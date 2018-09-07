@@ -1,12 +1,20 @@
 # cm
 Cloudmesh v4
 
-
-In this assignment, the entire class can participate. We will use a single repo that is yet to be announced for the class to coordinate the assignment. This assignment can be useful for your projects and reused for your projects to conduct benchmarks on remote machines. The online and residential classes can be used to ask questions and work on this in person. 
+Class Assignment: Parallel Remote Jobs
+In this assignment, the entire class can participate. We will use a single repo at 
 
  
 
-The goal is to have a configuration file in which we add a number of computers that you can use to execute tasks via ssh calls remotely. We wiill use no fancyful ssh library, but just subprocess. As this taks requires possibly more than you can do in a single week, you need to decide which task you like to work on.
+* https://github.com/cloudmesh-community/cm 
+
+ 
+
+to coordinate the assignment. This assignment can be useful for your projects and reused for your projects to conduct benchmarks on remote machines. The online and residential classes can be used to ask questions and work on this in person. 
+
+ 
+
+The goal is to have a configuration file in which we add a number of computers that you can use to execute tasks via ssh calls remotely. We wiill use no fancyful ssh library, but just subprocess. As this task requires possibly more than you can do in a single week, you need to decide which task you like to work on.
 
  
 
@@ -30,11 +38,11 @@ d) develop a mechnism to start n vms via vagrant
 
  
 
-e) develop a test program that distributes a job to the machines calulates the job and fetches the result back. THis is closely related to c, but instead of integrating it in c the movement of the data to and from the job is part of a separate mechanism, It is essentially the status of the claculation. Once all results are in do the reduction into a single result. Remember you could do result calculations in parallel even if other results are not there i
+e) develop a test program that distributes a job to the machines calculates the job and fetches the result back. This is closely related to c, but instead of integrating it in c the movement of the data to and from the job is part of a separate mechanism, It is essentially the status of the calculation. Once all results are in do the reduction into a single result. Remember you could do result calculations in parallel even if other results are not there i
 
  
 
-f) advanced: develop a string based formulation of the tasks while providing the task in a def and using the chars | for parallel, ; for seqoeuntial and + for adding results
+f) advanced: develop a string based formulation of the tasks while providing the task in a def and using the chars | for parallel, ; for sequential and + for adding results
 
  
 
@@ -44,7 +52,7 @@ For example
 
 def a():
 
-   sting to be executed via ssh on remote machine
+   sting to be executed via ssh on a remote machine
 
  
 

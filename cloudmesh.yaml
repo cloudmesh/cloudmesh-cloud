@@ -1,0 +1,16 @@
+cloudmesh:
+  cluster:
+    computer_a: ##   computer:
+       name: computer_a
+       label: one
+       address: localhost
+       credentials:
+         username: TBD
+         pulickey: ~/.ssh/id_rsa.pub
+    computer_b:
+       name: computer_b
+       label: two
+       address: localhost
+       credentials:
+         username: TBD
+         pulickey: ~/.ssh/id_rsa.pub

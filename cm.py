@@ -7,12 +7,12 @@ class cloudmesh
   def config(name=“~/.cloudmesh/cloudmesh.yaml”)
     # reads in the yaml file
 
-      def get_driver(cloudname=None)
-                 if cloudname=none get the default cloud
-         credentials = ….
-                 return the driver for that cloud
+  def get_driver(cloudname=None)
+    # if cloudname=none get the default cloud
+    # credentials = ….
+    # return the driver for that cloud
 
-    now if you do that right you cans implify libcloud use with
+  # now if you do that right you cans implify libcloud use with
 
 
 if __name__ == '__main__':

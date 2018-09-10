@@ -6,8 +6,8 @@ cloudmesh:
       azure:
           kind: azure
           credentials:
-               AZURE_SUBSCRIPTION_ID = 'xxxxxxxx–xxxx-xxxx-xxxx-xxxxxxxxxxxx'
-               AZURE_MANAGEMENT_CERT_PATH = 'C:/Demo/azure_cert.pem'
+               AZURE_SUBSCRIPTION_ID: 'xxxxxxxx–xxxx-xxxx-xxxx-xxxxxxxxxxxx'
+               AZURE_MANAGEMENT_CERT_PATH: 'C:/Demo/azure_cert.pem'
   cluster:
     clustera:
       computer_a: ##   computer:

@@ -6,7 +6,7 @@ cloudmesh:
     azure:
       kind:                         azure
       credentials:
-        AZURE_SUBSCRIPTION_ID:      'xxxxxxxx–xxxx-xxxx-xxxx-xxxxxxxxxxxx'
+        AZURE_SUBSCRIPTION_ID:      'xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
         AZURE_MANAGEMENT_CERT_PATH: 'C:/Demo/azure_cert.pem'
     aws:
       kind:                         aws
@@ -20,12 +20,12 @@ cloudmesh:
         label:                      one
         address:                    localhost
         credentials:
-        username:                   TBD
-        pulickey:                   ~/.ssh/id_rsa.pub
+          username:                 TBD
+          pulickey:                 ~/.ssh/id_rsa.pub
       computer_b:
         name:                       computer_b
         label:                      two
         address:                    localhost
         credentials:
-        username:                   TBD
-        pulickey:                   ~/.ssh/id_rsa.pub
+          username:                 TBD
+          pulickey:                 ~/.ssh/id_rsa.pub

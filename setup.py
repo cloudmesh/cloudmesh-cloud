@@ -71,11 +71,11 @@ setup(
     name="cloudmesh_client",
     description="cloudmesh_client - A heterogeneous multi cloud command "
                 "client and shell",
-    long_description=read('README.rst'),
+    long_description=read('README.md'),
     license="Apache License, Version 2.0",
-    author="Gregor von Laszewski",
+    author="Gregor von Laszewski, cloudmesh.org",
     author_email="laszewski@gmail.com",
-    url="https://github.com/cloudmesh/cloudmesh_client",
+    url="https://github.com/cloudmesh-community/cm",
     classifiers=[
         "Intended Audience :: Developers",
         "Intended Audience :: Education",

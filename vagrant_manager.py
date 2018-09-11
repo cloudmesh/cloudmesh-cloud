@@ -10,7 +10,7 @@ Usage:
 
 Options:
   -h --help     Show this screen.
-  --vm_list=<list_of_vms>  List of VMs separated by commas ex: node-0,node-1
+  --vm_list=<list_of_vms>  List of VMs separated by commas ex: node-1,node-2
 """
 
 import fileinput

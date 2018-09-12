@@ -2,11 +2,12 @@
 """Vagrant Manager.
 
 Usage:
-  cm-vagrant.py vagrant create --vms <vm_number>
-  cm-vagrant.py vagrant start [--vm_list=<vmList>]
-  cm-vagrant.py vagrant stop [--vm_list=<vmList>]
-  cm-vagrant.py vagrant destroy [--vm_list=<vmList>]
-  cm-vagrant.py vagrant status [--vm_list=<vmList>]
+  cm-vagrant.py vagrant create --count <vm_number> [--debug]
+  cm-vagrant.py vagrant start [--vms=<vmList>] [--debug]
+  cm-vagrant.py vagrant stop [--vms=<vmList>] [--debug]
+  cm-vagrant.py vagrant destroy [--vms=<vmList>] [--debug]
+  cm-vagrant.py vagrant status [--vms=<vmList>]
+  cm-vagrant.py vagrant list
   cm-vagrant.py -h
 
 Options:
@@ -25,18 +26,26 @@ import re
 import subprocess
 import os
 from docopt import docopt
-
+from colorama import init
+from termcolor import colored
+import hostlist
 
 class Vagrant(object):
 
-    def __init__(self):
+    def __init__(self, debug=False):
         self.workspace = "./vagrant_workspace"
+        self.path = os.path.join(self.workspace, "Vagrantfile")
+        self.debug = debug
+
 
     def execute(self, command):
-        subprocess.run(command.strip(),
-                       cwd=self.workspace,
-                       check=True,
-                       shell=True)
+        if self.debug:
+            print(command.strip())
+        else:
+            subprocess.run(command.strip(),
+                           cwd=self.workspace,
+                           check=True,
+                           shell=True)
 
     def status(self, name=None):
         if name is None:
@@ -63,41 +72,61 @@ class Vagrant(object):
 
     def generate_vagrantfile(self, number_of_nodes):
         replacement_string = "NUMBER_OF_NODES = " + str(number_of_nodes)
-        for line in fileinput.FileInput(os.path.join(self.workspace, "Vagrantfile"), inplace=True):
+        for line in fileinput.FileInput(os.path.join(self.path), inplace=True):
             line = re.sub("NUMBER_OF_NODES.*(\d+)$", replacement_string, line.rstrip())
             print(line)
 
+    def list(self):
+        with open(self.path, 'r') as f:
+            content = f.read()
+        print (content)
 
 def process_arguments(arguments):
-    print(arguments)
+    debug = arguments["--debug"]
+    if debug:
+        try:
+            columns, rows = os.get_terminal_size(0)
+        except OSError:
+            columns, rows = os.get_terminal_size(1)
+
+        print (colored(columns * '=', "red"))
+        print (colored("Running in Debug Mode","red"))
+        print (colored(columns * '=',"red"))
+        print(arguments)
+        print (colored(columns * '-',"red"))
+
     if arguments.get("vagrant"):
-        provider = Vagrant()
-        if arguments.get("create") & arguments.get("--vms"):
+        provider = Vagrant(debug=debug)
+        if arguments.get("create") & arguments.get("--count"):
             provider.generate_vagrantfile(arguments.get("<vm_number>"))
-        elif arguments.get("start"):
-            if arguments.get("--vm_list"):
-                for node_name in arguments.get("--vm_list").split(','):
-                    provider.start(node_name)
-            else:
-                provider.start()
-        elif arguments.get("stop"):
-            if arguments.get("--vm_list"):
-                for node_name in arguments.get("--vm_list").split(','):
-                    provider.stop(node_name)
-            else:
-                provider.stop()
-        elif arguments.get("destroy"):
-            if arguments.get("--vm_list"):
-                for node_name in arguments.get("--vm_list").split(','):
-                    provider.destroy(node_name)
-            else:
-                provider.destroy()
-        elif arguments.get("status"):
-            if arguments.get("--vm_list"):
-                for node_name in arguments.get("--vm_list").split(','):
-                    provider.status(node_name)
-            else:
-                provider.status()
+
+        elif arguments.get("list"):
+            provider.status(list)
+
+        else:
+            hosts = False
+            action = None
+
+            if arguments.get("--vms"):
+                hosts = arguments.get("--vms")
+                hosts = hostlist.expand_hostlist(hosts)
+
+            if arguments.get("start"):
+                action = provider.start
+            elif arguments.get("stop"):
+                action = provider.stop
+            elif arguments.get("destroy"):
+                action = provider.destroy
+            elif arguments.get("status"):
+                action = provider.status
+
+            # do the action
+            if action is not None:
+                if hosts:
+                    for node_name in hosts:
+                        action(node_name)
+                else:
+                    action()
 
 
 def main():

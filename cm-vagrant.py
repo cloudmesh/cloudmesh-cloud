@@ -30,15 +30,32 @@ from colorama import init
 from termcolor import colored
 import hostlist
 
+# TODO: workspace should be in ~/.cloudmesh/vagrant
+# TODO: if the workspace is not ther it needs to be created
+
 class Vagrant(object):
+    """
+    TODO: doc
+    """
 
     def __init__(self, debug=False):
+        """
+        TODO: doc
+
+        :param debug:
+        """
         self.workspace = "./vagrant_workspace"
         self.path = os.path.join(self.workspace, "Vagrantfile")
         self.debug = debug
 
 
     def execute(self, command):
+        """
+        TODO: doc
+
+        :param command:
+        :return:
+        """
         if self.debug:
             print(command.strip())
         else:
@@ -48,40 +65,81 @@ class Vagrant(object):
                            shell=True)
 
     def status(self, name=None):
+        """
+        TODO: doc
+
+        :param name:
+        :return:
+        """
         if name is None:
             # start all
             name = ""
         self.execute("vagrant status " + str(name))
 
     def start(self, name=None):
+        """
+        TODO: doc
+
+        :param name:
+        :return:
+        """
         if name is None:
             # start all
             name = ""
         self.execute("vagrant up " + str(name))
 
     def stop(self, name=None):
+        """
+        TODO: doc
+
+        :param name:
+        :return:
+        """
         if name is None:
             # start all
             name = ""
         self.execute("vagrant halt " + str(name))
 
     def destroy(self, name=None):
+        """
+        TODO: doc
+
+        :param name:
+        :return:
+        """
         if name is None:
             name = ""
         self.execute("vagrant destroy " + str(name))
 
     def generate_vagrantfile(self, number_of_nodes):
+        """
+        TODO: doc
+
+        :param number_of_nodes:
+        :return:
+        """
         replacement_string = "NUMBER_OF_NODES = " + str(number_of_nodes)
         for line in fileinput.FileInput(os.path.join(self.path), inplace=True):
             line = re.sub("NUMBER_OF_NODES.*(\d+)$", replacement_string, line.rstrip())
             print(line)
 
     def list(self):
+        """
+        TODO: doc
+
+        :return:
+        """
         with open(self.path, 'r') as f:
             content = f.read()
         print (content)
 
 def process_arguments(arguments):
+    """
+    TODO: doc
+
+    :param arguments:
+    :return:
+    """
     debug = arguments["--debug"]
     if debug:
         try:
@@ -130,6 +188,11 @@ def process_arguments(arguments):
 
 
 def main():
+    """
+    TODO: doc
+
+    :return:
+    """
     arguments = docopt(__doc__, version='Vagrant Manager 1.0')
     process_arguments(arguments)
 

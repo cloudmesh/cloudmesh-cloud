@@ -8,12 +8,16 @@ Usage:
   cm-vagrant.py vagrant destroy [--vms=<vmList>] [--debug]
   cm-vagrant.py vagrant status [--vms=<vmList>]
   cm-vagrant.py vagrant list
+  cm-vagrant.py vagrant ssh NAME
+  cm-vagrant.py vagrant run COMMAND  [--vms=<vmList>]
+
+
   cm-vagrant.py -h
 
 Options:
   -h --help     Show this screen.
   --vm_list=<list_of_vms>  List of VMs separated by commas ex: node-1,node-2
-  
+
 Description:
    put a description here
    
@@ -32,6 +36,9 @@ import hostlist
 
 # TODO: workspace should be in ~/.cloudmesh/vagrant
 # TODO: if the workspace is not ther it needs to be created
+# TODO: use captal letters as easier to document in other tools
+# TODO: implement ssh
+# TODO: implement the run that executes the command on the specified hosts
 
 class Vagrant(object):
     """

@@ -32,33 +32,32 @@ class Vagrant(object):
         self.workspace = "./vagrant_workspace"
 
     def execute(self, command):
-        subprocess.run(command,
+        subprocess.run(command.strip(),
                        cwd=self.workspace,
                        check=True,
                        shell=True)
 
-    def status_all_vms(self):
-        self.execute("vagrant status")
-
-    def status_vm(self, name):
+    def status(self, name=None):
+        if name is None:
+            # start all
+            name = ""
         self.execute("vagrant status " + str(name))
 
-    def start_all_vms(self):
-        self.execute("vagrant up")
-
-    def start_vm(self, name):
+    def start(self, name=None):
+        if name is None:
+            # start all
+            name = ""
         self.execute("vagrant up " + str(name))
 
-    def stop_all_vms(self):
-        self.execute("vagrant halt")
-
-    def stop_vm(self, name):
+    def stop(self, name=None):
+        if name is None:
+            # start all
+            name = ""
         self.execute("vagrant halt " + str(name))
 
-    def destroy_all_vms(self):
-        self.execute("vagrant destroy")
-
-    def destroy_vm(self, name):
+    def destroy(self, name=None):
+        if name is None:
+            name = ""
         self.execute("vagrant destroy " + str(name))
 
     def generate_vagrantfile(self, number_of_nodes):
@@ -76,27 +75,27 @@ def process_arguments(arguments):
         elif arguments.get("start"):
             if arguments.get("--vm_list"):
                 for node_name in arguments.get("--vm_list").split(','):
-                    provider.start_vm(node_name)
+                    provider.start(node_name)
             else:
-                provider.start_all_vms()
+                provider.start()
         elif arguments.get("stop"):
             if arguments.get("--vm_list"):
                 for node_name in arguments.get("--vm_list").split(','):
-                    provider.stop_vm(node_name)
+                    provider.stop(node_name)
             else:
-                provider.stop_all_vms()
+                provider.stop()
         elif arguments.get("destroy"):
             if arguments.get("--vm_list"):
                 for node_name in arguments.get("--vm_list").split(','):
-                    provider.destroy_vm(node_name)
+                    provider.destroy(node_name)
             else:
-                provider.destroy_all_vms()
+                provider.destroy()
         elif arguments.get("status"):
             if arguments.get("--vm_list"):
                 for node_name in arguments.get("--vm_list").split(','):
-                    provider.status_vm(node_name)
+                    provider.status(node_name)
             else:
-                provider.status_all_vms()
+                provider.status()
 
 
 def main():

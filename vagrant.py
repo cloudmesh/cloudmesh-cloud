@@ -68,6 +68,7 @@ class Vagrant(object):
 
 
 def process_arguments(arguments):
+    print(arguments)
     if arguments.get("vagrant"):
         provider = Vagrant()
         if arguments.get("create") & arguments.get("--vms"):

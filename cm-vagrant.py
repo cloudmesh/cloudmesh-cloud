@@ -1,12 +1,12 @@
 """Vagrant Manager.
 
 Usage:
-  vagrant.py vagrant create --vms <vm_number>
-  vagrant.py vagrant start [--vm_list=<vmList>]
-  vagrant.py vagrant stop [--vm_list=<vmList>]
-  vagrant.py vagrant destroy [--vm_list=<vmList>]
-  vagrant.py vagrant status [--vm_list=<vmList>]
-  vagrant.py -h
+  cm-vagrant.py vagrant create --vms <vm_number>
+  cm-vagrant.py vagrant start [--vm_list=<vmList>]
+  cm-vagrant.py vagrant stop [--vm_list=<vmList>]
+  cm-vagrant.py vagrant destroy [--vm_list=<vmList>]
+  cm-vagrant.py vagrant status [--vm_list=<vmList>]
+  cm-vagrant.py -h
 
 Options:
   -h --help     Show this screen.

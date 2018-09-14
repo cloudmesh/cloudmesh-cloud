@@ -10,7 +10,7 @@ Usage:
   cm-vagrant.py vagrant list
   cm-vagrant.py vagrant ssh NAME
   cm-vagrant.py vagrant run COMMAND  [--vms=<vmList>]
-  cm-vagrant.py vagrant run-script SCRIPT [--vms=<vmList>]
+  cm-vagrant.py vagrant script run SCRIPT [--vms=<vmList>]
 
 
   cm-vagrant.py -h
@@ -33,7 +33,7 @@ Future Version ideas:
 
 * Discuss how to  run a script on in many vm's
   e.g. mabye we need another new command?
-  "run-script" command, as suggested in the file's doc.
+  `scripy run SCRIPT` command, as suggested in the file's doc.
 * Question: could the code after elif action_type in ['run','run-script']:
   be moved into a function/class?
 * do we need to adopt the logic from cloudmesh/experiment, where we create 

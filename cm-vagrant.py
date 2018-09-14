@@ -10,6 +10,7 @@ Usage:
   cm-vagrant.py vagrant list
   cm-vagrant.py vagrant ssh NAME
   cm-vagrant.py vagrant run COMMAND  [--vms=<vmList>]
+  cm-vagrant.py vagrant run-script SCRIPT [--vms=<vmList>]
 
 
   cm-vagrant.py -h
@@ -33,12 +34,17 @@ from docopt import docopt
 from colorama import init
 from termcolor import colored
 import hostlist
+import multiprocessing.dummy as mt
+import queue
+
 
 # TODO: workspace should be in ~/.cloudmesh/vagrant
 # TODO: if the workspace is not ther it needs to be created
 # TODO: use captal letters as easier to document in other tools
 # TODO: implement ssh
 # TODO: implement the run that executes the command on the specified hosts
+
+
 
 class Vagrant(object):
     """
@@ -55,8 +61,31 @@ class Vagrant(object):
         self.path = os.path.join(self.workspace, "Vagrantfile")
         self.debug = debug
 
+    def _get_host_names(self):
+        """
+        get all of the host names that exist in current vagrant environment
+        """
+        res=self.execute('vagrant status', result=True)
+        if isinstance(res,Exception):
+            print(res)
+            return []
+            
+        res=res.decode('utf8')
+        res=re.split('[\r\n]{1,2}',res)
+        host_lines=res[res.index('',1)+1:res.index('',2)]
+        host_names=[re.split('\s+',x)[0] for x in host_lines]
+        return host_names
+        
+    def run(self, name, command):
+        """
+        TODO: doc
 
-    def execute(self, command):
+        :param name:
+        """
+        res=self.execute('vagrant ssh {} -c {}'.format(name, command), result=True)
+        return (name,res)
+        
+    def execute(self, command, result=False):
         """
         TODO: doc
 
@@ -66,11 +95,20 @@ class Vagrant(object):
         if self.debug:
             print(command.strip())
         else:
-            subprocess.run(command.strip(),
-                           cwd=self.workspace,
-                           check=True,
-                           shell=True)
-
+            if not result:
+                subprocess.run(command.strip(),
+                               cwd=self.workspace,
+                               check=True,
+                               shell=True)
+            else:
+                try:
+                    res=subprocess.check_output(command.strip(),
+                                                cwd=self.workspace,
+                                                shell=True, stderr=subprocess.STDOUT)
+                    return res
+                except Exception as e:
+                    return e
+                
     def status(self, name=None):
         """
         TODO: doc
@@ -166,7 +204,7 @@ def process_arguments(arguments):
             provider.generate_vagrantfile(arguments.get("<vm_number>"))
 
         elif arguments.get("list"):
-            provider.status(list)
+            provider.list()
 
         else:
             hosts = False
@@ -184,15 +222,52 @@ def process_arguments(arguments):
                 action = provider.destroy
             elif arguments.get("status"):
                 action = provider.status
+            elif arguments.get("run") and arguments.get("COMMAND"):
+                action = provider.run
+                args=[arguments.get("COMMAND")]
+            elif arguments.get("run-script") & arguments.get("SCRIPT"):
+                action = provider.run_script
+                args=[arguments.get("SCRIPT")]
 
             # do the action
             if action is not None:
-                if hosts:
+                action_type=action.__name__           
+                if action_type in ['start','stop','destroy','status']:
+                    if hosts:
+                        for node_name in hosts:
+                            action(node_name)
+                    else:
+                        action()             
+                        
+                elif action_type in ['run','run-script']:
+                    # make sure there are sth in hosts, if nothing in the host
+                    # just grab all hosts in the current vagrant environment
+                    if not hosts:
+                        hosts=provider._get_host_names()
+                        if not hosts:
+                            raise EnvironmentError('There is no host exists in the current vagrant project')
+                                                    
+                    # initalize threading pool
+                    pool=mt.Pool(len(hosts))
+                    run_result=queue.Queue()
+                    
+                    # submit job to the threading pool and (immediately) start execution
                     for node_name in hosts:
-                        action(node_name)
-                else:
-                    action()
+                        cur_args=([node_name] + args)
+                        run_result.put(pool.apply_async(action, args=cur_args))
+                    pool.close()
+                    pool.join()
+                    
+                    # retrieve the result           
+                    while run_result.qsize()>0:
+                        job_res=run_result.get()
+                        node_name, res = job_res.get()
+                        job_status='Success' if not isinstance(res, Exception) else 'Failed'
+                        output=res.decode('utf8') if not isinstance(res, Exception) else res.stdout.decode('utf8')
 
+                        ## print report                        
+                        template='node_name: {}\njob_status: {}\noutput:\n\n{}'
+                        print(template.format(node_name, job_status, output))
 
 def main():
     """

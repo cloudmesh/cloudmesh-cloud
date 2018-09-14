@@ -159,7 +159,8 @@ class Vagrant(object):
                 try:
                     res=subprocess.check_output(command.strip(),
                                                 cwd=self.workspace,
-                                                shell=True, stderr=subprocess.STDOUT)
+                                                shell=True,
+                                                stderr=subprocess.STDOUT)
                     return res
                 except Exception as e:
                     return e

@@ -177,6 +177,20 @@ class Vagrant(object):
             name = ""
         self.execute("vagrant status " + str(name))
 
+    def vagrant_action(self, action=None, name=None):
+        """
+        TODO: doc
+
+        :param name:
+        :return:
+        """
+        if action is None:
+          pass # error
+        if name is None:
+            # start all
+            name = ""
+        self.execute("vagrant " + action + " " + str(name))
+        
     def start(self, name=None):
         """
         TODO: doc
@@ -184,11 +198,8 @@ class Vagrant(object):
         :param name:
         :return:
         """
-        if name is None:
-            # start all
-            name = ""
-        self.execute("vagrant up " + str(name))
-
+        self.vagrant_action(action="start", name=name)
+        
     def stop(self, name=None):
         """
         TODO: doc

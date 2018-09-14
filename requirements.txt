@@ -1,0 +1,4 @@
+docopt
+colorama
+termcolor
+python-hostlist

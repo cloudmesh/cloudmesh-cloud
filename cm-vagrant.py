@@ -36,6 +36,14 @@ Future Version ideas:
   "run-script" command, as suggested in the file's doc.
 * Question: could the code after elif action_type in ['run','run-script']:
   be moved into a function/class?
+* do we need to adopt the logic from cloudmesh/experiment, where we create 
+  a directory for each machine.vm and store the output files there. e.g.
+  --output=experiment
+ 
+     experiment/vm1/outout files from vm 1 go here 
+     experiment/vm2/outout files from vm 2 go here 
+     ...
+
 
 Version 0.3:
 

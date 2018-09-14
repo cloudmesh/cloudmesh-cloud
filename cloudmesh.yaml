@@ -14,6 +14,17 @@ cloudmesh:
         EC2_ACCESS_ID:              'your access id'
         EC2_SECRET_KEY:             'your secret key'
   cluster:
+    bigred2:
+        name:                       bigred2
+        label:                      bigred
+        address:                    bigred2.iu.edu
+        credentials:
+          username:                 TBD
+          pulickey:                 ~/.ssh/id_rsa.pub    
+    karst:
+        credentials:
+          username:                 TBD
+          pulickey:                 ~/.ssh/id_rsa.pub
     clustera:
       computer_a:                   ##   computer:
         name:                       computer_a

@@ -331,7 +331,7 @@ def main():
 
     :return:
     """
-    arguments = docopt(__doc__, version='Vagrant Manager 1.0')
+    arguments = docopt(__doc__, version='Cloudmesh Vagrant Manager 0.3')
     process_arguments(arguments)
 
 

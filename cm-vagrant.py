@@ -25,6 +25,53 @@ Description:
 Example:
    put an example here
 """
+"""
+Inplementation notes
+
+
+Future Version ideas:
+
+* Discuss how to  run a script on in many vm's
+  e.g. mabye we need another new command?
+  "run-script" command, as suggested in the file's doc.
+* Question: could the code after elif action_type in ['run','run-script']:
+  be moved into a function/class?
+
+Version 0.3:
+
+* addes "cm-vagrant run" command with multi-threading.
+
+  Design:
+
+    1.   Execute command in the hosts' shell.
+    2.   Retrieve the result from hosts' stdout/stderr.
+    2.1. Execution result will be retrieved and print to the stdout
+    3.   If name of the hosts are not specified using --vms, then the command will 
+         execute on all host that registered to the current vagrant project.
+    3.1. However, if the hosts are not available through ssh when running 
+         (say, the vm is stopped) , the execution will failed.
+    4.   For every run command, every specified host will run the command 
+         exactly one time, in a parrallelized fashion. The execution on every 
+         machine will be handled by a seperated thread.
+
+* additional changes to code and do some minor correction.
+
+
+Version 0.2:
+
+* added hostlists
+* simplified argument processing
+* introduced class object for management
+* added templates for documentation
+
+
+Version 0.1:
+
+* basic docopts version with elementary functionality
+* no classes
+
+"""
+
 from __future__ import print_function
 import fileinput
 import re

@@ -43,7 +43,7 @@ Future Version ideas:
      experiment/vm1/outout files from vm 1 go here 
      experiment/vm2/outout files from vm 2 go here 
      ...
-
+* use capital letters only and not <value>, e.g. VALUE instead of <value> in docots spec
 
 Version 0.3:
 

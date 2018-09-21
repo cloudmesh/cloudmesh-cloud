@@ -103,7 +103,8 @@ import queue
 
 class Vagrant(object):
     """
-    TODO: doc
+    Vagrant Manager.
+    Provides the capabilities to manage a Vagrant Cluster of nodes via the script.
     """
 
     def __init__(self, debug=False):

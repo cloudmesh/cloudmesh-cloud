@@ -108,9 +108,9 @@ class Vagrant(object):
 
     def __init__(self, debug=False):
         """
-        TODO: doc
+        Initializes the workspace for Vagrant.
 
-        :param debug:
+        :param debug: enables debug information to be printed.
         """
         self.workspace = "./vagrant_workspace"
         self.path = os.path.join(self.workspace, "Vagrantfile")
@@ -167,9 +167,10 @@ class Vagrant(object):
                 
     def status(self, name=None):
         """
-        TODO: doc
+        Provides the status information of all Vagrant Virtual machines by default.
+        If a name is specified, it provides the status of that particular virtual machine.
 
-        :param name:
+        :param name: [optional], name of the Vagrant VM.
         :return:
         """
         if name is None:
@@ -193,18 +194,20 @@ class Vagrant(object):
         
     def start(self, name=None):
         """
-        TODO: doc
+        Default: Starts all the VMs specified.
+        If @name is provided, only the named VM is started.
 
-        :param name:
+        :param name: [optional], name of the Vagrant VM.
         :return:
         """
         self.vagrant_action(action="start", name=name)
         
     def stop(self, name=None):
         """
-        TODO: doc
+        Default: Stops all the VMs specified.
+        If @name is provided, only the named VM is stopped.
 
-        :param name:
+        :param name: [optional], name of the Vagrant VM.
         :return:
         """
         if name is None:
@@ -214,9 +217,10 @@ class Vagrant(object):
 
     def destroy(self, name=None):
         """
-        TODO: doc
+        Default: Destroys all the VMs specified.
+        If @name is provided, only the named VM is destroyed.
 
-        :param name:
+        :param name: [optional], name of the Vagrant VM.
         :return:
         """
         if name is None:
@@ -225,10 +229,8 @@ class Vagrant(object):
 
     def generate_vagrantfile(self, number_of_nodes):
         """
-        TODO: doc
-
-        :param number_of_nodes:
-        :return:
+        Generates the Vagrant file to support the @number_of_nodes
+        :param number_of_nodes: number of nodes required in the cluster.
         """
         replacement_string = "NUMBER_OF_NODES = " + str(number_of_nodes)
         for line in fileinput.FileInput(os.path.join(self.path), inplace=True):
@@ -247,10 +249,9 @@ class Vagrant(object):
 
 def process_arguments(arguments):
     """
-    TODO: doc
+    Processes all the input arguments and acts accordingly.
 
-    :param arguments:
-    :return:
+    :param arguments: input arguments for the Vagrant script.
     """
     debug = arguments["--debug"]
     if debug:
@@ -338,9 +339,7 @@ def process_arguments(arguments):
 
 def main():
     """
-    TODO: doc
-
-    :return:
+    Main function for the Vagrant Manager. Processes the input arguments.
     """
     arguments = docopt(__doc__, version='Cloudmesh Vagrant Manager 0.3')
     process_arguments(arguments)

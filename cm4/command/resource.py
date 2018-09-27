@@ -8,11 +8,13 @@ Created on Tue Sep 11 23:57:04 2018
 
 from ResourceABC import ResourceABC
 import yaml
+import os
 
 class Resource(ResourceABC):
     
     def __init__(self):
-        self.yamlFile = "/Users/yuluo/Desktop/cloudmesh.yaml"
+        # TODO:
+        self.yamlFile = os.path.expanduser("~/.cloudmesh/cloudmesh.yaml")
         
     
     

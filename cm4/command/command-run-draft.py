@@ -6,6 +6,8 @@ Created on Sun Sep  9 17:19:52 2018
 @author: yuluo
 """
 
+# TODO: please change to using docopts and integrate in cm4.command.py
+
 import argparse
 from data import Resource 
 from parall import ParallProcess    
@@ -20,9 +22,9 @@ def main():
     parse.add_argument("-run", action="append", nargs=2, metavar=("NAME/LABEL", "Script"), dest="run", help="run in labeled/named computer")
     parse.add_argument("--label", action="append", nargs=2, metavar=("Label", "Script"), dest="label", help="run in labeled computer")
     parse.add_argument("--name", action="append", nargs=2, metavar=("Name", "Script"), dest="name", help="run in named computer")
-    result = parse.parse_args();
-    
-    resource = Resource();
+    result = parse.parse_args()
+
+    resource = Resource()
     content = resource.readFile("/Users/yuluo/Desktop/cloudmesh.yaml")
     run = ParallProcess(content) 
     
@@ -55,7 +57,7 @@ def main():
             output = run.run_local(username, publickey, (result.name[0])[1])
             run.readable(output)
     else:
-        print("Syntax error: please use python run.py -h")
+        print("Syntax error: please use python command-run-draft.py -h")
 
 
 

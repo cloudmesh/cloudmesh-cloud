@@ -84,7 +84,7 @@ class ParallProcess(ProcessABC):
     
         
     def run_parall(self, scripts):
-        output = mp.Queue();
+        output = mp.Queue()
         parall_list = self.parall_list(scripts)
         
         def parall_process(cp, output, script):

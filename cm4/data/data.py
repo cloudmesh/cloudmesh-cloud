@@ -1,14 +1,14 @@
 """Cloudmesh Multi Service Data Access
 
 Usage:
-  cmdata.py add FILE
-  cmdata.py add SERVICE FILE 
-  cmdata.py get FILE
-  cmdata.py get FILE DEST_FOLDER
-  cmdata.py del FILE
-  cmdata.py (ls | dir)
-  cmdata.py (-h | --help)
-  cmdata.py --version
+  cm4 data add FILE
+  cm4 data add SERVICE FILE
+  cm4 data get FILE
+  cm4 data get FILE DEST_FOLDER
+  cm4 data del FILE
+  cm4 data (ls | dir)
+  cm4 data (-h | --help)
+  cm4 data --version
 
 Options:
   -h --help     Show this screen.
@@ -24,21 +24,21 @@ from db.LocalDBProvider import LocalDBProvider
 from storage.LocalStorageProvider import LocalStorageProvider
 from storage.AzureStorageProvider import AzureStorageProvider
 
-class cmdata:
+class data:
 
     def __init__(self):
         self._db = None
         self._conf = {}
         self._providers = {}
 
-    def config(self, config_path='./cmdata.yaml'):
-        ''' 
+    def config(self, config_path='~/.cloudmesh/cloudmesh4.yaml'):
+        """
         Use `cmdrvie.yaml` and environ vars to configure.
-        '''
+        """
         # Read config file
-        with open(config_path, "r") as stream:
+        with open(os.path.expanduser(config_path), "r") as stream:
             conf = yaml.load(stream)
-            self._conf = conf.get('cmdata')
+            self._conf = conf.get('cloudmesh').get('data')
 
         # Set DB provider. There should only be one.
         db_provider = self._conf.get('default').get('db')
@@ -65,29 +65,29 @@ class cmdata:
         self._providers['default'] = self._providers[default_storage_provider]
 
     def ls(self):
-        '''
+        """
         List tracked files.
-        '''
+        """
         self._print_row("FILE", "URL", "SERVICE", "SIZE")
         for f in self._db.list_files():
             self._print_row(f.name, f.url, f.service, f.size)
 
     def add(self, provider, file_path):
-        '''
+        """
         Add a new file
 
         :param provider: The storage provider where the file should be stored.
         :param file_path: The local path to the file.
-        '''
+        """
         new_cloud_file = self._providers[provider or 'default'].add(file_path)
         self._db.add(new_cloud_file)
 
     def get(self, file_name, dest_folder='.'):
-        '''
+        """
         Retrieve a file
 
         :param file_name: The name corresponding to the cloud file to be downloaded.
-        '''
+        """
         # Get db entry for this file
         cloud_file = self._db.get(file_name)
 
@@ -100,26 +100,26 @@ class cmdata:
         self._providers[cloud_file.service].get(cloud_file, dest_folder)
     
     def delete(self, file_name):
-        '''
+        """
         Remove a file
-        
+
         :param file_name: The name of the file to remove.
-        '''
+        """
         cloud_file = self._db.get(file_name)
         self._providers[cloud_file.service].delete(cloud_file)
         self._db.delete(cloud_file)
         
     def _print_row(self, file_name, url, service, size):
-        '''
+        """
         Print a formatted row
-        '''
+        """
         print(" %-35s %-50s %-10s %-10s" % (file_name, url, service, size))
 
 
 if __name__ == "__main__":
     arguments = docopt(__doc__, version='Cloudmesh Drive 0.1')
 
-    cd = cmdata()
+    cd = data()
     cd.config() 
 
     if arguments['ls'] or arguments['dir']:

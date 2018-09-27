@@ -1,19 +1,21 @@
 #!/usr/bin/env python
+from __future__ import print_function
+
 """Vagrant Manager.
 
 Usage:
-  cm-vagrant.py vagrant create --count <vm_number> [--debug]
-  cm-vagrant.py vagrant start [--vms=<vmList>] [--debug]
-  cm-vagrant.py vagrant stop [--vms=<vmList>] [--debug]
-  cm-vagrant.py vagrant destroy [--vms=<vmList>] [--debug]
-  cm-vagrant.py vagrant status [--vms=<vmList>]
-  cm-vagrant.py vagrant list
-  cm-vagrant.py vagrant ssh NAME
-  cm-vagrant.py vagrant run COMMAND  [--vms=<vmList>]
-  cm-vagrant.py vagrant script run SCRIPT [--vms=<vmList>]
+  vagrant.py vagrant create --count <vm_number> [--debug]
+  vagrant.py vagrant start [--vms=<vmList>] [--debug]
+  vagrant.py vagrant stop [--vms=<vmList>] [--debug]
+  vagrant.py vagrant destroy [--vms=<vmList>] [--debug]
+  vagrant.py vagrant status [--vms=<vmList>]
+  vagrant.py vagrant list
+  vagrant.py vagrant ssh NAME
+  vagrant.py vagrant run COMMAND  [--vms=<vmList>]
+  vagrant.py vagrant script run SCRIPT [--vms=<vmList>]
 
 
-  cm-vagrant.py -h
+  vagrant.py -h
 
 Options:
   -h --help     Show this screen.
@@ -79,8 +81,6 @@ Version 0.1:
 * no classes
 
 """
-
-from __future__ import print_function
 import fileinput
 import re
 import subprocess
@@ -98,7 +98,6 @@ import queue
 # TODO: use captal letters as easier to document in other tools
 # TODO: implement ssh
 # TODO: implement the run that executes the command on the specified hosts
-
 
 
 class Vagrant(object):
@@ -121,26 +120,26 @@ class Vagrant(object):
         """
         get all of the host names that exist in current vagrant environment
         """
-        res=self.execute('vagrant status', result=True)
-        if isinstance(res,Exception):
+        res = self.execute('vagrant status', result=True)
+        if isinstance(res, Exception):
             print(res)
             return []
-            
-        res=res.decode('utf8')
-        res=re.split('[\r\n]{1,2}',res)
-        host_lines=res[res.index('',1)+1:res.index('',2)]
-        host_names=[re.split('\s+',x)[0] for x in host_lines]
+
+        res = res.decode('utf8')
+        res = re.split('[\r\n]{1,2}', res)
+        host_lines = res[res.index('', 1) + 1:res.index('', 2)]
+        host_names = [re.split('\s+', x)[0] for x in host_lines]
         return host_names
-        
+
     def run(self, name, command):
         """
         TODO: doc
 
         :param name:
         """
-        res=self.execute('vagrant ssh {} -c {}'.format(name, command), result=True)
-        return (name,res)
-        
+        res = self.execute('vagrant ssh {} -c {}'.format(name, command), result=True)
+        return name, res
+
     def execute(self, command, result=False):
         """
         TODO: doc
@@ -158,14 +157,14 @@ class Vagrant(object):
                                shell=True)
             else:
                 try:
-                    res=subprocess.check_output(command.strip(),
-                                                cwd=self.workspace,
-                                                shell=True,
-                                                stderr=subprocess.STDOUT)
+                    res = subprocess.check_output(command.strip(),
+                                                  cwd=self.workspace,
+                                                  shell=True,
+                                                  stderr=subprocess.STDOUT)
                     return res
                 except Exception as e:
                     return e
-                
+
     def status(self, name=None):
         """
         Provides the status information of all Vagrant Virtual machines by default.
@@ -187,12 +186,12 @@ class Vagrant(object):
         :return:
         """
         if action is None:
-          pass # error
+            pass  # error
         if name is None:
             # start all
             name = ""
         self.execute("vagrant " + action + " " + str(name))
-        
+
     def start(self, name=None):
         """
         Default: Starts all the VMs specified.
@@ -202,7 +201,7 @@ class Vagrant(object):
         :return:
         """
         self.vagrant_action(action="start", name=name)
-        
+
     def stop(self, name=None):
         """
         Default: Stops all the VMs specified.
@@ -246,7 +245,8 @@ class Vagrant(object):
         """
         with open(self.path, 'r') as f:
             content = f.read()
-        print (content)
+        print(content)
+
 
 def process_arguments(arguments):
     """
@@ -261,11 +261,11 @@ def process_arguments(arguments):
         except OSError:
             columns, rows = os.get_terminal_size(1)
 
-        print (colored(columns * '=', "red"))
-        print (colored("Running in Debug Mode","red"))
-        print (colored(columns * '=',"red"))
+        print(colored(columns * '=', "red"))
+        print(colored("Running in Debug Mode", "red"))
+        print(colored(columns * '=', "red"))
         print(arguments)
-        print (colored(columns * '-',"red"))
+        print(colored(columns * '-', "red"))
 
     if arguments.get("vagrant"):
         provider = Vagrant(debug=debug)
@@ -293,50 +293,51 @@ def process_arguments(arguments):
                 action = provider.status
             elif arguments.get("run") and arguments.get("COMMAND"):
                 action = provider.run
-                args=[arguments.get("COMMAND")]
+                args = [arguments.get("COMMAND")]
             elif arguments.get("run-script") & arguments.get("SCRIPT"):
                 action = provider.run_script
-                args=[arguments.get("SCRIPT")]
+                args = [arguments.get("SCRIPT")]
 
             # do the action
             if action is not None:
-                action_type=action.__name__           
-                if action_type in ['start','stop','destroy','status']:
+                action_type = action.__name__
+                if action_type in ['start', 'stop', 'destroy', 'status']:
                     if hosts:
                         for node_name in hosts:
                             action(node_name)
                     else:
-                        action()             
-                        
-                elif action_type in ['run','run-script']:
+                        action()
+
+                elif action_type in ['run', 'run-script']:
                     # make sure there are sth in hosts, if nothing in the host
                     # just grab all hosts in the current vagrant environment
                     if not hosts:
-                        hosts=provider._get_host_names()
+                        hosts = provider._get_host_names()
                         if not hosts:
                             raise EnvironmentError('There is no host exists in the current vagrant project')
-                                                    
+
                     # initalize threading pool
-                    pool=mt.Pool(len(hosts))
-                    run_result=queue.Queue()
-                    
+                    pool = mt.Pool(len(hosts))
+                    run_result = queue.Queue()
+
                     # submit job to the threading pool and (immediately) start execution
                     for node_name in hosts:
-                        cur_args=([node_name] + args)
+                        cur_args = ([node_name] + args)
                         run_result.put(pool.apply_async(action, args=cur_args))
                     pool.close()
                     pool.join()
-                    
+
                     # retrieve the result           
-                    while run_result.qsize()>0:
-                        job_res=run_result.get()
+                    while run_result.qsize() > 0:
+                        job_res = run_result.get()
                         node_name, res = job_res.get()
-                        job_status='Success' if not isinstance(res, Exception) else 'Failed'
-                        output=res.decode('utf8') if not isinstance(res, Exception) else res.stdout.decode('utf8')
+                        job_status = 'Success' if not isinstance(res, Exception) else 'Failed'
+                        output = res.decode('utf8') if not isinstance(res, Exception) else res.stdout.decode('utf8')
 
                         ## print report                        
-                        template='node_name: {}\njob_status: {}\noutput:\n\n{}'
+                        template = 'node_name: {}\njob_status: {}\noutput:\n\n{}'
                         print(template.format(node_name, job_status, output))
+
 
 def main():
     """

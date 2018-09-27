@@ -2,12 +2,14 @@ import getpass
 import datetime
 from os.path import isfile, abspath, basename, getsize
 
-class CloudFile():
+
+class CloudFile(object):
     yaml_tag = u"!CloudFile"
 
     """
     Model for cloud file database entry.
     """
+
     def __init__(self):
         self.name = ''
         self.owner = getpass.getuser()
@@ -18,7 +20,7 @@ class CloudFile():
         self.service = ''
         self.url = ''
         self.policies = []
-        
+
     def from_local_path(self, file_path):
         file_path = abspath(file_path)
 
@@ -29,4 +31,3 @@ class CloudFile():
         self.size = getsize(file_path)
 
         return self
-        

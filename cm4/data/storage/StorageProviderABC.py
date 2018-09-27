@@ -1,6 +1,7 @@
 import abc
 
-class StorageProviderABC(metaclass = abc.ABCMeta):
+
+class StorageProviderABC(metaclass=abc.ABCMeta):
     """
     Abstract Base Class for supported cloud providers.
     """

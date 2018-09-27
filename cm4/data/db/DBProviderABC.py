@@ -1,6 +1,7 @@
 import abc
 
-class DBProviderABC(metaclass = abc.ABCMeta):
+
+class DBProviderABC(metaclass=abc.ABCMeta):
     """
     Abstract Base Class for supported database providers.
     """
@@ -14,30 +15,30 @@ class DBProviderABC(metaclass = abc.ABCMeta):
         pass
 
     @abc.abstractmethod
-    def add(self, cloudFile):
+    def add(self, cloud_file):
         """
         add a new CloudFile to the database
 
         todo: not sure if this should take a cloud file entry or not. path, policies might be a better choice
 
-        :param cloudFile: a CloudFile. todo
+        :param cloud_file: a CloudFile. todo
         :return: a CloudFile with resource information filled in
         """
         pass
 
     @abc.abstractmethod
-    def delete(self, cloudFile):
+    def delete(self, cloud_file):
         """
         delete a file from the database
-        :param cloudFile: the cloud file entry being deleted
+        :param cloud_file: the cloud file entry being deleted
         """
         pass
 
     @abc.abstractmethod
-    def update(self, cloudFile):
+    def update(self, cloud_file):
         """
         update a file
-        :param cloudFile: the cloud file entry being updated
+        :param cloud_file: the cloud file entry being updated
         :return: the updated CloudFile
         """
         pass

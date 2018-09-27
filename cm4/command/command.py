@@ -1,4 +1,3 @@
-from __future__ import print_function
 from docopt import docopt
 import cm4.vagrant.vagrant
 import cm4.data.data
@@ -43,6 +42,7 @@ Description:
 Example:
    put an example here
 """
+
 
 def main():
     """

@@ -102,3 +102,13 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+# Visual Studio Code workspace settings
+.vscode/
+
+# Test local db and storage files
+data/test/db/*
+!data/test/db/README.md
+
+data/test/storage/*
+!data/test/storage/README.md

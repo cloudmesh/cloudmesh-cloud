@@ -24,7 +24,7 @@ from db.LocalDBProvider import LocalDBProvider
 from storage.LocalStorageProvider import LocalStorageProvider
 from storage.AzureStorageProvider import AzureStorageProvider
 
-class data:
+class Data (object):
 
     def __init__(self):
         self._db = None
@@ -119,7 +119,7 @@ class data:
 if __name__ == "__main__":
     arguments = docopt(__doc__, version='Cloudmesh Drive 0.1')
 
-    cd = data()
+    cd = Data()
     cd.config() 
 
     if arguments['ls'] or arguments['dir']:

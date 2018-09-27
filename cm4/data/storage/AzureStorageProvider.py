@@ -1,6 +1,6 @@
 from libcloud.storage.types import Provider
 from libcloud.storage.providers import get_driver
-from CloudFile import CloudFile
+from cm4.data.CloudFile import CloudFile
 from storage.StorageProviderABC import StorageProviderABC
 
 

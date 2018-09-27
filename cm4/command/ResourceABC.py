@@ -11,16 +11,16 @@ import abc
 class ResourceABC(metaclass = abc.ABCMeta):
     
     @abc.abstractmethod
-    def readFile(self, yamlFile):
+    def readFile(self, yaml_file):
         """
         read the content from yaml file
-        :param yamlFile: the yaml file path
+        :param yaml_file: the yaml file path
         :return: a list of cluster information
         """
         pass
     
     @abc.abstractmethod
-    def add(self, content, filePath):
+    def add(self, content, file_path):
         """
         add new cluster content into the default yaml file
         :param content: new cluster content
@@ -36,19 +36,19 @@ class ResourceABC(metaclass = abc.ABCMeta):
         pass
     
     @abc.abstractmethod
-    def remove(self, content, filePath):
+    def remove(self, content, file_path):
         """
         remove specified cluster contetn from yaml file
         :param content: the cluster content we have
-        :param filePath: the file path of cotent that we want to remove
+        :param file_path: the file path of cotent that we want to remove
         """
         pass
     
     @abc.abstractmethod
-    def updateFile(newContent):
+    def updateFile(new_content):
         """
         update the cluster information into yaml file
-        :param newContent: the new cluster information
+        :param new_content: the new cluster information
         """
         pass
     

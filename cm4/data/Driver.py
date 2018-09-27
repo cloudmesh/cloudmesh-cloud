@@ -33,6 +33,7 @@ class Driver(object):
             self._conf = yaml.load(stream)
             print(yaml.dump(self._conf))
 
+    # noinspection PyPep8Naming
     def get(self, cloudname=None):
         # if cloudname=none get the default cloud
         # credentials = ….

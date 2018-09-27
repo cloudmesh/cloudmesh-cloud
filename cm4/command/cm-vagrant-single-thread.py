@@ -26,7 +26,6 @@ Example:
 # TODO: we have command-run-draft and command.py we should integrate this all in a single command.py
 
 
-from __future__ import print_function
 import fileinput
 import re
 import subprocess
@@ -35,6 +34,7 @@ from docopt import docopt
 from colorama import init
 from termcolor import colored
 import hostlist
+
 
 # TODO: workspace should be in ~/.cloudmesh/vagrant
 # TODO: if the workspace is not ther it needs to be created
@@ -56,7 +56,6 @@ class Vagrant(object):
         self.workspace = "./vagrant_workspace"
         self.path = os.path.join(self.workspace, "Vagrantfile")
         self.debug = debug
-
 
     def execute(self, command):
         """
@@ -140,7 +139,8 @@ class Vagrant(object):
         """
         with open(self.path, 'r') as f:
             content = f.read()
-        print (content)
+        print(content)
+
 
 def process_arguments(arguments):
     """
@@ -156,11 +156,11 @@ def process_arguments(arguments):
         except OSError:
             columns, rows = os.get_terminal_size(1)
 
-        print (colored(columns * '=', "red"))
-        print (colored("Running in Debug Mode","red"))
-        print (colored(columns * '=',"red"))
+        print(colored(columns * '=', "red"))
+        print(colored("Running in Debug Mode", "red"))
+        print(colored(columns * '=', "red"))
         print(arguments)
-        print (colored(columns * '-',"red"))
+        print(colored(columns * '-', "red"))
 
     if arguments.get("vagrant"):
         provider = Vagrant(debug=debug)

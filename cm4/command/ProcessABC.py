@@ -8,17 +8,18 @@ Created on Wed Sep 12 00:01:15 2018
 
 import abc
 
-class ProcessABC(metaclass = abc.ABCMeta):
-    
+
+class ProcessABC(metaclass=abc.ABCMeta):
+
     @abc.abstractmethod
-    def get_computer_list(self, yamlFile):
+    def get_computer_list(self, yaml_file):
         """
         get the list of computers
         :param content: the yaml file content
         :return: a list of computer information
         """
         pass
-    
+
     @abc.abstractmethod
     def get_computer(self, info):
         """
@@ -27,7 +28,7 @@ class ProcessABC(metaclass = abc.ABCMeta):
         :return: the computer key, username and public key
         """
         pass
-    
+
     @abc.abstractmethod
     def run_remote(self, username, publickey, script):
         """
@@ -38,7 +39,7 @@ class ProcessABC(metaclass = abc.ABCMeta):
         :return: the result of runnng script
         """
         pass
-    
+
     @abc.abstractmethod
     def scp(self, username, publickey, script):
         """
@@ -49,7 +50,7 @@ class ProcessABC(metaclass = abc.ABCMeta):
         :return: location of the script in vm
         """
         pass
-    
+
     @abc.abstractmethod
     def delete(self, username, publickey, file):
         """
@@ -59,7 +60,7 @@ class ProcessABC(metaclass = abc.ABCMeta):
         :param file: the location of script
         """
         pass
-    
+
     @abc.abstractmethod
     def run_local(self, username, publickey, script):
         """
@@ -70,7 +71,7 @@ class ProcessABC(metaclass = abc.ABCMeta):
         :return: the result of runnng script
         """
         pass
-    
+
     @abc.abstractmethod
     def parall_list(self, scripts):
         """
@@ -79,7 +80,7 @@ class ProcessABC(metaclass = abc.ABCMeta):
         :return: the list of computers that would run scripts
         """
         pass
-    
+
     @abc.abstractmethod
     def run_parall(self, scripts):
         """
@@ -88,7 +89,7 @@ class ProcessABC(metaclass = abc.ABCMeta):
         :rerurn: the result of all scripts
         """
         pass
-    
+
     @abc.abstractmethod
     def readable(self, result):
         """

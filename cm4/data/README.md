@@ -7,7 +7,7 @@ A central database provider keeps track of files stored with multiple cloud serv
 
 ### Local
 
-The [`LocalDBProvider`](./db/LocalDBProvider.py) uses a folder on the local file system or network share to store each cloud file entry as a yaml file.
+The [`LocalDBProvider`](db/LocalDBProvider.py) uses a folder on the local file system or network share to store each cloud file entry as a yaml file.
 
 
 ### MongoDB
@@ -21,7 +21,7 @@ Storage providers are services that allow storing files.
 
 ### Local
 
-The [`LocalStorageProvider`](./storage/LocalStorageProvider.py) uses a folder on the local file system or network share to act as a "cloud" storage provider.
+The [`LocalStorageProvider`](storage/LocalStorageProvider.py) uses a folder on the local file system or network share to act as a "cloud" storage provider.
 
 ### Azure Blob Storage
 
@@ -29,7 +29,7 @@ See Libcloud's [Azure Blobs Storage Driver Documentation](https://libcloud.readt
 
 ## Getting Started
 
-The default [`cmdata.yaml`](./cmdata.yaml) is setup to use a local database and storage provider. 
+The default [`cmdata.yaml`](cmdata.yaml) is setup to use a local database and storage provider. 
 
 **Download**
 
@@ -46,8 +46,8 @@ python cmdata.py add test/files/hello.txt
 ```
 
 If you're using an unmodified `cmdata.yaml` local test directories are set as the default "service".
-An entry for the added file will appear in the local db folder [`test/db`](./test/db) and the file 
-will be stored in [`test/storage`](./test/storage). 
+An entry for the added file will appear in the local db folder [`test/db`](../test/data/db) and the file 
+will be stored in [`test/storage`](../test/data/storage). 
 
 *Note: Network shares can also be used with the local storage provider.*
 

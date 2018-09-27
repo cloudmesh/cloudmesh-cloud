@@ -24,7 +24,7 @@ import sys
 import platform
 
 # don't use import to get the version as that causes a circular dependency
-exec(open('cloudmesh_client/version.py').read().strip())
+exec(open('cm4/__init__.py').read().strip())
 
 #
 # TODO: update to the newest versions
@@ -57,19 +57,19 @@ home = os.path.expanduser("~")
 # data_files= [
 #    (os.path.join(home, '.cloudmesh'),
 #    [os.path.join(d, f) for f in files]) for d, folders, files in os.walk(
-#                os.path.join('cloudmesh_client', 'etc'))]
+#                os.path.join('cloudmesh_cm4', 'etc'))]
 #
 # print ("DDDD", data_files)
 
 # package_data={
-#   'cloudmesh_client.etc': ['*.yaml', '*.py'],
+#   'cloudmesh_cm4.etc': ['*.yaml', '*.py'],
 # },
 
 
 setup(
     version=__version__,
-    name="cloudmesh_client",
-    description="cloudmesh_client - A heterogeneous multi cloud command "
+    name="cloudmesh_cm4",
+    description="cloudmesh_cm4 - A heterogeneous multi cloud command "
                 "client and shell",
     long_description=read('README.md'),
     license="Apache License, Version 2.0",
@@ -98,14 +98,14 @@ setup(
     include_package_data=True,
     # data_files= data_files,
     # package_data={
-    #     'cloudmesh_client.etc': ['*.yaml', '*.py'],
+    #     'cloudmesh_cm4.etc': ['*.yaml', '*.py'],
     # },
     #
     # TODO: update the endpoints
     #
     entry_points={
         'console_scripts': [
-            'cmv = cm-vagrant:main',
+            'cm4 = cm4.command.command:main',
         ],
     },
     # tests_require=['tox'],

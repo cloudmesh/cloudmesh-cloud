@@ -2,17 +2,16 @@
 """Vagrant Manager.
 
 Usage:
-  cm-vagrant.py vagrant create --count <vm_number> [--debug]
-  cm-vagrant.py vagrant start [--vms=<vmList>] [--debug]
-  cm-vagrant.py vagrant stop [--vms=<vmList>] [--debug]
-  cm-vagrant.py vagrant destroy [--vms=<vmList>] [--debug]
-  cm-vagrant.py vagrant status [--vms=<vmList>]
-  cm-vagrant.py vagrant list
-  cm-vagrant.py vagrant ssh NAME
-  cm-vagrant.py vagrant run COMMAND  [--vms=<vmList>]
+    cm4 vagrant create --count <vm_number> [--debug]
+    cm4 vagrant start [--vms=<vmList>] [--debug]
+    cm4 vagrant stop [--vms=<vmList>] [--debug]
+    cm4 vagrant destroy [--vms=<vmList>] [--debug]
+    cm4 vagrant status [--vms=<vmList>]
+    cm4 vagrant list
+    cm4 vagrant ssh NAME
+    cm4 vagrant run COMMAND  [--vms=<vmList>]
 
-
-  cm-vagrant.py -h
+    cm4 -h
 
 Options:
   -h --help     Show this screen.
@@ -24,6 +23,9 @@ Description:
 Example:
    put an example here
 """
+# TODO: we have command-run-draft and command.py we should integrate this all in a single command.py
+
+
 from __future__ import print_function
 import fileinput
 import re

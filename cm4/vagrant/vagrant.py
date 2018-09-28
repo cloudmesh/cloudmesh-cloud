@@ -322,8 +322,8 @@ def process_arguments(arguments):
 
                     # submit job to the threading pool and (immediately) start execution
                     for node_name in hosts:
-                        cur_args = ([node_name] + args)
-                        run_result.put(pool.apply_async(action, args=cur_args))
+                        currrent_args = ([node_name] + args)
+                        run_result.put(pool.apply_async(action, args=currrent_args))
                     pool.close()
                     pool.join()
 

@@ -7,10 +7,12 @@ Created on Sun Sep  9 17:19:52 2018
 """
 
 # TODO: please change to using docopts and integrate in cm4.command.py
+# TODO: we do not want to use argparse
 
 import argparse
 from cm4.command.resource import Resource
 from cm4.command.parallel import ParallelProcess
+import os
 
 
 def main():
@@ -29,7 +31,9 @@ def main():
     result = parse.parse_args()
 
     resource = Resource()
-    content = resource.readFile("/Users/yuluo/Desktop/cloudmesh.yaml")
+    name = os.path.userexpand("~/.cloudmesh/cloudmesh4.yaml")
+    content = resource.readFile(name)
+
     run = ParallelProcess(content)
 
     if result.res:

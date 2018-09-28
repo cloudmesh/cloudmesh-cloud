@@ -1,7 +1,3 @@
-from docopt import docopt
-import cm4.vagrant.vagrant
-import cm4.data.data
-
 """Vagrant Manager.
 
 Usage:
@@ -42,13 +38,18 @@ Description:
 Example:
    put an example here
 """
+from docopt import docopt
+import cm4.vagrant.vagrant
+import cm4.data.data
+import cm4
+
 
 
 def main():
     """
     Main function for the Vagrant Manager. Processes the input arguments.
     """
-    arguments = docopt(__doc__, version='Cloudmesh Vagrant Manager 0.3')
+    arguments = docopt(__doc__, version=version)
     cm4.vagrant.vagrant.process_arguments(arguments)
     cm4.data.vagrant.process_arguments(arguments)
 

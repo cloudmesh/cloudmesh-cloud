@@ -1,7 +1,7 @@
 from libcloud.storage.types import Provider
 from libcloud.storage.providers import get_driver
 from cm4.data.CloudFile import CloudFile
-from storage.StorageProviderABC import StorageProviderABC
+from cm4.data.storage.StorageProviderABC import StorageProviderABC
 
 
 class AzureStorageProvider(StorageProviderABC):

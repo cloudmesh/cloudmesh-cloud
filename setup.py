@@ -17,12 +17,13 @@
 # ------------------------------------------------------------------------#
 from __future__ import print_function
 
-import setuptools
-from setuptools import setup, find_packages
 import os
-import sys
 import platform
+import sys
 
+from setuptools import setup, find_packages
+
+__version__ = None  # surpress the version error
 # don't use import to get the version as that causes a circular dependency
 exec(open('cm4/__init__.py').read().strip())
 
@@ -47,6 +48,7 @@ if command is not None:
     os.system(command)
 
 requirements = map(str.strip, open('requirements.txt'))
+
 
 def read(fname):
     return open(os.path.join(os.path.dirname(__file__), fname)).read()

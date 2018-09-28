@@ -15,7 +15,7 @@ class ProcessABC(metaclass=abc.ABCMeta):
     def get_computer_list(self, yaml_file):
         """
         get the list of computers
-        :param content: the yaml file content
+        :param: yaml_file: the yaml file content
         :return: a list of computer information
         """
         pass

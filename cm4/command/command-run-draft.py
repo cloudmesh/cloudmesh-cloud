@@ -9,8 +9,8 @@ Created on Sun Sep  9 17:19:52 2018
 # TODO: please change to using docopts and integrate in cm4.command.py
 
 import argparse
-from data import Resource
-from parall import ParallProcess
+from cm4.command.resource import Resource
+from cm4.command.parallel import ParallelProcess
 
 
 def main():
@@ -30,7 +30,7 @@ def main():
 
     resource = Resource()
     content = resource.readFile("/Users/yuluo/Desktop/cloudmesh.yaml")
-    run = ParallProcess(content)
+    run = ParallelProcess(content)
 
     if result.res:
         if result.add_res:
@@ -49,7 +49,6 @@ def main():
         # print(run.run_remote(username, publickey, "/home/ubuntu/cm.sh"))
         # run.run_local(username, publickey, "/Users/yuluo/Desktop/cm.sh")
         # run.delete(username, publickey, "/home/ubuntu/cm.sh")
-
 
     elif result.conn:
         if result.label:

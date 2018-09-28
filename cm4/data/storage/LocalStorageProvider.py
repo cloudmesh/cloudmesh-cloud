@@ -1,10 +1,10 @@
 import os
-import yaml
+import oyaml as yaml
 import shutil
 from pathlib import Path
 from os.path import abspath
-from CloudFile import CloudFile
-from storage.StorageProviderABC import StorageProviderABC
+from cm4.data.CloudFile import CloudFile
+from cm4.data.storage.StorageProviderABC import StorageProviderABC
 
 
 class LocalStorageProvider(StorageProviderABC):

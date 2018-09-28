@@ -49,6 +49,7 @@ def main():
     """
     Main function for the Vagrant Manager. Processes the input arguments.
     """
+    version = cm4.__version__
     arguments = docopt(__doc__, version=version)
     cm4.vagrant.vagrant.process_arguments(arguments)
     cm4.data.vagrant.process_arguments(arguments)

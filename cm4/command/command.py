@@ -44,7 +44,6 @@ import cm4.data.data
 import cm4
 
 
-
 def main():
     """
     Main function for the Vagrant Manager. Processes the input arguments.

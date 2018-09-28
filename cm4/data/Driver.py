@@ -20,14 +20,15 @@
 from libcloud.compute.types import Provider
 from libcloud.compute.providers import get_driver
 import oyaml as yaml
-
+import os
 
 class Driver(object):
 
     def __init__(self):
         self._conf = {}
 
-    def config(self, name="./cloudmesh.yaml"):
+    def config(self, name="~/.cloudmesh/cloudmesh4.yaml"):
+        name = os.path.userexpand(name)
         # reads in the yaml file
         with open(name, "r") as stream:
             self._conf = yaml.load(stream)

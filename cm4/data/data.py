@@ -16,15 +16,17 @@ Options:
   --config      Location of a cmdata.yaml file
 """
 
-import yaml
+import oyaml as yaml
 from os import environ
 from docopt import docopt
-from CloudFile import CloudFile
-from db.LocalDBProvider import LocalDBProvider
-from storage.LocalStorageProvider import LocalStorageProvider
-from storage.AzureStorageProvider import AzureStorageProvider
+from cm4.data.CloudFile import CloudFile
+from cm4.data.db.LocalDBProvider import LocalDBProvider
+from cm4.data.storage.LocalStorageProvider import LocalStorageProvider
+from cm4.data.storage.AzureStorageProvider import AzureStorageProvider
+import os
 
-class Data (object):
+
+class Data(object):
 
     def __init__(self):
         self._db = None
@@ -44,11 +46,12 @@ class Data (object):
         db_provider = self._conf.get('default').get('db')
 
         if db_provider == 'local':
-            db_path =  self._conf.get('db').get('local').get('CMDATA_DB_FOLDER') or environ.get('CMDATA_DB_FOLDER')
+            db_path = self._conf.get('db').get('local').get('CMDATA_DB_FOLDER') or environ.get('CMDATA_DB_FOLDER')
             self._db = LocalDBProvider(db_path)
 
         # Check for local storage provider.
-        storage_path = self._conf.get('service').get('local').get('CMDATA_STORAGE_FOLDER') or environ.get('CMDATA_STORAGE_FOLDER')
+        storage_path = self._conf.get('service').get('local').get('CMDATA_STORAGE_FOLDER') or environ.get(
+            'CMDATA_STORAGE_FOLDER')
         if storage_path:
             self._providers['local'] = LocalStorageProvider(storage_path)
 
@@ -84,9 +87,12 @@ class Data (object):
 
     def get(self, file_name, dest_folder='.'):
         """
+
         Retrieve a file
 
         :param file_name: The name corresponding to the cloud file to be downloaded.
+        :param dest_folder:
+        :return:
         """
         # Get db entry for this file
         cloud_file = self._db.get(file_name)
@@ -98,7 +104,7 @@ class Data (object):
         # Todo: docopt default for this?
         dest_folder = dest_folder or '.'
         self._providers[cloud_file.service].get(cloud_file, dest_folder)
-    
+
     def delete(self, file_name):
         """
         Remove a file
@@ -108,7 +114,7 @@ class Data (object):
         cloud_file = self._db.get(file_name)
         self._providers[cloud_file.service].delete(cloud_file)
         self._db.delete(cloud_file)
-        
+
     def _print_row(self, file_name, url, service, size):
         """
         Print a formatted row
@@ -120,7 +126,7 @@ if __name__ == "__main__":
     arguments = docopt(__doc__, version='Cloudmesh Drive 0.1')
 
     cd = Data()
-    cd.config() 
+    cd.config()
 
     if arguments['ls'] or arguments['dir']:
         cd.ls()

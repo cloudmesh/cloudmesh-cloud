@@ -3,4 +3,4 @@ colorama
 termcolor
 python-hostlist
 apache-libcloud
-pyyaml
+oyaml

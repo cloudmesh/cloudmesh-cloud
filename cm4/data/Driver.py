@@ -19,7 +19,7 @@
 ########################################################################
 from libcloud.compute.types import Provider
 from libcloud.compute.providers import get_driver
-import yaml
+import oyaml as yaml
 
 
 class Driver(object):

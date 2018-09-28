@@ -1,8 +1,9 @@
 import os
-import yaml
+import oyaml as yaml
 from pathlib import Path
-from CloudFile import CloudFile
-from db.DBProviderABC import DBProviderABC
+from cm4.data.CloudFile import CloudFile
+from cm4.data.db.DBProviderABC import DBProviderABC
+
 
 class LocalDBProvider(DBProviderABC):
     """
@@ -23,7 +24,7 @@ class LocalDBProvider(DBProviderABC):
         :return: A CloudFile object
         """
         files = self.list_files()
-        
+
         if not files:
             return None
 
@@ -81,6 +82,5 @@ class LocalDBProvider(DBProviderABC):
             try:
                 obj = yaml.load(stream)
             except yaml.YAMLError as ex:
-                print(ex)    
+                print(ex)
         return obj
-        

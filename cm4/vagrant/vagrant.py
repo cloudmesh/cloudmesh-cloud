@@ -1,4 +1,17 @@
 #!/usr/bin/env python
+
+import queue
+import fileinput
+import re
+import subprocess
+import os
+import hostlist
+from docopt import docopt
+from colorama import init
+from termcolor import colored
+import multiprocessing.dummy as mt
+
+
 """Vagrant Manager.
 
 Usage:
@@ -79,17 +92,6 @@ Version 0.1:
 * no classes
 
 """
-import fileinput
-import re
-import subprocess
-import os
-from docopt import docopt
-from colorama import init
-from termcolor import colored
-import hostlist
-import multiprocessing.dummy as mt
-import queue
-
 
 # TODO: workspace should be in ~/.cloudmesh/vagrant
 # TODO: if the workspace is not ther it needs to be created
@@ -332,7 +334,7 @@ def process_arguments(arguments):
                         job_status = 'Success' if not isinstance(res, Exception) else 'Failed'
                         output = res.decode('utf8') if not isinstance(res, Exception) else res.stdout.decode('utf8')
 
-                        ## print report                        
+                        # print report
                         template = 'node_name: {}\njob_status: {}\noutput:\n\n{}'
                         print(template.format(node_name, job_status, output))
 

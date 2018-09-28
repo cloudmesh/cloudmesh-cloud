@@ -8,8 +8,10 @@ Created on Tue Sep 11 23:30:31 2018
 
 import abc
 
-class ResourceABC(metaclass = abc.ABCMeta):
-    
+
+# noinspection PyPep8Naming
+class ResourceABC(metaclass=abc.ABCMeta):
+
     @abc.abstractmethod
     def readFile(self, yaml_file):
         """
@@ -18,7 +20,7 @@ class ResourceABC(metaclass = abc.ABCMeta):
         :return: a list of cluster information
         """
         pass
-    
+
     @abc.abstractmethod
     def add(self, content, file_path):
         """
@@ -26,7 +28,7 @@ class ResourceABC(metaclass = abc.ABCMeta):
         :param content: new cluster content
         """
         pass
-    
+
     @abc.abstractmethod
     def listAll(self, content):
         """
@@ -34,7 +36,7 @@ class ResourceABC(metaclass = abc.ABCMeta):
         :param content: the cluster content in yaml file
         """
         pass
-    
+
     @abc.abstractmethod
     def remove(self, content, file_path):
         """
@@ -43,7 +45,7 @@ class ResourceABC(metaclass = abc.ABCMeta):
         :param file_path: the file path of cotent that we want to remove
         """
         pass
-    
+
     @abc.abstractmethod
     def updateFile(new_content):
         """
@@ -51,4 +53,3 @@ class ResourceABC(metaclass = abc.ABCMeta):
         :param new_content: the new cluster information
         """
         pass
-    

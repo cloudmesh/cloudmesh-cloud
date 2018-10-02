@@ -1,5 +1,4 @@
 import os
-import oyaml as yaml
 import shutil
 from pathlib import Path
 from os.path import abspath
@@ -11,7 +10,7 @@ class LocalStorageProvider(StorageProviderABC):
     """
     A storage provider that uses a local file system or network drive path to store files.
     """
-    
+
     def __init__(self, storage_path):
         """
         Initialize storage path.

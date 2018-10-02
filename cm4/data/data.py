@@ -16,14 +16,12 @@ Options:
   --config      Location of a cmdata.yaml file
 """
 
+import os
 import oyaml as yaml
-from os import environ
 from docopt import docopt
-from cm4.data.CloudFile import CloudFile
 from cm4.data.db.LocalDBProvider import LocalDBProvider
 from cm4.data.storage.LocalStorageProvider import LocalStorageProvider
 from cm4.data.storage.AzureStorageProvider import AzureStorageProvider
-import os
 
 
 class Data(object):
@@ -46,22 +44,22 @@ class Data(object):
         db_provider = self._conf.get('default').get('db')
 
         if db_provider == 'local':
-            db_path = self._conf.get('db').get('local').get('CMDATA_DB_FOLDER') or environ.get('CMDATA_DB_FOLDER')
+            db_path = self._conf.get('db').get('local').get('CMDATA_DB_FOLDER')
             self._db = LocalDBProvider(db_path)
 
         # Check for local storage provider.
-        storage_path = self._conf.get('service').get('local').get('CMDATA_STORAGE_FOLDER') or environ.get(
-            'CMDATA_STORAGE_FOLDER')
+        storage_path = self._conf.get('service').get('local').get('CMDATA_STORAGE_FOLDER')
         if storage_path:
             self._providers['local'] = LocalStorageProvider(storage_path)
 
         # Check for Azure provider.
         az_conf = self._conf.get('service').get('azure')
         if az_conf:
-            az_act = az_conf.get('credentials').get('AZURE_STORAGE_ACCOUNT') or environ.get('AZURE_STORAGE_ACCOUNT')
-            az_key = az_conf.get('credentials').get('AZURE_STORAGE_KEY') or environ.get('AZURE_STORAGE_KEY')
+            az_act = az_conf.get('credentials').get('AZURE_STORAGE_ACCOUNT')
+            az_key = az_conf.get('credentials').get('AZURE_STORAGE_KEY')
+            az_container = az_conf.get('container')
             if az_act and az_key:
-                self._providers['azure'] = AzureStorageProvider(az_act, az_key, az_conf.get('container'))
+                self._providers['azure'] = AzureStorageProvider(az_act, az_key, az_container)
 
         # Set a default storage provider.
         default_storage_provider = self._conf.get('default').get('service')

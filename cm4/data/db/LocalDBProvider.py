@@ -1,7 +1,6 @@
 import os
 import oyaml as yaml
 from pathlib import Path
-from cm4.data.CloudFile import CloudFile
 from cm4.data.db.DBProviderABC import DBProviderABC
 
 
@@ -12,7 +11,7 @@ class LocalDBProvider(DBProviderABC):
 
     def __init__(self, db_path):
         """
-        Initialize local db provider by scanning for yaml files in in the path
+        Initialize local db provider by setting the path
         """
         self._path = Path(db_path)
 
@@ -52,7 +51,6 @@ class LocalDBProvider(DBProviderABC):
         Remove a CloudFile from the local db
 
         :param cloud_file: A could file entry
-        :return:
         """
         entry_path = self._get_entry_name(cloud_file)
         os.remove(entry_path)
@@ -60,6 +58,8 @@ class LocalDBProvider(DBProviderABC):
     def update(self, cloud_file):
         """
         Update an existing Cloud File entry
+
+        :param cloud_file: A could file entry
         """
         self.add(cloud_file)
 

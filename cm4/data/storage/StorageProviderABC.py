@@ -34,3 +34,12 @@ class StorageProviderABC(metaclass=abc.ABCMeta):
         :param cloud_file: the cloud file entry being deleted
         """
         pass
+
+    @abc.abstractmethod
+    def exists(self, file_name):
+        """
+        if a file exists in the remote storage provider
+
+        :param file_name: a file name to check
+        """
+        pass

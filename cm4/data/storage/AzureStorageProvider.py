@@ -1,4 +1,4 @@
-from libcloud.storage.types import Provider
+from libcloud.storage.types import Provider, ObjectDoesNotExistError
 from libcloud.storage.providers import get_driver
 from cm4.data.CloudFile import CloudFile
 from cm4.data.storage.StorageProviderABC import StorageProviderABC
@@ -14,6 +14,10 @@ class AzureStorageProvider(StorageProviderABC):
         driver = get_driver(Provider.AZURE_BLOBS)
         self._driver = driver(key=account_name, secret=access_key)
         self._container = self._driver.get_container(container_name=container)
+
+        if not self._container:
+            raise Exception(f"The container `{container}` not found in account {account_name}.")
+
         self._container_url = self._container.extra.get('url').replace('http', 'https')
 
     def add(self, local_path):
@@ -59,6 +63,19 @@ class AzureStorageProvider(StorageProviderABC):
         """
         obj = self._get_object(cloud_file.name)
         self._driver.delete_object(obj)
+
+    def exists(self, cloud_file_name):
+        """
+        Tell if a file is present in the remote storage.
+
+        :param cloud_file: An instance of CloudFile
+        :return: True if the object exists.
+        """
+        try:
+            self._get_object(cloud_file_name)
+            return True
+        except ObjectDoesNotExistError:
+            return False
 
     def _get_object(self, obj_name):
         """

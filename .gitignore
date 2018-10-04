@@ -47,6 +47,7 @@ coverage.xml
 *.cover
 .hypothesis/
 .pytest_cache/
+.noseids
 
 # Translations
 *.mo
@@ -107,9 +108,15 @@ venv.bak/
 # Visual Studio Code workspace settings
 .vscode/
 
-# Test local db and storage files
-data/test/db/*
-!data/test/db/README.md
+# PyCharm settings
+.idea/
 
-data/test/storage/*
-!data/test/storage/README.md
+# Test local db and storage files
+cm4/test/data/db/*
+!cm4/test/data/db/README.md
+
+cm4/test/data/storage/*
+!cm4/test/data/storage/README.md
+
+cm4/test/data/download/*
+!cm4/test/data/download/README.md

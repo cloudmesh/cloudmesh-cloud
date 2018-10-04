@@ -81,7 +81,7 @@ A central database provider keeps track of files stored with multiple cloud serv
 
 #### Local
 
-The [`LocalDBProvider`](db/LocalDBProvider.py) uses a folder on the local file system or network share to store each cloud file entry as a yaml file.
+The [`LocalDBProvider`](cm4/data/db/LocalDBProvider.py) uses a folder on the local file system or network share to store each cloud file entry as a yaml file.
 
 
 #### MongoDB
@@ -95,7 +95,7 @@ Storage providers are services that allow storing files.
 
 #### Local
 
-The [`LocalStorageProvider`](storage/LocalStorageProvider.py) uses a folder on the local file system or network share to act as a "cloud" storage provider.
+The [`LocalStorageProvider`](cm4/data/storage/LocalStorageProvider.py) uses a folder on the local file system or network share to act as a "cloud" storage provider.
 
 #### Azure Blob Storage
 
@@ -103,7 +103,7 @@ See Libcloud's [Azure Blobs Storage Driver Documentation](https://libcloud.readt
 
 ### Getting Started
 
-The default [`cmdata.yaml`](cmdata.yaml) is setup to use a local database and storage provider. 
+The default `data` section in [`cloudmesh.yaml`](cm4/configuration/cloudmesh.yaml) is setup to use a local database and storage provider. 
 
 **Download**
 
@@ -116,28 +116,28 @@ cd data
 
 **Add a file to the default storage service**
 ```
-python cmdata.py add test/files/hello.txt
+cm4 data add test/files/hello.txt
 ```
 
-If you're using an unmodified `cmdata.yaml` local test directories are set as the default "service".
-An entry for the added file will appear in the local db folder [`test/db`](test/db) and the file 
-will be stored in [`test/storage`](test/storage). 
+If you're using an unmodified `cloudmesh.yaml` local test directories are set as the default "service".
+An entry for the added file will appear in the local db folder [`cm4/test/data/db`](cm4/test/data/db) and the file 
+will be stored in [`cm4/test/data/storage`](cm4/test/data/storage). 
 
 *Note: Network shares can also be used with the local storage provider.*
 
 **List all files**
 ```
-python cmdata.py ls
+cm4 data add ls
 ```
 
 **Download file**
 ```
-python cmdata.py get hello.txt ../test
+cm4 data get hello.txt ../test
 ```
 
 **Delete file**
 ```
-python cmdata.py del hello.txt
+cm4 data del hello.txt
 ```
 
 ### TODO - DATA
@@ -149,5 +149,5 @@ python cmdata.py del hello.txt
 - [ ] Box integration
 - [ ] AWS integration
 - [ ] Command line option for config file path
-- [ ] Should settings be moved to `cloudmesh.yaml`?
+- [x] Should settings be moved to `cloudmesh.yaml`?
 - [ ] Better way to determine which storage providers to load

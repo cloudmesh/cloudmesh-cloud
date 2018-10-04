@@ -19,12 +19,12 @@ cloudmesh:
       service: local
     db:
       local:
-        CMDATA_DB_FOLDER: './cm4/test/data/db'
+        CMDATA_DB_FOLDER: '~/cloudmesh/cm4/test/data/db'
       mongo:
         MONGO_CONNECTION_STRING: ''
     service:
       local:
-        CMDATA_STORAGE_FOLDER: './cm4/test/data/storage'
+        CMDATA_STORAGE_FOLDER: '~/cloudmesh/cm4/test/data/storage'
       azure:
         container: 'cmdata'
         credentials:

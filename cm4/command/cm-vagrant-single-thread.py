@@ -53,7 +53,7 @@ class Vagrant(object):
 
         :param debug:
         """
-        self.workspace = "./vagrant_workspace"
+        self.workspace = "~/cloudmesh/vagrant_workspace"
         self.path = os.path.join(self.workspace, "Vagrantfile")
         self.debug = debug
 

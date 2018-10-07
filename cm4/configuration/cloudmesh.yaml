@@ -19,23 +19,18 @@ cloudmesh:
       service: local
     db:
       local:
-        kind: local
-        CMDATA_DB_FOLDER: './data/db'
+        CMDATA_DB_FOLDER: './cm4/test/data/db'
       mongo:
-        kind: mongo
         MONGO_CONNECTION_STRING: ''
     service:
       local:
-        kind: local
-        CMDATA_STORAGE_FOLDER: './data/storage'
+        CMDATA_STORAGE_FOLDER: './cm4/test/data/storage'
       azure:
-        kind: azure
         container: 'cmdata'
         credentials:
           AZURE_STORAGE_ACCOUNT: ''
           AZURE_STORAGE_KEY: ''
       google:
-        kind: google
         credentials:
           GOOGLE_STORAGE_KEY: ''
           GOOGLE_STORAGE_SECRET: ''

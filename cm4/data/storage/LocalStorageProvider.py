@@ -1,8 +1,7 @@
 import os
-import oyaml as yaml
 import shutil
 from pathlib import Path
-from os.path import abspath
+from os.path import abspath, exists
 from cm4.data.CloudFile import CloudFile
 from cm4.data.storage.StorageProviderABC import StorageProviderABC
 
@@ -11,7 +10,7 @@ class LocalStorageProvider(StorageProviderABC):
     """
     A storage provider that uses a local file system or network drive path to store files.
     """
-    
+
     def __init__(self, storage_path):
         """
         Initialize storage path.
@@ -49,3 +48,11 @@ class LocalStorageProvider(StorageProviderABC):
         :param cloud_file: the cloud file entry being deleted
         """
         os.remove(cloud_file.url)
+
+    def exists(self, cloud_file_name):
+        """
+        Delete a file from the database
+
+        :param cloud_file: the cloud file entry being deleted
+        """
+        return exists(abspath(self._path.joinpath(cloud_file_name)))

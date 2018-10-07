@@ -1,3 +1,4 @@
+#! /usr/bin/env python
 ########################################################################
 #
 #    Copyright 2018 cloudmesh.org
@@ -16,24 +17,25 @@
 #    License: Apache 2.0
 #
 ########################################################################
-
 from libcloud.compute.types import Provider
 from libcloud.compute.providers import get_driver
-import yaml
+import oyaml as yaml
+import os
 
-
-class cloudmesh:
+class Driver(object):
 
     def __init__(self):
         self._conf = {}
 
-    def config(self, name="./cloudmesh.yaml"):
+    def config(self, name="~/.cloudmesh/cloudmesh4.yaml"):
+        name = os.path.userexpand(name)
         # reads in the yaml file
         with open(name, "r") as stream:
             self._conf = yaml.load(stream)
             print(yaml.dump(self._conf))
 
-    def get_driver(self, cloudname=None):
+    # noinspection PyPep8Naming
+    def get(self, cloudname=None):
         # if cloudname=none get the default cloud
         # credentials = ….
         # return the driver for that cloud
@@ -60,9 +62,9 @@ class cloudmesh:
 
 
 if __name__ == '__main__':
-    cm = cloudmesh()
+    cm = Driver()
     cm.config()
-    driver = cm.get_driver("aws")
+    driver = cm.get("aws")
     print("driver=", driver)
     # connection = cm.get_driver("azure")
     # retrieve available images and sizes

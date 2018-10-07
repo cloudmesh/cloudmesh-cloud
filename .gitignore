@@ -1,3 +1,4 @@
+vagrant_workspace
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -46,6 +47,7 @@ coverage.xml
 *.cover
 .hypothesis/
 .pytest_cache/
+.noseids
 
 # Translations
 *.mo
@@ -102,3 +104,19 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+# Visual Studio Code workspace settings
+.vscode/
+
+# PyCharm settings
+.idea/
+
+# Test local db and storage files
+cm4/test/data/db/*
+!cm4/test/data/db/README.md
+
+cm4/test/data/storage/*
+!cm4/test/data/storage/README.md
+
+cm4/test/data/download/*
+!cm4/test/data/download/README.md

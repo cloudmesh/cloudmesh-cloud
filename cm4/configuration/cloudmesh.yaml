@@ -1,0 +1,63 @@
+cloudmesh:
+  default:
+    cloud:                          azure
+    cluster:                        clustera
+  cloud:
+    azure:
+      kind:                         azure
+      credentials:
+        AZURE_SUBSCRIPTION_ID:      'xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
+        AZURE_MANAGEMENT_CERT_PATH: 'C:/Demo/azure_cert.pem'
+    aws:
+      kind:                         aws
+      credentials:
+        EC2_ACCESS_ID:              'your access id'
+        EC2_SECRET_KEY:             'your secret key'
+  data:
+    default:
+      db:  local
+      service: local
+    db:
+      local:
+        CMDATA_DB_FOLDER: './cm4/test/data/db'
+      mongo:
+        MONGO_CONNECTION_STRING: ''
+    service:
+      local:
+        CMDATA_STORAGE_FOLDER: './cm4/test/data/storage'
+      azure:
+        container: 'cmdata'
+        credentials:
+          AZURE_STORAGE_ACCOUNT: ''
+          AZURE_STORAGE_KEY: ''
+      google:
+        credentials:
+          GOOGLE_STORAGE_KEY: ''
+          GOOGLE_STORAGE_SECRET: ''
+  cluster:
+    bigred2:
+        name:                       bigred2
+        label:                      bigred
+        address:                    bigred2.iu.edu
+        credentials:
+          username:                 TBD
+          pulickey:                 ~/.ssh/id_rsa.pub    
+    karst:
+        credentials:
+          username:                 TBD
+          pulickey:                 ~/.ssh/id_rsa.pub
+    clustera:
+      computer_a:                   ##   computer:
+        name:                       computer_a
+        label:                      one
+        address:                    localhost
+        credentials:
+          username:                 TBD
+          pulickey:                 ~/.ssh/id_rsa.pub
+      computer_b:
+        name:                       computer_b
+        label:                      two
+        address:                    localhost
+        credentials:
+          username:                 TBD
+          pulickey:                 ~/.ssh/id_rsa.pub

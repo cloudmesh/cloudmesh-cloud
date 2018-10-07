@@ -71,3 +71,83 @@ this is not yet well defined hence advanced
  
 
 all others we can easily do 
+
+
+## Manual: Cloudmesh Multi Service Data Access
+
+### Database Providers
+
+A central database provider keeps track of files stored with multiple cloud services.
+
+#### Local
+
+The [`LocalDBProvider`](cm4/data/db/LocalDBProvider.py) uses a folder on the local file system or network share to store each cloud file entry as a yaml file.
+
+
+#### MongoDB
+
+Todo
+
+
+### Storage Providers
+
+Storage providers are services that allow storing files.
+
+#### Local
+
+The [`LocalStorageProvider`](cm4/data/storage/LocalStorageProvider.py) uses a folder on the local file system or network share to act as a "cloud" storage provider.
+
+#### Azure Blob Storage
+
+See Libcloud's [Azure Blobs Storage Driver Documentation](https://libcloud.readthedocs.io/en/latest/storage/drivers/azure_blobs.html) for instructions on how to setup a storage account and generate access keys.
+
+### Getting Started
+
+The default `data` section in [`cloudmesh.yaml`](cm4/configuration/cloudmesh.yaml) is setup to use a local database and storage provider. 
+
+**Download**
+
+```
+git clone https://github.com/cloudmesh-community/cm
+cd cm
+pip install -r requirements.txt
+cd data
+```
+
+**Add a file to the default storage service**
+```
+cm4 data add test/files/hello.txt
+```
+
+If you're using an unmodified `cloudmesh.yaml` local test directories are set as the default "service".
+An entry for the added file will appear in the local db folder [`cm4/test/data/db`](cm4/test/data/db) and the file 
+will be stored in [`cm4/test/data/storage`](cm4/test/data/storage). 
+
+*Note: Network shares can also be used with the local storage provider.*
+
+**List all files**
+```
+cm4 data add ls
+```
+
+**Download file**
+```
+cm4 data get hello.txt ../test
+```
+
+**Delete file**
+```
+cm4 data del hello.txt
+```
+
+### TODO - DATA
+
+- [ ] The output for `ls` is not well formatted for the length of URLs.
+- [ ] Access/sharing policies
+- [ ] MongoDB database provider
+- [ ] Google Drive integration
+- [ ] Box integration
+- [ ] AWS integration
+- [ ] Command line option for config file path
+- [x] Should settings be moved to `cloudmesh.yaml`?
+- [ ] Better way to determine which storage providers to load

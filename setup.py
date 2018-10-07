@@ -17,22 +17,23 @@
 # ------------------------------------------------------------------------#
 from __future__ import print_function
 
-import setuptools
-from setuptools import setup, find_packages
 import os
-import sys
 import platform
+import sys
 
+from setuptools import setup, find_packages
+
+__version__ = None  # surpress the version error
 # don't use import to get the version as that causes a circular dependency
-exec(open('cloudmesh_client/version.py').read().strip())
+exec(open('cm4/__init__.py').read().strip())
 
 #
 # TODO: update to the newest versions
 #
-if sys.version_info < (2, 7, 10) or sys.version_info > (3, 0):
+if sys.version_info > (3, 7, 0):
     print(70 * "#")
-    print("WARNING: upgrade to python 2.7.10 or above but not 3 "
-          "are not supported. Your version is {}. failed.".format(sys.version_info))
+    print("WARNING: upgrade to python 3.7.0 "
+          "other version are not supported. Your version is {}. failed.".format(sys.version_info))
     print(70 * "#")
 
 command = None
@@ -48,6 +49,7 @@ if command is not None:
 
 requirements = map(str.strip, open('requirements.txt'))
 
+
 def read(fname):
     return open(os.path.join(os.path.dirname(__file__), fname)).read()
 
@@ -57,19 +59,19 @@ home = os.path.expanduser("~")
 # data_files= [
 #    (os.path.join(home, '.cloudmesh'),
 #    [os.path.join(d, f) for f in files]) for d, folders, files in os.walk(
-#                os.path.join('cloudmesh_client', 'etc'))]
+#                os.path.join('cloudmesh_cm4', 'etc'))]
 #
 # print ("DDDD", data_files)
 
 # package_data={
-#   'cloudmesh_client.etc': ['*.yaml', '*.py'],
+#   'cloudmesh_cm4.etc': ['*.yaml', '*.py'],
 # },
 
 
 setup(
     version=__version__,
-    name="cloudmesh_client",
-    description="cloudmesh_client - A heterogeneous multi cloud command "
+    name="cloudmesh_cm4",
+    description="cloudmesh_cm4 - A heterogeneous multi cloud command "
                 "client and shell",
     long_description=read('README.md'),
     license="Apache License, Version 2.0",
@@ -98,14 +100,14 @@ setup(
     include_package_data=True,
     # data_files= data_files,
     # package_data={
-    #     'cloudmesh_client.etc': ['*.yaml', '*.py'],
+    #     'cloudmesh_cm4.etc': ['*.yaml', '*.py'],
     # },
     #
     # TODO: update the endpoints
     #
     entry_points={
         'console_scripts': [
-            'cmv = cm-vagrant:main',
+            'cm4 = cm4.command.command:main',
         ],
     },
     # tests_require=['tox'],

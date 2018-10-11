@@ -1,5 +1,8 @@
 # AWS cm 
 
+:o: what is the difference between this readme and the readme in the
+directory above? Please only maintaine one README.
+
 The project code is designed for using awscm.py to access the aws instance and run scripts in it.
 
 In the code, we provide these commands for achieving the goal of conducting benchmarks on remote machines.

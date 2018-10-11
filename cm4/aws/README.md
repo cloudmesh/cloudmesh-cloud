@@ -27,7 +27,7 @@ The [`awscm.py`] is the main runable python class to start the aws cm
 project. It used the "docopt" to build the usage of commands.  Here
 are the version 1 commands that could be used:
 
-___
+#### Add resources
 
 ```
   awscm.py resource add <yaml_file>
@@ -42,12 +42,15 @@ aws_a:
     label: aws_a
     name: aws_a
 ```
-___
+
+#### List Resources
+
 ```
   awscm.py resource list [--debug]
 ```
 list all instances from the default yaml file
-___
+
+#### Remove Resources
 
 ```
   awscm.py resource remove <label_name>
@@ -59,7 +62,9 @@ the correct name or label. For example:
 ```
   python awscm.py resource remove aws_a
 ```
-___
+
+#### View Resources
+
 ```
   awscm.py resource view <label_name>
 ```
@@ -70,7 +75,9 @@ in the correct name or label. For example:
 ```
    python awscm.py view aws_a
 ```
-___
+
+#### Copy Instances from File
+
 ```
   awscm.py copy instance <label_name> file <file> to <where> 
 ```
@@ -78,7 +85,9 @@ copy the file from local to the directory of instance. For exmaple:
 ```
   python awscm.py copy instance aws_a file test.txt to /test/
 ```
-___
+
+#### Copy Instances from Folder
+
 ```
   awscm.py copy instance <label_name> foler <foler> to <where> 
 ```
@@ -86,7 +95,9 @@ copy the folder from local to the directory of instance. For example:
 ```
   python awscm.py copy instance aws_a folder /test/ to /test/
 ```
-___
+
+#### Copy Instances
+
 ```
   awscm.py list instance <label_name> from <where>
 ```
@@ -94,7 +105,9 @@ list the files/folders in the directory of instanace. For example:
 ```
   python awscm.py instance aws_a from /test/
 ```
-___
+
+#### Delete Instances from file
+
 ```
   awscm.py delete instance <label_name> file <file> from <where> 
 ```
@@ -102,7 +115,9 @@ delete the file from the directory of instance. For example:
 ```
   python awscm.py delete instance aws_a file text.txt from /test/
 ```
-___
+
+#### Delete Instances from Folder
+
 ```
   awscm.py delete instance <label_name> folder <folder> from <where>
 ```
@@ -110,7 +125,9 @@ delete the folder from the directory of instance. For example:
 ```
   python awscm.py delete instance aws_a folder test from /test/
 ```
-___
+
+#### Create instances from folder
+
 ```
   awscm.py create instance <label_name> folder <folder> in <where>
 ```
@@ -118,7 +135,9 @@ create a new folder in the directory of instance. For example:
 ```
   python awscm.py create instance aws_a folder test in /test/
 ```
-___
+
+#### Read Instances from Folder
+
 ```
   awscm.py read instance <label_name> file <file> from <where>
 ```
@@ -126,7 +145,8 @@ read the file in the directory of instance. For example:
 ```
   python awscm.py read instance aws_a file test.txt from /test/
 ```
-___
+#### Download INstances from file
+
 ```
   awscm.py download instance <label_name> file <file> from <where> to <local>
 ```
@@ -134,7 +154,9 @@ download the file from the directory of instance to local. For example:
 ```
   python awscm.py download instance aws_a file test.txt from /test/ to /test/
 ```
-___
+
+### Download instances from folder
+
 ```
   awscm.py download instance <label_name> folder <folder> from <where> to <local>
 ```
@@ -142,7 +164,9 @@ download the folder from the directory of instance to local. For example:
 ```
   python awscm.py download instance aws_a folder test from /test/ to /test
 ```
-___
+
+#### Check instances
+
 ```
   awscm.py check instance <label_name> process_name <process>
 ```
@@ -150,7 +174,9 @@ check the running process in the instance. For example:
 ```
   python awscm.py check isntance aws_a process_name test
 ```
-___
+
+#### Run instances locally
+
 ```
   awscm.py run instance <label_name> local <scripts>
 ```
@@ -158,7 +184,9 @@ run the scripts from local into the instance. For example:
 ```
   python awscm.py instance aws_a local test.sh,test.sh,test.sh
 ```
-___
+
+#### Run instances remotely
+
 ```
   awscm.py run instance <label_name> remote <scripts>
 ```
@@ -166,7 +194,9 @@ run the scripts from remote instance. For example:
 ```
   python awscm.py run instance aws_a remote test.sh,test.sh,test.sh
 ```
-___
+
+#### Run local
+
 ```
   awscm.py run local <scripts>
 ```
@@ -174,7 +204,9 @@ run the scripts from local into the random parallel instance. For example:
 ```
   python awscm.py run local test.sh,test.sh,test.sh
 ```
-___
+
+#### Run local
+
 ```
   awscm.py run remote <scripts>
 ```
@@ -185,7 +217,8 @@ instances have the required scripts. For example:
 ```
   python awscm.py run remote test.sh,test.sh,test.sh
 ```
-___
+Run advanced
+
 ```
   awscm.py run advanced <string>
   ```
@@ -211,7 +244,6 @@ then we run the command to get the result:
 ```
   python awscm.py advanced a|b|c;d;a+b+c+d
 ```
-___
 
 ### config.py
 

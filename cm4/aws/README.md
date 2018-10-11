@@ -56,6 +56,12 @@ looks at teh system sattus of mongo and other cm4 stuff
 
 ```
 
+here are some additional thoughts, that may influence what we do:
+
+* <http://cloudmesh.github.io/cmd3/man/man.html#vm>
+* There is also a newer version of cloudmesh, that we have not implemented all of this logic but it uses cmd5 
+
+
 ### awscm.py
 
 The [`awscm.py`] is the main runable python class to start the aws cm

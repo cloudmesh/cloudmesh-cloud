@@ -1,8 +1,10 @@
 # AWS cm 
 
-The project code is designed for using awscm.py to access the aws instance and run scripts in it.
+The project code is designed for using awscm.py to access the aws
+instance and run scripts in it.
 
-In the code, we provide these commands for achieving the goal of conducting benchmarks on remote machines.
+In the code, we provide these commands for achieving the goal of
+conducting benchmarks on remote machines.
 
 ## Code Description
 
@@ -10,22 +12,29 @@ In the awscm folder, there are several basic python files:
 
 ### cloudmesh.yaml
 
-This file contains the property of each instance, especially the AWS instance. In AWS cm project, we only concern about the block of 
-information in "cloud" part. 
+This file contains the property of each instance, especially the AWS
+instance. In AWS cm project, we only concern about the block of
+information in "cloud" part.
 
-In the properties of one aws instance, we need users to specify the "name" and "label" of the instance. In the "credentials" part,
-we need users to fill in the "KEY" and "ID". Make sure there are no duplicated names and labels in the "aws" list.
+In the properties of one aws instance, we need users to specify the
+"name" and "label" of the instance. In the "credentials" part, we need
+users to fill in the "KEY" and "ID". Make sure there are no duplicated
+names and labels in the "aws" list.
 
 ### awscm.py
 
-The [`awscm.py`] is the main runable python class to start the aws cm project. It used the "docopt" to build the usage of commands.
-Here are the version 1 commands that could be used:
+The [`awscm.py`] is the main runable python class to start the aws cm
+project. It used the "docopt" to build the usage of commands.  Here
+are the version 1 commands that could be used:
+
 ___
 
 ```
   awscm.py resource add <yaml_file>
 ```
-add extra instance information into the default yaml file. Please follow the schema of the asw instance. For example:
+
+add extra instance information into the default yaml file. Please
+follow the schema of the asw instance. For example:
 
 ```
 aws_a:
@@ -39,10 +48,14 @@ ___
 ```
 list all instances from the default yaml file
 ___
+
 ```
   awscm.py resource remove <label_name>
 ```
-remove the named or labeled instance from yaml file. Please fill in the correct name or label. For example:
+  
+remove the named or labeled instance from yaml file. Please fill in
+the correct name or label. For example:
+
 ```
   python awscm.py resource remove aws_a
 ```
@@ -50,7 +63,10 @@ ___
 ```
   awscm.py resource view <label_name>
 ```
-view named or labeled instance from the default yaml file. Please fill in the correct name or label. For example:
+
+view named or labeled instance from the default yaml file. Please fill
+in the correct name or label. For example:
+
 ```
    python awscm.py view aws_a
 ```
@@ -162,25 +178,36 @@ ___
 ```
   awscm.py run remote <scripts>
 ```
-run the scripts from the remote parallel instances. Make sure all instances have the required scripts. For example:
+
+run the scripts from the remote parallel instances. Make sure all
+instances have the required scripts. For example:
+
 ```
   python awscm.py run remote test.sh,test.sh,test.sh
 ```
 ___
 ```
   awscm.py run advanced <string>
-```
-this command is running the advanced algorithm. Developing a string based formulation of the tasks while providing the task in a def and using the chars | for parallel, ; for sequential and + for adding results.
-In the project, we only develop simples string to be executed via ssh on a remote machines. The default setting is running the local scripts into remote parallel instances. 
+  ```
+  
+this command is running the advanced algorithm. Developing a string
+based formulation of the tasks while providing the task in a def and
+using the chars | for parallel, ; for sequential and + for adding
+results.  In the project, we only develop simples string to be
+executed via ssh on a remote machines. The default setting is running
+the local scripts into remote parallel instances.
 
 For example, we define the function in [`advanced.py`]:
+
 ```
   def a():
   def b():
   def c():
   def d();
 ```
+
 then we run the command to get the result:
+
 ```
   python awscm.py advanced a|b|c;d;a+b+c+d
 ```
@@ -188,28 +215,39 @@ ___
 
 ### config.py
 
-This python class is helping the project read the configuration of instances. In the yaml file, we set three types of instances: 
-cloud, cluster and default, and the [`config.py`] could return relative block information of them.
+This python class is helping the project read the configuration of
+instances. In the yaml file, we set three types of instances: cloud,
+cluster and default, and the [`config.py`] could return relative block
+information of them.
 
 ### resource.py
 
-[`resource.py`] is used to read and manage the default yaml file. In the class, we provides the read, update, add, remove and review functionalities for yaml file. And [`awscm.py`] would call these functions
-to run the commands.
+[`resource.py`] is used to read and manage the default yaml file. In
+the class, we provides the read, update, add, remove and review
+functionalities for yaml file. And [`awscm.py`] would call these
+functions to run the commands.
 
 ### utility.py
 
-The [`utility.pt`] file contains the functions to do preparation before running scripts in remote instance. In this python class, we implement the functions:
-copy file to instance, copy folder into instance, list files from the instance, delete file from instance, delete folder from instance, 
-create folder instance, read file from instance, download file from instance, download folder from instance and check whether the process is running or not.
+The [`utility.pt`] file contains the functions to do preparation
+before running scripts in remote instance. In this python class, we
+implement the functions: copy file to instance, copy folder into
+instance, list files from the instance, delete file from instance,
+delete folder from instance, create folder instance, read file from
+instance, download file from instance, download folder from instance
+and check whether the process is running or not.
 
 ### run.py
 
-The [`run.py`] file contains the functions to call the scripts in remote instance. In this class, we provides three functions: run the scripts locally to the instance,
- run the remote scripts in the instance and run the scripts in parallel instances.
+The [`run.py`] file contains the functions to call the scripts in
+ remote instance. In this class, we provides three functions: run the
+ scripts locally to the instance, run the remote scripts in the
+ instance and run the scripts in parallel instances.
 
 ### advanced.py
 
-This class is used for the advanced approach to run a string based formulation of the tasks. Need to be updated later.
+This class is used for the advanced approach to run a string based
+formulation of the tasks. Need to be updated later.
 
 ## TODO - Spark
 

@@ -1,17 +1,5 @@
 #!/usr/bin/env python
 
-import queue
-import fileinput
-import re
-import subprocess
-import os
-import hostlist
-from docopt import docopt
-from colorama import init
-from termcolor import colored
-import multiprocessing.dummy as mt
-
-
 """Vagrant Manager.
 
 Usage:
@@ -22,8 +10,9 @@ Usage:
   vagrant.py vagrant status [--vms=<vmList>]
   vagrant.py vagrant list
   vagrant.py vagrant ssh NAME
-  vagrant.py vagrant run COMMAND  [--vms=<vmList>]
-  vagrant.py vagrant script run SCRIPT [--vms=<vmList>]
+  vagrant.py vagrant run-command COMMAND [--vms=<vmList>] [--debug]
+  vagrant.py vagrant run-script SCRIPT [--vms=<vmList>] [--debug]
+
 
 
   vagrant.py -h
@@ -96,9 +85,20 @@ Version 0.1:
 # TODO: workspace should be in ~/.cloudmesh/vagrant
 # TODO: if the workspace is not ther it needs to be created
 # TODO: use captal letters as easier to document in other tools
-# TODO: implement ssh
-# TODO: implement the run that executes the command on the specified hosts
 
+
+import queue
+import fileinput
+import re
+import subprocess
+import os
+import hostlist
+from docopt import docopt
+from colorama import init
+from termcolor import colored
+import multiprocessing.dummy as mt
+import time
+import logging
 
 class Vagrant(object):
     """
@@ -108,14 +108,27 @@ class Vagrant(object):
 
     def __init__(self, debug=False):
         """
-        Initializes the workspace for Vagrant.
+        TODO: doc
 
-        :param debug: enables debug information to be printed.
+        :param debug:
         """
+<<<<<<< HEAD
         self.workspace = "~/cloudmesh/vagrant_workspace"
+=======
+        self.workspace = "./vagrant_workspace"
+        self.experiment_path="../experiment"
+        self.ssh_config={}
+>>>>>>> 9c821c988aac7acd422184beb5b4ced2628aaa75
         self.path = os.path.join(self.workspace, "Vagrantfile")
         self.debug = debug
 
+    def _nested_mkdir(self, path):
+        parsed_path=path.split('/')
+        for i in range(len(parsed_path)-1):
+            d='/'.join(parsed_path[0:i+1])
+            if not os.path.isdir(d):
+                os.mkdir(d)
+                
     def _get_host_names(self):
         """
         get all of the host names that exist in current vagrant environment
@@ -124,22 +137,232 @@ class Vagrant(object):
         if isinstance(res, Exception):
             print(res)
             return []
-
+            
         res = res.decode('utf8')
         res = re.split('[\r\n]{1,2}', res)
         host_lines = res[res.index('', 1) + 1:res.index('', 2)]
         host_names = [re.split('\s+', x)[0] for x in host_lines]
         return host_names
 
-    def run(self, name, command):
+    def _scp(self,name, direction, source, dest):
         """
-        TODO: doc
+        upload file to / fetch file from the remote node using scp functionality available on local machine
 
-        :param name:
+        :param name: name of the node.
+        :param direction: download or upload
+        :param source: source file path 
+        :param dest: destination file path 
+        :return: None
+        """         
+        # get vagrant setting
+        if name not in self.ssh_config:
+            res=self.execute('vagrant ssh-config {}'.format(name), result=True)
+            res=res.decode('utf8')            
+            configs=[x.strip().split() for x in re.split('[\r\n]+',res) if x]
+            configs=dict(zip([x[0] for x in configs], [x[1] for x in configs]))
+            user=configs['User']
+            key_file=os.path.normpath(configs['IdentityFile'])
+            
+            # get node ip
+            res=self.run_command(name, 'hostname -I', False)    
+            ip=re.findall('\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}', res['output'])[1]
+            
+            #save to ssh_config
+            self.ssh_config[name]={'user':user, 'ip':ip, 'key_file':key_file}
+        else:
+            user, ip, key_file=[self.ssh_config[name][x] for x in ['user','ip','key_file']]
+            
+        # submit 
+        kwargs={'key_file':key_file, 'source':source, 'user':user, 'ip':ip, 'dest':dest}
+        
+        if direction=='upload':
+            logging.debug('upload {} to node {}...'.format(source, name))
+            subprocess.call('scp -q -o LogLevel=QUIET -i {key_file} {source} {user}@{ip}:{dest}'.format(**kwargs))
+        elif direction=='download':
+            logging.debug('download {} form the node {}...'.format(source, name))
+            subprocess.call('scp -q -o LogLevel=QUIET -i {key_file} {user}@{ip}:{source} {dest}'.format(**kwargs))
+                     
+    def _parse_run_result(self, res, template=None, report_kwargs=None):
         """
-        res = self.execute('vagrant ssh {} -c {}'.format(name, command), result=True)
-        return name, res
+        parse runnin result, and (optionally) generating running report
 
+        :param res: job result object
+        :param template: template of running report
+        :param report_kwargs: content dictionary of running result
+        :return: str or dictionary:
+        """         
+        #parse run_report
+        job_status='Finished' if not isinstance(res, Exception) else 'Failed'
+        
+        if job_status =='Finished':
+            str_output=res.decode('utf8') if not isinstance(res, str) else res
+            command_output=re.search('^\x04(.+?)\nreturn_code', str_output, re.MULTILINE|re.DOTALL)
+            command_output=command_output.group(1).strip() if command_output else ""
+            return_code=int(re.search('return_code: (\d+)', str_output).group(1))
+            job_status=job_status if return_code!=0 else 'Success'
+        else:                               
+            command_output=res.stdout.decode('utf8')
+            return_code='N.A.'
+        
+        ## return 
+        parse_result={'job_status':job_status, 'return_code':return_code, 'output':command_output}
+        if template and report_kwargs:
+            report_kwargs.update(parse_result)
+            return template.format(**report_kwargs)
+        else:
+            return parse_result
+
+    def run_parallel(self, hosts, action, args, kwargs):                                            
+        """
+        run job in parallel fashion
+
+        :param hosts: list of node names on which job runs
+        :param run_action: running action function object
+        :param args: positional arguments of running action function
+        :param kwargs: keyword arguments of running action function
+        :return: None:
+        """      
+        # initalize threading pool
+        pool = mt.Pool(len(hosts))
+        run_result = queue.Queue()
+        
+        # submit job to the threading pool and put the job result object into the result queue
+        for node in hosts:
+            currrent_args = ([node] + args)
+            job=pool.apply_async(action, args=currrent_args, kwds=kwargs)            
+            run_result.put([node, job])
+        pool.close()
+        
+        # retrieve the result          
+        wait_time=5
+        run_report=[]
+        while run_result.qsize()>0:
+            node, job_res = run_result.get()
+            if not job_res.ready():
+                run_result.put([node, job_res])
+                logging.info('job assign to node {:<8s} is not finished yet! Wait for finishing.....'.format(node, wait_time))
+                time.sleep(wait_time)
+            else:
+                run_report.append(job_res.get())
+        
+        #print report
+        for x in run_report:
+            print(x)
+                
+    def run_script(self, name, script_path, report=True, report_alone=True):
+        """
+        run shell script on specified node, fetch the console output and data output if existed
+
+        :param name: name of node
+        :param script_path: local path of script file which will be executed on the node
+        :param report: processing job running report. if False, return result object
+        :param report_alone: print job running report. if False, return job running report
+        :return: dictionary, subprocess.CalledProcessError
+        """
+        # building path
+        script_name=os.path.basename(script_path)
+        exp_folder_name='{}_{:.0f}'.format(script_name,time.time())
+        guest_exp_folder_path='~/cm_experiment/{}'.format(exp_folder_name)
+        guest_script_path='{}/{}'.format(guest_exp_folder_path,script_name)
+
+        # ensure cm_experiment folder exists, in not, build cm_experiement folder
+        cm_folder_query=self.run_command(name, 'ls -d ~/cm_experiment/', False)
+        cm_folder_query=cm_folder_query['output']
+        if 'No such file or directory' in cm_folder_query:
+            self.run_command(name, 'mkdir ~/cm_experiment', False)
+                           
+        # build geust expreiment folder and ship sciript to it 
+        self.run_command(name, 'mkdir {}'.format(guest_exp_folder_path), False)
+        self._scp(name, 'upload', source=script_name, dest=guest_script_path)
+      
+        # run the script
+        script_args=guest_exp_folder_path
+        run_res=self.run_command(name, '. {} {} 2>&1 > {}/console_output.txt'.format(guest_script_path, script_args, guest_exp_folder_path), False)   
+        
+        # fetch console output
+        if isinstance(run_res, subprocess.CalledProcessError):
+            # TODO: if return error, how to modify the following process?
+            pass
+        elif isinstance(run_res, Exception):
+            raise run_res
+        else:
+            console_output=self.run_command(name, 'cat {}/console_output.txt'.format(guest_exp_folder_path), False)
+            run_res['output']=console_output['output']+'\n'+run_res['output']               
+        
+        # fetch output files if exists
+        output_files_query=self.run_command(name, "ls {}/output/".format(guest_exp_folder_path), report=False)
+        have_output_file=output_files_query['return_code']==0 and output_files_query['output'] # remote output folder exists and have files in it     
+        
+        if have_output_file:
+            # build local experiment folder
+            host_exp_folder_path='{}/{}/{}/output'.format(self.experiment_path, name, exp_folder_name)  
+            self._nested_mkdir(host_exp_folder_path)
+            
+            #fetch output files
+            output_files=[ '{}/output/{}'.format(guest_exp_folder_path, x) for x in output_files_query['output'].split('\n')]
+            for source in output_files:
+                self._scp(name, 'download', source=source, dest=host_exp_folder_path)
+ 
+        # processing the report
+        if not report:
+            return run_res
+        
+        else:
+            template='\n'.join(['\n\n========= JOB REPORT =========',
+                                'node_name: {name}',
+                                'job_description: {job_type} "{command}"',
+                                'job_status/node_return_code: {job_status} / {return_code}',
+                                'node_job_folder: {remote_job_folder}',
+                                'local_output_folder:{local_output_folder}',
+                                'console_output:\n{output}\n'])            
+            
+            report_kwargs={'name':name, 
+                           'job_type':'run_script',
+                           'remote_job_folder':guest_exp_folder_path+'/',
+                           'local_output_folder': host_exp_folder_path+'/' if have_output_file else 'N.A.',
+                           'command':script_path                          
+                           }
+            
+            report_kwargs.update(run_res)            
+            report=template.format(**report_kwargs)
+            
+            if report_alone:
+                print(report)            
+            else:
+                return report            
+            
+    def run_command(self, name, command, report=True, report_alone=True):
+        """
+        run shell command in specified node
+
+        :param name: name of node
+        :param command: command executed on the node
+        :param report: processing job running report. if False, return result object
+        :param report_alone: print job running report. if False, return job running report
+        :return: string, subprocess.CalledProcessError
+        """
+        #submit job
+        logging.debug('exceute "{}" on node {}......'.format(command, name))        
+        res=self.execute('vagrant ssh {} -c "echo -e \\"\x04\\";{}; echo \\"return_code: $?\\""'.format(name, command), result=True)                                       
+        
+        # processing result
+        if not report:
+            return self._parse_run_result(res) if not isinstance(res, Exception) else res
+        
+        else:
+            template='\n'.join(['\n\n========= JOB REPORT =========',
+                                'node_name: {name}',
+                                'job_description: {job_type} "{command}"',
+                                'console output:\n{output}\n'])
+            report_kwargs={'name':name, 'job_type':'run_command', 'command':command}
+            report=self._parse_run_result(res, template, report_kwargs)
+            
+            if report_alone:
+                print(report)                
+            else:
+                return report                
+											 
+							  
     def execute(self, command, result=False):
         """
         TODO: doc
@@ -148,23 +371,36 @@ class Vagrant(object):
         :return:
         """
         if self.debug:
-            print(command.strip())
-        else:
-            if not result:
-                subprocess.run(command.strip(),
-                               cwd=self.workspace,
-                               check=True,
-                               shell=True)
-            else:
-                try:
-                    res = subprocess.check_output(command.strip(),
-                                                  cwd=self.workspace,
-                                                  shell=True,
-                                                  stderr=subprocess.STDOUT)
-                    return res
-                except Exception as e:
-                    return e
+            logging.debug(command.strip())
+	  
 
+        if not result:
+            subprocess.run(command.strip(),
+                           cwd=self.workspace,
+                           check=True,
+                           input=b'\n',
+                           shell=True)
+        else:
+            try:
+                res = subprocess.check_output(command.strip(),
+                                              cwd=self.workspace,
+                                              shell=True,
+                                              input=b'\n',
+                                              stderr=subprocess.STDOUT)
+                return res
+            except Exception as e:
+                return e
+				
+    def ssh(self, name):
+        """
+        TODO: doc
+		
+        :param name:
+        :return:
+        """				 
+        self.execute("vagrant ssh " + str(name))
+					
+			
     def status(self, name=None):
         """
         Provides the status information of all Vagrant Virtual machines by default.
@@ -201,6 +437,7 @@ class Vagrant(object):
         :return:
         """
         self.vagrant_action(action="start", name=name)
+					   	   
 
     def stop(self, name=None):
         """
@@ -230,6 +467,7 @@ class Vagrant(object):
     def generate_vagrantfile(self, number_of_nodes):
         """
         Generates the Vagrant file to support the @number_of_nodes
+
         :param number_of_nodes: number of nodes required in the cluster.
         """
         replacement_string = "NUMBER_OF_NODES = " + str(number_of_nodes)
@@ -253,6 +491,7 @@ def process_arguments(arguments):
     Processes all the input arguments and acts accordingly.
 
     :param arguments: input arguments for the Vagrant script.
+			
     """
     debug = arguments["--debug"]
     if debug:
@@ -266,6 +505,10 @@ def process_arguments(arguments):
         print(colored(columns * '=', "red"))
         print(arguments)
         print(colored(columns * '-', "red"))
+        logging.basicConfig(level=logging.DEBUG)
+    else:
+        logging.basicConfig(level=logging.INFO)
+
 
     if arguments.get("vagrant"):
         provider = Vagrant(debug=debug)
@@ -278,6 +521,8 @@ def process_arguments(arguments):
         else:
             hosts = False
             action = None
+            kwargs = dict()
+            args= ()
 
             if arguments.get("--vms"):
                 hosts = arguments.get("--vms")
@@ -291,12 +536,16 @@ def process_arguments(arguments):
                 action = provider.destroy
             elif arguments.get("status"):
                 action = provider.status
-            elif arguments.get("run") and arguments.get("COMMAND"):
-                action = provider.run
+            elif arguments.get("ssh"):
+                action = provider.ssh
+                args=[arguments.get("NAME")]
+            elif arguments.get("run-command") and arguments.get("COMMAND"):
+                action = provider.run_command
                 args = [arguments.get("COMMAND")]
-            elif arguments.get("run-script") & arguments.get("SCRIPT"):
+            elif arguments.get("run-script") and arguments.get("SCRIPT"):
                 action = provider.run_script
                 args = [arguments.get("SCRIPT")]
+              
 
             # do the action
             if action is not None:
@@ -308,40 +557,29 @@ def process_arguments(arguments):
                     else:
                         action()
 
-                elif action_type in ['run', 'run-script']:
+                elif action_type in ['ssh']:
+                    action(*args)
+                
+                elif action_type in ['run_command','run_script']:                 
                     # make sure there are sth in hosts, if nothing in the host
                     # just grab all hosts in the current vagrant environment
                     if not hosts:
                         hosts = provider._get_host_names()
                         if not hosts:
                             raise EnvironmentError('There is no host exists in the current vagrant project')
-
-                    # initalize threading pool
-                    pool = mt.Pool(len(hosts))
-                    run_result = queue.Queue()
-
-                    # submit job to the threading pool and (immediately) start execution
-                    for node_name in hosts:
-                        currrent_args = ([node_name] + args)
-                        run_result.put(pool.apply_async(action, args=currrent_args))
-                    pool.close()
-                    pool.join()
-
-                    # retrieve the result           
-                    while run_result.qsize() > 0:
-                        job_res = run_result.get()
-                        node_name, res = job_res.get()
-                        job_status = 'Success' if not isinstance(res, Exception) else 'Failed'
-                        output = res.decode('utf8') if not isinstance(res, Exception) else res.stdout.decode('utf8')
-
-                        # print report
-                        template = 'node_name: {}\njob_status: {}\noutput:\n\n{}'
-                        print(template.format(node_name, job_status, output))
-
+			  
+                    if len(hosts)>1:
+                        kwargs.update({'report_alone':False})				
+                        provider.run_parallel(hosts, action, args, kwargs)
+                    else:
+                        kwargs.update({'report_alone':True})
+                        action(hosts[0], *args, **kwargs)                   
 
 def main():
     """
     Main function for the Vagrant Manager. Processes the input arguments.
+
+			
     """
     arguments = docopt(__doc__, version='Cloudmesh Vagrant Manager 0.3')
     process_arguments(arguments)

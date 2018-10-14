@@ -1,11 +1,12 @@
 import oyaml as yaml
-from os.path import isfile, expanduser
+from os.path import isfile, expanduser, join, dirname, realpath
 from cm4.configuration.dot_dictionary import DotDictionary
+from shutil import copyfile
 
 
 class Config(object):
 
-    def __init__(self, config_path='~/.cloudmesh/cloudmesh4.yaml'):
+    def __init__(self, config_path='~/.cloudmesh.yaml'):
         """
         Initialize the Config class.
 
@@ -17,7 +18,7 @@ class Config(object):
         config_path = expanduser(config_path)
 
         if not isfile(config_path):
-            raise Exception(f"`{config_path}` is not a file.")
+            copyfile(join(dirname(realpath(__file__)), "cloudmesh.yaml"), config_path)
 
         with open(config_path, "r") as stream:
             conf = yaml.load(stream)

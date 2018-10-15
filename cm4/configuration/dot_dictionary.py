@@ -30,6 +30,9 @@ class DotDictionary(dict):
     def get(self, key, default=None):
         return self.__getitem__(key, default)
 
+    def set(self, key, value):
+        self._deep_set(key.split("."), value)
+
     def __setitem__(self, key, val):
         dict.__setitem__(self, key, val)
 
@@ -62,3 +65,21 @@ class DotDictionary(dict):
             return self._deep_get(dict.get(d, keys[0]), keys[1:], default)
         except KeyError:
             return default
+
+    def _deep_set(self, keys, value):
+        """
+        A helper for setting values from nested dictionaries.
+
+        Example:
+            Keys = {'meta': {'status': 'OK', 'status_code': 200}}
+            deep_set(['meta', 'status_code'], 300)          # => {'meta': {'status': 'OK', 'status_code': 300}}
+        """
+        if len(keys) < 1 or keys[0] == "":
+            return
+        elif len(keys) == 1:
+            self[keys[0]] = value
+        else:
+            temp_dict = self.setdefault(keys[0])
+            for key in keys[1:-1]:
+                temp_dict = temp_dict.setdefault(key, {})
+            temp_dict[keys[-1]] = value

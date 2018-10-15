@@ -1,11 +1,12 @@
 import oyaml as yaml
-from os.path import isfile, expanduser
+from os.path import isfile, expanduser, join, dirname, realpath
 from cm4.configuration.dot_dictionary import DotDictionary
+from shutil import copyfile
 
 
 class Config(object):
 
-    def __init__(self, config_path='~/.cloudmesh/cloudmesh4.yaml'):
+    def __init__(self, config_path='~/.cloudmesh.yaml'):
         """
         Initialize the Config class.
 
@@ -14,12 +15,12 @@ class Config(object):
         """
         self._cloudmesh = {}
 
-        config_path = expanduser(config_path)
+        self.config_path = expanduser(config_path)
 
-        if not isfile(config_path):
-            raise Exception(f"`{config_path}` is not a file.")
+        if not isfile(self.config_path):
+            copyfile(join(dirname(realpath(__file__)), "cloudmesh.yaml"), self.config_path)
 
-        with open(config_path, "r") as stream:
+        with open(self.config_path, "r") as stream:
             conf = yaml.load(stream)
             self._cloudmesh = DotDictionary(conf.get('cloudmesh'))
 
@@ -36,3 +37,21 @@ class Config(object):
         :param key: A string representing the value's path in the config.
         """
         return self._cloudmesh.get(key, default)
+
+    def set(self, key, value):
+        """
+        A helper function for setting values in the config without
+        a chain of `set()` calls.
+
+        Usage:
+            mongo_conn = conf.get('db.mongo.MONGO_CONNECTION_STRING', "https://localhost:3232")
+
+        :param key: A string representing the value's path in the config.
+        :param value: value to be set.
+        """
+        self._cloudmesh.set(key, value)
+        yamlFile = {}
+        yamlFile["cloudmesh"] = self._cloudmesh.copy()
+        with open(self.config_path, "w") as stream:
+            yaml.safe_dump(yamlFile, stream, default_flow_style=False)
+

@@ -1,5 +1,7 @@
 cloudmesh:
   default:
+    group:                          cloudmesh
+    experiment:                     base
     cloud:                          azure
     cluster:                        clustera
   cloud:
@@ -13,6 +15,30 @@ cloudmesh:
       credentials:
         EC2_ACCESS_ID:              'your access id'
         EC2_SECRET_KEY:             'your secret key'
+    openstack:
+      kind:
+      credentials:
+  chameleon:
+      cm:
+        heading: Chameleon
+        host: chameleoncloud.org
+        label: chameleon
+        type: openstack
+        type_version: liberty
+      credentials:
+        OS_AUTH_URL: https://openstack.tacc.chameleoncloud.org:5000/v3
+        OS_PASSWORD: read
+        OS_TENANT_NAME: CH-819337
+        OS_TENANT_ID: CH-819337
+        OS_PROJECT_NAME: CH-819337
+        OS_PROJECT_DOMAIN_ID: default
+        OS_USER_DOMAIN_ID: default
+        OS_USERNAME: TBD
+        OS_VERSION: liberty
+        OS_REGION_NAME: RegionOne
+      default:
+        flavor: m1.small
+        image: Ubuntu-Server-14.04-LTS      
   data:
     default:
       db:  local

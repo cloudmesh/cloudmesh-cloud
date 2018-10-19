@@ -16,7 +16,20 @@ Usage:
   cm4 data get FILE DEST_FOLDER
   cm4 data del FILE
   cm4 data (ls | dir)
-  
+  cm4 set cloud=CLOUD
+  cm4 set group=GROUP
+  cm4 set role=ROLE
+  cm4 set experiment=EXPERIMENT
+  cm4 vm create --count <vm_number> [--debug]
+  cm4 vm start [--vms=<vmList>] [--debug]
+  cm4 vm stop [--vms=<vmList>] [--debug]
+  cm4 vm destroy [--vms=<vmList>] [--debug]
+  cm4 vm status [--vms=<vmList>]
+  cm4 vm list
+  cm4 vm ssh NAME
+  cm4 vm run COMMAND  [--vms=<vmList>]
+  cm4 vm script run SCRIPT [--vms=<vmList>]
+
   cm4 (-h | --help)
   cm4 --version
 

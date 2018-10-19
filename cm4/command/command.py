@@ -29,7 +29,9 @@ Usage:
   cm4 vm ssh NAME
   cm4 vm run COMMAND  [--vms=<vmList>]
   cm4 vm script run SCRIPT [--vms=<vmList>]
-
+  cm4 spark deploy -n 10
+  cm4 spark run
+  cm4 spark execute PRG
   cm4 (-h | --help)
   cm4 --version
 

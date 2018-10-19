@@ -20,6 +20,8 @@ class SetupMongoDB(object):
         self.mongo_download = 'https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu1804-4.0.3.tgz'
         self.mongo_db_path = os.path.join(self.mongo_path, 'mongodb-linux-x86_64-ubuntu1804-4.0.3')
         
+        #if the coloudmesh.yaml file mentioned where to install mongodb and other information, then we will set the information by using config.py
+        
     
         
     def check_mongo_dir(self):
@@ -57,7 +59,7 @@ class SetupMongoDB(object):
         
         #user input port, username, password
         print("Please remember the port, username, password infromation")
-        self.port = int(input("The Port open for MongoDB:"))
+        self.port = int(input("The Port open for MongoDB (default: 27017):"))
         self.username = input("The username used in MongoDB:")
         self.password = input("The password for that username:")
         
@@ -122,7 +124,7 @@ class SetupMongoDB(object):
         client.close()
         
         
-    
+'''    
 def main():
     test = SetupMongoDB()
     test.check_mongo_dir()
@@ -131,3 +133,4 @@ def main():
     
 if __name__ == "__main__":
     main()
+'''

@@ -6,7 +6,7 @@ from shutil import copyfile
 
 class Config(object):
 
-    def __init__(self, config_path='~/.cloudmesh.yaml'):
+    def __init__(self, config_path='~/.cloudmesh/cloudmesh4.yaml'):
         """
         Initialize the Config class.
 

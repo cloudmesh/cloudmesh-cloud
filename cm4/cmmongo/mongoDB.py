@@ -5,6 +5,7 @@ Created on Wed Oct 17 01:15:28 2018
 
 @author: yuluo
 """
+
 from pymongo import MongoClient
 import urllib.parse
 

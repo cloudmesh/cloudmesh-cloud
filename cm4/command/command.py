@@ -22,23 +22,24 @@ Usage:
   cm4 set host=HOSTNAME
   cm4 set cluster=CLUSTERNAME
   cm4 set experiment=EXPERIMENT
-  cm4 vm create --count <vm_number> [--debug]
-  cm4 vm start [--vms=<vmList>] [--debug]
-  cm4 vm stop [--vms=<vmList>] [--debug]
-  cm4 vm destroy [--vms=<vmList>] [--debug]
-  cm4 vm status [--vms=<vmList>]
+  cm4 vm create --count <vm_number> [--debug] [--dryrun]
+  cm4 vm start [--vms=<vmList>] [--debug] [--dryrun]
+  cm4 vm stop [--vms=<vmList>] [--debug] [--dryrun]
+  cm4 vm destroy [--vms=<vmList>] [--debug] [--dryrun]
+  cm4 vm status [--vms=<vmList>] [--dryrun]
   cm4 vm list
   cm4 vm ssh NAME
   cm4 vm run COMMAND  [--vms=<vmList>]
-  cm4 vm script run SCRIPT [--vms=<vmList>]
-  cm4 ssh create host HOSTNAME [--debug]
-  cm4 ssh create cluster CLUSTER [--debug]
-  cm4 ssh stop cluster
-  cm4 ssh run host HOSTANMES
-  cm4 ssh run cluster HOSTANME
-  cm4 spark deploy -n 10
-  cm4 spark run
-  cm4 spark execute PRG
+  cm4 vm script run SCRIPT [--vms=<vmList>] [--dryrun]
+  cm4 ssh start [--hosts=HOSTANMES] [--debug] [--dryrun]
+  cm4 ssh create host HOSTNAME [--debug] [--dryrun]
+  cm4 ssh create cluster CLUSTER [--debug] [--dryrun]
+  cm4 ssh stop cluster [--dryrun]
+  cm4 ssh run host HOSTANMES [--dryrun]
+  cm4 ssh run cluster HOSTANME [--dryrun]
+  cm4 spark deploy -n 10 [--dryrun]
+  cm4 spark run [--dryrun]
+  cm4 spark execute PRG [--dryrun]
   cm4 (-h | --help)
   cm4 --version
 

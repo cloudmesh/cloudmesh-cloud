@@ -19,6 +19,8 @@ Usage:
   cm4 set cloud=CLOUD
   cm4 set group=GROUP
   cm4 set role=ROLE
+  cm4 set host=HOSTNAME
+  cm4 set cluster=CLUSTERNAME
   cm4 set experiment=EXPERIMENT
   cm4 vm create --count <vm_number> [--debug]
   cm4 vm start [--vms=<vmList>] [--debug]
@@ -29,6 +31,11 @@ Usage:
   cm4 vm ssh NAME
   cm4 vm run COMMAND  [--vms=<vmList>]
   cm4 vm script run SCRIPT [--vms=<vmList>]
+  cm4 ssh create host HOSTNAME [--debug]
+  cm4 ssh create cluster CLUSTER [--debug]
+  cm4 ssh stop cluster
+  cm4 ssh run host HOSTANMES
+  cm4 ssh run cluster HOSTANME
   cm4 spark deploy -n 10
   cm4 spark run
   cm4 spark execute PRG

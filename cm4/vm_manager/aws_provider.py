@@ -6,7 +6,7 @@ class AWSProvider(CloudProviderABC):
         pass
 
     def start(self):
-        print("Starting the AWS cloud instance")
+        pass
 
     def stop(self):
         pass

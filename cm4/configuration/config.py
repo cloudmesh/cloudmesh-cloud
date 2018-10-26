@@ -23,7 +23,7 @@ class Config(object):
             mkdir(config_folder)
 
         if not isfile(self.config_path):
-            copyfile(join(dirname(realpath(__file__)), "cloudmesh4.yaml"), self.config_path)
+            copyfile(join(dirname(realpath(__file__)), "../etc/cloudmesh4.yaml"), self.config_path)
 
         with open(self.config_path, "r") as stream:
             conf = yaml.load(stream)

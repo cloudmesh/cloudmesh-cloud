@@ -4,16 +4,38 @@ from libcloud.compute.providers import get_driver
 # tg837909
 # Lee091120115!
 
-Openstack = get_driver(Provider.OPENSTACK)
 
-con = Openstack(
-    'admin', 'password',
-    ex_force_base_url='http://23.12.198.36:8774/v2.1',
-    api_version='2.0',
-    ex_tenant_name='demo')
 
-cls = get_driver(Provider.RACKSPACE)
-driver = cls('username', 'api key', region='iad')
+
+class Provider(object):
+
+    def __init__(self):
+        config = Config()
+        os_config = config.get("openstack")
+    
+    def get(self, cloud):
+        if self.osconfig["cm]["type"]  == "openstack": # ????
+          credential = os[config][credentials]  
+          openstack = get_driver(Provider.OPENSTACK)
+
+
+        con = Openstack(
+        config["user"], 
+        config{'password'],
+        ex_force_base_url=config["url"]
+        api_version=config["api_versiom],
+        ex_tenant_name=config["tennant_name"])
+
+        cls = get_driver(Provider.RACKSPACE)
+        driver = cls('username', 'api key', region='iad')
+
+
+        return driver
+
+
+    
+provider = Provider("chameleon")
+
 
 sizes = driver.list_sizes()
 images = driver.list_images()
@@ -25,7 +47,23 @@ node = driver.create_node(name='libcloud', size=size, image=image)
 print(node)
 
 
+class Vm(object):
 
+    __init__(cloud)
+       self.provider = Provider (cloud)
+       
+    
+    start
+    stop
+    resume
+    suspend
+    destroy
+    create
+    list
+    status
+    ...
+    
+    
 
 
 

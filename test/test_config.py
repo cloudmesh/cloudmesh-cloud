@@ -25,3 +25,13 @@ class TestConfig:
         az_conf = self._conf.get("cloud.azure")
         az_id = az_conf.get('credentials.AZURE_SUBSCRIPTION_ID')
         assert az_id is not None
+
+    def test_set(self):
+        before = self._conf.get("default.cloud")
+        self._conf.set("default.cloud", "testcloud")
+
+        new_config = Config()
+        after = new_config.get("default.cloud")
+
+        assert before != after
+        new_config.set("default.cloud", before)

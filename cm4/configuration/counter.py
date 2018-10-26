@@ -20,7 +20,7 @@ class Counter(object):
         increments the counter by one
         :return:
         """
-        pass
+        raise NotImplementedError()
 
     def get(cls, name='counter'):
         """
@@ -28,7 +28,7 @@ class Counter(object):
         :param name: name of the counter
         :return: the value of the counter
         """
-        pass
+        raise NotImplementedError()
 
     def set(cls, name='counter', value=None):
         """
@@ -39,4 +39,4 @@ class Counter(object):
         """
         # test if value is an int
         # than set
-        pass
+        raise NotImplementedError()

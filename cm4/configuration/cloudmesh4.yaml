@@ -7,8 +7,19 @@ cloudmesh:
   cloud:
     azure:
       kind:                         azure
+      default:
+        region:                     'northcentralus'
+        image:                      'Canonical:UbuntuServer:16.04-LTS:latest'
+        size:                       'Basic_A0'
+        resource_group:             'cloudmesh'
+        storage_account:            'cmdrive'
+        network:                    'cmnetwork'
+      public_key:                   ''
       credentials:
+        AZURE_TENANT_ID:            'xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
         AZURE_SUBSCRIPTION_ID:      'xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
+        AZURE_APPLICATION_ID:       'xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
+        AZURE_SECRET_KEY:           'your secret key'
         AZURE_MANAGEMENT_CERT_PATH: 'C:/Demo/azure_cert.pem'
     aws:
       kind:                         aws

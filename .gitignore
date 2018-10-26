@@ -112,11 +112,11 @@ venv.bak/
 .idea/
 
 # Test local db and storage files
-cm4/test/data/db/*
-!cm4/test/data/db/README.md
+test/data/db/*
+!test/data/db/README.md
 
-cm4/test/data/storage/*
-!cm4/test/data/storage/README.md
+test/data/storage/*
+!test/data/storage/README.md
 
-cm4/test/data/download/*
-!cm4/test/data/download/README.md
+test/data/download/*
+!test/data/download/README.md

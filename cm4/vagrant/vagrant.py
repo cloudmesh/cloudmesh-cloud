@@ -112,13 +112,9 @@ class Vagrant(object):
 
         :param debug:
         """
-<<<<<<< HEAD
-        self.workspace = "~/cloudmesh/vagrant_workspace"
-=======
         self.workspace = "./vagrant_workspace"
         self.experiment_path="../experiment"
         self.ssh_config={}
->>>>>>> 9c821c988aac7acd422184beb5b4ced2628aaa75
         self.path = os.path.join(self.workspace, "Vagrantfile")
         self.debug = debug
 

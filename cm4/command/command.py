@@ -47,12 +47,6 @@ Options:
   -h --help     Show this screen.
   --version     Show version.
   --config      Location of a cmdata.yaml file
-
-
-  cm4 -h
-
-Options:
-  -h --help     Show this screen.
   --vm_list=<list_of_vms>  List of VMs separated by commas ex: node-1,node-2
 
 Description:

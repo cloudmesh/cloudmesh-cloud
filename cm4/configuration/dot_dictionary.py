@@ -1,3 +1,5 @@
+import collections.abc
+
 class DotDictionary(dict):
     """
     A subclass of `dict` that allows dot paths into nested dictionary.
@@ -83,3 +85,11 @@ class DotDictionary(dict):
             for key in keys[1:-1]:
                 temp_dict = temp_dict.setdefault(key, {})
             temp_dict[keys[-1]] = value
+
+    def to_dict(self,input=None):
+        if input == None:
+            input=self
+        if isinstance(input, collections.abc.Mapping):
+            return {k: self.to_dict(v) for k, v in input.items()}
+        else:
+            return input

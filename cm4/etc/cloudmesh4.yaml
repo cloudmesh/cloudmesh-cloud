@@ -1,4 +1,13 @@
 cloudmesh:
+  profile:
+    address:
+      firstname: TBD
+      lastname: TBD
+      email: TBD
+    github:
+      username: TBD
+    key:
+      public: ~/.ssh/id_rsa.pub
   default:
     group:                          cloudmesh
     experiment:                     base
@@ -6,7 +15,12 @@ cloudmesh:
     cluster:                        clustera
   cloud:
     azure:
-      kind:                         azure
+      cm:
+        heading:                    AWS
+        host:                       azure.mocrosoft.com
+        label:                      Azure
+        kind:                       azure
+        version:                    TBD
       default:
         region:                     'northcentralus'
         image:                      'Canonical:UbuntuServer:16.04-LTS:latest'
@@ -14,7 +28,6 @@ cloudmesh:
         resource_group:             'cloudmesh'
         storage_account:            'cmdrive'
         network:                    'cmnetwork'
-      public_key:                   ''
       credentials:
         AZURE_TENANT_ID:            'xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
         AZURE_SUBSCRIPTION_ID:      'xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
@@ -22,20 +35,22 @@ cloudmesh:
         AZURE_SECRET_KEY:           'your secret key'
         AZURE_MANAGEMENT_CERT_PATH: 'C:/Demo/azure_cert.pem'
     aws:
-      kind:                         aws
+      cm:
+        heading:                    AWS
+        host:                       aws.amazon.com
+        label:                      aws
+        kind:                       aws
+        version:                    TBD
       credentials:
         EC2_ACCESS_ID:              'your access id'
         EC2_SECRET_KEY:             'your secret key'
-    openstack:
-      kind:
-      credentials:
-  chameleon:
+    chameleon:
       cm:
         heading: Chameleon
         host: chameleoncloud.org
         label: chameleon
-        type: openstack
-        type_version: liberty
+        kind: openstack
+        version: liberty
       credentials:
         OS_AUTH_URL: https://openstack.tacc.chameleoncloud.org:5000/v3
         OS_PASSWORD: read
@@ -49,7 +64,48 @@ cloudmesh:
         OS_REGION_NAME: RegionOne
       default:
         flavor: m1.small
-        image: Ubuntu-Server-14.04-LTS      
+        image: Ubuntu-Server-14.04-LTS
+    jetstream:
+      cm:
+        heading: Jetstream
+        host: http://jetstream-cloud.org/
+        label: jetstream
+        kind: openstack
+        version: kilo
+      credentials:
+        OS_PROJECT_DOMAIN_NAME: tacc
+        OS_USER_DOMAIN_NAME: tacc
+        OS_PROJECT_ID: 7bfa792867a141e6855fdaaa2a960a4e
+        OS_PROJECT_NAME: TG-CIE170003
+        OS_TENANT_NAME: TG-CIE170003
+        OS_USERNAME: tg455498
+        OS_PASSWORD: Sol5uMvOxMc1
+        OS_AUTH_URL: https://tacc.jetstream-cloud.org:5000
+        OS_IDENTITY_API_VERSION: 3
+        OS_INTERFACE: public
+        OS_REGION_NAME: RegionOne
+      default:
+        flavor: m1.small
+        image: Ubuntu-Server-14.04-LTS
+   cybera-e:
+      cm:
+        heading: Cybera Edmonton OpenStack
+        host: cybera
+        label: kilo
+        kind: openstack
+        version: kilo
+      kind: openstack
+      credentials:
+        OS_AUTH_URL: https://openstack.tacc.chameleoncloud.org:5000/v3
+        OS_TENANT_ID: TBD
+        OS_TENANT_NAME: TBD
+        OS_PROJECT_NAME: TBD
+        OS_USERNAME: TBD
+        OS_PASSWORD: TBD
+        OS_REGION_NAME: Edmonton
+      default:
+        flavor: m1.small
+        image: Ubuntu 14.04
   data:
     default:
       db:  local

@@ -3,9 +3,18 @@
 """SSH: running parallel remote jobs
 
 Usage:
-  VirtualCluster.py vcluster create <virtualcluster-name> --clusters=<clusterList> [--computers=<computerList>] [--debug]
-  VirtualCluster.py vcluster list [<depth> [default:1]]
-
+  VirtualCluster.py vcluster create virtual-cluster <virtualcluster-name> --clusters=<clusterList> [--computers=<computerList>] [--debug]
+  VirtualCluster.py vcluster destroy virtual-cluster <virtualcluster-name>
+  VirtualCluster.py vcluster create runtime-config <config-name> <proc-num> in:params out:stdout [--download-proc-num=<download-pnum> [default=1]] [--suffix=<suffix>] [--no-meta | --download-later] [--save-to=<save-path>] [--debug]
+  VirtualCluster.py vcluster create runtime-config <config-name> <proc-num> in:params out:file <outfile-name> [--download-proc-num=<download-pnum> [default=1]] [--suffix=<suffix>] [--no-meta | --download-later] [--save-to=<save-path>] [--debug]
+  VirtualCluster.py vcluster create runtime-config <config-name> <proc-num> in:params+file <argfile-path> out:stdout [--download-proc-num=<download-pnum> [default=1]] [--suffix=<suffix>] [--no-meta | --download-later] [--save-to=<save-path>] [--debug]
+  VirtualCluster.py vcluster create runtime-config <config-name> <proc-num> in:params+file <argfile-path> out:file <outffile-name> [--download-proc-num=<download-pnum> [default=1]] [--suffix=<suffix>] [--no-meta | --download-later] [--save-to=<save-path>] [--debug]
+  VirtualCluster.py vcluster set-param runtime-config <config-name> <parameter> <value>
+  VirtualCluster.py vcluster destroy runtime-config <config-name>
+  VirtualCluster.py vcluster list virtual-clusters [<depth> [default:1]]
+  VirtualCluster.py vcluster list runtime-configs [<depth> [default:1]]
+  VirtualCluster.py vcluster run-script <script-path>
+  VirtualCluster.py vcluster connection-test
 
   VirtualCluster.py -h
 
@@ -46,7 +55,7 @@ from cm4.abstractclass.CloudManagerABC import CloudManagerABC
 
 class VirtualCluster(CloudManagerABC):
 
-    def __init__(self, output_suffix, metarun=False, debug = False):
+    def __init__(self, metarun=False, debug = False):
         """
         Initialize the instance of ssh class
         :param config_path:
@@ -83,6 +92,24 @@ class VirtualCluster(CloudManagerABC):
             #         self.config[n]['arg_filename'] = os.path.expanduser(ntpath.basename(self.config[n]['arg_file_path']))
             #     self.config[n]['remote_script_path'] = os.path.join(self.config[n]['remote_path'], self.config[n]['script_name_with_suffix'])
 
+
+
+    def destroy(self):
+        pass
+    def info(self):
+        pass
+    def ls(self):
+        pass
+    def resume(self):
+        pass
+    def stop(self):
+        pass
+    def suspend(self):
+        pass
+    def start(self):
+        pass
+    def create(self):
+        pass
 
     def run_remote_job(self,n_idx,n, all_pids):
         ## COPY SCRIPT TO REMOTE
@@ -207,18 +234,9 @@ class VirtualCluster(CloudManagerABC):
                 raise ValueError("%s: 'local_output_path' keyword is missing" % n)
 
 
-
-    def set_config(self):
-        pass
-
-    def get_config(self):
-        pass
-
-
     def sync_pids_with_config(self):
         for item in self.all_pids:
             self.config[item[0]]['pid'] = item[1]
-
 
     def add_suffix_to_path(self,path):
         dir_path = os.path.dirname(path)
@@ -243,18 +261,8 @@ class VirtualCluster(CloudManagerABC):
         for n_idx,n in enumerate(self.config):
             self.config[n]['pid'] = all_pids_dict[n]
 
-    def create(self, vcluster_name, cluster_list=[], computer_list=[]):
-        # self.config[vcluster_name] = OrderedDict()
-        vcluster_tosave = DotDictionary()
-        vcluster_tosave.set(vcluster_name,DotDictionary())
-        for cluster in cluster_list:
-            for computer in self.cm_config.get('cluster.{}'.format(cluster)):
-                if computer in computer_list or computer_list=='':
-                    vcluster_tosave[vcluster_name].update({computer:dict(self.cm_config.get('cluster.{}.{}'.format(cluster, computer)))})
-        vcluster_tosave_dict = vcluster_tosave.to_dict()
-        self.vcluster_config.deep_set(['virtual_cluster'], vcluster_tosave_dict)
 
-    def list(self,max_depth,input_dict=None,current_depth=1):
+    def list(self,target,max_depth,current_depth=1,input_dict=None):
         """
         listing the current virtual clusters based on the vcluster_conf file.
 
@@ -263,35 +271,79 @@ class VirtualCluster(CloudManagerABC):
         :param current_depth: current depth of printing information
         :return:
         """
-        if input_dict==None:
-            input_dict = self.vcluster_config._conf_dict['virtual_cluster']
-        if max_depth>=current_depth and type(input_dict)==DotDictionary:
-            for key in input_dict:
-                key_to_print = key + ':' if max_depth>=current_depth else key
-                indent = current_depth if current_depth>1 else current_depth-1
-                print('\t'*indent,key_to_print)
-                if type(input_dict.get(key))!=DotDictionary:
-                    print('\t' * (indent + 1), input_dict.get(key))
-                else:
-                    for value in input_dict.get(key):
-                        value_to_print = value + ':' if max_depth > current_depth else value
-                        print ('\t'*(indent+1),value_to_print)
-                        self.list(max_depth,input_dict=input_dict[key][value],current_depth=current_depth+1)
+        if target=='virtual-clusters' and input_dict==None:
+            input_dict = self.vcluster_config._conf_dict['virtual-cluster']
+        elif target == 'runtime-configs'and input_dict==None:
+            input_dict = self.vcluster_config._conf_dict['runtime-config']
+        elif input_dict==None:
+            raise ValueError("Target of listing not found.")
 
-    def destroy(self):
-        pass
-    def info(self):
-        pass
-    def ls(self):
-        pass
-    def resume(self):
-        pass
-    def stop(self):
-        pass
-    def suspend(self):
-        pass
-    def start(self):
-        pass
+        if max_depth>=current_depth:
+            if type(input_dict)==dict:
+                for key in input_dict:
+                    key_to_print = key + ':' if max_depth>=current_depth else key
+                    indent = current_depth if current_depth>1 else current_depth-1
+                    print('\t'*indent,key_to_print)
+                    if type(input_dict.get(key))!=dict:
+                        print('\t' * (indent + 1), input_dict.get(key))
+                    else:
+                        for value in input_dict.get(key):
+                            value_to_print = value + ':' if max_depth > current_depth else value
+                            print ('\t'*(indent+1),value_to_print)
+                            self.list(target,max_depth,input_dict=input_dict[key][value],current_depth=current_depth+1)
+            else:
+                indent = current_depth if current_depth > 1 else current_depth - 1
+                print('\t' * indent, input_dict)
+
+    def _create_vcluster(self, vcluster_name, cluster_list=[], computer_list=[]):
+        vcluster_tosave = {vcluster_name: {}}
+        for cluster in cluster_list:
+            for computer in self.cm_config.get('cluster.{}'.format(cluster)):
+                if computer in computer_list or computer_list == '':
+                    vcluster_tosave[vcluster_name].update({computer: dict(self.cm_config.get('cluster.{}.{}'.format(cluster, computer)))})
+        self.vcluster_config.deep_set(['virtual-cluster'], vcluster_tosave)
+        print("Virtual cluster created/replaced successfully.")
+
+    def _create_config(self,config_name,proc_num,download_proc_num,suffix,nometa,download_later,save_to,input_type,infile_path,output_type,outfile_name):
+        config_tosave = {config_name:{}}
+        config_tosave[config_name].update({"proc_num":proc_num,
+                                           "download_proc_num": download_proc_num,
+                                           "suffix": suffix,
+                                           "no-meta": nometa,
+                                           "download-later": download_later,
+                                           "save_to":save_to,
+                                           "input_type":input_type,
+                                           "infile_path":infile_path,
+                                           "output_type":output_type,
+                                           "outfile_name":outfile_name})
+        self.vcluster_config.deep_set(['runtime-config'],config_tosave)
+        print("Runtime-configuration created/replaced successfully.")
+
+    def create(self,*args,**kwargs):
+        if len(args) > 5 :
+            self._create_config(*args)
+        else:
+            self._create_vcluster(*args,**kwargs)
+
+    def destroy(self,target, key):
+        if target=='virtual-cluster':
+            self.vcluster_config.remove(['virtual-cluster'], key)
+            print("Virtual-cluster {} destroyed successfully.".format(key))
+        elif target == 'runtime-config':
+            self.vcluster_config.remove(['runtime-config'], key)
+            print("Runtime-configuration {} destroyed successfully.".format(key))
+        else:
+            raise ValueError("Target of destroying not found.")
+
+    def set_param(self,target,name,parameter,value):
+        if target=='virtual-cluster':
+            self.vcluster_config.deep_set(['virtual-cluster',name,parameter], value)
+            print("Virtual-cluster parameter {} set to {} successfully.".format(parameter,value))
+        elif target == 'runtime-config':
+            self.vcluster_config.deep_set(['runtime-config',name,parameter],value)
+            print("Runtime-configuration parameter {} set to {} successfully.".format(parameter, value))
+        else:
+            raise ValueError("Target of variable set not found.")
 
 
 def run_method_in_parallel(args):
@@ -300,22 +352,12 @@ def run_method_in_parallel(args):
 def collect_results_in_parallel(args):
     return args[0].collect_result(args[1],args[2],args[3])
 
-class dotdict(dict):
-    """
-    dot.notation access to dictionary attributes
-    """
-    __getattr__ = dict.get
-    __setattr__ = dict.__setitem__
-    __delattr__ = dict.__delitem__
-
-
-
 
 def process_arguments(arguments):
     """
     Processes all the input arguments and acts accordingly.
 
-    :param arguments: input arguments for the ssh script.
+    :param arguments: input arguments for the virtual cluster script.
 
     """
     debug = arguments["--debug"]
@@ -334,18 +376,102 @@ def process_arguments(arguments):
     # else:
     #     logging.basicConfig(level=logging.INFO)
 
-    if arguments.get("vcluster"):
-        suffix = '_' + str(datetime.now()).replace('-', '').replace(' ', '_').replace(':', '')[0:str(datetime.now()).replace('-', '').replace(' ', '_').replace(':', '').index('.') + 3].replace('.', '')
-        vcluster_manager = VirtualCluster(suffix, debug=debug)
-        if arguments.get("create") and arguments.get("--clusters"):
-            clusters = hostlist.expand_hostlist(arguments.get("--clusters"))
-            computers = hostlist.expand_hostlist(arguments.get("--computers"))
-            vcluster_manager.create(arguments.get("<virtualcluster-name>"),cluster_list=clusters,computer_list=computers)
+    """
+    
+      VirtualCluster.py vcluster create virtual-cluster <virtualcluster-name> --clusters=<clusterList> [--computers=<computerList>] [--debug]
+      VirtualCluster.py vcluster destroy virtual-cluster <virtualcluster-name>
+      VirtualCluster.py vcluster create runtime-config <config-name> <proc-num> in:params out:stdout [--download-proc-num=<download-pnum> [default=1]] [--suffix=<suffix>] [--no-meta | --download-later] [--save-to=<save-path>] [--debug]
+      VirtualCluster.py vcluster create runtime-config <config-name> <proc-num> in:params out:file <outfile-name> [--download-proc-num=<download-pnum> [default=1]] [--suffix=<suffix>] [--no-meta | --download-later] [--save-to=<save-path>] [--debug]
+      VirtualCluster.py vcluster create runtime-config <config-name> <proc-num> in:params+file <argfile-path> out:stdout [--download-proc-num=<download-pnum> [default=1]] [--suffix=<suffix>] [--no-meta | --download-later] [--save-to=<save-path>] [--debug]
+      VirtualCluster.py vcluster create runtime-config <config-name> <proc-num> in:params+file <argfile-path> out:file <outffile-name> [--download-proc-num=<download-pnum> [default=1]] [--suffix=<suffix>] [--no-meta | --download-later] [--save-to=<save-path>] [--debug]
+      VirtualCluster.py vcluster set-param runtime-config <config-name> <parameter> <value>
+      VirtualCluster.py vcluster set-param virtual-cluster  <virtualcluster-name> <parameter> <value>
+      VirtualCluster.py vcluster destroy runtime-config <config-name>
+      VirtualCluster.py vcluster list virtual-clusters [<depth> [default:1]]
+      VirtualCluster.py vcluster list runtime-configs [<depth> [default:1]]
+      VirtualCluster.py vcluster run-script <script-path>
+      VirtualCluster.py vcluster connection-test
 
-        elif arguments.get("list"):
-            max_depth = 1 if arguments.get("<depth>") is None else int(arguments.get("<depth>"))
-            vcluster_manager.list(max_depth)
-        #
+      VirtualCluster.py -h
+
+    Options:
+      -h --help     Show this screen.
+      --node_list=<list_of_nodes>  List of nodes separated by commas. Ex: node-1,node-2
+      --cluster_list=<list_of_clusters> List of clusters separated by commas. Ex: cluster-1, cluster-2
+
+
+    Description:
+       put a description here
+
+    Example:
+       put an example here
+    """
+
+    if arguments.get("vcluster"):
+        vcluster_manager = VirtualCluster(debug=debug)
+        if arguments.get("create"):
+            if arguments.get("virtual-cluster") and arguments.get("--clusters"):
+                clusters = hostlist.expand_hostlist(arguments.get("--clusters"))
+                computers = hostlist.expand_hostlist(arguments.get("--computers"))
+                vcluster_manager.create(arguments.get("<virtualcluster-name>"),cluster_list=clusters,computer_list=computers)
+            elif arguments.get("runtime-config") and arguments.get("<config-name>") and arguments.get("<proc-num>"):
+                config_name = arguments.get("<config-name>")
+                proc_num = int(arguments.get("<proc-num>"))
+                download_proc_num = 1 if arguments.get("<download-pnum>") is None else int(arguments.get("<download-pnum>"))
+                random_suffix =  '_' + str(datetime.now()).replace('-', '').replace(' ', '_').replace(':', '')[0:str(datetime.now()).replace('-', '').replace(' ', '_').replace(':', '').index('.') + 3].replace('.', '')
+                suffix = random_suffix if arguments.get("suffix") is None else arguments.get("suffix")
+                save_to = "" if arguments.get("<save-path>") is None else arguments.get("<save-path>")
+                nometa = arguments.get("--no-meta")
+                download_later = arguments.get("--download-later")
+                if arguments.get("in:params") and arguments.get("out:stdout"):
+                    input_type = "params"
+                    infile_path = ''
+                    output_type = "stdout"
+                    outfile_name = ''
+                elif arguments.get("in:params") and arguments.get("out:file"):
+                    input_type = "params"
+                    infile_path=''
+                    output_type = "file"
+                    outfile_name = arguments.get("<outfile-name>")
+                elif arguments.get("in:params") and arguments.get("out:stdout"):
+                    input_type = "params+file"
+                    infile_path = arguments.get("<argfile-path>")
+                    output_type = "stdout"
+                    outfile_name = ''
+                elif arguments.get("in:params") and arguments.get("out:stdout"):
+                    input_type = "params+file"
+                    infile_path = arguments.get("<argfile-path>")
+                    output_type = "file"
+                    outfile_name = arguments.get("<outfile-name>")
+
+                vcluster_manager.create(config_name,proc_num,download_proc_num,suffix,nometa,download_later,save_to,input_type,infile_path,output_type,outfile_name)
+        if arguments.get("destroy"):
+            if arguments.get("virtual-cluster"):
+                vcluster_manager.destroy("virtual-cluster",arguments.get("<virtualcluster-name>"))
+            elif arguments.get("runtime-config"):
+                vcluster_manager.destroy("runtime-config",arguments.get("<config-name>"))
+
+        if arguments.get("list"):
+            if arguments.get("virtual-clusters"):
+                max_depth = 1 if arguments.get("<depth>") is None else int(arguments.get("<depth>"))
+                vcluster_manager.list("virtual-clusters",max_depth)
+            elif arguments.get("runtime-configs"):
+                max_depth = 1 if arguments.get("<depth>") is None else int(arguments.get("<depth>"))
+                vcluster_manager.list("runtime-configs",max_depth)
+
+        if arguments.get("set-param"):
+            if arguments.get("virtual-clusters"):
+                config_name = arguments.get("<virtualcluster-name>")
+                parameter = arguments.get("<parameter>")
+                value = arguments.get("<value>")
+                vcluster_manager.set_param("virtual-clusters",config_name,parameter,value)
+
+            if arguments.get("runtime-config"):
+                config_name = arguments.get("<config-name>")
+                parameter = arguments.get("<parameter>")
+                value = arguments.get("<value>")
+                vcluster_manager.set_param("runtime-config",config_name,parameter,value)
+
         # else:
         #     hosts = False
         #     action = None
@@ -421,40 +547,9 @@ def process_arguments(arguments):
 #
 #     """
 #
-#     parser = argparse.ArgumentParser(description='Running remote parallel jobs',formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-#     parser.add_argument('ConfPath', metavar='ConfPath', type=str, nargs=1,
-#                         help='Path of configuration file')
-#
-#     parser.add_argument('ProcNum', metavar='ProcNum', type=int, nargs=1,
-#                         help='Number of processes')
-#
-#     parser.add_argument('--CProcNum', metavar='Num', type=int, nargs=1,default=1,
-#                         help='Number of processes used for collecting the results.')
-#
-#     suffix = '_' + str(datetime.now()).replace('-', '').replace(' ', '_').replace(':', '')[
-#                         0:str(datetime.now()).replace('-', '').replace(' ', '_').replace(':', '').index(
-#                             '.') + 3].replace('.', '')
-#
-#     parser.add_argument('--suffix', metavar='suffix', type=str, nargs=1,default=suffix,
-#                         help='suffix to be added to output file names.')
-#     parser.add_argument('--nometa', help='If used, the metadata will not be saved (warning: results cannot be collected later).', action='store_true')
-#     parser.add_argument('--nodownload',help='If used, the result will not be downloaded (cannot be used with --nometa flag)', action='store_true')
 #     parser.add_argument('--download', metavar='metapath', type=str, nargs=1,
 #                         help='Retrieve the result from a previously submitted job using its metadata file.')
 #
-#     args = parser.parse_args()
-#     config_path = args.ConfPath[0]
-#     process_num_submit = args.ProcNum[0]
-#     process_num_collect = args.CProcNum[0] if type(args.CProcNum) == list else args.CProcNum
-#     output_suffix = args.suffix[0] if  type(args.suffix) == list else args.suffix
-#     metadatapath = args.download[0] if type(args.download) == list else args.download
-#     nometa = args.nometa
-#     nodownload = args.nodownload
-#     if nometa == True and nodownload == True:
-#         raise RuntimeError("--nometa and --nodownload flags cannot be used together since you would not be " \
-#                                  "able to download the results afterwards.")
-#     # print(args)
-#     # sys.exit()
 #
 #     if metadatapath is None:
 #         all_pids = Manager().list()

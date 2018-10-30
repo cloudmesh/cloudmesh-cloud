@@ -5,23 +5,24 @@
 Usage:
   VirtualCluster.py vcluster create virtual-cluster <virtualcluster-name> --clusters=<clusterList> [--computers=<computerList>] [--debug]
   VirtualCluster.py vcluster destroy virtual-cluster <virtualcluster-name>
-  VirtualCluster.py vcluster create runtime-config <config-name> <proc-num> in:params out:stdout [--download-proc-num=<download-pnum> [default=1]] [--suffix=<suffix>] [--no-meta | --download-later] [--save-to=<save-path>] [--debug]
-  VirtualCluster.py vcluster create runtime-config <config-name> <proc-num> in:params out:file <outfile-name> [--download-proc-num=<download-pnum> [default=1]] [--suffix=<suffix>] [--no-meta | --download-later] [--save-to=<save-path>] [--debug]
-  VirtualCluster.py vcluster create runtime-config <config-name> <proc-num> in:params+file <argfile-path> out:stdout [--download-proc-num=<download-pnum> [default=1]] [--suffix=<suffix>] [--no-meta | --download-later] [--save-to=<save-path>] [--debug]
-  VirtualCluster.py vcluster create runtime-config <config-name> <proc-num> in:params+file <argfile-path> out:file <outffile-name> [--download-proc-num=<download-pnum> [default=1]] [--suffix=<suffix>] [--no-meta | --download-later] [--save-to=<save-path>] [--debug]
+  VirtualCluster.py vcluster create runtime-config <config-name> <proc-num> in:params out:stdout [--params=<set-of-params-list>] [--download-proc-num=<download-pnum> [default=1]] [--suffix=<suffix>] [--download-later] [--save-to=<save-path>] [--debug]
+  VirtualCluster.py vcluster create runtime-config <config-name> <proc-num> in:params out:file <outfile-name> [--params=<set-of-params-list>] [--download-proc-num=<download-pnum> [default=1]] [--suffix=<suffix>] [--download-later] [--save-to=<save-path>] [--debug]
+  VirtualCluster.py vcluster create runtime-config <config-name> <proc-num> in:params+file <argfile-path> out:stdout [--params=<set-of-params-list>] [--download-proc-num=<download-pnum> [default=1]] [--suffix=<suffix>] [--download-later] [--save-to=<save-path>] [--debug]
+  VirtualCluster.py vcluster create runtime-config <config-name> <proc-num> in:params+file <argfile-path> out:file <outffile-name> [--params=<set-of-params-list>] [--download-proc-num=<download-pnum> [default=1]] [--suffix=<suffix>] [--download-later] [--save-to=<save-path>] [--debug]
   VirtualCluster.py vcluster set-param runtime-config <config-name> <parameter> <value>
   VirtualCluster.py vcluster destroy runtime-config <config-name>
   VirtualCluster.py vcluster list virtual-clusters [<depth> [default:1]]
   VirtualCluster.py vcluster list runtime-configs [<depth> [default:1]]
-  VirtualCluster.py vcluster run-script <script-path>
+  VirtualCluster.py vcluster run-script <virtualcluster-name> <config-name> <script-path>
   VirtualCluster.py vcluster connection-test
 
   VirtualCluster.py -h
 
 Options:
   -h --help     Show this screen.
-  --node_list=<list_of_nodes>  List of nodes separated by commas. Ex: node-1,node-2
-  --cluster_list=<list_of_clusters> List of clusters separated by commas. Ex: cluster-1, cluster-2
+  --node_list=<list_of_nodes>           List of nodes separated by commas. Ex: node-1,node-2
+  --cluster_list=<list_of_clusters>     List of clusters separated by commas. Ex: cluster-1, cluster-2
+  --params=<set-of-paramList>           This is a set of parameter list each set is sent to one node. Delimiter for each node is ",", e.g. with 1 2, 3 4, 5 6 the 1 2 will be sent to node1, 3 4 run on node 2, etc.
 
 Description:
    put a description here
@@ -111,7 +112,31 @@ class VirtualCluster(CloudManagerABC):
     def create(self):
         pass
 
-    def run_remote_job(self,n_idx,n, all_pids):
+
+    def run(self,cluster_name,config_name,script_path):
+        self.cluster = self.vcluster_config.get('virtual-cluster')[cluster_name]
+        self.config = self.vcluster_config.get('runtime-config')[config_name]
+        all_pids = Manager().list()
+        if self.config.get('params-list') is None:
+            raise ValueError('param-list is not set. This value determines how many instance of the target application will run remotely. Therefore, even if the parameter is empty, add commas for every run you expect.')
+        all_jobs = [(self,param, all_pids) for param_idx,param in enumerate(self.config.get('params-list'))]
+        pool = Pool(processes=self.config['proc_num'])
+        pool.map(run_method_in_parallel,all_jobs)
+        parallel_jobs.all_pids = all_pids
+        if nodownload == False:
+            parallel_jobs.sync_pids_with_config()
+            pool = Pool(processes=process_num_collect)
+            print("collecting results")
+            while len(all_pids)> 0 :
+                time.sleep(3)
+                all_running_jobs = [(parallel_jobs, n_idx, n, all_pids) for n_idx, n in enumerate(parallel_jobs.config) if (n,parallel_jobs.config[n]['pid']) in all_pids]
+                pool.map(collect_results_in_parallel, all_running_jobs)
+                print ("waiting for other results if any...")
+
+            print("All of the remote results collected.")
+
+
+    def run_remote_job(self,n, all_pids):
         ## COPY SCRIPT TO REMOTE
         while self.config[n]['script_name_with_suffix'] not in self.ssh(n,'ls %s'%self.config[n]['remote_path']):
             self.scp(n,self.config[n]['script_path'],'%s:%s' % (self.config[n]['hostname'], os.path.join(self.config[n]['remote_path'],self.config[n]['script_name_with_suffix'])))
@@ -304,18 +329,18 @@ class VirtualCluster(CloudManagerABC):
         self.vcluster_config.deep_set(['virtual-cluster'], vcluster_tosave)
         print("Virtual cluster created/replaced successfully.")
 
-    def _create_config(self,config_name,proc_num,download_proc_num,suffix,nometa,download_later,save_to,input_type,infile_path,output_type,outfile_name):
+    def _create_config(self,config_name,proc_num,download_proc_num,suffix,download_later,save_to,input_type,infile_path,output_type,outfile_name,params_list):
         config_tosave = {config_name:{}}
         config_tosave[config_name].update({"proc_num":proc_num,
                                            "download_proc_num": download_proc_num,
                                            "suffix": suffix,
-                                           "no-meta": nometa,
                                            "download-later": download_later,
-                                           "save_to":save_to,
-                                           "input_type":input_type,
-                                           "infile_path":infile_path,
-                                           "output_type":output_type,
-                                           "outfile_name":outfile_name})
+                                           "save-to":save_to,
+                                           "input-type":input_type,
+                                           "infile-path":infile_path,
+                                           "output-type":output_type,
+                                           "outfile-name":outfile_name,
+                                           "params-list":params_list})
         self.vcluster_config.deep_set(['runtime-config'],config_tosave)
         print("Runtime-configuration created/replaced successfully.")
 
@@ -346,8 +371,9 @@ class VirtualCluster(CloudManagerABC):
             raise ValueError("Target of variable set not found.")
 
 
+
 def run_method_in_parallel(args):
-    return args[0].run_remote_job(args[1],args[2],args[3])
+    return args[0].run_remote_job(args[1],args[2])
 
 def collect_results_in_parallel(args):
     return args[0].collect_result(args[1],args[2],args[3])
@@ -361,51 +387,6 @@ def process_arguments(arguments):
 
     """
     debug = arguments["--debug"]
-    # if debug:
-    #     try:
-    #         columns, rows = os.get_terminal_size(0)
-    #     except OSError:
-    #         columns, rows = os.get_terminal_size(1)
-    #
-    #     print(colored(columns * '=', "red"))
-    #     print(colored("Running in Debug Mode", "red"))
-    #     print(colored(columns * '=', "red"))
-    #     print(arguments)
-    #     print(colored(columns * '-', "red"))
-    #     logging.basicConfig(level=logging.DEBUG)
-    # else:
-    #     logging.basicConfig(level=logging.INFO)
-
-    """
-    
-      VirtualCluster.py vcluster create virtual-cluster <virtualcluster-name> --clusters=<clusterList> [--computers=<computerList>] [--debug]
-      VirtualCluster.py vcluster destroy virtual-cluster <virtualcluster-name>
-      VirtualCluster.py vcluster create runtime-config <config-name> <proc-num> in:params out:stdout [--download-proc-num=<download-pnum> [default=1]] [--suffix=<suffix>] [--no-meta | --download-later] [--save-to=<save-path>] [--debug]
-      VirtualCluster.py vcluster create runtime-config <config-name> <proc-num> in:params out:file <outfile-name> [--download-proc-num=<download-pnum> [default=1]] [--suffix=<suffix>] [--no-meta | --download-later] [--save-to=<save-path>] [--debug]
-      VirtualCluster.py vcluster create runtime-config <config-name> <proc-num> in:params+file <argfile-path> out:stdout [--download-proc-num=<download-pnum> [default=1]] [--suffix=<suffix>] [--no-meta | --download-later] [--save-to=<save-path>] [--debug]
-      VirtualCluster.py vcluster create runtime-config <config-name> <proc-num> in:params+file <argfile-path> out:file <outffile-name> [--download-proc-num=<download-pnum> [default=1]] [--suffix=<suffix>] [--no-meta | --download-later] [--save-to=<save-path>] [--debug]
-      VirtualCluster.py vcluster set-param runtime-config <config-name> <parameter> <value>
-      VirtualCluster.py vcluster set-param virtual-cluster  <virtualcluster-name> <parameter> <value>
-      VirtualCluster.py vcluster destroy runtime-config <config-name>
-      VirtualCluster.py vcluster list virtual-clusters [<depth> [default:1]]
-      VirtualCluster.py vcluster list runtime-configs [<depth> [default:1]]
-      VirtualCluster.py vcluster run-script <script-path>
-      VirtualCluster.py vcluster connection-test
-
-      VirtualCluster.py -h
-
-    Options:
-      -h --help     Show this screen.
-      --node_list=<list_of_nodes>  List of nodes separated by commas. Ex: node-1,node-2
-      --cluster_list=<list_of_clusters> List of clusters separated by commas. Ex: cluster-1, cluster-2
-
-
-    Description:
-       put a description here
-
-    Example:
-       put an example here
-    """
 
     if arguments.get("vcluster"):
         vcluster_manager = VirtualCluster(debug=debug)
@@ -421,8 +402,10 @@ def process_arguments(arguments):
                 random_suffix =  '_' + str(datetime.now()).replace('-', '').replace(' ', '_').replace(':', '')[0:str(datetime.now()).replace('-', '').replace(' ', '_').replace(':', '').index('.') + 3].replace('.', '')
                 suffix = random_suffix if arguments.get("suffix") is None else arguments.get("suffix")
                 save_to = "" if arguments.get("<save-path>") is None else arguments.get("<save-path>")
-                nometa = arguments.get("--no-meta")
                 download_later = arguments.get("--download-later")
+                params_list = [] if arguments.get("--params") is None else arguments.get("--params").split(',')
+                # if len(params_list) != proc_num:
+                #     raise ValueError("There should be one parameter for each remote node so that the runs are not identical and redundant.")
                 if arguments.get("in:params") and arguments.get("out:stdout"):
                     input_type = "params"
                     infile_path = ''
@@ -444,7 +427,7 @@ def process_arguments(arguments):
                     output_type = "file"
                     outfile_name = arguments.get("<outfile-name>")
 
-                vcluster_manager.create(config_name,proc_num,download_proc_num,suffix,nometa,download_later,save_to,input_type,infile_path,output_type,outfile_name)
+                vcluster_manager.create(config_name,proc_num,download_proc_num,suffix,download_later,save_to,input_type,infile_path,output_type,outfile_name,params_list)
         if arguments.get("destroy"):
             if arguments.get("virtual-cluster"):
                 vcluster_manager.destroy("virtual-cluster",arguments.get("<virtualcluster-name>"))
@@ -461,72 +444,22 @@ def process_arguments(arguments):
 
         if arguments.get("set-param"):
             if arguments.get("virtual-clusters"):
-                config_name = arguments.get("<virtualcluster-name>")
+                cluster_name = arguments.get("<virtualcluster-name>")
                 parameter = arguments.get("<parameter>")
                 value = arguments.get("<value>")
-                vcluster_manager.set_param("virtual-clusters",config_name,parameter,value)
+                vcluster_manager.set_param("virtual-clusters",cluster_name,parameter,value)
 
             if arguments.get("runtime-config"):
                 config_name = arguments.get("<config-name>")
                 parameter = arguments.get("<parameter>")
                 value = arguments.get("<value>")
                 vcluster_manager.set_param("runtime-config",config_name,parameter,value)
+        if arguments.get("run-script"):
+            cluster_name = arguments.get("<virtualcluster-name>")
+            config_name = arguments.get("<config-name>")
+            script_path = arguments.get("<script-path>")
+            vcluster_manager.run(cluster_name,config_name,script_path)
 
-        # else:
-        #     hosts = False
-        #     action = None
-        #     kwargs = dict()
-        #     args = ()
-        #
-        #     if arguments.get("--vms"):
-        #         hosts = arguments.get("--vms")
-        #         hosts = hostlist.expand_hostlist(hosts)
-        #
-        #     if arguments.get("start"):
-        #         action = provider.start
-        #     elif arguments.get("stop"):
-        #         action = provider.stop
-        #     elif arguments.get("destroy"):
-        #         action = provider.destroy
-        #     elif arguments.get("status"):
-        #         action = provider.status
-        #     elif arguments.get("ssh"):
-        #         action = provider.ssh
-        #         args = [arguments.get("NAME")]
-        #     elif arguments.get("run-command") and arguments.get("COMMAND"):
-        #         action = provider.run_command
-        #         args = [arguments.get("COMMAND")]
-        #     elif arguments.get("run-script") and arguments.get("SCRIPT"):
-        #         action = provider.run_script
-        #         args = [arguments.get("SCRIPT")]
-        #
-        #     # do the action
-        #     if action is not None:
-        #         action_type = action.__name__
-        #         if action_type in ['start', 'stop', 'destroy', 'status']:
-        #             if hosts:
-        #                 for node_name in hosts:
-        #                     action(node_name)
-        #             else:
-        #                 action()
-        #
-        #         elif action_type in ['ssh']:
-        #             action(*args)
-        #
-        #         elif action_type in ['run_command', 'run_script']:
-        #             # make sure there are sth in hosts, if nothing in the host
-        #             # just grab all hosts in the current vagrant environment
-        #             if not hosts:
-        #                 hosts = provider._get_host_names()
-        #                 if not hosts:
-        #                     raise EnvironmentError('There is no host exists in the current vagrant project')
-        #
-        #             if len(hosts) > 1:
-        #                 kwargs.update({'report_alone': False})
-        #                 provider.run_parallel(hosts, action, args, kwargs)
-        #             else:
-        #                 kwargs.update({'report_alone': True})
-        #                 action(hosts[0], *args, **kwargs)
 
 
 # if __name__ == '__main__':

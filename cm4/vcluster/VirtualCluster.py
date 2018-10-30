@@ -5,15 +5,15 @@
 Usage:
   VirtualCluster.py vcluster create virtual-cluster <virtualcluster-name> --clusters=<clusterList> [--computers=<computerList>] [--debug]
   VirtualCluster.py vcluster destroy virtual-cluster <virtualcluster-name>
-  VirtualCluster.py vcluster create runtime-config <config-name> <proc-num> in:params out:stdout [--params=<set-of-params-list>] [--download-proc-num=<download-pnum> [default=1]] [--suffix=<suffix>] [--download-later] [--save-to=<save-path>] [--debug]
-  VirtualCluster.py vcluster create runtime-config <config-name> <proc-num> in:params out:file <outfile-name> [--params=<set-of-params-list>] [--download-proc-num=<download-pnum> [default=1]] [--suffix=<suffix>] [--download-later] [--save-to=<save-path>] [--debug]
-  VirtualCluster.py vcluster create runtime-config <config-name> <proc-num> in:params+file <argfile-path> out:stdout [--params=<set-of-params-list>] [--download-proc-num=<download-pnum> [default=1]] [--suffix=<suffix>] [--download-later] [--save-to=<save-path>] [--debug]
-  VirtualCluster.py vcluster create runtime-config <config-name> <proc-num> in:params+file <argfile-path> out:file <outffile-name> [--params=<set-of-params-list>] [--download-proc-num=<download-pnum> [default=1]] [--suffix=<suffix>] [--download-later] [--save-to=<save-path>] [--debug]
+  VirtualCluster.py vcluster create runtime-config <config-name> <proc-num> in:params out:stdout [--download-proc-num=<download-pnum> [default=1]] [--download-now]  [--debug]
+  VirtualCluster.py vcluster create runtime-config <config-name> <proc-num> in:params out:file [--download-proc-num=<download-pnum> [default=1]] [--download-now]  [--debug]
+  VirtualCluster.py vcluster create runtime-config <config-name> <proc-num> in:params+file out:stdout [--download-proc-num=<download-pnum> [default=1]]  [--download-now]  [--debug]
+  VirtualCluster.py vcluster create runtime-config <config-name> <proc-num> in:params+file out:file [--download-proc-num=<download-pnum> [default=1]] [--download-now]  [--debug]
   VirtualCluster.py vcluster set-param runtime-config <config-name> <parameter> <value>
   VirtualCluster.py vcluster destroy runtime-config <config-name>
   VirtualCluster.py vcluster list virtual-clusters [<depth> [default:1]]
   VirtualCluster.py vcluster list runtime-configs [<depth> [default:1]]
-  VirtualCluster.py vcluster run-script <virtualcluster-name> <config-name> <script-path>
+  VirtualCluster.py vcluster run-script <job-name> <virtualcluster-name> <config-name> <script-path> <remote-path> <save-to> [--argfile-path=<argfile-path>] [--outfile-name=<outfile-name>] [--params=<set-of-params-list>] [--suffix=<suffix>] [--overwrite]
   VirtualCluster.py vcluster connection-test
 
   VirtualCluster.py -h
@@ -71,9 +71,9 @@ class VirtualCluster(CloudManagerABC):
             self.cm_config = Config()
             self.vcluster_config = GenericConfig(self.workspace)
 
-            self.debug = debug
+            self.debug = 1
             # self.config_validator(config_path)
-            # self.all_pids = []
+            self.all_pids = []
             # self.output_suffix = output_suffix
             # for n_idx, n in enumerate(self.config):
             #     self.config[n]['node'] = n
@@ -109,114 +109,133 @@ class VirtualCluster(CloudManagerABC):
         pass
     def start(self):
         pass
-    def create(self):
-        pass
 
 
-    def run(self,cluster_name,config_name,script_path):
-        self.cluster = self.vcluster_config.get('virtual-cluster')[cluster_name]
-        self.config = self.vcluster_config.get('runtime-config')[config_name]
-        all_pids = Manager().list()
-        if self.config.get('params-list') is None:
+    def run(self,job_name, cluster_name,config_name,script_path,argfile_path,outfile_name,remote_path,local_path,params_list,suffix,overwrite):
+        if params_list is None:
             raise ValueError('param-list is not set. This value determines how many instance of the target application will run remotely. Therefore, even if the parameter is empty, add commas for every run you expect.')
-        all_jobs = [(self,param, all_pids) for param_idx,param in enumerate(self.config.get('params-list'))]
-        pool = Pool(processes=self.config['proc_num'])
+        if job_name in list(self.vcluster_config.get('job-metadata').keys()) and overwrite is False:
+            raise RuntimeError("The job {} exists in the configuration file, if you want to overwrite the job, use --overwrite argument.".format(job_name))
+        self.virt_cluster = self.vcluster_config.get('virtual-cluster')[cluster_name]
+        self.runtime_config = self.vcluster_config.get('runtime-config')[config_name]
+        # job_number = 1 if self.vcluster_config.get('job-metadata') is None else max([int(x.split('-')[1]) for x in self.vcluster_config.get('job-metadata').keys()]) + 1
+        job_metadata = {job_name:{}}
+        job_metadata[job_name]['suffix'] = suffix
+        job_metadata[job_name]['raw_remote_path'] = remote_path
+        job_metadata[job_name]['script_path'] = os.path.abspath(script_path)
+        job_metadata[job_name]['argfile_path'] = argfile_path
+        job_metadata[job_name]['outfile_path'] = outfile_name
+        job_metadata[job_name]['script_name'] = ntpath.basename(script_path)
+        job_metadata[job_name]['script_name_with_suffix'] = self.add_suffix_to_path(job_metadata[job_name]['script_name'],suffix)
+        job_metadata[job_name]['remote_path'] = os.path.join(remote_path,'job' + suffix,'')
+        job_metadata[job_name]['remote_script_path'] = os.path.join(job_metadata[job_name]['remote_path'], job_metadata[job_name]['script_name_with_suffix'])
+        job_metadata[job_name]['local_path'] = local_path
+        job_metadata[job_name]['params_list'] = params_list
+        self.job_metadata = job_metadata
+
+        self.vcluster_config.deep_set(['job-metadata'], job_metadata)
+        all_pids = Manager().list()
+        all_jobs = [(self,job_metadata[job_name],param_idx, param, all_pids) for param_idx,param in enumerate(params_list)]
+        pool = Pool(processes=self.runtime_config['proc_num'])
         pool.map(run_method_in_parallel,all_jobs)
-        parallel_jobs.all_pids = all_pids
-        if nodownload == False:
-            parallel_jobs.sync_pids_with_config()
-            pool = Pool(processes=process_num_collect)
+        self.all_pids = all_pids
+        self.vcluster_config.deep_set(['job-metadata',job_name,'nodes-pids' ],all_pids._getvalue())
+        if self.runtime_config['download-now']:
+            # parallel_jobs.sync_pids_with_config()
+            pool = Pool(processes=self.runtime_config['download_proc_num'])
             print("collecting results")
             while len(all_pids)> 0 :
                 time.sleep(3)
-                all_running_jobs = [(parallel_jobs, n_idx, n, all_pids) for n_idx, n in enumerate(parallel_jobs.config) if (n,parallel_jobs.config[n]['pid']) in all_pids]
+                all_running_jobs = [(self,job_metadata[job_name], node_idx,node_pid_tuple, all_pids) for node_idx, node_pid_tuple in enumerate(self.vcluster_config.get('job-metadata')['j1test']['nodes-pids']) if node_pid_tuple in all_pids]
                 pool.map(collect_results_in_parallel, all_running_jobs)
                 print ("waiting for other results if any...")
 
             print("All of the remote results collected.")
 
+    def collect(self):
+        pass
 
-    def run_remote_job(self,n, all_pids):
+
+    def collect_result(self,job_metadata, node_idx, node_pid_tuple,all_pids):
+        dest_node = node_pid_tuple[0]
+        dest_pid = node_pid_tuple[1]
+        dest_node_info = self.virt_cluster[dest_node]
+        ssh_caller = lambda *x: self.ssh(dest_node_info['name'],os.path.expanduser(dest_node_info['credentials']['sshconfigpath']),*x)
+        scp_caller = lambda *x: self.scp(dest_node_info['name'],os.path.expanduser(dest_node_info['credentials']['sshconfigpath']),*x)
+        ps_output = ssh_caller('ps', '-ef', '|', 'grep', dest_pid, '|', 'grep -v grep')
+        if len(ps_output) == 0 :
+            if not os.path.exists(job_metadata['local_path']):
+                os.makedirs(job_metadata['local_path'])
+            if self.runtime_config['output-type'] == 'stdout':
+                scp_caller('%s:%s' % (dest_node_info['name'], os.path.join(job_metadata['remote_path'],self.add_suffix_to_path('outputfile_%d' % node_idx, job_metadata['suffix']))),os.path.join(job_metadata['local_path'], ''))
+            elif self.runtime_config['output-type'] == 'file':
+                scp_caller('-r', '%s:%s' % (dest_node_info['name'], os.path.join(job_metadata['remote_path'], job_metadata['outfile_name'])),os.path.join(job_metadata['local_path'], ''))
+            elif self.runtime_config['output-type'] == 'stdout+file':
+                scp_caller('%s:%s' % (dest_node_info['name'], os.path.join(job_metadata['remote_path'], self.add_suffix_to_path('outputfile_%d' %node_idx,job_metadata['suffix']))), os.path.join(job_metadata['local_path'], ''))
+                scp_caller('-r', '%s:%s' % (dest_node_info['name'], os.path.join(job_metadata['remote_path'], job_metadata['outfile_name'])),os.path.join(job_metadata['local_path'], ''))
+            all_pids.remove((dest_node, dest_pid))
+            print("Results collected from %s."%dest_node)
+
+    def run_remote_job(self, job_metadata, param_idx, params, all_pids):
         ## COPY SCRIPT TO REMOTE
-        while self.config[n]['script_name_with_suffix'] not in self.ssh(n,'ls %s'%self.config[n]['remote_path']):
-            self.scp(n,self.config[n]['script_path'],'%s:%s' % (self.config[n]['hostname'], os.path.join(self.config[n]['remote_path'],self.config[n]['script_name_with_suffix'])))
-            # time.sleep(1)f
+        available_nodes_num =  len(list(self.virt_cluster.keys()))
+        target_node_idx = param_idx%available_nodes_num
+        target_node_key = list(self.virt_cluster.keys())[target_node_idx]
+        target_node = self.virt_cluster[target_node_key]
+        ssh_caller = lambda *x: self.ssh(target_node['name'],os.path.expanduser(target_node['credentials']['sshconfigpath']),*x)
+        scp_caller = lambda *x: self.scp(target_node['name'],os.path.expanduser(target_node['credentials']['sshconfigpath']),*x)
+        if len(ssh_caller('if test -d %s; then echo "exist"; fi'%job_metadata['remote_path'])) == 0:
+            ssh_caller('cd %s && mkdir job%s'%(job_metadata['raw_remote_path'],job_metadata['suffix']))
+        scp_caller(job_metadata['script_path'],'%s:%s' % (target_node['name'], os.path.join(job_metadata['remote_path'],job_metadata['script_name_with_suffix'])))
+
         if self.debug:
             print("script copied")
-        self.ssh(n,'chmod +x' , self.config[n]['remote_script_path'])
+
+        ssh_caller('chmod +x' , job_metadata['remote_script_path'])
+
         if self.debug:
             print("chmod +x set")
 
         ## COPY INPUT TO REMOTE AND RUN
-        if self.config[n]['arg_type'].lower() == 'params+file':
-            while ntpath.basename(self.config[n]['arg_file_path']) not in self.ssh(n, 'ls %s' % self.config[n]['remote_path']):
-                self.scp(n, self.config[n]['arg_file_path'],
-                         '%s:%s' % (self.config[n]['hostname'], self.config[n]['remote_path']))
-                # time.sleep(1)
-        if self.config[n]['output_type'].lower() in ['stdout','stdout+file']:
-            self.remote_pid = self.ssh(n,'cd %s && nohup %s %s >%s & echo $!'%(self.config[n]['remote_path'],self.config[n]['remote_script_path'],self.config[n]['arg_params'],os.path.join(self.config[n]['remote_path'],self.add_suffix_to_path('outputfile_node_%d' % self.config[n]['node_idx']))))
+        if self.runtime_config['input-type'].lower() == 'params+file':
+            scp_caller(self.runtime_config['infile-path'],'%s:%s' % (target_node['name'], job_metadata['remote_path']))
+        if self.runtime_config['output-type'].lower() in ['stdout','stdout+file']:
+            remote_pid = ssh_caller('cd %s && nohup %s %s > %s 2>&1 </dev/null& echo $!' % (job_metadata['remote_path'], job_metadata['remote_script_path'], params, os.path.join(job_metadata['remote_path'], self.add_suffix_to_path('outputfile_%d' % param_idx, job_metadata['suffix']))))
             if self.debug:
                 print("params->stdout ran")
-        elif self.config[n]['output_type'].lower() == 'file':
-            self.remote_pid = self.ssh(n,'cd %s && nohup %s %s >&- & echo $!'%(self.config[n]['remote_path'],self.config[n]['remote_script_path'],self.config[n]['arg_params']))
+        elif self.runtime_config['output-type'].lower() == 'file':
+            remote_pid = ssh_caller('cd %s && nohup %s %s > &- 2>&1 & echo $!' % (job_metadata['remote_path'], job_metadata['remote_script_path'], params))
             if self.debug:
                 print("params->file ran")
-
-        self.remote_pid = self.remote_pid[0]
-        all_pids.append((n,self.remote_pid))
-        print('Remote Pid on %s: %s'%(self.config[n]['node'],self.remote_pid))
+        all_pids.append((target_node_key,remote_pid[0]))
+        print('Remote Pid on %s: %s'%(target_node_key,remote_pid[0]))
 
 
-
-    def collect_result(self,n_idx,n,all_pids):
-        self.ps_output = self.ssh(n,'ps', '-ef', '|', 'grep', self.config[n]['pid'], '|', 'grep -v grep')
-        if len(self.ps_output) == 0 :
-            if not os.path.exists(self.config[n]['local_output_path']):
-                os.makedirs(self.config[n]['local_output_path'])
-            if self.config[n]['output_type'] == 'stdout':
-                self.scp(n,'%s:%s' % (self.config[n]['hostname'], os.path.join(self.config[n]['remote_path'],self.add_suffix_to_path('outputfile_node_%d' % (n_idx)))),os.path.join(self.config[n]['local_output_path'], ''))
-            elif self.config[n]['output_type'] == 'file':
-                self.scp(n,'%s:%s' % (self.config[n]['hostname'],os.path.join(self.config[n]['remote_path'], self.config[n]['output_filename'])),os.path.join(self.config[n]['local_output_path'], ''))
-            elif self.config[n]['output_type'] == 'stdout+file':
-                self.scp(n, '%s:%s' % (self.config[n]['hostname'],
-                                       os.path.join(self.config[n]['remote_path'], self.add_suffix_to_path('outputfile_node_%d' % (n_idx)))),
-                         os.path.join(self.config[n]['local_output_path'], ''))
-                self.scp(n, '%s:%s' % (self.config[n]['hostname'],
-                                       os.path.join(self.config[n]['remote_path'], self.config[n]['output_filename'])),
-                         os.path.join(self.config[n]['local_output_path'], ''))
-            all_pids.remove((n, self.config[n]['pid']))
-            print("Results from %s collected"%n)
-
-
-
-    def ssh(self,*args):
-        n = args[0]
-        args = args[1:]
-        ssh = subprocess.Popen(["ssh", self.config[n]['hostname'] , '-F', self.config[n]['sshconfigpath'], *args ],
-                               shell=False,
+    def ssh(self,hostname, sshconfigpath, *args):
+        ssh = subprocess.Popen(["ssh", hostname , '-F', sshconfigpath, *args ],
                                stdout=subprocess.PIPE,
                                stderr=subprocess.PIPE)
-        result = ssh.stdout.readlines()
+        result = ssh.stdout.readline()
         if result == []:
             error = ssh.stderr.readlines()
             if len(error) > 0:
-                print("ERROR in host %s: %s" % (self.config[n]['hostname'],error))
+                print("ERROR in host %s: %s" % (hostname,error))
             return []
         else:
-            return [x.decode('utf-8').strip('\n') for x in result]
+            try:
+                return [x.decode('utf-8').strip('\n') for x in result]
+            except AttributeError:
+                return [result.decode('utf-8').strip('\n')]
 
-    def scp(self, *args):
-        n = args[0]
-        args = args[1:]
-        ssh = subprocess.Popen(["scp", '-F', self.config[n]['sshconfigpath'], *args],
-                               shell=False,
+    def scp(self, hostname, sshconfigpath, *args):
+        ssh = subprocess.Popen(["scp", '-F', sshconfigpath, *args],
                                stdout=subprocess.PIPE,
                                stderr=subprocess.PIPE)
         middle_result = ssh.stdout.readlines()
         if middle_result == []:
             error = ssh.stderr.readlines()
             if len(error) > 0:
-                print("ERROR in host %s: %s" % (self.config[n]['hostname'], error))
+                print("ERROR in host %s: %s" % (hostname, error))
 
     def config_validator(self,config_path):
         self.config_path = config_path
@@ -263,11 +282,11 @@ class VirtualCluster(CloudManagerABC):
         for item in self.all_pids:
             self.config[item[0]]['pid'] = item[1]
 
-    def add_suffix_to_path(self,path):
+    def add_suffix_to_path(self,path,suffix):
         dir_path = os.path.dirname(path)
         full_filename = os.path.basename(path)
         filename, fileextention =  os.path.splitext(full_filename)
-        full_filename_new = filename + self.output_suffix + fileextention
+        full_filename_new = filename + suffix + fileextention
         new_path = os.path.join(dir_path,full_filename_new)
         return new_path
 
@@ -329,18 +348,14 @@ class VirtualCluster(CloudManagerABC):
         self.vcluster_config.deep_set(['virtual-cluster'], vcluster_tosave)
         print("Virtual cluster created/replaced successfully.")
 
-    def _create_config(self,config_name,proc_num,download_proc_num,suffix,download_later,save_to,input_type,infile_path,output_type,outfile_name,params_list):
+    def _create_config(self,config_name,proc_num,download_proc_num,download_now,save_to,input_type,output_type):
         config_tosave = {config_name:{}}
         config_tosave[config_name].update({"proc_num":proc_num,
                                            "download_proc_num": download_proc_num,
-                                           "suffix": suffix,
-                                           "download-later": download_later,
+                                           "download-now": download_now,
                                            "save-to":save_to,
                                            "input-type":input_type,
-                                           "infile-path":infile_path,
-                                           "output-type":output_type,
-                                           "outfile-name":outfile_name,
-                                           "params-list":params_list})
+                                           "output-type":output_type})
         self.vcluster_config.deep_set(['runtime-config'],config_tosave)
         print("Runtime-configuration created/replaced successfully.")
 
@@ -373,10 +388,10 @@ class VirtualCluster(CloudManagerABC):
 
 
 def run_method_in_parallel(args):
-    return args[0].run_remote_job(args[1],args[2])
+    return args[0].run_remote_job(args[1],args[2],args[3],args[4])
 
 def collect_results_in_parallel(args):
-    return args[0].collect_result(args[1],args[2],args[3])
+    return args[0].collect_result(args[1],args[2],args[3],args[4])
 
 
 def process_arguments(arguments):
@@ -399,21 +414,16 @@ def process_arguments(arguments):
                 config_name = arguments.get("<config-name>")
                 proc_num = int(arguments.get("<proc-num>"))
                 download_proc_num = 1 if arguments.get("<download-pnum>") is None else int(arguments.get("<download-pnum>"))
-                random_suffix =  '_' + str(datetime.now()).replace('-', '').replace(' ', '_').replace(':', '')[0:str(datetime.now()).replace('-', '').replace(' ', '_').replace(':', '').index('.') + 3].replace('.', '')
-                suffix = random_suffix if arguments.get("suffix") is None else arguments.get("suffix")
+
                 save_to = "" if arguments.get("<save-path>") is None else arguments.get("<save-path>")
-                download_later = arguments.get("--download-later")
-                params_list = [] if arguments.get("--params") is None else arguments.get("--params").split(',')
+                download_now = arguments.get("--download-now")
                 # if len(params_list) != proc_num:
                 #     raise ValueError("There should be one parameter for each remote node so that the runs are not identical and redundant.")
                 if arguments.get("in:params") and arguments.get("out:stdout"):
                     input_type = "params"
-                    infile_path = ''
                     output_type = "stdout"
-                    outfile_name = ''
                 elif arguments.get("in:params") and arguments.get("out:file"):
                     input_type = "params"
-                    infile_path=''
                     output_type = "file"
                     outfile_name = arguments.get("<outfile-name>")
                 elif arguments.get("in:params") and arguments.get("out:stdout"):
@@ -426,8 +436,8 @@ def process_arguments(arguments):
                     infile_path = arguments.get("<argfile-path>")
                     output_type = "file"
                     outfile_name = arguments.get("<outfile-name>")
+                vcluster_manager.create(config_name,proc_num,download_proc_num,download_now,save_to,input_type,output_type)
 
-                vcluster_manager.create(config_name,proc_num,download_proc_num,suffix,download_later,save_to,input_type,infile_path,output_type,outfile_name,params_list)
         if arguments.get("destroy"):
             if arguments.get("virtual-cluster"):
                 vcluster_manager.destroy("virtual-cluster",arguments.get("<virtualcluster-name>"))
@@ -455,10 +465,21 @@ def process_arguments(arguments):
                 value = arguments.get("<value>")
                 vcluster_manager.set_param("runtime-config",config_name,parameter,value)
         if arguments.get("run-script"):
+            job_name = arguments.get("<job-name>")
             cluster_name = arguments.get("<virtualcluster-name>")
             config_name = arguments.get("<config-name>")
             script_path = arguments.get("<script-path>")
-            vcluster_manager.run(cluster_name,config_name,script_path)
+            remote_path = arguments.get("<remote-path>")
+            local_path = arguments.get("<save-to>")
+            random_suffix = '_' + str(datetime.now()).replace('-', '').replace(' ', '_').replace(':', '')[
+                                  0:str(datetime.now()).replace('-', '').replace(' ', '_').replace(':', '').index(
+                                      '.') + 3].replace('.', '')
+            suffix = random_suffix if arguments.get("suffix") is None else arguments.get("suffix")
+            params_list = [] if arguments.get("--params") is None else arguments.get("--params").split(',')
+            overwrite = False if type(arguments.get("--overwrite")) is None else arguments.get("--overwrite")
+            argfile_path = '' if arguments.get("--argfile-path") is None else arguments.get("<argfile-path>")
+            outfile_name = '' if arguments.get("--outfile-name") is None else arguments.get("<outfile-name>")
+            vcluster_manager.run(job_name,cluster_name,config_name,script_path,argfile_path,outfile_name,remote_path,local_path,params_list,suffix,overwrite)
 
 
 

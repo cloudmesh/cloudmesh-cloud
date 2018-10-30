@@ -76,7 +76,7 @@ class GenericConfig(object):
             if index < end or value is None:
                 inner_dict = inner_dict.setdefault(component, {})
             else:
-                if type(inner_dict[component]) != dict or component not in inner_dict.keys():
+                if component not in inner_dict.keys() or type(inner_dict[component]) != dict :
                     inner_dict[component] = value
                 else:
                     inner_dict[component].update(value)

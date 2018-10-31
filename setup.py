@@ -32,7 +32,7 @@ exec(open('cm4/__init__.py').read().strip())
 #
 if sys.version_info > (3, 7, 0):
     print(70 * "#")
-    print("WARNING: upgrade to python 3.7.0 "
+    print("WARNING: upgrade to a python greater than 3.7.0 "
           "other version are not supported. Your version is {}. failed.".format(sys.version_info))
     print(70 * "#")
 

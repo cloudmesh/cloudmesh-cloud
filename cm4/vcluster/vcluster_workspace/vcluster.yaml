@@ -1,0 +1,63 @@
+virtual-cluster:
+  vc:
+    computer_a:
+      name: computer_a
+      label: one
+      address: localhost
+      credentials:
+        username: TBD
+        pulickey: ~/.ssh/id_rsa.pub
+    computer_b:
+      name: computer_b
+      label: two
+      address: localhost
+      credentials:
+        username: TBD
+        pulickey: ~/.ssh/id_rsa.pub
+  local_vagrants:
+    computer_a:
+      name: machine1
+      label: one
+      address: localhost
+      credentials:
+        sshconfigpath: ~/vms/ubuntu14/sshconfig1
+    computer_b:
+      name: machine2
+      label: two
+      address: localhost
+      credentials:
+        sshconfigpath: ~/vms/ubuntu14/sshconfig2
+runtime-config:
+  test_conf21:
+    proc_num: 1
+    download_proc_num: 1
+    suffix: _20181029_18440213
+    download-later: false
+  test_conf22:
+    proc_num: 1
+    download_proc_num: 1
+    suffix: _20181029_20383589
+    download-later: false
+  test_conf24:
+    proc_num: 1
+    download_proc_num: 1
+    suffix: _20181029_20595740
+    download-later: false
+    save_to: ./results
+    input_type: params
+    infile_path: ''
+    output_type: stdout
+    outfile_name: ''
+  last_conf:
+    proc_num: 1
+    download_proc_num: 1
+    suffix: _20181029_23295369
+    download-later: false
+    save-to: ''
+    input-type: params
+    infile-path: ''
+    output-type: stdout
+    outfile-name: ''
+    params-list:
+    - '33'
+    - joey

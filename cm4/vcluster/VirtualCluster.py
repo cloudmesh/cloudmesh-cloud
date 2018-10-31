@@ -16,7 +16,7 @@ Usage:
   VirtualCluster.py vcluster list runtime-configs [<depth> [default:1]]
   VirtualCluster.py vcluster run-script <job-name> <virtualcluster-name> <config-name> <script-path> <set-of-params-list> <remote-path> <save-to> [--argfile-path=<argfile-path>] [--outfile-name=<outfile-name>] [--suffix=<suffix>] [--overwrite]
   VirtualCluster.py vcluster fetch <job-name> [--load-metadata=<metadata-path>]
-  VirtualCluster.py vcluster clean-remote <job-name> [--load-metafile=<metadata-path>]
+  VirtualCluster.py vcluster clean-remote <job-name> <proc-num>
   VirtualCluster.py vcluster test-connection <virtualcluster-name> <proc-num>
 
 vcluster run-script parfileout_job local_vagrants parfileout ./sample_input/test_script_filein_stdout.sh _ ~/ ./results --argfile-path=./sample_input/test-script-argument
@@ -408,26 +408,41 @@ class VirtualCluster(CloudManagerABC):
         args = list(func_args[2:])
         return method_to_call(*args)
 
-    def test_connection(self,vcluster_name,proc_num):
+    def connection_test(self,vcluster_name,proc_num):
         self.virt_cluster = self.vcluster_config.get('virtual-cluster')[vcluster_name]
         all_pids = Manager().list()
-        all_jobs = [(self, 'run_test' ,param_idx) for param_idx in range(len(list(self.virt_cluster.keys())))]
+        all_jobs = [(self, 'run_connection_test' ,node_idx) for node_idx in range(len(list(self.virt_cluster.keys())))]
         pool = Pool(processes=proc_num)
         pool.map(self.run_method_in_parallel, all_jobs)
-        self.all_pids = all_pids
 
-    def run_test(self, param_idx):
+    def run_connection_test(self, node_idx):
         ## COPY SCRIPT TO REMOTE
         available_nodes_num =  len(list(self.virt_cluster.keys()))
-        target_node_idx = param_idx%available_nodes_num
+        target_node_idx = node_idx%available_nodes_num
         target_node_key = list(self.virt_cluster.keys())[target_node_idx]
         target_node = self.virt_cluster[target_node_key]
         ssh_caller = lambda *x: self.ssh(target_node['name'],os.path.expanduser(target_node['credentials']['sshconfigpath']),*x)
-        # scp_caller = lambda *x: self.scp(target_node['name'],os.path.expanduser(target_node['credentials']['sshconfigpath']),*x)
         if len(ssh_caller('uname -a')) > 0:
             print("Node {} is accessible.".format(target_node_key))
         else:
             print("Error: Node {} cannot be accessed.".format(target_node_key))
+
+    def clean_remote(self,job_name,proc_num):
+        job_metadata = self.vcluster_config.get('job-metadata')[job_name]
+        self.virt_cluster = self.vcluster_config.get('virtual-cluster')[job_metadata['cluster_name']]
+        remote_path = job_metadata['remote_path']
+        all_jobs = [(self, 'run_clean_remote' ,node,remote_path) for node in list(self.virt_cluster)]
+        pool = Pool(processes=proc_num)
+        pool.map(self.run_method_in_parallel, all_jobs)
+
+    def run_clean_remote(self, target_node,remote_path):
+        target_node_info = self.virt_cluster[target_node]
+        ssh_caller = lambda *x: self.ssh(target_node_info['name'],os.path.expanduser(target_node_info['credentials']['sshconfigpath']),*x)
+        ssh_caller('rm -rf {}'.format(remote_path))
+        if len(ssh_caller('ls {}'.format(remote_path))) == 0:
+            print("Node {} cleaned successfully.".format(target_node))
+        else:
+            print("Error: Node {} could not be cleaned.".format(target_node))
 
 
 
@@ -522,8 +537,11 @@ def process_arguments(arguments):
         if arguments.get("test-connection"):
             vcluster_name = arguments.get("<virtualcluster-name>")
             proc_num = int(arguments.get("<proc-num>"))
-            vcluster_manager.test_connection(vcluster_name,proc_num)
-
+            vcluster_manager.connection_test(vcluster_name,proc_num)
+        if arguments.get("clean-remote"):
+            job_name = arguments.get("<job-name>")
+            proc_num = int(arguments.get("<proc-num>"))
+            vcluster_manager.clean_remote(job_name,proc_num)
 
 def main():
     """

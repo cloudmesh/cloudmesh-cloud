@@ -9,7 +9,7 @@ Usage:
   vagrant.py vagrant stop [--vms=<vmList>] [--debug]
   vagrant.py vagrant suspend [--vms=<vmList>] [--debug]
   vagrant.py vagrant destroy [--vms=<vmList>] [--debug]
-  vagrant.py vagrant info [--debug]
+  vagrant.py vagrant info NAME [--debug]
   vagrant.py vagrant ls [--debug]
   vagrant.py vagrant upload --from=FROM --to=TO [-r] [--vms=<vmlist>] [--debug]
   vagrant.py vagrant download --from=FROM --to=TO [-r] [--vms=<vmlist>] [--debug]
@@ -89,15 +89,14 @@ Version 0.1:
 # TODO: use captal letters as easier to document in other tools
 
 
-import queue
-import fileinput
-import re
-import subprocess
-import os
 import hostlist
 from docopt import docopt
 from colorama import init
 from termcolor import colored
+import queue
+import re
+import subprocess
+import os
 import multiprocessing.dummy as mt
 import time
 import logging
@@ -114,10 +113,18 @@ class Vagrant(object):
 
         :param debug:
         """
-        self.workspace = "./vagrant_workspace"
-        self.experiment_path="../experiment"
-        self.ssh_config={}
+        if not os.getenv('EHVAGRANT_HOME'):
+            self.workspace = os.path.join(os.path.expanduser('~'),'.cloudmesh','vagrant_workspace',)
+        else:
+            self.workspace =  os.getenv('EHVAGRANT_HOME')
         self.path = os.path.join(self.workspace, "Vagrantfile")
+        self.experiment_path = os.path.join(self.workspace,'experiment')
+        
+        if not os.path.isdir(self.workspace):
+            os.mkdir(self.workspace)
+            self.create(['node1','node2'])
+        
+        self.ssh_config={}        
         self.debug = debug
 
     def _update_by_key(self, target, source, keys=None, key_dict=None):
@@ -509,7 +516,7 @@ class Vagrant(object):
             name = ""
         self.execute("vagrant destroy " + str(name))
 			
-    def info(self, name=None):
+    def ls(self, name=None):
         """
         Provides the status information of all Vagrant Virtual machines by default.
         If a name is specified, it provides the status of that particular virtual machine.
@@ -522,15 +529,13 @@ class Vagrant(object):
             name = ""
         self.execute("vagrant status " + str(name))
         
-    def ls(self):
+    def info(self, name):
         """
-        TODO: doc
+        provides the status of that particular virtual machine.
 
         :return:
         """
-        with open(self.path, 'r') as f:
-            content = f.read()
-        print(content)   
+        self.execute("vagrant status " + name) 
 
     def download(self, name, source, dest, prefix_dest=False, recursive=False):
         """
@@ -556,32 +561,6 @@ class Vagrant(object):
         r=(not os.path.basename(source) or recursive)
         self._scp(name, 'upload', source, dest, r)
         
-    def vagrant_action(self, action=None, name=None):
-        """
-        TODO: doc
-
-        :param name:
-        :return:
-        """
-        if action is None:
-            pass  # error
-        if name is None:
-            # start all
-            name = ""
-        self.execute("vagrant " + action + " " + str(name))
-
-    def generate_vagrantfile(self, number_of_nodes):
-        """
-        Generates the Vagrant file to support the @number_of_nodes
-
-        :param number_of_nodes: number of nodes required in the cluster.
-        """
-        replacement_string = "NUMBER_OF_NODES = " + str(number_of_nodes)
-        for line in fileinput.FileInput(os.path.join(self.path), inplace=True):
-            line = re.sub("NUMBER_OF_NODES.*(\d+)$", replacement_string, line.rstrip())
-            print(line)
-
-
 def process_arguments(arguments):
     """
     Processes all the input arguments and acts accordingly.
@@ -630,6 +609,7 @@ def process_arguments(arguments):
             action = provider.destroy
         elif arguments.get("info"):
             action = provider.info
+            args.append(arguments.get("NAME"))
         elif arguments.get("ls"):
             action = provider.ls            
         elif arguments.get("download"):
@@ -659,7 +639,7 @@ def process_arguments(arguments):
             action_type = action.__name__   
             
             # aciton that has immediately execute       
-            if action_type in ['ssh']:
+            if action_type in ['ssh','info']:
                 action(*args, **kwargs)
                 return             
             
@@ -675,7 +655,7 @@ def process_arguments(arguments):
                 args.append(vms_hosts)
                 action(*args, **kwargs)
                 return                         
-            elif action_type in ['start','resume','stop','suspend','destroy','info','ls'] and not vms_hosts:
+            elif action_type in ['start','resume','stop','suspend','destroy','ls'] and not vms_hosts:
                 action()
                 return
             
@@ -688,7 +668,7 @@ def process_arguments(arguments):
                 hosts = vms_hosts                                            
     
             # action work with host                    
-            if action_type in ['start','resume','stop','suspend','destroy','info']:
+            if action_type in ['start','resume','stop','suspend','destroy','ls']:
                 for node_name in hosts:
                     action(node_name)                
             else:

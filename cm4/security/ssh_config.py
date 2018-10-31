@@ -10,6 +10,9 @@ from textwrap import dedent
 from cloudmesh.common.console import Console
 from cloudmesh.common.Shell import Shell
 
+#
+# THE CONFIG FILE NEEDS TO CHANGE WE WANT SSH OR HOST OR CLUSTER TO WORK WITH THIS
+#
 
 # noinspection PyPep8Naming
 class ssh_config(object):
@@ -91,7 +94,7 @@ class ssh_config(object):
         executes a test with the given ssh config if a login is possible. 
            TODO: not yet implemented
         """
-        pass
+        raise NotImplementedError()
 
     def login(self, name):
         """
@@ -180,6 +183,8 @@ if __name__ == "__main__":
     hosts = ssh_config()
 
     user = ConfigDict("cloudmesh.yaml")["cloudmesh.profile.user"]
+
+
     print("User:", user)
 
     hosts.generate(key="india", username=user)

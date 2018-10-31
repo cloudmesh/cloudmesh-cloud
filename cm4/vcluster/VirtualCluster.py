@@ -17,12 +17,14 @@ Usage:
   VirtualCluster.py vcluster run-script <job-name> <virtualcluster-name> <config-name> <script-path> <set-of-params-list> <remote-path> <save-to> [--argfile-path=<argfile-path>] [--outfile-name=<outfile-name>] [--suffix=<suffix>] [--overwrite]
   VirtualCluster.py vcluster fetch <job-name> [--load-metadata=<metadata-path>]
   VirtualCluster.py vcluster clean-remote <job-name> [--load-metafile=<metadata-path>]
-  VirtualCluster.py vcluster connection-test
+  VirtualCluster.py vcluster test-connection <virtualcluster-name> <proc-num>
 
 vcluster run-script parfileout_job local_vagrants parfileout ./sample_input/test_script_filein_stdout.sh _ ~/ ./results --argfile-path=./sample_input/test-script-argument
 vcluster run-script parfilefileout_job local_vagrants parfilefileout ./sample_input/test_script_filein_fileout.sh _ ~/ ./results --argfile-path=./sample_input/test-script-argument
 vcluster run-script parfilefilestdout_job local_vagrants parfilestdfileout ./sample_input/test_script_filein_bothout.sh _ ~/ ./results --argfile-path=./sample_input/test-script-argument
 vcluster create runtime-config parfilestdfileout 1 in:params+file out:stdout+file
+VirtualCluster.py vcluster fetch <job-name> [--load-metafile=<metadata-path>]
+
 
 
   VirtualCluster.py -h
@@ -40,20 +42,14 @@ Example:
    put an example here
 """
 
-# from configobj import ConfigObj,ConfigObjError
 from multiprocessing import Pool, Manager
 import subprocess
 import os
 import ntpath
 import time
-import argparse
-import sys
 import pickle
-from collections import OrderedDict
 from docopt import docopt
-from cm4.configuration.dot_dictionary import DotDictionary
 import hostlist
-import fileinput
 from time import sleep
 from datetime import datetime
 from cm4.configuration.config import Config
@@ -151,13 +147,12 @@ class VirtualCluster(CloudManagerABC):
         job_metadata[job_name]['remote_script_path'] = os.path.join(job_metadata[job_name]['remote_path'], job_metadata[job_name]['script_name_with_suffix'])
         job_metadata[job_name]['local_path'] = local_path
 
-
         self.job_metadata = job_metadata
         self.vcluster_config.deep_set(['job-metadata'], job_metadata)
         all_pids = Manager().list()
-        all_jobs = [(self,job_metadata[job_name],param_idx, param, all_pids) for param_idx,param in enumerate(job_metadata[job_name]['params_list'])]
+        all_jobs = [(self,'run_remote_job',job_metadata[job_name],param_idx, param, all_pids) for param_idx,param in enumerate(job_metadata[job_name]['params_list'])]
         pool = Pool(processes=self.runtime_config['proc_num'])
-        pool.map(run_method_in_parallel,all_jobs)
+        pool.map(self.run_method_in_parallel,all_jobs)
         self.all_pids = all_pids
         self.vcluster_config.deep_set(['job-metadata',job_name,'nodes-pids' ],all_pids._getvalue())
         if self.runtime_config['download-now']:
@@ -166,8 +161,8 @@ class VirtualCluster(CloudManagerABC):
             print("collecting results")
             while len(all_pids)> 0 :
                 time.sleep(3)
-                all_running_jobs = [(self,job_metadata[job_name], node_pid_tuple, all_pids) for node_pid_tuple in job_metadata[job_name]['nodes-pids'] if node_pid_tuple in all_pids]
-                pool.map(collect_results_in_parallel, all_running_jobs)
+                all_running_jobs = [(self,'collect_result',job_metadata[job_name], node_pid_tuple, all_pids) for node_pid_tuple in job_metadata[job_name]['nodes-pids'] if node_pid_tuple in all_pids]
+                pool.map(self.run_method_in_parallel, all_running_jobs)
                 print ("waiting for other results if any...")
 
             print("All of the remote results collected.")
@@ -407,18 +402,33 @@ class VirtualCluster(CloudManagerABC):
         else:
             raise ValueError("Target of variable set not found.")
 
-    def run_method_in_parallel(self,args):
-        return args[0].run_remote_job(args[1], args[2], args[3], args[4])
+    def run_method_in_parallel(self,func_args):
+        target_class = func_args[0]
+        method_to_call = getattr(target_class,func_args[1] )
+        args = list(func_args[2:])
+        return method_to_call(*args)
 
-    def collect_results_in_parallel(self,args):
-        return args[0].collect_result(args[1], args[2], args[3])
+    def test_connection(self,vcluster_name,proc_num):
+        self.virt_cluster = self.vcluster_config.get('virtual-cluster')[vcluster_name]
+        all_pids = Manager().list()
+        all_jobs = [(self, 'run_test' ,param_idx) for param_idx in range(len(list(self.virt_cluster.keys())))]
+        pool = Pool(processes=proc_num)
+        pool.map(self.run_method_in_parallel, all_jobs)
+        self.all_pids = all_pids
 
+    def run_test(self, param_idx):
+        ## COPY SCRIPT TO REMOTE
+        available_nodes_num =  len(list(self.virt_cluster.keys()))
+        target_node_idx = param_idx%available_nodes_num
+        target_node_key = list(self.virt_cluster.keys())[target_node_idx]
+        target_node = self.virt_cluster[target_node_key]
+        ssh_caller = lambda *x: self.ssh(target_node['name'],os.path.expanduser(target_node['credentials']['sshconfigpath']),*x)
+        # scp_caller = lambda *x: self.scp(target_node['name'],os.path.expanduser(target_node['credentials']['sshconfigpath']),*x)
+        if len(ssh_caller('uname -a')) > 0:
+            print("Node {} is accessible.".format(target_node_key))
+        else:
+            print("Error: Node {} cannot be accessed.".format(target_node_key))
 
-def run_method_in_parallel(args):
-    return args[0].run_remote_job(args[1],args[2],args[3],args[4])
-
-def collect_results_in_parallel(args):
-    return args[0].collect_result(args[1],args[2],args[3])
 
 
 def process_arguments(arguments):
@@ -509,80 +519,10 @@ def process_arguments(arguments):
             job_name = arguments.get("<job-name>")
             metadata_path = arguments.get("<metadata-path>")
             vcluster_manager.fetch(job_name,metadata_path)
-
-
-
-
-"""
-VirtualCluster.py vcluster fetch <job-name> [--load-metafile=<metadata-path>]
-"""
-
-# if __name__ == '__main__':
-#     """
-#
-#   VirtualCluster.py ssh create [--computers=<computersList>] [--debug]
-#     Usage:
-#   VirtualCluster.py ssh create --count <vm_number> [--debug]
-#   VirtualCluster.py ssh start [--vms=<vmList>] [--debug]
-#   VirtualCluster.py ssh stop [--vms=<vmList>] [--debug]
-#   VirtualCluster.py ssh destroy [--vms=<vmList>] [--debug]
-#   VirtualCluster.py ssh status [--vms=<vmList>]
-#   VirtualCluster.py ssh list
-#   VirtualCluster.py ssh ssh NAME
-#   VirtualCluster.py ssh run-command COMMAND [--vms=<vmList>] [--debug]
-#   VirtualCluster.py ssh run-script SCRIPT [--vms=<vmList>] [--debug]
-#
-#
-#     """
-#
-#     parser.add_argument('--download', metavar='metapath', type=str, nargs=1,
-#                         help='Retrieve the result from a previously submitted job using its metadata file.')
-#
-#
-#     if metadatapath is None:
-#         all_pids = Manager().list()
-#         parallel_jobs = ssh(config_path,output_suffix)
-#         all_jobs = [(parallel_jobs,n_idx,n, all_pids) for n_idx,n in enumerate(parallel_jobs.config)]
-#         pool = Pool(processes=process_num_submit)
-#         pool.map(run_method_in_parallel,all_jobs)
-#         parallel_jobs.all_pids = all_pids
-#
-#         if not nometa:
-#             if not os.path.exists('./metadata'):
-#                 os.makedirs('./metadata')
-#             metadata = parallel_jobs.build_metadata()
-#             with open (os.path.join('./metadata','md' + suffix + '.pkl'), "wb") as ff:
-#                 pickle.dump(metadata , ff, protocol=pickle.HIGHEST_PROTOCOL)
-#             print ("metadata saved.")
-#         if nodownload == False:
-#             parallel_jobs.sync_pids_with_config()
-#             pool = Pool(processes=process_num_collect)
-#             print("collecting results")
-#             while len(all_pids)> 0 :
-#                 time.sleep(3)
-#                 all_running_jobs = [(parallel_jobs, n_idx, n, all_pids) for n_idx, n in enumerate(parallel_jobs.config) if (n,parallel_jobs.config[n]['pid']) in all_pids]
-#                 pool.map(collect_results_in_parallel, all_running_jobs)
-#                 print ("waiting for other results if any...")
-#
-#             print("All of the remote results collected.")
-#     else:
-#         if not os.path.isfile(metadatapath):
-#             raise FileExistsError("The metadata file %s does not exist."%metadatapath)
-#         parallel_jobs = ssh('','',metarun=True)
-#         with  open(metadatapath, "rb")  as ff:
-#             metadata = pickle.load(ff)
-#         parallel_jobs.load_metadata(metadata)
-#         all_pids = Manager().list()
-#         all_pids.extend(parallel_jobs.all_pids)
-#         parallel_jobs.all_pids = all_pids
-#         pool = Pool(processes=process_num_collect)
-#         print("collecting results")
-#         while len(all_pids)> 0 :
-#             time.sleep(3)
-#             all_running_jobs = [(parallel_jobs, n_idx, n, all_pids) for n_idx, n in enumerate(parallel_jobs.config) if (n,parallel_jobs.config[n]['pid']) in all_pids]
-#             pool.map(collect_results_in_parallel, all_running_jobs)
-#             print ("waiting for other results if any...")
-#         print("All of the remote results collected.")
+        if arguments.get("test-connection"):
+            vcluster_name = arguments.get("<virtualcluster-name>")
+            proc_num = int(arguments.get("<proc-num>"))
+            vcluster_manager.test_connection(vcluster_name,proc_num)
 
 
 def main():

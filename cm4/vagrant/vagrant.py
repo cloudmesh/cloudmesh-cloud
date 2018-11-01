@@ -602,6 +602,7 @@ def process_arguments(arguments):
 			
     """
     debug = arguments["--debug"]
+    # print(type(arguments))
     if debug:
         try:
             columns, rows = os.get_terminal_size(0)

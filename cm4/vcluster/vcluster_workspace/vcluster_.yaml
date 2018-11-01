@@ -1,0 +1,263 @@
+virtual-cluster:
+  vc:
+    computer_a:
+      name: computer_a
+      label: one
+      address: localhost
+      credentials:
+        username: TBD
+        pulickey: ~/.ssh/id_rsa.pub
+    computer_b:
+      name: computer_b
+      label: two
+      address: localhost
+      credentials:
+        username: TBD
+        pulickey: ~/.ssh/id_rsa.pub
+  local_vagrants:
+    computer_a:
+      name: machine1
+      label: one
+      address: localhost
+      credentials:
+        sshconfigpath: ~/vms/ubuntu14/sshconfig1
+    computer_b:
+      name: machine2
+      label: two
+      address: localhost
+      credentials:
+        sshconfigpath: ~/vms/ubuntu14/sshconfig2
+  new_vcluster:
+    computer_a:
+      name: machine1
+      label: one
+      address: localhost
+      credentials:
+        sshconfigpath: ~/vms/ubuntu14/sshconfig1
+    c2:
+      name: machine2
+      label: two
+      address: localhost
+      credentials:
+        sshconfigpath: ~/vms/ubuntu14/sshconfig2
+runtime-config:
+  test_conf21:
+    proc_num: 1
+    download_proc_num: 1
+    suffix: _20181029_18440213
+    download-later: false
+  test_conf22:
+    proc_num: 1
+    download_proc_num: 1
+    suffix: _20181029_20383589
+    download-later: false
+  test_conf24:
+    proc_num: 1
+    download_proc_num: 1
+    suffix: _20181029_20595740
+    download-later: false
+    save_to: ./results
+    input_type: params
+    infile_path: ''
+    output_type: stdout
+    outfile_name: ''
+  last_conf:
+    proc_num: 3
+    download_proc_num: 5
+    suffix: _20181029_23295369
+    download-now: true
+    save-to: ''
+    input-type: params
+    infile-path: ''
+    output-type: stdout
+    outfile-name: ''
+    params-list:
+    - '33'
+    - joey
+  parfile:
+    proc_num: 3
+    download_proc_num: 3
+    download-now: true
+    save-to: ''
+    input-type: params
+    output-type: file
+  parfileout:
+    proc_num: 3
+    download_proc_num: 1
+    download-now: true
+    save-to: ''
+    input-type: params+file
+    output-type: stdout
+  parfilefileout:
+    proc_num: 4
+    download_proc_num: 3
+    download-now: true
+    save-to: ''
+    input-type: params+file
+    output-type: file
+  parfilestdfileout:
+    proc_num: 4
+    download_proc_num: 4
+    download-now: true
+    save-to: ''
+    input-type: params+file
+    output-type: stdout+file
+job-metadata:
+  j1test:
+    suffix: _20181030_21423731
+    cluster_name: local_vagrants
+    config_name: last_conf
+    raw_remote_path: ~/
+    script_path: /home/corriel/gitrepos/courses/e516_CloudComputing_cloudmesh/cm4/vcluster/sample_input/inf_script_stdin_stdout.sh
+    argfile_path: ''
+    outfile_path: ''
+    script_name: inf_script_stdin_stdout.sh
+    script_name_with_suffix: inf_script_stdin_stdout_20181030_21423731.sh
+    remote_path: ~/job_20181030_21423731/
+    remote_script_path: ~/job_20181030_21423731/inf_script_stdin_stdout_20181030_21423731.sh
+    local_path: ./results
+    params_list:
+    - jj
+    - '33'
+    - ''
+    - ''
+    - ''
+    nodes-pids:
+    - - computer_b
+      - '32137'
+      - 1
+    - - computer_a
+      - '10424'
+      - 2
+    - - computer_a
+      - '10427'
+      - 0
+    - - computer_b
+      - '32429'
+      - 3
+    - - computer_a
+      - '10721'
+      - 4
+  parfilejob:
+    suffix: _20181030_23173840
+    cluster_name: local_vagrants
+    config_name: parfile
+    raw_remote_path: ~/
+    script_path: /home/corriel/gitrepos/courses/e516_CloudComputing_cloudmesh/cm4/vcluster/sample_input/inf_script_stdin_fileout.sh
+    argfile_path: ''
+    outfile_name: outie.out
+    script_name: inf_script_stdin_fileout.sh
+    script_name_with_suffix: inf_script_stdin_fileout_20181030_23173840.sh
+    remote_path: ~/job_20181030_23173840/
+    remote_script_path: ~/job_20181030_23173840/inf_script_stdin_fileout_20181030_23173840.sh
+    local_path: ./results
+    params_list:
+    - ''
+    - ''
+    - ''
+    - ''
+    - ''
+    nodes-pids:
+    - - computer_b
+      - '8067'
+      - 1
+    - - computer_a
+      - '26320'
+      - 0
+    - - computer_a
+      - '26324'
+      - 2
+    - - computer_b
+      - '8433'
+      - 3
+    - - computer_a
+      - '26692'
+      - 4
+  parfileout_job:
+    suffix: _20181030_23490172
+    cluster_name: local_vagrants
+    config_name: parfileout
+    raw_remote_path: ~/
+    script_path: /home/corriel/gitrepos/courses/e516_CloudComputing_cloudmesh/cm4/vcluster/sample_input/test_script_filein_stdout.sh
+    argfile_path: ./sample_input/test-script-argument
+    argfile_name: test-script-argument
+    params_list:
+    - 'test-script-argument '
+    - 'test-script-argument '
+    - 'test-script-argument '
+    - 'test-script-argument '
+    outfile_name: ''
+    script_name: test_script_filein_stdout.sh
+    script_name_with_suffix: test_script_filein_stdout_20181030_23490172.sh
+    remote_path: ~/job_20181030_23490172/
+    remote_script_path: ~/job_20181030_23490172/test_script_filein_stdout_20181030_23490172.sh
+    local_path: ./results
+    nodes-pids:
+    - - computer_b
+      - '9469'
+      - 1
+    - - computer_a
+      - '30640'
+      - 0
+    - - computer_a
+      - '30643'
+      - 2
+    - - computer_b
+      - '9833'
+      - 3
+  parfilefileoutjob:
+    suffix: _20181031_00061912
+    cluster_name: local_vagrants
+    config_name: parfilefileout
+    raw_remote_path: ~/
+    script_path: /home/corriel/gitrepos/courses/e516_CloudComputing_cloudmesh/cm4/vcluster/sample_input/test_script_filein_fileout.sh
+    argfile_path: ./sample_input/test-script-argument
+    argfile_name: test-script-argument
+    params_list:
+    - 'test-script-argument '
+    - 'test-script-argument '
+    - 'test-script-argument '
+    - 'test-script-argument '
+    - 'test-script-argument '
+    outfile_name: test-script-output
+    script_name: test_script_filein_fileout.sh
+    script_name_with_suffix: test_script_filein_fileout_20181031_00061912.sh
+    remote_path: ~/job_20181031_00061912/
+    remote_script_path: ~/job_20181031_00061912/test_script_filein_fileout_20181031_00061912.sh
+    local_path: ./results
+    nodes-pids:
+    - - computer_a
+      - '989'
+      - 2
+    - - computer_a
+      - '993'
+      - 0
+    - - computer_b
+      - '11307'
+      - 3
+    - - computer_b
+      - '11320'
+      - 1
+    - - computer_a
+      - '1450'
+      - 4
+  parfilefilestdout_job:
+    suffix: _20181031_13341893
+    cluster_name: local_vagrants
+    config_name: parfilestdfileout
+    raw_remote_path: ~/
+    script_path: /home/corriel/gitrepos/courses/e516_CloudComputing_cloudmesh/cm4/vcluster/sample_input/test_script_filein_bothout.sh
+    argfile_path: ./sample_input/test-script-argument
+    argfile_name: test-script-argument
+    params_list:
+    - test-script-argument _
+    outfile_name: ''
+    script_name: test_script_filein_bothout.sh
+    script_name_with_suffix: test_script_filein_bothout_20181031_13341893.sh
+    remote_path: ~/job_20181031_13341893/
+    remote_script_path: ~/job_20181031_13341893/test_script_filein_bothout_20181031_13341893.sh
+    local_path: ./results
+    nodes-pids:
+    - - computer_a
+      - '17339'
+      - 0

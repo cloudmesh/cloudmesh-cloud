@@ -1,63 +1,78 @@
 virtual-cluster:
-  vc:
-    computer_a:
-      name: computer_a
-      label: one
-      address: localhost
-      credentials:
-        username: TBD
-        pulickey: ~/.ssh/id_rsa.pub
-    computer_b:
-      name: computer_b
-      label: two
-      address: localhost
-      credentials:
-        username: TBD
-        pulickey: ~/.ssh/id_rsa.pub
-  local_vagrants:
+  vcluster1:
     computer_a:
       name: machine1
       label: one
       address: localhost
       credentials:
         sshconfigpath: ~/vms/ubuntu14/sshconfig1
-    computer_b:
+    c2:
       name: machine2
       label: two
       address: localhost
       credentials:
         sshconfigpath: ~/vms/ubuntu14/sshconfig2
 runtime-config:
-  test_conf21:
-    proc_num: 1
-    download_proc_num: 1
-    suffix: _20181029_18440213
-    download-later: false
-  test_conf22:
-    proc_num: 1
-    download_proc_num: 1
-    suffix: _20181029_20383589
-    download-later: false
-  test_conf24:
-    proc_num: 1
-    download_proc_num: 1
-    suffix: _20181029_20595740
-    download-later: false
-    save_to: ./results
-    input_type: params
-    infile_path: ''
-    output_type: stdout
-    outfile_name: ''
-  last_conf:
-    proc_num: 1
-    download_proc_num: 1
-    suffix: _20181029_23295369
-    download-later: false
-    save-to: ''
+  ParamInStdOut:
+    proc_num: 5
+    download_proc_num: 3
+    download-later: 'true'
     input-type: params
-    infile-path: ''
     output-type: stdout
-    outfile-name: ''
-    params-list:
-    - '33'
-    - joey
+job-metadata:
+  TestJob1:
+    suffix: _20181031_22352006
+    cluster_name: vcluster1
+    config_name: ParamInStdOut
+    raw_remote_path: ~/
+    script_path: /home/corriel/gitrepos/courses/e516_CloudComputing_cloudmesh/cm4/vcluster/sample_scripts/inf_script_stdin_stdout.sh
+    argfile_path: ''
+    argfile_name: ''
+    params_list:
+    - _
+    - _
+    - _
+    - _
+    - _
+    - _
+    - _
+    - _
+    - _
+    - _
+    outfile_name: ''
+    script_name: inf_script_stdin_stdout.sh
+    script_name_with_suffix: inf_script_stdin_stdout_20181031_22352006.sh
+    remote_path: ~/job_20181031_22352006/
+    remote_script_path: ~/job_20181031_22352006/inf_script_stdin_stdout_20181031_22352006.sh
+    local_path: ./cm4/vcluster/sample_output
+    nodes-pids:
+    - - c2
+      - '17307'
+      - 1
+    - - c2
+      - '17309'
+      - 3
+    - - c2
+      - '17603'
+      - 5
+    - - computer_a
+      - '16391'
+      - 0
+    - - computer_a
+      - '16398'
+      - 2
+    - - computer_a
+      - '16402'
+      - 4
+    - - computer_a
+      - '16765'
+      - 6
+    - - c2
+      - '18118'
+      - 7
+    - - computer_a
+      - '16896'
+      - 8
+    - - c2
+      - '18194'
+      - 9

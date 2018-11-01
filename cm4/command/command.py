@@ -33,16 +33,16 @@ Usage:
   cm4 vm script run SCRIPT [--vms=<vmList>] [--dryrun]
   cm4 vcluster create virtual-cluster <virtualcluster-name> --clusters=<clusterList> [--computers=<computerList>] [--debug]
   cm4 vcluster destroy virtual-cluster <virtualcluster-name>
-  cm4 vcluster create runtime-config <config-name> <proc-num> in:params out:stdout [--download-proc-num=<download-pnum> [default=1]] [--download-now [default=True]]  [--debug]
-  cm4 vcluster create runtime-config <config-name> <proc-num> in:params out:file [--download-proc-num=<download-pnum> [default=1]] [--download-now [default=True]]  [--debug]
-  cm4 vcluster create runtime-config <config-name> <proc-num> in:params+file out:stdout [--download-proc-num=<download-pnum> [default=1]]  [--download-now [default=True]]  [--debug]
-  cm4 vcluster create runtime-config <config-name> <proc-num> in:params+file out:file [--download-proc-num=<download-pnum> [default=1]] [--download-now [default=True]]  [--debug]
-  cm4 vcluster create runtime-config <config-name> <proc-num> in:params+file out:stdout+file [--download-proc-num=<download-pnum> [default=1]] [--download-now [default=True]]  [--debug]
+  cm4 vcluster create runtime-config <config-name> <proc-num> in:params out:stdout [--fetch-proc-num=<download-pnum> [default=1]] [--download-later [default=True]]  [--debug]
+  cm4 vcluster create runtime-config <config-name> <proc-num> in:params out:file [--fetch-proc-num=<download-pnum> [default=1]] [--download-later [default=True]]  [--debug]
+  cm4 vcluster create runtime-config <config-name> <proc-num> in:params+file out:stdout [--fetch-proc-num=<download-pnum> [default=1]]  [--download-later [default=True]]  [--debug]
+  cm4 vcluster create runtime-config <config-name> <proc-num> in:params+file out:file [--fetch-proc-num=<download-pnum> [default=1]] [--download-later [default=True]]  [--debug]
+  cm4 vcluster create runtime-config <config-name> <proc-num> in:params+file out:stdout+file [--fetch-proc-num=<download-pnum> [default=1]] [--download-later [default=True]]  [--debug]
   cm4 vcluster set-param runtime-config <config-name> <parameter> <value>
   cm4 vcluster destroy runtime-config <config-name>
   cm4 vcluster list virtual-clusters [<depth> [default:1]]
   cm4 vcluster list runtime-configs [<depth> [default:1]]
-  cm4 vcluster run-script <job-name> <virtualcluster-name> <config-name> <script-path> <set-of-params-list> <remote-path> <save-to> [--argfile-path=<argfile-path>] [--outfile-name=<outfile-name>] [--suffix=<suffix>] [--overwrite]
+  cm4 vcluster run-script --script-path=<script-path> --job-name=<job-name> --vcluster-name=<virtualcluster-name> --config-name=<config-name> --arguments=<set-of-params-list> --remote-path=<remotepath> --local-path=<save-to> [--argfile-path=<argfile-path>] [--outfile-name=<outfile-name>] [--suffix=<suffix>] [--overwrite]
   cm4 vcluster fetch <job-name>
   cm4 vcluster clean-remote <job-name> <proc-num>
   cm4 vcluster test-connection <virtualcluster-name> <proc-num>

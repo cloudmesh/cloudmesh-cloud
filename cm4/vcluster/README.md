@@ -4,35 +4,20 @@ This is a tool used to submit jobs to remote hosts in parallel and contains the 
 
 ```console
 cm4 vcluster create virtual-cluster VIRTUALCLUSTER_NAME --clusters=CLUSTERS_LIST [--computers=COMPUTERS_LIST] [--debug]
-
 cm4 vcluster destroy virtual-cluster VIRTUALCLUSTER_NAME
-
 cm4 vcluster create runtime-config CONFIG_NAME PROCESS_NUM in:params out:stdout [--fetch-proc-num=FETCH_PROCESS_NUM [default=1]] [--download-now [default=True]]  [--debug]
-
 cm4 vcluster create runtime-config CONFIG_NAME PROCESS_NUM in:params out:file [--fetch-proc-num=FETCH_PROCESS_NUM [default=1]] [--download-now [default=True]]  [--debug]
-
 cm4 vcluster create runtime-config CONFIG_NAME PROCESS_NUM in:params+file out:stdout [--fetch-proc-num=FETCH_PROCESS_NUM [default=1]]  [--download-now [default=True]]  [--debug]
-
 cm4 vcluster create runtime-config CONFIG_NAME PROCESS_NUM in:params+file out:file [--fetch-proc-num=FETCH_PROCESS_NUM [default=1]] [--download-now [default=True]]  [--debug]
-
 cm4 vcluster create runtime-config CONFIG_NAME PROCESS_NUM in:params+file out:stdout+file [--fetch-proc-num=FETCH_PROCESS_NUM [default=1]] [--download-now [default=True]]  [--debug]
-
 cm4 vcluster set-param runtime-config CONFIG_NAME PARAMETER VALUE
-
 cm4 vcluster destroy runtime-config CONFIG_NAME
-
 cm4 vcluster list virtual-clusters [DEPTH [default:1]]
-
 cm4 vcluster list runtime-configs [DEPTH [default:1]]
-
 cm4 vcluster run-script --script-path=SCRIPT_PATH --job-name=JOB_NAME --vcluster-name=VIRTUALCLUSTER_NAME --config-name=CONFIG_NAME --arguments=SET_OF_PARAMS --remote-path=REMOTE_PATH> --local-path=LOCAL_PATH [--argfile-path=ARGUMENT_FILE_PATH] [--outfile-name=OUTPUT_FILE_NAME] [--suffix=SUFFIX] [--overwrite]
-
 cm4 vcluster fetch JOB_NAME
-
 cm4 vcluster clean-remote JOB_NAME PROCESS_NUM
-
 cm4 vcluster test-connection VIRTUALCLUSTER_NAME PROCESS_NUM
-
 ```
 
 As can be seen, the command `vcluster` can be called with XX possible options: 

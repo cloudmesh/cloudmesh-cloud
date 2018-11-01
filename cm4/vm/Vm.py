@@ -7,30 +7,26 @@ class Provider(object):
     def __init__(self):
         config = Config()
         os_config = config.get("openstack")
-    
-    def get(self, cloud):
-        if self.osconfig["cm]["type"]  == "openstack": # ????
-          credential = os[config][credentials]  
-          openstack = get_driver(Provider.OPENSTACK)
 
+    def get_driver(self, cloud):
+        credential = self.os_config.get("credentials")
 
-        con = Openstack(
-        config["user"], 
-        config{'password'],
-        ex_force_base_url=config["url"]
-        api_version=config["api_versiom],
-        ex_tenant_name=config["tennant_name"])
-
-        cls = get_driver(Provider.RACKSPACE)
-        driver = cls('username', 'api key', region='iad')
-
-
+        Openstack = get_driver(Provider.OPENSTACK)
+        driver = Openstack(
+            credential.get('user'),
+            credential.get('password'),
+            ex_force_base_url=credential.get("url"),
+            api_version=credential.get("api_version"),
+            ex_tenant_name=credential.get("tennant_name"))
         return driver
+
+
 
 class Vm(object):
 
-    __init__(cloud)
-       self.provider = Provider (cloud)
+    def __init__(self, cloud):
+        self.provider = Provider (cloud)
+        pass
            
     def start(self):
         pass
@@ -56,27 +52,6 @@ class Vm(object):
     def status(self):
         pass
     
-    
-
-"""    
-    
-provider = Provider("chameleon")
-
-
-sizes = driver.list_sizes()
-images = driver.list_images()
-
-size = [s for s in sizes if s.id == 'performance1-1'][0]
-image = [i for i in images if 'Ubuntu 12.04' in i.name][0]
-
-node = driver.create_node(name='libcloud', size=size, image=image)
-print(node)
-
-
-    
-
-"""
-
 
 
 

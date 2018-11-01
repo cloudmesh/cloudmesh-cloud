@@ -3,21 +3,21 @@
 """Virtual Cluster: running parallel remote jobs
 
 Usage:
-  virtualcluster.py vcluster create virtual-cluster <virtualcluster-name> --clusters=<clusterList> [--computers=<computerList>] [--debug]
-  virtualcluster.py vcluster destroy virtual-cluster <virtualcluster-name>
-  virtualcluster.py vcluster create runtime-config <config-name> <proc-num> in:params out:stdout [--fetch-proc-num=<download-pnum> [default=1]] [--download-later [default=False]]  [--debug]
-  virtualcluster.py vcluster create runtime-config <config-name> <proc-num> in:params out:file [--fetch-proc-num=<download-pnum> [default=1]] [--download-later [default=False]]  [--debug]
-  virtualcluster.py vcluster create runtime-config <config-name> <proc-num> in:params+file out:stdout [--fetch-proc-num=<download-pnum> [default=1]]  [--download-later [default=False]]  [--debug]
-  virtualcluster.py vcluster create runtime-config <config-name> <proc-num> in:params+file out:file [--fetch-proc-num=<download-pnum> [default=1]] [--download-later [default=False]]  [--debug]
-  virtualcluster.py vcluster create runtime-config <config-name> <proc-num> in:params+file out:stdout+file [--fetch-proc-num=<download-pnum> [default=1]] [--download-later [default=False]]  [--debug]
-  virtualcluster.py vcluster set-param runtime-config <config-name> <parameter> <value>
-  virtualcluster.py vcluster destroy runtime-config <config-name>
-  virtualcluster.py vcluster list virtual-clusters [<depth> [default:1]]
-  virtualcluster.py vcluster list runtime-configs [<depth> [default:1]]
-  virtualcluster.py vcluster run-script --script-path=<script-path> --job-name=<job-name> --vcluster-name=<virtualcluster-name> --config-name=<config-name> --arguments=<set-of-params-list> --remote-path=<remotepath> --local-path=<save-to> [--argfile-path=<argfile-path>] [--outfile-name=<outfile-name>] [--suffix=<suffix>] [--overwrite]
-  virtualcluster.py vcluster fetch <job-name>
-  virtualcluster.py vcluster clean-remote <job-name> <proc-num>
-  virtualcluster.py vcluster test-connection <virtualcluster-name> <proc-num>
+  virtualcluster.py vcluster create virtual-cluster VIRTUALCLUSTER_NAME --clusters=CLUSTERS_LIST [--computers=COMPUTERS_LIST] [--debug]
+  virtualcluster.py vcluster destroy virtual-cluster VIRTUALCLUSTER_NAME
+  virtualcluster.py vcluster create runtime-config CONFIG_NAME PROCESS_NUM in:params out:stdout [--fetch-proc-num=FETCH_PROCESS_NUM [default=1]] [--download-later [default=False]]  [--debug]
+  virtualcluster.py vcluster create runtime-config CONFIG_NAME PROCESS_NUM in:params out:file [--fetch-proc-num=FETCH_PROCESS_NUM [default=1]] [--download-later [default=False]]  [--debug]
+  virtualcluster.py vcluster create runtime-config CONFIG_NAME PROCESS_NUM in:params+file out:stdout [--fetch-proc-num=FETCH_PROCESS_NUM [default=1]]  [--download-later [default=False]]  [--debug]
+  virtualcluster.py vcluster create runtime-config CONFIG_NAME PROCESS_NUM in:params+file out:file [--fetch-proc-num=FETCH_PROCESS_NUM [default=1]] [--download-later [default=False]]  [--debug]
+  virtualcluster.py vcluster create runtime-config CONFIG_NAME PROCESS_NUM in:params+file out:stdout+file [--fetch-proc-num=FETCH_PROCESS_NUM [default=1]] [--download-later [default=False]]  [--debug]
+  virtualcluster.py vcluster set-param runtime-config CONFIG_NAME PARAMETER VALUE
+  virtualcluster.py vcluster destroy runtime-config CONFIG_NAME
+  virtualcluster.py vcluster list virtual-clusters [DEPTH [default:1]]
+  virtualcluster.py vcluster list runtime-configs [DEPTH [default:1]]
+  virtualcluster.py vcluster run-script --script-path=SCRIPT_PATH --job-name=JOB_NAME --vcluster-name=VIRTUALCLUSTER_NAME --config-name=CONFIG_NAME --arguments=SET_OF_PARAMS --remote-path=REMOTE_PATH> --local-path=LOCAL_PATH [--argfile-path=ARGUMENT_FILE_PATH] [--outfile-name=OUTPUT_FILE_NAME] [--suffix=SUFFIX] [--overwrite]
+  virtualcluster.py vcluster fetch JOB_NAME
+  virtualcluster.py vcluster clean-remote JOB_NAME PROCESS_NUM
+  virtualcluster.py vcluster test-connection VIRTUALCLUSTER_NAME PROCESS_NUM
   virtualcluster.py -h
 
 Options:
@@ -518,11 +518,11 @@ def process_arguments(arguments):
             if arguments.get("virtual-cluster") and arguments.get("--clusters"):
                 clusters = hostlist.expand_hostlist(arguments.get("--clusters"))
                 computers = hostlist.expand_hostlist(arguments.get("--computers"))
-                vcluster_manager.create(arguments.get("<virtualcluster-name>"),cluster_list=clusters,computer_list=computers)
-            elif arguments.get("runtime-config") and arguments.get("<config-name>") and arguments.get("<proc-num>"):
-                config_name = arguments.get("<config-name>")
-                proc_num = int(arguments.get("<proc-num>"))
-                download_proc_num = 1 if arguments.get("<download-pnum>") is None else int(arguments.get("<download-pnum>"))
+                vcluster_manager.create(arguments.get("VIRTUALCLUSTER_NAME"),cluster_list=clusters,computer_list=computers)
+            elif arguments.get("runtime-config") and arguments.get("CONFIG_NAME") and arguments.get("PROCESS_NUM"):
+                config_name = arguments.get("CONFIG_NAME")
+                proc_num = int(arguments.get("PROCESS_NUM"))
+                download_proc_num = 1 if arguments.get("FETCH_PROCESS_NUM") is None else int(arguments.get("FETCH_PROCESS_NUM"))
 
                 save_to = "" if arguments.get("<save-path>") is None else arguments.get("<save-path>")
                 download_later = True if arguments.get("--download-later") is False else False
@@ -545,29 +545,29 @@ def process_arguments(arguments):
 
         elif arguments.get("destroy"):
             if arguments.get("virtual-cluster"):
-                vcluster_manager.destroy("virtual-cluster",arguments.get("<virtualcluster-name>"))
+                vcluster_manager.destroy("virtual-cluster",arguments.get("VIRTUALCLUSTER_NAME"))
             elif arguments.get("runtime-config"):
-                vcluster_manager.destroy("runtime-config",arguments.get("<config-name>"))
+                vcluster_manager.destroy("runtime-config",arguments.get("CONFIG_NAME"))
 
         elif arguments.get("list"):
             if arguments.get("virtual-clusters"):
-                max_depth = 1 if arguments.get("<depth>") is None else int(arguments.get("<depth>"))
+                max_depth = 1 if arguments.get("DEPTH") is None else int(arguments.get("DEPTH"))
                 vcluster_manager.list("virtual-clusters",max_depth)
             elif arguments.get("runtime-configs"):
-                max_depth = 1 if arguments.get("<depth>") is None else int(arguments.get("<depth>"))
+                max_depth = 1 if arguments.get("DEPTH") is None else int(arguments.get("DEPTH"))
                 vcluster_manager.list("runtime-configs",max_depth)
 
         elif arguments.get("set-param"):
             if arguments.get("virtual-clusters"):
-                cluster_name = arguments.get("<virtualcluster-name>")
-                parameter = arguments.get("<parameter>")
-                value = arguments.get("<value>")
+                cluster_name = arguments.get("VIRTUALCLUSTER_NAME")
+                parameter = arguments.get("PARAMETER")
+                value = arguments.get("VALUE")
                 vcluster_manager.set_param("virtual-clusters",cluster_name,parameter,value)
 
             if arguments.get("runtime-config"):
-                config_name = arguments.get("<config-name>")
-                parameter = arguments.get("<parameter>")
-                value = arguments.get("<value>")
+                config_name = arguments.get("CONFIG_NAME")
+                parameter = arguments.get("PARAMETER")
+                value = arguments.get("VALUE")
                 vcluster_manager.set_param("runtime-config",config_name,parameter,value)
         elif arguments.get("run-script"):
             job_name = arguments.get("--job-name")
@@ -586,15 +586,15 @@ def process_arguments(arguments):
             outfile_name = '' if arguments.get("--outfile-name") is None else arguments.get("--outfile-name")
             vcluster_manager.run(job_name,cluster_name,config_name,script_path,argfile_path,outfile_name,remote_path,local_path,params_list,suffix,overwrite)
         elif arguments.get("fetch"):
-            job_name = arguments.get("<job-name>")
+            job_name = arguments.get("JOB_NAME")
             vcluster_manager.fetch(job_name)
         elif arguments.get("test-connection"):
-            vcluster_name = arguments.get("<virtualcluster-name>")
-            proc_num = int(arguments.get("<proc-num>"))
+            vcluster_name = arguments.get("VIRTUALCLUSTER_NAME")
+            proc_num = int(arguments.get("PROCESS_NUM"))
             vcluster_manager.connection_test(vcluster_name,proc_num)
         elif arguments.get("clean-remote"):
-            job_name = arguments.get("<job-name>")
-            proc_num = int(arguments.get("<proc-num>"))
+            job_name = arguments.get("JOB_NAME")
+            proc_num = int(arguments.get("PROCESS_NUM"))
             vcluster_manager.clean_remote(job_name,proc_num)
 
 def main():

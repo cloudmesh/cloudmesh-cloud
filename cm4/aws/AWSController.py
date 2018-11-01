@@ -1,6 +1,7 @@
 from cm4.abstractclass.CloudManagerABC import CloudManagerABC
 from libcloud.compute.types import Provider
 from libcloud.compute.providers import get_driver
+from libcloud.compute.base import NodeImage
 
 
 # for more information:
@@ -77,16 +78,21 @@ class AWSController (CloudManagerABC):
         """
         nodes = self.driver.list_nodes()
         for i in nodes:
-            if i.id == image_id:
+            if i.id == node_id:
                 result = self.driver.destroy_node(i)
                 return result
 
-    def create(self, **kwargs):
+    def create(self, size, image, keyname, security):
         """
         create node
         :param kwargs: all needed information
         :return:
         """
         # https://libcloud.readthedocs.io/en/latest/_modules/libcloud/compute/drivers/ec2.html#BaseEC2NodeDriver.create_node
-        return self.driver.create_node(**kwargs)
+        sizes = self.driver.list_sizes()
+        images = self.driver.list_images()
+        size = [s for s in sizes if s.id == size][0]
+        image = [i for i in images if i.id == image][0]
+        self.driver.create_node(name=None, image=image, size=size, ex_keyname=keyname, ex_securitygroup=security)
+
 

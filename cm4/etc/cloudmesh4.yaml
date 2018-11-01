@@ -161,3 +161,24 @@ cloudmesh:
         credentials:
           username:                 TBD
           pulickey:                 ~/.ssh/id_rsa.pub
+    vcluster_test1:
+      computer_a:
+        name: machine1
+        label: one
+        address: localhost
+        credentials:
+          sshconfigpath: ~/vms/ubuntu14/sshconfig1
+      computer_b:
+        name:                       computer_a
+        label:                      one
+        address:                    localhost
+        credentials:
+          username:                 TBD
+          pulickey:                 ~/.ssh/id_rsa.pub
+    vcluster_test2:
+      c2:
+        name: machine2
+        label: two
+        address: localhost
+        credentials:
+          sshconfigpath: ~/vms/ubuntu14/sshconfig2

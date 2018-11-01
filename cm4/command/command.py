@@ -31,12 +31,21 @@ Usage:
   cm4 vm ssh NAME
   cm4 vm run COMMAND  [--vms=<vmList>]
   cm4 vm script run SCRIPT [--vms=<vmList>] [--dryrun]
-  cm4 ssh start [--hosts=HOSTANMES] [--debug] [--dryrun]
-  cm4 ssh create host HOSTNAME [--debug] [--dryrun]
-  cm4 ssh create cluster CLUSTER [--debug] [--dryrun]
-  cm4 ssh stop cluster [--dryrun]
-  cm4 ssh run host HOSTANMES [--dryrun]
-  cm4 ssh run cluster HOSTANME [--dryrun]
+  cm4 vcluster create virtual-cluster <virtualcluster-name> --clusters=<clusterList> [--computers=<computerList>] [--debug]
+  cm4 vcluster destroy virtual-cluster <virtualcluster-name>
+  cm4 vcluster create runtime-config <config-name> <proc-num> in:params out:stdout [--fetch-proc-num=<download-pnum> [default=1]] [--download-later [default=True]]  [--debug]
+  cm4 vcluster create runtime-config <config-name> <proc-num> in:params out:file [--fetch-proc-num=<download-pnum> [default=1]] [--download-later [default=True]]  [--debug]
+  cm4 vcluster create runtime-config <config-name> <proc-num> in:params+file out:stdout [--fetch-proc-num=<download-pnum> [default=1]]  [--download-later [default=True]]  [--debug]
+  cm4 vcluster create runtime-config <config-name> <proc-num> in:params+file out:file [--fetch-proc-num=<download-pnum> [default=1]] [--download-later [default=True]]  [--debug]
+  cm4 vcluster create runtime-config <config-name> <proc-num> in:params+file out:stdout+file [--fetch-proc-num=<download-pnum> [default=1]] [--download-later [default=True]]  [--debug]
+  cm4 vcluster set-param runtime-config <config-name> <parameter> <value>
+  cm4 vcluster destroy runtime-config <config-name>
+  cm4 vcluster list virtual-clusters [<depth> [default:1]]
+  cm4 vcluster list runtime-configs [<depth> [default:1]]
+  cm4 vcluster run-script --script-path=<script-path> --job-name=<job-name> --vcluster-name=<virtualcluster-name> --config-name=<config-name> --arguments=<set-of-params-list> --remote-path=<remotepath> --local-path=<save-to> [--argfile-path=<argfile-path>] [--outfile-name=<outfile-name>] [--suffix=<suffix>] [--overwrite]
+  cm4 vcluster fetch <job-name>
+  cm4 vcluster clean-remote <job-name> <proc-num>
+  cm4 vcluster test-connection <virtualcluster-name> <proc-num>
   cm4 spark deploy -n 10 [--dryrun]
   cm4 spark run [--dryrun]
   cm4 spark execute PRG [--dryrun]
@@ -57,6 +66,7 @@ Example:
 """
 from docopt import docopt
 import cm4.vagrant.vagrant
+import cm4.vcluster.VirtualCluster
 import cm4.data.data
 import cm4
 
@@ -68,7 +78,8 @@ def main():
     version = cm4.__version__
     arguments = docopt(__doc__, version=version)
     cm4.vagrant.vagrant.process_arguments(arguments)
-    cm4.data.vagrant.process_arguments(arguments)
+    cm4.vcluster.VirtualCluster.process_arguments(arguments)
+    # cm4.data.vagrant.process_arguments(arguments)  # this call is raising this error: module 'cm4.data' has no attribute 'vagrant'
 
 
 if __name__ == "__main__":

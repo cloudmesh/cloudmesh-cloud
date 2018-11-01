@@ -95,7 +95,7 @@ For `scp`, open terminal and execute `scp`, you should see a short usage guide s
 
 - You DO NOT have to install `ehvagrant` separately from `cloudmesh`.  When `cloudmesh` sets up, it automatically installs `ehvagrant`.
 
-- Your `VAGRANTFILE_PATH` now change to `$CLOUDMESH_ROOT_DIRECTORY/configuration/Vagrantfile`.
+- Your `VAGRANTFILE_PATH` now change to `~/.cloudmesh/Vagrantfile`.
 
 - To enable `cloudmesh` to interact with Vagrant instance, add Vagrant instances' information to the configuration file of `cloudmesh`, which locates at `$CLOUDMESH_ROOT_DIRECTORY/configuration/cloudmesh.yaml`. To specify a Vagrant instance in `cloudmesh.yaml`,  just fill the `name` of the Vagrant instance, and let `address` variable point to the `VAGRHANTFILE_PATH`. You may leave all other field blank. Here is an example to specify `node1`and `node2` in `cloudmesh.yaml`.
 

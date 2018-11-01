@@ -8,7 +8,7 @@ Usage:
   vagrant.py vagrant resume [--vms=<vmList>] [--debug]
   vagrant.py vagrant stop [--vms=<vmList>] [--debug]
   vagrant.py vagrant suspend [--vms=<vmList>] [--debug]
-  vagrant.py vagrant destroy [--vms=<vmList>] [--debug]
+  vagrant.py vagrant destroy [-f] [--vms=<vmList>] [--debug] 
   vagrant.py vagrant info NAME [--debug]
   vagrant.py vagrant ls [--debug]
   vagrant.py vagrant upload --from=FROM --to=TO [-r] [--vms=<vmlist>] [--debug]
@@ -113,6 +113,7 @@ class Vagrant(object):
 
         :param debug:
         """
+        # prepare path
         if not os.getenv('EHVAGRANT_HOME'):
             self.workspace = os.path.join(os.path.expanduser('~'),'.cloudmesh','vagrant_workspace',)
         else:
@@ -120,14 +121,20 @@ class Vagrant(object):
         self.path = os.path.join(self.workspace, "Vagrantfile")
         self.experiment_path = os.path.join(self.workspace,'experiment')
         
+        # prepare folder and Vagrantfile
         if not os.path.isdir(self.workspace):
-            os.mkdir(self.workspace)
-            self.create(['node1','node2'])
+            self._nested_mkdir(self.workspace)
+            
+        if not os.path.isdir(self.experiment_path):
+            os.mkdir(self.experiment_path)
+            
+        if not os.path.isfile(self.path):
+            self.create(['node1','node2'])  
         
         self.ssh_config={}        
         self.debug = debug
 
-    def _update_by_key(self, target, source, keys=None, key_dict=None):
+    def _update_by_key(self, target, source, keys=[], key_dict={}):
         for x in keys:
             if source.get(x): # key exists and not none
                 target.update({re.sub('^[-]+','',x):source[x]})
@@ -135,11 +142,20 @@ class Vagrant(object):
             if source.get(k):
                 target.update({v:source[k]})
         return target
-
+    
+    def _impute_drive_sep(self, splited_path):
+        if ':' in splited_path[0]:
+            splited_path.insert(0, os.sep)
+            splited_path.insert(2, os.sep)
+        return splited_path
+    
     def _nested_mkdir(self, path):
-        parsed_path=path.split('/')
+        parsed_path = re.split('[\\\\/]', path)
+        parsed_path = [x for x in parsed_path if x]
+        parsed_path = self._impute_drive_sep(parsed_path)
+        
         for i in range(len(parsed_path)-1):
-            d='/'.join(parsed_path[0:i+1])
+            d=os.path.join(*parsed_path[0:i+1])
             if not os.path.isdir(d):
                 os.mkdir(d)
                 
@@ -256,20 +272,23 @@ class Vagrant(object):
         # retrieve the result          
         wait_time=5
         run_report=[]
-        while run_result.qsize()>0:
-            node, job_res = run_result.get()
-            if not job_res.ready():
-                run_result.put([node, job_res])
-                logging.info('job assign to node {:<8s} is not finished yet! Wait for finishing.....'.format(node, wait_time))
-                time.sleep(wait_time)
-            else:
-                run_report.append(job_res.get())
-        
+        try:
+            while run_result.qsize()>0:
+                node, job_res = run_result.get()
+                if not job_res.ready():
+                    run_result.put([node, job_res])
+                    logging.info('job assign to node {:<8s} is not finished yet! Wait for finishing.....'.format(node, wait_time))
+                    time.sleep(wait_time)
+                else:
+                    run_report.append(job_res.get())
+        except KeyboardInterrupt:
+            pass
+            
         #print report
         for x in run_report:
             print(x)
                 
-    def run_script(self, name, script_path, data=None, prefix_dest=False, report=True, report_alone=True):
+    def run_script(self, name, script_path, data=None, report=True, report_alone=True):
         """
         run shell script on specified node, fetch the console output and data output if existed
 
@@ -299,10 +318,12 @@ class Vagrant(object):
         if data:
             if os.path.isdir(data):
                 self.upload(name, source=data, dest=guest_exp_folder_path, recursive=True)
-                self.run_command(name, 'mv {base}/{data_folder} {base}/data'.format(base=guest_exp_folder_path, data_folder=re.split('[\\\\/]', data)[-1]))
-            else:                
-                self.run_command(name, 'mkdir {}/data/'.format(guest_exp_folder_path), False)
-                self.upload(name, source=data, dest=guest_exp_folder_path)
+                data_folder = [x for x in re.split('[\\\\/]', data) if x][-1]
+                self.run_command(name, 'mv {base}/{data_folder} {base}/data'.format(base=guest_exp_folder_path, data_folder=data_folder), False)
+            else:
+                data_folder='{}/data/'.format(guest_exp_folder_path)                
+                self.run_command(name, 'mkdir {}'.format(data_folder), False)
+                self.upload(name, source=data, dest=data_folder)
       
         # run the script
         script_args=guest_exp_folder_path
@@ -324,11 +345,9 @@ class Vagrant(object):
         
         if have_output_file:
             # build local experiment folder
-            host_exp_folder_path='{}/{}/{}/'.format(self.experiment_path, name, exp_folder_name)  
+            host_exp_folder_path = os.path.join(self.experiment_path, name, exp_folder_name, 'output')  
             self._nested_mkdir(host_exp_folder_path)
-            
-            #fetch output files
-            self.download(name, source="{}/output/".format(guest_exp_folder_path), dest=host_exp_folder_path, prefix_dest=prefix_dest, recursive=True)
+            self.download(name, source="{}/output/".format(guest_exp_folder_path), dest=host_exp_folder_path, prefix_dest=False, recursive=True)
  
         # processing the report
         if not report:
@@ -466,7 +485,11 @@ class Vagrant(object):
         :param name: [optional], name of the Vagrant VM.
         :return:
         """
+        if name is None:
+            # start all
+            name = ""        
         self.execute("vagrant up " + str(name))
+        
         
     def resume(self, name=None):
         """
@@ -476,7 +499,11 @@ class Vagrant(object):
         :param name: [optional], name of the Vagrant VM.
         :return:
         """
-        self.execute("vagrant up " + str(name)))        
+        
+        if name is None:
+            # start all
+            name = ""
+        self.execute("vagrant up " + str(name))     
 					   	   
 
     def stop(self, name=None):
@@ -504,7 +531,7 @@ class Vagrant(object):
             name = ""
         self.execute("vagrant suspend " + str(name)) 
 
-    def destroy(self, name=None):
+    def destroy(self, name=None, force = False):
         """
         Default: Destroys all the VMs specified.
         If @name is provided, only the named VM is destroyed.
@@ -514,7 +541,7 @@ class Vagrant(object):
         """
         if name is None:
             name = ""
-        self.execute("vagrant destroy " + str(name))
+        self.execute("vagrant destroy {}{}".format('-f ' if force else '' ,name))
 			
     def ls(self, name=None):
         """
@@ -542,13 +569,19 @@ class Vagrant(object):
         TODO: doc
 
         :return:
-        """        
+        """
         if prefix_dest:
-            path_split = re.split('[\\\\/]',dest)
-            path_split.insert(-1, name)
-            dest=os.path.join(*path_split)
-            dest=re.sub('\\\\','/',dest)
-                
+            if os.path.isdir(dest):
+                dest = os.path.join(dest,name)
+                if not os.path.isdir(dest):
+                    os.mkdir(dest)
+            else:                
+                path_split = re.split('[\\\\/]',dest)
+                if path_split[-1]:
+                    path_split.insert(-1, name)
+                    path_split = self._impute_drive_sep(path_split)
+                    dest=os.path.join(*path_split)
+               
         r=(not os.path.basename(source) or recursive)
         self._scp(name, 'download', source, dest, r)
     
@@ -607,6 +640,7 @@ def process_arguments(arguments):
             action = provider.suspend
         elif arguments.get("destroy"):
             action = provider.destroy
+            kwargs=provider._update_by_key(kwargs, arguments, [], {'-f':'force'})
         elif arguments.get("info"):
             action = provider.info
             args.append(arguments.get("NAME"))
@@ -614,13 +648,13 @@ def process_arguments(arguments):
             action = provider.ls            
         elif arguments.get("download"):
             action = provider.download
-            args.append(arguments.get("FROM"))
-            args.append(arguments.get("TO"))
+            args.append(arguments.get("--from"))
+            args.append(arguments.get("--to"))
             kwargs = provider._update_by_key(kwargs, arguments, key_dict={'-r':'recursive'})
         elif arguments.get("upload"):
             action = provider.upload
-            args.append(arguments.get("FROM"))
-            args.append(arguments.get("TO"))
+            args.append(arguments.get("--from"))
+            args.append(arguments.get("--to"))
             kwargs = provider._update_by_key(kwargs, arguments, key_dict={'-r':'recursive'})
         elif arguments.get("ssh"):
             action = provider.ssh
@@ -656,7 +690,7 @@ def process_arguments(arguments):
                 action(*args, **kwargs)
                 return                         
             elif action_type in ['start','resume','stop','suspend','destroy','ls'] and not vms_hosts:
-                action()
+                action(*args, **kwargs)
                 return
             
             # impute hosts
@@ -670,13 +704,13 @@ def process_arguments(arguments):
             # action work with host                    
             if action_type in ['start','resume','stop','suspend','destroy','ls']:
                 for node_name in hosts:
-                    action(node_name)                
+                    action(node_name, *args, **kwargs)                
             else:
                 # impute argument according to number of host
                 if len(hosts)>1:
                     if action_type in ['run_command','run_script']:
                         kwargs.update({'report_alone':False})                             
-                    if action_type in ['run_script, download']:
+                    if action_type in ['download']:
                         kwargs.update({'prefix_dest':True})                        
                         
                     provider.run_parallel(hosts, action, args, kwargs)                        
@@ -684,7 +718,7 @@ def process_arguments(arguments):
                 else:
                     if action_type in ['run_command','run_script']:
                         kwargs.update({'report_alone':True})                             
-                    if action_type in ['run_script, download']:
+                    if action_type in ['download']:
                         kwargs.update({'prefix_dest':False})                        
                     
                     action(hosts[0], *args, **kwargs)                    

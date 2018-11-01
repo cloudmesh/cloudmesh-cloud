@@ -247,7 +247,7 @@ Usage: ```python vagrant.py vagrant run script SCRIPT [--data=PATH] [--vms=<vmLi
 Run an arbitrary **shell script** on instances. The behavior of this command will comply with `run command`, plus extra features defined as following:
 
 - positional argument `SCRIPT` is the path of the script file to be executed, which must locates on the host machine. It will be uploaded and stored at the `JOB_FOLDER` of all executing instances, which locates at` ~/cm_experiment/{script_name}_{epoch_second}/`.
-- If there is any data that must be run against the script, specify the path of the data (be file or folder) with `--data` argument.  The data will be copied into `$JOB_FOLDER/data/` directory of all executing instances.
+- If there is any data that must be run against the script, specify the path of the data with `--data` argument. **If you specify a folder in `--data`, you must put `/` in the end of folder path**. The data will be copied into `$JOB_FOLDER/data/` directory of all executing instances.
 - About the script and its execution:
   - If the script will ever produce any output file, it should be stored at `$JOB_FOLDER/output/` directory. The behavior including building the `$JOB_FOLDER/output/` folder and storing result file to that folder **should be handle by the script itself**.
   - When execution, the script will always receive the value of  `JOB_FOLDER` as its first argument. This value can be used in various ways. For example, to build the `$JOB_FOLDER/output/` folder.

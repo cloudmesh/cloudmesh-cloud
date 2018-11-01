@@ -1,20 +1,20 @@
 #!/usr/bin/env python3
 
-"""SSH: running parallel remote jobs
+"""Virtual Cluster: running parallel remote jobs
 
 Usage:
   virtualcluster.py vcluster create virtual-cluster <virtualcluster-name> --clusters=<clusterList> [--computers=<computerList>] [--debug]
   virtualcluster.py vcluster destroy virtual-cluster <virtualcluster-name>
-  virtualcluster.py vcluster create runtime-config <config-name> <proc-num> in:params out:stdout [--download-proc-num=<download-pnum> [default=1]] [--download-later [default=False]]  [--debug]
-  virtualcluster.py vcluster create runtime-config <config-name> <proc-num> in:params out:file [--download-proc-num=<download-pnum> [default=1]] [--download-later [default=False]]  [--debug]
-  virtualcluster.py vcluster create runtime-config <config-name> <proc-num> in:params+file out:stdout [--download-proc-num=<download-pnum> [default=1]]  [--download-later [default=False]]  [--debug]
-  virtualcluster.py vcluster create runtime-config <config-name> <proc-num> in:params+file out:file [--download-proc-num=<download-pnum> [default=1]] [--download-later [default=False]]  [--debug]
-  virtualcluster.py vcluster create runtime-config <config-name> <proc-num> in:params+file out:stdout+file [--download-proc-num=<download-pnum> [default=1]] [--download-later [default=False]]  [--debug]
+  virtualcluster.py vcluster create runtime-config <config-name> <proc-num> in:params out:stdout [--fetch-proc-num=<download-pnum> [default=1]] [--download-later [default=False]]  [--debug]
+  virtualcluster.py vcluster create runtime-config <config-name> <proc-num> in:params out:file [--fetch-proc-num=<download-pnum> [default=1]] [--download-later [default=False]]  [--debug]
+  virtualcluster.py vcluster create runtime-config <config-name> <proc-num> in:params+file out:stdout [--fetch-proc-num=<download-pnum> [default=1]]  [--download-later [default=False]]  [--debug]
+  virtualcluster.py vcluster create runtime-config <config-name> <proc-num> in:params+file out:file [--fetch-proc-num=<download-pnum> [default=1]] [--download-later [default=False]]  [--debug]
+  virtualcluster.py vcluster create runtime-config <config-name> <proc-num> in:params+file out:stdout+file [--fetch-proc-num=<download-pnum> [default=1]] [--download-later [default=False]]  [--debug]
   virtualcluster.py vcluster set-param runtime-config <config-name> <parameter> <value>
   virtualcluster.py vcluster destroy runtime-config <config-name>
   virtualcluster.py vcluster list virtual-clusters [<depth> [default:1]]
   virtualcluster.py vcluster list runtime-configs [<depth> [default:1]]
-  virtualcluster.py vcluster run-script <job-name> <virtualcluster-name> <config-name> <script-path> <set-of-params-list> <remote-path> <save-to> [--argfile-path=<argfile-path>] [--outfile-name=<outfile-name>] [--suffix=<suffix>] [--overwrite]
+  virtualcluster.py vcluster run-script --script-path=<script-path> --job-name=<job-name> --vcluster-name=<virtualcluster-name> --config-name=<config-name> --arguments=<set-of-params-list> --remote-path=<remotepath> --local-path=<save-to> [--argfile-path=<argfile-path>] [--outfile-name=<outfile-name>] [--suffix=<suffix>] [--overwrite]
   virtualcluster.py vcluster fetch <job-name>
   virtualcluster.py vcluster clean-remote <job-name> <proc-num>
   virtualcluster.py vcluster test-connection <virtualcluster-name> <proc-num>
@@ -136,7 +136,6 @@ class virtualcluster(object):
         config_tosave[config_name].update({"proc_num":proc_num,
                                            "download_proc_num": download_proc_num,
                                            "download-later": download_later,
-                                           "save-to":save_to,
                                            "input-type":input_type,
                                            "output-type":output_type})
         self.vcluster_config.deep_set(['runtime-config'],config_tosave)
@@ -441,7 +440,7 @@ class virtualcluster(object):
         """
         if params_list is None:
             raise ValueError('param-list is not set. This value determines how many instance of the target application will run remotely. Therefore, even if the parameter is empty, add commas for every run you expect.')
-        if job_name in list(self.vcluster_config.get('job-metadata').keys()) and overwrite is False:
+        if self.vcluster_config.get('job-metadata') is not None and job_name in list(self.vcluster_config.get('job-metadata').keys()) and overwrite is False:
             raise RuntimeError("The job {} exists in the configuration file, if you want to overwrite the job, use --overwrite argument.".format(job_name))
         self.virt_cluster = self.vcluster_config.get('virtual-cluster')[cluster_name]
         self.runtime_config = self.vcluster_config.get('runtime-config')[config_name]
@@ -457,7 +456,6 @@ class virtualcluster(object):
             job_metadata[job_name]['params_list'] = ['{} {}'.format(job_metadata[job_name]['argfile_name'],x) for x in params_list]
         else:
             job_metadata[job_name]['params_list'] = params_list
-
         job_metadata[job_name]['outfile_name'] = outfile_name
         job_metadata[job_name]['script_name'] = ntpath.basename(script_path)
         job_metadata[job_name]['script_name_with_suffix'] = self.add_suffix_to_path(job_metadata[job_name]['script_name'],suffix)
@@ -473,7 +471,7 @@ class virtualcluster(object):
         pool.map(self._execute_in_parallel,all_jobs)
         self.all_pids = all_pids
         self.vcluster_config.deep_set(['job-metadata',job_name,'nodes-pids' ],all_pids._getvalue())
-        if self.runtime_config['download-later']:
+        if not self.runtime_config['download-later']:
             pool = Pool(processes=self.runtime_config['download_proc_num'])
             print("collecting results")
             while len(all_pids)> 0 :
@@ -572,17 +570,17 @@ def process_arguments(arguments):
                 value = arguments.get("<value>")
                 vcluster_manager.set_param("runtime-config",config_name,parameter,value)
         elif arguments.get("run-script"):
-            job_name = arguments.get("<job-name>")
-            cluster_name = arguments.get("<virtualcluster-name>")
-            config_name = arguments.get("<config-name>")
-            script_path = arguments.get("<script-path>")
-            remote_path = arguments.get("<remote-path>")
-            local_path = arguments.get("<save-to>")
+            job_name = arguments.get("--job-name")
+            cluster_name = arguments.get("--vcluster-name")
+            config_name = arguments.get("--config-name")
+            script_path = arguments.get("--script-path")
+            remote_path = arguments.get("--remote-path")
+            local_path = arguments.get("--local-path")
             random_suffix = '_' + str(datetime.now()).replace('-', '').replace(' ', '_').replace(':', '')[
                                   0:str(datetime.now()).replace('-', '').replace(' ', '_').replace(':', '').index(
                                       '.') + 3].replace('.', '')
             suffix = random_suffix if arguments.get("suffix") is None else arguments.get("suffix")
-            params_list = arguments.get("<set-of-params-list>").split(',')
+            params_list = arguments.get("--arguments").split(',')
             overwrite = False if type(arguments.get("--overwrite")) is None else arguments.get("--overwrite")
             argfile_path = '' if arguments.get("--argfile-path") is None else arguments.get("--argfile-path")
             outfile_name = '' if arguments.get("--outfile-name") is None else arguments.get("--outfile-name")

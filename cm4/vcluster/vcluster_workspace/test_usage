@@ -1,0 +1,6 @@
+
+vcluster run-script parfileout_job local_vagrants parfileout ./sample_input/test_script_filein_stdout.sh _ ~/ ./results --argfile-path=./sample_input/test-script-argument
+vcluster run-script parfilefileout_job local_vagrants parfilefileout ./sample_input/test_script_filein_fileout.sh _ ~/ ./results --argfile-path=./sample_input/test-script-argument
+vcluster run-script parfilefilestdout_job local_vagrants parfilestdfileout ./sample_input/test_script_filein_bothout.sh _ ~/ ./results --argfile-path=./sample_input/test-script-argument
+vcluster create runtime-config parfilestdfileout 1 in:params+file out:stdout+file
+VirtualCluster.py vcluster fetch <job-name> [--load-metafile=<metadata-path>]

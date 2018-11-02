@@ -5,6 +5,9 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+
+
+
 # C extensions
 *.so
 
@@ -121,3 +124,4 @@ test/data/storage/*
 
 test/data/download/*
 !test/data/download/README.md
+/cm4/openstack/cloudmesh.yaml

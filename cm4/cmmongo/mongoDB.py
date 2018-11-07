@@ -6,13 +6,14 @@ import urllib.parse
 class MongoDB(DatabaseManagerABC):
     # haven't tested it
 
-    def __init__(self):
+    def __init__(self, username, password, port):
         self.database = 'cloudmesh'
-        self.password = None
-        self.username = None
-        self.port = None
+        self.password = urllib.parse.quote_plus(password)
+        self.username = urllib.parse.quote_plus(username)
+        self.port = port
         self.client = None
         self.db = None
+
 
     def set_port(self, port):
         """
@@ -39,18 +40,19 @@ class MongoDB(DatabaseManagerABC):
         """
         connect to database
         """
-        self.client = MongoClient ('mongodb://%s:%s@127.0.0.1:%s' % (self.username, self.password, self.port))
+        self.client = MongoClient('mongodb://%s:%s@127.0.0.1:%s' % (self.username, self.password, self.port))
         self.db = self.client[self.database]
 
-    def insert_default_collection(self, document):
+    def insert_config_document(self, document):
         """
-        insert document to default collection
+        insert document to config collection
         :param document:
         :return: id of document
         """
-        cm = self.db['default']
+        cm = self.db['config']
         post_id = cm.insert_one(document).inserted_id
         return post_id
+
 
     def insert_cloud_document(self, document):
         """
@@ -59,38 +61,9 @@ class MongoDB(DatabaseManagerABC):
         :return: id of document
         """
         cm = self.db['cloud']
-        post_id = cm.insert_one(document).inserted_id
+        post_id = cm.insert_one(self.var_to_json(document)).inserted_id
         return post_id
 
-    def insert_chameleon_document(self, document):
-        """
-        insert document to chameleon collection
-        :param document:
-        :return: id of document
-        """
-        cm = self.db['chameleon']
-        post_id = cm.insert_one (document).inserted_id
-        return post_id
-
-    def insert_data_document(self, document):
-        """
-        insert document to data collection
-        :param document:
-        :return: id of document
-        """
-        cm = self.db['data']
-        post_id = cm.insert_one (document).inserted_id
-        return post_id
-
-    def insert_cluster_collection(self, document):
-        """
-        insert document to cluster collection
-        :param document:
-        :return: id of document
-        """
-        instance = self.db['instance']
-        post_id = instance.insert_one(document).inserted_id
-        return post_id
 
     def insert_status_collection(self, document):
         """
@@ -122,7 +95,7 @@ class MongoDB(DatabaseManagerABC):
         post_id = group.insert_one(document).inserted_id
         return post_id
 
-    def update_document(self, collection_name, ID, info):
+    def update_document(self, collection_name, ID, value, info):
         """
         update document in any collection
         :param collection_name: collection name, like 'default', 'job' ....
@@ -131,7 +104,7 @@ class MongoDB(DatabaseManagerABC):
         :return: True/False
         """
         collection = self.db[collection_name]
-        result = collection.update_one({'_id': ID}, {'$set': info}).acknowledged
+        result = collection.update_one({ID : value}, {'$set': self.var_to_json(info)}).acknowledged
         return result
 
     def find_document(self, collection_name, key, value):
@@ -154,41 +127,9 @@ class MongoDB(DatabaseManagerABC):
         :return: the deleted document
         """
         collection = self.db[collection_name]
-        old_document = collection.find_one_and_delete({'_id': ID})
+        old_document = collection.find_one_and_delete({'id': ID})
         return old_document
 
-
-    @staticmethod
-    def cluster_document(label, cloud, name, os='Null', cpu='Null', memory='Null',
-                          storage='Null', address='Null', credential_id='Null', credential_key='Null', group_id='Null'):
-        """
-        create cluster document
-        :param label:
-        :param cloud:
-        :param name:
-        :param os:
-        :param cpu:
-        :param memory:
-        :param storage:
-        :param address:
-        :param credential_id:
-        :param credential_key:
-        :param group_id:
-        :return:
-        """
-        document = {'label': label,
-                    'cloud': cloud,
-                    'name': name,
-                    'spec': {'os': os,
-                             'cpu': cpu,
-                             'memory': memory,
-                             'storage': storage},
-                    'address': address,
-                    'credential': {'id': credential_id,
-                                   'key': credential_key},
-                    'group': group_id
-                    }
-        return document
 
     @staticmethod
     def status_document(instance_id, status, job_id, history):
@@ -200,7 +141,7 @@ class MongoDB(DatabaseManagerABC):
         :param history:
         :return:
         """
-        document = {'_id': instance_id,
+        document = {'id': instance_id,
                     'status': status,
                     'currentJob': job_id,
                     'history': history}
@@ -241,6 +182,30 @@ class MongoDB(DatabaseManagerABC):
                     'size': size,
                     'vms': list_vms}
         return document
+
+
+    def var_to_json(self, document):
+        new = dict()
+        for key in document.keys():
+            if isinstance(document[key], dict):
+                new.update({key : self.var_to_json(document[key])})
+            elif isinstance(document[key], list):
+                temp = []
+                for item in document[key]:
+                    if isinstance(item, dict):
+                        temp.append(self.var_to_json(item))
+                    elif isinstance(item, str):
+                        temp.append(item)
+                    elif isinstance(item, int):
+                        temp.append(item)
+                    elif isinstance(item, list):
+                        temp.append(item)
+                new.update({key: temp})
+            elif isinstance(document[key], str):
+                new.update({key: document[key]})
+            elif isinstance(document[key], int):
+                new.update({key: document[key]})
+        return new
 
     def close_client(self):
         """

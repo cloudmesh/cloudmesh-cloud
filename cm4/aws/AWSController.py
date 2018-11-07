@@ -1,7 +1,7 @@
 from cm4.abstractclass.CloudManagerABC import CloudManagerABC
 from libcloud.compute.types import Provider
 from libcloud.compute.providers import get_driver
-from libcloud.compute.base import NodeImage
+import json
 
 
 # for more information:
@@ -46,11 +46,15 @@ class AWSController (CloudManagerABC):
         :param node_id:
         :return: metadata of node
         """
+        '''
         nodes = self.driver.list_nodes()
         for i in nodes:
             if i.id == node_id:
-                return dict(id=i.id, name=i.name, state=i.state, public_ips=i.public_ips, private_ips=i.private_ips,
-                            size=i.size, image=i.image, created_date=i.created_at.strftime ("%Y-%m-%d %H:%M:%S"), extra=i.extra)
+                return i
+        '''
+        return self.driver.list_nodes([node_id])
+
+
 
     def stop(self, node_id):
         """
@@ -94,5 +98,8 @@ class AWSController (CloudManagerABC):
         size = [s for s in sizes if s.id == size][0]
         image = [i for i in images if i.id == image][0]
         self.driver.create_node(name=None, image=image, size=size, ex_keyname=keyname, ex_securitygroup=security)
+
+
+
 
 

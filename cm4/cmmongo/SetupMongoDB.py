@@ -5,7 +5,7 @@ Created on Wed Oct 17 01:51:00 2018
 
 @author: yuluo
 """
-import os, subprocess, yaml
+import os, subprocess, yaml, time
 from sys import platform
 from pymongo import MongoClient
 
@@ -79,6 +79,9 @@ class SetupMongoDB(object):
         self.initial_mongo_config(self.username, self.password)
         print("Enable the Secutiry. You will use your username and password to login the MongoDB")
 
+        time.sleep(2)
+
+        self.run_mongoDB()
 
         
         

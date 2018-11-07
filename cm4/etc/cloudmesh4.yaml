@@ -59,8 +59,8 @@ cloudmesh:
         kind: openstack
         version: liberty
       credentials:
-        OS_AUTH_URL: https://chi.tacc.chameleoncloud.org:5000/v2.0/tokens
-        OS_USERNAME: #put your user name here
+        OS_AUTH_URL: https://openstack.tacc.chameleoncloud.org:5000/v2.0/tokens
+        OS_USERNAME: #put your name here
         OS_PASSWORD: #put your password here
         OS_TENANT_NAME: CH-819337
         OS_TENANT_ID: CH-819337
@@ -68,9 +68,9 @@ cloudmesh:
         OS_PROJECT_DOMAIN_ID: default
         OS_USER_DOMAIN_ID: default        
         OS_VERSION: liberty
-        OS_REGION_NAME: CHI@TACC
+        OS_REGION_NAME: RegionOne
       default:
-        flavor: baremetal
+        flavor: m1.small
         image: CC-Ubuntu16.04
     jetstream:
       cm:

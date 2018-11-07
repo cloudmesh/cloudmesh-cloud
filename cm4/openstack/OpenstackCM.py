@@ -147,13 +147,29 @@ class OpenstackCM (CloudManagerABC):
 
 #%% testcode
 #d= OpenstackCM('chameleon')
-#ndoe = d.create('cm_test')
+#
+## create and auto start
+#node = d.create('cm_test')
 #node_id = node.id
-#d.ls()
-#d.info(node_id)
+#d.info(node_id)['state']
+#
+## suspend
+#d.suspend(node_id)
+#d.info(node_id)['state']
+#
+## resume
+#d.resume(node_id)
+#d.info(node_id)['state']
+#
+## stop
+#d.stop(node_id)
+#d.info(node_id)['state']
+#
+## restart
 #d.start(node_id)
+#d.info(node_id)['state']
+#
+## destroy
 #d.destroy(node_id)
 #d.info(node_id)
 #d.ls()
-
-

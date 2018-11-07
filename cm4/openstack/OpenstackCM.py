@@ -147,11 +147,13 @@ class OpenstackCM (CloudManagerABC):
 
 #%% testcode
 #d= OpenstackCM('chameleon')
-#d.create('cm_test')
-#node_id = d._get_obj_by_name('node','cm_test').id
+#ndoe = d.create('cm_test')
+#node_id = node.id
 #d.ls()
 #d.info(node_id)
+#d.start(node_id)
 #d.destroy(node_id)
+#d.info(node_id)
 #d.ls()
 
 

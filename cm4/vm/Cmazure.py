@@ -7,7 +7,7 @@ from cm4.vm.Cloud import Cloud
 class Cmazure(Cloud):
 
     def __init__(self, config, cloud):
-        cls = get_driver(Provider.AZURE)
+        cls = get_driver(Provider.AZURE_ARM)
         os_config = config.get('cloud.%s' % cloud)
         default = os_config.get('default')
         credentials = os_config.get('credentials')

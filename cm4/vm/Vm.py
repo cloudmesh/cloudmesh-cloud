@@ -1,10 +1,11 @@
-from libcloud.compute.types import Provider
+from cm4.vm.Cmaws import Cmaws
+from cm4.vm.Cmazure import Cmazure
+from cm4.vm.Cmopenstack import Cmopenstack
 from cm4.configuration.config import Config
-from cm4.vm import Cmaws, Cmazure, Cmopenstack
 from cm4.cmmongo.mongoDB import MongoDB
 
 
-class Provider (object):
+class Vmprovider (object):
 
     def __init__(self):
         self.config = Config()
@@ -18,13 +19,14 @@ class Provider (object):
         But we haven't test OPENSTACK
         :return: the driver based on the 'kind' information
         """
+
         os_config = self.config.get('cloud.%s' % cloud)
         if os_config.get('cm.kind') == 'azure':
-            driver = Cmazure(self.os_config)
+            driver = Cmazure(self.config, cloud)
         elif os_config.get('cm.kind') == 'aws':
-            driver = Cmaws(self.os_config)
+            driver = Cmaws(self.config, cloud).get_provider()
         elif os_config.get('cm.kind') == 'openstack':
-            driver = Cmopenstack(self.os_config)
+            driver = Cmopenstack(self.config, cloud)
 
         return driver
 
@@ -41,7 +43,7 @@ class Provider (object):
 class Vm(object):
 
     def __init__(self, cloud):
-        self.provider = Provider().get_provider(cloud)
+        self.provider = Vmprovider().get_provider(cloud)
         self.mongo = MongoDB('luoyu', 'luoyu', 27017)
 
 
@@ -51,13 +53,14 @@ class Vm(object):
         :param node_id:
         :return: True/False
         """
-        if self.mongo.find_document('cloud', 'id', node_id)['state'] == 'stopped':
-            result = self.provider.ex_start_node(self.info(node_id))
-            info = self.provider.info(node_id)
-            self.mongo.update_document('cloud', 'id', node_id, info)
+        info = self.info(node_id)
+        if self.mongo.find_document('cloud', 'id', node_id)['state'] != 'running':
+            result = self.provider.ex_start_node(info)
             return result
         else:
             return True
+
+
 
     def stop(self, node_id):
         """
@@ -65,15 +68,13 @@ class Vm(object):
         :param node_id:
         :return: True/False
         """
+        info = self.info(node_id)
 
-        if self.mongo.find_document('cloud', 'id', node_id)['state'] == 'running':
-            result = self.provider.ex_stop_node(self.info(node_id))
-            self.mongo.update_document('cloud', 'id', node_id, {'state' : 'stopped'})
+        if self.mongo.find_document('cloud', 'id', node_id)['state'] != 'stopped':
+            result = self.provider.ex_stop_node(info)
             return result
         else:
             return True
-
-        return result
 
     def resume(self, node_id):
         """
@@ -125,8 +126,8 @@ class Vm(object):
         :param node_id:
         :return: all information about one node
         """
-        status = self.info(node_id).state
-        self.mongo.update_document('cloud', 'id', node_id, {'state' : status})
+        self.info(node_id).state
+        status = self.mongo.find_document('cloud', 'id', node_id)['state']
         return status
 
     def info(self, node_id):
@@ -138,5 +139,10 @@ class Vm(object):
         nodes = self.list()
         for i in nodes:
             if i.id == node_id:
-                self.mongo.update_document('cloud', 'id', node_id, i)
+                if self.mongo.find_document ('cloud', 'id', node_id) != None:
+                    self.mongo.update_document('cloud', 'id', node_id, vars(i))
+                else:
+                    self.mongo.insert_cloud_document(vars(i))
                 return i
+
+

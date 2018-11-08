@@ -1,6 +1,8 @@
 from pymongo import MongoClient
 from cm4.abstractclass.DatabaseManagerABC import DatabaseManagerABC
 import urllib.parse
+from pprint import pprint
+
 
 
 class MongoDB(DatabaseManagerABC):
@@ -13,6 +15,7 @@ class MongoDB(DatabaseManagerABC):
         self.port = port
         self.client = None
         self.db = None
+        self.connect_db()
 
 
     def set_port(self, port):
@@ -116,7 +119,7 @@ class MongoDB(DatabaseManagerABC):
         :return: the document which match the key and value
         """
         collection = self.db[collection_name]
-        document = collection.find({key: value})
+        document = collection.find_one({key: value})
         return document
 
     def delete_document(self, collection_name, ID):

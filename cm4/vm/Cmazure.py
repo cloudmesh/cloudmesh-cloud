@@ -6,12 +6,12 @@ from cm4.vm.Cloud import Cloud
 
 class Cmazure(Cloud):
 
-    def __init__(self, config):
+    def __init__(self, config, cloud):
         cls = get_driver(Provider.AZURE)
-        os_config = config.get('cloud.%s' % 'azure')
+        os_config = config.get('cloud.%s' % cloud)
         default = os_config.get('default')
         credentials = os_config.get('credentials')
-        driver = cls(tenant_id=credentials['AZURE_TENANT_ID'],
+        self.driver = cls(tenant_id=credentials['AZURE_TENANT_ID'],
                      subscription_id=credentials['AZURE_SUBSCRIPTION_ID'],
                      key=credentials['AZURE_APPLICATION_ID'],
                      secret=credentials['AZURE_SECRET_KEY'],
@@ -25,9 +25,12 @@ class Cmazure(Cloud):
                             ex_network=default['network']
                             )
         '''
-        return driver
+
 
     '''
     def get_new_node_setting(self):
         return self.setting
     '''
+
+    def get_provider(self):
+        return self.driver

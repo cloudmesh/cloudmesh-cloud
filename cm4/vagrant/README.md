@@ -39,7 +39,7 @@ Minimum  requirements to use`ehvagrant`are the following:
 
 Just `pip install ehvagrant`. 
 
-IMPORTANT: if you are using`ehvagrant` along`cloudmesh`, please refer to [here](#Using-`ehvagrant`-with-`Cloudmesh`) to setup `ehvagrant `.
+IMPORTANT: if you are using`ehvagrant` along`cloudmesh`, You don't have to install `ehvagrant` separately from `cloudmesh`.  
 
 ### Install vagrant
 
@@ -61,7 +61,7 @@ You may choose other virtualization provider. In this case, please setup virtual
 
 To utilized `ehvagrant`, `Vagrantfile` should be stored at`VAGRANTFILE_PATH`which default path is  `~/ehvagrant/Vagrantfile`. If you have defined environment variable `EHVAGRANT_HOME` , default `VAGRANTFILE_PATH` becomes `$EHVAGRANT_HOME/Vagrantfile` .
 
-IMPORTANT: If you are using `ehvagrant` with `cloudmesh`, then your `VAGRANTFILE_PATH` will be changed to  `~/.cloudmesh/vagrant/Vagrantfile`.
+IMPORTANT: If you are using `ehvagrant` with `cloudmesh`, then your `VAGRANTFILE_PATH` will be changed to  `~/.cloudmesh/vagrant_workspace/Vagrantfile`.
 
 `ehvagrant` will try to locate `Vagrantfile` every time it invokes. If it can't find it, `ehvagrant` will generate a default `Vagrantfile`at default path. Default `Vagrantfile` defines two Ubuntu machine called `node1` and `node2`, powered by VirtualBox.  
 
@@ -77,7 +77,7 @@ After finishing `Vagrantfile`definition,  you are now ready to deploy and run yo
 
 Then execute `ehvagrant start`. Since your machines are not deployed yet, Vagrant will first deploy your machines and then bring them up, and automatically do LOTS of setting.  When Vagrant has done its work, we can confirm this by issuing `ehvagrant ls` again. You will see now:
 
-![after_init](/img/after_init.png)
+![after_init](./img/after_init.png)
 
 HOO-WA! Your two virtual machines are painlessly deployed, configured, up and running! Now you are ready to do some fancy work with Vagrant and `ehvagrant`.
 
@@ -87,38 +87,16 @@ Since these topics are not directly relate to `ehvagrant`,  here I just describe
 
 For `scp`, open terminal and execute `scp`, you should see a short usage guide shows on your screen. If it is not there, please install `scp` and make sure its executive file is in your `PATH` environment variable. 
 
-![scp_availability check](/img/scp.png)
+![scp_availability_check](./img/scp.png)
 
 ### Using `ehvagrant` with `cloudmesh`
 
 `ehvagrant` was originally developed as a module of `cloudmesh`. If you get `ehvagrant` with `cloudmesh` distribution,  do following change when setup `ehvagrant` with `cloudmesh`:
 
 - You DO NOT have to install `ehvagrant` separately from `cloudmesh`.  When `cloudmesh` sets up, it automatically installs `ehvagrant`.
-
-- Your `VAGRANTFILE_PATH` now change to `~/.cloudmesh/Vagrantfile`.
-
-- To enable `cloudmesh` to interact with Vagrant instance, add Vagrant instances' information to the configuration file of `cloudmesh`, which locates at `$CLOUDMESH_ROOT_DIRECTORY/configuration/cloudmesh.yaml`. To specify a Vagrant instance in `cloudmesh.yaml`,  just fill the `name` of the Vagrant instance, and let `address` variable point to the `VAGRHANTFILE_PATH`. You may leave all other field blank. Here is an example to specify `node1`and `node2` in `cloudmesh.yaml`.
+- Your `VAGRANTFILE_PATH` now change to `~/.cloudmesh/vagrant _space/Vagrantfile`.
 
 
-  ```yaml
-  cloudmesh:
-     cluster:
-      cluster_vagrant:
-        vagrant_a:                   
-          name:                       node1
-          label:                      
-          address:                    ./Vagrantfile
-          credentials:
-            username:                 
-            pulickey:                 
-        vagrant_b:
-          name:                       node2
-          label:                      
-          address:                    ./Vagrantfile
-          credentials:
-            username:                 
-            pulickey:
-  ```
 
 ------
 
@@ -238,7 +216,7 @@ Usage:```python vagrant.py vagrant run command COMMAND [--vms=<vmList>]```
 
 Run an arbitrary shell `COMMAND` on instances. If user specify multiple instances to run, the command will run on those instances simultaneously, i.e., in a parallel fashion.  Any output produced to the `stdout` and `stderr` of executing instances will be fetched and reformatted to a job report. Finally, the job report will print out to the current terminal.
 
-![run_command_example](/img/run_command.png)
+![run_command_example](./img/run_command.png)
 
 #### run arbitrary shell script
 
@@ -256,4 +234,4 @@ Run an arbitrary **shell script** on instances. The behavior of this command wil
   - If using with `cloudmesh`, output content will be stored at `~/.cloudmesh/experiment/{instnace_name}/{script_name}_{epoch_second}/output/`. 
 - Finally, execution reports will be printed out to current terminal.
 
-![run_script_example](/img/run_script.png)
+![run_script_example](./img/run_script.png)

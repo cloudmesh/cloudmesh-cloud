@@ -5,9 +5,9 @@ from cm4.vm.Cloud import Cloud
 
 class Cmopenstack(Cloud):
 
-    def __init__(self, config):
+    def __init__(self, config, cloud):
         cls = get_driver(Provider.OPENSTACK)
-        os_config = config.get('cloud.%s' % 'openstack')
+        os_config = config.get('cloud.%s' % cloud)
         default = os_config.get('default')
         credentials = os_config.get('credentials')
         driver = cls(credentials['OS_USERNAME'],
@@ -22,9 +22,12 @@ class Cmopenstack(Cloud):
         image = [i for i in driver.list_images() if i.id == default['image']][0]
         self.setting = dict(size=size, image=image)
         '''
-        return driver
+
 
     '''
     def get_new_node_setting(self):
         return self.setting
     '''
+
+    def get_provider(self):
+        return self.driver

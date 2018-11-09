@@ -29,7 +29,5 @@ class Cmaws(Cloud):
         return self.setting
     '''
 
-    def get_provider(self):
-        return self.driver
 
 

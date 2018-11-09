@@ -1,5 +1,5 @@
 import time
-from cm4.azure.AzureManager import AzureManager
+from cm4.azure.AzureVm import AzureVm
 from cm4.configuration.config import Config
 
 
@@ -7,8 +7,8 @@ class TestCloudAzure:
 
     def setUp(self):
         self.config = Config()
-        self.azure = AzureManager()
-        
+        self.azure = AzureVm()
+
         self.test_node_name = 'cm-test-vm-1'
         self.test_node_id = ''
 
@@ -24,11 +24,10 @@ class TestCloudAzure:
 
     def test_azure_010_create(self):
         vm = self.azure.create(self.test_node_name)
-        self.test_node_id = vm.id
-        assert True is True
+        assert vm is not None
 
     def test_azure_020_ls(self):
-        ls_results = self.azure.ls()
+        ls_results = self.azure.list()
         assert isinstance(ls_results, list)
 
     def test_azure_030_suspend(self):
@@ -53,5 +52,24 @@ class TestCloudAzure:
 
     def test_azure_070_destroy(self):
         self.azure.destroy(self.test_node_name)
-        state = self._wait_and_get_state(self.test_node_name, 30)
-        state is None
+
+    def test_azure_create_network(self):
+        self.azure.create_network("cmnet")
+
+    def test_azure_list_volumes(self):
+        vols = self.azure.list_volumes()
+
+    def test_azure_delete_network(self):
+        self.azure._ex_delete_network("cmnetwork")
+
+    def test_azure_get_node(self):
+        vm = self.azure._get_node(self.test_node_name)
+        assert vm is not None
+
+    def test_azure_run(self):
+        cmd = "lsb_release -a"
+        res = self.azure.run(self.test_node_name, cmd)
+        # getting output
+        # https://stackoverflow.com/questions/38152873/how-can-i-get-the-output-of-a-customscriptextenstion-when-using-azure-resource-m
+
+        assert res is not None

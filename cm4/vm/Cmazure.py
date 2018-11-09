@@ -31,6 +31,3 @@ class Cmazure(Cloud):
     def get_new_node_setting(self):
         return self.setting
     '''
-
-    def get_provider(self):
-        return self.driver

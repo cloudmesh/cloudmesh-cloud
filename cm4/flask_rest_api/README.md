@@ -11,5 +11,5 @@ Flask-PyMongo
 #### Examples
 - Retrieve information about a VM \
   ```bash 
-  curl localhost:5000/vm/i-0fad7e92ffea8b345
+  curl localhost:5000/vms/i-0fad7e92ffea8b345
   ```

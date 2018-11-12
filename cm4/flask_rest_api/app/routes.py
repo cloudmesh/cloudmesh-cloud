@@ -30,8 +30,8 @@ def get_all_vms():
 @app.route('/vms/stopped/', methods=['GET'])
 def get_stopped_vms():
     """
-    Returns all the VM information.
-    :return: a json with all the vm information
+    Returns all the stopped VM information.
+    :return: a json with all the stopped vm information
     """
     vms = cloud.find({'state': 'stopped'})
     if not vms:

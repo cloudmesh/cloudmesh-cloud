@@ -5,7 +5,7 @@ Created on Wed Oct 17 01:51:00 2018
 
 @author: yuluo
 """
-import os, subprocess, yaml
+import os, subprocess, yaml, time
 from sys import platform
 from pymongo import MongoClient
 
@@ -51,6 +51,9 @@ class SetupMongoDB(object):
         #update PATH
         cmd = 'echo "export PATH=%s/bin:$PATH" >> ~/.bashrc ' % self.mongo_db_path
         subprocess.check_output(cmd, shell=True)
+        cmd = '. ~/.bashrc'
+        subprocess.check_output (cmd, shell=True)
+        time.sleep(15)
         #create database and log folder
         cmd = 'mkdir %s' % os.path.join(self.mongo_db_path,'database')
         subprocess.check_output(cmd, shell=True)
@@ -79,6 +82,9 @@ class SetupMongoDB(object):
         self.initial_mongo_config(self.username, self.password)
         print("Enable the Secutiry. You will use your username and password to login the MongoDB")
 
+        time.sleep(2)
+
+        self.run_mongoDB()
 
         
         
@@ -107,30 +113,30 @@ class SetupMongoDB(object):
     def run_mongoDB(self):
         #mongod --dbpath /home/ubuntu/MongoDB/mongodb-linux-x86_64-ubuntu1804-4.0.3/db/ --config /home/ubuntu/MongoDB/mongodb-linux-x86_64-ubuntu1804-4.0.3/mongod.conf
         cmd = 'mongod --dbpath %s --config %s' % (os.path.join(self.mongo_db_path, 'database'), os.path.join(self.mongo_db_path, 'mongod.conf'))
-        subprocess.Popen(cmd,stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True)
+        subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True)
         print('MonogDB is running')
         
     def shutdown_mongoDB(self):
         #mongod --dbpath /home/ubuntu/MongoDB/mongodb-linux-x86_64-ubuntu1804-4.0.3/db/ --shutdown
         cmd = 'mongod --dbpath %s --shutdown' % os.path.join(self.mongo_db_path, 'database')
-        subprocess.Popen(cmd,stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True)
+        subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True)
         print('MonogDB is stopped')
         
         
  
     def set_auth(self):
-        client = MongoClient('localhost', self.port)
-        client.admin.add_user(self.username, self.password, roles = [ { 'role' : "userAdminAnyDatabase", 'db' : "admin" }, "readWriteAnyDatabase" ])
+        client = MongoClient('localhost', 27017)
+        client.admin.add_user('luoyu', 'luoyu', roles = [ { 'role' : "userAdminAnyDatabase", 'db' : "admin" }, "readWriteAnyDatabase" ])
         client.close()
         
         
-'''    
+
 def main():
     test = SetupMongoDB()
-    test.check_mongo_dir()
+    test.set_auth()
+    #test.check_mongo_dir()
     #test.run_mongoDB()
     #test.shutdown_mongoDB()
     
 if __name__ == "__main__":
     main()
-'''

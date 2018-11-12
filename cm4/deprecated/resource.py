@@ -6,7 +6,7 @@ Created on Tue Sep 11 23:57:04 2018
 @author: yuluo
 """
 
-from cm4.command.ResourceABC import ResourceABC
+from cm4.deprecated.ResourceABC import ResourceABC
 import oyaml as yaml
 import os
 

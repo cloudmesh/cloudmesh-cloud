@@ -529,7 +529,7 @@ class Vagrant(object):
         if name is None:
             # start all
             name = ""
-        self.execute("vagrant suspend " + str(name)) 
+        self.execute("vagrant suspend " + str(name))
 
     def destroy(self, name=None, force = False):
         """
@@ -562,7 +562,7 @@ class Vagrant(object):
 
         :return:
         """
-        self.execute("vagrant status " + name) 
+        self.execute("vagrant status " + name)
 
     def download(self, name, source, dest, prefix_dest=False, recursive=False):
         """

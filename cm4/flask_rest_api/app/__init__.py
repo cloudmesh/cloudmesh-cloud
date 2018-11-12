@@ -1,10 +1,10 @@
 from flask import Flask
 from flask_pymongo import PyMongo
 
-from cm4.flask_rest_api.rest_config import Config
+from cm4.flask_rest_api.rest_config import RestConfig
 
 app = Flask(__name__)
-app.config.from_object(Config)
+app.config.from_object(RestConfig)
 
 mongo = PyMongo(app)
 cloud = mongo.db.cloud

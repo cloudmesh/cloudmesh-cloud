@@ -134,6 +134,12 @@ cloudmesh:
         credentials:
           GOOGLE_STORAGE_KEY: ''
           GOOGLE_STORAGE_SECRET: ''
+    mongo:
+      MONGO_DBNAME: 'cloudmesh'
+      MONGO_HOST: '127.0.0.1'
+      MONGO_PORT: '27017'
+      MONGO_USERNAME: 'admin'
+      MONGO_PASSWORD: 'admin'
   cluster:
     bigred2:
         name:                       bigred2

@@ -21,6 +21,11 @@ cd ~/git/cloudmesh/cm
 export PYTHONPATH=$PYTHONPATH:$PWD
 ```
 
+- Add the MongoDB information in the cm4 configuration file
+```bash
+vi ~/.cloudmesh/cloudmesh4.yaml
+```
+
 - Run the REST API
 ```bash
 python cm4/flask_rest_api/rest_api.py

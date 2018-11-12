@@ -16,8 +16,8 @@ class Cmaws(Cloud):
 
 
         '''
-        size = [s for s in driver.list_sizes() if s.id == default['size']][0]
-        image = [i for i in driver.list_images() if i.id == default['image']][0]
+        size = [s for s in self.driver.list_sizes() if s.id == default['size']][0]
+        image = [i for i in self.driver.list_images() if i.id == default['image']][0]
         self.setting = dict(image=image, size=size, ex_keyname=default['EC2_PRIVATE_KEY_FILE_NAME'],
                             ex_securitygroup=default['EC2_SECURITY_GROUP'])
         '''

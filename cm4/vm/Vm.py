@@ -3,6 +3,9 @@ from cm4.vm.Cmazure import Cmazure
 from cm4.vm.Cmopenstack import Cmopenstack
 from cm4.configuration.config import Config
 from cm4.cmmongo.mongoDB import MongoDB
+from cm4.configuration.name import Name
+from cm4.vm.thread import thread
+from cm4.configuration.counter import Counter
 
 
 class Vmprovider (object):
@@ -47,69 +50,75 @@ class Vm(object):
         self.mongo = MongoDB('luoyu', 'luoyu', 27017)
 
 
-    def start(self, node_id):
+    def start(self, name):
         """
         start the node based on the id
         :param node_id:
         :return: True/False
         """
-        info = self.info(node_id)
-        if self.mongo.find_document('cloud', 'id', node_id)['state'] != 'running':
-            result = self.provider.ex_start_node(info)
-            return result
+
+        info = self.info(name)
+        if info.state != 'running':
+            self.provider.ex_start_node(info)
+            thread(self, 'test', name, 'running').start()
+            document = self.mongo.find_document ('cloud', 'name', name)
+            return document
         else:
-            return True
+            document = self.mongo.find_document('cloud', 'name', name)
+            return document
 
 
-
-    def stop(self, node_id):
+    def stop(self, name):
         """
         stop the node based on the ide
         :param node_id:
         :return: True/False
         """
-        info = self.info(node_id)
-
-        if self.mongo.find_document('cloud', 'id', node_id)['state'] != 'stopped':
-            result = self.provider.ex_stop_node(info)
-            return result
+        info = self.info(name)
+        if info.state != 'stopped':
+            self.provider.ex_stop_node(info)
+            thread(self, 'test', name, 'stopped').start()
+            document = self.mongo.find_document('cloud', 'name', name)
+            return document
         else:
-            return True
+            document = self.mongo.find_document('cloud', 'name', name)
+            return document
 
-    def resume(self, node_id):
+    def resume(self, name):
         """
         start the node based on id
         :param node_id:
         """
-        return self.start(node_id)
+        return self.start(name)
 
-    def suspend(self, node_id):
+    def suspend(self, name):
         """
         stop the node based on id
         :param node_id:
         """
-        return self.stop(node_id)
+        return self.stop(name)
 
-    def destroy(self, node_id):
+    def destroy(self, name):
         """
         delete the node based on id
         :param node_id:
         :return: True/False
         """
-
-        result = self.provider.destroy_node(self.info(node_id))
-        self.mongo.delete_document('cloud', node_id)
+        result = self.provider.destroy_node(self.info(name))
+        self.mongo.delete_document('cloud', 'name', name)
 
         return result
-
     '''
-    def create(self, name):
+    def create(self):
         """
         create a new node
         :param name: the name for the new node
         :return:
         """
-        return self.provider.create_node(name=name, **self.provider.get_new_node_setting())
+        name = self.new_name('test', 'test', 'luoyu')
+        node = self.provider.create_node(name=name, **self.provider.get_new_node_setting())
+        self.mongo.insert_cloud_document(vars(node))
+        return node
     '''
 
     def list(self):
@@ -120,17 +129,17 @@ class Vm(object):
         result = self.provider.list_nodes()
         return result
 
-    def status(self, node_id):
+    def status(self, name):
         """
         show node information based on id
         :param node_id:
         :return: all information about one node
         """
-        self.info(node_id).state
-        status = self.mongo.find_document('cloud', 'id', node_id)['state']
+        self.info(name).state
+        status = self.mongo.find_document('cloud', 'name', name)['state']
         return status
 
-    def info(self, node_id):
+    def info(self, name):
         """
         show node information based on id
         :param node_id:
@@ -138,11 +147,19 @@ class Vm(object):
         """
         nodes = self.list()
         for i in nodes:
-            if i.id == node_id:
-                if self.mongo.find_document ('cloud', 'id', node_id) != None:
-                    self.mongo.update_document('cloud', 'id', node_id, vars(i))
-                else:
-                    self.mongo.insert_cloud_document(vars(i))
+            if i.name == name:
+                document = vars(i)
+                self.mongo.update_document('cloud', 'name', name, document)
                 return i
+
+    def new_name(self, experiment, group, user):
+        counter = Counter()
+        count = counter.get()
+        name = Name()
+        name_format = {'experiment': experiment, 'group': group, 'user': user, 'counter': count}
+        name.set_schema('instance')
+        counter.incr()
+        counter.set()
+        return name.get(name_format)
 
 

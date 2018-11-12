@@ -98,7 +98,7 @@ class MongoDB(DatabaseManagerABC):
         post_id = group.insert_one(document).inserted_id
         return post_id
 
-    def update_document(self, collection_name, ID, value, info):
+    def update_document(self, collection_name, key, value, info):
         """
         update document in any collection
         :param collection_name: collection name, like 'default', 'job' ....
@@ -107,7 +107,7 @@ class MongoDB(DatabaseManagerABC):
         :return: True/False
         """
         collection = self.db[collection_name]
-        result = collection.update_one({ID : value}, {'$set': self.var_to_json(info)}).acknowledged
+        result = collection.update_one({key : value}, {'$set': self.var_to_json(info)}).acknowledged
         return result
 
     def find_document(self, collection_name, key, value):
@@ -122,7 +122,7 @@ class MongoDB(DatabaseManagerABC):
         document = collection.find_one({key: value})
         return document
 
-    def delete_document(self, collection_name, ID):
+    def delete_document(self, collection_name, key, value):
         """
         delete the document from collection
         :param collection_name: collection name, like 'default', 'job' ....
@@ -130,7 +130,7 @@ class MongoDB(DatabaseManagerABC):
         :return: the deleted document
         """
         collection = self.db[collection_name]
-        old_document = collection.find_one_and_delete({'id': ID})
+        old_document = collection.find_one_and_delete({key : value})
         return old_document
 
 
@@ -209,6 +209,7 @@ class MongoDB(DatabaseManagerABC):
             elif isinstance(document[key], int):
                 new.update({key: document[key]})
         return new
+
 
     def close_client(self):
         """

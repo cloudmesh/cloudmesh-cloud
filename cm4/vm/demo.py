@@ -1,30 +1,34 @@
 from cm4.vm.Vm import Vm
+from pprint import pprint
 
 def main():
 
-    test = Vm('aws')
-    #test.start('i-0fad7e92ffea8b345')
-    #test.stop('i-0fad7e92ffea8b345')
-    print(test.list())
-    #print(test.status('i-0fad7e92ffea8b345'))
-    test.mongo.close_client()
+    provider = Vm('aws')
+    #print(provider.list())
+    #pprit(provider.start('a-b=luoyu-0'))
+    #provider.stop('a-b=luoyu-0')
+    #pprint(provider.stop('a-b=luoyu-0'))
+    #print(provider.status('a-b=luoyu-0'))
+    #pprint(vars(provider.info('a-b=luoyu-0')))
 
-    #test = Vm('azure')
-    #print(test.list()[0].id)
-    # test.start('i-0fad7e92ffea8b345')
-    #test.stop('/subscriptions/97729f86-47bb-428b-98b6-835ef04c3553/resourceGroups/CLOUDMESH/providers/Microsoft.Compute/virtualMachines/cm-test-vm-1')
-    #print(test.status('/subscriptions/97729f86-47bb-428b-98b6-835ef04c3553/resourceGroups/CLOUDMESH/providers/Microsoft.Compute/virtualMachines/cm-test-vm-1'))
-    #test.mongo.close_client()
+    provider = Vm('azure')
+    #print(provider.list())
+    #pprit(provider.start('a-b=luoyu-1'))
+    #provider.stop('a-b=luoyu-1')
+    #pprint(provider.stop('a-b=luoyu-1'))
+    #print(provider.status('a-b=luoyu-1'))
+    #pprint(vars(provider.info('a-b=luoyu-1')))
 
 
+    provider = Vm('chameleon')
+    #print(provider.list())
+    #pprit(provider.start('a-b=luoyu-2'))
+    #provider.stop('a-b=luoyu-2')
+    #pprint(provider.stop('a-b=luoyu-2'))
+    #print(provider.status('a-b=luoyu-2'))
+    #pprint(vars(provider.info('a-b=luoyu-2')))
 
-    #test = Vm('chameleon')
-    #print(test.list()[0].id)
-    #test.start('9bca2334-cac8-4cbd-bcdd-7af00f6345dc')
-    #test.stop('9bca2334-cac8-4cbd-bcdd-7af00f6345dc')
-    #print(test.status('9bca2334-cac8-4cbd-bcdd-7af00f6345dc'))
-    #test.mongo.close_client()
-
+    provider.mongo.close_client()
 
 if __name__ == "__main__":
     main()

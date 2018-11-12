@@ -28,7 +28,7 @@ Amazon Web Service (**AWS**) provided by Amazon is a secure cloud service plarfo
 
 Before users use the **cm4** platfrom to access **EC2**, they have to finish these preparations:
 
-1. EC2 account, more inofrmation is [here](https://aws.amazon.com/premiumsupport/knowledge-center/create-and-activate-aws-account/)
+1. EC2 account, more information is [here](https://aws.amazon.com/premiumsupport/knowledge-center/create-and-activate-aws-account/)
 2. Log in the EC2 account, update your **Access Key**.
 **Access Keys** has two parts: **Access Key ID** and **Secret Access Key**. These **Access Keys** are the only way you could authentically access the AWS though AWS API requests.
 (create new Access Key: Account (right upper corner) > My Security Credentials > Access Keys > Create New Access Key)
@@ -47,7 +47,12 @@ When you finish all above things, you should update information into the block '
 David
 
 ### OPENSTACK
-David and Kimball
+OpenStack is an Infrastructure service that allows users to utilize computing resource in cloud service platform through virtual environments. 
+
+[Chameleon Cloud](https://www.chameleoncloud.org/) provides an OpenStack installation of version 2015.1 (Kilo) using the KVM virtualization technology at the KVM@TACC site. It is
+important to make sure you are visiting the [KVM@TACC](https://openstack.tacc.chameleoncloud.org/) site so as to get proper installation. Learn more [here](https://chameleoncloud.readthedocs.io/en/latest/technical/kvm.html) 
+to properly set up yout account before proceed to your journey with **cm4**.
+
 
 ### Extra: Vargrant
 Please refer to [here](https://github.com/cloudmesh-community/cm/tree/master/cm4/vagrant/README.md) to see how to setup Vagrant with cm4.

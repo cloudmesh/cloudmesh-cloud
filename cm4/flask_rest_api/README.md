@@ -32,7 +32,6 @@ python cm4/flask_rest_api/rest_api.py
 - /vms/stopped  : Provides information on all the stopped VMs.
 - /vms/<id> : Provides information on the VM identified by the <id>
 
-
 #### Examples
 
 - Retrieve information about a VM

@@ -121,7 +121,10 @@ cloudmesh:
       local:
         CMDATA_DB_FOLDER: '~/cloudmesh/cm4/test/data/db'
       mongo:
-        MONGO_CONNECTION_STRING: ''
+        MONGODB_CONNECTION_SERVER_URL: ''
+        MONGODB_USERNAME: ''
+        MONGODB_PASSWORD: ''
+        MONGODB_PORT: ''
     service:
       local:
         CMDATA_STORAGE_FOLDER: '~/cloudmesh/cm4/test/data/storage'

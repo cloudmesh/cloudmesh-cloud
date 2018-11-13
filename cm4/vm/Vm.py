@@ -46,8 +46,11 @@ class Vmprovider (object):
 class Vm(object):
 
     def __init__(self, cloud):
+        config = Config()
         self.provider = Vmprovider().get_provider(cloud)
-        self.mongo = MongoDB('luoyu', 'luoyu', 27017)
+        self.mongo = MongoDB(config.get('data.db.mongo.MONGODB_USERNAME'), config.get('data.db.mongo.MONGODB_PASSWORD'),
+                             config.get('data.db.mongo.MONGODB_CONNECTION_SERVER_URL'),
+                             config.get('data.db.mongo.MONGODB_PORT'))
 
 
     def start(self, name):

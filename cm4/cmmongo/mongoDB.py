@@ -8,8 +8,9 @@ from pprint import pprint
 class MongoDB(DatabaseManagerABC):
     # haven't tested it
 
-    def __init__(self, username, password, port):
+    def __init__(self, host, username, password, port):
         self.database = 'cloudmesh'
+        self.host = host
         self.password = urllib.parse.quote_plus(password)
         self.username = urllib.parse.quote_plus(username)
         self.port = port
@@ -43,7 +44,7 @@ class MongoDB(DatabaseManagerABC):
         """
         connect to database
         """
-        self.client = MongoClient('mongodb://%s:%s@127.0.0.1:%s' % (self.username, self.password, self.port))
+        self.client = MongoClient('mongodb://%s:%s@%s:%s' % (self.username, self.password, self.host, self.port))
         self.db = self.client[self.database]
 
     def insert_config_document(self, document):

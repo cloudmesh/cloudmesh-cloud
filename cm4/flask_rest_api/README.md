@@ -16,10 +16,17 @@ Use pip install to install the following packages.
 cd ~/git/cloudmesh/cm
 ```
 
-- Add the cm directory to the Python Path
-```bash
-export PYTHONPATH=$PYTHONPATH:$PWD
-```
+
+The following has been suggested by student but is not correct:
+
+> - Add the cm directory to the Python Path
+> ```bash
+> export PYTHONPATH=$PYTHONPATH:$PWD
+``
+Instead for development we do 
+
+pip install .
+`
 
 - Add the MongoDB information in the cm4 configuration file
 ```bash

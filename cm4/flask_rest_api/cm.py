@@ -15,7 +15,7 @@ app.config['ENV']='development'
 app.config['JSONIFY_PRETTYPRINT_REGULAR']=True
 
 
-db = MongoDB('luoyu','luoyu',27017)
+db = MongoDB('host','user','password','port')
 db.connect_db()
 
 

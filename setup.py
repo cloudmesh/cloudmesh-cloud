@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # ----------------------------------------------------------------------- #
 # Copyright 2008-2010, Gregor von Laszewski                               #
-# Copyright 2010-2013, cloudmesh.org                                      #
+# Copyright 2010-2018, cloudmesh.org                                      #
 #                                                                         #
 # Licensed under the Apache License, Version 2.0 (the "License"); you may #
 # not use this file except in compliance with the License. You may obtain #
@@ -16,20 +16,17 @@
 # limitations under the License.                                          #
 # ------------------------------------------------------------------------#
 from __future__ import print_function
+from setuptools import setup, find_packages
 
 import os
 import platform
 import sys
 
-from setuptools import setup, find_packages
 
-__version__ = None  # surpress the version error
+__version__ = None  # suppress the version error
 # don't use import to get the version as that causes a circular dependency
 exec(open('cm4/__init__.py').read().strip())
 
-#
-# TODO: update to the newest versions
-#
 if sys.version_info > (3, 7, 0):
     print(70 * "#")
     print("WARNING: upgrade to a python greater than 3.7.0 "
@@ -47,7 +44,14 @@ if command is not None:
     print("Install readline")
     os.system(command)
 
-requirements = map(str.strip, open('requirements.txt'))
+requiers = """
+docopt
+colorama
+termcolor
+python-hostlist
+apache-libcloud
+oyaml
+""".split("\n")
 
 
 def read(fname):
@@ -87,7 +91,7 @@ setup(
         "License :: OSI Approved :: Apache Software License",
         "Operating System :: MacOS :: MacOS X",
         "Operating System :: POSIX :: Linux",
-        "Programming Language :: Python :: 2.7",
+        "Programming Language :: Python :: 3.7",
         "Topic :: Scientific/Engineering",
         "Topic :: System :: Clustering",
         "Topic :: System :: Distributed Computing",
@@ -96,15 +100,13 @@ setup(
     ],
     keywords="cloud cmd commandshell plugins",
     packages=find_packages(),
-    install_requires=requirements,
+    install_requires=requiers,
+    namespace_packages=['cloudmesh'],
     include_package_data=True,
     # data_files= data_files,
     # package_data={
     #     'cloudmesh_cm4.etc': ['*.yaml', '*.py'],
     # },
-    #
-    # TODO: update the endpoints
-    #
     entry_points={
         'console_scripts': [
             'cm4 = cm4.command.command:main',

@@ -128,17 +128,20 @@ class Data(object):
         print(" %-35s %-10s %-10s %-50s" % (file_name, service, size, url))
 
 
-if __name__ == "__main__":
-    arguments = docopt(__doc__, version='Cloudmesh Drive 0.1')
-
+def process_arguments(args):
     cd = Data()
     cd.config()
 
-    if arguments['ls'] or arguments['dir']:
+    if args['ls'] or args['dir']:
         cd.ls()
-    elif arguments['add'] and arguments['FILE']:
-        cd.add(arguments['SERVICE'], arguments['FILE'])
-    elif arguments['del'] and arguments['FILE']:
-        cd.delete(arguments['FILE'])
-    elif arguments['get'] and arguments['FILE']:
-        cd.get(arguments['FILE'], arguments['DEST_FOLDER'])
+    elif args['add'] and args['FILE']:
+        cd.add(args['SERVICE'], args['FILE'])
+    elif args['del'] and args['FILE']:
+        cd.delete(args['FILE'])
+    elif args['get'] and args['FILE']:
+        cd.get(args['FILE'], args['DEST_FOLDER'])
+
+
+if __name__ == "__main__":
+    arguments = docopt(__doc__, version='Cloudmesh Drive')
+    process_arguments(arguments)

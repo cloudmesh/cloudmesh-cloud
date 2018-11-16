@@ -6,7 +6,8 @@ from cm4.configuration.config import Config
 
 
 class OpenstackCM (CloudManagerABC):
-   
+
+    ### util
     def __init__(self, cloud=None):
         config = Config()
         self.cloud = cloud
@@ -66,7 +67,10 @@ class OpenstackCM (CloudManagerABC):
     def set_cloud(self, cloud):
         self.cloud=cloud
         self.os_config = Config().get('cloud.{}'.format(cloud))
-                
+
+
+
+    ### APIs
     def ls(self):
         """
         list all nodes
@@ -76,7 +80,7 @@ class OpenstackCM (CloudManagerABC):
         return [dict(id=i.id, name=i.name, state=i.state) for i in nodes]
 
 
-    def info(self, node_id):
+    def nodes_info(self, node_id):
         """
         get clear information about all node
         :param node_id:
@@ -91,7 +95,7 @@ class OpenstackCM (CloudManagerABC):
                            created_date=i.created_at.strftime ("%Y-%m-%d %H:%M:%S"), extra=i.extra)
         return res
 
-    def node_info(self, node_id):
+    def info(self, node_id):
         """
         get clear information about one node
         :param node_id:

@@ -4,6 +4,7 @@ import datetime
 
 # testcode
 # need extra waiting time so server can finish update the node states
+# pending - running - stopped
 
 def main():
     d = OpenstackCM('chameleon')
@@ -13,27 +14,37 @@ def main():
     node = d.create('cm_test_small')
     node_id = node.id
     #node_id = "826d57a4-8810-412f-9be8-b738b9facb58"
+    #print(node)
+
+    #print(d.info(node_id))
+    #print(d.node_info(node_id))
 
     print("Node:" + node_id + " has been set up")
-    sleep(10)
+
+    while(d.info(node_id)['state']=='pending'):
+        sleep(3)
     print("At time " + str(datetime.datetime.now()) + " the state is " + d.info(node_id)['state'])
+
 
     ## suspend
     print("call d.suspend() function")
     d.suspend(node_id)
-    sleep(10)
+    while (d.info(node_id)['state'] == 'running'):
+        sleep(3)
     print("At time " + str(datetime.datetime.now()) + " the state is " + d.info(node_id)['state'])
 
     ## resume
     print("call d.resume() function")
     d.resume(node_id)
-    sleep(10)
+    while (d.info(node_id)['state'] == 'stopped'):
+        sleep(3)
     print("At time " + str(datetime.datetime.now()) + " the state is " + d.info(node_id)['state'])
 
     ## stop
     print("call d.stop() function")
     d.stop(node_id)
-    sleep(10)
+    while (d.info(node_id)['state'] == 'running'):
+        sleep(3)
     print("At time " + str(datetime.datetime.now()) + " the state is " + d.info(node_id)['state'])
 
     ## restart

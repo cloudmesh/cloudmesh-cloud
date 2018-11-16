@@ -75,18 +75,38 @@ class OpenstackCM (CloudManagerABC):
         nodes = self.driver.list_nodes()
         return [dict(id=i.id, name=i.name, state=i.state) for i in nodes]
 
+
     def info(self, node_id):
+        """
+        get clear information about all node
+        :param node_id:
+        :return: metadata of node
+        """
+        nodes = self.driver.list_nodes()
+        res = {}
+        for i in nodes:
+            res[i.id]=dict(id=i.id, name=i.name, state=i.state,
+                           public_ips=i.public_ips, private_ips=i.private_ips,
+                           size=i.size, image=i.image,
+                           created_date=i.created_at.strftime ("%Y-%m-%d %H:%M:%S"), extra=i.extra)
+        return res
+
+    def node_info(self, node_id):
         """
         get clear information about one node
         :param node_id:
         :return: metadata of node
         """
-        nodes = self.driver.list_nodes()
-        for i in nodes:
-            if i.id == node_id:
-                return dict(id=i.id, name=i.name, state=i.state, public_ips=i.public_ips, private_ips=i.private_ips,
-                            size=i.size, image=i.image, created_date=i.created_at.strftime ("%Y-%m-%d %H:%M:%S"), extra=i.extra)
-
+        node = self._get_node_by_id(node_id)
+        return dict(id=node.id,
+                    name=node.name,
+                    state=node.state,
+                    public_ips=node.public_ips,
+                    private_ips=node.private_ips,
+                    size=node.size,
+                    image=node.image,
+                    created_date=node.created_at.strftime("%Y-%m-%d %H:%M:%S"),
+                    extra=node.extra)
 
     def create(self, name, image=None, size=None, **kwargs):
         # get defualt if needed
@@ -134,6 +154,15 @@ class OpenstackCM (CloudManagerABC):
         """
         node = self._get_node_by_id(node_id)
         return self.driver.ex_resume_node(node)
+
+    def reboot(self, node_id):
+        """
+        resume the node
+        :param node_id:
+        :return: True/False
+        """
+        node = self._get_node_by_id(node_id)
+        return self.driver.reboot_node(node)
 
     def destroy(self, node_id):
         """

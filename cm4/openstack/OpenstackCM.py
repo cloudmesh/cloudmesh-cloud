@@ -10,12 +10,13 @@ class OpenstackCM (CloudManagerABC):
     def __init__(self, cloud=None):
         config = Config()
         self.cloud = cloud
+        self.driver = None
         if cloud:
             self.os_config = config.get('cloud.{}'.format(cloud))
-            self.driver = self._get_driver(cloud)
+            self.driver = self.get_driver(cloud)
         else:
             self.os_config = config
-            self.driver = None
+
     
     def _get_obj_list(self,obj_type):
         if obj_type == 'node':
@@ -42,7 +43,7 @@ class OpenstackCM (CloudManagerABC):
     def _get_node_by_id(self, node_id):
         return self._get_obj_by_id('node', node_id)
     
-    def _get_driver(self, cloud):
+    def get_driver_helper(self, cloud):
         credential = self.os_config.get("credentials")    
         Openstack = get_driver(Provider.OPENSTACK)
         driver = Openstack(
@@ -56,13 +57,11 @@ class OpenstackCM (CloudManagerABC):
         return driver
 
     def get_driver(self, cloud=None):
-        if not cloud and not self.driver:
-            raise ValueError('driver not exist: call get_driver() with "cloud" arguement')
-        elif not cloud and self.driver:
-            return self.driver        
-        else:
-            self.driver=self._get_driver(cloud)
-            return self.driver
+        if not cloud:
+            raise ValueError('cloud arguement has not been properly configured')
+        if not self.driver:
+            self.driver=self.get_driver_helper(cloud)
+        return self.driver
         
     def set_cloud(self, cloud):
         self.cloud=cloud
@@ -76,18 +75,38 @@ class OpenstackCM (CloudManagerABC):
         nodes = self.driver.list_nodes()
         return [dict(id=i.id, name=i.name, state=i.state) for i in nodes]
 
+
     def info(self, node_id):
+        """
+        get clear information about all node
+        :param node_id:
+        :return: metadata of node
+        """
+        nodes = self.driver.list_nodes()
+        res = {}
+        for i in nodes:
+            res[i.id]=dict(id=i.id, name=i.name, state=i.state,
+                           public_ips=i.public_ips, private_ips=i.private_ips,
+                           size=i.size, image=i.image,
+                           created_date=i.created_at.strftime ("%Y-%m-%d %H:%M:%S"), extra=i.extra)
+        return res
+
+    def node_info(self, node_id):
         """
         get clear information about one node
         :param node_id:
         :return: metadata of node
         """
-        nodes = self.driver.list_nodes()
-        for i in nodes:
-            if i.id == node_id:
-                return dict(id=i.id, name=i.name, state=i.state, public_ips=i.public_ips, private_ips=i.private_ips,
-                            size=i.size, image=i.image, created_date=i.created_at.strftime ("%Y-%m-%d %H:%M:%S"), extra=i.extra)
-
+        node = self._get_node_by_id(node_id)
+        return dict(id=node.id,
+                    name=node.name,
+                    state=node.state,
+                    public_ips=node.public_ips,
+                    private_ips=node.private_ips,
+                    size=node.size,
+                    image=node.image,
+                    created_date=node.created_at.strftime("%Y-%m-%d %H:%M:%S"),
+                    extra=node.extra)
 
     def create(self, name, image=None, size=None, **kwargs):
         # get defualt if needed
@@ -136,6 +155,15 @@ class OpenstackCM (CloudManagerABC):
         node = self._get_node_by_id(node_id)
         return self.driver.ex_resume_node(node)
 
+    def reboot(self, node_id):
+        """
+        resume the node
+        :param node_id:
+        :return: True/False
+        """
+        node = self._get_node_by_id(node_id)
+        return self.driver.reboot_node(node)
+
     def destroy(self, node_id):
         """
         delete the node
@@ -145,31 +173,3 @@ class OpenstackCM (CloudManagerABC):
         node = self._get_node_by_id(node_id)
         return self.driver.destroy_node(node)       
 
-#%% testcode
-#d= OpenstackCM('chameleon')
-#
-## create and auto start
-#node = d.create('cm_test')
-#node_id = node.id
-#d.info(node_id)['state']
-#
-## suspend
-#d.suspend(node_id)
-#d.info(node_id)['state']
-#
-## resume
-#d.resume(node_id)
-#d.info(node_id)['state']
-#
-## stop
-#d.stop(node_id)
-#d.info(node_id)['state']
-#
-## restart
-#d.start(node_id)
-#d.info(node_id)['state']
-#
-## destroy
-#d.destroy(node_id)
-#d.info(node_id)
-#d.ls()

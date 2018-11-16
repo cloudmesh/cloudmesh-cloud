@@ -10,12 +10,13 @@ class OpenstackCM (CloudManagerABC):
     def __init__(self, cloud=None):
         config = Config()
         self.cloud = cloud
+        self.driver = None
         if cloud:
             self.os_config = config.get('cloud.{}'.format(cloud))
-            self.driver = self._get_driver(cloud)
+            self.driver = self.get_driver(cloud)
         else:
             self.os_config = config
-            self.driver = None
+
     
     def _get_obj_list(self,obj_type):
         if obj_type == 'node':
@@ -42,7 +43,7 @@ class OpenstackCM (CloudManagerABC):
     def _get_node_by_id(self, node_id):
         return self._get_obj_by_id('node', node_id)
     
-    def _get_driver(self, cloud):
+    def get_driver_helper(self, cloud):
         credential = self.os_config.get("credentials")    
         Openstack = get_driver(Provider.OPENSTACK)
         driver = Openstack(
@@ -56,13 +57,11 @@ class OpenstackCM (CloudManagerABC):
         return driver
 
     def get_driver(self, cloud=None):
-        if not cloud and not self.driver:
-            raise ValueError('driver not exist: call get_driver() with "cloud" arguement')
-        elif not cloud and self.driver:
-            return self.driver        
-        else:
-            self.driver=self._get_driver(cloud)
-            return self.driver
+        if not cloud:
+            raise ValueError('cloud arguement has not been properly configured')
+        if not self.driver:
+            self.driver=self.get_driver_helper(cloud)
+        return self.driver
         
     def set_cloud(self, cloud):
         self.cloud=cloud
@@ -145,31 +144,3 @@ class OpenstackCM (CloudManagerABC):
         node = self._get_node_by_id(node_id)
         return self.driver.destroy_node(node)       
 
-#%% testcode
-#d= OpenstackCM('chameleon')
-#
-## create and auto start
-#node = d.create('cm_test')
-#node_id = node.id
-#d.info(node_id)['state']
-#
-## suspend
-#d.suspend(node_id)
-#d.info(node_id)['state']
-#
-## resume
-#d.resume(node_id)
-#d.info(node_id)['state']
-#
-## stop
-#d.stop(node_id)
-#d.info(node_id)['state']
-#
-## restart
-#d.start(node_id)
-#d.info(node_id)['state']
-#
-## destroy
-#d.destroy(node_id)
-#d.info(node_id)
-#d.ls()

@@ -19,7 +19,7 @@ config = Config()
 db = MongoDB(config.get('data.mongo.MONGO_DBNAME'),
              config.get('data.mongo.MONGO_USERNAME'),
              config.get('data.mongo.MONGO_PASSWORD'),
-             config.get('data.mongo.MONGO_PORT')
+             config.get('data.mongo.MONGO_PORT'))
 db.connect_db()
 
 

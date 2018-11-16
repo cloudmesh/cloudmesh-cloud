@@ -24,11 +24,11 @@ class Vmprovider (object):
         """
 
         os_config = self.config.get('cloud.%s' % cloud)
-        if os_config.get('cm.kind') == 'azure':
+        if os_config.get('cm').get('kind') == 'azure':
             driver = Cmazure(self.config, cloud).driver
-        elif os_config.get('cm.kind') == 'aws':
+        elif os_config.get('cm').get('kind') == 'aws':
             driver = Cmaws(self.config, cloud).driver
-        elif os_config.get('cm.kind') == 'openstack':
+        elif os_config.get('cm').get('kind') == 'openstack':
             driver = Cmopenstack(self.config, cloud).driver
 
         return driver
@@ -48,9 +48,8 @@ class Vm(object):
     def __init__(self, cloud):
         config = Config()
         self.provider = Vmprovider().get_provider(cloud)
-        self.mongo = MongoDB(config.get('data.mongo.MONGO_USERNAME'), config.get('data.db.mongo.MONGO_PASSWORD'),
-                             config.get('data.mongo.MONGO_HOST'),
-                             config.get('data.mongo.MONGO_PORT'))
+        self.mongo = MongoDB('52.12.193.127','luoyu', 'luoyu',
+                             27017)
 
 
     def start(self, name):
@@ -152,7 +151,10 @@ class Vm(object):
         for i in nodes:
             if i.name == name:
                 document = vars(i)
-                self.mongo.update_document('cloud', 'name', name, document)
+                if self.mongo.find_document('cloud', 'name', name):
+                    self.mongo.update_document('cloud', 'name', name, document)
+                else:
+                    self.mongo.insert_cloud_document(document)
                 return i
 
     def new_name(self, experiment, group, user):

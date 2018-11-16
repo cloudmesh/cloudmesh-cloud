@@ -5,11 +5,11 @@ def main():
 
     provider = Vm('aws')
     #print(provider.list())
-    #pprit(provider.start('a-b=luoyu-0'))
+    #pprint(provider.start('a-b=luoyu-0'))
     #provider.stop('a-b=luoyu-0')
     #pprint(provider.stop('a-b=luoyu-0'))
     #print(provider.status('a-b=luoyu-0'))
-    #pprint(vars(provider.info('a-b=luoyu-0')))
+    pprint(vars(provider.info('a-b=luoyu-0')))
 
     provider = Vm('azure')
     #print(provider.list())

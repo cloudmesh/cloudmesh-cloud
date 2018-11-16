@@ -168,3 +168,12 @@ class Vm(object):
         return name.get(name_format)
 
 
+def process_arguments(arguments):
+    """
+    TODO: Talk about tomorrow.
+
+    :param arguments:
+    :return:
+    """
+    print("vm")
+    print(arguments)

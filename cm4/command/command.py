@@ -1,4 +1,4 @@
-"""Vagrant Manager.
+"""Cloudmesh 4
 
 Usage:
   cm4 vagrant create --count <vm_number> [--debug]
@@ -71,15 +71,40 @@ import cm4.data.data
 import cm4
 
 
+def process_arguments(arguments):
+    version = cm4.__version__
+
+    # TODO: How to handle --config?
+
+    if arguments.get("--version"):
+        print(version)
+
+    elif arguments.get("vm"):
+        pass
+
+    elif arguments.get("vagrant"):
+        cm4.vagrant.vagrant.process_arguments(arguments)
+
+    elif arguments.get("vcluster"):
+        cm4.vcluster.VirtualCluster.process_arguments(arguments)
+
+    elif arguments.get("data"):
+        cm4.data.data.process_arguments(arguments)
+
+    elif arguments.get("set"):
+        pass  # TODO use existing config to just do it or should config have process_arguments?
+
+    elif arguments.get("spark"):
+        pass  # TODO not sure what to call.
+
+
 def main():
     """
-    Main function for the Vagrant Manager. Processes the input arguments.
+    Main function for Cloudmesh 4. Expose `cm4` as an executable command.
     """
     version = cm4.__version__
     arguments = docopt(__doc__, version=version)
-    cm4.vagrant.vagrant.process_arguments(arguments)
-    cm4.vcluster.VirtualCluster.process_arguments(arguments)
-    # cm4.data.vagrant.process_arguments(arguments)  # this call is raising this error: module 'cm4.data' has no attribute 'vagrant'
+    process_arguments(arguments)
 
 
 if __name__ == "__main__":

@@ -9,13 +9,17 @@ import pprint
 from flask import Flask, request, jsonify
 from cm4.cmmongo.mongoDB import MongoDB
 from cm4.vm.Vm import Vm
+from cm4.configuration.config import Config
 
 app = Flask(__name__)
 app.config['ENV']='development'
 app.config['JSONIFY_PRETTYPRINT_REGULAR']=True
 
-
-db = MongoDB('host','user','password','port')
+config = Config()
+db = MongoDB(config.get('data.mongo.MONGO_DBNAME'),
+             config.get('data.mongo.MONGO_USERNAME'),
+             config.get('data.mongo.MONGO_PASSWORD'),
+             config.get('data.mongo.MONGO_PORT')
 db.connect_db()
 
 

@@ -1,0 +1,49 @@
+ * Serving Flask app "cm.py"
+ * Environment: production
+   WARNING: Do not use the development server in a production environment.
+   Use a production WSGI server instead.
+ * Debug mode: off
+Traceback (most recent call last):
+  File "/Users/yuluo/Documents/demo/cm/venv/bin/flask", line 11, in <module>
+    sys.exit(main())
+  File "/Users/yuluo/Documents/demo/cm/venv/lib/python3.6/site-packages/flask/cli.py", line 894, in main
+    cli.main(args=args, prog_name=name)
+  File "/Users/yuluo/Documents/demo/cm/venv/lib/python3.6/site-packages/flask/cli.py", line 557, in main
+    return super(FlaskGroup, self).main(*args, **kwargs)
+  File "/Users/yuluo/Documents/demo/cm/venv/lib/python3.6/site-packages/click/core.py", line 717, in main
+    rv = self.invoke(ctx)
+  File "/Users/yuluo/Documents/demo/cm/venv/lib/python3.6/site-packages/click/core.py", line 1137, in invoke
+    return _process_result(sub_ctx.command.invoke(sub_ctx))
+  File "/Users/yuluo/Documents/demo/cm/venv/lib/python3.6/site-packages/click/core.py", line 956, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+  File "/Users/yuluo/Documents/demo/cm/venv/lib/python3.6/site-packages/click/core.py", line 555, in invoke
+    return callback(*args, **kwargs)
+  File "/Users/yuluo/Documents/demo/cm/venv/lib/python3.6/site-packages/click/decorators.py", line 64, in new_func
+    return ctx.invoke(f, obj, *args, **kwargs)
+  File "/Users/yuluo/Documents/demo/cm/venv/lib/python3.6/site-packages/click/core.py", line 555, in invoke
+    return callback(*args, **kwargs)
+  File "/Users/yuluo/Documents/demo/cm/venv/lib/python3.6/site-packages/flask/cli.py", line 767, in run_command
+    app = DispatchingApp(info.load_app, use_eager_loading=eager_loading)
+  File "/Users/yuluo/Documents/demo/cm/venv/lib/python3.6/site-packages/flask/cli.py", line 293, in __init__
+    self._load_unlocked()
+  File "/Users/yuluo/Documents/demo/cm/venv/lib/python3.6/site-packages/flask/cli.py", line 317, in _load_unlocked
+    self._app = rv = self.loader()
+  File "/Users/yuluo/Documents/demo/cm/venv/lib/python3.6/site-packages/flask/cli.py", line 372, in load_app
+    app = locate_app(self, import_name, name)
+  File "/Users/yuluo/Documents/demo/cm/venv/lib/python3.6/site-packages/flask/cli.py", line 235, in locate_app
+    __import__(module_name)
+  File "/Users/yuluo/Documents/demo/cm/cm4/flask_rest_api/cm.py", line 18, in <module>
+    db = MongoDB('host','user','password','port')
+  File "/Users/yuluo/Documents/demo/cm/cm4/cmmongo/mongoDB.py", line 19, in __init__
+    self.connect_db()
+  File "/Users/yuluo/Documents/demo/cm/cm4/cmmongo/mongoDB.py", line 47, in connect_db
+    self.client = MongoClient('mongodb://%s:%s@%s:%s' % (self.username, self.password, self.host, self.port))
+  File "/Users/yuluo/Documents/demo/cm/venv/lib/python3.6/site-packages/pymongo/mongo_client.py", line 494, in __init__
+    res = uri_parser.parse_uri(entity, port, warn=True)
+  File "/Users/yuluo/Documents/demo/cm/venv/lib/python3.6/site-packages/pymongo/uri_parser.py", line 424, in parse_uri
+    nodes = split_hosts(hosts, default_port=default_port)
+  File "/Users/yuluo/Documents/demo/cm/venv/lib/python3.6/site-packages/pymongo/uri_parser.py", line 260, in split_hosts
+    nodes.append(parse_host(entity, port))
+  File "/Users/yuluo/Documents/demo/cm/venv/lib/python3.6/site-packages/pymongo/uri_parser.py", line 155, in parse_host
+    % (port,))
+ValueError: Port must be an integer between 0 and 65535: port

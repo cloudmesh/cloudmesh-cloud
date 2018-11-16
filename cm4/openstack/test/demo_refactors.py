@@ -28,6 +28,7 @@ def main():
     # resize test - checked
     # *** chameleon requires extra confirmation for resizing request
     input("Press Enter to continue...")
+    print("resizing.........")
     sizes = r.list_sizes()
     print(sizes)
     r.resize(node_id, sizes[2]) # resize to medium

@@ -47,7 +47,7 @@ class Vm(object):
 
     def __init__(self, cloud):
         config = Config()
-        self.provider = Vmprovider().get_provider(cloud)        # driver
+        self.provider = Vmprovider().get_provider(cloud)
         self.mongo = MongoDB(config.get('data.mongo.MONGO_USERNAME'), config.get('data.db.mongo.MONGO_PASSWORD'),
                              config.get('data.mongo.MONGO_HOST'),
                              config.get('data.mongo.MONGO_PORT'))
@@ -164,8 +164,6 @@ class Vm(object):
         counter.incr()
         counter.set()
         return name.get(name_format)
-
-
 
 
 def process_arguments(arguments):

@@ -29,6 +29,5 @@ def main():
             pp.pprint(s.__dict__, f)
 
 
-
 if __name__ == "__main__":
     main()

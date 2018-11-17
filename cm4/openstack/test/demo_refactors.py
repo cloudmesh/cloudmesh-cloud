@@ -10,15 +10,25 @@ from cm4.openstack.OpenstackCM import OpenstackCM
 from cm4.openstack.OpenstackRefactor import OpenstackRefactor
 from time import sleep
 import datetime
+import pprint as pp
+
 
 # testcode
 # need extra waiting time so server can finish update the node states
 # pending - running - stopped
-
+# a
 
 def main():
     d = OpenstackCM('chameleon')
     r = OpenstackRefactor(d)
+
+    '''
+    sizes = r.list_sizes()
+    images = r.list_images()
+    for im in images:
+        pp.pprint(im.__dict__)
+    return
+    '''
 
     ## create and auto start
     print("call d.create() function")

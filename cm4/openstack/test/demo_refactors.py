@@ -16,7 +16,7 @@ import pprint as pp
 # testcode
 # need extra waiting time so server can finish update the node states
 # pending - running - stopped
-# a
+
 
 def main():
     d = OpenstackCM('chameleon')

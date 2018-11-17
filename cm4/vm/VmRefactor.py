@@ -9,16 +9,16 @@ from libcloud.compute.types import Provider
 from libcloud.compute.providers import get_driver
 import os
 from cm4.configuration.config import Config
-
+import cm4.vm.VmUtil as util
 
 
 ###
 ### provide generic methods to manipulate nodes from various providers by name
 
 class VmRefactor(object):
-    def __init__(self, cloud):
+    def __init__(self, vm):
         self.config = Config()
-        self.cloud = cloud
+        self.vm = vm
 
 
     def confirm_resize(self, name):
@@ -29,7 +29,7 @@ class VmRefactor(object):
         '''
         node = self.get_node_by_name(name)
         node_id = node.id
-        return self.cloud.driver.ex_confirm_resize(node)
+        return self.vm.provider.ex_confirm_resize(node)
 
 
     def resize(self, name, size):
@@ -40,7 +40,7 @@ class VmRefactor(object):
         '''
         node = self.get_node_by_name(name)
         node_id = node.id
-        return self.cloud.driver.ex_resize(node, size)
+        return self.vm.provider.ex_resize(node, size)
 
 
     def revert_resize(self, name):
@@ -51,7 +51,7 @@ class VmRefactor(object):
         '''
         node = self.get_node_by_name(name)
         node_id = node.id
-        return self.cloud.driver.ex_revert_resize(node)
+        return self.vm.provider.ex_revert_resize(node)
 
 
     # rebuild node with new image
@@ -63,7 +63,7 @@ class VmRefactor(object):
         '''
         node = self.get_node_by_name(name)
         node_id = node.id
-        return self.cloud.driver.ex_rebuild(node, image=image)
+        return self.vm.provider.ex_rebuild(node, image=image)
 
 
     def rename(self, name, newname):
@@ -74,19 +74,7 @@ class VmRefactor(object):
         '''
         node = self.get_node_by_name(name)
         node_id = node.id
-        return self.cloud.driver.ex_set_server_name(node, newname)
-
-
-
-    ##
-    ##   Utilities
-    def get_node_by_id(self, node_id):
-        '''
-        get node object by id string
-        :param:node id
-        :return: node object
-        '''
-        return self._get_obj_by_id('node', node_id)
+        return self.vm.provider.ex_set_server_name(node, newname)
 
 
     def list(self):

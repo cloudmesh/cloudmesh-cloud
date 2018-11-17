@@ -7,6 +7,7 @@ Created on Tue Nov 17 00:12:19 2018
 
 
 from cm4.vm.Vm import Vm
+from cm4.vm.VmRefactor import VmRefactor
 from pprint import pprint
 
 def main():
@@ -14,6 +15,7 @@ def main():
     # test for aws
     input("Press Enter to continue testing for AWS cloud....")
     provider = Vm('aws')
+    refactor = VmRefactor(provider)
 
 
 

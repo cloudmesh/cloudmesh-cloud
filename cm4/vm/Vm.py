@@ -8,6 +8,7 @@ from cm4.vm.thread import thread
 from cm4.configuration.counter import Counter
 
 
+
 class Vmprovider (object):
 
     def __init__(self):
@@ -166,7 +167,7 @@ class Vm(object):
         return name.get(name_format)
 
 
-    
+
 
 def process_arguments(arguments):
     """

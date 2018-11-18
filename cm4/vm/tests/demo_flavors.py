@@ -12,6 +12,18 @@ from pprint import pprint
 
 def main():
 
+    # test for openstack
+    #input("Press Enter to continue testing for Chameleon cloud....")
+
+    openstack = Vm('chameleon')
+    print(openstack.list())
+    refactor = VmRefactor(openstack)
+
+
+    return  # test openstack first
+
+
+    # TODO: need more tests for other provider
     # test for aws
     input("Press Enter to continue testing for AWS cloud....")
     provider = Vm('aws')
@@ -26,9 +38,7 @@ def main():
 
 
 
-    # test for openstack
-    input("Press Enter to continue testing for Chameleon cloud....")
-    provider = Vm('chameleon')
+
 
 
     provider.mongo.close_client()

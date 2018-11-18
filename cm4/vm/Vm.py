@@ -48,9 +48,10 @@ class Vm(object):
     def __init__(self, cloud):
         config = Config()
         self.provider = Vmprovider().get_provider(cloud)    # driver
-        self.mongo = MongoDB(config.get('data.mongo.MONGO_USERNAME'), config.get('data.db.mongo.MONGO_PASSWORD'),
-                             config.get('data.mongo.MONGO_HOST'),
-                             config.get('data.mongo.MONGO_PORT'))
+        self.mongo = MongoDB(host=config.get('data.mongo.MONGO_HOST'),
+                             username=config.get('data.mongo.MONGO_USERNAME'),
+                             password=config.get('data.mongo.MONGO_PASSWORD'),
+                             port=config.get('data.mongo.MONGO_PORT'))
 
 
     def start(self, name):
@@ -64,7 +65,7 @@ class Vm(object):
         if info.state != 'running':
             self.provider.ex_start_node(info)
             thread(self, 'test', name, 'running').start()
-            document = self.mongo.find_document ('cloud', 'name', name)
+            document = self.mongo.find_document('cloud', 'name', name)
             return document
         else:
             document = self.mongo.find_document('cloud', 'name', name)

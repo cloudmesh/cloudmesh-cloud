@@ -5,7 +5,6 @@ Created on Tue Nov 16 11:48:09 2018
 @author: Rui
 """
 
-
 from cm4.vm.Cmaws import Cmaws
 from cm4.vm.Cmazure import Cmazure
 from cm4.vm.Cmopenstack import Cmopenstack
@@ -54,5 +53,3 @@ class VmUtil(object):
     def get_node_by_id(self, node_id):
         return VmUtil._get_obj_by_id('node', node_id)
 
-
-# TODO: Migrate util functions here to reduce redundency

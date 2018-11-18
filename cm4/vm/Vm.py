@@ -25,13 +25,12 @@ class Vmprovider (object):
         """
 
         os_config = self.config.get('cloud.%s' % cloud)
-        if os_config.get('cm.kind') == 'azure':
+        if os_config.get('cm').get('kind') == 'azure':
             driver = Cmazure(self.config, cloud).driver
-        elif os_config.get('cm.kind') == 'aws':
+        elif os_config.get('cm').get('kind') == 'aws':
             driver = Cmaws(self.config, cloud).driver
-        elif os_config.get('cm.kind') == 'openstack':
+        elif os_config.get('cm').get('kind') == 'openstack':
             driver = Cmopenstack(self.config, cloud).driver
-
         return driver
 
     '''
@@ -49,9 +48,10 @@ class Vm(object):
     def __init__(self, cloud):
         config = Config()
         self.provider = Vmprovider().get_provider(cloud)    # driver
-        self.mongo = MongoDB(config.get('data.mongo.MONGO_USERNAME'), config.get('data.db.mongo.MONGO_PASSWORD'),
-                             config.get('data.mongo.MONGO_HOST'),
-                             config.get('data.mongo.MONGO_PORT'))
+        self.mongo = MongoDB(host=config.get('data.mongo.MONGO_HOST'),
+                             username=config.get('data.mongo.MONGO_USERNAME'),
+                             password=config.get('data.mongo.MONGO_PASSWORD'),
+                             port=config.get('data.mongo.MONGO_PORT'))
 
 
     def start(self, name):
@@ -65,7 +65,7 @@ class Vm(object):
         if info.state != 'running':
             self.provider.ex_start_node(info)
             thread(self, 'test', name, 'running').start()
-            document = self.mongo.find_document ('cloud', 'name', name)
+            document = self.mongo.find_document('cloud', 'name', name)
             return document
         else:
             document = self.mongo.find_document('cloud', 'name', name)

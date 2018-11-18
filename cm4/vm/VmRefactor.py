@@ -82,7 +82,7 @@ class VmRefactor(object):
         list existed nodes
         :return: all nodes' information
         """
-        result = self.cloud.driver.list_nodes()
+        result = self.vm.provider.list_nodes()
         return result
 
 
@@ -96,6 +96,25 @@ class VmRefactor(object):
         for i in nodes:
             if i.name == name:
                 document = vars(i)
-                self.mongo.update_document('cloud', 'name', name, document)
+                self.vm.mongo.update_document('cloud', 'name', name, document)
                 return i
         raise ValueError('Node with name: \"'+name+'\" was not found!')
+
+
+
+    def list_sizes(self):
+        '''
+        List sizes on a provider
+        :param:
+        :return: list of NodeSize
+        '''
+        return self.vm.provider.list_sizes()
+
+
+    def list_images(self, location=None, ex_only_active=True):
+        '''
+        Lists all active images using the V2 Glance API
+        :param:
+        :return: list of Images
+        '''
+        return self.vm.provider.list_images(location, ex_only_active)

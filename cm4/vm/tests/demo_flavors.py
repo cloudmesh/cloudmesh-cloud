@@ -16,20 +16,26 @@ def main():
     #input("Press Enter to continue testing for Chameleon cloud....")
 
     openstack = Vm('chameleon')
-    print(openstack.list())
+    print(openstack.list()[0].name)
+    name = openstack.list()[0].name
     refactor = VmRefactor(openstack)
+
+    sizes = refactor.list_sizes()
+
+    refactor.resize(name=name, size=sizes[1])
+
 
 
     return  # test openstack first
 
 
     # TODO: need more tests for other provider
+
+
     # test for aws
     input("Press Enter to continue testing for AWS cloud....")
     provider = Vm('aws')
     refactor = VmRefactor(provider)
-
-
 
 
     # test for azure

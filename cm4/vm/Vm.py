@@ -25,13 +25,12 @@ class Vmprovider (object):
         """
 
         os_config = self.config.get('cloud.%s' % cloud)
-        if os_config.get('cm.kind') == 'azure':
+        if os_config.get('cm').get('kind') == 'azure':
             driver = Cmazure(self.config, cloud).driver
-        elif os_config.get('cm.kind') == 'aws':
+        elif os_config.get('cm').get('kind') == 'aws':
             driver = Cmaws(self.config, cloud).driver
-        elif os_config.get('cm.kind') == 'openstack':
+        elif os_config.get('cm').get('kind') == 'openstack':
             driver = Cmopenstack(self.config, cloud).driver
-
         return driver
 
     '''

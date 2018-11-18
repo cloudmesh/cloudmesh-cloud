@@ -1,7 +1,7 @@
 from libcloud.compute.types import Provider
 from libcloud.compute.providers import get_driver
 from cm4.vm.Cloud import Cloud
-
+import os
 
 class Cmopenstack(Cloud):
 
@@ -12,7 +12,7 @@ class Cmopenstack(Cloud):
         credentials = os_config.get('credentials')
 
         self.driver = cls(credentials['OS_USERNAME'],
-                     credentials['OS_PASSWORD'],
+                     credentials['OS_PASSWORD'] or os.environ['OS_PASSWORD'],
                      ex_tenant_name=credentials['OS_TENANT_NAME'],
                      ex_force_auth_url=credentials['OS_AUTH_URL'],
                      ex_force_auth_version=credentials['OS_VERSION'],

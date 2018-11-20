@@ -8,19 +8,16 @@ from cm4.vm.thread import thread
 from cm4.configuration.counter import Counter
 
 
-
 class Vmprovider (object):
 
     def __init__(self):
         self.config = Config()
 
-
-    # only developed for AZURE, AWS, Chameleon
     def get_provider(self, cloud):
         """
         Create the driver based on the 'kind' information.
         This method could deal with AWS, AZURE, and OPENSTACK for CLOUD block of YAML file.
-        But we haven't test OPENSTACK
+        Only developed for AZURE, AWS, Chameleon, but we haven't test OPENSTACK
         :return: the driver based on the 'kind' information
         """
 
@@ -33,15 +30,6 @@ class Vmprovider (object):
             driver = Cmopenstack(self.config, cloud).driver
         return driver
 
-    '''
-    def get_new_node_setting(self):
-        """
-        get the new node setting
-        :return: the new node setting information
-        """
-        return self.setting
-    '''
-
 
 class Vm(object):
 
@@ -53,12 +41,11 @@ class Vm(object):
                              password=config.get('data.mongo.MONGO_PASSWORD'),
                              port=config.get('data.mongo.MONGO_PORT'))
 
-
     def start(self, name):
         """
         start the node based on the id
-        :param node_id:
-        :return: True/False
+        :param name:
+        :return: VM document
         """
 
         info = self.info(name)
@@ -71,12 +58,11 @@ class Vm(object):
             document = self.mongo.find_document('cloud', 'name', name)
             return document
 
-
     def stop(self, name):
         """
         stop the node based on the ide
-        :param node_id:
-        :return: True/False
+        :param name:
+        :return: VM document
         """
         info = self.info(name)
         if info.state != 'stopped':
@@ -91,27 +77,27 @@ class Vm(object):
     def resume(self, name):
         """
         start the node based on id
-        :param node_id:
+        :param name:
         """
         return self.start(name)
 
     def suspend(self, name):
         """
         stop the node based on id
-        :param node_id:
+        :param name:
         """
         return self.stop(name)
 
     def destroy(self, name):
         """
         delete the node based on id
-        :param node_id:
+        :param name:
         :return: True/False
         """
         result = self.provider.destroy_node(self.info(name))
         self.mongo.delete_document('cloud', 'name', name)
-
         return result
+
     '''
     def create(self):
         """
@@ -136,7 +122,7 @@ class Vm(object):
     def status(self, name):
         """
         show node information based on id
-        :param node_id:
+        :param name:
         :return: all information about one node
         """
         self.info(name).state
@@ -146,7 +132,7 @@ class Vm(object):
     def info(self, name):
         """
         show node information based on id
-        :param node_id:
+        :param name:
         :return: all information about one node
         """
         nodes = self.list()
@@ -167,14 +153,11 @@ class Vm(object):
         return name.get(name_format)
 
 
-
-
 def process_arguments(arguments):
     """
-    TODO: Talk about tomorrow.
-
+    Process command line arguments to execute VM actions.
+    Called from cm4.command.command
     :param arguments:
-    :return:
     """
     print("vm")
     print(arguments)

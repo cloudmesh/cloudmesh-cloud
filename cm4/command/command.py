@@ -16,17 +16,18 @@ Usage:
   cm4 data get FILE DEST_FOLDER
   cm4 data del FILE
   cm4 data (ls | dir)
-  cm4 set cloud=CLOUD
-  cm4 set group=GROUP
-  cm4 set role=ROLE
-  cm4 set host=HOSTNAME
-  cm4 set cluster=CLUSTERNAME
-  cm4 set experiment=EXPERIMENT
-  cm4 vm create --count <vm_number> [--debug] [--dryrun]
-  cm4 vm start [--vms=<vmList>] [--debug] [--dryrun]
-  cm4 vm stop [--vms=<vmList>] [--debug] [--dryrun]
-  cm4 vm destroy [--vms=<vmList>] [--debug] [--dryrun]
-  cm4 vm status [--vms=<vmList>] [--dryrun]
+  cm4 set cloud CLOUD
+  cm4 set group GROUP
+  cm4 set role ROLE
+  cm4 set host HOSTNAME
+  cm4 set cluster CLUSTERNAME
+  cm4 set experiment EXPERIMENT
+  cm4 set --key=KEY --value=VALUE
+  cm4 vm create --count VMNUMBER [--debug] [--dryrun]
+  cm4 vm start [--vms=VMLIST] [--debug] [--dryrun]
+  cm4 vm stop [--vms=VMLIST] [--debug] [--dryrun]
+  cm4 vm destroy [--vms=VMLIST] [--debug] [--dryrun]
+  cm4 vm status [--vms=VMLIST] [--dryrun]
   cm4 vm list
   cm4 vm ssh NAME
   cm4 vm run COMMAND  [--vms=<vmList>]
@@ -59,28 +60,26 @@ Options:
   --vm_list=<list_of_vms>  List of VMs separated by commas ex: node-1,node-2
 
 Description:
-   put a description here
+   Cloudmesh v4
 
-Example:
-   put an example here
 """
 from docopt import docopt
+from cm4.configuration.config import Config
 import cm4.vagrant.vagrant
 import cm4.vcluster.VirtualCluster
 import cm4.data.data
+import cm4.vm.Vm
 import cm4
 
 
 def process_arguments(arguments):
     version = cm4.__version__
 
-    # TODO: How to handle --config?
-
     if arguments.get("--version"):
         print(version)
 
     elif arguments.get("vm"):
-        pass
+        cm4.vm.Vm.process_arguments(arguments)
 
     elif arguments.get("vagrant"):
         cm4.vagrant.vagrant.process_arguments(arguments)
@@ -92,10 +91,30 @@ def process_arguments(arguments):
         cm4.data.data.process_arguments(arguments)
 
     elif arguments.get("set"):
-        pass  # TODO use existing config to just do it or should config have process_arguments?
+        config = Config()
 
-    elif arguments.get("spark"):
-        pass  # TODO not sure what to call.
+        if arguments.get("cloud"):
+            config.set("default.cloud", arguments.get("CLOUD"))
+
+        elif arguments.get("group"):
+            config.set("default.group", arguments.get("GROUP"))
+
+        elif arguments.get("role"):
+            config.set("default.role", arguments.get("ROLE"))
+
+        elif arguments.get("cluster"):
+            config.set("default.cluster", arguments.get("CLUSTER"))
+
+        elif arguments.get("experiment"):
+            config.set("default.experiment", arguments.get("EXPERIMENT"))
+
+        elif arguments.get("host"):
+            config.set("default.host", arguments.get("HOST"))
+
+        elif arguments.get("--key") and arguments.get("--value"):
+            config.set(arguments.get("--key"), arguments.get("--value"))
+
+        print("Config has been updated.")
 
 
 def main():

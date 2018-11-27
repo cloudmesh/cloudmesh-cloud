@@ -1,3 +1,5 @@
+import pprint
+from cm4.azure.AzureVm import AzureVm
 from cm4.vm.Cmaws import Cmaws
 from cm4.vm.Cmazure import Cmazure
 from cm4.vm.Cmopenstack import Cmopenstack
@@ -35,7 +37,7 @@ class Vm(object):
 
     def __init__(self, cloud):
         config = Config()
-        self.provider = Vmprovider().get_provider(cloud)    # driver
+        self.provider = Vmprovider().get_provider(cloud)
         self.mongo = MongoDB(host=config.get('data.mongo.MONGO_HOST'),
                              username=config.get('data.mongo.MONGO_USERNAME'),
                              password=config.get('data.mongo.MONGO_PASSWORD'),
@@ -98,18 +100,17 @@ class Vm(object):
         self.mongo.delete_document('cloud', 'name', name)
         return result
 
-    '''
-    def create(self):
+    def create(self, name):
         """
         create a new node
         :param name: the name for the new node
         :return:
         """
-        name = self.new_name('test', 'test', 'luoyu')
-        node = self.provider.create_node(name=name, **self.provider.get_new_node_setting())
-        self.mongo.insert_cloud_document(vars(node))
-        return node
-    '''
+        print("vm default create")
+        print(name)
+        # node = self.provider.create_node(name=name, **self.provider.get_new_node_setting())
+        # self.mongo.insert_cloud_document(vars(node))
+        # return node
 
     def list(self):
         """
@@ -143,6 +144,15 @@ class Vm(object):
                 return i
 
     def new_name(self, experiment, group, user):
+        """
+        TODO: Doc
+
+        TODO: use config defaults by default.
+
+        :param experiment:
+        :param group:
+        :return:
+        """
         counter = Counter()
         count = counter.get()
         name = Name()
@@ -159,5 +169,38 @@ def process_arguments(arguments):
     Called from cm4.command.command
     :param arguments:
     """
-    print("vm")
-    print(arguments)
+    if arguments.get("--debug"):
+        pp = pprint.PrettyPrinter(indent=4)
+        print("vm processing arguments")
+        pp.pprint(arguments)
+
+    config = Config()
+    default_cloud = config.get("default.cloud")
+    vm = Vm(default_cloud) if default_cloud is not "azure" else AzureVm(default_cloud)
+
+    if arguments.get("list"):
+        vm.list()
+    elif arguments.get("create"):
+        # TODO: Default create method in Vm
+
+        # TODO: Reconcile `create` behavior here and in docopts where
+        #       create is called with a `VMCOUNT`.
+        pass
+    elif arguments.get("start"):
+        vm.start(arguments.get("--vms"))
+    elif arguments.get("stop"):
+        vm.stop(arguments.get("--vms"))
+    elif arguments.get("destroy"):
+        vm.destroy(arguments.get("--vms"))
+    elif arguments.get("status"):
+        vm.status(arguments.get("--vms"))
+    elif arguments.get("ssh"):
+        # TODO
+        pass
+    elif arguments.get("run"):
+        # TODO
+        pass
+    elif arguments.get("script"):
+        # TODO
+        pass
+

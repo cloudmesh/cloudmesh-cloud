@@ -151,3 +151,4 @@ cm4 data del hello.txt
 - [ ] Command line option for config file path
 - [x] Should settings be moved to `cloudmesh.yaml`?
 - [ ] Better way to determine which storage providers to load
+- [x] Test direct commit permissions

@@ -4,11 +4,10 @@ from libcloud.compute.providers import get_driver
 from libcloud.compute.drivers.azure_arm import AzureNetwork, AzureSubnet, AzureIPAddress
 from libcloud.compute.base import NodeAuthSSHKey
 from cm4.configuration.config import Config
-from cm4.vm.Vm import Vm
 from pathlib import Path
 
 
-class AzureVm(Vm):
+class AzureVm:
 
     def __init__(self):
         """
@@ -30,6 +29,31 @@ class AzureVm(Vm):
             secret=cred["AZURE_SECRET_KEY"],
             region=self.defaults["region"]
         )
+
+    def start(self, name):
+        """
+        Start a stopped node.
+
+        :param name: The name of the stopped node.
+        """
+        self.provider.ex_start_node(self._get_node(name))
+
+    def stop(self, name):
+        """
+        Stop a running node.
+
+        :param name: The name of the running node.
+        """
+        self.provider.ex_stop_node(self._get_node(name))
+
+    def resume(self, name):
+        """
+        Start a suspended node.
+
+        :param name: The name of the suspended node.
+        """
+        self.start(name)
+
 
     def suspend(self, name):
         """
@@ -85,6 +109,44 @@ class AzureVm(Vm):
         )
 
         return new_vm
+
+    def list_volumes(self):
+        """
+        Return a list of all volumes in the resource group
+        """
+        return self.provider.list_volumes()
+
+    def list(self):
+        """
+        List all nodes.
+        """
+        return self.provider.list_nodes()
+
+    def status(self, name):
+        """
+        show node information based on id
+        :param name:
+        :return: all information about one node
+        """
+        return self.provider.ex_get_node(name)
+
+    def info(self, node_id):
+        """
+        Get all information about one node.
+        """
+        return self.provider.ex_get_node(node_id)
+
+    def destroy_volume(self, volume):
+        """
+        Destroy a volume
+        :param volume:
+        :return:
+        """
+        self.provider.destroy_volume(volume)
+
+    def run(self, node_id, command):
+        node = self._get_node(node_id)
+        return self.provider.ex_run_command(node, command)
 
     def _get_node(self, name):
         """

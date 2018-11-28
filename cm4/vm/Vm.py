@@ -1,5 +1,5 @@
 import pprint
-from cm4.azure.AzureVm import AzureVm
+#from cm4.azure.AzureVm import AzureVm
 from cm4.vm.Cmaws import Cmaws
 from cm4.vm.Cmazure import Cmazure
 from cm4.vm.Cmopenstack import Cmopenstack
@@ -176,7 +176,8 @@ def process_arguments(arguments):
 
     config = Config()
     default_cloud = config.get("default.cloud")
-    vm = Vm(default_cloud) if default_cloud is not "azure" else AzureVm(default_cloud)
+    #vm = Vm(default_cloud) if default_cloud is not "azure" else AzureVm(default_cloud)
+    vm = Vm(default_cloud)
 
     if arguments.get("list"):
         vm.list()

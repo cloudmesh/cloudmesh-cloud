@@ -2,6 +2,7 @@
 """
 Modified on Tue Nov 15 2018
 
+@author: Kimball Wu
 @author: Rui
 """
 
@@ -75,8 +76,22 @@ class OpenstackCM (CloudManagerABC):
         self.cloud=cloud
         self.os_config = Config().get('cloud.{}'.format(cloud))
 
-
-
+    ### API hack for new VM class
+    def ex_start_node(self, info):
+        return self.driver.ex_start_node(info)
+       
+    def ex_stop_node(self, info, deallocate):
+        return self.driver.ex_stop_node(info)
+       
+    def destroy_node(self, node_info):
+        return self.driver.destroy_node(node_info) 
+              
+    def create_node(self, name):
+        return self.create(name)
+       
+    def list_nodes(self):
+        return self.driver.list_nodes()
+   
     ### APIs
     def ls(self):
         """

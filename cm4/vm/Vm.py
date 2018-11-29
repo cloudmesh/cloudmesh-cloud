@@ -169,6 +169,8 @@ def process_arguments(arguments):
     Called from cm4.command.command
     :param arguments:
     """
+    result = None
+
     if arguments.get("--debug"):
         pp = pprint.PrettyPrinter(indent=4)
         print("vm processing arguments")
@@ -176,16 +178,26 @@ def process_arguments(arguments):
 
     config = Config()
     default_cloud = config.get("default.cloud")
+    default_group = config.get("default.group")
+    default_experiment = config.get("default.experiment")
+    default_cluster = config.get("default.cluster")
+
     vm = Vm(default_cloud)
 
     if arguments.get("list"):
-        vm.list()
-    elif arguments.get("create"):
-        # TODO: Default create method in Vm
+        result = vm.list()
 
+    elif arguments.get("create"):
         # TODO: Reconcile `create` behavior here and in docopts where
         #       create is called with a `VMCOUNT`.
-        pass
+
+        vm_name = arguments.get("VMNAME")
+
+        if vm_name is None:
+            vm_name = vm.new_name(default_experiment, default_group, "user")
+
+        vm.create(vm_name)
+        result = f"Created {vm_name}"
     elif arguments.get("start"):
         vm.start(arguments.get("--vms"))
     elif arguments.get("stop"):
@@ -203,3 +215,5 @@ def process_arguments(arguments):
     elif arguments.get("script"):
         # TODO
         pass
+
+    return result

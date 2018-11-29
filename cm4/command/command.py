@@ -23,6 +23,7 @@ Usage:
   cm4 set cluster CLUSTERNAME
   cm4 set experiment EXPERIMENT
   cm4 set --key=KEY --value=VALUE
+  cm4 vm create VMNAME
   cm4 vm create --count VMNUMBER [--debug] [--dryrun]
   cm4 vm start [--vms=VMLIST] [--debug] [--dryrun]
   cm4 vm stop [--vms=VMLIST] [--debug] [--dryrun]
@@ -79,7 +80,8 @@ def process_arguments(arguments):
         print(version)
 
     elif arguments.get("vm"):
-        cm4.vm.Vm.process_arguments(arguments)
+        result = cm4.vm.Vm.process_arguments(arguments)
+        print(result)
 
     elif arguments.get("vagrant"):
         cm4.vagrant.vagrant.process_arguments(arguments)

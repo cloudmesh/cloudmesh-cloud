@@ -1,29 +1,23 @@
 import time
-from cm4.azure.AzureVm import AzureVm
+from cm4.vm.Vm import Vm
 from cm4.configuration.config import Config
 
 
 class TestCloudAzure:
 
-    def setUp(self):
+    def setup(self):
         self.config = Config()
-        self.azure = AzureVm()
-
+        self.azure = Vm('azure')
         self.test_node_name = 'cm-test-vm-1'
         self.test_node_id = ''
 
-    # def tearDown(self):
-    #     testNode = self.azure._get_node(self.testNodeName)
-    #     if testNode:
-    #         self.azure.destroy(self.testNodeName)
-
     def _wait_and_get_state(self, name, how_long=15):
         time.sleep(how_long)
-        node = self.azure._get_node(name)
+        node = self.azure.provider._get_node(name)
         return node.state if node else None
 
     def test_azure_010_create(self):
-        vm = self.azure.create(self.test_node_name)
+        vm = self.azure.create('cm-test-vm-1')
         assert vm is not None
 
     def test_azure_020_ls(self):
@@ -33,12 +27,8 @@ class TestCloudAzure:
     def test_azure_030_suspend(self):
         self.azure.suspend(self.test_node_name)
         state = self._wait_and_get_state(self.test_node_name)
-        assert state == 'paused'
-
-    def test_azure_040_resume(self):
-        self.azure.resume(self.test_node_name)
-        state = self._wait_and_get_state(self.test_node_name)
-        assert state == 'running'
+        assert state == 'stopped'
+        # assert state == 'paused'
 
     def test_azure_050_stop(self):
         self.azure.stop(self.test_node_name)

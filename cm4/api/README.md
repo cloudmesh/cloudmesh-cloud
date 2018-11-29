@@ -27,17 +27,21 @@ the specs into the `api/specs` folder. These specs will be referenced by
 Currently the requirements for running the api are not included in the project's base requirements.
 Ensure that both `flask` and `connexion` are pip installed.
 
+```bash
+pip install -r cm4/api/requirements.txt
+```
 
 **Run the API**
 
 ```bash
-$ python cm4/api/api.py
+python cm4/api/api.py
 ```
 
 or
 
 ```bash
-$ python cm4/api/test/test_api.py
+python cm4/api/test/api.py
 ```
 
+The UI is served at [http://localhost:8080/cloudmesh/v3/ui/](http://localhost:8080/cloudmesh/v3/ui/)
 

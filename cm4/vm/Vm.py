@@ -149,6 +149,7 @@ class Vm(object):
                     self.mongo.insert_cloud_document(document)
                 return i
 
+
     def new_name(self, experiment, group, user):
         """
         TODO: Doc

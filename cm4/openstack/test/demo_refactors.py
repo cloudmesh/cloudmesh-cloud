@@ -1,7 +1,17 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Tue Nov 15 2018
+
+@author: Rui
+"""
+
+
 from cm4.openstack.OpenstackCM import OpenstackCM
 from cm4.openstack.OpenstackRefactor import OpenstackRefactor
 from time import sleep
 import datetime
+import pprint as pp
+
 
 # testcode
 # need extra waiting time so server can finish update the node states
@@ -11,6 +21,14 @@ import datetime
 def main():
     d = OpenstackCM('chameleon')
     r = OpenstackRefactor(d)
+
+    '''
+    sizes = r.list_sizes()
+    images = r.list_images()
+    for im in images:
+        pp.pprint(im.__dict__)
+    return
+    '''
 
     ## create and auto start
     print("call d.create() function")
@@ -32,17 +50,19 @@ def main():
     sizes = r.list_sizes()
     print(sizes)
     r.resize(node_id, sizes[2]) # resize to medium
+    print("resizing finished")
 
     input("Press Enter to continue...")
     node = r.confirm_resize(node_id)
-
+    print("resizing confirmed")
 
     # change image test - checked
     input("Press Enter to continue...")
+    print("refactoring image.............")
     images = r.list_images()
     print(images)
     node = r.rebuild(node_id, image=images[2])
-
+    print("image changed")
 
     # rename test - checked
     input("Press Enter to continue...")

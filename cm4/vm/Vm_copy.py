@@ -1,3 +1,5 @@
+import pprint
+#from cm4.azure.AzureVm import AzureVm
 from cm4.vm.Cmaws import Cmaws
 from cm4.vm.Cmazure import Cmazure
 from cm4.vm.Cmopenstack import Cmopenstack
@@ -14,13 +16,11 @@ class Vmprovider (object):
     def __init__(self):
         self.config = Config()
 
-
-    # only developed for AZURE, AWS, Chameleon
     def get_provider(self, cloud):
         """
         Create the driver based on the 'kind' information.
         This method could deal with AWS, AZURE, and OPENSTACK for CLOUD block of YAML file.
-        But we haven't test OPENSTACK
+        Only developed for AZURE, AWS, Chameleon, but we haven't test OPENSTACK
         :return: the driver based on the 'kind' information
         """
 
@@ -31,17 +31,7 @@ class Vmprovider (object):
             driver = Cmaws(self.config, cloud).driver
         elif os_config.get('cm').get('kind') == 'openstack':
             driver = Cmopenstack(self.config, cloud).driver
-
         return driver
-
-    '''
-    def get_new_node_setting(self):
-        """
-        get the new node setting
-        :return: the new node setting information
-        """
-        return self.setting
-    '''
 
 
 class Vm(object):
@@ -49,16 +39,23 @@ class Vm(object):
     def __init__(self, cloud):
         config = Config()
         self.provider = Vmprovider().get_provider(cloud)
+<<<<<<< HEAD
         self.mongo = MongoDB(config.get('data.mongo.MONGO_HOST'),
                              config.get('data.mongo.MONGO_USERNAME'), config.get('data.mongo.MONGO_PASSWORD'),
                              config.get('data.mongo.MONGO_PORT'))
 
+=======
+        self.mongo = MongoDB(host=config.get('data.mongo.MONGO_HOST'),
+                             username=config.get('data.mongo.MONGO_USERNAME'),
+                             password=config.get('data.mongo.MONGO_PASSWORD'),
+                             port=config.get('data.mongo.MONGO_PORT'))
+>>>>>>> upstream/master
 
     def start(self, name):
         """
         start the node based on the id
-        :param node_id:
-        :return: True/False
+        :param name:
+        :return: VM document
         """
 
         info = self.info(name)
@@ -71,12 +68,11 @@ class Vm(object):
             document = self.mongo.find_document('cloud', 'name', name)
             return document
 
-
     def stop(self, name):
         """
         stop the node based on the ide
-        :param node_id:
-        :return: True/False
+        :param name:
+        :return: VM document
         """
         info = self.info(name)
         if info.state != 'stopped':
@@ -91,39 +87,38 @@ class Vm(object):
     def resume(self, name):
         """
         start the node based on id
-        :param node_id:
+        :param name:
         """
         return self.start(name)
 
     def suspend(self, name):
         """
         stop the node based on id
-        :param node_id:
+        :param name:
         """
         return self.stop(name)
 
     def destroy(self, name):
         """
         delete the node based on id
-        :param node_id:
+        :param name:
         :return: True/False
         """
         result = self.provider.destroy_node(self.info(name))
         self.mongo.delete_document('cloud', 'name', name)
-
         return result
-    '''
-    def create(self):
+
+    def create(self, name):
         """
         create a new node
         :param name: the name for the new node
         :return:
         """
-        name = self.new_name('test', 'test', 'luoyu')
-        node = self.provider.create_node(name=name, **self.provider.get_new_node_setting())
-        self.mongo.insert_cloud_document(vars(node))
-        return node
-    '''
+        print("vm default create")
+        print(name)
+        # node = self.provider.create_node(name=name, **self.provider.get_new_node_setting())
+        # self.mongo.insert_cloud_document(vars(node))
+        # return node
 
     def list(self):
         """
@@ -136,7 +131,7 @@ class Vm(object):
     def status(self, name):
         """
         show node information based on id
-        :param node_id:
+        :param name:
         :return: all information about one node
         """
         self.info(name).state
@@ -146,7 +141,7 @@ class Vm(object):
     def info(self, name):
         """
         show node information based on id
-        :param node_id:
+        :param name:
         :return: all information about one node
         """
         nodes = self.list()
@@ -160,6 +155,15 @@ class Vm(object):
                 return i
 
     def new_name(self, experiment, group, user):
+        """
+        TODO: Doc
+
+        TODO: use config defaults by default.
+
+        :param experiment:
+        :param group:
+        :return:
+        """
         counter = Counter()
         count = counter.get()
         name = Name()
@@ -183,10 +187,43 @@ class Vm(object):
 
 def process_arguments(arguments):
     """
-    TODO: Talk about tomorrow.
-
+    Process command line arguments to execute VM actions.
+    Called from cm4.command.command
     :param arguments:
-    :return:
     """
-    print("vm")
-    print(arguments)
+    if arguments.get("--debug"):
+        pp = pprint.PrettyPrinter(indent=4)
+        print("vm processing arguments")
+        pp.pprint(arguments)
+
+    config = Config()
+    default_cloud = config.get("default.cloud")
+    #vm = Vm(default_cloud) if default_cloud is not "azure" else AzureVm(default_cloud)
+    vm = Vm(default_cloud)
+
+    if arguments.get("list"):
+        vm.list()
+    elif arguments.get("create"):
+        # TODO: Default create method in Vm
+
+        # TODO: Reconcile `create` behavior here and in docopts where
+        #       create is called with a `VMCOUNT`.
+        pass
+    elif arguments.get("start"):
+        vm.start(arguments.get("--vms"))
+    elif arguments.get("stop"):
+        vm.stop(arguments.get("--vms"))
+    elif arguments.get("destroy"):
+        vm.destroy(arguments.get("--vms"))
+    elif arguments.get("status"):
+        vm.status(arguments.get("--vms"))
+    elif arguments.get("ssh"):
+        # TODO
+        pass
+    elif arguments.get("run"):
+        # TODO
+        pass
+    elif arguments.get("script"):
+        # TODO
+        pass
+

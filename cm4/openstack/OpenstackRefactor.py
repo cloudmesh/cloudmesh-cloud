@@ -1,3 +1,10 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Tue Nov 15 2018
+
+@author: Rui
+"""
+
 from cm4.abstractclass.CloudManagerABC import CloudManagerABC
 from libcloud.compute.types import Provider
 from libcloud.compute.providers import get_driver

@@ -6,6 +6,7 @@ from cm4.cmmongo.mongoDB import MongoDB
 from cm4.configuration.name import Name
 from cm4.vm.thread import thread
 from cm4.configuration.counter import Counter
+from pprint import pprint
 
 
 class Vmprovider (object):
@@ -168,6 +169,17 @@ class Vm(object):
         counter.set()
         return name.get(name_format)
 
+
+    def size_image(self):
+        sizes = self.provider.list_sizes()
+        images = self.provider.list_images()
+        size = [s for s in sizes if s.id == 't2.micro'][0]
+        image = [i for i in images if i.id == 'ami-0bbe6b35405ecebdb'][0]
+        # self.driver.create_node(name=None, image=image, size=size, ex_keyname=keyname, ex_securitygroup=security)
+
+        pprint(vars(image))
+
+        pprint(vars(size))
 
 def process_arguments(arguments):
     """

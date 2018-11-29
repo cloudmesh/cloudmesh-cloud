@@ -1,5 +1,7 @@
 from cm4.vm.Vm import Vm
 from pprint import pprint
+from cm4.configuration.name import Name
+import sys
 
 def main():
 
@@ -8,9 +10,10 @@ def main():
     #pprint(provider.start('a-b=luoyu-0'))
     #pprint(provider.stop('a-b=luoyu-0'))
     #print(provider.status('a-b=luoyu-0'))
-    pprint(vars(provider.info('a-b=luoyu-0')))
+    #pprint(vars(provider.info('a-b=luoyu-0')))
+    provider.size_image()
 
-    provider = Vm('azure')
+    #provider = Vm('azure')
     #print(provider.list())
     #pprit(provider.start('cm-test-vm-1'))
     #pprint(provider.stop('cm-test-vm-1'))
@@ -18,7 +21,7 @@ def main():
     #pprint(vars(provider.info('cm-test-vm-1')))
 
 
-    provider = Vm('chameleon')
+    #provider = Vm('chameleon')
     #print(provider.list())
     #pprit(provider.start('cm_test'))
     #pprint(provider.stop('cm_test'))

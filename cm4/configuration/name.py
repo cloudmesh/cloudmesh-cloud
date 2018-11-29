@@ -11,7 +11,10 @@ class Name(object):
     def __init__(self, ntype=None, schema=None, name_dict=None):
         self.ntype = ntype
         self.name_dict = None
-        self.default_schema_dict={
+        if schema != None:
+            self.default_schema_dict=schema
+        else:
+            self.default_schema_dict={
                 "instance":"{experiment}-{group}={user}-{counter}"
                 } 
         self.schema = None

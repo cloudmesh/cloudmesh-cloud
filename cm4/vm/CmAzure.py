@@ -1,91 +1,89 @@
 import time
-from libcloud.compute.types import Provider
-from libcloud.compute.providers import get_driver
-from libcloud.compute.drivers.azure_arm import AzureNetwork, AzureSubnet, AzureIPAddress
 from libcloud.compute.base import NodeAuthSSHKey
+from libcloud.compute.drivers.azure_arm import AzureNetwork, AzureSubnet, AzureIPAddress, AzureNodeDriver
+from libcloud.compute.base import NodeDriver
 from cm4.configuration.config import Config
-from pathlib import Path
+from cm4.vm.Cloud import Cloud
 
 
-class AzureVm:
+class CmAzure(Cloud):
 
-    def __init__(self):
-        """
-        Initialize AzureManager
-        """
-        config = Config()
-        cred = config.get("cloud.azure.credentials")
+    def __init__(self, config, cloud):
+        os_config = config.get('cloud.%s' % cloud)
+        default = os_config.get('default')
+        credentials = os_config.get('credentials')
 
-        self.defaults = config.get("cloud.azure.default")
-        self.resource_group = self.defaults["resource_group"]
-        self.subscription_id = cred["AZURE_TENANT_ID"]
-        self.sizes = []
-
-        cls = get_driver(Provider.AZURE_ARM)
-        self.provider = cls(
-            tenant_id=cred["AZURE_TENANT_ID"],
-            subscription_id=cred["AZURE_SUBSCRIPTION_ID"],
-            key=cred["AZURE_APPLICATION_ID"],
-            secret=cred["AZURE_SECRET_KEY"],
-            region=self.defaults["region"]
+        self.driver = CmAzureDriver(
+            tenant_id=credentials['AZURE_TENANT_ID'],
+            subscription_id=credentials['AZURE_SUBSCRIPTION_ID'],
+            key=credentials['AZURE_APPLICATION_ID'],
+            secret=credentials['AZURE_SECRET_KEY'],
+            region=default['region']
         )
 
-    def start(self, name):
-        """
-        Start a stopped node.
 
-        :param name: The name of the stopped node.
-        """
-        self.provider.ex_start_node(self._get_node(name))
+class CmAzureDriver(AzureNodeDriver, NodeDriver):
+
+    def __init__(self, tenant_id, subscription_id, key, secret,
+                 secure=True, host=None, port=None,
+                 api_version=None, region=None, **kwargs):
+
+        config = Config()
+        self.defaults = config.get("cloud.azure.default")
+        self.resource_group = self.defaults["resource_group"]
+
+        super().__init__(tenant_id=tenant_id,
+                         subscription_id=subscription_id,
+                         key=key, secret=secret,
+                         secure=secure,
+                         host=host, port=port,
+                         api_version=api_version,
+                         region=region, **kwargs)
 
     def stop(self, name):
         """
-        Stop a running node.
-
-        :param name: The name of the running node.
+        Stop a running node. Deallocate resources. VM status will
+        be `stopped`.
+        :param name:
         """
-        self.provider.ex_stop_node(self._get_node(name))
-
-    def resume(self, name):
-        """
-        Start a suspended node.
-
-        :param name: The name of the suspended node.
-        """
-        self.start(name)
-
+        self.ex_stop_node(self._get_node(name))
 
     def suspend(self, name):
         """
-        Suspend a running node.
+        Suspend a running node. Same as `stop`, but resources do not
+        deallocate. VM status will be `paused`.
+
+        Todo: decide whether to keep this or not. Currently Vm.suspend
+              doesn't pass a deallocate param.
 
         :param name: The name of the running node.
         """
-        self.provider.ex_stop_node(self._get_node(name), deallocate=False)
+        self.ex_stop_node(self._get_node(name), deallocate=False)
 
-    def destroy(self, name):
+    def destroy_node(self, node):
         """
         Destroy a node.
         """
-        node = self._get_node(name)
-        self.provider.destroy_node(node)
+        # node = self._get_node(name)
+        super().destroy_node(node)
         # Managed volumes are not destroyed by `destroy_node`.
         time.sleep(2)
-        self.provider.destroy_volume(self._get_volume(name))
+        print(f"destroying volume for {node.name}")
+        self.destroy_volume(self._get_volume(node.name))
         # Libcloud does not delete public IP addresses
-        self._ex_delete_public_ip(f"{name}-ip")
+        self._ex_delete_public_ip(f"{node.name}-ip")
 
-    def create(self, name):
+    def create_node(self, name):
         """
         Create a node
         """
 
-        #id_rsa_path = f"{Path.home()}/.ssh/id_rsa.pub"
+        # id_rsa_path = f"{Path.home()}/.ssh/id_rsa.pub"
 
         auth = NodeAuthSSHKey(self.defaults["public_key"])
 
-        image = self.provider.get_image(self.defaults["image"])
-        sizes = self.provider.list_sizes()
+        image = self.get_image(self.defaults["image"])
+        sizes = self.list_sizes()
         size = [s for s in sizes if s.id == self.defaults["size"]][0]
 
         # Create a network and default subnet if none exists
@@ -96,7 +94,7 @@ class AzureVm:
         nic = self._create_create_nic(name, subnet)
 
         # Create vm
-        new_vm = self.provider.create_node(
+        new_vm = super().create_node(
             name=name,
             size=size,
             image=image,
@@ -110,63 +108,25 @@ class AzureVm:
 
         return new_vm
 
-    def list_volumes(self):
-        """
-        Return a list of all volumes in the resource group
-        """
-        return self.provider.list_volumes()
-
-    def list(self):
-        """
-        List all nodes.
-        """
-        return self.provider.list_nodes()
-
-    def status(self, name):
-        """
-        show node information based on id
-        :param name:
-        :return: all information about one node
-        """
-        return self.provider.ex_get_node(name)
-
-    def info(self, node_id):
-        """
-        Get all information about one node.
-        """
-        return self.provider.ex_get_node(node_id)
-
-    def destroy_volume(self, volume):
-        """
-        Destroy a volume
-        :param volume:
-        :return:
-        """
-        self.provider.destroy_volume(volume)
-
-    def run(self, node_id, command):
-        node = self._get_node(node_id)
-        return self.provider.ex_run_command(node, command)
-
     def _get_node(self, name):
         """
         Get an instance of a Node returned by `list` by node name.
         """
-        node = [n for n in self.list() if n.name == name]
+        node = [n for n in self.list_nodes() if n.name == name]
         return node[0] if node else None
 
     def _get_volume(self, volume_id):
         """
         Get the volume named after a created node.
         """
-        volume = [v for v in self.provider.list_volumes() if v.name == volume_id]
+        volume = [v for v in self.list_volumes() if v.name == volume_id]
         return volume[0] if volume else None
 
     def _get_network(self, network_name):
         """
         Return an instance of a network if it exists.
         """
-        net = [n for n in self.provider.ex_list_networks() if n.name == network_name]
+        net = [n for n in self.ex_list_networks() if n.name == network_name]
         return net[0] if net else None
 
     def _create_network(self, network_name):
@@ -190,14 +150,14 @@ class AzureVm:
         :param subnet: The `AzureSubnet` where the nic will reside
         :return:
         """
-        public_ip = self.provider.ex_create_public_ip(
+        public_ip = self.ex_create_public_ip(
             f"{name}-ip",
             resource_group=self.resource_group
         )
 
         time.sleep(1)
 
-        return self.provider.ex_create_network_interface(
+        return self.ex_create_network_interface(
             name=f"{name}-nic",
             subnet=subnet,
             resource_group=self.resource_group,
@@ -209,7 +169,7 @@ class AzureVm:
         Create a network
         """
         data = {
-            "location": self.provider.default_location.id,
+            "location": self.default_location.id,
             "properties": {
                 "addressSpace": {
                     "addressPrefixes": [
@@ -221,9 +181,9 @@ class AzureVm:
 
         action = "/subscriptions/%s/resourceGroups/%s/providers/" \
                  "Microsoft.Network/virtualNetworks/%s" \
-                 % (self.provider.connection.subscription_id, self.resource_group, name)
+                 % (self.connection.subscription_id, self.resource_group, name)
 
-        r = self.provider.connection.request(
+        r = self.connection.request(
             action,
             params={"api-version": "2018-08-01"},
             method="PUT",
@@ -243,9 +203,9 @@ class AzureVm:
         """
         action = "/subscriptions/%s/resourceGroups/%s/providers/" \
                  "Microsoft.Network/virtualNetworks/%s" \
-                 % (self.provider.connection.subscription_id, self.resource_group, name)
+                 % (self.connection.subscription_id, self.resource_group, name)
 
-        r = self.provider.connection.request(
+        r = self.connection.request(
             action,
             params={"api-version": "2018-08-01"},
             method="DELETE"
@@ -265,9 +225,9 @@ class AzureVm:
 
         action = "/subscriptions/%s/resourceGroups/%s/providers/" \
                  "Microsoft.Network/virtualNetworks/%s/subnets/%s" \
-                 % (self.provider.connection.subscription_id, self.resource_group, network_name, name)
+                 % (self.connection.subscription_id, self.resource_group, network_name, name)
 
-        r = self.provider.connection.request(
+        r = self.connection.request(
             action,
             params={"api-version": "2018-08-01"},
             method="PUT",
@@ -287,10 +247,10 @@ class AzureVm:
 
         target = "/subscriptions/%s/resourceGroups/%s/" \
                  "providers/Microsoft.Network/publicIPAddresses/%s" \
-                 % (self.subscription_id, self.resource_group, name)
+                 % (self.connection.subscription_id, self.resource_group, name)
 
         data = {
-            "location": self.provider.default_location.id,
+            "location": self.default_location.id,
             "tags": {},
             "properties": {
                 "publicIPAllocationMethod": "Dynamic"
@@ -318,9 +278,9 @@ class AzureVm:
         """
         action = "/subscriptions/%s/resourceGroups/%s/providers/" \
                  "Microsoft.Network/publicIPAddresses/%s" \
-                 % (self.provider.connection.subscription_id, self.resource_group, name)
+                 % (self.connection.subscription_id, self.resource_group, name)
 
-        r = self.provider.connection.request(
+        r = self.connection.request(
             action,
             params={"api-version": "2018-08-01"},
             method="DELETE"

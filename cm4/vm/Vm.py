@@ -1,7 +1,6 @@
 import pprint
-#from cm4.azure.AzureVm import AzureVm
 from cm4.vm.Cmaws import Cmaws
-from cm4.vm.Cmazure import Cmazure
+from cm4.vm.CmAzure import CmAzure
 from cm4.vm.Cmopenstack import Cmopenstack
 from cm4.configuration.config import Config
 from cm4.cmmongo.mongoDB import MongoDB
@@ -25,7 +24,7 @@ class Vmprovider (object):
 
         os_config = self.config.get('cloud.%s' % cloud)
         if os_config.get('cm').get('kind') == 'azure':
-            driver = Cmazure(self.config, cloud).driver
+            driver = CmAzure(self.config, cloud).driver
         elif os_config.get('cm').get('kind') == 'aws':
             driver = Cmaws(self.config, cloud).driver
         elif os_config.get('cm').get('kind') == 'openstack':
@@ -33,7 +32,7 @@ class Vmprovider (object):
         return driver
 
 
-class Vm(object):
+class Vm:
 
     def __init__(self, cloud):
         config = Config()
@@ -60,15 +59,16 @@ class Vm(object):
             document = self.mongo.find_document('cloud', 'name', name)
             return document
 
-    def stop(self, name):
+    def stop(self, name, deallocate=True):
         """
         stop the node based on the ide
         :param name:
+        :param deallocate:
         :return: VM document
         """
         info = self.info(name)
         if info.state != 'stopped':
-            self.provider.ex_stop_node(info)
+            self.provider.ex_stop_node(info, deallocate)
             thread(self, 'test', name, 'stopped').start()
             document = self.mongo.find_document('cloud', 'name', name)
             return document
@@ -88,7 +88,7 @@ class Vm(object):
         stop the node based on id
         :param name:
         """
-        return self.stop(name)
+        return self.stop(name, False)
 
     def destroy(self, name):
         """
@@ -106,10 +106,10 @@ class Vm(object):
         :param name: the name for the new node
         :return:
         """
-        print("vm default create")
-        print(name)
+        node = self.provider.create_node(name)
+        self.mongo.insert_cloud_document(vars(node))
+        return node
         # node = self.provider.create_node(name=name, **self.provider.get_new_node_setting())
-        # self.mongo.insert_cloud_document(vars(node))
         # return node
 
     def list(self):
@@ -176,7 +176,6 @@ def process_arguments(arguments):
 
     config = Config()
     default_cloud = config.get("default.cloud")
-    #vm = Vm(default_cloud) if default_cloud is not "azure" else AzureVm(default_cloud)
     vm = Vm(default_cloud)
 
     if arguments.get("list"):
@@ -204,4 +203,3 @@ def process_arguments(arguments):
     elif arguments.get("script"):
         # TODO
         pass
-

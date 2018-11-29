@@ -13,7 +13,8 @@ nist-install: nist-download nist-copy
 
 nist-download:
 	rm -rf ../nist
-	git clone https://github.com/davidmdem/nist/tree/operation-scope ../nist
+	git clone https://github.com/davidmdem/nist ../nist
+
 
 nist-copy:
 	cd cm4/api; rm -rf specs; mkdir specs;

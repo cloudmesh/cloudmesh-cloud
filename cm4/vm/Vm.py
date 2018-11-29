@@ -39,17 +39,12 @@ class Vm(object):
     def __init__(self, cloud):
         config = Config()
         self.provider = Vmprovider().get_provider(cloud)
-<<<<<<< HEAD
-        self.mongo = MongoDB(config.get('data.mongo.MONGO_HOST'),
-                             config.get('data.mongo.MONGO_USERNAME'), config.get('data.mongo.MONGO_PASSWORD'),
-                             config.get('data.mongo.MONGO_PORT'))
 
-=======
         self.mongo = MongoDB(host=config.get('data.mongo.MONGO_HOST'),
                              username=config.get('data.mongo.MONGO_USERNAME'),
                              password=config.get('data.mongo.MONGO_PASSWORD'),
                              port=config.get('data.mongo.MONGO_PORT'))
->>>>>>> upstream/master
+
 
     def start(self, name):
         """

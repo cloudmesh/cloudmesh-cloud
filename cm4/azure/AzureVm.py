@@ -4,12 +4,10 @@ from libcloud.compute.providers import get_driver
 from libcloud.compute.drivers.azure_arm import AzureNetwork, AzureSubnet, AzureIPAddress
 from libcloud.compute.base import NodeAuthSSHKey
 from cm4.configuration.config import Config
-from cm4.vm.Vm import Vm
+from pathlib import Path
 
 
 class AzureVm:
-
-    Live = True
 
     def __init__(self):
         """
@@ -56,6 +54,7 @@ class AzureVm:
         """
         self.start(name)
 
+
     def suspend(self, name):
         """
         Suspend a running node.
@@ -80,6 +79,9 @@ class AzureVm:
         """
         Create a node
         """
+
+        #id_rsa_path = f"{Path.home()}/.ssh/id_rsa.pub"
+
         auth = NodeAuthSSHKey(self.defaults["public_key"])
 
         image = self.provider.get_image(self.defaults["image"])
@@ -88,10 +90,10 @@ class AzureVm:
 
         # Create a network and default subnet if none exists
         network_name = self.defaults["network"]
-        network, subnet = self.create_network(network_name)
+        network, subnet = self._create_network(network_name)
 
         # Create a NIC with public IP
-        nic = self.create_nic(name, subnet)
+        nic = self._create_create_nic(name, subnet)
 
         # Create vm
         new_vm = self.provider.create_node(
@@ -157,7 +159,7 @@ class AzureVm:
         """
         Get the volume named after a created node.
         """
-        volume = [v for v in self.list_volumes() if v.name == volume_id]
+        volume = [v for v in self.provider.list_volumes() if v.name == volume_id]
         return volume[0] if volume else None
 
     def _get_network(self, network_name):
@@ -167,7 +169,7 @@ class AzureVm:
         net = [n for n in self.provider.ex_list_networks() if n.name == network_name]
         return net[0] if net else None
 
-    def create_network(self, network_name):
+    def _create_network(self, network_name):
         """
         Create a new network resource if it does not exist or returns
         an existing network resource if it exists.
@@ -181,7 +183,7 @@ class AzureVm:
         time.sleep(2)
         return network, subnet
 
-    def create_nic(self, name, subnet):
+    def _create_create_nic(self, name, subnet):
         """
         Create a network interface card with a public IP
         :param name: The name of the node

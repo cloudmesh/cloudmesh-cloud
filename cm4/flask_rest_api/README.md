@@ -44,3 +44,12 @@ python cm4/flask_rest_api/rest_api.py
   curl localhost:5000/vms/i-0fad7e92ffea8b345
   ```
 
+#### Dev - restricting certain ips for certain rest calls
+```bash
+from flask import abort, request
+
+@app.before_request
+def limit_remote_addr():
+    if request.remote_addr != '10.20.30.40':
+        abort(403)  # Forbidden
+```

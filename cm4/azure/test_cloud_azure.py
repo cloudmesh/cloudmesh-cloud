@@ -54,7 +54,7 @@ class TestCloudAzure:
         self.azure.destroy(self.test_node_name)
 
     def test_azure_create_network(self):
-        self.azure.create_network("cmnet")
+        self.azure._create_network("cmnet")
 
     def test_azure_list_volumes(self):
         vols = self.azure.list_volumes()

@@ -45,12 +45,21 @@ if command is not None:
     os.system(command)
 
 requiers = """
-docopt
-colorama
-termcolor
-python-hostlist
-apache-libcloud
-oyaml
+apache-libcloud==2.3.0
+certifi==2018.10.15
+chardet==3.0.4
+colorama==0.4.0
+config==0.4.0
+coverage==4.5.1
+docopt==0.6.2
+idna==2.7
+oyaml==0.7
+pymongo==3.7.2
+python-hostlist==1.18
+PyYAML==3.13
+requests==2.20.0
+termcolor==1.1.0
+urllib3==1.24
 """.split("\n")
 
 

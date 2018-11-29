@@ -6,7 +6,7 @@ Created on Tue Nov 16 11:48:09 2018
 """
 
 from cm4.vm.Cmaws import Cmaws
-from cm4.vm.Cmazure import Cmazure
+from cm4.vm.CmAzure import CmAzure
 from cm4.vm.Cmopenstack import Cmopenstack
 from cm4.configuration.config import Config
 from cm4.cmmongo.mongoDB import MongoDB

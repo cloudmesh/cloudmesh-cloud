@@ -11,7 +11,8 @@ def main():
     #pprint(provider.stop('a-b=luoyu-0'))
     #print(provider.status('a-b=luoyu-0'))
     #pprint(vars(provider.info('a-b=luoyu-0')))
-    provider.size_image()
+    pprint(vars(provider.create ('a-b=luoyu-1')))
+    #provider.size_image()
 
     #provider = Vm('azure')
     #print(provider.list())

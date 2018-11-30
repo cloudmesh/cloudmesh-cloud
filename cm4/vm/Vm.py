@@ -170,18 +170,49 @@ class Vm:
         counter.incr()
         return name.get(name_format)
 
-
     def get_public_ips(self, name=None):
+        """
+        Returns all the public ips available if a name is not given.
+        If a name is provided, the ip of the vm name would be returned.
+        :param name: name of the VM.
+        :return: Dictionary of VMs with their public ips
+        """
         if name is None:
-            documents = self.mongo.find_all_document('cloud', 'public_ips')
-            public_ip = []
-            for i in documents:
-                if len(i['public_ips']) != 0:
-                    public_ip.append(i['public_ips'][0])
+            filter = {
+                "$exists": True,
+                "$not": {"$size": 0}
+            }
+            documents = self.mongo.find('cloud', 'public_ips', filter)
+            if documents is not None:
+                return None
+            else:
+                result = {}
+                for document in documents:
+                    result[document['name']] = document['public_ips']
+                return result
         else:
-            public_ip = self.mongo.find_document('cloud', 'name', name)['public_ips']
+            public_ips = self.mongo.find_document('cloud', 'name', name)['public_ips']
+            if not public_ips:
+                return None
+            else:
+                return {name: public_ips}
 
-        return public_ip
+    def set_public_ip(self, name, public_ip):
+        """
+        Assign the given public ip to the given VM.
+        :param name: name of the VM
+        :param public_ip: public ip to be assigned.
+        """
+        if name is not None and public_ip is not None:
+            self.provider.set_public_ip(name, public_ip)
+
+    def remove_public_ip(self, name):
+        """
+        Deletes the public ip of the given VM.
+        :param name: name of the VM
+        """
+        if name is not None:
+            self.provider.remove_public_ip(name)
 
 
 

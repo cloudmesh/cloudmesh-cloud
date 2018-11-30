@@ -123,13 +123,22 @@ class MongoDB(DatabaseManagerABC):
         document = collection.find_one({key: value})
         return document
 
-    def find_all_document(self, collection_name, key=None):
+    def find(self, collection_name, key=None, value=None):
+        """
+        find all the documents in a collection.
+        If no key is specified, all the documents are returned.
+        :param collection_name: collection name, like 'default', 'job' ....
+        :param key: search key
+        :param value: search value
+        :return: the documents which matches the key and value
+        """
         collection = self.db[collection_name]
         if key is None:
-            document = collection.find({})
+            documents = collection.find()
         else:
-            document = collection.find({key : {'$exists' : 1}})
-        return document
+            documents = collection.find({key: value})
+        return documents
+
 
     def delete_document(self, collection_name, key, value):
         """

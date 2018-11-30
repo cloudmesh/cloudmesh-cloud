@@ -9,6 +9,8 @@ from cm4.vm.thread import thread
 from cm4.configuration.counter import Counter
 from pprint import pprint
 
+import time
+
 
 class Vmprovider (object):
 
@@ -166,20 +168,22 @@ class Vm:
         name_format = {'experiment': experiment, 'group': group, 'user': user, 'counter': count}
         name.set_schema('instance')
         counter.incr()
-        counter.set()
         return name.get(name_format)
 
 
-    def size_image(self):
-        sizes = self.provider.list_sizes()
-        images = self.provider.list_images()
-        size = [s for s in sizes if s.id == 't2.micro'][0]
-        image = [i for i in images if i.id == 'ami-0bbe6b35405ecebdb'][0]
-        # self.driver.create_node(name=None, image=image, size=size, ex_keyname=keyname, ex_securitygroup=security)
+    def get_public_ips(self, name=None):
+        if name is None:
+            documents = self.mongo.find_all_document('cloud', 'public_ips')
+            public_ip = []
+            for i in documents:
+                if len(i['public_ips']) != 0:
+                    public_ip.append(i['public_ips'][0])
+        else:
+            public_ip = self.mongo.find_document('cloud', 'name', name)['public_ips']
 
-        pprint(vars(image))
+        return public_ip
 
-        pprint(vars(size))
+
 
 def process_arguments(arguments):
     """

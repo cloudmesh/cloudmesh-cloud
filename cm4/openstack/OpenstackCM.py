@@ -51,7 +51,16 @@ class OpenstackCM (CloudManagerABC):
             
     def _get_node_by_id(self, node_id):
         return self._get_obj_by_id('node', node_id)
-    
+
+
+    def get_driver(self, cloud=None):
+        if not cloud:
+            raise ValueError('cloud arguement has not been properly configured')
+        if not self.driver:
+            self.driver=self.get_driver_helper(cloud)
+        return self.driver
+
+
     def get_driver_helper(self, cloud):
         credential = self.os_config.get("credentials")    
         Openstack = get_driver(Provider.OPENSTACK)
@@ -65,13 +74,7 @@ class OpenstackCM (CloudManagerABC):
             )
         return driver
 
-    def get_driver(self, cloud=None):
-        if not cloud:
-            raise ValueError('cloud arguement has not been properly configured')
-        if not self.driver:
-            self.driver=self.get_driver_helper(cloud)
-        return self.driver
-        
+
     def set_cloud(self, cloud):
         self.cloud=cloud
         self.os_config = Config().get('cloud.{}'.format(cloud))

@@ -15,7 +15,7 @@ class thread(threading.Thread):
         self.update_status()
 
     def update_status(self):
-        count = 0
+        count = 32
         print('Thread: updating the status of node')
         ping_check = False
         if self.status == 'running':
@@ -27,11 +27,11 @@ class thread(threading.Thread):
                 ping_check = False
             else:
                 ping_check = self.ping_public_ip()
-            time.sleep(2)
-            if count > 30:
+            time.sleep(count)
+            if count < 2:
                 print('Cannot get the newest status information')
-                sys.exit(0)
-            count = count + 1
+                break
+            count = count/2
         self.vm.info(self.node_name)
 
     def ping_public_ip(self):

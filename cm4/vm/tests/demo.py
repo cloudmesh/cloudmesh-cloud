@@ -6,12 +6,14 @@ import sys
 def main():
 
     provider = Vm('aws')
+    #print(provider.get_public_ips('a-b=luoyu-0'))
     #print(provider.list())
     #pprint(provider.start('a-b=luoyu-0'))
     #pprint(provider.stop('a-b=luoyu-0'))
     #print(provider.status('a-b=luoyu-0'))
     #pprint(vars(provider.info('a-b=luoyu-0')))
-    pprint(vars(provider.create ('a-b=luoyu-1')))
+    #pprint(vars(provider.create ('a-b=luoyu-1')))
+    #pprint(provider.destroy ('a-b=luoyu-1'))
     #provider.size_image()
 
     #provider = Vm('azure')

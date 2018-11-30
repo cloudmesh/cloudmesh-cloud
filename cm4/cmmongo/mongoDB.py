@@ -123,6 +123,14 @@ class MongoDB(DatabaseManagerABC):
         document = collection.find_one({key: value})
         return document
 
+    def find_all_document(self, collection_name, key=None):
+        collection = self.db[collection_name]
+        if key is None:
+            document = collection.find({})
+        else:
+            document = collection.find({key : {'$exists' : 1}})
+        return document
+
     def delete_document(self, collection_name, key, value):
         """
         delete the document from collection

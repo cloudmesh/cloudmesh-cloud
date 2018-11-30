@@ -12,8 +12,9 @@ from cm4.configuration.config import Config
 import cm4.vm.VmUtil as util
 
 
-###
-### provide generic methods to manipulate nodes from various providers by name
+"""
+provide generic methods to manipulate nodes from various providers by name
+"""
 
 class VmRefactor(object):
     def __init__(self, vm):
@@ -99,7 +100,6 @@ class VmRefactor(object):
                 self.vm.mongo.update_document('cloud', 'name', name, document)
                 return i
         raise ValueError('Node with name: \"'+name+'\" was not found!')
-
 
 
     def list_sizes(self):

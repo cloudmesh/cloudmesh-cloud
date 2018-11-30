@@ -37,10 +37,13 @@ class Vm:
     def __init__(self, cloud):
         config = Config()
         self.provider = Vmprovider().get_provider(cloud)
+
         self.mongo = MongoDB(host=config.get('data.mongo.MONGO_HOST'),
                              username=config.get('data.mongo.MONGO_USERNAME'),
                              password=config.get('data.mongo.MONGO_PASSWORD'),
                              port=config.get('data.mongo.MONGO_PORT'))
+        #print(config.get('data.mongo.MONGO_HOST'))
+
 
     def start(self, name):
         """
@@ -48,7 +51,6 @@ class Vm:
         :param name:
         :return: VM document
         """
-
         info = self.info(name)
         if info.state != 'running':
             self.provider.ex_start_node(info)
@@ -109,8 +111,6 @@ class Vm:
         node = self.provider.create_node(name)
         self.mongo.insert_cloud_document(vars(node))
         return node
-        # node = self.provider.create_node(name=name, **self.provider.get_new_node_setting())
-        # return node
 
     def list(self):
         """
@@ -140,7 +140,10 @@ class Vm:
         for i in nodes:
             if i.name == name:
                 document = vars(i)
-                self.mongo.update_document('cloud', 'name', name, document)
+                if self.mongo.find_document('cloud', 'name', name):
+                    self.mongo.update_document('cloud', 'name', name, document)
+                else:
+                    self.mongo.insert_cloud_document(document)
                 return i
 
     def new_name(self, experiment, group, user):

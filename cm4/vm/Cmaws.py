@@ -43,3 +43,4 @@ class CmAWSDriver(EC2NodeDriver, NodeDriver):
 
         return new_vm
 
+

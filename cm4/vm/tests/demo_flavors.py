@@ -15,20 +15,23 @@ def main():
     # test for openstack
     # input("Press Enter to connect to MongoDB....")
     openstack = Vm('chameleon')
+    openstack.start('cm_test_small')
 
+
+    
     print(openstack.mongo.username)
     print(openstack.mongo.password)
     print(openstack.mongo.client)
     print(openstack.mongo.db['config'])
-    print(openstack.mongo.db.collection_names(include_system_collections=False))
+    #print(openstack.mongo.db.collection_names(include_system_collections=False))
 
-    return
+
     list = openstack.list()
     pprint(list)
     pprint(list[0])
 
     print(openstack.info('cm_test_small'))
-    openstack.start('cm_test_small')
+
 
     name = openstack.list()[0].name
     refactor = VmRefactor(openstack)

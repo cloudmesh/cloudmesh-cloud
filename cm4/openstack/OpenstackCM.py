@@ -12,7 +12,7 @@ from cm4.abstractclass.CloudManagerABC import CloudManagerABC
 from libcloud.compute.types import Provider
 from libcloud.compute.providers import get_driver
 from cm4.configuration.config import Config
-
+from time import sleep
 
 class OpenstackCM (CloudManagerABC):
 
@@ -25,7 +25,10 @@ class OpenstackCM (CloudManagerABC):
         if cloud:
             self.os_config = config.get('cloud.{}'.format(cloud))
             self.driver = self.get_driver(cloud)
-            self.key = self.os_config.get('credentials.OS_KEY_PATH') or os.environ['OS_KEY_PATH']
+            self.key = self.os_config.get('credentials').get('OS_KEY_PATH')     # credentials.target return null string
+            # if we don't find OS_KEY_PATH in yaml, go to os.environ instead which can be set in .bashrc
+            if self.key==None:
+                os.environ['OS_KEY_PATH']
         else:
             self.os_config = config
 
@@ -39,7 +42,6 @@ class OpenstackCM (CloudManagerABC):
             obj_list = self.driver.list_sizes()
         elif obj_type == 'ip':
             obj_list = self.driver.ex_list_floating_ips()
-            
         return obj_list
     
     def _get_obj_by_name(self, obj_type, obj_name):
@@ -60,7 +62,7 @@ class OpenstackCM (CloudManagerABC):
 
     def get_driver(self, cloud=None):
         if not cloud:
-            raise ValueError('cloud arguement has not been properly configured')
+            raise ValueError('Cloud arguement is not properly configured')
         if not self.driver:
             self.driver=self.get_driver_helper(cloud)
         return self.driver
@@ -79,17 +81,20 @@ class OpenstackCM (CloudManagerABC):
             )
         return driver
 
-    def get_driver(self, cloud):
-        if not self.driver:
-            self.driver=self.get_driver_helper(cloud)
-        return self.driver
         
     def set_cloud(self, cloud):
+        """
+        switch to another cloud provider
+        :param cloud: target provider
+        :return:
+        """
         self.cloud=cloud
         self.os_config = Config().get('cloud.{}'.format(cloud))
         
     def _get_public_ip(self):
-        ips = [x for x in  self._get_obj_list('ip') if not x.node_id]
+        ips = [x for x in self._get_obj_list('ip') if not x.node_id]
+        #print(self._get_obj_list('ip'))
+        #print(ips[0].node_id)
         return ips[0] if ips else None       
 
     ### API hack for new VM class
@@ -113,7 +118,6 @@ class OpenstackCM (CloudManagerABC):
         """
         execute arbitrary shell command on node through ssh
         ssh funcionality must available on the local machine
-        
         :param name: name of the VM
         :param command: shell command 
         
@@ -124,8 +128,6 @@ class OpenstackCM (CloudManagerABC):
                   'user' : self.os_config.get('default.username'),
                   'host' : node.public_ips[0],
                   'command': command}        
-         
-        # execute
         try:
             res = subprocess.check_output(template.format(**kwargs),
                                           shell=True,
@@ -157,7 +159,10 @@ class OpenstackCM (CloudManagerABC):
         node = self._get_obj_by_name('node', name)
         for ip in node.public_ips:
             self.driver.ex_detach_floating_ip_from_node(node, ip)
-          
+
+
+
+    ## standard functions
     def ls(self):
         """
         list all nodes
@@ -203,23 +208,29 @@ class OpenstackCM (CloudManagerABC):
         # get defualt if needed
         image_name = image if image else self.os_config.get('default').get('image')
         size_name = size if size else self.os_config.get('default').get('flavor')
-                
 
         # add to kwargs
         kwargs['name'] = name
         kwargs['image'] = self._get_obj_by_name('image', image_name)
         kwargs['size'] = self._get_obj_by_name('size', size_name)                      
         if self.key:
-            key_pair = self.driver.ex_import_keypair(name, self.key)
-            kwargs['ex_keyname']=name
+            try:
+                key_pair = self.driver.import_key_pair_from_file(name, self.key)
+            except Exception as e:
+                print(e)
+                print("If exception code is 409 Conflict Key pair is already exists, we can still proceed without key importation")
+
+        kwargs['ex_keyname']=name
             
         # create node
         node = self.driver.create_node(**kwargs)
-        
+
         # attach ip if available
         ip = self._get_public_ip()
-        if ip:      
-            self.driver.ex_attach_floating_ip_to_node(node, ip)        
+        if ip:
+            while (self.info(node.id)['state'] != 'running'):
+                sleep(3)
+            self.driver.ex_attach_floating_ip_to_node(node, ip)
         return node
 
     def start(self, node_id):

@@ -69,9 +69,11 @@ cloudmesh:
         OS_USER_DOMAIN_ID: default        
         OS_VERSION: liberty
         OS_REGION_NAME: RegionOne
+        OS_KEY_PATH: #put your keyfile path here
       default:
         flavor: m1.small
         image: CC-Ubuntu16.04
+        username: cc
     jetstream:
       cm:
         heading: Jetstream

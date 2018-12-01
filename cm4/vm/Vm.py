@@ -162,6 +162,50 @@ class Vm:
         counter.set()
         return name.get(name_format)
 
+    def get_public_ips(self, name=None):
+        """
+        Returns all the public ips available if a name is not given.
+        If a name is provided, the ip of the vm name would be returned.
+        :param name: name of the VM.
+        :return: Dictionary of VMs with their public ips
+        """
+        if name is None:
+            filter = {
+                "$exists": True,
+                "$not": {"$size": 0}
+            }
+            documents = self.mongo.find('cloud', 'public_ips', filter)
+            if documents is not None:
+                return None
+            else:
+                result = {}
+                for document in documents:
+                    result[document['name']] = document['public_ips']
+                return result
+        else:
+            public_ips = self.mongo.find_document('cloud', 'name', name)['public_ips']
+            if not public_ips:
+                return None
+            else:
+                return {name: public_ips}
+
+    def set_public_ip(self, name, public_ip):
+        """
+        Assign the given public ip to the given VM.
+        :param name: name of the VM
+        :param public_ip: public ip to be assigned.
+        """
+        if name is not None and public_ip is not None:
+            self.provider.set_public_ip(name, public_ip)
+
+    def remove_public_ip(self, name):
+        """
+        Deletes the public ip of the given VM.
+        :param name: name of the VM
+        """
+        if name is not None:
+            self.provider.remove_public_ip(name)
+
 
 def process_arguments(arguments):
     """
@@ -169,6 +213,8 @@ def process_arguments(arguments):
     Called from cm4.command.command
     :param arguments:
     """
+    result = None
+
     if arguments.get("--debug"):
         pp = pprint.PrettyPrinter(indent=4)
         print("vm processing arguments")
@@ -176,16 +222,26 @@ def process_arguments(arguments):
 
     config = Config()
     default_cloud = config.get("default.cloud")
+    default_group = config.get("default.group")
+    default_experiment = config.get("default.experiment")
+    default_cluster = config.get("default.cluster")
+
     vm = Vm(default_cloud)
 
     if arguments.get("list"):
-        vm.list()
-    elif arguments.get("create"):
-        # TODO: Default create method in Vm
+        result = vm.list()
 
+    elif arguments.get("create"):
         # TODO: Reconcile `create` behavior here and in docopts where
         #       create is called with a `VMCOUNT`.
-        pass
+
+        vm_name = arguments.get("VMNAME")
+
+        if vm_name is None:
+            vm_name = vm.new_name(default_experiment, default_group, "user")
+
+        vm.create(vm_name)
+        result = f"Created {vm_name}"
     elif arguments.get("start"):
         vm.start(arguments.get("--vms"))
     elif arguments.get("stop"):
@@ -203,3 +259,5 @@ def process_arguments(arguments):
     elif arguments.get("script"):
         # TODO
         pass
+
+    return result

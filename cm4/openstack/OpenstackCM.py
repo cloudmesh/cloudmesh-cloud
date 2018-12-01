@@ -204,7 +204,7 @@ class OpenstackCM (CloudManagerABC):
                     created_date=node.created_at.strftime("%Y-%m-%d %H:%M:%S"),
                     extra=node.extra)
 
-    def create(self, name, image=None, size=None, **kwargs):
+    def create(self, name, image=None, size=None, timeout=1000, **kwargs, ):
         # get defualt if needed
         image_name = image if image else self.os_config.get('default').get('image')
         size_name = size if size else self.os_config.get('default').get('flavor')
@@ -226,10 +226,13 @@ class OpenstackCM (CloudManagerABC):
         node = self.driver.create_node(**kwargs)
 
         # attach ip if available
+        # in case of error, need timeout to make sure we do attachment after the node has been spawned
         ip = self._get_public_ip()
         if ip:
-            while (self.info(node.id)['state'] != 'running'):
+            timeout_counter = 0
+            while (self.info(node.id)['state'] != 'running' || timeout_counter<timeout):
                 sleep(3)
+                timeout_counter+=3
             self.driver.ex_attach_floating_ip_to_node(node, ip)
         return node
 

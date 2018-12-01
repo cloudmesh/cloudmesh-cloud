@@ -118,3 +118,17 @@ class VmRefactor(object):
         :return: list of Images
         '''
         return self.vm.provider.list_images(location, ex_only_active)
+
+
+    def info(self, name):
+        """
+        show node information based on name
+        :param name:
+        :return: all information about one node
+        """
+        nodes = self.list()
+        for i in nodes:
+            if i.name == name:
+                document = vars(i)
+                self.mongo.update_document('cloud', 'name', name, document)
+                return i

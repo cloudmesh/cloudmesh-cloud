@@ -172,6 +172,14 @@ class OpenstackCM (CloudManagerABC):
         return [dict(id=i.id, name=i.name, state=i.state) for i in nodes]
 
 
+    def list_available_ips(self):
+        index = 0
+        for x in self._get_obj_list('ip'):
+            if not x.node_id:
+                print("available ip_{}: {}".format(index, x))
+                index+=1
+
+
     def nodes_info(self, node_id):
         """
         get clear information about all node
@@ -204,7 +212,7 @@ class OpenstackCM (CloudManagerABC):
                     created_date=node.created_at.strftime("%Y-%m-%d %H:%M:%S"),
                     extra=node.extra)
 
-    def create(self, name, image=None, size=None, timeout=1000, **kwargs, ):
+    def create(self, name, image=None, size=None, timeout=300, **kwargs, ):
         # get defualt if needed
         image_name = image if image else self.os_config.get('default').get('image')
         size_name = size if size else self.os_config.get('default').get('flavor')
@@ -219,7 +227,6 @@ class OpenstackCM (CloudManagerABC):
             except Exception as e:
                 print(e)
                 print("If exception code is 409 Conflict Key pair is already exists, we can still proceed without key importation")
-
         kwargs['ex_keyname']=name
             
         # create node
@@ -230,11 +237,15 @@ class OpenstackCM (CloudManagerABC):
         ip = self._get_public_ip()
         if ip:
             timeout_counter = 0
-            while (self.info(node.id)['state'] != 'running' || timeout_counter<timeout):
+            while (self.info(node.id)['state'] != 'running'):
+                if timeout_counter > timeout:
+                    print("Node is being spawned for too long, float ip association is failed")
+                    return node
                 sleep(3)
                 timeout_counter+=3
             self.driver.ex_attach_floating_ip_to_node(node, ip)
         return node
+
 
     def start(self, node_id):
         """

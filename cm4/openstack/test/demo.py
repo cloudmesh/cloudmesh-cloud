@@ -3,7 +3,7 @@ from time import sleep
 import datetime
 
 # testcode
-# need extra waiting time so server can finish update the node states
+# need extra waiting time so server can finish update the node status
 # pending - running - stopped
 
 def main():
@@ -58,8 +58,6 @@ def main():
     d.destroy(node_id)
     sleep(10)
 
-
-    d.ls()
 
 
 if __name__ == "__main__":

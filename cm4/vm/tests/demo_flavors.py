@@ -15,10 +15,9 @@ def main():
     # test for openstack
     # input("Press Enter to connect to MongoDB....")
     openstack = Vm('chameleon')
-    openstack.start('cm_test_small')
+    openstack.create('ruili-01')
 
 
-    
     print(openstack.mongo.username)
     print(openstack.mongo.password)
     print(openstack.mongo.client)

@@ -37,12 +37,10 @@ class Vm:
     def __init__(self, cloud):
         config = Config()
         self.provider = Vmprovider().get_provider(cloud)
-
         self.mongo = MongoDB(host=config.get('data.mongo.MONGO_HOST'),
                              username=config.get('data.mongo.MONGO_USERNAME'),
                              password=config.get('data.mongo.MONGO_PASSWORD'),
                              port=config.get('data.mongo.MONGO_PORT'))
-        #print(config.get('data.mongo.MONGO_HOST'))
 
 
     def start(self, name):

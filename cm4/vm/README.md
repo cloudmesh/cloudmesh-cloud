@@ -172,7 +172,9 @@ When users first time start the **MongoDB**, they have to add an account and ope
 
 If you want to learn more about the **Security** in MongoDB, you can visit this [page](https://docs.mongodb.com/manual/security/) or visit the brief introduction about the MongoDB
 
-
+Here is a quick reference about how to
+ [enable MongoDB Security](https://medium.com/@raj_adroit/mongodb-enable-authentication-enable-access-control-e8a75a26d332) option. Currently our implementation require 
+users to access localhost mongoDB client with admin account. 
 
 
 

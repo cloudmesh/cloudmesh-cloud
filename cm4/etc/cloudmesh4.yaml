@@ -33,7 +33,6 @@ cloudmesh:
         AZURE_SUBSCRIPTION_ID:      'xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
         AZURE_APPLICATION_ID:       'xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
         AZURE_SECRET_KEY:           'your secret key'
-        AZURE_MANAGEMENT_CERT_PATH: 'C:/Demo/azure_cert.pem'
     aws:
       cm:
         heading:                    AWS

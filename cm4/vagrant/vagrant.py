@@ -3,19 +3,19 @@
 """Vagrant Manager.
 
 Usage:
-  vagrant.py vagrant create --vms=<vmlist> [--box=BOX] [--template=TEMPLATE] [--output=OUTPUT] [--debug]
-  vagrant.py vagrant start [--vms=<vmList>] [--debug]
-  vagrant.py vagrant resume [--vms=<vmList>] [--debug]
-  vagrant.py vagrant stop [--vms=<vmList>] [--debug]
-  vagrant.py vagrant suspend [--vms=<vmList>] [--debug]
-  vagrant.py vagrant destroy [-f] [--vms=<vmList>] [--debug] 
+  vagrant.py vagrant create --vms=VMLIST [--box=BOX] [--template=TEMPLATE] [--output=OUTPUT] [--debug]
+  vagrant.py vagrant start [--vms=VMLIST] [--debug]
+  vagrant.py vagrant resume [--vms=VMLIST] [--debug]
+  vagrant.py vagrant stop [--vms=VMLIST] [--debug]
+  vagrant.py vagrant suspend [--vms=VMLIST] [--debug]
+  vagrant.py vagrant destroy [-f] [--vms=VMLIST] [--debug] 
   vagrant.py vagrant info NAME [--debug]
   vagrant.py vagrant ls [--debug]
-  vagrant.py vagrant upload --from=FROM --to=TO [-r] [--vms=<vmlist>] [--debug]
-  vagrant.py vagrant download --from=FROM --to=TO [-r] [--vms=<vmlist>] [--debug]
+  vagrant.py vagrant upload --from=FROM --to=TO [-r] [--vms=VMLIST] [--debug]
+  vagrant.py vagrant download --from=FROM --to=TO [-r] [--vms=VMLIST] [--debug]
   vagrant.py vagrant ssh NAME [--debug]
-  vagrant.py vagrant run command COMMAND [--vms=<vmList>] [--debug]
-  vagrant.py vagrant run script SCRIPT [--data=PATH] [--vms=<vmList>] [--debug]
+  vagrant.py vagrant run command COMMAND [--vms=VMLIST] [--debug]
+  vagrant.py vagrant run script SCRIPT [--data=PATH] [--vms=VMLIST] [--debug]
 
   vagrant.py -h
 
@@ -30,7 +30,7 @@ Example:
    put an example here
 """
 """
-Inplementation notes
+Implementation notes
 
 
 Future Version ideas:
@@ -51,7 +51,7 @@ Future Version ideas:
 
 Version 0.3:
 
-* addes "cm-vagrant run" command with multi-threading.
+* added "cm-vagrant run" command with multi-threading.
 
   Design:
 

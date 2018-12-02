@@ -12,7 +12,7 @@ class Name(object):
         self.ntype = ntype
         self.name_dict = None
         self.default_schema_dict={
-                "instance":"{experiment}-{group}={user}-{counter}"
+                "instance":"{experiment}-{group}-{user}-{counter}"
                 } 
         self.schema = None
         self.schema = self._get_schema(ntype, schema, False)

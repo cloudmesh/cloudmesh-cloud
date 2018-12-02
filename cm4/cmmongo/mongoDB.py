@@ -17,7 +17,7 @@ class MongoDB(DatabaseManagerABC):
         self.client = None
         self.db = None
         self.connect_db()
-
+        #pprint(self.db.command("serverStatus"))
 
     def set_port(self, port):
         """
@@ -65,6 +65,7 @@ class MongoDB(DatabaseManagerABC):
         :return: id of document
         """
         cm = self.db['cloud']
+        print(cm)
         post_id = cm.insert_one(self.var_to_json(document)).inserted_id
         return post_id
 

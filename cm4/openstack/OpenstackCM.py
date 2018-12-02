@@ -161,7 +161,6 @@ class OpenstackCM (CloudManagerABC):
             self.driver.ex_detach_floating_ip_from_node(node, ip)
 
 
-
     ## standard functions
     def ls(self):
         """

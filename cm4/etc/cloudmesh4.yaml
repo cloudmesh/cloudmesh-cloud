@@ -69,7 +69,7 @@ cloudmesh:
         OS_USER_DOMAIN_ID: default        
         OS_VERSION: liberty
         OS_REGION_NAME: RegionOne
-        OS_KEY_PATH: #put your keyfile path here
+        OS_KEY_PATH: #put your ssh-keyfile path here (macOS convention is ~/.ssh/id_rsa.pub)
       default:
         flavor: m1.small
         image: CC-Ubuntu16.04

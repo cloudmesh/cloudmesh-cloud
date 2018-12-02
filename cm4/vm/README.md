@@ -12,14 +12,21 @@ In this project, we are using the python library [**Apache Libcloud**](https://l
 * [**AZURE**](https://azure.microsoft.com/en-us/)
 * any cloud service providers using **OPENSTACK**. For example, [**Chameleon**](https://www.chameleoncloud.org) and [**Jetstream**](https://jetstream-cloud.org)
 
-While using the **Apache Libcloud** API, we could do these operations for nodes in above cloud service providers:
+By using the **Apache Libcloud** API, we could do these operations for nodes in above cloud service providers:
 
 * Start the node
 * Stop the node
 * Resume the node
 * Suspend the node
 * Destory the node
-* :o2: Create the node
+* Create the node
+
+**Improvement**: Sometimes adjustments to nodes are necessary (switch between different images/OS and service sizes). 
+Now our project also allow users to customize their instances across multiple providers by using refactor functions to support their management tasks.
+* Resize the node
+* Rebuild(with different image) the node
+* Rename the node
+* Revert previous operations to the node
 
 
 ### AWS

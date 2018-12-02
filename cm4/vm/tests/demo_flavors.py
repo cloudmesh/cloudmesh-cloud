@@ -15,29 +15,31 @@ def main():
     # test for openstack
     # input("Press Enter to connect to MongoDB....")
     openstack = Vm('chameleon')
-    openstack.create('ruili-01')
+    refactor = VmRefactor(openstack)
+    #openstack.create('ruili-01')
 
 
-    print(openstack.mongo.username)
-    print(openstack.mongo.password)
-    print(openstack.mongo.client)
-    print(openstack.mongo.db['config'])
+    #print(openstack.mongo.username)
+    #print(openstack.mongo.password)
+    #print(openstack.mongo.client)
+    #print(openstack.mongo.db)
     #print(openstack.mongo.db.collection_names(include_system_collections=False))
 
 
     list = openstack.list()
-    pprint(list)
-    pprint(list[0])
+    #pprint(list)
+    #pprint(list[0])
 
-    print(openstack.info('cm_test_small'))
+    print(openstack.info('ruili-01'))
 
 
     name = openstack.list()[0].name
-    refactor = VmRefactor(openstack)
+    print(name)
 
     sizes = refactor.list_sizes()
+    pprint(sizes)
 
-    refactor.resize(name=name, size=sizes[1])
+    refactor.resize(name=name, size=sizes[3])
 
 
 

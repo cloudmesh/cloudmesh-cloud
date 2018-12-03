@@ -12,8 +12,11 @@ from cm4.configuration.config import Config
 import cm4.vm.VmUtil as util
 
 
-###
-### provide generic methods to manipulate nodes from various providers by name
+"""
+provide generic methods to manipulate nodes from various providers by name
+
+init VmRefactor with a VM instance (self.vm)
+"""
 
 class VmRefactor(object):
     def __init__(self, vm):
@@ -29,7 +32,7 @@ class VmRefactor(object):
         '''
         node = self.get_node_by_name(name)
         node_id = node.id
-        return self.vm.provider.ex_confirm_resize(node)
+        return self.vm.provider.driver.ex_confirm_resize(node)
 
 
     def resize(self, name, size):
@@ -40,7 +43,7 @@ class VmRefactor(object):
         '''
         node = self.get_node_by_name(name)
         node_id = node.id
-        return self.vm.provider.ex_resize(node, size)
+        return self.vm.provider.driver.ex_resize(node, size)
 
 
     def revert_resize(self, name):
@@ -51,7 +54,7 @@ class VmRefactor(object):
         '''
         node = self.get_node_by_name(name)
         node_id = node.id
-        return self.vm.provider.ex_revert_resize(node)
+        return self.vm.provider.driver.ex_revert_resize(node)
 
 
     # rebuild node with new image
@@ -63,7 +66,7 @@ class VmRefactor(object):
         '''
         node = self.get_node_by_name(name)
         node_id = node.id
-        return self.vm.provider.ex_rebuild(node, image=image)
+        return self.vm.provider.driver.ex_rebuild(node, image=image)
 
 
     def rename(self, name, newname):
@@ -74,7 +77,7 @@ class VmRefactor(object):
         '''
         node = self.get_node_by_name(name)
         node_id = node.id
-        return self.vm.provider.ex_set_server_name(node, newname)
+        return self.vm.provider.driver.ex_set_server_name(node, newname)
 
 
     def list(self):
@@ -82,7 +85,7 @@ class VmRefactor(object):
         list existed nodes
         :return: all nodes' information
         """
-        result = self.vm.provider.list_nodes()
+        result = self.vm.provider.driver.list_nodes()
         return result
 
 
@@ -101,14 +104,13 @@ class VmRefactor(object):
         raise ValueError('Node with name: \"'+name+'\" was not found!')
 
 
-
     def list_sizes(self):
         '''
         List sizes on a provider
         :param:
         :return: list of NodeSize
         '''
-        return self.vm.provider.list_sizes()
+        return self.vm.provider.driver.list_sizes()
 
 
     def list_images(self, location=None, ex_only_active=True):
@@ -117,7 +119,7 @@ class VmRefactor(object):
         :param:
         :return: list of Images
         '''
-        return self.vm.provider.list_images(location, ex_only_active)
+        return self.vm.provider.driver.list_images(location, ex_only_active)
 
 
     def info(self, name):

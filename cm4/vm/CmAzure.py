@@ -1,3 +1,4 @@
+import os
 import time
 from libcloud.compute.base import NodeAuthSSHKey
 from libcloud.compute.drivers.azure_arm import AzureNetwork, AzureSubnet, AzureIPAddress, AzureNodeDriver
@@ -28,8 +29,8 @@ class CmAzureDriver(AzureNodeDriver, NodeDriver):
                  secure=True, host=None, port=None,
                  api_version=None, region=None, **kwargs):
 
-        config = Config()
-        self.defaults = config.get("cloud.azure.default")
+        self.config = Config()
+        self.defaults = self.config.get("cloud.azure.default")
         self.resource_group = self.defaults["resource_group"]
 
         super().__init__(tenant_id=tenant_id,
@@ -77,10 +78,12 @@ class CmAzureDriver(AzureNodeDriver, NodeDriver):
         """
         Create a node
         """
+        key_path = self.config.get("profile.key.public")
 
-        # id_rsa_path = f"{Path.home()}/.ssh/id_rsa.pub"
+        with open(os.path.expanduser(key_path), 'r') as fp:
+            key = fp.read()
 
-        auth = NodeAuthSSHKey(self.defaults["public_key"])
+        auth = NodeAuthSSHKey(key)
 
         image = self.get_image(self.defaults["image"])
         sizes = self.list_sizes()
@@ -91,7 +94,7 @@ class CmAzureDriver(AzureNodeDriver, NodeDriver):
         network, subnet = self._create_network(network_name)
 
         # Create a NIC with public IP
-        nic = self._create_create_nic(name, subnet)
+        nic = self._create_nic(name, subnet)
 
         # Create vm
         new_vm = super().create_node(
@@ -129,21 +132,45 @@ class CmAzureDriver(AzureNodeDriver, NodeDriver):
         net = [n for n in self.ex_list_networks() if n.name == network_name]
         return net[0] if net else None
 
+    def _get_subnet(self, network):
+        """
+        Returns the first subnet associated with the virtual network.
+        Assuming the network was created by this provider, there will
+        be only one subnet.
+
+        :param network:
+        :return:
+        """
+        subnet = self.ex_list_subnets(network)[0]
+        return subnet
+
     def _create_network(self, network_name):
         """
         Create a new network resource if it does not exist or returns
         an existing network resource if it exists.
         """
+        existing_network = self._get_network(network_name)
+
+        # Do not recreate an already existing network and subnet.
+        if existing_network is not None:
+            existing_subnet = self._get_subnet(existing_network)
+            return existing_network, existing_subnet
+
+        print(f"Virtual Network {network_name} not found. Creating...")
+
         network_cidr = "10.0.0.0/16"
         network = self._ex_create_network(name=network_name, cidr=network_cidr)
-        time.sleep(2)
+        time.sleep(1)
         subnet_name = "default"
         subnet_cidr = "10.0.0.0/16"
         subnet = self._ex_create_subnet(name=subnet_name, cidr=subnet_cidr, network_name=network_name)
-        time.sleep(2)
+        time.sleep(1)
+
+        print(f"Created Virtual Network {network_name}.")
+
         return network, subnet
 
-    def _create_create_nic(self, name, subnet):
+    def _create_nic(self, name, subnet):
         """
         Create a network interface card with a public IP
         :param name: The name of the node

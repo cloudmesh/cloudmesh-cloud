@@ -12,21 +12,28 @@ In this project, we are using the python library [**Apache Libcloud**](https://l
 * [**AZURE**](https://azure.microsoft.com/en-us/)
 * any cloud service providers using **OPENSTACK**. For example, [**Chameleon**](https://www.chameleoncloud.org) and [**Jetstream**](https://jetstream-cloud.org)
 
-While using the **Apache Libcloud** API, we could do these operations for nodes in above cloud service providers:
+By using the **Apache Libcloud** API, we could do these operations for nodes in above cloud service providers:
 
 * Start the node
 * Stop the node
 * Resume the node
 * Suspend the node
 * Destory the node
-* :o2: Create the node
+* Create the node
+
+**Improvement**: Sometimes adjustments to nodes are necessary (switch between different images/OS and service sizes). 
+Now our project also allow users to customize their instances across multiple providers by using refactor functions to support their management tasks.
+* Resize the node
+* Rebuild(with different image) the node
+* Rename the node
+* Revert previous operations to the node
 
 
 ### AWS
 
-Amazon Web Service (**AWS**) provided by Amazon is a secure cloud service plarform, users could start any instances with selected images.
+Amazon Web Service (**AWS**) provided by Amazon is a secure cloud service platform, users could start any instances with selected images.
 
-Before users use the **cm4** platfrom to access **EC2**, they have to finish these preparations:
+Before users use the **cm4** platform to access **EC2**, they have to finish these preparations:
 
 1. EC2 account, more information is 
    [here](https://aws.amazon.com/premiumsupport/knowledge-center/create-and-activate-aws-account/)
@@ -39,11 +46,11 @@ Before users use the **cm4** platfrom to access **EC2**, they have to finish the
    (create new Access Key: Account 
    (right upper corner) > My Security Credentials > Access Keys > Create New Access Key)
 
-3. **Private Key file** is a key pairs to emcrypy and decrypt 
+3. **Private Key file** is a key pairs to encrypt and decrypt 
    login information. While using **Private Key file**, there is no 
    need to use username or password to login the instance of AWS. For
    sshing the instance, the ssh client would use the **private key file** 
-   instead of cerdential information. (create new key pairs: Network $ Security
+   instead of credential information. (create new key pairs: Network & Security
    (left column bar) > Key Pairs > Create Key Pair)
 
 4. **Security Group** acts as a virtual firewall for the instance. 
@@ -62,7 +69,39 @@ When you finish all above things, you should update information into the block '
 
 ### AZURE
 
-David
+Uses [LibCloud's Azure ARM Compute Driver](https://libcloud.readthedocs.io/en/latest/compute/drivers/azure_arm.html)
+
+### Azure Setup
+
+
+**Install Azure CLI**
+
+[Download and install according to your platform.](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest)
+
+**Make sure subscription is registered for compute services**
+
+```
+az provider register --namespace Microsoft.Compute
+```
+
+**Service principal**
+
+[Full documentation on creating service principals.](https://docs.microsoft.com/en-us/cli/azure/create-an-azure-service-principal-azure-cli?view=azure-cli-latest) The Azure ARM Driver does not appear to support certificate based
+principals at this time.
+
+
+Create Principal
+```
+az ad sp create-for-rbac --name cm-admin-pw --password <SECRET>
+```
+
+Add `Owner` role.
+
+```
+az role assignment create --assignee <APP_ID> --role Owner
+```
+
+*Note:* `<APP_ID>` is provided in the output when the principal is created
 
 ### OPENSTACK
 
@@ -165,7 +204,9 @@ When users first time start the **MongoDB**, they have to add an account and ope
 
 If you want to learn more about the **Security** in MongoDB, you can visit this [page](https://docs.mongodb.com/manual/security/) or visit the brief introduction about the MongoDB
 
-
+Here is a quick reference about how to
+ [enable MongoDB Security](https://medium.com/@raj_adroit/mongodb-enable-authentication-enable-access-control-e8a75a26d332) option. Currently our implementation require 
+users to access localhost mongoDB client with admin account. 
 
 
 

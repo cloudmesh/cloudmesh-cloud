@@ -1,15 +1,15 @@
 """Cloudmesh 4
 
 Usage:
-  cm4 vagrant create --count <vm_number> [--debug]
-  cm4 vagrant start [--vms=<vmList>] [--debug]
-  cm4 vagrant stop [--vms=<vmList>] [--debug]
-  cm4 vagrant destroy [--vms=<vmList>] [--debug]
-  cm4 vagrant status [--vms=<vmList>]
+  cm4 vagrant create --count=VMNUMBER [--debug]
+  cm4 vagrant start [--vms=VMLIST] [--debug]
+  cm4 vagrant stop [--vms=VMLIST] [--debug]
+  cm4 vagrant destroy [--vms=VMLIST] [--debug]
+  cm4 vagrant status [--vms=VMLIST]
   cm4 vagrant list
   cm4 vagrant ssh NAME
-  cm4 vagrant run COMMAND  [--vms=<vmList>]
-  cm4 vagrant script run SCRIPT [--vms=<vmList>]
+  cm4 vagrant run COMMAND  [--vms=VMLIST]
+  cm4 vagrant script run SCRIPT [--vms=VMLIST]
   cm4 data add FILE
   cm4 data add SERVICE FILE
   cm4 data get FILE
@@ -23,9 +23,7 @@ Usage:
   cm4 set cluster CLUSTERNAME
   cm4 set experiment EXPERIMENT
   cm4 set --key=KEY --value=VALUE
-  cm4 vm create VMNAME
-  cm4 vm create --count VMNUMBER [--debug] [--dryrun]
-  cm4 vm start [--vms=VMLIST] [--debug] [--dryrun]
+  cm4 vm start [VMNAME] [--vms=VMLIST] [--count=VMNUMBER] [--debug] [--dryrun]
   cm4 vm stop [--vms=VMLIST] [--debug] [--dryrun]
   cm4 vm destroy [--vms=VMLIST] [--debug] [--dryrun]
   cm4 vm status [--vms=VMLIST] [--dryrun]

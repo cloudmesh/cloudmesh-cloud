@@ -1,4 +1,5 @@
 import pprint
+import getpass
 from cm4.vm.Cmaws import Cmaws
 from cm4.vm.CmAzure import CmAzure
 from cm4.vm.Cmopenstack import Cmopenstack
@@ -53,7 +54,6 @@ class Vm:
         :param name:
         :return: VM document
         """
-
         info = self.info(name)
         if info.state != 'running':
             self.provider.ex_start_node(info)
@@ -114,8 +114,6 @@ class Vm:
         node = self.provider.create_node(name)
         self.mongo.insert_cloud_document(vars(node))
         return node
-        # node = self.provider.create_node(name=name, **self.provider.get_new_node_setting())
-        # return node
 
     def list(self):
         """
@@ -156,10 +154,9 @@ class Vm:
         """
         TODO: Doc
 
-        TODO: use config defaults by default.
-
         :param experiment:
         :param group:
+        :param user:
         :return:
         """
         counter = Counter()
@@ -240,31 +237,39 @@ def process_arguments(arguments):
     if arguments.get("list"):
         result = vm.list()
 
-    elif arguments.get("create"):
+    elif arguments.get("start"):
         # TODO: Reconcile `create` behavior here and in docopts where
         #       create is called with a `VMCOUNT`.
 
         vm_name = arguments.get("VMNAME")
 
         if vm_name is None:
-            vm_name = vm.new_name(default_experiment, default_group, "user")
+            vm_name = vm.new_name(default_experiment, default_group, getpass.getuser())
 
         vm.create(vm_name)
+
         result = f"Created {vm_name}"
-    elif arguments.get("start"):
-        vm.start(arguments.get("--vms"))
+
+    # elif arguments.get("start"):
+    #     vm.start(arguments.get("--vms"))
+
     elif arguments.get("stop"):
         vm.stop(arguments.get("--vms"))
+
     elif arguments.get("destroy"):
         vm.destroy(arguments.get("--vms"))
+
     elif arguments.get("status"):
         vm.status(arguments.get("--vms"))
+
     elif arguments.get("ssh"):
         # TODO
         pass
+
     elif arguments.get("run"):
         # TODO
         pass
+
     elif arguments.get("script"):
         # TODO
         pass

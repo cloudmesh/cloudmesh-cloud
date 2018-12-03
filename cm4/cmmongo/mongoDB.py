@@ -153,7 +153,7 @@ class MongoDB(DatabaseManagerABC):
 
 
     @staticmethod
-    def status_document(instance_id, status, job_id, history):
+    def status_document(instance_name, status, job_id, history):
         """
         create status document
         :param instance_id:
@@ -162,7 +162,7 @@ class MongoDB(DatabaseManagerABC):
         :param history:
         :return:
         """
-        document = {'id': instance_id,
+        document = {'id': instance_name,
                     'status': status,
                     'currentJob': job_id,
                     'history': history}

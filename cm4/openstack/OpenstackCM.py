@@ -19,7 +19,7 @@ from cm4.openstack.OpenstackRefactor import OpenstackRefactor
 
 class OpenstackCM(CloudManagerABC):
 
-    ### util
+    # util
     def __init__(self, cloud=None):
         config = Config()
         self.cloud = cloud
@@ -96,7 +96,7 @@ class OpenstackCM(CloudManagerABC):
         # print(ips[0].node_id)
         return ips[0] if ips else None
 
-        ### API hack for new VM class
+    # API hack for new VM class
 
     def ex_start_node(self, node):
         return self.driver.ex_start_node(node)
@@ -113,7 +113,7 @@ class OpenstackCM(CloudManagerABC):
     def list_nodes(self):
         return self.driver.list_nodes()
 
-    ### APIs
+    # APIs
     def execute(self, name, command):
         """
         execute arbitrary shell command on node through ssh
@@ -159,7 +159,7 @@ class OpenstackCM(CloudManagerABC):
         for ip in node.public_ips:
             self.driver.ex_detach_floating_ip_from_node(node, ip)
 
-    ## standard functions
+    # standard functions
     def ls(self):
         """
         list all nodes

@@ -29,7 +29,7 @@ def main():
     return
     '''
 
-    ## create and auto start
+    # create and auto start
     print("call d.create() function")
     node = d.create('cm_test_small')
     node_id = node.id
@@ -66,7 +66,7 @@ def main():
     input("Press Enter to continue...")
     node = r.rename(node_id, "new name")
 
-    ## destroy
+    # destroy
     input("Press Enter to continue...")
     print("call d.destroy() function")
     d.destroy(node_id)

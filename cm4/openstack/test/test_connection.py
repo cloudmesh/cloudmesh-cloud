@@ -2,6 +2,7 @@ from libcloud.compute.types import Provider
 from libcloud.compute.providers import get_driver
 from config import Config
 
+
 # TODO: BUG: Provider also in libcloud
 class Provider(object):
 

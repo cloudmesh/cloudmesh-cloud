@@ -67,6 +67,7 @@ class Run(object):
         task = []
 
         max_instance = int(count_scripts / count_instance) + 1
+        # TODO: BUG: i is over two loops
         for i in range(max_instance):
             for i in aws.keys():
                 task.append({i: aws[i]})

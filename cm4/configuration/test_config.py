@@ -35,3 +35,4 @@ class TestConfig:
 
         assert before != after
         new_config.set("default.cloud", before)
+

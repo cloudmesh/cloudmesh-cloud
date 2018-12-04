@@ -3,6 +3,7 @@ from os.path import isfile, expanduser, join, dirname, realpath, exists
 from cm4.configuration.dot_dictionary import DotDictionary
 from shutil import copyfile
 from os import mkdir
+from pathlib import Path
 
 
 class Config(object):
@@ -23,7 +24,8 @@ class Config(object):
             mkdir(config_folder)
 
         if not isfile(self.config_path):
-            copyfile(join(dirname(realpath(__file__)), "../etc/cloudmesh4.yaml"), self.config_path)
+            destination_path = Path(join(dirname(realpath(__file__)), "../etc/cloudmesh4.yaml"))
+            copyfile(destination_path.resolve(), self.config_path)
 
         with open(self.config_path, "r") as stream:
             conf = yaml.load(stream)

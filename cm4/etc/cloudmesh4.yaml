@@ -139,6 +139,8 @@ cloudmesh:
       MONGO_PORT: '27017'
       MONGO_USERNAME: 'admin'
       MONGO_PASSWORD: 'admin'
+      MONGO_DOWNLOAD: 'downloadPath.tgz'
+      MONGO_FOLDER: 'mongdb folder name'
   cluster:
     bigred2:
         name:                       bigred2

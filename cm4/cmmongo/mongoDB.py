@@ -6,7 +6,6 @@ from pprint import pprint
 
 
 class MongoDB(DatabaseManagerABC):
-    # haven't tested it
 
     def __init__(self, host, username, password, port):
         self.database = 'cloudmesh'
@@ -17,7 +16,7 @@ class MongoDB(DatabaseManagerABC):
         self.client = None
         self.db = None
         self.connect_db()
-        #pprint(self.db.command("serverStatus"))
+
 
     def set_port(self, port):
         """
@@ -151,6 +150,27 @@ class MongoDB(DatabaseManagerABC):
         collection = self.db[collection_name]
         old_document = collection.find_one_and_delete({key : value})
         return old_document
+
+    def db_command(self, command):
+        """
+        issue command string against mongoDB console
+        :param command: interaction command string you want to send to mongodb console
+        :return: command return
+        """
+        try:
+            res = self.db.command(command)
+        except Exception as e:
+            #print(e)
+            raise ValueError("Not a valid command")
+
+        return res
+
+    def test_db_connection(self):
+        """
+        test mongodb correspondent db connection
+        :return:
+        """
+        return self.db_command("serverStatus")
 
 
     @staticmethod

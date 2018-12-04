@@ -5,7 +5,7 @@ import subprocess
 
 class CommandAWS(object):
 
-    def __init__(self, mongo):
+    def __init__(self):
         config = Config()
         self.private_key_file = config.get('cloud.aws.credentials.EC2_PRIVATE_KEY_FILE_PATH')
         self.mongo = MongoDB(host=config.get('data.mongo.MONGO_HOST'),

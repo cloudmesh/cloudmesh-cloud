@@ -89,17 +89,17 @@ Version 0.1:
 # TODO: use captal letters as easier to document in other tools
 
 
-import hostlist
-from docopt import docopt
-from colorama import init
-from termcolor import colored
+import logging
+import multiprocessing.dummy as mt
+import os
 import queue
 import re
 import subprocess
-import os
-import multiprocessing.dummy as mt
 import time
-import logging
+
+import hostlist
+from docopt import docopt
+from termcolor import colored
 
 
 class Vagrant(object):

@@ -25,11 +25,11 @@ class VmRefactor(object):
 
 
     def confirm_resize(self, name):
-        '''
+        """
         confirm a resizing request for a node
         :param: node_id
         :return: bool
-        '''
+        """
         node = self.get_node_by_name(name)
         node_id = node.id
         return self.vm.provider.driver.ex_confirm_resize(node)

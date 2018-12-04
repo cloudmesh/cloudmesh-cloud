@@ -96,7 +96,7 @@ class SetupMongoDB(object):
                                                   logAppend=True)
                                    )
 
-        if username != None and password != None:
+        if username is not None and password is not None:
             default_config_file.update(dict(security=dict(authorization='enabled')))
 
         with open(os.path.join(self.mongo_db_path, 'mongod.conf'), "w") as output:

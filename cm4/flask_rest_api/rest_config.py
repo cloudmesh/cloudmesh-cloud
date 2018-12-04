@@ -9,3 +9,5 @@ class RestConfig(object):
     MONGO_USERNAME = config.get("data.mongo.MONGO_USERNAME")
     MONGO_PASSWORD = config.get("data.mongo.MONGO_PASSWORD")
     MONGO_URI = "mongodb://" + MONGO_USERNAME + ":" + MONGO_PASSWORD + "@" + MONGO_HOST + ":" + MONGO_PORT + "/" + MONGO_DBNAME
+    # TODO:
+    # MONGO_URI = "mongodb://{MONGO_USERNAME}:{MONGO_PASSWORD}@{MONGO_HOST}:{MONGO_PORT}/{MONGO_DBNAME}".format(**data.mongo)

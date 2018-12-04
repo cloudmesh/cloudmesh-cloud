@@ -7,7 +7,7 @@ from cm4.configuration.config import Config
 from pprint import pprint
 
 
-class MongoDBController (object):
+class MongoDBController(object):
 
     def __init__(self):
 
@@ -143,7 +143,7 @@ class MongoDBController (object):
                                    systemLog=dict(destination='file',
                                                   path=os.path.join(self.mongo_db_path, 'log', 'mongod.log'),
                                                   logAppend=True)
-                                    )
+                                   )
 
         if security:
             default_config_file.update(dict(security=dict(authorization='enabled')))
@@ -163,6 +163,7 @@ class MongoDBController (object):
         subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True)
         print('MonogDB is running')
 
+    # noinspection PyMethodMayBeStatic
     def shutdown_mongodb(self):
         """
         shutdown the MongoDB server

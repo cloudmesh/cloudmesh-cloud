@@ -4,7 +4,6 @@ import urllib.parse
 
 class MongoDB(object):
 
-
     def __init__(self, host, username, password, port):
         self.database = 'cloudmesh'
         self.host = host
@@ -135,7 +134,6 @@ class MongoDB(object):
             documents = collection.find({key: value})
         return documents
 
-
     def delete_document(self, collection_name, key, value):
         """
         delete the document
@@ -154,6 +152,7 @@ class MongoDB(object):
         :param command: interaction command string you want to send to mongodb console
         :return: command return
         """
+        # noinspection PyUnusedLocal
         try:
             res = self.db.command(command)
         except Exception as e:

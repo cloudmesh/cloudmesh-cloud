@@ -2,7 +2,15 @@ from cm4.cmmongo.mongoDB import MongoDB
 from cm4.configuration.config import Config
 
 
+#
+# TODO: convert to a nosetest
+#
+
 class TestMongo:
+
+    def __init__(self):
+        self.status_id = None
+        self.mongo = None
 
     def setup(self):
         self.status_id = "test-id-1"

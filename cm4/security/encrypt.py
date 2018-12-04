@@ -1,5 +1,5 @@
 import os
-from cloudmesh.common.util import path_expand
+from cm4.common.util import path_expand
 
 
 class EncryptFile(object):
@@ -21,7 +21,10 @@ class EncryptFile(object):
         command = path_expand("openssl rsa -in {key} -pubout  > {pem}".format(**self.data))
         self._execute(command)
 
-    def pem_cat(slef):
+    #
+    # TODO: BUG
+    #
+    def pem_cat(self):
         command = path_expand("cat {pem}".format(**self.data))
         self._execute(command)
 

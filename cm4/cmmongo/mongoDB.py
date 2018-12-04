@@ -4,7 +4,6 @@ import urllib.parse
 from pprint import pprint
 
 
-
 class MongoDB(DatabaseManagerABC):
 
     def __init__(self, host, username, password, port):
@@ -16,7 +15,6 @@ class MongoDB(DatabaseManagerABC):
         self.client = None
         self.db = None
         self.connect_db()
-
 
     def set_port(self, port):
         """
@@ -30,7 +28,7 @@ class MongoDB(DatabaseManagerABC):
         set username
         :param username:
         """
-        self.username = urllib.parse.quote_plus (username)
+        self.username = urllib.parse.quote_plus(username)
 
     def set_password(self, password):
         """
@@ -56,7 +54,6 @@ class MongoDB(DatabaseManagerABC):
         post_id = cm.insert_one(document).inserted_id
         return post_id
 
-
     def insert_cloud_document(self, document):
         """
         insert document to cloud collection
@@ -67,7 +64,6 @@ class MongoDB(DatabaseManagerABC):
         print(cm)
         post_id = cm.insert_one(self.var_to_json(document)).inserted_id
         return post_id
-
 
     def insert_status_collection(self, document):
         """
@@ -108,7 +104,7 @@ class MongoDB(DatabaseManagerABC):
         :return: True/False
         """
         collection = self.db[collection_name]
-        result = collection.update_one({key : value}, {'$set': self.var_to_json(info)}).acknowledged
+        result = collection.update_one({key: value}, {'$set': self.var_to_json(info)}).acknowledged
         return result
 
     def find_document(self, collection_name, key, value):
@@ -147,7 +143,7 @@ class MongoDB(DatabaseManagerABC):
         :return: the deleted document
         """
         collection = self.db[collection_name]
-        old_document = collection.find_one_and_delete({key : value})
+        old_document = collection.find_one_and_delete({key: value})
         return old_document
 
     def db_command(self, command):
@@ -159,7 +155,7 @@ class MongoDB(DatabaseManagerABC):
         try:
             res = self.db.command(command)
         except Exception as e:
-            #print(e)
+            # print(e)
             raise ValueError("Not a valid command")
 
         return res
@@ -170,7 +166,6 @@ class MongoDB(DatabaseManagerABC):
         :return:
         """
         return self.db_command("serverStatus")
-
 
     @staticmethod
     def status_document(instance_id, status, job_id, history):
@@ -224,12 +219,11 @@ class MongoDB(DatabaseManagerABC):
                     'vms': list_vms}
         return document
 
-
     def var_to_json(self, document):
         new = dict()
         for key in document.keys():
             if isinstance(document[key], dict):
-                new.update({key : self.var_to_json(document[key])})
+                new.update({key: self.var_to_json(document[key])})
             elif isinstance(document[key], list):
                 temp = []
                 for item in document[key]:
@@ -248,14 +242,8 @@ class MongoDB(DatabaseManagerABC):
                 new.update({key: document[key]})
         return new
 
-
     def close_client(self):
         """
         close the connection to mongodb
         """
         self.client.close()
-
-
-
-
-

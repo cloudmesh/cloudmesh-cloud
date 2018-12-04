@@ -1,5 +1,6 @@
 from __future__ import print_function
 
+
 #
 # TODO THIS IS CODE FROM THE PREVIOUS CLOUDMESH, WE NEEED TO CLEAN AND POSSIBLY SIMPLIFY
 #
@@ -93,7 +94,7 @@ class Key(ListResource):
                     Console.error("Key already in db", traceflag=False)
         if not store:
             return d
-                # noinspection PyProtectedMember,PyUnreachableCode,PyUnusedLocal
+            # noinspection PyProtectedMember,PyUnreachableCode,PyUnusedLocal
 
     @classmethod
     def get_from_yaml(cls, filename=None, load_order=None, store=True):
@@ -117,7 +118,6 @@ class Key(ListResource):
         keylist = config_keys["keylist"]
 
         uri = Config.path_expand(os.path.join("~", ".cloudmesh", filename))
-
 
         d = []
         for key in list(keylist.keys()):
@@ -156,8 +156,6 @@ class Key(ListResource):
         if not store:
             return d
 
-
-
         """
         take a look into original cloudmesh code, its possible to either specify a key or a filename
         the original one is able to figure this out and do the rightthing. We may want to add this
@@ -177,6 +175,7 @@ class Key(ListResource):
               keyname: ssh rsa hajfhjldahlfjhdlsak ..... comment
               github-x: github
         """
+
     @classmethod
     def get_from_cloud(cls, cloud, live=False, format="table"):
         """
@@ -280,7 +279,7 @@ class Key(ListResource):
     def run_command(cls, cmd):
         """ Runs a command in a shell, returns the result"""
         p = subprocess.Popen(cmd, shell=True,
-                         stdout=subprocess.PIPE)
+                             stdout=subprocess.PIPE)
         return p.stdout.read()
 
     @classmethod
@@ -297,12 +296,12 @@ class Key(ListResource):
         pprint("add_azure_key_to_db")
         # Add to the current DB
         cls.add_from_path(key_path,
-                            key_name,
-                            source="ssh",
-                            uri="file://" + key_path)
+                          key_name,
+                          source="ssh",
+                          uri="file://" + key_path)
 
         # Add certificate to the new DB
-        fingerprint_cmd = "openssl x509 -in "+certificate_path+" -sha1 -noout -fingerprint | sed s/://g"
+        fingerprint_cmd = "openssl x509 -in " + certificate_path + " -sha1 -noout -fingerprint | sed s/://g"
         # print("fingerprint_cmd:", fingerprint_cmd)
         fingerprint = cls.run_command(fingerprint_cmd)
         fingerprint = fingerprint.split('=')[1]
@@ -346,7 +345,6 @@ class Key(ListResource):
     @classmethod
     def all(cls, output="dict"):
         return cls.cm.find(kind="key", scope="all", output=output)
-
 
     @classmethod
     def find(cls, name=None, output="dict"):
@@ -421,9 +419,9 @@ class Key(ListResource):
 
         if store:
             cls._add_from_sshkey(sshkey.__key__,
-                             keyname,
-                             user,
-                             source=source,
-                             uri=uri)
+                                 keyname,
+                                 user,
+                                 source=source,
+                                 uri=uri)
         else:
             return sshkey.__key__

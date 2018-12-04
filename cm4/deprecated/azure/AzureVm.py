@@ -5,6 +5,8 @@ from libcloud.compute.drivers.azure_arm import AzureNetwork, AzureSubnet, AzureI
 from libcloud.compute.base import NodeAuthSSHKey
 from cm4.configuration.config import Config
 from pathlib import Path
+
+
 # from cm4.vm.Vm import Vm
 
 
@@ -29,7 +31,6 @@ class AzureVm:
     #         secret=cred["AZURE_SECRET_KEY"],
     #         region=self.defaults["region"]
     #     )
-
 
     def suspend(self, name):
         """
@@ -56,7 +57,7 @@ class AzureVm:
         Create a node
         """
 
-        #id_rsa_path = f"{Path.home()}/.ssh/id_rsa.pub"
+        # id_rsa_path = f"{Path.home()}/.ssh/id_rsa.pub"
 
         auth = NodeAuthSSHKey(self.defaults["public_key"])
 

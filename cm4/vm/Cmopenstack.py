@@ -8,11 +8,7 @@ from libcloud.compute.base import NodeDriver
 import os
 
 
-
 class Cmopenstack(Cloud):
 
     def __init__(self, config, cloud):
-        self.driver = OpenstackCM(cloud)   # cloud is chameleon
-        
-
-
+        self.driver = OpenstackCM(cloud)  # cloud is chameleon

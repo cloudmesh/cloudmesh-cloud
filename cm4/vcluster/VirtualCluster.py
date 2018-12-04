@@ -46,7 +46,7 @@ from cm4.configuration.config import Config
 from cm4.configuration.generic_config import GenericConfig
 
 
-# noinspection PyPep8,PyPep8,PyPep8
+# noinspection PyPep8
 class VirtualCluster(object):
 
     def __init__(self, debug):
@@ -123,7 +123,13 @@ class VirtualCluster(object):
         else:
             print("Error: Node {} cannot be accessed.".format(target_node))
 
-    def _create_config(self, config_name, proc_num, download_proc_num, download_later, input_type, output_type):
+    def _create_config(self,
+                       config_name,
+                       proc_num,
+                       download_proc_num,
+                       download_later,
+                       input_type,
+                       output_type):
         """
         This method is used to create a runtime-configuration.
 
@@ -249,17 +255,14 @@ class VirtualCluster(object):
                 scp_caller(job_metadata['argfile_path'], '%s:%s' % (target_node['name'], job_metadata['remote_path']))
 
         if self.runtime_config['output-type'].lower() == 'stdout':
-            remote_pid = ssh_caller('cd %s && nohup %s %s > %s 2>&1 </dev/null& echo $!' % (job_metadata['remote_path']
-                                                                                                , job_metadata[
-                                                                                                'remote_script_path'],
-                                                                                            params,
-                                                                                            os.path.join(job_metadata[
-                                                                                                             'remote_path'],
-                                                                                                         self.add_suffix_to_path(
-                                                                                                             'outputfile_%d' % \
-                                                                                                             param_idx,
-                                                                                                             job_metadata[
-                                                                                                                 'suffix']))))
+            remote_pid = ssh_caller(
+                'cd %s && nohup %s %s > %s 2>&1 </dev/null& echo $!' % (job_metadata['remote_path'],
+                                                                        job_metadata['remote_script_path'],
+                                                                        params,
+                                                                        os.path.join(job_metadata['remote_path'],
+                                                                        self.add_suffix_to_path('outputfile_%d' % \
+                                                                                                param_idx,
+                                                                                          job_metadata['suffix']))))
         elif self.runtime_config['output-type'].lower() == 'stdout+file':
             remote_pid = ssh_caller('cd %s && nohup %s %s > %s 2>&1 </dev/null& echo $!' % \
                                     (os.path.join(job_metadata['remote_path'], 'run{}'.format(param_idx)),

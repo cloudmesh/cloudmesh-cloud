@@ -1,7 +1,7 @@
-import oyaml as yaml
-from os.path import isfile, expanduser, join, dirname, realpath, exists
-from shutil import copyfile
 from os import mkdir
+from os.path import isfile, expanduser, dirname, exists
+
+import oyaml as yaml
 
 
 class GenericConfig(object):
@@ -28,7 +28,6 @@ class GenericConfig(object):
             if self._conf_dict is None:
                 self._conf_dict = {}
 
-
     def get(self, key, default=None):
         """
         A helper function for reading values from the config without
@@ -39,6 +38,7 @@ class GenericConfig(object):
             default_db = conf.get('default.db')
             az_credentials = conf.get('data.service.azure.credentials')
 
+        :param default:
         :param key: A string representing the value's path in the config.
         """
         return self._conf_dict.get(key, default)
@@ -58,7 +58,7 @@ class GenericConfig(object):
         with open(self.config_path, "w") as stream:
             yaml.safe_dump(dict(self._conf_dict), stream, default_flow_style=False)
 
-    def deep_set(self, keys,value=None):
+    def deep_set(self, keys, value=None):
         """
         A helper function for setting values in the config without
         a chain of `set()` calls.
@@ -66,7 +66,7 @@ class GenericConfig(object):
         Usage:
             mongo_conn = conf.get('db.mongo.MONGO_CONNECTION_STRING', "https://localhost:3232")
 
-        :param key: A string representing the value's path in the config.
+        :param keys: A string representing the value's path in the config.
         :param value: value to be set.
         """
         pointer = self._conf_dict
@@ -76,7 +76,7 @@ class GenericConfig(object):
             if index < end or value is None:
                 inner_dict = inner_dict.setdefault(component, {})
             else:
-                if component not in inner_dict.keys() or type(inner_dict[component]) != dict :
+                if component not in inner_dict.keys() or type(inner_dict[component]) != dict:
                     inner_dict[component] = value
                 else:
                     inner_dict[component].update(value)
@@ -86,12 +86,11 @@ class GenericConfig(object):
     def keys(self):
         """
         Print keys of a subkey
-        :param key:
         :return:
         """
         return self._conf_dict.keys()
 
-    def remove(self,path,key_to_remove):
+    def remove(self, path, key_to_remove):
         """
 
         :return:
@@ -106,4 +105,3 @@ class GenericConfig(object):
             print("{} doesn't exist to remove.".format(key_to_remove))
         with open(self.config_path, "w") as stream:
             yaml.safe_dump(dict(self._conf_dict), stream, default_flow_style=False)
-

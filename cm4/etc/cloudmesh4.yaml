@@ -33,7 +33,6 @@ cloudmesh:
         AZURE_SUBSCRIPTION_ID:      'xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
         AZURE_APPLICATION_ID:       'xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
         AZURE_SECRET_KEY:           'your secret key'
-        AZURE_MANAGEMENT_CERT_PATH: 'C:/Demo/azure_cert.pem'
     aws:
       cm:
         heading:                    AWS
@@ -69,9 +68,11 @@ cloudmesh:
         OS_USER_DOMAIN_ID: default        
         OS_VERSION: liberty
         OS_REGION_NAME: RegionOne
+        OS_KEY_PATH: #put your ssh-keyfile path here (macOS convention is ~/.ssh/id_rsa.pub)
       default:
         flavor: m1.small
         image: CC-Ubuntu16.04
+        username: cc
     jetstream:
       cm:
         heading: Jetstream
@@ -120,8 +121,6 @@ cloudmesh:
     db:
       local:
         CMDATA_DB_FOLDER: '~/cloudmesh/cm4/test/data/db'
-      mongo:
-        MONGO_CONNECTION_STRING: ''
     service:
       local:
         CMDATA_STORAGE_FOLDER: '~/cloudmesh/cm4/test/data/storage'
@@ -134,6 +133,14 @@ cloudmesh:
         credentials:
           GOOGLE_STORAGE_KEY: ''
           GOOGLE_STORAGE_SECRET: ''
+    mongo:
+      MONGO_DBNAME: 'cloudmesh'
+      MONGO_HOST: '127.0.0.1'
+      MONGO_PORT: '27017'
+      MONGO_USERNAME: 'admin'
+      MONGO_PASSWORD: 'admin'
+      MONGO_DOWNLOAD: 'downloadPath.tgz'
+      MONGO_FOLDER: 'mongdb folder name'
   cluster:
     bigred2:
         name:                       bigred2

@@ -1,5 +1,6 @@
 import collections.abc
 
+
 class DotDictionary(dict):
     """
     A subclass of `dict` that allows dot paths into nested dictionary.
@@ -11,6 +12,7 @@ class DotDictionary(dict):
         sc = dot.get('meta.status_code')
         sc2 = dot['meta.status_code']
     """
+
     def __init__(self, *args, **kwargs):
         self.update(*args, **kwargs)
 
@@ -86,9 +88,9 @@ class DotDictionary(dict):
                 temp_dict = temp_dict.setdefault(key, {})
             temp_dict[keys[-1]] = value
 
-    def to_dict(self,input=None):
-        if input == None:
-            input=self
+    def to_dict(self, input=None):
+        if input is None:
+            input = self
         if isinstance(input, collections.abc.Mapping):
             return {k: self.to_dict(v) for k, v in input.items()}
         else:

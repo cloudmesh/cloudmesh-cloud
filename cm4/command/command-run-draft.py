@@ -10,8 +10,8 @@ Created on Sun Sep  9 17:19:52 2018
 # TODO: we do not want to use argparse
 
 import argparse
-from cm4.command.resource import Resource
-from cm4.command.parallel import ParallelProcess
+from cm4.deprecated.resource import Resource
+from cm4.deprecated.parallel import ParallelProcess
 import os
 
 
@@ -31,7 +31,7 @@ def main():
     result = parse.parse_args()
 
     resource = Resource()
-    name = os.path.userexpand("~/.cloudmesh/cloudmesh4.yaml")
+    name = os.path.expanduser("~/.cloudmesh/cloudmesh4.yaml")
     content = resource.readFile(name)
 
     run = ParallelProcess(content)

@@ -16,6 +16,10 @@ class TestCloudAzure:
         node = self.azure.provider._get_node(name)
         return node.state if node else None
 
+    def test_azure_005_getname(self):
+        name = self.azure.new_name()
+        assert name is not None
+
     def test_azure_010_create(self):
         vm = self.azure.create('cm-test-vm-1')
         assert vm is not None

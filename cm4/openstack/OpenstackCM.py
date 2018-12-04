@@ -13,6 +13,8 @@ from libcloud.compute.types import Provider
 from libcloud.compute.providers import get_driver
 from cm4.configuration.config import Config
 from time import sleep
+from pprint import pprint
+from cm4.openstack.OpenstackRefactor import OpenstackRefactor
 
 class OpenstackCM (CloudManagerABC):
 
@@ -98,14 +100,14 @@ class OpenstackCM (CloudManagerABC):
         return ips[0] if ips else None       
 
     ### API hack for new VM class
-    def ex_start_node(self, info):
-        return self.driver.ex_start_node(info)
+    def ex_start_node(self, node):
+        return self.driver.ex_start_node(node)
        
     def ex_stop_node(self, info, deallocate):
         return self.driver.ex_stop_node(info)
        
-    def destroy_node(self, node_info):
-        return self.driver.destroy_node(node_info) 
+    def destroy_node(self, node):
+        return self.driver.destroy_node(node)
               
     def create_node(self, name):
         return self.create(name)
@@ -179,9 +181,9 @@ class OpenstackCM (CloudManagerABC):
                 index+=1
 
 
-    def nodes_info(self, node_id):
+    def nodes_info(self):
         """
-        get clear information about all node
+        get organized meta information about all node
         :param node_id:
         :return: metadata of node
         """
@@ -196,7 +198,7 @@ class OpenstackCM (CloudManagerABC):
 
     def info(self, node_id):
         """
-        get clear information about one node
+        get meta information about one node
         :param node_id:
         :return: metadata of node
         """
@@ -300,3 +302,67 @@ class OpenstackCM (CloudManagerABC):
         node = self._get_node_by_id(node_id)
         return self.driver.destroy_node(node)       
 
+
+
+#@staticmethod
+def process_arguments(arguments):
+    """
+    Process command line arguments to execute VM actions.
+    Called from cm4.command.command
+    :param arguments:
+    """
+    result = None
+    node = None
+    config = Config()
+    if arguments.get("--debug"):
+        pp = pprint.PrettyPrinter(indent=4)
+        print("vm processing arguments")
+        pp.pprint(arguments)
+    vm = OpenstackCM('chameleon')
+    rf = OpenstackRefactor(vm)
+
+    # general info queries
+    if arguments.get("list") or arguments.get("ls"):
+        result = vm.ls()
+    elif arguments.get("sizes"):
+        result = rf.list_sizes()
+    elif arguments.get("images"):
+        result = rf.list_images()
+    # common driver operations
+    elif arguments.get("create"):
+        #TODO: add create method
+        pass
+    elif arguments.get("start"):
+        result = vm.start(node.id)
+    elif arguments.get("resume"):
+        result = vm.resume(node.id)
+    elif arguments.get("stop"):
+        result = vm.stop(node.id)
+    elif arguments.get("suspend"):
+        result = vm.suspend(node.id)
+    elif arguments.get("destroy"):
+        result = vm.destroy(node.id)
+    # refactor operations
+    elif arguments.get("resize"):
+        target_size = arguments.get("resize")
+        result = rf.resize(node.id, target_size)
+    elif arguments.get("rename"):
+        target_name = arguments.get("rename")
+        result = rf.rename(node.id, target_name)
+    elif arguments.get("resize"):
+        target_image = arguments.get("resize")
+        result = rf.rebuild(node.id, target_image)
+    # remote cliet connection and authentication operations
+    elif arguments.get("ssh"):
+        # TODO
+        pass
+
+    elif arguments.get("run"):
+        # TODO
+        pass
+
+    elif arguments.get("script"):
+        # TODO
+        pass
+
+    return result

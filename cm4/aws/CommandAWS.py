@@ -84,7 +84,7 @@ class CommandAWS(object):
     def job_end_update_mongo(self, document_id, output):
         """
         jod is done, update the information into job collection in MongoDB, status is done
-        :param id: the job document id
+        :param document_id: the job document id
         :param output: the result
         :return: True/False
         """
@@ -105,10 +105,10 @@ class CommandAWS(object):
             history = status['history']
             if status['currentJob'] == job_id:
                 history.append(job_id)
-                self.mongo.update_document('status', vm_name, dict(status='No Job', currentJob='Null',
-                                                                      history=history))
+                self.mongo.update_document('status', 'id', vm_name, dict(status='No Job', currentJob='Null',
+                                                                         history=history))
             else:
-                self.mongo.update_document('status', vm_name, dict(status='processing', currentJob=job_id))
+                self.mongo.update_document('status', 'id', vm_name, dict(status='processing', currentJob=job_id))
 
 
     def disconnect(self):

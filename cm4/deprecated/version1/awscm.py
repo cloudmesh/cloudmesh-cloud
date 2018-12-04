@@ -50,8 +50,8 @@ from config import Config
 from utility import Utility
 from run import Run
 from advanced import Advanced
-  
-    
+
+
 def process_arguments(arg):
     """
     Processes all the input arguments and acts relative processes.
@@ -63,94 +63,119 @@ def process_arguments(arg):
     config = Config(debug=debug)
     run = Run(debug=debug)
     advanced = Advanced(debug=debug)
-    
+
     config.config()
     utility = Utility(debug=debug)
     regular_file = config.get_config()
 
     if arg.get('add') & arg.get('resource'):
         resource.add(regular_file, arg.get('<yaml_file>'))
-    
+
     if arg.get('list') & arg.get('resource'):
         print(yaml.dump(regular_file))
-        
+
     if arg.get('remove') & arg.get('resource'):
         resource.remove(regular_file, arg.get('<label_name>'))
-        
+
     if arg.get('view') & arg.get('resource'):
-        print(yaml.dump(resource.review(arg.get('<label_name>'), config.get_cloud(), config.get_cluster(), config.get_default())))
-    
+        print(yaml.dump(
+            resource.review(arg.get('<label_name>'), config.get_cloud(), config.get_cluster(), config.get_default())))
+
     if arg.get('copy') & arg.get('file'):
-        output = utility.copy_file(resource.review(arg.get('<label_name>'), config.get_cloud(), config.get_cluster(), config.get_default()), arg.get('<file>'), arg.get('<where>'))
+        output = utility.copy_file(
+            resource.review(arg.get('<label_name>'), config.get_cloud(), config.get_cluster(), config.get_default()),
+            arg.get('<file>'), arg.get('<where>'))
         print(output)
-            
+
     if arg.get('copy') & arg.get('folder'):
-        output = utility.copy_folder(resource.review(arg.get('<label_name>'), config.get_cloud(), config.get_cluster(), config.get_default()), arg.get('<folder>'), arg.get('<where>'))
+        output = utility.copy_folder(
+            resource.review(arg.get('<label_name>'), config.get_cloud(), config.get_cluster(), config.get_default()),
+            arg.get('<folder>'), arg.get('<where>'))
         print(output)
-            
+
     if arg.get('list') & arg.get('instance'):
-        output = utility.dir_list(resource.review(arg.get('<label_name>'), config.get_cloud(), config.get_cluster(), config.get_default()),arg.get('<file>'), arg.get('<where>'))
+        output = utility.dir_list(
+            resource.review(arg.get('<label_name>'), config.get_cloud(), config.get_cluster(), config.get_default()),
+            arg.get('<file>'), arg.get('<where>'))
         print(output)
-        
+
     if arg.get('delete') & arg.get('file'):
-        output = utility.delete_file(resource.review(arg.get('<label_name>'), config.get_cloud(), config.get_cluster(), config.get_default()), arg.get('<file>'), arg.get('<where>'))
+        output = utility.delete_file(
+            resource.review(arg.get('<label_name>'), config.get_cloud(), config.get_cluster(), config.get_default()),
+            arg.get('<file>'), arg.get('<where>'))
         print(output)
-        
+
     if arg.get('delete') & arg.get('folder'):
-        output = utility.delete_folder(resource.review(arg.get('<label_name>'), config.get_cloud(), config.get_cluster(), config.get_default()), arg.get('<folder>'), arg.get('<where>'))
+        output = utility.delete_folder(
+            resource.review(arg.get('<label_name>'), config.get_cloud(), config.get_cluster(), config.get_default()),
+            arg.get('<folder>'), arg.get('<where>'))
         print(output)
-    
+
     if arg.get('create') & arg.get('folder'):
-        output = utility.create_folder(resource.review(arg.get('<label_name>'), config.get_cloud(), config.get_cluster(), config.get_default()), arg.get('<folder>'), arg.get('<where>'))
+        output = utility.create_folder(
+            resource.review(arg.get('<label_name>'), config.get_cloud(), config.get_cluster(), config.get_default()),
+            arg.get('<folder>'), arg.get('<where>'))
         print(output)
-        
+
     if arg.get('read') & arg.get('file'):
-        output = utility.read_file(resource.review(arg.get('<label_name>'), config.get_cloud(), config.get_cluster(), config.get_default()), arg.get('<file>'), arg.get('<where>'))
+        output = utility.read_file(
+            resource.review(arg.get('<label_name>'), config.get_cloud(), config.get_cluster(), config.get_default()),
+            arg.get('<file>'), arg.get('<where>'))
         print(output)
-        
+
     if arg.get('download') & arg.get('file'):
-        output = utility.download_file(resource.review(arg.get('<label_name>'), config.get_cloud(), config.get_cluster(), config.get_default()), arg.get('<file>'), arg.get('<where>'), arg.get('<local>'))
+        output = utility.download_file(
+            resource.review(arg.get('<label_name>'), config.get_cloud(), config.get_cluster(), config.get_default()),
+            arg.get('<file>'), arg.get('<where>'), arg.get('<local>'))
         print(output)
-        
+
     if arg.get('download') & arg.get('folder'):
-        output = utility.download_folder(resource.review(arg.get('<label_name>'), config.get_cloud(), config.get_cluster(), config.get_default()), arg.get('<folder>'), arg.get('<where>'), arg.get('<local>'))
+        output = utility.download_folder(
+            resource.review(arg.get('<label_name>'), config.get_cloud(), config.get_cluster(), config.get_default()),
+            arg.get('<folder>'), arg.get('<where>'), arg.get('<local>'))
         print(output)
-        
+
     if arg.get('check') & arg.get('process_name'):
-        output = utility.check_process(resource.review(arg.get('<label_name>'), config.get_cloud(), config.get_cluster(), config.get_default()), arg.get('<process>'))
+        output = utility.check_process(
+            resource.review(arg.get('<label_name>'), config.get_cloud(), config.get_cluster(), config.get_default()),
+            arg.get('<process>'))
         print(output)
-    
+
     if arg.get('run') & arg.get('instance') & arg.get('local'):
-        output = run.run_instance_local(resource.review(arg.get('<label_name>'), config.get_cloud(), config.get_cluster(), config.get_default()), arg.get('<scripts>'))
+        output = run.run_instance_local(
+            resource.review(arg.get('<label_name>'), config.get_cloud(), config.get_cluster(), config.get_default()),
+            arg.get('<scripts>'))
         for i in output:
             print(i)
-        
+
     elif arg.get('run') & arg.get('local'):
         output = run.run_local_or_remote(arg.get('<scripts>'), True)
         for i in output:
             print(i)
-        
+
     if arg.get('run') & arg.get('instance') & arg.get('remote'):
-        output = run.run_instance_remote(resource.review(arg.get('<label_name>'), config.get_cloud(), config.get_cluster(), config.get_default()), arg.get('<scripts>'))
+        output = run.run_instance_remote(
+            resource.review(arg.get('<label_name>'), config.get_cloud(), config.get_cluster(), config.get_default()),
+            arg.get('<scripts>'))
         for i in output:
             print(i)
-        
+
     elif arg.get('run') & arg.get('remote'):
         output = run.run_local_or_remote(arg.get('<scripts>'), False)
         for i in output:
-            print(i)   
-    
+            print(i)
+
     if arg.get('run') & arg.get('advanced'):
         advanced.formula(arg.get('<string>'))
-    
-    
-    
+
+
 def main():
     """
     Main function for the awscm controler. Processes the input arguments.
     """
     arguments = docopt(__doc__, version='Cloudmesh Vagrant Manager 0.1')
     process_arguments(arguments)
-    
+
+
 if __name__ == "__main__":
     main()

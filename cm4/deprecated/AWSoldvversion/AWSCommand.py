@@ -4,6 +4,7 @@ from cm4.cmmongo.mongoDB import MongoDB
 import subprocess
 
 
+
 class AWSCommand(ProcessManagerABC):
 
     def __init__(self, **kwargs):
@@ -68,7 +69,7 @@ class AWSCommand(ProcessManagerABC):
         """
         output = []
         for i in vm_list:
-            username = 'ubuntu@'+self.find_node_DNS(i)
+            username = 'ubuntu@' + self.find_node_DNS(i)
             job_id = self.start_job('Null', command, i)
             self.update_status(i, job_id)
             temp = subprocess.check_output(['ssh', '-i', self.ssh_key, username,
@@ -91,7 +92,7 @@ class AWSCommand(ProcessManagerABC):
             username = 'ubuntu@' + self.find_node_DNS(i)
             job_id = self.start_job(content, 'Null', i)
             self.update_status(i, job_id)
-            temp = subprocess.check_output(['ssh', '-i', self.ssh_key, username, content]).decode ("utf-8")
+            temp = subprocess.check_output(['ssh', '-i', self.ssh_key, username, content]).decode("utf-8")
             self.end_job(i, temp)
             self.update_status(i, job_id)
             output.append('Running command: ' + script + ' in Instance(name or id) ' + i + ':\n' + temp)
@@ -139,4 +140,3 @@ class AWSCommand(ProcessManagerABC):
         disconnect from mongodb
         """
         self.database.close_client()
-

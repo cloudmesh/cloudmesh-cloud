@@ -28,7 +28,6 @@ class GenericConfig(object):
             if self._conf_dict is None:
                 self._conf_dict = {}
 
-
     def get(self, key, default=None):
         """
         A helper function for reading values from the config without
@@ -58,7 +57,7 @@ class GenericConfig(object):
         with open(self.config_path, "w") as stream:
             yaml.safe_dump(dict(self._conf_dict), stream, default_flow_style=False)
 
-    def deep_set(self, keys,value=None):
+    def deep_set(self, keys, value=None):
         """
         A helper function for setting values in the config without
         a chain of `set()` calls.
@@ -76,7 +75,7 @@ class GenericConfig(object):
             if index < end or value is None:
                 inner_dict = inner_dict.setdefault(component, {})
             else:
-                if component not in inner_dict.keys() or type(inner_dict[component]) != dict :
+                if component not in inner_dict.keys() or type(inner_dict[component]) != dict:
                     inner_dict[component] = value
                 else:
                     inner_dict[component].update(value)
@@ -91,7 +90,7 @@ class GenericConfig(object):
         """
         return self._conf_dict.keys()
 
-    def remove(self,path,key_to_remove):
+    def remove(self, path, key_to_remove):
         """
 
         :return:
@@ -106,4 +105,3 @@ class GenericConfig(object):
             print("{} doesn't exist to remove.".format(key_to_remove))
         with open(self.config_path, "w") as stream:
             yaml.safe_dump(dict(self._conf_dict), stream, default_flow_style=False)
-

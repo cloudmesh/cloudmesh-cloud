@@ -5,7 +5,6 @@ Created on Tue Nov 17 00:12:19 2018
 @author: Rui
 """
 
-
 from cm4.vm.Vm import Vm
 from cm4.vm.VmRefactor import VmRefactor
 from time import sleep
@@ -20,9 +19,9 @@ def openstack_test1():
     vm = Vm('chameleon')
     refactor = VmRefactor(vm)
 
-    names = vm.list()                   # instances
-    sizes = refactor.list_sizes()       # available sizes
-    images = refactor.list_images()     # available images
+    names = vm.list()  # instances
+    sizes = refactor.list_sizes()  # available sizes
+    images = refactor.list_images()  # available images
 
     ## create new instance if necessary
     ## create and auto start
@@ -30,15 +29,15 @@ def openstack_test1():
     node = vm.provider.create('testgroup-experiment-01')
     node_id = node.id
     name = node.name
-    while (vm.info(name).state == 'pending'):
+    while vm.info(name).state == 'pending':
         sleep(3)
     print("At time " + str(datetime.datetime.now()) + " the state is " + vm.info(name).state)
     print(node)
     print("Node:" + node_id + " has been set up")
 
-    #name = vm.list()[0].name
-    #print("We are testing with cloud provider: chameleon, node name: %s " % name)
-    #print("At time " + str(datetime.datetime.now()) + " the state is " + str(vm.info(name).state))
+    # name = vm.list()[0].name
+    # print("We are testing with cloud provider: chameleon, node name: %s " % name)
+    # print("At time " + str(datetime.datetime.now()) + " the state is " + str(vm.info(name).state))
 
     # resize test - checked
     # *** chameleon requires extra confirmation for resizing request
@@ -71,9 +70,6 @@ def openstack_test1():
     sleep(10)
 
 
-
-
-
 def aws_test():
     """
     2. test for aws
@@ -81,13 +77,11 @@ def aws_test():
     pass
 
 
-
 def azure_test():
     """
     3. test for azure
     """
     pass
-
 
 
 def main():
@@ -101,7 +95,6 @@ def main():
 
     input("Press Enter to continue testing for Azure cloud....")
     azure_test()
-
 
 
 if __name__ == "__main__":

@@ -37,7 +37,7 @@ def main():
     print(node)
     print("Node:" + node_id + " has been set up")
 
-    while (d.info(node_id)['state'] == 'pending'):
+    while d.info(node_id)['state'] == 'pending':
         sleep(3)
     print("At time " + str(datetime.datetime.now()) + " the state is " + d.info(node_id)['state'])
 

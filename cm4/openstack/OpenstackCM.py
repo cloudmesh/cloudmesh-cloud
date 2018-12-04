@@ -234,7 +234,7 @@ class OpenstackCM(CloudManagerABC):
         ip = self._get_public_ip()
         if ip:
             timeout_counter = 0
-            while (self.info(node.id)['state'] != 'running'):
+            while self.info(node.id)['state'] != 'running':
                 if timeout_counter > timeout:
                     print("Node is being spawned for too long, float ip association is failed")
                     return node

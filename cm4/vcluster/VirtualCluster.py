@@ -172,14 +172,14 @@ class virtualcluster(object):
         return method_to_call(*args)
 
     def _fetch_results_in_parallel(self, job_metadata, node_pid_tuple, all_pids):
-        '''
+        """
         This method is used to fetch the results from remote nodes.
 
         :param job_metadata: the dictionary containing the information about the previously submitted job
         :param node_pid_tuple: the tuple containing destination node, destination pid and destination node index when the job was submitted
         :param all_pids:
         :return:
-        '''
+        """
         dest_node = node_pid_tuple[0]
         dest_pid = node_pid_tuple[1]
         node_idx = node_pid_tuple[2]

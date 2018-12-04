@@ -12,11 +12,11 @@ from run import Run
 class Advanced(object):
 
     def __init__(self, debug=False):
-        '''
+        """
         initializes the advanced class for awscm
-        
+
         :param debug: enables debug information to be printed
-        '''
+        """
 
         self.debug = debug
         self.run = Run(debug=debug)
@@ -24,48 +24,48 @@ class Advanced(object):
         self.final_result = ''
 
     def a(self):
-        '''
+        """
         define the a function
-        
+
         :return: the string based script
-        '''
+        """
 
         return '#!/bin/bash\n echo "a-Monday$(date)"'
 
     def b(self):
-        '''
+        """
         define the b function
-        
+
         :return: the string based script
-        '''
+        """
 
         return '#!/bin/bash\n echo "b-Tuesday($USER)"'
 
     def c(self):
-        '''
+        """
         define the c function
-        
+
         :return: the string based script
-        '''
+        """
 
         return '#!/bin/bash\n echo "c-Wednesday($PWD)"'
 
     def d(self):
-        '''
+        """
         define the d function
-        
+
         :return: the string based script
-        '''
+        """
 
         return '#!/bin/bash\n echo "d-Thursday(Yu)"'
 
     def function_identifier(self, name):
-        '''
+        """
         identify the char
-        
+
         :param name: the char of the function we want to run
         :return: the string based script
-        '''
+        """
 
         if name == 'a':
             return self.a()
@@ -77,11 +77,11 @@ class Advanced(object):
             return self.d()
 
     def parall(self, par):
-        ''''
+        """'
         run the task parallelly
-        
+
         :param par: the scripts
-        '''
+        """
 
         scripts = ''
         for i in par:
@@ -95,11 +95,11 @@ class Advanced(object):
             self.result_dir.update({temp[index - 1]: temp})
 
     def sequential(self, work):
-        '''
+        """
         run the sequential tasks
-        
+
         :param work: the tasks
-        '''
+        """
 
         for i in work:
             if '|' in i:
@@ -112,21 +112,21 @@ class Advanced(object):
                 self.item(i)
 
     def add(self, add_list):
-        '''
+        """
         add the reuslts into one
-        
+
         :param add_list: add the results
-        '''
+        """
 
         for i in add_list:
             self.final_result += self.result_dir[i]
 
     def item(self, job):
-        '''
+        """
         run one task
-        
+
         :param job: one task
-        '''
+        """
 
         script = self.function_identifier(job)
         sub_result = self.run.run_local_or_remote(script, True)
@@ -135,11 +135,11 @@ class Advanced(object):
         self.result_dir.update({temp[index - 1]: temp})
 
     def formula(self, string):
-        '''
+        """
         parse the formulation
-        
+
         :param string: the string formulation
-        '''
+        """
 
         work = string.split(';')
         self.sequential(work)

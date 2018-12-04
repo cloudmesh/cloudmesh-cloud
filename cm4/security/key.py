@@ -245,7 +245,7 @@ class Key(ListResource):
 
     @classmethod
     def list(cls, category=None, live=False, output="table"):
-        "this does not work only returns all ceys in the db"
+        """this does not work only returns all ceys in the db"""
         (order, header) = CloudProvider(category).get_attributes("key")
         d = cls.cm.find(kind="key", scope="all", output=output)
         return Printer.write(d,

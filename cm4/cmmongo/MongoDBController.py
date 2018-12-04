@@ -120,13 +120,13 @@ class MongoDBController (object):
         create admin acount in MongoDB
         """
         # run mongodb
-        self.run_mongoDB()
+        self.run_mongodb()
 
         # set up auth information
         self.set_auth()
 
         # shut down mongodb
-        self.shutdown_mongoDB()
+        self.shutdown_mongodb()
 
         # enable secutiry
         self.initial_mongo_config(True)

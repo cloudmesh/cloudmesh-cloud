@@ -219,6 +219,7 @@ class Vm:
         if name is not None:
             self.provider.remove_public_ip(name)
 
+
 def process_arguments(arguments):
     """
     Process command line arguments to execute VM actions.

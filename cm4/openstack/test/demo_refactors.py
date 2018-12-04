@@ -5,7 +5,6 @@ Created on Tue Nov 15 2018
 @author: Rui
 """
 
-
 from cm4.openstack.OpenstackCM import OpenstackCM
 from cm4.openstack.OpenstackRefactor import OpenstackRefactor
 from time import sleep
@@ -38,10 +37,9 @@ def main():
     print(node)
     print("Node:" + node_id + " has been set up")
 
-    while(d.info(node_id)['state']=='pending'):
+    while d.info(node_id)['state'] == 'pending':
         sleep(3)
     print("At time " + str(datetime.datetime.now()) + " the state is " + d.info(node_id)['state'])
-
 
     # resize test - checked
     # *** chameleon requires extra confirmation for resizing request
@@ -49,7 +47,7 @@ def main():
     print("resizing.........")
     sizes = r.list_sizes()
     print(sizes)
-    r.resize(node_id, sizes[2]) # resize to medium
+    r.resize(node_id, sizes[2])  # resize to medium
     print("resizing finished")
 
     input("Press Enter to continue...")
@@ -68,13 +66,11 @@ def main():
     input("Press Enter to continue...")
     node = r.rename(node_id, "new name")
 
-
     ## destroy
     input("Press Enter to continue...")
     print("call d.destroy() function")
     d.destroy(node_id)
     sleep(10)
-
 
     d.ls()
 

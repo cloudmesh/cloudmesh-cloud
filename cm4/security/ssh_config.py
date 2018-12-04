@@ -10,6 +10,7 @@ from textwrap import dedent
 from cloudmesh.common.console import Console
 from cloudmesh.common.Shell import Shell
 
+
 #
 # THE CONFIG FILE NEEDS TO CHANGE WE WANT SSH OR HOST OR CLUSTER TO WORK WITH THIS
 #
@@ -19,6 +20,7 @@ class ssh_config(object):
     """
     Managing the config in .ssh
     """
+
     def __init__(self, filename=None):
         if filename is not None:
             # load
@@ -183,7 +185,6 @@ if __name__ == "__main__":
     hosts = ssh_config()
 
     user = ConfigDict("cloudmesh.yaml")["cloudmesh.profile.user"]
-
 
     print("User:", user)
 

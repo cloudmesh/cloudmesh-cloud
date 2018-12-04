@@ -8,7 +8,6 @@ from libcloud.compute.base import NodeDriver
 class Cmaws(Cloud):
 
     def __init__(self, config, kind):
-
         os_config = config.get('cloud.%s' % kind)
         default = os_config.get('default')
         credentials = os_config.get('credentials')
@@ -19,7 +18,6 @@ class Cmaws(Cloud):
         )
 
 
-
 class CmAWSDriver(EC2NodeDriver, NodeDriver):
 
     def __init__(self, key, secret, region, **kwargs):
@@ -27,11 +25,8 @@ class CmAWSDriver(EC2NodeDriver, NodeDriver):
         self.default = config.get("cloud.aws.default")
         super().__init__(key=key, secret=secret, region=region, **kwargs)
 
-
     def ex_stop_node(self, node, deallocate):
         super().ex_stop_node(node)
-
-
 
     def create_node(self, name):
         size = [s for s in self.list_sizes() if s.id == self.default['size']][0]
@@ -41,5 +36,3 @@ class CmAWSDriver(EC2NodeDriver, NodeDriver):
                                      ex_securitygroup=self.default['EC2_SECURITY_GROUP'])
 
         return new_vm
-
-

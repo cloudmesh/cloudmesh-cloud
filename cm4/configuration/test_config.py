@@ -13,11 +13,11 @@ class TestConfig:
         assert self._conf.get("nothere") is None
         assert self._conf.get("nothere", {}) == {}
         assert self._conf.get("default.nothere") is None
-        custom_default = {"foo" : "bar"}
+        custom_default = {"foo": "bar"}
         assert self._conf.get("default.nothere", custom_default) == custom_default
 
     def test_get_shorthand(self):
-        raw_result = self._conf._cloudmesh.get("default").get("cloud")    
+        raw_result = self._conf._cloudmesh.get("default").get("cloud")
         default_result = self._conf.get("default").get("cloud")
         short_result = self._conf.get("default.cloud")
         assert short_result == default_result == raw_result
@@ -35,4 +35,3 @@ class TestConfig:
 
         assert before != after
         new_config.set("default.cloud", before)
-

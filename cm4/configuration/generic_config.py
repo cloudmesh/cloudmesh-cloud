@@ -1,7 +1,7 @@
-import oyaml as yaml
-from os.path import isfile, expanduser, join, dirname, realpath, exists
-from shutil import copyfile
 from os import mkdir
+from os.path import isfile, expanduser, dirname, exists
+
+import oyaml as yaml
 
 
 class GenericConfig(object):

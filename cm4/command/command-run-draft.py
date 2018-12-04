@@ -31,7 +31,7 @@ def main():
     result = parse.parse_args()
 
     resource = Resource()
-    name = os.path.userexpand("~/.cloudmesh/cloudmesh4.yaml")
+    name = os.path.expanduser("~/.cloudmesh/cloudmesh4.yaml")
     content = resource.readFile(name)
 
     run = ParallelProcess(content)

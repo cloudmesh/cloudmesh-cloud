@@ -6,6 +6,9 @@ class TestConfig:
     Functional tests for the configuration Config class
     """
 
+    def __init__(self):
+        self._conf = None
+
     def setup(self):
         self._conf = Config()
 

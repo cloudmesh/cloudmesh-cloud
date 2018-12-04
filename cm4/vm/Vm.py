@@ -6,8 +6,10 @@ from cm4.vm.Cmopenstack import Cmopenstack
 from cm4.configuration.config import Config
 from cm4.cmmongo.mongoDB import MongoDB
 from cm4.configuration.name import Name
-from cm4.vm.thread import thread
+from cm4.vm.thread import Thread
 from cm4.configuration.counter import Counter
+from pprint import pprint
+
 
 
 class Vmprovider(object):
@@ -38,10 +40,12 @@ class Vm:
     def __init__(self, cloud):
         self.config = Config()
         self.provider = Vmprovider().get_provider(cloud)
+
         self.mongo = MongoDB(host=self.config.get('data.mongo.MONGO_HOST'),
                              username=self.config.get('data.mongo.MONGO_USERNAME'),
                              password=self.config.get('data.mongo.MONGO_PASSWORD'),
                              port=self.config.get('data.mongo.MONGO_PORT'))
+
 
     def start(self, name):
         """
@@ -52,7 +56,7 @@ class Vm:
         info = self.info(name)
         if info.state != 'running':
             self.provider.ex_start_node(info)
-            thread(self, 'test', name, 'running').start()
+            Thread(self, 'test', name, 'running').start()
             document = self.mongo.find_document('cloud', 'name', name)
             return document
         else:
@@ -69,7 +73,7 @@ class Vm:
         info = self.info(name)
         if info.state != 'stopped':
             self.provider.ex_stop_node(info, deallocate)
-            thread(self, 'test', name, 'stopped').start()
+            Thread(self, 'test', name, 'stopped').start()
             document = self.mongo.find_document('cloud', 'name', name)
             return document
         else:
@@ -124,7 +128,7 @@ class Vm:
         :param name:
         :return: all information about one node
         """
-        self.info(name).state
+        self.info(name)
         status = self.mongo.find_document('cloud', 'name', name)['state']
         return status
 
@@ -145,7 +149,9 @@ class Vm:
                 return i
         raise ValueError('Node: ' + name + ' does not exist!')
 
+
     def new_name(self, experiment=None, group=None, user=None):
+
         """
         Generate a VM name with the format `experiment-group-name-<counter>` where `counter`
         represents a running count of VMs created.
@@ -214,7 +220,6 @@ class Vm:
             self.provider.remove_public_ip(name)
 
 
-# @staticmethod
 def process_arguments(arguments):
     """
     Process command line arguments to execute VM actions.

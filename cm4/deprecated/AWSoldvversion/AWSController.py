@@ -2,6 +2,7 @@ from cm4.abstractclass.CloudManagerABC import CloudManagerABC
 from libcloud.compute.types import Provider
 from libcloud.compute.providers import get_driver
 import json
+from pprint import pprint
 
 
 # for more information:
@@ -95,4 +96,6 @@ class AWSController(CloudManagerABC):
         images = self.driver.list_images()
         size = [s for s in sizes if s.id == size][0]
         image = [i for i in images if i.id == image][0]
+
         self.driver.create_node(name=None, image=image, size=size, ex_keyname=keyname, ex_securitygroup=security)
+

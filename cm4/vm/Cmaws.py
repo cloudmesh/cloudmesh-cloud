@@ -1,5 +1,3 @@
-from libcloud.compute.types import Provider
-from libcloud.compute.providers import get_driver
 from cm4.vm.Cloud import Cloud
 from cm4.configuration.config import Config
 
@@ -10,7 +8,6 @@ from libcloud.compute.base import NodeDriver
 class Cmaws(Cloud):
 
     def __init__(self, config, kind):
-        cls = get_driver(Provider.EC2)
         os_config = config.get('cloud.%s' % kind)
         default = os_config.get('default')
         credentials = os_config.get('credentials')
@@ -23,10 +20,10 @@ class Cmaws(Cloud):
 
 class CmAWSDriver(EC2NodeDriver, NodeDriver):
 
-    def __init__(self, id, key, region, **kwargs):
+    def __init__(self, key, secret, region, **kwargs):
         config = Config()
         self.default = config.get("cloud.aws.default")
-        super().__init__(key=id, secret=key, region=region, **kwargs)
+        super().__init__(key=key, secret=secret, region=region, **kwargs)
 
     def ex_stop_node(self, node, deallocate):
         super().ex_stop_node(node)

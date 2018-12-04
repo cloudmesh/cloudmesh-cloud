@@ -1,9 +1,12 @@
 from cm4.vm.Vm import Vm
 from pprint import pprint
+from cm4.configuration.name import Name
+import sys
 
 
 def main():
     provider = Vm('aws')
+
     # print(provider.list())
     # pprit(provider.start('a-b=luoyu-0'))
     # provider.stop('a-b=luoyu-0')

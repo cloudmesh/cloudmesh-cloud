@@ -41,6 +41,7 @@ class Config(object):
             default_db = conf.get('default.db')
             az_credentials = conf.get('data.service.azure.credentials')
 
+        :param default:
         :param key: A string representing the value's path in the config.
         """
         return self._cloudmesh.get(key, default)

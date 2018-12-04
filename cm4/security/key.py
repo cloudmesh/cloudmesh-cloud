@@ -1,5 +1,6 @@
 from __future__ import print_function
 
+
 #
 # TODO THIS IS CODE FROM THE PREVIOUS CLOUDMESH, WE NEEED TO CLEAN AND POSSIBLY SIMPLIFY
 #
@@ -54,6 +55,7 @@ class Key(ListResource):
     def get_from_git(cls, username, store=True):
         """
 
+        :param store:
         :param username: the github username
         :return: an array of public keys
         :rtype: list
@@ -93,11 +95,13 @@ class Key(ListResource):
                     Console.error("Key already in db", traceflag=False)
         if not store:
             return d
-                # noinspection PyProtectedMember,PyUnreachableCode,PyUnusedLocal
+            # noinspection PyProtectedMember,PyUnreachableCode,PyUnusedLocal
 
     @classmethod
     def get_from_yaml(cls, filename=None, load_order=None, store=True):
         """
+        :param store:
+        :param load_order:
         :param filename: name of the yaml file
         :return: a SSHKeyManager (dict of keys)
         """
@@ -117,7 +121,6 @@ class Key(ListResource):
         keylist = config_keys["keylist"]
 
         uri = Config.path_expand(os.path.join("~", ".cloudmesh", filename))
-
 
         d = []
         for key in list(keylist.keys()):
@@ -156,8 +159,6 @@ class Key(ListResource):
         if not store:
             return d
 
-
-
         """
         take a look into original cloudmesh code, its possible to either specify a key or a filename
         the original one is able to figure this out and do the rightthing. We may want to add this
@@ -177,10 +178,13 @@ class Key(ListResource):
               keyname: ssh rsa hajfhjldahlfjhdlsak ..... comment
               github-x: github
         """
+
     @classmethod
     def get_from_cloud(cls, cloud, live=False, format="table"):
         """
         This method lists all keys of the cloud
+        :param format:
+        :param live:
         :param cloud: the cloud name
         :return: a SSHKeyManager (dict of keys)
         """
@@ -228,7 +232,6 @@ class Key(ListResource):
         :param user:
         :param keyname:
         :param cloud:
-        :param name_on_cloud:
         """
 
         key = cls.cm.find(kind="key", name=keyname, scope="first")
@@ -246,7 +249,7 @@ class Key(ListResource):
 
     @classmethod
     def list(cls, category=None, live=False, output="table"):
-        "this does not work only returns all ceys in the db"
+        """this does not work only returns all ceys in the db"""
         (order, header) = CloudProvider(category).get_attributes("key")
         d = cls.cm.find(kind="key", scope="all", output=output)
         return Printer.write(d,
@@ -258,6 +261,8 @@ class Key(ListResource):
     def list_on_cloud(cls, cloud, live=False, format="table"):
         """
         This method lists all keys of the cloud
+        :param format:
+        :param live:
         :param cloud: the cloud name
         """
         try:
@@ -280,7 +285,7 @@ class Key(ListResource):
     def run_command(cls, cmd):
         """ Runs a command in a shell, returns the result"""
         p = subprocess.Popen(cmd, shell=True,
-                         stdout=subprocess.PIPE)
+                             stdout=subprocess.PIPE)
         return p.stdout.read()
 
     @classmethod
@@ -297,12 +302,12 @@ class Key(ListResource):
         pprint("add_azure_key_to_db")
         # Add to the current DB
         cls.add_from_path(key_path,
-                            key_name,
-                            source="ssh",
-                            uri="file://" + key_path)
+                          key_name,
+                          source="ssh",
+                          uri="file://" + key_path)
 
         # Add certificate to the new DB
-        fingerprint_cmd = "openssl x509 -in "+certificate_path+" -sha1 -noout -fingerprint | sed s/://g"
+        fingerprint_cmd = "openssl x509 -in " + certificate_path + " -sha1 -noout -fingerprint | sed s/://g"
         # print("fingerprint_cmd:", fingerprint_cmd)
         fingerprint = cls.run_command(fingerprint_cmd)
         fingerprint = fingerprint.split('=')[1]
@@ -347,7 +352,6 @@ class Key(ListResource):
     def all(cls, output="dict"):
         return cls.cm.find(kind="key", scope="all", output=output)
 
-
     @classmethod
     def find(cls, name=None, output="dict"):
         return cls.get(name=name, output=output)
@@ -357,6 +361,7 @@ class Key(ListResource):
         """
         Finds the key on the database by name
 
+        :param output:
         :param name: name of the key to be found
         :return: Query object of the search
         """
@@ -411,7 +416,12 @@ class Key(ListResource):
         """
         Adds the key to the database based on the path
 
+        :param path:
         :param keyname: name of the key or path to the key
+        :param user:
+        :param source:
+        :param uri:
+        :param store:
         :return:
         """
 
@@ -421,9 +431,9 @@ class Key(ListResource):
 
         if store:
             cls._add_from_sshkey(sshkey.__key__,
-                             keyname,
-                             user,
-                             source=source,
-                             uri=uri)
+                                 keyname,
+                                 user,
+                                 source=source,
+                                 uri=uri)
         else:
             return sshkey.__key__

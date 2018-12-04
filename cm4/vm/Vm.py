@@ -1,120 +1,108 @@
-from libcloud.compute.types import Provider
-from libcloud.compute.providers import get_driver
+import pprint
+import getpass
+from cm4.vm.Cmaws import Cmaws
+from cm4.vm.CmAzure import CmAzure
+from cm4.vm.Cmopenstack import Cmopenstack
 from cm4.configuration.config import Config
-from libcloud.compute.base import NodeAuthSSHKey
+from cm4.cmmongo.mongoDB import MongoDB
+from cm4.configuration.name import Name
+from cm4.vm.thread import Thread
+from cm4.configuration.counter import Counter
+from pprint import pprint
 
 
-class Provider (object):
 
-    def __init__(self, cloud):
-        config = Config()
-        self.os_config = config.get('cloud.%s' % cloud)
-        self.default = self.os_config.get('default')
-        self.credentials = self.os_config.get('credentials')
-        self.driver = None
-        self.setting = dict()
+class Vmprovider(object):
 
-    # only developed for AZURE, AWS, Chameleon
-    def get_provider(self):
+    def __init__(self):
+        self.config = Config()
+
+    def get_provider(self, cloud):
         """
         Create the driver based on the 'kind' information.
         This method could deal with AWS, AZURE, and OPENSTACK for CLOUD block of YAML file.
-        But we haven't test OPENSTACK
+        Only developed for AZURE, AWS, Chameleon, but we haven't test OPENSTACK
         :return: the driver based on the 'kind' information
         """
-        if self.os_config.get('cm.kind') == 'azure':
-            cls = get_driver(Provider.AZURE)
-            self.driver = cls(tenant_id=self.credentials['AZURE_TENANT_ID'],
-                              subscription_id=self.credentials['AZURE_SUBSCRIPTION_ID'],
-                              key=self.credentials['AZURE_APPLICATION_ID'],
-                              secret=self.credentials['AZURE_SECRET_KEY'],
-                              region=self.default['region'])
-            size = [s for s in self.driver.list_sizes() if s.id == self.default['size']][0]
-            image = [i for i in self.driver.list_images() if i.id == self.default['image']][0]
-            self.setting.update(size=size, image=image, auth=NodeAuthSSHKey(self.default['AZURE_MANAGEMENT_CERT_PATH']),
-                                ex_use_managed_disks=True, ex_resource_group=self.default['resource_group'],
-                                ex_storage_account=self.default['storage_account'],
-                                ex_network=self.default['network']
-                                )
+
+        os_config = self.config.get('cloud.%s' % cloud)
+        if os_config.get('cm').get('kind') == 'azure':
+            driver = CmAzure(self.config, cloud).driver
+        elif os_config.get('cm').get('kind') == 'aws':
+            driver = Cmaws(self.config, cloud).driver
+        elif os_config.get('cm').get('kind') == 'openstack':
+            driver = Cmopenstack(self.config, cloud).driver
+        return driver
 
 
-        elif self.os_config.get('cm.kind') == 'aws':
-            cls = get_driver(Provider.EC2)
-            self.driver = cls(self.credentials['EC2_ACCESS_ID'],
-                              self.credentials['EC2_SECRET_KEY'],
-                              self.default['region'])
-            size = [s for s in self.driver.list_sizes() if s.id == self.default['size']][0]
-            image = [i for i in self.driver.list_images() if i.id == self.default['image']][0]
-            self.setting.update(image=image, size=size, ex_keyname=self.default['EC2_PRIVATE_KEY_FILE_NAME'],
-                                ex_securitygroup=self.default['EC2_SECURITY_GROUP'])
-
-        elif self.os_config.get('cm.kind') == 'openstack':
-            # need someone to test it
-            cls = get_driver(Provider.OPENSTACK)
-            self.driver = cls(self.credentials['OS_USERNAME'],
-                              self.credentials['OS_PASSWORD'],
-                              ex_tenant_name=self.credentials['OS_TENANT_NAME'],
-                              ex_force_auth_url=self.credentials['OS_AUTH_URL'],
-                              ex_force_auth_version=self.credentials['OS_VERSION'],
-                              ex_force_service_region=self.credentials['OS_REGION_NAME']
-                              )
-            size = [s for s in self.driver.list_sizes() if s.id == self.default['flavor']][0]
-            image = [i for i in self.driver.list_images() if i.id == self.default['image']][0]
-            self.setting.update(size=size, image=image)
-
-
-        return self.driver
-
-    def get_new_node_setting(self):
-        """
-        get the new node setting
-        :return: the new node setting information
-        """
-        return self.setting
-
-
-class Vm(object):
+class Vm:
 
     def __init__(self, cloud):
-        self.provider = Provider(cloud)
+        self.config = Config()
+        self.provider = Vmprovider().get_provider(cloud)
 
-    def start(self, node_id):
+        self.mongo = MongoDB(host=self.config.get('data.mongo.MONGO_HOST'),
+                             username=self.config.get('data.mongo.MONGO_USERNAME'),
+                             password=self.config.get('data.mongo.MONGO_PASSWORD'),
+                             port=self.config.get('data.mongo.MONGO_PORT'))
+
+
+    def start(self, name):
         """
         start the node based on the id
-        :param node_id:
-        :return: True/False
+        :param name:
+        :return: VM document
         """
-        return self.provider.ex_start_node(self.info(node_id))
+        info = self.info(name)
+        if info.state != 'running':
+            self.provider.ex_start_node(info)
+            Thread(self, 'test', name, 'running').start()
+            document = self.mongo.find_document('cloud', 'name', name)
+            return document
+        else:
+            document = self.mongo.find_document('cloud', 'name', name)
+            return document
 
-    def stop(self, node_id):
+    def stop(self, name, deallocate=True):
         """
         stop the node based on the ide
-        :param node_id:
-        :return: True/False
+        :param name:
+        :param deallocate:
+        :return: VM document
         """
-        return self.provider.ex_stop_node(self.info(node_id))
+        info = self.info(name)
+        if info.state != 'stopped':
+            self.provider.ex_stop_node(info, deallocate)
+            Thread(self, 'test', name, 'stopped').start()
+            document = self.mongo.find_document('cloud', 'name', name)
+            return document
+        else:
+            document = self.mongo.find_document('cloud', 'name', name)
+            return document
 
-    def resume(self, node_id):
+    def resume(self, name):
         """
         start the node based on id
-        :param node_id:
+        :param name:
         """
-        self.start(node_id)
+        return self.start(name)
 
-    def suspend(self, node_id):
+    def suspend(self, name):
         """
         stop the node based on id
-        :param node_id:
+        :param name:
         """
-        self.stop(node_id)
+        return self.stop(name, False)
 
-    def destroy(self, node_id):
+    def destroy(self, name):
         """
         delete the node based on id
-        :param node_id:
+        :param name:
         :return: True/False
         """
-        return self.provider.destroy_node(self.info(node_id))
+        result = self.provider.destroy_node(self.info(name))
+        self.mongo.delete_document('cloud', 'name', name)
+        return result
 
     def create(self, name):
         """
@@ -122,27 +110,171 @@ class Vm(object):
         :param name: the name for the new node
         :return:
         """
-        return self.provider.create_node(name=name, **self.provider.get_new_node_setting())
+        node = self.provider.create_node(name)
+        self.mongo.insert_cloud_document(vars(node))
+        return node
 
     def list(self):
         """
         list existed nodes
         :return: all nodes' information
         """
-        return self.provider.list_nodes()
+        result = self.provider.list_nodes()
+        return result
 
-    def status(self, node_id):
+    def status(self, name):
         """
         show node information based on id
-        :param node_id:
+        :param name:
         :return: all information about one node
         """
-        return self.info(node_id)
+        self.info(name)
+        status = self.mongo.find_document('cloud', 'name', name)['state']
+        return status
 
-    def info(self, node_id):
+    def info(self, name):
         """
         show node information based on id
-        :param node_id:
+        :param name:
         :return: all information about one node
         """
-        return self.provider.ex_get_node(node_id)
+        nodes = self.list()
+        for i in nodes:
+            if i.name == name:
+                document = vars(i)
+                if self.mongo.find_document('cloud', 'name', name):
+                    self.mongo.update_document('cloud', 'name', name, document)
+                else:
+                    self.mongo.insert_cloud_document(document)
+                return i
+        raise ValueError('Node: ' + name + ' does not exist!')
+
+
+    def new_name(self, experiment=None, group=None, user=None):
+
+        """
+        Generate a VM name with the format `experiment-group-name-<counter>` where `counter`
+        represents a running count of VMs created.
+
+        Defaults can be modified in the cloudmesh4.yaml file.
+
+        :param experiment:
+        :param group:
+        :param user:
+        :return: The generated name.
+        """
+        experiment = experiment or self.config.get("default.experiment")
+        group = group or self.config.get("default.group")
+        user = user or getpass.getuser()
+
+        counter = Counter()
+        count = counter.get()
+        name = Name()
+        name_format = {'experiment': experiment, 'group': group, 'user': user, 'counter': count}
+        name.set_schema('instance')
+        counter.incr()
+        return name.get(name_format)
+
+    def get_public_ips(self, name=None):
+        """
+        Returns all the public ips available if a name is not given.
+        If a name is provided, the ip of the vm name would be returned.
+        :param name: name of the VM.
+        :return: Dictionary of VMs with their public ips
+        """
+        if name is None:
+            filter = {
+                "$exists": True,
+                "$not": {"$size": 0}
+            }
+            documents = self.mongo.find('cloud', 'public_ips', filter)
+            if documents is not None:
+                return None
+            else:
+                result = {}
+                for document in documents:
+                    result[document['name']] = document['public_ips']
+                return result
+        else:
+            public_ips = self.mongo.find_document('cloud', 'name', name)['public_ips']
+            if not public_ips:
+                return None
+            else:
+                return {name: public_ips}
+
+    def set_public_ip(self, name, public_ip):
+        """
+        Assign the given public ip to the given VM.
+        :param name: name of the VM
+        :param public_ip: public ip to be assigned.
+        """
+        if name is not None and public_ip is not None:
+            self.provider.set_public_ip(name, public_ip)
+
+    def remove_public_ip(self, name):
+        """
+        Deletes the public ip of the given VM.
+        :param name: name of the VM
+        """
+        if name is not None:
+            self.provider.remove_public_ip(name)
+
+
+def process_arguments(arguments):
+    """
+    Process command line arguments to execute VM actions.
+    Called from cm4.command.command
+    :param arguments:
+    """
+    result = None
+
+    if arguments.get("--debug"):
+        pp = pprint.PrettyPrinter(indent=4)
+        print("vm processing arguments")
+        pp.pprint(arguments)
+
+    default_cloud = Config().get("default.cloud")
+
+    vm = Vm(default_cloud)
+
+    if arguments.get("list"):
+        result = vm.list()
+
+    elif arguments.get("start"):
+        # TODO: Reconcile `create` behavior here and in docopts where
+        #       create is called with a `VMCOUNT`.
+
+        vm_name = arguments.get("VMNAME")
+
+        if vm_name is None:
+            vm_name = vm.new_name()
+
+        vm.create(vm_name)
+
+        result = f"Created {vm_name}"
+
+    # elif arguments.get("start"):
+    #     vm.start(arguments.get("--vms"))
+
+    elif arguments.get("stop"):
+        vm.stop(arguments.get("--vms"))
+
+    elif arguments.get("destroy"):
+        vm.destroy(arguments.get("--vms"))
+
+    elif arguments.get("status"):
+        vm.status(arguments.get("--vms"))
+
+    elif arguments.get("ssh"):
+        # TODO
+        pass
+
+    elif arguments.get("run"):
+        # TODO
+        pass
+
+    elif arguments.get("script"):
+        # TODO
+        pass
+
+    return result

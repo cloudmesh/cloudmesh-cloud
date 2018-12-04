@@ -88,6 +88,7 @@ class AWSController(CloudManagerABC):
     def create(self, size, image, keyname, security):
         """
         create node
+        :param size:
         :param kwargs: all needed information
         :return:
         """

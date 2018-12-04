@@ -68,7 +68,7 @@ class AzureStorageProvider(StorageProviderABC):
         """
         Tell if a file is present in the remote storage.
 
-        :param cloud_file: An instance of CloudFile
+        :param cloud_file_name: An instance of CloudFile
         :return: True if the object exists.
         """
         try:

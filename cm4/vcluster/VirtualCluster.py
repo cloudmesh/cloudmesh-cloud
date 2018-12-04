@@ -408,11 +408,11 @@ class virtualcluster(object):
         :param current_depth: current depth of printing information
         :return:
         """
-        if target == 'virtual-clusters' and input_dict == None:
+        if target == 'virtual-clusters' and input_dict is None:
             input_dict = self.vcluster_config._conf_dict['virtual-cluster']
-        elif target == 'runtime-configs' and input_dict == None:
+        elif target == 'runtime-configs' and input_dict is None:
             input_dict = self.vcluster_config._conf_dict['runtime-config']
-        elif input_dict == None:
+        elif input_dict is None:
             raise ValueError("Target of listing not found.")
 
         if max_depth >= current_depth:

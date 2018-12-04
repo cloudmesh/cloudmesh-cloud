@@ -25,6 +25,7 @@ class ResourceABC(metaclass=abc.ABCMeta):
     def add(self, content, file_path):
         """
         add new cluster content into the default yaml file
+        :param file_path:
         :param content: new cluster content
         """
         pass

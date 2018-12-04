@@ -7,8 +7,8 @@ import json
 import os
 from textwrap import dedent
 
-from cloudmesh.common.console import Console
-from cloudmesh.common.Shell import Shell
+from cm4.common.console import Console
+from cm4.common.shell import Shell
 
 
 #

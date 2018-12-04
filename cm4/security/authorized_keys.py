@@ -8,8 +8,8 @@ import os.path
 
 from six import itervalues
 
-from cloudmesh.common.Shell import Subprocess
-from cloudmesh.common.util import tempdir
+from cm4.common.shell import Subprocess
+from cm4.common.util import tempdir
 
 
 # TODO:  use our simple subprocess wrapper ?

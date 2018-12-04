@@ -58,8 +58,8 @@ class Config(object):
         :param value: value to be set.
         """
         self._cloudmesh.set(key, value)
-        yamlFile = {}
-        yamlFile["cloudmesh"] = self._cloudmesh.copy()
+        yaml_file = {}
+        yaml_file["cloudmesh"] = self._cloudmesh.copy()
         with open(self.config_path, "w") as stream:
-            yaml.safe_dump(yamlFile, stream, default_flow_style=False)
+            yaml.safe_dump(yaml_file, stream, default_flow_style=False)
 

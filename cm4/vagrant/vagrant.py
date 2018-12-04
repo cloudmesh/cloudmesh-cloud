@@ -294,6 +294,7 @@ class Vagrant(object):
         """
         run shell script on specified node, fetch the console output and data output if existed
 
+        :param data:
         :param name: name of node
         :param script_path: local path of script file which will be executed on the node
         :param report: processing job running report. if False, return result object
@@ -419,6 +420,7 @@ class Vagrant(object):
         """
         TODO: doc
 
+        :param result:
         :param command:
         :return:
         """
@@ -538,6 +540,7 @@ class Vagrant(object):
         Default: Destroys all the VMs specified.
         If @name is provided, only the named VM is destroyed.
 
+        :param force:
         :param name: [optional], name of the Vagrant VM.
         :return:
         """

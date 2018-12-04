@@ -55,6 +55,7 @@ class Key(ListResource):
     def get_from_git(cls, username, store=True):
         """
 
+        :param store:
         :param username: the github username
         :return: an array of public keys
         :rtype: list
@@ -99,6 +100,8 @@ class Key(ListResource):
     @classmethod
     def get_from_yaml(cls, filename=None, load_order=None, store=True):
         """
+        :param store:
+        :param load_order:
         :param filename: name of the yaml file
         :return: a SSHKeyManager (dict of keys)
         """
@@ -180,6 +183,8 @@ class Key(ListResource):
     def get_from_cloud(cls, cloud, live=False, format="table"):
         """
         This method lists all keys of the cloud
+        :param format:
+        :param live:
         :param cloud: the cloud name
         :return: a SSHKeyManager (dict of keys)
         """
@@ -227,7 +232,6 @@ class Key(ListResource):
         :param user:
         :param keyname:
         :param cloud:
-        :param name_on_cloud:
         """
 
         key = cls.cm.find(kind="key", name=keyname, scope="first")
@@ -257,6 +261,8 @@ class Key(ListResource):
     def list_on_cloud(cls, cloud, live=False, format="table"):
         """
         This method lists all keys of the cloud
+        :param format:
+        :param live:
         :param cloud: the cloud name
         """
         try:
@@ -355,6 +361,7 @@ class Key(ListResource):
         """
         Finds the key on the database by name
 
+        :param output:
         :param name: name of the key to be found
         :return: Query object of the search
         """
@@ -409,7 +416,12 @@ class Key(ListResource):
         """
         Adds the key to the database based on the path
 
+        :param path:
         :param keyname: name of the key or path to the key
+        :param user:
+        :param source:
+        :param uri:
+        :param store:
         :return:
         """
 

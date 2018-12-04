@@ -88,8 +88,10 @@ class AWSController(CloudManagerABC):
     def create(self, size, image, keyname, security):
         """
         create node
+        :param security:
+        :param keyname:
+        :param image:
         :param size:
-        :param kwargs: all needed information
         :return:
         """
         # https://libcloud.readthedocs.io/en/latest/_modules/libcloud/compute/drivers/ec2.html#BaseEC2NodeDriver.create_node

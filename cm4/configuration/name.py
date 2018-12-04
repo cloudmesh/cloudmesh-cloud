@@ -70,6 +70,7 @@ class Name(object):
         """
         verify if the info contains in `kwargs` can produce a valid name for `ntype` object
         
+        :param kwargs:
         :param ntype: the type of resource being named
         :param schema: naming schema        
         """

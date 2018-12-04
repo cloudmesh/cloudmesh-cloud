@@ -10,7 +10,7 @@ from cm4.vm.thread import thread
 from cm4.configuration.counter import Counter
 
 
-class Vmprovider (object):
+class Vmprovider(object):
 
     def __init__(self):
         self.config = Config()
@@ -143,7 +143,7 @@ class Vm:
                 else:
                     self.mongo.insert_cloud_document(document)
                 return i
-        raise ValueError('Node: '+name+' does not exist!')
+        raise ValueError('Node: ' + name + ' does not exist!')
 
     def new_name(self, experiment=None, group=None, user=None):
         """
@@ -214,7 +214,7 @@ class Vm:
             self.provider.remove_public_ip(name)
 
 
-#@staticmethod
+# @staticmethod
 def process_arguments(arguments):
     """
     Process command line arguments to execute VM actions.

@@ -10,7 +10,7 @@ import datetime
 def main():
     d = OpenstackCM('chameleon')
 
-    ## create and auto start
+    # create and auto start
     print("call d.create() function")
     node = d.create('cm_test_small')
     node_id = node.id
@@ -26,34 +26,34 @@ def main():
         sleep(3)
     print("At time " + str(datetime.datetime.now()) + " the state is " + d.info(node_id)['state'])
 
-    ## suspend
+    # suspend
     print("call d.suspend() function")
     d.suspend(node_id)
     while d.info(node_id)['state'] == 'running':
         sleep(3)
     print("At time " + str(datetime.datetime.now()) + " the state is " + d.info(node_id)['state'])
 
-    ## resume
+    # resume
     print("call d.resume() function")
     d.resume(node_id)
     while d.info(node_id)['state'] == 'stopped':
         sleep(3)
     print("At time " + str(datetime.datetime.now()) + " the state is " + d.info(node_id)['state'])
 
-    ## stop
+    # stop
     print("call d.stop() function")
     d.stop(node_id)
     while d.info(node_id)['state'] == 'running':
         sleep(3)
     print("At time " + str(datetime.datetime.now()) + " the state is " + d.info(node_id)['state'])
 
-    ## restart
+    # restart
     print("call d.restart() function")
     d.start(node_id)
     sleep(10)
     print("At time " + str(datetime.datetime.now()) + " the state is " + d.info(node_id)['state'])
 
-    ## destroy
+    # destroy
     print("call d.destroy() function")
     d.destroy(node_id)
     sleep(10)

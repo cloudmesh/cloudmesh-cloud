@@ -150,12 +150,9 @@ class Vm:
                 return i
         raise ValueError('Node: '+name+' does not exist!')
 
-<<<<<<< HEAD
 
-    def new_name(self, experiment, group, user):
-=======
     def new_name(self, experiment=None, group=None, user=None):
->>>>>>> upstream/master
+
         """
         Generate a VM name with the format `experiment-group-name-<counter>` where `counter`
         represents a running count of VMs created.
@@ -224,11 +221,8 @@ class Vm:
             self.provider.remove_public_ip(name)
 
 
-<<<<<<< HEAD
 
-=======
 #@staticmethod
->>>>>>> upstream/master
 def process_arguments(arguments):
     """
     Process command line arguments to execute VM actions.

@@ -19,7 +19,7 @@ from cm4.openstack.OpenstackRefactor import OpenstackRefactor
 
 class OpenstackCM(CloudManagerABC):
 
-    # util
+    # common
     def __init__(self, cloud=None):
         config = Config()
         self.cloud = cloud
@@ -70,8 +70,8 @@ class OpenstackCM(CloudManagerABC):
 
     def get_driver_helper(self, cloud):
         credential = self.os_config.get("credentials")
-        Openstack = get_driver(Provider.OPENSTACK)
-        driver = Openstack(
+        openstack = get_driver(Provider.OPENSTACK)
+        driver = openstack(
             credential.get('OS_USERNAME'),
             credential.get('OS_PASSWORD') or os.environ['OS_PASSWORD'],
             ex_force_auth_url=credential.get("OS_AUTH_URL"),

@@ -13,8 +13,8 @@ class Provider(object):
     def get_driver(self, cloud):
         credential = self.os_config.get("credentials")
 
-        Openstack = get_driver(Provider.OPENSTACK)
-        driver = Openstack(
+        openstack = get_driver(Provider.OPENSTACK)
+        driver = openstack(
             credential.get('user'),
             credential.get('password'),
             ex_force_base_url=credential.get("url"),

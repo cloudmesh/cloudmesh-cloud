@@ -7,7 +7,7 @@ class TestDataLocal:
     Functional tests for the local data storage service
     """
 
-    def setUp(self):
+    def setup(self):
         self.test_file_name = "hello.txt"
         self._data = Data()
         self._data.config("cm4/configuration/cloudmesh.yaml")

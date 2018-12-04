@@ -29,7 +29,7 @@ class Driver(object):
         self._conf = {}
 
     def config(self, name="~/.cloudmesh/cloudmesh4.yaml"):
-        name = os.path.userexpand(name)
+        name = os.path.expanduser(name)
         # reads in the yaml file
         with open(name, "r") as stream:
             self._conf = yaml.load(stream)

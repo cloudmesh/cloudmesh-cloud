@@ -7,7 +7,7 @@ class TestDataAzure:
     Functional tests for the local data storage service
     """
 
-    def setUp(self):
+    def setup(self):
         self.test_file_name = "1MB.dat"
         self._data = Data()
         self._data.config()

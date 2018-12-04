@@ -24,11 +24,10 @@ def openstack_test1():
     sizes = refactor.list_sizes()       # available sizes
     images = refactor.list_images()     # available images
 
-    '''
     ## create new instance if necessary
     ## create and auto start
     print("creating instance with provider: chameleon")
-    node = vm.provider.create('ruili-test-01')
+    node = vm.provider.create('testgroup-experiment-01')
     node_id = node.id
     name = node.name
     while (vm.info(name).state == 'pending'):
@@ -36,12 +35,10 @@ def openstack_test1():
     print("At time " + str(datetime.datetime.now()) + " the state is " + vm.info(name).state)
     print(node)
     print("Node:" + node_id + " has been set up")
-    '''
 
-    name = vm.list()[0].name
-
-    print("We are testing with cloud provider: chameleon, node name: %s " % name)
-    print("At time " + str(datetime.datetime.now()) + " the state is " + str(vm.info(name).state))
+    #name = vm.list()[0].name
+    #print("We are testing with cloud provider: chameleon, node name: %s " % name)
+    #print("At time " + str(datetime.datetime.now()) + " the state is " + str(vm.info(name).state))
 
     # resize test - checked
     # *** chameleon requires extra confirmation for resizing request
@@ -94,7 +91,7 @@ def azure_test():
 
 
 def main():
-
+    input("Press Enter to continue testing for Chameleon cloud....")
     openstack_test1()
     return
 

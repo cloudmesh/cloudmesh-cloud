@@ -144,6 +144,7 @@ class Vm:
                 else:
                     self.mongo.insert_cloud_document(document)
                 return i
+        raise ValueError('Node: '+name+' does not exist!')
 
     def new_name(self, experiment, group, user):
         """
@@ -207,6 +208,7 @@ class Vm:
             self.provider.remove_public_ip(name)
 
 
+#@staticmethod
 def process_arguments(arguments):
     """
     Process command line arguments to execute VM actions.

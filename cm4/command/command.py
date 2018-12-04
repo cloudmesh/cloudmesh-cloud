@@ -87,6 +87,9 @@ def process_arguments(arguments):
     elif arguments.get("vcluster"):
         cm4.vcluster.VirtualCluster.process_arguments(arguments)
 
+    elif arguments.get("openstack"):
+        cm4.openstack.OpenstackCM.process_arguments(arguments)
+
     elif arguments.get("data"):
         cm4.data.data.process_arguments(arguments)
 

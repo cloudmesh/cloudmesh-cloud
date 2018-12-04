@@ -22,28 +22,28 @@ def main():
 
     print("Node:" + node_id + " has been set up")
 
-    while (d.info(node_id)['state'] == 'pending'):
+    while d.info(node_id)['state'] == 'pending':
         sleep(3)
     print("At time " + str(datetime.datetime.now()) + " the state is " + d.info(node_id)['state'])
 
     ## suspend
     print("call d.suspend() function")
     d.suspend(node_id)
-    while (d.info(node_id)['state'] == 'running'):
+    while d.info(node_id)['state'] == 'running':
         sleep(3)
     print("At time " + str(datetime.datetime.now()) + " the state is " + d.info(node_id)['state'])
 
     ## resume
     print("call d.resume() function")
     d.resume(node_id)
-    while (d.info(node_id)['state'] == 'stopped'):
+    while d.info(node_id)['state'] == 'stopped':
         sleep(3)
     print("At time " + str(datetime.datetime.now()) + " the state is " + d.info(node_id)['state'])
 
     ## stop
     print("call d.stop() function")
     d.stop(node_id)
-    while (d.info(node_id)['state'] == 'running'):
+    while d.info(node_id)['state'] == 'running':
         sleep(3)
     print("At time " + str(datetime.datetime.now()) + " the state is " + d.info(node_id)['state'])
 

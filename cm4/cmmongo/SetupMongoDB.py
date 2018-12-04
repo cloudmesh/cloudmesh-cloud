@@ -31,7 +31,7 @@ class SetupMongoDB(object):
             print("MongoDB is not installed in " + os.path.join(os.path.dirname(__file__), "MongoDB"))
             print("Auto-install the MongoDB into " + os.path.join(os.path.dirname(__file__), "MongoDB"))
 
-            if (platform == 'linux'):
+            if platform == 'linux':
                 self.install_mongo_linux()
 
     def install_mongo_linux(self):
@@ -96,7 +96,7 @@ class SetupMongoDB(object):
                                                   logAppend=True)
                                    )
 
-        if (username != None and password != None):
+        if username != None and password != None:
             default_config_file.update(dict(security=dict(authorization='enabled')))
 
         with open(os.path.join(self.mongo_db_path, 'mongod.conf'), "w") as output:

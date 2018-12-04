@@ -11,22 +11,22 @@ import subprocess
 class Utility(object):
 
     def __init__(self, debug=False):
-        '''
+        """
         initializes the utulity class for awscm
-        
+
         :param debug: enables debug information to be printed
-        '''
+        """
 
         self.debug = debug
         self.default_path_aws = '/home/ubuntu/'
 
     def get_instance(self, instance):
-        '''
+        """
         get the content of the labeled or named instance
-        
+
         :param instance: the key-value pair of the instance information
         :return instance: the detailed value of the instance
-        '''
+        """
 
         title = list(instance.keys())[0]
         instance = instance.get(title)
@@ -34,14 +34,14 @@ class Utility(object):
 
     def copy_file(self, instance, file, where):
         # runable for aws
-        '''
+        """
         copy the file from local into the instance
-        
+
         :param instance: the instance that we want to access
         :param file: the file path that we want to copy to the instance
         :param where: the destination of the copied file
         :return: "Success" or "Fail"
-        '''
+        """
 
         instance = self.get_instance(instance)
         try:
@@ -59,14 +59,14 @@ class Utility(object):
 
     def copy_folder(self, instance, folder, where):
         # runable for aws
-        '''
+        """
         copy the folder from local into the instance
-        
+
         :param instance: the instance that we want to access
         :param folder: the folder path that we want to copy to the instance
         :param where: the destination of the copied file
         :return: "Success" or "Fail"
-        '''
+        """
 
         instance = self.get_instance(instance)
         try:
@@ -84,13 +84,13 @@ class Utility(object):
             return "Fail to access the instance"
 
     def dir_list(self, instance, where):
-        '''
+        """
         list objects from the instance directory
-        
+
         :param instance: the instance we want to access
         :param where: the directory that we want to view
         :return output: the list of objects
-        '''
+        """
 
         instance = self.get_instance(instance)
         output = ''
@@ -112,14 +112,14 @@ class Utility(object):
             return "Fail to access the instance"
 
     def delete_file(self, instance, file, where):
-        '''
+        """
         delete the file from the instance
-        
+
         :param instance: the instance that we want to access
         :param file: the file name that we want to delete
         :param where: the destination of the deleted file
         :return: "Success" or "Fail"
-        '''
+        """
 
         instance = self.get_instance(instance)
         try:
@@ -137,14 +137,14 @@ class Utility(object):
             return "Fail to access the instance"
 
     def delete_folder(self, instance, folder, where):
-        '''
+        """
         delete the folder from the instance
-        
+
         :param instance: the instance that we want to access
         :param folder: the folder name that we want to delete
         :param where: the destination of the deleted folder
         :return: "Success" or "Fail"
-        '''
+        """
 
         instance = self.get_instance(instance)
         try:
@@ -163,14 +163,14 @@ class Utility(object):
             return "Fail to access the instance"
 
     def create_folder(self, instance, folder, where):
-        '''
+        """
         create a folder in the instance
-        
+
         :param instance: the instance that we want to access
         :param folder: the name of created folder
         :param where: the destination location in the remote instance
         :return: "Success" or "Fail"
-        '''
+        """
 
         instance = self.get_instance(instance)
         try:
@@ -188,14 +188,14 @@ class Utility(object):
             return "Faile to access the instance"
 
     def read_file(self, instance, file, where):
-        '''
+        """
         read file from the instance
-        
+
         :param instance: the instance that we want to access
         :param file: the file name that we want to read
         :param where: the location of the file in the instance
         :return output: the content of file
-        '''
+        """
 
         instance = self.get_instance(instance)
         output = ""
@@ -216,15 +216,15 @@ class Utility(object):
             return "Faile to access the instance"
 
     def download_file(self, instance, file, where, local):
-        '''
+        """
         download file from instance to local
-        
+
         :param instance: the instance that we want to access
         :param file: the file name that we want to download
         :param where: the directory path of the file in the instance
         :param local: the local destination that we want to save the file
         :return: "Success" or "Fail"
-        '''
+        """
 
         instance = self.get_instance(instance)
 
@@ -244,15 +244,15 @@ class Utility(object):
             return "Faile to access the instance"
 
     def download_folder(self, instance, folder, where, local):
-        '''
+        """
         download folder from instance to local
-        
+
         :param instance: the instance that we want to access
         :param file: the folder name that we want to download
         :param where: the directory path of the folder in the instance
         :param local: the local destination that we want to save the folder
         :return: "Success" or "Fail"
-        '''
+        """
 
         instance = self.get_instance(instance)
 
@@ -273,13 +273,13 @@ class Utility(object):
             return "Faile to access the instance"
 
     def check_process(self, instance, process):
-        '''
+        """
         check where the process is running or not
-        
+
         :param instance: the instance that we want to access
         :param process: the process name
         :return output: the information of the running process
-        '''
+        """
 
         instance = self.get_instance(instance)
         output = ""

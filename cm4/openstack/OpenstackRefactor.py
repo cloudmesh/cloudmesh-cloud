@@ -18,11 +18,11 @@ class OpenstackRefactor():
         self.cm = cm
 
     def list_sizes(self):
-        '''
+        """
         List sizes on a provider
         :param:
         :return: list of NodeSize
-        '''
+        """
         return self.cm.driver.list_sizes()
 
     def list_images(self, location=None, ex_only_active=True):

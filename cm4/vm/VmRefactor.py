@@ -36,11 +36,11 @@ class VmRefactor(object):
 
 
     def resize(self, name, size):
-        '''
+        """
         resize a node
         :param: node_id, new size object
         :return: bool
-        '''
+        """
         node = self.get_node_by_name(name)
         node_id = node.id
         return self.vm.provider.driver.ex_resize(node, size)

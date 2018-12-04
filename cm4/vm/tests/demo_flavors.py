@@ -29,7 +29,7 @@ def openstack_test1():
     node = vm.provider.create('testgroup-experiment-01')
     node_id = node.id
     name = node.name
-    while (vm.info(name).state == 'pending'):
+    while vm.info(name).state == 'pending':
         sleep(3)
     print("At time " + str(datetime.datetime.now()) + " the state is " + vm.info(name).state)
     print(node)

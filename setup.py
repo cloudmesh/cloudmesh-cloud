@@ -113,9 +113,9 @@ setup(
     namespace_packages=['cloudmesh'],
     include_package_data=True,
     # data_files= data_files,
-    # package_data={
-    #     'cloudmesh_cm4.etc': ['*.yaml', '*.py'],
-    # },
+    package_data={
+        'cm4.etc': ['*.yaml', '*.py'],
+    },
     entry_points={
         'console_scripts': [
             'cm4 = cm4.command.command:main',

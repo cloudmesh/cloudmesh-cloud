@@ -1,10 +1,9 @@
 from pymongo import MongoClient
-from cm4.abstractclass.DatabaseManagerABC import DatabaseManagerABC
 import urllib.parse
-from pprint import pprint
 
 
-class MongoDB(DatabaseManagerABC):
+class MongoDB(object):
+
 
     def __init__(self, host, username, password, port):
         self.database = 'cloudmesh'
@@ -97,11 +96,12 @@ class MongoDB(DatabaseManagerABC):
 
     def update_document(self, collection_name, key, value, info):
         """
-        update document in any collection
-        :param collection_name: collection name, like 'default', 'job' ....
-        :param ID: the document id
-        :param info: updated information (key-value)
-        :return: True/False
+        update document
+        :param collection_name: the name of the collection
+        :param key: the key that we find the document
+        :param value: the value that we find the document
+        :param info: the update information
+        :return:
         """
         collection = self.db[collection_name]
         result = collection.update_one({key: value}, {'$set': self.var_to_json(info)}).acknowledged
@@ -135,11 +135,13 @@ class MongoDB(DatabaseManagerABC):
             documents = collection.find({key: value})
         return documents
 
+
     def delete_document(self, collection_name, key, value):
         """
-        delete the document from collection
+        delete the document
         :param collection_name: collection name, like 'default', 'job' ....
-        :param ID: document id
+        :param key: search key
+        :param value: search value
         :return: the deleted document
         """
         collection = self.db[collection_name]
@@ -168,16 +170,16 @@ class MongoDB(DatabaseManagerABC):
         return self.db_command("serverStatus")
 
     @staticmethod
-    def status_document(instance_id, status, job_id, history):
+    def status_document(instance_name, status, job_id, history):
         """
         create status document
-        :param instance_id:
-        :param status:
-        :param job_id:
-        :param history:
+        :param instance_name: the name of vm
+        :param status: the status of the vm, processing or No job
+        :param job_id: the job document id
+        :param history: the list of job document ids
         :return:
         """
-        document = {'id': instance_id,
+        document = {'id': instance_name,
                     'status': status,
                     'currentJob': job_id,
                     'history': history}

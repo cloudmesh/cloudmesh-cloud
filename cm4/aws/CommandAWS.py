@@ -36,12 +36,11 @@ class CommandAWS(object):
 
     def run_command(self, command, vm_name):
         """
-        running command in nodes, update the job and status document in MongoDB
-        :param command: the input command
-        :param vm_list: list of node id
-        :return: the result of each node
+        run command in the vm, and save the job information into MongoDB
+        :param command: the command string
+        :param vm_name: the vm name
+        :return: the result of command
         """
-
         username = 'ubuntu@'+self.find_node_DNS(vm_name)
         job_id = self.job_start_update_mongo('Null', command, vm_name)
         self.update_instance_job_status(vm_name, job_id)
@@ -52,7 +51,12 @@ class CommandAWS(object):
         return 'Running command ' + command + 'in Instance ' + vm_name + ':\n' + temp
 
     def run_script(self, script, vm_name):
-
+        """
+        run script in the vm, and save the job information into MongoDB
+        :param script: the raw shell script file
+        :param vm_name: the vm name
+        :return: the result of script
+        """
         username = 'ubuntu@' + self.find_node_DNS(vm_name)
         content = self.read_script(script)
 
@@ -70,7 +74,7 @@ class CommandAWS(object):
         create new job document in MongoDB, status is processing
         :param script: the running script
         :param command: the input command
-        :param vm: the node id
+        :param vm_name: the vm name
         :return: the job document id
         """
         job = self.mongo.job_document(vm_name, 'processing', script, 'Null', 'Null', command)
@@ -80,7 +84,7 @@ class CommandAWS(object):
     def job_end_update_mongo(self, id, output):
         """
         jod is done, update the information into job collection in MongoDB, status is done
-        :param ID: the job document id
+        :param id: the job document id
         :param output: the result
         :return: True/False
         """

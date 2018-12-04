@@ -248,7 +248,7 @@ class Utility(object):
         download folder from instance to local
 
         :param instance: the instance that we want to access
-        :param file: the folder name that we want to download
+        :param folder: the folder name that we want to download
         :param where: the directory path of the folder in the instance
         :param local: the local destination that we want to save the folder
         :return: "Success" or "Fail"

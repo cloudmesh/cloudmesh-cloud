@@ -12,7 +12,7 @@ from pprint import pprint
 
 
 
-class Vmprovider (object):
+class Vmprovider(object):
 
     def __init__(self):
         self.config = Config()
@@ -147,7 +147,7 @@ class Vm:
                 else:
                     self.mongo.insert_cloud_document(document)
                 return i
-        raise ValueError('Node: '+name+' does not exist!')
+        raise ValueError('Node: ' + name + ' does not exist!')
 
 
     def new_name(self, experiment=None, group=None, user=None):

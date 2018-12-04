@@ -1,10 +1,8 @@
 from libcloud.compute.types import Provider
 from libcloud.compute.providers import get_driver
-import os
 from config import Config
-import yaml
 
-
+# TODO: BUG: Provider also in libcloud
 class Provider(object):
 
     def __init__(self):

@@ -6,7 +6,7 @@ class TestConfig:
     Functional tests for the configuration Config class
     """
 
-    def setUp(self):
+    def setup(self):
         self._conf = Config()
 
     def test_get_notfound_defaults(self):

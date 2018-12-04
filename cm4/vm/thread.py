@@ -3,7 +3,7 @@ import time, os
 
 
 
-class thread(threading.Thread):
+class Thread(threading.Thread):
     def __init__(self, vm, name, node_name, status):
         threading.Thread.__init__(self)
         self.vm = vm

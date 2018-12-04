@@ -8,7 +8,7 @@ import json
 # https://libcloud.readthedocs.io/en/latest/apidocs/libcloud.compute.drivers.html#module-libcloud.compute.drivers.ec2
 
 
-class AWSController (CloudManagerABC):
+class AWSController(CloudManagerABC):
 
     def __init__(self, ACCESS_ID, SECRET_KEY, region):
         """
@@ -54,8 +54,6 @@ class AWSController (CloudManagerABC):
         '''
         return self.driver.list_nodes([node_id])
 
-
-
     def stop(self, node_id):
         """
         stop the node
@@ -98,7 +96,3 @@ class AWSController (CloudManagerABC):
         size = [s for s in sizes if s.id == size][0]
         image = [i for i in images if i.id == image][0]
         self.driver.create_node(name=None, image=image, size=size, ex_keyname=keyname, ex_securitygroup=security)
-
-
-
-

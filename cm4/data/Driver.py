@@ -22,6 +22,7 @@ from libcloud.compute.providers import get_driver
 import oyaml as yaml
 import os
 
+
 class Driver(object):
 
     def __init__(self):

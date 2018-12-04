@@ -4,14 +4,14 @@ import os
 from config import Config
 import yaml
 
+
 class Provider(object):
 
     def __init__(self):
         config = Config()
         self.os_config = config.get_cloud().get("openstack")
-    
-    def get_driver(self, cloud):
 
+    def get_driver(self, cloud):
         credential = self.os_config.get("credentials")
 
         Openstack = get_driver(Provider.OPENSTACK)
@@ -20,9 +20,8 @@ class Provider(object):
             credential.get('password'),
             ex_force_base_url=credential.get("url"),
             api_version=credential.get("api_version"),
-            ex_tenant_name=credential.get("tennant_name") )
+            ex_tenant_name=credential.get("tennant_name"))
         return driver
-
 
 
 def connection_test():
@@ -39,13 +38,9 @@ def connection_test():
     print(node)
 
 
-
 # test running point
 if __name__ == "__main__":
     connection_test()
-
-
-
 
 # TODO
 '''
@@ -68,11 +63,3 @@ class Vm(object):
     
     
 '''
-
-
-
-
-
-
-
-

@@ -36,13 +36,12 @@ class Vmprovider (object):
 class Vm:
 
     def __init__(self, cloud):
-        config = Config()
+        self.config = Config()
         self.provider = Vmprovider().get_provider(cloud)
-        self.mongo = MongoDB(host=config.get('data.mongo.MONGO_HOST'),
-                             username=config.get('data.mongo.MONGO_USERNAME'),
-                             password=config.get('data.mongo.MONGO_PASSWORD'),
-                             port=config.get('data.mongo.MONGO_PORT'))
-
+        self.mongo = MongoDB(host=self.config.get('data.mongo.MONGO_HOST'),
+                             username=self.config.get('data.mongo.MONGO_USERNAME'),
+                             password=self.config.get('data.mongo.MONGO_PASSWORD'),
+                             port=self.config.get('data.mongo.MONGO_PORT'))
 
     def start(self, name):
         """
@@ -146,15 +145,22 @@ class Vm:
                 return i
         raise ValueError('Node: '+name+' does not exist!')
 
-    def new_name(self, experiment, group, user):
+    def new_name(self, experiment=None, group=None, user=None):
         """
-        TODO: Doc
+        Generate a VM name with the format `experiment-group-name-<counter>` where `counter`
+        represents a running count of VMs created.
+
+        Defaults can be modified in the cloudmesh4.yaml file.
 
         :param experiment:
         :param group:
         :param user:
-        :return:
+        :return: The generated name.
         """
+        experiment = experiment or self.config.get("default.experiment")
+        group = group or self.config.get("default.group")
+        user = user or getpass.getuser()
+
         counter = Counter()
         count = counter.get()
         name = Name()
@@ -222,11 +228,7 @@ def process_arguments(arguments):
         print("vm processing arguments")
         pp.pprint(arguments)
 
-    config = Config()
-    default_cloud = config.get("default.cloud")
-    default_group = config.get("default.group")
-    default_experiment = config.get("default.experiment")
-    default_cluster = config.get("default.cluster")
+    default_cloud = Config().get("default.cloud")
 
     vm = Vm(default_cloud)
 
@@ -240,7 +242,7 @@ def process_arguments(arguments):
         vm_name = arguments.get("VMNAME")
 
         if vm_name is None:
-            vm_name = vm.new_name(default_experiment, default_group, getpass.getuser())
+            vm_name = vm.new_name()
 
         vm.create(vm_name)
 

@@ -2,6 +2,7 @@ from __future__ import print_function
 from os.path import isfile, expanduser, join, dirname, realpath, exists
 from os import mkdir
 from shutil import copyfile
+from pathlib import Path
 import oyaml as yaml
 
 
@@ -25,7 +26,8 @@ class Counter(object):
             mkdir(config_folder)
 
         if not isfile(self.counter_file_path):
-            copyfile(join(dirname(realpath(__file__)), "../etc/counter.yaml"), self.counter_file_path)
+            destination_path = Path(join(dirname(realpath(__file__)), "../etc/counter.yaml"))
+            copyfile(destination_path.resolve(), self.counter_file_path)
 
         with open(self.counter_file_path, "r") as stream:
             self.counters = yaml.load(stream)

@@ -1,5 +1,7 @@
 class Name(object):
 
+    # TODO: THIS IS INCOMPLETE
+
     # possibly move this to configuration
 
     def __init__(self):
@@ -22,7 +24,7 @@ class Name(object):
             # named args as defined in schema
             pass
 
-    def verify(schema, **knargs):
+    def verify(self, schema, **knargs):
         # verifies if kargs are defined returns tru/false
         pass
 
@@ -30,7 +32,7 @@ class Name(object):
         # returns current name without increasing the counter
         # we have two ways to get the name
         # Name.current
-        pass
+        return None
 
     def load(self):
         # reads the counter form the yaml file

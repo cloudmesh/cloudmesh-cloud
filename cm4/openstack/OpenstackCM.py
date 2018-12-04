@@ -154,7 +154,6 @@ class OpenstackCM(CloudManagerABC):
     def remove_public_ip(self, name):
         """        
         :param name: name of the VM
-        :param ip_str: ip string or ip object
         """
         node = self._get_obj_by_name('node', name)
         for ip in node.public_ips:
@@ -179,7 +178,6 @@ class OpenstackCM(CloudManagerABC):
     def nodes_info(self):
         """
         get organized meta information about all node
-        :param node_id:
         :return: metadata of node
         """
         nodes = self.driver.list_nodes()

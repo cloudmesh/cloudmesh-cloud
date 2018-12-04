@@ -38,6 +38,7 @@ class GenericConfig(object):
             default_db = conf.get('default.db')
             az_credentials = conf.get('data.service.azure.credentials')
 
+        :param default:
         :param key: A string representing the value's path in the config.
         """
         return self._conf_dict.get(key, default)
@@ -65,7 +66,7 @@ class GenericConfig(object):
         Usage:
             mongo_conn = conf.get('db.mongo.MONGO_CONNECTION_STRING', "https://localhost:3232")
 
-        :param key: A string representing the value's path in the config.
+        :param keys: A string representing the value's path in the config.
         :param value: value to be set.
         """
         pointer = self._conf_dict
@@ -85,7 +86,6 @@ class GenericConfig(object):
     def keys(self):
         """
         Print keys of a subkey
-        :param key:
         :return:
         """
         return self._conf_dict.keys()

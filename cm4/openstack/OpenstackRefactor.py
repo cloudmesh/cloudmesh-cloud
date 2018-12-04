@@ -59,7 +59,7 @@ class OpenstackRefactor(object):
         :return: bool
         """
         node = self.cm._get_node_by_id(node_id)
-        return self.cm.driver.ex_revert_resize(node);
+        return self.cm.driver.ex_revert_resize(node)
 
     # rebuild node with new image
     def rebuild(self, node_id, image):

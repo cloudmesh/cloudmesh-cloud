@@ -41,7 +41,7 @@ class CommandAWS(object):
         :param vm_name: the vm name
         :return: the result of command
         """
-        username = 'ubuntu@'+self.find_node_dns(vm_name)
+        username = 'ubuntu@' + self.find_node_dns(vm_name)
         job_id = self.job_start_update_mongo('Null', command, vm_name)
         self.update_instance_job_status(vm_name, job_id)
         temp = subprocess.check_output(['ssh', '-i', self.private_key_file, username, command]).decode("utf-8")
@@ -68,7 +68,6 @@ class CommandAWS(object):
 
         return 'Running command ' + script + 'in Instance ' + vm_name + ':\n' + temp
 
-
     def job_start_update_mongo(self, script, command, vm_name):
         """
         create new job document in MongoDB, status is processing
@@ -80,7 +79,6 @@ class CommandAWS(object):
         job = self.mongo.job_document(vm_name, 'processing', script, 'Null', 'Null', command)
         return self.mongo.insert_job_collection(job)
 
-
     def job_end_update_mongo(self, document_id, output):
         """
         jod is done, update the information into job collection in MongoDB, status is done
@@ -89,7 +87,6 @@ class CommandAWS(object):
         :return: True/False
         """
         return self.mongo.update_document('job', '_id', document_id, dict(status='done', output=output))
-
 
     def update_instance_job_status(self, vm_name, job_id):
         """
@@ -109,7 +106,6 @@ class CommandAWS(object):
                                                                          history=history))
             else:
                 self.mongo.update_document('status', 'id', vm_name, dict(status='processing', currentJob=job_id))
-
 
     def disconnect(self):
         """

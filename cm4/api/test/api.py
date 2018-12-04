@@ -1,8 +1,4 @@
 import connexion
-from pathlib import Path
-from os import path
-from specsynthase.specbuilder import SpecBuilder
-
 
 if __name__ == "__main__":
     spec_dir = "../specs"

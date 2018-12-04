@@ -1,8 +1,8 @@
-from flask import Flask, request, jsonify
-from cm4.cmmongo.mongoDB import MongoDB
-from cm4.vm.Vm import Vm
-from cm4.configuration.config import Config
+from flask import request, jsonify
 
+from cm4.cmmongo.mongoDB import MongoDB
+from cm4.configuration.config import Config
+from cm4.vm.Vm import Vm
 
 config = Config()
 db = MongoDB(config.get('data.mongo.MONGO_DBNAME'),

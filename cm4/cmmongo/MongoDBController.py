@@ -5,6 +5,7 @@ from sys import platform
 from pymongo import MongoClient
 from cm4.configuration.config import Config
 from pprint import pprint
+import textwrap
 
 
 class MongoDBController(object):
@@ -17,19 +18,29 @@ class MongoDBController(object):
     def __str__(self):
         return yaml.dump(self.data, default_flow_style=False, indent=2)
 
+
+    def installer(self, script):
+        lines = textwrap.dedent(script)
+        print (lines)
+        for line in script:
+            subprocess.check_output(line, shell=True)
+
     def check_mongo_dir_and_install(self):
         """
         check where the MongoDB is installed in cmmongo location.
         if MongoDB is not installed, python help install it
         """
         path = self.data["MONGO_PATH"]
-        if not os.path.isdir(path):
+        if not os.path.isdir(path) and self.data["MONGO_AUTOINSTALL"]:
             print("MongoDB is not installed in {MONGO_PATH}".format(**self.data))
             #
             # ask if you like to install and give infor wher it is being installed
             #
+            # use cloudmesh yes no question see cloudmesh 3
+            #
+            print("Auto-install the MongoDB into {MONGOP_PATH}".format(self.data))
 
-            print("Auto-install the MongoDB into {}".format())
+            self.data["MONGO_CODE"] = self.data["MONGO_DOWNLAOD"][platform]
 
             if platform == 'linux':
                 self.install_mongo_linux()
@@ -39,49 +50,21 @@ class MongoDBController(object):
                 # TODO
                 print('next update')
 
-''' broken
-        self.mongo_download = self.config.get('data.mongo.MONGO_DOWNLOAD')
-        temp = str(self.mongo_download).split('/')
-        self.download_file = temp[len(temp) - 1]
-        self.mongo_db_path = self.config.get('data.mongo.MONGO_FOLDER')
-'''
-
-
     def install_mongo_linux(self):
+        # TODO UNTESTED
         """
         install MongoDB in Linux system (Ubuntu)
         """
-
-        # create MongoDB folder in current path
-        cmd = 'mkdir {path}'.format(**self.mongo_config)
-        subprocess.check_output(cmd, shell=True)
-        # install prepartion tools
-        cmd = 'sudo apt-get --yes install libcurl4 openssl'
-        subprocess.check_output(cmd, shell=True)
-        # download the last version of MongoDB
-        cmd = 'wget -P {path} {download}'.format(**self.mongo_config)
-        subprocess.check_output(cmd, shell=True)
-        # extract content
-        cmd = 'tar -zxvf "{tar}" -C {path}'.format(**self.mongo_config)
-        subprocess.check_output(cmd, shell=True)
-        # update the mongodb folder path into yaml
-        cmd = 'ls %s' % self.mongo_path
-        output = str(subprocess.check_output(cmd, shell=True).decode("utf-8")).split('\n')
-
-        for i in output:
-            if i is not self.download_file and i is not '':
-                self.mongo_db_path = os.path.join(self.mongo_path, i)
-                self.config.set('data.mongo.MONGO_FOLDER', self.mongo_db_path)
-        # update PATH
-        cmd = 'echo "export PATH=%s/bin:$PATH" >> ~/.bashrc ' % self.mongo_db_path
-        subprocess.check_output(cmd, shell=True)
-        cmd = '. ~/.bashrc'
-        subprocess.check_output(cmd, shell=True)
-        # create database and log folder
-        cmd = 'mkdir {database}'.format(**self.mongo_config)
-        subprocess.check_output(cmd, shell=True)
-        cmd = 'mkdir {log}'.forma(**self.mongo_config)
-        subprocess.check_output(cmd, shell=True)
+        script = """
+        sudo apt-get --yes install libcurl4 openssl
+        mkdir {MONGO_PATH}
+        wget -P /tmp/mongodb.tgz {MONGO_CODE}
+        tar -zxvf /tmp/mongodb.tgz -C {MONGO_PATH}
+        echo "export PATH={MONGO_PATH}/bin:$PATH" >> ~/.bashrc
+        source ~/.bashrc'
+        mkdir {MONGO_LOG}
+        """
+        # THIS IS BROKEN AS ITS A SUPBROCESS? '. ~/.bashrc'
 
         # initial mongodb config file
         self.initial_mongo_config(False)
@@ -90,35 +73,17 @@ class MongoDBController(object):
         """
         install MongoDB in Darwin system (Mac)
         """
-        # create MongoDB folder in current path
-        cmd = 'mkdir %s' % self.mongo_path
-        subprocess.check_output(cmd, shell=True)
-        # download the last version of MongoDB
-        cmd = 'cd %s;curl -O %s' % (self.mongo_path, self.mongo_download)
-        subprocess.check_output(cmd, shell=True)
-        # extract content
-        cmd = 'tar -zxvf %s -C %s' % (os.path.join(self.mongo_path, self.download_file), self.mongo_path)
-        subprocess.check_output(cmd, shell=True)
+        # wget -P /tmp/mongodb.tgz {MONGO_CODE}
 
-        # update the mongodb folder path into yaml
-        cmd = 'ls %s' % self.mongo_path
-        output = str(subprocess.check_output(cmd, shell=True).decode("utf-8")).split('\n')
-
-        for i in output:
-            if i is not self.download_file and i is not '':
-                self.mongo_db_path = os.path.join(self.mongo_path, i)
-                self.config.set('data.mongo.MONGO_FOLDER', self.mongo_db_path)
-
-        # update PATH
-        cmd = 'echo "export PATH=%s/bin:$PATH" >> ~/.bash_profile' % self.mongo_db_path
-        subprocess.check_output(cmd, shell=True)
-        cmd = '. ~/.bash_profile'
-        subprocess.check_output(cmd, shell=True)
-        # create database and log folder
-        cmd = 'mkdir %s' % os.path.join(self.mongo_db_path, 'database')
-        subprocess.check_output(cmd, shell=True)
-        cmd = 'mkdir %s' % os.path.join(self.mongo_db_path, 'log')
-        subprocess.check_output(cmd, shell=True)
+        script = """
+        mkdir {MONGO_PATH}
+        cmd = 'cd {MONGO_PATH}; curl -O {MONGO_CODE} -o /tmp/mongodb.tgz
+        tar -zxvf /tmp/mongodb.tgz -C {MONGO_PATH}
+        echo "export PATH={MONGO_PATH}/bin:$PATH" >> ~/.bash_profile
+        source ~/.bashrc_profile'
+        mkdir {MONGO_LOG}
+        """
+        # THIS IS BROKEN AS ITS A SUPBROCESS? '. ~/.bashrc'
 
         # initial mongodb config file
         self.initial_mongo_config(False)

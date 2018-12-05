@@ -57,3 +57,10 @@ class CloudManagerABC(metaclass=abc.ABCMeta):
         create one node
         """
         pass
+
+    def rename(self, name, new_name):
+        """
+        renames the node
+        """
+        pass
+

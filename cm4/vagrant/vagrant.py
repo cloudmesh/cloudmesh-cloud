@@ -11,25 +11,28 @@ import time
 import hostlist
 from docopt import docopt
 from termcolor import colored
-
+#
+# TODO: BUG: this is managed laregly with the vm command and not vagrant, so what we need to do is make sure that if
+#  this stays, we need to have similar fumctionality in vm
+#
 """Vagrant Manager.
 
 Usage:
-  vagrant.py vagrant create --vms=VMLIST [--box=BOX] [--template=TEMPLATE] [--output=OUTPUT] [--debug]
-  vagrant.py vagrant start [--vms=VMLIST] [--debug]
-  vagrant.py vagrant resume [--vms=VMLIST] [--debug]
-  vagrant.py vagrant stop [--vms=VMLIST] [--debug]
-  vagrant.py vagrant suspend [--vms=VMLIST] [--debug]
-  vagrant.py vagrant destroy [-f] [--vms=VMLIST] [--debug] 
-  vagrant.py vagrant info NAME [--debug]
-  vagrant.py vagrant ls [--debug]
-  vagrant.py vagrant upload --from=FROM --to=TO [-r] [--vms=VMLIST] [--debug]
-  vagrant.py vagrant download --from=FROM --to=TO [-r] [--vms=VMLIST] [--debug]
-  vagrant.py vagrant ssh NAME [--debug]
-  vagrant.py vagrant run command COMMAND [--vms=VMLIST] [--debug]
-  vagrant.py vagrant run script SCRIPT [--data=PATH] [--vms=VMLIST] [--debug]
+  cm4 vagrant create --vms=VMLIST [--box=BOX] [--template=TEMPLATE] [--output=OUTPUT] [--debug]
+  cm4 vagrant start [--vms=VMLIST] [--debug]
+  cm4 vagrant resume [--vms=VMLIST] [--debug]
+  cm4 vagrant stop [--vms=VMLIST] [--debug]
+  cm4 vagrant suspend [--vms=VMLIST] [--debug]
+  cm4 vagrant destroy [-f] [--vms=VMLIST] [--debug] 
+  cm4 vagrant info NAME [--debug]
+  cm4 vagrant ls [--debug]
+  cm4 vagrant upload --from=FROM --to=TO [-r] [--vms=VMLIST] [--debug]
+  cm4 vagrant download --from=FROM --to=TO [-r] [--vms=VMLIST] [--debug]
+  cm4 vagrant ssh NAME [--debug]
+  cm4 vagrant run command COMMAND [--vms=VMLIST] [--debug]
+  cm4 vagrant run script SCRIPT [--data=PATH] [--vms=VMLIST] [--debug]
 
-  vagrant.py -h
+  cm4 -h
 
 Options:
   -h --help     Show this screen.
@@ -41,9 +44,9 @@ Description:
 Example:
    put an example here
 """
+
 """
 Implementation notes
-
 
 Future Version ideas:
 
@@ -115,20 +118,29 @@ class Vagrant(object):
         :param debug:
         """
         # prepare path
-        if not os.getenv('EHVAGRANT_HOME'):
-            self.workspace = os.path.join(os.path.expanduser('~'), '.cloudmesh', 'vagrant_workspace', )
-        else:
-            self.workspace = os.getenv('EHVAGRANT_HOME')
+        #
+        # TODO: BUG: We use cloudmesh, ehvagrant is not whow we set this up
+        #
+        # THis should use a config = Config()
+        #
+
+        self.workspace = os.path.join(os.path.expanduser('~'), '.cloudmesh', 'vagrant_workspace', )
         self.path = os.path.join(self.workspace, "Vagrantfile")
         self.experiment_path = os.path.join(self.workspace, 'experiment')
 
         # prepare folder and Vagrantfile
+        #
+        #  TODO: BUG: Thsi should be a utility function in common
+        #
         if not os.path.isdir(self.workspace):
             self._nested_mkdir(self.workspace)
 
         if not os.path.isdir(self.experiment_path):
             os.mkdir(self.experiment_path)
 
+        #
+        # TODO: BUG: I do not understand what node 1 and node2 are, seems debugging code
+        #
         if not os.path.isfile(self.path):
             self.create(['node1', 'node2'])
 
@@ -169,6 +181,12 @@ class Vagrant(object):
         """
         get all of the host names that exist in current vagrant environment
         """
+
+        #
+        # TODO: BUG: should this not also be in the db and if not we load into the db,
+        #  but tahan we use the db
+        #
+
         res = self.execute('vagrant status', result=True)
         if isinstance(res, Exception):
             print(res)
@@ -190,6 +208,9 @@ class Vagrant(object):
         :param dest: destination file path 
         :return: None
         """
+        #
+        # TODO: BUG: the scp should work on all named vms, regardless if vagrant or not
+        #
         # get vagrant setting
         if name not in self.ssh_config:
             res = self.execute('vagrant ssh-config {}'.format(name), result=True)
@@ -234,6 +255,9 @@ class Vagrant(object):
         :param report_kwargs: content dictionary of running result
         :return: str or dictionary:
         """
+        #
+        # TODO: BUG: THis shoudl work on all vms regardless of vagrant or not
+        #
         # parse run_report
         job_status = 'Finished' if not isinstance(res, Exception) else 'Failed'
 
@@ -265,6 +289,9 @@ class Vagrant(object):
         :param kwargs: keyword arguments of running action function
         :return: None:
         """
+        #
+        # TODO: BUG: This shoudl work on all vms regardless of vagrant or not
+        #
         # initalize threading pool
         pool = mt.Pool(len(hosts))
         run_result = queue.Queue()
@@ -307,6 +334,11 @@ class Vagrant(object):
         :param report_alone: print job running report. if False, return job running report
         :return: dictionary, subprocess.CalledProcessError
         """
+
+        #
+        # TODO: BUG: This should work on all vms and not just vagrant
+        #
+
         # building path
         script_name = os.path.basename(script_path)
         exp_folder_name = '{}_{:.0f}'.format(script_name, time.time())
@@ -403,6 +435,10 @@ class Vagrant(object):
         :return: string, subprocess.CalledProcessError
         """
         # submit job
+
+        #
+        # TODO: BUG: THis shoudl work on all vms and not just vagrant
+        #
         logging.debug('exceute "{}" on node {}......'.format(command, name))
         res = self.execute(
             'vagrant ssh {} -c "echo -e \\"\x04\\";{}; echo \\"return_code: $?\\""'.format(name, command), result=True)

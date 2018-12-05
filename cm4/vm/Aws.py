@@ -5,20 +5,20 @@ from libcloud.compute.drivers.ec2 import EC2NodeDriver
 from libcloud.compute.base import NodeDriver
 
 
-class Cmaws(Cloud):
+class Aws(Cloud):
 
     def __init__(self, config, kind):
         os_config = config.get('cloud.%s' % kind)
         default = os_config.get('default')
         credentials = os_config.get('credentials')
-        self.driver = CmAWSDriver(
+        self.driver = AWSDriver(
             credentials['EC2_ACCESS_ID'],
             credentials['EC2_SECRET_KEY'],
             region=default['region']
         )
 
 
-class CmAWSDriver(EC2NodeDriver, NodeDriver):
+class AWSDriver(EC2NodeDriver, NodeDriver):
 
     def __init__(self, key, secret, region, **kwargs):
         config = Config()

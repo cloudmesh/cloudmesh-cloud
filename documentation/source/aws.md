@@ -24,7 +24,8 @@ names and labels in the "aws" list.
 
 ### :o: Suggestion for Redesign
 
-I propose to redising and use the old cloudmesh interface in this new implementation
+I propose to redising and use the old cloudmesh interface in this new
+implementation
 
 ```
 cm4 aws vm list
@@ -59,7 +60,8 @@ looks at teh system sattus of mongo and other cm4 stuff
 here are some additional thoughts, that may influence what we do:
 
 * <http://cloudmesh.github.io/cmd3/man/man.html#vm>
-* There is also a newer version of cloudmesh, that we have not implemented all of this logic but it uses cmd5 
+* There is also a newer version of cloudmesh, that we have not
+  implemented all of this logic but it uses cmd5
 
 
 ### awscm.py

@@ -55,6 +55,7 @@ python cm4/flask_rest_api/rest_api.py
 from flask import abort, request
 from cm4.flask_rest_api.app import app
 
+
 @app.before_request
 def limit_remote_addr():
     if request.remote_addr != '10.20.30.40':

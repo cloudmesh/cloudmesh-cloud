@@ -7,15 +7,11 @@ Created on Tue Nov 16 2018
 
 from cm4.openstack.OpenstackCM import OpenstackCM
 from cm4.openstack.OpenstackRefactor import OpenstackRefactor
-from time import sleep
-import datetime
 import pprint as pp
 
 
 # testcode
 # need extra waiting time so server can finish update the node states
-
-
 def main():
     d = OpenstackCM('chameleon')
     r = OpenstackRefactor(d)

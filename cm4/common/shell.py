@@ -2,15 +2,14 @@
 A convenient method to execute shell commands and return their output. Note: that this method requires that the
 command be completely execute before the output is returned. FOr many activities in cloudmesh this is sufficient.
 """
-
-from __future__ import print_function
-
 import errno
 import glob
 import os
 import subprocess
 import sys
 import zipfile
+
+from typing import Union
 from pipes import quote
 from sys import platform
 
@@ -26,10 +25,10 @@ class Brew(object):
         r = Shell.brew("install", name)
         print(r)
 
-        if "already satisfied: " + name in r:
+        if f"already satisfied: {name}" in r:
             print(name, "... already installed")
             Console.ok(r)
-        elif "Successfully installed esptool":
+        elif f"Successfully installed {name}" in r:
             print(name, "... installed")
             Console.ok(r)
         else:
@@ -38,7 +37,7 @@ class Brew(object):
 
     @classmethod
     def version(cls, name):
-        r = Shell.brew("ls", "--version", "name")
+        r = Shell.brew("ls", "--version", name)
         print(r)
 
 
@@ -49,7 +48,7 @@ class Pip(object):
         if "already satisfied: esptool" in r:
             print(name, "... already installed")
             Console.ok(r)
-        elif "Successfully installed esptool":
+        elif "Successfully installed esptool" in r:
             print(name, "... installed")
             Console.ok(r)
         else:
@@ -533,12 +532,12 @@ class Shell(object):
                 result = result + [line]
         return result
 
-    def __init__(cls):
+    def __init__(self):
         """
         identifies parameters for the os
         """
-        if cls.operating_system() == "windows":
-            cls.find_cygwin_executables()
+        if self.operating_system() == "windows":
+            self.find_cygwin_executables()
         else:
             pass
             # implement for cmd, for linux we can just pass as it includes everything
@@ -603,7 +602,8 @@ class Shell(object):
         return platform.system().lower()
 
     @classmethod
-    def execute(cls, cmd, arguments="", shell=False, cwd=None, traceflag=True, witherror=True):
+    def execute(cls, cmd, arguments: Union[list, tuple, str] = "", shell=False, cwd=None, traceflag=True,
+                witherror=True):
         """Run Shell command
 
         :param witherror: if set to fasle the error will not be printed
@@ -639,6 +639,8 @@ class Shell(object):
 
         if cwd is None:
             cwd = os.getcwd()
+
+        # noinspection PyBroadException
         try:
             if shell:
                 result = subprocess.check_output(
@@ -652,7 +654,7 @@ class Shell(object):
                     # shell=True,
                     stderr=subprocess.STDOUT,
                     cwd=cwd)
-        except:
+        except Exception:
             if witherror:
                 Console.error("problem executing subprocess", traceflag=traceflag)
         if result is not None:
@@ -682,7 +684,8 @@ class Shell(object):
             else:
                 raise
 
-    def unzip(cls, source_filename, dest_dir):
+    @staticmethod
+    def unzip(source_filename, dest_dir):
         """
         unzips a file into the destination directory
         :param dest_dir: the destination directory

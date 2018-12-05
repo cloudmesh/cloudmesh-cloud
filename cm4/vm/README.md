@@ -1,16 +1,24 @@
 # VM Description
 
-In cloudmesh cm4 project, we are using the **Python** tool to implement a program that could remotelly controll cloud nodes provided by different organizations and run experiments parallelly in runable machines.
+In cloudmesh cm4 project, we are using the **Python** tool to implement a program that could remotely control cloud 
+nodes provided by different organizations and run experiments in parallel.
 
-The goal of **cm4** project is to provide a platform that users could directly control the nodes they have, like AWS, Azure, and OPENSTACK instances. Users could decide to start, stop, destory, create, resume, and suspend different nodes without accessing the **Console** interfaces of providers. Then users could install experiment environment, softwares, and other required tools in these running nodes. Finally, an experiment could be executed in running nodes by sending the commands from **cm4** platform. Meanwhile, we embedd the NoSQL database **MongoDB** into project for managing the nodes and experiments.
+The goal of **cm4** project is to provide a platform that users could directly control the nodes they have, like AWS, 
+Azure, and OPENSTACK instances. Users could decide to start, stop, destroy, create, resume, and suspend different nodes 
+without accessing the **Console** interfaces of providers. Then users could install experiment environment, software, 
+and other required tools in these running nodes. Finally, an experiment could be executed in running nodes by sending 
+the commands from **cm4** platform. Meanwhile, we embed the NoSQL database **MongoDB** into project for managing the
+nodes and experiments.
 
 ## Providers *cm4* could access
 
-In this project, we are using the python library [**Apache Libcloud**](https://libcloud.apache.org) to interact with cloud service providers. Currently, in the **cm4** project, we could access:
+In this project, we are using the python library [**Apache Libcloud**](https://libcloud.apache.org) to interact with 
+cloud service providers. Currently, in the **cm4** project, we could access:
 
 * [**AWS**](https://aws.amazon.com)
 * [**AZURE**](https://azure.microsoft.com/en-us/)
-* any cloud service providers using **OPENSTACK**. For example, [**Chameleon**](https://www.chameleoncloud.org) and [**Jetstream**](https://jetstream-cloud.org)
+* any cloud service providers using **OPENSTACK**. For example, [**Chameleon**](https://www.chameleoncloud.org) and 
+[**Jetstream**](https://jetstream-cloud.org)
 
 By using the **Apache Libcloud** API, we could do these operations for nodes in above cloud service providers:
 
@@ -22,7 +30,8 @@ By using the **Apache Libcloud** API, we could do these operations for nodes in 
 * Create the node
 
 **Improvement**: Sometimes adjustments to nodes are necessary (switch between different images/OS and service sizes). 
-Now our project also allow users to customize their instances across multiple providers by using refactor functions to support their management tasks.
+Now our project also allow users to customize their instances across multiple providers by using refactor functions to 
+support their management tasks.
 * Resize the node
 * Rebuild(with different image) the node
 * Rename the node
@@ -31,7 +40,8 @@ Now our project also allow users to customize their instances across multiple pr
 
 ### AWS
 
-Amazon Web Service (**AWS**) provided by Amazon is a secure cloud service platform, users could start any instances with selected images.
+Amazon Web Service (**AWS**) provided by Amazon is a secure cloud service platform, users could start any instances with
+selected images.
 
 Before users use the **cm4** platform to access **EC2**, they have to finish these preparations:
 
@@ -60,11 +70,14 @@ Before users use the **cm4** platform to access **EC2**, they have to finish the
    (create new Security Group: Network $ Security (left column bar) > Security Group > Create Security Group)
 
 5. **Region** is the service location where you start the instance. 
-   AWS hosts services in different regions, you should select the region where you want to start you instace.
+   AWS hosts services in different regions, you should select the region where you want to start you instance.
 
-When you finish all above things, you should update information into the block 'aws' of **chouldmesh4.yaml** file in **ETC** folder
+When you finish all above things, you should update information into the block 'aws' of **cloudmesh4.yaml** file in 
+**ETC** folder
 
-**EC2** provides On-Demand Pricing cloud services based on different CPU, Memory and Storage selections. Please visit this [page](https://aws.amazon.com/ec2/pricing/on-demand/) for more information. In default setting, we use the latest **Ubuntu** image filled in default.image field. If you want to use other images, please update the Image ID into it.
+**EC2** provides On-Demand Pricing cloud services based on different CPU, Memory and Storage selections. Please visit 
+this [page](https://aws.amazon.com/ec2/pricing/on-demand/) for more information. In default setting, we use the latest 
+**Ubuntu** image filled in default.image field. If you want to use other images, please update the Image ID into it.
 
 
 ### AZURE
@@ -91,6 +104,7 @@ principals at this time.
 
 
 Create Principal
+
 ```
 az ad sp create-for-rbac --name cm-admin-pw --password <SECRET>
 ```
@@ -105,16 +119,20 @@ az role assignment create --assignee <APP_ID> --role Owner
 
 ### OPENSTACK
 
-OpenStack is an Infrastructure service that allows users to utilize computing resource in cloud service platform through virtual environments. 
+OpenStack is an Infrastructure service that allows users to utilize computing resource in cloud service platform through 
+virtual environments. 
 
-[Chameleon Cloud](https://www.chameleoncloud.org/) provides an OpenStack installation of version 2015.1 (Kilo) using the KVM virtualization technology at the KVM@TACC site. It is
-important to make sure you are visiting the [KVM@TACC](https://openstack.tacc.chameleoncloud.org/) site so as to get proper installation. Learn more [here](https://chameleoncloud.readthedocs.io/en/latest/technical/kvm.html) 
+[Chameleon Cloud](https://www.chameleoncloud.org/) provides an OpenStack installation of version 2015.1 (Kilo) using the
+KVM virtualization technology at the KVM@TACC site. It is important to make sure you are visiting the 
+[KVM@TACC](https://openstack.tacc.chameleoncloud.org/) site so as to get proper installation. Learn more 
+[here](https://chameleoncloud.readthedocs.io/en/latest/technical/kvm.html) 
 to properly set up yout account before proceed to your journey with **cm4**.
 
 
 ### Extra: Vargrant
 
-Please refer to [here](https://github.com/cloudmesh-community/cm/tree/master/cm4/vagrant/README.md) to see how to setup Vagrant with cm4.
+Please refer to [here](https://github.com/cloudmesh-community/cm/tree/master/cm4/vagrant/README.md) to see how to setup 
+Vagrant with cm4.
 
 ## [`cloudmesh4.yaml`] configuration file
 
@@ -129,14 +147,16 @@ We add the database into **cm4** with two reasons:
 * record the experiment executed through cm4, easy for next re-execution.
 
 
-Everytime the user use the **cm4** platform, the server would access the running MongoDB database, querying the nodes' information, showing relative metadata, and then updating all necessary data.
+Every time the user use the **cm4** platform, the server would access the running MongoDB database, querying the nodes'
+information, showing relative metadata, and then updating all necessary data.
 
-The **MongoDB** would finish below taskes:
+The **MongoDB** would finish below tasks:
 
 * saving all information:
 
-  1. the nodes' information queryed from cloud service, like name, id, status, and other metadata about this node.
-  2. saving the executing or excuted experiment information, like which node we run the experiment, the input, the command, and the output.
+  1. the nodes' information queried from cloud service, like name, id, status, and other metadata about this node.
+  2. saving the executing or executed experiment information, like which node we run the experiment, the input, the 
+  command, and the output.
   3. saving the group information users defined.
   4. saving the [`cloudmesh4.yaml`] information.
 
@@ -153,24 +173,28 @@ The **MongoDB** would finish below taskes:
 
 #### Data Scheme in MongoDB
 
-There are three types of docuemnts in MongoDB:
+There are three types of documents in MongoDB:
 
-* Node information in ```cloud``` collection.
-  Different cloud service providers would return different schemas of node information. It is hard to manipulate different nodes' information into same schema, so we decide to dump the return mesaage into MongoDB without any changes.
+* Node information in `cloud` collection.
+  Different cloud service providers would return different schemas of node information. It is hard to manipulate 
+  different nodes' information into same schema, so we decide to dump the return mesaage into MongoDB without 
+  any changes.
   
-* Node's experiment status in ```status``` collection.
-  The doucment in ```status``` collection is going to save the information of experiments executed in a node.
+* Node's experiment status in `status` collection.
+  The document in `status` collection is going to save the information of experiments executed in a node.
+ 
   ```
   '_id': node_id,
   'status': status,
   'currentJob': job_id,
   'history': history
-  ```
-  ```status : node is running a experiment or not```
-  ```currentJob : the running experiment id```
-  ```history : the history of executed experiments in this node```
-  
-* Experiment information in ```job``` collection.
+  'status' : node is running a experiment or not
+  'currentJob' : the running experiment id
+  'history' : the history of executed experiments in this node
+   ```
+
+* Experiment information in `job` collection.
+
   ```
   '_id' : experiment_id
   'name': name,
@@ -179,22 +203,22 @@ There are three types of docuemnts in MongoDB:
   'output': output_info,
   'description': description,
   'commands': commands
+  'name' : the name of the experiment
+  'status' : running or finished
+  'input' : the input data file
+  'output' : the output data file
+  'description' : the description about this experiment
+  'commands' : the commands used in this experiemnt
   ```
-  ```name : the name of the experiment```
-  ```status : running or finished```
-  ```input : the input data file```
-  ```output : the output data file```
-  ```description : the description about this experiment```
-  ```commands : the commands used in this experiemnt```
 
-* Group information in ```group``` collection. :o2:
+* Group information in `group` collection.
+
   ```
   'cloud': cloud,
   'name': name,
   'size': size,
   'vms': list_vms
   ```
-  we are still working on it
 
 #### Security in MongoDB
 
@@ -207,6 +231,4 @@ If you want to learn more about the **Security** in MongoDB, you can visit this 
 Here is a quick reference about how to
  [enable MongoDB Security](https://medium.com/@raj_adroit/mongodb-enable-authentication-enable-access-control-e8a75a26d332) option. Currently our implementation require 
 users to access localhost mongoDB client with admin account. 
-
-
 

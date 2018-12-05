@@ -1,3 +1,4 @@
+
 # Cloudmesh cm v4
 
 
@@ -7,6 +8,8 @@ to coordinate the assignment. This assignment can be useful for your
 projects and reused for your projects to conduct benchmarks on remote
 machines. The online and residential classes can be used to ask
 questions and work on this in person.
+
+# Cloudmesh v4
 
 The goal is to have a configuration file in which we add a number of
 computers that you can use to execute tasks via ssh calls remotely. We
@@ -28,8 +31,8 @@ machine using subprocess and a queue. Start with one job per machine,
 c.1) take c and do a new logic where each machine can take multiple
 jobs
 
-d) develop a mechnism to start n vms via vagrant 
-
+d) develop a mechanism to start n vms via vagrant 
+ 
 e) develop a test program that distributes a job to the machines
 calculates the job and fetches the result back. This is closely
 related to c, but instead of integrating it in c the movement of the
@@ -42,29 +45,17 @@ f) advanced: develop a string based formulation of the tasks while
 providing the task in a def and using the chars | for parallel, ; for
 sequential and + for adding results
 
- 
-
 For example
 
- 
 ```
 def a():
 
    sting to be executed via ssh on a remote machine
 
- 
-
 def b():
 
 (a | b| c); d; a+ b+ c +d
 ```
- 
-
-this is not yet well defined hence advanced
-
- 
-
-all others we can easily do 
 
 
 ## Manual: Cloudmesh Multi Service Data Access
@@ -130,29 +121,19 @@ and the file will be stored in
 *Note: Network shares can also be used with the local storage provider.*
 
 **List all files**
+
 ```
 cm4 data add ls
 ```
 
 **Download file**
+
 ```
 cm4 data get hello.txt ../test
 ```
 
 **Delete file**
+
 ```
 cm4 data del hello.txt
 ```
-
-### TODO - DATA
-
-- [ ] The output for `ls` is not well formatted for the length of URLs.
-- [ ] Access/sharing policies
-- [ ] MongoDB database provider
-- [ ] Google Drive integration
-- [ ] Box integration
-- [ ] AWS integration
-- [ ] Command line option for config file path
-- [x] Should settings be moved to `cloudmesh.yaml`?
-- [ ] Better way to determine which storage providers to load
-- [x] Test direct commit permissions

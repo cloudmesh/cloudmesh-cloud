@@ -10,8 +10,13 @@ Created on Sun Sep  9 17:19:52 2018
 # TODO: we do not want to use argparse
 
 import argparse
+<<<<<<< HEAD:cm4/command/command-run-draft.py
 from deprecated.deprecated.resource import Resource
 from deprecated.deprecated import ParallelProcess
+=======
+from deprecated import Resource
+from deprecated.parallel import ParallelProcess
+>>>>>>> 4685965dae46688ac522a3412b26a2b52547c665:deprecated/command-run-draft.py
 import os
 
 

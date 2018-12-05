@@ -1,7 +1,7 @@
 import os
 import time
 from libcloud.compute.base import NodeAuthSSHKey
-from libcloud.compute.drivers.azure_arm import AzureNetwork, AzureSubnet, AzureIPAddress, AzureNodeDriver
+from libcloud.compute.drivers.azure_arm import AzureNetwork, AzureSubnet, AzureIPAddress, AzureNodeDriver, Node
 from libcloud.compute.base import NodeDriver
 from cm4.configuration.config import Config
 from cm4.vm.Cloud import Cloud
@@ -61,9 +61,10 @@ class CmAzureDriver(AzureNodeDriver, NodeDriver):
         """
         self.ex_stop_node(self._get_node(name), deallocate=False)
 
-    def destroy_node(self, node):
+    def destroy_node(self, node: Node, **kwargs):
         """
         Destroy a node.
+        :param node:
         """
         # node = self._get_node(name)
         super().destroy_node(node)
@@ -74,7 +75,7 @@ class CmAzureDriver(AzureNodeDriver, NodeDriver):
         # Libcloud does not delete public IP addresses
         self._ex_delete_public_ip(f"{node.name}-ip")
 
-    def create_node(self, name):
+    def create_node(self, name, **kwargs):
         """
         Create a node
         """

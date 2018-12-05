@@ -2,33 +2,29 @@ import abc
 
 
 class CloudManagerABC(metaclass=abc.ABCMeta):
-
-    # please update the abstract class
-    # this abstract class used for any cloud instance
-
     @abc.abstractmethod
-    def start(self):
+    def start(self, node_id):
         """
         start node
         """
         pass
 
     @abc.abstractmethod
-    def stop(self):
+    def stop(self, node_id):
         """
         stop node
         """
         pass
 
     @abc.abstractmethod
-    def info(self):
+    def info(self, node_id):
         """
         get all information about one node
         """
         pass
 
     @abc.abstractmethod
-    def suspend(self):
+    def suspend(self, node_id):
         """
         suspend one node
         """
@@ -42,21 +38,21 @@ class CloudManagerABC(metaclass=abc.ABCMeta):
         pass
 
     @abc.abstractmethod
-    def resume(self):
+    def resume(self, node_id):
         """
         resume one node
         """
         pass
 
     @abc.abstractmethod
-    def destroy(self):
+    def destroy(self, node_id):
         """
         delete one node
         """
         pass
 
     @abc.abstractmethod
-    def create(self):
+    def create(self, name, image=None, size=None, timeout=300, **kwargs):
         """
         create one node
         """

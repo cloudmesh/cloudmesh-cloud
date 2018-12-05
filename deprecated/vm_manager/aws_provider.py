@@ -1,4 +1,4 @@
-from cm4.vm_manager.providerABC import CloudProviderABC
+from deprecated.vm_manager.providerABC import CloudProviderABC
 
 
 class AWSProvider(CloudProviderABC):

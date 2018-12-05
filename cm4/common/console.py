@@ -126,27 +126,17 @@ class Console(object):
         """
         prints a message to the screen
         :param message: the message to print
-        :param width: teh width of the line
+        :param width: the width of the line
         :return:
         """
         return textwrap.fill(message, width=width)
-
-    @staticmethod
-    def msg(message):
-        """
-        prints a message
-        :param message: the message to print
-        :return:
-        """
-        message = message or ""
-        print(message)
 
     @classmethod
     def error(cls, message, prefix=True, traceflag=True):
         """
         prints an error message
         :param message: the message
-        :param prefix: a prefix for the meassage
+        :param prefix: a prefix for the message
         :param traceflag: if true the stack trace is retrieved and printed
         :return:
         """
@@ -167,7 +157,7 @@ class Console(object):
             print()
 
     @staticmethod
-    def TODO(message, prefix=True, traceflag=True):
+    def todo(message, prefix=True, traceflag=True):
         """
         prints an TODO message
         :param message: the message

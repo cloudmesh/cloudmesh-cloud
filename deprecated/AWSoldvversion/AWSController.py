@@ -82,7 +82,7 @@ class AWSController(CloudManagerABC):
         nodes = self.driver.list_nodes()
         for i in nodes:
             if i.id == node_id:
-                result = self.driver.destroy_node(i)
+                result = self.driver.destroy_node(i, )
                 return result
 
     def create(self, size, image, keyname, security):

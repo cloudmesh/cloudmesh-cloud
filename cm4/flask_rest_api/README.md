@@ -51,8 +51,9 @@ python cm4/flask_rest_api/rest_api.py
 
 #### Dev - restricting certain ips for certain rest calls
 
-```bash
+```python
 from flask import abort, request
+from cm4.flask_rest_api.app import app
 
 @app.before_request
 def limit_remote_addr():

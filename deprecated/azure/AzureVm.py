@@ -45,7 +45,7 @@ class AzureVm:
         Destroy a node.
         """
         node = self._get_node(name)
-        self.provider.destroy_node(node)
+        self.provider.destroy_node(node, )
         # Managed volumes are not destroyed by `destroy_node`.
         time.sleep(2)
         self.provider.destroy_volume(self._get_volume(name))

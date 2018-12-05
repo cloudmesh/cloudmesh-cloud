@@ -11,11 +11,8 @@ import random
 import re
 import shutil
 import tempfile
-# import pip
 import time
 from contextlib import contextmanager
-from string import Template
-
 from six.moves import input
 
 
@@ -94,11 +91,6 @@ def path_expand(text):
     """
     result = os.path.expanduser(text)
 
-    # os.path.expandvars(path)
-
-    # template = Template(text)
-    # result = template.substitute(os.environ)
-
     if result.startswith("."):
         result = result.replace(".", os.getcwd(), 1)
     return result
@@ -110,8 +102,6 @@ def convert_from_unicode(data):
     :param data: the data to convert
     :return:
     """
-    # if isinstance(data, basestring):
-
     if isinstance(data, str):
         return str(data)
     elif isinstance(data, collections.Mapping):
@@ -286,16 +276,6 @@ def copy_files(files_glob, source_dir, dest_dir):
     for filename in files:
         if os.path.isfile(filename):
             shutil.copy2(filename, dest_dir)
-
-
-def dict_replace(content, replacements=None):
-    # TODO: it is unclear why we have this. Describe
-    if replacements is None:
-        replacements = {}
-    for key in replacements:
-        content = content.replace("\{key\}".format(replacements[key]))
-
-    return content
 
 
 def readfile(filename):

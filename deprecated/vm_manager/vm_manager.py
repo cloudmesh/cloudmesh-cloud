@@ -18,10 +18,10 @@ Example:
 """
 from docopt import docopt
 from cm4.configuration.config import Config
-from cm4.vm_manager.aws_provider import AWSProvider
+from deprecated.vm_manager import AWSProvider
 
 
-def process_arguments(self, arguments):
+def process_arguments(arguments):
     provider = arguments['--provider']
     config = Config()
 
@@ -29,9 +29,9 @@ def process_arguments(self, arguments):
         provider = config.get("default.cloud")
 
     if provider == "aws":
-        cloud_manager = AWSProvider(self.config)
+        cloud_manager = AWSProvider(config)
     else:
-        cloud_manager = AWSProvider(self.config)
+        cloud_manager = AWSProvider(config)
 
     if arguments['start']:
         cloud_manager.start()

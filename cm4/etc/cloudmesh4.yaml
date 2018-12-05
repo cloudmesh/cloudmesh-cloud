@@ -135,6 +135,7 @@ cloudmesh:
           GOOGLE_STORAGE_SECRET: ''
     mongo:
       MONGO_AUTOINSTALL: False
+      MONGO_BREWINSTALL: False
       LOCAL: ~/local
       MONGO_HOME: ~/local/mongodb
       MONGO_PATH: ~/.cloudmesh/mongodb

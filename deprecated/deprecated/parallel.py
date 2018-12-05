@@ -10,7 +10,7 @@ import os
 import random
 import subprocess
 
-from cm4.deprecated.ProcessABC import ProcessABC
+from deprecated.deprecated import ProcessABC
 
 
 class ParallelProcess(ProcessABC):

@@ -7,14 +7,14 @@ from cm4.configuration.config import Config
 from cm4.vm.Cloud import Cloud
 
 
-class CmAzure(Cloud):
+class Azure(Cloud):
 
     def __init__(self, config, cloud):
         os_config = config.get('cloud.%s' % cloud)
         default = os_config.get('default')
         credentials = os_config.get('credentials')
 
-        self.driver = CmAzureDriver(
+        self.driver = AzureDriver(
             tenant_id=credentials['AZURE_TENANT_ID'],
             subscription_id=credentials['AZURE_SUBSCRIPTION_ID'],
             key=credentials['AZURE_APPLICATION_ID'],
@@ -23,7 +23,7 @@ class CmAzure(Cloud):
         )
 
 
-class CmAzureDriver(AzureNodeDriver, NodeDriver):
+class AzureDriver(AzureNodeDriver, NodeDriver):
 
     def __init__(self, tenant_id, subscription_id, key, secret,
                  secure=True, host=None, port=None,

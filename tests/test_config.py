@@ -24,9 +24,11 @@ class TestConfig:
         #assert 'cloud' in config.cloud
 
     def test_10_config_print(self):
+        HEADING(myself())
         print(self.config)
         assert True is True
 
     def test_20_config_subscriptable(self):
+        HEADING(myself())
         data = self.config["cloudmesh"]["data"]["mongo"]
         assert data is not None

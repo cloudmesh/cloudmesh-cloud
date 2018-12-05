@@ -23,6 +23,18 @@ class MongoDBController(object):
         self.download_file = temp[len(temp) - 1]
         self.mongo_db_path = self.config.get('data.mongo.MONGO_FOLDER')
 
+
+        #
+        # it would be simpler if the previous info is in a dict directly
+        #
+        self.mongo_config = {
+            "path": self.mongo_path,
+            "download": self.mongo_download,
+            "tar": os.path.join(self.mongo_path, self.download_file),
+            "database": os.path.join(self.mongo_db_path, 'database'),
+            'log': os.path.join(self.mongo_db_path, 'log')
+        }
+
     def check_mongo_dir_and_install(self):
         """
         check where the MongoDB is installed in cmmongo location.
@@ -44,17 +56,18 @@ class MongoDBController(object):
         """
         install MongoDB in Linux system (Ubuntu)
         """
+
         # create MongoDB folder in current path
-        cmd = 'mkdir %s' % self.mongo_path
+        cmd = 'mkdir {path}'.format(**self.mongo_config)
         subprocess.check_output(cmd, shell=True)
         # install prepartion tools
         cmd = 'sudo apt-get --yes install libcurl4 openssl'
         subprocess.check_output(cmd, shell=True)
         # download the last version of MongoDB
-        cmd = 'wget -P %s %s' % (self.mongo_path, self.mongo_download)
+        cmd = 'wget -P {path} {download}'.format(**self.mongo_config)
         subprocess.check_output(cmd, shell=True)
         # extract content
-        cmd = 'tar -zxvf "%s" -C %s' % (os.path.join(self.mongo_path, self.download_file), self.mongo_path)
+        cmd = 'tar -zxvf "{tar}" -C {path}'.format(**self.mongo_config)
         subprocess.check_output(cmd, shell=True)
         # update the mongodb folder path into yaml
         cmd = 'ls %s' % self.mongo_path
@@ -70,9 +83,9 @@ class MongoDBController(object):
         cmd = '. ~/.bashrc'
         subprocess.check_output(cmd, shell=True)
         # create database and log folder
-        cmd = 'mkdir %s' % os.path.join(self.mongo_db_path, 'database')
+        cmd = 'mkdir {database}'.format(**self.mongo_config)
         subprocess.check_output(cmd, shell=True)
-        cmd = 'mkdir %s' % os.path.join(self.mongo_db_path, 'log')
+        cmd = 'mkdir {log}'.forma(**self.mongo_config)
         subprocess.check_output(cmd, shell=True)
 
         # initial mongodb config file

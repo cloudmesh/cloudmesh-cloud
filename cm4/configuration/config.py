@@ -15,7 +15,7 @@ class Config(object):
         :param config_path: A local file path to cloudmesh yaml config
             with a root element `cloudmesh`. Default: `~/.cloudmesh/cloudmesh4.yaml`
         """
-        self._cloudmesh = {}
+        self.data = {}
 
         self.config_path = expanduser(config_path)
         config_folder = dirname(self.config_path)
@@ -29,7 +29,7 @@ class Config(object):
 
         with open(self.config_path, "r") as stream:
             conf = yaml.load(stream)
-            self._cloudmesh = DotDictionary(conf.get('cloudmesh'))
+            self.data = DotDictionary(conf.get('cloudmesh'))
 
     def get(self, key, default=None):
         """
@@ -44,7 +44,7 @@ class Config(object):
         :param default:
         :param key: A string representing the value's path in the config.
         """
-        return self._cloudmesh.get(key, default)
+        return self.data.get(key, default)
 
     def set(self, key, value):
         """
@@ -57,10 +57,13 @@ class Config(object):
         :param key: A string representing the value's path in the config.
         :param value: value to be set.
         """
-        self._cloudmesh.set(key, value)
-        yaml_file = {"cloudmesh": self._cloudmesh.copy()}
+        self.data.set(key, value)
+        yaml_file = {"cloudmesh": self.data.copy()}
         with open(self.config_path, "w") as stream:
             yaml.safe_dump(yaml_file, stream, default_flow_style=False)
 
+    def dict(self):
+        return self.data
+
     def __str__(self):
-        return yaml.dump(self._cloudmesh)
+        return yaml.dump(self.data)

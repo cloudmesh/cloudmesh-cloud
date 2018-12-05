@@ -1,7 +1,7 @@
 import getpass
 import pprint
-from cm4.vm.Cmaws import Cmaws
-from cm4.vm.CmAzure import CmAzure
+from cm4.vm.Aws import Aws
+from cm4.vm.Azure import Azure
 from cm4.vm.Cmopenstack import Cmopenstack
 from cm4.configuration.config import Config
 from cm4.cmmongo.mongoDB import MongoDB
@@ -26,9 +26,9 @@ class Vmprovider(object):
         os_config = self.config.get('cloud.%s' % cloud)
 
         if os_config.get('cm').get('kind') == 'azure':
-            driver = CmAzure(self.config, cloud).driver
+            driver = Azure(self.config, cloud).driver
         elif os_config.get('cm').get('kind') == 'aws':
-            driver = Cmaws(self.config, cloud).driver
+            driver = Aws(self.config, cloud).driver
         elif os_config.get('cm').get('kind') == 'openstack':
             driver = Cmopenstack(self.config, cloud).driver
 

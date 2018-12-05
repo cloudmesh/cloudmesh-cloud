@@ -1,6 +1,7 @@
 ## CM4 REST Api
 
-The cm4 REST Api is built using flask and provides the cloud information retrieval functionality through HTTP calls.
+The cm4 REST Api is built using flask and provides the cloud
+information retrieval functionality through HTTP calls.
 
 #### Pre-requisites
 
@@ -17,7 +18,7 @@ Use pip install to install the following packages.
 cd ~/git/cloudmesh/cm
 ```
 
-- Configure the cm4 project
+- Configure the cm4
 
 ```bash
 pip install .
@@ -54,6 +55,7 @@ python cm4/flask_rest_api/rest_api.py
 ```python
 from flask import abort, request
 from cm4.flask_rest_api.app import app
+
 
 @app.before_request
 def limit_remote_addr():

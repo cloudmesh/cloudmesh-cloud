@@ -21,6 +21,9 @@ def indent(text, indent=2, width=128):
     :param width: the width of the text
     :return:
     """
+    #
+    # TODO: BUG: DO NOT USE indent in a function called indent
+    #
     return "\n".join(
         textwrap.wrap(text,
                       width=width,

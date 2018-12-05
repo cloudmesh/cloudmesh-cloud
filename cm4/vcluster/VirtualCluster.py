@@ -3,35 +3,37 @@
 # noinspection PyPep8
 """Virtual Cluster: running parallel remote jobs
 
-Usage:
-  virtualcluster.py vcluster create virtual-cluster VIRTUALCLUSTER_NAME --clusters=CLUSTERS_LIST [--computers=COMPUTERS_LIST] [--debug]
-  virtualcluster.py vcluster destroy virtual-cluster VIRTUALCLUSTER_NAME
-  virtualcluster.py vcluster create runtime-config CONFIG_NAME PROCESS_NUM in:params out:stdout [--fetch-proc-num=FETCH_PROCESS_NUM [default=1]] [--download-later [default=False]]  [--debug]
-  virtualcluster.py vcluster create runtime-config CONFIG_NAME PROCESS_NUM in:params out:file [--fetch-proc-num=FETCH_PROCESS_NUM [default=1]] [--download-later [default=False]]  [--debug]
-  virtualcluster.py vcluster create runtime-config CONFIG_NAME PROCESS_NUM in:params+file out:stdout [--fetch-proc-num=FETCH_PROCESS_NUM [default=1]]  [--download-later [default=False]]  [--debug]
-  virtualcluster.py vcluster create runtime-config CONFIG_NAME PROCESS_NUM in:params+file out:file [--fetch-proc-num=FETCH_PROCESS_NUM [default=1]] [--download-later [default=False]]  [--debug]
-  virtualcluster.py vcluster create runtime-config CONFIG_NAME PROCESS_NUM in:params+file out:stdout+file [--fetch-proc-num=FETCH_PROCESS_NUM [default=1]] [--download-later [default=False]]  [--debug]
-  virtualcluster.py vcluster set-param runtime-config CONFIG_NAME PARAMETER VALUE
-  virtualcluster.py vcluster destroy runtime-config CONFIG_NAME
-  virtualcluster.py vcluster list virtual-clusters [DEPTH [default:1]]
-  virtualcluster.py vcluster list runtime-configs [DEPTH [default:1]]
-  virtualcluster.py vcluster run-script --script-path=SCRIPT_PATH --job-name=JOB_NAME --vcluster-name=VIRTUALCLUSTER_NAME --config-name=CONFIG_NAME --arguments=SET_OF_PARAMS --remote-path=REMOTE_PATH> --local-path=LOCAL_PATH [--argfile-path=ARGUMENT_FILE_PATH] [--outfile-name=OUTPUT_FILE_NAME] [--suffix=SUFFIX] [--overwrite]
-  virtualcluster.py vcluster fetch JOB_NAME
-  virtualcluster.py vcluster clean-remote JOB_NAME PROCESS_NUM
-  virtualcluster.py vcluster test-connection VIRTUALCLUSTER_NAME PROCESS_NUM
-  virtualcluster.py -h
+::
 
-Options:
-  -h --help     Show this screen.
-  --node_list=<list_of_nodes>           List of nodes separated by commas. Ex: node-1,node-2
-  --cluster_list=<list_of_clusters>     List of clusters separated by commas. Ex: cluster-1, cluster-2
-  --params=<set-of-paramList>           This is a set of parameter list each set is sent to one node. Delimiter for each node is ",", e.g. with 1 2, 3 4, 5 6 the 1 2 will be sent to node1, 3 4 run on node 2, etc.
+    Usage:
+      cm4 vcluster create virtual-cluster VIRTUALCLUSTER_NAME --clusters=CLUSTERS_LIST [--computers=COMPUTERS_LIST] [--debug]
+      cm4 vcluster destroy virtual-cluster VIRTUALCLUSTER_NAME
+      cm4 vcluster create runtime-config CONFIG_NAME PROCESS_NUM in:params out:stdout [--fetch-proc-num=FETCH_PROCESS_NUM [default=1]] [--download-later [default=False]]  [--debug]
+      cm4 vcluster create runtime-config CONFIG_NAME PROCESS_NUM in:params out:file [--fetch-proc-num=FETCH_PROCESS_NUM [default=1]] [--download-later [default=False]]  [--debug]
+      cm4 vcluster create runtime-config CONFIG_NAME PROCESS_NUM in:params+file out:stdout [--fetch-proc-num=FETCH_PROCESS_NUM [default=1]]  [--download-later [default=False]]  [--debug]
+      cm4 vcluster create runtime-config CONFIG_NAME PROCESS_NUM in:params+file out:file [--fetch-proc-num=FETCH_PROCESS_NUM [default=1]] [--download-later [default=False]]  [--debug]
+      cm4 vcluster create runtime-config CONFIG_NAME PROCESS_NUM in:params+file out:stdout+file [--fetch-proc-num=FETCH_PROCESS_NUM [default=1]] [--download-later [default=False]]  [--debug]
+      cm4 vcluster set-param runtime-config CONFIG_NAME PARAMETER VALUE
+      cm4 vcluster destroy runtime-config CONFIG_NAME
+      cm4 vcluster list virtual-clusters [DEPTH [default:1]]
+      cm4 vcluster list runtime-configs [DEPTH [default:1]]
+      cm4 vcluster run-script --script-path=SCRIPT_PATH --job-name=JOB_NAME --vcluster-name=VIRTUALCLUSTER_NAME --config-name=CONFIG_NAME --arguments=SET_OF_PARAMS --remote-path=REMOTE_PATH> --local-path=LOCAL_PATH [--argfile-path=ARGUMENT_FILE_PATH] [--outfile-name=OUTPUT_FILE_NAME] [--suffix=SUFFIX] [--overwrite]
+      cm4 vcluster fetch JOB_NAME
+      cm4 vcluster clean-remote JOB_NAME PROCESS_NUM
+      cm4 vcluster test-connection VIRTUALCLUSTER_NAME PROCESS_NUM
+      cm4 -h
 
-Description:
-   put a description here
+    Options:
+      -h --help     Show this screen.
+      --node_list=<list_of_nodes>           List of nodes separated by commas. Ex: node-1,node-2
+      --cluster_list=<list_of_clusters>     List of clusters separated by commas. Ex: cluster-1, cluster-2
+      --params=<set-of-paramList>           This is a set of parameter list each set is sent to one node. Delimiter for each node is ",", e.g. with 1 2, 3 4, 5 6 the 1 2 will be sent to node1, 3 4 run on node 2, etc.
 
-Example:
-   put an example here
+    Description:
+       put a description here
+
+    Example:
+       put an example here
 """
 
 from multiprocessing import Pool, Manager
@@ -198,7 +200,7 @@ class VirtualCluster(object):
                                                                                          ['sshconfigpath']), *x)
         scp_caller = lambda *x: self._scp(dest_node_info['name'], os.path.expanduser(dest_node_info['credentials'] \
                                                                                          ['sshconfigpath']), *x)
-        ps_output = ssh_caller('ps', '-ef', '|', 'grep', dest_pid, '|', 'grep -v grep')
+        ps_output = ssh_caller('ps', '-ef', '|', 'grep', dest_pid.strip('\n'), '|', 'grep -v grep')
         if len(ps_output) == 0 and node_pid_tuple in [pid for pid in all_pids]:
             if not os.path.exists(job_metadata['local_path']):
                 os.makedirs(job_metadata['local_path'])
@@ -235,8 +237,10 @@ class VirtualCluster(object):
                                                                                       ['sshconfigpath']), *x)
         scp_caller = lambda *x: self._scp(target_node['name'], os.path.expanduser(target_node['credentials'] \
                                                                                       ['sshconfigpath']), *x)
-        if len(ssh_caller('if test -d %s; then echo "exist"; fi' % job_metadata['remote_path'])) == 0:
-            ssh_caller('cd %s && mkdir job%s' % (job_metadata['raw_remote_path'], job_metadata['suffix']))
+
+        # directory_check = ssh_caller('if test -d %s; then echo "exist"; fi' % job_metadata['remote_path'])
+        # if len(directory_check) == 0:
+        ssh_caller('cd %s && mkdir job%s' % (job_metadata['raw_remote_path'], job_metadata['suffix']) , True)
         if self.runtime_config['output-type'].lower() in ['file', 'stdout+file']:
             ssh_caller("cd {} && mkdir run{}".format(job_metadata['remote_path'], param_idx))
             nested_remote_path = os.path.join(job_metadata['remote_path'], 'run{}'.format(param_idx),
@@ -275,8 +279,8 @@ class VirtualCluster(object):
                                                                                            'run{}'.format(param_idx)),
                                                                               job_metadata['script_name_with_suffix'],
                                                                               params))
-        all_pids.append((target_node_key, remote_pid[0], param_idx))
-        print('Remote Pid on %s: %s' % (target_node_key, remote_pid[0]))
+        all_pids.append((target_node_key, remote_pid, param_idx))
+        print('Remote Pid on %s: %s' % (target_node_key, remote_pid.strip('\n')))
 
     @staticmethod
     def _ssh(hostname, sshconfigpath, *args):
@@ -288,18 +292,22 @@ class VirtualCluster(object):
         :param args: the argument to be submitted via ssh
         :return:
         """
+        hide_errors_flag = False
+        if type(args[-1]) == bool:
+            hide_errors_flag = True
+            args=args[:-1]
         ssh = subprocess.Popen(["ssh", hostname, '-F', sshconfigpath, *args],
                                stdout=subprocess.PIPE,
                                stderr=subprocess.PIPE)
         result = ssh.stdout.readline()
         if not result:
             error = ssh.stderr.readlines()
-            if len(error) > 0:
+            if len(error) > 0 and hide_errors_flag == False:
                 print("ERROR in host %s: %s" % (hostname, error))
             return []
         else:
             try:
-                return [x.decode('utf-8').strip('\n') for x in result if type(x) == bytes]
+                return ''.join([chr(x) for x in result])
             except AttributeError:
                 return [result.decode('utf-8').strip('\n')]
 
@@ -575,11 +583,9 @@ def process_arguments(arguments):
             elif arguments.get("runtime-config") and arguments.get("CONFIG_NAME") and arguments.get("PROCESS_NUM"):
                 config_name = arguments.get("CONFIG_NAME")
                 proc_num = int(arguments.get("PROCESS_NUM"))
-                download_proc_num = 1 if arguments.get("FETCH_PROCESS_NUM") is None else \
-                    int(arguments.get("FETCH_PROCESS_NUM"))
-
-                save_to = "" if arguments.get("<save-path>") is None else arguments.get("<save-path>")
-                download_later = True if arguments.get("--download-later") is False else False
+                download_proc_num = 1 if arguments.get("--fetch-proc-num") is None else \
+                    int(arguments.get("--fetch-proc-num"))
+                download_later = True if arguments.get("--download-later") is True else False
                 input_type = ""
                 output_type = ""
                 if arguments.get("in:params") and arguments.get("out:stdout"):
@@ -597,8 +603,8 @@ def process_arguments(arguments):
                 elif arguments.get("in:params+file") and arguments.get("out:stdout+file"):
                     input_type = "params+file"
                     output_type = "stdout+file"
-                vcluster_manager.create(config_name, proc_num, download_proc_num, download_later, save_to,
-                                        input_type, output_type)
+                vcluster_manager.create(config_name, proc_num, download_proc_num, download_later, input_type,
+                                        output_type)
 
         elif arguments.get("destroy"):
             if arguments.get("virtual-cluster"):

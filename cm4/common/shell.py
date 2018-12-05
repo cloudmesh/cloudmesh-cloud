@@ -688,6 +688,7 @@ class Shell(object):
     def unzip(source_filename, dest_dir):
         """
         unzips a file into the destination directory
+        :param source_filename:
         :param dest_dir: the destination directory
         :return:
         """

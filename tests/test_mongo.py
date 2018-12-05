@@ -6,11 +6,12 @@ from cm4.common.debug import HEADING, myself
 # nosetest -v --nopature
 # nosetests -v --nocapture tests/test_mongo.py
 
-class TestCloudAzure:
+
+class TestMongo:
 
     def setup(self):
         self.config = Config()
 
-    def test_01_config(self):
+    def test_10_config_print(self):
         print(self.config)
-        assert True
+        assert True is True

@@ -6,12 +6,9 @@ from pymongo import MongoClient
 from cm4.configuration.config import Config
 from pprint import pprint
 import textwrap
-
-
-class MongoINstall(object)
-    #
-    # TODO: move all the mongo install stuff here_
-    #
+from cm4.common.shell import Script
+from cm4.common.shell import Shell, Brew
+from cm4.common.shell import SystemPath
 
 class MongoDBController(object):
 
@@ -23,14 +20,7 @@ class MongoDBController(object):
     def __str__(self):
         return yaml.dump(self.data, default_flow_style=False, indent=2)
 
-
-    def installer(self, script):
-        lines = textwrap.dedent(script)
-        print (lines)
-        for line in script:
-            subprocess.check_output(line, shell=True)
-
-    def check_mongo_dir_and_install(self):
+    def install(self):
         """
         check where the MongoDB is installed in cmmongo location.
         if MongoDB is not installed, python help install it
@@ -48,14 +38,14 @@ class MongoDBController(object):
             self.data["MONGO_CODE"] = self.data["MONGO_DOWNLAOD"][platform]
 
             if platform == 'linux':
-                self.install_mongo_linux()
+                self.install_linux()
             if platform == 'darwin':
-                self.install_mongo_darwin()
+                self.install_darwin()
             if platform == 'windows':
                 # TODO
-                print('next update')
+                raise NotImplementedError
 
-    def install_mongo_linux(self):
+    def install_linux(self):
         # TODO UNTESTED
         """
         install MongoDB in Linux system (Ubuntu)
@@ -67,33 +57,45 @@ class MongoDBController(object):
         mkdir -p {MONGO_LOG}
         wget -P /tmp/mongodb.tgz {MONGO_CODE}
         tar -zxvf /tmp/mongodb.tgz -C {LOCAL}
-        echo "export PATH={MONGO_HOME}/bin:$PATH" >> ~/.bashrc
-        source ~/.bashrc'
         """
+        installer = Script(script)
+        SystemPath.add("{MONGO_HOME}/bin".format(**self.data))
+
         # THIS IS BROKEN AS ITS A SUPBROCESS? '. ~/.bashrc'
 
         # initial mongodb config file
         self.initial_mongo_config(False)
 
-    def install_mongo_darwin(self):
+    def install_darwin(self, brew=False):
         """
         install MongoDB in Darwin system (Mac)
         """
-        # wget -P /tmp/mongodb.tgz {MONGO_CODE}
 
-        script = """
-        mkdir -p {MONGO_PATH}
-        mkdir -p {MONGO_HOME}
-        mkdir -p {MONGO_LOG}
-        curl -O {MONGO_CODE} -o /tmp/mongodb.tgz
-        tar -zxvf /tmp/mongodb.tgz -C {LOCAL}
-        echo "export PATH={MONGO_home}/bin:$PATH" >> ~/.bash_profile
-        source ~/.bashrc_profile'
-        """
-        # THIS IS BROKEN AS ITS A SUPBROCESS? '. ~/.bashrc'
 
-        # initial mongodb config file
-        self.initial_mongo_config(False)
+        if brew:
+            Brew.install("mongodb")
+            path = Shell.which("mongod")
+            SystemPath.add("{path}".format(path=path))
+            #
+            # TODO: BUG: add to path
+            #
+
+        else:
+
+            script = """
+            mkdir -p {MONGO_PATH}
+            mkdir -p {MONGO_HOME}
+            mkdir -p {MONGO_LOG}
+            curl -O {MONGO_CODE} -o /tmp/mongodb.tgz
+            tar -zxvf /tmp/mongodb.tgz -C {LOCAL}
+            """
+            installer = Script(script)
+            SystemPath.add("{MONGO_HOME}/bin".format(**self.data))
+
+            # THIS IS BROKEN AS ITS A SUPBROCESS? '. ~/.bashrc'
+
+            # initial mongodb config file
+            self.initial_mongo_config(False)
 
     def update_auth(self):
         """
@@ -117,6 +119,10 @@ class MongoDBController(object):
         create the MongoDB config file
         :param security: enable the security
         """
+        #
+        # TODO: BUG: we do not use mongoconfig, but pass everything from commandline,
+        #  everything shoudl be specified in cloudmesh4.yaml
+        #
         default_config_file = dict(net=dict(bindIp=self.host, port=self.port),
                                    storage=dict(dbPath=os.path.join(self.mongo_db_path, 'database'),
                                                 journal=dict(enabled=True)),

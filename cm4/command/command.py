@@ -3,7 +3,7 @@
 ::
 
     Usage:
-      cm4 admin mongo install [--download=PATH]
+      cm4 admin mongo install [--brew] [--download=PATH]
       cm4 admin mongo start
       cm4 admin mongo stop
       cm4 admin mongo backup FILENAME

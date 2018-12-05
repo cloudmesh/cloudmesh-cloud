@@ -76,12 +76,8 @@ class MongoDBController(object):
             Brew.install("mongodb")
             path = Shell.which("mongod")
             SystemPath.add("{path}".format(path=path))
-            #
-            # TODO: BUG: add to path
-            #
 
         else:
-
             script = """
             mkdir -p {MONGO_PATH}
             mkdir -p {MONGO_HOME}
@@ -101,6 +97,9 @@ class MongoDBController(object):
         """
         create admin acount in MongoDB
         """
+        #
+        # TODO: BUG: should that not be done differently, e.g. from commandline or via ENV variables
+        #
         # run mongodb
         self.run_mongodb()
 

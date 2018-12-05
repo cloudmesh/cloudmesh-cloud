@@ -134,6 +134,8 @@ cloudmesh:
           GOOGLE_STORAGE_KEY: ''
           GOOGLE_STORAGE_SECRET: ''
     mongo:
+      MONGO_AUTOINSTALL: False
+      MONGO_HOME: ~/.cloudmesh/mongo
       MONGO_PATH: ~/.cloudmesh/mongo/dbpath
       MONGO_LOG: ~/.cloudmesh/mongo/log
       MONGO_DBNAME: 'cloudmesh'
@@ -143,9 +145,9 @@ cloudmesh:
       MONGO_PASSWORD: TBD
       MONGO_DOWNLOAD:
         darwin: https://fastdl.mongodb.org/osx/mongodb-osx-ssl-x86_64-4.0.4.tgz
-        ubuntu1804: https://repo.mongodb.org/apt/ubuntu/dists/bionic/mongodb-org/4.0/multiverse/binary-amd64/mongodb-org-server_4.0.4_amd64.deb
-        windows64: https://fastdl.mongodb.org/win32/mongodb-win32-x86_64-2008plus-ssl-4.0.4-signed.msi
-        redhat70: https://repo.mongodb.org/yum/redhat/7/mongodb-org/4.0/x86_64/RPMS/mongodb-org-server-4.0.4-1.el7.x86_64.rpm
+        linux: https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-4.0.4.tgz
+        windows: https://fastdl.mongodb.org/win32/mongodb-win32-x86_64-2008plus-ssl-4.0.4-signed.msi
+        redhat: https://repo.mongodb.org/yum/redhat/7/mongodb-org/4.0/x86_64/RPMS/mongodb-org-server-4.0.4-1.el7.x86_64.rpm
   cluster:
     bigred2:
       name: bigred2

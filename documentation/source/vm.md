@@ -1,10 +1,10 @@
 # VM Description
 
-In cloudmesh cm4 project, we are using the **Python** tool to
+In cloudmesh cm4, we are using the **Python** tool to
 implement a program that could remotely control cloud nodes provided
 by different organizations and run experiments in parallel.
 
-The goal of **cm4** project is to provide a platform that users could
+The goal of **cm4** is to provide a platform that users could
 directly control the nodes they have, like AWS, Azure, and OPENSTACK
 instances. Users could decide to start, stop, destroy, create, resume,
 and suspend different nodes without accessing the **Console**
@@ -12,14 +12,14 @@ interfaces of providers. Then users could install experiment
 environment, software, and other required tools in these running
 nodes. Finally, an experiment could be executed in running nodes by
 sending the commands from **cm4** platform. Meanwhile, we embed the
-NoSQL database **MongoDB** into project for managing the nodes and
+NoSQL database **MongoDB** into cm4 for managing the nodes and
 experiments.
 
 ## Providers *cm4* could access
 
-In this project, we are using the python library
+We are using the python library
 [**Apache Libcloud**](https://libcloud.apache.org) to interact with
-cloud service providers. Currently, in the **cm4** project, we could
+cloud service providers. Currently, in the **cm4**, we could
 access:
 
 * [**AWS**](https://aws.amazon.com)
@@ -37,7 +37,7 @@ By using the **Apache Libcloud** API, we could do these operations for nodes in 
 * Create the node
 
 **Improvement**: Sometimes adjustments to nodes are necessary (switch between different images/OS and service sizes). 
-Now our project also allow users to customize their instances across multiple providers by using refactor functions to 
+Now cm4 also allow users to customize their instances across multiple providers by using refactor functions to 
 support their management tasks. 
 
 * Resize the node
@@ -250,7 +250,7 @@ There are three types of documents in MongoDB:
 #### Security in MongoDB
 
 For data security purpose, we enable the MongoDB security
-functionality in **cm4** project.
+functionality in **cm4**.
 
 When users first time start the **MongoDB**, they have to add an
 account and open an port to access all database in MongoDB. Because we

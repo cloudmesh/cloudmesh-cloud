@@ -1,6 +1,6 @@
 # AWS cm 
 
-The project code is designed for using awscm.py to access the aws
+The code is designed for using awscm.py to access the aws
 instance and run scripts in it.
 
 In the code, we provide these commands for achieving the goal of
@@ -13,7 +13,7 @@ In the awscm folder, there are several basic python files:
 ### cloudmesh.yaml
 
 This file contains the property of each instance, especially the AWS
-instance. In AWS cm project, we only concern about the block of
+instance. In AWS cm, we only concern about the block of
 information in "cloud" part.
 
 In the properties of one aws instance, we need users to specify the
@@ -66,9 +66,9 @@ here are some additional thoughts, that may influence what we do:
 
 ### awscm.py
 
-The [`awscm.py`] is the main runable python class to start the aws cm
-project. It used the "docopt" to build the usage of commands.  Here
-are the version 1 commands that could be used:
+The [`awscm.py`] is the main runable python class to start the aws
+cm. It used the "docopt" to build the usage of commands.  Here are the
+version 1 commands that could be used:
 
 #### Add resources
 
@@ -269,7 +269,7 @@ Run advanced
 this command is running the advanced algorithm. Developing a string
 based formulation of the tasks while providing the task in a def and
 using the chars | for parallel, ; for sequential and + for adding
-results.  In the project, we only develop simples string to be
+results.  In cm4, we only develop simples string to be
 executed via ssh on a remote machines. The default setting is running
 the local scripts into remote parallel instances.
 
@@ -290,10 +290,10 @@ then we run the command to get the result:
 
 ### config.py
 
-This python class is helping the project read the configuration of
-instances. In the yaml file, we set three types of instances: cloud,
-cluster and default, and the [`config.py`] could return relative block
-information of them.
+This python class is reading the configuration of instances. In the
+yaml file, we set three types of instances: cloud, cluster and
+default, and the [`config.py`] could return relative block information
+of them.
 
 ### resource.py
 

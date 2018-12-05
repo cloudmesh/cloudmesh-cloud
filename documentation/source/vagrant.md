@@ -121,7 +121,7 @@ supports Unix-like OS, and after finishing your modification on
 
 After finishing `Vagrantfile`definition, you are now ready to deploy
 and run your virtual machine with Vagrant. But first, let us check
-current status of your Vagrant project. Execute `ehvagrant ls`at
+current status of your Vagrant provider. Execute `ehvagrant ls`at
 `ehvagrant` root directory, you will see:
 
 ![before_init](img/vagrant/before_init.png)

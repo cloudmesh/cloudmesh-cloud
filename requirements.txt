@@ -15,4 +15,4 @@ termcolor
 urllib3
 Flask-PyMongo
 flask
-connexion
+six

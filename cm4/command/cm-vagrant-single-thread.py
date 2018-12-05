@@ -171,7 +171,7 @@ def process_arguments(arguments):
             provider.status(list)
 
         else:
-            hosts = False
+            hosts = None
             action = None
 
             if arguments.get("--vms"):

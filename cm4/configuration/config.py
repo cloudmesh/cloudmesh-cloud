@@ -1,6 +1,6 @@
 import oyaml as yaml
+#import yaml
 from os.path import isfile, expanduser, join, dirname, realpath, exists
-from cm4.configuration.dot_dictionary import DotDictionary
 from shutil import copyfile
 from os import mkdir
 from pathlib import Path
@@ -28,9 +28,16 @@ class Config(object):
             copyfile(destination_path.resolve(), self.config_path)
 
         with open(self.config_path, "r") as stream:
-            conf = yaml.load(stream)
-            self.data = DotDictionary(conf.get('cloudmesh'))
+            self.data = yaml.load(stream)
 
+    def dict(self):
+        return self.data
+
+    def __str__(self):
+        return yaml.dump(self.data)
+
+
+''' broken
     def get(self, key, default=None):
         """
         A helper function for reading values from the config without
@@ -62,8 +69,4 @@ class Config(object):
         with open(self.config_path, "w") as stream:
             yaml.safe_dump(yaml_file, stream, default_flow_style=False)
 
-    def dict(self):
-        return self.data
-
-    def __str__(self):
-        return yaml.dump(self.data)
+'''

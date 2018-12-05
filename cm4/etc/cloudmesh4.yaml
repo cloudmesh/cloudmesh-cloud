@@ -9,47 +9,47 @@ cloudmesh:
     key:
       public: ~/.ssh/id_rsa.pub
   default:
-    group:                          cloudmesh
-    experiment:                     base
-    cloud:                          azure
-    cluster:                        clustera
+    group: cloudmesh
+    experiment: base
+    cloud: azure
+    cluster: clustera
   cloud:
     azure:
       cm:
-        heading:                    AWS
-        host:                       azure.mocrosoft.com
-        label:                      Azure
-        kind:                       azure
-        version:                    TBD
+        heading: AWS
+        host: azure.mocrosoft.com
+        label: Azure
+        kind: azure
+        version: TBD
       default:
-        region:                     'northcentralus'
-        image:                      'Canonical:UbuntuServer:16.04-LTS:latest'
-        size:                       'Basic_A0'
-        resource_group:             'cloudmesh'
-        storage_account:            'cmdrive'
-        network:                    'cmnetwork'
+        region: 'northcentralus'
+        image:'Canonical:UbuntuServer:16.04-LTS:latest'
+        size: 'Basic_A0'
+        resource_group: 'cloudmesh'
+        storage_account: 'cmdrive'
+        network: 'cmnetwork'
       credentials:
-        AZURE_TENANT_ID:            'xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
-        AZURE_SUBSCRIPTION_ID:      'xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
-        AZURE_APPLICATION_ID:       'xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
-        AZURE_SECRET_KEY:           'your secret key'
+        AZURE_TENANT_ID: 'xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
+        AZURE_SUBSCRIPTION_ID: 'xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
+        AZURE_APPLICATION_ID: 'xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
+        AZURE_SECRET_KEY: 'your secret key'
     aws:
       cm:
-        heading:                    AWS
-        host:                       aws.amazon.com
-        label:                      aws
-        kind:                       aws
-        version:                    TBD
+        heading: AWS
+        host: aws.amazon.com
+        label:aws
+        kind: aws
+        version: TBD
       default:
-        region:                     'us-west-2'
-        image:                      'ami-0bbe6b35405ecebdb'
-        size:                       't2.micro'
-        EC2_PRIVATE_KEY_FILE_NAME:  'aws_cert'
-        EC2_SECURITY_GROUP:         'group1'
+        region: 'us-west-2'
+        image:'ami-0bbe6b35405ecebdb'
+        size: 't2.micro'
+        EC2_PRIVATE_KEY_FILE_NAME: 'aws_cert'
+        EC2_SECURITY_GROUP:'group1'
       credentials:
-        EC2_ACCESS_ID:              'your access id'
-        EC2_SECRET_KEY:             'your secret key'
-        EC2_PRIVATE_KEY_FILE_PATH:  '~/Demo/aws_cert.pem'
+        EC2_ACCESS_ID: 'your access id'
+        EC2_SECRET_KEY: 'your secret key'
+        EC2_PRIVATE_KEY_FILE_PATH: '~/Demo/aws_cert.pem'
     chameleon:
       cm:
         heading: Chameleon
@@ -116,7 +116,7 @@ cloudmesh:
         image: Ubuntu 14.04
   data:
     default:
-      db:  local
+      db: local
       service: local
     db:
       local:
@@ -143,31 +143,31 @@ cloudmesh:
       MONGO_FOLDER: 'mongdb folder name'
   cluster:
     bigred2:
-      name:                       bigred2
-      label:                      bigred
-      address:                    bigred2.iu.edu
+      name: bigred2
+      label: bigred
+      address: bigred2.iu.edu
       credentials:
-        username:                 TBD
-        pulickey:                 ~/.ssh/id_rsa.pub
+        username: TBD
+        pulickey: ~/.ssh/id_rsa.pub
     karst:
       credentials:
-        username:                 TBD
-        pulickey:                 ~/.ssh/id_rsa.pub
+        username: TBD
+        pulickey: ~/.ssh/id_rsa.pub
     clustera:
-      computer_a:                   ##   computer:
-        name:                       computer_a
-        label:                      one
-        address:                    localhost
+      computer_a: 
+        name: computer_a
+        label: one
+        address: localhost
         credentials:
-          username:                 TBD
-          pulickey:                 ~/.ssh/id_rsa.pub
+          username: TBD
+          pulickey: ~/.ssh/id_rsa.pub
       computer_b:
-        name:                       computer_b
-        label:                      two
-        address:                    localhost
+        name: computer_b
+        label:two
+        address: localhost
         credentials:
-          username:                 TBD
-          pulickey:                 ~/.ssh/id_rsa.pub
+          username: TBD
+          pulickey: ~/.ssh/id_rsa.pub
     vcluster_test1:
       computer_a:
         name: machine1
@@ -176,12 +176,12 @@ cloudmesh:
         credentials:
           sshconfigpath: ~/vms/ubuntu14/sshconfig1
       computer_b:
-        name:                       computer_a
-        label:                      one
-        address:                    localhost
+        name: computer_a
+        label:one
+        address: localhost
         credentials:
-          username:                 TBD
-          pulickey:                 ~/.ssh/id_rsa.pub
+          username: TBD
+          pulickey: ~/.ssh/id_rsa.pub
     vcluster_test2:
       c2:
         name: machine2

@@ -8,6 +8,11 @@ from pprint import pprint
 import textwrap
 
 
+class MongoINstall(object)
+    #
+    # TODO: move all the mongo install stuff here_
+    #
+
 class MongoDBController(object):
 
     def __init__(self):
@@ -57,12 +62,13 @@ class MongoDBController(object):
         """
         script = """
         sudo apt-get --yes install libcurl4 openssl
-        mkdir {MONGO_PATH}
+        mkdir -p {MONGO_PATH}
+        mkdir -p {MONGO_HOME}
+        mkdir -p {MONGO_LOG}
         wget -P /tmp/mongodb.tgz {MONGO_CODE}
-        tar -zxvf /tmp/mongodb.tgz -C {MONGO_PATH}
-        echo "export PATH={MONGO_PATH}/bin:$PATH" >> ~/.bashrc
+        tar -zxvf /tmp/mongodb.tgz -C {LOCAL}
+        echo "export PATH={MONGO_HOME}/bin:$PATH" >> ~/.bashrc
         source ~/.bashrc'
-        mkdir {MONGO_LOG}
         """
         # THIS IS BROKEN AS ITS A SUPBROCESS? '. ~/.bashrc'
 
@@ -76,12 +82,13 @@ class MongoDBController(object):
         # wget -P /tmp/mongodb.tgz {MONGO_CODE}
 
         script = """
-        mkdir {MONGO_PATH}
-        cmd = 'cd {MONGO_PATH}; curl -O {MONGO_CODE} -o /tmp/mongodb.tgz
-        tar -zxvf /tmp/mongodb.tgz -C {MONGO_PATH}
-        echo "export PATH={MONGO_PATH}/bin:$PATH" >> ~/.bash_profile
+        mkdir -p {MONGO_PATH}
+        mkdir -p {MONGO_HOME}
+        mkdir -p {MONGO_LOG}
+        curl -O {MONGO_CODE} -o /tmp/mongodb.tgz
+        tar -zxvf /tmp/mongodb.tgz -C {LOCAL}
+        echo "export PATH={MONGO_home}/bin:$PATH" >> ~/.bash_profile
         source ~/.bashrc_profile'
-        mkdir {MONGO_LOG}
         """
         # THIS IS BROKEN AS ITS A SUPBROCESS? '. ~/.bashrc'
 

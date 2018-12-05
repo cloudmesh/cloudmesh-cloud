@@ -135,9 +135,10 @@ cloudmesh:
           GOOGLE_STORAGE_SECRET: ''
     mongo:
       MONGO_AUTOINSTALL: False
-      MONGO_HOME: ~/.cloudmesh/mongo
-      MONGO_PATH: ~/.cloudmesh/mongo/dbpath
-      MONGO_LOG: ~/.cloudmesh/mongo/log
+      LOCAL: ~/local
+      MONGO_HOME: ~/local/mongodb
+      MONGO_PATH: ~/.cloudmesh/mongodb
+      MONGO_LOG: ~/.cloudmesh/mongodb/log
       MONGO_DBNAME: 'cloudmesh'
       MONGO_HOST: '127.0.0.1'
       MONGO_PORT: '27017'

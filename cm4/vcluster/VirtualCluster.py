@@ -3,35 +3,37 @@
 # noinspection PyPep8
 """Virtual Cluster: running parallel remote jobs
 
-Usage:
-  virtualcluster.py vcluster create virtual-cluster VIRTUALCLUSTER_NAME --clusters=CLUSTERS_LIST [--computers=COMPUTERS_LIST] [--debug]
-  virtualcluster.py vcluster destroy virtual-cluster VIRTUALCLUSTER_NAME
-  virtualcluster.py vcluster create runtime-config CONFIG_NAME PROCESS_NUM in:params out:stdout [--fetch-proc-num=FETCH_PROCESS_NUM [default=1]] [--download-later [default=False]]  [--debug]
-  virtualcluster.py vcluster create runtime-config CONFIG_NAME PROCESS_NUM in:params out:file [--fetch-proc-num=FETCH_PROCESS_NUM [default=1]] [--download-later [default=False]]  [--debug]
-  virtualcluster.py vcluster create runtime-config CONFIG_NAME PROCESS_NUM in:params+file out:stdout [--fetch-proc-num=FETCH_PROCESS_NUM [default=1]]  [--download-later [default=False]]  [--debug]
-  virtualcluster.py vcluster create runtime-config CONFIG_NAME PROCESS_NUM in:params+file out:file [--fetch-proc-num=FETCH_PROCESS_NUM [default=1]] [--download-later [default=False]]  [--debug]
-  virtualcluster.py vcluster create runtime-config CONFIG_NAME PROCESS_NUM in:params+file out:stdout+file [--fetch-proc-num=FETCH_PROCESS_NUM [default=1]] [--download-later [default=False]]  [--debug]
-  virtualcluster.py vcluster set-param runtime-config CONFIG_NAME PARAMETER VALUE
-  virtualcluster.py vcluster destroy runtime-config CONFIG_NAME
-  virtualcluster.py vcluster list virtual-clusters [DEPTH [default:1]]
-  virtualcluster.py vcluster list runtime-configs [DEPTH [default:1]]
-  virtualcluster.py vcluster run-script --script-path=SCRIPT_PATH --job-name=JOB_NAME --vcluster-name=VIRTUALCLUSTER_NAME --config-name=CONFIG_NAME --arguments=SET_OF_PARAMS --remote-path=REMOTE_PATH> --local-path=LOCAL_PATH [--argfile-path=ARGUMENT_FILE_PATH] [--outfile-name=OUTPUT_FILE_NAME] [--suffix=SUFFIX] [--overwrite]
-  virtualcluster.py vcluster fetch JOB_NAME
-  virtualcluster.py vcluster clean-remote JOB_NAME PROCESS_NUM
-  virtualcluster.py vcluster test-connection VIRTUALCLUSTER_NAME PROCESS_NUM
-  virtualcluster.py -h
+::
 
-Options:
-  -h --help     Show this screen.
-  --node_list=<list_of_nodes>           List of nodes separated by commas. Ex: node-1,node-2
-  --cluster_list=<list_of_clusters>     List of clusters separated by commas. Ex: cluster-1, cluster-2
-  --params=<set-of-paramList>           This is a set of parameter list each set is sent to one node. Delimiter for each node is ",", e.g. with 1 2, 3 4, 5 6 the 1 2 will be sent to node1, 3 4 run on node 2, etc.
+    Usage:
+      cm4 vcluster create virtual-cluster VIRTUALCLUSTER_NAME --clusters=CLUSTERS_LIST [--computers=COMPUTERS_LIST] [--debug]
+      cm4 vcluster destroy virtual-cluster VIRTUALCLUSTER_NAME
+      cm4 vcluster create runtime-config CONFIG_NAME PROCESS_NUM in:params out:stdout [--fetch-proc-num=FETCH_PROCESS_NUM [default=1]] [--download-later [default=False]]  [--debug]
+      cm4 vcluster create runtime-config CONFIG_NAME PROCESS_NUM in:params out:file [--fetch-proc-num=FETCH_PROCESS_NUM [default=1]] [--download-later [default=False]]  [--debug]
+      cm4 vcluster create runtime-config CONFIG_NAME PROCESS_NUM in:params+file out:stdout [--fetch-proc-num=FETCH_PROCESS_NUM [default=1]]  [--download-later [default=False]]  [--debug]
+      cm4 vcluster create runtime-config CONFIG_NAME PROCESS_NUM in:params+file out:file [--fetch-proc-num=FETCH_PROCESS_NUM [default=1]] [--download-later [default=False]]  [--debug]
+      cm4 vcluster create runtime-config CONFIG_NAME PROCESS_NUM in:params+file out:stdout+file [--fetch-proc-num=FETCH_PROCESS_NUM [default=1]] [--download-later [default=False]]  [--debug]
+      cm4 vcluster set-param runtime-config CONFIG_NAME PARAMETER VALUE
+      cm4 vcluster destroy runtime-config CONFIG_NAME
+      cm4 vcluster list virtual-clusters [DEPTH [default:1]]
+      cm4 vcluster list runtime-configs [DEPTH [default:1]]
+      cm4 vcluster run-script --script-path=SCRIPT_PATH --job-name=JOB_NAME --vcluster-name=VIRTUALCLUSTER_NAME --config-name=CONFIG_NAME --arguments=SET_OF_PARAMS --remote-path=REMOTE_PATH> --local-path=LOCAL_PATH [--argfile-path=ARGUMENT_FILE_PATH] [--outfile-name=OUTPUT_FILE_NAME] [--suffix=SUFFIX] [--overwrite]
+      cm4 vcluster fetch JOB_NAME
+      cm4 vcluster clean-remote JOB_NAME PROCESS_NUM
+      cm4 vcluster test-connection VIRTUALCLUSTER_NAME PROCESS_NUM
+      cm4 -h
 
-Description:
-   put a description here
+    Options:
+      -h --help     Show this screen.
+      --node_list=<list_of_nodes>           List of nodes separated by commas. Ex: node-1,node-2
+      --cluster_list=<list_of_clusters>     List of clusters separated by commas. Ex: cluster-1, cluster-2
+      --params=<set-of-paramList>           This is a set of parameter list each set is sent to one node. Delimiter for each node is ",", e.g. with 1 2, 3 4, 5 6 the 1 2 will be sent to node1, 3 4 run on node 2, etc.
 
-Example:
-   put an example here
+    Description:
+       put a description here
+
+    Example:
+       put an example here
 """
 
 from multiprocessing import Pool, Manager

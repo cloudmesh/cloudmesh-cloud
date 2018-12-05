@@ -1,7 +1,9 @@
 import time
 from cm4.vm.Vm import Vm
 from cm4.configuration.config import Config
+from cm4.common.debug import HEADING, myself
 
+# nosetest -v --nopature
 
 class TestCloudAzure:
 
@@ -17,6 +19,7 @@ class TestCloudAzure:
         return node.state if node else None
 
     def test_azure_005_getname(self):
+        HEADING(myself())
         name = self.azure.new_name()
         assert name is not None
 

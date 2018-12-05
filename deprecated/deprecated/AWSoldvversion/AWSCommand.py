@@ -1,5 +1,5 @@
 from cm4.abstractclass.ProcessManagerABC import ProcessManagerABC
-from cm4.deprecated.AWSoldvversion.AWSController import AWSController
+from deprecated.deprecated.AWSoldvversion.AWSController import AWSController
 from cm4.cmmongo.mongoDB import MongoDB
 import subprocess
 

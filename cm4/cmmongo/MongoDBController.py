@@ -12,42 +12,24 @@ class MongoDBController(object):
     def __init__(self):
 
         self.config = Config()
+        self.data = self.config["cloudmesh"]["data"]["mongo"]
 
-        self.mongo_data = self.config["cloudmesh"]["data"]["mongo"]
-
-        #self.host = self.config.get('data.mongo.MONGO_HOST')
-        #self.username = self.config.get('data.mongo.MONGO_USERNAME')
-        #self.password = self.config.get('data.mongo.MONGO_PASSWORD')
-        #self.port = int(self.config.get('data.mongo.MONGO_PORT'))
-
-        self.mongo_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "MongoDB")
-
-
-        self.mongo_download = self.config.get('data.mongo.MONGO_DOWNLOAD')
-        temp = str(self.mongo_download).split('/')
-        self.download_file = temp[len(temp) - 1]
-        self.mongo_db_path = self.config.get('data.mongo.MONGO_FOLDER')
-
-
-        #
-        # it would be simpler if the previous info is in a dict directly
-        #
-        self.mongo_config = {
-            "path": self.mongo_path,
-            "download": self.mongo_download,
-            "tar": os.path.join(self.mongo_path, self.download_file),
-            "database": os.path.join(self.mongo_db_path, 'database'),
-            'log': os.path.join(self.mongo_db_path, 'log')
-        }
+    def __str__(self):
+        return yaml.dump(self.data, default_flow_style=False, indent=2)
 
     def check_mongo_dir_and_install(self):
         """
         check where the MongoDB is installed in cmmongo location.
         if MongoDB is not installed, python help install it
         """
-        if not os.path.isdir(os.path.join(os.path.dirname(__file__), "MongoDB")):
-            print("MongoDB is not installed in " + os.path.join(os.path.dirname(__file__), "MongoDB"))
-            print("Auto-install the MongoDB into " + os.path.join(os.path.dirname(__file__), "MongoDB"))
+        path = self.data["MONGO_PATH"]
+        if not os.path.isdir(path):
+            print("MongoDB is not installed in {MONGO_PATH}".format(**self.data))
+            #
+            # ask if you like to install and give infor wher it is being installed
+            #
+
+            print("Auto-install the MongoDB into {}".format())
 
             if platform == 'linux':
                 self.install_mongo_linux()
@@ -56,6 +38,14 @@ class MongoDBController(object):
             if platform == 'windows':
                 # TODO
                 print('next update')
+
+''' broken
+        self.mongo_download = self.config.get('data.mongo.MONGO_DOWNLOAD')
+        temp = str(self.mongo_download).split('/')
+        self.download_file = temp[len(temp) - 1]
+        self.mongo_db_path = self.config.get('data.mongo.MONGO_FOLDER')
+'''
+
 
     def install_mongo_linux(self):
         """

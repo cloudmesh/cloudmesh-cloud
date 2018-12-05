@@ -1,7 +1,7 @@
 import random
 from flask import jsonify
 from random import randint
-from cm4.api.test.vm import PROVIDERS, IMAGES
+from deprecated.api.test.vm import PROVIDERS, IMAGES
 
 TAGS = ["web server", "db", "compute", "proxy"]
 OS = ["linux", "windows", "darwin"]

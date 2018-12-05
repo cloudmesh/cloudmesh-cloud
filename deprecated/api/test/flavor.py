@@ -2,7 +2,7 @@ import random
 import uuid
 from flask import jsonify
 from random import randint
-from cm4.api.test.vm import SIZES, PROVIDERS
+from deprecated.api.test.vm import SIZES, PROVIDERS
 
 RAMS = [4294967296, 8589934592, 12884901888, 17179869184, 34359738368]
 DISKS = [10737418240, 21474836480, 32212254720, 53687091200, 1099511627776]

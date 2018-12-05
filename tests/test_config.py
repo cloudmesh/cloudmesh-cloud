@@ -9,7 +9,11 @@ def test_config():
     HEADING(myself())
     config = Config()
 
+    pprint(config.dict())
+
     print(config)
+    print (type(config.data))
+
 
     #pprint(config.credentials('local'))
 

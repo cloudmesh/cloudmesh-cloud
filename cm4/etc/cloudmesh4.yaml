@@ -60,7 +60,7 @@ cloudmesh:
       credentials:
         OS_AUTH_URL: https://openstack.tacc.chameleoncloud.org:5000/v2.0/tokens
         OS_USERNAME: TBD
-        OS_PASSWORD: #put your password here
+        OS_PASSWORD: TBD
         OS_TENANT_NAME: CH-819337
         OS_TENANT_ID: CH-819337
         OS_PROJECT_NAME: CH-819337
@@ -68,7 +68,7 @@ cloudmesh:
         OS_USER_DOMAIN_ID: default
         OS_VERSION: liberty
         OS_REGION_NAME: RegionOne
-        OS_KEY_PATH: #put your ssh-keyfile path here (macOS convention is ~/.ssh/id_rsa.pub)
+        OS_KEY_PATH: TBD
       default:
         flavor: m1.small
         image: CC-Ubuntu16.04

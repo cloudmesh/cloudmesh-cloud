@@ -5,18 +5,28 @@ from pprint import pprint
 
 # nosetests -v --nocapture tests/test_config.py
 
-def test_config():
-    HEADING(myself())
-    config = Config()
 
-    pprint(config.dict())
+class TestConfig:
 
-    print(config)
-    print (type(config.data))
+    def setup(self):
+        self.config = Config()
 
+    def test_00_config(self):
+        HEADING(myself())
 
-    #pprint(config.credentials('local'))
+        pprint(self.config.dict())
 
-    assert config is not None
-    #assert 'cloud' in config.cloud
+        print(self.config)
+        print(type(self.config.data))
+        #pprint(config.credentials('local'))
 
+        assert self.config is not None
+        #assert 'cloud' in config.cloud
+
+    def test_10_config_print(self):
+        print(self.config)
+        assert True is True
+
+    def test_20_config_subscriptable(self):
+        data = self.config["cloudmesh"]["data"]["mongo"]
+        assert data is not None

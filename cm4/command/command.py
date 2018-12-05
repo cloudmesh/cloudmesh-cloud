@@ -68,6 +68,7 @@ import cm4.vagrant.vagrant
 import cm4.vcluster.VirtualCluster
 import cm4.data.data
 import cm4.vm.Vm
+import cm4.openstack.OpenstackCM
 import cm4
 
 

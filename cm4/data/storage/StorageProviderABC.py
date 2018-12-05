@@ -7,11 +7,12 @@ class StorageProviderABC(metaclass=abc.ABCMeta):
     """
 
     @abc.abstractmethod
-    def get(self, cloud_file):
+    def get(self, cloud_file, local_dest):
         """
         get a file stored with this provider
 
         :param cloud_file: the cloud file entry being retrieved
+        :param local_dest: download destination
         :return: the downloaded cloud file binary
         """
         pass

@@ -23,7 +23,8 @@ class CommandAWS(object):
         dns = self.mongo.find_document('cloud', 'name', vm_name).get('extra').get('dns_name')
         return dns
 
-    def read_script(self, script):
+    @staticmethod
+    def read_script(script):
         """
         read the script file
 

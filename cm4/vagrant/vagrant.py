@@ -1,5 +1,17 @@
 #!/usr/bin/env python
 
+import logging
+import multiprocessing.dummy as mt
+import os
+import queue
+import re
+import subprocess
+import time
+
+import hostlist
+from docopt import docopt
+from termcolor import colored
+
 """Vagrant Manager.
 
 Usage:
@@ -84,22 +96,10 @@ Version 0.1:
 
 """
 
+
 # TODO: workspace should be in ~/.cloudmesh/vagrant
 # TODO: if the workspace is not ther it needs to be created
 # TODO: use captal letters as easier to document in other tools
-
-
-import logging
-import multiprocessing.dummy as mt
-import os
-import queue
-import re
-import subprocess
-import time
-
-import hostlist
-from docopt import docopt
-from termcolor import colored
 
 
 class Vagrant(object):
@@ -135,23 +135,28 @@ class Vagrant(object):
         self.ssh_config = {}
         self.debug = debug
 
-    def _update_by_key(self, target, source, keys=[], key_dict={}):
+    @staticmethod
+    def _update_by_key(target, source, keys=None, key_dict=None):
+        keys = keys or []
+        key_dict = key_dict or {}
+
         for x in keys:
             if source.get(x):  # key exists and not none
-                target.update({re.sub('^[-]+', '', x): source[x]})
+                target.update({re.sub("^[-]+", '', x): source[x]})
         for k, v in key_dict.items():
             if source.get(k):
                 target.update({v: source[k]})
         return target
 
-    def _impute_drive_sep(self, splited_path):
+    @staticmethod
+    def _impute_drive_sep(splited_path):
         if ':' in splited_path[0]:
             splited_path.insert(0, os.sep)
             splited_path.insert(2, os.sep)
         return splited_path
 
     def _nested_mkdir(self, path):
-        parsed_path = re.split('[\\\\/]', path)
+        parsed_path = re.split("[\\\\/]", path)
         parsed_path = [x for x in parsed_path if x]
         parsed_path = self._impute_drive_sep(parsed_path)
 
@@ -219,7 +224,8 @@ class Vagrant(object):
             template = 'scp {recursive} -P {port} -q -o LogLevel=QUIET -o StrictHostKeyChecking=no -i {key_file} {user}@{ip}:{source} {dest}'
             subprocess.call(template.format(**kwargs))
 
-    def _parse_run_result(self, res, template=None, report_kwargs=None):
+    @staticmethod
+    def _parse_run_result(res, template=None, report_kwargs=None):
         """
         parse running result, and (optionally) generating running report
 
@@ -241,7 +247,6 @@ class Vagrant(object):
             command_output = res.stdout.decode('utf8')
             return_code = 'N.A.'
 
-        ## return 
         parse_result = {'job_status': job_status, 'return_code': return_code, 'output': command_output}
         if template and report_kwargs:
             report_kwargs.update(parse_result)
@@ -249,7 +254,8 @@ class Vagrant(object):
         else:
             return parse_result
 
-    def run_parallel(self, hosts, run_action, args, kwargs):
+    @staticmethod
+    def run_parallel(hosts, run_action, args, kwargs):
         """
         run job in parallel fashion
 
@@ -313,11 +319,11 @@ class Vagrant(object):
         if 'No such file or directory' in cm_folder_query:
             self.run_command(name, 'mkdir ~/cm_experiment', False)
 
-        # build geust expreiment folder and ship sciript to it 
+        # build guest experiment folder and ship script to it
         self.run_command(name, 'mkdir {}'.format(guest_exp_folder_path), False)
         self.upload(name, source=script_path, dest=guest_script_path, recursive=False)
 
-        # if there is some data must runing against, scp data to data folder
+        # if there is some data must running against, scp data to data folder
         if data:
             if os.path.isdir(data):
                 self.upload(name, source=data, dest=guest_exp_folder_path, recursive=True)
@@ -361,6 +367,8 @@ class Vagrant(object):
             return run_res
 
         else:
+            host_exp_folder_path = os.path.join(self.experiment_path, name, exp_folder_name, 'output')
+
             template = '\n'.join(['\n\n========= JOB REPORT =========',
                                   'node_name: {name}',
                                   'job_description: {job_type} "{command}"',
@@ -629,7 +637,6 @@ def process_arguments(arguments):
         provider = Vagrant(debug=debug)
 
         # parse argument
-        hosts = []
         action = None
         kwargs = dict()
         args = []
@@ -733,8 +740,6 @@ def process_arguments(arguments):
 def main():
     """
     Main function for the Vagrant Manager. Processes the input arguments.
-
-			
     """
     arguments = docopt(__doc__, version='Cloudmesh Vagrant Manager 0.3')
     process_arguments(arguments)

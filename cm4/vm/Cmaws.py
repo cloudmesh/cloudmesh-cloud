@@ -25,7 +25,7 @@ class CmAWSDriver(EC2NodeDriver, NodeDriver):
         self.default = config.get("cloud.aws.default")
         super().__init__(key=key, secret=secret, region=region, **kwargs)
 
-    def ex_stop_node(self, node, deallocate):
+    def ex_stop_node(self, node, deallocate=None):
         super().ex_stop_node(node)
 
     def create_node(self, name):

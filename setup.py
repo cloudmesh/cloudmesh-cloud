@@ -60,6 +60,7 @@ PyYAML==3.13
 requests==2.20.0
 termcolor==1.1.0
 urllib3==1.24
+six
 """.split("\n")
 
 

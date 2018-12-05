@@ -1,6 +1,7 @@
 ## CM4 REST Api
 
-The cm4 REST Api is built using flask and provides the cloud information retrieval functionality through HTTP calls.
+The cm4 REST Api is built using flask and provides the cloud
+information retrieval functionality through HTTP calls.
 
 #### Pre-requisites
 

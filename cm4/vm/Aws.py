@@ -8,7 +8,7 @@ from libcloud.compute.base import NodeDriver
 class Aws(Cloud):
 
     def __init__(self, config, kind):
-        os_config = config.get('cloud.%s' % kind)
+        os_config = config["cloud"][kind]
         default = os_config.get('default')
         credentials = os_config.get('credentials')
         self.driver = AWSDriver(
@@ -21,8 +21,8 @@ class Aws(Cloud):
 class AWSDriver(EC2NodeDriver, NodeDriver):
 
     def __init__(self, key, secret, region, **kwargs):
-        config = Config()
-        self.default = config.get("cloud.aws.default")
+        config = Config().data["cloudmesh"]
+        self.default = config["cloud"]["aws"]["default"]
         super().__init__(key=key, secret=secret, region=region, **kwargs)
 
     def ex_stop_node(self, node, deallocate=None):

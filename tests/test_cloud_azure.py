@@ -24,46 +24,57 @@ class TestCloudAzure:
         assert name is not None
 
     def test_azure_010_create(self):
+        HEADING(myself())
         vm = self.azure.create('cm-test-vm-1')
         assert vm is not None
 
     def test_azure_020_ls(self):
+        HEADING(myself())
         ls_results = self.azure.list()
         assert isinstance(ls_results, list)
 
     def test_azure_030_suspend(self):
+        HEADING(myself())
         self.azure.suspend(self.test_node_name)
         state = self._wait_and_get_state(self.test_node_name)
         assert state == 'stopped'
         # assert state == 'paused'
 
     def test_azure_050_stop(self):
+        HEADING(myself())
         self.azure.stop(self.test_node_name)
         state = self._wait_and_get_state(self.test_node_name, 30)
         assert state == 'stopped'
 
     def test_azure_060_start(self):
+        HEADING(myself())
         self.azure.start(self.test_node_name)
         state = self._wait_and_get_state(self.test_node_name, 30)
         assert state == 'running'
 
     def test_azure_070_destroy(self):
+        HEADING(myself())
         self.azure.destroy(self.test_node_name)
 
     def test_azure_create_network(self):
+        HEADING(myself())
         self.azure._create_network("cmnet")
 
     def test_azure_list_volumes(self):
+        HEADING(myself())
         vols = self.azure.list_volumes()
 
     def test_azure_delete_network(self):
+        HEADING(myself())
         self.azure._ex_delete_network("cmnetwork")
 
     def test_azure_get_node(self):
+        HEADING(myself())
         vm = self.azure._get_node(self.test_node_name)
         assert vm is not None
 
     def test_azure_run(self):
+        HEADING(myself())
         cmd = "lsb_release -a"
         res = self.azure.run(self.test_node_name, cmd)
         # getting output

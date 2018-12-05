@@ -583,11 +583,9 @@ def process_arguments(arguments):
             elif arguments.get("runtime-config") and arguments.get("CONFIG_NAME") and arguments.get("PROCESS_NUM"):
                 config_name = arguments.get("CONFIG_NAME")
                 proc_num = int(arguments.get("PROCESS_NUM"))
-                download_proc_num = 1 if arguments.get("FETCH_PROCESS_NUM") is None else \
-                    int(arguments.get("FETCH_PROCESS_NUM"))
-
-                save_to = "" if arguments.get("<save-path>") is None else arguments.get("<save-path>")
-                download_later = True if arguments.get("--download-later") is False else False
+                download_proc_num = 1 if arguments.get("--fetch-proc-num") is None else \
+                    int(arguments.get("--fetch-proc-num"))
+                download_later = True if arguments.get("--download-later") is True else False
                 input_type = ""
                 output_type = ""
                 if arguments.get("in:params") and arguments.get("out:stdout"):
@@ -605,8 +603,8 @@ def process_arguments(arguments):
                 elif arguments.get("in:params+file") and arguments.get("out:stdout+file"):
                     input_type = "params+file"
                     output_type = "stdout+file"
-                vcluster_manager.create(config_name, proc_num, download_proc_num, download_later, save_to,
-                                        input_type, output_type)
+                vcluster_manager.create(config_name, proc_num, download_proc_num, download_later, input_type,
+                                        output_type)
 
         elif arguments.get("destroy"):
             if arguments.get("virtual-cluster"):

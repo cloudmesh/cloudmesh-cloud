@@ -12,12 +12,17 @@ class MongoDBController(object):
     def __init__(self):
 
         self.config = Config()
-        self.host = self.config.get('data.mongo.MONGO_HOST')
-        self.username = self.config.get('data.mongo.MONGO_USERNAME')
-        self.password = self.config.get('data.mongo.MONGO_PASSWORD')
-        self.port = int(self.config.get('data.mongo.MONGO_PORT'))
+
+        self.mongo_data = self.config["cloudmesh"]["data"]["mongo"]
+
+        #self.host = self.config.get('data.mongo.MONGO_HOST')
+        #self.username = self.config.get('data.mongo.MONGO_USERNAME')
+        #self.password = self.config.get('data.mongo.MONGO_PASSWORD')
+        #self.port = int(self.config.get('data.mongo.MONGO_PORT'))
 
         self.mongo_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "MongoDB")
+
+
         self.mongo_download = self.config.get('data.mongo.MONGO_DOWNLOAD')
         temp = str(self.mongo_download).split('/')
         self.download_file = temp[len(temp) - 1]

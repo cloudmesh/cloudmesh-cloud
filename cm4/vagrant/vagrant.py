@@ -455,7 +455,7 @@ class Vagrant(object):
     def ssh(self, name):
         """
         TODO: doc
-		
+
         :param name:
         :return:
         """
@@ -613,7 +613,7 @@ def process_arguments(arguments):
     Processes all the input arguments and acts accordingly.
 
     :param arguments: input arguments for the Vagrant script.
-			
+
     """
     debug = arguments["--debug"]
     # print(type(arguments))

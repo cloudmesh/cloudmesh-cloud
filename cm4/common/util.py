@@ -114,6 +114,7 @@ def convert_from_unicode(data):
 
 def yn_choice(message, default='y', tries=None):
     """asks for a yes/no question.
+    :param tries:
     :param message: the message containing the question
     :param default: the default answer
     """
@@ -254,7 +255,7 @@ def auto_create_requirements(requirements):
     try:
         with open("requirements.txt", "r") as f:
             file_content = f.read()
-    except:
+    except Exception as e:
         file_content = ""
 
     setup_requirements = '\n'.join(requirements)

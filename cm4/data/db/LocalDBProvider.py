@@ -73,7 +73,8 @@ class LocalDBProvider(DBProviderABC):
         file_name = cloud_file.name + ".yaml"
         return self._path.joinpath(file_name)
 
-    def _read_file(self, yaml_file_path):
+    @staticmethod
+    def _read_file(yaml_file_path):
         """
         Read a yaml file from disk and return the python object it represents.
         """

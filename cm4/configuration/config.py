@@ -15,7 +15,6 @@ class Config(object):
         :param config_path: A local file path to cloudmesh yaml config
             with a root element `cloudmesh`. Default: `~/.cloudmesh/cloudmesh4.yaml`
         """
-        self.data = {}
 
         self.config_path = expanduser(config_path)
         config_folder = dirname(self.config_path)
@@ -34,7 +33,7 @@ class Config(object):
         return self.data
 
     def __str__(self):
-        return yaml.dump(self.data)
+        return yaml.dump(self.data, default_flow_style=False, indent=2)
 
 
 ''' broken

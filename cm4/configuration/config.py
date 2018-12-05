@@ -62,3 +62,5 @@ class Config(object):
         with open(self.config_path, "w") as stream:
             yaml.safe_dump(yaml_file, stream, default_flow_style=False)
 
+    def __str__(self):
+        return yaml.dump(self._cloudmesh)

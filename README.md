@@ -1,15 +1,7 @@
-
 # Cloudmesh cm v4
 
 
 * <https://github.com/cloudmesh-community/cm>
-
-to coordinate the assignment. This assignment can be useful for your
-projects and reused for your projects to conduct benchmarks on remote
-machines. The online and residential classes can be used to ask
-questions and work on this in person.
-
-# Cloudmesh v4
 
 The goal is to have a configuration file in which we add a number of
 computers that you can use to execute tasks via ssh calls remotely. We

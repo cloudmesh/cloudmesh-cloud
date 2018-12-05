@@ -18,7 +18,7 @@ Use pip install to install the following packages.
 cd ~/git/cloudmesh/cm
 ```
 
-- Configure the cm4 project
+- Configure the cm4
 
 ```bash
 pip install .

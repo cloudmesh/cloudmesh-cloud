@@ -23,7 +23,7 @@ cloudmesh:
         version: TBD
       default:
         region: 'northcentralus'
-        image:'Canonical:UbuntuServer:16.04-LTS:latest'
+        image: 'Canonical:UbuntuServer:16.04-LTS:latest'
         size: 'Basic_A0'
         resource_group: 'cloudmesh'
         storage_account: 'cmdrive'
@@ -37,15 +37,15 @@ cloudmesh:
       cm:
         heading: AWS
         host: aws.amazon.com
-        label:aws
+        label: aws
         kind: aws
         version: TBD
       default:
         region: 'us-west-2'
-        image:'ami-0bbe6b35405ecebdb'
+        image: 'ami-0bbe6b35405ecebdb'
         size: 't2.micro'
         EC2_PRIVATE_KEY_FILE_NAME: 'aws_cert'
-        EC2_SECURITY_GROUP:'group1'
+        EC2_SECURITY_GROUP: 'group1'
       credentials:
         EC2_ACCESS_ID: 'your access id'
         EC2_SECRET_KEY: 'your secret key'
@@ -65,7 +65,7 @@ cloudmesh:
         OS_TENANT_ID: CH-819337
         OS_PROJECT_NAME: CH-819337
         OS_PROJECT_DOMAIN_ID: default
-        OS_USER_DOMAIN_ID: default        
+        OS_USER_DOMAIN_ID: default
         OS_VERSION: liberty
         OS_REGION_NAME: RegionOne
         OS_KEY_PATH: #put your ssh-keyfile path here (macOS convention is ~/.ssh/id_rsa.pub)
@@ -154,7 +154,7 @@ cloudmesh:
         username: TBD
         pulickey: ~/.ssh/id_rsa.pub
     clustera:
-      computer_a: 
+      computer_a:
         name: computer_a
         label: one
         address: localhost
@@ -163,7 +163,7 @@ cloudmesh:
           pulickey: ~/.ssh/id_rsa.pub
       computer_b:
         name: computer_b
-        label:two
+        label: two
         address: localhost
         credentials:
           username: TBD
@@ -177,7 +177,7 @@ cloudmesh:
           sshconfigpath: ~/vms/ubuntu14/sshconfig1
       computer_b:
         name: computer_a
-        label:one
+        label: one
         address: localhost
         credentials:
           username: TBD

@@ -1,0 +1,478 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>VM Description &mdash; cm4 alpha documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Virtual Cluster" href="vcluster.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> cm4
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="README.html">Cloudmesh cm v4</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aws.html">AWS cm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ufo.html">CM4 REST Api</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vagrant.html">ehvagrant: enhanced Vagrant interface with importable python module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vcluster.html">Virtual Cluster</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">VM Description</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#providers-cm4-could-access">Providers <em>cm4</em> could access</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#aws">AWS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#azure">AZURE</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#azure-setup">Azure Setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#openstack">OPENSTACK</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#extra-vargrant">Extra: Vargrant</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#cloudmesh4-yaml-configuration-file">[<code class="docutils literal notranslate"><span class="pre">cloudmesh4.yaml</span></code>] configuration file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#mongodb-database">MongoDB Database</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#data-scheme-in-mongodb">Data Scheme in MongoDB</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#security-in-mongodb">Security in MongoDB</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">cm4</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>VM Description</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/vm.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="vm-description">
+<span id="vm-description"></span><h1>VM Description<a class="headerlink" href="#vm-description" title="Permalink to this headline">¶</a></h1>
+<p>In cloudmesh cm4, we are using the <strong>Python</strong> tool to
+implement a program that could remotely control cloud nodes provided
+by different organizations and run experiments in parallel.</p>
+<p>The goal of <strong>cm4</strong> is to provide a platform that users could
+directly control the nodes they have, like AWS, Azure, and OPENSTACK
+instances. Users could decide to start, stop, destroy, create, resume,
+and suspend different nodes without accessing the <strong>Console</strong>
+interfaces of providers. Then users could install experiment
+environment, software, and other required tools in these running
+nodes. Finally, an experiment could be executed in running nodes by
+sending the commands from <strong>cm4</strong> platform. Meanwhile, we embed the
+NoSQL database <strong>MongoDB</strong> into cm4 for managing the nodes and
+experiments.</p>
+<div class="section" id="providers-cm4-could-access">
+<span id="providers-cm4-could-access"></span><h2>Providers <em>cm4</em> could access<a class="headerlink" href="#providers-cm4-could-access" title="Permalink to this headline">¶</a></h2>
+<p>We are using the python library
+<a class="reference external" href="https://libcloud.apache.org"><strong>Apache Libcloud</strong></a> to interact with
+cloud service providers. Currently, in the <strong>cm4</strong>, we could
+access:</p>
+<ul class="simple">
+<li><a class="reference external" href="https://aws.amazon.com"><strong>AWS</strong></a></li>
+<li><a class="reference external" href="https://azure.microsoft.com/en-us/"><strong>AZURE</strong></a></li>
+<li>any cloud service providers using <strong>OPENSTACK</strong>. For example, <a class="reference external" href="https://www.chameleoncloud.org"><strong>Chameleon</strong></a> and
+<a class="reference external" href="https://jetstream-cloud.org"><strong>Jetstream</strong></a></li>
+</ul>
+<p>By using the <strong>Apache Libcloud</strong> API, we could do these operations for nodes in above cloud service providers:</p>
+<ul class="simple">
+<li>Start the node</li>
+<li>Stop the node</li>
+<li>Resume the node</li>
+<li>Suspend the node</li>
+<li>Destory the node</li>
+<li>Create the node</li>
+</ul>
+<p><strong>Improvement</strong>: Sometimes adjustments to nodes are necessary (switch between different images/OS and service sizes).
+Now cm4 also allow users to customize their instances across multiple providers by using refactor functions to
+support their management tasks.</p>
+<ul class="simple">
+<li>Resize the node</li>
+<li>Rebuild(with different image) the node</li>
+<li>Rename the node</li>
+<li>Revert previous operations to the node</li>
+</ul>
+<div class="section" id="aws">
+<span id="aws"></span><h3>AWS<a class="headerlink" href="#aws" title="Permalink to this headline">¶</a></h3>
+<p>Amazon Web Service (<strong>AWS</strong>) provided by Amazon is a secure cloud
+service platform, users could start any instances with selected
+images.</p>
+<p>Before users use the <strong>cm4</strong> platform to access <strong>EC2</strong>, they have to
+finish these preparations:</p>
+<ol>
+<li><p class="first">EC2 account, more information is
+<a class="reference external" href="https://aws.amazon.com/premiumsupport/knowledge-center/create-and-activate-aws-account/">here</a></p>
+</li>
+<li><p class="first">Log in the EC2 account, update your <strong>Access Key</strong>.</p>
+<p><strong>Access Keys</strong> has two parts: <strong>Access Key ID</strong> and <strong>Secret
+Access Key</strong>. These <strong>Access Keys</strong> are the only way you could
+authentically access the AWS though AWS API requests.  (create new
+Access Key: Account (right upper corner) &gt; My Security Credentials</p>
+<blockquote>
+<div><p>Access Keys &gt; Create New Access Key)</p>
+</div></blockquote>
+</li>
+<li><p class="first"><strong>Private Key file</strong> is a key pairs to encrypt and decrypt login
+information. While using <strong>Private Key file</strong>, there is no need to
+use username or password to login the instance of AWS. For sshing
+the instance, the ssh client would use the <strong>private key file</strong>
+instead of credential information. (create new key pairs: Network &amp;
+Security (left column bar) &gt; Key Pairs &gt; Create Key Pair)</p>
+</li>
+<li><p class="first"><strong>Security Group</strong> acts as a virtual firewall for the instance.
+When you launch a instance, we have to attach the <strong>Security
+Group</strong> to it for controlling the traffic in and out. So before you
+are using any nodes in AWS, you have to pre-define the <strong>Security
+Group</strong> that you will use.  (create new Security Group: Network $
+Security (left column bar) &gt; Security Group &gt; Create Security
+Group)</p>
+</li>
+<li><p class="first"><strong>Region</strong> is the service location where you start the instance.
+AWS hosts services in different regions, you should select the
+region where you want to start you instance.</p>
+</li>
+</ol>
+<p>When you finish all above things, you should update information into
+the block ‘aws’ of <strong>cloudmesh4.yaml</strong> file in <strong>ETC</strong> folder</p>
+<p><strong>EC2</strong> provides On-Demand Pricing cloud services based on different
+CPU, Memory and Storage selections. Please visit this
+<a class="reference external" href="https://aws.amazon.com/ec2/pricing/on-demand/">page</a> for more
+information. In default setting, we use the latest <strong>Ubuntu</strong> image
+filled in default.image field. If you want to use other images, please
+update the Image ID into it.</p>
+</div>
+<div class="section" id="azure">
+<span id="azure"></span><h3>AZURE<a class="headerlink" href="#azure" title="Permalink to this headline">¶</a></h3>
+<p>Uses <a class="reference external" href="https://libcloud.readthedocs.io/en/latest/compute/drivers/azure_arm.html">LibCloud’s Azure ARM Compute Driver</a></p>
+</div>
+<div class="section" id="azure-setup">
+<span id="azure-setup"></span><h3>Azure Setup<a class="headerlink" href="#azure-setup" title="Permalink to this headline">¶</a></h3>
+<p><strong>Install Azure CLI</strong></p>
+<p><a class="reference external" href="https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest">Download and install according to your platform.</a></p>
+<p><strong>Make sure subscription is registered for compute services</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">az</span> <span class="n">provider</span> <span class="n">register</span> <span class="o">--</span><span class="n">namespace</span> <span class="n">Microsoft</span><span class="o">.</span><span class="n">Compute</span>
+</pre></div>
+</div>
+<p><strong>Service principal</strong></p>
+<p><a class="reference external" href="https://docs.microsoft.com/en-us/cli/azure/create-an-azure-service-principal-azure-cli?view=azure-cli-latest">Full documentation on creating service principals.</a>
+The Azure ARM Driver does not appear to support certificate based
+principals at this time.</p>
+<p>Create Principal</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">az</span> <span class="n">ad</span> <span class="n">sp</span> <span class="n">create</span><span class="o">-</span><span class="k">for</span><span class="o">-</span><span class="n">rbac</span> <span class="o">--</span><span class="n">name</span> <span class="n">cm</span><span class="o">-</span><span class="n">admin</span><span class="o">-</span><span class="n">pw</span> <span class="o">--</span><span class="n">password</span> <span class="o">&lt;</span><span class="n">SECRET</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>Add <code class="docutils literal notranslate"><span class="pre">Owner</span></code> role.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">az</span> <span class="n">role</span> <span class="n">assignment</span> <span class="n">create</span> <span class="o">--</span><span class="n">assignee</span> <span class="o">&lt;</span><span class="n">APP_ID</span><span class="o">&gt;</span> <span class="o">--</span><span class="n">role</span> <span class="n">Owner</span>
+</pre></div>
+</div>
+<p><em>Note:</em> <code class="docutils literal notranslate"><span class="pre">&lt;APP_ID&gt;</span></code> is provided in the output when the principal is created</p>
+</div>
+<div class="section" id="openstack">
+<span id="openstack"></span><h3>OPENSTACK<a class="headerlink" href="#openstack" title="Permalink to this headline">¶</a></h3>
+<p>OpenStack is an Infrastructure service that allows users to utilize computing resource in cloud service platform through
+virtual environments.</p>
+<p><a class="reference external" href="https://www.chameleoncloud.org/">Chameleon Cloud</a> provides an
+OpenStack installation of version 2015.1 (Kilo) using the KVM
+virtualization technology at the KVM&#64;TACC site. It is important to
+make sure you are visiting the
+<a class="reference external" href="https://openstack.tacc.chameleoncloud.org/">KVM&#64;TACC</a> site so as to
+get proper installation. Learn more
+<a class="reference external" href="https://chameleoncloud.readthedocs.io/en/latest/technical/kvm.html">here</a>
+to properly set up yout account before proceed to your journey with
+<strong>cm4</strong>.</p>
+</div>
+<div class="section" id="extra-vargrant">
+<span id="extra-vargrant"></span><h3>Extra: Vargrant<a class="headerlink" href="#extra-vargrant" title="Permalink to this headline">¶</a></h3>
+<p>Please refer to <a class="reference external" href="https://github.com/cloudmesh-community/cm/tree/master/cm4/vagrant/README.md">here</a> to see how to setup
+Vagrant with cm4.</p>
+</div>
+</div>
+<div class="section" id="cloudmesh4-yaml-configuration-file">
+<span id="cloudmesh4-yaml-configuration-file"></span><h2>[<code class="docutils literal notranslate"><span class="pre">cloudmesh4.yaml</span></code>] configuration file<a class="headerlink" href="#cloudmesh4-yaml-configuration-file" title="Permalink to this headline">¶</a></h2>
+<p>Sachith</p>
+</div>
+<div class="section" id="mongodb-database">
+<span id="mongodb-database"></span><h2>MongoDB Database<a class="headerlink" href="#mongodb-database" title="Permalink to this headline">¶</a></h2>
+<p>We add the database into <strong>cm4</strong> with two reasons:</p>
+<ul class="simple">
+<li>provide the information of nodes in different providers.</li>
+<li>record the experiment executed through cm4, easy for next re-execution.</li>
+</ul>
+<p>Every time the user use the <strong>cm4</strong> platform, the server would access
+the running MongoDB database, querying the nodes’ information, showing
+relative metadata, and then updating all necessary data.</p>
+<p>The <strong>MongoDB</strong> would finish below tasks:</p>
+<ul class="simple">
+<li>saving all information:<ol>
+<li>the nodes’ information queried from cloud service, like name, id,
+status, and other metadata about this node.</li>
+<li>saving the executing or executed experiment information, like
+which node we run the experiment, the input, the command, and the
+output.</li>
+<li>saving the group information users defined.</li>
+<li>saving the [<code class="docutils literal notranslate"><span class="pre">cloudmesh4.yaml</span></code>] information.</li>
+</ol>
+</li>
+<li>updating any changes:<ol>
+<li>the changes updated on the nodes, like stop running node, or start stopped node.</li>
+<li>the changes updated on the [<code class="docutils literal notranslate"><span class="pre">cloudmesh4.yaml</span></code>], like add new nodes.</li>
+<li>when the experiment is done, output and experiment status would be updated.</li>
+<li>new group is created while using <strong>cm4</strong> will be updated</li>
+</ol>
+</li>
+<li>return required information:<ol>
+<li>return the node information, group information, and experiment
+information when <strong>cm4</strong> queries them.</li>
+</ol>
+</li>
+</ul>
+<div class="section" id="data-scheme-in-mongodb">
+<span id="data-scheme-in-mongodb"></span><h3>Data Scheme in MongoDB<a class="headerlink" href="#data-scheme-in-mongodb" title="Permalink to this headline">¶</a></h3>
+<p>There are three types of documents in MongoDB:</p>
+<ul>
+<li><p class="first">Node information in <code class="docutils literal notranslate"><span class="pre">cloud</span></code> collection.  Different cloud service
+providers would return different schemas of node information. It is
+hard to manipulate different nodes’ information into same schema, so
+we decide to dump the return mesaage into MongoDB without any
+changes.</p>
+</li>
+<li><p class="first">Node’s experiment status in <code class="docutils literal notranslate"><span class="pre">status</span></code> collection.  The document in
+<code class="docutils literal notranslate"><span class="pre">status</span></code> collection is going to save the information of experiments
+executed in a node.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s1">&#39;_id&#39;</span><span class="p">:</span> <span class="n">node_id</span><span class="p">,</span>
+<span class="s1">&#39;status&#39;</span><span class="p">:</span> <span class="n">status</span><span class="p">,</span>
+<span class="s1">&#39;currentJob&#39;</span><span class="p">:</span> <span class="n">job_id</span><span class="p">,</span>
+<span class="s1">&#39;history&#39;</span><span class="p">:</span> <span class="n">history</span>
+<span class="s1">&#39;status&#39;</span> <span class="p">:</span> <span class="n">node</span> <span class="ow">is</span> <span class="n">running</span> <span class="n">a</span> <span class="n">experiment</span> <span class="ow">or</span> <span class="ow">not</span>
+<span class="s1">&#39;currentJob&#39;</span> <span class="p">:</span> <span class="n">the</span> <span class="n">running</span> <span class="n">experiment</span> <span class="nb">id</span>
+<span class="s1">&#39;history&#39;</span> <span class="p">:</span> <span class="n">the</span> <span class="n">history</span> <span class="n">of</span> <span class="n">executed</span> <span class="n">experiments</span> <span class="ow">in</span> <span class="n">this</span> <span class="n">node</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Experiment information in <code class="docutils literal notranslate"><span class="pre">job</span></code> collection.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s1">&#39;_id&#39;</span> <span class="p">:</span> <span class="n">experiment_id</span>
+<span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="n">name</span><span class="p">,</span>
+<span class="s1">&#39;status&#39;</span><span class="p">:</span> <span class="n">status</span><span class="p">,</span>
+<span class="s1">&#39;input&#39;</span><span class="p">:</span> <span class="n">input_info</span><span class="p">,</span>
+<span class="s1">&#39;output&#39;</span><span class="p">:</span> <span class="n">output_info</span><span class="p">,</span>
+<span class="s1">&#39;description&#39;</span><span class="p">:</span> <span class="n">description</span><span class="p">,</span>
+<span class="s1">&#39;commands&#39;</span><span class="p">:</span> <span class="n">commands</span>
+<span class="s1">&#39;name&#39;</span> <span class="p">:</span> <span class="n">the</span> <span class="n">name</span> <span class="n">of</span> <span class="n">the</span> <span class="n">experiment</span>
+<span class="s1">&#39;status&#39;</span> <span class="p">:</span> <span class="n">running</span> <span class="ow">or</span> <span class="n">finished</span>
+<span class="s1">&#39;input&#39;</span> <span class="p">:</span> <span class="n">the</span> <span class="nb">input</span> <span class="n">data</span> <span class="n">file</span>
+<span class="s1">&#39;output&#39;</span> <span class="p">:</span> <span class="n">the</span> <span class="n">output</span> <span class="n">data</span> <span class="n">file</span>
+<span class="s1">&#39;description&#39;</span> <span class="p">:</span> <span class="n">the</span> <span class="n">description</span> <span class="n">about</span> <span class="n">this</span> <span class="n">experiment</span>
+<span class="s1">&#39;commands&#39;</span> <span class="p">:</span> <span class="n">the</span> <span class="n">commands</span> <span class="n">used</span> <span class="ow">in</span> <span class="n">this</span> <span class="n">experiemnt</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Group information in <code class="docutils literal notranslate"><span class="pre">group</span></code> collection.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s1">&#39;cloud&#39;</span><span class="p">:</span> <span class="n">cloud</span><span class="p">,</span>
+<span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="n">name</span><span class="p">,</span>
+<span class="s1">&#39;size&#39;</span><span class="p">:</span> <span class="n">size</span><span class="p">,</span>
+<span class="s1">&#39;vms&#39;</span><span class="p">:</span> <span class="n">list_vms</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</div>
+<div class="section" id="security-in-mongodb">
+<span id="security-in-mongodb"></span><h3>Security in MongoDB<a class="headerlink" href="#security-in-mongodb" title="Permalink to this headline">¶</a></h3>
+<p>For data security purpose, we enable the MongoDB security
+functionality in <strong>cm4</strong>.</p>
+<p>When users first time start the <strong>MongoDB</strong>, they have to add an
+account and open an port to access all database in MongoDB. Because we
+save all nodes’ information into MongoDB inclduing the <em>Authorization</em>
+information. If your MongoDB is open to everyone, it is easy for
+hacker to steal your information. So you are requried to set the
+<strong>username</strong> and <strong>password</strong> for the security purpose.</p>
+<p>If you want to learn more about the <strong>Security</strong> in MongoDB, you can
+visit this <a class="reference external" href="https://docs.mongodb.com/manual/security/">page</a> or visit
+the brief introduction about the MongoDB</p>
+<p>Here is a quick reference about how to
+<a class="reference external" href="https://medium.com/&#64;raj_adroit/mongodb-enable-authentication-enable-access-control-e8a75a26d332">enable MongoDB Security</a>
+option. Currently our implementation require users to access
+localhost mongoDB client with admin account.</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="vcluster.html" class="btn btn-neutral" title="Virtual Cluster" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Cloudmesh Community
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

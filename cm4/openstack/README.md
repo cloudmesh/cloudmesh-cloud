@@ -1,1 +1,0 @@
-Please refer to README file in vm folder for details.

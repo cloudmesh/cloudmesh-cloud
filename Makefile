@@ -3,6 +3,7 @@ all: doc
 doc:
 	rm -rf docs
 	mkdir -p dest
+	cp README.md documentation/source
 	cd documentation; make html
 	cp -r documentation/build/html/ docs
 

@@ -45,7 +45,7 @@ IMPORTANT: if you are using`ehvagrant` along`cloudmesh`, You don't have to insta
 
 You can download Vagrant from [here](https://www.vagrantup.com/downloads.html). It supports all mainstream operating system, including Windows, Mac OS, and various Linux distribution.  After finishing installation, you can check if the installation success by executing `vagrant version`.  You should see something like below.
 
-![vagrant version](./img/version.png)
+![vagrant version](cm4/vagrant/img/version.png)
 
 ### Install *virtualization provider*
 
@@ -73,11 +73,11 @@ You can use  [vagrant create](#create-instances) functionality to easily setup a
 
 After finishing `Vagrantfile`definition,  you are now ready to deploy and run your virtual machine with Vagrant. But first, let us check current status of your Vagrant project. Execute `ehvagrant ls`at `ehvagrant` root directory, you will see: 
 
-![before_init](./img/before_init.png)
+![before_init](cm4/vagrant/img/before_init.png)
 
 Then execute `ehvagrant start`. Since your machines are not deployed yet, Vagrant will first deploy your machines and then bring them up, and automatically do LOTS of setting.  When Vagrant has done its work, we can confirm this by issuing `ehvagrant ls` again. You will see now:
 
-![after_init](./img/after_init.png)
+![after_init](cm4/vagrant/img/after_init.png)
 
 HOO-WA! Your two virtual machines are painlessly deployed, configured, up and running! Now you are ready to do some fancy work with Vagrant and `ehvagrant`.
 
@@ -87,7 +87,7 @@ Since these topics are not directly relate to `ehvagrant`,  here I just describe
 
 For `scp`, open terminal and execute `scp`, you should see a short usage guide shows on your screen. If it is not there, please install `scp` and make sure its executive file is in your `PATH` environment variable. 
 
-![scp_availability_check](./img/scp.png)
+![scp_availability_check](cm4/vagrant/img/scp.png)
 
 ### Using `ehvagrant` with `cloudmesh`
 
@@ -216,7 +216,7 @@ Usage:```python vagrant.py vagrant run command COMMAND [--vms=<vmList>]```
 
 Run an arbitrary shell `COMMAND` on instances. If user specify multiple instances to run, the command will run on those instances simultaneously, i.e., in a parallel fashion.  Any output produced to the `stdout` and `stderr` of executing instances will be fetched and reformatted to a job report. Finally, the job report will print out to the current terminal.
 
-![run_command_example](./img/run_command.png)
+![run_command_example](cm4/vagrant/img/run_command.png)
 
 #### run arbitrary shell script
 
@@ -234,4 +234,4 @@ Run an arbitrary **shell script** on instances. The behavior of this command wil
   - If using with `cloudmesh`, output content will be stored at `~/.cloudmesh/experiment/{instnace_name}/{script_name}_{epoch_second}/output/`. 
 - Finally, execution reports will be printed out to current terminal.
 
-![run_script_example](./img/run_script.png)
+![run_script_example](cm4/vagrant/img/run_script.png)

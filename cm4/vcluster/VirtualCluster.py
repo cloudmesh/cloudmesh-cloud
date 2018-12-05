@@ -198,7 +198,7 @@ class VirtualCluster(object):
                                                                                          ['sshconfigpath']), *x)
         scp_caller = lambda *x: self._scp(dest_node_info['name'], os.path.expanduser(dest_node_info['credentials'] \
                                                                                          ['sshconfigpath']), *x)
-        ps_output = ssh_caller('ps', '-ef', '|', 'grep', dest_pid, '|', 'grep -v grep')
+        ps_output = ssh_caller('ps', '-ef', '|', 'grep', dest_pid.strip('\n'), '|', 'grep -v grep')
         if len(ps_output) == 0 and node_pid_tuple in [pid for pid in all_pids]:
             if not os.path.exists(job_metadata['local_path']):
                 os.makedirs(job_metadata['local_path'])
@@ -235,8 +235,10 @@ class VirtualCluster(object):
                                                                                       ['sshconfigpath']), *x)
         scp_caller = lambda *x: self._scp(target_node['name'], os.path.expanduser(target_node['credentials'] \
                                                                                       ['sshconfigpath']), *x)
-        if len(ssh_caller('if test -d %s; then echo "exist"; fi' % job_metadata['remote_path'])) == 0:
-            ssh_caller('cd %s && mkdir job%s' % (job_metadata['raw_remote_path'], job_metadata['suffix']))
+
+        # directory_check = ssh_caller('if test -d %s; then echo "exist"; fi' % job_metadata['remote_path'])
+        # if len(directory_check) == 0:
+        ssh_caller('cd %s && mkdir job%s' % (job_metadata['raw_remote_path'], job_metadata['suffix']) , True)
         if self.runtime_config['output-type'].lower() in ['file', 'stdout+file']:
             ssh_caller("cd {} && mkdir run{}".format(job_metadata['remote_path'], param_idx))
             nested_remote_path = os.path.join(job_metadata['remote_path'], 'run{}'.format(param_idx),
@@ -275,8 +277,8 @@ class VirtualCluster(object):
                                                                                            'run{}'.format(param_idx)),
                                                                               job_metadata['script_name_with_suffix'],
                                                                               params))
-        all_pids.append((target_node_key, remote_pid[0], param_idx))
-        print('Remote Pid on %s: %s' % (target_node_key, remote_pid[0]))
+        all_pids.append((target_node_key, remote_pid, param_idx))
+        print('Remote Pid on %s: %s' % (target_node_key, remote_pid.strip('\n')))
 
     @staticmethod
     def _ssh(hostname, sshconfigpath, *args):
@@ -288,18 +290,22 @@ class VirtualCluster(object):
         :param args: the argument to be submitted via ssh
         :return:
         """
+        hide_errors_flag = False
+        if type(args[-1]) == bool:
+            hide_errors_flag = True
+            args=args[:-1]
         ssh = subprocess.Popen(["ssh", hostname, '-F', sshconfigpath, *args],
                                stdout=subprocess.PIPE,
                                stderr=subprocess.PIPE)
         result = ssh.stdout.readline()
         if not result:
             error = ssh.stderr.readlines()
-            if len(error) > 0:
+            if len(error) > 0 and hide_errors_flag == False:
                 print("ERROR in host %s: %s" % (hostname, error))
             return []
         else:
             try:
-                return [x.decode('utf-8').strip('\n') for x in result if type(x) == bytes]
+                return ''.join([chr(x) for x in result])
             except AttributeError:
                 return [result.decode('utf-8').strip('\n')]
 

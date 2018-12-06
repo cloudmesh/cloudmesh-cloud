@@ -1,8 +1,6 @@
 from libcloud.compute.types import Provider
 from libcloud.compute.providers import get_driver
 
-# tg837909
-# Lee091120115!
 
 Openstack = get_driver(Provider.OPENSTACK)
 

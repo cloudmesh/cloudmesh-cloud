@@ -1,6 +1,6 @@
 from flask import request, jsonify
 
-from cm4.cmmongo.mongoDB import MongoDB
+from cm4.mongo.mongoDB import MongoDB
 from cm4.configuration.config import Config
 from cm4.vm.Vm import Vm
 

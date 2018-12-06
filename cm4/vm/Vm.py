@@ -4,7 +4,7 @@ from cm4.vm.Aws import Aws
 from cm4.vm.Azure import Azure
 from cm4.vm.Cmopenstack import Cmopenstack
 from cm4.configuration.config import Config
-from cm4.cmmongo.mongoDB import MongoDB
+from cm4.mongo.mongoDB import MongoDB
 from cm4.configuration.name import Name
 from cm4.vm.thread import Thread
 from cm4.configuration.counter import Counter

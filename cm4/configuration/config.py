@@ -33,7 +33,7 @@ class Config(object):
         return self.data
 
     def __str__(self):
-        return yaml.dump(self.data, default_flow_style=False, indent=2)
+         return yaml.dump(self.data, default_flow_style=False, indent=2)
 
 
 ''' broken

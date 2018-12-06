@@ -451,7 +451,7 @@ Here are some samples for running these operations by using **cm4** project:
  
 
  
- ### 4.4 VM Refactor (Rui)
+ ### VM Refactor (Rui)
  In addition, in order to offer more flexibilities to our users, we also developed vmrefactor (`cm4/vm/VmRefactor.py`)
 to allow users to customize the flavors of their running instances and services in different providers.
 ```text

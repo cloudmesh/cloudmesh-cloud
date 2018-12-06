@@ -137,10 +137,24 @@ Vagrant with cm4.
 
 ## [`cloudmesh4.yaml`] configuration file
 
-Sachith
+The cloudmesh4.yaml file contains all the configurations required for CM4 to run. 
+By default it's located in the Cloudmesh home directory (~/.cloudmesh/cloudmesh4.yaml).
 
+#### Use the Configurations file
+To use the configurations in CM4, you need to import the Config class and use the config
+object provided by that class to access and manipulate the configuration file. 
 
+##### Getting the config object
+```python
+from cm4.configuration.config import Config
+config = Config().data["cloudmesh"]
+```
 
+##### Getting values
+To get values from the configurations, you can call level by level from top-down config.
+```python
+MONGO_HOST = config["data"]["mongo"]["MONGO_HOST"]
+```
 
 ## What we have implemented 
 
@@ -351,8 +365,70 @@ Here are some samples for running these operations by using **cm4** project:
  ### 4.3 Chameleon VM Operation (Rui and Kimball)
  
  
- ## 5. Flask Rest API (Kimball and Sachith)
+ ## 5. Flask Rest API (Sachith)
  
+ 
+The cm4 REST Api is built using flask and provides the cloud information retrieval functionality through HTTP calls.
+
+#### Pre-requisites
+
+Use pip install to install the following packages.
+
+- Flask
+- Flask-PyMongo
+
+#### How to run the REST API
+
+- Navigate to the cm directory. example:
+
+```bash
+cd ~/git/cloudmesh/cm
+```
+
+- Configure the cm4 project
+
+```bash
+pip install .
+```
+
+- Add the MongoDB information in the cm4 configuration file
+
+```bash
+vi ~/.cloudmesh/cloudmesh4.yaml
+```
+
+- Run the REST API
+
+```bash
+python cm4/flask_rest_api/rest_api.py
+```
+
+#### API
+
+- `/vms/` : Provides information on all the VMs.
+- `/vms/stopped`  : Provides information on all the stopped VMs.
+- `/vms/<id>` : Provides information on the VM identified by the <id>
+
+#### Examples
+
+- Retrieve information about a VM
+
+  ```bash 
+  curl localhost:5000/vms/i-0fad7e92ffea8b345
+  ```
+
+#### Dev - restricting certain ips for certain rest calls
+
+```python
+from flask import abort, request
+from cm4.flask_rest_api.app import app
+
+
+@app.before_request
+def limit_remote_addr():
+    if request.remote_addr != '10.20.30.40':
+        abort(403)  # Forbidden
+```
  
  ## Extra: Run Command/Script in AWS by **cm4**
  

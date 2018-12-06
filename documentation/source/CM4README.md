@@ -363,6 +363,19 @@ delete_document(collection_name, key, value) : delete the document satisfied wit
                                                from 'collection_name' collection
 ``` 
 
+#### Execute Command in  MongoDB
+To grant users more power in manipulating their local MongoDB database, we also
+add functions for users to execute their customized mongoDB command as if they can 
+use mongoDB client throught terminal by db_command(command) function. 
+And in order to handle the various exceptions and errors which might occur when 
+executing the command, we also add the db_connection() function to help contain those
+unexpected results.
+```text
+db_command(command): issue a command string to virtual mongoDB shell
+db_connection: test connection to local mongoDB host
+```
+
+
 ### 4. The Virtual Machine Provider
 
 In the **cm4**, we developed the `cm4/vm/Vm.py` class to implement the operations for different virtual machines from AWS, 
@@ -383,6 +396,7 @@ The basic functions are:
 10. set_public_ip(vm_name, public_ip): set the public ip for the virtual machine with specified name
 11. remove_public_ip(vm_name) : remove the public ip from virtual machine with specified name
 ```
+
 
 Below we list some sample of running these functions for virtual machines in  AWS, Azure and Openstack.
 
@@ -408,7 +422,42 @@ Here are some samples for running these operations by using **cm4**:
  
  
  ### 4.3 Chameleon VM Operation (Rui and Kimball)
+ Same as above, before using the VM Openstack functionalities, 
+ user has to update their Openstack information into the `cloudmesh4.yaml` file (~/.cloudmesh/cloudmesh.yaml by macOS convention). 
+It is also important to notice that openstack has various providers.
+ And it is important to specify each of them with correspondent log-in credentials.
+
+Many of the funtions are supported by the **Libcloud** library. By specifying the config parameters to `openstack` and `chameleaon`, 
+VM Provider will automatically attach futher operations to openstack primitives.
+
+In order to overcome some issues with service provider (mostly delays in operations like spawing, ip-assignments, refactoring and etc), 
+we implement timeout mechanism to syncronize status between our local machines and remote providers. 
+Blocking strategy is used to prevent un-deterministic running result.
+
+Since providers of openstack like Chameleon and Jetstream allow users to 
+associate customized float ip to their instances, we also develop such functions
+to support tasks like this and give more power to users when runing their jobs.
+
+Here are some samples for running these operations by using **cm4** project:
+
+:o: please update the commands and results here
  
+ 
+ ### 4.4 VM Refactor (Rui)
+ In addition, in order to offer more flexibilities to our users, we also developed vmrefactor (`cm4/vm/VmRefactor.py`)
+to allow users to customize the flavors of their running instances and services in different providers.
+```text
+1. resize(vm_name, size) : resize the virtual machine with specified size object
+2. confirm_resize(vm_name) : some providers requires confirmation message to complete resize() operation
+3. revert(vm_name) : revert a resize operation. Revert the virtual machine to previous status
+4. rename(vm_name, newname) : rename the virtual machine 
+5. rebuild(vm_name, image) : rebuild the virtual machine to another image/OS with image object.
+```
+
+Currently, major providers usually charge users according to their usage. It might be 
+finacially wise sometimes to shift between different service size to reduce unnecessary cost.
+VmRefactor is designed based on this idea to help users to achieve higher cost efficiency. VmRefactor can also help users navigate 
+thier management tasks especially when they have many different tasks on the run.
  
  ## 5. Flask Rest API (Sachith)
  

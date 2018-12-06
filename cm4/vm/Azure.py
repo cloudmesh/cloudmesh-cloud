@@ -7,14 +7,15 @@ from cm4.configuration.config import Config
 from cm4.vm.Cloud import Cloud
 
 
-class CmAzure(Cloud):
+class Azure(Cloud):
 
     def __init__(self, config, cloud):
-        os_config = config.get('cloud.%s' % cloud)
+        os_config = config["cloud"][cloud]
+
         default = os_config.get('default')
         credentials = os_config.get('credentials')
 
-        self.driver = CmAzureDriver(
+        self.driver = AzureDriver(
             tenant_id=credentials['AZURE_TENANT_ID'],
             subscription_id=credentials['AZURE_SUBSCRIPTION_ID'],
             key=credentials['AZURE_APPLICATION_ID'],
@@ -23,14 +24,14 @@ class CmAzure(Cloud):
         )
 
 
-class CmAzureDriver(AzureNodeDriver, NodeDriver):
+class AzureDriver(AzureNodeDriver, NodeDriver):
 
     def __init__(self, tenant_id, subscription_id, key, secret,
                  secure=True, host=None, port=None,
                  api_version=None, region=None, **kwargs):
 
-        self.config = Config()
-        self.defaults = self.config.get("cloud.azure.default")
+        self.config = Config().data["cloudmesh"]
+        self.defaults = self.config["cloud"]["azure"]["default"]
         self.resource_group = self.defaults["resource_group"]
 
         super().__init__(tenant_id=tenant_id,
@@ -79,7 +80,7 @@ class CmAzureDriver(AzureNodeDriver, NodeDriver):
         """
         Create a node
         """
-        key_path = self.config.get("profile.key.public")
+        key_path = self.config["profile"]["key"]["public"]
 
         with open(os.path.expanduser(key_path), 'r') as fp:
             key = fp.read()

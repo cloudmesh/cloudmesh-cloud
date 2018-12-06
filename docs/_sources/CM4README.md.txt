@@ -1,15 +1,20 @@
 # CM4 Details
 
 
-In cloudmesh cm4, we are using the **Python** tool to implement a program that could remotely control cloud 
-nodes provided by different organizations and run experiments in parallel.
+In cloudmesh cm4, we are using the **Python** tool to implement a
+program that could remotely control cloud nodes provided by different
+organizations and run experiments in parallel.
 
-The goal of **cm4** is to provide a platform that users could directly control the nodes they have, like AWS, 
-Azure, and OPENSTACK instances. Users could decide to start, stop, destroy, create, resume, and suspend different nodes 
-without accessing the **Console** interfaces of providers. Then users could install experiment environment, software, 
-and other required tools in these running nodes. Finally, an experiment could be executed in running nodes by sending 
-the commands from **cm4** platform. Meanwhile, we embed the NoSQL database **MongoDB** into cm4 for managing the
-nodes and experiments.
+The goal of **cm4** is to provide a platform that users could directly
+control the nodes they have, like AWS, Azure, and OPENSTACK
+instances. Users could decide to start, stop, destroy, create, resume,
+and suspend different nodes without accessing the **Console**
+interfaces of providers. Then users could install experiment
+environment, software, and other required tools in these running
+nodes. Finally, an experiment could be executed in running nodes by
+sending the commands from **cm4** platform. Meanwhile, we embed the
+NoSQL database **MongoDB** into cm4 for managing the nodes and
+experiments.
 
 ## Providers that *cm4* could access
 
@@ -21,7 +26,8 @@ cloud service providers. Currently, in the **cm4**, we could access:
 * any cloud service providers using **OPENSTACK**. For example, [**Chameleon**](https://www.chameleoncloud.org) and 
 [**Jetstream**](https://jetstream-cloud.org)
 
-By using the **Apache Libcloud** API, we could do these operations for nodes in above cloud service providers:
+By using the **Apache Libcloud** API, we could do these operations for
+nodes in above cloud service providers:
 
 * Start the node
 * Stop the node
@@ -30,9 +36,11 @@ By using the **Apache Libcloud** API, we could do these operations for nodes in 
 * Destory the node
 * Create the node
 
-**Improvement**: Sometimes adjustments to nodes are necessary (switch between different images/OS and service sizes). 
-Cm4 also allow users to customize their instances across multiple providers by using refactor functions to 
-support their management tasks.
+**Improvement**: Sometimes adjustments to nodes are necessary (switch
+between different images/OS and service sizes).  Cm4 also allow users
+to customize their instances across multiple providers by using
+refactor functions to support their management tasks.
+
 * Resize the node
 * Rebuild(with different image) the node
 * Rename the node
@@ -41,8 +49,9 @@ support their management tasks.
 
 ### AWS
 
-Amazon Web Service (**AWS**) provided by Amazon is a secure cloud service platform, users could start any instances with
-selected images.
+Amazon Web Service (**AWS**) provided by Amazon is a secure cloud
+service platform, users could start any instances with selected
+images.
 
 Before users use the **cm4** platform to access **EC2**, they have to finish these preparations:
 
@@ -51,34 +60,40 @@ Before users use the **cm4** platform to access **EC2**, they have to finish the
 
 2. Log in the EC2 account, update your **Access Key**.
 
-   **Access Keys** has two parts: **Access Key ID** 
-   and **Secret Access Key**. These **Access Keys** are the only 
-   way you    could authentically access the AWS though AWS API requests.
-   (create new Access Key: Account 
-   (right upper corner) > My Security Credentials > Access Keys > Create New Access Key)
+   **Access Keys** has two parts: **Access Key ID** and **Secret
+   Access Key**. These **Access Keys** are the only way you could
+   authentically access the AWS though AWS API requests.  (create new
+   Access Key: Account (right upper corner) > My Security Credentials
+   > Access Keys > Create New Access Key)
 
-3. **Private Key file** is a key pairs to encrypt and decrypt 
-   login information. While using **Private Key file**, there is no 
-   need to use username or password to login the instance of AWS. For
-   sshing the instance, the ssh client would use the **private key file** 
-   instead of credential information. (create new key pairs: Network & Security
-   (left column bar) > Key Pairs > Create Key Pair)
+3. **Private Key file** is a key pairs to encrypt and decrypt login
+   information. While using **Private Key file**, there is no need to
+   use username or password to login the instance of AWS. For sshing
+   the instance, the ssh client would use the **private key file**
+   instead of credential information. (create new key pairs: Network &
+   Security (left column bar) > Key Pairs > Create Key Pair)
 
-4. **Security Group** acts as a virtual firewall for the instance. 
-   When you launch a instance, we have to attach the **Security Group** 
-   to it for controlling the traffic in and out. So before you are using 
-   any nodes in AWS, you have to pre-define the **Security Group** that you will use.
-   (create new Security Group: Network $ Security (left column bar) > Security Group > Create Security Group)
+4. **Security Group** acts as a virtual firewall for the instance.
+   When you launch a instance, we have to attach the **Security
+   Group** to it for controlling the traffic in and out. So before you
+   are using any nodes in AWS, you have to pre-define the **Security
+   Group** that you will use.  (create new Security Group: Network $
+   Security (left column bar) > Security Group > Create Security
+   Group)
 
-5. **Region** is the service location where you start the instance. 
-   AWS hosts services in different regions, you should select the region where you want to start you instance.
+5. **Region** is the service location where you start the instance.
+   AWS hosts services in different regions, you should select the
+   region where you want to start you instance.
 
-When you finish all above things, you should update information into the block 'aws' of **cloudmesh4.yaml** file in 
-**ETC** folder
+When you finish all above things, you should update information into
+the block 'aws' of **cloudmesh4.yaml** file in **ETC** folder
 
-**EC2** provides On-Demand Pricing cloud services based on different CPU, Memory and Storage selections. Please visit 
-this [page](https://aws.amazon.com/ec2/pricing/on-demand/) for more information. In default setting, we use the latest 
-**Ubuntu** image filled in default.image field. If you want to use other images, please update the Image ID into it.
+**EC2** provides On-Demand Pricing cloud services based on different
+CPU, Memory and Storage selections. Please visit this
+[page](https://aws.amazon.com/ec2/pricing/on-demand/) for more
+information. In default setting, we use the latest **Ubuntu** image
+filled in default.image field. If you want to use other images, please
+update the Image ID into it.
 
 
 ### AZURE
@@ -100,7 +115,8 @@ az provider register --namespace Microsoft.Compute
 
 **Service principal**
 
-[Full documentation on creating service principals.](https://docs.microsoft.com/en-us/cli/azure/create-an-azure-service-principal-azure-cli?view=azure-cli-latest) The Azure ARM Driver does not appear to support certificate based
+[Full documentation on creating service principals.](https://docs.microsoft.com/en-us/cli/azure/create-an-azure-service-principal-azure-cli?view=azure-cli-latest)
+The Azure ARM Driver does not appear to support certificate based
 principals at this time.
 
 
@@ -120,14 +136,19 @@ az role assignment create --assignee <APP_ID> --role Owner
 
 ### OPENSTACK
 
-OpenStack is an Infrastructure service that allows users to utilize computing resource in cloud service platform through 
-virtual environments. 
+OpenStack is an Infrastructure service that allows users to utilize
+computing resource in cloud service platform through virtual
+environments.
 
-[Chameleon Cloud](https://www.chameleoncloud.org/) provides an OpenStack installation of version 2015.1 (Kilo) using the
-KVM virtualization technology at the KVM@TACC site. It is important to make sure you are visiting the 
-[KVM@TACC](https://openstack.tacc.chameleoncloud.org/) site so as to get proper installation. Learn more 
-[here](https://chameleoncloud.readthedocs.io/en/latest/technical/kvm.html) 
-to properly set up yout account before proceed to your journey with **cm4**.
+[Chameleon Cloud](https://www.chameleoncloud.org/) provides an
+OpenStack installation of version 2015.1 (Kilo) using the KVM
+virtualization technology at the KVM@TACC site. It is important to
+make sure you are visiting the
+[KVM@TACC](https://openstack.tacc.chameleoncloud.org/) site so as to
+get proper installation. Learn more
+[here](https://chameleoncloud.readthedocs.io/en/latest/technical/kvm.html)
+to properly set up yout account before proceed to your journey with
+**cm4**.
 
 
 ### Extra: Vargrant
@@ -137,8 +158,6 @@ Vagrant with cm4.
 
 ## What we have implemented 
 
-Our group (Yu Luo, Sachith Danushka Withana, Kimball Wu, Rui Li and David Michael Demeulenaere) implement below functionalities under the guidance from 
-Professor von Laszewski.
 
 * the function to install **cm4** and its required packages
 * the function to manage the virtual machines from cloud service providers (Azure, AWS, and Openstack)
@@ -469,6 +488,6 @@ describing the job status of each virtual machine.
  
 :o: please add example
  
- ```commandline
+ ```bash
 
 ```

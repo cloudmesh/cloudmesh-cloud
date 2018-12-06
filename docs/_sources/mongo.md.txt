@@ -1,12 +1,14 @@
 # Cloudmesh Database
 
-Cloudmesh stores its status in a database so that you can easily remember which services you used where and have an accurate account of them.
+Cloudmesh stores its status in a database so that you can easily
+remember which services you used where and have an accurate account of
+them.
 
 We use as a database mongoDB to store this information
 
 To use cloudmesh you simply need to start the database service.
 
-Note: In futire versions this is done automatically. For nw we just od it by hand
+Note: In future versions this is done automatically. For nw we just od it by hand
 
 
 You can start the database service with
@@ -27,9 +29,9 @@ You can test the database service with
 $ cm4 admin mongo status
 ```
 
-The database will be started on teh port as specified in `~/.cloudmesh/cloudmesh4.yaml`
+The database will be started on the port as specified in `~/.cloudmesh/cloudmesh4.yaml`
 
-Additional values can be specivied or are available to locate the downloads.
+Additional values can be specified or are available to locate the downloads.
 
 ```
     mongo:

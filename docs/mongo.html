@@ -28,8 +28,8 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="CM4 Report" href="CM4README.html" />
-    <link rel="prev" title="Instalation" href="install.html" /> 
+    <link rel="next" title="CM4 Details" href="CM4README.html" />
+    <link rel="prev" title="Installation" href="install.html" /> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -85,9 +85,9 @@
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="contributors.html">Contributors</a></li>
-<li class="toctree-l1"><a class="reference internal" href="install.html">Instalation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Cloudmesh Database</a></li>
-<li class="toctree-l1"><a class="reference internal" href="CM4README.html">CM4 Report</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CM4README.html">CM4 Details</a></li>
 <li class="toctree-l1"><a class="reference internal" href="README.html">Cloudmesh cm v4</a></li>
 <li class="toctree-l1"><a class="reference internal" href="aws.html">AWS cm</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ufo.html">CM4 REST Api</a></li>
@@ -161,10 +161,12 @@
             
   <div class="section" id="cloudmesh-database">
 <span id="cloudmesh-database"></span><h1>Cloudmesh Database<a class="headerlink" href="#cloudmesh-database" title="Permalink to this headline">¶</a></h1>
-<p>Cloudmesh stores its status in a database so that you can easily remember which services you used where and have an accurate account of them.</p>
+<p>Cloudmesh stores its status in a database so that you can easily
+remember which services you used where and have an accurate account of
+them.</p>
 <p>We use as a database mongoDB to store this information</p>
 <p>To use cloudmesh you simply need to start the database service.</p>
-<p>Note: In futire versions this is done automatically. For nw we just od it by hand</p>
+<p>Note: In future versions this is done automatically. For nw we just od it by hand</p>
 <p>You can start the database service with</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ cm4 admin mongo start
 </pre></div>
@@ -177,8 +179,8 @@
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ cm4 admin mongo status
 </pre></div>
 </div>
-<p>The database will be started on teh port as specified in <code class="docutils literal notranslate"><span class="pre">~/.cloudmesh/cloudmesh4.yaml</span></code></p>
-<p>Additional values can be specivied or are available to locate the downloads.</p>
+<p>The database will be started on the port as specified in <code class="docutils literal notranslate"><span class="pre">~/.cloudmesh/cloudmesh4.yaml</span></code></p>
+<p>Additional values can be specified or are available to locate the downloads.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>    <span class="n">mongo</span><span class="p">:</span>
       <span class="n">MONGO_AUTOINSTALL</span><span class="p">:</span> <span class="kc">True</span>
       <span class="n">MONGO_BREWINSTALL</span><span class="p">:</span> <span class="kc">False</span>
@@ -209,10 +211,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="CM4README.html" class="btn btn-neutral float-right" title="CM4 Report" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="CM4README.html" class="btn btn-neutral float-right" title="CM4 Details" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="install.html" class="btn btn-neutral" title="Instalation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="install.html" class="btn btn-neutral" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

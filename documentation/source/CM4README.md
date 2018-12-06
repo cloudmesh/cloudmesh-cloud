@@ -135,27 +135,6 @@ to properly set up yout account before proceed to your journey with **cm4**.
 Please refer to [here](https://github.com/cloudmesh-community/cm/tree/master/cm4/vagrant/README.md) to see how to setup 
 Vagrant with cm4.
 
-## [`cloudmesh4.yaml`] configuration file
-
-The cloudmesh4.yaml file contains all the configurations required for CM4 to run. 
-By default it's located in the Cloudmesh home directory (~/.cloudmesh/cloudmesh4.yaml).
-
-#### Use the Configurations file
-To use the configurations in CM4, you need to import the Config class and use the config
-object provided by that class to access and manipulate the configuration file. 
-
-##### Getting the config object
-```python
-from cm4.configuration.config import Config
-config = Config().data["cloudmesh"]
-```
-
-##### Getting values
-To get values from the configurations, you can call level by level from top-down config.
-```python
-MONGO_HOST = config["data"]["mongo"]["MONGO_HOST"]
-```
-
 ## What we have implemented 
 
 Our group (Yu Luo, Sachith Danushka Withana, Kimball Wu, Rui Li and David Michael Demeulenaere) implement below functionalities under the guidance from 
@@ -178,14 +157,61 @@ Professor von Laszewski.
 
 ```
 
-### 2. The Configuration files and some relative function classes (Sachith, Kimball)
+### 2. The Configuration files and some relative function classes (Sachith)
 
-We save all configuration files in `etc` folder and some relative classes into the folder `cm/configuration`.
+The cloudmesh4.yaml file contains all the configurations required for CM4 to run. 
+By default it's located in the Cloudmesh home directory (~/.cloudmesh/cloudmesh4.yaml).
 
-:o: please descirbe what you have done. For example, the class file with short description
+#### Use the Configurations file
+To use the configurations in CM4, you need to import the Config class and use the config
+object provided by that class to access and manipulate the configuration file. 
+
+##### Getting the config object
+```python
+from cm4.configuration.config import Config
+config = Config().data["cloudmesh"]
+```
+
+##### Getting values
+To get values from the configurations, you can call level by level from top-down config.
+```python
+MONGO_HOST = config["data"]["mongo"]["MONGO_HOST"]
+```
+
+### 3. Using the Counter file
+CM4 keeps track of all the VMs running using counters for each VM. 
+The counter file is located at 
+```bash
+~/.cloudmesh/counter.yaml
+```
+
+#### Using the counter
+
+```python
+from cm4.configuration.counter import Counter
+counter = Counter()
+```
+
+##### Incrementing and Decrementing the counter values
+```python
+# to update a specific VM counter
+counter.incr("<VM_NAME>")
+counter.decr("<VM_NAME>")
+
+# to update the total vm counter
+counter.incr()
+counter.decr()
+```
+
+##### Getting and Setting the counter values
+```python
+# to update a specific VM counter
+counter.get("<VM_NAME>")
+counter.set("<VM_NAME>", "value")
+```
 
 
-### 3. The MongoDB Database in **cm4** Project (Yu)
+### 4. The MongoDB Database in **cm4** Project (Yu)
 
 We add the database into **cm4** with two reasons:
 

@@ -99,7 +99,6 @@ def process_arguments(arguments):
 
     arguments = dotdict(arguments)
 
-
     if arguments.get("--version"):
         print(version)
 

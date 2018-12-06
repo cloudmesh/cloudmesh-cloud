@@ -42,13 +42,19 @@ class Script(object):
 
     def __init__(self, script):
         if script is not None:
-            self.run(self, script)
+            self.run(script)
 
     def run(self, script):
-        lines = textwrap.dedent(script)
+        lines = textwrap.dedent(script).strip().split("\n")
+        print("===============")
         print (lines)
-        for line in script:
-            subprocess.check_output(line, shell=True)
+        print("===============")
+        for line in lines:
+            print (line)
+            cmd = line.split(" ")
+            print (cmd)
+            r = subprocess.check_output(cmd, shell=True)
+            print (r)
 
 class Brew(object):
     @classmethod

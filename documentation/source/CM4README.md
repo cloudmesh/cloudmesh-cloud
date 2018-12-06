@@ -137,10 +137,24 @@ Vagrant with cm4.
 
 ## [`cloudmesh4.yaml`] configuration file
 
-Sachith
+The cloudmesh4.yaml file contains all the configurations required for CM4 to run. 
+By default it's located in the Cloudmesh home directory (~/.cloudmesh/cloudmesh4.yaml).
 
+#### Use the Configurations file
+To use the configurations in CM4, you need to import the Config class and use the config
+object provided by that class to access and manipulate the configuration file. 
 
+##### Getting the config object
+```python
+from cm4.configuration.config import Config
+config = Config().data["cloudmesh"]
+```
 
+##### Getting values
+To get values from the configurations, you can call level by level from top-down config.
+```python
+MONGO_HOST = config["data"]["mongo"]["MONGO_HOST"]
+```
 
 ## What we have implemented 
 

@@ -4,6 +4,7 @@
 
     Usage:
       cm4 admin mongo install [--brew] [--download=PATH]
+      cm4 admin mongo status
       cm4 admin mongo start
       cm4 admin mongo stop
       cm4 admin mongo backup FILENAME
@@ -90,13 +91,23 @@ import cm4.data.data
 import cm4.vm.Vm
 import cm4.openstack.OpenstackCM
 import cm4
+import cm4.mongo.MongoDBController
+from cm4.common.dotdict import dotdict
 
 
 def process_arguments(arguments):
     version = cm4.__version__
 
+    arguments = dotdict(arguments)
+
+
     if arguments.get("--version"):
         print(version)
+
+    elif arguments.admin and arguments.mongo:
+        print ("MONGO")
+        result = cm4.mongo.MongoDBController.process_arguments(arguments)
+        print(result)
 
     elif arguments.get("vm"):
         result = cm4.vm.Vm.process_arguments(arguments)

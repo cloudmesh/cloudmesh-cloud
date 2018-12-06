@@ -10,9 +10,12 @@ from cm4.common.shell import Script
 from cm4.common.shell import Shell, Brew
 from cm4.common.shell import SystemPath
 
-class MongoDBController(object):
+class MongoInstaller(object):
 
     def __init__(self):
+        """
+        Initialization of the MOngo installer
+        """
 
         self.config = Config()
         self.data = self.config["cloudmesh"]["data"]["mongo"]
@@ -22,7 +25,7 @@ class MongoDBController(object):
 
     def install(self):
         """
-        check where the MongoDB is installed in cmmongo location.
+        check where the MongoDB is installed in mongo location.
         if MongoDB is not installed, python help install it
         """
         path = self.data["MONGO_PATH"]
@@ -38,14 +41,13 @@ class MongoDBController(object):
             self.data["MONGO_CODE"] = self.data["MONGO_DOWNLAOD"][platform]
 
             if platform == 'linux':
-                self.install_linux()
+                self.linux()
             if platform == 'darwin':
-                self.install_darwin()
+                self.darwin()
             if platform == 'windows':
-                # TODO
-                raise NotImplementedError
+                self.windows()
 
-    def install_linux(self):
+    def linux(self):
         # TODO UNTESTED
         """
         install MongoDB in Linux system (Ubuntu)
@@ -63,10 +65,8 @@ class MongoDBController(object):
 
         # THIS IS BROKEN AS ITS A SUPBROCESS? '. ~/.bashrc'
 
-        # initial mongodb config file
-        self.initial_mongo_config(False)
 
-    def install_darwin(self, brew=False):
+    def darwin(self, brew=False):
         """
         install MongoDB in Darwin system (Mac)
         """
@@ -90,8 +90,28 @@ class MongoDBController(object):
 
             # THIS IS BROKEN AS ITS A SUPBROCESS? '. ~/.bashrc'
 
-            # initial mongodb config file
-            self.initial_mongo_config(False)
+    def windows(self, brew=False):
+        """
+        install MongoDB in Darwin system (Mac)
+        """
+
+        # TODO
+        raise NotImplementedError
+
+
+class MongoDBController(object):
+
+    def __init__(self):
+
+        self.config = Config()
+        self.data = self.config["cloudmesh"]["data"]["mongo"]
+
+
+        self.initial_mongo_config(False)
+
+    def __str__(self):
+        return yaml.dump(self.data, default_flow_style=False, indent=2)
+
 
     def update_auth(self):
         """
@@ -208,6 +228,56 @@ class MongoDBController(object):
         pprint(client.server_info())
 
 
+def process_arguments(arguments):
+    """
+    Process command line arguments to execute VM actions.
+    Called from cm4.command.command
+    :param arguments:
+    """
+    result = None
+
+    """
+      cm4 admin mongo install [--brew] [--download=PATH]
+      cm4 admin mongo start
+      cm4 admin mongo stop
+      cm4 admin mongo backup FILENAME
+      cm4 admin mongo load FILENAME
+      cm4 admin mongo help
+"""
+
+    if arguments.install:
+
+        print("install")
+
+    elif arguments.start:
+
+        print("start")
+
+    elif arguments.stop:
+
+        print("stop")
+
+    elif arguments.backup:
+
+        print("backup")
+
+    elif arguments.load:
+
+        print("backup")
+
+    elif arguments.status:
+
+        mongo = MongoDBController()
+        r = mongo.status()
+        return r
+
+    elif arguments.load:
+
+        print("help")
+
+    return result
+
+
 def main():
     test = MongoDBController()
     # test.set_auth()
@@ -217,8 +287,8 @@ def main():
     # test.run_mongodb()
     # test.shutdown_mongodb()
     test.status()
-    # test.dump('~/.cloudmesh/demo/version1/cm/cm4/cmmongo/MongoDB/backup')
-    # test.restore ('~/.coudmesh/demo/version1/cm/cm4/cmmongo/MongoDB/backup')
+    # test.dump('~/.cloudmesh/demo/version1/cm/cm4/mongo/MongoDB/backup')
+    # test.restore ('~/.coudmesh/demo/version1/cm/cm4/mongo/MongoDB/backup')
 
 
 if __name__ == "__main__":

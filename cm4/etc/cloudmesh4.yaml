@@ -153,6 +153,10 @@ cloudmesh:
         credentials:
           username:                 TBD
           pulickey:                 ~/.ssh/id_rsa.pub
+    slurm-taito:
+        name:                       taito
+        credentials:
+          sshconfigpath:            ~/vms/sshconfig_slurm
     clustera:
       computer_a:                   ##   computer:
         name:                       computer_a

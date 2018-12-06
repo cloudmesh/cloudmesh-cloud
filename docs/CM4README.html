@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>CM4 Report &mdash; cm4 alpha documentation</title>
+  <title>CM4 Details &mdash; cm4 alpha documentation</title>
   
 
   
@@ -27,7 +27,9 @@
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" /> 
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Cloudmesh cm v4" href="README.html" />
+    <link rel="prev" title="Cloudmesh Database" href="mongo.html" /> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -81,7 +83,53 @@
             
             
               <p class="caption"><span class="caption-text">Contents:</span></p>
-<ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="contributors.html">Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Instalation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mongo.html">Cloudmesh Database</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">CM4 Details</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#providers-that-cm4-could-access">Providers that <em>cm4</em> could access</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#aws">AWS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#azure">AZURE</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#azure-setup">Azure Setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#openstack">OPENSTACK</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#extra-vargrant">Extra: Vargrant</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#what-we-have-implemented">What we have implemented</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#the-preparation-for-installing-cm4-david">1. The Preparation for installing <strong>cm4</strong> (David)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#the-configuration-files-and-some-relative-function-classes-sachith">2. The Configuration files and some relative function classes (Sachith)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#use-the-configurations-file">Use the Configurations file</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#using-the-counter-file">3. Using the Counter file</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#using-the-counter">Using the counter</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#the-mongodb-database-in-cm4-yu">4. The MongoDB Database in <strong>cm4</strong> (Yu)</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#data-scheme-in-mongodb">Data Scheme in MongoDB</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#security-in-mongodb">Security in MongoDB</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#install-mongodb-into-local">Install MongoDB Into Local</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#insert-and-update-documents-in-mongodb">Insert and Update Documents in MongoDB</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#the-virtual-machine-provider">4. The Virtual Machine Provider</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#aws-vm-operations-yu">4.1 AWS VM Operations (Yu)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#azure-vm-operation-david">4.2 Azure VM Operation (David)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#chameleon-vm-operation-rui-and-kimball">4.3 Chameleon VM Operation (Rui and Kimball)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#flask-rest-api-sachith">5. Flask Rest API (Sachith)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#pre-requisites">Pre-requisites</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#how-to-run-the-rest-api">How to run the REST API</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#api">API</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#examples">Examples</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#dev-restricting-certain-ips-for-certain-rest-calls">Dev - restricting certain ips for certain rest calls</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#extra-run-command-script-in-aws-by-cm4">Extra: Run Command/Script in AWS by <strong>cm4</strong></a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="README.html">Cloudmesh cm v4</a></li>
 <li class="toctree-l1"><a class="reference internal" href="aws.html">AWS cm</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ufo.html">CM4 REST Api</a></li>
@@ -134,7 +182,7 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>CM4 Report</li>
+      <li>CM4 Details</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -153,20 +201,20 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="cm4-report">
-<span id="cm4-report"></span><h1>CM4 Report<a class="headerlink" href="#cm4-report" title="Permalink to this headline">¶</a></h1>
-<p>In cloudmesh cm4 project, we are using the <strong>Python</strong> tool to implement a program that could remotely control cloud
+  <div class="section" id="cm4-details">
+<span id="cm4-details"></span><h1>CM4 Details<a class="headerlink" href="#cm4-details" title="Permalink to this headline">¶</a></h1>
+<p>In cloudmesh cm4, we are using the <strong>Python</strong> tool to implement a program that could remotely control cloud
 nodes provided by different organizations and run experiments in parallel.</p>
-<p>The goal of <strong>cm4</strong> project is to provide a platform that users could directly control the nodes they have, like AWS,
+<p>The goal of <strong>cm4</strong> is to provide a platform that users could directly control the nodes they have, like AWS,
 Azure, and OPENSTACK instances. Users could decide to start, stop, destroy, create, resume, and suspend different nodes
 without accessing the <strong>Console</strong> interfaces of providers. Then users could install experiment environment, software,
 and other required tools in these running nodes. Finally, an experiment could be executed in running nodes by sending
-the commands from <strong>cm4</strong> platform. Meanwhile, we embed the NoSQL database <strong>MongoDB</strong> into project for managing the
+the commands from <strong>cm4</strong> platform. Meanwhile, we embed the NoSQL database <strong>MongoDB</strong> into cm4 for managing the
 nodes and experiments.</p>
 <div class="section" id="providers-that-cm4-could-access">
 <span id="providers-that-cm4-could-access"></span><h2>Providers that <em>cm4</em> could access<a class="headerlink" href="#providers-that-cm4-could-access" title="Permalink to this headline">¶</a></h2>
-<p>In this project, we are using the python library <a class="reference external" href="https://libcloud.apache.org"><strong>Apache Libcloud</strong></a> to interact with
-cloud service providers. Currently, in the <strong>cm4</strong> project, we could access:</p>
+<p>We are using the python library <a class="reference external" href="https://libcloud.apache.org"><strong>Apache Libcloud</strong></a> to interact with
+cloud service providers. Currently, in the <strong>cm4</strong>, we could access:</p>
 <ul class="simple">
 <li><a class="reference external" href="https://aws.amazon.com"><strong>AWS</strong></a></li>
 <li><a class="reference external" href="https://azure.microsoft.com/en-us/"><strong>AZURE</strong></a></li>
@@ -183,7 +231,7 @@ cloud service providers. Currently, in the <strong>cm4</strong> project, we coul
 <li>Create the node</li>
 </ul>
 <p><strong>Improvement</strong>: Sometimes adjustments to nodes are necessary (switch between different images/OS and service sizes).
-Now our project also allow users to customize their instances across multiple providers by using refactor functions to
+Cm4 also allow users to customize their instances across multiple providers by using refactor functions to
 support their management tasks.</p>
 <ul class="simple">
 <li>Resize the node</li>
@@ -351,8 +399,8 @@ The counter file is located at</p>
 </div>
 </div>
 </div>
-<div class="section" id="the-mongodb-database-in-cm4-project-yu">
-<span id="the-mongodb-database-in-cm4-project-yu"></span><h3>4. The MongoDB Database in <strong>cm4</strong> Project (Yu)<a class="headerlink" href="#the-mongodb-database-in-cm4-project-yu" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="the-mongodb-database-in-cm4-yu">
+<span id="the-mongodb-database-in-cm4-yu"></span><h3>4. The MongoDB Database in <strong>cm4</strong> (Yu)<a class="headerlink" href="#the-mongodb-database-in-cm4-yu" title="Permalink to this headline">¶</a></h3>
 <p>We add the database into <strong>cm4</strong> with two reasons:</p>
 <ul class="simple">
 <li>provide the information of nodes in different providers.</li>
@@ -422,7 +470,7 @@ The document in <code class="docutils literal notranslate"><span class="pre">sta
 </div>
 <div class="section" id="security-in-mongodb">
 <span id="security-in-mongodb"></span><h4>Security in MongoDB<a class="headerlink" href="#security-in-mongodb" title="Permalink to this headline">¶</a></h4>
-<p>For data security purpose, we enable the MongoDB security functionality in <strong>cm4</strong> project.</p>
+<p>For data security purpose, we enable the MongoDB security functionality in **cm4*.</p>
 <p>When users first time start the <strong>MongoDB</strong>, they have to add an account and open an port to access all database in MongoDB. Because we save all nodes’ information into MongoDB inclduing the <em>Authorization</em> information. If your MongoDB is open to everyone, it is easy for hacker to steal your information. So you are requried to set the <strong>username</strong> and <strong>password</strong> for the security purpose.</p>
 <p>If you want to learn more about the <strong>Security</strong> in MongoDB, you can visit this <a class="reference external" href="https://docs.mongodb.com/manual/security/">page</a> or visit the brief introduction about the MongoDB</p>
 <p>Here is a quick reference about how to
@@ -499,7 +547,7 @@ cloud service providers.</p>
 <code class="docutils literal notranslate"><span class="pre">cm4/vm/Aws.py</span></code> to create the driver based on the configuration to connect to AWS.</p>
 <p>Inherit the <strong>Libcloud</strong> library, we did some modifications on <code class="docutils literal notranslate"><span class="pre">AWSDriver</span></code> to extend the operation. The <code class="docutils literal notranslate"><span class="pre">create_node</span></code>
 method would create a virtual machine in AWS based on the configuration of <code class="docutils literal notranslate"><span class="pre">cloudmesh4.yaml</span></code> file</p>
-<p>Here are some samples for running these operations by using <strong>cm4</strong> project:</p>
+<p>Here are some samples for running these operations by using <strong>cm4</strong>:</p>
 <p>:o: please update the commands and results here</p>
 <div class="highlight-commandline notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
@@ -532,7 +580,7 @@ method would create a virtual machine in AWS based on the configuration of <code
 </pre></div>
 </div>
 <ul class="simple">
-<li>Configure the cm4 project</li>
+<li>Configure the cm4</li>
 </ul>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install .
 </pre></div>
@@ -586,7 +634,7 @@ method would create a virtual machine in AWS based on the configuration of <code
 <span id="extra-run-command-script-in-aws-by-cm4"></span><h2>Extra: Run Command/Script in AWS by <strong>cm4</strong><a class="headerlink" href="#extra-run-command-script-in-aws-by-cm4" title="Permalink to this headline">¶</a></h2>
 <p>The <code class="docutils literal notranslate"><span class="pre">cm4/aws/CommandAWS.py</span></code> contains some methods to run commands/scripts from local to remote AWS virtual machines.
 Any command/script operations executed by <code class="docutils literal notranslate"><span class="pre">CommandAWS.py</span></code> would be saved into MongoDB.</p>
-<p>In <strong>cm4</strong> project, we use python running <strong>ssh</strong> client to connect the AWS virtual machines. Before running the commands
+<p>In <strong>cm4</strong>, we use python running <strong>ssh</strong> client to connect the AWS virtual machines. Before running the commands
 or scripts remotely, the <code class="docutils literal notranslate"><span class="pre">CommandAWS.py</span></code> would create the job document in MongoDB for saving the experiment information.
 This job document contains the information of virtual machine name, the running command or script, and job status, input,
 output and description. Meanwhile, the job document_id would be added into status document of the <code class="docutils literal notranslate"><span class="pre">status</span></code> collection for
@@ -603,6 +651,15 @@ describing the job status of each virtual machine.</p>
            
           </div>
           <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="README.html" class="btn btn-neutral float-right" title="Cloudmesh cm v4" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="mongo.html" class="btn btn-neutral" title="Cloudmesh Database" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
   
 
   <hr/>

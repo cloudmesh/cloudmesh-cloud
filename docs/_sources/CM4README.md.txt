@@ -1,20 +1,20 @@
-# CM4 Report
+# CM4 Details
 
 
-In cloudmesh cm4 project, we are using the **Python** tool to implement a program that could remotely control cloud 
+In cloudmesh cm4, we are using the **Python** tool to implement a program that could remotely control cloud 
 nodes provided by different organizations and run experiments in parallel.
 
-The goal of **cm4** project is to provide a platform that users could directly control the nodes they have, like AWS, 
+The goal of **cm4** is to provide a platform that users could directly control the nodes they have, like AWS, 
 Azure, and OPENSTACK instances. Users could decide to start, stop, destroy, create, resume, and suspend different nodes 
 without accessing the **Console** interfaces of providers. Then users could install experiment environment, software, 
 and other required tools in these running nodes. Finally, an experiment could be executed in running nodes by sending 
-the commands from **cm4** platform. Meanwhile, we embed the NoSQL database **MongoDB** into project for managing the
+the commands from **cm4** platform. Meanwhile, we embed the NoSQL database **MongoDB** into cm4 for managing the
 nodes and experiments.
 
 ## Providers that *cm4* could access
 
-In this project, we are using the python library [**Apache Libcloud**](https://libcloud.apache.org) to interact with 
-cloud service providers. Currently, in the **cm4** project, we could access:
+We are using the python library [**Apache Libcloud**](https://libcloud.apache.org) to interact with 
+cloud service providers. Currently, in the **cm4**, we could access:
 
 * [**AWS**](https://aws.amazon.com)
 * [**AZURE**](https://azure.microsoft.com/en-us/)
@@ -31,7 +31,7 @@ By using the **Apache Libcloud** API, we could do these operations for nodes in 
 * Create the node
 
 **Improvement**: Sometimes adjustments to nodes are necessary (switch between different images/OS and service sizes). 
-Now our project also allow users to customize their instances across multiple providers by using refactor functions to 
+Cm4 also allow users to customize their instances across multiple providers by using refactor functions to 
 support their management tasks.
 * Resize the node
 * Rebuild(with different image) the node
@@ -211,7 +211,7 @@ counter.set("<VM_NAME>", "value")
 ```
 
 
-### 4. The MongoDB Database in **cm4** Project (Yu)
+### 4. The MongoDB Database in **cm4** (Yu)
 
 We add the database into **cm4** with two reasons:
 
@@ -284,7 +284,7 @@ There are three types of documents in MongoDB:
 
 #### Security in MongoDB
 
-For data security purpose, we enable the MongoDB security functionality in **cm4** project.
+For data security purpose, we enable the MongoDB security functionality in **cm4*.
 
 When users first time start the **MongoDB**, they have to add an account and open an port to access all database in MongoDB. Because we save all nodes' information into MongoDB inclduing the *Authorization* information. If your MongoDB is open to everyone, it is easy for hacker to steal your information. So you are requried to set the **username** and **password** for the security purpose. 
 
@@ -377,7 +377,7 @@ The **Libcloud** library has enough methods to support the operations for managi
 Inherit the **Libcloud** library, we did some modifications on `AWSDriver` to extend the operation. The `create_node`
 method would create a virtual machine in AWS based on the configuration of `cloudmesh4.yaml` file  
 
-Here are some samples for running these operations by using **cm4** project:
+Here are some samples for running these operations by using **cm4**:
 
 :o: please update the commands and results here
 
@@ -411,7 +411,7 @@ Use pip install to install the following packages.
 cd ~/git/cloudmesh/cm
 ```
 
-- Configure the cm4 project
+- Configure the cm4
 
 ```bash
 pip install .
@@ -461,7 +461,7 @@ def limit_remote_addr():
 The `cm4/aws/CommandAWS.py` contains some methods to run commands/scripts from local to remote AWS virtual machines.
 Any command/script operations executed by `CommandAWS.py` would be saved into MongoDB.
  
-In **cm4** project, we use python running **ssh** client to connect the AWS virtual machines. Before running the commands 
+In **cm4**, we use python running **ssh** client to connect the AWS virtual machines. Before running the commands 
 or scripts remotely, the `CommandAWS.py` would create the job document in MongoDB for saving the experiment information.
 This job document contains the information of virtual machine name, the running command or script, and job status, input, 
 output and description. Meanwhile, the job document_id would be added into status document of the `status` collection for 

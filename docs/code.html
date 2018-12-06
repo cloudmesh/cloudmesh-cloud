@@ -1,0 +1,2071 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Code Documentation &mdash; cm4 alpha documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="VM Description" href="vm.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> cm4
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="README.html">Cloudmesh cm v4</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aws.html">AWS cm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ufo.html">CM4 REST Api</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vagrant.html">ehvagrant: enhanced Vagrant interface with importable python module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vcluster.html">Virtual Cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vm.html">VM Description</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Code Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-cm4.command.command">Command</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-cm4.aws.CommandAWS">AWS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#mongo">Mongo</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#module-cm4.cmmongo.mongoDB">MongoDB</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#controler">Controler</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#common">Common</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#module-cm4.common.util">Util</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-cm4.common.console">Console</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-cm4.common.debug">Debug</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-cm4.common.shell">Shell</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-cm4.vcluster.VirtualCluster">Virtual Cluster</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-cm4.configuration.config">Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-cm4.data.db.DBProviderABC">Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-cm4.flask_rest_api.rest_api">Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-cm4.openstack.OpenstackCM">Openstack</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-cm4.vagrant.vagrant">Vagrant</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-cm4.vm.Cloud">VM</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">cm4</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Code Documentation</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/code.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-cm4">
+<span id="code-documentation"></span><h1>Code Documentation<a class="headerlink" href="#module-cm4" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-cm4.command.command">
+<span id="command"></span><h2>Command<a class="headerlink" href="#module-cm4.command.command" title="Permalink to this headline">¶</a></h2>
+<p>Cloudmesh 4</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Usage</span><span class="p">:</span>
+  <span class="n">cm4</span> <span class="n">vagrant</span> <span class="n">create</span> <span class="o">--</span><span class="n">count</span><span class="o">=</span><span class="n">VMNUMBER</span> <span class="p">[</span><span class="o">--</span><span class="n">debug</span><span class="p">]</span>
+  <span class="n">cm4</span> <span class="n">vagrant</span> <span class="n">start</span> <span class="p">[</span><span class="o">--</span><span class="n">vms</span><span class="o">=</span><span class="n">VMLIST</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">debug</span><span class="p">]</span>
+  <span class="n">cm4</span> <span class="n">vagrant</span> <span class="n">stop</span> <span class="p">[</span><span class="o">--</span><span class="n">vms</span><span class="o">=</span><span class="n">VMLIST</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">debug</span><span class="p">]</span>
+  <span class="n">cm4</span> <span class="n">vagrant</span> <span class="n">destroy</span> <span class="p">[</span><span class="o">--</span><span class="n">vms</span><span class="o">=</span><span class="n">VMLIST</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">debug</span><span class="p">]</span>
+  <span class="n">cm4</span> <span class="n">vagrant</span> <span class="n">status</span> <span class="p">[</span><span class="o">--</span><span class="n">vms</span><span class="o">=</span><span class="n">VMLIST</span><span class="p">]</span>
+  <span class="n">cm4</span> <span class="n">vagrant</span> <span class="nb">list</span>
+  <span class="n">cm4</span> <span class="n">vagrant</span> <span class="n">ssh</span> <span class="n">NAME</span>
+  <span class="n">cm4</span> <span class="n">vagrant</span> <span class="n">run</span> <span class="n">COMMAND</span>  <span class="p">[</span><span class="o">--</span><span class="n">vms</span><span class="o">=</span><span class="n">VMLIST</span><span class="p">]</span>
+  <span class="n">cm4</span> <span class="n">vagrant</span> <span class="n">script</span> <span class="n">run</span> <span class="n">SCRIPT</span> <span class="p">[</span><span class="o">--</span><span class="n">vms</span><span class="o">=</span><span class="n">VMLIST</span><span class="p">]</span>
+  <span class="n">cm4</span> <span class="n">data</span> <span class="n">add</span> <span class="n">FILE</span>
+  <span class="n">cm4</span> <span class="n">data</span> <span class="n">add</span> <span class="n">SERVICE</span> <span class="n">FILE</span>
+  <span class="n">cm4</span> <span class="n">data</span> <span class="n">get</span> <span class="n">FILE</span>
+  <span class="n">cm4</span> <span class="n">data</span> <span class="n">get</span> <span class="n">FILE</span> <span class="n">DEST_FOLDER</span>
+  <span class="n">cm4</span> <span class="n">data</span> <span class="k">del</span> <span class="n">FILE</span>
+  <span class="n">cm4</span> <span class="n">data</span> <span class="p">(</span><span class="n">ls</span> <span class="o">|</span> <span class="nb">dir</span><span class="p">)</span>
+  <span class="n">cm4</span> <span class="nb">set</span> <span class="n">cloud</span> <span class="n">CLOUD</span>
+  <span class="n">cm4</span> <span class="nb">set</span> <span class="n">group</span> <span class="n">GROUP</span>
+  <span class="n">cm4</span> <span class="nb">set</span> <span class="n">role</span> <span class="n">ROLE</span>
+  <span class="n">cm4</span> <span class="nb">set</span> <span class="n">host</span> <span class="n">HOSTNAME</span>
+  <span class="n">cm4</span> <span class="nb">set</span> <span class="n">cluster</span> <span class="n">CLUSTERNAME</span>
+  <span class="n">cm4</span> <span class="nb">set</span> <span class="n">experiment</span> <span class="n">EXPERIMENT</span>
+  <span class="n">cm4</span> <span class="nb">set</span> <span class="o">--</span><span class="n">key</span><span class="o">=</span><span class="n">KEY</span> <span class="o">--</span><span class="n">value</span><span class="o">=</span><span class="n">VALUE</span>
+  <span class="n">cm4</span> <span class="n">vm</span> <span class="n">start</span> <span class="p">[</span><span class="n">VMNAME</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">vms</span><span class="o">=</span><span class="n">VMLIST</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">count</span><span class="o">=</span><span class="n">VMNUMBER</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">debug</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">dryrun</span><span class="p">]</span>
+  <span class="n">cm4</span> <span class="n">vm</span> <span class="n">stop</span> <span class="p">[</span><span class="o">--</span><span class="n">vms</span><span class="o">=</span><span class="n">VMLIST</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">debug</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">dryrun</span><span class="p">]</span>
+  <span class="n">cm4</span> <span class="n">vm</span> <span class="n">destroy</span> <span class="p">[</span><span class="o">--</span><span class="n">vms</span><span class="o">=</span><span class="n">VMLIST</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">debug</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">dryrun</span><span class="p">]</span>
+  <span class="n">cm4</span> <span class="n">vm</span> <span class="n">status</span> <span class="p">[</span><span class="o">--</span><span class="n">vms</span><span class="o">=</span><span class="n">VMLIST</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">dryrun</span><span class="p">]</span>
+  <span class="n">cm4</span> <span class="n">vm</span> <span class="nb">list</span>
+  <span class="n">cm4</span> <span class="n">vm</span> <span class="n">ssh</span> <span class="n">NAME</span>
+  <span class="n">cm4</span> <span class="n">vm</span> <span class="n">run</span> <span class="n">COMMAND</span>  <span class="p">[</span><span class="o">--</span><span class="n">vms</span><span class="o">=&lt;</span><span class="n">vmList</span><span class="o">&gt;</span><span class="p">]</span>
+  <span class="n">cm4</span> <span class="n">vm</span> <span class="n">script</span> <span class="n">run</span> <span class="n">SCRIPT</span> <span class="p">[</span><span class="o">--</span><span class="n">vms</span><span class="o">=&lt;</span><span class="n">vmList</span><span class="o">&gt;</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">dryrun</span><span class="p">]</span>
+  <span class="n">cm4</span> <span class="n">vcluster</span> <span class="n">create</span> <span class="n">virtual</span><span class="o">-</span><span class="n">cluster</span> <span class="n">VIRTUALCLUSTER_NAME</span> <span class="o">--</span><span class="n">clusters</span><span class="o">=</span><span class="n">CLUSTERS_LIST</span> <span class="p">[</span><span class="o">--</span><span class="n">computers</span><span class="o">=</span><span class="n">COMPUTERS_LIST</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">debug</span><span class="p">]</span>
+  <span class="n">cm4</span> <span class="n">vcluster</span> <span class="n">destroy</span> <span class="n">virtual</span><span class="o">-</span><span class="n">cluster</span> <span class="n">VIRTUALCLUSTER_NAME</span>
+  <span class="n">cm4</span> <span class="n">vcluster</span> <span class="n">create</span> <span class="n">runtime</span><span class="o">-</span><span class="n">config</span> <span class="n">CONFIG_NAME</span> <span class="n">PROCESS_NUM</span> <span class="ow">in</span><span class="p">:</span><span class="n">params</span> <span class="n">out</span><span class="p">:</span><span class="n">stdout</span> <span class="p">[</span><span class="o">--</span><span class="n">fetch</span><span class="o">-</span><span class="n">proc</span><span class="o">-</span><span class="n">num</span><span class="o">=</span><span class="n">FETCH_PROCESS_NUM</span> <span class="p">[</span><span class="n">default</span><span class="o">=</span><span class="mi">1</span><span class="p">]]</span> <span class="p">[</span><span class="o">--</span><span class="n">download</span><span class="o">-</span><span class="n">later</span> <span class="p">[</span><span class="n">default</span><span class="o">=</span><span class="kc">True</span><span class="p">]]</span>  <span class="p">[</span><span class="o">--</span><span class="n">debug</span><span class="p">]</span>
+  <span class="n">cm4</span> <span class="n">vcluster</span> <span class="n">create</span> <span class="n">runtime</span><span class="o">-</span><span class="n">config</span> <span class="n">CONFIG_NAME</span> <span class="n">PROCESS_NUM</span> <span class="ow">in</span><span class="p">:</span><span class="n">params</span> <span class="n">out</span><span class="p">:</span><span class="n">file</span> <span class="p">[</span><span class="o">--</span><span class="n">fetch</span><span class="o">-</span><span class="n">proc</span><span class="o">-</span><span class="n">num</span><span class="o">=</span><span class="n">FETCH_PROCESS_NUM</span> <span class="p">[</span><span class="n">default</span><span class="o">=</span><span class="mi">1</span><span class="p">]]</span> <span class="p">[</span><span class="o">--</span><span class="n">download</span><span class="o">-</span><span class="n">later</span> <span class="p">[</span><span class="n">default</span><span class="o">=</span><span class="kc">True</span><span class="p">]]</span>  <span class="p">[</span><span class="o">--</span><span class="n">debug</span><span class="p">]</span>
+  <span class="n">cm4</span> <span class="n">vcluster</span> <span class="n">create</span> <span class="n">runtime</span><span class="o">-</span><span class="n">config</span> <span class="n">CONFIG_NAME</span> <span class="n">PROCESS_NUM</span> <span class="ow">in</span><span class="p">:</span><span class="n">params</span><span class="o">+</span><span class="n">file</span> <span class="n">out</span><span class="p">:</span><span class="n">stdout</span> <span class="p">[</span><span class="o">--</span><span class="n">fetch</span><span class="o">-</span><span class="n">proc</span><span class="o">-</span><span class="n">num</span><span class="o">=</span><span class="n">FETCH_PROCESS_NUM</span> <span class="p">[</span><span class="n">default</span><span class="o">=</span><span class="mi">1</span><span class="p">]]</span>  <span class="p">[</span><span class="o">--</span><span class="n">download</span><span class="o">-</span><span class="n">later</span> <span class="p">[</span><span class="n">default</span><span class="o">=</span><span class="kc">True</span><span class="p">]]</span>  <span class="p">[</span><span class="o">--</span><span class="n">debug</span><span class="p">]</span>
+  <span class="n">cm4</span> <span class="n">vcluster</span> <span class="n">create</span> <span class="n">runtime</span><span class="o">-</span><span class="n">config</span> <span class="n">CONFIG_NAME</span> <span class="n">PROCESS_NUM</span> <span class="ow">in</span><span class="p">:</span><span class="n">params</span><span class="o">+</span><span class="n">file</span> <span class="n">out</span><span class="p">:</span><span class="n">file</span> <span class="p">[</span><span class="o">--</span><span class="n">fetch</span><span class="o">-</span><span class="n">proc</span><span class="o">-</span><span class="n">num</span><span class="o">=</span><span class="n">FETCH_PROCESS_NUM</span> <span class="p">[</span><span class="n">default</span><span class="o">=</span><span class="mi">1</span><span class="p">]]</span> <span class="p">[</span><span class="o">--</span><span class="n">download</span><span class="o">-</span><span class="n">later</span> <span class="p">[</span><span class="n">default</span><span class="o">=</span><span class="kc">True</span><span class="p">]]</span>  <span class="p">[</span><span class="o">--</span><span class="n">debug</span><span class="p">]</span>
+  <span class="n">cm4</span> <span class="n">vcluster</span> <span class="n">create</span> <span class="n">runtime</span><span class="o">-</span><span class="n">config</span> <span class="n">CONFIG_NAME</span> <span class="n">PROCESS_NUM</span> <span class="ow">in</span><span class="p">:</span><span class="n">params</span><span class="o">+</span><span class="n">file</span> <span class="n">out</span><span class="p">:</span><span class="n">stdout</span><span class="o">+</span><span class="n">file</span> <span class="p">[</span><span class="o">--</span><span class="n">fetch</span><span class="o">-</span><span class="n">proc</span><span class="o">-</span><span class="n">num</span><span class="o">=</span><span class="n">FETCH_PROCESS_NUM</span> <span class="p">[</span><span class="n">default</span><span class="o">=</span><span class="mi">1</span><span class="p">]]</span> <span class="p">[</span><span class="o">--</span><span class="n">download</span><span class="o">-</span><span class="n">later</span> <span class="p">[</span><span class="n">default</span><span class="o">=</span><span class="kc">True</span><span class="p">]]</span>  <span class="p">[</span><span class="o">--</span><span class="n">debug</span><span class="p">]</span>
+  <span class="n">cm4</span> <span class="n">vcluster</span> <span class="nb">set</span><span class="o">-</span><span class="n">param</span> <span class="n">runtime</span><span class="o">-</span><span class="n">config</span> <span class="n">CONFIG_NAME</span> <span class="n">PARAMETER</span> <span class="n">VALUE</span>
+  <span class="n">cm4</span> <span class="n">vcluster</span> <span class="n">destroy</span> <span class="n">runtime</span><span class="o">-</span><span class="n">config</span> <span class="n">CONFIG_NAME</span>
+  <span class="n">cm4</span> <span class="n">vcluster</span> <span class="nb">list</span> <span class="n">virtual</span><span class="o">-</span><span class="n">clusters</span> <span class="p">[</span><span class="n">DEPTH</span> <span class="p">[</span><span class="n">default</span><span class="p">:</span><span class="mi">1</span><span class="p">]]</span>
+  <span class="n">cm4</span> <span class="n">vcluster</span> <span class="nb">list</span> <span class="n">runtime</span><span class="o">-</span><span class="n">configs</span> <span class="p">[</span><span class="n">DEPTH</span> <span class="p">[</span><span class="n">default</span><span class="p">:</span><span class="mi">1</span><span class="p">]]</span>
+  <span class="n">cm4</span> <span class="n">vcluster</span> <span class="n">run</span><span class="o">-</span><span class="n">script</span> <span class="o">--</span><span class="n">script</span><span class="o">-</span><span class="n">path</span><span class="o">=</span><span class="n">SCRIPT_PATH</span> <span class="o">--</span><span class="n">job</span><span class="o">-</span><span class="n">name</span><span class="o">=</span><span class="n">JOB_NAME</span> <span class="o">--</span><span class="n">vcluster</span><span class="o">-</span><span class="n">name</span><span class="o">=</span><span class="n">VIRTUALCLUSTER_NAME</span> <span class="o">--</span><span class="n">config</span><span class="o">-</span><span class="n">name</span><span class="o">=</span><span class="n">CONFIG_NAME</span> <span class="o">--</span><span class="n">arguments</span><span class="o">=</span><span class="n">SET_OF_PARAMS</span> <span class="o">--</span><span class="n">remote</span><span class="o">-</span><span class="n">path</span><span class="o">=</span><span class="n">REMOTE_PATH</span><span class="o">&gt;</span> <span class="o">--</span><span class="n">local</span><span class="o">-</span><span class="n">path</span><span class="o">=</span><span class="n">LOCAL_PATH</span> <span class="p">[</span><span class="o">--</span><span class="n">argfile</span><span class="o">-</span><span class="n">path</span><span class="o">=</span><span class="n">ARGUMENT_FILE_PATH</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">outfile</span><span class="o">-</span><span class="n">name</span><span class="o">=</span><span class="n">OUTPUT_FILE_NAME</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">suffix</span><span class="o">=</span><span class="n">SUFFIX</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">overwrite</span><span class="p">]</span>
+  <span class="n">cm4</span> <span class="n">vcluster</span> <span class="n">fetch</span> <span class="n">JOB_NAME</span>
+  <span class="n">cm4</span> <span class="n">vcluster</span> <span class="n">clean</span><span class="o">-</span><span class="n">remote</span> <span class="n">JOB_NAME</span> <span class="n">PROCESS_NUM</span>
+  <span class="n">cm4</span> <span class="n">vcluster</span> <span class="n">test</span><span class="o">-</span><span class="n">connection</span> <span class="n">VIRTUALCLUSTER_NAME</span> <span class="n">PROCESS_NUM</span>
+  <span class="n">cm4</span> <span class="n">spark</span> <span class="n">deploy</span> <span class="o">-</span><span class="n">n</span> <span class="mi">10</span> <span class="p">[</span><span class="o">--</span><span class="n">dryrun</span><span class="p">]</span>
+  <span class="n">cm4</span> <span class="n">spark</span> <span class="n">run</span> <span class="p">[</span><span class="o">--</span><span class="n">dryrun</span><span class="p">]</span>
+  <span class="n">cm4</span> <span class="n">spark</span> <span class="n">execute</span> <span class="n">PRG</span> <span class="p">[</span><span class="o">--</span><span class="n">dryrun</span><span class="p">]</span>
+  <span class="n">cm4</span> <span class="p">(</span><span class="o">-</span><span class="n">h</span> <span class="o">|</span> <span class="o">--</span><span class="n">help</span><span class="p">)</span>
+  <span class="n">cm4</span> <span class="o">--</span><span class="n">version</span>
+
+<span class="n">Options</span><span class="p">:</span>
+  <span class="o">-</span><span class="n">h</span> <span class="o">--</span><span class="n">help</span>     <span class="n">Show</span> <span class="n">this</span> <span class="n">screen</span><span class="o">.</span>
+  <span class="o">--</span><span class="n">version</span>     <span class="n">Show</span> <span class="n">version</span><span class="o">.</span>
+  <span class="o">--</span><span class="n">config</span>      <span class="n">Location</span> <span class="n">of</span> <span class="n">a</span> <span class="n">cmdata</span><span class="o">.</span><span class="n">yaml</span> <span class="n">file</span>
+  <span class="o">--</span><span class="n">vm_list</span><span class="o">=&lt;</span><span class="n">list_of_vms</span><span class="o">&gt;</span>  <span class="n">List</span> <span class="n">of</span> <span class="n">VMs</span> <span class="n">separated</span> <span class="n">by</span> <span class="n">commas</span> <span class="n">ex</span><span class="p">:</span> <span class="n">node</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">node</span><span class="o">-</span><span class="mi">2</span>
+
+<span class="n">Description</span><span class="p">:</span>
+   <span class="n">Cloudmesh</span> <span class="n">v4</span>
+</pre></div>
+</div>
+<dl class="function">
+<dt id="cm4.command.command.main">
+<code class="descclassname">cm4.command.command.</code><code class="descname">main</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/command/command.html#main"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.command.command.main" title="Permalink to this definition">¶</a></dt>
+<dd><p>Main function for Cloudmesh 4. Expose <cite>cm4</cite> as an executable command.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-cm4.aws.CommandAWS">
+<span id="aws"></span><h2>AWS<a class="headerlink" href="#module-cm4.aws.CommandAWS" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="mongo">
+<h2>Mongo<a class="headerlink" href="#mongo" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-cm4.cmmongo.mongoDB">
+<span id="mongodb"></span><h3>MongoDB<a class="headerlink" href="#module-cm4.cmmongo.mongoDB" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="controler">
+<h3>Controler<a class="headerlink" href="#controler" title="Permalink to this headline">¶</a></h3>
+</div>
+</div>
+<div class="section" id="common">
+<h2>Common<a class="headerlink" href="#common" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-cm4.common.util">
+<span id="util"></span><h3>Util<a class="headerlink" href="#module-cm4.common.util" title="Permalink to this headline">¶</a></h3>
+<p>Useful utility functions</p>
+<dl class="function">
+<dt id="cm4.common.util.HEADING">
+<code class="descclassname">cm4.common.util.</code><code class="descname">HEADING</code><span class="sig-paren">(</span><em>txt=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/common/util.html#HEADING"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.common.util.HEADING" title="Permalink to this definition">¶</a></dt>
+<dd><p>Prints a message to stdout with #### surrounding it. This is useful for
+nosetests to better distinguish them.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>txt</strong> (<em>string</em>) – a text message to be printed</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="cm4.common.util.auto_create_requirements">
+<code class="descclassname">cm4.common.util.</code><code class="descname">auto_create_requirements</code><span class="sig-paren">(</span><em>requirements</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/common/util.html#auto_create_requirements"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.common.util.auto_create_requirements" title="Permalink to this definition">¶</a></dt>
+<dd><p>creates a requirement.txt file form the requirements in the list. If the file exists, it get changed only if the
+requirements in the list are different from the existing file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>requirements</strong> – the requirements in a list</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="cm4.common.util.auto_create_version">
+<code class="descclassname">cm4.common.util.</code><code class="descname">auto_create_version</code><span class="sig-paren">(</span><em>class_name</em>, <em>version</em>, <em>filename='__init__.py'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/common/util.html#auto_create_version"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.common.util.auto_create_version" title="Permalink to this definition">¶</a></dt>
+<dd><p>creates a version number in the __init__.py file.
+it can be accessed with __version__
+:param class_name:
+:param version:
+:param filename:
+:return:</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="cm4.common.util.backup_name">
+<code class="descclassname">cm4.common.util.</code><code class="descname">backup_name</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/common/util.html#backup_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.common.util.backup_name" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>filename</strong> (<em>string</em>) – given a filename creates a backup name of the form
+filename.bak.1. If the filename already exists
+the number will be increased as  much as needed so
+the file does not exist in the given location.
+The filename can consists a path and is expanded
+with ~ and environment variables.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">string</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="cm4.common.util.banner">
+<code class="descclassname">cm4.common.util.</code><code class="descname">banner</code><span class="sig-paren">(</span><em>txt=None</em>, <em>c='#'</em>, <em>debug=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/common/util.html#banner"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.common.util.banner" title="Permalink to this definition">¶</a></dt>
+<dd><p>prints a banner of the form with a frame of # around the txt:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">############################</span>
+<span class="c1"># txt</span>
+<span class="c1">############################</span>
+</pre></div>
+</div>
+<p>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>debug</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><em>bool</em></a>) – prints a debug message also</li>
+<li><strong>txt</strong> (<em>string</em>) – a text message to be printed</li>
+<li><strong>c</strong> (<em>character</em>) – the character used instead of c</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="cm4.common.util.convert_from_unicode">
+<code class="descclassname">cm4.common.util.</code><code class="descname">convert_from_unicode</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/common/util.html#convert_from_unicode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.common.util.convert_from_unicode" title="Permalink to this definition">¶</a></dt>
+<dd><p>converts unicode data to a string
+:param data: the data to convert
+:return:</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="cm4.common.util.copy_files">
+<code class="descclassname">cm4.common.util.</code><code class="descname">copy_files</code><span class="sig-paren">(</span><em>files_glob</em>, <em>source_dir</em>, <em>dest_dir</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/common/util.html#copy_files"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.common.util.copy_files" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>files_glob</strong> – <a href="#id1"><span class="problematic" id="id2">*</span></a>.yaml</li>
+<li><strong>source_dir</strong> – source directiry</li>
+<li><strong>dest_dir</strong> – destination directory</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="cm4.common.util.exponential_backoff">
+<code class="descclassname">cm4.common.util.</code><code class="descname">exponential_backoff</code><span class="sig-paren">(</span><em>fn</em>, <em>sleeptime_s_max=1800</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/common/util.html#exponential_backoff"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.common.util.exponential_backoff" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calls <cite>fn</cite> until it returns True, with an exponentially increasing wait time between calls</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="cm4.common.util.generate_password">
+<code class="descclassname">cm4.common.util.</code><code class="descname">generate_password</code><span class="sig-paren">(</span><em>length=8</em>, <em>lower=True</em>, <em>upper=True</em>, <em>number=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/common/util.html#generate_password"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.common.util.generate_password" title="Permalink to this definition">¶</a></dt>
+<dd><p>generates a simple password. We should not realy use this in production.
+:param length: the length of the password
+:param lower: True of lower case characters are allowed
+:param upper: True if upper case characters are allowed
+:param number: True if numbers are allowed
+:return:</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="cm4.common.util.grep">
+<code class="descclassname">cm4.common.util.</code><code class="descname">grep</code><span class="sig-paren">(</span><em>pattern</em>, <em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/common/util.html#grep"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.common.util.grep" title="Permalink to this definition">¶</a></dt>
+<dd><p>Very simple grep that returns the first matching line in a file.
+String matching only, does not do REs as currently implemented.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="cm4.common.util.path_expand">
+<code class="descclassname">cm4.common.util.</code><code class="descname">path_expand</code><span class="sig-paren">(</span><em>text</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/common/util.html#path_expand"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.common.util.path_expand" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns a string with expanded variable.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>text</strong> – the path to be expanded, which can include ~ and $ variables</li>
+<li><strong>text</strong> – string</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="cm4.common.util.readfile">
+<code class="descclassname">cm4.common.util.</code><code class="descname">readfile</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/common/util.html#readfile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.common.util.readfile" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns the content of a file
+:param filename: the filename
+:return:</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="cm4.common.util.search">
+<code class="descclassname">cm4.common.util.</code><code class="descname">search</code><span class="sig-paren">(</span><em>lines</em>, <em>pattern</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/common/util.html#search"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.common.util.search" title="Permalink to this definition">¶</a></dt>
+<dd><p>return all lines that match the pattern
+#TODO: we need an example</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>lines</strong> – </li>
+<li><strong>pattern</strong> – </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="cm4.common.util.str_banner">
+<code class="descclassname">cm4.common.util.</code><code class="descname">str_banner</code><span class="sig-paren">(</span><em>txt=None</em>, <em>c='#'</em>, <em>debug=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/common/util.html#str_banner"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.common.util.str_banner" title="Permalink to this definition">¶</a></dt>
+<dd><p>prints a banner of the form with a frame of # around the txt:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">############################</span>
+<span class="c1"># txt</span>
+<span class="c1">############################</span>
+</pre></div>
+</div>
+<p>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>txt</strong> (<em>string</em>) – a text message to be printed</li>
+<li><strong>c</strong> (<em>character</em>) – the character used instead of c</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="cm4.common.util.tempdir">
+<code class="descclassname">cm4.common.util.</code><code class="descname">tempdir</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/common/util.html#tempdir"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.common.util.tempdir" title="Permalink to this definition">¶</a></dt>
+<dd><p>A contextmanager to work in an auto-removed temporary directory</p>
+<p>Arguments are passed through to tempfile.mkdtemp</p>
+<p>example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="k">with</span> <span class="n">tempdir</span><span class="p">()</span> <span class="k">as</span> <span class="n">path</span><span class="p">:</span>
+<span class="gp">... </span>   <span class="k">pass</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="cm4.common.util.writefile">
+<code class="descclassname">cm4.common.util.</code><code class="descname">writefile</code><span class="sig-paren">(</span><em>filename</em>, <em>content</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/common/util.html#writefile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.common.util.writefile" title="Permalink to this definition">¶</a></dt>
+<dd><p>writes the content into the file
+:param filename: the filename
+:param content: teh content
+:return:</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="cm4.common.util.yn_choice">
+<code class="descclassname">cm4.common.util.</code><code class="descname">yn_choice</code><span class="sig-paren">(</span><em>message</em>, <em>default='y'</em>, <em>tries=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/common/util.html#yn_choice"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.common.util.yn_choice" title="Permalink to this definition">¶</a></dt>
+<dd><p>asks for a yes/no question.
+:param tries:
+:param message: the message containing the question
+:param default: the default answer</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-cm4.common.console">
+<span id="console"></span><h3>Console<a class="headerlink" href="#module-cm4.common.console" title="Permalink to this headline">¶</a></h3>
+<p>Printing messages in a console</p>
+<dl class="class">
+<dt id="cm4.common.console.Console">
+<em class="property">class </em><code class="descclassname">cm4.common.console.</code><code class="descname">Console</code><a class="reference internal" href="_modules/cm4/common/console.html#Console"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.common.console.Console" title="Permalink to this definition">¶</a></dt>
+<dd><p>A simple way to print in a console terminal in color. Instead of using
+simply the print statement you can use special methods to indicate
+warnings, errors, ok and regular messages.</p>
+<p>Example Usage:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Console</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Warning&quot;</span><span class="p">)</span>
+<span class="n">Console</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Error&quot;</span><span class="p">)</span>
+<span class="n">Console</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Info&quot;</span><span class="p">)</span>
+<span class="n">Console</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="s2">&quot;msg&quot;</span><span class="p">)</span>
+<span class="n">Console</span><span class="o">.</span><span class="n">ok</span><span class="p">(</span><span class="s2">&quot;Success&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>One can switch the color mode off with:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Console</span><span class="o">.</span><span class="n">color</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="n">Console</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Error&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The color will be switched on by default.</p>
+<dl class="staticmethod">
+<dt id="cm4.common.console.Console.cprint">
+<em class="property">static </em><code class="descname">cprint</code><span class="sig-paren">(</span><em>color</em>, <em>prefix</em>, <em>message</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/common/console.html#Console.cprint"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.common.console.Console.cprint" title="Permalink to this definition">¶</a></dt>
+<dd><p>prints a message in a given color
+:param color: the color as defined in the theme
+:param prefix: the prefix (a string)
+:param message: the message
+:return:</p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="cm4.common.console.Console.debug_msg">
+<em class="property">static </em><code class="descname">debug_msg</code><span class="sig-paren">(</span><em>message</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/common/console.html#Console.debug_msg"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.common.console.Console.debug_msg" title="Permalink to this definition">¶</a></dt>
+<dd><p>print a debug message
+:param message: the message
+:return:</p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="cm4.common.console.Console.error">
+<em class="property">classmethod </em><code class="descname">error</code><span class="sig-paren">(</span><em>message</em>, <em>prefix=True</em>, <em>traceflag=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/common/console.html#Console.error"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.common.console.Console.error" title="Permalink to this definition">¶</a></dt>
+<dd><p>prints an error message
+:param message: the message
+:param prefix: a prefix for the message
+:param traceflag: if true the stack trace is retrieved and printed
+:return:</p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="cm4.common.console.Console.get">
+<em class="property">static </em><code class="descname">get</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/common/console.html#Console.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.common.console.Console.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns the default theme for printing console messages
+:param name: the name of the theme
+:return:</p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="cm4.common.console.Console.info">
+<em class="property">static </em><code class="descname">info</code><span class="sig-paren">(</span><em>message</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/common/console.html#Console.info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.common.console.Console.info" title="Permalink to this definition">¶</a></dt>
+<dd><p>prints an informational message
+:param message: the message
+:return:</p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="cm4.common.console.Console.msg">
+<em class="property">static </em><code class="descname">msg</code><span class="sig-paren">(</span><em>message</em>, <em>width=79</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/common/console.html#Console.msg"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.common.console.Console.msg" title="Permalink to this definition">¶</a></dt>
+<dd><p>prints a message to the screen
+:param message: the message to print
+:param width: the width of the line
+:return:</p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="cm4.common.console.Console.ok">
+<em class="property">static </em><code class="descname">ok</code><span class="sig-paren">(</span><em>message</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/common/console.html#Console.ok"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.common.console.Console.ok" title="Permalink to this definition">¶</a></dt>
+<dd><p>prints an ok message
+:param message: the message
+:return:</p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="cm4.common.console.Console.set_debug">
+<em class="property">classmethod </em><code class="descname">set_debug</code><span class="sig-paren">(</span><em>on=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/common/console.html#Console.set_debug"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.common.console.Console.set_debug" title="Permalink to this definition">¶</a></dt>
+<dd><p>sets debuggin on or of
+:param on: if on debugging is set
+:return:</p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="cm4.common.console.Console.set_theme">
+<em class="property">static </em><code class="descname">set_theme</code><span class="sig-paren">(</span><em>color=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/common/console.html#Console.set_theme"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.common.console.Console.set_theme" title="Permalink to this definition">¶</a></dt>
+<dd><p>defines if the console messages are printed in color
+:param color: if True its printed in color
+:return:</p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="cm4.common.console.Console.todo">
+<em class="property">static </em><code class="descname">todo</code><span class="sig-paren">(</span><em>message</em>, <em>prefix=True</em>, <em>traceflag=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/common/console.html#Console.todo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.common.console.Console.todo" title="Permalink to this definition">¶</a></dt>
+<dd><p>prints an TODO message
+:param message: the message
+:param prefix: if set to true it prints TODO: as prefix
+:param traceflag: if true the stack trace is retrieved and printed
+:return:</p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="cm4.common.console.Console.warning">
+<em class="property">static </em><code class="descname">warning</code><span class="sig-paren">(</span><em>message</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/common/console.html#Console.warning"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.common.console.Console.warning" title="Permalink to this definition">¶</a></dt>
+<dd><p>prints a warning
+:param message: the message
+:return:</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="cm4.common.console.indent">
+<code class="descclassname">cm4.common.console.</code><code class="descname">indent</code><span class="sig-paren">(</span><em>text</em>, <em>indent=2</em>, <em>width=128</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/common/console.html#indent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.common.console.indent" title="Permalink to this definition">¶</a></dt>
+<dd><p>indents the given text by the indent specified and maing it maximal width wide</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>text</strong> – the text to print</li>
+<li><strong>indent</strong> – indent characters</li>
+<li><strong>width</strong> – the width of the text</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-cm4.common.debug">
+<span id="debug"></span><h3>Debug<a class="headerlink" href="#module-cm4.common.debug" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="module-cm4.common.shell">
+<span id="shell"></span><h3>Shell<a class="headerlink" href="#module-cm4.common.shell" title="Permalink to this headline">¶</a></h3>
+<p>A convenient method to execute shell commands and return their output. Note: that this method requires that the
+command be completely execute before the output is returned. FOr many activities in cloudmesh this is sufficient.</p>
+<dl class="class">
+<dt id="cm4.common.shell.Shell">
+<em class="property">class </em><code class="descclassname">cm4.common.shell.</code><code class="descname">Shell</code><a class="reference internal" href="_modules/cm4/common/shell.html#Shell"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.common.shell.Shell" title="Permalink to this definition">¶</a></dt>
+<dd><p>The shell class allowing us to conveniently access many operating system commands.
+TODO: This works well on Linux and OSX, but has not been tested much on Windows</p>
+<dl class="classmethod">
+<dt id="cm4.common.shell.Shell.VBoxManage">
+<em class="property">classmethod </em><code class="descname">VBoxManage</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/common/shell.html#Shell.VBoxManage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.common.shell.Shell.VBoxManage" title="Permalink to this definition">¶</a></dt>
+<dd><p>executes VboxManage with the given arguments
+:param args:
+:return:</p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="cm4.common.shell.Shell.bash">
+<em class="property">classmethod </em><code class="descname">bash</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/common/shell.html#Shell.bash"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.common.shell.Shell.bash" title="Permalink to this definition">¶</a></dt>
+<dd><p>executes bash with the given arguments
+:param args:
+:return:</p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="cm4.common.shell.Shell.blockdiag">
+<em class="property">classmethod </em><code class="descname">blockdiag</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/common/shell.html#Shell.blockdiag"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.common.shell.Shell.blockdiag" title="Permalink to this definition">¶</a></dt>
+<dd><p>executes blockdiag with the given arguments
+:param args:
+:return:</p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="cm4.common.shell.Shell.brew">
+<em class="property">classmethod </em><code class="descname">brew</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/common/shell.html#Shell.brew"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.common.shell.Shell.brew" title="Permalink to this definition">¶</a></dt>
+<dd><p>executes bash with the given arguments
+:param args:
+:return:</p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="cm4.common.shell.Shell.cat">
+<em class="property">classmethod </em><code class="descname">cat</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/common/shell.html#Shell.cat"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.common.shell.Shell.cat" title="Permalink to this definition">¶</a></dt>
+<dd><p>executes cat with the given arguments
+:param args:
+:return:</p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="cm4.common.shell.Shell.check_output">
+<em class="property">classmethod </em><code class="descname">check_output</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/common/shell.html#Shell.check_output"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.common.shell.Shell.check_output" title="Permalink to this definition">¶</a></dt>
+<dd><p>Thin wrapper around <a class="reference external" href="https://docs.python.org/3/library/subprocess.html#subprocess.check_output" title="(in Python v3.7)"><code class="xref py py-func docutils literal notranslate"><span class="pre">subprocess.check_output()</span></code></a></p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="cm4.common.shell.Shell.check_python">
+<em class="property">classmethod </em><code class="descname">check_python</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/common/shell.html#Shell.check_python"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.common.shell.Shell.check_python" title="Permalink to this definition">¶</a></dt>
+<dd><p>checks if the python version is supported
+:return: True if it is supported</p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="cm4.common.shell.Shell.cm">
+<em class="property">classmethod </em><code class="descname">cm</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/common/shell.html#Shell.cm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.common.shell.Shell.cm" title="Permalink to this definition">¶</a></dt>
+<dd><p>executes cm with the given arguments
+:param args:
+:return:</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cm4.common.shell.Shell.command">
+<code class="descname">command</code><em class="property"> = {'darwin': {}, 'linux': {}, 'windows': {}}</em><a class="headerlink" href="#cm4.common.shell.Shell.command" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO</p>
+<p>how do we now define dynamically functions based on a list that we want to support</p>
+<p>what we want is where args are multiple unlimited parameters to the function</p>
+<dl class="docutils">
+<dt>def f(args…):</dt>
+<dd><p class="first">name = get the name from f
+a = list of args…</p>
+<p class="last">cls.execute(cmd, arguments=a, capture=True, verbose=False)</p>
+</dd>
+</dl>
+<p>commands = [‘ps’, ‘ls’, ….. ]
+for c in commands:</p>
+<blockquote>
+<div>generate this command and add to this class dynamically</div></blockquote>
+<p>or do something more simple</p>
+<p>ls = cls.execute(‘cmd’, args…)</p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="cm4.common.shell.Shell.command_exists">
+<em class="property">classmethod </em><code class="descname">command_exists</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/common/shell.html#Shell.command_exists"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.common.shell.Shell.command_exists" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns True if the command exists
+:param name:
+:return:</p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="cm4.common.shell.Shell.dialog">
+<em class="property">classmethod </em><code class="descname">dialog</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/common/shell.html#Shell.dialog"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.common.shell.Shell.dialog" title="Permalink to this definition">¶</a></dt>
+<dd><p>executes dialof with the given arguments
+:param args:
+:return:</p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="cm4.common.shell.Shell.execute">
+<em class="property">classmethod </em><code class="descname">execute</code><span class="sig-paren">(</span><em>cmd</em>, <em>arguments: Union[list</em>, <em>tuple</em>, <em>str] = ''</em>, <em>shell=False</em>, <em>cwd=None</em>, <em>traceflag=True</em>, <em>witherror=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/common/shell.html#Shell.execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.common.shell.Shell.execute" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run Shell command</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>witherror</strong> – if set to fasle the error will not be printed</li>
+<li><strong>traceflag</strong> – if set to true the trace is printed in case of an error</li>
+<li><strong>cwd</strong> – the current working directory in whcih the command is supposed to be executed.</li>
+<li><strong>shell</strong> – if set to true the subprocess is called as part of a shell</li>
+<li><strong>cmd</strong> – command to run</li>
+<li><strong>arguments</strong> – we do not know yet</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="cm4.common.shell.Shell.fgrep">
+<em class="property">classmethod </em><code class="descname">fgrep</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/common/shell.html#Shell.fgrep"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.common.shell.Shell.fgrep" title="Permalink to this definition">¶</a></dt>
+<dd><p>executes fgrep with the given arguments
+:param args:
+:return:</p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="cm4.common.shell.Shell.find_cygwin_executables">
+<em class="property">classmethod </em><code class="descname">find_cygwin_executables</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/common/shell.html#Shell.find_cygwin_executables"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.common.shell.Shell.find_cygwin_executables" title="Permalink to this definition">¶</a></dt>
+<dd><p>find the executables in cygwin</p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="cm4.common.shell.Shell.find_lines_with">
+<em class="property">classmethod </em><code class="descname">find_lines_with</code><span class="sig-paren">(</span><em>lines</em>, <em>what</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/common/shell.html#Shell.find_lines_with"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.common.shell.Shell.find_lines_with" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns all lines that contain what
+:param lines:
+:param what:
+:return:</p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="cm4.common.shell.Shell.get_python">
+<em class="property">classmethod </em><code class="descname">get_python</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/common/shell.html#Shell.get_python"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.common.shell.Shell.get_python" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns the python and pip version
+:return: python version, pip version</p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="cm4.common.shell.Shell.git">
+<em class="property">classmethod </em><code class="descname">git</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/common/shell.html#Shell.git"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.common.shell.Shell.git" title="Permalink to this definition">¶</a></dt>
+<dd><p>executes git with the given arguments
+:param args:
+:return:</p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="cm4.common.shell.Shell.grep">
+<em class="property">classmethod </em><code class="descname">grep</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/common/shell.html#Shell.grep"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.common.shell.Shell.grep" title="Permalink to this definition">¶</a></dt>
+<dd><p>executes grep with the given arguments
+:param args:
+:return:</p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="cm4.common.shell.Shell.head">
+<em class="property">classmethod </em><code class="descname">head</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/common/shell.html#Shell.head"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.common.shell.Shell.head" title="Permalink to this definition">¶</a></dt>
+<dd><p>executes head with the given arguments
+:param args:
+:return:</p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="cm4.common.shell.Shell.keystone">
+<em class="property">classmethod </em><code class="descname">keystone</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/common/shell.html#Shell.keystone"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.common.shell.Shell.keystone" title="Permalink to this definition">¶</a></dt>
+<dd><p>executes keystone with the given arguments
+:param args:
+:return:</p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="cm4.common.shell.Shell.kill">
+<em class="property">classmethod </em><code class="descname">kill</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/common/shell.html#Shell.kill"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.common.shell.Shell.kill" title="Permalink to this definition">¶</a></dt>
+<dd><p>executes kill with the given arguments
+:param args:
+:return:</p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="cm4.common.shell.Shell.ls">
+<em class="property">classmethod </em><code class="descname">ls</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/common/shell.html#Shell.ls"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.common.shell.Shell.ls" title="Permalink to this definition">¶</a></dt>
+<dd><p>executes ls with the given arguments
+:param args:
+:return:</p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="cm4.common.shell.Shell.mkdir">
+<em class="property">classmethod </em><code class="descname">mkdir</code><span class="sig-paren">(</span><em>directory</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/common/shell.html#Shell.mkdir"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.common.shell.Shell.mkdir" title="Permalink to this definition">¶</a></dt>
+<dd><p>creates a directory with all its parents in ots name
+:param directory: the path of the directory
+:return:</p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="cm4.common.shell.Shell.mongod">
+<em class="property">classmethod </em><code class="descname">mongod</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/common/shell.html#Shell.mongod"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.common.shell.Shell.mongod" title="Permalink to this definition">¶</a></dt>
+<dd><p>executes mongod with the given arguments
+:param args:
+:return:</p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="cm4.common.shell.Shell.nosetests">
+<em class="property">classmethod </em><code class="descname">nosetests</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/common/shell.html#Shell.nosetests"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.common.shell.Shell.nosetests" title="Permalink to this definition">¶</a></dt>
+<dd><p>executes nosetests with the given arguments
+:param args:
+:return:</p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="cm4.common.shell.Shell.nova">
+<em class="property">classmethod </em><code class="descname">nova</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/common/shell.html#Shell.nova"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.common.shell.Shell.nova" title="Permalink to this definition">¶</a></dt>
+<dd><p>executes nova with the given arguments
+:param args:
+:return:</p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="cm4.common.shell.Shell.operating_system">
+<em class="property">classmethod </em><code class="descname">operating_system</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/common/shell.html#Shell.operating_system"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.common.shell.Shell.operating_system" title="Permalink to this definition">¶</a></dt>
+<dd><p>the name of the os
+:return: the name of the os</p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="cm4.common.shell.Shell.pandoc">
+<em class="property">classmethod </em><code class="descname">pandoc</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/common/shell.html#Shell.pandoc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.common.shell.Shell.pandoc" title="Permalink to this definition">¶</a></dt>
+<dd><p>executes vagrant with the given arguments
+:param args:
+:return:</p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="cm4.common.shell.Shell.ping">
+<em class="property">classmethod </em><code class="descname">ping</code><span class="sig-paren">(</span><em>host=None</em>, <em>count=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/common/shell.html#Shell.ping"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.common.shell.Shell.ping" title="Permalink to this definition">¶</a></dt>
+<dd><p>execute ping
+:param host: the host to ping
+:param count: the number of pings
+:return:</p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="cm4.common.shell.Shell.pip">
+<em class="property">classmethod </em><code class="descname">pip</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/common/shell.html#Shell.pip"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.common.shell.Shell.pip" title="Permalink to this definition">¶</a></dt>
+<dd><p>executes pip with the given arguments
+:param args:
+:return:</p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="cm4.common.shell.Shell.ps">
+<em class="property">classmethod </em><code class="descname">ps</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/common/shell.html#Shell.ps"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.common.shell.Shell.ps" title="Permalink to this definition">¶</a></dt>
+<dd><p>executes ps with the given arguments
+:param args:
+:return:</p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="cm4.common.shell.Shell.pwd">
+<em class="property">classmethod </em><code class="descname">pwd</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/common/shell.html#Shell.pwd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.common.shell.Shell.pwd" title="Permalink to this definition">¶</a></dt>
+<dd><p>executes pwd with the given arguments
+:param args:
+:return:</p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="cm4.common.shell.Shell.rackdiag">
+<em class="property">classmethod </em><code class="descname">rackdiag</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/common/shell.html#Shell.rackdiag"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.common.shell.Shell.rackdiag" title="Permalink to this definition">¶</a></dt>
+<dd><p>executes rackdiag with the given arguments
+:param args:
+:return:</p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="cm4.common.shell.Shell.remove_line_with">
+<em class="property">classmethod </em><code class="descname">remove_line_with</code><span class="sig-paren">(</span><em>lines</em>, <em>what</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/common/shell.html#Shell.remove_line_with"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.common.shell.Shell.remove_line_with" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns all lines that do not contain what
+:param lines:
+:param what:
+:return:</p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="cm4.common.shell.Shell.rm">
+<em class="property">classmethod </em><code class="descname">rm</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/common/shell.html#Shell.rm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.common.shell.Shell.rm" title="Permalink to this definition">¶</a></dt>
+<dd><p>executes rm with the given arguments
+:param args:
+:return:</p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="cm4.common.shell.Shell.rsync">
+<em class="property">classmethod </em><code class="descname">rsync</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/common/shell.html#Shell.rsync"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.common.shell.Shell.rsync" title="Permalink to this definition">¶</a></dt>
+<dd><p>executes rsync with the given arguments
+:param args:
+:return:</p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="cm4.common.shell.Shell.scp">
+<em class="property">classmethod </em><code class="descname">scp</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/common/shell.html#Shell.scp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.common.shell.Shell.scp" title="Permalink to this definition">¶</a></dt>
+<dd><p>executes scp with the given arguments
+:param args:
+:return:</p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="cm4.common.shell.Shell.sh">
+<em class="property">classmethod </em><code class="descname">sh</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/common/shell.html#Shell.sh"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.common.shell.Shell.sh" title="Permalink to this definition">¶</a></dt>
+<dd><p>executes sh with the given arguments
+:param args:
+:return:</p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="cm4.common.shell.Shell.sort">
+<em class="property">classmethod </em><code class="descname">sort</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/common/shell.html#Shell.sort"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.common.shell.Shell.sort" title="Permalink to this definition">¶</a></dt>
+<dd><p>executes sort with the given arguments
+:param args:
+:return:</p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="cm4.common.shell.Shell.ssh">
+<em class="property">classmethod </em><code class="descname">ssh</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/common/shell.html#Shell.ssh"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.common.shell.Shell.ssh" title="Permalink to this definition">¶</a></dt>
+<dd><p>executes ssh with the given arguments
+:param args:
+:return:</p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="cm4.common.shell.Shell.sudo">
+<em class="property">classmethod </em><code class="descname">sudo</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/common/shell.html#Shell.sudo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.common.shell.Shell.sudo" title="Permalink to this definition">¶</a></dt>
+<dd><p>executes sudo with the given arguments
+:param args:
+:return:</p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="cm4.common.shell.Shell.tail">
+<em class="property">classmethod </em><code class="descname">tail</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/common/shell.html#Shell.tail"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.common.shell.Shell.tail" title="Permalink to this definition">¶</a></dt>
+<dd><p>executes tail with the given arguments
+:param args:
+:return:</p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="cm4.common.shell.Shell.terminal_type">
+<em class="property">classmethod </em><code class="descname">terminal_type</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/common/shell.html#Shell.terminal_type"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.common.shell.Shell.terminal_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns  darwin, cygwin, cmd, or linux</p>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="cm4.common.shell.Shell.unzip">
+<em class="property">static </em><code class="descname">unzip</code><span class="sig-paren">(</span><em>source_filename</em>, <em>dest_dir</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/common/shell.html#Shell.unzip"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.common.shell.Shell.unzip" title="Permalink to this definition">¶</a></dt>
+<dd><p>unzips a file into the destination directory
+:param source_filename:
+:param dest_dir: the destination directory
+:return:</p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="cm4.common.shell.Shell.vagrant">
+<em class="property">classmethod </em><code class="descname">vagrant</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/common/shell.html#Shell.vagrant"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.common.shell.Shell.vagrant" title="Permalink to this definition">¶</a></dt>
+<dd><p>executes vagrant with the given arguments
+:param args:
+:return:</p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="cm4.common.shell.Shell.which">
+<em class="property">classmethod </em><code class="descname">which</code><span class="sig-paren">(</span><em>command</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/common/shell.html#Shell.which"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.common.shell.Shell.which" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns the path of the command with which
+:param command: teh command
+:return: the path</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="cm4.common.shell.Subprocess">
+<em class="property">class </em><code class="descclassname">cm4.common.shell.</code><code class="descname">Subprocess</code><span class="sig-paren">(</span><em>cmd</em>, <em>cwd=None</em>, <em>stderr=-1</em>, <em>stdout=-1</em>, <em>env=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/common/shell.html#Subprocess"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.common.shell.Subprocess" title="Permalink to this definition">¶</a></dt>
+<dd><p>Executes a command. This class should not be directly used, but instead you should use Shell.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="cm4.common.shell.SubprocessError">
+<em class="property">exception </em><code class="descclassname">cm4.common.shell.</code><code class="descname">SubprocessError</code><span class="sig-paren">(</span><em>cmd</em>, <em>returncode</em>, <em>stderr</em>, <em>stdout</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/common/shell.html#SubprocessError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.common.shell.SubprocessError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Manages the formatting of the error and stdout.
+THis command should not be directly called. Instead use SHell</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="cm4.common.shell.main">
+<code class="descclassname">cm4.common.shell.</code><code class="descname">main</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/common/shell.html#main"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.common.shell.main" title="Permalink to this definition">¶</a></dt>
+<dd><p>a test that should actually be added into a nosetest
+:return:</p>
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="module-cm4.vcluster.VirtualCluster">
+<span id="virtual-cluster"></span><h2>Virtual Cluster<a class="headerlink" href="#module-cm4.vcluster.VirtualCluster" title="Permalink to this headline">¶</a></h2>
+<p>Virtual Cluster: running parallel remote jobs</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Usage</span><span class="p">:</span>
+  <span class="n">cm4</span> <span class="n">vcluster</span> <span class="n">create</span> <span class="n">virtual</span><span class="o">-</span><span class="n">cluster</span> <span class="n">VIRTUALCLUSTER_NAME</span> <span class="o">--</span><span class="n">clusters</span><span class="o">=</span><span class="n">CLUSTERS_LIST</span> <span class="p">[</span><span class="o">--</span><span class="n">computers</span><span class="o">=</span><span class="n">COMPUTERS_LIST</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">debug</span><span class="p">]</span>
+  <span class="n">cm4</span> <span class="n">vcluster</span> <span class="n">destroy</span> <span class="n">virtual</span><span class="o">-</span><span class="n">cluster</span> <span class="n">VIRTUALCLUSTER_NAME</span>
+  <span class="n">cm4</span> <span class="n">vcluster</span> <span class="n">create</span> <span class="n">runtime</span><span class="o">-</span><span class="n">config</span> <span class="n">CONFIG_NAME</span> <span class="n">PROCESS_NUM</span> <span class="ow">in</span><span class="p">:</span><span class="n">params</span> <span class="n">out</span><span class="p">:</span><span class="n">stdout</span> <span class="p">[</span><span class="o">--</span><span class="n">fetch</span><span class="o">-</span><span class="n">proc</span><span class="o">-</span><span class="n">num</span><span class="o">=</span><span class="n">FETCH_PROCESS_NUM</span> <span class="p">[</span><span class="n">default</span><span class="o">=</span><span class="mi">1</span><span class="p">]]</span> <span class="p">[</span><span class="o">--</span><span class="n">download</span><span class="o">-</span><span class="n">later</span> <span class="p">[</span><span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">]]</span>  <span class="p">[</span><span class="o">--</span><span class="n">debug</span><span class="p">]</span>
+  <span class="n">cm4</span> <span class="n">vcluster</span> <span class="n">create</span> <span class="n">runtime</span><span class="o">-</span><span class="n">config</span> <span class="n">CONFIG_NAME</span> <span class="n">PROCESS_NUM</span> <span class="ow">in</span><span class="p">:</span><span class="n">params</span> <span class="n">out</span><span class="p">:</span><span class="n">file</span> <span class="p">[</span><span class="o">--</span><span class="n">fetch</span><span class="o">-</span><span class="n">proc</span><span class="o">-</span><span class="n">num</span><span class="o">=</span><span class="n">FETCH_PROCESS_NUM</span> <span class="p">[</span><span class="n">default</span><span class="o">=</span><span class="mi">1</span><span class="p">]]</span> <span class="p">[</span><span class="o">--</span><span class="n">download</span><span class="o">-</span><span class="n">later</span> <span class="p">[</span><span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">]]</span>  <span class="p">[</span><span class="o">--</span><span class="n">debug</span><span class="p">]</span>
+  <span class="n">cm4</span> <span class="n">vcluster</span> <span class="n">create</span> <span class="n">runtime</span><span class="o">-</span><span class="n">config</span> <span class="n">CONFIG_NAME</span> <span class="n">PROCESS_NUM</span> <span class="ow">in</span><span class="p">:</span><span class="n">params</span><span class="o">+</span><span class="n">file</span> <span class="n">out</span><span class="p">:</span><span class="n">stdout</span> <span class="p">[</span><span class="o">--</span><span class="n">fetch</span><span class="o">-</span><span class="n">proc</span><span class="o">-</span><span class="n">num</span><span class="o">=</span><span class="n">FETCH_PROCESS_NUM</span> <span class="p">[</span><span class="n">default</span><span class="o">=</span><span class="mi">1</span><span class="p">]]</span>  <span class="p">[</span><span class="o">--</span><span class="n">download</span><span class="o">-</span><span class="n">later</span> <span class="p">[</span><span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">]]</span>  <span class="p">[</span><span class="o">--</span><span class="n">debug</span><span class="p">]</span>
+  <span class="n">cm4</span> <span class="n">vcluster</span> <span class="n">create</span> <span class="n">runtime</span><span class="o">-</span><span class="n">config</span> <span class="n">CONFIG_NAME</span> <span class="n">PROCESS_NUM</span> <span class="ow">in</span><span class="p">:</span><span class="n">params</span><span class="o">+</span><span class="n">file</span> <span class="n">out</span><span class="p">:</span><span class="n">file</span> <span class="p">[</span><span class="o">--</span><span class="n">fetch</span><span class="o">-</span><span class="n">proc</span><span class="o">-</span><span class="n">num</span><span class="o">=</span><span class="n">FETCH_PROCESS_NUM</span> <span class="p">[</span><span class="n">default</span><span class="o">=</span><span class="mi">1</span><span class="p">]]</span> <span class="p">[</span><span class="o">--</span><span class="n">download</span><span class="o">-</span><span class="n">later</span> <span class="p">[</span><span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">]]</span>  <span class="p">[</span><span class="o">--</span><span class="n">debug</span><span class="p">]</span>
+  <span class="n">cm4</span> <span class="n">vcluster</span> <span class="n">create</span> <span class="n">runtime</span><span class="o">-</span><span class="n">config</span> <span class="n">CONFIG_NAME</span> <span class="n">PROCESS_NUM</span> <span class="ow">in</span><span class="p">:</span><span class="n">params</span><span class="o">+</span><span class="n">file</span> <span class="n">out</span><span class="p">:</span><span class="n">stdout</span><span class="o">+</span><span class="n">file</span> <span class="p">[</span><span class="o">--</span><span class="n">fetch</span><span class="o">-</span><span class="n">proc</span><span class="o">-</span><span class="n">num</span><span class="o">=</span><span class="n">FETCH_PROCESS_NUM</span> <span class="p">[</span><span class="n">default</span><span class="o">=</span><span class="mi">1</span><span class="p">]]</span> <span class="p">[</span><span class="o">--</span><span class="n">download</span><span class="o">-</span><span class="n">later</span> <span class="p">[</span><span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">]]</span>  <span class="p">[</span><span class="o">--</span><span class="n">debug</span><span class="p">]</span>
+  <span class="n">cm4</span> <span class="n">vcluster</span> <span class="nb">set</span><span class="o">-</span><span class="n">param</span> <span class="n">runtime</span><span class="o">-</span><span class="n">config</span> <span class="n">CONFIG_NAME</span> <span class="n">PARAMETER</span> <span class="n">VALUE</span>
+  <span class="n">cm4</span> <span class="n">vcluster</span> <span class="n">destroy</span> <span class="n">runtime</span><span class="o">-</span><span class="n">config</span> <span class="n">CONFIG_NAME</span>
+  <span class="n">cm4</span> <span class="n">vcluster</span> <span class="nb">list</span> <span class="n">virtual</span><span class="o">-</span><span class="n">clusters</span> <span class="p">[</span><span class="n">DEPTH</span> <span class="p">[</span><span class="n">default</span><span class="p">:</span><span class="mi">1</span><span class="p">]]</span>
+  <span class="n">cm4</span> <span class="n">vcluster</span> <span class="nb">list</span> <span class="n">runtime</span><span class="o">-</span><span class="n">configs</span> <span class="p">[</span><span class="n">DEPTH</span> <span class="p">[</span><span class="n">default</span><span class="p">:</span><span class="mi">1</span><span class="p">]]</span>
+  <span class="n">cm4</span> <span class="n">vcluster</span> <span class="n">run</span><span class="o">-</span><span class="n">script</span> <span class="o">--</span><span class="n">script</span><span class="o">-</span><span class="n">path</span><span class="o">=</span><span class="n">SCRIPT_PATH</span> <span class="o">--</span><span class="n">job</span><span class="o">-</span><span class="n">name</span><span class="o">=</span><span class="n">JOB_NAME</span> <span class="o">--</span><span class="n">vcluster</span><span class="o">-</span><span class="n">name</span><span class="o">=</span><span class="n">VIRTUALCLUSTER_NAME</span> <span class="o">--</span><span class="n">config</span><span class="o">-</span><span class="n">name</span><span class="o">=</span><span class="n">CONFIG_NAME</span> <span class="o">--</span><span class="n">arguments</span><span class="o">=</span><span class="n">SET_OF_PARAMS</span> <span class="o">--</span><span class="n">remote</span><span class="o">-</span><span class="n">path</span><span class="o">=</span><span class="n">REMOTE_PATH</span><span class="o">&gt;</span> <span class="o">--</span><span class="n">local</span><span class="o">-</span><span class="n">path</span><span class="o">=</span><span class="n">LOCAL_PATH</span> <span class="p">[</span><span class="o">--</span><span class="n">argfile</span><span class="o">-</span><span class="n">path</span><span class="o">=</span><span class="n">ARGUMENT_FILE_PATH</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">outfile</span><span class="o">-</span><span class="n">name</span><span class="o">=</span><span class="n">OUTPUT_FILE_NAME</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">suffix</span><span class="o">=</span><span class="n">SUFFIX</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">overwrite</span><span class="p">]</span>
+  <span class="n">cm4</span> <span class="n">vcluster</span> <span class="n">fetch</span> <span class="n">JOB_NAME</span>
+  <span class="n">cm4</span> <span class="n">vcluster</span> <span class="n">clean</span><span class="o">-</span><span class="n">remote</span> <span class="n">JOB_NAME</span> <span class="n">PROCESS_NUM</span>
+  <span class="n">cm4</span> <span class="n">vcluster</span> <span class="n">test</span><span class="o">-</span><span class="n">connection</span> <span class="n">VIRTUALCLUSTER_NAME</span> <span class="n">PROCESS_NUM</span>
+  <span class="n">cm4</span> <span class="o">-</span><span class="n">h</span>
+
+<span class="n">Options</span><span class="p">:</span>
+  <span class="o">-</span><span class="n">h</span> <span class="o">--</span><span class="n">help</span>     <span class="n">Show</span> <span class="n">this</span> <span class="n">screen</span><span class="o">.</span>
+  <span class="o">--</span><span class="n">node_list</span><span class="o">=&lt;</span><span class="n">list_of_nodes</span><span class="o">&gt;</span>           <span class="n">List</span> <span class="n">of</span> <span class="n">nodes</span> <span class="n">separated</span> <span class="n">by</span> <span class="n">commas</span><span class="o">.</span> <span class="n">Ex</span><span class="p">:</span> <span class="n">node</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">node</span><span class="o">-</span><span class="mi">2</span>
+  <span class="o">--</span><span class="n">cluster_list</span><span class="o">=&lt;</span><span class="n">list_of_clusters</span><span class="o">&gt;</span>     <span class="n">List</span> <span class="n">of</span> <span class="n">clusters</span> <span class="n">separated</span> <span class="n">by</span> <span class="n">commas</span><span class="o">.</span> <span class="n">Ex</span><span class="p">:</span> <span class="n">cluster</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">cluster</span><span class="o">-</span><span class="mi">2</span>
+  <span class="o">--</span><span class="n">params</span><span class="o">=&lt;</span><span class="nb">set</span><span class="o">-</span><span class="n">of</span><span class="o">-</span><span class="n">paramList</span><span class="o">&gt;</span>           <span class="n">This</span> <span class="ow">is</span> <span class="n">a</span> <span class="nb">set</span> <span class="n">of</span> <span class="n">parameter</span> <span class="nb">list</span> <span class="n">each</span> <span class="nb">set</span> <span class="ow">is</span> <span class="n">sent</span> <span class="n">to</span> <span class="n">one</span> <span class="n">node</span><span class="o">.</span> <span class="n">Delimiter</span> <span class="k">for</span> <span class="n">each</span> <span class="n">node</span> <span class="ow">is</span> <span class="s2">&quot;,&quot;</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">g</span><span class="o">.</span> <span class="k">with</span> <span class="mi">1</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span> <span class="mi">6</span> <span class="n">the</span> <span class="mi">1</span> <span class="mi">2</span> <span class="n">will</span> <span class="n">be</span> <span class="n">sent</span> <span class="n">to</span> <span class="n">node1</span><span class="p">,</span> <span class="mi">3</span> <span class="mi">4</span> <span class="n">run</span> <span class="n">on</span> <span class="n">node</span> <span class="mi">2</span><span class="p">,</span> <span class="n">etc</span><span class="o">.</span>
+
+<span class="n">Description</span><span class="p">:</span>
+   <span class="n">put</span> <span class="n">a</span> <span class="n">description</span> <span class="n">here</span>
+
+<span class="n">Example</span><span class="p">:</span>
+   <span class="n">put</span> <span class="n">an</span> <span class="n">example</span> <span class="n">here</span>
+</pre></div>
+</div>
+<dl class="function">
+<dt id="cm4.vcluster.VirtualCluster.main">
+<code class="descclassname">cm4.vcluster.VirtualCluster.</code><code class="descname">main</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/vcluster/VirtualCluster.html#main"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.vcluster.VirtualCluster.main" title="Permalink to this definition">¶</a></dt>
+<dd><p>Main function for the SSH. Processes the input arguments.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="cm4.vcluster.VirtualCluster.process_arguments">
+<code class="descclassname">cm4.vcluster.VirtualCluster.</code><code class="descname">process_arguments</code><span class="sig-paren">(</span><em>arguments</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/vcluster/VirtualCluster.html#process_arguments"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.vcluster.VirtualCluster.process_arguments" title="Permalink to this definition">¶</a></dt>
+<dd><p>Processes all the input arguments and acts accordingly.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>arguments</strong> – input arguments for the virtual cluster script.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-cm4.configuration.config">
+<span id="configuration"></span><h2>Configuration<a class="headerlink" href="#module-cm4.configuration.config" title="Permalink to this headline">¶</a></h2>
+<span class="target" id="module-cm4.configuration.counter"></span><dl class="class">
+<dt id="cm4.configuration.counter.Counter">
+<em class="property">class </em><code class="descclassname">cm4.configuration.counter.</code><code class="descname">Counter</code><span class="sig-paren">(</span><em>counter_file_path='~/.cloudmesh/counter.yaml'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/configuration/counter.html#Counter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.configuration.counter.Counter" title="Permalink to this definition">¶</a></dt>
+<dd><p>A counter is used to keep track of some value that can be increased
+and is associated with a user. Typically it is used to increment the
+vm id or the job id.</p>
+<dl class="method">
+<dt id="cm4.configuration.counter.Counter.decr">
+<code class="descname">decr</code><span class="sig-paren">(</span><em>name='counter'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/configuration/counter.html#Counter.decr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.configuration.counter.Counter.decr" title="Permalink to this definition">¶</a></dt>
+<dd><p>increments the counter by one
+:return:</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cm4.configuration.counter.Counter.get">
+<code class="descname">get</code><span class="sig-paren">(</span><em>name='counter'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/configuration/counter.html#Counter.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.configuration.counter.Counter.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns the value of the counter
+:param name: name of the counter
+:return: the value of the counter</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cm4.configuration.counter.Counter.incr">
+<code class="descname">incr</code><span class="sig-paren">(</span><em>name='counter'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/configuration/counter.html#Counter.incr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.configuration.counter.Counter.incr" title="Permalink to this definition">¶</a></dt>
+<dd><p>increments the counter by one
+:return:</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cm4.configuration.counter.Counter.set">
+<code class="descname">set</code><span class="sig-paren">(</span><em>name='counter'</em>, <em>value=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/configuration/counter.html#Counter.set"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.configuration.counter.Counter.set" title="Permalink to this definition">¶</a></dt>
+<dd><p>sets a counter associated with a particular user
+:param name: name of the counter
+:param value: the value
+:return:</p>
+</dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-cm4.configuration.dot_dictionary"></span><dl class="class">
+<dt id="cm4.configuration.dot_dictionary.DotDictionary">
+<em class="property">class </em><code class="descclassname">cm4.configuration.dot_dictionary.</code><code class="descname">DotDictionary</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/configuration/dot_dictionary.html#DotDictionary"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.configuration.dot_dictionary.DotDictionary" title="Permalink to this definition">¶</a></dt>
+<dd><p>A subclass of <cite>dict</cite> that allows dot paths into nested dictionary.</p>
+<p>Based on: <a class="reference external" href="https://stackoverflow.com/a/2390997/120783">https://stackoverflow.com/a/2390997/120783</a></p>
+<dl class="docutils">
+<dt>Usage:</dt>
+<dd>dot = DotDictionary({‘meta’: {‘status’: ‘OK’, ‘status_code’: 200}})
+sc = dot.get(‘meta.status_code’)
+sc2 = dot[‘meta.status_code’]</dd>
+</dl>
+<dl class="method">
+<dt id="cm4.configuration.dot_dictionary.DotDictionary.get">
+<code class="descname">get</code><span class="sig-paren">(</span><em>key</em>, <em>default=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/configuration/dot_dictionary.html#DotDictionary.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.configuration.dot_dictionary.DotDictionary.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the value for key if key is in the dictionary, else default.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cm4.configuration.dot_dictionary.DotDictionary.update">
+<code class="descname">update</code><span class="sig-paren">(</span><span class="optional">[</span><em>E</em>, <span class="optional">]</span><em>**F</em><span class="sig-paren">)</span> &#x2192; None.  Update D from dict/iterable E and F.<a class="reference internal" href="_modules/cm4/configuration/dot_dictionary.html#DotDictionary.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.configuration.dot_dictionary.DotDictionary.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>If E is present and has a .keys() method, then does:  for k in E: D[k] = E[k]
+If E is present and lacks a .keys() method, then does:  for k, v in E: D[k] = v
+In either case, this is followed by: for k in F:  D[k] = F[k]</p>
+</dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-cm4.configuration.generic_config"></span><span class="target" id="module-cm4.configuration.name"></span><p>Created on Fri Oct 26 12:44:44 2018</p>
+<p>&#64;author: Wu</p>
+</div>
+<div class="section" id="module-cm4.data.db.DBProviderABC">
+<span id="data"></span><h2>Data<a class="headerlink" href="#module-cm4.data.db.DBProviderABC" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="cm4.data.db.DBProviderABC.DBProviderABC">
+<em class="property">class </em><code class="descclassname">cm4.data.db.DBProviderABC.</code><code class="descname">DBProviderABC</code><a class="reference internal" href="_modules/cm4/data/db/DBProviderABC.html#DBProviderABC"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.data.db.DBProviderABC.DBProviderABC" title="Permalink to this definition">¶</a></dt>
+<dd><p>Abstract Base Class for supported database providers.</p>
+<dl class="method">
+<dt id="cm4.data.db.DBProviderABC.DBProviderABC.add">
+<code class="descname">add</code><span class="sig-paren">(</span><em>cloud_file</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/data/db/DBProviderABC.html#DBProviderABC.add"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.data.db.DBProviderABC.DBProviderABC.add" title="Permalink to this definition">¶</a></dt>
+<dd><p>add a new CloudFile to the database</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>cloud_file</strong> – a CloudFile. todo</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">a CloudFile with resource information filled in</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cm4.data.db.DBProviderABC.DBProviderABC.delete">
+<code class="descname">delete</code><span class="sig-paren">(</span><em>cloud_file</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/data/db/DBProviderABC.html#DBProviderABC.delete"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.data.db.DBProviderABC.DBProviderABC.delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>delete a file from the database</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>cloud_file</strong> – the cloud file entry being deleted</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cm4.data.db.DBProviderABC.DBProviderABC.list_files">
+<code class="descname">list_files</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/data/db/DBProviderABC.html#DBProviderABC.list_files"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.data.db.DBProviderABC.DBProviderABC.list_files" title="Permalink to this definition">¶</a></dt>
+<dd><p>get a list of stored files</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">a list of CloudFiles</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cm4.data.db.DBProviderABC.DBProviderABC.update">
+<code class="descname">update</code><span class="sig-paren">(</span><em>cloud_file</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/data/db/DBProviderABC.html#DBProviderABC.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.data.db.DBProviderABC.DBProviderABC.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>update a file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>cloud_file</strong> – the cloud file entry being updated</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">the updated CloudFile</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-cm4.data.db.LocalDBProvider"></span><dl class="class">
+<dt id="cm4.data.db.LocalDBProvider.LocalDBProvider">
+<em class="property">class </em><code class="descclassname">cm4.data.db.LocalDBProvider.</code><code class="descname">LocalDBProvider</code><span class="sig-paren">(</span><em>db_path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/data/db/LocalDBProvider.html#LocalDBProvider"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.data.db.LocalDBProvider.LocalDBProvider" title="Permalink to this definition">¶</a></dt>
+<dd><p>The local DB provider uses a folder with yaml files representing each cloud resource.</p>
+<dl class="method">
+<dt id="cm4.data.db.LocalDBProvider.LocalDBProvider.add">
+<code class="descname">add</code><span class="sig-paren">(</span><em>cloud_file</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/data/db/LocalDBProvider.html#LocalDBProvider.add"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.data.db.LocalDBProvider.LocalDBProvider.add" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a new Cloud File to the local DB</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>cloud_file</strong> – A CloudFile instance.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cm4.data.db.LocalDBProvider.LocalDBProvider.delete">
+<code class="descname">delete</code><span class="sig-paren">(</span><em>cloud_file</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/data/db/LocalDBProvider.html#LocalDBProvider.delete"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.data.db.LocalDBProvider.LocalDBProvider.delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove a CloudFile from the local db</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>cloud_file</strong> – A could file entry</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cm4.data.db.LocalDBProvider.LocalDBProvider.get">
+<code class="descname">get</code><span class="sig-paren">(</span><em>file_name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/data/db/LocalDBProvider.html#LocalDBProvider.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.data.db.LocalDBProvider.LocalDBProvider.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a CloudFile object corresponding to the given file name</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>file_name</strong> – Corresponds to the CloudFile’s <cite>name</cite>.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A CloudFile object</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cm4.data.db.LocalDBProvider.LocalDBProvider.list_files">
+<code class="descname">list_files</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/data/db/LocalDBProvider.html#LocalDBProvider.list_files"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.data.db.LocalDBProvider.LocalDBProvider.list_files" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a list of Cloud Files tracked in this DB</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cm4.data.db.LocalDBProvider.LocalDBProvider.update">
+<code class="descname">update</code><span class="sig-paren">(</span><em>cloud_file</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/data/db/LocalDBProvider.html#LocalDBProvider.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.data.db.LocalDBProvider.LocalDBProvider.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update an existing Cloud File entry</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>cloud_file</strong> – A could file entry</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-cm4.data.data"></span><p>Cloudmesh Multi Service Data Access</p>
+<dl class="docutils">
+<dt>Usage:</dt>
+<dd>cm4 data add FILE
+cm4 data add SERVICE FILE
+cm4 data get FILE
+cm4 data get FILE DEST_FOLDER
+cm4 data del FILE
+cm4 data (ls | dir)
+cm4 data (-h | –help)
+cm4 data –version</dd>
+<dt>Options:</dt>
+<dd>-h –help     Show this screen.
+–version     Show version.
+–config      Location of a cmdata.yaml file</dd>
+</dl>
+<span class="target" id="module-cm4.data.Driver"></span><span class="target" id="module-cm4.data.storage.AzureStorageProvider"></span><dl class="class">
+<dt id="cm4.data.storage.AzureStorageProvider.AzureStorageProvider">
+<em class="property">class </em><code class="descclassname">cm4.data.storage.AzureStorageProvider.</code><code class="descname">AzureStorageProvider</code><span class="sig-paren">(</span><em>account_name</em>, <em>access_key</em>, <em>container='cmdata'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/data/storage/AzureStorageProvider.html#AzureStorageProvider"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.data.storage.AzureStorageProvider.AzureStorageProvider" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="cm4.data.storage.AzureStorageProvider.AzureStorageProvider.add">
+<code class="descname">add</code><span class="sig-paren">(</span><em>local_path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/data/storage/AzureStorageProvider.html#AzureStorageProvider.add"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.data.storage.AzureStorageProvider.AzureStorageProvider.add" title="Permalink to this definition">¶</a></dt>
+<dd><p>Upload a new file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>local_path</strong> – Path to a file that will be stored.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">a CloudFile with resource information filled in</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cm4.data.storage.AzureStorageProvider.AzureStorageProvider.delete">
+<code class="descname">delete</code><span class="sig-paren">(</span><em>cloud_file</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/data/storage/AzureStorageProvider.html#AzureStorageProvider.delete"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.data.storage.AzureStorageProvider.AzureStorageProvider.delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete a file from the database</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>cloud_file</strong> – the cloud file entry being deleted</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cm4.data.storage.AzureStorageProvider.AzureStorageProvider.exists">
+<code class="descname">exists</code><span class="sig-paren">(</span><em>cloud_file_name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/data/storage/AzureStorageProvider.html#AzureStorageProvider.exists"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.data.storage.AzureStorageProvider.AzureStorageProvider.exists" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tell if a file is present in the remote storage.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>cloud_file_name</strong> – An instance of CloudFile</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">True if the object exists.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cm4.data.storage.AzureStorageProvider.AzureStorageProvider.get">
+<code class="descname">get</code><span class="sig-paren">(</span><em>cloud_file</em>, <em>local_dest</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/data/storage/AzureStorageProvider.html#AzureStorageProvider.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.data.storage.AzureStorageProvider.AzureStorageProvider.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Download the file from the <cite>cloud_file.url</cite> to a local folder.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>cloud_file</strong> – A cloud file entry from the db.</li>
+<li><strong>local_dest</strong> – A local path where the cloud file will be downloaded.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-cm4.data.storage.LocalStorageProvider"></span><dl class="class">
+<dt id="cm4.data.storage.LocalStorageProvider.LocalStorageProvider">
+<em class="property">class </em><code class="descclassname">cm4.data.storage.LocalStorageProvider.</code><code class="descname">LocalStorageProvider</code><span class="sig-paren">(</span><em>storage_path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/data/storage/LocalStorageProvider.html#LocalStorageProvider"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.data.storage.LocalStorageProvider.LocalStorageProvider" title="Permalink to this definition">¶</a></dt>
+<dd><p>A storage provider that uses a local file system or network drive path to store files.</p>
+<dl class="method">
+<dt id="cm4.data.storage.LocalStorageProvider.LocalStorageProvider.add">
+<code class="descname">add</code><span class="sig-paren">(</span><em>local_path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/data/storage/LocalStorageProvider.html#LocalStorageProvider.add"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.data.storage.LocalStorageProvider.LocalStorageProvider.add" title="Permalink to this definition">¶</a></dt>
+<dd><p>Upload a new file.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>local_path</strong> – Path to a file that will be stored.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">a CloudFile with resource information filled in</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cm4.data.storage.LocalStorageProvider.LocalStorageProvider.delete">
+<code class="descname">delete</code><span class="sig-paren">(</span><em>cloud_file</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/data/storage/LocalStorageProvider.html#LocalStorageProvider.delete"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.data.storage.LocalStorageProvider.LocalStorageProvider.delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete a file from the database</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>cloud_file</strong> – the cloud file entry being deleted</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cm4.data.storage.LocalStorageProvider.LocalStorageProvider.exists">
+<code class="descname">exists</code><span class="sig-paren">(</span><em>cloud_file_name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/data/storage/LocalStorageProvider.html#LocalStorageProvider.exists"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.data.storage.LocalStorageProvider.LocalStorageProvider.exists" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delete a file from the database</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>cloud_file_name</strong> – the cloud file entry being deleted</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cm4.data.storage.LocalStorageProvider.LocalStorageProvider.get">
+<code class="descname">get</code><span class="sig-paren">(</span><em>cloud_file</em>, <em>local_dest</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/data/storage/LocalStorageProvider.html#LocalStorageProvider.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.data.storage.LocalStorageProvider.LocalStorageProvider.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Download the file from the <cite>cloud_file.url</cite> to a local folder.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>cloud_file</strong> – A cloud file entry from the db.</li>
+<li><strong>local_dest</strong> – A local path where the cloud file will be downloaded.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-cm4.data.storage.StorageProviderABC"></span><dl class="class">
+<dt id="cm4.data.storage.StorageProviderABC.StorageProviderABC">
+<em class="property">class </em><code class="descclassname">cm4.data.storage.StorageProviderABC.</code><code class="descname">StorageProviderABC</code><a class="reference internal" href="_modules/cm4/data/storage/StorageProviderABC.html#StorageProviderABC"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.data.storage.StorageProviderABC.StorageProviderABC" title="Permalink to this definition">¶</a></dt>
+<dd><p>Abstract Base Class for supported cloud providers.</p>
+<dl class="method">
+<dt id="cm4.data.storage.StorageProviderABC.StorageProviderABC.add">
+<code class="descname">add</code><span class="sig-paren">(</span><em>cloud_file</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/data/storage/StorageProviderABC.html#StorageProviderABC.add"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.data.storage.StorageProviderABC.StorageProviderABC.add" title="Permalink to this definition">¶</a></dt>
+<dd><p>upload a file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>cloud_file</strong> – a CloudFile. todo</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">a CloudFile with resource information filled in</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cm4.data.storage.StorageProviderABC.StorageProviderABC.delete">
+<code class="descname">delete</code><span class="sig-paren">(</span><em>cloud_file</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/data/storage/StorageProviderABC.html#StorageProviderABC.delete"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.data.storage.StorageProviderABC.StorageProviderABC.delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>delete a file from the provider</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>cloud_file</strong> – the cloud file entry being deleted</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cm4.data.storage.StorageProviderABC.StorageProviderABC.exists">
+<code class="descname">exists</code><span class="sig-paren">(</span><em>file_name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/data/storage/StorageProviderABC.html#StorageProviderABC.exists"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.data.storage.StorageProviderABC.StorageProviderABC.exists" title="Permalink to this definition">¶</a></dt>
+<dd><p>if a file exists in the remote storage provider</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>file_name</strong> – a file name to check</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cm4.data.storage.StorageProviderABC.StorageProviderABC.get">
+<code class="descname">get</code><span class="sig-paren">(</span><em>cloud_file</em>, <em>local_dest</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/data/storage/StorageProviderABC.html#StorageProviderABC.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.data.storage.StorageProviderABC.StorageProviderABC.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>get a file stored with this provider</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>cloud_file</strong> – the cloud file entry being retrieved</li>
+<li><strong>local_dest</strong> – download destination</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">the downloaded cloud file binary</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-cm4.flask_rest_api.rest_api">
+<span id="server"></span><h2>Server<a class="headerlink" href="#module-cm4.flask_rest_api.rest_api" title="Permalink to this headline">¶</a></h2>
+<span class="target" id="module-cm4.flask_rest_api.rest_config"></span><span class="target" id="module-cm4.flask_rest_api.app.routes"></span><dl class="function">
+<dt id="cm4.flask_rest_api.app.routes.get_all_vms">
+<code class="descclassname">cm4.flask_rest_api.app.routes.</code><code class="descname">get_all_vms</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/flask_rest_api/app/routes.html#get_all_vms"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.flask_rest_api.app.routes.get_all_vms" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns all the VM information.
+:return: a json with all the vm information</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="cm4.flask_rest_api.app.routes.get_stopped_vms">
+<code class="descclassname">cm4.flask_rest_api.app.routes.</code><code class="descname">get_stopped_vms</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/flask_rest_api/app/routes.html#get_stopped_vms"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.flask_rest_api.app.routes.get_stopped_vms" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns all the stopped VM information.
+:return: a json with all the stopped vm information</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="cm4.flask_rest_api.app.routes.get_vm_info">
+<code class="descclassname">cm4.flask_rest_api.app.routes.</code><code class="descname">get_vm_info</code><span class="sig-paren">(</span><em>vm_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/flask_rest_api/app/routes.html#get_vm_info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.flask_rest_api.app.routes.get_vm_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the VM information for the provided vm_id.
+:param vm_id: id of the VM
+:return: a json with the vm information</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-cm4.openstack.OpenstackCM">
+<span id="openstack"></span><h2>Openstack<a class="headerlink" href="#module-cm4.openstack.OpenstackCM" title="Permalink to this headline">¶</a></h2>
+<p>Modified on Tue Nov 15 2018</p>
+<p>&#64;author: Kimball Wu
+&#64;author: Rui</p>
+<dl class="function">
+<dt id="cm4.openstack.OpenstackCM.process_arguments">
+<code class="descclassname">cm4.openstack.OpenstackCM.</code><code class="descname">process_arguments</code><span class="sig-paren">(</span><em>arguments</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/openstack/OpenstackCM.html#process_arguments"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.openstack.OpenstackCM.process_arguments" title="Permalink to this definition">¶</a></dt>
+<dd><p>Process command line arguments to execute VM actions.
+Called from cm4.command.command
+:param arguments:</p>
+</dd></dl>
+
+<span class="target" id="module-cm4.openstack.OpenstackRefactor"></span><p>Created on Tue Nov 15 2018</p>
+<p>&#64;author: Rui</p>
+</div>
+<div class="section" id="module-cm4.vagrant.vagrant">
+<span id="vagrant"></span><h2>Vagrant<a class="headerlink" href="#module-cm4.vagrant.vagrant" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="cm4.vagrant.vagrant.Vagrant">
+<em class="property">class </em><code class="descclassname">cm4.vagrant.vagrant.</code><code class="descname">Vagrant</code><span class="sig-paren">(</span><em>debug=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/vagrant/vagrant.html#Vagrant"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.vagrant.vagrant.Vagrant" title="Permalink to this definition">¶</a></dt>
+<dd><p>Vagrant Manager.
+Provides the capabilities to manage a Vagrant Cluster of nodes via the script.</p>
+<dl class="method">
+<dt id="cm4.vagrant.vagrant.Vagrant.create">
+<code class="descname">create</code><span class="sig-paren">(</span><em>hosts</em>, <em>image='ubuntu/xenial64'</em>, <em>output_path=None</em>, <em>template=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/vagrant/vagrant.html#Vagrant.create"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.vagrant.vagrant.Vagrant.create" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO: doc</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cm4.vagrant.vagrant.Vagrant.destroy">
+<code class="descname">destroy</code><span class="sig-paren">(</span><em>name=None</em>, <em>force=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/vagrant/vagrant.html#Vagrant.destroy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.vagrant.vagrant.Vagrant.destroy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default: Destroys all the VMs specified.
+If &#64;name is provided, only the named VM is destroyed.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>force</strong> – </li>
+<li><strong>name</strong> – [optional], name of the Vagrant VM.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cm4.vagrant.vagrant.Vagrant.download">
+<code class="descname">download</code><span class="sig-paren">(</span><em>name</em>, <em>source</em>, <em>dest</em>, <em>prefix_dest=False</em>, <em>recursive=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/vagrant/vagrant.html#Vagrant.download"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.vagrant.vagrant.Vagrant.download" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO: doc</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cm4.vagrant.vagrant.Vagrant.execute">
+<code class="descname">execute</code><span class="sig-paren">(</span><em>command</em>, <em>result=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/vagrant/vagrant.html#Vagrant.execute"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.vagrant.vagrant.Vagrant.execute" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO: doc</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>result</strong> – </li>
+<li><strong>command</strong> – </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cm4.vagrant.vagrant.Vagrant.info">
+<code class="descname">info</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/vagrant/vagrant.html#Vagrant.info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.vagrant.vagrant.Vagrant.info" title="Permalink to this definition">¶</a></dt>
+<dd><p>provides the status of that particular virtual machine.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cm4.vagrant.vagrant.Vagrant.ls">
+<code class="descname">ls</code><span class="sig-paren">(</span><em>name=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/vagrant/vagrant.html#Vagrant.ls"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.vagrant.vagrant.Vagrant.ls" title="Permalink to this definition">¶</a></dt>
+<dd><p>Provides the status information of all Vagrant Virtual machines by default.
+If a name is specified, it provides the status of that particular virtual machine.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> – [optional], name of the Vagrant VM.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cm4.vagrant.vagrant.Vagrant.resume">
+<code class="descname">resume</code><span class="sig-paren">(</span><em>name=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/vagrant/vagrant.html#Vagrant.resume"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.vagrant.vagrant.Vagrant.resume" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default: resume(start) all the VMs specified.
+If &#64;name is provided, only the named VM is started.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> – [optional], name of the Vagrant VM.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cm4.vagrant.vagrant.Vagrant.run_command">
+<code class="descname">run_command</code><span class="sig-paren">(</span><em>name</em>, <em>command</em>, <em>report=True</em>, <em>report_alone=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/vagrant/vagrant.html#Vagrant.run_command"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.vagrant.vagrant.Vagrant.run_command" title="Permalink to this definition">¶</a></dt>
+<dd><p>run shell command in specified node</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>name</strong> – name of node</li>
+<li><strong>command</strong> – command executed on the node</li>
+<li><strong>report</strong> – processing job running report. if False, return result object</li>
+<li><strong>report_alone</strong> – print job running report. if False, return job running report</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">string, subprocess.CalledProcessError</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="cm4.vagrant.vagrant.Vagrant.run_parallel">
+<em class="property">static </em><code class="descname">run_parallel</code><span class="sig-paren">(</span><em>hosts</em>, <em>run_action</em>, <em>args</em>, <em>kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/vagrant/vagrant.html#Vagrant.run_parallel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.vagrant.vagrant.Vagrant.run_parallel" title="Permalink to this definition">¶</a></dt>
+<dd><p>run job in parallel fashion</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>hosts</strong> – list of node names on which job runs</li>
+<li><strong>run_action</strong> – running action function object</li>
+<li><strong>args</strong> – positional arguments of running action function</li>
+<li><strong>kwargs</strong> – keyword arguments of running action function</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">None:</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cm4.vagrant.vagrant.Vagrant.run_script">
+<code class="descname">run_script</code><span class="sig-paren">(</span><em>name</em>, <em>script_path</em>, <em>data=None</em>, <em>report=True</em>, <em>report_alone=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/vagrant/vagrant.html#Vagrant.run_script"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.vagrant.vagrant.Vagrant.run_script" title="Permalink to this definition">¶</a></dt>
+<dd><p>run shell script on specified node, fetch the console output and data output if existed</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>data</strong> – </li>
+<li><strong>name</strong> – name of node</li>
+<li><strong>script_path</strong> – local path of script file which will be executed on the node</li>
+<li><strong>report</strong> – processing job running report. if False, return result object</li>
+<li><strong>report_alone</strong> – print job running report. if False, return job running report</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">dictionary, subprocess.CalledProcessError</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cm4.vagrant.vagrant.Vagrant.ssh">
+<code class="descname">ssh</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/vagrant/vagrant.html#Vagrant.ssh"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.vagrant.vagrant.Vagrant.ssh" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO: doc</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> – </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cm4.vagrant.vagrant.Vagrant.start">
+<code class="descname">start</code><span class="sig-paren">(</span><em>name=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/vagrant/vagrant.html#Vagrant.start"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.vagrant.vagrant.Vagrant.start" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default: Starts all the VMs specified.
+If &#64;name is provided, only the named VM is started.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> – [optional], name of the Vagrant VM.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cm4.vagrant.vagrant.Vagrant.stop">
+<code class="descname">stop</code><span class="sig-paren">(</span><em>name=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/vagrant/vagrant.html#Vagrant.stop"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.vagrant.vagrant.Vagrant.stop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Default: Stops all the VMs specified.
+If &#64;name is provided, only the named VM is stopped.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> – [optional], name of the Vagrant VM.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cm4.vagrant.vagrant.Vagrant.suspend">
+<code class="descname">suspend</code><span class="sig-paren">(</span><em>name=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/vagrant/vagrant.html#Vagrant.suspend"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.vagrant.vagrant.Vagrant.suspend" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO: doc</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> – </td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cm4.vagrant.vagrant.Vagrant.upload">
+<code class="descname">upload</code><span class="sig-paren">(</span><em>name</em>, <em>source</em>, <em>dest</em>, <em>recursive=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/vagrant/vagrant.html#Vagrant.upload"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.vagrant.vagrant.Vagrant.upload" title="Permalink to this definition">¶</a></dt>
+<dd><p>TODO: doc</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="cm4.vagrant.vagrant.main">
+<code class="descclassname">cm4.vagrant.vagrant.</code><code class="descname">main</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/vagrant/vagrant.html#main"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.vagrant.vagrant.main" title="Permalink to this definition">¶</a></dt>
+<dd><p>Main function for the Vagrant Manager. Processes the input arguments.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="cm4.vagrant.vagrant.process_arguments">
+<code class="descclassname">cm4.vagrant.vagrant.</code><code class="descname">process_arguments</code><span class="sig-paren">(</span><em>arguments</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/vagrant/vagrant.html#process_arguments"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.vagrant.vagrant.process_arguments" title="Permalink to this definition">¶</a></dt>
+<dd><p>Processes all the input arguments and acts accordingly.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>arguments</strong> – input arguments for the Vagrant script.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-cm4.vm.Cloud">
+<span id="vm"></span><h2>VM<a class="headerlink" href="#module-cm4.vm.Cloud" title="Permalink to this headline">¶</a></h2>
+<span class="target" id="module-cm4.vm.Cmaws"></span><dl class="class">
+<dt id="cm4.vm.Cmaws.CmAWSDriver">
+<em class="property">class </em><code class="descclassname">cm4.vm.Cmaws.</code><code class="descname">CmAWSDriver</code><span class="sig-paren">(</span><em>key</em>, <em>secret</em>, <em>region</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/vm/Cmaws.html#CmAWSDriver"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.vm.Cmaws.CmAWSDriver" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="cm4.vm.Cmaws.CmAWSDriver.create_node">
+<code class="descname">create_node</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/vm/Cmaws.html#CmAWSDriver.create_node"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.vm.Cmaws.CmAWSDriver.create_node" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new EC2 node.</p>
+<p>Reference: <a class="reference external" href="http://bit.ly/8ZyPSy">http://bit.ly/8ZyPSy</a> [docs.amazonwebservices.com]</p>
+<p>&#64;inherits: <code class="xref py py-class docutils literal notranslate"><span class="pre">NodeDriver.create_node</span></code></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>ex_keyname</strong> (<code class="docutils literal notranslate"><span class="pre">str</span></code>) – The name of the key pair</li>
+<li><strong>ex_userdata</strong> (<code class="docutils literal notranslate"><span class="pre">str</span></code>) – User data</li>
+<li><strong>ex_security_groups</strong> (<code class="docutils literal notranslate"><span class="pre">list</span></code>) – A list of names of security groups to
+assign to the node.</li>
+<li><strong>ex_security_group_ids</strong> (<code class="docutils literal notranslate"><span class="pre">list</span></code>) – A list of ids of security groups to
+assign to the node.[for VPC nodes only]</li>
+<li><strong>ex_metadata</strong> (<code class="docutils literal notranslate"><span class="pre">dict</span></code>) – Key/Value metadata to associate with a node</li>
+<li><strong>ex_mincount</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – Minimum number of instances to launch</li>
+<li><strong>ex_maxcount</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – Maximum number of instances to launch</li>
+<li><strong>ex_clienttoken</strong> (<code class="docutils literal notranslate"><span class="pre">str</span></code>) – Unique identifier to ensure idempotency</li>
+<li><strong>ex_blockdevicemappings</strong> (<code class="docutils literal notranslate"><span class="pre">list</span></code> of <code class="docutils literal notranslate"><span class="pre">dict</span></code>) – <code class="docutils literal notranslate"><span class="pre">list</span></code> of <code class="docutils literal notranslate"><span class="pre">dict</span></code> block device
+mappings.</li>
+<li><strong>ex_iamprofile</strong> (<code class="docutils literal notranslate"><span class="pre">str</span></code>) – Name or ARN of IAM profile</li>
+<li><strong>ex_ebs_optimized</strong> (<code class="docutils literal notranslate"><span class="pre">bool</span></code>) – EBS-Optimized if True</li>
+<li><strong>ex_subnet</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">EC2Subnet</span></code>) – The subnet to launch the instance into.</li>
+<li><strong>ex_placement_group</strong> (<code class="docutils literal notranslate"><span class="pre">str</span></code>) – The name of the placement group to
+launch the instance into.</li>
+<li><strong>ex_assign_public_ip</strong> (<code class="docutils literal notranslate"><span class="pre">bool</span></code>) – If True, the instance will
+be assigned a public ip address.
+Note : It takes takes a short
+while for the instance to be
+assigned the public ip so the
+node returned will NOT have
+the public ip assigned yet.</li>
+<li><strong>ex_terminate_on_shutdown</strong> (<code class="docutils literal notranslate"><span class="pre">bool</span></code>) – Indicates if the instance
+should be terminated instead
+of just shut down when using
+the operating systems command
+for system shutdown.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="cm4.vm.Cmaws.CmAWSDriver.ex_stop_node">
+<code class="descname">ex_stop_node</code><span class="sig-paren">(</span><em>node</em>, <em>deallocate=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/vm/Cmaws.html#CmAWSDriver.ex_stop_node"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.vm.Cmaws.CmAWSDriver.ex_stop_node" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stops the node by passing in the node object, does not work with
+instance store backed instances</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>node</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Node</span></code>) – The node to be used</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">bool</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-cm4.vm.Cmopenstack"></span><span class="target" id="module-cm4.vm.thread"></span><dl class="class">
+<dt id="cm4.vm.thread.Thread">
+<em class="property">class </em><code class="descclassname">cm4.vm.thread.</code><code class="descname">Thread</code><span class="sig-paren">(</span><em>vm</em>, <em>name</em>, <em>node_name</em>, <em>status</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/vm/thread.html#Thread"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.vm.thread.Thread" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="cm4.vm.thread.Thread.run">
+<code class="descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/vm/thread.html#Thread.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.vm.thread.Thread.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method representing the thread’s activity.</p>
+<p>You may override this method in a subclass. The standard run() method
+invokes the callable object passed to the object’s constructor as the
+target argument, if any, with sequential and keyword arguments taken
+from the args and kwargs arguments, respectively.</p>
+</dd></dl>
+
+</dd></dl>
+
+<span class="target" id="module-cm4.vm.Vm"></span><dl class="function">
+<dt id="cm4.vm.Vm.process_arguments">
+<code class="descclassname">cm4.vm.Vm.</code><code class="descname">process_arguments</code><span class="sig-paren">(</span><em>arguments</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/vm/Vm.html#process_arguments"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.vm.Vm.process_arguments" title="Permalink to this definition">¶</a></dt>
+<dd><p>Process command line arguments to execute VM actions.
+Called from cm4.command.command
+:param arguments:</p>
+</dd></dl>
+
+<span class="target" id="module-cm4.vm.VmRefactor"></span><p>Created on Tue Nov 16 23:58:09 2018</p>
+<p>&#64;author: Rui</p>
+<span class="target" id="module-cm4.vm.VmUtil"></span><p>Created on Tue Nov 16 11:48:09 2018</p>
+<p>&#64;author: Rui</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="vm.html" class="btn btn-neutral" title="VM Description" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Cloudmesh Community
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

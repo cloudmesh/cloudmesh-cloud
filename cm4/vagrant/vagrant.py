@@ -1,23 +1,38 @@
 #!/usr/bin/env python
 
+import logging
+import multiprocessing.dummy as mt
+import os
+import queue
+import re
+import subprocess
+import time
+
+import hostlist
+from docopt import docopt
+from termcolor import colored
+#
+# TODO: BUG: this is managed laregly with the vm command and not vagrant, so what we need to do is make sure that if
+#  this stays, we need to have similar fumctionality in vm
+#
 """Vagrant Manager.
 
 Usage:
-  vagrant.py vagrant create --vms=VMLIST [--box=BOX] [--template=TEMPLATE] [--output=OUTPUT] [--debug]
-  vagrant.py vagrant start [--vms=VMLIST] [--debug]
-  vagrant.py vagrant resume [--vms=VMLIST] [--debug]
-  vagrant.py vagrant stop [--vms=VMLIST] [--debug]
-  vagrant.py vagrant suspend [--vms=VMLIST] [--debug]
-  vagrant.py vagrant destroy [-f] [--vms=VMLIST] [--debug] 
-  vagrant.py vagrant info NAME [--debug]
-  vagrant.py vagrant ls [--debug]
-  vagrant.py vagrant upload --from=FROM --to=TO [-r] [--vms=VMLIST] [--debug]
-  vagrant.py vagrant download --from=FROM --to=TO [-r] [--vms=VMLIST] [--debug]
-  vagrant.py vagrant ssh NAME [--debug]
-  vagrant.py vagrant run command COMMAND [--vms=VMLIST] [--debug]
-  vagrant.py vagrant run script SCRIPT [--data=PATH] [--vms=VMLIST] [--debug]
+  cm4 vagrant create --vms=VMLIST [--box=BOX] [--template=TEMPLATE] [--output=OUTPUT] [--debug]
+  cm4 vagrant start [--vms=VMLIST] [--debug]
+  cm4 vagrant resume [--vms=VMLIST] [--debug]
+  cm4 vagrant stop [--vms=VMLIST] [--debug]
+  cm4 vagrant suspend [--vms=VMLIST] [--debug]
+  cm4 vagrant destroy [-f] [--vms=VMLIST] [--debug] 
+  cm4 vagrant info NAME [--debug]
+  cm4 vagrant ls [--debug]
+  cm4 vagrant upload --from=FROM --to=TO [-r] [--vms=VMLIST] [--debug]
+  cm4 vagrant download --from=FROM --to=TO [-r] [--vms=VMLIST] [--debug]
+  cm4 vagrant ssh NAME [--debug]
+  cm4 vagrant run command COMMAND [--vms=VMLIST] [--debug]
+  cm4 vagrant run script SCRIPT [--data=PATH] [--vms=VMLIST] [--debug]
 
-  vagrant.py -h
+  cm4 -h
 
 Options:
   -h --help     Show this screen.
@@ -29,9 +44,9 @@ Description:
 Example:
    put an example here
 """
+
 """
 Implementation notes
-
 
 Future Version ideas:
 
@@ -84,22 +99,10 @@ Version 0.1:
 
 """
 
+
 # TODO: workspace should be in ~/.cloudmesh/vagrant
 # TODO: if the workspace is not ther it needs to be created
 # TODO: use captal letters as easier to document in other tools
-
-
-import logging
-import multiprocessing.dummy as mt
-import os
-import queue
-import re
-import subprocess
-import time
-
-import hostlist
-from docopt import docopt
-from termcolor import colored
 
 
 class Vagrant(object):
@@ -115,43 +118,57 @@ class Vagrant(object):
         :param debug:
         """
         # prepare path
-        if not os.getenv('EHVAGRANT_HOME'):
-            self.workspace = os.path.join(os.path.expanduser('~'), '.cloudmesh', 'vagrant_workspace', )
-        else:
-            self.workspace = os.getenv('EHVAGRANT_HOME')
+        #
+        # TODO: BUG: We use cloudmesh, ehvagrant is not whow we set this up
+        #
+        # THis should use a config = Config()
+        #
+
+        self.workspace = os.path.join(os.path.expanduser('~'), '.cloudmesh', 'vagrant_workspace', )
         self.path = os.path.join(self.workspace, "Vagrantfile")
         self.experiment_path = os.path.join(self.workspace, 'experiment')
 
         # prepare folder and Vagrantfile
+        #
+        #  TODO: BUG: Thsi should be a utility function in common
+        #
         if not os.path.isdir(self.workspace):
             self._nested_mkdir(self.workspace)
 
         if not os.path.isdir(self.experiment_path):
             os.mkdir(self.experiment_path)
 
+        #
+        # TODO: BUG: I do not understand what node 1 and node2 are, seems debugging code
+        #
         if not os.path.isfile(self.path):
             self.create(['node1', 'node2'])
 
         self.ssh_config = {}
         self.debug = debug
 
-    def _update_by_key(self, target, source, keys=[], key_dict={}):
+    @staticmethod
+    def _update_by_key(target, source, keys=None, key_dict=None):
+        keys = keys or []
+        key_dict = key_dict or {}
+
         for x in keys:
             if source.get(x):  # key exists and not none
-                target.update({re.sub('^[-]+', '', x): source[x]})
+                target.update({re.sub("^[-]+", '', x): source[x]})
         for k, v in key_dict.items():
             if source.get(k):
                 target.update({v: source[k]})
         return target
 
-    def _impute_drive_sep(self, splited_path):
+    @staticmethod
+    def _impute_drive_sep(splited_path):
         if ':' in splited_path[0]:
             splited_path.insert(0, os.sep)
             splited_path.insert(2, os.sep)
         return splited_path
 
     def _nested_mkdir(self, path):
-        parsed_path = re.split('[\\\\/]', path)
+        parsed_path = re.split("[\\\\/]", path)
         parsed_path = [x for x in parsed_path if x]
         parsed_path = self._impute_drive_sep(parsed_path)
 
@@ -164,6 +181,12 @@ class Vagrant(object):
         """
         get all of the host names that exist in current vagrant environment
         """
+
+        #
+        # TODO: BUG: should this not also be in the db and if not we load into the db,
+        #  but tahan we use the db
+        #
+
         res = self.execute('vagrant status', result=True)
         if isinstance(res, Exception):
             print(res)
@@ -185,6 +208,9 @@ class Vagrant(object):
         :param dest: destination file path 
         :return: None
         """
+        #
+        # TODO: BUG: the scp should work on all named vms, regardless if vagrant or not
+        #
         # get vagrant setting
         if name not in self.ssh_config:
             res = self.execute('vagrant ssh-config {}'.format(name), result=True)
@@ -219,7 +245,8 @@ class Vagrant(object):
             template = 'scp {recursive} -P {port} -q -o LogLevel=QUIET -o StrictHostKeyChecking=no -i {key_file} {user}@{ip}:{source} {dest}'
             subprocess.call(template.format(**kwargs))
 
-    def _parse_run_result(self, res, template=None, report_kwargs=None):
+    @staticmethod
+    def _parse_run_result(res, template=None, report_kwargs=None):
         """
         parse running result, and (optionally) generating running report
 
@@ -228,6 +255,9 @@ class Vagrant(object):
         :param report_kwargs: content dictionary of running result
         :return: str or dictionary:
         """
+        #
+        # TODO: BUG: THis shoudl work on all vms regardless of vagrant or not
+        #
         # parse run_report
         job_status = 'Finished' if not isinstance(res, Exception) else 'Failed'
 
@@ -241,7 +271,6 @@ class Vagrant(object):
             command_output = res.stdout.decode('utf8')
             return_code = 'N.A.'
 
-        ## return 
         parse_result = {'job_status': job_status, 'return_code': return_code, 'output': command_output}
         if template and report_kwargs:
             report_kwargs.update(parse_result)
@@ -249,7 +278,8 @@ class Vagrant(object):
         else:
             return parse_result
 
-    def run_parallel(self, hosts, run_action, args, kwargs):
+    @staticmethod
+    def run_parallel(hosts, run_action, args, kwargs):
         """
         run job in parallel fashion
 
@@ -259,6 +289,9 @@ class Vagrant(object):
         :param kwargs: keyword arguments of running action function
         :return: None:
         """
+        #
+        # TODO: BUG: This shoudl work on all vms regardless of vagrant or not
+        #
         # initalize threading pool
         pool = mt.Pool(len(hosts))
         run_result = queue.Queue()
@@ -294,12 +327,18 @@ class Vagrant(object):
         """
         run shell script on specified node, fetch the console output and data output if existed
 
+        :param data:
         :param name: name of node
         :param script_path: local path of script file which will be executed on the node
         :param report: processing job running report. if False, return result object
         :param report_alone: print job running report. if False, return job running report
         :return: dictionary, subprocess.CalledProcessError
         """
+
+        #
+        # TODO: BUG: This should work on all vms and not just vagrant
+        #
+
         # building path
         script_name = os.path.basename(script_path)
         exp_folder_name = '{}_{:.0f}'.format(script_name, time.time())
@@ -312,11 +351,11 @@ class Vagrant(object):
         if 'No such file or directory' in cm_folder_query:
             self.run_command(name, 'mkdir ~/cm_experiment', False)
 
-        # build geust expreiment folder and ship sciript to it 
+        # build guest experiment folder and ship script to it
         self.run_command(name, 'mkdir {}'.format(guest_exp_folder_path), False)
         self.upload(name, source=script_path, dest=guest_script_path, recursive=False)
 
-        # if there is some data must runing against, scp data to data folder
+        # if there is some data must running against, scp data to data folder
         if data:
             if os.path.isdir(data):
                 self.upload(name, source=data, dest=guest_exp_folder_path, recursive=True)
@@ -360,6 +399,8 @@ class Vagrant(object):
             return run_res
 
         else:
+            host_exp_folder_path = os.path.join(self.experiment_path, name, exp_folder_name, 'output')
+
             template = '\n'.join(['\n\n========= JOB REPORT =========',
                                   'node_name: {name}',
                                   'job_description: {job_type} "{command}"',
@@ -394,6 +435,10 @@ class Vagrant(object):
         :return: string, subprocess.CalledProcessError
         """
         # submit job
+
+        #
+        # TODO: BUG: THis shoudl work on all vms and not just vagrant
+        #
         logging.debug('exceute "{}" on node {}......'.format(command, name))
         res = self.execute(
             'vagrant ssh {} -c "echo -e \\"\x04\\";{}; echo \\"return_code: $?\\""'.format(name, command), result=True)
@@ -419,6 +464,7 @@ class Vagrant(object):
         """
         TODO: doc
 
+        :param result:
         :param command:
         :return:
         """
@@ -445,7 +491,7 @@ class Vagrant(object):
     def ssh(self, name):
         """
         TODO: doc
-		
+
         :param name:
         :return:
         """
@@ -538,6 +584,7 @@ class Vagrant(object):
         Default: Destroys all the VMs specified.
         If @name is provided, only the named VM is destroyed.
 
+        :param force:
         :param name: [optional], name of the Vagrant VM.
         :return:
         """
@@ -602,7 +649,7 @@ def process_arguments(arguments):
     Processes all the input arguments and acts accordingly.
 
     :param arguments: input arguments for the Vagrant script.
-			
+
     """
     debug = arguments["--debug"]
     # print(type(arguments))
@@ -626,7 +673,6 @@ def process_arguments(arguments):
         provider = Vagrant(debug=debug)
 
         # parse argument
-        hosts = []
         action = None
         kwargs = dict()
         args = []
@@ -730,8 +776,6 @@ def process_arguments(arguments):
 def main():
     """
     Main function for the Vagrant Manager. Processes the input arguments.
-
-			
     """
     arguments = docopt(__doc__, version='Cloudmesh Vagrant Manager 0.3')
     process_arguments(arguments)

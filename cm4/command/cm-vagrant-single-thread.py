@@ -27,13 +27,13 @@ Example:
 
 
 import fileinput
+import os
 import re
 import subprocess
-import os
-from docopt import docopt
-from colorama import init
-from termcolor import colored
+
 import hostlist
+from docopt import docopt
+from termcolor import colored
 
 
 # TODO: workspace should be in ~/.cloudmesh/vagrant
@@ -171,7 +171,7 @@ def process_arguments(arguments):
             provider.status(list)
 
         else:
-            hosts = False
+            hosts = None
             action = None
 
             if arguments.get("--vms"):

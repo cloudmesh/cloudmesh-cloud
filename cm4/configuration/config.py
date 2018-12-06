@@ -1,6 +1,6 @@
 import oyaml as yaml
+#import yaml
 from os.path import isfile, expanduser, join, dirname, realpath, exists
-from cm4.configuration.dot_dictionary import DotDictionary
 from shutil import copyfile
 from os import mkdir
 from pathlib import Path
@@ -15,7 +15,6 @@ class Config(object):
         :param config_path: A local file path to cloudmesh yaml config
             with a root element `cloudmesh`. Default: `~/.cloudmesh/cloudmesh4.yaml`
         """
-        self._cloudmesh = {}
 
         self.config_path = expanduser(config_path)
         config_folder = dirname(self.config_path)
@@ -28,9 +27,16 @@ class Config(object):
             copyfile(destination_path.resolve(), self.config_path)
 
         with open(self.config_path, "r") as stream:
-            conf = yaml.load(stream)
-            self._cloudmesh = DotDictionary(conf.get('cloudmesh'))
+            self.data = yaml.load(stream)
 
+    def dict(self):
+        return self.data
+
+    def __str__(self):
+         return yaml.dump(self.data, default_flow_style=False, indent=2)
+
+
+''' broken
     def get(self, key, default=None):
         """
         A helper function for reading values from the config without
@@ -44,7 +50,7 @@ class Config(object):
         :param default:
         :param key: A string representing the value's path in the config.
         """
-        return self._cloudmesh.get(key, default)
+        return self.data.get(key, default)
 
     def set(self, key, value):
         """
@@ -57,9 +63,9 @@ class Config(object):
         :param key: A string representing the value's path in the config.
         :param value: value to be set.
         """
-        self._cloudmesh.set(key, value)
-        yamlFile = {}
-        yamlFile["cloudmesh"] = self._cloudmesh.copy()
+        self.data.set(key, value)
+        yaml_file = {"cloudmesh": self.data.copy()}
         with open(self.config_path, "w") as stream:
-            yaml.safe_dump(yamlFile, stream, default_flow_style=False)
+            yaml.safe_dump(yaml_file, stream, default_flow_style=False)
 
+'''

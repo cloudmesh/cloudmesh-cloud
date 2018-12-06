@@ -13,3 +13,7 @@ PyYAML
 requests
 termcolor
 urllib3
+Flask-PyMongo
+flask
+six
+recommonmark

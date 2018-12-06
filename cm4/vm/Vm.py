@@ -1,21 +1,19 @@
-import pprint
 import getpass
-from cm4.vm.Cmaws import Cmaws
-from cm4.vm.CmAzure import CmAzure
+import pprint
+from cm4.vm.Aws import Aws
+from cm4.vm.Azure import Azure
 from cm4.vm.Cmopenstack import Cmopenstack
 from cm4.configuration.config import Config
-from cm4.cmmongo.mongoDB import MongoDB
+from cm4.mongo.mongoDB import MongoDB
 from cm4.configuration.name import Name
 from cm4.vm.thread import Thread
 from cm4.configuration.counter import Counter
-from pprint import pprint
-
 
 
 class Vmprovider(object):
 
     def __init__(self):
-        self.config = Config()
+        self.config = Config().data["cloudmesh"]
 
     def get_provider(self, cloud):
         """
@@ -24,28 +22,29 @@ class Vmprovider(object):
         Only developed for AZURE, AWS, Chameleon, but we haven't test OPENSTACK
         :return: the driver based on the 'kind' information
         """
+        driver = None
+        os_config = self.config["cloud"][cloud]
 
-        os_config = self.config.get('cloud.%s' % cloud)
         if os_config.get('cm').get('kind') == 'azure':
-            driver = CmAzure(self.config, cloud).driver
+            driver = Azure(self.config, cloud).driver
         elif os_config.get('cm').get('kind') == 'aws':
-            driver = Cmaws(self.config, cloud).driver
+            driver = Aws(self.config, cloud).driver
         elif os_config.get('cm').get('kind') == 'openstack':
             driver = Cmopenstack(self.config, cloud).driver
+
         return driver
 
 
 class Vm:
 
     def __init__(self, cloud):
-        self.config = Config()
+        self.config = Config().data["cloudmesh"]
         self.provider = Vmprovider().get_provider(cloud)
 
-        self.mongo = MongoDB(host=self.config.get('data.mongo.MONGO_HOST'),
-                             username=self.config.get('data.mongo.MONGO_USERNAME'),
-                             password=self.config.get('data.mongo.MONGO_PASSWORD'),
-                             port=self.config.get('data.mongo.MONGO_PORT'))
-
+        self.mongo = MongoDB(host=self.config["data"]["mongo"]["MONGO_HOST"],
+                             username=self.config["data"]["mongo"]["MONGO_USERNAME"],
+                             password=self.config["data"]["mongo"]["MONGO_PASSWORD"],
+                             port=self.config["data"]["mongo"]["MONGO_PORT"])
 
     def start(self, name):
         """
@@ -149,9 +148,7 @@ class Vm:
                 return i
         raise ValueError('Node: ' + name + ' does not exist!')
 
-
     def new_name(self, experiment=None, group=None, user=None):
-
         """
         Generate a VM name with the format `experiment-group-name-<counter>` where `counter`
         represents a running count of VMs created.
@@ -163,8 +160,8 @@ class Vm:
         :param user:
         :return: The generated name.
         """
-        experiment = experiment or self.config.get("default.experiment")
-        group = group or self.config.get("default.group")
+        experiment = experiment or self.config["default"]["experiment"]
+        group = group or self.config["default"]["group"]
         user = user or getpass.getuser()
 
         counter = Counter()
@@ -183,12 +180,12 @@ class Vm:
         :return: Dictionary of VMs with their public ips
         """
         if name is None:
-            filter = {
+            filters = {
                 "$exists": True,
                 "$not": {"$size": 0}
             }
-            documents = self.mongo.find('cloud', 'public_ips', filter)
-            if documents is not None:
+            documents = self.mongo.find('cloud', 'public_ips', filters)
+            if documents is None:
                 return None
             else:
                 result = {}

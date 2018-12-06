@@ -9,7 +9,7 @@ from cm4.configuration.counter import Counter
 
 
 class Name(object):
-    def __init__(self, ntype=None, schema=None, name_dict=None):
+    def __init__(self, ntype=None, schema=None):
         self.ntype = ntype
         self.name_dict = None
         self.default_schema_dict = {
@@ -20,10 +20,9 @@ class Name(object):
 
     def _get_schema(self, ntype, schema, throw=True):
         """
-            find naming schema according to avalaible info
-            if can not found any, throw a execption if `thorw`=True, else return None
-            
-            """
+        find naming schema according to available info
+        if can not found any, throw a exception if `throw`=True, else return None
+        """
         if schema:
             return schema
         elif self.schema:
@@ -33,14 +32,14 @@ class Name(object):
         else:
             if throw:
                 raise ValueError(
-                    "Default naimg schema for {} don't exist. Please call set_schema() first!".format(ntype))
+                    "Default naming schema for {} don't exist. Please call set_schema() first!".format(ntype))
             else:
                 return None
 
     def _impute_count(self, kwargs):
         def _incr(kwargs):
             if not self.name_dict:
-                return Counter().get(user=kwargs['user'])
+                return Counter().get()
             else:
                 return self.name_dict['counter'] + 1
 
@@ -70,6 +69,7 @@ class Name(object):
         """
         verify if the info contains in `kwargs` can produce a valid name for `ntype` object
         
+        :param kwargs:
         :param ntype: the type of resource being named
         :param schema: naming schema        
         """

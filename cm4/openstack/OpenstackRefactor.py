@@ -5,16 +5,9 @@ Created on Tue Nov 15 2018
 @author: Rui
 """
 
-from cm4.abstractclass.CloudManagerABC import CloudManagerABC
-from libcloud.compute.types import Provider
-from libcloud.compute.providers import get_driver
-import os
-from cm4.configuration.config import Config
-
 
 class OpenstackRefactor(object):
     def __init__(self, cm=None):
-        config = Config()
         self.cm = cm
 
     def list_sizes(self):
@@ -59,7 +52,7 @@ class OpenstackRefactor(object):
         :return: bool
         """
         node = self.cm._get_node_by_id(node_id)
-        return self.cm.driver.ex_revert_resize(node);
+        return self.cm.driver.ex_revert_resize(node)
 
     # rebuild node with new image
     def rebuild(self, node_id, image):

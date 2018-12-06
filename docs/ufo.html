@@ -1,0 +1,294 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>CM4 REST Api &mdash; cm4 alpha documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="ehvagrant: enhanced Vagrant interface with importable python module" href="vagrant.html" />
+    <link rel="prev" title="AWS cm" href="aws.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> cm4
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="README.html">Cloudmesh cm v4</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aws.html">AWS cm</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">CM4 REST Api</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#pre-requisites">Pre-requisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#how-to-run-the-rest-api">How to run the REST API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#api">API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#examples">Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#dev-restricting-certain-ips-for-certain-rest-calls">Dev - restricting certain ips for certain rest calls</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="vagrant.html">ehvagrant: enhanced Vagrant interface with importable python module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vcluster.html">Virtual Cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vm.html">VM Description</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">cm4</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>CM4 REST Api</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/ufo.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="cm4-rest-api">
+<span id="cm4-rest-api"></span><h1>CM4 REST Api<a class="headerlink" href="#cm4-rest-api" title="Permalink to this headline">¶</a></h1>
+<p>The cm4 REST Api is built using flask and provides the cloud
+information retrieval functionality through HTTP calls.</p>
+<div class="section" id="pre-requisites">
+<span id="pre-requisites"></span><h2>Pre-requisites<a class="headerlink" href="#pre-requisites" title="Permalink to this headline">¶</a></h2>
+<p>Use pip install to install the following packages.</p>
+<ul class="simple">
+<li>Flask</li>
+<li>Flask-PyMongo</li>
+</ul>
+</div>
+<div class="section" id="how-to-run-the-rest-api">
+<span id="how-to-run-the-rest-api"></span><h2>How to run the REST API<a class="headerlink" href="#how-to-run-the-rest-api" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Navigate to the cm directory. example:</li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> ~/git/cloudmesh/cm
+</pre></div>
+</div>
+<ul class="simple">
+<li>Configure the cm4</li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install .
+</pre></div>
+</div>
+<ul class="simple">
+<li>Add the MongoDB information in the cm4 configuration file</li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>vi ~/.cloudmesh/cloudmesh4.yaml
+</pre></div>
+</div>
+<ul class="simple">
+<li>Run the REST API</li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python cm4/flask_rest_api/rest_api.py
+</pre></div>
+</div>
+</div>
+<div class="section" id="api">
+<span id="api"></span><h2>API<a class="headerlink" href="#api" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">/vms/</span></code> : Provides information on all the VMs.</li>
+<li><code class="docutils literal notranslate"><span class="pre">/vms/stopped</span></code>  : Provides information on all the stopped VMs.</li>
+<li><code class="docutils literal notranslate"><span class="pre">/vms/&lt;id&gt;</span></code> : Provides information on the VM identified by the <id></li>
+</ul>
+</div>
+<div class="section" id="examples">
+<span id="examples"></span><h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p class="first">Retrieve information about a VM</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl localhost:5000/vms/i-0fad7e92ffea8b345
+</pre></div>
+</div>
+</li>
+</ul>
+</div>
+<div class="section" id="dev-restricting-certain-ips-for-certain-rest-calls">
+<span id="dev-restricting-certain-ips-for-certain-rest-calls"></span><h2>Dev - restricting certain ips for certain rest calls<a class="headerlink" href="#dev-restricting-certain-ips-for-certain-rest-calls" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">abort</span><span class="p">,</span> <span class="n">request</span>
+<span class="kn">from</span> <span class="nn">cm4.flask_rest_api.app</span> <span class="kn">import</span> <span class="n">app</span>
+
+
+<span class="nd">@app.before_request</span>
+<span class="k">def</span> <span class="nf">limit_remote_addr</span><span class="p">():</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">remote_addr</span> <span class="o">!=</span> <span class="s1">&#39;10.20.30.40&#39;</span><span class="p">:</span>
+        <span class="n">abort</span><span class="p">(</span><span class="mi">403</span><span class="p">)</span>  <span class="c1"># Forbidden</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="vagrant.html" class="btn btn-neutral float-right" title="ehvagrant: enhanced Vagrant interface with importable python module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="aws.html" class="btn btn-neutral" title="AWS cm" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Cloudmesh Community
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

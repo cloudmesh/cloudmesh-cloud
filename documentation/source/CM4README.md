@@ -158,7 +158,6 @@ Professor von Laszewski.
 ```
 
 ### 2. The Configuration files and some relative function classes (Sachith)
-## [`cloudmesh4.yaml`] configuration file
 
 The cloudmesh4.yaml file contains all the configurations required for CM4 to run. 
 By default it's located in the Cloudmesh home directory (~/.cloudmesh/cloudmesh4.yaml).
@@ -179,7 +178,40 @@ To get values from the configurations, you can call level by level from top-down
 MONGO_HOST = config["data"]["mongo"]["MONGO_HOST"]
 ```
 
-### 3. The MongoDB Database in **cm4** Project (Yu)
+### 3. Using the Counter file
+CM4 keeps track of all the VMs running using counters for each VM. 
+The counter file is located at 
+```bash
+~/.cloudmesh/counter.yaml
+```
+
+#### Using the counter
+
+```python
+from cm4.configuration.counter import Counter
+counter = Counter()
+```
+
+##### Incrementing and Decrementing the counter values
+```python
+# to update a specific VM counter
+counter.incr("<VM_NAME>")
+counter.decr("<VM_NAME>")
+
+# to update the total vm counter
+counter.incr()
+counter.decr()
+```
+
+##### Getting and Setting the counter values
+```python
+# to update a specific VM counter
+counter.get("<VM_NAME>")
+counter.set("<VM_NAME>", "value")
+```
+
+
+### 4. The MongoDB Database in **cm4** Project (Yu)
 
 We add the database into **cm4** with two reasons:
 

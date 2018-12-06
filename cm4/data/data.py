@@ -121,7 +121,8 @@ class Data(object):
         self._providers[cloud_file.service].delete(cloud_file)
         self._db.delete(cloud_file)
 
-    def _print_row(self, file_name, service, size, url):
+    @staticmethod
+    def _print_row(file_name, service, size, url):
         """
         Print a formatted row
         """

@@ -53,6 +53,6 @@ class LocalStorageProvider(StorageProviderABC):
         """
         Delete a file from the database
 
-        :param cloud_file: the cloud file entry being deleted
+        :param cloud_file_name: the cloud file entry being deleted
         """
         return exists(abspath(self._path.joinpath(cloud_file_name)))

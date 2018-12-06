@@ -8,18 +8,18 @@ Modified on Tue Nov 15 2018
 
 import os
 import subprocess
+import pprint
 from cm4.abstractclass.CloudManagerABC import CloudManagerABC
 from libcloud.compute.types import Provider
 from libcloud.compute.providers import get_driver
 from cm4.configuration.config import Config
 from time import sleep
-from pprint import pprint
 from cm4.openstack.OpenstackRefactor import OpenstackRefactor
 
 
 class OpenstackCM(CloudManagerABC):
 
-    ### util
+    # common
     def __init__(self, cloud=None):
         config = Config()
         self.cloud = cloud
@@ -31,11 +31,12 @@ class OpenstackCM(CloudManagerABC):
             self.key = self.os_config.get('credentials').get('OS_KEY_PATH')  # credentials.target return null string
             # if we don't find OS_KEY_PATH in yaml, go to os.environ instead which can be set in .bashrc
             if self.key is None:
-                os.environ['OS_KEY_PATH']
+                self.key = os.environ['OS_KEY_PATH']
         else:
             self.os_config = config
 
     def _get_obj_list(self, obj_type):
+        obj_list = None
         if obj_type == 'node':
             obj_list = self.driver.list_nodes()
         elif obj_type == 'image':
@@ -70,8 +71,8 @@ class OpenstackCM(CloudManagerABC):
 
     def get_driver_helper(self, cloud):
         credential = self.os_config.get("credentials")
-        Openstack = get_driver(Provider.OPENSTACK)
-        driver = Openstack(
+        openstack = get_driver(Provider.OPENSTACK)
+        driver = openstack(
             credential.get('OS_USERNAME'),
             credential.get('OS_PASSWORD') or os.environ['OS_PASSWORD'],
             ex_force_auth_url=credential.get("OS_AUTH_URL"),
@@ -96,7 +97,7 @@ class OpenstackCM(CloudManagerABC):
         # print(ips[0].node_id)
         return ips[0] if ips else None
 
-        ### API hack for new VM class
+    # API hack for new VM class
 
     def ex_start_node(self, node):
         return self.driver.ex_start_node(node)
@@ -113,7 +114,7 @@ class OpenstackCM(CloudManagerABC):
     def list_nodes(self):
         return self.driver.list_nodes()
 
-    ### APIs
+    # APIs
     def execute(self, name, command):
         """
         execute arbitrary shell command on node through ssh
@@ -154,13 +155,12 @@ class OpenstackCM(CloudManagerABC):
     def remove_public_ip(self, name):
         """        
         :param name: name of the VM
-        :param ip_str: ip string or ip object
         """
         node = self._get_obj_by_name('node', name)
         for ip in node.public_ips:
             self.driver.ex_detach_floating_ip_from_node(node, ip)
 
-    ## standard functions
+    # standard functions
     def ls(self):
         """
         list all nodes
@@ -179,7 +179,6 @@ class OpenstackCM(CloudManagerABC):
     def nodes_info(self):
         """
         get organized meta information about all node
-        :param node_id:
         :return: metadata of node
         """
         nodes = self.driver.list_nodes()
@@ -208,7 +207,7 @@ class OpenstackCM(CloudManagerABC):
                     created_date=node.created_at.strftime("%Y-%m-%d %H:%M:%S"),
                     extra=node.extra)
 
-    def create(self, name, image=None, size=None, timeout=300, **kwargs, ):
+    def create(self, name, image=None, size=None, timeout=300, **kwargs):
         # get defualt if needed
         image_name = image if image else self.os_config.get('default').get('image')
         size_name = size if size else self.os_config.get('default').get('flavor')
@@ -219,7 +218,7 @@ class OpenstackCM(CloudManagerABC):
         kwargs['size'] = self._get_obj_by_name('size', size_name)
         if self.key:
             try:
-                key_pair = self.driver.import_key_pair_from_file(name, self.key)
+                self.driver.import_key_pair_from_file(name, self.key)
             except Exception as e:
                 print(e)
                 print(
@@ -295,9 +294,7 @@ class OpenstackCM(CloudManagerABC):
         :return: True/False
         """
         node = self._get_node_by_id(node_id)
-        return self.driver.destroy_node(node)
-
-    # @staticmethod
+        return self.driver.destroy_node(node, )
 
 
 def process_arguments(arguments):
@@ -308,7 +305,6 @@ def process_arguments(arguments):
     """
     result = None
     node = None
-    config = Config()
     if arguments.get("--debug"):
         pp = pprint.PrettyPrinter(indent=4)
         print("vm processing arguments")

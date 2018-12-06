@@ -5,7 +5,13 @@ Cloudmesh Version 4
    :maxdepth: 2
    :caption: Contents:
 
-
+   README
+   aws
+   ufo
+   vagrant
+   vcluster
+   vm
+   code
 
 Indices and tables
 ==================

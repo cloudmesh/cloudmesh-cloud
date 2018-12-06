@@ -1,6 +1,7 @@
+from flask import jsonify
+
 from cm4.flask_rest_api.app import app
 from cm4.flask_rest_api.app import cloud
-from flask import request, jsonify
 
 
 @app.route('/')

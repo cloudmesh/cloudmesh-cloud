@@ -76,8 +76,8 @@ class MongoInstaller(object):
         mkdir -p {MONGO_HOME}
         mkdir -p {MONGO_LOG}
         wget -P /tmp/mongodb.tgz {MONGO_CODE}
-        tar -zxvf /tmp/mongodb.tgz -C {LOCAL}
-        """.format(**self.data)
+        tar -zxvf /tmp/mongodb.tgz -C {LOCAL}/mongo --strip 1
+            """.format(**self.data)
         installer = Script(script)
         SystemPath.add("{MONGO_HOME}/bin".format(**self.data))
 
@@ -101,8 +101,8 @@ class MongoInstaller(object):
             mkdir -p {MONGO_PATH}
             mkdir -p {MONGO_HOME}
             mkdir -p {MONGO_LOG}
-            curl -O {MONGO_CODE} -o /tmp/mongodb.tgz
-            tar -zxvf /tmp/mongodb.tgz -C {LOCAL}
+            curl -o /tmp/mongodb.tgz {MONGO_CODE}
+            tar -zxvf /tmp/mongodb.tgz -C {LOCAL}/mongo --strip 1
             """.format(**self.data)
             installer = Script(script)
             SystemPath.add("{MONGO_HOME}/bin".format(**self.data))
@@ -303,10 +303,6 @@ def process_arguments(arguments):
         mongo = MongoDBController()
         r = mongo.status()
         return r
-
-    elif arguments.load:
-
-        print("help")
 
     return result
 

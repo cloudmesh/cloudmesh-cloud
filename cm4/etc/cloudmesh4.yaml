@@ -137,7 +137,7 @@ cloudmesh:
       MONGO_AUTOINSTALL: False
       MONGO_BREWINSTALL: False
       LOCAL: ~/local
-      MONGO_HOME: ~/local/mongodb
+      MONGO_HOME: ~/local/mongo
       MONGO_PATH: ~/.cloudmesh/mongodb
       MONGO_LOG: ~/.cloudmesh/mongodb/log
       MONGO_DBNAME: 'cloudmesh'

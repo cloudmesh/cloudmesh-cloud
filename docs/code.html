@@ -28,7 +28,7 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="VM Description" href="vm.html" /> 
+    <link rel="prev" title="Jupyter Integration" href="jupyter.html" /> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -86,6 +86,7 @@
 <li class="toctree-l1"><a class="reference internal" href="contributors.html">Contributors</a></li>
 <li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="mongo.html">Cloudmesh Database</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="CM4README.html">CM4 Details</a></li>
 <li class="toctree-l1"><a class="reference internal" href="README.html">Cloudmesh cm v4</a></li>
 <li class="toctree-l1"><a class="reference internal" href="aws.html">AWS cm</a></li>
@@ -93,6 +94,7 @@
 <li class="toctree-l1"><a class="reference internal" href="vagrant.html">ehvagrant: enhanced Vagrant interface with importable python module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="vcluster.html">Virtual Cluster</a></li>
 <li class="toctree-l1"><a class="reference internal" href="vm.html">VM Description</a></li>
+<li class="toctree-l1"><a class="reference internal" href="jupyter.html">Jupyter Integration</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Code Documentation</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#module-cm4.command.command">Command</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#module-cm4.aws.CommandAWS">AWS</a></li>
@@ -193,6 +195,10 @@
   <span class="n">cm4</span> <span class="n">admin</span> <span class="n">mongo</span> <span class="n">stop</span>
   <span class="n">cm4</span> <span class="n">admin</span> <span class="n">mongo</span> <span class="n">backup</span> <span class="n">FILENAME</span>
   <span class="n">cm4</span> <span class="n">admin</span> <span class="n">mongo</span> <span class="n">load</span> <span class="n">FILENAME</span>
+  <span class="n">cm4</span> <span class="n">admin</span> <span class="n">rest</span> <span class="n">status</span>
+  <span class="n">cm4</span> <span class="n">admin</span> <span class="n">rest</span> <span class="n">start</span>
+  <span class="n">cm4</span> <span class="n">admin</span> <span class="n">rest</span> <span class="n">stop</span>
+  <span class="n">cm4</span> <span class="n">admin</span> <span class="n">status</span>
   <span class="n">cm4</span> <span class="n">vagrant</span> <span class="n">create</span> <span class="o">--</span><span class="n">count</span><span class="o">=</span><span class="n">VMNUMBER</span> <span class="p">[</span><span class="o">--</span><span class="n">debug</span><span class="p">]</span>
   <span class="n">cm4</span> <span class="n">vagrant</span> <span class="n">start</span> <span class="p">[</span><span class="o">--</span><span class="n">vms</span><span class="o">=</span><span class="n">VMLIST</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">debug</span><span class="p">]</span>
   <span class="n">cm4</span> <span class="n">vagrant</span> <span class="n">stop</span> <span class="p">[</span><span class="o">--</span><span class="n">vms</span><span class="o">=</span><span class="n">VMLIST</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">debug</span><span class="p">]</span>
@@ -1946,7 +1952,7 @@ Called from cm4.command.command
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
       
-        <a href="vm.html" class="btn btn-neutral" title="VM Description" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="jupyter.html" class="btn btn-neutral" title="Jupyter Integration" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

@@ -164,7 +164,7 @@ Vagrant with cm4.
 * the function to use **MongoDB** for saving data
 
 
-### 1. The Preparation for installing **cm4** (David)
+### The Preparation for installing **cm4** (David)
 
 * requriements.txt : the required packages
 * setup.py : ?? 
@@ -176,7 +176,7 @@ Vagrant with cm4.
 
 ```
 
-### 2. The Configuration files and some relative function classes (Sachith)
+### The Configuration files and some relative function classes (Sachith)
 
 The cloudmesh4.yaml file contains all the configurations required for CM4 to run. 
 By default it's located in the Cloudmesh home directory (~/.cloudmesh/cloudmesh4.yaml).
@@ -197,7 +197,7 @@ To get values from the configurations, you can call level by level from top-down
 MONGO_HOST = config["data"]["mongo"]["MONGO_HOST"]
 ```
 
-### 3. Using the Counter file
+### Using the Counter file
 CM4 keeps track of all the VMs running using counters for each VM. 
 The counter file is located at 
 ```bash
@@ -230,7 +230,7 @@ counter.set("<VM_NAME>", "value")
 ```
 
 
-### 4. The MongoDB Database in **cm4** (Yu)
+### The MongoDB Database in **cm4** (Yu)
 
 We add the database into **cm4** with two reasons:
 
@@ -363,7 +363,7 @@ delete_document(collection_name, key, value) : delete the document satisfied wit
                                                from 'collection_name' collection
 ``` 
 
-### 4. The Virtual Machine Provider
+### The Virtual Machine Provider
 
 In the **cm4**, we developed the `cm4/vm/Vm.py` class to implement the operations for different virtual machines from AWS, 
 Azure, and Chameleon by using the python library [**Apache Libcloud**](https://libcloud.apache.org) to interact with 
@@ -386,7 +386,7 @@ The basic functions are:
 
 Below we list some sample of running these functions for virtual machines in  AWS, Azure and Openstack.
 
-### 4.1 AWS VM Operations (Yu)
+### AWS VM Operations (Yu)
 
 Before using the AWS Vm code, user has to update their AWS information into `cloudmesh4.yaml` file in **etc** folder.
 
@@ -404,13 +404,13 @@ Here are some samples for running these operations by using **cm4**:
 
 ```
 
- ### 4.2 Azure VM Operation (David)
+ ### Azure VM Operation (David)
  
  
- ### 4.3 Chameleon VM Operation (Rui and Kimball)
+ ### Chameleon VM Operation (Rui and Kimball)
  
  
- ## 5. Flask Rest API (Sachith)
+ ## Flask Rest API (Sachith)
  
  
 The cm4 REST Api is built using flask and provides the cloud information retrieval functionality through HTTP calls.

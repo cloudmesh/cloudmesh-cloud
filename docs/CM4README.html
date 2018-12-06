@@ -29,7 +29,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Cloudmesh cm v4" href="README.html" />
-    <link rel="prev" title="Cloudmesh Database" href="mongo.html" /> 
+    <link rel="prev" title="Configuration" href="configuration.html" /> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -87,6 +87,7 @@
 <li class="toctree-l1"><a class="reference internal" href="contributors.html">Contributors</a></li>
 <li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="mongo.html">Cloudmesh Database</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">Configuration</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">CM4 Details</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#providers-that-cm4-could-access">Providers that <em>cm4</em> could access</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#aws">AWS</a></li>
@@ -136,6 +137,7 @@
 <li class="toctree-l1"><a class="reference internal" href="vagrant.html">ehvagrant: enhanced Vagrant interface with importable python module</a></li>
 <li class="toctree-l1"><a class="reference internal" href="vcluster.html">Virtual Cluster</a></li>
 <li class="toctree-l1"><a class="reference internal" href="vm.html">VM Description</a></li>
+<li class="toctree-l1"><a class="reference internal" href="jupyter.html">Jupyter Integration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="code.html">Code Documentation</a></li>
 </ul>
 
@@ -593,6 +595,11 @@ method would create a virtual machine in AWS based on the configuration of <code
 </div>
 <div class="section" id="how-to-run-the-rest-api">
 <span id="how-to-run-the-rest-api"></span><h3>How to run the REST API<a class="headerlink" href="#how-to-run-the-rest-api" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ cm4 admin rest status
+$ cm4 admin rest start
+$ cm4 admin rest stop
+</pre></div>
+</div>
 <ul class="simple">
 <li>Navigate to the cm directory. example:</li>
 </ul>
@@ -677,7 +684,7 @@ describing the job status of each virtual machine.</p>
         <a href="README.html" class="btn btn-neutral float-right" title="Cloudmesh cm v4" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="mongo.html" class="btn btn-neutral" title="Cloudmesh Database" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="configuration.html" class="btn btn-neutral" title="Configuration" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

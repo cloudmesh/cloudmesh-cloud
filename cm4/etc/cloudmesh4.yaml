@@ -9,47 +9,47 @@ cloudmesh:
     key:
       public: ~/.ssh/id_rsa.pub
   default:
-    group:                          cloudmesh
-    experiment:                     base
-    cloud:                          azure
-    cluster:                        clustera
+    group: cloudmesh
+    experiment: base
+    cloud: azure
+    cluster: clustera
   cloud:
     azure:
       cm:
-        heading:                    AWS
-        host:                       azure.mocrosoft.com
-        label:                      Azure
-        kind:                       azure
-        version:                    TBD
+        heading: AWS
+        host: azure.mocrosoft.com
+        label: Azure
+        kind: azure
+        version: TBD
       default:
-        region:                     'northcentralus'
-        image:                      'Canonical:UbuntuServer:16.04-LTS:latest'
-        size:                       'Basic_A0'
-        resource_group:             'cloudmesh'
-        storage_account:            'cmdrive'
-        network:                    'cmnetwork'
+        region: 'northcentralus'
+        image: 'Canonical:UbuntuServer:16.04-LTS:latest'
+        size: 'Basic_A0'
+        resource_group: 'cloudmesh'
+        storage_account: 'cmdrive'
+        network: 'cmnetwork'
       credentials:
-        AZURE_TENANT_ID:            'xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
-        AZURE_SUBSCRIPTION_ID:      'xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
-        AZURE_APPLICATION_ID:       'xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
-        AZURE_SECRET_KEY:           'your secret key'
+        AZURE_TENANT_ID: 'xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
+        AZURE_SUBSCRIPTION_ID: 'xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
+        AZURE_APPLICATION_ID: 'xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
+        AZURE_SECRET_KEY: 'your secret key'
     aws:
       cm:
-        heading:                    AWS
-        host:                       aws.amazon.com
-        label:                      aws
-        kind:                       aws
-        version:                    TBD
+        heading: AWS
+        host: aws.amazon.com
+        label: aws
+        kind: aws
+        version: TBD
       default:
-        region:                     'us-west-2'
-        image:                      'ami-0bbe6b35405ecebdb'
-        size:                       't2.micro'
-        EC2_PRIVATE_KEY_FILE_NAME:  'aws_cert'
-        EC2_SECURITY_GROUP:         'group1'
+        region: 'us-west-2'
+        image: 'ami-0bbe6b35405ecebdb'
+        size: 't2.micro'
+        EC2_PRIVATE_KEY_FILE_NAME: 'aws_cert'
+        EC2_SECURITY_GROUP: 'group1'
       credentials:
-        EC2_ACCESS_ID:              'your access id'
-        EC2_SECRET_KEY:             'your secret key'
-        EC2_PRIVATE_KEY_FILE_PATH:  '~/Demo/aws_cert.pem'
+        EC2_ACCESS_ID: 'your access id'
+        EC2_SECRET_KEY: 'your secret key'
+        EC2_PRIVATE_KEY_FILE_PATH: '~/Demo/aws_cert.pem'
     chameleon:
       cm:
         heading: Chameleon
@@ -59,16 +59,16 @@ cloudmesh:
         version: liberty
       credentials:
         OS_AUTH_URL: https://openstack.tacc.chameleoncloud.org:5000/v2.0/tokens
-        OS_USERNAME: #put your name here
-        OS_PASSWORD: #put your password here
+        OS_USERNAME: TBD
+        OS_PASSWORD: TBD
         OS_TENANT_NAME: CH-819337
         OS_TENANT_ID: CH-819337
         OS_PROJECT_NAME: CH-819337
         OS_PROJECT_DOMAIN_ID: default
-        OS_USER_DOMAIN_ID: default        
+        OS_USER_DOMAIN_ID: default
         OS_VERSION: liberty
         OS_REGION_NAME: RegionOne
-        OS_KEY_PATH: #put your ssh-keyfile path here (macOS convention is ~/.ssh/id_rsa.pub)
+        OS_KEY_PATH: TBD
       default:
         flavor: m1.small
         image: CC-Ubuntu16.04
@@ -116,7 +116,7 @@ cloudmesh:
         image: Ubuntu 14.04
   data:
     default:
-      db:  local
+      db: local
       service: local
     db:
       local:
@@ -134,44 +134,53 @@ cloudmesh:
           GOOGLE_STORAGE_KEY: ''
           GOOGLE_STORAGE_SECRET: ''
     mongo:
+      MONGO_AUTOINSTALL: False
+      MONGO_BREWINSTALL: False
+      LOCAL: ~/local
+      MONGO_HOME: ~/local/mongodb
+      MONGO_PATH: ~/.cloudmesh/mongodb
+      MONGO_LOG: ~/.cloudmesh/mongodb/log
       MONGO_DBNAME: 'cloudmesh'
       MONGO_HOST: '127.0.0.1'
       MONGO_PORT: '27017'
       MONGO_USERNAME: 'admin'
-      MONGO_PASSWORD: 'admin'
-      MONGO_DOWNLOAD: 'downloadPath.tgz'
-      MONGO_FOLDER: 'mongdb folder name'
+      MONGO_PASSWORD: TBD
+      MONGO_DOWNLOAD:
+        darwin: https://fastdl.mongodb.org/osx/mongodb-osx-ssl-x86_64-4.0.4.tgz
+        linux: https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-4.0.4.tgz
+        windows: https://fastdl.mongodb.org/win32/mongodb-win32-x86_64-2008plus-ssl-4.0.4-signed.msi
+        redhat: https://repo.mongodb.org/yum/redhat/7/mongodb-org/4.0/x86_64/RPMS/mongodb-org-server-4.0.4-1.el7.x86_64.rpm
   cluster:
     bigred2:
-        name:                       bigred2
-        label:                      bigred
-        address:                    bigred2.iu.edu
-        credentials:
-          username:                 TBD
-          pulickey:                 ~/.ssh/id_rsa.pub    
+      name: bigred2
+      label: bigred
+      address: bigred2.iu.edu
+      credentials:
+        username: TBD
+        pulickey: ~/.ssh/id_rsa.pub
     karst:
-        credentials:
-          username:                 TBD
-          pulickey:                 ~/.ssh/id_rsa.pub
+      credentials:
+        username: TBD
+        pulickey: ~/.ssh/id_rsa.pub
     slurm-taito:
-        name:                       taito
-        credentials:
-          sshconfigpath:            ~/vms/sshconfig_slurm
+      name:                       taito
+      credentials:
+        sshconfigpath:            ~/vms/sshconfig_slurm
     clustera:
-      computer_a:                   ##   computer:
-        name:                       computer_a
-        label:                      one
-        address:                    localhost
+      computer_a:
+        name: computer_a
+        label: one
+        address: localhost
         credentials:
-          username:                 TBD
-          pulickey:                 ~/.ssh/id_rsa.pub
+          username: TBD
+          pulickey: ~/.ssh/id_rsa.pub
       computer_b:
-        name:                       computer_b
-        label:                      two
-        address:                    localhost
+        name: computer_b
+        label: two
+        address: localhost
         credentials:
-          username:                 TBD
-          pulickey:                 ~/.ssh/id_rsa.pub
+          username: TBD
+          pulickey: ~/.ssh/id_rsa.pub
     vcluster_test1:
       computer_a:
         name: machine1
@@ -180,12 +189,12 @@ cloudmesh:
         credentials:
           sshconfigpath: ~/vms/ubuntu14/sshconfig1
       computer_b:
-        name:                       computer_a
-        label:                      one
-        address:                    localhost
+        name: computer_a
+        label: one
+        address: localhost
         credentials:
-          username:                 TBD
-          pulickey:                 ~/.ssh/id_rsa.pub
+          username: TBD
+          pulickey: ~/.ssh/id_rsa.pub
     vcluster_test2:
       c2:
         name: machine2

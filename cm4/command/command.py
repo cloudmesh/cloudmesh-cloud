@@ -3,6 +3,12 @@
 ::
 
     Usage:
+      cm4 admin mongo install [--brew] [--download=PATH]
+      cm4 admin mongo start
+      cm4 admin mongo stop
+      cm4 admin mongo backup FILENAME
+      cm4 admin mongo load FILENAME
+      cm4 admin mongo help
       cm4 vagrant create --count=VMNUMBER [--debug]
       cm4 vagrant start [--vms=VMLIST] [--debug]
       cm4 vagrant stop [--vms=VMLIST] [--debug]

@@ -5,6 +5,10 @@ Cloudmesh Version 4
    :maxdepth: 2
    :caption: Contents:
 
+   contributors
+   install
+   mongo
+   CM4README
    README
    aws
    ufo

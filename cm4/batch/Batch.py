@@ -1,0 +1,468 @@
+#!/usr/bin/env python3
+
+# noinspection PyPep8
+"""Batch: running Slurm jobs
+
+::
+
+    Usage:
+      cm4 batch create-job JOB_NAME --slurm-script=SLURM_SCRIPT_PATH --input-type=INPUT_TYPE --slurm-cluster=SLURM_CLUSTER_NAME --job-script-path=SCRIPT_PATH --remote-path=REMOTE_PATH --local-path=LOCAL_PATH [--argfile-path=ARGUMENT_FILE_PATH] [--outfile-name=OUTPUT_FILE_NAME] [--suffix=SUFFIX] [--overwrite]
+      cm4 batch run-job JOB_NAME
+      cm4 batch fetch JOB_NAME
+      cm4 batch test-connection SLURM_CLUSTER_NAME
+      cm4 batch set-param slurm-cluster CLUSTER_NAME PARAMETER VALUE
+      cm4 batch set-param job-metadata JOB_NAME PARAMETER VALUE
+      cm4 batch list slurm-clusters [DEPTH [default:1]]
+      cm4 batch list jobs [DEPTH [default:1]]
+      cm4 batch remove slurm-cluster CLUSTER_NAME
+      cm4 batch remove job JOB_NAME
+      cm4 batch clean-remote JOB_NAME
+      cm4 -h
+
+    Options:
+      -h --help     Show this screen.
+      --node_list=<list_of_nodes>           List of nodes separated by commas. Ex: node-1,node-2
+      --cluster_list=<list_of_clusters>     List of clusters separated by commas. Ex: cluster-1, cluster-2
+      --params=<set-of-paramList>           This is a set of parameter list each set is sent to one node. Delimiter for each node is ",", e.g. with 1 2, 3 4, 5 6 the 1 2 will be sent to node1, 3 4 run on node 2, etc.
+
+    Description:
+       put a description here
+
+    Example:
+       put an example here
+"""
+
+from multiprocessing import Pool, Manager
+import subprocess
+import os
+import ntpath
+import time
+from docopt import docopt
+from datetime import datetime
+from cm4.configuration.config import Config
+from cm4.configuration.generic_config import GenericConfig
+
+
+# noinspection PyPep8
+class SlurmCluster(object):
+
+    def __init__(self, debug):
+        """
+        Initializes the SlurmCluster class
+
+        :param debug: switch the debug information on and off
+        """
+        current_path = os.path.dirname(os.path.realpath(__file__))
+        self.workspace = os.path.join(current_path, "batch_workspace/slurm_batch.yaml")
+        if not os.path.exists(os.path.dirname(self.workspace)):
+            os.makedirs(os.path.dirname(self.workspace))
+        self.cm_config = Config()
+        self.batch_config = GenericConfig(self.workspace)
+        self.debug = debug
+        self.all_jobIDs = []
+        self.slurm_cluster = {}
+        self.job_metadata = {}
+
+    def create(self,
+               job_name,
+               slurm_cluster_name,
+               slurm_script_path,
+               input_type,
+               job_script_path,
+               argfile_path,
+               remote_path,
+               local_path,
+               suffix,
+               overwrite=False):
+
+        """
+        This method is used to create a job for running on remote slurm cluster
+
+        :param job_name: name of the job to create
+        :param slurm_cluster_name: slurm cluster on which the job is gonna run
+        :param slurm_script_path: path of the slurm script
+        :param input_type: type of the input for the script that is going to be run on remote cluster, possible values: params, params+file
+        :param job_script_path: path of the file that is going to be run on the cluster via slurm script
+        :param argfile_path: path of the file that has to be passed to the file as an argument if any
+        :param remote_path: path in the remotes on which the scripts is gonna be copied to and ran from
+        :param local_path: local path to which the results are gonna be copied
+        :param suffix: suffix of the filenames in the job
+        :param overwrite: if the job already exists, this flag overwrites the previous job with the same name
+        :return:
+        """
+        if self.batch_config.get('job-metadata') is not None and job_name in \
+                list(self.batch_config.get('job-metadata').keys()) and overwrite is False:
+            raise RuntimeError("The job {} exists in the configuration file, if you want to overwrite the job, \
+            use --overwrite argument.".format(job_name))
+        slurm_cluster = self.cm_config.get('cluster')[slurm_cluster_name]
+        tmp_cluster = {slurm_cluster_name : dict(slurm_cluster)}
+        self.batch_config.deep_set(['slurm_cluster'], tmp_cluster)
+        job_metadata = {job_name: {}}
+        job_metadata[job_name]['suffix'] = suffix
+        job_metadata[job_name]['slurm_cluster_name'] = slurm_cluster_name
+        job_metadata[job_name]['input_type'] = input_type
+        job_metadata[job_name]['raw_remote_path'] = remote_path
+        job_metadata[job_name]['slurm_script_path'] = os.path.abspath(slurm_script_path)
+        job_metadata[job_name]['job_script_path'] = os.path.abspath(job_script_path)
+        job_metadata[job_name]['argfile_path'] = os.path.abspath(argfile_path)
+        job_metadata[job_name]['argfile_name'] = ntpath.basename(argfile_path)
+        job_metadata[job_name]['script_name'] = ntpath.basename(job_script_path)
+        job_metadata[job_name]['slurm_script_name'] = ntpath.basename(slurm_script_path)
+        job_metadata[job_name]['remote_path'] = os.path.join(remote_path, 'job' + suffix, '')
+        job_metadata[job_name]['remote_script_path'] = os.path.join(job_metadata[job_name]['remote_path'],
+                                                                    job_metadata[job_name]['script_name'])
+        job_metadata[job_name]['remote_slurm_script_path'] = os.path.join(job_metadata[job_name]['remote_path'],
+                                                                          job_metadata[job_name]['slurm_script_name'])
+        job_metadata[job_name]['local_path'] = local_path
+        self.job_metadata = job_metadata[job_name]
+        self.batch_config.deep_set(['job-metadata'], job_metadata)
+
+    @staticmethod
+    def _execute_in_parallel(func_args):
+        """
+        This is a method used for running methods in parallel
+
+        :param func_args:
+        :return:
+        """
+        target_class = func_args[0]
+        method_to_call = getattr(target_class, func_args[1])
+        args = list(func_args[2:])
+        return method_to_call(*args)
+
+    def _fetch_results_in_parallel(self, job_metadata, job_id, all_job_ids):
+        """
+        This method is used to fetch the results from remote nodes.
+
+        :param job_metadata: the dictionary containing the information about the previously submitted job
+        :param job_id: the tuple containing destination node, destination pid and destination node index when the job was submitted
+        :param all_job_ids:
+        :return:
+        """
+        dest_node_info = self.slurm_cluster
+        dest_job_id = job_id
+        ssh_caller = lambda *x: self._ssh(dest_node_info['name'], os.path.expanduser(dest_node_info['credentials'] \
+                                                                                         ['sshconfigpath']), *x)
+        scp_caller = lambda *x: self._scp(dest_node_info['name'], os.path.expanduser(dest_node_info['credentials'] \
+                                                                                         ['sshconfigpath']), *x)
+        ps_output = ssh_caller("qstat -u $USER | grep %s" % job_id)
+        if len(ps_output) == 0 or ' c ' in ps_output.lower():
+
+            if not os.path.exists(job_metadata['local_path']):
+                os.makedirs(job_metadata['local_path'])
+            scp_caller('-r', '%s:%s' % (dest_node_info['name'], job_metadata['remote_path']),
+                       os.path.join(job_metadata ['local_path'],''))
+            os.remove(os.path.join(job_metadata['local_path'],os.path.basename(os.path.normpath(job_metadata['remote_path'])), job_metadata['script_name']))
+            os.remove(os.path.join(job_metadata['local_path'],os.path.basename(os.path.normpath(job_metadata['remote_path'])), job_metadata['slurm_script_name']))
+            if job_metadata['input_type'] == 'params+file':
+                os.remove(os.path.join(job_metadata['local_path'], os.path.basename(os.path.normpath(job_metadata['remote_path'])),job_metadata['argfile_name']))
+            all_job_ids.remove(dest_job_id)
+            print("Results collected from %s for jobID %s" % (dest_node_info['name'], dest_job_id))
+
+
+    @staticmethod
+    def _ssh(hostname, sshconfigpath, *args):
+        """
+        This method is used to create remove ssh connections
+
+        :param hostname: hostname
+        :param sshconfigpath: path to sshconfig for connecting to remote node
+        :param args: the argument to be submitted via ssh
+        :return:
+        """
+        hide_errors_flag = False
+        if type(args[-1]) == bool:
+            hide_errors_flag = True
+            args=args[:-1]
+        ssh = subprocess.Popen(["ssh", hostname, '-F', sshconfigpath, *args],
+                               stdout=subprocess.PIPE,
+                               stderr=subprocess.PIPE)
+        result = ssh.stdout.readline()
+        if not result:
+            error = ssh.stderr.readlines()
+            if len(error) > 0 and hide_errors_flag == False:
+                print("ERROR in host %s: %s" % (hostname, error))
+            return []
+        else:
+            try:
+                return ''.join([chr(x) for x in result])
+            except AttributeError:
+                return [result.decode('utf-8').strip('\n')]
+
+    @staticmethod
+    def _scp(hostname, sshconfigpath, *args):
+        """
+        This method is used for scp from and to remote
+
+        :param hostname: hostname
+        :param sshconfigpath: ssh config file
+        :param args:arguments for using while copying
+        :return:
+        """
+        ssh = subprocess.Popen(["scp", '-F', sshconfigpath, *args],
+                               stdout=subprocess.PIPE,
+                               stderr=subprocess.PIPE)
+        middle_result = ssh.stdout.readlines()
+        if not middle_result:
+            error = ssh.stderr.readlines()
+            if len(error) > 0:
+                print("ERROR in host %s: %s" % (hostname, error))
+
+    @staticmethod
+    def add_suffix_to_path(path, suffix):
+        """
+        This method is used to add suffix to a path
+
+        :param path: path
+        :param suffix: suffix
+        :return:
+        """
+        dir_path = os.path.dirname(path)
+        full_filename = os.path.basename(path)
+        filename, fileextention = os.path.splitext(full_filename)
+        full_filename_new = filename + suffix + fileextention
+        new_path = os.path.join(dir_path, full_filename_new)
+        return new_path
+
+    def clean_remote(self, job_name):
+        """
+        This method is used to spawn processes for cleaning the remote nodes
+
+        :param job_name: name of previously submitted job for which the nodes are going to be cleaned
+        :return:
+        """
+        job_metadata = self.batch_config.get('job-metadata')[job_name]
+        target_cluster_info = self.batch_config.get('slurm_cluster')[job_metadata['slurm_cluster_name']]
+        remote_path = job_metadata['remote_path']
+
+        ssh_caller = lambda *x: self._ssh(target_cluster_info['name'], os.path.expanduser(target_cluster_info['credentials'] \
+                                                                                           ['sshconfigpath']), *x, True)
+        ssh_caller('rm -rf {}'.format(remote_path))
+        if len(ssh_caller('ls {}'.format(remote_path))) == 0:
+            print("Job {} cleaned successfully.".format(job_name))
+        else:
+            print("Error: Job {} could not be cleaned.".format(job_name))
+
+    def connection_test(self, slurm_cluster_name):
+        """
+        This method is used for testing the connection to the slurm cluster connection node
+
+        :param slurm_cluster_name: name of the slurm cluster which is going to be tested
+        :return:
+        """
+        target_node_info = self.batch_config.get('slurm_cluster')[slurm_cluster_name]
+        ssh_caller = lambda *x: self._ssh(target_node_info['name'], os.path.expanduser(target_node_info['credentials'] \
+                                                                                           ['sshconfigpath']), *x)
+        if len(ssh_caller('uname -a')) > 0:
+            print("Slurm Cluster {} is accessible.".format(target_node_info['name']))
+        else:
+            print("Error: Slurm Cluster {} cannot be accessed.".format(target_node_info['name']))
+
+
+    def remove(self, target, key):
+        """
+        Used to remove virtual clusters and runtime configs
+
+        :param target: type of entity to be removed
+        :param key: keyname of the entity to be removed
+        :return:
+        """
+        if target == 'slurm-cluster':
+            self.batch_config.remove(['slurm-cluster'], key)
+            print("Slurm-cluster {} removeed successfully.".format(key))
+        if target == 'job':
+            self.batch_config.remove(['job-metadata'], key)
+            print("Job {} removeed successfully.".format(key))
+        else:
+            raise ValueError("Target of removeing not found.")
+
+    def fetch(self, job_name):
+        """
+        This method is used to fetch resutls from remote nodes
+
+        :param job_name: the previously submitted job name
+        :return:
+        """
+        job_metadata = self.batch_config.get('job-metadata')[job_name]
+        self.slurm_cluster = self.batch_config.get('slurm_cluster')[job_metadata['slurm_cluster_name']]
+        loaded_all_job_ids = [x for x in job_metadata['jobIDs']]
+        all_job_ids = Manager().list()
+        all_job_ids.extend(loaded_all_job_ids)
+        pool = Pool(processes=1)
+        print("collecting results")
+        while len(all_job_ids) > 0:
+            time.sleep(1)
+            all_running_jobs = [(self, '_fetch_results_in_parallel', job_metadata, jobID, all_job_ids) for \
+                                jobID in loaded_all_job_ids if jobID in all_job_ids]
+            pool.map(self._execute_in_parallel, all_running_jobs)
+            print("waiting for other results if any...")
+        print("All of the remote results collected.")
+
+    def list(self, target, max_depth, current_depth=1, input_dict=None):
+        """
+        listing the target slurm clusters or job-metadata
+
+        :param target: name of the virtual cluster to be listed
+        :param max_depth: depth of information to be shown
+        :param current_depth: current depth of printing information
+        :param input_dict: used for recursion for depth of higher than 1
+        :return:
+        """
+        if target == 'slurm-clusters' and input_dict is None:
+            input_dict = self.batch_config.get('slurm_cluster')
+        if target == 'jobs' and input_dict is None:
+            input_dict = self.batch_config.get('job-metadata')
+        elif input_dict is None:
+            raise ValueError("Target of listing not found.")
+
+        if max_depth >= current_depth:
+            if type(input_dict) == dict:
+                for key in input_dict:
+                    key_to_print = key + ':' if max_depth >= current_depth else key
+                    indent = current_depth if current_depth > 1 else current_depth - 1
+                    print('\t' * indent, key_to_print)
+                    if type(input_dict.get(key)) != dict:
+                        print('\t' * (indent + 1), input_dict.get(key))
+                    else:
+                        for value in input_dict.get(key):
+                            value_to_print = value + ':' if max_depth > current_depth else value
+                            print('\t' * (indent + 1), value_to_print)
+                            self.list(target, max_depth, input_dict=input_dict[key][value],
+                                      current_depth=current_depth + 1)
+            else:
+                indent = current_depth if current_depth > 1 else current_depth - 1
+                print('\t' * indent, input_dict)
+
+
+    def run(self, job_name):
+        """
+        This method is used to create a job, validate it and run it on remote nodes
+
+        :param job_name: name of the job to create
+        :return:
+        """
+        job_metadata = self.batch_config.get('job-metadata')[job_name]
+        all_job_ids = Manager().list()
+        cluster_name = job_metadata['slurm_cluster_name']
+        slurm_cluster = self.batch_config.get('slurm_cluster').get(cluster_name)
+        ssh_caller = lambda *x: self._ssh(slurm_cluster['name'], os.path.expanduser(slurm_cluster['credentials'] \
+                                                                                      ['sshconfigpath']), *x)
+        scp_caller = lambda *x: self._scp(slurm_cluster['name'], os.path.expanduser(slurm_cluster['credentials'] \
+                                                                                      ['sshconfigpath']), *x)
+        ssh_caller('cd %s && mkdir job%s' % (job_metadata['raw_remote_path'], job_metadata['suffix']), True)
+        scp_caller(job_metadata['slurm_script_path'], '%s:%s' % (slurm_cluster['name'], job_metadata['remote_slurm_script_path']))
+        scp_caller(job_metadata['job_script_path'], '%s:%s' % (slurm_cluster['name'], job_metadata['remote_script_path']))
+        ssh_caller('chmod +x', job_metadata['remote_script_path'])
+        if job_metadata['input_type'].lower() == 'params+file':
+            scp_caller(job_metadata['argfile_path'], '%s:%s' % (slurm_cluster['name'], job_metadata['remote_path']))
+
+        remote_job_id = ssh_caller("cd %s && qsub %s && qstat -u $USER | tail -n 1 | awk '{print $1}'" %
+                                (job_metadata['remote_path'], job_metadata['remote_slurm_script_path']))
+        remote_job_id = remote_job_id.strip('\n')
+        all_job_ids.append(remote_job_id)
+        print('Remote job ID: %s' % remote_job_id)
+        self.batch_config.deep_set(['job-metadata', job_name, 'jobIDs'], [pid for pid in all_job_ids])
+
+    def set_param(self, target, name, parameter, value):
+        """
+        Used to set a specific parameter in the configuration
+
+        :param target: the entity type on which the parameter is going to be set, e.g. runtime-config
+        :param name: the entity name on which the parameter is going to be set, e.g. test-config32
+        :param parameter: name of the parameter to be set
+        :param value: value of that parameter to be set
+        :return:
+        """
+        if target == 'slurm-cluster':
+            self.batch_config.deep_set(['slurm_cluster', name, parameter], value)
+            print("slurm-cluster parameter {} set to {} successfully.".format(parameter, value))
+        elif target == 'job-metadata':
+            self.batch_config.deep_set(['job-metadata', name, parameter], value)
+            print("Job-metadata parameter {} set to {} successfully.".format(parameter, value))
+        else:
+            raise ValueError("Target of variable set not found.")
+
+
+def process_arguments(arguments):
+    """
+    Processes all the input arguments and acts accordingly.
+
+    :param arguments: input arguments for the virtual cluster script.
+
+    """
+    debug = arguments["--debug"]
+
+    if arguments.get("batch"):
+        slurm_manager = SlurmCluster(debug=debug)
+        if arguments.get("create-job") and arguments.get("JOB_NAME"):
+                job_name = arguments.get("JOB_NAME")
+                slurm_script_path = arguments.get("--slurm-script")
+                input_type = arguments.get("--input-type")
+                assert input_type in ['params', 'params+file'], "Input type can be either params or params+file"
+                if input_type == 'params+file':
+                    assert arguments.get("--argfile-path") is not None, "Input type is params+file but the input \
+                    filename is not specified"
+                slurm_cluster_name = arguments.get("--slurm-cluster")
+                job_script_path = arguments.get("--job-script-path")
+                remote_path = arguments.get("--remote-path")
+                local_path = arguments.get("--local-path")
+                random_suffix = '_' + str(datetime.now()).replace('-', '').replace(' ', '_').replace(':', '')[
+                                      0:str(datetime.now()).replace('-', '').replace(' ', '_').replace(':', '').index(
+                                          '.') + 3].replace('.', '')
+                suffix = random_suffix if arguments.get("suffix") is None else arguments.get("suffix")
+                overwrite = False if type(arguments.get("--overwrite")) is None else arguments.get("--overwrite")
+                argfile_path = '' if arguments.get("--argfile-path") is None else arguments.get("--argfile-path")
+                slurm_manager.create(job_name, slurm_cluster_name, slurm_script_path, input_type,
+                                     job_script_path, argfile_path, remote_path, local_path,
+                                     suffix, overwrite)
+
+        elif arguments.get("remove"):
+            if arguments.get("slurm-cluster"):
+                slurm_manager.remove("slurm-cluster", arguments.get("CLUSTER_NAME"))
+            if arguments.get("job"):
+                slurm_manager.remove("job", arguments.get("JOB_NAME"))
+
+        elif arguments.get("list"):
+            max_depth = 1 if arguments.get("DEPTH") is None else int(arguments.get("DEPTH"))
+            if arguments.get("slurm-clusters"):
+                slurm_manager.list("slurm-clusters", max_depth)
+            elif arguments.get("jobs"):
+                slurm_manager.list("jobs", max_depth)
+
+        elif arguments.get("set-param"):
+            if arguments.get("slurm-cluster"):
+                cluster_name = arguments.get("CLUSTER_NAME")
+                parameter = arguments.get("PARAMETER")
+                value = arguments.get("VALUE")
+                slurm_manager.set_param("slurm-cluster", cluster_name, parameter, value)
+
+            if arguments.get("job-metadata"):
+                config_name = arguments.get("JOB_NAME")
+                parameter = arguments.get("PARAMETER")
+                value = arguments.get("VALUE")
+                slurm_manager.set_param("job-metadata", config_name, parameter, value)
+        elif arguments.get("run-job"):
+            job_name = arguments.get("JOB_NAME")
+            slurm_manager.run(job_name)
+        elif arguments.get("fetch"):
+            job_name = arguments.get("JOB_NAME")
+            slurm_manager.fetch(job_name)
+        elif arguments.get("test-connection"):
+            slurm_cluster_name = arguments.get("SLURM_CLUSTER_NAME")
+            slurm_manager.connection_test(slurm_cluster_name)
+        elif arguments.get("clean-remote"):
+            job_name = arguments.get("JOB_NAME")
+            slurm_manager.clean_remote(job_name)
+
+
+def main():
+    """
+    Main function for the batch. Processes the input arguments.
+
+    """
+    arguments = docopt(__doc__, version='Cloudmesh Batch 0.1')
+    process_arguments(arguments)
+
+
+if __name__ == "__main__":
+    main()

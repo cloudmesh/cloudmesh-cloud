@@ -8,6 +8,7 @@ Cloudmesh Version 4
    contributors
    install
    mongo
+   configuration
    CM4README
    README
    aws

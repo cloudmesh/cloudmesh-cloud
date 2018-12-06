@@ -50,10 +50,21 @@
       cm4 vcluster destroy runtime-config CONFIG_NAME
       cm4 vcluster list virtual-clusters [DEPTH [default:1]]
       cm4 vcluster list runtime-configs [DEPTH [default:1]]
-      cm4 vcluster run-script --script-path=SCRIPT_PATH --job-name=JOB_NAME --vcluster-name=VIRTUALCLUSTER_NAME --config-name=CONFIG_NAME --arguments=SET_OF_PARAMS --remote-path=REMOTE_PATH> --local-path=LOCAL_PATH [--argfile-path=ARGUMENT_FILE_PATH] [--outfile-name=OUTPUT_FILE_NAME] [--suffix=SUFFIX] [--overwrite]
+      cm4 vcluster run-script --script-path=SCRIPT_PATH --job-name=JOB_NAME --vcluster-name=VIRTUALCLUSTER_NAME --config-name=CONFIG_NAME --arguments=SET_OF_PARAMS --remote-path=REMOTE_PATH --local-path=LOCAL_PATH [--argfile-path=ARGUMENT_FILE_PATH] [--outfile-name=OUTPUT_FILE_NAME] [--suffix=SUFFIX] [--overwrite]
       cm4 vcluster fetch JOB_NAME
       cm4 vcluster clean-remote JOB_NAME PROCESS_NUM
       cm4 vcluster test-connection VIRTUALCLUSTER_NAME PROCESS_NUM
+      cm4 batch create-job JOB_NAME --slurm-script=SLURM_SCRIPT_PATH --input-type=INPUT_TYPE --slurm-cluster=SLURM_CLUSTER_NAME --job-script-path=SCRIPT_PATH --remote-path=REMOTE_PATH --local-path=LOCAL_PATH [--argfile-path=ARGUMENT_FILE_PATH] [--outfile-name=OUTPUT_FILE_NAME] [--suffix=SUFFIX] [--overwrite]
+      cm4 batch run-job JOB_NAME
+      cm4 batch fetch JOB_NAME
+      cm4 batch test-connection SLURM_CLUSTER_NAME
+      cm4 batch set-param slurm-cluster CLUSTER_NAME PARAMETER VALUE
+      cm4 batch set-param job-metadata JOB_NAME PARAMETER VALUE
+      cm4 batch list slurm-clusters [DEPTH [default:1]]
+      cm4 batch list jobs [DEPTH [default:1]]
+      cm4 batch remove slurm-cluster CLUSTER_NAME
+      cm4 batch remove job JOB_NAME
+      cm4 batch clean-remote JOB_NAME
       cm4 spark deploy -n 10 [--dryrun]
       cm4 spark run [--dryrun]
       cm4 spark execute PRG [--dryrun]
@@ -74,6 +85,7 @@ from docopt import docopt
 from cm4.configuration.config import Config
 import cm4.vagrant.vagrant
 import cm4.vcluster.VirtualCluster
+import cm4.batch.Batch
 import cm4.data.data
 import cm4.vm.Vm
 import cm4.openstack.OpenstackCM
@@ -95,6 +107,9 @@ def process_arguments(arguments):
 
     elif arguments.get("vcluster"):
         cm4.vcluster.VirtualCluster.process_arguments(arguments)
+
+    elif arguments.get("batch"):
+        cm4.batch.Batch.process_arguments(arguments)
 
     elif arguments.get("openstack"):
         cm4.openstack.OpenstackCM.process_arguments(arguments)

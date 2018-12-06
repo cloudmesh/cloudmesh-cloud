@@ -8,6 +8,7 @@ Cloudmesh Version 4
    contributors
    install
    mongo
+   configuration
    CM4README
    README
    aws
@@ -15,6 +16,7 @@ Cloudmesh Version 4
    vagrant
    vcluster
    vm
+   jupyter
    code
 
 Indices and tables

@@ -6,6 +6,7 @@ Cloudmesh Version 4
    :caption: Contents:
 
    contributors
+   quickstart
    install
    mongo
    configuration
@@ -16,6 +17,7 @@ Cloudmesh Version 4
    vagrant
    vcluster
    vm
+   jupyter
    code
 
 Indices and tables

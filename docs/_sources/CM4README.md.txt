@@ -424,6 +424,12 @@ Use pip install to install the following packages.
 
 #### How to run the REST API
 
+```bash
+$ cm4 admin rest status
+$ cm4 admin rest start
+$ cm4 admin rest stop
+```
+
 - Navigate to the cm directory. example:
 
 ```bash

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>CM4 REST Api &mdash; cm4 alpha documentation</title>
+  <title>12. CM4 REST Api &mdash; cm4 alpha documentation</title>
   
 
   
@@ -28,8 +28,8 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="ehvagrant: enhanced Vagrant interface with importable python module" href="vagrant.html" />
-    <link rel="prev" title="AWS cm" href="aws.html" /> 
+    <link rel="next" title="13. Virtual Cluster" href="vcluster.html" />
+    <link rel="prev" title="11. AWS cm" href="aws.html" /> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -84,19 +84,31 @@
             
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="README.html">Cloudmesh cm v4</a></li>
-<li class="toctree-l1"><a class="reference internal" href="aws.html">AWS cm</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">CM4 REST Api</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#pre-requisites">Pre-requisites</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#how-to-run-the-rest-api">How to run the REST API</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#api">API</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#examples">Examples</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#dev-restricting-certain-ips-for-certain-rest-calls">Dev - restricting certain ips for certain rest calls</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributors.html">1. Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">2. Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">3. Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mongo.html">4. Cloudmesh Database</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">5. Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vmproviders.html">6. VM Providers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vagrant.html">7. Vagrant</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vagrant-other.html">8. ehvagrant: enhanced Vagrant interface with importable python module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CM4README.html">9. CM4 Details</a></li>
+<li class="toctree-l1"><a class="reference internal" href="README.html">10. Cloudmesh cm v4</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aws.html">11. AWS cm</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">12. CM4 REST Api</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#pre-requisites">12.1. Pre-requisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#how-to-run-the-rest-api">12.2. How to run the REST API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#api">12.3. API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#examples">12.4. Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#dev-restricting-certain-ips-for-certain-rest-calls">12.5. Dev - restricting certain ips for certain rest calls</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="vagrant.html">ehvagrant: enhanced Vagrant interface with importable python module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="vcluster.html">Virtual Cluster</a></li>
-<li class="toctree-l1"><a class="reference internal" href="vm.html">VM Description</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vcluster.html">13. Virtual Cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vm.html">14. VM Description</a></li>
+<li class="toctree-l1"><a class="reference internal" href="jupyter.html">15. Jupyter Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="code.html">16. Code Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deprecated.html">17. Deprecated from here on</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ehvagrant.html">18. ehvagrant: enhanced Vagrant interface with importable python module</a></li>
 </ul>
 
             
@@ -142,7 +154,7 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>CM4 REST Api</li>
+      <li>12. CM4 REST Api</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -162,11 +174,11 @@
            <div itemprop="articleBody">
             
   <div class="section" id="cm4-rest-api">
-<span id="cm4-rest-api"></span><h1>CM4 REST Api<a class="headerlink" href="#cm4-rest-api" title="Permalink to this headline">¶</a></h1>
+<span id="cm4-rest-api"></span><h1>12. CM4 REST Api<a class="headerlink" href="#cm4-rest-api" title="Permalink to this headline">¶</a></h1>
 <p>The cm4 REST Api is built using flask and provides the cloud
 information retrieval functionality through HTTP calls.</p>
 <div class="section" id="pre-requisites">
-<span id="pre-requisites"></span><h2>Pre-requisites<a class="headerlink" href="#pre-requisites" title="Permalink to this headline">¶</a></h2>
+<span id="pre-requisites"></span><h2>12.1. Pre-requisites<a class="headerlink" href="#pre-requisites" title="Permalink to this headline">¶</a></h2>
 <p>Use pip install to install the following packages.</p>
 <ul class="simple">
 <li>Flask</li>
@@ -174,7 +186,7 @@ information retrieval functionality through HTTP calls.</p>
 </ul>
 </div>
 <div class="section" id="how-to-run-the-rest-api">
-<span id="how-to-run-the-rest-api"></span><h2>How to run the REST API<a class="headerlink" href="#how-to-run-the-rest-api" title="Permalink to this headline">¶</a></h2>
+<span id="how-to-run-the-rest-api"></span><h2>12.2. How to run the REST API<a class="headerlink" href="#how-to-run-the-rest-api" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li>Navigate to the cm directory. example:</li>
 </ul>
@@ -201,7 +213,7 @@ information retrieval functionality through HTTP calls.</p>
 </div>
 </div>
 <div class="section" id="api">
-<span id="api"></span><h2>API<a class="headerlink" href="#api" title="Permalink to this headline">¶</a></h2>
+<span id="api"></span><h2>12.3. API<a class="headerlink" href="#api" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li><code class="docutils literal notranslate"><span class="pre">/vms/</span></code> : Provides information on all the VMs.</li>
 <li><code class="docutils literal notranslate"><span class="pre">/vms/stopped</span></code>  : Provides information on all the stopped VMs.</li>
@@ -209,7 +221,7 @@ information retrieval functionality through HTTP calls.</p>
 </ul>
 </div>
 <div class="section" id="examples">
-<span id="examples"></span><h2>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<span id="examples"></span><h2>12.4. Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
 <ul>
 <li><p class="first">Retrieve information about a VM</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl localhost:5000/vms/i-0fad7e92ffea8b345
@@ -219,7 +231,7 @@ information retrieval functionality through HTTP calls.</p>
 </ul>
 </div>
 <div class="section" id="dev-restricting-certain-ips-for-certain-rest-calls">
-<span id="dev-restricting-certain-ips-for-certain-rest-calls"></span><h2>Dev - restricting certain ips for certain rest calls<a class="headerlink" href="#dev-restricting-certain-ips-for-certain-rest-calls" title="Permalink to this headline">¶</a></h2>
+<span id="dev-restricting-certain-ips-for-certain-rest-calls"></span><h2>12.5. Dev - restricting certain ips for certain rest calls<a class="headerlink" href="#dev-restricting-certain-ips-for-certain-rest-calls" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">abort</span><span class="p">,</span> <span class="n">request</span>
 <span class="kn">from</span> <span class="nn">cm4.flask_rest_api.app</span> <span class="kn">import</span> <span class="n">app</span>
 
@@ -241,10 +253,10 @@ information retrieval functionality through HTTP calls.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="vagrant.html" class="btn btn-neutral float-right" title="ehvagrant: enhanced Vagrant interface with importable python module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="vcluster.html" class="btn btn-neutral float-right" title="13. Virtual Cluster" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="aws.html" class="btn btn-neutral" title="AWS cm" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="aws.html" class="btn btn-neutral" title="11. AWS cm" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

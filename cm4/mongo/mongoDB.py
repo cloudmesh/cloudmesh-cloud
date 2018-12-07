@@ -6,7 +6,7 @@ from cm4.configuration.config import Config
 class MongoDB(object):
 
     def __init__(self, host, username, password, port):
-        self.database = Config().data['cloudmesh']['data']['mongo']['MONGO_DBNAME']
+        self.database = Config().data["cloudmesh"]["data"]["mongo"]["MONGO_DBNAME"]
         self.host = host
         self.password = urllib.parse.quote_plus(password)
         self.username = urllib.parse.quote_plus(username)

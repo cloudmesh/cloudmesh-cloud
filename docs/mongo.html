@@ -1,0 +1,267 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>4. Cloudmesh Database &mdash; cm4 alpha documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="5. Configuration" href="configuration.html" />
+    <link rel="prev" title="3. Installation" href="install.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> cm4
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="contributors.html">1. Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">2. Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">3. Installation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">4. Cloudmesh Database</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">5. Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CM4README.html">6. CM4 Details</a></li>
+<li class="toctree-l1"><a class="reference internal" href="README.html">7. Cloudmesh cm v4</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aws.html">8. AWS cm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ufo.html">9. CM4 REST Api</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vagrant.html">10. ehvagrant: enhanced Vagrant interface with importable python module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vcluster.html">11. Virtual Cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vm.html">12. VM Description</a></li>
+<li class="toctree-l1"><a class="reference internal" href="jupyter.html">13. Jupyter Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="code.html">14. Code Documentation</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">cm4</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>4. Cloudmesh Database</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/mongo.md.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="cloudmesh-database">
+<span id="cloudmesh-database"></span><h1>4. Cloudmesh Database<a class="headerlink" href="#cloudmesh-database" title="Permalink to this headline">¶</a></h1>
+<p>Cloudmesh stores its status in a database so that you can easily
+remember which services you used where and have an accurate account of
+them.</p>
+<p>We use as a database mongoDB to store this information</p>
+<p>To use cloudmesh you simply need to start the database service.</p>
+<p>Note: In future versions this is done automatically. For nw we just od it by hand</p>
+<p>You can start the database service with</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ cm4 admin mongo start
+</pre></div>
+</div>
+<p>You can stop the database service with</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ cm4 admin mongo start
+</pre></div>
+</div>
+<p>You can test the database service with</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ cm4 admin mongo status
+</pre></div>
+</div>
+<p>The database will be started on the port as specified in <code class="docutils literal notranslate"><span class="pre">~/.cloudmesh/cloudmesh4.yaml</span></code></p>
+<p>Additional values can be specified or are available to locate the downloads.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>    <span class="n">mongo</span><span class="p">:</span>
+      <span class="n">MONGO_AUTOINSTALL</span><span class="p">:</span> <span class="kc">True</span>
+      <span class="n">MONGO_BREWINSTALL</span><span class="p">:</span> <span class="kc">False</span>
+      <span class="n">LOCAL</span><span class="p">:</span> <span class="o">~/</span><span class="n">local</span>
+      <span class="n">MONGO_HOME</span><span class="p">:</span> <span class="o">~/</span><span class="n">local</span><span class="o">/</span><span class="n">mongo</span>
+      <span class="n">MONGO_PATH</span><span class="p">:</span> <span class="o">~/.</span><span class="n">cloudmesh</span><span class="o">/</span><span class="n">mongodb</span>
+      <span class="n">MONGO_LOG</span><span class="p">:</span> <span class="o">~/.</span><span class="n">cloudmesh</span><span class="o">/</span><span class="n">mongodb</span><span class="o">/</span><span class="n">log</span>
+      <span class="n">MONGO_DBNAME</span><span class="p">:</span> <span class="s1">&#39;cloudmesh&#39;</span>
+      <span class="n">MONGO_HOST</span><span class="p">:</span> <span class="s1">&#39;127.0.0.1&#39;</span>
+      <span class="n">MONGO_PORT</span><span class="p">:</span> <span class="s1">&#39;27017&#39;</span>
+      <span class="n">MONGO_USERNAME</span><span class="p">:</span> <span class="s1">&#39;admin&#39;</span>
+      <span class="n">MONGO_PASSWORD</span><span class="p">:</span> <span class="n">TBD</span>
+      <span class="n">MONGO_DOWNLOAD</span><span class="p">:</span>
+        <span class="n">darwin</span><span class="p">:</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">fastdl</span><span class="o">.</span><span class="n">mongodb</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">osx</span><span class="o">/</span><span class="n">mongodb</span><span class="o">-</span><span class="n">osx</span><span class="o">-</span><span class="n">ssl</span><span class="o">-</span><span class="n">x86_64</span><span class="o">-</span><span class="mf">4.0</span><span class="o">.</span><span class="mf">4.</span><span class="n">tgz</span>
+        <span class="n">linux</span><span class="p">:</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">fastdl</span><span class="o">.</span><span class="n">mongodb</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">linux</span><span class="o">/</span><span class="n">mongodb</span><span class="o">-</span><span class="n">linux</span><span class="o">-</span><span class="n">x86_64</span><span class="o">-</span><span class="mf">4.0</span><span class="o">.</span><span class="mf">4.</span><span class="n">tgz</span>
+        <span class="n">windows</span><span class="p">:</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">fastdl</span><span class="o">.</span><span class="n">mongodb</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">win32</span><span class="o">/</span><span class="n">mongodb</span><span class="o">-</span><span class="n">win32</span><span class="o">-</span><span class="n">x86_64</span><span class="o">-</span><span class="mi">2008</span><span class="n">plus</span><span class="o">-</span><span class="n">ssl</span><span class="o">-</span><span class="mf">4.0</span><span class="o">.</span><span class="mi">4</span><span class="o">-</span><span class="n">signed</span><span class="o">.</span><span class="n">msi</span>
+        <span class="n">redhat</span><span class="p">:</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">repo</span><span class="o">.</span><span class="n">mongodb</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">yum</span><span class="o">/</span><span class="n">redhat</span><span class="o">/</span><span class="mi">7</span><span class="o">/</span><span class="n">mongodb</span><span class="o">-</span><span class="n">org</span><span class="o">/</span><span class="mf">4.0</span><span class="o">/</span><span class="n">x86_64</span><span class="o">/</span><span class="n">RPMS</span><span class="o">/</span><span class="n">mongodb</span><span class="o">-</span><span class="n">org</span><span class="o">-</span><span class="n">server</span><span class="o">-</span><span class="mf">4.0</span><span class="o">.</span><span class="mi">4</span><span class="o">-</span><span class="mf">1.</span><span class="n">el7</span><span class="o">.</span><span class="n">x86_64</span><span class="o">.</span><span class="n">rpm</span>
+</pre></div>
+</div>
+<p>TODO: describe the parameters</p>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="configuration.html" class="btn btn-neutral float-right" title="5. Configuration" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="install.html" class="btn btn-neutral" title="3. Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Cloudmesh Community
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

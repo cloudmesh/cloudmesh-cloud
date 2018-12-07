@@ -231,7 +231,11 @@ def process_arguments(arguments):
         print("vm processing arguments")
         pp.pprint(arguments)
 
+<<<<<<< HEAD
     default_cloud = Config().data['cloudmesh']['default']['cloud']
+=======
+    default_cloud = Config().data["cloudmesh"]["default"]["cloud"]
+>>>>>>> upstream/master
 
     vm = Vm(default_cloud)
 

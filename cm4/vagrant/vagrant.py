@@ -8,42 +8,14 @@ import re
 import subprocess
 import time
 
+from cm4.configuration.config import Config
+
 import hostlist
-from docopt import docopt
 from termcolor import colored
 #
 # TODO: BUG: this is managed laregly with the vm command and not vagrant, so what we need to do is make sure that if
 #  this stays, we need to have similar fumctionality in vm
 #
-"""Vagrant Manager.
-
-Usage:
-  cm4 vagrant create --vms=VMLIST [--box=BOX] [--template=TEMPLATE] [--output=OUTPUT] [--debug]
-  cm4 vagrant start [--vms=VMLIST] [--debug]
-  cm4 vagrant resume [--vms=VMLIST] [--debug]
-  cm4 vagrant stop [--vms=VMLIST] [--debug]
-  cm4 vagrant suspend [--vms=VMLIST] [--debug]
-  cm4 vagrant destroy [-f] [--vms=VMLIST] [--debug] 
-  cm4 vagrant info NAME [--debug]
-  cm4 vagrant ls [--debug]
-  cm4 vagrant upload --from=FROM --to=TO [-r] [--vms=VMLIST] [--debug]
-  cm4 vagrant download --from=FROM --to=TO [-r] [--vms=VMLIST] [--debug]
-  cm4 vagrant ssh NAME [--debug]
-  cm4 vagrant run command COMMAND [--vms=VMLIST] [--debug]
-  cm4 vagrant run script SCRIPT [--data=PATH] [--vms=VMLIST] [--debug]
-
-  cm4 -h
-
-Options:
-  -h --help     Show this screen.
-  --vm_list=<list_of_vms>  List of VMs separated by commas ex: node-1,node-2
-
-Description:
-   put a description here
-   
-Example:
-   put an example here
-"""
 
 """
 Implementation notes
@@ -117,32 +89,19 @@ class Vagrant(object):
 
         :param debug:
         """
-        # prepare path
-        #
-        # TODO: BUG: We use cloudmesh, ehvagrant is not whow we set this up
-        #
-        # THis should use a config = Config()
-        #
-
-        self.workspace = os.path.join(os.path.expanduser('~'), '.cloudmesh', 'vagrant_workspace', )
-        self.path = os.path.join(self.workspace, "Vagrantfile")
-        self.experiment_path = os.path.join(self.workspace, 'experiment')
-
-        # prepare folder and Vagrantfile
-        #
-        #  TODO: BUG: Thsi should be a utility function in common
-        #
+        # prepare path and directory
+        self.workspace = os.path.expanduser(os.path.normpath(Config().data['cloudmesh']['cloud']['vagrant']['default']['vagrant_path']))
         if not os.path.isdir(self.workspace):
             self._nested_mkdir(self.workspace)
-
-        if not os.path.isdir(self.experiment_path):
-            os.mkdir(self.experiment_path)
-
-        #
-        # TODO: BUG: I do not understand what node 1 and node2 are, seems debugging code
-        #
+            
+        self.path = os.path.join(self.workspace, "Vagrantfile")
+        ## if there is no Vagrantfile in the default Vagrantfile path, create one!
         if not os.path.isfile(self.path):
-            self.create(['node1', 'node2'])
+            self.create(count=2)        
+        
+        self.experiment_path = os.path.join(self.workspace, 'experiment')      
+        if not os.path.isdir(self.experiment_path):
+            os.mkdir(self.experiment_path)       
 
         self.ssh_config = {}
         self.debug = debug
@@ -167,10 +126,11 @@ class Vagrant(object):
             splited_path.insert(2, os.sep)
         return splited_path
 
-    def _nested_mkdir(self, path):
+    @staticmethod
+    def _nested_mkdir(path):
         parsed_path = re.split("[\\\\/]", path)
         parsed_path = [x for x in parsed_path if x]
-        parsed_path = self._impute_drive_sep(parsed_path)
+        parsed_path = Vagrant._impute_drive_sep(parsed_path)
 
         for i in range(len(parsed_path) - 1):
             d = os.path.join(*parsed_path[0:i + 1])
@@ -382,7 +342,7 @@ class Vagrant(object):
             console_output = self.run_command(name, 'cat {}/console_output.txt'.format(guest_exp_folder_path), False)
             run_res['output'] = console_output['output'] + '\n' + run_res['output']
 
-            # fetch output files if exists
+        # fetch output files if exists
         output_files_query = self.run_command(name, "ls {}/output/".format(guest_exp_folder_path), report=False)
         have_output_file = output_files_query['return_code'] == 0 and output_files_query[
             'output']  # remote output folder exists and have files in it
@@ -497,15 +457,17 @@ class Vagrant(object):
         """
         self.execute("vagrant ssh " + str(name))
 
-    def create(self, hosts, image='ubuntu/xenial64', output_path=None, template=None):
+    def create(self, count=2, image='ubuntu/xenial64', output_path=None, template=None):
         """
         TODO: doc
 
         :return:                        
         """
         # prepare dict
+        
         kwargs = {}
-        array = ["'{}'".format(x) for x in hosts]
+        count = int(count)
+        array = ["'{}{}'".format(x,y) for x,y in zip(['node'] * count, list(range(1,1+count)))]
         kwargs.update({'array': ','.join(array)})
         kwargs.update({'image': image})
 
@@ -592,20 +554,13 @@ class Vagrant(object):
             name = ""
         self.execute("vagrant destroy {}{}".format('-f ' if force else '', name))
 
-    def ls(self, name=None):
+    def list(self):
         """
-        Provides the status information of all Vagrant Virtual machines by default.
-        If a name is specified, it provides the status of that particular virtual machine.
+        Provides the status information of all Vagrant Virtual machines.
+        """        
+        self.execute("vagrant status")
 
-        :param name: [optional], name of the Vagrant VM.
-        :return:
-        """
-        if name is None:
-            # start all
-            name = ""
-        self.execute("vagrant status " + str(name))
-
-    def info(self, name):
+    def status(self, name):
         """
         provides the status of that particular virtual machine.
 
@@ -652,7 +607,7 @@ def process_arguments(arguments):
 
     """
     debug = arguments["--debug"]
-    # print(type(arguments))
+#    print(arguments)
     if debug:
         try:
             columns, rows = os.get_terminal_size(0)
@@ -678,7 +633,7 @@ def process_arguments(arguments):
         args = []
         if arguments.get("create"):
             action = provider.create
-            kwargs = provider._update_by_key(kwargs, arguments, ['--image', '--template'], {'--output': 'output_path'})
+            kwargs = provider._update_by_key(kwargs, arguments, ['--image', '--template', '--count'], {'--output': 'output_path'})
         elif arguments.get("start"):
             action = provider.start
         elif arguments.get("resume"):
@@ -690,11 +645,11 @@ def process_arguments(arguments):
         elif arguments.get("destroy"):
             action = provider.destroy
             kwargs = provider._update_by_key(kwargs, arguments, [], {'-f': 'force'})
-        elif arguments.get("info"):
-            action = provider.info
+        elif arguments.get("status"):
+            action = provider.status
             args.append(arguments.get("NAME"))
-        elif arguments.get("ls"):
-            action = provider.ls
+        elif arguments.get("list"):
+            action = provider.list
         elif arguments.get("download"):
             action = provider.download
             args.append(arguments.get("--from"))
@@ -708,10 +663,10 @@ def process_arguments(arguments):
         elif arguments.get("ssh"):
             action = provider.ssh
             args.append(arguments.get("NAME"))
-        elif arguments.get("run") and arguments.get("command"):
+        elif arguments.get("run") and not arguments.get("script"):
             action = provider.run_command
             args.append(arguments.get("COMMAND"))
-        elif arguments.get("run") and arguments.get("script"):
+        elif arguments.get("script") and arguments.get("run"):
             action = provider.run_script
             args.append(arguments.get("SCRIPT"))
             kwargs = provider._update_by_key(kwargs, arguments, ['--data'])
@@ -721,25 +676,24 @@ def process_arguments(arguments):
 
             action_type = action.__name__
 
-            # aciton that has immediately execute       
-            if action_type in ['ssh', 'info']:
+            # 1. aciton that can be immediately executed       
+            if action_type in ['ssh', 'list', 'create']:
                 action(*args, **kwargs)
                 return
 
-                # parse vms_hosts
+            # parse vms_hosts
             if arguments.get("--vms"):
                 vms_hosts = arguments.get("--vms")
                 vms_hosts = hostlist.expand_hostlist(vms_hosts)
             else:
                 vms_hosts = []
 
-            # action with vms_hosts
-            if action_type in ['create']:
-                args.append(vms_hosts)
+            # 2. action can executed with original vms_hosts
+            if action_type in ['start', 'resume', 'stop', 'suspend', 'destroy'] and not vms_hosts:
                 action(*args, **kwargs)
                 return
-            elif action_type in ['start', 'resume', 'stop', 'suspend', 'destroy', 'ls'] and not vms_hosts:
-                action(*args, **kwargs)
+            elif action_type in ['status'] and not vms_hosts:
+                provider.list()
                 return
 
             # impute hosts
@@ -750,8 +704,8 @@ def process_arguments(arguments):
             else:
                 hosts = vms_hosts
 
-                # action work with host
-            if action_type in ['start', 'resume', 'stop', 'suspend', 'destroy', 'ls']:
+            # 3. action work with imputed host
+            if action_type in ['start', 'resume', 'stop', 'suspend', 'destroy', 'status']:
                 for node_name in hosts:
                     action(node_name, *args, **kwargs)
             else:
@@ -769,17 +723,4 @@ def process_arguments(arguments):
                         kwargs.update({'report_alone': True})
                     if action_type in ['download']:
                         kwargs.update({'prefix_dest': False})
-
                     action(hosts[0], *args, **kwargs)
-
-
-def main():
-    """
-    Main function for the Vagrant Manager. Processes the input arguments.
-    """
-    arguments = docopt(__doc__, version='Cloudmesh Vagrant Manager 0.3')
-    process_arguments(arguments)
-
-
-if __name__ == "__main__":
-    main()

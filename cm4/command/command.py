@@ -9,6 +9,10 @@
       cm4 admin mongo stop
       cm4 admin mongo backup FILENAME
       cm4 admin mongo load FILENAME
+      cm4 admin rest status
+      cm4 admin rest start
+      cm4 admin rest stop
+      cm4 admin status
       cm4 vagrant create --count=VMNUMBER [--debug]
       cm4 vagrant start [--vms=VMLIST] [--debug]
       cm4 vagrant stop [--vms=VMLIST] [--debug]
@@ -103,7 +107,6 @@ def process_arguments(arguments):
     version = cm4.__version__
 
     arguments = dotdict(arguments)
-
 
     if arguments.get("--version"):
         print(version)

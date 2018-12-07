@@ -173,17 +173,19 @@ class MongoDBController(object):
         #
         default_config_file = {
             "net": {
-                "bindIp"=self.host,
-                "port"=self.port
+                "bindIp": self.host,
+                "port": self.port
                 },
             "storage": {
                 "dbPath": os.path.join(self.mongo_db_path, 'database'),
-                "journal": {"enabled"=True}
+                "journal": {"enabled": True}
+            },
+            "systemLog": {
+                "destination": 'file',
+                "path": os.path.join(self.mongo_db_path, 'log', 'mongod.log'),
+                "logAppend": True
             }
-            "systemLog": dict(destination='file',
-            "path": os.path.join(self.mongo_db_path, 'log', 'mongod.log'),
-                                                  logAppend=True)
-                                   )
+        }
 
         if security:
             default_config_file.update(dict(security=dict(authorization='enabled')))

@@ -127,6 +127,10 @@ class MongoDBController(object):
         pprint (self.config.dict())
 
         self.data = self.config.data["cloudmesh"]["data"]["mongo"]
+        self.host = self.data['MONGO_HOST']
+        self.port = self.data['MONGO_PORT']
+        self.username = self.data['MONGO_USERNAME']
+        self.password = self.data['MONGO_PASSWORD']
 
 
         # TODO: self.initial_mongo_config(False)
@@ -267,6 +271,7 @@ def process_arguments(arguments):
 
     """
       cm4 admin mongo install [--brew] [--download=PATH]
+      cm4 admin mongo security
       cm4 admin mongo start
       cm4 admin mongo stop
       cm4 admin mongo backup FILENAME
@@ -281,6 +286,11 @@ def process_arguments(arguments):
         installer = MongoInstaller()
         r = installer.install()
         return r
+
+    elif arguments.security:
+        mongo = MongoDBController()
+        mongo.set_auth()
+        print()
 
     elif arguments.start:
 
@@ -315,7 +325,7 @@ def main():
     # test.update_auth()
     # test.run_mongodb()
     # test.shutdown_mongodb()
-    test.status()
+    #test.status()
     # test.dump('~/.cloudmesh/demo/version1/cm/cm4/mongo/MongoDB/backup')
     # test.restore ('~/.coudmesh/demo/version1/cm/cm4/mongo/MongoDB/backup')
 

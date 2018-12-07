@@ -111,6 +111,7 @@ class Vm:
         """
         node = self.provider.create_node(name)
         self.mongo.insert_cloud_document(vars(node))
+        Thread(self, 'test', name, 'running').start()
         return node
 
     def list(self):
@@ -230,14 +231,14 @@ def process_arguments(arguments):
         print("vm processing arguments")
         pp.pprint(arguments)
 
-    default_cloud = Config().get("default.cloud")
+    default_cloud = Config().data['cloudmesh']['default']['cloud']
 
     vm = Vm(default_cloud)
 
     if arguments.get("list"):
         result = vm.list()
 
-    elif arguments.get("start"):
+    elif arguments.get("create"):
         # TODO: Reconcile `create` behavior here and in docopts where
         #       create is called with a `VMCOUNT`.
 
@@ -250,17 +251,20 @@ def process_arguments(arguments):
 
         result = f"Created {vm_name}"
 
-    # elif arguments.get("start"):
-    #     vm.start(arguments.get("--vms"))
+    elif arguments.get("start"):
+        result = vm.start(arguments.get("--vms"))
 
     elif arguments.get("stop"):
-        vm.stop(arguments.get("--vms"))
+        result = vm.stop(arguments.get("--vms"))
 
     elif arguments.get("destroy"):
-        vm.destroy(arguments.get("--vms"))
+        result = vm.destroy(arguments.get("--vms"))
 
     elif arguments.get("status"):
-        vm.status(arguments.get("--vms"))
+        result = vm.status(arguments.get("--vms"))
+
+    elif arguments.get("publicip"):
+        result = vm.get_public_ips(arguments.get('--vms'))
 
     elif arguments.get("ssh"):
         # TODO

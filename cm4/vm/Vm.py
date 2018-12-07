@@ -38,13 +38,9 @@ class Vmprovider(object):
 class Vm:
 
     def __init__(self, cloud):
+        self.mongo = MongoDB()
         self.config = Config().data["cloudmesh"]
         self.provider = Vmprovider().get_provider(cloud)
-
-        self.mongo = MongoDB(host=self.config["data"]["mongo"]["MONGO_HOST"],
-                             username=self.config["data"]["mongo"]["MONGO_USERNAME"],
-                             password=self.config["data"]["mongo"]["MONGO_PASSWORD"],
-                             port=self.config["data"]["mongo"]["MONGO_PORT"])
 
     def start(self, name):
         """

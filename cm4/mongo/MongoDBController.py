@@ -272,61 +272,6 @@ class MongoDBController(object):
         #pprint(client.server_info())
 
 
-def process_arguments(arguments):
-    """
-    Process command line arguments to execute VM actions.
-    Called from cm4.command.command
-    :param arguments:
-    """
-    result = None
-
-    """
-      cm4 admin mongo install [--brew] [--download=PATH]
-      cm4 admin mongo start
-      cm4 admin mongo stop
-      cm4 admin mongo backup FILENAME
-      cm4 admin mongo load FILENAME
-      cm4 admin mongo help
-"""
-
-    if arguments.install:
-
-        print("install")
-        print("========")
-        installer = MongoInstaller()
-        r = installer.install()
-        return r
-
-    elif arguments.security:
-        mongo = MongoDBController()
-        mongo.set_auth()
-        print()
-
-    elif arguments.start:
-
-        print("start")
-
-    elif arguments.stop:
-
-        print("stop")
-
-    elif arguments.backup:
-
-        print("backup")
-
-    elif arguments.load:
-
-        print("backup")
-
-    elif arguments.status:
-
-        mongo = MongoDBController()
-        r = mongo.status()
-        return r
-
-    return result
-
-
 def main():
     test = MongoDBController()
     # test.set_auth()

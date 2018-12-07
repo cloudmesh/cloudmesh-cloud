@@ -25,13 +25,13 @@ class SystemPath(object):
     def add(path):
         if platform == "darwin":
             script = """
-            echo "export PATH={path}/bin:$PATH" >> ~/.bash_profile
-            source ~/.bash_profile'
+            echo \"export PATH={path}:$PATH\" >> ~/.bash_profile
+            source ~/.bash_profile
             """.format(path=path)
         elif platform == "linux":
             script = """
-            echo "export PATH={path}/bin:$PATH" >> ~/.bashrc
-            source ~/.bashrc'
+            echo \"export PATH={path}:$PATH\" >> ~/.bashrc
+            source ~/.bashrc
             """.format(path=path)
         elif platform == "windows":
             script = None
@@ -42,13 +42,16 @@ class Script(object):
 
     def __init__(self, script):
         if script is not None:
-            self.run(self, script)
+            self.run(script)
 
     def run(self, script):
-        lines = textwrap.dedent(script)
+        lines = textwrap.dedent(script).strip().split("\n")
+        print("===============")
         print (lines)
-        for line in script:
-            subprocess.check_output(line, shell=True)
+        print("===============")
+        for line in lines:
+            r = subprocess.check_output(line, shell=True)
+            print (r)
 
 class Brew(object):
     @classmethod

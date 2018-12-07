@@ -82,13 +82,24 @@
             
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../README.html">Cloudmesh cm v4</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../aws.html">AWS cm</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../ufo.html">CM4 REST Api</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../vagrant.html">ehvagrant: enhanced Vagrant interface with importable python module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../vcluster.html">Virtual Cluster</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../vm.html">VM Description</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../code.html">Code Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contributors.html">1. Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../quickstart.html">2. Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../install.html">3. Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../mongo.html">4. Cloudmesh Database</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../configuration.html">5. Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../vmproviders.html">6. VM Providers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../vagrant.html">7. Vagrant</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../vagrant-other.html">8. Cloudmesh Vagrant: New</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../CM4README.html">9. CM4 Details</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../README.html">10. Cloudmesh cm v4</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../aws.html">11. AWS cm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ufo.html">12. CM4 REST Api</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../vcluster.html">13. Virtual Cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../vm.html">14. VM Description</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../jupyter.html">15. Jupyter Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../code.html">16. Code Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../deprecated.html">17. Deprecated from here on</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ehvagrant.html">18. ehvagrant: enhanced Vagrant interface with importable python module</a></li>
 </ul>
 
             
@@ -170,7 +181,42 @@
 <span class="kn">from</span> <span class="nn">cm4.common.console</span> <span class="k">import</span> <span class="n">Console</span>
 <span class="kn">from</span> <span class="nn">cm4.common.util</span> <span class="k">import</span> <span class="n">path_expand</span>
 <span class="kn">from</span> <span class="nn">distutils.spawn</span> <span class="k">import</span> <span class="n">find_executable</span>
+<span class="kn">import</span> <span class="nn">textwrap</span>
+<span class="kn">from</span> <span class="nn">sys</span> <span class="k">import</span> <span class="n">platform</span>
 
+<span class="k">class</span> <span class="nc">SystemPath</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">add</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">platform</span> <span class="o">==</span> <span class="s2">&quot;darwin&quot;</span><span class="p">:</span>
+            <span class="n">script</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">            echo </span><span class="se">\&quot;</span><span class="s2">export PATH=</span><span class="si">{path}</span><span class="s2">:$PATH</span><span class="se">\&quot;</span><span class="s2"> &gt;&gt; ~/.bash_profile</span>
+<span class="s2">            source ~/.bash_profile</span>
+<span class="s2">            &quot;&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">path</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">platform</span> <span class="o">==</span> <span class="s2">&quot;linux&quot;</span><span class="p">:</span>
+            <span class="n">script</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">            echo </span><span class="se">\&quot;</span><span class="s2">export PATH=</span><span class="si">{path}</span><span class="s2">:$PATH</span><span class="se">\&quot;</span><span class="s2"> &gt;&gt; ~/.bashrc</span>
+<span class="s2">            source ~/.bashrc</span>
+<span class="s2">            &quot;&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">path</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">platform</span> <span class="o">==</span> <span class="s2">&quot;windows&quot;</span><span class="p">:</span>
+            <span class="n">script</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="c1"># TODO: BUG: Implement</span>
+        <span class="n">installer</span> <span class="o">=</span> <span class="n">Script</span><span class="p">(</span><span class="n">script</span><span class="p">)</span>
+
+<span class="k">class</span> <span class="nc">Script</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">script</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">script</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">script</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">script</span><span class="p">):</span>
+        <span class="n">lines</span> <span class="o">=</span> <span class="n">textwrap</span><span class="o">.</span><span class="n">dedent</span><span class="p">(</span><span class="n">script</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;===============&quot;</span><span class="p">)</span>
+        <span class="nb">print</span> <span class="p">(</span><span class="n">lines</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;===============&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">lines</span><span class="p">:</span>
+            <span class="n">r</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">check_output</span><span class="p">(</span><span class="n">line</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="nb">print</span> <span class="p">(</span><span class="n">r</span><span class="p">)</span>
 
 <span class="k">class</span> <span class="nc">Brew</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="nd">@classmethod</span>

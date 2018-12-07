@@ -1,9 +1,8 @@
-from __future__ import print_function
-from cloudmesh_client.common.Shell import Shell
-from cloudmesh_client.common.dotdict import dotdict
+from cm4.common.shell import Shell
+from cm4.common.dotdict import dotdict
 import textwrap
 import os
-from cloudmesh_client.shell.console import Console
+from cm4.common.console import Console
 from pprint import pprint
 
 
@@ -38,8 +37,9 @@ class vm(object):
             arg.provision = ""
 
 
-
+        # not sure how I2 gets found TODO verify, comment bellow is not enough
         # the 12 is derived from the indentation of Vagrant in the script
+        # TODO we may need not just port 80 to forward
         script = textwrap.dedent("""
             Vagrant.configure(2) do |config|
 
@@ -157,6 +157,7 @@ class vm(object):
         result = Shell.execute("vagrant", ["ssh", name, "-c", command], cwd=vms[name]["directory"])
         return result
 
+    # TODO: Seems replicated
     @classmethod
     def to_dict(cls, lst, id="name"):
         d = {}

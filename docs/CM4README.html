@@ -91,16 +91,9 @@
 <li class="toctree-l1"><a class="reference internal" href="configuration.html">5. Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="vmproviders.html">6. VM Providers</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">7. CM4 Details</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#providers-that-cm4-could-access">7.1. Providers that <em>cm4</em> could access</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#aws">7.1.1. AWS</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#azure">7.1.2. AZURE</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#azure-setup">7.1.3. Azure Setup</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#openstack">7.1.4. OPENSTACK</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#extra-vargrant">7.1.5. Extra: Vargrant</a></li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="#extra-vargrant">7.1. Extra: Vargrant</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#what-we-have-implemented">7.2. What we have implemented</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#the-preparation-for-installing-cm4-david">7.2.1. The Preparation for installing <strong>cm4</strong> (David)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#the-preparation-for-installing-cm4-david">7.2.1. The Preparation for installing <code class="docutils literal notranslate"><span class="pre">cm4</span></code> (David)</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#the-configuration-files-and-some-relative-function-classes-sachith">7.2.2. The Configuration files and some relative function classes (Sachith)</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#use-the-configurations-file">7.2.2.1. Use the Configurations file</a></li>
 </ul>
@@ -109,7 +102,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#using-the-counter">7.2.3.1. Using the counter</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#the-mongodb-database-in-cm4-yu">7.2.4. The MongoDB Database in <strong>cm4</strong> (Yu)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#the-mongodb-database-in-cm4-yu">7.2.4. The MongoDB Database in <code class="docutils literal notranslate"><span class="pre">cm4</span></code> (Yu)</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#data-scheme-in-mongodb">7.2.4.1. Data Scheme in MongoDB</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#security-in-mongodb">7.2.4.2. Security in MongoDB</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#install-mongodb-into-local">7.2.4.3. Install MongoDB Into Local</a></li>
@@ -135,7 +128,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#dev-restricting-certain-ips-for-certain-rest-calls">7.3.5. Dev - restricting certain ips for certain rest calls</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#extra-run-command-script-in-aws-by-cm4">7.4. Extra: Run Command/Script in AWS by <strong>cm4</strong></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#extra-run-command-script-in-aws-by-cm4">7.4. Extra: Run Command/Script in AWS by <code class="docutils literal notranslate"><span class="pre">cm4</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="README.html">8. Cloudmesh cm v4</a></li>
@@ -215,154 +208,34 @@
 <p>In cloudmesh cm4, we are using the <strong>Python</strong> tool to implement a
 program that could remotely control cloud nodes provided by different
 organizations and run experiments in parallel.</p>
-<p>The goal of <strong>cm4</strong> is to provide a platform that users could directly
+<p>The goal of <em><code class="docutils literal notranslate"><span class="pre">cm4</span></code></em> is to provide a platform that users could directly
 control the nodes they have, like AWS, Azure, and OPENSTACK
 instances. Users could decide to start, stop, destroy, create, resume,
 and suspend different nodes without accessing the <strong>Console</strong>
 interfaces of providers. Then users could install experiment
 environment, software, and other required tools in these running
 nodes. Finally, an experiment could be executed in running nodes by
-sending the commands from <strong>cm4</strong> platform. Meanwhile, we embed the
+sending the commands from <em><code class="docutils literal notranslate"><span class="pre">cm4</span></code></em> platform. Meanwhile, we embed the
 NoSQL database <strong>MongoDB</strong> into cm4 for managing the nodes and
 experiments.</p>
-<div class="section" id="providers-that-cm4-could-access">
-<span id="providers-that-cm4-could-access"></span><h2>7.1. Providers that <em>cm4</em> could access<a class="headerlink" href="#providers-that-cm4-could-access" title="Permalink to this headline">¶</a></h2>
-<p>We are using the python library <a class="reference external" href="https://libcloud.apache.org"><strong>Apache Libcloud</strong></a> to interact with
-cloud service providers. Currently, in the <strong>cm4</strong>, we could access:</p>
-<ul class="simple">
-<li><a class="reference external" href="https://aws.amazon.com"><strong>AWS</strong></a></li>
-<li><a class="reference external" href="https://azure.microsoft.com/en-us/"><strong>AZURE</strong></a></li>
-<li>any cloud service providers using <strong>OPENSTACK</strong>. For example, <a class="reference external" href="https://www.chameleoncloud.org"><strong>Chameleon</strong></a> and
-<a class="reference external" href="https://jetstream-cloud.org"><strong>Jetstream</strong></a></li>
-</ul>
-<p>By using the <strong>Apache Libcloud</strong> API, we could do these operations for
-nodes in above cloud service providers:</p>
-<ul class="simple">
-<li>Start the node</li>
-<li>Stop the node</li>
-<li>Resume the node</li>
-<li>Suspend the node</li>
-<li>Destory the node</li>
-<li>Create the node</li>
-</ul>
-<p><strong>Improvement</strong>: Sometimes adjustments to nodes are necessary (switch
-between different images/OS and service sizes).  Cm4 also allow users
-to customize their instances across multiple providers by using
-refactor functions to support their management tasks.</p>
-<ul class="simple">
-<li>Resize the node</li>
-<li>Rebuild(with different image) the node</li>
-<li>Rename the node</li>
-<li>Revert previous operations to the node</li>
-</ul>
-<div class="section" id="aws">
-<span id="aws"></span><h3>7.1.1. AWS<a class="headerlink" href="#aws" title="Permalink to this headline">¶</a></h3>
-<p>Amazon Web Service (<strong>AWS</strong>) provided by Amazon is a secure cloud
-service platform, users could start any instances with selected
-images.</p>
-<p>Before users use the <strong>cm4</strong> platform to access <strong>EC2</strong>, they have to finish these preparations:</p>
-<ol>
-<li><p class="first">EC2 account, more information is
-<a class="reference external" href="https://aws.amazon.com/premiumsupport/knowledge-center/create-and-activate-aws-account/">here</a></p>
-</li>
-<li><p class="first">Log in the EC2 account, update your <strong>Access Key</strong>.</p>
-<p><strong>Access Keys</strong> has two parts: <strong>Access Key ID</strong> and <strong>Secret
-Access Key</strong>. These <strong>Access Keys</strong> are the only way you could
-authentically access the AWS though AWS API requests.  (create new
-Access Key: Account (right upper corner) &gt; My Security Credentials</p>
-<blockquote>
-<div><p>Access Keys &gt; Create New Access Key)</p>
-</div></blockquote>
-</li>
-<li><p class="first"><strong>Private Key file</strong> is a key pairs to encrypt and decrypt login
-information. While using <strong>Private Key file</strong>, there is no need to
-use username or password to login the instance of AWS. For sshing
-the instance, the ssh client would use the <strong>private key file</strong>
-instead of credential information. (create new key pairs: Network &amp;
-Security (left column bar) &gt; Key Pairs &gt; Create Key Pair)</p>
-</li>
-<li><p class="first"><strong>Security Group</strong> acts as a virtual firewall for the instance.
-When you launch a instance, we have to attach the <strong>Security
-Group</strong> to it for controlling the traffic in and out. So before you
-are using any nodes in AWS, you have to pre-define the <strong>Security
-Group</strong> that you will use.  (create new Security Group: Network $
-Security (left column bar) &gt; Security Group &gt; Create Security
-Group)</p>
-</li>
-<li><p class="first"><strong>Region</strong> is the service location where you start the instance.
-AWS hosts services in different regions, you should select the
-region where you want to start you instance.</p>
-</li>
-</ol>
-<p>When you finish all above things, you should update information into
-the block ‘aws’ of <strong>cloudmesh4.yaml</strong> file in <strong>ETC</strong> folder</p>
-<p><strong>EC2</strong> provides On-Demand Pricing cloud services based on different
-CPU, Memory and Storage selections. Please visit this
-<a class="reference external" href="https://aws.amazon.com/ec2/pricing/on-demand/">page</a> for more
-information. In default setting, we use the latest <strong>Ubuntu</strong> image
-filled in default.image field. If you want to use other images, please
-update the Image ID into it.</p>
-</div>
-<div class="section" id="azure">
-<span id="azure"></span><h3>7.1.2. AZURE<a class="headerlink" href="#azure" title="Permalink to this headline">¶</a></h3>
-<p>Uses <a class="reference external" href="https://libcloud.readthedocs.io/en/latest/compute/drivers/azure_arm.html">LibCloud’s Azure ARM Compute Driver</a></p>
-</div>
-<div class="section" id="azure-setup">
-<span id="azure-setup"></span><h3>7.1.3. Azure Setup<a class="headerlink" href="#azure-setup" title="Permalink to this headline">¶</a></h3>
-<p><strong>Install Azure CLI</strong></p>
-<p><a class="reference external" href="https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest">Download and install according to your platform.</a></p>
-<p><strong>Make sure subscription is registered for compute services</strong></p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">az</span> <span class="n">provider</span> <span class="n">register</span> <span class="o">--</span><span class="n">namespace</span> <span class="n">Microsoft</span><span class="o">.</span><span class="n">Compute</span>
-</pre></div>
-</div>
-<p><strong>Service principal</strong></p>
-<p><a class="reference external" href="https://docs.microsoft.com/en-us/cli/azure/create-an-azure-service-principal-azure-cli?view=azure-cli-latest">Full documentation on creating service principals.</a>
-The Azure ARM Driver does not appear to support certificate based
-principals at this time.</p>
-<p>Create Principal</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">az</span> <span class="n">ad</span> <span class="n">sp</span> <span class="n">create</span><span class="o">-</span><span class="k">for</span><span class="o">-</span><span class="n">rbac</span> <span class="o">--</span><span class="n">name</span> <span class="n">cm</span><span class="o">-</span><span class="n">admin</span><span class="o">-</span><span class="n">pw</span> <span class="o">--</span><span class="n">password</span> <span class="o">&lt;</span><span class="n">SECRET</span><span class="o">&gt;</span>
-</pre></div>
-</div>
-<p>Add <code class="docutils literal notranslate"><span class="pre">Owner</span></code> role.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">az</span> <span class="n">role</span> <span class="n">assignment</span> <span class="n">create</span> <span class="o">--</span><span class="n">assignee</span> <span class="o">&lt;</span><span class="n">APP_ID</span><span class="o">&gt;</span> <span class="o">--</span><span class="n">role</span> <span class="n">Owner</span>
-</pre></div>
-</div>
-<p><em>Note:</em> <code class="docutils literal notranslate"><span class="pre">&lt;APP_ID&gt;</span></code> is provided in the output when the principal is created</p>
-</div>
-<div class="section" id="openstack">
-<span id="openstack"></span><h3>7.1.4. OPENSTACK<a class="headerlink" href="#openstack" title="Permalink to this headline">¶</a></h3>
-<p>OpenStack is an Infrastructure service that allows users to utilize
-computing resource in cloud service platform through virtual
-environments.</p>
-<p><a class="reference external" href="https://www.chameleoncloud.org/">Chameleon Cloud</a> provides an
-OpenStack installation of version 2015.1 (Kilo) using the KVM
-virtualization technology at the KVM&#64;TACC site. It is important to
-make sure you are visiting the
-<a class="reference external" href="https://openstack.tacc.chameleoncloud.org/">KVM&#64;TACC</a> site so as to
-get proper installation. Learn more
-<a class="reference external" href="https://chameleoncloud.readthedocs.io/en/latest/technical/kvm.html">here</a>
-to properly set up yout account before proceed to your journey with
-<strong>cm4</strong>.</p>
-</div>
 <div class="section" id="extra-vargrant">
-<span id="extra-vargrant"></span><h3>7.1.5. Extra: Vargrant<a class="headerlink" href="#extra-vargrant" title="Permalink to this headline">¶</a></h3>
+<span id="extra-vargrant"></span><h2>7.1. Extra: Vargrant<a class="headerlink" href="#extra-vargrant" title="Permalink to this headline">¶</a></h2>
 <p>Please refer to <a class="reference external" href="https://github.com/cloudmesh-community/cm/tree/master/cm4/vagrant/README.md">here</a> to see how to setup
 Vagrant with cm4.</p>
-</div>
 </div>
 <div class="section" id="what-we-have-implemented">
 <span id="what-we-have-implemented"></span><h2>7.2. What we have implemented<a class="headerlink" href="#what-we-have-implemented" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li>the function to install <strong>cm4</strong> and its required packages</li>
+<li>the function to install <code class="docutils literal notranslate"><span class="pre">cm4</span></code> and its required packages</li>
 <li>the function to manage the virtual machines from cloud service providers (Azure, AWS, and Openstack)</li>
-<li>the function to use <strong>MongoDB</strong> for saving data</li>
+<li>the function to use <em>MongoDB</em> for saving data</li>
 </ul>
 <div class="section" id="the-preparation-for-installing-cm4-david">
-<span id="the-preparation-for-installing-cm4-david"></span><h3>7.2.1. The Preparation for installing <strong>cm4</strong> (David)<a class="headerlink" href="#the-preparation-for-installing-cm4-david" title="Permalink to this headline">¶</a></h3>
+<span id="the-preparation-for-installing-cm4-david"></span><h3>7.2.1. The Preparation for installing <code class="docutils literal notranslate"><span class="pre">cm4</span></code> (David)<a class="headerlink" href="#the-preparation-for-installing-cm4-david" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>requriements.txt : the required packages</li>
 <li>setup.py : ??</li>
-<li>cm4/command/command.py : the python class defines the interface for the command-line <strong>cm4</strong></li>
+<li>cm4/command/command.py : the python class defines the interface for the command-line <code class="docutils literal notranslate"><span class="pre">cm4</span></code></li>
 </ul>
 <p>:o: update the command that cm4 can really run.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>
@@ -429,15 +302,15 @@ The counter file is located at</p>
 </div>
 </div>
 <div class="section" id="the-mongodb-database-in-cm4-yu">
-<span id="the-mongodb-database-in-cm4-yu"></span><h3>7.2.4. The MongoDB Database in <strong>cm4</strong> (Yu)<a class="headerlink" href="#the-mongodb-database-in-cm4-yu" title="Permalink to this headline">¶</a></h3>
-<p>We add the database into <strong>cm4</strong> with two reasons:</p>
+<span id="the-mongodb-database-in-cm4-yu"></span><h3>7.2.4. The MongoDB Database in <code class="docutils literal notranslate"><span class="pre">cm4</span></code> (Yu)<a class="headerlink" href="#the-mongodb-database-in-cm4-yu" title="Permalink to this headline">¶</a></h3>
+<p>We add the database into <code class="docutils literal notranslate"><span class="pre">cm4</span></code> with two reasons:</p>
 <ul class="simple">
 <li>provide the information of nodes in different providers.</li>
 <li>record the experiment executed through cm4, easy for next re-execution.</li>
 </ul>
-<p>Every time the user use the <strong>cm4</strong> platform, the server would access the running MongoDB database, querying the nodes’
+<p>Every time the user use the <code class="docutils literal notranslate"><span class="pre">cm4</span></code> platform, the server would access the running MongoDB database, querying the nodes’
 information, showing relative metadata, and then updating all necessary data.</p>
-<p>The <strong>MongoDB</strong> would finish below tasks:</p>
+<p>The <em>MongoDB</em> would finish below tasks:</p>
 <ul class="simple">
 <li>saving all information:<ol>
 <li>the nodes’ information queried from cloud service, like name, id, status, and other metadata about this node.</li>
@@ -450,11 +323,11 @@ command, and the output.</li>
 <li>the changes updated on the nodes, like stop running node, or start stopped node.</li>
 <li>the changes updated on the [<code class="docutils literal notranslate"><span class="pre">cloudmesh4.yaml</span></code>], like add new nodes.</li>
 <li>when the experiment is done, output and experiment status would be updated.</li>
-<li>new group is created while using <strong>cm4</strong> will be updated</li>
+<li>new group is created while using <code class="docutils literal notranslate"><span class="pre">cm4</span></code> will be updated</li>
 </ol>
 </li>
 <li>return required information:<ol>
-<li>return the node information, group information, and experiment information when <strong>cm4</strong> queries them.</li>
+<li>return the node information, group information, and experiment information when <code class="docutils literal notranslate"><span class="pre">cm4</span></code> queries them.</li>
 </ol>
 </li>
 </ul>
@@ -499,16 +372,16 @@ The document in <code class="docutils literal notranslate"><span class="pre">sta
 </div>
 <div class="section" id="security-in-mongodb">
 <span id="security-in-mongodb"></span><h4>7.2.4.2. Security in MongoDB<a class="headerlink" href="#security-in-mongodb" title="Permalink to this headline">¶</a></h4>
-<p>For data security purpose, we enable the MongoDB security functionality in **cm4*.</p>
-<p>When users first time start the <strong>MongoDB</strong>, they have to add an account and open an port to access all database in MongoDB. Because we save all nodes’ information into MongoDB inclduing the <em>Authorization</em> information. If your MongoDB is open to everyone, it is easy for hacker to steal your information. So you are requried to set the <strong>username</strong> and <strong>password</strong> for the security purpose.</p>
-<p>If you want to learn more about the <strong>Security</strong> in MongoDB, you can visit this <a class="reference external" href="https://docs.mongodb.com/manual/security/">page</a> or visit the brief introduction about the MongoDB</p>
+<p>For data security purpose, we enable the MongoDB security functionality in <code class="docutils literal notranslate"><span class="pre">cm4</span></code>.</p>
+<p>When users first time start the <em>MongoDB</em>, they have to add an account and open an port to access all database in MongoDB. Because we save all nodes’ information into MongoDB inclduing the <em>Authorization</em> information. If your MongoDB is open to everyone, it is easy for hacker to steal your information. So you are requried to set the <em>username</em> and <em>password</em> for the security purpose.</p>
+<p>If you want to learn more about the <em>Security</em> in MongoDB, you can visit this <a class="reference external" href="https://docs.mongodb.com/manual/security/">page</a> or visit the brief introduction about the MongoDB</p>
 <p>Here is a quick reference about how to
 <a class="reference external" href="https://medium.com/&#64;raj_adroit/mongodb-enable-authentication-enable-access-control-e8a75a26d332">enable MongoDB Security</a> option.</p>
 </div>
 <div class="section" id="install-mongodb-into-local">
 <span id="install-mongodb-into-local"></span><h4>7.2.4.3. Install MongoDB Into Local<a class="headerlink" href="#install-mongodb-into-local" title="Permalink to this headline">¶</a></h4>
 <p>If you want to know how to install MongoDB into local, you can review <a class="reference external" href="https://docs.mongodb.com/manual/installation/">Install MongoDB</a></p>
-<p>And if you want to use <strong>cm4</strong> to help you install MongoDB, you have to update the information required for installing MongoDB into [<code class="docutils literal notranslate"><span class="pre">cloudmesh4.yaml</span></code>] file.</p>
+<p>And if you want to use <code class="docutils literal notranslate"><span class="pre">cm4</span></code> to help you install MongoDB, you have to update the information required for installing MongoDB into [<code class="docutils literal notranslate"><span class="pre">cloudmesh4.yaml</span></code>] file.</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">cm4/cmmongo/MongoDBController.py</span></code> has the functions to install MongoDB for Linux and Darwin system.</p>
 <p>The logic of installing MongoDB is:</p>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>1. install prepared tools
@@ -566,8 +439,8 @@ db_connection: test connection to local mongoDB host
 </div>
 <div class="section" id="the-virtual-machine-provider">
 <span id="id1"></span><h3>7.2.6. 4. The Virtual Machine Provider<a class="headerlink" href="#the-virtual-machine-provider" title="Permalink to this headline">¶</a></h3>
-<p>In the <strong>cm4</strong>, we developed the <code class="docutils literal notranslate"><span class="pre">cm4/vm/Vm.py</span></code> class to implement the operations for different virtual machines from AWS,
-Azure, and Chameleon by using the python library <a class="reference external" href="https://libcloud.apache.org"><strong>Apache Libcloud</strong></a> to interact with
+<p>In the <code class="docutils literal notranslate"><span class="pre">cm4</span></code>, we developed the <code class="docutils literal notranslate"><span class="pre">cm4/vm/Vm.py</span></code> class to implement the operations for different virtual machines from AWS,
+Azure, and Chameleon by using the python library <a class="reference external" href="https://libcloud.apache.org"><em>Apache Libcloud</em></a> to interact with
 cloud service providers.</p>
 <p>The basic functions are:</p>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>1. start(vm_name) : start the virtual machine with specified name
@@ -587,12 +460,12 @@ cloud service providers.</p>
 </div>
 <div class="section" id="aws-vm-operations-yu">
 <span id="aws-vm-operations-yu"></span><h3>7.2.7. AWS VM Operations (Yu)<a class="headerlink" href="#aws-vm-operations-yu" title="Permalink to this headline">¶</a></h3>
-<p>Before using the AWS Vm code, user has to update their AWS information into <code class="docutils literal notranslate"><span class="pre">cloudmesh4.yaml</span></code> file in <strong>etc</strong> folder.</p>
-<p>The <strong>Libcloud</strong> library has enough methods to support the operations for managing virtual machines in AWS. We use a
+<p>Before using the AWS Vm code, user has to update their AWS information into <code class="docutils literal notranslate"><span class="pre">cloudmesh4.yaml</span></code> file in <em>etc</em> folder.</p>
+<p>The <em>Libcloud</em> library has enough methods to support the operations for managing virtual machines in AWS. We use a
 <code class="docutils literal notranslate"><span class="pre">cm4/vm/Aws.py</span></code> to create the driver based on the configuration to connect to AWS.</p>
-<p>Inherit the <strong>Libcloud</strong> library, we did some modifications on <code class="docutils literal notranslate"><span class="pre">AWSDriver</span></code> to extend the operation. The <code class="docutils literal notranslate"><span class="pre">create_node</span></code>
+<p>Inherit the <em>Libcloud</em> library, we did some modifications on <code class="docutils literal notranslate"><span class="pre">AWSDriver</span></code> to extend the operation. The <code class="docutils literal notranslate"><span class="pre">create_node</span></code>
 method would create a virtual machine in AWS based on the configuration of <code class="docutils literal notranslate"><span class="pre">cloudmesh4.yaml</span></code> file</p>
-<p>Here are some samples for running these operations by using <strong>cm4</strong>:</p>
+<p>Here are some samples for running these operations by using <code class="docutils literal notranslate"><span class="pre">cm4</span></code>:</p>
 <p>:o: please update the commands and results here</p>
 <div class="highlight-commandline notranslate"><div class="highlight"><pre><span></span>
 </pre></div>
@@ -607,7 +480,7 @@ method would create a virtual machine in AWS based on the configuration of <code
 user has to update their Openstack information into the <code class="docutils literal notranslate"><span class="pre">cloudmesh4.yaml</span></code> file (~/.cloudmesh/cloudmesh.yaml by macOS convention).
 It is also important to notice that openstack has various providers.
 And it is important to specify each of them with correspondent log-in credentials.</p>
-<p>Many of the funtions are supported by the <strong>Libcloud</strong> library. By specifying the config parameters to <code class="docutils literal notranslate"><span class="pre">openstack</span></code> and <code class="docutils literal notranslate"><span class="pre">chameleaon</span></code>,
+<p>Many of the funtions are supported by the <em>Libcloud</em> library. By specifying the config parameters to <code class="docutils literal notranslate"><span class="pre">openstack</span></code> and <code class="docutils literal notranslate"><span class="pre">chameleaon</span></code>,
 VM Provider will automatically attach futher operations to openstack primitives.</p>
 <p>In order to overcome some issues with service provider (mostly delays in operations like spawing, ip-assignments, refactoring and etc),
 we implement timeout mechanism to syncronize status between our local machines and remote providers.
@@ -615,7 +488,7 @@ Blocking strategy is used to prevent un-deterministic running result.</p>
 <p>Since providers of openstack like Chameleon and Jetstream allow users to
 associate customized float ip to their instances, we also develop such functions
 to support tasks like this and give more power to users when runing their jobs.</p>
-<p>Here are some samples for running these operations by using <strong>cm4</strong> project:</p>
+<p>Here are some samples for running these operations by using <code class="docutils literal notranslate"><span class="pre">cm4</span></code> project:</p>
 <p>:o: please update the commands and results here</p>
 </div>
 <div class="section" id="vm-refactor-rui">
@@ -711,10 +584,10 @@ $ cm4 admin rest stop
 </div>
 </div>
 <div class="section" id="extra-run-command-script-in-aws-by-cm4">
-<span id="extra-run-command-script-in-aws-by-cm4"></span><h2>7.4. Extra: Run Command/Script in AWS by <strong>cm4</strong><a class="headerlink" href="#extra-run-command-script-in-aws-by-cm4" title="Permalink to this headline">¶</a></h2>
+<span id="extra-run-command-script-in-aws-by-cm4"></span><h2>7.4. Extra: Run Command/Script in AWS by <code class="docutils literal notranslate"><span class="pre">cm4</span></code><a class="headerlink" href="#extra-run-command-script-in-aws-by-cm4" title="Permalink to this headline">¶</a></h2>
 <p>The <code class="docutils literal notranslate"><span class="pre">cm4/aws/CommandAWS.py</span></code> contains some methods to run commands/scripts from local to remote AWS virtual machines.
 Any command/script operations executed by <code class="docutils literal notranslate"><span class="pre">CommandAWS.py</span></code> would be saved into MongoDB.</p>
-<p>In <strong>cm4</strong>, we use python running <strong>ssh</strong> client to connect the AWS virtual machines. Before running the commands
+<p>In <code class="docutils literal notranslate"><span class="pre">cm4</span></code>, we use python running <em>ssh</em> client to connect the AWS virtual machines. Before running the commands
 or scripts remotely, the <code class="docutils literal notranslate"><span class="pre">CommandAWS.py</span></code> would create the job document in MongoDB for saving the experiment information.
 This job document contains the information of virtual machine name, the running command or script, and job status, input,
 output and description. Meanwhile, the job document_id would be added into status document of the <code class="docutils literal notranslate"><span class="pre">status</span></code> collection for

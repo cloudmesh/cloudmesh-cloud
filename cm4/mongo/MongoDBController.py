@@ -123,6 +123,8 @@ class MongoDBController(object):
     def __init__(self):
 
         self.config = Config()
+        self.data = self.config.data["cloudmesh"]["data"]["mongo"]
+        self.expanduser()
 
         pprint (self.config.dict())
 
@@ -132,6 +134,13 @@ class MongoDBController(object):
     def __str__(self):
         return yaml.dump(self.data, default_flow_style=False, indent=2)
 
+
+
+    def expanduser(self):
+        for key in self.data:
+            if type(self.data[key]) == str:
+                self.data[key] = os.path.expanduser(self.data[key])
+        pprint(self.data)
 
     def update_auth(self):
         """
@@ -162,11 +171,17 @@ class MongoDBController(object):
         # TODO: BUG: we do not use mongoconfig, but pass everything from commandline,
         #  everything shoudl be specified in cloudmesh4.yaml
         #
-        default_config_file = dict(net=dict(bindIp=self.host, port=self.port),
-                                   storage=dict(dbPath=os.path.join(self.mongo_db_path, 'database'),
-                                                journal=dict(enabled=True)),
-                                   systemLog=dict(destination='file',
-                                                  path=os.path.join(self.mongo_db_path, 'log', 'mongod.log'),
+        default_config_file = {
+            "net": {
+                "bindIp"=self.host,
+                "port"=self.port
+                },
+            "storage": {
+                "dbPath": os.path.join(self.mongo_db_path, 'database'),
+                "journal": {"enabled"=True}
+            }
+            "systemLog": dict(destination='file',
+            "path": os.path.join(self.mongo_db_path, 'log', 'mongod.log'),
                                                   logAppend=True)
                                    )
 

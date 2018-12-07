@@ -1,5 +1,14 @@
 # Installation
 
+## One Line installer
+
+Does not work yet 
+
+```bash
+wget -qO - http://cloudmesh.github.io/get/cm4/osx | sh 
+```
+
+
 ## Prerequisites
 
 Before you install make sure that you have python 3.7.1 installed. We

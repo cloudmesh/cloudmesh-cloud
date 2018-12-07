@@ -27,6 +27,7 @@ class Config(object):
 
         with open(self.config_path, "r") as stream:
             self.data = yaml.load(stream)
+            
         # self.data is loaded as nested OrderedDict, can not use set or get
         if self.data == None:
             raise EnvironmentError("Failed to load configuration file cloudmesh4.yaml, please check the path and file locally")

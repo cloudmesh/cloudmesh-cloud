@@ -168,7 +168,7 @@ class Vm(CloudManagerABC):
                 else:
                     self.mongo.insert_cloud_document(document)
                 return i
-        raise ValueError('Node: ' + name + ' does not exist!')
+        raise ValueError(f"Node: {name} does not exist!")
 
     def new_name(self, experiment=None, group=None, user=None):
         """
@@ -260,15 +260,13 @@ def process_arguments(arguments):
     if arguments.get("list"):
         result = vm.list()
 
-    elif arguments.get("create"):
-        # TODO: Reconcile `create` behavior here and in docopts where
-        #       create is called with a `VMCOUNT`.
-        vm_name = arguments.get("VMNAME")
-        vm.create(vm_name)
-        result = f"Created {vm_name}"
-
     elif arguments.get("start"):
-        result = vm.start(arguments.get("--vms"))
+        try:
+            result = vm.start(arguments.get("--vms"))
+        except ValueError:
+            vm_name = arguments.get("VMNAME")
+            vm.create(vm_name)
+            result = f"Created {vm_name}"
 
     elif arguments.get("stop"):
         result = vm.stop(arguments.get("--vms"))

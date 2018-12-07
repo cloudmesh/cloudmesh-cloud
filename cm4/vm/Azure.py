@@ -129,7 +129,10 @@ class AzureDriver(AzureNodeDriver, NodeDriver):
 
         self.config = Config().data["cloudmesh"]
         self.defaults = self.config["cloud"]["azure"]["default"]
+        self.subscription_id = subscription_id
         self.resource_group = self.defaults["resource_group"]
+        self.network_name = self.defaults["network"]
+        self.storage_account = self.defaults["storage_account"]
 
         super().__init__(tenant_id=tenant_id,
                          subscription_id=subscription_id,
@@ -187,13 +190,7 @@ class AzureDriver(AzureNodeDriver, NodeDriver):
         image = self.get_image(self.defaults["image"])
         sizes = self.list_sizes()
         size = [s for s in sizes if s.id == self.defaults["size"]][0]
-
-        # Create a network and default subnet if none exists
-        network_name = self.defaults["network"]
-        network, subnet = self._create_network(network_name)
-
-        # Create a NIC with public IP
-        nic = self._create_nic(name, subnet)
+        nic = self._get_nic(name)
 
         # Create vm
         new_vm = super().create_node(
@@ -201,14 +198,61 @@ class AzureDriver(AzureNodeDriver, NodeDriver):
             size=size,
             image=image,
             auth=auth,
-            ex_use_managed_disks=True,
-            ex_resource_group=self.defaults["resource_group"],
-            ex_storage_account=self.defaults["storage_account"],
             ex_nic=nic,
-            ex_network=network_name
+            ex_use_managed_disks=True,
+            ex_resource_group=self.resource_group,
+            ex_storage_account=self.storage_account
         )
 
         return new_vm
+
+    def remove_public_ip(self, name):
+        """
+        Removes a public IP from a VM
+        :param name: Node name
+        :return:
+        """
+        # Re-PUT the nic without a public IP to disassociate the IP from the nic
+        self._get_nic(name, with_public_ip=False)
+        # Delete IP
+        self._ex_delete_public_ip(f"{name}-ip")
+
+    def set_public_ip(self, name, ip=None):
+        """
+        Reset the node with a public IP
+        :param name:
+        :param ip:
+        """
+        self._get_nic(name, with_public_ip=True)
+
+    def _get_nic(self, vm_name, with_public_ip=True):
+        """
+        Gets a nic associated with the default network/subnet.
+
+        :param vm_name:
+        :param with_public_ip:
+        """
+        # Create a network and default subnet if none exists
+        network, subnet = self._get_or_create_network(self.network_name)
+
+        # Create public IP
+        if with_public_ip is True:
+            public_ip = self.ex_create_public_ip(
+                f"{vm_name}-ip",
+                resource_group=self.resource_group
+            )
+        else:
+            public_ip = None
+
+        # Create NIC
+        nic = self.ex_create_network_interface(
+            name=f"{vm_name}-nic",
+            subnet=subnet,
+            resource_group=self.resource_group,
+            public_ip=public_ip
+        )
+
+        return nic
 
     def _get_node(self, name):
         """
@@ -243,10 +287,16 @@ class AzureDriver(AzureNodeDriver, NodeDriver):
         subnet = self.ex_list_subnets(network)[0]
         return subnet
 
-    def _create_network(self, network_name):
+    def _get_or_create_network(self, network_name):
         """
         Create a new network resource if it does not exist or returns
         an existing network resource if it exists.
+
+        If the network exists, we assume that everything else on the network is
+        configured and do nothing.
+
+        Otherwise the network is created with a default subnet and a network security
+        group that allows inbound SSH traffic.
         """
         existing_network = self._get_network(network_name)
 
@@ -260,35 +310,23 @@ class AzureDriver(AzureNodeDriver, NodeDriver):
         network_cidr = "10.0.0.0/16"
         network = self._ex_create_network(name=network_name, cidr=network_cidr)
         time.sleep(1)
+
+        # Create SSH security group
+        sec_group_id = self._ex_create_network_security_group(f"{network_name}-ssh-group")
+
         subnet_name = "default"
         subnet_cidr = "10.0.0.0/16"
-        subnet = self._ex_create_subnet(name=subnet_name, cidr=subnet_cidr, network_name=network_name)
+        subnet = self._ex_create_subnet(
+            name=subnet_name,
+            cidr=subnet_cidr,
+            network_name=network_name,
+            security_group_id=sec_group_id
+        )
         time.sleep(1)
 
         print(f"Created Virtual Network {network_name}.")
 
         return network, subnet
-
-    def _create_nic(self, name, subnet):
-        """
-        Create a network interface card with a public IP
-        :param name: The name of the node
-        :param subnet: The `AzureSubnet` where the nic will reside
-        :return:
-        """
-        public_ip = self.ex_create_public_ip(
-            f"{name}-ip",
-            resource_group=self.resource_group
-        )
-
-        time.sleep(1)
-
-        return self.ex_create_network_interface(
-            name=f"{name}-nic",
-            subnet=subnet,
-            resource_group=self.resource_group,
-            public_ip=public_ip
-        )
 
     def _ex_create_network(self, cidr, name):
         """
@@ -307,7 +345,7 @@ class AzureDriver(AzureNodeDriver, NodeDriver):
 
         action = "/subscriptions/%s/resourceGroups/%s/providers/" \
                  "Microsoft.Network/virtualNetworks/%s" \
-                 % (self.connection.subscription_id, self.resource_group, name)
+                 % (self.subscription_id, self.resource_group, name)
 
         r = self.connection.request(
             action,
@@ -329,7 +367,7 @@ class AzureDriver(AzureNodeDriver, NodeDriver):
         """
         action = "/subscriptions/%s/resourceGroups/%s/providers/" \
                  "Microsoft.Network/virtualNetworks/%s" \
-                 % (self.connection.subscription_id, self.resource_group, name)
+                 % (self.subscription_id, self.resource_group, name)
 
         r = self.connection.request(
             action,
@@ -339,19 +377,22 @@ class AzureDriver(AzureNodeDriver, NodeDriver):
 
         return r
 
-    def _ex_create_subnet(self, cidr, network_name, name):
+    def _ex_create_subnet(self, cidr, network_name, name, security_group_id=None):
         """
         Create a subnet
         """
         data = {
             "properties": {
-                "addressPrefix": cidr
+                "addressPrefix": cidr,
+                "networkSecurityGroup": {
+                    "id": security_group_id
+                }
             }
         }
 
         action = "/subscriptions/%s/resourceGroups/%s/providers/" \
                  "Microsoft.Network/virtualNetworks/%s/subnets/%s" \
-                 % (self.connection.subscription_id, self.resource_group, network_name, name)
+                 % (self.subscription_id, self.resource_group, network_name, name)
 
         r = self.connection.request(
             action,
@@ -366,36 +407,6 @@ class AzureDriver(AzureNodeDriver, NodeDriver):
             extra=r.object["properties"]
         )
 
-    def _ex_create_public_ip(self, name):
-        """
-        Create a public IP resources.
-        """
-
-        target = "/subscriptions/%s/resourceGroups/%s/" \
-                 "providers/Microsoft.Network/publicIPAddresses/%s" \
-                 % (self.connection.subscription_id, self.resource_group, name)
-
-        data = {
-            "location": self.default_location.id,
-            "tags": {},
-            "properties": {
-                "publicIPAllocationMethod": "Dynamic"
-            }
-        }
-
-        r = self.connection.request(
-            target,
-            params={"api-version": "2018-08-01"},
-            data=data,
-            method='PUT'
-        )
-
-        return AzureIPAddress(
-            id=r.object["id"],
-            name=r.object["name"],
-            extra=r.object["properties"]
-        )
-
     def _ex_delete_public_ip(self, name):
         """
         Delete a public IP
@@ -404,7 +415,7 @@ class AzureDriver(AzureNodeDriver, NodeDriver):
         """
         action = "/subscriptions/%s/resourceGroups/%s/providers/" \
                  "Microsoft.Network/publicIPAddresses/%s" \
-                 % (self.connection.subscription_id, self.resource_group, name)
+                 % (self.subscription_id, self.resource_group, name)
 
         r = self.connection.request(
             action,
@@ -413,3 +424,43 @@ class AzureDriver(AzureNodeDriver, NodeDriver):
         )
 
         return r
+
+    def _ex_create_network_security_group(self, name):
+        """
+        An updated version of libcloud's default `ex_create_network_security_group` that
+        includes an ssh rule.
+        :param name: Name of the network security group to create
+        """
+
+        target = "/subscriptions/%s/resourceGroups/%s/" \
+                 "providers/Microsoft.Network/networkSecurityGroups/%s" \
+                 % (self.subscription_id, self.resource_group, name)
+        data = {
+            "location": self.default_location.id,
+            "properties": {
+                "securityRules": [
+                    {
+                        "name": "SshInbound",
+                        "properties": {
+                            "protocol": "TCP",
+                            "sourceAddressPrefix": "*",
+                            "destinationAddressPrefix": "*",
+                            "access": "Allow",
+                            "destinationPortRange": "22",
+                            "sourcePortRange": "*",
+                            "priority": 130,
+                            "direction": "Inbound"
+                        }
+                    }
+                ]
+            }
+        }
+
+        r = self.connection.request(
+            target,
+            params={"api-version": "2016-09-01"},
+            data=data,
+            method='PUT'
+        )
+
+        return r.object["id"]

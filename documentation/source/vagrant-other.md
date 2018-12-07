@@ -1,57 +1,38 @@
-# ehvagrant: enhanced Vagrant interface with importable python module
-
-[TOC]
-
-----
-
-## Introduction
+# Cloudmesh Vagrant: New
 
 [Vagrant](https://www.vagrantup.com/) is a open-source software that
 help you to build and manage virtual machines through command line
-interface. `ehvagrant`provide you an *enhanced* command line Vagrant
-interface that enable users to utilize Vagrant functionalities *in an
-earlier way*.
+interface. `cm4`provides you with an easy wahy to manage multiple
+virtual machines via vagrnt.
 
-In essence, `ehvagrant` just a Python script. However, thanks to the
+
+This is interesting and we need to compare this with the Vagrantfile
+approach I use that is stored in a directory for each vm
+
+Thanks to the
 "entry_points" functionality supported by
 [setuptools](https://github.com/pypa/setuptools), we can easily use
 this script as if it is a "real" command line application.
-
-The major enhancement of `ehvagrant` is that it enables you to execute
+It enables you to execute
 the same job on multiple Vagrant instances at the same time,
 including:
 
 - transfer file and folder between host machine and instances
-
 - execute command or script on instances.
 
 This allows you to test a program on multiple virtual machines, which
 may have different OS and working environment, at the same time, by
 just issuing a **single** command.
 
-
-
------
-
 ## Setup Walkthrough
 
 ### Requirement summary
 
-Minimum  requirements to use`ehvagrant`are the following:
+You will need the following
 
-- Python 3 and `pip`should be available on the host machine. A working
-- Vagrant software work with appropriate
-- [virtualization provider](#Install-*virtualization-provider*). `scp`
-- functionality should be available on the host machine. Currently,
-- `ehvagrant ` just support the virtual machine that are running an
-- Unix-like OS, such as Ubuntu.
-
-### Setup `ehvagrant` 
-
-Just `pip install ehvagrant`. 
-
-IMPORTANT: if you are using`ehvagrant` along`cloudmesh`, You don't
-have to install `ehvagrant` separately from `cloudmesh`.  
+- Python 3 and `pip`.
+- [virtualization provider](#Install-*virtualization-provider*).
+- `scp`
 
 ### Install vagrant
 
@@ -59,15 +40,12 @@ You can download Vagrant from
 [here](https://www.vagrantup.com/downloads.html). It supports all
 mainstream operating system, including Windows, Mac OS, and various
 Linux distribution. After finishing installation, you can check if the
-installation success by executing `vagrant version`. You should see
-something like below.
-
-![vagrant version](img/vagrant/version.png)
+installation success by executing `vagrant version`. 
 
 ### Install *virtualization provider*
 
 Although Vagrant *help* you with managing virtual machines, Vagrant
-itself does not *handle* the task of virtualization. Vagrant rely on
+itself does not *handle* the task of virtualization. Vagrant relies on
 virtualization software or even cloud service provider to do the
 actual work of *virtualization* -- running virtual machine on top of
 host machine, provisioning computational and storage resources to
@@ -77,7 +55,15 @@ you need to install Vagrant along with *virtualization provider*
 and/or the correspondent t *Vagrant plugin*** that enables Vagrant to
 interact with virtualization provider.
 
-The default virtualization provider of Vagrant is [VirtualBox](https://www.virtualbox.org/). You don't have to install any plugin to let Vagrant working with VirtualBox. However, you indeed need to install VirtualBox if it don't exist on your host computer. In this case please refer to [VirtualBox downloand page](https://www.virtualbox.org/wiki/Downloads). Also, please note that using VirtualBox as the virtualization provider implies virtual machines will run on your host machine. So make sure there are sufficient resources on your host machine. 
+The default virtualization provider of Vagrant is
+[VirtualBox](https://www.virtualbox.org/). You don't have to install
+any plugin to let Vagrant working with VirtualBox. However, you indeed
+need to install VirtualBox if it don't exist on your host computer. In
+this case please refer to
+[VirtualBox downloand page](https://www.virtualbox.org/wiki/Downloads). Also,
+please note that using VirtualBox as the virtualization provider
+implies virtual machines will run on your host machine. So make sure
+there are sufficient resources on your host machine.
 
 You may choose other virtualization provider. In this case, please
 setup virtualization provider of your choice and follow the
@@ -91,19 +77,16 @@ VirtualBox.
 `Vagrantfile` is the main configuration file of Vagrant. Vagrant will
 only interact with the virtual machines defined in the `Vagrantfile`.
 
-To utilized `ehvagrant`, `Vagrantfile` should be stored
-at`VAGRANTFILE_PATH`which default path is `~/ehvagrant/Vagrantfile`.
-If you have defined environment variable `EHVAGRANT_HOME` , default
-`VAGRANTFILE_PATH` becomes `$EHVAGRANT_HOME/Vagrantfile` .
-
-IMPORTANT: If you are using `ehvagrant` with `cloudmesh`, then your
+In `cloudmesh`, your
 `VAGRANTFILE_PATH` will be changed to
 `~/.cloudmesh/vagrant_workspace/Vagrantfile`.
 
-`ehvagrant` will try to locate `Vagrantfile` every time it invokes. If
-it can't find it, `ehvagrant` will generate a default `Vagrantfile`at
+`cm4 vagrant` will try to locate `Vagrantfile` every time it invokes. If
+it can't find it, a default `Vagrantfile`at
 default path. Default `Vagrantfile` defines two Ubuntu machine called
 `node1` and `node2`, powered by VirtualBox.
+
+BUG: THIS DOES NOT MAKE SENSE
 
 You can use  [vagrant create](#create-instances) functionality to
 easily setup a `Vagrantfile` which defines any amount of virtual
@@ -121,25 +104,27 @@ supports Unix-like OS, and after finishing your modification on
 
 After finishing `Vagrantfile`definition, you are now ready to deploy
 and run your virtual machine with Vagrant. But first, let us check
-current status of your Vagrant provider. Execute `ehvagrant ls`at
-`ehvagrant` root directory, you will see:
+current status of your Vagrant provider. Execute `cm4 vm list`
+
+BUG: IMAGE PROKEN, COPY ASCII
 
 ![before_init](img/vagrant/before_init.png)
 
-Then execute `ehvagrant start`. Since your machines are not deployed
+Then execute `cm4 start`. Since your machines are not deployed
 yet, Vagrant will first deploy your machines and then bring them up,
 and automatically do LOTS of setting. When Vagrant has done its work,
-we can confirm this by issuing `ehvagrant ls` again. You will see now:
+we can confirm this by issuing `cm4 vm list` again. You will see now:
+
+BUG: IMAGE PROKEN, COPY ASCII
 
 ![after_init](img/vagrant/after_init.png)
 
 HOO-WA! Your two virtual machines are painlessly deployed, configured,
-up and running! Now you are ready to do some fancy work with Vagrant
-and `ehvagrant`.
+up and running! 
 
 ### Micellouenes: setup `scp` on host machine
 
-Since these topics are not directly relate to `ehvagrant`, here I just
+Since these topics are not directly relate to `cm4`, here I just
 describe how do you check these functionally are working properly.
 
 For `scp`, open terminal and execute `scp`, you should see a short
@@ -147,22 +132,9 @@ usage guide shows on your screen. If it is not there, please install
 `scp` and make sure its executive file is in your `PATH` environment
 variable.
 
+BUG: IMAGE BROKEN
+
 ![scp_availability_check](img/vagrant/scp.png)
-
-### Using `ehvagrant` with `cloudmesh`
-
-`ehvagrant` was originally developed as a module of `cloudmesh`. If
-you get `ehvagrant` with `cloudmesh` distribution, do following change
-when setup `ehvagrant` with `cloudmesh`:
-
-- You DO NOT have to install `ehvagrant` separately from `cloudmesh`.
-- When `cloudmesh` sets up, it automatically installs `ehvagrant`.
-- Your `VAGRANTFILE_PATH` now change to `~/.cloudmesh/vagrant
-- _space/Vagrantfile`.
-
-
-
-------
 
 ## Usage
 
@@ -214,7 +186,7 @@ You should use `--vms=<vmList>` argument to specify the list of names
 of instances. See
 [here](#How-to-specify-instances-I-want-to-work-with?) to know how to.
 
-If you don't specify an `IMAGE`, `ehvagrant` will use
+If you don't specify an `IMAGE`, `cm4` will use
 [Ubuntu/xenial64](https://app.vagrantup.com/ubuntu/boxes/xenial64) as
 its default image. If you specify an `IMAGE` that is in the list given
 by `vagrant box list` command, Vagrant will define instances using
@@ -300,7 +272,7 @@ separately stored in a folder which name after the instances'`name` .
 
 For example, if user try to download `~/foo.txt` simultaneously from
 `node1` and `node2`, and designate `./bar/foo.txt` as the host file
-path, then `ehvagrant ` will automatically modify the host file path,
+path, then `cm4` will automatically modify the host file path,
 copy `~/foo.txt` on `node1` into `./bar/node1/foo.txt` and copy
 `~foo.txt`on `node2` into `./bar/node2/foo.txt`.
 
@@ -358,12 +330,11 @@ following:
 	
 * After execution, if there exist anything in ` $JOB_FOLDER$/output/`,
   then it will all be fetched and stored to  `~/experiment/{instnace_name}/{script_name}_{epoch_second}/output/` folder on the host machine. 
-
-  * If you have set `EHVAGRANT_HOME` environment variable, then
-    fetched output will be saved to`$EHVAGRANT_HOME/{instnace_name}/{script_name}_{epoch_second}/output/`
   
   * If using with `cloudmesh`, output content will be stored at `~/.cloudmesh/experiment/{instnace_name}/{script_name}_{epoch_second}/output/`. 
 
 * Finally, execution reports will be printed out to current terminal.
+
+BUG USE ASCII
 
 ![run_script_example](img/vagrant/run_script.png)

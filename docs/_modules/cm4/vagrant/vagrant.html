@@ -82,13 +82,24 @@
             
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../README.html">Cloudmesh cm v4</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../aws.html">AWS cm</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../ufo.html">CM4 REST Api</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../vagrant.html">ehvagrant: enhanced Vagrant interface with importable python module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../vcluster.html">Virtual Cluster</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../vm.html">VM Description</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../code.html">Code Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contributors.html">1. Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../quickstart.html">2. Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../install.html">3. Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../mongo.html">4. Cloudmesh Database</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../configuration.html">5. Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../vmproviders.html">6. VM Providers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../vagrant.html">7. Vagrant</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../vagrant-other.html">8. Cloudmesh Vagrant: New</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../CM4README.html">9. CM4 Details</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../README.html">10. Cloudmesh cm v4</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../aws.html">11. AWS cm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ufo.html">12. CM4 REST Api</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../vcluster.html">13. Virtual Cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../vm.html">14. VM Description</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../jupyter.html">15. Jupyter Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../code.html">16. Code Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../deprecated.html">17. Deprecated from here on</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ehvagrant.html">18. ehvagrant: enhanced Vagrant interface with importable python module</a></li>
 </ul>
 
             
@@ -165,25 +176,28 @@
 <span class="kn">import</span> <span class="nn">hostlist</span>
 <span class="kn">from</span> <span class="nn">docopt</span> <span class="k">import</span> <span class="n">docopt</span>
 <span class="kn">from</span> <span class="nn">termcolor</span> <span class="k">import</span> <span class="n">colored</span>
-
+<span class="c1">#</span>
+<span class="c1"># TODO: BUG: this is managed laregly with the vm command and not vagrant, so what we need to do is make sure that if</span>
+<span class="c1">#  this stays, we need to have similar fumctionality in vm</span>
+<span class="c1">#</span>
 <span class="sd">&quot;&quot;&quot;Vagrant Manager.</span>
 
 <span class="sd">Usage:</span>
-<span class="sd">  vagrant.py vagrant create --vms=VMLIST [--box=BOX] [--template=TEMPLATE] [--output=OUTPUT] [--debug]</span>
-<span class="sd">  vagrant.py vagrant start [--vms=VMLIST] [--debug]</span>
-<span class="sd">  vagrant.py vagrant resume [--vms=VMLIST] [--debug]</span>
-<span class="sd">  vagrant.py vagrant stop [--vms=VMLIST] [--debug]</span>
-<span class="sd">  vagrant.py vagrant suspend [--vms=VMLIST] [--debug]</span>
-<span class="sd">  vagrant.py vagrant destroy [-f] [--vms=VMLIST] [--debug] </span>
-<span class="sd">  vagrant.py vagrant info NAME [--debug]</span>
-<span class="sd">  vagrant.py vagrant ls [--debug]</span>
-<span class="sd">  vagrant.py vagrant upload --from=FROM --to=TO [-r] [--vms=VMLIST] [--debug]</span>
-<span class="sd">  vagrant.py vagrant download --from=FROM --to=TO [-r] [--vms=VMLIST] [--debug]</span>
-<span class="sd">  vagrant.py vagrant ssh NAME [--debug]</span>
-<span class="sd">  vagrant.py vagrant run command COMMAND [--vms=VMLIST] [--debug]</span>
-<span class="sd">  vagrant.py vagrant run script SCRIPT [--data=PATH] [--vms=VMLIST] [--debug]</span>
+<span class="sd">  cm4 vagrant create --vms=VMLIST [--box=BOX] [--template=TEMPLATE] [--output=OUTPUT] [--debug]</span>
+<span class="sd">  cm4 vagrant start [--vms=VMLIST] [--debug]</span>
+<span class="sd">  cm4 vagrant resume [--vms=VMLIST] [--debug]</span>
+<span class="sd">  cm4 vagrant stop [--vms=VMLIST] [--debug]</span>
+<span class="sd">  cm4 vagrant suspend [--vms=VMLIST] [--debug]</span>
+<span class="sd">  cm4 vagrant destroy [-f] [--vms=VMLIST] [--debug] </span>
+<span class="sd">  cm4 vagrant info NAME [--debug]</span>
+<span class="sd">  cm4 vagrant ls [--debug]</span>
+<span class="sd">  cm4 vagrant upload --from=FROM --to=TO [-r] [--vms=VMLIST] [--debug]</span>
+<span class="sd">  cm4 vagrant download --from=FROM --to=TO [-r] [--vms=VMLIST] [--debug]</span>
+<span class="sd">  cm4 vagrant ssh NAME [--debug]</span>
+<span class="sd">  cm4 vagrant run command COMMAND [--vms=VMLIST] [--debug]</span>
+<span class="sd">  cm4 vagrant run script SCRIPT [--data=PATH] [--vms=VMLIST] [--debug]</span>
 
-<span class="sd">  vagrant.py -h</span>
+<span class="sd">  cm4 -h</span>
 
 <span class="sd">Options:</span>
 <span class="sd">  -h --help     Show this screen.</span>
@@ -195,9 +209,9 @@
 <span class="sd">Example:</span>
 <span class="sd">   put an example here</span>
 <span class="sd">&quot;&quot;&quot;</span>
+
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Implementation notes</span>
-
 
 <span class="sd">Future Version ideas:</span>
 
@@ -269,20 +283,29 @@
 <span class="sd">        :param debug:</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># prepare path</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s1">&#39;EHVAGRANT_HOME&#39;</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">workspace</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="s1">&#39;~&#39;</span><span class="p">),</span> <span class="s1">&#39;.cloudmesh&#39;</span><span class="p">,</span> <span class="s1">&#39;vagrant_workspace&#39;</span><span class="p">,</span> <span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">workspace</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s1">&#39;EHVAGRANT_HOME&#39;</span><span class="p">)</span>
+        <span class="c1">#</span>
+        <span class="c1"># TODO: BUG: We use cloudmesh, ehvagrant is not whow we set this up</span>
+        <span class="c1">#</span>
+        <span class="c1"># THis should use a config = Config()</span>
+        <span class="c1">#</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">workspace</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="s1">&#39;~&#39;</span><span class="p">),</span> <span class="s1">&#39;.cloudmesh&#39;</span><span class="p">,</span> <span class="s1">&#39;vagrant_workspace&#39;</span><span class="p">,</span> <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">workspace</span><span class="p">,</span> <span class="s2">&quot;Vagrantfile&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">experiment_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">workspace</span><span class="p">,</span> <span class="s1">&#39;experiment&#39;</span><span class="p">)</span>
 
         <span class="c1"># prepare folder and Vagrantfile</span>
+        <span class="c1">#</span>
+        <span class="c1">#  TODO: BUG: Thsi should be a utility function in common</span>
+        <span class="c1">#</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">workspace</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_nested_mkdir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">workspace</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">experiment_path</span><span class="p">):</span>
             <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">experiment_path</span><span class="p">)</span>
 
+        <span class="c1">#</span>
+        <span class="c1"># TODO: BUG: I do not understand what node 1 and node2 are, seems debugging code</span>
+        <span class="c1">#</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">path</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">create</span><span class="p">([</span><span class="s1">&#39;node1&#39;</span><span class="p">,</span> <span class="s1">&#39;node2&#39;</span><span class="p">])</span>
 
@@ -323,6 +346,12 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        get all of the host names that exist in current vagrant environment</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1">#</span>
+        <span class="c1"># TODO: BUG: should this not also be in the db and if not we load into the db,</span>
+        <span class="c1">#  but tahan we use the db</span>
+        <span class="c1">#</span>
+
         <span class="n">res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s1">&#39;vagrant status&#39;</span><span class="p">,</span> <span class="n">result</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="ne">Exception</span><span class="p">):</span>
             <span class="nb">print</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
@@ -344,6 +373,9 @@
 <span class="sd">        :param dest: destination file path </span>
 <span class="sd">        :return: None</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1">#</span>
+        <span class="c1"># TODO: BUG: the scp should work on all named vms, regardless if vagrant or not</span>
+        <span class="c1">#</span>
         <span class="c1"># get vagrant setting</span>
         <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">ssh_config</span><span class="p">:</span>
             <span class="n">res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s1">&#39;vagrant ssh-config </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">),</span> <span class="n">result</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -388,6 +420,9 @@
 <span class="sd">        :param report_kwargs: content dictionary of running result</span>
 <span class="sd">        :return: str or dictionary:</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1">#</span>
+        <span class="c1"># TODO: BUG: THis shoudl work on all vms regardless of vagrant or not</span>
+        <span class="c1">#</span>
         <span class="c1"># parse run_report</span>
         <span class="n">job_status</span> <span class="o">=</span> <span class="s1">&#39;Finished&#39;</span> <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="ne">Exception</span><span class="p">)</span> <span class="k">else</span> <span class="s1">&#39;Failed&#39;</span>
 
@@ -419,6 +454,9 @@
 <span class="sd">        :param kwargs: keyword arguments of running action function</span>
 <span class="sd">        :return: None:</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1">#</span>
+        <span class="c1"># TODO: BUG: This shoudl work on all vms regardless of vagrant or not</span>
+        <span class="c1">#</span>
         <span class="c1"># initalize threading pool</span>
         <span class="n">pool</span> <span class="o">=</span> <span class="n">mt</span><span class="o">.</span><span class="n">Pool</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">hosts</span><span class="p">))</span>
         <span class="n">run_result</span> <span class="o">=</span> <span class="n">queue</span><span class="o">.</span><span class="n">Queue</span><span class="p">()</span>
@@ -461,6 +499,11 @@
 <span class="sd">        :param report_alone: print job running report. if False, return job running report</span>
 <span class="sd">        :return: dictionary, subprocess.CalledProcessError</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1">#</span>
+        <span class="c1"># TODO: BUG: This should work on all vms and not just vagrant</span>
+        <span class="c1">#</span>
+
         <span class="c1"># building path</span>
         <span class="n">script_name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">script_path</span><span class="p">)</span>
         <span class="n">exp_folder_name</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">{}</span><span class="s1">_</span><span class="si">{:.0f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">script_name</span><span class="p">,</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">())</span>
@@ -557,6 +600,10 @@
 <span class="sd">        :return: string, subprocess.CalledProcessError</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># submit job</span>
+
+        <span class="c1">#</span>
+        <span class="c1"># TODO: BUG: THis shoudl work on all vms and not just vagrant</span>
+        <span class="c1">#</span>
         <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s1">&#39;exceute &quot;</span><span class="si">{}</span><span class="s1">&quot; on node </span><span class="si">{}</span><span class="s1">......&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">name</span><span class="p">))</span>
         <span class="n">res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span>
             <span class="s1">&#39;vagrant ssh </span><span class="si">{}</span><span class="s1"> -c &quot;echo -e </span><span class="se">\\</span><span class="s1">&quot;</span><span class="se">\x04\\</span><span class="s1">&quot;;</span><span class="si">{}</span><span class="s1">; echo </span><span class="se">\\</span><span class="s1">&quot;return_code: $?</span><span class="se">\\</span><span class="s1">&quot;&quot;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">command</span><span class="p">),</span> <span class="n">result</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>

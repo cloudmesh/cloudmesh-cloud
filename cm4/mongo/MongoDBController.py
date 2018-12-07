@@ -5,27 +5,45 @@ from sys import platform
 from pymongo import MongoClient
 from cm4.configuration.config import Config
 from pprint import pprint
-import textwrap
 from cm4.common.shell import Script
 from cm4.common.shell import Shell, Brew
 from cm4.common.shell import SystemPath
 
-class MongoDBController(object):
+class MongoInstaller(object):
 
     def __init__(self):
+        """
+        Initialization of the MOngo installer
+        """
 
         self.config = Config()
-        self.data = self.config["cloudmesh"]["data"]["mongo"]
+        self.data = self.config.data["cloudmesh"]["data"]["mongo"]
+        self.expanduser()
+
+
+    def expanduser(self):
+        for key in self.data:
+            if type(self.data[key]) == str:
+                self.data[key] = os.path.expanduser(self.data[key])
+        pprint(self.data)
 
     def __str__(self):
         return yaml.dump(self.data, default_flow_style=False, indent=2)
 
     def install(self):
         """
-        check where the MongoDB is installed in cmmongo location.
+        check where the MongoDB is installed in mongo location.
         if MongoDB is not installed, python help install it
         """
-        path = self.data["MONGO_PATH"]
+        path = os.path.expanduser(self.data["MONGO_PATH"])
+        print(path)
+        pprint(self.data)
+
+        if not self.data["MONGO_AUTOINSTALL"]:
+            print ("Mongo auto install is off")
+            return ""
+
+
         if not os.path.isdir(path) and self.data["MONGO_AUTOINSTALL"]:
             print("MongoDB is not installed in {MONGO_PATH}".format(**self.data))
             #
@@ -33,19 +51,21 @@ class MongoDBController(object):
             #
             # use cloudmesh yes no question see cloudmesh 3
             #
-            print("Auto-install the MongoDB into {MONGOP_PATH}".format(self.data))
+            print("Auto-install the MongoDB into {MONGO_PATH}".format(**self.data))
 
-            self.data["MONGO_CODE"] = self.data["MONGO_DOWNLAOD"][platform]
+            self.data["MONGO_CODE"] = self.data["MONGO_DOWNLOAD"][platform]
 
-            if platform == 'linux':
-                self.install_linux()
-            if platform == 'darwin':
-                self.install_darwin()
-            if platform == 'windows':
-                # TODO
-                raise NotImplementedError
+            if platform.lower() == 'linux':
+                self.linux()
+            elif platform.lower() == 'darwin':
+                self.darwin()
+            elif platform.lower() == 'windows':
+                self.windows()
+            else:
+                print("platform not found", platform)
 
-    def install_linux(self):
+
+    def linux(self):
         # TODO UNTESTED
         """
         install MongoDB in Linux system (Ubuntu)
@@ -56,23 +76,22 @@ class MongoDBController(object):
         mkdir -p {MONGO_HOME}
         mkdir -p {MONGO_LOG}
         wget -P /tmp/mongodb.tgz {MONGO_CODE}
-        tar -zxvf /tmp/mongodb.tgz -C {LOCAL}
-        """
+        tar -zxvf /tmp/mongodb.tgz -C {LOCAL}/mongo --strip 1
+            """.format(**self.data)
         installer = Script(script)
         SystemPath.add("{MONGO_HOME}/bin".format(**self.data))
 
         # THIS IS BROKEN AS ITS A SUPBROCESS? '. ~/.bashrc'
 
-        # initial mongodb config file
-        self.initial_mongo_config(False)
 
-    def install_darwin(self, brew=False):
+    def darwin(self, brew=False):
         """
         install MongoDB in Darwin system (Mac)
         """
 
 
         if brew:
+            print ("mongo installer via brew")
             Brew.install("mongodb")
             path = Shell.which("mongod")
             SystemPath.add("{path}".format(path=path))
@@ -82,16 +101,39 @@ class MongoDBController(object):
             mkdir -p {MONGO_PATH}
             mkdir -p {MONGO_HOME}
             mkdir -p {MONGO_LOG}
-            curl -O {MONGO_CODE} -o /tmp/mongodb.tgz
-            tar -zxvf /tmp/mongodb.tgz -C {LOCAL}
-            """
+            curl -o /tmp/mongodb.tgz {MONGO_CODE}
+            tar -zxvf /tmp/mongodb.tgz -C {LOCAL}/mongo --strip 1
+            """.format(**self.data)
             installer = Script(script)
             SystemPath.add("{MONGO_HOME}/bin".format(**self.data))
 
             # THIS IS BROKEN AS ITS A SUPBROCESS? '. ~/.bashrc'
 
-            # initial mongodb config file
-            self.initial_mongo_config(False)
+    def windows(self, brew=False):
+        """
+        install MongoDB in Darwin system (Mac)
+        """
+
+        # TODO
+        raise NotImplementedError
+
+
+class MongoDBController(object):
+
+    def __init__(self):
+
+        self.config = Config()
+
+        pprint (self.config.dict())
+
+        self.data = self.config.data["cloudmesh"]["data"]["mongo"]
+
+
+        # TODO: self.initial_mongo_config(False)
+
+    def __str__(self):
+        return yaml.dump(self.data, default_flow_style=False, indent=2)
+
 
     def update_auth(self):
         """
@@ -204,8 +246,65 @@ class MongoDBController(object):
         """
         check the MongoDB status
         """
-        client = MongoClient(self.host, self.port)
-        pprint(client.server_info())
+
+        script = "ps -ax | grep mongo | fgrep -v grep"
+
+
+        ps_output = Script(script)
+        print(ps_output)
+
+        #client = MongoClient(self.host, self.port)
+        #pprint(client.server_info())
+
+
+def process_arguments(arguments):
+    """
+    Process command line arguments to execute VM actions.
+    Called from cm4.command.command
+    :param arguments:
+    """
+    result = None
+
+    """
+      cm4 admin mongo install [--brew] [--download=PATH]
+      cm4 admin mongo start
+      cm4 admin mongo stop
+      cm4 admin mongo backup FILENAME
+      cm4 admin mongo load FILENAME
+      cm4 admin mongo help
+"""
+
+    if arguments.install:
+
+        print("install")
+        print("========")
+        installer = MongoInstaller()
+        r = installer.install()
+        return r
+
+    elif arguments.start:
+
+        print("start")
+
+    elif arguments.stop:
+
+        print("stop")
+
+    elif arguments.backup:
+
+        print("backup")
+
+    elif arguments.load:
+
+        print("backup")
+
+    elif arguments.status:
+
+        mongo = MongoDBController()
+        r = mongo.status()
+        return r
+
+    return result
 
 
 def main():
@@ -217,8 +316,8 @@ def main():
     # test.run_mongodb()
     # test.shutdown_mongodb()
     test.status()
-    # test.dump('~/.cloudmesh/demo/version1/cm/cm4/cmmongo/MongoDB/backup')
-    # test.restore ('~/.coudmesh/demo/version1/cm/cm4/cmmongo/MongoDB/backup')
+    # test.dump('~/.cloudmesh/demo/version1/cm/cm4/mongo/MongoDB/backup')
+    # test.restore ('~/.coudmesh/demo/version1/cm/cm4/mongo/MongoDB/backup')
 
 
 if __name__ == "__main__":

@@ -36,3 +36,11 @@ class AWSDriver(EC2NodeDriver, NodeDriver):
                                      ex_securitygroup=self.default['EC2_SECURITY_GROUP'])
 
         return new_vm
+
+    def set_public_ip(self, name, public_ip):
+        print("No set_public_ip method")
+        pass
+
+    def remove_public_ip(self, name):
+        print("No remove_public_ip method")
+        pass

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Code Documentation &mdash; cm4 alpha documentation</title>
+  <title>16. Code Documentation &mdash; cm4 alpha documentation</title>
   
 
   
@@ -28,7 +28,8 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="VM Description" href="vm.html" /> 
+    <link rel="next" title="17. Deprecated from here on" href="deprecated.html" />
+    <link rel="prev" title="15. Jupyter Integration" href="jupyter.html" /> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -83,36 +84,47 @@
             
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="README.html">Cloudmesh cm v4</a></li>
-<li class="toctree-l1"><a class="reference internal" href="aws.html">AWS cm</a></li>
-<li class="toctree-l1"><a class="reference internal" href="ufo.html">CM4 REST Api</a></li>
-<li class="toctree-l1"><a class="reference internal" href="vagrant.html">ehvagrant: enhanced Vagrant interface with importable python module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="vcluster.html">Virtual Cluster</a></li>
-<li class="toctree-l1"><a class="reference internal" href="vm.html">VM Description</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Code Documentation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#module-cm4.command.command">Command</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-cm4.aws.CommandAWS">AWS</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#mongo">Mongo</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#module-cm4.cmmongo.mongoDB">MongoDB</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#controler">Controler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributors.html">1. Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">2. Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">3. Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mongo.html">4. Cloudmesh Database</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">5. Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vmproviders.html">6. VM Providers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vagrant.html">7. Vagrant</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vagrant-other.html">8. Cloudmesh Vagrant: New</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CM4README.html">9. CM4 Details</a></li>
+<li class="toctree-l1"><a class="reference internal" href="README.html">10. Cloudmesh cm v4</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aws.html">11. AWS cm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ufo.html">12. CM4 REST Api</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vcluster.html">13. Virtual Cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vm.html">14. VM Description</a></li>
+<li class="toctree-l1"><a class="reference internal" href="jupyter.html">15. Jupyter Integration</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">16. Code Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-cm4.command.command">16.1. Command</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-cm4.aws.CommandAWS">16.2. AWS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#mongo">16.3. Mongo</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#mongodb">16.3.1. MongoDB</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#controler">16.3.2. Controler</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#common">Common</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#module-cm4.common.util">Util</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#module-cm4.common.console">Console</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#module-cm4.common.debug">Debug</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#module-cm4.common.shell">Shell</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#common">16.4. Common</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#module-cm4.common.util">16.4.1. Util</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-cm4.common.console">16.4.2. Console</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-cm4.common.debug">16.4.3. Debug</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-cm4.common.shell">16.4.4. Shell</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#module-cm4.vcluster.VirtualCluster">Virtual Cluster</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-cm4.configuration.config">Configuration</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-cm4.data.db.DBProviderABC">Data</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-cm4.flask_rest_api.rest_api">Server</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-cm4.openstack.OpenstackCM">Openstack</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-cm4.vagrant.vagrant">Vagrant</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-cm4.vm.Cloud">VM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-cm4.vcluster.VirtualCluster">16.5. Virtual Cluster</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-cm4.configuration.config">16.6. Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-cm4.data.db.DBProviderABC">16.7. Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-cm4.flask_rest_api.rest_api">16.8. Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-cm4.openstack.OpenstackCM">16.9. Openstack</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-cm4.vagrant.vagrant">16.10. Vagrant</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-cm4.vm.Cloud">16.11. VM</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="deprecated.html">17. Deprecated from here on</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ehvagrant.html">18. ehvagrant: enhanced Vagrant interface with importable python module</a></li>
 </ul>
 
             
@@ -158,7 +170,7 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>Code Documentation</li>
+      <li>16. Code Documentation</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -178,11 +190,21 @@
            <div itemprop="articleBody">
             
   <div class="section" id="module-cm4">
-<span id="code-documentation"></span><h1>Code Documentation<a class="headerlink" href="#module-cm4" title="Permalink to this headline">¶</a></h1>
+<span id="code-documentation"></span><h1>16. Code Documentation<a class="headerlink" href="#module-cm4" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="module-cm4.command.command">
-<span id="command"></span><h2>Command<a class="headerlink" href="#module-cm4.command.command" title="Permalink to this headline">¶</a></h2>
+<span id="command"></span><h2>16.1. Command<a class="headerlink" href="#module-cm4.command.command" title="Permalink to this headline">¶</a></h2>
 <p>Cloudmesh 4</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Usage</span><span class="p">:</span>
+  <span class="n">cm4</span> <span class="n">admin</span> <span class="n">mongo</span> <span class="n">install</span> <span class="p">[</span><span class="o">--</span><span class="n">brew</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">download</span><span class="o">=</span><span class="n">PATH</span><span class="p">]</span>
+  <span class="n">cm4</span> <span class="n">admin</span> <span class="n">mongo</span> <span class="n">status</span>
+  <span class="n">cm4</span> <span class="n">admin</span> <span class="n">mongo</span> <span class="n">start</span>
+  <span class="n">cm4</span> <span class="n">admin</span> <span class="n">mongo</span> <span class="n">stop</span>
+  <span class="n">cm4</span> <span class="n">admin</span> <span class="n">mongo</span> <span class="n">backup</span> <span class="n">FILENAME</span>
+  <span class="n">cm4</span> <span class="n">admin</span> <span class="n">mongo</span> <span class="n">load</span> <span class="n">FILENAME</span>
+  <span class="n">cm4</span> <span class="n">admin</span> <span class="n">rest</span> <span class="n">status</span>
+  <span class="n">cm4</span> <span class="n">admin</span> <span class="n">rest</span> <span class="n">start</span>
+  <span class="n">cm4</span> <span class="n">admin</span> <span class="n">rest</span> <span class="n">stop</span>
+  <span class="n">cm4</span> <span class="n">admin</span> <span class="n">status</span>
   <span class="n">cm4</span> <span class="n">vagrant</span> <span class="n">create</span> <span class="o">--</span><span class="n">count</span><span class="o">=</span><span class="n">VMNUMBER</span> <span class="p">[</span><span class="o">--</span><span class="n">debug</span><span class="p">]</span>
   <span class="n">cm4</span> <span class="n">vagrant</span> <span class="n">start</span> <span class="p">[</span><span class="o">--</span><span class="n">vms</span><span class="o">=</span><span class="n">VMLIST</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">debug</span><span class="p">]</span>
   <span class="n">cm4</span> <span class="n">vagrant</span> <span class="n">stop</span> <span class="p">[</span><span class="o">--</span><span class="n">vms</span><span class="o">=</span><span class="n">VMLIST</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">debug</span><span class="p">]</span>
@@ -224,10 +246,21 @@
   <span class="n">cm4</span> <span class="n">vcluster</span> <span class="n">destroy</span> <span class="n">runtime</span><span class="o">-</span><span class="n">config</span> <span class="n">CONFIG_NAME</span>
   <span class="n">cm4</span> <span class="n">vcluster</span> <span class="nb">list</span> <span class="n">virtual</span><span class="o">-</span><span class="n">clusters</span> <span class="p">[</span><span class="n">DEPTH</span> <span class="p">[</span><span class="n">default</span><span class="p">:</span><span class="mi">1</span><span class="p">]]</span>
   <span class="n">cm4</span> <span class="n">vcluster</span> <span class="nb">list</span> <span class="n">runtime</span><span class="o">-</span><span class="n">configs</span> <span class="p">[</span><span class="n">DEPTH</span> <span class="p">[</span><span class="n">default</span><span class="p">:</span><span class="mi">1</span><span class="p">]]</span>
-  <span class="n">cm4</span> <span class="n">vcluster</span> <span class="n">run</span><span class="o">-</span><span class="n">script</span> <span class="o">--</span><span class="n">script</span><span class="o">-</span><span class="n">path</span><span class="o">=</span><span class="n">SCRIPT_PATH</span> <span class="o">--</span><span class="n">job</span><span class="o">-</span><span class="n">name</span><span class="o">=</span><span class="n">JOB_NAME</span> <span class="o">--</span><span class="n">vcluster</span><span class="o">-</span><span class="n">name</span><span class="o">=</span><span class="n">VIRTUALCLUSTER_NAME</span> <span class="o">--</span><span class="n">config</span><span class="o">-</span><span class="n">name</span><span class="o">=</span><span class="n">CONFIG_NAME</span> <span class="o">--</span><span class="n">arguments</span><span class="o">=</span><span class="n">SET_OF_PARAMS</span> <span class="o">--</span><span class="n">remote</span><span class="o">-</span><span class="n">path</span><span class="o">=</span><span class="n">REMOTE_PATH</span><span class="o">&gt;</span> <span class="o">--</span><span class="n">local</span><span class="o">-</span><span class="n">path</span><span class="o">=</span><span class="n">LOCAL_PATH</span> <span class="p">[</span><span class="o">--</span><span class="n">argfile</span><span class="o">-</span><span class="n">path</span><span class="o">=</span><span class="n">ARGUMENT_FILE_PATH</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">outfile</span><span class="o">-</span><span class="n">name</span><span class="o">=</span><span class="n">OUTPUT_FILE_NAME</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">suffix</span><span class="o">=</span><span class="n">SUFFIX</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">overwrite</span><span class="p">]</span>
+  <span class="n">cm4</span> <span class="n">vcluster</span> <span class="n">run</span><span class="o">-</span><span class="n">script</span> <span class="o">--</span><span class="n">script</span><span class="o">-</span><span class="n">path</span><span class="o">=</span><span class="n">SCRIPT_PATH</span> <span class="o">--</span><span class="n">job</span><span class="o">-</span><span class="n">name</span><span class="o">=</span><span class="n">JOB_NAME</span> <span class="o">--</span><span class="n">vcluster</span><span class="o">-</span><span class="n">name</span><span class="o">=</span><span class="n">VIRTUALCLUSTER_NAME</span> <span class="o">--</span><span class="n">config</span><span class="o">-</span><span class="n">name</span><span class="o">=</span><span class="n">CONFIG_NAME</span> <span class="o">--</span><span class="n">arguments</span><span class="o">=</span><span class="n">SET_OF_PARAMS</span> <span class="o">--</span><span class="n">remote</span><span class="o">-</span><span class="n">path</span><span class="o">=</span><span class="n">REMOTE_PATH</span> <span class="o">--</span><span class="n">local</span><span class="o">-</span><span class="n">path</span><span class="o">=</span><span class="n">LOCAL_PATH</span> <span class="p">[</span><span class="o">--</span><span class="n">argfile</span><span class="o">-</span><span class="n">path</span><span class="o">=</span><span class="n">ARGUMENT_FILE_PATH</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">outfile</span><span class="o">-</span><span class="n">name</span><span class="o">=</span><span class="n">OUTPUT_FILE_NAME</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">suffix</span><span class="o">=</span><span class="n">SUFFIX</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">overwrite</span><span class="p">]</span>
   <span class="n">cm4</span> <span class="n">vcluster</span> <span class="n">fetch</span> <span class="n">JOB_NAME</span>
   <span class="n">cm4</span> <span class="n">vcluster</span> <span class="n">clean</span><span class="o">-</span><span class="n">remote</span> <span class="n">JOB_NAME</span> <span class="n">PROCESS_NUM</span>
   <span class="n">cm4</span> <span class="n">vcluster</span> <span class="n">test</span><span class="o">-</span><span class="n">connection</span> <span class="n">VIRTUALCLUSTER_NAME</span> <span class="n">PROCESS_NUM</span>
+  <span class="n">cm4</span> <span class="n">batch</span> <span class="n">create</span><span class="o">-</span><span class="n">job</span> <span class="n">JOB_NAME</span> <span class="o">--</span><span class="n">slurm</span><span class="o">-</span><span class="n">script</span><span class="o">=</span><span class="n">SLURM_SCRIPT_PATH</span> <span class="o">--</span><span class="nb">input</span><span class="o">-</span><span class="nb">type</span><span class="o">=</span><span class="n">INPUT_TYPE</span> <span class="o">--</span><span class="n">slurm</span><span class="o">-</span><span class="n">cluster</span><span class="o">=</span><span class="n">SLURM_CLUSTER_NAME</span> <span class="o">--</span><span class="n">job</span><span class="o">-</span><span class="n">script</span><span class="o">-</span><span class="n">path</span><span class="o">=</span><span class="n">SCRIPT_PATH</span> <span class="o">--</span><span class="n">remote</span><span class="o">-</span><span class="n">path</span><span class="o">=</span><span class="n">REMOTE_PATH</span> <span class="o">--</span><span class="n">local</span><span class="o">-</span><span class="n">path</span><span class="o">=</span><span class="n">LOCAL_PATH</span> <span class="p">[</span><span class="o">--</span><span class="n">argfile</span><span class="o">-</span><span class="n">path</span><span class="o">=</span><span class="n">ARGUMENT_FILE_PATH</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">outfile</span><span class="o">-</span><span class="n">name</span><span class="o">=</span><span class="n">OUTPUT_FILE_NAME</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">suffix</span><span class="o">=</span><span class="n">SUFFIX</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">overwrite</span><span class="p">]</span>
+  <span class="n">cm4</span> <span class="n">batch</span> <span class="n">run</span><span class="o">-</span><span class="n">job</span> <span class="n">JOB_NAME</span>
+  <span class="n">cm4</span> <span class="n">batch</span> <span class="n">fetch</span> <span class="n">JOB_NAME</span>
+  <span class="n">cm4</span> <span class="n">batch</span> <span class="n">test</span><span class="o">-</span><span class="n">connection</span> <span class="n">SLURM_CLUSTER_NAME</span>
+  <span class="n">cm4</span> <span class="n">batch</span> <span class="nb">set</span><span class="o">-</span><span class="n">param</span> <span class="n">slurm</span><span class="o">-</span><span class="n">cluster</span> <span class="n">CLUSTER_NAME</span> <span class="n">PARAMETER</span> <span class="n">VALUE</span>
+  <span class="n">cm4</span> <span class="n">batch</span> <span class="nb">set</span><span class="o">-</span><span class="n">param</span> <span class="n">job</span><span class="o">-</span><span class="n">metadata</span> <span class="n">JOB_NAME</span> <span class="n">PARAMETER</span> <span class="n">VALUE</span>
+  <span class="n">cm4</span> <span class="n">batch</span> <span class="nb">list</span> <span class="n">slurm</span><span class="o">-</span><span class="n">clusters</span> <span class="p">[</span><span class="n">DEPTH</span> <span class="p">[</span><span class="n">default</span><span class="p">:</span><span class="mi">1</span><span class="p">]]</span>
+  <span class="n">cm4</span> <span class="n">batch</span> <span class="nb">list</span> <span class="n">jobs</span> <span class="p">[</span><span class="n">DEPTH</span> <span class="p">[</span><span class="n">default</span><span class="p">:</span><span class="mi">1</span><span class="p">]]</span>
+  <span class="n">cm4</span> <span class="n">batch</span> <span class="n">remove</span> <span class="n">slurm</span><span class="o">-</span><span class="n">cluster</span> <span class="n">CLUSTER_NAME</span>
+  <span class="n">cm4</span> <span class="n">batch</span> <span class="n">remove</span> <span class="n">job</span> <span class="n">JOB_NAME</span>
+  <span class="n">cm4</span> <span class="n">batch</span> <span class="n">clean</span><span class="o">-</span><span class="n">remote</span> <span class="n">JOB_NAME</span>
   <span class="n">cm4</span> <span class="n">spark</span> <span class="n">deploy</span> <span class="o">-</span><span class="n">n</span> <span class="mi">10</span> <span class="p">[</span><span class="o">--</span><span class="n">dryrun</span><span class="p">]</span>
   <span class="n">cm4</span> <span class="n">spark</span> <span class="n">run</span> <span class="p">[</span><span class="o">--</span><span class="n">dryrun</span><span class="p">]</span>
   <span class="n">cm4</span> <span class="n">spark</span> <span class="n">execute</span> <span class="n">PRG</span> <span class="p">[</span><span class="o">--</span><span class="n">dryrun</span><span class="p">]</span>
@@ -252,21 +285,21 @@
 
 </div>
 <div class="section" id="module-cm4.aws.CommandAWS">
-<span id="aws"></span><h2>AWS<a class="headerlink" href="#module-cm4.aws.CommandAWS" title="Permalink to this headline">¶</a></h2>
+<span id="aws"></span><h2>16.2. AWS<a class="headerlink" href="#module-cm4.aws.CommandAWS" title="Permalink to this headline">¶</a></h2>
 </div>
 <div class="section" id="mongo">
-<h2>Mongo<a class="headerlink" href="#mongo" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="module-cm4.cmmongo.mongoDB">
-<span id="mongodb"></span><h3>MongoDB<a class="headerlink" href="#module-cm4.cmmongo.mongoDB" title="Permalink to this headline">¶</a></h3>
+<h2>16.3. Mongo<a class="headerlink" href="#mongo" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="mongodb">
+<h3>16.3.1. MongoDB<a class="headerlink" href="#mongodb" title="Permalink to this headline">¶</a></h3>
 </div>
 <div class="section" id="controler">
-<h3>Controler<a class="headerlink" href="#controler" title="Permalink to this headline">¶</a></h3>
+<h3>16.3.2. Controler<a class="headerlink" href="#controler" title="Permalink to this headline">¶</a></h3>
 </div>
 </div>
 <div class="section" id="common">
-<h2>Common<a class="headerlink" href="#common" title="Permalink to this headline">¶</a></h2>
+<h2>16.4. Common<a class="headerlink" href="#common" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="module-cm4.common.util">
-<span id="util"></span><h3>Util<a class="headerlink" href="#module-cm4.common.util" title="Permalink to this headline">¶</a></h3>
+<span id="util"></span><h3>16.4.1. Util<a class="headerlink" href="#module-cm4.common.util" title="Permalink to this headline">¶</a></h3>
 <p>Useful utility functions</p>
 <dl class="function">
 <dt id="cm4.common.util.HEADING">
@@ -511,7 +544,7 @@ String matching only, does not do REs as currently implemented.</p>
 
 </div>
 <div class="section" id="module-cm4.common.console">
-<span id="console"></span><h3>Console<a class="headerlink" href="#module-cm4.common.console" title="Permalink to this headline">¶</a></h3>
+<span id="console"></span><h3>16.4.2. Console<a class="headerlink" href="#module-cm4.common.console" title="Permalink to this headline">¶</a></h3>
 <p>Printing messages in a console</p>
 <dl class="class">
 <dt id="cm4.common.console.Console">
@@ -654,10 +687,10 @@ warnings, errors, ok and regular messages.</p>
 
 </div>
 <div class="section" id="module-cm4.common.debug">
-<span id="debug"></span><h3>Debug<a class="headerlink" href="#module-cm4.common.debug" title="Permalink to this headline">¶</a></h3>
+<span id="debug"></span><h3>16.4.3. Debug<a class="headerlink" href="#module-cm4.common.debug" title="Permalink to this headline">¶</a></h3>
 </div>
 <div class="section" id="module-cm4.common.shell">
-<span id="shell"></span><h3>Shell<a class="headerlink" href="#module-cm4.common.shell" title="Permalink to this headline">¶</a></h3>
+<span id="shell"></span><h3>16.4.4. Shell<a class="headerlink" href="#module-cm4.common.shell" title="Permalink to this headline">¶</a></h3>
 <p>A convenient method to execute shell commands and return their output. Note: that this method requires that the
 command be completely execute before the output is returned. FOr many activities in cloudmesh this is sufficient.</p>
 <dl class="class">
@@ -1083,7 +1116,7 @@ THis command should not be directly called. Instead use SHell</p>
 </div>
 </div>
 <div class="section" id="module-cm4.vcluster.VirtualCluster">
-<span id="virtual-cluster"></span><h2>Virtual Cluster<a class="headerlink" href="#module-cm4.vcluster.VirtualCluster" title="Permalink to this headline">¶</a></h2>
+<span id="virtual-cluster"></span><h2>16.5. Virtual Cluster<a class="headerlink" href="#module-cm4.vcluster.VirtualCluster" title="Permalink to this headline">¶</a></h2>
 <p>Virtual Cluster: running parallel remote jobs</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Usage</span><span class="p">:</span>
   <span class="n">cm4</span> <span class="n">vcluster</span> <span class="n">create</span> <span class="n">virtual</span><span class="o">-</span><span class="n">cluster</span> <span class="n">VIRTUALCLUSTER_NAME</span> <span class="o">--</span><span class="n">clusters</span><span class="o">=</span><span class="n">CLUSTERS_LIST</span> <span class="p">[</span><span class="o">--</span><span class="n">computers</span><span class="o">=</span><span class="n">COMPUTERS_LIST</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">debug</span><span class="p">]</span>
@@ -1138,7 +1171,7 @@ THis command should not be directly called. Instead use SHell</p>
 
 </div>
 <div class="section" id="module-cm4.configuration.config">
-<span id="configuration"></span><h2>Configuration<a class="headerlink" href="#module-cm4.configuration.config" title="Permalink to this headline">¶</a></h2>
+<span id="configuration"></span><h2>16.6. Configuration<a class="headerlink" href="#module-cm4.configuration.config" title="Permalink to this headline">¶</a></h2>
 <span class="target" id="module-cm4.configuration.counter"></span><dl class="class">
 <dt id="cm4.configuration.counter.Counter">
 <em class="property">class </em><code class="descclassname">cm4.configuration.counter.</code><code class="descname">Counter</code><span class="sig-paren">(</span><em>counter_file_path='~/.cloudmesh/counter.yaml'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/configuration/counter.html#Counter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.configuration.counter.Counter" title="Permalink to this definition">¶</a></dt>
@@ -1178,38 +1211,11 @@ vm id or the job id.</p>
 
 </dd></dl>
 
-<span class="target" id="module-cm4.configuration.dot_dictionary"></span><dl class="class">
-<dt id="cm4.configuration.dot_dictionary.DotDictionary">
-<em class="property">class </em><code class="descclassname">cm4.configuration.dot_dictionary.</code><code class="descname">DotDictionary</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/configuration/dot_dictionary.html#DotDictionary"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.configuration.dot_dictionary.DotDictionary" title="Permalink to this definition">¶</a></dt>
-<dd><p>A subclass of <cite>dict</cite> that allows dot paths into nested dictionary.</p>
-<p>Based on: <a class="reference external" href="https://stackoverflow.com/a/2390997/120783">https://stackoverflow.com/a/2390997/120783</a></p>
-<dl class="docutils">
-<dt>Usage:</dt>
-<dd>dot = DotDictionary({‘meta’: {‘status’: ‘OK’, ‘status_code’: 200}})
-sc = dot.get(‘meta.status_code’)
-sc2 = dot[‘meta.status_code’]</dd>
-</dl>
-<dl class="method">
-<dt id="cm4.configuration.dot_dictionary.DotDictionary.get">
-<code class="descname">get</code><span class="sig-paren">(</span><em>key</em>, <em>default=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/configuration/dot_dictionary.html#DotDictionary.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.configuration.dot_dictionary.DotDictionary.get" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the value for key if key is in the dictionary, else default.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="cm4.configuration.dot_dictionary.DotDictionary.update">
-<code class="descname">update</code><span class="sig-paren">(</span><span class="optional">[</span><em>E</em>, <span class="optional">]</span><em>**F</em><span class="sig-paren">)</span> &#x2192; None.  Update D from dict/iterable E and F.<a class="reference internal" href="_modules/cm4/configuration/dot_dictionary.html#DotDictionary.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.configuration.dot_dictionary.DotDictionary.update" title="Permalink to this definition">¶</a></dt>
-<dd><p>If E is present and has a .keys() method, then does:  for k in E: D[k] = E[k]
-If E is present and lacks a .keys() method, then does:  for k, v in E: D[k] = v
-In either case, this is followed by: for k in F:  D[k] = F[k]</p>
-</dd></dl>
-
-</dd></dl>
-
 <span class="target" id="module-cm4.configuration.generic_config"></span><span class="target" id="module-cm4.configuration.name"></span><p>Created on Fri Oct 26 12:44:44 2018</p>
 <p>&#64;author: Wu</p>
 </div>
 <div class="section" id="module-cm4.data.db.DBProviderABC">
-<span id="data"></span><h2>Data<a class="headerlink" href="#module-cm4.data.db.DBProviderABC" title="Permalink to this headline">¶</a></h2>
+<span id="data"></span><h2>16.7. Data<a class="headerlink" href="#module-cm4.data.db.DBProviderABC" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="cm4.data.db.DBProviderABC.DBProviderABC">
 <em class="property">class </em><code class="descclassname">cm4.data.db.DBProviderABC.</code><code class="descname">DBProviderABC</code><a class="reference internal" href="_modules/cm4/data/db/DBProviderABC.html#DBProviderABC"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.data.db.DBProviderABC.DBProviderABC" title="Permalink to this definition">¶</a></dt>
@@ -1572,7 +1578,7 @@ cm4 data –version</dd>
 
 </div>
 <div class="section" id="module-cm4.flask_rest_api.rest_api">
-<span id="server"></span><h2>Server<a class="headerlink" href="#module-cm4.flask_rest_api.rest_api" title="Permalink to this headline">¶</a></h2>
+<span id="server"></span><h2>16.8. Server<a class="headerlink" href="#module-cm4.flask_rest_api.rest_api" title="Permalink to this headline">¶</a></h2>
 <span class="target" id="module-cm4.flask_rest_api.rest_config"></span><span class="target" id="module-cm4.flask_rest_api.app.routes"></span><dl class="function">
 <dt id="cm4.flask_rest_api.app.routes.get_all_vms">
 <code class="descclassname">cm4.flask_rest_api.app.routes.</code><code class="descname">get_all_vms</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/flask_rest_api/app/routes.html#get_all_vms"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.flask_rest_api.app.routes.get_all_vms" title="Permalink to this definition">¶</a></dt>
@@ -1597,7 +1603,7 @@ cm4 data –version</dd>
 
 </div>
 <div class="section" id="module-cm4.openstack.OpenstackCM">
-<span id="openstack"></span><h2>Openstack<a class="headerlink" href="#module-cm4.openstack.OpenstackCM" title="Permalink to this headline">¶</a></h2>
+<span id="openstack"></span><h2>16.9. Openstack<a class="headerlink" href="#module-cm4.openstack.OpenstackCM" title="Permalink to this headline">¶</a></h2>
 <p>Modified on Tue Nov 15 2018</p>
 <p>&#64;author: Kimball Wu
 &#64;author: Rui</p>
@@ -1613,7 +1619,7 @@ Called from cm4.command.command
 <p>&#64;author: Rui</p>
 </div>
 <div class="section" id="module-cm4.vagrant.vagrant">
-<span id="vagrant"></span><h2>Vagrant<a class="headerlink" href="#module-cm4.vagrant.vagrant" title="Permalink to this headline">¶</a></h2>
+<span id="vagrant"></span><h2>16.10. Vagrant<a class="headerlink" href="#module-cm4.vagrant.vagrant" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="cm4.vagrant.vagrant.Vagrant">
 <em class="property">class </em><code class="descclassname">cm4.vagrant.vagrant.</code><code class="descname">Vagrant</code><span class="sig-paren">(</span><em>debug=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/vagrant/vagrant.html#Vagrant"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.vagrant.vagrant.Vagrant" title="Permalink to this definition">¶</a></dt>
@@ -1912,76 +1918,7 @@ If &#64;name is provided, only the named VM is stopped.</p>
 
 </div>
 <div class="section" id="module-cm4.vm.Cloud">
-<span id="vm"></span><h2>VM<a class="headerlink" href="#module-cm4.vm.Cloud" title="Permalink to this headline">¶</a></h2>
-<span class="target" id="module-cm4.vm.Cmaws"></span><dl class="class">
-<dt id="cm4.vm.Cmaws.CmAWSDriver">
-<em class="property">class </em><code class="descclassname">cm4.vm.Cmaws.</code><code class="descname">CmAWSDriver</code><span class="sig-paren">(</span><em>key</em>, <em>secret</em>, <em>region</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/vm/Cmaws.html#CmAWSDriver"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.vm.Cmaws.CmAWSDriver" title="Permalink to this definition">¶</a></dt>
-<dd><dl class="method">
-<dt id="cm4.vm.Cmaws.CmAWSDriver.create_node">
-<code class="descname">create_node</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/vm/Cmaws.html#CmAWSDriver.create_node"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.vm.Cmaws.CmAWSDriver.create_node" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create a new EC2 node.</p>
-<p>Reference: <a class="reference external" href="http://bit.ly/8ZyPSy">http://bit.ly/8ZyPSy</a> [docs.amazonwebservices.com]</p>
-<p>&#64;inherits: <code class="xref py py-class docutils literal notranslate"><span class="pre">NodeDriver.create_node</span></code></p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>ex_keyname</strong> (<code class="docutils literal notranslate"><span class="pre">str</span></code>) – The name of the key pair</li>
-<li><strong>ex_userdata</strong> (<code class="docutils literal notranslate"><span class="pre">str</span></code>) – User data</li>
-<li><strong>ex_security_groups</strong> (<code class="docutils literal notranslate"><span class="pre">list</span></code>) – A list of names of security groups to
-assign to the node.</li>
-<li><strong>ex_security_group_ids</strong> (<code class="docutils literal notranslate"><span class="pre">list</span></code>) – A list of ids of security groups to
-assign to the node.[for VPC nodes only]</li>
-<li><strong>ex_metadata</strong> (<code class="docutils literal notranslate"><span class="pre">dict</span></code>) – Key/Value metadata to associate with a node</li>
-<li><strong>ex_mincount</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – Minimum number of instances to launch</li>
-<li><strong>ex_maxcount</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>) – Maximum number of instances to launch</li>
-<li><strong>ex_clienttoken</strong> (<code class="docutils literal notranslate"><span class="pre">str</span></code>) – Unique identifier to ensure idempotency</li>
-<li><strong>ex_blockdevicemappings</strong> (<code class="docutils literal notranslate"><span class="pre">list</span></code> of <code class="docutils literal notranslate"><span class="pre">dict</span></code>) – <code class="docutils literal notranslate"><span class="pre">list</span></code> of <code class="docutils literal notranslate"><span class="pre">dict</span></code> block device
-mappings.</li>
-<li><strong>ex_iamprofile</strong> (<code class="docutils literal notranslate"><span class="pre">str</span></code>) – Name or ARN of IAM profile</li>
-<li><strong>ex_ebs_optimized</strong> (<code class="docutils literal notranslate"><span class="pre">bool</span></code>) – EBS-Optimized if True</li>
-<li><strong>ex_subnet</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">EC2Subnet</span></code>) – The subnet to launch the instance into.</li>
-<li><strong>ex_placement_group</strong> (<code class="docutils literal notranslate"><span class="pre">str</span></code>) – The name of the placement group to
-launch the instance into.</li>
-<li><strong>ex_assign_public_ip</strong> (<code class="docutils literal notranslate"><span class="pre">bool</span></code>) – If True, the instance will
-be assigned a public ip address.
-Note : It takes takes a short
-while for the instance to be
-assigned the public ip so the
-node returned will NOT have
-the public ip assigned yet.</li>
-<li><strong>ex_terminate_on_shutdown</strong> (<code class="docutils literal notranslate"><span class="pre">bool</span></code>) – Indicates if the instance
-should be terminated instead
-of just shut down when using
-the operating systems command
-for system shutdown.</li>
-</ul>
-</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-<dl class="method">
-<dt id="cm4.vm.Cmaws.CmAWSDriver.ex_stop_node">
-<code class="descname">ex_stop_node</code><span class="sig-paren">(</span><em>node</em>, <em>deallocate=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/vm/Cmaws.html#CmAWSDriver.ex_stop_node"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.vm.Cmaws.CmAWSDriver.ex_stop_node" title="Permalink to this definition">¶</a></dt>
-<dd><p>Stops the node by passing in the node object, does not work with
-instance store backed instances</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>node</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">Node</span></code>) – The node to be used</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">bool</span></code></td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
-</dd></dl>
-
+<span id="vm"></span><h2>16.11. VM<a class="headerlink" href="#module-cm4.vm.Cloud" title="Permalink to this headline">¶</a></h2>
 <span class="target" id="module-cm4.vm.Cmopenstack"></span><span class="target" id="module-cm4.vm.thread"></span><dl class="class">
 <dt id="cm4.vm.thread.Thread">
 <em class="property">class </em><code class="descclassname">cm4.vm.thread.</code><code class="descname">Thread</code><span class="sig-paren">(</span><em>vm</em>, <em>name</em>, <em>node_name</em>, <em>status</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/vm/thread.html#Thread"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.vm.thread.Thread" title="Permalink to this definition">¶</a></dt>
@@ -2020,8 +1957,10 @@ Called from cm4.command.command
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
+        <a href="deprecated.html" class="btn btn-neutral float-right" title="17. Deprecated from here on" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
-        <a href="vm.html" class="btn btn-neutral" title="VM Description" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+        <a href="jupyter.html" class="btn btn-neutral" title="15. Jupyter Integration" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

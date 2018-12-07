@@ -83,13 +83,24 @@
             
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="README.html">Cloudmesh cm v4</a></li>
-<li class="toctree-l1"><a class="reference internal" href="aws.html">AWS cm</a></li>
-<li class="toctree-l1"><a class="reference internal" href="ufo.html">CM4 REST Api</a></li>
-<li class="toctree-l1"><a class="reference internal" href="vagrant.html">ehvagrant: enhanced Vagrant interface with importable python module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="vcluster.html">Virtual Cluster</a></li>
-<li class="toctree-l1"><a class="reference internal" href="vm.html">VM Description</a></li>
-<li class="toctree-l1"><a class="reference internal" href="code.html">Code Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributors.html">1. Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">2. Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">3. Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mongo.html">4. Cloudmesh Database</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">5. Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vmproviders.html">6. VM Providers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vagrant.html">7. Vagrant</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vagrant-other.html">8. Cloudmesh Vagrant: New</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CM4README.html">9. CM4 Details</a></li>
+<li class="toctree-l1"><a class="reference internal" href="README.html">10. Cloudmesh cm v4</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aws.html">11. AWS cm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ufo.html">12. CM4 REST Api</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vcluster.html">13. Virtual Cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vm.html">14. VM Description</a></li>
+<li class="toctree-l1"><a class="reference internal" href="jupyter.html">15. Jupyter Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="code.html">16. Code Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deprecated.html">17. Deprecated from here on</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ehvagrant.html">18. ehvagrant: enhanced Vagrant interface with importable python module</a></li>
 </ul>
 
             
@@ -239,8 +250,6 @@
 </li>
       <li><a href="code.html#module-cm4.aws.CommandAWS">cm4.aws.CommandAWS (module)</a>
 </li>
-      <li><a href="code.html#module-cm4.cmmongo.mongoDB">cm4.cmmongo.mongoDB (module)</a>
-</li>
       <li><a href="code.html#module-cm4.command.command">cm4.command.command (module)</a>
 </li>
       <li><a href="code.html#module-cm4.common.console">cm4.common.console (module)</a>
@@ -254,8 +263,6 @@
       <li><a href="code.html#module-cm4.configuration.config">cm4.configuration.config (module)</a>
 </li>
       <li><a href="code.html#module-cm4.configuration.counter">cm4.configuration.counter (module)</a>
-</li>
-      <li><a href="code.html#module-cm4.configuration.dot_dictionary">cm4.configuration.dot_dictionary (module)</a>
 </li>
       <li><a href="code.html#module-cm4.configuration.generic_config">cm4.configuration.generic_config (module)</a>
 </li>
@@ -273,10 +280,10 @@
 </li>
       <li><a href="code.html#module-cm4.data.storage.LocalStorageProvider">cm4.data.storage.LocalStorageProvider (module)</a>
 </li>
-      <li><a href="code.html#module-cm4.data.storage.StorageProviderABC">cm4.data.storage.StorageProviderABC (module)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="code.html#module-cm4.data.storage.StorageProviderABC">cm4.data.storage.StorageProviderABC (module)</a>
+</li>
       <li><a href="code.html#module-cm4.flask_rest_api.app.routes">cm4.flask_rest_api.app.routes (module)</a>
 </li>
       <li><a href="code.html#module-cm4.flask_rest_api.rest_api">cm4.flask_rest_api.rest_api (module)</a>
@@ -293,8 +300,6 @@
 </li>
       <li><a href="code.html#module-cm4.vm.Cloud">cm4.vm.Cloud (module)</a>
 </li>
-      <li><a href="code.html#module-cm4.vm.Cmaws">cm4.vm.Cmaws (module)</a>
-</li>
       <li><a href="code.html#module-cm4.vm.Cmopenstack">cm4.vm.Cmopenstack (module)</a>
 </li>
       <li><a href="code.html#module-cm4.vm.thread">cm4.vm.thread (module)</a>
@@ -304,8 +309,6 @@
       <li><a href="code.html#module-cm4.vm.VmRefactor">cm4.vm.VmRefactor (module)</a>
 </li>
       <li><a href="code.html#module-cm4.vm.VmUtil">cm4.vm.VmUtil (module)</a>
-</li>
-      <li><a href="code.html#cm4.vm.Cmaws.CmAWSDriver">CmAWSDriver (class in cm4.vm.Cmaws)</a>
 </li>
       <li><a href="code.html#cm4.common.shell.Shell.command">command (cm4.common.shell.Shell attribute)</a>
 </li>
@@ -322,8 +325,6 @@
       <li><a href="code.html#cm4.common.console.Console.cprint">cprint() (cm4.common.console.Console static method)</a>
 </li>
       <li><a href="code.html#cm4.vagrant.vagrant.Vagrant.create">create() (cm4.vagrant.vagrant.Vagrant method)</a>
-</li>
-      <li><a href="code.html#cm4.vm.Cmaws.CmAWSDriver.create_node">create_node() (cm4.vm.Cmaws.CmAWSDriver method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -355,8 +356,6 @@
 </li>
       <li><a href="code.html#cm4.common.shell.Shell.dialog">dialog() (cm4.common.shell.Shell class method)</a>
 </li>
-      <li><a href="code.html#cm4.configuration.dot_dictionary.DotDictionary">DotDictionary (class in cm4.configuration.dot_dictionary)</a>
-</li>
       <li><a href="code.html#cm4.vagrant.vagrant.Vagrant.download">download() (cm4.vagrant.vagrant.Vagrant method)</a>
 </li>
   </ul></td>
@@ -366,8 +365,6 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="code.html#cm4.common.console.Console.error">error() (cm4.common.console.Console class method)</a>
-</li>
-      <li><a href="code.html#cm4.vm.Cmaws.CmAWSDriver.ex_stop_node">ex_stop_node() (cm4.vm.Cmaws.CmAWSDriver method)</a>
 </li>
       <li><a href="code.html#cm4.common.shell.Shell.execute">execute() (cm4.common.shell.Shell class method)</a>
 
@@ -413,8 +410,6 @@
 
       <ul>
         <li><a href="code.html#cm4.configuration.counter.Counter.get">(cm4.configuration.counter.Counter method)</a>
-</li>
-        <li><a href="code.html#cm4.configuration.dot_dictionary.DotDictionary.get">(cm4.configuration.dot_dictionary.DotDictionary method)</a>
 </li>
         <li><a href="code.html#cm4.data.db.LocalDBProvider.LocalDBProvider.get">(cm4.data.db.LocalDBProvider.LocalDBProvider method)</a>
 </li>
@@ -687,11 +682,9 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="code.html#cm4.common.shell.Shell.unzip">unzip() (cm4.common.shell.Shell static method)</a>
 </li>
-      <li><a href="code.html#cm4.configuration.dot_dictionary.DotDictionary.update">update() (cm4.configuration.dot_dictionary.DotDictionary method)</a>
+      <li><a href="code.html#cm4.data.db.DBProviderABC.DBProviderABC.update">update() (cm4.data.db.DBProviderABC.DBProviderABC method)</a>
 
       <ul>
-        <li><a href="code.html#cm4.data.db.DBProviderABC.DBProviderABC.update">(cm4.data.db.DBProviderABC.DBProviderABC method)</a>
-</li>
         <li><a href="code.html#cm4.data.db.LocalDBProvider.LocalDBProvider.update">(cm4.data.db.LocalDBProvider.LocalDBProvider method)</a>
 </li>
       </ul></li>

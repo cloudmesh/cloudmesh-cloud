@@ -91,7 +91,7 @@
 """
 from docopt import docopt
 from cm4.configuration.config import Config
-import cm4.vagrant.vagrant
+import cm4.vagrant.vagrant_basic
 import cm4.vcluster.VirtualCluster
 import cm4.batch.Batch
 import cm4.data.data
@@ -124,7 +124,7 @@ def process_arguments(arguments):
         cm4.aws.CommandAWS.process_arguments(arguments)
 
     elif arguments.get("vagrant"):
-        cm4.vagrant.vagrant.process_arguments(arguments)
+        cm4.vagrant.vagrant_basic.process_arguments(arguments)
 
     elif arguments.get("vcluster"):
         cm4.vcluster.VirtualCluster.process_arguments(arguments)

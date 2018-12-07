@@ -15,7 +15,7 @@ class Config(object):
             with a root element `cloudmesh`. Default: `~/.cloudmesh/cloudmesh4.yaml`
         """
 
-        self.config_path = expanduser(config_path)
+        self.config_path = Path(expanduser(config_path)).resolve()
         config_folder = dirname(self.config_path)
 
         if not exists(config_folder):

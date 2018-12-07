@@ -1,5 +1,4 @@
 import oyaml as yaml
-#import yaml
 from os.path import isfile, expanduser, join, dirname, realpath, exists
 from shutil import copyfile
 from os import mkdir
@@ -34,8 +33,7 @@ class Config(object):
         return self.data
 
     def __str__(self):
-         return yaml.dump(self.data, default_flow_style=False, indent=2)
-
+        return yaml.dump(self.data, default_flow_style=False, indent=2)
 
     def get(self, key, default=None):
         """
@@ -67,5 +65,3 @@ class Config(object):
         yaml_file = {"cloudmesh": self.data.copy()}
         with open(self.config_path, "w") as stream:
             yaml.safe_dump(yaml_file, stream, default_flow_style=False)
-
-

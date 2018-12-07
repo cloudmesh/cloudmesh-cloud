@@ -289,6 +289,7 @@ class OpenstackCM(CloudManagerABC):
         node = self._get_node_by_id(node_id)
         return self.driver.reboot_node(node)
 
+
     def destroy(self, node_id):
         """
         delete the node

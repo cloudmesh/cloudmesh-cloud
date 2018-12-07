@@ -31,6 +31,7 @@ class Config(object):
         if self.data == None:
             raise EnvironmentError("Failed to load configuration file cloudmesh4.yaml, please check the path and file locally")
 
+    
     def dict(self):
         return self.data
 

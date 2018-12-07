@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>8. ehvagrant: enhanced Vagrant interface with importable python module &mdash; cm4 alpha documentation</title>
+  <title>8. Cloudmesh Vagrant: New &mdash; cm4 alpha documentation</title>
   
 
   
@@ -91,46 +91,43 @@
 <li class="toctree-l1"><a class="reference internal" href="configuration.html">5. Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="vmproviders.html">6. VM Providers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="vagrant.html">7. Vagrant</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">8. ehvagrant: enhanced Vagrant interface with importable python module</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#introduction">8.1. Introduction</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#setup-walkthrough">8.2. Setup Walkthrough</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#requirement-summary">8.2.1. Requirement summary</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#setup-ehvagrant">8.2.2. Setup <code class="docutils literal notranslate"><span class="pre">ehvagrant</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#install-vagrant">8.2.3. Install vagrant</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#install-virtualization-provider">8.2.4. Install <em>virtualization provider</em></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#configure-vagrantfile">8.2.5. Configure <code class="docutils literal notranslate"><span class="pre">Vagrantfile</span></code></a></li>
-<li class="toctree-l3"><a class="reference internal" href="#initialize-virtual-machine">8.2.6. Initialize virtual machine</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#micellouenes-setup-scp-on-host-machine">8.2.7. Micellouenes: setup <code class="docutils literal notranslate"><span class="pre">scp</span></code> on host machine</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#using-ehvagrant-with-cloudmesh">8.2.8. Using <code class="docutils literal notranslate"><span class="pre">ehvagrant</span></code> with <code class="docutils literal notranslate"><span class="pre">cloudmesh</span></code></a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">8. Cloudmesh Vagrant: New</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#setup-walkthrough">8.1. Setup Walkthrough</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#requirement-summary">8.1.1. Requirement summary</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#install-vagrant">8.1.2. Install vagrant</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#install-virtualization-provider">8.1.3. Install <em>virtualization provider</em></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#configure-vagrantfile">8.1.4. Configure <code class="docutils literal notranslate"><span class="pre">Vagrantfile</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#initialize-virtual-machine">8.1.5. Initialize virtual machine</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#micellouenes-setup-scp-on-host-machine">8.1.6. Micellouenes: setup <code class="docutils literal notranslate"><span class="pre">scp</span></code> on host machine</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#usage">8.3. Usage</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#introduction">8.3.1. Introduction</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#which-instances-will-be-affected-by-my-command">8.3.1.1. Which instances will be affected by my command?</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#how-to-specify-instances-i-want-to-work-with">8.3.1.2. How to specify instances I want to work with?</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#before-start">8.3.1.3. Before Start</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#usage">8.2. Usage</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#introduction">8.2.1. Introduction</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#which-instances-will-be-affected-by-my-command">8.2.1.1. Which instances will be affected by my command?</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#how-to-specify-instances-i-want-to-work-with">8.2.1.2. How to specify instances I want to work with?</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#before-start">8.2.1.3. Before Start</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#manage-instances">8.3.2. Manage instances</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#create-instances">8.3.2.1. create instances</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#start-up-instances">8.3.2.2. start up instances</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#resume-instances">8.3.2.3. resume instances</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#stop-instances">8.3.2.4. stop instances</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#suspend-instance">8.3.2.5. suspend instance</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#destroy-instances">8.3.2.6. destroy instances</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#show-current-status-of-instances">8.3.2.7. show current status of instances</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#show-current-status-of-specific-instance">8.3.2.8. show current status of specific instance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#manage-instances">8.2.2. Manage instances</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#create-instances">8.2.2.1. create instances</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#start-up-instances">8.2.2.2. start up instances</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#resume-instances">8.2.2.3. resume instances</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#stop-instances">8.2.2.4. stop instances</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#suspend-instance">8.2.2.5. suspend instance</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#destroy-instances">8.2.2.6. destroy instances</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#show-current-status-of-instances">8.2.2.7. show current status of instances</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#show-current-status-of-specific-instance">8.2.2.8. show current status of specific instance</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#transfer-file-and-folder-between-host-and-instances">8.3.3. Transfer file and folder between host and instances</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#upload-file-or-folder-from-host-to-instances">8.3.3.1. upload file or folder (from host to instances)</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#download-file-or-folder-from-instances-to-host">8.3.3.2. download file or folder (from instances to host)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#transfer-file-and-folder-between-host-and-instances">8.2.3. Transfer file and folder between host and instances</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#upload-file-or-folder-from-host-to-instances">8.2.3.1. upload file or folder (from host to instances)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#download-file-or-folder-from-instances-to-host">8.2.3.2. download file or folder (from instances to host)</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#execute-arbitrary-shell-command-or-script-on-instances">8.3.4. Execute arbitrary shell command or script on instances</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#start-a-ssh-session">8.3.4.1. start a ssh session</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#run-arbitrary-shell-command">8.3.4.2. run arbitrary shell command</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#run-arbitrary-shell-script">8.3.4.3. run arbitrary shell script</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#execute-arbitrary-shell-command-or-script-on-instances">8.2.4. Execute arbitrary shell command or script on instances</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#start-a-ssh-session">8.2.4.1. start a ssh session</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#run-arbitrary-shell-command">8.2.4.2. run arbitrary shell command</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#run-arbitrary-shell-script">8.2.4.3. run arbitrary shell script</a></li>
 </ul>
 </li>
 </ul>
@@ -192,7 +189,7 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>8. ehvagrant: enhanced Vagrant interface with importable python module</li>
+      <li>8. Cloudmesh Vagrant: New</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -211,22 +208,19 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="ehvagrant-enhanced-vagrant-interface-with-importable-python-module">
-<span id="ehvagrant-enhanced-vagrant-interface-with-importable-python-module"></span><h1>8. ehvagrant: enhanced Vagrant interface with importable python module<a class="headerlink" href="#ehvagrant-enhanced-vagrant-interface-with-importable-python-module" title="Permalink to this headline">¶</a></h1>
-<p>[TOC]</p>
-<hr class="docutils" />
-<div class="section" id="introduction">
-<span id="introduction"></span><h2>8.3.1. Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+  <div class="section" id="cloudmesh-vagrant-new">
+<span id="cloudmesh-vagrant-new"></span><h1>8. Cloudmesh Vagrant: New<a class="headerlink" href="#cloudmesh-vagrant-new" title="Permalink to this headline">¶</a></h1>
 <p><a class="reference external" href="https://www.vagrantup.com/">Vagrant</a> is a open-source software that
 help you to build and manage virtual machines through command line
-interface. <code class="docutils literal notranslate"><span class="pre">ehvagrant</span></code>provide you an <em>enhanced</em> command line Vagrant
-interface that enable users to utilize Vagrant functionalities <em>in an
-earlier way</em>.</p>
-<p>In essence, <code class="docutils literal notranslate"><span class="pre">ehvagrant</span></code> just a Python script. However, thanks to the
+interface. <code class="docutils literal notranslate"><span class="pre">cm4</span></code>provides you with an easy wahy to manage multiple
+virtual machines via vagrnt.</p>
+<p>This is interesting and we need to compare this with the Vagrantfile
+approach I use that is stored in a directory for each vm</p>
+<p>Thanks to the
 “entry_points” functionality supported by
 <a class="reference external" href="https://github.com/pypa/setuptools">setuptools</a>, we can easily use
-this script as if it is a “real” command line application.</p>
-<p>The major enhancement of <code class="docutils literal notranslate"><span class="pre">ehvagrant</span></code> is that it enables you to execute
+this script as if it is a “real” command line application.
+It enables you to execute
 the same job on multiple Vagrant instances at the same time,
 including:</p>
 <ul class="simple">
@@ -236,42 +230,29 @@ including:</p>
 <p>This allows you to test a program on multiple virtual machines, which
 may have different OS and working environment, at the same time, by
 just issuing a <strong>single</strong> command.</p>
-</div>
-<hr class="docutils" />
 <div class="section" id="setup-walkthrough">
-<span id="setup-walkthrough"></span><h2>8.2. Setup Walkthrough<a class="headerlink" href="#setup-walkthrough" title="Permalink to this headline">¶</a></h2>
+<span id="setup-walkthrough"></span><h2>8.1. Setup Walkthrough<a class="headerlink" href="#setup-walkthrough" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="requirement-summary">
-<span id="requirement-summary"></span><h3>8.2.1. Requirement summary<a class="headerlink" href="#requirement-summary" title="Permalink to this headline">¶</a></h3>
-<p>Minimum  requirements to use<code class="docutils literal notranslate"><span class="pre">ehvagrant</span></code>are the following:</p>
+<span id="requirement-summary"></span><h3>8.1.1. Requirement summary<a class="headerlink" href="#requirement-summary" title="Permalink to this headline">¶</a></h3>
+<p>You will need the following</p>
 <ul class="simple">
-<li>Python 3 and <code class="docutils literal notranslate"><span class="pre">pip</span></code>should be available on the host machine. A working</li>
-<li>Vagrant software work with appropriate</li>
-<li><a class="reference external" href="#Install-*virtualization-provider*">virtualization provider</a>. <code class="docutils literal notranslate"><span class="pre">scp</span></code></li>
-<li>functionality should be available on the host machine. Currently,</li>
-<li><code class="docutils literal notranslate"><span class="pre">ehvagrant</span></code> just support the virtual machine that are running an</li>
-<li>Unix-like OS, such as Ubuntu.</li>
+<li>Python 3 and <code class="docutils literal notranslate"><span class="pre">pip</span></code>.</li>
+<li><a class="reference external" href="#Install-*virtualization-provider*">virtualization provider</a>.</li>
+<li><code class="docutils literal notranslate"><span class="pre">scp</span></code></li>
 </ul>
 </div>
-<div class="section" id="setup-ehvagrant">
-<span id="setup-ehvagrant"></span><h3>8.2.2. Setup <code class="docutils literal notranslate"><span class="pre">ehvagrant</span></code><a class="headerlink" href="#setup-ehvagrant" title="Permalink to this headline">¶</a></h3>
-<p>Just <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">ehvagrant</span></code>.</p>
-<p>IMPORTANT: if you are using<code class="docutils literal notranslate"><span class="pre">ehvagrant</span></code> along<code class="docutils literal notranslate"><span class="pre">cloudmesh</span></code>, You don’t
-have to install <code class="docutils literal notranslate"><span class="pre">ehvagrant</span></code> separately from <code class="docutils literal notranslate"><span class="pre">cloudmesh</span></code>.</p>
-</div>
 <div class="section" id="install-vagrant">
-<span id="install-vagrant"></span><h3>8.2.3. Install vagrant<a class="headerlink" href="#install-vagrant" title="Permalink to this headline">¶</a></h3>
+<span id="install-vagrant"></span><h3>8.1.2. Install vagrant<a class="headerlink" href="#install-vagrant" title="Permalink to this headline">¶</a></h3>
 <p>You can download Vagrant from
 <a class="reference external" href="https://www.vagrantup.com/downloads.html">here</a>. It supports all
 mainstream operating system, including Windows, Mac OS, and various
 Linux distribution. After finishing installation, you can check if the
-installation success by executing <code class="docutils literal notranslate"><span class="pre">vagrant</span> <span class="pre">version</span></code>. You should see
-something like below.</p>
-<p><img alt="vagrant version" src="_images/version.png" /></p>
+installation success by executing <code class="docutils literal notranslate"><span class="pre">vagrant</span> <span class="pre">version</span></code>.</p>
 </div>
 <div class="section" id="install-virtualization-provider">
-<span id="install-virtualization-provider"></span><h3>8.2.4. Install <em>virtualization provider</em><a class="headerlink" href="#install-virtualization-provider" title="Permalink to this headline">¶</a></h3>
+<span id="install-virtualization-provider"></span><h3>8.1.3. Install <em>virtualization provider</em><a class="headerlink" href="#install-virtualization-provider" title="Permalink to this headline">¶</a></h3>
 <p>Although Vagrant <em>help</em> you with managing virtual machines, Vagrant
-itself does not <em>handle</em> the task of virtualization. Vagrant rely on
+itself does not <em>handle</em> the task of virtualization. Vagrant relies on
 virtualization software or even cloud service provider to do the
 actual work of <em>virtualization</em> – running virtual machine on top of
 host machine, provisioning computational and storage resources to
@@ -280,7 +261,15 @@ machine….etc. In other word, to leverage Vagrant functionality<strong>,
 you need to install Vagrant along with <em>virtualization provider</em>
 and/or the correspondent t <em>Vagrant plugin</em></strong> that enables Vagrant to
 interact with virtualization provider.</p>
-<p>The default virtualization provider of Vagrant is <a class="reference external" href="https://www.virtualbox.org/">VirtualBox</a>. You don’t have to install any plugin to let Vagrant working with VirtualBox. However, you indeed need to install VirtualBox if it don’t exist on your host computer. In this case please refer to <a class="reference external" href="https://www.virtualbox.org/wiki/Downloads">VirtualBox downloand page</a>. Also, please note that using VirtualBox as the virtualization provider implies virtual machines will run on your host machine. So make sure there are sufficient resources on your host machine.</p>
+<p>The default virtualization provider of Vagrant is
+<a class="reference external" href="https://www.virtualbox.org/">VirtualBox</a>. You don’t have to install
+any plugin to let Vagrant working with VirtualBox. However, you indeed
+need to install VirtualBox if it don’t exist on your host computer. In
+this case please refer to
+<a class="reference external" href="https://www.virtualbox.org/wiki/Downloads">VirtualBox downloand page</a>. Also,
+please note that using VirtualBox as the virtualization provider
+implies virtual machines will run on your host machine. So make sure
+there are sufficient resources on your host machine.</p>
 <p>You may choose other virtualization provider. In this case, please
 setup virtualization provider of your choice and follow the
 <a class="reference external" href="'https://www.vagrantup.com/docs/providers/'">Vagrant user manual</a> to
@@ -289,20 +278,17 @@ that you have to address, we strongly recommend you just go with
 VirtualBox.</p>
 </div>
 <div class="section" id="configure-vagrantfile">
-<span id="configure-vagrantfile"></span><h3>8.2.5. Configure <code class="docutils literal notranslate"><span class="pre">Vagrantfile</span></code><a class="headerlink" href="#configure-vagrantfile" title="Permalink to this headline">¶</a></h3>
+<span id="configure-vagrantfile"></span><h3>8.1.4. Configure <code class="docutils literal notranslate"><span class="pre">Vagrantfile</span></code><a class="headerlink" href="#configure-vagrantfile" title="Permalink to this headline">¶</a></h3>
 <p><code class="docutils literal notranslate"><span class="pre">Vagrantfile</span></code> is the main configuration file of Vagrant. Vagrant will
 only interact with the virtual machines defined in the <code class="docutils literal notranslate"><span class="pre">Vagrantfile</span></code>.</p>
-<p>To utilized <code class="docutils literal notranslate"><span class="pre">ehvagrant</span></code>, <code class="docutils literal notranslate"><span class="pre">Vagrantfile</span></code> should be stored
-at<code class="docutils literal notranslate"><span class="pre">VAGRANTFILE_PATH</span></code>which default path is <code class="docutils literal notranslate"><span class="pre">~/ehvagrant/Vagrantfile</span></code>.
-If you have defined environment variable <code class="docutils literal notranslate"><span class="pre">EHVAGRANT_HOME</span></code> , default
-<code class="docutils literal notranslate"><span class="pre">VAGRANTFILE_PATH</span></code> becomes <code class="docutils literal notranslate"><span class="pre">$EHVAGRANT_HOME/Vagrantfile</span></code> .</p>
-<p>IMPORTANT: If you are using <code class="docutils literal notranslate"><span class="pre">ehvagrant</span></code> with <code class="docutils literal notranslate"><span class="pre">cloudmesh</span></code>, then your
+<p>In <code class="docutils literal notranslate"><span class="pre">cloudmesh</span></code>, your
 <code class="docutils literal notranslate"><span class="pre">VAGRANTFILE_PATH</span></code> will be changed to
 <code class="docutils literal notranslate"><span class="pre">~/.cloudmesh/vagrant_workspace/Vagrantfile</span></code>.</p>
-<p><code class="docutils literal notranslate"><span class="pre">ehvagrant</span></code> will try to locate <code class="docutils literal notranslate"><span class="pre">Vagrantfile</span></code> every time it invokes. If
-it can’t find it, <code class="docutils literal notranslate"><span class="pre">ehvagrant</span></code> will generate a default <code class="docutils literal notranslate"><span class="pre">Vagrantfile</span></code>at
+<p><code class="docutils literal notranslate"><span class="pre">cm4</span> <span class="pre">vagrant</span></code> will try to locate <code class="docutils literal notranslate"><span class="pre">Vagrantfile</span></code> every time it invokes. If
+it can’t find it, a default <code class="docutils literal notranslate"><span class="pre">Vagrantfile</span></code>at
 default path. Default <code class="docutils literal notranslate"><span class="pre">Vagrantfile</span></code> defines two Ubuntu machine called
 <code class="docutils literal notranslate"><span class="pre">node1</span></code> and <code class="docutils literal notranslate"><span class="pre">node2</span></code>, powered by VirtualBox.</p>
+<p>BUG: THIS DOES NOT MAKE SENSE</p>
 <p>You can use  <a class="reference external" href="#create-instances">vagrant create</a> functionality to
 easily setup a <code class="docutils literal notranslate"><span class="pre">Vagrantfile</span></code> which defines any amount of virtual
 machine as you want. Moreover,  you can also try to customize your own
@@ -315,57 +301,45 @@ supports Unix-like OS, and after finishing your modification on
 <code class="docutils literal notranslate"><span class="pre">Vagrantfile</span></code>.</p>
 </div>
 <div class="section" id="initialize-virtual-machine">
-<span id="initialize-virtual-machine"></span><h3>8.2.6. Initialize virtual machine<a class="headerlink" href="#initialize-virtual-machine" title="Permalink to this headline">¶</a></h3>
+<span id="initialize-virtual-machine"></span><h3>8.1.5. Initialize virtual machine<a class="headerlink" href="#initialize-virtual-machine" title="Permalink to this headline">¶</a></h3>
 <p>After finishing <code class="docutils literal notranslate"><span class="pre">Vagrantfile</span></code>definition, you are now ready to deploy
 and run your virtual machine with Vagrant. But first, let us check
-current status of your Vagrant provider. Execute <code class="docutils literal notranslate"><span class="pre">ehvagrant</span> <span class="pre">ls</span></code>at
-<code class="docutils literal notranslate"><span class="pre">ehvagrant</span></code> root directory, you will see:</p>
+current status of your Vagrant provider. Execute <code class="docutils literal notranslate"><span class="pre">cm4</span> <span class="pre">vm</span> <span class="pre">list</span></code></p>
+<p>BUG: IMAGE PROKEN, COPY ASCII</p>
 <p><img alt="before_init" src="_images/before_init.png" /></p>
-<p>Then execute <code class="docutils literal notranslate"><span class="pre">ehvagrant</span> <span class="pre">start</span></code>. Since your machines are not deployed
+<p>Then execute <code class="docutils literal notranslate"><span class="pre">cm4</span> <span class="pre">start</span></code>. Since your machines are not deployed
 yet, Vagrant will first deploy your machines and then bring them up,
 and automatically do LOTS of setting. When Vagrant has done its work,
-we can confirm this by issuing <code class="docutils literal notranslate"><span class="pre">ehvagrant</span> <span class="pre">ls</span></code> again. You will see now:</p>
+we can confirm this by issuing <code class="docutils literal notranslate"><span class="pre">cm4</span> <span class="pre">vm</span> <span class="pre">list</span></code> again. You will see now:</p>
+<p>BUG: IMAGE PROKEN, COPY ASCII</p>
 <p><img alt="after_init" src="_images/after_init.png" /></p>
 <p>HOO-WA! Your two virtual machines are painlessly deployed, configured,
-up and running! Now you are ready to do some fancy work with Vagrant
-and <code class="docutils literal notranslate"><span class="pre">ehvagrant</span></code>.</p>
+up and running!</p>
 </div>
 <div class="section" id="micellouenes-setup-scp-on-host-machine">
-<span id="micellouenes-setup-scp-on-host-machine"></span><h3>8.2.7. Micellouenes: setup <code class="docutils literal notranslate"><span class="pre">scp</span></code> on host machine<a class="headerlink" href="#micellouenes-setup-scp-on-host-machine" title="Permalink to this headline">¶</a></h3>
-<p>Since these topics are not directly relate to <code class="docutils literal notranslate"><span class="pre">ehvagrant</span></code>, here I just
+<span id="micellouenes-setup-scp-on-host-machine"></span><h3>8.1.6. Micellouenes: setup <code class="docutils literal notranslate"><span class="pre">scp</span></code> on host machine<a class="headerlink" href="#micellouenes-setup-scp-on-host-machine" title="Permalink to this headline">¶</a></h3>
+<p>Since these topics are not directly relate to <code class="docutils literal notranslate"><span class="pre">cm4</span></code>, here I just
 describe how do you check these functionally are working properly.</p>
 <p>For <code class="docutils literal notranslate"><span class="pre">scp</span></code>, open terminal and execute <code class="docutils literal notranslate"><span class="pre">scp</span></code>, you should see a short
 usage guide shows on your screen. If it is not there, please install
 <code class="docutils literal notranslate"><span class="pre">scp</span></code> and make sure its executive file is in your <code class="docutils literal notranslate"><span class="pre">PATH</span></code> environment
 variable.</p>
+<p>BUG: IMAGE BROKEN</p>
 <p><img alt="scp_availability_check" src="_images/scp.png" /></p>
 </div>
-<div class="section" id="using-ehvagrant-with-cloudmesh">
-<span id="using-ehvagrant-with-cloudmesh"></span><h3>8.2.8. Using <code class="docutils literal notranslate"><span class="pre">ehvagrant</span></code> with <code class="docutils literal notranslate"><span class="pre">cloudmesh</span></code><a class="headerlink" href="#using-ehvagrant-with-cloudmesh" title="Permalink to this headline">¶</a></h3>
-<p><code class="docutils literal notranslate"><span class="pre">ehvagrant</span></code> was originally developed as a module of <code class="docutils literal notranslate"><span class="pre">cloudmesh</span></code>. If
-you get <code class="docutils literal notranslate"><span class="pre">ehvagrant</span></code> with <code class="docutils literal notranslate"><span class="pre">cloudmesh</span></code> distribution, do following change
-when setup <code class="docutils literal notranslate"><span class="pre">ehvagrant</span></code> with <code class="docutils literal notranslate"><span class="pre">cloudmesh</span></code>:</p>
-<ul class="simple">
-<li>You DO NOT have to install <code class="docutils literal notranslate"><span class="pre">ehvagrant</span></code> separately from <code class="docutils literal notranslate"><span class="pre">cloudmesh</span></code>.</li>
-<li>When <code class="docutils literal notranslate"><span class="pre">cloudmesh</span></code> sets up, it automatically installs <code class="docutils literal notranslate"><span class="pre">ehvagrant</span></code>.</li>
-<li>Your <code class="docutils literal notranslate"><span class="pre">VAGRANTFILE_PATH</span></code> now change to `~/.cloudmesh/vagrant</li>
-<li>_space/Vagrantfile`.</li>
-</ul>
 </div>
-</div>
-<hr class="docutils" />
 <div class="section" id="usage">
-<span id="usage"></span><h2>8.3. Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<span id="usage"></span><h2>8.2. Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="introduction">
-<span id="id1"></span><h3>8.3.1. Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h3>
+<span id="introduction"></span><h3>8.2.1. Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h3>
 <div class="section" id="which-instances-will-be-affected-by-my-command">
-<span id="which-instances-will-be-affected-by-my-command"></span><h4>8.3.1.1. Which instances will be affected by my command?<a class="headerlink" href="#which-instances-will-be-affected-by-my-command" title="Permalink to this headline">¶</a></h4>
+<span id="which-instances-will-be-affected-by-my-command"></span><h4>8.2.1.1. Which instances will be affected by my command?<a class="headerlink" href="#which-instances-will-be-affected-by-my-command" title="Permalink to this headline">¶</a></h4>
 <p>Commands will only affect the instances that belongs to <em>current
 Vagrant environment</em>, which is defined by the <code class="docutils literal notranslate"><span class="pre">Vagrantfile</span></code> locates at
 <code class="docutils literal notranslate"><span class="pre">VAGRNANTFILE_PATH</span></code>. Instances are identified by its name.</p>
 </div>
 <div class="section" id="how-to-specify-instances-i-want-to-work-with">
-<span id="how-to-specify-instances-i-want-to-work-with"></span><h4>8.3.1.2. How to specify instances I want to work with?<a class="headerlink" href="#how-to-specify-instances-i-want-to-work-with" title="Permalink to this headline">¶</a></h4>
+<span id="how-to-specify-instances-i-want-to-work-with"></span><h4>8.2.1.2. How to specify instances I want to work with?<a class="headerlink" href="#how-to-specify-instances-i-want-to-work-with" title="Permalink to this headline">¶</a></h4>
 <p>Use<code class="docutils literal notranslate"><span class="pre">--vms=&lt;vmList&gt;</span></code> option to specify which instances you want to work
 with. Your <code class="docutils literal notranslate"><span class="pre">&lt;vmList&gt;</span></code> string will be parsed by
 <a class="reference external" href="https://www.nsc.liu.se/~kent/python-hostlist/">python-hostlist</a>
@@ -383,7 +357,7 @@ command without specifying instances will usually affect <strong>all</strong> of
 the instances that are available in the current vagrant environment.</p>
 </div>
 <div class="section" id="before-start">
-<span id="before-start"></span><h4>8.3.1.3. Before Start<a class="headerlink" href="#before-start" title="Permalink to this headline">¶</a></h4>
+<span id="before-start"></span><h4>8.2.1.3. Before Start<a class="headerlink" href="#before-start" title="Permalink to this headline">¶</a></h4>
 <p>Before transferring file and folder between host and instances or
 running commands and scripts on instances, you must <strong>make sure</strong> that
 all of the instances you want to work with are <strong>up, running, and
@@ -391,16 +365,16 @@ reachable through network.</strong></p>
 </div>
 </div>
 <div class="section" id="manage-instances">
-<span id="manage-instances"></span><h3>8.3.2. Manage instances<a class="headerlink" href="#manage-instances" title="Permalink to this headline">¶</a></h3>
+<span id="manage-instances"></span><h3>8.2.2. Manage instances<a class="headerlink" href="#manage-instances" title="Permalink to this headline">¶</a></h3>
 <div class="section" id="create-instances">
-<span id="create-instances"></span><h4>8.3.2.1. create instances<a class="headerlink" href="#create-instances" title="Permalink to this headline">¶</a></h4>
+<span id="create-instances"></span><h4>8.2.2.1. create instances<a class="headerlink" href="#create-instances" title="Permalink to this headline">¶</a></h4>
 <p>Usage: <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">vagrant.py</span> <span class="pre">vagrant</span> <span class="pre">create</span> <span class="pre">--vms=&lt;vmList&gt;</span> <span class="pre">[--image=IMAGE]</span> <span class="pre">[--output=OUTPUT]</span></code></p>
 <p>Generate a <code class="docutils literal notranslate"><span class="pre">Vagrantfile</span></code> that defines multiple instances. <strong>This
 functionality can only define instances working with VirtualBox</strong>.</p>
 <p>You should use <code class="docutils literal notranslate"><span class="pre">--vms=&lt;vmList&gt;</span></code> argument to specify the list of names
 of instances. See
 <a class="reference external" href="#How-to-specify-instances-I-want-to-work-with?">here</a> to know how to.</p>
-<p>If you don’t specify an <code class="docutils literal notranslate"><span class="pre">IMAGE</span></code>, <code class="docutils literal notranslate"><span class="pre">ehvagrant</span></code> will use
+<p>If you don’t specify an <code class="docutils literal notranslate"><span class="pre">IMAGE</span></code>, <code class="docutils literal notranslate"><span class="pre">cm4</span></code> will use
 <a class="reference external" href="https://app.vagrantup.com/ubuntu/boxes/xenial64">Ubuntu/xenial64</a> as
 its default image. If you specify an <code class="docutils literal notranslate"><span class="pre">IMAGE</span></code> that is in the list given
 by <code class="docutils literal notranslate"><span class="pre">vagrant</span> <span class="pre">box</span> <span class="pre">list</span></code> command, Vagrant will define instances using
@@ -413,45 +387,45 @@ the image.</p>
 original file saved in there</strong>.</p>
 </div>
 <div class="section" id="start-up-instances">
-<span id="start-up-instances"></span><h4>8.3.2.2. start up instances<a class="headerlink" href="#start-up-instances" title="Permalink to this headline">¶</a></h4>
+<span id="start-up-instances"></span><h4>8.2.2.2. start up instances<a class="headerlink" href="#start-up-instances" title="Permalink to this headline">¶</a></h4>
 <p>Usage: <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">vagrant.py</span> <span class="pre">vagrant</span> <span class="pre">start</span> <span class="pre">[--vms=&lt;vmList&gt;]</span></code></p>
 <p>Start up stopped or suspended instances.</p>
 </div>
 <div class="section" id="resume-instances">
-<span id="resume-instances"></span><h4>8.3.2.3. resume instances<a class="headerlink" href="#resume-instances" title="Permalink to this headline">¶</a></h4>
+<span id="resume-instances"></span><h4>8.2.2.3. resume instances<a class="headerlink" href="#resume-instances" title="Permalink to this headline">¶</a></h4>
 <p>Usage: <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">vagrant.py</span> <span class="pre">vagrant</span> <span class="pre">resume</span> <span class="pre">[--vms=&lt;vmList&gt;]</span></code></p>
 <p>resume suspended instances.</p>
 </div>
 <div class="section" id="stop-instances">
-<span id="stop-instances"></span><h4>8.3.2.4. stop instances<a class="headerlink" href="#stop-instances" title="Permalink to this headline">¶</a></h4>
+<span id="stop-instances"></span><h4>8.2.2.4. stop instances<a class="headerlink" href="#stop-instances" title="Permalink to this headline">¶</a></h4>
 <p>Usage: <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">vagrant.py</span> <span class="pre">vagrant</span> <span class="pre">stop</span> <span class="pre">[--vms=&lt;vmList&gt;]</span></code></p>
 <p>Shut down instances. Any unsaved data will be lost.</p>
 </div>
 <div class="section" id="suspend-instance">
-<span id="suspend-instance"></span><h4>8.3.2.5. suspend instance<a class="headerlink" href="#suspend-instance" title="Permalink to this headline">¶</a></h4>
+<span id="suspend-instance"></span><h4>8.2.2.5. suspend instance<a class="headerlink" href="#suspend-instance" title="Permalink to this headline">¶</a></h4>
 <p>Usage: <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">vagrant.py</span> <span class="pre">vagrant</span> <span class="pre">suspend</span> <span class="pre">[--vms=&lt;vmList&gt;]</span></code></p>
 <p>Save current state of instances and then stop it. Unsaved data will
 not lost and user can restore the current state and continue to work
 latter on.</p>
 </div>
 <div class="section" id="destroy-instances">
-<span id="destroy-instances"></span><h4>8.3.2.6. destroy instances<a class="headerlink" href="#destroy-instances" title="Permalink to this headline">¶</a></h4>
+<span id="destroy-instances"></span><h4>8.2.2.6. destroy instances<a class="headerlink" href="#destroy-instances" title="Permalink to this headline">¶</a></h4>
 <p>Usage:<code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">vagrant.py</span> <span class="pre">vagrant</span> <span class="pre">destroy</span> <span class="pre">[--vms=&lt;vmList&gt;]</span></code></p>
 <p>Destroy Vagrant instances. The data stored on the instance will be lost.</p>
 </div>
 <div class="section" id="show-current-status-of-instances">
-<span id="show-current-status-of-instances"></span><h4>8.3.2.7. show current status of instances<a class="headerlink" href="#show-current-status-of-instances" title="Permalink to this headline">¶</a></h4>
+<span id="show-current-status-of-instances"></span><h4>8.2.2.7. show current status of instances<a class="headerlink" href="#show-current-status-of-instances" title="Permalink to this headline">¶</a></h4>
 <p>Usage: <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">vagrant.py</span> <span class="pre">vagrant</span> <span class="pre">ls</span></code></p>
 <p>Show the status of all Vagrant instances belonging to the current environment.</p>
 </div>
 <div class="section" id="show-current-status-of-specific-instance">
-<span id="show-current-status-of-specific-instance"></span><h4>8.3.2.8. show current status of specific instance<a class="headerlink" href="#show-current-status-of-specific-instance" title="Permalink to this headline">¶</a></h4>
+<span id="show-current-status-of-specific-instance"></span><h4>8.2.2.8. show current status of specific instance<a class="headerlink" href="#show-current-status-of-specific-instance" title="Permalink to this headline">¶</a></h4>
 <p>Usage: <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">vagrant.py</span> <span class="pre">vagrant</span> <span class="pre">info</span> <span class="pre">Name</span></code></p>
 <p>Show the status of instance specified by <code class="docutils literal notranslate"><span class="pre">Name</span></code>.</p>
 </div>
 </div>
 <div class="section" id="transfer-file-and-folder-between-host-and-instances">
-<span id="transfer-file-and-folder-between-host-and-instances"></span><h3>8.3.3. Transfer file and folder between host and instances<a class="headerlink" href="#transfer-file-and-folder-between-host-and-instances" title="Permalink to this headline">¶</a></h3>
+<span id="transfer-file-and-folder-between-host-and-instances"></span><h3>8.2.3. Transfer file and folder between host and instances<a class="headerlink" href="#transfer-file-and-folder-between-host-and-instances" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
 <li>The following functionality are implemented by utilizing <code class="docutils literal notranslate"><span class="pre">scp</span></code>
 command.
@@ -465,32 +439,32 @@ string</strong>. For example, <code class="docutils literal notranslate"><span c
 indicates the target is a folder.</li>
 </ul>
 <div class="section" id="upload-file-or-folder-from-host-to-instances">
-<span id="upload-file-or-folder-from-host-to-instances"></span><h4>8.3.3.1. upload file or folder (from host to instances)<a class="headerlink" href="#upload-file-or-folder-from-host-to-instances" title="Permalink to this headline">¶</a></h4>
+<span id="upload-file-or-folder-from-host-to-instances"></span><h4>8.2.3.1. upload file or folder (from host to instances)<a class="headerlink" href="#upload-file-or-folder-from-host-to-instances" title="Permalink to this headline">¶</a></h4>
 <p>Usage:<code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">vagrant.py</span> <span class="pre">vagrant</span> <span class="pre">upload</span> <span class="pre">--from</span> <span class="pre">FROM</span> <span class="pre">--to</span> <span class="pre">TO</span> <span class="pre">[-r]</span> <span class="pre">[--vms=&lt;vmlist&gt;]</span></code></p>
 <p>Upload file or folder on host machine to instances.</p>
 </div>
 <div class="section" id="download-file-or-folder-from-instances-to-host">
-<span id="download-file-or-folder-from-instances-to-host"></span><h4>8.3.3.2. download file or folder (from instances to host)<a class="headerlink" href="#download-file-or-folder-from-instances-to-host" title="Permalink to this headline">¶</a></h4>
+<span id="download-file-or-folder-from-instances-to-host"></span><h4>8.2.3.2. download file or folder (from instances to host)<a class="headerlink" href="#download-file-or-folder-from-instances-to-host" title="Permalink to this headline">¶</a></h4>
 <p>Usage:<code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">vagrant.py</span> <span class="pre">vagrant</span> <span class="pre">download</span> <span class="pre">--from</span> <span class="pre">FROM</span> <span class="pre">--to</span> <span class="pre">TO</span> <span class="pre">[-r]</span> <span class="pre">[--vms=&lt;vmlist&gt;]</span></code></p>
 <p>If you are trying to download file or folder from two or more
 instances simultaneously, data will be parallelly downloaded and be
 separately stored in a folder which name after the instances’<code class="docutils literal notranslate"><span class="pre">name</span></code> .</p>
 <p>For example, if user try to download <code class="docutils literal notranslate"><span class="pre">~/foo.txt</span></code> simultaneously from
 <code class="docutils literal notranslate"><span class="pre">node1</span></code> and <code class="docutils literal notranslate"><span class="pre">node2</span></code>, and designate <code class="docutils literal notranslate"><span class="pre">./bar/foo.txt</span></code> as the host file
-path, then <code class="docutils literal notranslate"><span class="pre">ehvagrant</span></code> will automatically modify the host file path,
+path, then <code class="docutils literal notranslate"><span class="pre">cm4</span></code> will automatically modify the host file path,
 copy <code class="docutils literal notranslate"><span class="pre">~/foo.txt</span></code> on <code class="docutils literal notranslate"><span class="pre">node1</span></code> into <code class="docutils literal notranslate"><span class="pre">./bar/node1/foo.txt</span></code> and copy
 <code class="docutils literal notranslate"><span class="pre">~foo.txt</span></code>on <code class="docutils literal notranslate"><span class="pre">node2</span></code> into <code class="docutils literal notranslate"><span class="pre">./bar/node2/foo.txt</span></code>.</p>
 </div>
 </div>
 <div class="section" id="execute-arbitrary-shell-command-or-script-on-instances">
-<span id="execute-arbitrary-shell-command-or-script-on-instances"></span><h3>8.3.4. Execute arbitrary shell command or script on instances<a class="headerlink" href="#execute-arbitrary-shell-command-or-script-on-instances" title="Permalink to this headline">¶</a></h3>
+<span id="execute-arbitrary-shell-command-or-script-on-instances"></span><h3>8.2.4. Execute arbitrary shell command or script on instances<a class="headerlink" href="#execute-arbitrary-shell-command-or-script-on-instances" title="Permalink to this headline">¶</a></h3>
 <div class="section" id="start-a-ssh-session">
-<span id="start-a-ssh-session"></span><h4>8.3.4.1. start a ssh session<a class="headerlink" href="#start-a-ssh-session" title="Permalink to this headline">¶</a></h4>
+<span id="start-a-ssh-session"></span><h4>8.2.4.1. start a ssh session<a class="headerlink" href="#start-a-ssh-session" title="Permalink to this headline">¶</a></h4>
 <p>Usage: <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">vagrant.py</span> <span class="pre">vagrant</span> <span class="pre">ssh</span> <span class="pre">NAME</span></code></p>
 <p>Launch a secure-shell session which connects to the vagrant instance specified by <code class="docutils literal notranslate"><span class="pre">NAME</span></code>.</p>
 </div>
 <div class="section" id="run-arbitrary-shell-command">
-<span id="run-arbitrary-shell-command"></span><h4>8.3.4.2. run arbitrary shell command<a class="headerlink" href="#run-arbitrary-shell-command" title="Permalink to this headline">¶</a></h4>
+<span id="run-arbitrary-shell-command"></span><h4>8.2.4.2. run arbitrary shell command<a class="headerlink" href="#run-arbitrary-shell-command" title="Permalink to this headline">¶</a></h4>
 <p>Usage:<code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">vagrant.py</span> <span class="pre">vagrant</span> <span class="pre">run</span> <span class="pre">command</span> <span class="pre">COMMAND</span> <span class="pre">[--vms=&lt;vmList&gt;]</span></code></p>
 <p>Run an arbitrary shell <code class="docutils literal notranslate"><span class="pre">COMMAND</span></code> on instances. If user specify
 multiple instances to run, the command will run on those instances
@@ -501,7 +475,7 @@ the current terminal.</p>
 <p><img alt="run_command_example" src="_images/run_command.png" /></p>
 </div>
 <div class="section" id="run-arbitrary-shell-script">
-<span id="run-arbitrary-shell-script"></span><h4>8.3.4.3. run arbitrary shell script<a class="headerlink" href="#run-arbitrary-shell-script" title="Permalink to this headline">¶</a></h4>
+<span id="run-arbitrary-shell-script"></span><h4>8.2.4.3. run arbitrary shell script<a class="headerlink" href="#run-arbitrary-shell-script" title="Permalink to this headline">¶</a></h4>
 <p>Usage: <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">vagrant.py</span> <span class="pre">vagrant</span> <span class="pre">run</span> <span class="pre">script</span> <span class="pre">SCRIPT</span> <span class="pre">[--data=PATH]</span> <span class="pre">[--vms=&lt;vmList&gt;]</span></code></p>
 <p>Run an arbitrary <strong>shell script</strong> on instances. The behavior of this
 command will comply with <code class="docutils literal notranslate"><span class="pre">run</span> <span class="pre">command</span></code>, plus extra features defined as
@@ -529,13 +503,12 @@ folder.</li>
 </li>
 <li>After execution, if there exist anything in <code class="docutils literal notranslate"><span class="pre">$JOB_FOLDER$/output/</span></code>,
 then it will all be fetched and stored to  <code class="docutils literal notranslate"><span class="pre">~/experiment/{instnace_name}/{script_name}_{epoch_second}/output/</span></code> folder on the host machine.<ul>
-<li>If you have set <code class="docutils literal notranslate"><span class="pre">EHVAGRANT_HOME</span></code> environment variable, then
-fetched output will be saved to<code class="docutils literal notranslate"><span class="pre">$EHVAGRANT_HOME/{instnace_name}/{script_name}_{epoch_second}/output/</span></code></li>
 <li>If using with <code class="docutils literal notranslate"><span class="pre">cloudmesh</span></code>, output content will be stored at <code class="docutils literal notranslate"><span class="pre">~/.cloudmesh/experiment/{instnace_name}/{script_name}_{epoch_second}/output/</span></code>.</li>
 </ul>
 </li>
 <li>Finally, execution reports will be printed out to current terminal.</li>
 </ul>
+<p>BUG USE ASCII</p>
 <p><img alt="run_script_example" src="_images/run_script.png" /></p>
 </div>
 </div>

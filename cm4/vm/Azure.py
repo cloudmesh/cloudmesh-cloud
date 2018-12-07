@@ -5,9 +5,11 @@ from libcloud.compute.drivers.azure_arm import AzureNetwork, AzureSubnet, AzureI
 from libcloud.compute.base import NodeDriver
 from cm4.configuration.config import Config
 from cm4.vm.Cloud import Cloud
+from cm4.abstractclass.CloudManagerABC import CloudManagerABC
 
 
-class Azure(Cloud):
+
+class Azure(Cloud, CloudManagerABC):
 
     def __init__(self, config, cloud):
         os_config = config["cloud"][cloud]
@@ -22,6 +24,101 @@ class Azure(Cloud):
             secret=credentials['AZURE_SECRET_KEY'],
             region=default['region']
         )
+
+    #
+    # implement cloudmenager ABC
+    #
+
+    def start(self, name):
+        """
+        start a node
+
+        :param name: the unique node name
+        :return:  The dict representing the node
+        """
+        pass
+
+    def stop(self, name):
+        """
+        stops the node with the given name
+
+        :param name:
+        :return: The dict representing the node including updated status
+        """
+        pass
+
+    def info(self, name):
+        """
+        gets the information of a node with a given name
+
+        :param name:
+        :return: The dict representing the node including updated status
+        """
+        pass
+
+    def suspend(self, name):
+        """
+        suspends the node with the given name
+
+        :param name: the name of the node
+        :return: The dict representing the node
+        """
+        pass
+
+    def ls(self):
+        """
+        list all nodes id
+
+        :return: an array of dicts representing the nodes
+        """
+        pass
+
+    def resume(self, name):
+        """
+        resume the named node
+
+        :param name: the name of the node
+        :return: the dict of the node
+        """
+        pass
+
+    def destroy(self, name):
+        """
+        Destroys the node
+        :param name: the name of the node
+        :return: the dict of the node
+        """
+        pass
+
+    def create(self, name, image=None, size=None, timeout=360, **kwargs):
+        """
+        creates a named node
+
+        :param name: the name of the node
+        :param image: the image used
+        :param size: the size of the image
+        :param timeout: a timeout in seconds that is invoked in case the image does not boot.
+               The default is set to 3 minutes.
+        :param kwargs: additional arguments passed along at time of boot
+        :return:
+        """
+        """
+        create one node
+        """
+        pass
+
+    def rename(self, name, new_name):
+        """
+        rename a node
+
+        :param name: the current name
+        :param new_name: the new name
+        :return: the dict with the new name
+        """
+        pass
+
+
+
 
 
 class AzureDriver(AzureNodeDriver, NodeDriver):

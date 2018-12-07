@@ -26,7 +26,11 @@ class OpenstackCM(CloudManagerABC):
         self.driver = None
         self.key = None
         if cloud:
-            self.os_config = config.get('cloud.{}'.format(cloud))
+            print("cloud")
+            data = config.get('cloudmesh')
+            print(data)
+            self.os_config = data.get('cloud').get(cloud)
+            print(self.os_config)
             self.driver = self.get_driver(cloud)
             self.key = self.os_config.get('credentials').get('OS_KEY_PATH')  # credentials.target return null string
             # if we don't find OS_KEY_PATH in yaml, go to os.environ instead which can be set in .bashrc

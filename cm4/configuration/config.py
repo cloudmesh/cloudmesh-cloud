@@ -28,6 +28,7 @@ class Config(object):
 
         with open(self.config_path, "r") as stream:
             self.data = yaml.load(stream)
+            #print(self.data)
 
     def dict(self):
         return self.data

@@ -9,6 +9,7 @@ from cm4.common.shell import Script
 from cm4.common.shell import Shell, Brew
 from cm4.common.shell import SystemPath
 
+
 class MongoInstaller(object):
 
     def __init__(self):
@@ -124,10 +125,16 @@ class MongoDBController(object):
 
         self.config = Config()
 
-        pprint (self.config.dict())
+        pprint(self.config.dict())
 
+        self.data = self.config.data["cloudmesh"]["data"]["mongo"]
+        self.expanduser()
 
-        # TODO: self.initial_mongo_config(False)
+    def expanduser(self):
+        for key in self.data:
+            if type(self.data[key]) == str:
+                self.data[key] = os.path.expanduser (self.data[key])
+        pprint(self.data)
 
     def __str__(self):
         return yaml.dump(self.data, default_flow_style=False, indent=2)
@@ -162,18 +169,21 @@ class MongoDBController(object):
         # TODO: BUG: we do not use mongoconfig, but pass everything from commandline,
         #  everything shoudl be specified in cloudmesh4.yaml
         #
-        default_config_file = dict(net=dict(bindIp=self.host, port=self.port),
-                                   storage=dict(dbPath=os.path.join(self.mongo_db_path, 'database'),
-                                                journal=dict(enabled=True)),
-                                   systemLog=dict(destination='file',
-                                                  path=os.path.join(self.mongo_db_path, 'log', 'mongod.log'),
-                                                  logAppend=True)
-                                   )
+
+        default_config_file = {'net': {'bindIp': self.data['MONGO_HOST'],
+                                       'port': self.data['MONGO_PORT']},
+                               'storage': {'dbPath': self.data['MONGO_PATH'],
+                                           'journal':
+                                               {'enabled': True}},
+                               'systemLog': {'destination': 'file',
+                                             'path': self.data['MONGO_LOG'],
+                                             'logAppend': True}
+                               }
 
         if security:
-            default_config_file.update(dict(security=dict(authorization='enabled')))
+            default_config_file.update({'security': {'authorization': 'enabled'}})
 
-        with open(os.path.join(self.mongo_db_path, 'mongod.conf'), "w") as output:
+        with open(os.path.join(self.data['MONGO_HOME'], 'mongod.conf'), "w") as output:
             try:
                 yaml.dump(default_config_file, output, default_flow_style=False)
             except yaml.YAMLError as exc:
@@ -309,19 +319,3 @@ def process_arguments(arguments):
 
     return result
 
-
-def main():
-    test = MongoDBController()
-    # test.set_auth()
-    # test.check_mongo_dir_and_install()
-    # test.install_mongo_darwin()
-    # test.update_auth()
-    # test.run_mongodb()
-    # test.shutdown_mongodb()
-    #test.status()
-    # test.dump('~/.cloudmesh/demo/version1/cm/cm4/mongo/MongoDB/backup')
-    # test.restore ('~/.coudmesh/demo/version1/cm/cm4/mongo/MongoDB/backup')
-
-
-if __name__ == "__main__":
-    main()

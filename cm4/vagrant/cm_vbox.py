@@ -3,7 +3,7 @@ from docopt import docopt
 import cm4
 from cm4.common.dotdict import dotdict
 from pprint import pprint
-from cloudmesh_client.common.Printer import Printer
+from cm4.common.Printer import Printer
 from cm4.common.shell import Shell
 import sys
 import os

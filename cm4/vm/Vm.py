@@ -1,5 +1,5 @@
 import getpass
-import pprint
+from pprint  import pprint
 from cm4.vm.Aws import Aws
 from cm4.vm.Azure import Azure
 from cm4.vm.Cmopenstack import Cmopenstack
@@ -226,8 +226,9 @@ def process_arguments(arguments):
         pp = pprint.PrettyPrinter(indent=4)
         print("vm processing arguments")
         pp.pprint(arguments)
-
-    default_cloud = Config().data["cloudmesh"]["default"]["cloud"]
+    config = Config()
+    pprint(config.data)
+    default_cloud = config.data["cloudmesh"]["default"]["cloud"]
 
 
     vm = Vm(default_cloud)

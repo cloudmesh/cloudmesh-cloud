@@ -3,7 +3,7 @@ from os.path import isfile, expanduser, join, dirname, realpath, exists
 from shutil import copyfile
 from os import mkdir
 from pathlib import Path
-
+from pprint import pprint
 
 class Config(object):
 
@@ -27,7 +27,7 @@ class Config(object):
 
         with open(self.config_path, "r") as stream:
             self.data = yaml.load(stream)
-
+        # self.data is loaded as nested OrderedDict, can not use set or get
         if self.data == None:
             raise EnvironmentError("Failed to load configuration file cloudmesh4.yaml, please check the path and file locally")
 
@@ -64,7 +64,10 @@ class Config(object):
         :param key: A string representing the value's path in the config.
         :param value: value to be set.
         """
-        self.data.set(key, value)
-        yaml_file = {"cloudmesh": self.data.copy()}
+        self.data['cloudmesh']['default']['cloud'] = value
+        #print("Setting env parameter cloud to: " + self.data['cloudmesh']['default']['cloud'])
+
+        yaml_file = self.data.copy()
         with open(self.config_path, "w") as stream:
+            print("Writing updata to cloudmesh.yaml")
             yaml.safe_dump(yaml_file, stream, default_flow_style=False)

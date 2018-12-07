@@ -1,17 +1,18 @@
 from cm4.configuration.config import Config
 from cm4.mongo.mongoDB import MongoDB
+from bson.objectid import ObjectId
 import subprocess
 
 
 class CommandAWS(object):
 
     def __init__(self):
-        config = Config()
-        self.private_key_file = config.get('cloud.aws.credentials.EC2_PRIVATE_KEY_FILE_PATH')
-        self.mongo = MongoDB(host=config.get('data.mongo.MONGO_HOST'),
-                             username=config.get('data.mongo.MONGO_USERNAME'),
-                             password=config.get('data.mongo.MONGO_PASSWORD'),
-                             port=config.get('data.mongo.MONGO_PORT'))
+        config = Config().data['cloudmesh']
+        self.private_key_file = config['cloud']['aws']['credentials']['EC2_PRIVATE_KEY_FILE_PATH']
+        self.mongo = MongoDB(host=config['data']['mongo']['MONGO_HOST'],
+                             username=config['data']['mongo']['MONGO_USERNAME'],
+                             password=config['data']['mongo']['MONGO_PASSWORD'],
+                             port=config['data']['mongo']['MONGO_PORT'])
 
     def find_node_dns(self, vm_name):
         """
@@ -48,8 +49,8 @@ class CommandAWS(object):
         temp = subprocess.check_output(['ssh', '-i', self.private_key_file, username, command]).decode("utf-8")
         self.job_end_update_mongo(job_id, temp)
         self.update_instance_job_status(vm_name, job_id)
-
-        return 'Running command ' + command + 'in Instance ' + vm_name + ':\n' + temp
+        output = 'Running command ' + command + 'in Instance ' + vm_name + ':\n' + temp
+        return output
 
     def run_script(self, script, vm_name):
         """
@@ -66,8 +67,8 @@ class CommandAWS(object):
         temp = subprocess.check_output(['ssh', '-i', self.private_key_file, username, content]).decode("utf-8")
         self.job_end_update_mongo(job_id, temp)
         self.update_instance_job_status(vm_name, job_id)
-
-        return 'Running command ' + script + 'in Instance ' + vm_name + ':\n' + temp
+        output = 'Running command ' + script + 'in Instance ' + vm_name + ':\n' + temp
+        return output
 
     def job_start_update_mongo(self, script, command, vm_name):
         """
@@ -77,7 +78,7 @@ class CommandAWS(object):
         :param vm_name: the vm name
         :return: the job document id
         """
-        job = self.mongo.job_document(vm_name, 'processing', script, 'Null', 'Null', command)
+        job = self.mongo.job_document(vm_name, 'processing', script, 'Null',  command, 'single job')
         return self.mongo.insert_job_collection(job)
 
     def job_end_update_mongo(self, document_id, output):
@@ -87,7 +88,8 @@ class CommandAWS(object):
         :param output: the result
         :return: True/False
         """
-        return self.mongo.update_document('job', '_id', document_id, dict(status='done', output=output))
+        var = dict(status='done', output=output)
+        return self.mongo.update_document('job', '_id', ObjectId(document_id), var)
 
     def update_instance_job_status(self, vm_name, job_id):
         """
@@ -96,20 +98,36 @@ class CommandAWS(object):
         :param vm_name: the name of vm
         :param job_id: jod id
         """
-        status = self.mongo.find_document('status', 'name', vm_name)
-        if status:
-            self.mongo.insert_status_collection(self.mongo.status_document(vm_name, 'processing', job_id, []))
+        status = self.mongo.find_document('status', 'id', vm_name)
+
+        if status is None:
+            document = self.mongo.status_document(vm_name, 'processing', job_id, [])
+            self.mongo.insert_status_collection(document)
+
         else:
-            history = status['history']
-            if status['currentJob'] == job_id:
-                history.append(job_id)
-                self.mongo.update_document('status', 'id', vm_name, dict(status='No Job', currentJob='Null',
-                                                                         history=history))
+            history = self.mongo.find_document('status', 'id', vm_name)['history']
+            if status['status'] == 'processing':
+                history.append(str(job_id))
+                var = dict(status='No Job', currentJob='Null', history=history)
+                self.mongo.update_document('status', 'id', vm_name, var)
             else:
-                self.mongo.update_document('status', 'id', vm_name, dict(status='processing', currentJob=job_id))
+                var = dict(status='processing', currentJob=job_id)
+                self.mongo.update_document('status', 'id', vm_name, var)
 
     def disconnect(self):
         """
         disconnect from mongodb
         """
         self.mongo.close_client()
+
+
+def process_arguments(arguments):
+    command = CommandAWS()
+    if arguments.get('command'):
+        result = command.run_command(arguments.get('COMMAND'), arguments.get('--vm'))
+        print(result)
+    elif arguments.get('script'):
+        result = command.run_script(arguments.get('SCRIPT'), arguments.get('--vm'))
+        print(result)
+
+

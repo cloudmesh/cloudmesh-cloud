@@ -31,14 +31,18 @@
       cm4 set cluster CLUSTERNAME
       cm4 set experiment EXPERIMENT
       cm4 set --key=KEY --value=VALUE
+      cm4 vm create [VMNAME] [--count=VMNUMBER] [--debug] [--dryrun]
       cm4 vm start [VMNAME] [--vms=VMLIST] [--count=VMNUMBER] [--debug] [--dryrun]
       cm4 vm stop [--vms=VMLIST] [--debug] [--dryrun]
       cm4 vm destroy [--vms=VMLIST] [--debug] [--dryrun]
       cm4 vm status [--vms=VMLIST] [--dryrun]
       cm4 vm list
+      cm4 vm publicip [--vms=VMLIST]
       cm4 vm ssh NAME
       cm4 vm run COMMAND  [--vms=<vmList>]
       cm4 vm script run SCRIPT [--vms=<vmList>] [--dryrun]
+      cm4 aws run command COMMAND [--vm=name]
+      cm4 aws run script SCRIPT [--vm=name]
       cm4 vcluster create virtual-cluster VIRTUALCLUSTER_NAME --clusters=CLUSTERS_LIST [--computers=COMPUTERS_LIST] [--debug]
       cm4 vcluster destroy virtual-cluster VIRTUALCLUSTER_NAME
       cm4 vcluster create runtime-config CONFIG_NAME PROCESS_NUM in:params out:stdout [--fetch-proc-num=FETCH_PROCESS_NUM [default=1]] [--download-later [default=True]]  [--debug]
@@ -91,6 +95,7 @@ import cm4.vm.Vm
 import cm4.openstack.OpenstackCM
 import cm4
 import cm4.mongo.MongoDBController
+import cm4.aws.CommandAWS
 from cm4.common.dotdict import dotdict
 
 
@@ -111,6 +116,9 @@ def process_arguments(arguments):
     elif arguments.get("vm"):
         result = cm4.vm.Vm.process_arguments(arguments)
         print(result)
+
+    elif arguments.get('aws'):
+        cm4.aws.CommandAWS.process_arguments(arguments)
 
     elif arguments.get("vagrant"):
         cm4.vagrant.vagrant.process_arguments(arguments)

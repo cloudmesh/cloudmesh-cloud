@@ -124,11 +124,10 @@ class MongoDBController(object):
     def __init__(self):
 
         self.config = Config()
-
-        pprint(self.config.dict())
-
         self.data = self.config.data["cloudmesh"]["data"]["mongo"]
         self.expanduser()
+
+        pprint(self.config.dict())
 
     def expanduser(self):
         for key in self.data:
@@ -148,6 +147,9 @@ class MongoDBController(object):
         # TODO: BUG: should that not be done differently, e.g. from commandline or via ENV variables
         #
         # run mongodb
+
+        self.initial_mongo_config()
+
         self.run_mongodb()
 
         # set up auth information
@@ -170,15 +172,22 @@ class MongoDBController(object):
         #  everything shoudl be specified in cloudmesh4.yaml
         #
 
-        default_config_file = {'net': {'bindIp': self.data['MONGO_HOST'],
-                                       'port': self.data['MONGO_PORT']},
-                               'storage': {'dbPath': self.data['MONGO_PATH'],
-                                           'journal':
-                                               {'enabled': True}},
-                               'systemLog': {'destination': 'file',
-                                             'path': self.data['MONGO_LOG'],
-                                             'logAppend': True}
-                               }
+        default_config_file = {
+            "net": {
+                "bindIp": self.host,
+                "port": self.port
+                },
+            "storage": {
+                "dbPath": os.path.join(self.mongo_db_path, 'database'),
+                "journal": {"enabled": True}
+            },
+            "systemLog": {
+                "destination": 'file',
+                "path": os.path.join(self.mongo_db_path, 'log', 'mongod.log'),
+                "logAppend": True
+            }
+        }
+
 
         if security:
             default_config_file.update({'security': {'authorization': 'enabled'}})
@@ -193,9 +202,9 @@ class MongoDBController(object):
         """
         start the MongoDB server
         """
-        cmd = 'mongod --dbpath %s --config %s' % (
-            os.path.join(self.mongo_db_path, 'database'), os.path.join(self.mongo_db_path, 'mongod.conf'))
-        subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True)
+
+        script = "mongod --dbpath {MONGO_PATH} --config {MONGO_HOME}/mongod.conf".format(**self.data)
+        run = Script(script)
         print('MonogDB is running')
 
     # noinspection PyMethodMayBeStatic
@@ -204,20 +213,22 @@ class MongoDBController(object):
         shutdown the MongoDB server
         linux and darwin have different way to shutdown the server, the common way is kill
         """
-        cmd = 'pgrep mongo'
-        pid = int(str(subprocess.check_output(cmd, shell=True).decode("utf-8")).split('\n')[0])
-        cmd = 'kill %s' % pid
-        subprocess.check_output(cmd, shell=True)
+        script = 'kill -2 `pgrep mongo`'
+        run = Script(script)
         print('MonogDB is stopped')
 
     def set_auth(self):
         """
         add admin acount into the MongoDB admin database
         """
+        """
         client = MongoClient(self.host, self.port)
         client.admin.add_user(self.username, self.password,
                               roles=[{'role': "userAdminAnyDatabase", 'db': "admin"}, "readWriteAnyDatabase"])
         client.close()
+        """
+        script = "db.getSiblingDB('admin').createUser({user: {MONGO_USERNAME}, pwd: {MONGO_PASSWORD}, roles: [{role:' userAdminAnyDatabase', db: 'admin'}]})".format(**self.data)
+        run = Script(script)
 
     def dump(self, output_location):
         """
@@ -227,12 +238,16 @@ class MongoDBController(object):
         #
         # TODO: BUG: expand user
         #
+        '''
         cmd = 'mongodump --host %s --port %s --username %s --password %s --out %s' % (self.host,
                                                                                       self.port,
                                                                                       self.username,
                                                                                       self.password,
                                                                                       output_location)
-        subprocess.check_output(cmd, shell=True)
+        '''
+
+        script = "mongodump --host {MONGO_HOST} --port {MONGO_PORT} --username {MONGO_USERNAME} --password {MONGO_PASSWORD} --out {MONGO_DUMP}".format(**self.data)
+        run = Script(script)
 
     def restore(self, data):
         """
@@ -248,7 +263,8 @@ class MongoDBController(object):
                                                                                    self.username,
                                                                                    self.password,
                                                                                    data)
-        subprocess.check_output(cmd, shell=True)
+        script = "mongostore --host {MONGO_HOST} --port {MONGO_PORT} --username {MONGO_USERNAME} --password {MONGO_PASSWORD} {MONGO_DUMP}".format(**self.data)
+        run = Script(script)
 
     def status(self):
         """
@@ -296,11 +312,11 @@ def process_arguments(arguments):
         print()
 
     elif arguments.start:
-
+        MongoDBController().run_mongodb()
         print("start")
 
     elif arguments.stop:
-
+        MongoDBController().shutdown_mongodb()
         print("stop")
 
     elif arguments.backup:

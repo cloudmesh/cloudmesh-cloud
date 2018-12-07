@@ -15,12 +15,12 @@ class AdminCommand(PluginCommand):
 
         Usage:
 
-          cm4 admin mongo install [--brew] [--download=PATH]
-          cm4 admin mongo start
-          cm4 admin mongo stop
-          cm4 admin mongo backup FILENAME
-          cm4 admin mongo load FILENAME
-          cm4 admin mongo help
+          cms admin mongo install [--brew] [--download=PATH]
+          cms admin mongo start
+          cms admin mongo stop
+          cms admin mongo backup FILENAME
+          cms admin mongo load FILENAME
+          cms admin mongo help
 
         The admin command performs some adminsitrative functions, such as installing packages, software and services.
         It also is used to start services and configure them.

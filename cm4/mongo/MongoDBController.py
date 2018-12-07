@@ -233,7 +233,7 @@ class MongoDBController(object):
         """
         #
         # TODO: BUG: expand user
-        #
+        # {MONGO_???} .fomrat(**self.data)
         cmd = 'mongodump --host %s --port %s --username %s --password %s --out %s' % (self.host,
                                                                                       self.port,
                                                                                       self.username,

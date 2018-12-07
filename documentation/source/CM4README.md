@@ -5,22 +5,16 @@ In cloudmesh cm4, we are using the **Python** tool to implement a
 program that could remotely control cloud nodes provided by different
 organizations and run experiments in parallel.
 
-The goal of **cm4** is to provide a platform that users could directly
+The goal of *`cm4`* is to provide a platform that users could directly
 control the nodes they have, like AWS, Azure, and OPENSTACK
 instances. Users could decide to start, stop, destroy, create, resume,
 and suspend different nodes without accessing the **Console**
 interfaces of providers. Then users could install experiment
 environment, software, and other required tools in these running
 nodes. Finally, an experiment could be executed in running nodes by
-sending the commands from **cm4** platform. Meanwhile, we embed the
+sending the commands from *`cm4`* platform. Meanwhile, we embed the
 NoSQL database **MongoDB** into cm4 for managing the nodes and
 experiments.
-
-
-
-
-
-
 
 
 ### Extra: Vargrant
@@ -30,17 +24,16 @@ Vagrant with cm4.
 
 ## What we have implemented 
 
-
-* the function to install **cm4** and its required packages
+* the function to install `cm4` and its required packages
 * the function to manage the virtual machines from cloud service providers (Azure, AWS, and Openstack)
-* the function to use **MongoDB** for saving data
+* the function to use *MongoDB* for saving data
 
 
-### The Preparation for installing **cm4** (David)
+### The Preparation for installing `cm4` (David)
 
 * requriements.txt : the required packages
 * setup.py : ?? 
-* cm4/command/command.py : the python class defines the interface for the command-line **cm4** 
+* cm4/command/command.py : the python class defines the interface for the command-line `cm4` 
 
 :o: update the command that cm4 can really run.
 
@@ -102,18 +95,18 @@ counter.set("<VM_NAME>", "value")
 ```
 
 
-### The MongoDB Database in **cm4** (Yu)
+### The MongoDB Database in `cm4` (Yu)
 
-We add the database into **cm4** with two reasons:
+We add the database into `cm4` with two reasons:
 
 * provide the information of nodes in different providers.
 * record the experiment executed through cm4, easy for next re-execution.
 
 
-Every time the user use the **cm4** platform, the server would access the running MongoDB database, querying the nodes'
+Every time the user use the `cm4` platform, the server would access the running MongoDB database, querying the nodes'
 information, showing relative metadata, and then updating all necessary data.
 
-The **MongoDB** would finish below tasks:
+The *MongoDB* would finish below tasks:
 
 * saving all information:
 
@@ -127,11 +120,11 @@ The **MongoDB** would finish below tasks:
   1. the changes updated on the nodes, like stop running node, or start stopped node.
   2. the changes updated on the [`cloudmesh4.yaml`], like add new nodes.
   3. when the experiment is done, output and experiment status would be updated.
-  4. new group is created while using **cm4** will be updated
+  4. new group is created while using `cm4` will be updated
 
 * return required information:
 	
-  1. return the node information, group information, and experiment information when **cm4** queries them.
+  1. return the node information, group information, and experiment information when `cm4` queries them.
 
 #### Data Scheme in MongoDB
 
@@ -175,11 +168,11 @@ There are three types of documents in MongoDB:
 
 #### Security in MongoDB
 
-For data security purpose, we enable the MongoDB security functionality in **cm4*.
+For data security purpose, we enable the MongoDB security functionality in `cm4`.
 
-When users first time start the **MongoDB**, they have to add an account and open an port to access all database in MongoDB. Because we save all nodes' information into MongoDB inclduing the *Authorization* information. If your MongoDB is open to everyone, it is easy for hacker to steal your information. So you are requried to set the **username** and **password** for the security purpose. 
+When users first time start the *MongoDB*, they have to add an account and open an port to access all database in MongoDB. Because we save all nodes' information into MongoDB inclduing the *Authorization* information. If your MongoDB is open to everyone, it is easy for hacker to steal your information. So you are requried to set the *username* and *password* for the security purpose. 
 
-If you want to learn more about the **Security** in MongoDB, you can visit this [page](https://docs.mongodb.com/manual/security/) or visit the brief introduction about the MongoDB
+If you want to learn more about the *Security* in MongoDB, you can visit this [page](https://docs.mongodb.com/manual/security/) or visit the brief introduction about the MongoDB
 
 Here is a quick reference about how to
  [enable MongoDB Security](https://medium.com/@raj_adroit/mongodb-enable-authentication-enable-access-control-e8a75a26d332) option. 
@@ -190,7 +183,7 @@ Here is a quick reference about how to
 
 If you want to know how to install MongoDB into local, you can review [Install MongoDB](https://docs.mongodb.com/manual/installation/)
 
-And if you want to use **cm4** to help you install MongoDB, you have to update the information required for installing MongoDB into [`cloudmesh4.yaml`] file.
+And if you want to use `cm4` to help you install MongoDB, you have to update the information required for installing MongoDB into [`cloudmesh4.yaml`] file.
 
 The `cm4/cmmongo/MongoDBController.py` has the functions to install MongoDB for Linux and Darwin system. 
 
@@ -256,8 +249,8 @@ db_connection: test connection to local mongoDB host
 ### 4. The Virtual Machine Provider
 
 
-In the **cm4**, we developed the `cm4/vm/Vm.py` class to implement the operations for different virtual machines from AWS, 
-Azure, and Chameleon by using the python library [**Apache Libcloud**](https://libcloud.apache.org) to interact with 
+In the `cm4`, we developed the `cm4/vm/Vm.py` class to implement the operations for different virtual machines from AWS, 
+Azure, and Chameleon by using the python library [*Apache Libcloud*](https://libcloud.apache.org) to interact with 
 cloud service providers. 
 
 The basic functions are:
@@ -280,15 +273,15 @@ Below we list some sample of running these functions for virtual machines in  AW
 
 ### AWS VM Operations (Yu)
 
-Before using the AWS Vm code, user has to update their AWS information into `cloudmesh4.yaml` file in **etc** folder.
+Before using the AWS Vm code, user has to update their AWS information into `cloudmesh4.yaml` file in *etc* folder.
 
-The **Libcloud** library has enough methods to support the operations for managing virtual machines in AWS. We use a 
+The *Libcloud* library has enough methods to support the operations for managing virtual machines in AWS. We use a 
 `cm4/vm/Aws.py` to create the driver based on the configuration to connect to AWS.  
 
-Inherit the **Libcloud** library, we did some modifications on `AWSDriver` to extend the operation. The `create_node`
+Inherit the *Libcloud* library, we did some modifications on `AWSDriver` to extend the operation. The `create_node`
 method would create a virtual machine in AWS based on the configuration of `cloudmesh4.yaml` file  
 
-Here are some samples for running these operations by using **cm4**:
+Here are some samples for running these operations by using `cm4`:
 
 :o: please update the commands and results here
 
@@ -306,7 +299,7 @@ Here are some samples for running these operations by using **cm4**:
 It is also important to notice that openstack has various providers.
  And it is important to specify each of them with correspondent log-in credentials.
 
-Many of the funtions are supported by the **Libcloud** library. By specifying the config parameters to `openstack` and `chameleaon`, 
+Many of the funtions are supported by the *Libcloud* library. By specifying the config parameters to `openstack` and `chameleaon`, 
 VM Provider will automatically attach futher operations to openstack primitives.
 
 In order to overcome some issues with service provider (mostly delays in operations like spawing, ip-assignments, refactoring and etc), 
@@ -317,7 +310,7 @@ Since providers of openstack like Chameleon and Jetstream allow users to
 associate customized float ip to their instances, we also develop such functions
 to support tasks like this and give more power to users when runing their jobs.
 
-Here are some samples for running these operations by using **cm4** project:
+Here are some samples for running these operations by using `cm4` project:
 
 :o: please update the commands and results here
  
@@ -410,12 +403,12 @@ def limit_remote_addr():
         abort(403)  # Forbidden
 ```
  
- ## Extra: Run Command/Script in AWS by **cm4**
+ ## Extra: Run Command/Script in AWS by `cm4`
  
 The `cm4/aws/CommandAWS.py` contains some methods to run commands/scripts from local to remote AWS virtual machines.
 Any command/script operations executed by `CommandAWS.py` would be saved into MongoDB.
  
-In **cm4**, we use python running **ssh** client to connect the AWS virtual machines. Before running the commands 
+In `cm4`, we use python running *ssh* client to connect the AWS virtual machines. Before running the commands 
 or scripts remotely, the `CommandAWS.py` would create the job document in MongoDB for saving the experiment information.
 This job document contains the information of virtual machine name, the running command or script, and job status, input, 
 output and description. Meanwhile, the job document_id would be added into status document of the `status` collection for 

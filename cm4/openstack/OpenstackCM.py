@@ -19,7 +19,7 @@ from cm4.openstack.OpenstackRefactor import OpenstackRefactor
 
 class OpenstackCM(CloudManagerABC):
 
-    # common
+
     def __init__(self, cloud=None):
         config = Config()
         self.cloud = cloud
@@ -295,6 +295,7 @@ class OpenstackCM(CloudManagerABC):
         """
         node = self._get_node_by_id(node_id)
         return self.driver.destroy_node(node, )
+
 
 
 def process_arguments(arguments):

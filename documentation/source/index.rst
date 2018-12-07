@@ -2,6 +2,7 @@ Cloudmesh Version 4
 ===============================
 
 .. toctree::
+   :numbered:
    :maxdepth: 2
    :caption: Contents:
 
@@ -10,6 +11,7 @@ Cloudmesh Version 4
    install
    mongo
    configuration
+   vmproviders
    CM4README
    README
    aws

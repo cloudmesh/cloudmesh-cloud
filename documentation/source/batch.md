@@ -25,6 +25,8 @@ The main options are:
 
 Each of these sub-commands are reviewed in the following sections with examples. 
 
+
+
 ## Creating a job configuration
 
 As can be seen, this sub-command has the most number of arguments and is the vital part of the `batch` tool. The parameters are all self-explanatory, but we will review the important ones here: 
@@ -69,6 +71,8 @@ job-metadata:
 
 ```
 
+
+
 ## Testing the connection
 
 Note that the cluster information is already extracted and added to this file. Therefore unlike `vcluster`, there is no need to add the cluster manually. So far, we have just added and updated the configuration and the job is neither submitted nor run in the cluster.  Before doing that, let's try to test our connection to the cluster: 
@@ -77,6 +81,8 @@ Note that the cluster information is already extracted and added to this file. T
 $ cm4 batch test-connection slurm-taito
 Slurm Cluster taito is accessible.
 ```
+
+
 
 ## Running the Job
 
@@ -109,6 +115,8 @@ drwx------ 3  4096 Dec  7 02:35 ../
 -rw------- 1    35 Dec  7 02:36 test-script-output
 ```
 
+
+
 ## Downloading the Results
 
 Now that the results are ready we can fetch the results using the following command: 
@@ -133,6 +141,8 @@ drwxr-xr-x 3 corriel 1M Dec  6 19:40 ../
 -rw------- 1 corriel 1M Dec  6 19:40 test-script-output
 ```
 
+
+
 ## Cleaning the remote
 
 Now that you are done, you can easily clean the remote using:
@@ -141,6 +151,8 @@ Now that you are done, you can easily clean the remote using:
 $ cm4 batch clean-remote SlurmTest1
 Job SlurmTest1 cleaned successfully.
 ```
+
+
 
 ## Get the list of the jobs and clusters
 
@@ -182,6 +194,8 @@ $ cm4 batch list slurm-clusters 2
 			 ~/vms/sshconfig_slurm
 ```
 
+
+
 ## Modifying the Configuration by Setting Parameters
 
 In case you want to modify or add a configuration parameter, there is no need to directly modify the file. Indeed you can use the `set-param` command to set a key for both jobs and slurm-clusters. In the next example we will add a test-key and test-value parameter to the `slurm-taito` cluster: 
@@ -201,6 +215,8 @@ $ cm4 batch list slurm-clusters 2
 		 test-value
 ```
 
+
+
 ## Removing jobs and clusters
 
 Finally, when you are done with a job, or when a cluster is not accessible anymore, you can easily remove them from the `batch` configuration file using the following: 
@@ -216,12 +232,3 @@ similarly, you can remove a obsolete job using the following command:
 $ cm4 batch remove job SlurmTest1
 Job SlurmTest1 removeed successfully.
 ```
-
-
-
-
-
-
-
-
-

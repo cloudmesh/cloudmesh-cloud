@@ -36,7 +36,6 @@ class Config(object):
          return yaml.dump(self.data, default_flow_style=False, indent=2)
 
 
-''' broken
     def get(self, key, default=None):
         """
         A helper function for reading values from the config without
@@ -68,4 +67,4 @@ class Config(object):
         with open(self.config_path, "w") as stream:
             yaml.safe_dump(yaml_file, stream, default_flow_style=False)
 
-'''
+

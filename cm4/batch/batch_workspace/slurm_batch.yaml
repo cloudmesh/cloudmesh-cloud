@@ -20,9 +20,6 @@ job-metadata:
     remote_script_path: ~/tmp/job_20181205_20222323/2_argsin_fileout_script.sh
     remote_slurm_script_path: ~/tmp/job_20181205_20222323/2_argsin_fileout.slurm
     local_path: ../batch/sample_scripts/out
-    jobIDs:
-    - '32791023'
-    test_key: hello
   SlurmTest3:
     suffix: _20181205_20322690
     slurm_cluster_name: slurm-taito
@@ -58,3 +55,18 @@ job-metadata:
     local_path: ../batch/sample_scripts/out
     jobIDs:
     - '32796553'
+  SlurmTest1:
+    suffix: _20181206_20025306
+    slurm_cluster_name: slurm-taito
+    input_type: params+file
+    raw_remote_path: ~/tmp
+    slurm_script_path: /home/corriel/gitrepos/courses/e516_CloudComputing_cloudmesh/cm4/batch/4_filein_fileout.slurm
+    job_script_path: /home/corriel/gitrepos/courses/e516_CloudComputing_cloudmesh/cm4/batch/4_filein_fileout_script.sh
+    argfile_path: /home/corriel/gitrepos/courses/e516_CloudComputing_cloudmesh/cm4/batch/test-script-argument
+    argfile_name: test-script-argument
+    script_name: 4_filein_fileout_script.sh
+    slurm_script_name: 4_filein_fileout.slurm
+    remote_path: ~/tmp/job_20181206_20025306/
+    remote_script_path: ~/tmp/job_20181206_20025306/4_filein_fileout_script.sh
+    remote_slurm_script_path: ~/tmp/job_20181206_20025306/4_filein_fileout.slurm
+    local_path: ../batch/sample_scripts/out

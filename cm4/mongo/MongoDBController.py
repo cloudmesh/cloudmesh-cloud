@@ -126,8 +126,6 @@ class MongoDBController(object):
 
         pprint (self.config.dict())
 
-        self.data = self.config.data["cloudmesh"]["data"]["mongo"]
-
 
         # TODO: self.initial_mongo_config(False)
 
@@ -282,6 +280,11 @@ def process_arguments(arguments):
         r = installer.install()
         return r
 
+    elif arguments.security:
+        mongo = MongoDBController()
+        mongo.set_auth()
+        print()
+
     elif arguments.start:
 
         print("start")
@@ -315,7 +318,7 @@ def main():
     # test.update_auth()
     # test.run_mongodb()
     # test.shutdown_mongodb()
-    test.status()
+    #test.status()
     # test.dump('~/.cloudmesh/demo/version1/cm/cm4/mongo/MongoDB/backup')
     # test.restore ('~/.coudmesh/demo/version1/cm/cm4/mongo/MongoDB/backup')
 

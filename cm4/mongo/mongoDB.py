@@ -242,6 +242,7 @@ class MongoDB(object):
                 new.update({key: document[key]})
             elif isinstance(document[key], int):
                 new.update({key: document[key]})
+
         return new
 
     def close_client(self):

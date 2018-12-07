@@ -94,7 +94,7 @@ class SlurmCluster(object):
                 list(self.batch_config.get('job-metadata').keys()) and overwrite is False:
             raise RuntimeError("The job {} exists in the configuration file, if you want to overwrite the job, \
             use --overwrite argument.".format(job_name))
-        slurm_cluster = self.cm_config.get('cluster')[slurm_cluster_name]
+        slurm_cluster = self.cm_config.get('cloudmesh').get('cluster')[slurm_cluster_name]
         tmp_cluster = {slurm_cluster_name : dict(slurm_cluster)}
         self.batch_config.deep_set(['slurm_cluster'], tmp_cluster)
         job_metadata = {job_name: {}}
@@ -268,9 +268,9 @@ class SlurmCluster(object):
         :return:
         """
         if target == 'slurm-cluster':
-            self.batch_config.remove(['slurm-cluster'], key)
+            self.batch_config.remove(['slurm_cluster'], key)
             print("Slurm-cluster {} removeed successfully.".format(key))
-        if target == 'job':
+        elif target == 'job':
             self.batch_config.remove(['job-metadata'], key)
             print("Job {} removeed successfully.".format(key))
         else:

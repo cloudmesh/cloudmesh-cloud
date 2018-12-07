@@ -12,16 +12,19 @@ Cloudmesh Version 4
    mongo
    configuration
    vmproviders
+   vagrant
+   vagrant-other
    CM4README
    README
    aws
    ufo
-   vagrant
    vcluster
    vm
    jupyter
    code
-
+   deprecated
+   ehvagrant
+   
 Indices and tables
 ==================
 

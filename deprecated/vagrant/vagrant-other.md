@@ -108,7 +108,7 @@ current status of your Vagrant provider. Execute `cm4 vm list`
 
 BUG: IMAGE PROKEN, COPY ASCII
 
-![before_init](img/vagrant/before_init.png)
+![before_init](../../documentation/source/img/vagrant/before_init.png)
 
 Then execute `cm4 start`. Since your machines are not deployed
 yet, Vagrant will first deploy your machines and then bring them up,
@@ -117,7 +117,7 @@ we can confirm this by issuing `cm4 vm list` again. You will see now:
 
 BUG: IMAGE PROKEN, COPY ASCII
 
-![after_init](img/vagrant/after_init.png)
+![after_init](../../documentation/source/img/vagrant/after_init.png)
 
 HOO-WA! Your two virtual machines are painlessly deployed, configured,
 up and running! 
@@ -134,7 +134,7 @@ variable.
 
 BUG: IMAGE BROKEN
 
-![scp_availability_check](img/vagrant/scp.png)
+![scp_availability_check](../../documentation/source/img/vagrant/scp.png)
 
 ## Usage
 
@@ -295,7 +295,7 @@ the `stdout` and `stderr` of executing instances will be fetched and
 reformatted to a job report. Finally, the job report will print out to
 the current terminal.
 
-![run_command_example](img/vagrant/run_command.png)
+![run_command_example](../../documentation/source/img/vagrant/run_command.png)
 
 #### run arbitrary shell script
 
@@ -337,4 +337,4 @@ following:
 
 BUG USE ASCII
 
-![run_script_example](img/vagrant/run_script.png)
+![run_script_example](../../documentation/source/img/vagrant/run_script.png)

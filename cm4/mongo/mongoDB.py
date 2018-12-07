@@ -5,12 +5,13 @@ from cm4.configuration.config import Config
 
 class MongoDB(object):
 
-    def __init__(self, host, username, password, port):
-        self.database = Config().data["cloudmesh"]["data"]["mongo"]["MONGO_DBNAME"]
-        self.host = host
-        self.password = urllib.parse.quote_plus(password)
-        self.username = urllib.parse.quote_plus(username)
-        self.port = port
+    def __init__(self, host=None, username=None, password=None, port=None):
+        config = Config().data["cloudmesh"]
+        self.database = config["data"]["mongo"]["MONGO_DBNAME"]
+        self.host = host or config["data"]["mongo"]["MONGO_HOST"]
+        self.password = urllib.parse.quote_plus(password or config["data"]["mongo"]["MONGO_PASSWORD"])
+        self.username = urllib.parse.quote_plus(username or config["data"]["mongo"]["MONGO_USERNAME"])
+        self.port = port or config["data"]["mongo"]["MONGO_PORT"]
         self.client = None
         self.db = None
         self.connect_db()
@@ -40,8 +41,18 @@ class MongoDB(object):
         """
         connect to database
         """
-        self.client = MongoClient('mongodb://%s:%s@%s:%s' % (self.username, self.password, self.host, self.port))
+        self.client = MongoClient(f"mongodb://{self.username}:{self.password}@{self.host}:{self.port}")
         self.db = self.client[self.database]
+
+    def save_list(self, collection, lst):
+        """
+        Save an iterable list into a mongo collection
+        :param collection:
+        :param lst:
+        """
+        col = self.db[collection]
+        for l in lst:
+            col.insert_one(self.var_to_json(l.__dict__))
 
     def insert_config_document(self, document):
         """

@@ -26,6 +26,8 @@ class OpenstackCM(CloudManagerABC):
         self.driver = None
         self.key = None
         if cloud:
+            data = config.get('cloudmesh')
+            self.os_config = data.get('cloud').get(cloud)
             self.os_config = config.get('cloudmesh').get('cloud').get(cloud)
             self.driver = self.get_driver(cloud)
             self.key = self.os_config.get('credentials').get('OS_KEY_PATH')  # credentials.target return null string

@@ -27,7 +27,9 @@ class Config(object):
 
         with open(self.config_path, "r") as stream:
             self.data = yaml.load(stream)
-            #print(self.data)
+
+        if self.data == None:
+            raise EnvironmentError("Failed to load configuration file cloudmesh4.yaml, please check the path and file locally")
 
     def dict(self):
         return self.data

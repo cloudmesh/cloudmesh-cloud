@@ -114,6 +114,15 @@ cloudmesh:
       default:
         flavor: m1.small
         image: Ubuntu 14.04
+    vagrant:
+      cm:
+        heading: Vagrant
+        host: TBD
+        label: TBD
+        kind: TBD
+        version: TBD
+      default:
+        vagrant_path: '~/.cloudmesh/vagrant_workspace'
   data:
     default:
       db: local

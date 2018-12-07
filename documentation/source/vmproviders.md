@@ -1,19 +1,24 @@
 # VM Providers
 
-Cm4 works straight forward with a number of providers under the assumption you have accounts on these frameworks. We demonstrate hete how to start a singel vm on each of these providers and list the started vms. Defaults form the configuration file are used to select images and flavors. These defaults can naturally be changed.
+Cm4 works straight forward with a number of providers under the
+assumption you have accounts on these frameworks. We demonstrate hete
+how to start a singel vm on each of these providers and list the
+started vms. Defaults form the configuration file are used to select
+images and flavors. These defaults can naturally be changed.
 
 ## General Cloud Providers Access
 
 We are using the python library
-[**Apache Libcloud**](https://libcloud.apache.org) to interact with
-cloud service providers. Currently, in the **cm4**, we could access:
+[Apache Libcloud](https://libcloud.apache.org) to interact with
+cloud service providers. Currently, in the `cm4`, we could access:
 
-* [**AWS**](https://aws.amazon.com)
-* [**AZURE**](https://azure.microsoft.com/en-us/)
-* any cloud service providers using **OPENSTACK**. For example, [**Chameleon**](https://www.chameleoncloud.org) and 
-[**Jetstream**](https://jetstream-cloud.org)
+* [AWS](https://aws.amazon.com)
+* [AZURE](https://azure.microsoft.com/en-us/)
+* any cloud service providers using *OpenStack*.
+  For example, [Chameleon](https://www.chameleoncloud.org) and 
+  [Jetstream](https://jetstream-cloud.org)
 
-By using the **Apache Libcloud** API, we could do these operations for
+By using the *Apache Libcloud* API, we could do these operations for
 nodes in above cloud service providers:
 
 * Start the node

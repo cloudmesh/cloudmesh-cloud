@@ -1,6 +1,6 @@
-from cloudmesh_client.common.Shell import Shell
-from cloudmesh_client.common.dotdict import dotdict
-from cloudmesh_client.shell.console import Console
+from cm4.common.shell import Shell
+from cm4.common.dotdict import dotdict
+from cm4.common.console import Console
 import os
 
 class image(object):

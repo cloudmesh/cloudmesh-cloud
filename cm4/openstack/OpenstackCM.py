@@ -19,14 +19,14 @@ from cm4.openstack.OpenstackRefactor import OpenstackRefactor
 
 class OpenstackCM(CloudManagerABC):
 
-    # common
+
     def __init__(self, cloud=None):
-        config = Config()
+        config = Config().data
         self.cloud = cloud
         self.driver = None
         self.key = None
         if cloud:
-            self.os_config = config.get('cloud.{}'.format(cloud))
+            self.os_config = config.get('cloudmesh').get('cloud').get(cloud)
             self.driver = self.get_driver(cloud)
             self.key = self.os_config.get('credentials').get('OS_KEY_PATH')  # credentials.target return null string
             # if we don't find OS_KEY_PATH in yaml, go to os.environ instead which can be set in .bashrc
@@ -295,6 +295,7 @@ class OpenstackCM(CloudManagerABC):
         """
         node = self._get_node_by_id(node_id)
         return self.driver.destroy_node(node, )
+
 
 
 def process_arguments(arguments):

@@ -38,13 +38,9 @@ class Vmprovider(object):
 class Vm:
 
     def __init__(self, cloud):
+        self.mongo = MongoDB()
         self.config = Config().data["cloudmesh"]
         self.provider = Vmprovider().get_provider(cloud)
-
-        self.mongo = MongoDB(host=self.config["data"]["mongo"]["MONGO_HOST"],
-                             username=self.config["data"]["mongo"]["MONGO_USERNAME"],
-                             password=self.config["data"]["mongo"]["MONGO_PASSWORD"],
-                             port=self.config["data"]["mongo"]["MONGO_PORT"])
 
     def start(self, name):
         """
@@ -103,12 +99,13 @@ class Vm:
         self.mongo.delete_document('cloud', 'name', name)
         return result
 
-    def create(self, name):
+    def create(self, name=None):
         """
         create a new node
         :param name: the name for the new node
         :return:
         """
+        name = name or self.new_name()
         node = self.provider.create_node(name)
         self.mongo.insert_cloud_document(vars(node))
         Thread(self, 'test', name, 'running').start()
@@ -233,7 +230,6 @@ def process_arguments(arguments):
 
     default_cloud = Config().data["cloudmesh"]["default"]["cloud"]
 
-
     vm = Vm(default_cloud)
 
     if arguments.get("list"):
@@ -242,14 +238,8 @@ def process_arguments(arguments):
     elif arguments.get("create"):
         # TODO: Reconcile `create` behavior here and in docopts where
         #       create is called with a `VMCOUNT`.
-
         vm_name = arguments.get("VMNAME")
-
-        if vm_name is None:
-            vm_name = vm.new_name()
-
         vm.create(vm_name)
-
         result = f"Created {vm_name}"
 
     elif arguments.get("start"):

@@ -98,9 +98,12 @@ import cm4.data.data
 import cm4.vm.Vm
 import cm4.openstack.OpenstackCM
 import cm4
-import cm4.mongo.MongoDBController
 import cm4.aws.CommandAWS
 from cm4.common.dotdict import dotdict
+
+
+def MongoImporter():
+    import cm4.mongo.MongoDBController
 
 
 def process_arguments(arguments):
@@ -112,6 +115,7 @@ def process_arguments(arguments):
         print(version)
 
     elif arguments.admin and arguments.mongo:
+        MongoImporter()
         print ("MONGO")
         result = cm4.mongo.MongoDBController.process_arguments(arguments)
         print(result)

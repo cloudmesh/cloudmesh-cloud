@@ -126,12 +126,6 @@ class MongoDBController(object):
 
         pprint (self.config.dict())
 
-        self.data = self.config.data["cloudmesh"]["data"]["mongo"]
-        self.host = self.data['MONGO_HOST']
-        self.port = self.data['MONGO_PORT']
-        self.username = self.data['MONGO_USERNAME']
-        self.password = self.data['MONGO_PASSWORD']
-
 
         # TODO: self.initial_mongo_config(False)
 
@@ -271,7 +265,6 @@ def process_arguments(arguments):
 
     """
       cm4 admin mongo install [--brew] [--download=PATH]
-      cm4 admin mongo security
       cm4 admin mongo start
       cm4 admin mongo stop
       cm4 admin mongo backup FILENAME

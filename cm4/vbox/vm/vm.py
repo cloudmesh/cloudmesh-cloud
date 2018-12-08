@@ -77,33 +77,7 @@ class vm(object):
             data[attribute] = value
         return data
 
-    @classmethod
-    def list(cls, verbose=False):
 
-        def convert(line):
-            entry = (' '.join(line.split())).split(' ')
-            data = dotdict()
-            data.id = entry[0]
-            data.name = entry[1]
-            data.provider = entry[2]
-            data.state = entry[3]
-            data.directory = entry[4]
-
-            return data
-
-        result = Shell.execute("vagrant", "global-status --prune")
-        if verbose:
-            print(result)
-        if "There are no active" in result:
-            return None
-
-        lines = []
-        for line in result.split("\n")[2:]:
-            if line == " ":
-                break
-            else:
-                lines.append(convert(line))
-        return lines
 
     @classmethod
     def delete(cls, name=None):

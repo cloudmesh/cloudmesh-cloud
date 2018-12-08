@@ -1,6 +1,11 @@
 import abc
 
 
+#
+# if name is none, take last name from mongo, apply to last started vm
+#
+
+
 class CloudManagerABC(metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def start(self, name):
@@ -13,7 +18,7 @@ class CloudManagerABC(metaclass=abc.ABCMeta):
         pass
 
     @abc.abstractmethod
-    def stop(self, name):
+    def stop(self, name=None):
         """
         stops the node with the given name
 
@@ -23,7 +28,7 @@ class CloudManagerABC(metaclass=abc.ABCMeta):
         pass
 
     @abc.abstractmethod
-    def info(self, name):
+    def info(self, name=None):
         """
         gets the information of a node with a given name
 
@@ -33,7 +38,7 @@ class CloudManagerABC(metaclass=abc.ABCMeta):
         pass
 
     @abc.abstractmethod
-    def suspend(self, name):
+    def suspend(self, name=None):
         """
         suspends the node with the given name
 
@@ -43,7 +48,7 @@ class CloudManagerABC(metaclass=abc.ABCMeta):
         pass
 
     @abc.abstractmethod
-    def ls(self):
+    def list(self):
         """
         list all nodes id
 
@@ -52,7 +57,7 @@ class CloudManagerABC(metaclass=abc.ABCMeta):
         pass
 
     @abc.abstractmethod
-    def resume(self, name):
+    def resume(self, name=None):
         """
         resume the named node
 
@@ -62,7 +67,7 @@ class CloudManagerABC(metaclass=abc.ABCMeta):
         pass
 
     @abc.abstractmethod
-    def destroy(self, name):
+    def destroy(self, name=None):
         """
         Destroys the node
         :param name: the name of the node
@@ -71,7 +76,7 @@ class CloudManagerABC(metaclass=abc.ABCMeta):
         pass
 
     @abc.abstractmethod
-    def create(self, name, image=None, size=None, timeout=360, **kwargs):
+    def create(self, name=None, image=None, size=None, timeout=360, **kwargs):
         """
         creates a named node
 
@@ -88,7 +93,7 @@ class CloudManagerABC(metaclass=abc.ABCMeta):
         """
         pass
 
-    def rename(self, name, new_name):
+    def rename(self, name=None, destination=None):
         """
         rename a node
 
@@ -96,5 +101,6 @@ class CloudManagerABC(metaclass=abc.ABCMeta):
         :param new_name: the new name
         :return: the dict with the new name
         """
+        # if destination is None, increase the name counter and use the new name
         pass
 

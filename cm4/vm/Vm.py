@@ -8,7 +8,8 @@ from cm4.mongo.mongoDB import MongoDB
 from cm4.configuration.name import Name
 from cm4.vm.thread import Thread
 from cm4.configuration.counter import Counter
-
+from cm4.abstractclass.CloudManagerABC import CloudManagerABC
+import cm4
 
 class Vmprovider(object):
 
@@ -26,21 +27,31 @@ class Vmprovider(object):
         os_config = self.config["cloud"][cloud]
 
         if os_config.get('cm').get('kind') == 'azure':
+
+            driver = cm4.vm.Azure.Azure()
             driver = Azure(self.config, cloud).driver
         elif os_config.get('cm').get('kind') == 'aws':
             driver = Aws(self.config, cloud).driver
         elif os_config.get('cm').get('kind') == 'openstack':
             driver = Cmopenstack(self.config, cloud).driver
-
+        elif os_config.get('cm').get('kind') == 'vbox':
+            driver = None
+            raise NotImplementedError
         return driver
 
 
-class Vm:
+class Vm(CloudManagerABC):
 
     def __init__(self, cloud):
         self.mongo = MongoDB()
         self.config = Config().data["cloudmesh"]
-        self.provider = Vmprovider().get_provider(cloud)
+        self.kind = self.config["cloud"][cloud]["kind"]
+        if self.kind in ["vbox"]:
+            raise NotImplementedError
+            self.provider = None # ?????
+        else:
+            self.provider = Vmprovider().get_provider(cloud)
+
 
     def start(self, name):
         """
@@ -48,15 +59,25 @@ class Vm:
         :param name:
         :return: VM document
         """
-        info = self.info(name)
-        if info.state != 'running':
-            self.provider.ex_start_node(info)
-            Thread(self, 'test', name, 'running').start()
-            document = self.mongo.find_document('cloud', 'name', name)
-            return document
+        if self.kind in ["vbox"]:
+            raise NotImplementedError
+            self.provider
         else:
-            document = self.mongo.find_document('cloud', 'name', name)
-            return document
+            info = self.info(name)
+            if info.state != 'running':
+                #self.provider.ex_start_node(info)
+
+                parameters = {
+                    "name": "node1"
+                }
+                self.provider.start(**parameters)
+
+                Thread(self, 'test', name, 'running').start()
+                document = self.mongo.find_document('cloud', 'name', name)
+                return document
+            else:
+                document = self.mongo.find_document('cloud', 'name', name)
+                return document
 
     def stop(self, name, deallocate=True):
         """
@@ -67,6 +88,9 @@ class Vm:
         """
         info = self.info(name)
         if info.state != 'stopped':
+            #
+            # BUG: THIS SHOUDL NOT CALL LIBCLOUD BUT ONLY OUR OWN ABSTRACTIONS, IF CONDITION NEEDED
+            #
             self.provider.ex_stop_node(info, deallocate)
             Thread(self, 'test', name, 'stopped').start()
             document = self.mongo.find_document('cloud', 'name', name)
@@ -144,7 +168,7 @@ class Vm:
                 else:
                     self.mongo.insert_cloud_document(document)
                 return i
-        raise ValueError('Node: ' + name + ' does not exist!')
+        raise ValueError(f"Node: {name} does not exist!")
 
     def new_name(self, experiment=None, group=None, user=None):
         """
@@ -236,15 +260,13 @@ def process_arguments(arguments):
     if arguments.get("list"):
         result = vm.list()
 
-    elif arguments.get("create"):
-        # TODO: Reconcile `create` behavior here and in docopts where
-        #       create is called with a `VMCOUNT`.
-        vm_name = arguments.get("VMNAME")
-        vm.create(vm_name)
-        result = f"Created {vm_name}"
-
     elif arguments.get("start"):
-        result = vm.start(arguments.get("--vms"))
+        try:
+            result = vm.start(arguments.get("--vms"))
+        except ValueError:
+            vm_name = arguments.get("VMNAME")
+            vm.create(vm_name)
+            result = f"Created {vm_name}"
 
     elif arguments.get("stop"):
         result = vm.stop(arguments.get("--vms"))

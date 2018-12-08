@@ -23,3 +23,4 @@ class Cm4Command(PluginCommand):
     @with_cm4_doc
     def do_cm4(self, args, arguments):
         cm4.command.command.process_arguments(arguments)
+

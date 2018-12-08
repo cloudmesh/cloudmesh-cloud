@@ -2,14 +2,14 @@
 """Vagrant Manager.
 
 Usage:
-    cm4 vagrant create --count <vm_number> [--debug]
-    cm4 vagrant start [--vms=<vmList>] [--debug]
-    cm4 vagrant stop [--vms=<vmList>] [--debug]
-    cm4 vagrant destroy [--vms=<vmList>] [--debug]
-    cm4 vagrant status [--vms=<vmList>]
-    cm4 vagrant list
-    cm4 vagrant ssh NAME
-    cm4 vagrant run COMMAND  [--vms=<vmList>]
+    cm4 vbox create --count <vm_number> [--debug]
+    cm4 vbox start [--vms=<vmList>] [--debug]
+    cm4 vbox stop [--vms=<vmList>] [--debug]
+    cm4 vbox destroy [--vms=<vmList>] [--debug]
+    cm4 vbox status [--vms=<vmList>]
+    cm4 vbox list
+    cm4 vbox ssh NAME
+    cm4 vbox run COMMAND  [--vms=<vmList>]
 
     cm4 -h
 
@@ -36,7 +36,7 @@ from docopt import docopt
 from termcolor import colored
 
 
-# TODO: workspace should be in ~/.cloudmesh/vagrant
+# TODO: workspace should be in ~/.cloudmesh/vbox
 # TODO: if the workspace is not ther it needs to be created
 # TODO: use captal letters as easier to document in other tools
 # TODO: implement ssh
@@ -82,7 +82,7 @@ class Vagrant(object):
         if name is None:
             # start all
             name = ""
-        self.execute("vagrant status " + str(name))
+        self.execute("vbox status " + str(name))
 
     def start(self, name=None):
         """
@@ -94,7 +94,7 @@ class Vagrant(object):
         if name is None:
             # start all
             name = ""
-        self.execute("vagrant up " + str(name))
+        self.execute("vbox up " + str(name))
 
     def stop(self, name=None):
         """
@@ -106,7 +106,7 @@ class Vagrant(object):
         if name is None:
             # start all
             name = ""
-        self.execute("vagrant halt " + str(name))
+        self.execute("vbox halt " + str(name))
 
     def destroy(self, name=None):
         """
@@ -117,7 +117,7 @@ class Vagrant(object):
         """
         if name is None:
             name = ""
-        self.execute("vagrant destroy " + str(name))
+        self.execute("vbox destroy " + str(name))
 
     def generate_vagrantfile(self, number_of_nodes):
         """
@@ -162,7 +162,7 @@ def process_arguments(arguments):
         print(arguments)
         print(colored(columns * '-', "red"))
 
-    if arguments.get("vagrant"):
+    if arguments.get("vbox"):
         provider = Vagrant(debug=debug)
         if arguments.get("create") & arguments.get("--count"):
             provider.generate_vagrantfile(arguments.get("<vm_number>"))

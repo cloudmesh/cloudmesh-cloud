@@ -64,7 +64,7 @@ class vm(object):
 
     @classmethod
     def info(cls, name=None):
-        result = Shell.execute("vagrant",
+        result = Shell.execute("vbox",
                                ["ssh-config"],
                                cwd=name)
         lines = result.split("\n")
@@ -91,7 +91,7 @@ class vm(object):
 
             return data
 
-        result = Shell.execute("vagrant", "global-status --prune")
+        result = Shell.execute("vbox", "global-status --prune")
         if verbose:
             print(result)
         if "There are no active" in result:
@@ -108,7 +108,7 @@ class vm(object):
     @classmethod
     def delete(cls, name=None):
 
-        result = Shell.execute("vagrant",
+        result = Shell.execute("vbox",
                                ["destroy", "-f", name],
                                cwd=name)
         return result
@@ -131,7 +131,7 @@ class vm(object):
             Console.ok("{name} created".format(**arg))
             Console.ok("{name} booting ...".format(**arg))
 
-            result = Shell.execute("vagrant",
+            result = Shell.execute("vbox",
                                    ["up", arg.name],
                                    cwd=arg.name)
             Console.ok("{name} ok.".format(**arg))
@@ -140,12 +140,12 @@ class vm(object):
 
     @classmethod
     def resume(cls, name):
-        result = Shell.execute("vagrant", ["resume", name])
+        result = Shell.execute("vbox", ["resume", name])
         return result
 
     @classmethod
     def suspend(cls, name):
-        result = Shell.execute("vagrant", ["suspend", name])
+        result = Shell.execute("vbox", ["suspend", name])
         return result
 
     @classmethod
@@ -154,7 +154,7 @@ class vm(object):
         vms = cls.to_dict(cls.list())
 
         arg = "ssh {} -c {}".format(name, command)
-        result = Shell.execute("vagrant", ["ssh", name, "-c", command], cwd=vms[name]["directory"])
+        result = Shell.execute("vbox", ["ssh", name, "-c", command], cwd=vms[name]["directory"])
         return result
 
     # TODO: Seems replicated

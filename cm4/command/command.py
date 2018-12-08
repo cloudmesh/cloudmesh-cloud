@@ -92,7 +92,7 @@ import cm4.vm.Vm
 import cm4.openstack.OpenstackCM
 import cm4
 import cm4.aws.CommandAWS
-from cm4.common.dotdict import dotdict
+from cloudmesh.common.dotdict import dotdict
 from pprint import pprint
 from cloudmesh.common.dotdict import dotdict
 

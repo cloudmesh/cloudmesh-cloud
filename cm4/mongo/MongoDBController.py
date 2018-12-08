@@ -5,9 +5,8 @@ from sys import platform
 from pymongo import MongoClient
 from cm4.configuration.config import Config
 from pprint import pprint
-from cm4.common.shell import Script
-from cm4.common.shell import Shell, Brew
-from cm4.common.shell import SystemPath
+from cm4.common.script import Script, SystemPath
+from cloudmesh.common.Shell import Shell, Brew
 
 class MongoInstaller(object):
 

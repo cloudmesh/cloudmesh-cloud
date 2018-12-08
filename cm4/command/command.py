@@ -92,6 +92,8 @@ import cm4.vm.Vm
 import cm4.openstack.OpenstackCM
 import cm4
 import cm4.aws.CommandAWS
+from cm4.common.dotdict import dotdict
+from pprint import pprint
 from cloudmesh.common.dotdict import dotdict
 
 
@@ -105,7 +107,7 @@ def process_arguments(arguments):
 
     elif arguments.get("vm"):
         result = cm4.vm.Vm.process_arguments(arguments)
-        print(result)
+        pprint(result)
 
     elif arguments.get('aws'):
         cm4.aws.CommandAWS.process_arguments(arguments)

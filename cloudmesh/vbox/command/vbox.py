@@ -11,9 +11,10 @@ from cm4 import __version__
 from cloudmesh.shell.command import command
 from cloudmesh.shell.command import PluginCommand
 import cm4.vbox
+from cm4.vbox.search import search
 
-from cm4.mongo.MongoDBController import MongoDBController
-from cm4.mongo.MongoDBController import MongoInstaller
+# from cm4.mongo.MongoDBController import MongoDBController
+# from cm4.mongo.MongoDBController import MongoInstaller
 
 
 
@@ -22,10 +23,7 @@ from cm4.mongo.MongoDBController import MongoInstaller
 # pprint (vbox.image.list())
 
 #
-# TODO: make sure shell.execute works, maybe use shell=True
-# TODO: make python 3.7.1 transition
 # TODO: revisit Printer
-# TODO: get version from cm4.__Init__
 
 def defaults():
     """
@@ -78,9 +76,11 @@ class VboxCommand(PluginCommand):
 
           Usage:
             vbox version [--format=FORMAT]
+            vbox image search [--url=URL]
             vbox image list [--format=FORMAT]
             vbox image find NAME
             vbox image add NAME
+            vbox image search
             vbox vm list [--format=FORMAT] [-v]
             vbox vm delete NAME
             vbox vm config NAME
@@ -110,7 +110,7 @@ class VboxCommand(PluginCommand):
             _LIST_PRINT(versions, arguments.format)
 
         elif arguments.image and arguments.list:
-            l = cm4.vbox.image.list(verbose=arguments.verbose)
+            l = cm4.vbox.image.list()
             _LIST_PRINT(l, arguments.format, order=["name", "provider", "date"])
 
         elif arguments.image and arguments.add:

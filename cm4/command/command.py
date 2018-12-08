@@ -6,16 +6,7 @@
       cm4 admin rest status
       cm4 admin rest start
       cm4 admin rest stop
-      cm4 admin status
-      cm4 vbox create --count=VMNUMBER [--debug]
-      cm4 vbox start [--vms=VMLIST] [--debug]
-      cm4 vbox stop [--vms=VMLIST] [--debug]
-      cm4 vbox destroy [--vms=VMLIST] [--debug]
-      cm4 vbox status [--vms=VMLIST]
-      cm4 vbox list
-      cm4 vbox ssh NAME
-      cm4 vbox run COMMAND  [--vms=VMLIST]
-      cm4 vbox script run SCRIPT [--vms=VMLIST]
+      cm4 admin status]
       cm4 data add FILE
       cm4 data add SERVICE FILE
       cm4 data get FILE
@@ -111,9 +102,6 @@ def process_arguments(arguments):
 
     elif arguments.get('aws'):
         cm4.aws.CommandAWS.process_arguments(arguments)
-
-    elif arguments.get("vbox"):
-        raise NotImplementedError
 
     elif arguments.get("vcluster"):
         cm4.vcluster.VirtualCluster.process_arguments(arguments)

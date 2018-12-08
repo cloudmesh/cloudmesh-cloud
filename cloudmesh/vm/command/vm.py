@@ -1,7 +1,9 @@
 from __future__ import print_function
 from cloudmesh.shell.command import command
 from cloudmesh.shell.command import PluginCommand
-#from cloudmesh.vm.api.manager import Manager
+
+
+# from cloudmesh.vm.api.manager import Manager
 
 class VmCommand(PluginCommand):
 
@@ -28,8 +30,7 @@ class VmCommand(PluginCommand):
 
         print(arguments)
 
-        #m = Manager()
-
+        # m = Manager()
 
         if arguments.FILE:
             print("option a")
@@ -38,6 +39,3 @@ class VmCommand(PluginCommand):
         elif arguments.list:
             print("option b")
         #    m.list("just calling list without parameter")
-
-
-

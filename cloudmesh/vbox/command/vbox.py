@@ -1,22 +1,19 @@
-from docopt import docopt
+import os
+from pprint import pprint
 
 import cm4
-from cloudmesh.common.dotdict import dotdict
-from pprint import pprint
+import cm4.vbox
 from cloudmesh.common.Printer import Printer
 from cloudmesh.common.Shell import Shell
-import sys
-import os
-from cm4 import __version__
-from cloudmesh.shell.command import command
+from cloudmesh.common.dotdict import dotdict
 from cloudmesh.shell.command import PluginCommand
-import cm4.vbox
-from cm4.vbox.provider import  VboxProvider
+from cloudmesh.shell.command import command
+from cm4 import __version__
+from cm4.vbox.provider import VboxProvider
 
 
 # from cm4.mongo.MongoDBController import MongoDBController
 # from cm4.mongo.MongoDBController import MongoInstaller
-
 
 
 # pprint (vbox.vm.list())
@@ -52,11 +49,14 @@ def _convert(lst, id="name"):
     return d
 
 
+# noinspection PyPep8Naming
 def _LIST_PRINT(l, output, order=None):
     if output in ["yaml", "dict", "json"]:
-        l = _convert(l)
+        l_converted = _convert(l)
+    else:
+        l_converted = l
 
-    result = Printer.write(l,
+    result = Printer.write(l_converted,
                            order=order,
                            output=output)
 
@@ -64,7 +64,6 @@ def _LIST_PRINT(l, output, order=None):
         print(result)
     else:
         pprint(result)
-
 
 
 class VboxCommand(PluginCommand):
@@ -94,16 +93,16 @@ class VboxCommand(PluginCommand):
         arguments.verbose = arguments["-v"]
         arguments.all = arguments["--all"]
 
-        print (arguments)
+        print(arguments)
 
         if arguments.version:
             versions = {
                 "vbox": {
-                   "attribute": "Vagrant Version",
+                    "attribute": "Vagrant Version",
                     "version": cm4.vbox.version(),
                 },
                 "cloudmesh-vbox": {
-                    "attribute":"cloudmesh vbox Version",
+                    "attribute": "cloudmesh vbox Version",
                     "version": __version__
                 }
             }
@@ -119,7 +118,7 @@ class VboxCommand(PluginCommand):
                 l = VboxProvider.add_image(arguments.NAME)
                 print(l)
             except Exception as e:
-                print (e)
+                print(e)
             return ""
 
         elif arguments.image and arguments.delete:
@@ -127,7 +126,7 @@ class VboxCommand(PluginCommand):
                 l = VboxProvider.delete_image(arguments.NAME)
                 print(l)
             except Exception as e:
-                print (e)
+                print(e)
             return ""
 
 
@@ -140,15 +139,15 @@ class VboxCommand(PluginCommand):
 
             l = VboxProvider().nodes()
             _LIST_PRINT(l,
-                       arguments.format,
-                       order=["name", "state", "id", "provider", "directory"])
+                        arguments.format,
+                        order=["name", "state", "id", "provider", "directory"])
             return ""
 
         elif arguments.create and arguments.list:
 
             result = Shell.cat("{NAME}/Vagrantfile".format(**arguments))
             if result is not None:
-                print (result)
+                print(result)
             return ""
 
         elif arguments.create:
@@ -173,7 +172,7 @@ class VboxCommand(PluginCommand):
 
             result = Printer.attribute(d, output=arguments.format)
 
-            print (result)
+            print(result)
 
         elif arguments.ip:
 
@@ -202,10 +201,10 @@ class VboxCommand(PluginCommand):
             else:
                 for element in data:
                     ip = element['ip']
-                    if  ip == "127.0.0.1" or ip.startswith("10."):
+                    if ip == "127.0.0.1" or ip.startswith("10."):
                         pass
                     else:
-                        print (element['ip'])
+                        print(element['ip'])
 
 
         elif arguments.boot:
@@ -238,11 +237,11 @@ class VboxCommand(PluginCommand):
                 if result is not None:
                     lines = result.splitlines()[:-1]
                     for line in lines:
-                        print (line)
+                        print(line)
 
         else:
 
-            print ("use help")
+            print("use help")
 
         result = ""
         return result

@@ -5,17 +5,6 @@ from cloudmesh.shell.command import PluginCommand
 from cm4.mongo.MongoDBController import MongoDBController
 from cm4.mongo.MongoDBController import MongoInstaller
 
-"""
-        ::
-
-            Usage:
-
-              cms admin mongo install [--brew] [--download=PATH]
-             
-
-              
-
-"""
 
 class AdminCommand(PluginCommand):
 
@@ -48,7 +37,6 @@ class AdminCommand(PluginCommand):
         """
 
         # arguments.PATH = arguments['--download'] or None
-
 
         result = None
 

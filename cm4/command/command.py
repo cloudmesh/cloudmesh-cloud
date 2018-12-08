@@ -7,15 +7,15 @@
       cm4 admin rest start
       cm4 admin rest stop
       cm4 admin status
-      cm4 vagrant create --count=VMNUMBER [--debug]
-      cm4 vagrant start [--vms=VMLIST] [--debug]
-      cm4 vagrant stop [--vms=VMLIST] [--debug]
-      cm4 vagrant destroy [--vms=VMLIST] [--debug]
-      cm4 vagrant status [--vms=VMLIST]
-      cm4 vagrant list
-      cm4 vagrant ssh NAME
-      cm4 vagrant run COMMAND  [--vms=VMLIST]
-      cm4 vagrant script run SCRIPT [--vms=VMLIST]
+      cm4 vbox create --count=VMNUMBER [--debug]
+      cm4 vbox start [--vms=VMLIST] [--debug]
+      cm4 vbox stop [--vms=VMLIST] [--debug]
+      cm4 vbox destroy [--vms=VMLIST] [--debug]
+      cm4 vbox status [--vms=VMLIST]
+      cm4 vbox list
+      cm4 vbox ssh NAME
+      cm4 vbox run COMMAND  [--vms=VMLIST]
+      cm4 vbox script run SCRIPT [--vms=VMLIST]
       cm4 data add FILE
       cm4 data add SERVICE FILE
       cm4 data get FILE
@@ -85,7 +85,7 @@
 """
 from docopt import docopt
 from cm4.configuration.config import Config
-import cm4.vagrant.vagrant_basic
+import deprecated.vagrant_basic
 import cm4.vcluster.VirtualCluster
 import cm4.batch.Batch
 import cm4.data.data
@@ -111,8 +111,8 @@ def process_arguments(arguments):
     elif arguments.get('aws'):
         cm4.aws.CommandAWS.process_arguments(arguments)
 
-    elif arguments.get("vagrant"):
-        cm4.vagrant.vagrant_basic.process_arguments(arguments)
+    elif arguments.get("vbox"):
+        deprecated.vagrant_basic.process_arguments(arguments)
 
     elif arguments.get("vcluster"):
         cm4.vcluster.VirtualCluster.process_arguments(arguments)

@@ -497,16 +497,16 @@ class Shell(object):
     @classmethod
     def vagrant(cls, *args):
         """
-        executes vagrant with the given arguments
+        executes vbox with the given arguments
         :param args:
         :return:
         """
-        return cls.execute('vagrant', args)
+        return cls.execute('vbox', args)
 
     @classmethod
     def pandoc(cls, *args):
         """
-        executes vagrant with the given arguments
+        executes vbox with the given arguments
         :param args:
         :return:
         """

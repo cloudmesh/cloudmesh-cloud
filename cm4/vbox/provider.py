@@ -14,7 +14,6 @@ class VboxProvider (CloudManagerABC):
     # if name is none, take last name from mongo, apply to last started vm
     #
 
-
     def __init__(self):
         pass
 
@@ -101,10 +100,19 @@ class VboxProvider (CloudManagerABC):
 
     def execute(self, name, command, cwd=None):
 
+        arg = dotdict()
+        arg.cwd=cwd
+        arg.command=command
+        arg.name=name
+        config = Config()
+        cloud = "vagrant"  # TODO: must come through parameter or set cloud
+        arg.path = config.data["cloudmesh"]["cloud"]["vagrant"]["default"]["path"]
+        arg.directory = os.path.expanduser("{path}/{name}".format(**arg))
+
         vms = self.to_dict(self.nodes ())
 
         arg = "ssh {} -c {}".format(name, command)
-        result = Shell.execute("vagrant", ["ssh", name, "-c", command], cwd=vms[name]["directory"])
+        result = Shell.execute("vagrant", ["ssh", name, "-c", command], cwd=arg.directory)
         return result
 
 
@@ -134,9 +142,18 @@ class VboxProvider (CloudManagerABC):
         :param name:
         :return: The dict representing the node including updated status
         """
+
+        arg = dotdict()
+        arg.name = name
+        config = Config()
+
+        cloud = "vagrant"  # TODO: must come through parameter or set cloud
+        arg.path = config.data["cloudmesh"]["cloud"]["vagrant"]["default"]["path"]
+        arg.directory = os.path.expanduser("{path}/{name}".format(**arg))
+
         result = Shell.execute("vagrant",
                                ["ssh-config"],
-                               cwd=name)
+                               cwd=arg.directory)
         lines = result.split("\n")
         data = {}
         for line in lines:
@@ -185,9 +202,16 @@ class VboxProvider (CloudManagerABC):
     def delete(self, name=None):
         # TODO: check
 
+        arg = dotdict()
+        arg.name = name
+        config = Config()
+        cloud = "vagrant"  # TODO: must come through parameter or set cloud
+        arg.path = config.data["cloudmesh"]["cloud"]["vagrant"]["default"]["path"]
+        arg.directory = os.path.expanduser("{path}/{name}".format(**arg))
+
         result = Shell.execute("vagrant",
                                ["destroy", "-f", name],
-                               cwd=name)
+                               cwd=arg.directory)
         return result
 
     def vagrantfile(cls, **kwargs):

@@ -10,10 +10,8 @@ import time
 
 from cm4.configuration.config import Config
 
-import hostlist
-from termcolor import colored
 #
-# TODO: BUG: this is managed laregly with the vm command and not vagrant, so what we need to do is make sure that if
+# TODO: BUG: this is managed laregly with the vm command and not vbox, so what we need to do is make sure that if
 #  this stays, we need to have similar fumctionality in vm
 #
 
@@ -38,7 +36,7 @@ Future Version ideas:
 
 Version 0.3:
 
-* added "cm-vagrant run" command with multi-threading.
+* added "cm-vbox run" command with multi-threading.
 
   Design:
 
@@ -46,7 +44,7 @@ Version 0.3:
     2.   Retrieve the result from hosts' stdout/stderr.
     2.1. Execution result will be retrieved and print to the stdout
     3.   If name of the hosts are not specified using --vms, then the command will 
-         execute on all host that registered to the current vagrant project.
+         execute on all host that registered to the current vbox project.
     3.1. However, if the hosts are not available through ssh when running 
          (say, the vm is stopped) , the execution will failed.
     4.   For every run command, every specified host will run the command 
@@ -72,7 +70,7 @@ Version 0.1:
 """
 
 
-# TODO: workspace should be in ~/.cloudmesh/vagrant
+# TODO: workspace should be in ~/.cloudmesh/vbox
 # TODO: if the workspace is not ther it needs to be created
 # TODO: use captal letters as easier to document in other tools
 
@@ -90,7 +88,7 @@ class Vagrant(object):
         :param debug:
         """
         # prepare path and directory
-        self.workspace = os.path.expanduser(os.path.normpath(Config().data['cloudmesh']['cloud']['vagrant']['default']['vagrant_path']))
+        self.workspace = os.path.expanduser(os.path.normpath(Config().data['cloudmesh']['cloud']['vbox']['default']['vagrant_path']))
         if not os.path.isdir(self.workspace):
             self._nested_mkdir(self.workspace)
             
@@ -139,7 +137,7 @@ class Vagrant(object):
 
     def _get_host_names(self):
         """
-        get all of the host names that exist in current vagrant environment
+        get all of the host names that exist in current vbox environment
         """
 
         #
@@ -147,7 +145,7 @@ class Vagrant(object):
         #  but tahan we use the db
         #
 
-        res = self.execute('vagrant status', result=True)
+        res = self.execute('vbox status', result=True)
         if isinstance(res, Exception):
             print(res)
             return []
@@ -169,11 +167,11 @@ class Vagrant(object):
         :return: None
         """
         #
-        # TODO: BUG: the scp should work on all named vms, regardless if vagrant or not
+        # TODO: BUG: the scp should work on all named vms, regardless if vbox or not
         #
-        # get vagrant setting
+        # get vbox setting
         if name not in self.ssh_config:
-            res = self.execute('vagrant ssh-config {}'.format(name), result=True)
+            res = self.execute('vbox ssh-config {}'.format(name), result=True)
             res = res.decode('utf8')
             configs = [x.strip().split() for x in re.split('[\r\n]+', res) if x]
             configs = dict(zip([x[0] for x in configs], [x[1] for x in configs]))
@@ -216,7 +214,7 @@ class Vagrant(object):
         :return: str or dictionary:
         """
         #
-        # TODO: BUG: THis shoudl work on all vms regardless of vagrant or not
+        # TODO: BUG: THis shoudl work on all vms regardless of vbox or not
         #
         # parse run_report
         job_status = 'Finished' if not isinstance(res, Exception) else 'Failed'
@@ -250,7 +248,7 @@ class Vagrant(object):
         :return: None:
         """
         #
-        # TODO: BUG: This shoudl work on all vms regardless of vagrant or not
+        # TODO: BUG: This shoudl work on all vms regardless of vbox or not
         #
         # initalize threading pool
         pool = mt.Pool(len(hosts))
@@ -296,7 +294,7 @@ class Vagrant(object):
         """
 
         #
-        # TODO: BUG: This should work on all vms and not just vagrant
+        # TODO: BUG: This should work on all vms and not just vbox
         #
 
         # building path
@@ -397,11 +395,11 @@ class Vagrant(object):
         # submit job
 
         #
-        # TODO: BUG: THis shoudl work on all vms and not just vagrant
+        # TODO: BUG: THis shoudl work on all vms and not just vbox
         #
         logging.debug('exceute "{}" on node {}......'.format(command, name))
         res = self.execute(
-            'vagrant ssh {} -c "echo -e \\"\x04\\";{}; echo \\"return_code: $?\\""'.format(name, command), result=True)
+            'vbox ssh {} -c "echo -e \\"\x04\\";{}; echo \\"return_code: $?\\""'.format(name, command), result=True)
 
         # processing result
         if not report:
@@ -455,7 +453,7 @@ class Vagrant(object):
         :param name:
         :return:
         """
-        self.execute("vagrant ssh " + str(name))
+        self.execute("vbox ssh " + str(name))
 
     def create(self, count=2, image='ubuntu/xenial64', output_path=None, template=None):
         """
@@ -500,7 +498,7 @@ class Vagrant(object):
         if name is None:
             # start all
             name = ""
-        self.execute("vagrant up " + str(name))
+        self.execute("vbox up " + str(name))
 
     def resume(self, name=None):
         """
@@ -514,7 +512,7 @@ class Vagrant(object):
         if name is None:
             # start all
             name = ""
-        self.execute("vagrant up " + str(name))
+        self.execute("vbox up " + str(name))
 
     def stop(self, name=None):
         """
@@ -527,7 +525,7 @@ class Vagrant(object):
         if name is None:
             # start all
             name = ""
-        self.execute("vagrant halt " + str(name))
+        self.execute("vbox halt " + str(name))
 
     def suspend(self, name=None):
         """
@@ -539,7 +537,7 @@ class Vagrant(object):
         if name is None:
             # start all
             name = ""
-        self.execute("vagrant suspend " + str(name))
+        self.execute("vbox suspend " + str(name))
 
     def destroy(self, name=None, force=False):
         """
@@ -552,13 +550,13 @@ class Vagrant(object):
         """
         if name is None:
             name = ""
-        self.execute("vagrant destroy {}{}".format('-f ' if force else '', name))
+        self.execute("vbox destroy {}{}".format('-f ' if force else '', name))
 
     def list(self):
         """
         Provides the status information of all Vagrant Virtual machines.
         """        
-        self.execute("vagrant status")
+        self.execute("vbox status")
 
     def status(self, name):
         """
@@ -566,7 +564,7 @@ class Vagrant(object):
 
         :return:
         """
-        self.execute("vagrant status " + name)
+        self.execute("vbox status " + name)
 
     def download(self, name, source, dest, prefix_dest=False, recursive=False):
         """
@@ -598,129 +596,3 @@ class Vagrant(object):
         r = (not os.path.basename(source) or recursive)
         self._scp(name, 'upload', source, dest, r)
 
-
-def process_arguments(arguments):
-    """
-    Processes all the input arguments and acts accordingly.
-
-    :param arguments: input arguments for the Vagrant script.
-
-    """
-    debug = arguments["--debug"]
-#    print(arguments)
-    if debug:
-        try:
-            columns, rows = os.get_terminal_size(0)
-        except OSError:
-            columns, rows = os.get_terminal_size(1)
-
-        print(colored(columns * '=', "red"))
-        print(colored("Running in Debug Mode", "red"))
-        print(colored(columns * '=', "red"))
-        print(arguments)
-        print(colored(columns * '-', "red"))
-        logging.basicConfig(level=logging.DEBUG)
-    else:
-        logging.basicConfig(level=logging.INFO)
-
-    if arguments.get("vagrant"):
-
-        provider = Vagrant(debug=debug)
-
-        # parse argument
-        action = None
-        kwargs = dict()
-        args = []
-        if arguments.get("create"):
-            action = provider.create
-            kwargs = provider._update_by_key(kwargs, arguments, ['--image', '--template', '--count'], {'--output': 'output_path'})
-        elif arguments.get("start"):
-            action = provider.start
-        elif arguments.get("resume"):
-            action = provider.start
-        elif arguments.get("stop"):
-            action = provider.stop
-        elif arguments.get("suspend"):
-            action = provider.suspend
-        elif arguments.get("destroy"):
-            action = provider.destroy
-            kwargs = provider._update_by_key(kwargs, arguments, [], {'-f': 'force'})
-        elif arguments.get("status"):
-            action = provider.status
-            args.append(arguments.get("NAME"))
-        elif arguments.get("list"):
-            action = provider.list
-        elif arguments.get("download"):
-            action = provider.download
-            args.append(arguments.get("--from"))
-            args.append(arguments.get("--to"))
-            kwargs = provider._update_by_key(kwargs, arguments, key_dict={'-r': 'recursive'})
-        elif arguments.get("upload"):
-            action = provider.upload
-            args.append(arguments.get("--from"))
-            args.append(arguments.get("--to"))
-            kwargs = provider._update_by_key(kwargs, arguments, key_dict={'-r': 'recursive'})
-        elif arguments.get("ssh"):
-            action = provider.ssh
-            args.append(arguments.get("NAME"))
-        elif arguments.get("run") and not arguments.get("script"):
-            action = provider.run_command
-            args.append(arguments.get("COMMAND"))
-        elif arguments.get("script") and arguments.get("run"):
-            action = provider.run_script
-            args.append(arguments.get("SCRIPT"))
-            kwargs = provider._update_by_key(kwargs, arguments, ['--data'])
-
-        # do the action
-        if action is not None:
-
-            action_type = action.__name__
-
-            # 1. aciton that can be immediately executed       
-            if action_type in ['ssh', 'list', 'create']:
-                action(*args, **kwargs)
-                return
-
-            # parse vms_hosts
-            if arguments.get("--vms"):
-                vms_hosts = arguments.get("--vms")
-                vms_hosts = hostlist.expand_hostlist(vms_hosts)
-            else:
-                vms_hosts = []
-
-            # 2. action can executed with original vms_hosts
-            if action_type in ['start', 'resume', 'stop', 'suspend', 'destroy'] and not vms_hosts:
-                action(*args, **kwargs)
-                return
-            elif action_type in ['status'] and not vms_hosts:
-                provider.list()
-                return
-
-            # impute hosts
-            if not vms_hosts:
-                hosts = provider._get_host_names()
-                if not hosts:
-                    raise EnvironmentError('There is no host exists in the current vagrant project')
-            else:
-                hosts = vms_hosts
-
-            # 3. action work with imputed host
-            if action_type in ['start', 'resume', 'stop', 'suspend', 'destroy', 'status']:
-                for node_name in hosts:
-                    action(node_name, *args, **kwargs)
-            else:
-                # impute argument according to number of host
-                if len(hosts) > 1:
-                    if action_type in ['run_command', 'run_script']:
-                        kwargs.update({'report_alone': False})
-                    if action_type in ['download']:
-                        kwargs.update({'prefix_dest': True})
-
-                    provider.run_parallel(hosts, action, args, kwargs)
-
-                else:
-                    if action_type in ['run_command', 'run_script']:
-                        kwargs.update({'report_alone': True})
-                    if action_type in ['download']:
-                        kwargs.update({'prefix_dest': False})
-                    action(hosts[0], *args, **kwargs)

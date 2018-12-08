@@ -48,7 +48,7 @@ When you use Ehvagrant which integrated with Cloudmesh, Ehvagrant become a modul
 
 You can download Vagrant from [here](https://www.vagrantup.com/downloads.html). It supports all mainstream operating system, including Windows, Mac OS, and various Linux distribution. After finishing installation, you can check if the installation successes by executing `vagrant version`. You should see something like below.
 
-![vagrant version](img/vagrant/version.png)
+![vagrant version](../../documentation/source/img/vagrant/version.png)
 
 ### Install *virtualization provider*
 
@@ -91,14 +91,14 @@ and run your virtual machine with Vagrant. But first, let us check
 current status of your Vagrant provider. Execute `cm4 vagrant list` at
 console, you will see:
 
-![before_init](img/vagrant/before_init.png)
+![before_init](../../documentation/source/img/vagrant/before_init.png)
 
 Then execute `cm4 vagrant start`. Since your machines are not deployed
 yet, Vagrant will first deploy your machines and then bring them up,
 and automatically do LOTS of setting. When Vagrant has done its work,
 we can confirm this by issuing `cm4 vagrant list` again. You will see now:
 
-![after_init](img/vagrant/after_init.png)
+![after_init](../../documentation/source/img/vagrant/after_init.png)
 
 HOO-WA! Your two virtual machines are painlessly deployed, configured,
 up and running! Now you are ready to do some fancy work with Vagrant
@@ -114,7 +114,7 @@ usage guide shows on your screen. If it is not there, please install
 `scp` and make sure its executive file is in your `PATH` environment
 variable.
 
-![scp_availability_check](img/vagrant/scp.png)
+![scp_availability_check](../../documentation/source/img/vagrant/scp.png)
 
 
 
@@ -257,7 +257,7 @@ the `stdout` and `stderr` of executing instances will be fetched and
 reformatted to a job report. Finally, the job report will print out to
 the current terminal.
 
-![run_command_example](img/vagrant/run_command.png)
+![run_command_example](../../documentation/source/img/vagrant/run_command.png)
 
 #### run arbitrary shell script
 
@@ -289,4 +289,4 @@ following:
 
 * Finally, execution reports will be printed out to current terminal.
 
-![run_script_example](img/vagrant/run_script.png)
+![run_script_example](../../documentation/source/img/vagrant/run_script.png)

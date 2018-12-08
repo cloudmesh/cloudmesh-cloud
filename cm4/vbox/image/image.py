@@ -17,7 +17,7 @@ class image(object):
             data.date = entry[2]
             return data
 
-        result = Shell.execute("vagrant", ["box", "list"])
+        result = Shell.execute("vbox", ["box", "list"])
 
         lines = []
         for line in result.split("\n"):
@@ -27,7 +27,7 @@ class image(object):
     @classmethod
     def add(cls, name):
 
-        result = Shell.execute("vagrant", ["box", "add", name])
+        result = Shell.execute("vbox", ["box", "add", name])
         return result
 
     @classmethod

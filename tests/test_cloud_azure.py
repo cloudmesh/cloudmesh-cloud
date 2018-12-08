@@ -35,26 +35,26 @@ class TestCloudAzure:
 
     def test_azure_030_suspend(self):
         HEADING(myself())
-        self.azure.suspend(self.test_node_name)
+        self.azure.suspend(name=self.test_node_name)
         state = self._wait_and_get_state(self.test_node_name)
         assert state == 'stopped'
         # assert state == 'paused'
 
     def test_azure_050_stop(self):
         HEADING(myself())
-        self.azure.stop(self.test_node_name)
+        self.azure.stop(name=self.test_node_name)
         state = self._wait_and_get_state(self.test_node_name, 30)
         assert state == 'stopped'
 
     def test_azure_060_start(self):
         HEADING(myself())
-        self.azure.start(self.test_node_name)
+        self.azure.start(name=self.test_node_name)
         state = self._wait_and_get_state(self.test_node_name, 30)
         assert state == 'running'
 
     def test_azure_070_destroy(self):
         HEADING(myself())
-        self.azure.destroy(self.test_node_name)
+        self.azure.destroy(name=self.test_node_name)
 
     def test_azure_create_network(self):
         HEADING(myself())
@@ -70,13 +70,13 @@ class TestCloudAzure:
 
     def test_azure_get_node(self):
         HEADING(myself())
-        vm = self.azure._get_node(self.test_node_name)
+        vm = self.azure._get_node(name=self.test_node_name)
         assert vm is not None
 
     def test_azure_run(self):
         HEADING(myself())
         cmd = "lsb_release -a"
-        res = self.azure.run(self.test_node_name, cmd)
+        res = self.azure.run(name=self.test_node_name, cmd)
         # getting output
         # https://stackoverflow.com/questions/38152873/how-can-i-get-the-output-of-a-customscriptextenstion-when-using-azure-resource-m
 

@@ -16,5 +16,5 @@ class Test_vagrant:
 
     def test_01_vagranttest_status(self):
         HEADING(myself())
-        r = subprocess.check_output("cm4 vagrant list", shell=True)
+        r = subprocess.check_output("cm4 vbox list", shell=True)
         assert "node1" in r.decode("utf-8")

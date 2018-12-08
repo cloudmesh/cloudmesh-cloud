@@ -3,25 +3,19 @@
 ::
 
     Usage:
-      cm4 admin mongo install [--brew] [--download=PATH]
-      cm4 admin mongo status
-      cm4 admin mongo start
-      cm4 admin mongo stop
-      cm4 admin mongo backup FILENAME
-      cm4 admin mongo load FILENAME
       cm4 admin rest status
       cm4 admin rest start
       cm4 admin rest stop
       cm4 admin status
-      cm4 vagrant create --count=VMNUMBER [--debug]
-      cm4 vagrant start [--vms=VMLIST] [--debug]
-      cm4 vagrant stop [--vms=VMLIST] [--debug]
-      cm4 vagrant destroy [--vms=VMLIST] [--debug]
-      cm4 vagrant status [--vms=VMLIST]
-      cm4 vagrant list
-      cm4 vagrant ssh NAME
-      cm4 vagrant run COMMAND  [--vms=VMLIST]
-      cm4 vagrant script run SCRIPT [--vms=VMLIST]
+      cm4 vbox create --count=VMNUMBER [--debug]
+      cm4 vbox start [--vms=VMLIST] [--debug]
+      cm4 vbox stop [--vms=VMLIST] [--debug]
+      cm4 vbox destroy [--vms=VMLIST] [--debug]
+      cm4 vbox status [--vms=VMLIST]
+      cm4 vbox list
+      cm4 vbox ssh NAME
+      cm4 vbox run COMMAND  [--vms=VMLIST]
+      cm4 vbox script run SCRIPT [--vms=VMLIST]
       cm4 data add FILE
       cm4 data add SERVICE FILE
       cm4 data get FILE
@@ -91,7 +85,7 @@
 """
 from docopt import docopt
 from cm4.configuration.config import Config
-import cm4.vagrant.vagrant_basic
+import deprecated.vagrant_basic
 import cm4.vcluster.VirtualCluster
 import cm4.batch.Batch
 import cm4.data.data
@@ -102,10 +96,6 @@ import cm4.aws.CommandAWS
 from cm4.common.dotdict import dotdict
 
 
-def MongoImporter():
-    import cm4.mongo.MongoDBController
-
-
 def process_arguments(arguments):
     version = cm4.__version__
 
@@ -114,12 +104,6 @@ def process_arguments(arguments):
     if arguments.get("--version"):
         print(version)
 
-    elif arguments.admin and arguments.mongo:
-        MongoImporter()
-        print ("MONGO")
-        result = cm4.mongo.MongoDBController.process_arguments(arguments)
-        print(result)
-
     elif arguments.get("vm"):
         result = cm4.vm.Vm.process_arguments(arguments)
         print(result)
@@ -127,8 +111,8 @@ def process_arguments(arguments):
     elif arguments.get('aws'):
         cm4.aws.CommandAWS.process_arguments(arguments)
 
-    elif arguments.get("vagrant"):
-        cm4.vagrant.vagrant_basic.process_arguments(arguments)
+    elif arguments.get("vbox"):
+        deprecated.vagrant_basic.process_arguments(arguments)
 
     elif arguments.get("vcluster"):
         cm4.vcluster.VirtualCluster.process_arguments(arguments)

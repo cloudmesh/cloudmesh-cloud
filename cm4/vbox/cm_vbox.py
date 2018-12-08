@@ -8,9 +8,9 @@ from cm4.common.shell import Shell
 import sys
 import os
 from cm4 import __version__
-# pprint (vagrant.vm.list())
-# vagrant.vm.execute("w2", "uname")
-# pprint (vagrant.image.list())
+# pprint (vbox.vm.list())
+# vbox.vm.execute("w2", "uname")
+# pprint (vbox.image.list())
 
 #
 # TODO: make sure shell.execute works, maybe use shell=True
@@ -87,9 +87,9 @@ def do_vbox(argv):
 
     if arg.version:
         versions = {
-            "vagrant": {
+            "vbox": {
                "attribute": "Vagrant Version",
-                "version": cm4.vagrant.version(),
+                "version": cm4.vbox.version(),
             },
             "cloudmesh-vbox": {
                 "attribute":"cloudmesh vbox Version",
@@ -99,19 +99,19 @@ def do_vbox(argv):
         _LIST_PRINT(versions, arg.format)
 
     elif arg.image and arg.list:
-        l = cm4.vagrant.image.list(verbose=arg.verbose)
+        l = cm4.vbox.image.list(verbose=arg.verbose)
         _LIST_PRINT(l, arg.format, order=["name", "provider", "date"])
 
     elif arg.image and arg.add:
-        l = cm4.vagrant.image.add(arg.NAME)
+        l = cm4.vbox.image.add(arg.NAME)
         print(l)
 
     elif arg.image and arg.find:
-        l = cm4.vagrant.image.find(arg.NAME)
+        l = cm4.vbox.image.find(arg.NAME)
         print(l)
 
     elif arg.vm and arg.list:
-        l = cm4.vagrant.vm.list()
+        l = cm4.vbox.vm.list()
         _LIST_PRINT(l,
                    arg.format,
                    order=["name", "state", "id", "provider", "directory"])
@@ -129,7 +129,7 @@ def do_vbox(argv):
         arg.image = arg["--image"] or d.image
         arg.script = arg["--script"] or d.script
 
-        cm4.vagrant.vm.create(
+        cm4.vbox.vm.create(
             name=arg.NAME,
             memory=arg.memory,
             image=arg.image,
@@ -138,7 +138,7 @@ def do_vbox(argv):
     elif arg.config:
 
         # arg.NAME
-        d = cm4.vagrant.vm.info(name=arg.NAME)
+        d = cm4.vbox.vm.info(name=arg.NAME)
 
         result = Printer.attribute(d, output=arg.format)
 
@@ -147,7 +147,7 @@ def do_vbox(argv):
     elif arg.ip:
 
         data = []
-        result = cm4.vagrant.vm.execute(arg.NAME, "ifconfig")
+        result = cm4.vbox.vm.execute(arg.NAME, "ifconfig")
         if result is not None:
             lines = result.splitlines()[:-1]
             for line in lines:
@@ -186,7 +186,7 @@ def do_vbox(argv):
         arg.script = arg["--script"] or d.script
         arg.port = arg["--port"] or d.port
 
-        cm4.vagrant.vm.boot(
+        cm4.vbox.vm.boot(
             name=arg.NAME,
             memory=arg.memory,
             image=arg.image,
@@ -195,15 +195,15 @@ def do_vbox(argv):
 
     elif arg.delete:
 
-        result = cm4.vagrant.vm.delete(name=arg.NAME)
+        result = cm4.vbox.vm.delete(name=arg.NAME)
         print(result)
 
     elif arg.ssh:
 
         if arg.COMMAND is None:
-            os.system("cd {NAME}; vagrant ssh {NAME}".format(**arg))
+            os.system("cd {NAME}; vbox ssh {NAME}".format(**arg))
         else:
-            result = cm4.vagrant.vm.execute(arg.NAME, arg.COMMAND)
+            result = cm4.vbox.vm.execute(arg.NAME, arg.COMMAND)
             if result is not None:
                 lines = result.splitlines()[:-1]
                 for line in lines:

@@ -234,7 +234,7 @@ class Key(ListResource):
         :param cloud:
         """
 
-        key = cls.cm.find(kind="key", name=keyname, scope="first")
+        key = cls.cm.find_image(kind="key", name=keyname, scope="first")
         if key is None:
             Console.error("Key with the name {:} not found in database.".format(keyname))
             return
@@ -251,7 +251,7 @@ class Key(ListResource):
     def list(cls, category=None, live=False, output="table"):
         """this does not work only returns all ceys in the db"""
         (order, header) = CloudProvider(category).get_attributes("key")
-        d = cls.cm.find(kind="key", scope="all", output=output)
+        d = cls.cm.find_image(kind="key", scope="all", output=output)
         return Printer.write(d,
                              order=order,
                              header=header,
@@ -350,7 +350,7 @@ class Key(ListResource):
 
     @classmethod
     def all(cls, output="dict"):
-        return cls.cm.find(kind="key", scope="all", output=output)
+        return cls.cm.find_image(kind="key", scope="all", output=output)
 
     @classmethod
     def find(cls, name=None, output="dict"):
@@ -366,9 +366,9 @@ class Key(ListResource):
         :return: Query object of the search
         """
         if name is None:
-            return cls.cm.find(kind="key", output=output)
+            return cls.cm.find_image(kind="key", output=output)
         else:
-            return cls.cm.find(kind="key", name=name, output=output, scope="first")
+            return cls.cm.find_image(kind="key", name=name, output=output, scope="first")
 
     @classmethod
     def set_default(cls, name):

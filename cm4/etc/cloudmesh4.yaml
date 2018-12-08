@@ -125,7 +125,8 @@ cloudmesh:
         kind: TBD
         version: TBD
       default:
-        vagrant_path: '~/.cloudmesh/vagrant_workspace'
+        path: ~/.cloudmesh/vagrant
+        image: ubuntu/bionic/64
     vagrant_remote:
       cm:
         heading: Vagrant
@@ -139,7 +140,7 @@ cloudmesh:
         username: albert
         key: ~/.ssh/id_rsa.pub
       default:
-        vagrant_path: '~/.cloudmesh/vagrant_workspace'
+        path: '~/.cloudmesh/vagrant'
   data:
     default:
       db: local

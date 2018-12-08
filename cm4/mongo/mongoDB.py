@@ -141,9 +141,9 @@ class MongoDB(object):
         """
         collection = self.db[collection_name]
         if key is None:
-            documents = collection.find()
+            documents = collection.find_image()
         else:
-            documents = collection.find({key: value})
+            documents = collection.find_image({key: value})
         return documents
 
     def delete_document(self, collection_name, key, value):

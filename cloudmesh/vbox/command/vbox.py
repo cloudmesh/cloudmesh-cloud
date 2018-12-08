@@ -11,7 +11,8 @@ from cm4 import __version__
 from cloudmesh.shell.command import command
 from cloudmesh.shell.command import PluginCommand
 import cm4.vbox
-from cm4.vbox.search import search
+from cm4.vbox.provider import  VboxProvider
+
 
 # from cm4.mongo.MongoDBController import MongoDBController
 # from cm4.mongo.MongoDBController import MongoInstaller
@@ -76,11 +77,10 @@ class VboxCommand(PluginCommand):
 
           Usage:
             vbox version [--format=FORMAT]
-            vbox image search [--url=URL]
             vbox image list [--format=FORMAT]
-            vbox image find NAME
+            vbox image find KEYWORDS...
             vbox image add NAME
-            vbox image search
+            vbox image delete NAME
             vbox vm list [--format=FORMAT] [-v]
             vbox vm delete NAME
             vbox vm config NAME
@@ -110,16 +110,31 @@ class VboxCommand(PluginCommand):
             _LIST_PRINT(versions, arguments.format)
 
         elif arguments.image and arguments.list:
-            l = cm4.vbox.image.list()
+            l = VboxProvider.list_images()
+
             _LIST_PRINT(l, arguments.format, order=["name", "provider", "date"])
 
         elif arguments.image and arguments.add:
-            l = cm4.vbox.image.add(arguments.NAME)
-            print(l)
+            try:
+                l = VboxProvider.add_image(arguments.NAME)
+                print(l)
+            except Exception as e:
+                print (e)
+            return ""
 
-        elif arguments.image and arguments.find:
-            l = cm4.vbox.image.find(arguments.NAME)
-            print(l)
+        elif arguments.image and arguments.delete:
+            try:
+                l = VboxProvider.delete_image(arguments.NAME)
+                print(l)
+            except Exception as e:
+                print (e)
+            return ""
+
+
+        elif arguments.image and arguments.find_image:
+
+            VboxProvider.find_image(arguments.KEYWORDS)
+            return ""
 
         elif arguments.vm and arguments.list:
             l = cm4.vbox.vm.list()
@@ -130,7 +145,9 @@ class VboxCommand(PluginCommand):
         elif arguments.create and arguments.list:
 
             result = Shell.cat("{NAME}/Vagrantfile".format(**arguments))
-            print (result)
+            if result is not None:
+                print (result)
+            return ""
 
         elif arguments.create:
 

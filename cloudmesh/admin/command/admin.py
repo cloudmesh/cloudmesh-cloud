@@ -5,6 +5,18 @@ from cloudmesh.shell.command import PluginCommand
 from cm4.mongo.MongoDBController import MongoDBController
 from cm4.mongo.MongoDBController import MongoInstaller
 
+"""
+        ::
+
+            Usage:
+
+              cms admin mongo install [--brew] [--download=PATH]
+             
+
+              
+
+"""
+
 class AdminCommand(PluginCommand):
 
     # noinspection PyUnusedLocal
@@ -13,31 +25,32 @@ class AdminCommand(PluginCommand):
         """
         ::
 
-        Usage:
+          Usage:
+            admin mongo install [--brew] [--download=PATH]
+            admin mongo start
+            admin mongo stop
+            admin mongo backup FILENAME
+            admin mongo load FILENAME
 
-          cms admin mongo install [--brew] [--download=PATH]
-          cms admin mongo start
-          cms admin mongo stop
-          cms admin mongo backup FILENAME
-          cms admin mongo load FILENAME
-          cms admin mongo help
-
-        The admin command performs some adminsitrative functions, such as installing packages, software and services.
-        It also is used to start services and configure them.
+          The admin command performs some adminsitrative functions, such as installing packages, software and services.
+          It also is used to start services and configure them.
 
           Arguments:
-              FILENAME   a filename
-              PATH       the url to a file to be downloaded containing mongo
+            FILENAME  the filename for backups
+
           Options:
-              --brew     use brew on macOS to install mongo
+            -f      specify the file
+
+          Description:
+
+            TBD
 
         """
-        arguments.PATH = arguments['--download'] or None
 
-        # print(arguments)
+        # arguments.PATH = arguments['--download'] or None
+
 
         result = None
-
 
         if arguments.install:
 

@@ -85,7 +85,6 @@
 """
 from docopt import docopt
 from cm4.configuration.config import Config
-import deprecated.vagrant_basic
 import cm4.vcluster.VirtualCluster
 import cm4.batch.Batch
 import cm4.data.data
@@ -93,7 +92,7 @@ import cm4.vm.Vm
 import cm4.openstack.OpenstackCM
 import cm4
 import cm4.aws.CommandAWS
-from cm4.common.dotdict import dotdict
+from cloudmesh.common.dotdict import dotdict
 
 
 def process_arguments(arguments):
@@ -112,7 +111,7 @@ def process_arguments(arguments):
         cm4.aws.CommandAWS.process_arguments(arguments)
 
     elif arguments.get("vbox"):
-        deprecated.vagrant_basic.process_arguments(arguments)
+        raise NotImplementedError
 
     elif arguments.get("vcluster"):
         cm4.vcluster.VirtualCluster.process_arguments(arguments)

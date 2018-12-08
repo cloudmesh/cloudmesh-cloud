@@ -27,7 +27,8 @@ class Config(object):
 
         with open(self.config_path, "r") as stream:
             self.data = yaml.load(stream)
-        # self.data is loaded as nested OrderedDict, can not use set or get
+
+        # self.data is loaded as nested OrderedDict, can not use set or get methods directly
         if self.data == None:
             raise EnvironmentError("Failed to load configuration file cloudmesh4.yaml, please check the path and file locally")
 
@@ -65,7 +66,7 @@ class Config(object):
         :param value: value to be set.
         """
         self.data['cloudmesh']['default']['cloud'] = value
-        #print("Setting env parameter cloud to: " + self.data['cloudmesh']['default']['cloud'])
+        print("Setting env parameter cloud to: " + self.data['cloudmesh']['default']['cloud'])
 
         yaml_file = self.data.copy()
         with open(self.config_path, "w") as stream:

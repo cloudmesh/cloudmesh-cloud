@@ -137,7 +137,7 @@ class VboxCommand(PluginCommand):
             return ""
 
         elif arguments.vm and arguments.list:
-            l = cm4.vbox.vm.list()
+            l = VboxProvider().list()
             _LIST_PRINT(l,
                        arguments.format,
                        order=["name", "state", "id", "provider", "directory"])

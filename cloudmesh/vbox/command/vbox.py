@@ -1,10 +1,72 @@
-from __future__ import print_function
+from docopt import docopt
+
+import cm4
+from cloudmesh.common.dotdict import dotdict
+from pprint import pprint
+from cloudmesh.common.Printer import Printer
+from cloudmesh.common.Shell import Shell
+import sys
+import os
+from cm4 import __version__
 from cloudmesh.shell.command import command
 from cloudmesh.shell.command import PluginCommand
-import hostlist
-from termcolor import colored
-import os
-import logging
+import cm4.vbox
+
+from cm4.mongo.MongoDBController import MongoDBController
+from cm4.mongo.MongoDBController import MongoInstaller
+
+
+
+# pprint (vbox.vm.list())
+# vbox.vm.execute("w2", "uname")
+# pprint (vbox.image.list())
+
+#
+# TODO: make sure shell.execute works, maybe use shell=True
+# TODO: make python 3.7.1 transition
+# TODO: revisit Printer
+# TODO: get version from cm4.__Init__
+
+def defaults():
+    """
+    default values
+    :return: a number of default values for memory, image, and script
+    :rtype: dotdict
+    """
+    # TODO, read this from yaml file
+    d = dotdict()
+    d.memory = 1024
+    # d.image = "ubuntu/xenial64"
+    d.image = "ubuntu/trusty64"
+    d.port = 8080
+    d.script = None
+    return d
+
+
+#
+# TODO: this seems generally useful, we may want to put this in common
+#
+def _convert(lst, id="name"):
+    d = {}
+    for entry in lst:
+        d[entry[id]] = entry
+    return d
+
+
+def _LIST_PRINT(l, output, order=None):
+    if output in ["yaml", "dict", "json"]:
+        l = _convert(l)
+
+    result = Printer.write(l,
+                           order=order,
+                           output=output)
+
+    if output in ["table", "yaml", "json", "csv"]:
+        print(result)
+    else:
+        pprint(result)
+
+
 
 class VboxCommand(PluginCommand):
 
@@ -14,153 +76,153 @@ class VboxCommand(PluginCommand):
         """
         ::
 
-            Vagrant Manager. This command will be deprected and replaced with vm
-
-            Usage:
-              cms vbox create --vms=VMLIST [--box=BOX] [--template=TEMPLATE] [--output=OUTPUT] [--debug]
-              cms vbox start [--vms=VMLIST] [--debug]
-              cms vbox resume [--vms=VMLIST] [--debug]
-              cms vbox stop [--vms=VMLIST] [--debug]
-              cms vbox suspend [--vms=VMLIST] [--debug]
-              cms vbox destroy [-f] [--vms=VMLIST] [--debug]
-              cms vbox info NAME [--debug]
-              cms vbox ls [--debug]
-              cms vbox upload --from=FROM --to=TO [-r] [--vms=VMLIST] [--debug]
-              cms vbox download --from=FROM --to=TO [-r] [--vms=VMLIST] [--debug]
-              cms vbox ssh NAME [--debug]
-              cms vbox run command COMMAND [--vms=VMLIST] [--debug]
-              cms vbox run script SCRIPT [--data=PATH] [--vms=VMLIST] [--debug]
-
-              cm4 -h
-
-            Options:
-              -h --help     Show this screen.
-              --vm_list=<list_of_vms>  List of VMs separated by commas ex: node-1,node-2
-
-            Description:
-               put a description here
-
-            Example:
-               put an example here
+          Usage:
+            vbox version [--format=FORMAT]
+            vbox image list [--format=FORMAT]
+            vbox image find NAME
+            vbox image add NAME
+            vbox vm list [--format=FORMAT] [-v]
+            vbox vm delete NAME
+            vbox vm config NAME
+            vbox vm ip NAME [--all]
+            vbox create NAME ([--memory=MEMORY] [--image=IMAGE] [--script=SCRIPT] | list)
+            vbox vm boot NAME ([--memory=MEMORY] [--image=IMAGE] [--port=PORT] [--script=SCRIPT] | list)
+            vbox vm ssh NAME [-e COMMAND]
         """
 
-        debug = arguments["--debug"]
-        #    print(arguments)
-        if debug:
-            try:
-                columns, rows = os.get_terminal_size(0)
-            except OSError:
-                columns, rows = os.get_terminal_size(1)
+        arguments.format = arguments["--format"] or "table"
+        arguments.verbose = arguments["-v"]
+        arguments.all = arguments["--all"]
 
-            print(colored(columns * '=', "red"))
-            print(colored("Running in Debug Mode", "red"))
-            print(colored(columns * '=', "red"))
-            print(arguments)
-            print(colored(columns * '-', "red"))
-            logging.basicConfig(level=logging.DEBUG)
-        else:
-            logging.basicConfig(level=logging.INFO)
+        print (arguments)
 
-        if arguments.get("vbox"):
+        if arguments.version:
+            versions = {
+                "vbox": {
+                   "attribute": "Vagrant Version",
+                    "version": cm4.vbox.version(),
+                },
+                "cloudmesh-vbox": {
+                    "attribute":"cloudmesh vbox Version",
+                    "version": __version__
+                }
+            }
+            _LIST_PRINT(versions, arguments.format)
 
-            provider = Vagrant(debug=debug)
+        elif arguments.image and arguments.list:
+            l = cm4.vbox.image.list(verbose=arguments.verbose)
+            _LIST_PRINT(l, arguments.format, order=["name", "provider", "date"])
 
-            # parse argument
-            action = None
-            kwargs = dict()
-            args = []
-            if arguments.get("create"):
-                action = provider.create
-                kwargs = provider._update_by_key(kwargs, arguments, ['--image', '--template', '--count'],
-                                                 {'--output': 'output_path'})
-            elif arguments.get("start"):
-                action = provider.start
-            elif arguments.get("resume"):
-                action = provider.start
-            elif arguments.get("stop"):
-                action = provider.stop
-            elif arguments.get("suspend"):
-                action = provider.suspend
-            elif arguments.get("destroy"):
-                action = provider.destroy
-                kwargs = provider._update_by_key(kwargs, arguments, [], {'-f': 'force'})
-            elif arguments.get("status"):
-                action = provider.status
-                args.append(arguments.get("NAME"))
-            elif arguments.get("list"):
-                action = provider.list
-            elif arguments.get("download"):
-                action = provider.download
-                args.append(arguments.get("--from"))
-                args.append(arguments.get("--to"))
-                kwargs = provider._update_by_key(kwargs, arguments, key_dict={'-r': 'recursive'})
-            elif arguments.get("upload"):
-                action = provider.upload
-                args.append(arguments.get("--from"))
-                args.append(arguments.get("--to"))
-                kwargs = provider._update_by_key(kwargs, arguments, key_dict={'-r': 'recursive'})
-            elif arguments.get("ssh"):
-                action = provider.ssh
-                args.append(arguments.get("NAME"))
-            elif arguments.get("run") and not arguments.get("script"):
-                action = provider.run_command
-                args.append(arguments.get("COMMAND"))
-            elif arguments.get("script") and arguments.get("run"):
-                action = provider.run_script
-                args.append(arguments.get("SCRIPT"))
-                kwargs = provider._update_by_key(kwargs, arguments, ['--data'])
+        elif arguments.image and arguments.add:
+            l = cm4.vbox.image.add(arguments.NAME)
+            print(l)
 
-            # do the action
-            if action is not None:
+        elif arguments.image and arguments.find:
+            l = cm4.vbox.image.find(arguments.NAME)
+            print(l)
 
-                action_type = action.__name__
+        elif arguments.vm and arguments.list:
+            l = cm4.vbox.vm.list()
+            _LIST_PRINT(l,
+                       arguments.format,
+                       order=["name", "state", "id", "provider", "directory"])
 
-                # 1. aciton that can be immediately executed
-                if action_type in ['ssh', 'list', 'create']:
-                    action(*args, **kwargs)
-                    return
+        elif arguments.create and arguments.list:
 
-                # parse vms_hosts
-                if arguments.get("--vms"):
-                    vms_hosts = arguments.get("--vms")
-                    vms_hosts = hostlist.expand_hostlist(vms_hosts)
-                else:
-                    vms_hosts = []
+            result = Shell.cat("{NAME}/Vagrantfile".format(**arguments))
+            print (result)
 
-                # 2. action can executed with original vms_hosts
-                if action_type in ['start', 'resume', 'stop', 'suspend', 'destroy'] and not vms_hosts:
-                    action(*args, **kwargs)
-                    return
-                elif action_type in ['status'] and not vms_hosts:
-                    provider.list()
-                    return
+        elif arguments.create:
 
-                # impute hosts
-                if not vms_hosts:
-                    hosts = provider._get_host_names()
-                    if not hosts:
-                        raise EnvironmentError('There is no host exists in the current vbox project')
-                else:
-                    hosts = vms_hosts
+            d = defaults()
 
-                # 3. action work with imputed host
-                if action_type in ['start', 'resume', 'stop', 'suspend', 'destroy', 'status']:
-                    for node_name in hosts:
-                        action(node_name, *args, **kwargs)
-                else:
-                    # impute argument according to number of host
-                    if len(hosts) > 1:
-                        if action_type in ['run_command', 'run_script']:
-                            kwargs.update({'report_alone': False})
-                        if action_type in ['download']:
-                            kwargs.update({'prefix_dest': True})
+            arguments.memory = arguments["--memory"] or d.memory
+            arguments.image = arguments["--image"] or d.image
+            arguments.script = arguments["--script"] or d.script
 
-                        provider.run_parallel(hosts, action, args, kwargs)
+            cm4.vbox.vm.create(
+                name=arguments.NAME,
+                memory=arguments.memory,
+                image=arguments.image,
+                script=arguments.script)
 
+        elif arguments.config:
+
+            # arguments.NAME
+            d = cm4.vbox.vm.info(name=arguments.NAME)
+
+            result = Printer.attribute(d, output=arguments.format)
+
+            print (result)
+
+        elif arguments.ip:
+
+            data = []
+            result = cm4.vbox.vm.execute(arguments.NAME, "ifconfig")
+            if result is not None:
+                lines = result.splitlines()[:-1]
+                for line in lines:
+                    if "inet addr" in line:
+                        line = line.replace("inet addr", "ip")
+                        line = ' '.join(line.split())
+                        _adresses = line.split(" ")
+                        address = {}
+                        for element in _adresses:
+                            attribute, value = element.split(":")
+                            address[attribute] = value
+                        data.append(address)
+            if arguments.all:
+                d = {}
+                i = 0
+                for e in data:
+                    d[str(i)] = e
+                    i = i + 1
+                result = Printer.attribute(d, output=arguments.format)
+                print(result)
+            else:
+                for element in data:
+                    ip = element['ip']
+                    if  ip == "127.0.0.1" or ip.startswith("10."):
+                        pass
                     else:
-                        if action_type in ['run_command', 'run_script']:
-                            kwargs.update({'report_alone': True})
-                        if action_type in ['download']:
-                            kwargs.update({'prefix_dest': False})
-                        action(hosts[0], *args, **kwargs)
+                        print (element['ip'])
 
+
+        elif arguments.boot:
+
+            d = defaults()
+
+            arguments.memory = arguments["--memory"] or d.memory
+            arguments.image = arguments["--image"] or d.image
+            arguments.script = arguments["--script"] or d.script
+            arguments.port = arguments["--port"] or d.port
+
+            cm4.vbox.vm.boot(
+                name=arguments.NAME,
+                memory=arguments.memory,
+                image=arguments.image,
+                script=arguments.script,
+                port=arguments.port)
+
+        elif arguments.delete:
+
+            result = cm4.vbox.vm.delete(name=arguments.NAME)
+            print(result)
+
+        elif arguments.ssh:
+
+            if arguments.COMMAND is None:
+                os.system("cd {NAME}; vbox ssh {NAME}".format(**arguments))
+            else:
+                result = cm4.vbox.vm.execute(arguments.NAME, arguments.COMMAND)
+                if result is not None:
+                    lines = result.splitlines()[:-1]
+                    for line in lines:
+                        print (line)
+
+        else:
+
+            print ("use help")
+
+        result = ""
+        return result

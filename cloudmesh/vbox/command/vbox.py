@@ -137,10 +137,12 @@ class VboxCommand(PluginCommand):
             return ""
 
         elif arguments.vm and arguments.list:
-            l = VboxProvider().list()
+
+            l = VboxProvider().nodes()
             _LIST_PRINT(l,
                        arguments.format,
                        order=["name", "state", "id", "provider", "directory"])
+            return ""
 
         elif arguments.create and arguments.list:
 
@@ -176,7 +178,7 @@ class VboxCommand(PluginCommand):
         elif arguments.ip:
 
             data = []
-            result = VboxProvider.execute(arguments.NAME, "ifconfig")
+            result = VboxProvider().execute(arguments.NAME, "ifconfig")
             if result is not None:
                 lines = result.splitlines()[:-1]
                 for line in lines:
@@ -215,7 +217,7 @@ class VboxCommand(PluginCommand):
             arguments.script = arguments["--script"] or d.script
             arguments.port = arguments["--port"] or d.port
 
-            VboxProvider.boot(
+            node = VboxProvider().boot(
                 name=arguments.NAME,
                 memory=arguments.memory,
                 image=arguments.image,
@@ -224,7 +226,7 @@ class VboxCommand(PluginCommand):
 
         elif arguments.delete:
 
-            result = VboxProvider.delete(name=arguments.NAME)
+            result = VboxProvider().delete(name=arguments.NAME)
             print(result)
 
         elif arguments.ssh:
@@ -232,7 +234,7 @@ class VboxCommand(PluginCommand):
             if arguments.COMMAND is None:
                 os.system("cd {NAME}; vbox ssh {NAME}".format(**arguments))
             else:
-                result = VboxProvider.execute(arguments.NAME, arguments.COMMAND)
+                result = VboxProvider().execute(arguments.NAME, arguments.COMMAND)
                 if result is not None:
                     lines = result.splitlines()[:-1]
                     for line in lines:

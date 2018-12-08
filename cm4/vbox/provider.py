@@ -6,12 +6,17 @@ import os
 import textwrap
 from cm4.configuration.config import Config
 from pprint import pprint
+from cloudmesh.common.console import Console
 
 class VboxProvider (CloudManagerABC):
 
     #
     # if name is none, take last name from mongo, apply to last started vm
     #
+
+
+    def __init__(self):
+        pass
 
     def start(self, name):
         """
@@ -22,52 +27,9 @@ class VboxProvider (CloudManagerABC):
         """
         pass
 
+        #    def nodes(self, verbose=False):
 
-    def stop(self, name=None):
-        """
-        stops the node with the given name
-
-        :param name:
-        :return: The dict representing the node including updated status
-        """
-        pass
-
-
-    def info(self, name=None):
-        """
-        gets the information of a node with a given name
-
-        :param name:
-        :return: The dict representing the node including updated status
-        """
-        pass
-
-
-    def suspend(self, name=None):
-        """
-        suspends the node with the given name
-
-        :param name: the name of the node
-        :return: The dict representing the node
-        """
-        # TODO: find last name if name is None
-        result = Shell.execute("vagrant", ["suspend", name])
-        return result
-
-    def resume(self, name=None):
-        """
-        resume the named node
-
-        :param name: the name of the node
-        :return: the dict of the node
-        """
-        # TODO: find last name if name is None
-        result = Shell.execute("vagrant", ["resume", name])
-        return result
-
-
-
-    def list(self, verbose=False):
+    def nodes(self, verbose=False):
         """
         list all nodes id
 
@@ -97,6 +59,117 @@ class VboxProvider (CloudManagerABC):
             else:
                 lines.append(convert(line))
         return lines
+
+    def boot(self, **kwargs):
+
+        arg = dotdict(kwargs)
+        arg.cwd = kwargs.get("cwd", None)
+
+        # get the dir based on anme
+
+        print ("ARG")
+        pprint (arg)
+        vms = self.to_dict(self.nodes ())
+
+        print ("VMS", vms)
+
+        config = Config()
+        cloud = "vagrant" # TODO: must come through parameter or set cloud
+        arg.path = config.data["cloudmesh"]["cloud"]["vagrant"]["default"]["path"]
+        arg.directory = os.path.expanduser("{path}/{name}".format(**arg))
+
+        pprint(arg)
+
+        if arg.name in vms:
+            Console.error("vm {name} already booted".format(**arg), traceflag=False)
+            return None
+
+        else:
+            self.create(**kwargs)
+            Console.ok("{name} created".format(**arg))
+            Console.ok("{directory}/{name} booting ...".format(**arg))
+
+
+
+            result = Shell.execute("vagrant",
+                                   ["up", arg.name],
+                                   cwd=arg.directory)
+            Console.ok("{name} ok.".format(**arg))
+
+            return result
+
+
+    def execute(self, name, command, cwd=None):
+
+        vms = self.to_dict(self.nodes ())
+
+        arg = "ssh {} -c {}".format(name, command)
+        result = Shell.execute("vagrant", ["ssh", name, "-c", command], cwd=vms[name]["directory"])
+        return result
+
+
+    def to_dict(self, lst, id="name"):
+
+        d = {}
+        if lst is not None:
+            for entry in lst:
+                d[entry[id]] = entry
+        return d
+
+
+    def stop(self, name=None):
+        """
+        stops the node with the given name
+
+        :param name:
+        :return: The dict representing the node including updated status
+        """
+        pass
+
+
+    def info(self, name=None):
+        """
+        gets the information of a node with a given name
+
+        :param name:
+        :return: The dict representing the node including updated status
+        """
+        result = Shell.execute("vagrant",
+                               ["ssh-config"],
+                               cwd=name)
+        lines = result.split("\n")
+        data = {}
+        for line in lines:
+            attribute, value = line.strip().split(" ", 1)
+            if attribute == "IdentityFile":
+                value = value.replace('"','')
+
+            data[attribute] = value
+        return data
+
+
+    def suspend(self, name=None):
+        """
+        suspends the node with the given name
+
+        :param name: the name of the node
+        :return: The dict representing the node
+        """
+        # TODO: find last name if name is None
+        result = Shell.execute("vagrant", ["suspend", name])
+        return result
+
+    def resume(self, name=None):
+        """
+        resume the named node
+
+        :param name: the name of the node
+        :return: the dict of the node
+        """
+        # TODO: find last name if name is None
+        result = Shell.execute("vagrant", ["resume", name])
+        return result
+
 
 
 
@@ -187,24 +260,7 @@ class VboxProvider (CloudManagerABC):
             pass
 
         config = Config()
-
-        """
-        vagrant:
-              credentials:
-                local: True
-                hostname: localhost
-              cm:
-                heading: Vagrant
-                host: TBD
-                label: TBD
-                kind: TBD
-                version: TBD
-              default:
-                path: ~/.cloudmesh/vagrant
-                image: ubuntu/bionic/64
-        """
-
-        cloud = "vagrant" # must come through parameter or set cloud
+        cloud = "vagrant" # TODO must come through parameter or set cloud
         arg.path = config.data["cloudmesh"]["cloud"]["vagrant"]["default"]["path"]
         arg.directory = os.path.expanduser("{path}/{name}".format(**arg))
         arg.vagrantfile = "{directory}/Vagrantfile".format(**arg)

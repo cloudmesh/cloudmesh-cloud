@@ -83,11 +83,11 @@ class VboxCommand(PluginCommand):
             vbox image delete NAME
             vbox vm list [--format=FORMAT] [-v]
             vbox vm delete NAME
-            vbox vm config NAME
-            vbox vm ip NAME [--all]
-            vbox create NAME ([--memory=MEMORY] [--image=IMAGE] [--script=SCRIPT] | list)
-            vbox vm boot NAME ([--memory=MEMORY] [--image=IMAGE] [--port=PORT] [--script=SCRIPT] | list)
-            vbox vm ssh NAME [-e COMMAND]
+            vbox vm config [NAME]
+            vbox vm ip [NAME] [--all]
+            vbox vm create [NAME] ([--memory=MEMORY] [--image=IMAGE] [--script=SCRIPT] | list)
+            vbox vm boot [NAME] ([--memory=MEMORY] [--image=IMAGE] [--port=PORT] [--script=SCRIPT] | list)
+            vbox vm ssh [NAME] [-e COMMAND]
         """
 
         arguments.format = arguments["--format"] or "table"
@@ -157,7 +157,8 @@ class VboxCommand(PluginCommand):
             arguments.image = arguments["--image"] or d.image
             arguments.script = arguments["--script"] or d.script
 
-            cm4.vbox.vm.create(
+            server = VboxProvider()
+            server.create(
                 name=arguments.NAME,
                 memory=arguments.memory,
                 image=arguments.image,
@@ -166,7 +167,7 @@ class VboxCommand(PluginCommand):
         elif arguments.config:
 
             # arguments.NAME
-            d = cm4.vbox.vm.info(name=arguments.NAME)
+            d = VboxProvider().info(name=arguments.NAME)
 
             result = Printer.attribute(d, output=arguments.format)
 
@@ -175,7 +176,7 @@ class VboxCommand(PluginCommand):
         elif arguments.ip:
 
             data = []
-            result = cm4.vbox.vm.execute(arguments.NAME, "ifconfig")
+            result = VboxProvider.execute(arguments.NAME, "ifconfig")
             if result is not None:
                 lines = result.splitlines()[:-1]
                 for line in lines:
@@ -214,7 +215,7 @@ class VboxCommand(PluginCommand):
             arguments.script = arguments["--script"] or d.script
             arguments.port = arguments["--port"] or d.port
 
-            cm4.vbox.vm.boot(
+            VboxProvider.boot(
                 name=arguments.NAME,
                 memory=arguments.memory,
                 image=arguments.image,
@@ -223,7 +224,7 @@ class VboxCommand(PluginCommand):
 
         elif arguments.delete:
 
-            result = cm4.vbox.vm.delete(name=arguments.NAME)
+            result = VboxProvider.delete(name=arguments.NAME)
             print(result)
 
         elif arguments.ssh:
@@ -231,7 +232,7 @@ class VboxCommand(PluginCommand):
             if arguments.COMMAND is None:
                 os.system("cd {NAME}; vbox ssh {NAME}".format(**arguments))
             else:
-                result = cm4.vbox.vm.execute(arguments.NAME, arguments.COMMAND)
+                result = VboxProvider.execute(arguments.NAME, arguments.COMMAND)
                 if result is not None:
                     lines = result.splitlines()[:-1]
                     for line in lines:

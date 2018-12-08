@@ -8,59 +8,10 @@ from pprint import pprint
 
 class vm(object):
     @classmethod
-    def create(cls, **kwargs):
 
-        arg = dotdict(kwargs)
-
-        if not os.path.exists(arg.name):
-            os.makedirs(arg.name)
-
-        config = cls.vagrantfile(**kwargs)
-
-        with open('{name}/Vagrantfile'.format(**arg), 'w') as f:
-            f.write(config)
 
     @classmethod
-    def vagrantfile(cls, **kwargs):
 
-        arg = dotdict(kwargs)
-
-        provision = kwargs.get("script", None)
-
-        if provision is not None:
-            arg.provision = 'config.vm.provision "shell", inline: <<-SHELL\n'
-            for line in textwrap.dedent(provision).split("\n"):
-                if line.strip() != "":
-                    arg.provision += 12 * " " + "    " + line + "\n"
-            arg.provision += 12 * " " + "  " + "SHELL\n"
-        else:
-            arg.provision = ""
-
-
-        # not sure how I2 gets found TODO verify, comment bellow is not enough
-        # the 12 is derived from the indentation of Vagrant in the script
-        # TODO we may need not just port 80 to forward
-        script = textwrap.dedent("""
-            Vagrant.configure(2) do |config|
-
-              config.vm.define "{name}"
-              config.vm.hostname = "{name}"
-              config.vm.box = "{image}"
-              config.vm.box_check_update = true
-              config.vm.network "forwarded_port", guest: 80, host: {port}
-              config.vm.network "private_network", type: "dhcp"
-
-              # config.vm.network "public_network"
-              # config.vm.synced_folder "../data", "/vagrant_data"
-              config.vm.provider "virtualbox" do |vb|
-                 # vb.gui = true
-                 vb.memory = "{memory}"
-              end
-              {provision}
-            end
-        """.format(**arg))
-
-        return script
 
     @classmethod
     def info(cls, name=None):
@@ -79,13 +30,7 @@ class vm(object):
 
 
 
-    @classmethod
-    def delete(cls, name=None):
 
-        result = Shell.execute("vagrant",
-                               ["destroy", "-f", name],
-                               cwd=name)
-        return result
 
     @classmethod
     def boot(cls, **kwargs):
@@ -112,15 +57,6 @@ class vm(object):
 
             return result
 
-    @classmethod
-    def resume(cls, name):
-        result = Shell.execute("vagrant", ["resume", name])
-        return result
-
-    @classmethod
-    def suspend(cls, name):
-        result = Shell.execute("vagrant", ["suspend", name])
-        return result
 
     @classmethod
     def execute(cls, name, command, cwd=None):

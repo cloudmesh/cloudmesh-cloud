@@ -3,6 +3,9 @@ from cloudmesh.common.Shell import Shell
 import webbrowser
 from cloudmesh.common.dotdict import dotdict
 import os
+import textwrap
+from cm4.configuration.config import Config
+from pprint import pprint
 
 class VboxProvider (CloudManagerABC):
 
@@ -47,7 +50,21 @@ class VboxProvider (CloudManagerABC):
         :param name: the name of the node
         :return: The dict representing the node
         """
-        pass
+        # TODO: find last name if name is None
+        result = Shell.execute("vagrant", ["suspend", name])
+        return result
+
+    def resume(self, name=None):
+        """
+        resume the named node
+
+        :param name: the name of the node
+        :return: the dict of the node
+        """
+        # TODO: find last name if name is None
+        result = Shell.execute("vagrant", ["resume", name])
+        return result
+
 
 
     def list(self, verbose=False):
@@ -81,14 +98,6 @@ class VboxProvider (CloudManagerABC):
                 lines.append(convert(line))
         return lines
 
-    def resume(self, name=None):
-        """
-        resume the named node
-
-        :param name: the name of the node
-        :return: the dict of the node
-        """
-        pass
 
 
     def destroy(self, name=None):
@@ -99,8 +108,56 @@ class VboxProvider (CloudManagerABC):
         """
         pass
 
+    @classmethod
+    def delete(self, name=None):
+        # TODO: check
 
-    def create(self, name=None, image=None, size=None, timeout=360, **kwargs):
+        result = Shell.execute("vagrant",
+                               ["destroy", "-f", name],
+                               cwd=name)
+        return result
+
+    def vagrantfile(cls, **kwargs):
+
+        arg = dotdict(kwargs)
+
+        provision = kwargs.get("script", None)
+
+        if provision is not None:
+            arg.provision = 'config.vm.provision "shell", inline: <<-SHELL\n'
+            for line in textwrap.dedent(provision).split("\n"):
+                if line.strip() != "":
+                    arg.provision += 12 * " " + "    " + line + "\n"
+            arg.provision += 12 * " " + "  " + "SHELL\n"
+        else:
+            arg.provision = ""
+
+        # not sure how I2 gets found TODO verify, comment bellow is not enough
+        # the 12 is derived from the indentation of Vagrant in the script
+        # TODO we may need not just port 80 to forward
+        script = textwrap.dedent("""
+               Vagrant.configure(2) do |config|
+
+                 config.vm.define "{name}"
+                 config.vm.hostname = "{name}"
+                 config.vm.box = "{image}"
+                 config.vm.box_check_update = true
+                 config.vm.network "forwarded_port", guest: 80, host: {port}
+                 config.vm.network "private_network", type: "dhcp"
+
+                 # config.vm.network "public_network"
+                 # config.vm.synced_folder "../data", "/vagrant_data"
+                 config.vm.provider "virtualbox" do |vb|
+                    # vb.gui = true
+                    vb.memory = "{memory}"
+                 end
+                 {provision}
+               end
+           """.format(**arg))
+
+        return script
+
+    def create(self, name=None, image=None, size=None, timeout=360, port=80, **kwargs):
         """
         creates a named node
 
@@ -115,7 +172,52 @@ class VboxProvider (CloudManagerABC):
         """
         create one node
         """
-        pass
+        arg = dotdict(kwargs)
+        arg.port = port
+        if name is not None:
+            arg.name = name
+        else:
+            # TODO get new name
+            pass
+
+        if image is not None:
+            arg.image = image
+        else:
+            # TODO get image from yaml file
+            pass
+
+        config = Config()
+
+        """
+        vagrant:
+              credentials:
+                local: True
+                hostname: localhost
+              cm:
+                heading: Vagrant
+                host: TBD
+                label: TBD
+                kind: TBD
+                version: TBD
+              default:
+                path: ~/.cloudmesh/vagrant
+                image: ubuntu/bionic/64
+        """
+
+        cloud = "vagrant" # must come through parameter or set cloud
+        arg.path = config.data["cloudmesh"]["cloud"]["vagrant"]["default"]["path"]
+        arg.directory = os.path.expanduser("{path}/{name}".format(**arg))
+        arg.vagrantfile = "{directory}/Vagrantfile".format(**arg)
+
+        if not os.path.exists(arg.directory):
+            os.makedirs(arg.directory)
+
+        pprint(arg)
+
+        configuration = self.vagrantfile(**arg)
+
+        with open(arg.vagrantfile, 'w') as f:
+            f.write(configuration)
 
     def rename(self, name=None, destination=None):
         """

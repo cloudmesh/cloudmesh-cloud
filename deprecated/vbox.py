@@ -63,9 +63,11 @@ class VboxCommand(PluginCommand):
 
         if arguments.get("vbox"):
 
+            print ("vbox")
+            """
             provider = Vagrant(debug=debug)
 
-            # parse argument
+            # parse arguments
             action = None
             kwargs = dict()
             args = []
@@ -164,3 +166,4 @@ class VboxCommand(PluginCommand):
                             kwargs.update({'prefix_dest': False})
                         action(hosts[0], *args, **kwargs)
 
+            """

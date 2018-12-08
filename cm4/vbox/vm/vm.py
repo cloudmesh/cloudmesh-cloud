@@ -1,8 +1,8 @@
-from cm4.common.shell import Shell
-from cm4.common.dotdict import dotdict
+from cloudmesh.common.Shell import Shell
+from cloudmesh.common.dotdict import dotdict
 import textwrap
 import os
-from cm4.common.console import Console
+from cloudmesh.common.console import Console
 from pprint import pprint
 
 

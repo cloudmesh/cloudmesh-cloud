@@ -2,8 +2,11 @@ from cloudmesh.common.Shell import Shell
 from cloudmesh.common.dotdict import dotdict
 from cloudmesh.common.console import Console
 import os
+import webbrowser
+
 
 class image(object):
+
     @classmethod
     def list(cls):
         def convert(line):
@@ -17,7 +20,7 @@ class image(object):
             data.date = entry[2]
             return data
 
-        result = Shell.execute("vbox", ["box", "list"])
+        result = Shell.execute("vagrant", ["box", "list"])
 
         lines = []
         for line in result.split("\n"):
@@ -27,11 +30,17 @@ class image(object):
     @classmethod
     def add(cls, name):
 
-        result = Shell.execute("vbox", ["box", "add", name])
+        result = Shell.execute("vagrant", ["box", "add", name])
         return result
+
 
     @classmethod
     def find(cls, name):
-        Console.error("not yet implemented")
-        d = {'key': name}
-        os.system (u"open " + u"https://atlas.hashicorp.com/boxes/search?utf8=\&sort=\&provider=\&q={key}".format(**d))
+        d = {
+            'key': name,
+            'location': "https://app.vagrantup.com/boxes/search"
+        }
+        # cls.search(u"https://app.hashicorp.com/boxes/search?utf8=\&sort=\&provider=\&q={key}".format(**d))
+
+        link="{location}?utf8=%E2%9C%93&sort=downloads&provider=&q=\"{key}\"".format(**d)
+        webbrowser.open(link, new=2, autoraise=True)

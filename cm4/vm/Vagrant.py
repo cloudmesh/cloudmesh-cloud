@@ -64,7 +64,7 @@ class Vagrant(CloudManagerABC):
         :param name:
         :return:
         """
-        self.execute("vagrant ssh " + str(name))
+        self.execute("vbox ssh " + str(name))
 
     def create(self, hosts, image='ubuntu/xenial64', output_path=None, template=None):
         """
@@ -107,7 +107,7 @@ class Vagrant(CloudManagerABC):
         if name is None:
             # start all
             name = ""
-        self.execute("vagrant up " + str(name))
+        self.execute("vbox up " + str(name))
 
     def resume(self, name=None):
         """
@@ -121,7 +121,7 @@ class Vagrant(CloudManagerABC):
         if name is None:
             # start all
             name = ""
-        self.execute("vagrant up " + str(name))
+        self.execute("vbox up " + str(name))
 
     def stop(self, name=None):
         """
@@ -134,7 +134,7 @@ class Vagrant(CloudManagerABC):
         if name is None:
             # start all
             name = ""
-        self.execute("vagrant halt " + str(name))
+        self.execute("vbox halt " + str(name))
 
     def suspend(self, name=None):
         """
@@ -146,7 +146,7 @@ class Vagrant(CloudManagerABC):
         if name is None:
             # start all
             name = ""
-        self.execute("vagrant suspend " + str(name))
+        self.execute("vbox suspend " + str(name))
 
     def destroy(self, name=None, force=False):
         """
@@ -159,7 +159,7 @@ class Vagrant(CloudManagerABC):
         """
         if name is None:
             name = ""
-        self.execute("vagrant destroy {}{}".format('-f ' if force else '', name))
+        self.execute("vbox destroy {}{}".format('-f ' if force else '', name))
 
     def ls(self, name=None):
         """
@@ -172,7 +172,7 @@ class Vagrant(CloudManagerABC):
         if name is None:
             # start all
             name = ""
-        self.execute("vagrant status " + str(name))
+        self.execute("vbox status " + str(name))
 
     def info(self, name):
         """
@@ -180,7 +180,7 @@ class Vagrant(CloudManagerABC):
 
         :return:
         """
-        self.execute("vagrant status " + name)
+        self.execute("vbox status " + name)
 
     def download(self, name, source, dest, prefix_dest=False, recursive=False):
         """

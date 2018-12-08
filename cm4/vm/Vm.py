@@ -34,7 +34,7 @@ class Vmprovider(object):
             driver = Aws(self.config, cloud).driver
         elif os_config.get('cm').get('kind') == 'openstack':
             driver = Cmopenstack(self.config, cloud).driver
-        elif os_config.get('cm').get('kind') == 'vagrant':
+        elif os_config.get('cm').get('kind') == 'vbox':
             driver = None
             raise NotImplementedError
         return driver
@@ -46,7 +46,7 @@ class Vm(CloudManagerABC):
         self.mongo = MongoDB()
         self.config = Config().data["cloudmesh"]
         self.kind = self.config["cloud"][cloud]["kind"]
-        if self.kind in ["vagrant"]:
+        if self.kind in ["vbox"]:
             raise NotImplementedError
             self.provider = None # ?????
         else:
@@ -59,7 +59,7 @@ class Vm(CloudManagerABC):
         :param name:
         :return: VM document
         """
-        if self.kind in ["vagrant"]:
+        if self.kind in ["vbox"]:
             raise NotImplementedError
             self.provider
         else:

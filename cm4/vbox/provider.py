@@ -188,8 +188,6 @@ class VboxProvider (CloudManagerABC):
         return result
 
 
-
-
     def destroy(self, name=None):
         """
         Destroys the node

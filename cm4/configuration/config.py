@@ -66,7 +66,7 @@ class Config(object):
         :param value: value to be set.
         """
         self.data['cloudmesh']['default']['cloud'] = value
-        #print("Setting env parameter cloud to: " + self.data['cloudmesh']['default']['cloud'])
+        print("Setting env parameter cloud to: " + self.data['cloudmesh']['default']['cloud'])
 
         yaml_file = self.data.copy()
         with open(self.config_path, "w") as stream:

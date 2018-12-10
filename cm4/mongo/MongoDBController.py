@@ -8,6 +8,7 @@ from pprint import pprint
 from cm4.common.script import Script, SystemPath
 from cloudmesh.common.Shell import Shell, Brew
 
+
 class MongoInstaller(object):
 
     def __init__(self):
@@ -18,7 +19,6 @@ class MongoInstaller(object):
         self.config = Config()
         self.data = self.config.data["cloudmesh"]["data"]["mongo"]
         self.expanduser()
-
 
     def expanduser(self):
         for key in self.data:
@@ -39,9 +39,8 @@ class MongoInstaller(object):
         pprint(self.data)
 
         if not self.data["MONGO_AUTOINSTALL"]:
-            print ("Mongo auto install is off")
+            print("Mongo auto install is off")
             return ""
-
 
         if not os.path.isdir(path) and self.data["MONGO_AUTOINSTALL"]:
             print("MongoDB is not installed in {MONGO_PATH}".format(**self.data))
@@ -63,7 +62,6 @@ class MongoInstaller(object):
             else:
                 print("platform not found", platform)
 
-
     def linux(self):
         # TODO UNTESTED
         """
@@ -82,15 +80,13 @@ class MongoInstaller(object):
 
         # THIS IS BROKEN AS ITS A SUPBROCESS? '. ~/.bashrc'
 
-
     def darwin(self, brew=False):
         """
         install MongoDB in Darwin system (Mac)
         """
 
-
         if brew:
-            print ("mongo installer via brew")
+            print("mongo installer via brew")
             Brew.install("mongodb")
             path = Shell.which("mongod")
             SystemPath.add("{path}".format(path=path))
@@ -125,15 +121,12 @@ class MongoDBController(object):
         self.data = self.config.data["cloudmesh"]["data"]["mongo"]
         self.expanduser()
 
-        pprint (self.config.dict())
-
+        pprint(self.config.dict())
 
         # TODO: self.initial_mongo_config(False)
 
     def __str__(self):
         return yaml.dump(self.data, default_flow_style=False, indent=2)
-
-
 
     def expanduser(self):
         for key in self.data:
@@ -174,7 +167,7 @@ class MongoDBController(object):
             "net": {
                 "bindIp": self.host,
                 "port": self.port
-                },
+            },
             "storage": {
                 "dbPath": os.path.join(self.mongo_db_path, 'database'),
                 "journal": {"enabled": True}
@@ -263,12 +256,11 @@ class MongoDBController(object):
 
         script = "ps -ax | grep mongo | fgrep -v grep"
 
-
         ps_output = Script(script)
         print(ps_output)
 
-        #client = MongoClient(self.host, self.port)
-        #pprint(client.server_info())
+        # client = MongoClient(self.host, self.port)
+        # pprint(client.server_info())
 
 
 def main():
@@ -279,7 +271,7 @@ def main():
     # test.update_auth()
     # test.run_mongodb()
     # test.shutdown_mongodb()
-    #test.status()
+    # test.status()
     # test.dump('~/.cloudmesh/demo/version1/cm/cm4/mongo/MongoDB/backup')
     # test.restore ('~/.coudmesh/demo/version1/cm/cm4/mongo/MongoDB/backup')
 

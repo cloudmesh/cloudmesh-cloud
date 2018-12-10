@@ -8,7 +8,6 @@ from cm4.vm.Cloud import Cloud
 from cm4.abstractclass.CloudManagerABC import CloudManagerABC
 
 
-
 class Azure(Cloud, CloudManagerABC):
 
     def __init__(self, config, cloud):
@@ -116,9 +115,6 @@ class Azure(Cloud, CloudManagerABC):
         :return: the dict with the new name
         """
         pass
-
-
-
 
 
 class AzureDriver(AzureNodeDriver, NodeDriver):

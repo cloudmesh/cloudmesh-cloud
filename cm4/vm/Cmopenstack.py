@@ -5,6 +5,6 @@ from cm4.vm.Cloud import Cloud
 class Cmopenstack(Cloud):
 
     def __init__(self, config, cloud):
-        #print(cloud)
+        # print(cloud)
         self.driver = OpenstackCM(cloud)  # cloud is chameleon
         self.config = config

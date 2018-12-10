@@ -415,7 +415,7 @@ to allow users to customize the flavors of their running instances and services 
 Currently, major providers usually charge users according to their usage. It might be 
 finacially wise sometimes to shift between different service size to reduce unnecessary cost.
 VmRefactor is designed based on this idea to help users to achieve higher cost efficiency. VmRefactor can also help users navigate 
-thier management tasks especially when they have many different tasks on the run.
+thier management tasks especially when they have many different tasks on the run=.
  
  ## Flask Rest API (Sachith)
  

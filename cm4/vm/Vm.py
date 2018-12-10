@@ -34,7 +34,7 @@ class Vmprovider(object):
             driver = Aws(self.config, cloud).driver
         elif os_config.get('cm').get('kind') == 'openstack':
             driver = Cmopenstack(self.config, cloud).driver
-        elif os_config.get('cm').get('kind') == 'vagrant':
+        elif os_config.get('cm').get('kind') == 'vbox':
             driver = None
             raise NotImplementedError
         return driver
@@ -45,10 +45,10 @@ class Vm(CloudManagerABC):
     def __init__(self, cloud):
         self.mongo = MongoDB()
         self.config = Config().data["cloudmesh"]
-        self.kind = self.config["cloud"][cloud]["kind"]
-        if self.kind in ["vagrant"]:
+        self.kind = self.config["cloud"][cloud]["cm"]["kind"]   # add cm according cloudmesh.yaml convention
+        if self.kind in ["vbox"]:
             raise NotImplementedError
-            self.provider = None # ?????
+            self.provider = None    # ?????
         else:
             self.provider = Vmprovider().get_provider(cloud)
 
@@ -59,7 +59,7 @@ class Vm(CloudManagerABC):
         :param name:
         :return: VM document
         """
-        if self.kind in ["vagrant"]:
+        if self.kind in ["vbox"]:
             raise NotImplementedError
             self.provider
         else:
@@ -252,7 +252,7 @@ def process_arguments(arguments):
         print("vm processing arguments")
         pp.pprint(arguments)
     config = Config()
-    pprint(config.data)
+    #pprint(config.data)
     default_cloud = config.data["cloudmesh"]["default"]["cloud"]
 
     vm = Vm(default_cloud)
@@ -282,14 +282,14 @@ def process_arguments(arguments):
 
     elif arguments.get("ssh"):
         # TODO
-        pass
+        raise NotImplementedError("cm4 vm ssh command has not yet been implemented")
 
     elif arguments.get("run"):
         # TODO
-        pass
+        raise NotImplementedError("cm4 vm run command has not yet been implemented")
 
     elif arguments.get("script"):
         # TODO
-        pass
+        raise NotImplementedError("cm4 vm script command has not yet been implemented")
 
     return result

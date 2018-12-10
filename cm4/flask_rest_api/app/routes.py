@@ -16,7 +16,7 @@ def get_all_vms():
     Returns all the VM information.
     :return: a json with all the vm information
     """
-    vms = cloud.find()
+    vms = cloud.find_image()
     if not vms:
         return jsonify({'message': "There are no VMs in the system"}), 401
 
@@ -34,7 +34,7 @@ def get_stopped_vms():
     Returns all the stopped VM information.
     :return: a json with all the stopped vm information
     """
-    vms = cloud.find({'state': 'stopped'})
+    vms = cloud.find_image({'state': 'stopped'})
     if not vms:
         return jsonify({'message': "There are no stopped VMs in the system"}), 401
 

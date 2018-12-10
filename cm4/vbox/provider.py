@@ -8,7 +8,8 @@ from cm4.configuration.config import Config
 from pprint import pprint
 from cloudmesh.common.console import Console
 
-class VboxProvider (CloudManagerABC):
+
+class VboxProvider(CloudManagerABC):
 
     #
     # if name is none, take last name from mongo, apply to last started vm
@@ -66,14 +67,14 @@ class VboxProvider (CloudManagerABC):
 
         # get the dir based on anme
 
-        print ("ARG")
-        pprint (arg)
-        vms = self.to_dict(self.nodes ())
+        print("ARG")
+        pprint(arg)
+        vms = self.to_dict(self.nodes())
 
-        print ("VMS", vms)
+        print("VMS", vms)
 
         config = Config()
-        cloud = "vagrant" # TODO: must come through parameter or set cloud
+        cloud = "vagrant"  # TODO: must come through parameter or set cloud
         arg.path = config.data["cloudmesh"]["cloud"]["vagrant"]["default"]["path"]
         arg.directory = os.path.expanduser("{path}/{name}".format(**arg))
 
@@ -88,8 +89,6 @@ class VboxProvider (CloudManagerABC):
             Console.ok("{name} created".format(**arg))
             Console.ok("{directory}/{name} booting ...".format(**arg))
 
-
-
             result = Shell.execute("vagrant",
                                    ["up", arg.name],
                                    cwd=arg.directory)
@@ -97,24 +96,22 @@ class VboxProvider (CloudManagerABC):
 
             return result
 
-
     def execute(self, name, command, cwd=None):
 
         arg = dotdict()
-        arg.cwd=cwd
-        arg.command=command
-        arg.name=name
+        arg.cwd = cwd
+        arg.command = command
+        arg.name = name
         config = Config()
         cloud = "vagrant"  # TODO: must come through parameter or set cloud
         arg.path = config.data["cloudmesh"]["cloud"]["vagrant"]["default"]["path"]
         arg.directory = os.path.expanduser("{path}/{name}".format(**arg))
 
-        vms = self.to_dict(self.nodes ())
+        vms = self.to_dict(self.nodes())
 
         arg = "ssh {} -c {}".format(name, command)
         result = Shell.execute("vagrant", ["ssh", name, "-c", command], cwd=arg.directory)
         return result
-
 
     def to_dict(self, lst, id="name"):
 
@@ -124,7 +121,6 @@ class VboxProvider (CloudManagerABC):
                 d[entry[id]] = entry
         return d
 
-
     def stop(self, name=None):
         """
         stops the node with the given name
@@ -133,7 +129,6 @@ class VboxProvider (CloudManagerABC):
         :return: The dict representing the node including updated status
         """
         pass
-
 
     def info(self, name=None):
         """
@@ -159,11 +154,10 @@ class VboxProvider (CloudManagerABC):
         for line in lines:
             attribute, value = line.strip().split(" ", 1)
             if attribute == "IdentityFile":
-                value = value.replace('"','')
+                value = value.replace('"', '')
 
             data[attribute] = value
         return data
-
 
     def suspend(self, name=None):
         """
@@ -186,7 +180,6 @@ class VboxProvider (CloudManagerABC):
         # TODO: find last name if name is None
         result = Shell.execute("vagrant", ["resume", name])
         return result
-
 
     def destroy(self, name=None):
         """
@@ -252,10 +245,48 @@ class VboxProvider (CloudManagerABC):
 
         return script
 
+
+    def _get_specification(self, cloud=None, name=None, port=None, image=None, **kwargs):
+        arg = dotdict(kwargs)
+        arg.port = port
+        config = Config()
+        pprint (config.data)
+
+
+        if cloud is None:
+            #
+            # TOD read default cloud
+            #
+            cloud = "vagrant"  # TODO must come through parameter or set cloud
+
+
+        spec = config.data["cloudmesh"]["cloud"][cloud]["vagrant"]
+        pprint(spec)
+        default = config.data["cloudmesh"]["cloud"][cloud]["vagrant"]["default"]
+        pprint(default)
+
+        if name is not None:
+            arg.name = name
+        else:
+            # TODO get new name
+            pass
+
+        if image is not None:
+            arg.image = image
+        else:
+            arg.image = default["image"]
+            pass
+
+        arg.path = default["path"]
+        arg.directory = os.path.expanduser("{path}/{name}".format(**arg))
+        arg.vagrantfile = "{directory}/Vagrantfile".format(**arg)
+        return arg
+
     def create(self, name=None, image=None, size=None, timeout=360, port=80, **kwargs):
         """
         creates a named node
 
+        :param port:
         :param name: the name of the node
         :param image: the image used
         :param size: the size of the image
@@ -267,35 +298,20 @@ class VboxProvider (CloudManagerABC):
         """
         create one node
         """
-        arg = dotdict(kwargs)
-        arg.port = port
-        if name is not None:
-            arg.name = name
-        else:
-            # TODO get new name
-            pass
-
-        if image is not None:
-            arg.image = image
-        else:
-            # TODO get image from yaml file
-            pass
-
-        config = Config()
-        cloud = "vagrant" # TODO must come through parameter or set cloud
-        arg.path = config.data["cloudmesh"]["cloud"]["vagrant"]["default"]["path"]
-        arg.directory = os.path.expanduser("{path}/{name}".format(**arg))
-        arg.vagrantfile = "{directory}/Vagrantfile".format(**arg)
+        arg = self._get_specification(kwargs)
 
         if not os.path.exists(arg.directory):
             os.makedirs(arg.directory)
 
-        pprint(arg)
 
         configuration = self.vagrantfile(**arg)
 
         with open(arg.vagrantfile, 'w') as f:
             f.write(configuration)
+
+        pprint(arg)
+
+        return arg
 
     def rename(self, name=None, destination=None):
         """
@@ -311,7 +327,6 @@ class VboxProvider (CloudManagerABC):
     #
     # Additional methods
     #
-
 
     @classmethod
     def find_image(cls, keywords):
@@ -358,6 +373,7 @@ class VboxProvider (CloudManagerABC):
                 print(e)
 
             return result
+
     @classmethod
     def list_images(cls):
         def convert(line):

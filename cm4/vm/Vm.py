@@ -1,5 +1,5 @@
 import getpass
-from pprint  import pprint
+from pprint import pprint
 from cm4.vm.Aws import Aws
 from cm4.vm.Azure import Azure
 from cm4.vm.Cmopenstack import Cmopenstack
@@ -10,6 +10,7 @@ from cm4.vm.thread import Thread
 from cm4.configuration.counter import Counter
 from cm4.abstractclass.CloudManagerABC import CloudManagerABC
 import cm4
+
 
 class Vmprovider(object):
 
@@ -45,13 +46,12 @@ class Vm(CloudManagerABC):
     def __init__(self, cloud):
         self.mongo = MongoDB()
         self.config = Config().data["cloudmesh"]
-        self.kind = self.config["cloud"][cloud]["cm"]["kind"]   # add cm according cloudmesh.yaml convention
+        self.kind = self.config["cloud"][cloud]["cm"]["kind"]  # add cm according cloudmesh.yaml convention
         if self.kind in ["vbox"]:
             raise NotImplementedError
-            self.provider = None    # ?????
+            self.provider = None  # ?????
         else:
             self.provider = Vmprovider().get_provider(cloud)
-
 
     def start(self, name):
         """
@@ -65,7 +65,7 @@ class Vm(CloudManagerABC):
         else:
             info = self.info(name)
             if info.state != 'running':
-                #self.provider.ex_start_node(info)
+                # self.provider.ex_start_node(info)
 
                 parameters = {
                     "name": "node1"
@@ -252,7 +252,7 @@ def process_arguments(arguments):
         print("vm processing arguments")
         pp.pprint(arguments)
     config = Config()
-    #pprint(config.data)
+    # pprint(config.data)
     default_cloud = config.data["cloudmesh"]["default"]["cloud"]
 
     vm = Vm(default_cloud)

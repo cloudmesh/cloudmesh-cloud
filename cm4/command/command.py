@@ -9,6 +9,7 @@
       cm4 admin mongo stop
       cm4 admin mongo backup FILENAME
       cm4 admin mongo load FILENAME
+      cm4 admin mongo security
       cm4 admin rest status
       cm4 admin rest start
       cm4 admin rest stop
@@ -100,7 +101,7 @@ import cm4.openstack.OpenstackCM
 import cm4
 import cm4.aws.CommandAWS
 from cm4.common.dotdict import dotdict
-
+from cm4.mongo.MongoDBController import MongoDBController
 
 def MongoImporter():
     import cm4.mongo.MongoDBController

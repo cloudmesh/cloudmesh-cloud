@@ -32,13 +32,18 @@ Vagrant with cm4.
 ### The Preparation for installing `cm4` (David)
 
 * requriements.txt : the required packages
-* setup.py : ?? 
+* setup.py
 * cm4/command/command.py : the python class defines the interface for the command-line `cm4` 
 
-:o: update the command that cm4 can really run.
-
-```
-
+``` commandline
+$ cm4
+Usage:
+      cm4 admin mongo install [--brew] [--download=PATH]
+      cm4 admin mongo status
+      cm4 admin mongo start
+      cm4 admin mongo stop
+      cm4 admin mongo backup FILENAME
+      ...
 ```
 
 ### The Configuration files and some relative function classes (Sachith)
@@ -138,7 +143,7 @@ There are three types of documents in MongoDB:
 * Node's experiment status in `status` collection.
   The document in `status` collection is going to save the information of experiments executed in a node.
  
-  ```
+  ```json
   '_id': node_id,
   'status': status,
   'currentJob': job_id,
@@ -147,7 +152,7 @@ There are three types of documents in MongoDB:
 
 * Experiment information in `job` collection.
 
-  ```
+  ```json
   '_id' : experiment_id
   'name': name,
   'status': status,
@@ -159,11 +164,11 @@ There are three types of documents in MongoDB:
 
 * Group information in `group` collection.
 
-  ```
-  'cloud': cloud,
+  ```json
+  {'cloud': cloud,
   'name': name,
   'size': size,
-  'vms': list_vms
+  'vms': list_vms}
   ```
 
 #### Security in MongoDB
@@ -297,7 +302,7 @@ PING 52.39.13.229 (52.39.13.229): 56 data bytes
 
 then **MongoDB** will have below record in `cloud` collection.
 
-```json
+```text
 { "_id" : ObjectId("5c09c65f56c5a939942a9911"), 
 "id" : "i-01ca62f33728f4931", 
 "name" : "base-cloudmesh-yuluo-4", 

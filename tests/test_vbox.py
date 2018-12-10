@@ -38,10 +38,10 @@ class Test_vagrant:
 
     def test_03_image_boot(self):
         HEADING(myself())
-        r = subprocess.check_output("cms vbox vm create test_bionic", shell=True).decode("utf-8")
+        r = subprocess.check_output("cms vbox vm create test-bionic", shell=True).decode("utf-8")
         self.rprint (r)
         assert "ubuntu/bionic64" in r
 
-        r = subprocess.check_output("cms vbox vm boot test_bionic", shell=True).decode("utf-8")
+        r = subprocess.check_output("cms vbox vm boot test-bionic", shell=True).decode("utf-8")
         self.rprint (r)
         assert "ubuntu/bionic64" in r

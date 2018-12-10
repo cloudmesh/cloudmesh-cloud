@@ -8,7 +8,7 @@ import os.path
 
 from six import itervalues
 
-from cm4.common.shell import Subprocess
+from cloudmesh.common.Shell import Subprocess
 from cm4.common.util import tempdir
 
 

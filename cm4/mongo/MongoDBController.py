@@ -1,13 +1,10 @@
 import os
-import subprocess
 import yaml
 from sys import platform
-from pymongo import MongoClient
 from cm4.configuration.config import Config
 from pprint import pprint
-from cm4.common.shell import Script
-from cm4.common.shell import Shell, Brew
-from cm4.common.shell import SystemPath
+from cm4.common.script import Script, SystemPath
+from cloudmesh.common.Shell import Shell, Brew
 
 
 class MongoInstaller(object):
@@ -221,7 +218,6 @@ class MongoDBController(object):
         ps_output = Script(script)
         print(ps_output)
 
-
 def process_arguments(arguments):
     """
     Process command line arguments to execute VM actions.
@@ -274,7 +270,6 @@ def process_arguments(arguments):
         mongo = MongoDBController()
         r = mongo.status()
         return r
-
 
     return result
 

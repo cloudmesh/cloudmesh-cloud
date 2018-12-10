@@ -19,5 +19,5 @@ def vm_list():
         return 'No node is found on {}!\n'.format(cloud) if not rep else \
                jsonify(**{'records': [db.var_to_json(x.__dict__) for x in rep]})
     else:
-        return jsonify(**{'records': [db.var_to_json(x) for x in db.db['cloud'].find()]})
+        return jsonify(**{'records': [db.var_to_json(x) for x in db.db['cloud'].find_image()]})
 

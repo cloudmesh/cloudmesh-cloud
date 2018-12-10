@@ -1,6 +1,8 @@
 from __future__ import print_function
 from cloudmesh.shell.command import command
 from cloudmesh.shell.command import PluginCommand
+
+
 # from cloudmesh.spark.api.manager import Manager
 
 class SparkCommand(PluginCommand):
@@ -28,8 +30,7 @@ class SparkCommand(PluginCommand):
 
         print(arguments)
 
-        #m = Manager()
-
+        # m = Manager()
 
         if arguments.FILE:
             print("option a")
@@ -38,6 +39,3 @@ class SparkCommand(PluginCommand):
         elif arguments.list:
             print("option b")
         #    m.list("just calling list without parameter")
-
-
-

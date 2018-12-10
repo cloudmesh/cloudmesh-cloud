@@ -1,6 +1,8 @@
 from __future__ import print_function
 from cloudmesh.shell.command import command
 from cloudmesh.shell.command import PluginCommand
+
+
 # from cloudmesh.batch.api.manager import Manager
 
 class BatchCommand(PluginCommand):
@@ -28,8 +30,7 @@ class BatchCommand(PluginCommand):
 
         print(arguments)
 
-        #m = Manager()
-
+        # m = Manager()
 
         if arguments.FILE:
             print("option a")
@@ -38,6 +39,3 @@ class BatchCommand(PluginCommand):
         elif arguments.list:
             print("option b")
         #    m.list("just calling list without parameter")
-
-
-

@@ -13,16 +13,7 @@
       cm4 admin rest status
       cm4 admin rest start
       cm4 admin rest stop
-      cm4 admin status
-      cm4 vagrant create --count=VMNUMBER [--debug]
-      cm4 vagrant start [--vms=VMLIST] [--debug]
-      cm4 vagrant stop [--vms=VMLIST] [--debug]
-      cm4 vagrant destroy [--vms=VMLIST] [--debug]
-      cm4 vagrant status [--vms=VMLIST]
-      cm4 vagrant list
-      cm4 vagrant ssh NAME
-      cm4 vagrant run COMMAND  [--vms=VMLIST]
-      cm4 vagrant script run SCRIPT [--vms=VMLIST]
+      cm4 admin status]
       cm4 data add FILE
       cm4 data add SERVICE FILE
       cm4 data get FILE
@@ -92,7 +83,6 @@
 """
 from docopt import docopt
 from cm4.configuration.config import Config
-import cm4.vagrant.vagrant_basic
 import cm4.vcluster.VirtualCluster
 import cm4.batch.Batch
 import cm4.data.data
@@ -100,11 +90,10 @@ import cm4.vm.Vm
 import cm4.openstack.OpenstackCM
 import cm4
 import cm4.aws.CommandAWS
-from cm4.common.dotdict import dotdict
 from cm4.mongo.MongoDBController import MongoDBController
-
-def MongoImporter():
-    import cm4.mongo.MongoDBController
+from cloudmesh.common.dotdict import dotdict
+from pprint import pprint
+from cloudmesh.common.dotdict import dotdict
 
 
 def process_arguments(arguments):
@@ -123,13 +112,10 @@ def process_arguments(arguments):
 
     elif arguments.get("vm"):
         result = cm4.vm.Vm.process_arguments(arguments)
-        print(result)
+        pprint(result)
 
     elif arguments.get('aws'):
         cm4.aws.CommandAWS.process_arguments(arguments)
-
-    elif arguments.get("vagrant"):
-        cm4.vagrant.vagrant_basic.process_arguments(arguments)
 
     elif arguments.get("vcluster"):
         cm4.vcluster.VirtualCluster.process_arguments(arguments)

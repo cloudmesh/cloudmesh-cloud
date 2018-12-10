@@ -209,6 +209,9 @@ class OpenstackCM(CloudManagerABC):
                     created_date=node.created_at.strftime("%Y-%m-%d %H:%M:%S"),
                     extra=node.extra)
 
+    def list(self):
+        return self.driver.list_nodes()
+
     def create(self, name, image=None, size=None, timeout=300, **kwargs):
         # get defualt if needed
         image_name = image if image else self.os_config.get('default').get('image')
@@ -288,6 +291,7 @@ class OpenstackCM(CloudManagerABC):
         """
         node = self._get_node_by_id(node_id)
         return self.driver.reboot_node(node)
+
 
     def destroy(self, node_id):
         """

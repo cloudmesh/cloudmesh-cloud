@@ -114,6 +114,32 @@ cloudmesh:
       default:
         flavor: m1.small
         image: Ubuntu 14.04
+    vagrant:
+      credentials:
+        local: True
+        hostname: localhost
+      cm:
+        heading: Vagrant
+        host: TBD
+        label: TBD
+        kind: TBD
+        version: TBD
+      default:
+        vagrant_path: '~/.cloudmesh/vagrant_workspace'
+    vagrant_remote:
+      cm:
+        heading: Vagrant
+        host: TBD
+        label: TBD
+        kind: TBD
+        version: TBD
+      credentials:
+        local: False
+        hostname: 127.0.0.1
+        username: albert
+        key: ~/.ssh/id_rsa.pub
+      default:
+        vagrant_path: '~/.cloudmesh/vagrant_workspace'
   data:
     default:
       db: local

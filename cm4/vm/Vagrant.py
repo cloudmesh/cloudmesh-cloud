@@ -4,11 +4,22 @@ import re
 from cm4.abstractclass.CloudManagerABC import CloudManagerABC
 
 
+
+def execute(cmd, data, local=True):
+    if local:
+        print ("run it locally") #subprocess
+    else:
+        command = "ssh {username}@{hostname} \"{cmd}\"".format(**data, cmd=cmd)
+        execute(command, data, local=True)
+
+
 class Vagrant(CloudManagerABC):
     """
     Vagrant Manager.
     Provides the capabilities to manage a Vagrant Cluster of nodes via the script.
     """
+
+
 
     def __init__(self, debug=False):
         """

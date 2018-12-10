@@ -13,7 +13,6 @@ Cloudmesh Version 4
    configuration
    vmproviders
    vagrant
-   vagrant-other
    CM4README
    README
    aws

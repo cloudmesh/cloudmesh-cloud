@@ -1,134 +1,133 @@
 import os
 import time
 from libcloud.compute.base import NodeAuthSSHKey
-from libcloud.compute.drivers.azure_arm import AzureNetwork, AzureSubnet, AzureIPAddress, AzureNodeDriver, Node
 from libcloud.compute.base import NodeDriver
-from cm4.configuration.config import Config
+from libcloud.compute.drivers.azure_arm import AzureNetwork, AzureSubnet, AzureNodeDriver, Node
 from cm4.vm.Cloud import Cloud
 from cm4.abstractclass.CloudManagerABC import CloudManagerABC
 
 
-class Azure(Cloud, CloudManagerABC):
+class AzureProvider(CloudManagerABC, Cloud):
 
-    def __init__(self, config, cloud):
-        os_config = config["cloud"][cloud]
-
-        default = os_config.get('default')
-        credentials = os_config.get('credentials')
-
+    def __init__(self, config):
+        self.credentials = config["cloud"]["azure"]["credentials"]
+        self.default = config["cloud"]["azure"]["default"]
         self.driver = AzureDriver(
-            tenant_id=credentials['AZURE_TENANT_ID'],
-            subscription_id=credentials['AZURE_SUBSCRIPTION_ID'],
-            key=credentials['AZURE_APPLICATION_ID'],
-            secret=credentials['AZURE_SECRET_KEY'],
-            region=default['region']
+            tenant_id=self.credentials['AZURE_TENANT_ID'],
+            subscription_id=self.credentials['AZURE_SUBSCRIPTION_ID'],
+            key=self.credentials['AZURE_APPLICATION_ID'],
+            secret=self.credentials['AZURE_SECRET_KEY'],
+            region=self.default['region'],
+            cm_config=config,
+            cm_default=self.default
         )
-
-    #
-    # implement cloudmenager ABC
-    #
 
     def start(self, name):
         """
-        start a node
-
-        :param name: the unique node name
-        :return:  The dict representing the node
-        """
-        pass
-
-    def stop(self, name):
-        """
-        stops the node with the given name
 
         :param name:
-        :return: The dict representing the node including updated status
+        :return:
         """
-        pass
+        self.driver.ex_start_node(self.driver._get_node(name))
 
-    def info(self, name):
+    def stop(self, name=None):
+        """
+        Stop a running node. Deallocate resources. VM status will
+        be `stopped`.
+        :param name:
+        """
+        self.driver.ex_stop_node(self.driver._get_node(name))
+
+    def info(self, name=None):
         """
         gets the information of a node with a given name
 
         :param name:
         :return: The dict representing the node including updated status
         """
-        pass
+        return self.driver._get_node(name)
 
-    def suspend(self, name):
+    def suspend(self, name=None):
         """
         suspends the node with the given name
 
         :param name: the name of the node
         :return: The dict representing the node
         """
-        pass
+        self.driver.ex_stop_node(self.driver._get_node(name), deallocate=False)
 
-    def ls(self):
+    def nodes(self):
         """
         list all nodes id
 
         :return: an array of dicts representing the nodes
         """
-        pass
+        return self.driver.list_nodes()
 
-    def resume(self, name):
+    def resume(self, name=None):
         """
         resume the named node
 
         :param name: the name of the node
         :return: the dict of the node
         """
-        pass
+        self.start(name)
 
-    def destroy(self, name):
+    def destroy(self, name=None):
         """
         Destroys the node
         :param name: the name of the node
         :return: the dict of the node
         """
-        pass
+        self.driver.destroy_node(self.driver._get_node(name))
 
-    def create(self, name, image=None, size=None, timeout=360, **kwargs):
+    def create(self, name=None, image=None, size=None, timeout=360, **kwargs):
         """
         creates a named node
-
-        :param name: the name of the node
-        :param image: the image used
-        :param size: the size of the image
-        :param timeout: a timeout in seconds that is invoked in case the image does not boot.
-               The default is set to 3 minutes.
-        :param kwargs: additional arguments passed along at time of boot
         :return:
         """
         """
         create one node
         """
-        pass
+        return self.driver.create_node(name)
 
-    def rename(self, name, new_name):
+    def rename(self, name=None, destination=None):
         """
         rename a node
+        Rename is not directly supported. You have to detach
+        the drive, destroy the vm, and recreate a new one with
+        the same drive to get a rename effect.
 
         :param name: the current name
-        :param new_name: the new name
+        :param destination: the new name
         :return: the dict with the new name
         """
-        pass
+        raise NotImplementedError("Rename not yet implemented for Azure.")
+
+    def set_public_ip(self, name, public_ip):
+        return self.driver.set_public_ip(name, public_ip)
+
+    def remove_public_ip(self, name):
+        self.driver.remove_public_ip(name)
 
 
 class AzureDriver(AzureNodeDriver, NodeDriver):
-
+    """
+    Extension for the default Azure ARM driver.
+    https://libcloud.readthedocs.io/en/latest/compute/drivers/azure_arm.html
+    """
     def __init__(self, tenant_id, subscription_id, key, secret,
                  secure=True, host=None, port=None,
                  api_version=None, region=None, **kwargs):
 
-        self.config = Config().data["cloudmesh"]
-        self.defaults = self.config["cloud"]["azure"]["default"]
+        self.config = kwargs["cm_config"]
+        self.default = kwargs["cm_default"]
         self.subscription_id = subscription_id
-        self.resource_group = self.defaults["resource_group"]
-        self.network_name = self.defaults["network"]
-        self.storage_account = self.defaults["storage_account"]
+        self.resource_group = self.default["resource_group"]
+        self.network_name = self.default["network"]
+        self.storage_account = self.default["storage_account"]
+        self.default_image = None
+        self.default_size = None
 
         super().__init__(tenant_id=tenant_id,
                          subscription_id=subscription_id,
@@ -138,22 +137,10 @@ class AzureDriver(AzureNodeDriver, NodeDriver):
                          api_version=api_version,
                          region=region, **kwargs)
 
-    def stop(self, name):
-        """
-        Stop a running node. Deallocate resources. VM status will
-        be `stopped`.
-        :param name:
-        """
-        self.ex_stop_node(self._get_node(name))
-
     def suspend(self, name):
         """
         Suspend a running node. Same as `stop`, but resources do not
         deallocate. VM status will be `paused`.
-
-        Todo: decide whether to keep this or not. Currently Vm.suspend
-              doesn't pass a deallocate param.
-
         :param name: The name of the running node.
         """
         self.ex_stop_node(self._get_node(name), deallocate=False)
@@ -182,10 +169,8 @@ class AzureDriver(AzureNodeDriver, NodeDriver):
             key = fp.read()
 
         auth = NodeAuthSSHKey(key)
-
-        image = self.get_image(self.defaults["image"])
-        sizes = self.list_sizes()
-        size = [s for s in sizes if s.id == self.defaults["size"]][0]
+        image = self._get_default_image()
+        size = self._get_default_size()
         nic = self._get_nic(name)
 
         # Create vm
@@ -220,6 +205,25 @@ class AzureDriver(AzureNodeDriver, NodeDriver):
         :param ip:
         """
         self._get_nic(name, with_public_ip=True)
+
+    def _get_default_image(self):
+        """
+        Get an image object corresponding to teh default image id in config.
+        :return:
+        """
+        if self.default_image is None:
+            self.default_image = self.get_image(self.default["image"])
+        return self.default_image
+
+    def _get_default_size(self):
+        """
+        Get an size object corresponding to teh default image id in config.
+        :return:
+        """
+        if self.default_size is None:
+            sizes = self.list_sizes()
+            self.default_size = [s for s in sizes if s.id == self.default["size"]][0]
+        return self.default_size
 
     def _get_nic(self, vm_name, with_public_ip=True):
         """
@@ -309,6 +313,7 @@ class AzureDriver(AzureNodeDriver, NodeDriver):
 
         # Create SSH security group
         sec_group_id = self._ex_create_network_security_group(f"{network_name}-ssh-group")
+        time.sleep(1)
 
         subnet_name = "default"
         subnet_cidr = "10.0.0.0/16"

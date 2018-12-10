@@ -47,7 +47,6 @@ class CloudManagerABC(metaclass=abc.ABCMeta):
         """
         pass
 
-    # list is a reserved keyword so we switch from list to nodes
     @abc.abstractmethod
     def nodes(self):
         """

@@ -1,44 +1,14 @@
 import getpass
-from pprint import pprint
-from cm4.vm.Aws import Aws
-from cm4.vm.Azure import Azure
-from cm4.vm.Cmopenstack import Cmopenstack
-from cm4.configuration.config import Config
-from cm4.mongo.mongoDB import MongoDB
-from cm4.configuration.name import Name
+import pprint
 from cm4.vm.thread import Thread
+from cm4.configuration.config import Config
+from cm4.configuration.name import Name
 from cm4.configuration.counter import Counter
+from cm4.mongo.mongoDB import MongoDB
+from cm4.vm.Azure import AzureProvider
+from cm4.vm.Aws import AwsProvider
+from cm4.openstack.OpenstackCM import OpenstackCM
 from cm4.abstractclass.CloudManagerABC import CloudManagerABC
-import cm4
-
-
-class Vmprovider(object):
-
-    def __init__(self):
-        self.config = Config().data["cloudmesh"]
-
-    def get_provider(self, cloud):
-        """
-        Create the driver based on the 'kind' information.
-        This method could deal with AWS, AZURE, and OPENSTACK for CLOUD block of YAML file.
-        Only developed for AZURE, AWS, Chameleon, but we haven't test OPENSTACK
-        :return: the driver based on the 'kind' information
-        """
-        driver = None
-        os_config = self.config["cloud"][cloud]
-
-        if os_config.get('cm').get('kind') == 'azure':
-
-            driver = cm4.vm.Azure.Azure()
-            driver = Azure(self.config, cloud).driver
-        elif os_config.get('cm').get('kind') == 'aws':
-            driver = Aws(self.config, cloud).driver
-        elif os_config.get('cm').get('kind') == 'openstack':
-            driver = Cmopenstack(self.config, cloud).driver
-        elif os_config.get('cm').get('kind') == 'vbox':
-            driver = None
-            raise NotImplementedError
-        return driver
 
 
 class Vm(CloudManagerABC):
@@ -46,12 +16,19 @@ class Vm(CloudManagerABC):
     def __init__(self, cloud):
         self.mongo = MongoDB()
         self.config = Config().data["cloudmesh"]
-        self.kind = self.config["cloud"][cloud]["cm"]["kind"]  # add cm according cloudmesh.yaml convention
-        if self.kind in ["vbox"]:
+        self.public_key_path = self.config["profile"]["key"]["public"]
+        self.kind = self.config["cloud"][cloud]["cm"]["kind"]
+
+        if self.kind == 'azure':
+            self.provider = AzureProvider(self.config)
+        elif self.kind == 'aws':
+            self.provider = AwsProvider(self.config)
+        elif self.kind == 'openstack':
+            self.provider = OpenstackCM("chameleon")
+        elif self.kind == 'vbox':
             raise NotImplementedError
-            self.provider = None  # ?????
         else:
-            self.provider = Vmprovider().get_provider(cloud)
+            raise NotImplementedError(f"Cloud `{self.kind}` not supported.")
 
     def start(self, name):
         """
@@ -61,16 +38,10 @@ class Vm(CloudManagerABC):
         """
         if self.kind in ["vbox"]:
             raise NotImplementedError
-            self.provider
         else:
             info = self.info(name)
             if info.state != 'running':
-                # self.provider.ex_start_node(info)
-
-                parameters = {
-                    "name": "node1"
-                }
-                self.provider.start(**parameters)
+                self.provider.start(**info)
 
                 Thread(self, 'test', name, 'running').start()
                 document = self.mongo.find_document('cloud', 'name', name)
@@ -79,19 +50,15 @@ class Vm(CloudManagerABC):
                 document = self.mongo.find_document('cloud', 'name', name)
                 return document
 
-    def stop(self, name, deallocate=True):
+    def stop(self, name=None):
         """
         stop the node based on the ide
         :param name:
-        :param deallocate:
         :return: VM document
         """
         info = self.info(name)
         if info.state != 'stopped':
-            #
-            # BUG: THIS SHOUDL NOT CALL LIBCLOUD BUT ONLY OUR OWN ABSTRACTIONS, IF CONDITION NEEDED
-            #
-            self.provider.ex_stop_node(info, deallocate)
+            self.provider.stop(name)
             Thread(self, 'test', name, 'stopped').start()
             document = self.mongo.find_document('cloud', 'name', name)
             return document
@@ -99,27 +66,27 @@ class Vm(CloudManagerABC):
             document = self.mongo.find_document('cloud', 'name', name)
             return document
 
-    def resume(self, name):
+    def resume(self, name=None):
         """
         start the node based on id
         :param name:
         """
         return self.start(name)
 
-    def suspend(self, name):
+    def suspend(self, name=None):
         """
         stop the node based on id
         :param name:
         """
-        return self.stop(name, False)
+        return self.stop(name)
 
-    def destroy(self, name):
+    def destroy(self, name=None):
         """
         delete the node based on id
         :param name:
         :return: True/False
         """
-        result = self.provider.destroy_node(self.info(name))
+        result = self.provider.destroy(name)
         self.mongo.delete_document('cloud', 'name', name)
         return result
 
@@ -130,18 +97,13 @@ class Vm(CloudManagerABC):
         :return:
         """
         name = name or self.new_name()
-        node = self.provider.create_node(name)
+        node = self.provider.create(name=name)
         self.mongo.insert_cloud_document(vars(node))
         Thread(self, 'test', name, 'running').start()
         return node
 
-    def list(self):
-        """
-        list existed nodes
-        :return: all nodes' information
-        """
-        result = self.provider.list_nodes()
-        return result
+    def nodes(self):
+        return self.provider.nodes()
 
     def status(self, name):
         """
@@ -153,13 +115,13 @@ class Vm(CloudManagerABC):
         status = self.mongo.find_document('cloud', 'name', name)['state']
         return status
 
-    def info(self, name):
+    def info(self, name=None):
         """
         show node information based on id
         :param name:
         :return: all information about one node
         """
-        nodes = self.list()
+        nodes = self.nodes()
         for i in nodes:
             if i.name == name:
                 document = vars(i)
@@ -245,20 +207,20 @@ def process_arguments(arguments):
     Called from cm4.command.command
     :param arguments:
     """
+    config = Config()
+    default_cloud = config.data["cloudmesh"]["default"]["cloud"]
+    vm = Vm(default_cloud)
+
     result = None
 
     if arguments.get("--debug"):
         pp = pprint.PrettyPrinter(indent=4)
         print("vm processing arguments")
         pp.pprint(arguments)
-    config = Config()
-    # pprint(config.data)
-    default_cloud = config.data["cloudmesh"]["default"]["cloud"]
-
-    vm = Vm(default_cloud)
+        # pp.pprint(config.data)
 
     if arguments.get("list"):
-        result = vm.list()
+        result = vm.nodes()
 
     elif arguments.get("start"):
         try:

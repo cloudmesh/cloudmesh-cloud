@@ -1,14 +1,14 @@
 from cm4.vm.Cloud import Cloud
 from cm4.configuration.config import Config
-
+from cm4.abstractclass.CloudManagerABC import CloudManagerABC
 from libcloud.compute.drivers.ec2 import EC2NodeDriver
 from libcloud.compute.base import NodeDriver
 
 
-class Aws(Cloud):
+class AwsProvider(CloudManagerABC, Cloud):
 
-    def __init__(self, config, kind):
-        os_config = config["cloud"][kind]
+    def __init__(self, config):
+        os_config = config["cloud"]["aws"]
         default = os_config.get('default')
         credentials = os_config.get('credentials')
         self.driver = AWSDriver(
@@ -16,6 +16,59 @@ class Aws(Cloud):
             credentials['EC2_SECRET_KEY'],
             region=default['region']
         )
+
+    def start(self, name):
+        """
+
+        :param name:
+        :return:
+        """
+        self.driver.ex_start_node(self.driver._get_node(name))
+
+    def stop(self, name=None):
+        """
+        Stop a running node. Deallocate resources. VM status will
+        be `stopped`.
+        :param name:
+        """
+        self.driver.ex_stop_node(self.driver._get_node(name))
+
+    def info(self, name=None):
+        """
+        gets the information of a node with a given name
+
+        :param name:
+        :return: The dict representing the node including updated status
+        """
+        return self.driver._get_node(name)
+
+    def suspend(self, name=None):
+        self.stop(name)
+
+    def nodes(self):
+        """
+        list all nodes id
+        Todo: move to libcloud base manager.
+        :return: an array of dicts representing the nodes
+        """
+        return self.driver.list_nodes()
+
+    def resume(self, name=None):
+        self.start(name)
+
+    def destroy(self, name=None):
+        self.driver.destroy_node(self.driver._get_node(name))
+
+    def create(self, name=None, image=None, size=None, timeout=360, **kwargs):
+        self.driver.create_node(name)
+
+    def set_public_ip(self, name, public_ip):
+        print("No set_public_ip method")
+        pass
+
+    def remove_public_ip(self, name):
+        print("No remove_public_ip method")
+        pass
 
 
 class AWSDriver(EC2NodeDriver, NodeDriver):
@@ -37,10 +90,9 @@ class AWSDriver(EC2NodeDriver, NodeDriver):
 
         return new_vm
 
-    def set_public_ip(self, name, public_ip):
-        print("No set_public_ip method")
-        pass
-
-    def remove_public_ip(self, name):
-        print("No remove_public_ip method")
-        pass
+    def _get_node(self, name):
+        """
+        Get an instance of a Node returned by `list` by node name.
+        """
+        node = [n for n in self.list_nodes() if n.name == name]
+        return node[0] if node else None

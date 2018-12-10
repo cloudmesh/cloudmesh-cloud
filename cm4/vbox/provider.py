@@ -67,16 +67,17 @@ class VboxProvider(CloudManagerABC):
 
         # get the dir based on anme
 
+
+
+
         print("ARG")
         pprint(arg)
         vms = self.to_dict(self.nodes())
 
         print("VMS", vms)
 
-        config = Config()
-        cloud = "vagrant"  # TODO: must come through parameter or set cloud
-        arg.path = config.data["cloudmesh"]["cloud"]["vagrant"]["default"]["path"]
-        arg.directory = os.path.expanduser("{path}/{name}".format(**arg))
+        arg = self._get_specification(**kwargs)
+
 
         pprint(arg)
 
@@ -260,9 +261,10 @@ class VboxProvider(CloudManagerABC):
             cloud = "vagrant"  # TODO must come through parameter or set cloud
 
 
-        spec = config.data["cloudmesh"]["cloud"][cloud]["vagrant"]
+        print("CCC", cloud)
+        spec = config.data["cloudmesh"]["cloud"][cloud]
         pprint(spec)
-        default = config.data["cloudmesh"]["cloud"][cloud]["vagrant"]["default"]
+        default = spec["default"]
         pprint(default)
 
         if name is not None:
@@ -276,6 +278,7 @@ class VboxProvider(CloudManagerABC):
         else:
             arg.image = default["image"]
             pass
+
 
         arg.path = default["path"]
         arg.directory = os.path.expanduser("{path}/{name}".format(**arg))
@@ -298,7 +301,12 @@ class VboxProvider(CloudManagerABC):
         """
         create one node
         """
-        arg = self._get_specification(kwargs)
+
+        #
+        # TODO BUG: if name contains not just letters and numbers and - return error, e. undersore not allowed
+        #
+
+        arg = self._get_specification(name=name, image=image, size=size, timeout=timeout, port=port, **kwargs)
 
         if not os.path.exists(arg.directory):
             os.makedirs(arg.directory)

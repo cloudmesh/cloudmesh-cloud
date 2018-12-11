@@ -170,6 +170,7 @@ def str_banner(txt=None, c="#", debug=True):
 
     .
 
+    :param debug:
     :param txt: a text message to be printed
     :type txt: string
     :param c: the character used instead of c

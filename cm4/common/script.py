@@ -19,6 +19,7 @@ from distutils.spawn import find_executable
 import textwrap
 from sys import platform
 
+
 class SystemPath(object):
 
     @staticmethod
@@ -38,6 +39,7 @@ class SystemPath(object):
             # TODO: BUG: Implement
         installer = Script(script)
 
+
 class Script(object):
 
     def __init__(self, script):
@@ -47,8 +49,8 @@ class Script(object):
     def run(self, script):
         lines = textwrap.dedent(script).strip().split("\n")
         print("===============")
-        print (lines)
+        print(lines)
         print("===============")
         for line in lines:
             r = subprocess.check_output(line, shell=True)
-            print (r)
+            print(r)

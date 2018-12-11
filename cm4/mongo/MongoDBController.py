@@ -18,7 +18,6 @@ class MongoInstaller(object):
         self.data = self.config.data["cloudmesh"]["data"]["mongo"]
         self.expanduser()
 
-
     def expanduser(self):
         for key in self.data:
             if type(self.data[key]) == str:
@@ -38,9 +37,8 @@ class MongoInstaller(object):
         pprint(self.data)
 
         if not self.data["MONGO_AUTOINSTALL"]:
-            print ("Mongo auto install is off")
+            print("Mongo auto install is off")
             return ""
-
 
         if not os.path.isdir(path) and self.data["MONGO_AUTOINSTALL"]:
             print("MongoDB is not installed in {MONGO_PATH}".format(**self.data))
@@ -62,7 +60,6 @@ class MongoInstaller(object):
             else:
                 print("platform not found", platform)
 
-
     def linux(self):
         # TODO UNTESTED
         """
@@ -81,15 +78,13 @@ class MongoInstaller(object):
 
         # THIS IS BROKEN AS ITS A SUPBROCESS? '. ~/.bashrc'
 
-
     def darwin(self, brew=False):
         """
         install MongoDB in Darwin system (Mac)
         """
 
-
         if brew:
-            print ("mongo installer via brew")
+            print("mongo installer via brew")
             Brew.install("mongodb")
             path = Shell.which("mongod")
             SystemPath.add("{path}".format(path=path))
@@ -124,17 +119,16 @@ class MongoDBController(object):
         self.data = self.config.data["cloudmesh"]["data"]["mongo"]
         self.expanduser()
 
-        #pprint(self.config.dict())
-
-    def expanduser(self):
-        for key in self.data:
-            if type(self.data[key]) == str:
-                self.data[key] = os.path.expanduser (self.data[key])
-        #pprint(self.data)
+        pprint(self.config.dict())
 
     def __str__(self):
         return yaml.dump(self.data, default_flow_style=False, indent=2)
 
+    def expanduser(self):
+        for key in self.data:
+            if type(self.data[key]) == str:
+                self.data[key] = os.path.expanduser(self.data[key])
+        pprint(self.data)
 
     def update_auth(self):
         """
@@ -272,4 +266,3 @@ def process_arguments(arguments):
         return r
 
     return result
-

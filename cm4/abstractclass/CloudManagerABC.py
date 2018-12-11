@@ -47,7 +47,6 @@ class CloudManagerABC(metaclass=abc.ABCMeta):
         """
         pass
 
-    # list is a reserved keyword so we switch from list to nodes
     @abc.abstractmethod
     def nodes(self):
         """
@@ -98,6 +97,7 @@ class CloudManagerABC(metaclass=abc.ABCMeta):
         """
         rename a node
 
+        :param destination:
         :param name: the current name
         :param new_name: the new name
         :return: the dict with the new name

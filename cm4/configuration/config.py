@@ -5,6 +5,7 @@ from os import mkdir
 from pathlib import Path
 from pprint import pprint
 
+
 class Config(object):
 
     def __init__(self, config_path='~/.cloudmesh/cloudmesh4.yaml'):
@@ -29,10 +30,10 @@ class Config(object):
             self.data = yaml.load(stream)
 
         # self.data is loaded as nested OrderedDict, can not use set or get methods directly
-        if self.data == None:
-            raise EnvironmentError("Failed to load configuration file cloudmesh4.yaml, please check the path and file locally")
+        if self.data is None:
+            raise EnvironmentError(
+                "Failed to load configuration file cloudmesh4.yaml, please check the path and file locally")
 
-    
     def dict(self):
         return self.data
 

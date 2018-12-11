@@ -143,28 +143,28 @@ There are three types of documents in MongoDB:
 * Node's experiment status in `status` collection.
   The document in `status` collection is going to save the information of experiments executed in a node.
  
-  ```json
-  '_id': node_id,
+  ```text
+  {'_id': node_id,
   'status': status,
   'currentJob': job_id,
-  'history' : the history of executed experiments in this node
+  'history' : the history of executed experiments in this node}
    ```
 
 * Experiment information in `job` collection.
 
-  ```json
-  '_id' : experiment_id
+  ```text
+  {'_id': experiment_id
   'name': name,
   'status': status,
   'input': input_info,
   'output': output_info,
   'description': description,
-  'commands': commands
+  'commands': commands}
   ```
 
 * Group information in `group` collection.
 
-  ```json
+  ```text
   {'cloud': cloud,
   'name': name,
   'size': size,

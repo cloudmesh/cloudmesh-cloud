@@ -1,8 +1,6 @@
 import os
-import subprocess
 import yaml
 from sys import platform
-from pymongo import MongoClient
 from cm4.configuration.config import Config
 from pprint import pprint
 from cm4.common.script import Script, SystemPath
@@ -123,8 +121,6 @@ class MongoDBController(object):
 
         pprint(self.config.dict())
 
-        # TODO: self.initial_mongo_config(False)
-
     def __str__(self):
         return yaml.dump(self.data, default_flow_style=False, indent=2)
 
@@ -142,7 +138,8 @@ class MongoDBController(object):
         # TODO: BUG: should that not be done differently, e.g. from commandline or via ENV variables
         #
         # run mongodb
-        self.run_mongodb()
+
+        self.run_mongodb(True)
 
         # set up auth information
         self.set_auth()
@@ -150,52 +147,18 @@ class MongoDBController(object):
         # shut down mongodb
         self.shutdown_mongodb()
 
-        # enable secutiry
-        self.initial_mongo_config(True)
         print("Enable the Secutiry. You will use your username and password to login the MongoDB")
 
-    def initial_mongo_config(self, security=False):
-        """
-        create the MongoDB config file
-        :param security: enable the security
-        """
-        #
-        # TODO: BUG: we do not use mongoconfig, but pass everything from commandline,
-        #  everything shoudl be specified in cloudmesh4.yaml
-        #
-        default_config_file = {
-            "net": {
-                "bindIp": self.host,
-                "port": self.port
-            },
-            "storage": {
-                "dbPath": os.path.join(self.mongo_db_path, 'database'),
-                "journal": {"enabled": True}
-            },
-            "systemLog": {
-                "destination": 'file',
-                "path": os.path.join(self.mongo_db_path, 'log', 'mongod.log'),
-                "logAppend": True
-            }
-        }
-
-        if security:
-            default_config_file.update(dict(security=dict(authorization='enabled')))
-
-        with open(os.path.join(self.mongo_db_path, 'mongod.conf'), "w") as output:
-            try:
-                yaml.dump(default_config_file, output, default_flow_style=False)
-            except yaml.YAMLError as exc:
-                print(exc)
-
-    def run_mongodb(self):
+    def run_mongodb(self, security=False):
         """
         start the MongoDB server
         """
-        cmd = 'mongod --dbpath %s --config %s' % (
-            os.path.join(self.mongo_db_path, 'database'), os.path.join(self.mongo_db_path, 'mongod.conf'))
-        subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True)
-        print('MonogDB is running')
+        if security:
+            script = "mongod --dbpath {MONGO_PATH}  --logpath {MONGO_LOG}/mongod.log --fork".format(**self.data)
+        else:
+            script = "mongod --auth --dbpath {MONGO_PATH} --logpath {MONGO_LOG}/mongod.log --fork".format(**self.data)
+        print(script)
+        run = Script(script)
 
     # noinspection PyMethodMayBeStatic
     def shutdown_mongodb(self):
@@ -203,37 +166,30 @@ class MongoDBController(object):
         shutdown the MongoDB server
         linux and darwin have different way to shutdown the server, the common way is kill
         """
-        cmd = 'pgrep mongo'
-        pid = int(str(subprocess.check_output(cmd, shell=True).decode("utf-8")).split('\n')[0])
-        cmd = 'kill %s' % pid
-        subprocess.check_output(cmd, shell=True)
-        print('MonogDB is stopped')
+        script = 'kill -2 `pgrep mongo`'
+        run = Script(script)
 
     def set_auth(self):
         """
         add admin acount into the MongoDB admin database
         """
-        client = MongoClient(self.host, self.port)
-        client.admin.add_user(self.username, self.password,
-                              roles=[{'role': "userAdminAnyDatabase", 'db': "admin"}, "readWriteAnyDatabase"])
-        client.close()
 
-    def dump(self, output_location):
+        script = """mongo --eval 'db.getSiblingDB("admin").createUser({user:"%s",pwd:"%s",roles:[{role:"root",db:"admin"}]})'""" % (self.data['MONGO_USERNAME'], self.data['MONGO_PASSWORD'])
+        run = Script(script)
+
+    def dump(self, filename):
         """
         dump the entire MongoDB database into output location
         :param output_location: the location to save the backup
         """
         #
         # TODO: BUG: expand user
-        # {MONGO_???} .fomrat(**self.data)
-        cmd = 'mongodump --host %s --port %s --username %s --password %s --out %s' % (self.host,
-                                                                                      self.port,
-                                                                                      self.username,
-                                                                                      self.password,
-                                                                                      output_location)
-        subprocess.check_output(cmd, shell=True)
+        #
 
-    def restore(self, data):
+        script = "mongodump --authenticationDatabase admin --archive={MONGO_HOME}/".format(**self.data)+filename+".gz --gzip -u {MONGO_USERNAME} -p {MONGO_PASSWORD}".format(**self.data)
+        run = Script(script)
+
+    def restore(self, filename):
         """
         restore the backup data generated by dump
         :param data: the backup data folder
@@ -242,12 +198,9 @@ class MongoDBController(object):
         # TODO: BUG: expand user
         #
 
-        cmd = 'mongorestore --host %s --port %s --username %s --password %s %s' % (self.host,
-                                                                                   self.port,
-                                                                                   self.username,
-                                                                                   self.password,
-                                                                                   data)
-        subprocess.check_output(cmd, shell=True)
+        script = "mongorestore --authenticationDatabase admin -u {MONGO_USERNAME} -p " \
+                 "{MONGO_PASSWORD} --gzip --archive={MONGO_HOME}/".format(**self.data)+filename+".gz"
+        run = Script(script)
 
     def status(self):
         """
@@ -259,22 +212,57 @@ class MongoDBController(object):
         ps_output = Script(script)
         print(ps_output)
 
-        # client = MongoClient(self.host, self.port)
-        # pprint(client.server_info())
+def process_arguments(arguments):
+    """
+    Process command line arguments to execute VM actions.
+    Called from cm4.command.command
+    :param arguments:
+    """
+    result = None
 
+    """
+      cm4 admin mongo install [--brew] [--download=PATH]
+      cm4 admin mongo secutiry
+      cm4 admin mongo start
+      cm4 admin mongo stop
+      cm4 admin mongo backup FILENAME
+      cm4 admin mongo load FILENAME
+      cm4 admin mongo help
+"""
 
-def main():
-    test = MongoDBController()
-    # test.set_auth()
-    # test.check_mongo_dir_and_install()
-    # test.install_mongo_darwin()
-    # test.update_auth()
-    # test.run_mongodb()
-    # test.shutdown_mongodb()
-    # test.status()
-    # test.dump('~/.cloudmesh/demo/version1/cm/cm4/mongo/MongoDB/backup')
-    # test.restore ('~/.coudmesh/demo/version1/cm/cm4/mongo/MongoDB/backup')
+    if arguments.install:
 
+        print("install")
+        print("========")
+        installer = MongoInstaller()
+        r = installer.install()
+        return r
 
-if __name__ == "__main__":
-    main()
+    elif arguments.security:
+        mongo = MongoDBController()
+        mongo.update_auth()
+        print()
+
+    elif arguments.start:
+        MongoDBController().run_mongodb(False)
+        print("start")
+
+    elif arguments.stop:
+        MongoDBController().shutdown_mongodb()
+        print("stop")
+
+    elif arguments.backup:
+        MongoDBController().dump(arguments.get('FILENAME'))
+        print("backup")
+
+    elif arguments.load:
+        MongoDBController().restore(arguments.get('FILENAME'))
+        print("backup")
+
+    elif arguments.status:
+
+        mongo = MongoDBController()
+        r = mongo.status()
+        return r
+
+    return result

@@ -225,8 +225,7 @@ class OpenstackCM(CloudManagerABC):
                 self.driver.import_key_pair_from_file(name, self.key)
             except Exception as e:
                 print(e)
-                print(
-                    "If exception code is 409 Conflict Key pair is already exists, we can still proceed without key importation")
+                print("If exception code is 409 Conflict Key pair is already exists, we can still proceed without key importation")
         kwargs['ex_keyname'] = name
 
         # create node

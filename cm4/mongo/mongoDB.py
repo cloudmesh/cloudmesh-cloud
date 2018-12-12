@@ -6,12 +6,14 @@ from cm4.configuration.config import Config
 class MongoDB(object):
 
     def __init__(self, host=None, username=None, password=None, port=None):
-        config = Config().data["cloudmesh"]
-        self.database = config["data"]["mongo"]["MONGO_DBNAME"]
-        self.host = host or config["data"]["mongo"]["MONGO_HOST"]
-        self.password = urllib.parse.quote_plus(password or config["data"]["mongo"]["MONGO_PASSWORD"])
-        self.username = urllib.parse.quote_plus(username or config["data"]["mongo"]["MONGO_USERNAME"])
-        self.port = port or config["data"]["mongo"]["MONGO_PORT"]
+        self.config = Config().data["cloudmesh"]
+        self.mongo = self.config["data"]["mongo"]
+
+        self.database = ["MONGO_DBNAME"]
+        self.host = host or self.mongo["MONGO_HOST"]
+        self.password = urllib.parse.quote_plus(password or self.mongo["MONGO_PASSWORD"])
+        self.username = urllib.parse.quote_plus(username or self.mongo["MONGO_USERNAME"])
+        self.port = port or self.mongo["MONGO_PORT"]
         self.client = None
         self.db = None
         self.connect_db()

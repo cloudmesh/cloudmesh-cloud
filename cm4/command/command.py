@@ -33,6 +33,9 @@
       cm4 vm destroy [--vms=VMLIST] [--debug] [--dryrun]
       cm4 vm status [--vms=VMLIST] [--dryrun]
       cm4 vm list
+      cm4 vm resize [SIZE]
+      cm4 vm rebuild [IMAGE]
+      cm4 vm rename [NAME]
       cm4 vm publicip [--vms=VMLIST]
       cm4 vm ssh NAME
       cm4 vm run COMMAND  [--vms=<vmList>]
@@ -91,7 +94,6 @@ import cm4.openstack.OpenstackCM
 import cm4
 import cm4.aws.CommandAWS
 from cm4.mongo.MongoDBController import MongoDBController
-from cloudmesh.common.dotdict import dotdict
 from pprint import pprint
 from cloudmesh.common.dotdict import dotdict
 

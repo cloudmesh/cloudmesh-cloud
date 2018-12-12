@@ -395,10 +395,18 @@ Since providers of openstack like Chameleon and Jetstream allow users to
 associate customized float ip to their instances, we also develop such functions
 to support tasks like this and give more power to users when runing their jobs.
 
-Here are some samples for running these operations by using `cm4` project:
+Please refer to AWS VM Operation for examples. 
+Chameleon Openstack expose same 
+operations as AWS to users. Notice that before running your command,
+you need to make sure the global default cloud parameter has been set
+to 'Chameleon' by:
 
-:o: please update the commands and results here
- 
+```commandline
+$ cm4 vm set cloud chameleon
+Setting env parameter cloud to: chameleon
+Writing updata to cloudmesh.yaml
+Config has been updated.
+```
 
  
  ### VM Refactor (Rui)
@@ -416,6 +424,8 @@ Currently, major providers usually charge users according to their usage. It mig
 finacially wise sometimes to shift between different service size to reduce unnecessary cost.
 VmRefactor is designed based on this idea to help users to achieve higher cost efficiency. VmRefactor can also help users navigate 
 thier management tasks especially when they have many different tasks on the run=.
+ 
+
  
  ## Flask Rest API (Sachith)
  

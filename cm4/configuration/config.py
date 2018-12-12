@@ -4,7 +4,7 @@ from shutil import copyfile
 from os import mkdir
 from pathlib import Path
 from pprint import pprint
-
+from cloudmesh.common.dotdict import dotdict
 
 class Config(object):
 
@@ -73,3 +73,6 @@ class Config(object):
         with open(self.config_path, "w") as stream:
             print("Writing updata to cloudmesh.yaml")
             yaml.safe_dump(yaml_file, stream, default_flow_style=False)
+
+    def default(self):
+        return dotdict(self.data["cloudmesh"]["default"])

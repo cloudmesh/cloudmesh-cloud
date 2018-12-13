@@ -9,7 +9,7 @@ class MongoDB(object):
         self.config = Config().data["cloudmesh"]
         self.mongo = self.config["data"]["mongo"]
 
-        self.database = ["MONGO_DBNAME"]
+        self.database = self.mongo["MONGO_DBNAME"]
         self.host = host or self.mongo["MONGO_HOST"]
         self.password = urllib.parse.quote_plus(password or self.mongo["MONGO_PASSWORD"])
         self.username = urllib.parse.quote_plus(username or self.mongo["MONGO_USERNAME"])
@@ -52,19 +52,14 @@ class MongoDB(object):
         :param collection:
         :param lst:
         """
+        pass
         col = self.db[collection]
         for l in lst:
-            col.insert_one(self.var_to_json(l.__dict__))
-
-    def insert_config_document(self, document):
-        """
-        insert document to config collection
-        :param document:
-        :return: id of document
-        """
-        cm = self.db['config']
-        post_id = cm.insert_one(document).inserted_id
-        return post_id
+            if isinstance(l, dict):
+                item = l
+            else:
+                item = l.__dict__
+            col.update({"name": item.get("name")}, {"$set": self.var_to_json(item)}, upsert=True)
 
     def insert_cloud_document(self, document):
         """
@@ -95,16 +90,6 @@ class MongoDB(object):
         """
         job = self.db['job']
         post_id = job.insert_one(document).inserted_id
-        return post_id
-
-    def insert_group_collection(self, document):
-        """
-        insert document to group collection, the collection contains the information about created group
-        :param document:
-        :return: id of document
-        """
-        group = self.db['group']
-        post_id = group.insert_one(document).inserted_id
         return post_id
 
     def update_document(self, collection_name, key, value, info):

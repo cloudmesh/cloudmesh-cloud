@@ -131,7 +131,20 @@ class VboxProvider(CloudManagerABC):
         """
         pass
 
-    def info(self, name=None):
+
+    def _convert_assignment_to_dict(self, content):
+        d = {}
+        lines = content.split("\n")
+        for line in lines:
+            attribute, value = line.split("=", 1)
+            attribute = attribute.replace('"',"")
+            value = value.replace('"',"")
+
+            d[attribute] = value
+        return d
+
+
+    def info(self, name=None, source="x-vagrant"):
         """
         gets the information of a node with a given name
 
@@ -139,12 +152,9 @@ class VboxProvider(CloudManagerABC):
         :return: The dict representing the node including updated status
         """
 
-        """
-        VBoxManage showvminfo --machinereadable test-bionic_test-bionic_1544458530259_99921
-        """
-
         arg = dotdict()
         arg.name = name
+
         config = Config()
 
         cloud = "vagrant"  # TODO: must come through parameter or set cloud
@@ -154,6 +164,7 @@ class VboxProvider(CloudManagerABC):
         result = Shell.execute("vagrant",
                                ["ssh-config"],
                                cwd=arg.directory)
+
         lines = result.split("\n")
         data = {}
         for line in lines:
@@ -162,7 +173,33 @@ class VboxProvider(CloudManagerABC):
                 value = value.replace('"', '')
 
             data[attribute] = value
+
+        if source == 'vagrant':
+            return data
+        else:
+
+            vms = Shell.execute('VBoxManage', ["list","vms"]).split("\n")
+            #
+            # find vm
+            #
+            vbox_name_prefix = "{name}_{name}_".format(**arg)
+            print (vbox_name_prefix)
+            for vm in vms:
+                vm = vm.replace("\"","")
+                vname = vm.split(" {")[0]
+                if vname.startswith(vbox_name_prefix):
+                    details = Shell.execute("VBoxManage",
+                                            ["showvminfo", "--machinereadable", vname])
+                    # print (details)
+                    break;
+            details = self._convert_assignment_to_dict(details)
+            combined = {**data, **details}
+            data = combined
+
         return data
+
+
+
 
     def suspend(self, name=None):
         """

@@ -79,9 +79,9 @@ class VboxCommand(PluginCommand):
             vbox image find KEYWORDS...
             vbox image add NAME
             vbox image delete NAME
+            vbox vm info NAME
             vbox vm list [--format=FORMAT] [-v]
             vbox vm delete NAME
-            vbox vm config [NAME]
             vbox vm ip [NAME] [--all]
             vbox vm create [NAME] ([--memory=MEMORY] [--image=IMAGE] [--script=SCRIPT] | list)
             vbox vm boot [NAME] ([--memory=MEMORY] [--image=IMAGE] [--port=PORT] [--script=SCRIPT] | list)
@@ -164,7 +164,7 @@ class VboxCommand(PluginCommand):
                 image=arguments.image,
                 script=arguments.script)
 
-        elif arguments.config:
+        elif arguments.info:
 
             # arguments.NAME
             d = VboxProvider().info(name=arguments.NAME)

@@ -139,6 +139,10 @@ class VboxProvider(CloudManagerABC):
         :return: The dict representing the node including updated status
         """
 
+        """
+        VBoxManage showvminfo --machinereadable test-bionic_test-bionic_1544458530259_99921
+        """
+
         arg = dotdict()
         arg.name = name
         config = Config()

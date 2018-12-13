@@ -1,17 +1,17 @@
 from cm4.mongo.mongoDB import MongoDB
-from cm4.mongo.DbUpdateDecorator import SaveTo
+from cm4.mongo.DataBaseDecorator import DatabaseUpdate
 from cm4.common.debug import HEADING, myself
 
 # nosetest -v --nopature
 # nosetests -v --nocapture tests/test_mongo.py
 
 
-@SaveTo("test")
+@DatabaseUpdate("test")
 def r_dict():
     return {"name": "test-dict-1", "num": 123}
 
 
-@SaveTo("test")
+@DatabaseUpdate("test")
 def r_list():
     return [
         {"name": "test-dict-1", "num": 432},

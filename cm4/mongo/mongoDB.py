@@ -52,7 +52,6 @@ class MongoDB(object):
         :param collection:
         :param lst:
         """
-        pass
         col = self.db[collection]
         for l in lst:
             if isinstance(l, dict):

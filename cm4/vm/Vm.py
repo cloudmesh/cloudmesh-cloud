@@ -41,14 +41,9 @@ class Vm(CloudManagerABC):
         else:
             info = self.info(name)
             if info.state != 'running':
-                self.provider.start(**info)
-
-                Thread(self, 'test', name, 'running').start()
-                document = self.mongo.find_document('cloud', 'name', name)
-                return document
+                return self.provider.start(name)
             else:
-                document = self.mongo.find_document('cloud', 'name', name)
-                return document
+                return info
 
     def stop(self, name=None):
         """
@@ -56,15 +51,7 @@ class Vm(CloudManagerABC):
         :param name:
         :return: VM document
         """
-        info = self.info(name)
-        if info.state != 'stopped':
-            self.provider.stop(name)
-            Thread(self, 'test', name, 'stopped').start()
-            document = self.mongo.find_document('cloud', 'name', name)
-            return document
-        else:
-            document = self.mongo.find_document('cloud', 'name', name)
-            return document
+        return self.provider.stop(name)
 
     def resume(self, name=None):
         """
@@ -78,7 +65,7 @@ class Vm(CloudManagerABC):
         stop the node based on id
         :param name:
         """
-        return self.stop(name)
+        return self.provider.suspend(name)
 
     def destroy(self, name=None):
         """
@@ -98,39 +85,27 @@ class Vm(CloudManagerABC):
         """
         name = name or self.new_name()
         node = self.provider.create(name=name)
-        self.mongo.insert_cloud_document(vars(node))
-        Thread(self, 'test', name, 'running').start()
         return node
 
     def nodes(self):
         return self.provider.nodes()
 
-    def status(self, name):
-        """
-        show node information based on id
-        :param name:
-        :return: all information about one node
-        """
-        self.info(name)
-        status = self.mongo.find_document('cloud', 'name', name)['state']
-        return status
-
     def info(self, name=None):
         """
         show node information based on id
+
+        TODO: seems like this should look in mongo, not self.nodes
+            probably the solution is a more broad change to dynamically
+            set the provider based on a name/cloud lookup in mongo.
+
         :param name:
         :return: all information about one node
         """
         nodes = self.nodes()
+
         for i in nodes:
             if i.name == name:
-                document = vars(i)
-                if self.mongo.find_document('cloud', 'name', name):
-                    self.mongo.update_document('cloud', 'name', name, document)
-                else:
-                    self.mongo.insert_cloud_document(document)
                 return i
-        raise ValueError(f"Node: {name} does not exist!")
 
     def new_name(self, experiment=None, group=None, user=None):
         """

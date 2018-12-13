@@ -5,6 +5,7 @@ from libcloud.compute.base import NodeDriver
 from libcloud.compute.drivers.azure_arm import AzureNetwork, AzureSubnet, AzureNodeDriver, Node
 from cm4.vm.Cloud import Cloud
 from cm4.abstractclass.CloudManagerABC import CloudManagerABC
+from cm4.mongo.DataBaseDecorator import DatabaseUpdate
 
 
 class AzureProvider(CloudManagerABC, Cloud):
@@ -22,22 +23,28 @@ class AzureProvider(CloudManagerABC, Cloud):
             cm_default=self.default
         )
 
+    @DatabaseUpdate("cloud")
     def start(self, name):
         """
 
         :param name:
         :return:
         """
-        self.driver.ex_start_node(self.driver._get_node(name))
+        node = self.driver._get_node(name)
+        return self.driver.ex_start_node(node)
 
+    @DatabaseUpdate("cloud")
     def stop(self, name=None):
         """
         Stop a running node. Deallocate resources. VM status will
         be `stopped`.
         :param name:
         """
-        self.driver.ex_stop_node(self.driver._get_node(name))
+        node = self.driver._get_node(name)
+        self.driver.ex_stop_node(node)
+        return node
 
+    @DatabaseUpdate("cloud")
     def info(self, name=None):
         """
         gets the information of a node with a given name
@@ -47,6 +54,7 @@ class AzureProvider(CloudManagerABC, Cloud):
         """
         return self.driver._get_node(name)
 
+    @DatabaseUpdate("cloud")
     def suspend(self, name=None):
         """
         suspends the node with the given name
@@ -54,8 +62,12 @@ class AzureProvider(CloudManagerABC, Cloud):
         :param name: the name of the node
         :return: The dict representing the node
         """
-        self.driver.ex_stop_node(self.driver._get_node(name), deallocate=False)
+        node = self.driver._get_node(name)
+        self.driver.ex_stop_node(node, deallocate=False)
+        node.state= "suspended"
+        return node
 
+    @DatabaseUpdate("cloud")
     def nodes(self):
         """
         list all nodes id
@@ -64,6 +76,7 @@ class AzureProvider(CloudManagerABC, Cloud):
         """
         return self.driver.list_nodes()
 
+    @DatabaseUpdate("cloud")
     def resume(self, name=None):
         """
         resume the named node
@@ -71,16 +84,20 @@ class AzureProvider(CloudManagerABC, Cloud):
         :param name: the name of the node
         :return: the dict of the node
         """
-        self.start(name)
+        return self.start(name)
 
+    @DatabaseUpdate("cloud")
     def destroy(self, name=None):
         """
         Destroys the node
         :param name: the name of the node
         :return: the dict of the node
         """
-        self.driver.destroy_node(self.driver._get_node(name))
+        node = self.driver._get_node(name)
+        self.driver.destroy_node(node)
+        return node
 
+    @DatabaseUpdate("cloud")
     def create(self, name=None, image=None, size=None, timeout=360, **kwargs):
         """
         creates a named node
@@ -109,6 +126,10 @@ class AzureProvider(CloudManagerABC, Cloud):
 
     def remove_public_ip(self, name):
         self.driver.remove_public_ip(name)
+
+    @DatabaseUpdate("flavors")
+    def list_sizes(self):
+        return self.driver.list_sizes()
 
 
 class AzureDriver(AzureNodeDriver, NodeDriver):

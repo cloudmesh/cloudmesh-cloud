@@ -5,6 +5,7 @@ from os import mkdir
 from pathlib import Path
 from pprint import pprint
 from cloudmesh.common.dotdict import dotdict
+from cloudmesh.shell.variables import Variables
 
 class Config(object):
 
@@ -33,6 +34,18 @@ class Config(object):
         if self.data is None:
             raise EnvironmentError(
                 "Failed to load configuration file cloudmesh4.yaml, please check the path and file locally")
+
+        #
+        # populate default variables
+        #
+        default = self.default()
+
+        database = Variables(filename="~/.cloudmesh/var-data")
+
+        for name in default:
+            if not name in database:
+                database[name] = default[name]
+
 
     def dict(self):
         return self.data

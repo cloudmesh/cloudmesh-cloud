@@ -4,15 +4,15 @@ from libcloud.compute.base import NodeAuthSSHKey
 from libcloud.compute.base import NodeDriver
 from libcloud.compute.drivers.azure_arm import AzureNetwork, AzureSubnet, AzureNodeDriver, Node
 from cm4.vm.Cloud import Cloud
-from cm4.abstractclass.CloudManagerABC import CloudManagerABC
-from cm4.mongo.DataBaseDecorator import DatabaseUpdate
+from cm4.vm.LibcloudBaseProvider import LibcloudBaseProvider
 
+from cloudmesh.common.dotdict import dotdict
 
-class AzureProvider(CloudManagerABC, Cloud):
+class AzureProvider(LibcloudBaseProvider, Cloud):
 
     def __init__(self, config):
-        self.credentials = config["cloud"]["azure"]["credentials"]
-        self.default = config["cloud"]["azure"]["default"]
+        super().__init__("azure", config)
+
         self.driver = AzureDriver(
             tenant_id=self.credentials['AZURE_TENANT_ID'],
             subscription_id=self.credentials['AZURE_SUBSCRIPTION_ID'],
@@ -23,90 +23,55 @@ class AzureProvider(CloudManagerABC, Cloud):
             cm_default=self.default
         )
 
-    @DatabaseUpdate("cloud")
+    def _map_redacted_vm(self, r):
+        """
+        Redact user and public key
+        :param r: a Node
+        :return: a redacted Node as dict
+        """
+        r = self._map_default(r)
+        r["extra"]["properties"]["osProfile"] = None
+        return dotdict(r)
+
     def start(self, name):
-        """
+        node = self.info(name)
+        self.driver.ex_start_node(node)
+        return node
 
-        :param name:
-        :return:
-        """
-        node = self.driver._get_node(name)
-        return self.driver.ex_start_node(node)
-
-    @DatabaseUpdate("cloud")
     def stop(self, name=None):
         """
         Stop a running node. Deallocate resources. VM status will
         be `stopped`.
         :param name:
         """
-        node = self.driver._get_node(name)
-        self.driver.ex_stop_node(node)
+        node = self.info(name)
+        self.driver.ex_start_node(node)
         return node
 
-    @DatabaseUpdate("cloud")
-    def info(self, name=None):
-        """
-        gets the information of a node with a given name
-
-        :param name:
-        :return: The dict representing the node including updated status
-        """
-        return self.driver._get_node(name)
-
-    @DatabaseUpdate("cloud")
     def suspend(self, name=None):
-        """
-        suspends the node with the given name
-
-        :param name: the name of the node
-        :return: The dict representing the node
-        """
-        node = self.driver._get_node(name)
+        node = self.info(name)
         self.driver.ex_stop_node(node, deallocate=False)
-        node.state= "suspended"
         return node
 
-    @DatabaseUpdate("cloud")
     def nodes(self):
         """
-        list all nodes id
-
-        :return: an array of dicts representing the nodes
+        Overriding super to redact information from the
+        returned nodes. All other calls like `info` derive
+        from this nodes list.
+        :return: A list of nodes with out sensitive information in osProfile.
         """
-        return self.driver.list_nodes()
+        nodes = super().nodes()
+        redacted = list(map(self._map_redacted_vm, nodes))
+        return redacted
 
-    @DatabaseUpdate("cloud")
-    def resume(self, name=None):
-        """
-        resume the named node
-
-        :param name: the name of the node
-        :return: the dict of the node
-        """
-        return self.start(name)
-
-    @DatabaseUpdate("cloud")
-    def destroy(self, name=None):
-        """
-        Destroys the node
-        :param name: the name of the node
-        :return: the dict of the node
-        """
-        node = self.driver._get_node(name)
-        self.driver.destroy_node(node)
-        return node
-
-    @DatabaseUpdate("cloud")
     def create(self, name=None, image=None, size=None, timeout=360, **kwargs):
         """
-        creates a named node
-        :return:
+        Calls the default create and redacts osProfile
+        from the returned node.
+        :return: Node without sensitive information in osProfile
         """
-        """
-        create one node
-        """
-        return self.driver.create_node(name)
+        node = super().create(name, image, size)
+        return self._map_redacted_vm(node)
 
     def rename(self, name=None, destination=None):
         """
@@ -121,15 +86,11 @@ class AzureProvider(CloudManagerABC, Cloud):
         """
         raise NotImplementedError("Rename not yet implemented for Azure.")
 
-    def set_public_ip(self, name, public_ip):
-        return self.driver.set_public_ip(name, public_ip)
+    def set_public_ip(self, name):
+        return self.driver.set_public_ip(name)
 
     def remove_public_ip(self, name):
         self.driver.remove_public_ip(name)
-
-    @DatabaseUpdate("flavors")
-    def list_sizes(self):
-        return self.driver.list_sizes()
 
 
 class AzureDriver(AzureNodeDriver, NodeDriver):
@@ -147,8 +108,6 @@ class AzureDriver(AzureNodeDriver, NodeDriver):
         self.resource_group = self.default["resource_group"]
         self.network_name = self.default["network"]
         self.storage_account = self.default["storage_account"]
-        self.default_image = None
-        self.default_size = None
 
         super().__init__(tenant_id=tenant_id,
                          subscription_id=subscription_id,
@@ -157,14 +116,6 @@ class AzureDriver(AzureNodeDriver, NodeDriver):
                          host=host, port=port,
                          api_version=api_version,
                          region=region, **kwargs)
-
-    def suspend(self, name):
-        """
-        Suspend a running node. Same as `stop`, but resources do not
-        deallocate. VM status will be `paused`.
-        :param name: The name of the running node.
-        """
-        self.ex_stop_node(self._get_node(name), deallocate=False)
 
     def destroy_node(self, node: Node, **kwargs):
         """
@@ -180,18 +131,18 @@ class AzureDriver(AzureNodeDriver, NodeDriver):
         # Libcloud does not delete public IP addresses
         self._ex_delete_public_ip(f"{node.name}-ip")
 
-    def create_node(self, name, **kwargs):
+    def create_node(self, name=None, image=None, size=None, timeout=360, **kwargs):
         """
         Create a node
         """
+
+        # TODO: move `auth` to libcloud base
         key_path = self.config["profile"]["key"]["public"]
 
         with open(os.path.expanduser(key_path), 'r') as fp:
             key = fp.read()
 
         auth = NodeAuthSSHKey(key)
-        image = self._get_default_image()
-        size = self._get_default_size()
         nic = self._get_nic(name)
 
         # Create vm
@@ -219,32 +170,13 @@ class AzureDriver(AzureNodeDriver, NodeDriver):
         # Delete IP
         self._ex_delete_public_ip(f"{name}-ip")
 
-    def set_public_ip(self, name, ip=None):
+    def set_public_ip(self, name):
         """
         Reset the node with a public IP
         :param name:
         :param ip:
         """
         self._get_nic(name, with_public_ip=True)
-
-    def _get_default_image(self):
-        """
-        Get an image object corresponding to teh default image id in config.
-        :return:
-        """
-        if self.default_image is None:
-            self.default_image = self.get_image(self.default["image"])
-        return self.default_image
-
-    def _get_default_size(self):
-        """
-        Get an size object corresponding to teh default image id in config.
-        :return:
-        """
-        if self.default_size is None:
-            sizes = self.list_sizes()
-            self.default_size = [s for s in sizes if s.id == self.default["size"]][0]
-        return self.default_size
 
     def _get_nic(self, vm_name, with_public_ip=True):
         """

@@ -1,7 +1,7 @@
 import os
 import re
 
-from cm4.abstractclass.CloudManagerABC import CloudManagerABC
+from cm4.abstractclass.ComputeNodeManagerABC import ComputeNodeManagerABC
 
 
 def execute(cmd, data, local=True):
@@ -12,7 +12,7 @@ def execute(cmd, data, local=True):
         execute(command, data, local=True)
 
 
-class Vagrant(CloudManagerABC):
+class Vagrant(ComputeNodeManagerABC):
     """
     Vagrant Manager.
     Provides the capabilities to manage a Vagrant Cluster of nodes via the script.

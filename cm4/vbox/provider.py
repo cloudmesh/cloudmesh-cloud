@@ -1,22 +1,18 @@
-from cm4.abstractclass.CloudManagerABC import CloudManagerABC
-from cloudmesh.common.Shell import Shell
-import webbrowser
-from cloudmesh.common.dotdict import dotdict
 import os
 import textwrap
-from cm4.configuration.config import Config
+import webbrowser
 from pprint import pprint
+from cloudmesh.common.Shell import Shell
+from cloudmesh.common.dotdict import dotdict
+from cm4.abstractclass.ComputeNodeManagerABC import ComputeNodeManagerABC
+from cm4.configuration.config import Config
 from cloudmesh.common.console import Console
 
 
-class VboxProvider(CloudManagerABC):
+class VboxProvider(ComputeNodeManagerABC):
 
-    #
-    # if name is none, take last name from mongo, apply to last started vm
-    #
-
-    def __init__(self):
-        pass
+    def __init__(self, config):
+        super().__init__("vagrant", config)
 
     def start(self, name):
         """
@@ -26,8 +22,6 @@ class VboxProvider(CloudManagerABC):
         :return:  The dict representing the node
         """
         pass
-
-        #    def nodes(self, verbose=False):
 
     def nodes(self, verbose=False):
         """
@@ -131,7 +125,6 @@ class VboxProvider(CloudManagerABC):
         """
         pass
 
-
     def _convert_assignment_to_dict(self, content):
         d = {}
         lines = content.split("\n")
@@ -143,11 +136,11 @@ class VboxProvider(CloudManagerABC):
             d[attribute] = value
         return d
 
-
     def info(self, name=None, source="x-vagrant"):
         """
         gets the information of a node with a given name
 
+        :param source:
         :param name:
         :return: The dict representing the node including updated status
         """
@@ -198,9 +191,6 @@ class VboxProvider(CloudManagerABC):
 
         return data
 
-
-
-
     def suspend(self, name=None):
         """
         suspends the node with the given name
@@ -231,15 +221,13 @@ class VboxProvider(CloudManagerABC):
         """
         pass
 
-    @classmethod
+    # @classmethod
     def delete(self, name=None):
         # TODO: check
 
         arg = dotdict()
         arg.name = name
-        config = Config()
-        cloud = "vagrant"  # TODO: must come through parameter or set cloud
-        arg.path = config.data["cloudmesh"]["cloud"]["vagrant"]["default"]["path"]
+        arg.path = self.default["path"]
         arg.directory = os.path.expanduser("{path}/{name}".format(**arg))
 
         result = Shell.execute("vagrant",
@@ -287,12 +275,11 @@ class VboxProvider(CloudManagerABC):
 
         return script
 
-
     def _get_specification(self, cloud=None, name=None, port=None, image=None, **kwargs):
         arg = dotdict(kwargs)
         arg.port = port
         config = Config()
-        pprint (config.data)
+        pprint (self.config)
 
 
         if cloud is None:
@@ -306,7 +293,7 @@ class VboxProvider(CloudManagerABC):
         spec = config.data["cloudmesh"]["cloud"][cloud]
         pprint(spec)
         default = spec["default"]
-        pprint(default)
+        pprint(self.default)
 
         if name is not None:
             arg.name = name

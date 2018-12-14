@@ -1,12 +1,59 @@
 import abc
+from pprint import pprint
+from datetime import datetime
 
 
-#
-# if name is none, take last name from mongo, apply to last started vm
-#
+class ComputeNodeManagerABC(metaclass=abc.ABCMeta):
 
+    def __init__(self, cloud, config):
+        self.cloud = cloud
+        self.cm = config["cloud"][cloud]["cm"]
+        self.default = config["cloud"][cloud]["default"]
+        self.credentials = config["cloud"][cloud]["credentials"]
+        self.group = config["default"]["group"]
+        self.experiment = config["default"]["experiment"]
 
-class CloudManagerABC(metaclass=abc.ABCMeta):
+    def _map_default(self, r):
+        """
+        Adds common properties to libcloud results.
+        Transforms result from its original strongly typed
+        form to `dict`.
+
+        Child providers should still implement their own
+        result mapper as well for cloud specific redaction.
+
+        :param r:
+        :return: a result as dict
+        """
+        if not isinstance(r, dict):
+            r = r.__dict__
+
+        r["cloud"] = self.cloud
+        r["updated_at"] = str(datetime.utcnow())
+        return r
+
+    def _map_vm_create(self, c):
+        """
+        Includes `group` and `experiment` fields in
+        the result. Separate from `_map_default` because
+        these fields should only be set when something is
+        created and are unique to VM objects.
+        """
+        c = self._map_default(c)
+        c["group"] = self.group
+        c["experiment"] = self.experiment
+        c["created_at"] = str(datetime.utcnow())
+        c["state"] = "creating"
+        return c
+
+    def print_config(self):
+        print("cm:")
+        pprint(self.cm)
+        print("default:")
+        pprint(self.default)
+        print("Credentials:")
+        pprint(self.credentials)
+
     @abc.abstractmethod
     def start(self, name):
         """
@@ -104,4 +151,3 @@ class CloudManagerABC(metaclass=abc.ABCMeta):
         """
         # if destination is None, increase the name counter and use the new name
         pass
-

@@ -8,16 +8,22 @@ from cm4.mongo.mongoDB import MongoDB
 from cm4.vm.Azure import AzureProvider
 from cm4.vm.Aws import AwsProvider
 from cm4.openstack.OpenstackCM import OpenstackCM
-from cm4.abstractclass.CloudManagerABC import CloudManagerABC
+from cm4.abstractclass.ComputeNodeManagerABC import ComputeNodeManagerABC
+from cm4.mongo.DataBaseDecorator import DatabaseUpdate
+from cm4.vbox.provider import VboxProvider
+
+#
+# if name is none, take last name from mongo, apply to last started vm
+#
 
 
-class Vm(CloudManagerABC):
+class Vm(ComputeNodeManagerABC):
 
     def __init__(self, cloud):
         self.mongo = MongoDB()
         self.config = Config().data["cloudmesh"]
-        self.public_key_path = self.config["profile"]["key"]["public"]
         self.kind = self.config["cloud"][cloud]["cm"]["kind"]
+        super().__init__(cloud, self.config)
 
         if self.kind == 'azure':
             self.provider = AzureProvider(self.config)
@@ -25,26 +31,24 @@ class Vm(CloudManagerABC):
             self.provider = AwsProvider(self.config)
         elif self.kind == 'openstack':
             self.provider = OpenstackCM("chameleon")
-        elif self.kind == 'vbox':
-            raise NotImplementedError
+        elif self.kind == "vbox":   # not sure about vbox vs vagrant in vbox provider
+            self.provider = VboxProvider("vagrant")
         else:
             raise NotImplementedError(f"Cloud `{self.kind}` not supported.")
 
+    @DatabaseUpdate("cloud", ComputeNodeManagerABC._map_default)
     def start(self, name):
         """
         start the node based on the id
         :param name:
         :return: VM document
         """
-        if self.kind in ["vbox"]:
-            raise NotImplementedError
-        else:
-            info = self.info(name)
-            if info.state != 'running':
-                return self.provider.start(name)
-            else:
-                return info
+        info = self.info(name)
+        if info["state"] != "running":
+            info = self.provider.start(name)
+        return info
 
+    @DatabaseUpdate("cloud", ComputeNodeManagerABC._map_default)
     def stop(self, name=None):
         """
         stop the node based on the ide
@@ -53,6 +57,7 @@ class Vm(CloudManagerABC):
         """
         return self.provider.stop(name)
 
+    @DatabaseUpdate("cloud", ComputeNodeManagerABC._map_default)
     def resume(self, name=None):
         """
         start the node based on id
@@ -60,6 +65,7 @@ class Vm(CloudManagerABC):
         """
         return self.start(name)
 
+    @DatabaseUpdate("cloud", ComputeNodeManagerABC._map_default)
     def suspend(self, name=None):
         """
         stop the node based on id
@@ -67,6 +73,7 @@ class Vm(CloudManagerABC):
         """
         return self.provider.suspend(name)
 
+    @DatabaseUpdate("cloud", ComputeNodeManagerABC._map_default)
     def destroy(self, name=None):
         """
         delete the node based on id
@@ -74,9 +81,10 @@ class Vm(CloudManagerABC):
         :return: True/False
         """
         result = self.provider.destroy(name)
-        self.mongo.delete_document('cloud', 'name', name)
+        # self.mongo.delete_document('cloud', 'name', name)
         return result
 
+    @DatabaseUpdate("cloud", ComputeNodeManagerABC._map_vm_create)
     def create(self, name=None):
         """
         create a new node
@@ -84,12 +92,13 @@ class Vm(CloudManagerABC):
         :return:
         """
         name = name or self.new_name()
-        node = self.provider.create(name=name)
-        return node
+        return self.provider.create(name=name)
 
+    @DatabaseUpdate("cloud", ComputeNodeManagerABC._map_default)
     def nodes(self):
         return self.provider.nodes()
 
+    # @DatabaseUpdate("cloud", ComputeNodeManagerABC._map_default)
     def info(self, name=None):
         """
         show node information based on id
@@ -101,11 +110,7 @@ class Vm(CloudManagerABC):
         :param name:
         :return: all information about one node
         """
-        nodes = self.nodes()
-
-        for i in nodes:
-            if i.name == name:
-                return i
+        return self.provider.info(name)
 
     def new_name(self, experiment=None, group=None, user=None):
         """

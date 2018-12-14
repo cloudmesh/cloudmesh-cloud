@@ -1,4 +1,4 @@
-from cm4.abstractclass.CloudManagerABC import CloudManagerABC
+from cm4.abstractclass.ComputeNodeManagerABC import ComputeNodeManagerABC
 from libcloud.compute.types import Provider
 from libcloud.compute.providers import get_driver
 import json
@@ -9,7 +9,7 @@ from pprint import pprint
 # https://libcloud.readthedocs.io/en/latest/apidocs/libcloud.compute.drivers.html#module-libcloud.compute.drivers.ec2
 
 
-class AWSController(CloudManagerABC):
+class AWSController(ComputeNodeManagerABC):
 
     def __init__(self, ACCESS_ID, SECRET_KEY, region):
         """

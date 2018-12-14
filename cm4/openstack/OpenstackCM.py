@@ -9,7 +9,7 @@ Modified on Tue Nov 15 2018
 import os
 import subprocess
 import pprint
-from cm4.abstractclass.CloudManagerABC import CloudManagerABC
+from cm4.abstractclass.ComputeNodeManagerABC import ComputeNodeManagerABC
 from libcloud.compute.types import Provider
 from libcloud.compute.providers import get_driver
 from cm4.configuration.config import Config
@@ -17,7 +17,7 @@ from time import sleep
 from cm4.openstack.OpenstackRefactor import OpenstackRefactor
 
 
-class OpenstackCM(CloudManagerABC):
+class OpenstackCM(ComputeNodeManagerABC):
 
     def __init__(self, cloud=None):
         config = Config().data

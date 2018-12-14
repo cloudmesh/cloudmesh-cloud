@@ -11,7 +11,7 @@ class TestCloudAzure:
     def setup(self):
         self.config = Config()
         self.azure = Vm("azure")
-        self.test_node_name = 'base-cloudmesh-dave-15'
+        self.test_node_name = 'test1'
         self.test_node_id = ''
 
     def _wait_and_get_state(self, name, how_long=15):
@@ -21,7 +21,7 @@ class TestCloudAzure:
 
     def test_azure_010_create(self):
         HEADING(myself())
-        vm = self.azure.create()
+        vm = self.azure.create(self.test_node_name)
         assert vm is not None
 
     def test_azure_020_nodes(self):
@@ -38,19 +38,19 @@ class TestCloudAzure:
         HEADING(myself())
         self.azure.suspend(name=self.test_node_name)
         state = self._wait_and_get_state(self.test_node_name)
-        assert state == 'paused'
+        assert state == 'stopped'
 
-    def test_azure_050_stop(self):
-        HEADING(myself())
-        self.azure.stop(name=self.test_node_name)
-        state = self._wait_and_get_state(self.test_node_name, 30)
-        assert state == 'deallocating' or state == 'stopped'
-
-    def test_azure_060_start(self):
+    def test_azure_050_start(self):
         HEADING(myself())
         self.azure.start(name=self.test_node_name)
         state = self._wait_and_get_state(self.test_node_name, 30)
         assert state == 'running'
+
+    def test_azure_060_stop(self):
+        HEADING(myself())
+        self.azure.stop(name=self.test_node_name)
+        state = self._wait_and_get_state(self.test_node_name, 30)
+        assert state == 'deallocating' or state == 'stopped'
 
     def test_azure_070_destroy(self):
         HEADING(myself())

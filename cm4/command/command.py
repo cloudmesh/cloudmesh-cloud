@@ -64,9 +64,6 @@ def process_arguments(arguments):
         # cm4.aws.CommandAWS.process_arguments(arguments)
         raise NotImplementedError ("THERE IS A BUG HERE, CONTACT DAVID")
 
-    elif arguments.get("batch"):
-        cm4.batch.Batch.process_arguments(arguments)
-
     elif arguments.get("openstack"):
         cm4.openstack.OpenstackCM.process_arguments(arguments)
 

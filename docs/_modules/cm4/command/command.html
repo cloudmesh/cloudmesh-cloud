@@ -166,25 +166,6 @@
 <span class="sd">::</span>
 
 <span class="sd">    Usage:</span>
-<span class="sd">      cm4 admin mongo install [--brew] [--download=PATH]</span>
-<span class="sd">      cm4 admin mongo status</span>
-<span class="sd">      cm4 admin mongo start</span>
-<span class="sd">      cm4 admin mongo stop</span>
-<span class="sd">      cm4 admin mongo backup FILENAME</span>
-<span class="sd">      cm4 admin mongo load FILENAME</span>
-<span class="sd">      cm4 admin rest status</span>
-<span class="sd">      cm4 admin rest start</span>
-<span class="sd">      cm4 admin rest stop</span>
-<span class="sd">      cm4 admin status</span>
-<span class="sd">      cm4 vagrant create --count=VMNUMBER [--debug]</span>
-<span class="sd">      cm4 vagrant start [--vms=VMLIST] [--debug]</span>
-<span class="sd">      cm4 vagrant stop [--vms=VMLIST] [--debug]</span>
-<span class="sd">      cm4 vagrant destroy [--vms=VMLIST] [--debug]</span>
-<span class="sd">      cm4 vagrant status [--vms=VMLIST]</span>
-<span class="sd">      cm4 vagrant list</span>
-<span class="sd">      cm4 vagrant ssh NAME</span>
-<span class="sd">      cm4 vagrant run COMMAND  [--vms=VMLIST]</span>
-<span class="sd">      cm4 vagrant script run SCRIPT [--vms=VMLIST]</span>
 <span class="sd">      cm4 data add FILE</span>
 <span class="sd">      cm4 data add SERVICE FILE</span>
 <span class="sd">      cm4 data get FILE</span>
@@ -198,40 +179,8 @@
 <span class="sd">      cm4 set cluster CLUSTERNAME</span>
 <span class="sd">      cm4 set experiment EXPERIMENT</span>
 <span class="sd">      cm4 set --key=KEY --value=VALUE</span>
-<span class="sd">      cm4 vm start [VMNAME] [--vms=VMLIST] [--count=VMNUMBER] [--debug] [--dryrun]</span>
-<span class="sd">      cm4 vm stop [--vms=VMLIST] [--debug] [--dryrun]</span>
-<span class="sd">      cm4 vm destroy [--vms=VMLIST] [--debug] [--dryrun]</span>
-<span class="sd">      cm4 vm status [--vms=VMLIST] [--dryrun]</span>
-<span class="sd">      cm4 vm list</span>
-<span class="sd">      cm4 vm ssh NAME</span>
-<span class="sd">      cm4 vm run COMMAND  [--vms=&lt;vmList&gt;]</span>
-<span class="sd">      cm4 vm script run SCRIPT [--vms=&lt;vmList&gt;] [--dryrun]</span>
-<span class="sd">      cm4 vcluster create virtual-cluster VIRTUALCLUSTER_NAME --clusters=CLUSTERS_LIST [--computers=COMPUTERS_LIST] [--debug]</span>
-<span class="sd">      cm4 vcluster destroy virtual-cluster VIRTUALCLUSTER_NAME</span>
-<span class="sd">      cm4 vcluster create runtime-config CONFIG_NAME PROCESS_NUM in:params out:stdout [--fetch-proc-num=FETCH_PROCESS_NUM [default=1]] [--download-later [default=True]]  [--debug]</span>
-<span class="sd">      cm4 vcluster create runtime-config CONFIG_NAME PROCESS_NUM in:params out:file [--fetch-proc-num=FETCH_PROCESS_NUM [default=1]] [--download-later [default=True]]  [--debug]</span>
-<span class="sd">      cm4 vcluster create runtime-config CONFIG_NAME PROCESS_NUM in:params+file out:stdout [--fetch-proc-num=FETCH_PROCESS_NUM [default=1]]  [--download-later [default=True]]  [--debug]</span>
-<span class="sd">      cm4 vcluster create runtime-config CONFIG_NAME PROCESS_NUM in:params+file out:file [--fetch-proc-num=FETCH_PROCESS_NUM [default=1]] [--download-later [default=True]]  [--debug]</span>
-<span class="sd">      cm4 vcluster create runtime-config CONFIG_NAME PROCESS_NUM in:params+file out:stdout+file [--fetch-proc-num=FETCH_PROCESS_NUM [default=1]] [--download-later [default=True]]  [--debug]</span>
-<span class="sd">      cm4 vcluster set-param runtime-config CONFIG_NAME PARAMETER VALUE</span>
-<span class="sd">      cm4 vcluster destroy runtime-config CONFIG_NAME</span>
-<span class="sd">      cm4 vcluster list virtual-clusters [DEPTH [default:1]]</span>
-<span class="sd">      cm4 vcluster list runtime-configs [DEPTH [default:1]]</span>
-<span class="sd">      cm4 vcluster run-script --script-path=SCRIPT_PATH --job-name=JOB_NAME --vcluster-name=VIRTUALCLUSTER_NAME --config-name=CONFIG_NAME --arguments=SET_OF_PARAMS --remote-path=REMOTE_PATH --local-path=LOCAL_PATH [--argfile-path=ARGUMENT_FILE_PATH] [--outfile-name=OUTPUT_FILE_NAME] [--suffix=SUFFIX] [--overwrite]</span>
-<span class="sd">      cm4 vcluster fetch JOB_NAME</span>
-<span class="sd">      cm4 vcluster clean-remote JOB_NAME PROCESS_NUM</span>
-<span class="sd">      cm4 vcluster test-connection VIRTUALCLUSTER_NAME PROCESS_NUM</span>
-<span class="sd">      cm4 batch create-job JOB_NAME --slurm-script=SLURM_SCRIPT_PATH --input-type=INPUT_TYPE --slurm-cluster=SLURM_CLUSTER_NAME --job-script-path=SCRIPT_PATH --remote-path=REMOTE_PATH --local-path=LOCAL_PATH [--argfile-path=ARGUMENT_FILE_PATH] [--outfile-name=OUTPUT_FILE_NAME] [--suffix=SUFFIX] [--overwrite]</span>
-<span class="sd">      cm4 batch run-job JOB_NAME</span>
-<span class="sd">      cm4 batch fetch JOB_NAME</span>
-<span class="sd">      cm4 batch test-connection SLURM_CLUSTER_NAME</span>
-<span class="sd">      cm4 batch set-param slurm-cluster CLUSTER_NAME PARAMETER VALUE</span>
-<span class="sd">      cm4 batch set-param job-metadata JOB_NAME PARAMETER VALUE</span>
-<span class="sd">      cm4 batch list slurm-clusters [DEPTH [default:1]]</span>
-<span class="sd">      cm4 batch list jobs [DEPTH [default:1]]</span>
-<span class="sd">      cm4 batch remove slurm-cluster CLUSTER_NAME</span>
-<span class="sd">      cm4 batch remove job JOB_NAME</span>
-<span class="sd">      cm4 batch clean-remote JOB_NAME</span>
+<span class="sd">      cm4 aws run command COMMAND [--vm=name]</span>
+<span class="sd">      cm4 aws run script SCRIPT [--vm=name]</span>
 <span class="sd">      cm4 spark deploy -n 10 [--dryrun]</span>
 <span class="sd">      cm4 spark run [--dryrun]</span>
 <span class="sd">      cm4 spark execute PRG [--dryrun]</span>
@@ -250,15 +199,20 @@
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">from</span> <span class="nn">docopt</span> <span class="k">import</span> <span class="n">docopt</span>
 <span class="kn">from</span> <span class="nn">cm4.configuration.config</span> <span class="k">import</span> <span class="n">Config</span>
-<span class="kn">import</span> <span class="nn">cm4.vagrant.vagrant</span>
 <span class="kn">import</span> <span class="nn">cm4.vcluster.VirtualCluster</span>
 <span class="kn">import</span> <span class="nn">cm4.batch.Batch</span>
 <span class="kn">import</span> <span class="nn">cm4.data.data</span>
 <span class="kn">import</span> <span class="nn">cm4.vm.Vm</span>
 <span class="kn">import</span> <span class="nn">cm4.openstack.OpenstackCM</span>
 <span class="kn">import</span> <span class="nn">cm4</span>
-<span class="kn">import</span> <span class="nn">cm4.mongo.MongoDBController</span>
-<span class="kn">from</span> <span class="nn">cm4.common.dotdict</span> <span class="k">import</span> <span class="n">dotdict</span>
+
+<span class="c1">#</span>
+<span class="c1"># TODO: BUG: aws has been removed</span>
+<span class="c1">#</span>
+<span class="c1">#import cm4.aws.CommandAWS</span>
+<span class="kn">from</span> <span class="nn">cm4.mongo.MongoDBController</span> <span class="k">import</span> <span class="n">MongoDBController</span>
+<span class="kn">from</span> <span class="nn">pprint</span> <span class="k">import</span> <span class="n">pprint</span>
+<span class="kn">from</span> <span class="nn">cloudmesh.common.dotdict</span> <span class="k">import</span> <span class="n">dotdict</span>
 
 
 <span class="k">def</span> <span class="nf">process_arguments</span><span class="p">(</span><span class="n">arguments</span><span class="p">):</span>
@@ -269,23 +223,9 @@
     <span class="k">if</span> <span class="n">arguments</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;--version&quot;</span><span class="p">):</span>
         <span class="nb">print</span><span class="p">(</span><span class="n">version</span><span class="p">)</span>
 
-    <span class="k">elif</span> <span class="n">arguments</span><span class="o">.</span><span class="n">admin</span> <span class="ow">and</span> <span class="n">arguments</span><span class="o">.</span><span class="n">mongo</span><span class="p">:</span>
-        <span class="nb">print</span> <span class="p">(</span><span class="s2">&quot;MONGO&quot;</span><span class="p">)</span>
-        <span class="n">result</span> <span class="o">=</span> <span class="n">cm4</span><span class="o">.</span><span class="n">mongo</span><span class="o">.</span><span class="n">MongoDBController</span><span class="o">.</span><span class="n">process_arguments</span><span class="p">(</span><span class="n">arguments</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
-
-    <span class="k">elif</span> <span class="n">arguments</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;vm&quot;</span><span class="p">):</span>
-        <span class="n">result</span> <span class="o">=</span> <span class="n">cm4</span><span class="o">.</span><span class="n">vm</span><span class="o">.</span><span class="n">Vm</span><span class="o">.</span><span class="n">process_arguments</span><span class="p">(</span><span class="n">arguments</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
-
-    <span class="k">elif</span> <span class="n">arguments</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;vagrant&quot;</span><span class="p">):</span>
-        <span class="n">cm4</span><span class="o">.</span><span class="n">vagrant</span><span class="o">.</span><span class="n">vagrant</span><span class="o">.</span><span class="n">process_arguments</span><span class="p">(</span><span class="n">arguments</span><span class="p">)</span>
-
-    <span class="k">elif</span> <span class="n">arguments</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;vcluster&quot;</span><span class="p">):</span>
-        <span class="n">cm4</span><span class="o">.</span><span class="n">vcluster</span><span class="o">.</span><span class="n">VirtualCluster</span><span class="o">.</span><span class="n">process_arguments</span><span class="p">(</span><span class="n">arguments</span><span class="p">)</span>
-
-    <span class="k">elif</span> <span class="n">arguments</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;batch&quot;</span><span class="p">):</span>
-        <span class="n">cm4</span><span class="o">.</span><span class="n">batch</span><span class="o">.</span><span class="n">Batch</span><span class="o">.</span><span class="n">process_arguments</span><span class="p">(</span><span class="n">arguments</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">arguments</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;aws&#39;</span><span class="p">):</span>
+        <span class="c1"># cm4.aws.CommandAWS.process_arguments(arguments)</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span> <span class="p">(</span><span class="s2">&quot;THERE IS A BUG HERE, CONTACT DAVID&quot;</span><span class="p">)</span>
 
     <span class="k">elif</span> <span class="n">arguments</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;openstack&quot;</span><span class="p">):</span>
         <span class="n">cm4</span><span class="o">.</span><span class="n">openstack</span><span class="o">.</span><span class="n">OpenstackCM</span><span class="o">.</span><span class="n">process_arguments</span><span class="p">(</span><span class="n">arguments</span><span class="p">)</span>

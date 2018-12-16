@@ -99,7 +99,7 @@
 <li class="toctree-l1"><a class="reference internal" href="vm.html">13. VM Description</a></li>
 <li class="toctree-l1"><a class="reference internal" href="jupyter.html">14. Jupyter Integration</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">15. Code Documentation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#command">15.1. Command</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-cm4.command.command">15.1. Command</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#aws">15.2. AWS</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#mongo">15.3. Mongo</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#mongodb">15.3.1. MongoDB</a></li>
@@ -189,8 +189,47 @@
             
   <div class="section" id="module-cm4">
 <span id="code-documentation"></span><h1>15. Code Documentation<a class="headerlink" href="#module-cm4" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="command">
-<h2>15.1. Command<a class="headerlink" href="#command" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-cm4.command.command">
+<span id="command"></span><h2>15.1. Command<a class="headerlink" href="#module-cm4.command.command" title="Permalink to this headline">¶</a></h2>
+<p>Cloudmesh 4</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Usage</span><span class="p">:</span>
+  <span class="n">cm4</span> <span class="n">data</span> <span class="n">add</span> <span class="n">FILE</span>
+  <span class="n">cm4</span> <span class="n">data</span> <span class="n">add</span> <span class="n">SERVICE</span> <span class="n">FILE</span>
+  <span class="n">cm4</span> <span class="n">data</span> <span class="n">get</span> <span class="n">FILE</span>
+  <span class="n">cm4</span> <span class="n">data</span> <span class="n">get</span> <span class="n">FILE</span> <span class="n">DEST_FOLDER</span>
+  <span class="n">cm4</span> <span class="n">data</span> <span class="k">del</span> <span class="n">FILE</span>
+  <span class="n">cm4</span> <span class="n">data</span> <span class="p">(</span><span class="n">ls</span> <span class="o">|</span> <span class="nb">dir</span><span class="p">)</span>
+  <span class="n">cm4</span> <span class="nb">set</span> <span class="n">cloud</span> <span class="n">CLOUD</span>
+  <span class="n">cm4</span> <span class="nb">set</span> <span class="n">group</span> <span class="n">GROUP</span>
+  <span class="n">cm4</span> <span class="nb">set</span> <span class="n">role</span> <span class="n">ROLE</span>
+  <span class="n">cm4</span> <span class="nb">set</span> <span class="n">host</span> <span class="n">HOSTNAME</span>
+  <span class="n">cm4</span> <span class="nb">set</span> <span class="n">cluster</span> <span class="n">CLUSTERNAME</span>
+  <span class="n">cm4</span> <span class="nb">set</span> <span class="n">experiment</span> <span class="n">EXPERIMENT</span>
+  <span class="n">cm4</span> <span class="nb">set</span> <span class="o">--</span><span class="n">key</span><span class="o">=</span><span class="n">KEY</span> <span class="o">--</span><span class="n">value</span><span class="o">=</span><span class="n">VALUE</span>
+  <span class="n">cm4</span> <span class="n">aws</span> <span class="n">run</span> <span class="n">command</span> <span class="n">COMMAND</span> <span class="p">[</span><span class="o">--</span><span class="n">vm</span><span class="o">=</span><span class="n">name</span><span class="p">]</span>
+  <span class="n">cm4</span> <span class="n">aws</span> <span class="n">run</span> <span class="n">script</span> <span class="n">SCRIPT</span> <span class="p">[</span><span class="o">--</span><span class="n">vm</span><span class="o">=</span><span class="n">name</span><span class="p">]</span>
+  <span class="n">cm4</span> <span class="n">spark</span> <span class="n">deploy</span> <span class="o">-</span><span class="n">n</span> <span class="mi">10</span> <span class="p">[</span><span class="o">--</span><span class="n">dryrun</span><span class="p">]</span>
+  <span class="n">cm4</span> <span class="n">spark</span> <span class="n">run</span> <span class="p">[</span><span class="o">--</span><span class="n">dryrun</span><span class="p">]</span>
+  <span class="n">cm4</span> <span class="n">spark</span> <span class="n">execute</span> <span class="n">PRG</span> <span class="p">[</span><span class="o">--</span><span class="n">dryrun</span><span class="p">]</span>
+  <span class="n">cm4</span> <span class="p">(</span><span class="o">-</span><span class="n">h</span> <span class="o">|</span> <span class="o">--</span><span class="n">help</span><span class="p">)</span>
+  <span class="n">cm4</span> <span class="o">--</span><span class="n">version</span>
+
+<span class="n">Options</span><span class="p">:</span>
+  <span class="o">-</span><span class="n">h</span> <span class="o">--</span><span class="n">help</span>     <span class="n">Show</span> <span class="n">this</span> <span class="n">screen</span><span class="o">.</span>
+  <span class="o">--</span><span class="n">version</span>     <span class="n">Show</span> <span class="n">version</span><span class="o">.</span>
+  <span class="o">--</span><span class="n">config</span>      <span class="n">Location</span> <span class="n">of</span> <span class="n">a</span> <span class="n">cmdata</span><span class="o">.</span><span class="n">yaml</span> <span class="n">file</span>
+  <span class="o">--</span><span class="n">vm_list</span><span class="o">=&lt;</span><span class="n">list_of_vms</span><span class="o">&gt;</span>  <span class="n">List</span> <span class="n">of</span> <span class="n">VMs</span> <span class="n">separated</span> <span class="n">by</span> <span class="n">commas</span> <span class="n">ex</span><span class="p">:</span> <span class="n">node</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">node</span><span class="o">-</span><span class="mi">2</span>
+
+<span class="n">Description</span><span class="p">:</span>
+   <span class="n">Cloudmesh</span> <span class="n">v4</span>
+</pre></div>
+</div>
+<dl class="function">
+<dt id="cm4.command.command.main">
+<code class="descclassname">cm4.command.command.</code><code class="descname">main</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/command/command.html#main"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.command.command.main" title="Permalink to this definition">¶</a></dt>
+<dd><p>Main function for Cloudmesh 4. Expose <cite>cm4</cite> as an executable command.</p>
+</dd></dl>
+
 </div>
 <div class="section" id="aws">
 <h2>15.2. AWS<a class="headerlink" href="#aws" title="Permalink to this headline">¶</a></h2>
@@ -604,58 +643,6 @@ warnings, errors, ok and regular messages.</p>
 </div>
 <div class="section" id="module-cm4.vcluster.VirtualCluster">
 <span id="virtual-cluster"></span><h2>15.5. Virtual Cluster<a class="headerlink" href="#module-cm4.vcluster.VirtualCluster" title="Permalink to this headline">¶</a></h2>
-<p>Virtual Cluster: running parallel remote jobs</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Usage</span><span class="p">:</span>
-  <span class="n">cm4</span> <span class="n">vcluster</span> <span class="n">create</span> <span class="n">virtual</span><span class="o">-</span><span class="n">cluster</span> <span class="n">VIRTUALCLUSTER_NAME</span> <span class="o">--</span><span class="n">clusters</span><span class="o">=</span><span class="n">CLUSTERS_LIST</span> <span class="p">[</span><span class="o">--</span><span class="n">computers</span><span class="o">=</span><span class="n">COMPUTERS_LIST</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">debug</span><span class="p">]</span>
-  <span class="n">cm4</span> <span class="n">vcluster</span> <span class="n">destroy</span> <span class="n">virtual</span><span class="o">-</span><span class="n">cluster</span> <span class="n">VIRTUALCLUSTER_NAME</span>
-  <span class="n">cm4</span> <span class="n">vcluster</span> <span class="n">create</span> <span class="n">runtime</span><span class="o">-</span><span class="n">config</span> <span class="n">CONFIG_NAME</span> <span class="n">PROCESS_NUM</span> <span class="ow">in</span><span class="p">:</span><span class="n">params</span> <span class="n">out</span><span class="p">:</span><span class="n">stdout</span> <span class="p">[</span><span class="o">--</span><span class="n">fetch</span><span class="o">-</span><span class="n">proc</span><span class="o">-</span><span class="n">num</span><span class="o">=</span><span class="n">FETCH_PROCESS_NUM</span> <span class="p">[</span><span class="n">default</span><span class="o">=</span><span class="mi">1</span><span class="p">]]</span> <span class="p">[</span><span class="o">--</span><span class="n">download</span><span class="o">-</span><span class="n">later</span> <span class="p">[</span><span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">]]</span>  <span class="p">[</span><span class="o">--</span><span class="n">debug</span><span class="p">]</span>
-  <span class="n">cm4</span> <span class="n">vcluster</span> <span class="n">create</span> <span class="n">runtime</span><span class="o">-</span><span class="n">config</span> <span class="n">CONFIG_NAME</span> <span class="n">PROCESS_NUM</span> <span class="ow">in</span><span class="p">:</span><span class="n">params</span> <span class="n">out</span><span class="p">:</span><span class="n">file</span> <span class="p">[</span><span class="o">--</span><span class="n">fetch</span><span class="o">-</span><span class="n">proc</span><span class="o">-</span><span class="n">num</span><span class="o">=</span><span class="n">FETCH_PROCESS_NUM</span> <span class="p">[</span><span class="n">default</span><span class="o">=</span><span class="mi">1</span><span class="p">]]</span> <span class="p">[</span><span class="o">--</span><span class="n">download</span><span class="o">-</span><span class="n">later</span> <span class="p">[</span><span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">]]</span>  <span class="p">[</span><span class="o">--</span><span class="n">debug</span><span class="p">]</span>
-  <span class="n">cm4</span> <span class="n">vcluster</span> <span class="n">create</span> <span class="n">runtime</span><span class="o">-</span><span class="n">config</span> <span class="n">CONFIG_NAME</span> <span class="n">PROCESS_NUM</span> <span class="ow">in</span><span class="p">:</span><span class="n">params</span><span class="o">+</span><span class="n">file</span> <span class="n">out</span><span class="p">:</span><span class="n">stdout</span> <span class="p">[</span><span class="o">--</span><span class="n">fetch</span><span class="o">-</span><span class="n">proc</span><span class="o">-</span><span class="n">num</span><span class="o">=</span><span class="n">FETCH_PROCESS_NUM</span> <span class="p">[</span><span class="n">default</span><span class="o">=</span><span class="mi">1</span><span class="p">]]</span>  <span class="p">[</span><span class="o">--</span><span class="n">download</span><span class="o">-</span><span class="n">later</span> <span class="p">[</span><span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">]]</span>  <span class="p">[</span><span class="o">--</span><span class="n">debug</span><span class="p">]</span>
-  <span class="n">cm4</span> <span class="n">vcluster</span> <span class="n">create</span> <span class="n">runtime</span><span class="o">-</span><span class="n">config</span> <span class="n">CONFIG_NAME</span> <span class="n">PROCESS_NUM</span> <span class="ow">in</span><span class="p">:</span><span class="n">params</span><span class="o">+</span><span class="n">file</span> <span class="n">out</span><span class="p">:</span><span class="n">file</span> <span class="p">[</span><span class="o">--</span><span class="n">fetch</span><span class="o">-</span><span class="n">proc</span><span class="o">-</span><span class="n">num</span><span class="o">=</span><span class="n">FETCH_PROCESS_NUM</span> <span class="p">[</span><span class="n">default</span><span class="o">=</span><span class="mi">1</span><span class="p">]]</span> <span class="p">[</span><span class="o">--</span><span class="n">download</span><span class="o">-</span><span class="n">later</span> <span class="p">[</span><span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">]]</span>  <span class="p">[</span><span class="o">--</span><span class="n">debug</span><span class="p">]</span>
-  <span class="n">cm4</span> <span class="n">vcluster</span> <span class="n">create</span> <span class="n">runtime</span><span class="o">-</span><span class="n">config</span> <span class="n">CONFIG_NAME</span> <span class="n">PROCESS_NUM</span> <span class="ow">in</span><span class="p">:</span><span class="n">params</span><span class="o">+</span><span class="n">file</span> <span class="n">out</span><span class="p">:</span><span class="n">stdout</span><span class="o">+</span><span class="n">file</span> <span class="p">[</span><span class="o">--</span><span class="n">fetch</span><span class="o">-</span><span class="n">proc</span><span class="o">-</span><span class="n">num</span><span class="o">=</span><span class="n">FETCH_PROCESS_NUM</span> <span class="p">[</span><span class="n">default</span><span class="o">=</span><span class="mi">1</span><span class="p">]]</span> <span class="p">[</span><span class="o">--</span><span class="n">download</span><span class="o">-</span><span class="n">later</span> <span class="p">[</span><span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">]]</span>  <span class="p">[</span><span class="o">--</span><span class="n">debug</span><span class="p">]</span>
-  <span class="n">cm4</span> <span class="n">vcluster</span> <span class="nb">set</span><span class="o">-</span><span class="n">param</span> <span class="n">runtime</span><span class="o">-</span><span class="n">config</span> <span class="n">CONFIG_NAME</span> <span class="n">PARAMETER</span> <span class="n">VALUE</span>
-  <span class="n">cm4</span> <span class="n">vcluster</span> <span class="n">destroy</span> <span class="n">runtime</span><span class="o">-</span><span class="n">config</span> <span class="n">CONFIG_NAME</span>
-  <span class="n">cm4</span> <span class="n">vcluster</span> <span class="nb">list</span> <span class="n">virtual</span><span class="o">-</span><span class="n">clusters</span> <span class="p">[</span><span class="n">DEPTH</span> <span class="p">[</span><span class="n">default</span><span class="p">:</span><span class="mi">1</span><span class="p">]]</span>
-  <span class="n">cm4</span> <span class="n">vcluster</span> <span class="nb">list</span> <span class="n">runtime</span><span class="o">-</span><span class="n">configs</span> <span class="p">[</span><span class="n">DEPTH</span> <span class="p">[</span><span class="n">default</span><span class="p">:</span><span class="mi">1</span><span class="p">]]</span>
-  <span class="n">cm4</span> <span class="n">vcluster</span> <span class="n">run</span><span class="o">-</span><span class="n">script</span> <span class="o">--</span><span class="n">script</span><span class="o">-</span><span class="n">path</span><span class="o">=</span><span class="n">SCRIPT_PATH</span> <span class="o">--</span><span class="n">job</span><span class="o">-</span><span class="n">name</span><span class="o">=</span><span class="n">JOB_NAME</span> <span class="o">--</span><span class="n">vcluster</span><span class="o">-</span><span class="n">name</span><span class="o">=</span><span class="n">VIRTUALCLUSTER_NAME</span> <span class="o">--</span><span class="n">config</span><span class="o">-</span><span class="n">name</span><span class="o">=</span><span class="n">CONFIG_NAME</span> <span class="o">--</span><span class="n">arguments</span><span class="o">=</span><span class="n">SET_OF_PARAMS</span> <span class="o">--</span><span class="n">remote</span><span class="o">-</span><span class="n">path</span><span class="o">=</span><span class="n">REMOTE_PATH</span><span class="o">&gt;</span> <span class="o">--</span><span class="n">local</span><span class="o">-</span><span class="n">path</span><span class="o">=</span><span class="n">LOCAL_PATH</span> <span class="p">[</span><span class="o">--</span><span class="n">argfile</span><span class="o">-</span><span class="n">path</span><span class="o">=</span><span class="n">ARGUMENT_FILE_PATH</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">outfile</span><span class="o">-</span><span class="n">name</span><span class="o">=</span><span class="n">OUTPUT_FILE_NAME</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">suffix</span><span class="o">=</span><span class="n">SUFFIX</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">overwrite</span><span class="p">]</span>
-  <span class="n">cm4</span> <span class="n">vcluster</span> <span class="n">fetch</span> <span class="n">JOB_NAME</span>
-  <span class="n">cm4</span> <span class="n">vcluster</span> <span class="n">clean</span><span class="o">-</span><span class="n">remote</span> <span class="n">JOB_NAME</span> <span class="n">PROCESS_NUM</span>
-  <span class="n">cm4</span> <span class="n">vcluster</span> <span class="n">test</span><span class="o">-</span><span class="n">connection</span> <span class="n">VIRTUALCLUSTER_NAME</span> <span class="n">PROCESS_NUM</span>
-  <span class="n">cm4</span> <span class="o">-</span><span class="n">h</span>
-
-<span class="n">Options</span><span class="p">:</span>
-  <span class="o">-</span><span class="n">h</span> <span class="o">--</span><span class="n">help</span>     <span class="n">Show</span> <span class="n">this</span> <span class="n">screen</span><span class="o">.</span>
-  <span class="o">--</span><span class="n">node_list</span><span class="o">=&lt;</span><span class="n">list_of_nodes</span><span class="o">&gt;</span>           <span class="n">List</span> <span class="n">of</span> <span class="n">nodes</span> <span class="n">separated</span> <span class="n">by</span> <span class="n">commas</span><span class="o">.</span> <span class="n">Ex</span><span class="p">:</span> <span class="n">node</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="n">node</span><span class="o">-</span><span class="mi">2</span>
-  <span class="o">--</span><span class="n">cluster_list</span><span class="o">=&lt;</span><span class="n">list_of_clusters</span><span class="o">&gt;</span>     <span class="n">List</span> <span class="n">of</span> <span class="n">clusters</span> <span class="n">separated</span> <span class="n">by</span> <span class="n">commas</span><span class="o">.</span> <span class="n">Ex</span><span class="p">:</span> <span class="n">cluster</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">cluster</span><span class="o">-</span><span class="mi">2</span>
-  <span class="o">--</span><span class="n">params</span><span class="o">=&lt;</span><span class="nb">set</span><span class="o">-</span><span class="n">of</span><span class="o">-</span><span class="n">paramList</span><span class="o">&gt;</span>           <span class="n">This</span> <span class="ow">is</span> <span class="n">a</span> <span class="nb">set</span> <span class="n">of</span> <span class="n">parameter</span> <span class="nb">list</span> <span class="n">each</span> <span class="nb">set</span> <span class="ow">is</span> <span class="n">sent</span> <span class="n">to</span> <span class="n">one</span> <span class="n">node</span><span class="o">.</span> <span class="n">Delimiter</span> <span class="k">for</span> <span class="n">each</span> <span class="n">node</span> <span class="ow">is</span> <span class="s2">&quot;,&quot;</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">g</span><span class="o">.</span> <span class="k">with</span> <span class="mi">1</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span> <span class="mi">6</span> <span class="n">the</span> <span class="mi">1</span> <span class="mi">2</span> <span class="n">will</span> <span class="n">be</span> <span class="n">sent</span> <span class="n">to</span> <span class="n">node1</span><span class="p">,</span> <span class="mi">3</span> <span class="mi">4</span> <span class="n">run</span> <span class="n">on</span> <span class="n">node</span> <span class="mi">2</span><span class="p">,</span> <span class="n">etc</span><span class="o">.</span>
-
-<span class="n">Description</span><span class="p">:</span>
-   <span class="n">put</span> <span class="n">a</span> <span class="n">description</span> <span class="n">here</span>
-
-<span class="n">Example</span><span class="p">:</span>
-   <span class="n">put</span> <span class="n">an</span> <span class="n">example</span> <span class="n">here</span>
-</pre></div>
-</div>
-<dl class="function">
-<dt id="cm4.vcluster.VirtualCluster.main">
-<code class="descclassname">cm4.vcluster.VirtualCluster.</code><code class="descname">main</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/vcluster/VirtualCluster.html#main"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.vcluster.VirtualCluster.main" title="Permalink to this definition">¶</a></dt>
-<dd><p>Main function for the SSH. Processes the input arguments.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="cm4.vcluster.VirtualCluster.process_arguments">
-<code class="descclassname">cm4.vcluster.VirtualCluster.</code><code class="descname">process_arguments</code><span class="sig-paren">(</span><em>arguments</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/vcluster/VirtualCluster.html#process_arguments"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.vcluster.VirtualCluster.process_arguments" title="Permalink to this definition">¶</a></dt>
-<dd><p>Processes all the input arguments and acts accordingly.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>arguments</strong> – input arguments for the virtual cluster script.</td>
-</tr>
-</tbody>
-</table>
-</dd></dl>
-
 </div>
 <div class="section" id="module-cm4.configuration.config">
 <span id="configuration"></span><h2>15.6. Configuration<a class="headerlink" href="#module-cm4.configuration.config" title="Permalink to this headline">¶</a></h2>
@@ -1125,15 +1112,7 @@ from the args and kwargs arguments, respectively.</p>
 
 </dd></dl>
 
-<span class="target" id="module-cm4.vm.Vm"></span><dl class="function">
-<dt id="cm4.vm.Vm.process_arguments">
-<code class="descclassname">cm4.vm.Vm.</code><code class="descname">process_arguments</code><span class="sig-paren">(</span><em>arguments</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cm4/vm/Vm.html#process_arguments"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cm4.vm.Vm.process_arguments" title="Permalink to this definition">¶</a></dt>
-<dd><p>Process command line arguments to execute VM actions.
-Called from cm4.command.command
-:param arguments:</p>
-</dd></dl>
-
-<span class="target" id="module-cm4.vm.VmRefactor"></span><p>Created on Tue Nov 16 23:58:09 2018</p>
+<span class="target" id="module-cm4.vm.Vm"></span><span class="target" id="module-cm4.vm.VmRefactor"></span><p>Created on Tue Nov 16 23:58:09 2018</p>
 <p>&#64;author: Rui</p>
 <span class="target" id="module-cm4.vm.VmUtil"></span><p>Created on Tue Nov 16 11:48:09 2018</p>
 <p>&#64;author: Rui</p>

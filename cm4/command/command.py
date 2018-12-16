@@ -18,17 +18,6 @@
       cm4 set --key=KEY --value=VALUE
       cm4 aws run command COMMAND [--vm=name]
       cm4 aws run script SCRIPT [--vm=name]
-      cm4 batch create-job JOB_NAME --slurm-script=SLURM_SCRIPT_PATH --input-type=INPUT_TYPE --slurm-cluster=SLURM_CLUSTER_NAME --job-script-path=SCRIPT_PATH --remote-path=REMOTE_PATH --local-path=LOCAL_PATH [--argfile-path=ARGUMENT_FILE_PATH] [--outfile-name=OUTPUT_FILE_NAME] [--suffix=SUFFIX] [--overwrite]
-      cm4 batch run-job JOB_NAME
-      cm4 batch fetch JOB_NAME
-      cm4 batch test-connection SLURM_CLUSTER_NAME
-      cm4 batch set-param slurm-cluster CLUSTER_NAME PARAMETER VALUE
-      cm4 batch set-param job-metadata JOB_NAME PARAMETER VALUE
-      cm4 batch list slurm-clusters [DEPTH [default:1]]
-      cm4 batch list jobs [DEPTH [default:1]]
-      cm4 batch remove slurm-cluster CLUSTER_NAME
-      cm4 batch remove job JOB_NAME
-      cm4 batch clean-remote JOB_NAME
       cm4 spark deploy -n 10 [--dryrun]
       cm4 spark run [--dryrun]
       cm4 spark execute PRG [--dryrun]

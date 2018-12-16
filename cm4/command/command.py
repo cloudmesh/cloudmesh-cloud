@@ -92,7 +92,11 @@ import cm4.data.data
 import cm4.vm.Vm
 import cm4.openstack.OpenstackCM
 import cm4
-import cm4.aws.CommandAWS
+
+#
+# TODO: BUG: aws has been removed
+#
+#import cm4.aws.CommandAWS
 from cm4.mongo.MongoDBController import MongoDBController
 from pprint import pprint
 from cloudmesh.common.dotdict import dotdict
@@ -117,7 +121,8 @@ def process_arguments(arguments):
         pprint(result)
 
     elif arguments.get('aws'):
-        cm4.aws.CommandAWS.process_arguments(arguments)
+        # cm4.aws.CommandAWS.process_arguments(arguments)
+        raise NotImplementedError ("THERE IS A BUG HERE, CONTACT DAVID")
 
     elif arguments.get("vcluster"):
         cm4.vcluster.VirtualCluster.process_arguments(arguments)

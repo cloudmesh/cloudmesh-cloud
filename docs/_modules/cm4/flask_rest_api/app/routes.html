@@ -89,17 +89,15 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../configuration.html">5. Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../vmproviders.html">6. VM Providers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../vagrant.html">7. Vagrant</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../vagrant-other.html">8. Cloudmesh Vagrant: New</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../CM4README.html">9. CM4 Details</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../README.html">10. Cloudmesh cm v4</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../aws.html">11. AWS cm</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../ufo.html">12. CM4 REST Api</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../vcluster.html">13. Virtual Cluster</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../vm.html">14. VM Description</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../jupyter.html">15. Jupyter Integration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../code.html">16. Code Documentation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../deprecated.html">17. Deprecated from here on</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../ehvagrant.html">18. ehvagrant: enhanced Vagrant interface with importable python module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../CM4README.html">8. CM4 Details</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../README.html">9. Cloudmesh cm v4</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../aws.html">10. AWS cm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../ufo.html">11. CM4 REST Api</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../vcluster.html">12. Virtual Cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../vm.html">13. VM Description</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../jupyter.html">14. Jupyter Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../code.html">15. Code Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../deprecated.html">16. Deprecated from here on</a></li>
 </ul>
 
             
@@ -181,7 +179,7 @@
 <span class="sd">    Returns all the VM information.</span>
 <span class="sd">    :return: a json with all the vm information</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">vms</span> <span class="o">=</span> <span class="n">cloud</span><span class="o">.</span><span class="n">find</span><span class="p">()</span>
+    <span class="n">vms</span> <span class="o">=</span> <span class="n">cloud</span><span class="o">.</span><span class="n">find_image</span><span class="p">()</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">vms</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s1">&#39;message&#39;</span><span class="p">:</span> <span class="s2">&quot;There are no VMs in the system&quot;</span><span class="p">}),</span> <span class="mi">401</span>
 
@@ -199,7 +197,7 @@
 <span class="sd">    Returns all the stopped VM information.</span>
 <span class="sd">    :return: a json with all the stopped vm information</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">vms</span> <span class="o">=</span> <span class="n">cloud</span><span class="o">.</span><span class="n">find</span><span class="p">({</span><span class="s1">&#39;state&#39;</span><span class="p">:</span> <span class="s1">&#39;stopped&#39;</span><span class="p">})</span>
+    <span class="n">vms</span> <span class="o">=</span> <span class="n">cloud</span><span class="o">.</span><span class="n">find_image</span><span class="p">({</span><span class="s1">&#39;state&#39;</span><span class="p">:</span> <span class="s1">&#39;stopped&#39;</span><span class="p">})</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">vms</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">jsonify</span><span class="p">({</span><span class="s1">&#39;message&#39;</span><span class="p">:</span> <span class="s2">&quot;There are no stopped VMs in the system&quot;</span><span class="p">}),</span> <span class="mi">401</span>
 

@@ -2,7 +2,7 @@ from __future__ import print_function
 from cloudmesh.shell.command import command
 from cloudmesh.shell.command import PluginCommand
 from datetime import datetime
-from  cloudmesh.cm4.batch.Batch import SlurmCluster
+from cm4.batch.Batch import SlurmCluster
 
 # from cloudmesh.batch.api.manager import Manager
 

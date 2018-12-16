@@ -1,44 +1,8 @@
-#!/usr/bin/env python3
-
-# noinspection PyPep8
-"""Batch: running Slurm jobs
-
-::
-
-    Usage:
-      cm4 batch create-job JOB_NAME --slurm-script=SLURM_SCRIPT_PATH --input-type=INPUT_TYPE --slurm-cluster=SLURM_CLUSTER_NAME --job-script-path=SCRIPT_PATH --remote-path=REMOTE_PATH --local-path=LOCAL_PATH [--argfile-path=ARGUMENT_FILE_PATH] [--outfile-name=OUTPUT_FILE_NAME] [--suffix=SUFFIX] [--overwrite]
-      cm4 batch run-job JOB_NAME
-      cm4 batch fetch JOB_NAME
-      cm4 batch test-connection SLURM_CLUSTER_NAME
-      cm4 batch set-param slurm-cluster CLUSTER_NAME PARAMETER VALUE
-      cm4 batch set-param job-metadata JOB_NAME PARAMETER VALUE
-      cm4 batch list slurm-clusters [DEPTH [default:1]]
-      cm4 batch list jobs [DEPTH [default:1]]
-      cm4 batch remove slurm-cluster CLUSTER_NAME
-      cm4 batch remove job JOB_NAME
-      cm4 batch clean-remote JOB_NAME
-      cm4 -h
-
-    Options:
-      -h --help     Show this screen.
-      --node_list=<list_of_nodes>           List of nodes separated by commas. Ex: node-1,node-2
-      --cluster_list=<list_of_clusters>     List of clusters separated by commas. Ex: cluster-1, cluster-2
-      --params=<set-of-paramList>           This is a set of parameter list each set is sent to one node. Delimiter for each node is ",", e.g. with 1 2, 3 4, 5 6 the 1 2 will be sent to node1, 3 4 run on node 2, etc.
-
-    Description:
-       put a description here
-
-    Example:
-       put an example here
-"""
-
 from multiprocessing import Pool, Manager
 import subprocess
 import os
 import ntpath
 import time
-from docopt import docopt
-from datetime import datetime
 from cm4.configuration.config import Config
 from cm4.configuration.generic_config import GenericConfig
 
@@ -383,86 +347,16 @@ class SlurmCluster(object):
             raise ValueError("Target of variable set not found.")
 
 
-def process_arguments(arguments):
-    """
-    Processes all the input arguments and acts accordingly.
-
-    :param arguments: input arguments for the virtual cluster script.
-
-    """
-    debug = arguments["--debug"]
-
-    if arguments.get("batch"):
-        slurm_manager = SlurmCluster(debug=debug)
-        if arguments.get("create-job") and arguments.get("JOB_NAME"):
-                job_name = arguments.get("JOB_NAME")
-                slurm_script_path = arguments.get("--slurm-script")
-                input_type = arguments.get("--input-type")
-                assert input_type in ['params', 'params+file'], "Input type can be either params or params+file"
-                if input_type == 'params+file':
-                    assert arguments.get("--argfile-path") is not None, "Input type is params+file but the input \
-                    filename is not specified"
-                slurm_cluster_name = arguments.get("--slurm-cluster")
-                job_script_path = arguments.get("--job-script-path")
-                remote_path = arguments.get("--remote-path")
-                local_path = arguments.get("--local-path")
-                random_suffix = '_' + str(datetime.now()).replace('-', '').replace(' ', '_').replace(':', '')[
-                                      0:str(datetime.now()).replace('-', '').replace(' ', '_').replace(':', '').index(
-                                          '.') + 3].replace('.', '')
-                suffix = random_suffix if arguments.get("suffix") is None else arguments.get("suffix")
-                overwrite = False if type(arguments.get("--overwrite")) is None else arguments.get("--overwrite")
-                argfile_path = '' if arguments.get("--argfile-path") is None else arguments.get("--argfile-path")
-                slurm_manager.create(job_name, slurm_cluster_name, slurm_script_path, input_type,
-                                     job_script_path, argfile_path, remote_path, local_path,
-                                     suffix, overwrite)
-
-        elif arguments.get("remove"):
-            if arguments.get("slurm-cluster"):
-                slurm_manager.remove("slurm-cluster", arguments.get("CLUSTER_NAME"))
-            if arguments.get("job"):
-                slurm_manager.remove("job", arguments.get("JOB_NAME"))
-
-        elif arguments.get("list"):
-            max_depth = 1 if arguments.get("DEPTH") is None else int(arguments.get("DEPTH"))
-            if arguments.get("slurm-clusters"):
-                slurm_manager.list("slurm-clusters", max_depth)
-            elif arguments.get("jobs"):
-                slurm_manager.list("jobs", max_depth)
-
-        elif arguments.get("set-param"):
-            if arguments.get("slurm-cluster"):
-                cluster_name = arguments.get("CLUSTER_NAME")
-                parameter = arguments.get("PARAMETER")
-                value = arguments.get("VALUE")
-                slurm_manager.set_param("slurm-cluster", cluster_name, parameter, value)
-
-            if arguments.get("job-metadata"):
-                config_name = arguments.get("JOB_NAME")
-                parameter = arguments.get("PARAMETER")
-                value = arguments.get("VALUE")
-                slurm_manager.set_param("job-metadata", config_name, parameter, value)
-        elif arguments.get("run-job"):
-            job_name = arguments.get("JOB_NAME")
-            slurm_manager.run(job_name)
-        elif arguments.get("fetch"):
-            job_name = arguments.get("JOB_NAME")
-            slurm_manager.fetch(job_name)
-        elif arguments.get("test-connection"):
-            slurm_cluster_name = arguments.get("SLURM_CLUSTER_NAME")
-            slurm_manager.connection_test(slurm_cluster_name)
-        elif arguments.get("clean-remote"):
-            job_name = arguments.get("JOB_NAME")
-            slurm_manager.clean_remote(job_name)
 
 
-def main():
-    """
-    Main function for the batch. Processes the input arguments.
+#def main():
+#    """
+#    Main function for the batch. Processes the input arguments.
 
-    """
-    arguments = docopt(__doc__, version='Cloudmesh Batch 0.1')
-    process_arguments(arguments)
+#    """
+#    arguments = docopt(__doc__, version='Cloudmesh Batch 0.1')
+#    process_arguments(arguments)
 
 
-if __name__ == "__main__":
-    main()
+#if __name__ == "__main__":
+#    main()

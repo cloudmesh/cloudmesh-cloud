@@ -16,8 +16,8 @@ class VclusterCommand(PluginCommand):
 
           Usage:
           
-            vcluster create virtual-cluster VIRTUALCLUSTER_NAME --clusters=CLUSTERS_LIST [--computers=COMPUTERS_LIST] [--debug]
-            vcluster destroy virtual-cluster VIRTUALCLUSTER_NAME
+            vcluster create cluster CLUSTER_NAME --clusters=CLUSTERS_LIST [--computers=COMPUTERS_LIST] [--debug]
+            vcluster destroy cluster CLUSTER_NAME
             vcluster create runtime-config CONFIG_NAME PROCESS_NUM in:params out:stdout [--fetch-proc-num=FETCH_PROCESS_NUM [default=1]] [--download-later [default=True]]  [--debug]
             vcluster create runtime-config CONFIG_NAME PROCESS_NUM in:params out:file [--fetch-proc-num=FETCH_PROCESS_NUM [default=1]] [--download-later [default=True]]  [--debug]
             vcluster create runtime-config CONFIG_NAME PROCESS_NUM in:params+file out:stdout [--fetch-proc-num=FETCH_PROCESS_NUM [default=1]]  [--download-later [default=True]]  [--debug]
@@ -25,12 +25,12 @@ class VclusterCommand(PluginCommand):
             vcluster create runtime-config CONFIG_NAME PROCESS_NUM in:params+file out:stdout+file [--fetch-proc-num=FETCH_PROCESS_NUM [default=1]] [--download-later [default=True]]  [--debug]
             vcluster set-param runtime-config CONFIG_NAME PARAMETER VALUE
             vcluster destroy runtime-config CONFIG_NAME
-            vcluster list virtual-clusters [DEPTH [default:1]]
+            vcluster list clusters [DEPTH [default:1]]
             vcluster list runtime-configs [DEPTH [default:1]]
-            vcluster run-script --script-path=SCRIPT_PATH --job-name=JOB_NAME --vcluster-name=VIRTUALCLUSTER_NAME --config-name=CONFIG_NAME --arguments=SET_OF_PARAMS --remote-path=REMOTE_PATH --local-path=LOCAL_PATH [--argfile-path=ARGUMENT_FILE_PATH] [--outfile-name=OUTPUT_FILE_NAME] [--suffix=SUFFIX] [--overwrite]
+            vcluster run-script --script-path=SCRIPT_PATH --job-name=JOB_NAME --vcluster-name=CLUSTER_NAME --config-name=CONFIG_NAME --arguments=SET_OF_PARAMS --remote-path=REMOTE_PATH --local-path=LOCAL_PATH [--argfile-path=ARGUMENT_FILE_PATH] [--outfile-name=OUTPUT_FILE_NAME] [--suffix=SUFFIX] [--overwrite]
             vcluster fetch JOB_NAME
             vcluster clean-remote JOB_NAME PROCESS_NUM
-            vcluster test-connection VIRTUALCLUSTER_NAME PROCESS_NUM
+            vcluster test-connection CLUSTER_NAME PROCESS_NUM
 
           This command does some useful things.
 
@@ -49,10 +49,10 @@ class VclusterCommand(PluginCommand):
         if arguments.get("vcluster"):
             vcluster_manager = VirtualCluster(debug=debug)
             if arguments.get("create"):
-                if arguments.get("virtual-cluster") and arguments.get("--clusters"):
+                if arguments.get("cluster") and arguments.get("--clusters"):
                     clusters = hostlist.expand_hostlist(arguments.get("--clusters"))
                     computers = hostlist.expand_hostlist(arguments.get("--computers"))
-                    vcluster_manager.create(arguments.get("VIRTUALCLUSTER_NAME"),
+                    vcluster_manager.create(arguments.get("CLUSTER_NAME"),
                                             cluster_list=clusters, computer_list=computers)
                 elif arguments.get("runtime-config") and arguments.get("CONFIG_NAME") and arguments.get("PROCESS_NUM"):
                     config_name = arguments.get("CONFIG_NAME")
@@ -81,13 +81,13 @@ class VclusterCommand(PluginCommand):
                                             output_type)
 
             elif arguments.get("destroy"):
-                if arguments.get("virtual-cluster"):
-                    vcluster_manager.destroy("virtual-cluster", arguments.get("VIRTUALCLUSTER_NAME"))
+                if arguments.get("cluster"):
+                    vcluster_manager.destroy("virtual-cluster", arguments.get("CLUSTER_NAME"))
                 elif arguments.get("runtime-config"):
                     vcluster_manager.destroy("runtime-config", arguments.get("CONFIG_NAME"))
 
             elif arguments.get("list"):
-                if arguments.get("virtual-clusters"):
+                if arguments.get("clusters"):
                     max_depth = 1 if arguments.get("DEPTH") is None else int(arguments.get("DEPTH"))
                     vcluster_manager.list("virtual-clusters", max_depth)
                 elif arguments.get("runtime-configs"):
@@ -95,8 +95,8 @@ class VclusterCommand(PluginCommand):
                     vcluster_manager.list("runtime-configs", max_depth)
 
             elif arguments.get("set-param"):
-                if arguments.get("virtual-clusters"):
-                    cluster_name = arguments.get("VIRTUALCLUSTER_NAME")
+                if arguments.get("clusters"):
+                    cluster_name = arguments.get("CLUSTER_NAME")
                     parameter = arguments.get("PARAMETER")
                     value = arguments.get("VALUE")
                     vcluster_manager.set_param("virtual-clusters", cluster_name, parameter, value)
@@ -127,7 +127,7 @@ class VclusterCommand(PluginCommand):
                 job_name = arguments.get("JOB_NAME")
                 vcluster_manager.fetch(job_name)
             elif arguments.get("test-connection"):
-                vcluster_name = arguments.get("VIRTUALCLUSTER_NAME")
+                vcluster_name = arguments.get("CLUSTER_NAME")
                 proc_num = int(arguments.get("PROCESS_NUM"))
                 vcluster_manager.connection_test(vcluster_name, proc_num)
             elif arguments.get("clean-remote"):

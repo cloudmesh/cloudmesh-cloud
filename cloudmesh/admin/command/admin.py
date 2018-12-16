@@ -20,6 +20,7 @@ class AdminCommand(PluginCommand):
             admin mongo stop
             admin mongo backup FILENAME
             admin mongo load FILENAME
+            admin mongo security
 
           The admin command performs some adminsitrative functions, such as installing packages, software and services.
           It also is used to start services and configure them.
@@ -42,32 +43,37 @@ class AdminCommand(PluginCommand):
 
         if arguments.install:
 
-            print("install")
-            print("========")
+            print("MongoDB install")
+            print(79 * "=")
             installer = MongoInstaller()
             r = installer.install()
             return r
 
         elif arguments.security:
+
             mongo = MongoDBController()
             mongo.set_auth()
             print()
 
         elif arguments.start:
 
-            print("start")
+            print("MongoDB start")
+            MongoDBController().run_mongodb(False)
 
         elif arguments.stop:
 
-            print("stop")
+            print("MongoDB stop")
+            MongoDBController().shutdown_mongodb()
 
         elif arguments.backup:
 
-            print("backup")
+            print("MongoDB backup")
+            MongoDBController().dump(arguments.get('FILENAME'))
 
         elif arguments.load:
 
-            print("backup")
+            print("MongoDB backup")
+            MongoDBController().restore(arguments.get('FILENAME'))
 
         elif arguments.status:
 
@@ -76,3 +82,4 @@ class AdminCommand(PluginCommand):
             return r
 
         return result
+

@@ -3,13 +3,6 @@
 ::
 
     Usage:
-      cm4 admin mongo install [--brew] [--download=PATH]
-      cm4 admin mongo status
-      cm4 admin mongo start
-      cm4 admin mongo stop
-      cm4 admin mongo backup FILENAME
-      cm4 admin mongo load FILENAME
-      cm4 admin mongo security
       cm4 admin rest status
       cm4 admin rest start
       cm4 admin rest stop
@@ -109,12 +102,6 @@ def process_arguments(arguments):
 
     if arguments.get("--version"):
         print(version)
-
-    elif arguments.admin and arguments.mongo:
-        #MongoImporter()
-        print ("MONGO")
-        result = cm4.mongo.MongoDBController.process_arguments(arguments)
-        print(result)
 
     elif arguments.get("vm"):
         result = cm4.vm.Vm.process_arguments(arguments)

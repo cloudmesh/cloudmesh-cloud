@@ -32,13 +32,18 @@ Vagrant with cm4.
 ### The Preparation for installing `cm4` (David)
 
 * requriements.txt : the required packages
-* setup.py : ?? 
+* setup.py
 * cm4/command/command.py : the python class defines the interface for the command-line `cm4` 
 
-:o: update the command that cm4 can really run.
-
-```
-
+``` commandline
+$ cm4
+Usage:
+      cm4 admin mongo install [--brew] [--download=PATH]
+      cm4 admin mongo status
+      cm4 admin mongo start
+      cm4 admin mongo stop
+      cm4 admin mongo backup FILENAME
+      ...
 ```
 
 ### The Configuration files and some relative function classes (Sachith)
@@ -138,32 +143,32 @@ There are three types of documents in MongoDB:
 * Node's experiment status in `status` collection.
   The document in `status` collection is going to save the information of experiments executed in a node.
  
-  ```
-  '_id': node_id,
+  ```text
+  {'_id': node_id,
   'status': status,
   'currentJob': job_id,
-  'history' : the history of executed experiments in this node
+  'history' : the history of executed experiments in this node}
    ```
 
 * Experiment information in `job` collection.
 
-  ```
-  '_id' : experiment_id
+  ```text
+  {'_id': experiment_id
   'name': name,
   'status': status,
   'input': input_info,
   'output': output_info,
   'description': description,
-  'commands': commands
+  'commands': commands}
   ```
 
 * Group information in `group` collection.
 
-  ```
-  'cloud': cloud,
+  ```text
+  {'cloud': cloud,
   'name': name,
   'size': size,
-  'vms': list_vms
+  'vms': list_vms}
   ```
 
 #### Security in MongoDB
@@ -283,10 +288,90 @@ method would create a virtual machine in AWS based on the configuration of `clou
 
 Here are some samples for running these operations by using `cm4`:
 
-:o: please update the commands and results here
+First, user would create the virtual machine in AWS.
+```commandline
+$ cm4 vm create
+Collection(Database(MongoClient(host=['127.0.0.1:27017'], document_class=dict, tz_aware=False, connect=True), 'cloudmesh'), 'cloud')
+Thread: updating the status of node
+Created base-cloudmesh-yuluo-4
+PING 52.39.13.229 (52.39.13.229): 56 data bytes
+
+--- 52.39.13.229 ping statistics ---
+1 packets transmitted, 0 packets received, 100.0% packet loss
+```
+
+then **MongoDB** will have below record in `cloud` collection.
+
+```text
+{ "_id" : ObjectId("5c09c65f56c5a939942a9911"), 
+"id" : "i-01ca62f33728f4931", 
+"name" : "base-cloudmesh-yuluo-4", 
+"state" : "running", 
+"public_ips" : [ "52.39.13.229" ], 
+...}
+```
+
+If user want to stop the virtual machine, then he has to type below command with virtual machine name. The code will return 
+you the virtual machine from MongoDB record with a thread updating the new information. When the thread is done, you can use
+`status` method to check the status of the virtual machine.
 
 ```commandline
+$ cm4 vm stop --vms=base-cloudmesh-yuluo-4
+Thread: updating the status of node
+{'_id': ObjectId('5c09c65f56c5a939942a9911'), 
+'id': 'i-01ca62f33728f4931', 
+'name': 'base-cloudmesh-yuluo-4', 
+'state': 'running', 
+'public_ips': ['52.39.13.229'],
+...}
+$ cm4 vm status --vms=base-cloudmesh-yuluo-4
+stopped
+```
 
+When user wants to start the stopped virtual machine, he has to type the command of below sample.
+
+```commandline
+$ cm4 vm start --vms=base-cloudmesh-yuluo-4
+Thread: updating the status of node
+{'_id': ObjectId('5c09c65f56c5a939942a9911'), 
+'id': 'i-01ca62f33728f4931', 
+'name': 'base-cloudmesh-yuluo-4', 
+'state': 'stopped', 
+'public_ips': [],
+...}
+PING 54.191.109.54 (54.191.109.54): 56 data bytes
+
+--- 54.191.109.54 ping statistics ---
+1 packets transmitted, 0 packets received, 100.0% packet loss
+
+$ cm4 vm status --vms=base-cloudmesh-yuluo-4
+running
+```
+
+There is a way for users to get the public ip of a virtual machine.
+
+```commandline
+$ cm4 vm publicip --vms=base-cloudmesh-yuluo-4
+{'base-cloudmesh-yuluo-4': ['54.191.109.54']}
+```
+
+Also, if user wants to know the information of virtual machines under his AWS account, he could do this.
+
+```commandline
+$ cm4 vm list
+<Node: uuid=9b46e75095f586471e2cfe8ebc6b1021ead0e86b, name=a-b-luoyu-0, state=STOPPED, public_ips=[], 
+private_ips=['172.31.28.147'], provider=Amazon EC2 ...>, 
+<Node: uuid=da309c8acbbc7bc1f21295600323d073afffb04a, name=base-cloudmesh-yuluo-1, state=TERMINATED, 
+public_ips=[], private_ips=[], provider=Amazon EC2 ...>
+<Node: uuid=cb62a083081350da9e6f229aace4b697358a987b, name=base-cloudmesh-yuluo-4, state=RUNNING, 
+public_ips=['54.191.109.54'], private_ips=['172.31.41.197'], provider=Amazon EC2 ...>,
+```
+
+Finally, if user wants to delete the virtual machine, he could do this.
+
+```commandline
+$ cm4 vm destroy --vms=base-cloudmesh-yuluo-4
+True
 ```
 
  ### Azure VM Operation (David)
@@ -310,10 +395,18 @@ Since providers of openstack like Chameleon and Jetstream allow users to
 associate customized float ip to their instances, we also develop such functions
 to support tasks like this and give more power to users when runing their jobs.
 
-Here are some samples for running these operations by using `cm4` project:
+Please refer to AWS VM Operation for examples. 
+Chameleon Openstack expose same 
+operations as AWS to users. Notice that before running your command,
+you need to make sure the global default cloud parameter has been set
+to 'Chameleon' by:
 
-:o: please update the commands and results here
- 
+```commandline
+$ cm4 vm set cloud chameleon
+Setting env parameter cloud to: chameleon
+Writing updata to cloudmesh.yaml
+Config has been updated.
+```
 
  
  ### VM Refactor (Rui)
@@ -330,7 +423,9 @@ to allow users to customize the flavors of their running instances and services 
 Currently, major providers usually charge users according to their usage. It might be 
 finacially wise sometimes to shift between different service size to reduce unnecessary cost.
 VmRefactor is designed based on this idea to help users to achieve higher cost efficiency. VmRefactor can also help users navigate 
-thier management tasks especially when they have many different tasks on the run.
+thier management tasks especially when they have many different tasks on the run=.
+ 
+
  
  ## Flask Rest API (Sachith)
  
@@ -412,10 +507,48 @@ In `cm4`, we use python running *ssh* client to connect the AWS virtual machines
 or scripts remotely, the `CommandAWS.py` would create the job document in MongoDB for saving the experiment information.
 This job document contains the information of virtual machine name, the running command or script, and job status, input, 
 output and description. Meanwhile, the job document_id would be added into status document of the `status` collection for 
-describing the job status of each virtual machine.
+describing the job history of each virtual machine.
  
-:o: please add example
- 
- ```bash
+For example, user wants to run `pwd` command to `base-cloudmesh-yulou-5` machine in AWS.
 
+```commandline
+$ cm4 aws run command pwd --vm=base-cloudmesh-yuluo-5
+Running command pwdin Instance base-cloudmesh-yuluo-5:
+/home/ubuntu
 ```
+
+The `job` collection and `status` collection in MongoDB will have below document:
+
+```commandline
+> db.job.find()
+{ "_id" : ObjectId("5c09ff9b284fa4515ee9e204"), "name" : "base-cloudmesh-yuluo-5", "status" : "done", 
+"input" : "Null", "output" : "/home/ubuntu\n", "description" : "single job", "commands" : "pwd" }
+> db.status.find()
+{ "_id" : ObjectId("5c09ff9b284fa4515ee9e205"), "id" : "base-cloudmesh-yuluo-5", "status" : "No Job", 
+"currentJob" : "Null", "history" : [ "5c09ff9b284fa4515ee9e204" ] }
+``` 
+
+If user run script file containing '#!/bin/sh\npwd' in `base-cloudmesh-yulou-5` machine:
+
+```commandline
+$ cm4 aws run script /Users/yuluo/Desktop/cm.sh --vm=base-cloudmesh-yuluo-5
+Running command /Users/yuluo/Desktop/cm.shin Instance base-cloudmesh-yuluo-5:
+/home/ubuntu
+```
+
+The `job` collection and `status` collection in MongoDB will have below document:
+
+```commandline
+> db.job.find()
+{ "_id" : ObjectId("5c09ff9b284fa4515ee9e204"), "name" : "base-cloudmesh-yuluo-5", "status" : "done", 
+"input" : "Null", "output" : "/home/ubuntu\n", "description" : "single job", "commands" : "pwd" }
+{ "_id" : ObjectId("5c0a00a8284fa451d0ab427d"), "name" : "base-cloudmesh-yuluo-5", "status" : "done", 
+"input" : "#!/bin/sh\npwd", "output" : "/home/ubuntu\n", "description" : "single job", "commands" : "Null" }
+```
+
+```commandline
+> db.status.find()
+{ "_id" : ObjectId("5c09ff9b284fa4515ee9e205"), "id" : "base-cloudmesh-yuluo-5", "status" : "No Job", 
+"currentJob" : "Null", "history" : [ "5c09ff9b284fa4515ee9e204", "5c0a00a8284fa451d0ab427d" ] }
+```
+

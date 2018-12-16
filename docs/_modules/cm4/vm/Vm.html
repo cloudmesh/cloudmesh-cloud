@@ -89,17 +89,15 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../configuration.html">5. Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../vmproviders.html">6. VM Providers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../vagrant.html">7. Vagrant</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../vagrant-other.html">8. Cloudmesh Vagrant: New</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../CM4README.html">9. CM4 Details</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../README.html">10. Cloudmesh cm v4</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../aws.html">11. AWS cm</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../ufo.html">12. CM4 REST Api</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../vcluster.html">13. Virtual Cluster</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../vm.html">14. VM Description</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../jupyter.html">15. Jupyter Integration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../code.html">16. Code Documentation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../deprecated.html">17. Deprecated from here on</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../ehvagrant.html">18. ehvagrant: enhanced Vagrant interface with importable python module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../CM4README.html">8. CM4 Details</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../README.html">9. Cloudmesh cm v4</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../aws.html">10. AWS cm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ufo.html">11. CM4 REST Api</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../vcluster.html">12. Virtual Cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../vm.html">13. VM Description</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../jupyter.html">14. Jupyter Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../code.html">15. Code Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../deprecated.html">16. Deprecated from here on</a></li>
 </ul>
 
             
@@ -165,52 +163,43 @@
   <h1>Source code for cm4.vm.Vm</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">getpass</span>
 <span class="kn">import</span> <span class="nn">pprint</span>
-<span class="kn">from</span> <span class="nn">cm4.vm.Aws</span> <span class="k">import</span> <span class="n">Aws</span>
-<span class="kn">from</span> <span class="nn">cm4.vm.Azure</span> <span class="k">import</span> <span class="n">Azure</span>
-<span class="kn">from</span> <span class="nn">cm4.vm.Cmopenstack</span> <span class="k">import</span> <span class="n">Cmopenstack</span>
-<span class="kn">from</span> <span class="nn">cm4.configuration.config</span> <span class="k">import</span> <span class="n">Config</span>
-<span class="kn">from</span> <span class="nn">cm4.mongo.mongoDB</span> <span class="k">import</span> <span class="n">MongoDB</span>
-<span class="kn">from</span> <span class="nn">cm4.configuration.name</span> <span class="k">import</span> <span class="n">Name</span>
 <span class="kn">from</span> <span class="nn">cm4.vm.thread</span> <span class="k">import</span> <span class="n">Thread</span>
+<span class="kn">from</span> <span class="nn">cm4.configuration.config</span> <span class="k">import</span> <span class="n">Config</span>
+<span class="kn">from</span> <span class="nn">cm4.configuration.name</span> <span class="k">import</span> <span class="n">Name</span>
 <span class="kn">from</span> <span class="nn">cm4.configuration.counter</span> <span class="k">import</span> <span class="n">Counter</span>
+<span class="kn">from</span> <span class="nn">cm4.mongo.mongoDB</span> <span class="k">import</span> <span class="n">MongoDB</span>
+<span class="kn">from</span> <span class="nn">cm4.vm.Azure</span> <span class="k">import</span> <span class="n">AzureProvider</span>
+<span class="kn">from</span> <span class="nn">cm4.vm.Aws</span> <span class="k">import</span> <span class="n">AwsProvider</span>
+<span class="kn">from</span> <span class="nn">cm4.openstack.OpenstackCM</span> <span class="k">import</span> <span class="n">OpenstackCM</span>
+<span class="kn">from</span> <span class="nn">cm4.abstractclass.ComputeNodeManagerABC</span> <span class="k">import</span> <span class="n">ComputeNodeManagerABC</span>
+<span class="kn">from</span> <span class="nn">cm4.mongo.DataBaseDecorator</span> <span class="k">import</span> <span class="n">DatabaseUpdate</span>
+<span class="kn">from</span> <span class="nn">cm4.vbox.provider</span> <span class="k">import</span> <span class="n">VboxProvider</span>
+
+<span class="c1">#</span>
+<span class="c1"># if name is none, take last name from mongo, apply to last started vm</span>
+<span class="c1">#</span>
 
 
-<span class="k">class</span> <span class="nc">Vmprovider</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="n">Config</span><span class="p">()</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;cloudmesh&quot;</span><span class="p">]</span>
-
-    <span class="k">def</span> <span class="nf">get_provider</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cloud</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Create the driver based on the &#39;kind&#39; information.</span>
-<span class="sd">        This method could deal with AWS, AZURE, and OPENSTACK for CLOUD block of YAML file.</span>
-<span class="sd">        Only developed for AZURE, AWS, Chameleon, but we haven&#39;t test OPENSTACK</span>
-<span class="sd">        :return: the driver based on the &#39;kind&#39; information</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">driver</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="n">os_config</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;cloud&quot;</span><span class="p">][</span><span class="n">cloud</span><span class="p">]</span>
-
-        <span class="k">if</span> <span class="n">os_config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;cm&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kind&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;azure&#39;</span><span class="p">:</span>
-            <span class="n">driver</span> <span class="o">=</span> <span class="n">Azure</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">,</span> <span class="n">cloud</span><span class="p">)</span><span class="o">.</span><span class="n">driver</span>
-        <span class="k">elif</span> <span class="n">os_config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;cm&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kind&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;aws&#39;</span><span class="p">:</span>
-            <span class="n">driver</span> <span class="o">=</span> <span class="n">Aws</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">,</span> <span class="n">cloud</span><span class="p">)</span><span class="o">.</span><span class="n">driver</span>
-        <span class="k">elif</span> <span class="n">os_config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;cm&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;kind&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;openstack&#39;</span><span class="p">:</span>
-            <span class="n">driver</span> <span class="o">=</span> <span class="n">Cmopenstack</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">,</span> <span class="n">cloud</span><span class="p">)</span><span class="o">.</span><span class="n">driver</span>
-
-        <span class="k">return</span> <span class="n">driver</span>
-
-
-<span class="k">class</span> <span class="nc">Vm</span><span class="p">:</span>
+<span class="k">class</span> <span class="nc">Vm</span><span class="p">(</span><span class="n">ComputeNodeManagerABC</span><span class="p">):</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cloud</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mongo</span> <span class="o">=</span> <span class="n">MongoDB</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="n">Config</span><span class="p">()</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;cloudmesh&quot;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">provider</span> <span class="o">=</span> <span class="n">Vmprovider</span><span class="p">()</span><span class="o">.</span><span class="n">get_provider</span><span class="p">(</span><span class="n">cloud</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">kind</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;cloud&quot;</span><span class="p">][</span><span class="n">cloud</span><span class="p">][</span><span class="s2">&quot;cm&quot;</span><span class="p">][</span><span class="s2">&quot;kind&quot;</span><span class="p">]</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">cloud</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">mongo</span> <span class="o">=</span> <span class="n">MongoDB</span><span class="p">(</span><span class="n">host</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="s2">&quot;mongo&quot;</span><span class="p">][</span><span class="s2">&quot;MONGO_HOST&quot;</span><span class="p">],</span>
-                             <span class="n">username</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="s2">&quot;mongo&quot;</span><span class="p">][</span><span class="s2">&quot;MONGO_USERNAME&quot;</span><span class="p">],</span>
-                             <span class="n">password</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="s2">&quot;mongo&quot;</span><span class="p">][</span><span class="s2">&quot;MONGO_PASSWORD&quot;</span><span class="p">],</span>
-                             <span class="n">port</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="s2">&quot;mongo&quot;</span><span class="p">][</span><span class="s2">&quot;MONGO_PORT&quot;</span><span class="p">])</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">kind</span> <span class="o">==</span> <span class="s1">&#39;azure&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">provider</span> <span class="o">=</span> <span class="n">AzureProvider</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">kind</span> <span class="o">==</span> <span class="s1">&#39;aws&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">provider</span> <span class="o">=</span> <span class="n">AwsProvider</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">kind</span> <span class="o">==</span> <span class="s1">&#39;openstack&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">provider</span> <span class="o">=</span> <span class="n">OpenstackCM</span><span class="p">(</span><span class="s2">&quot;chameleon&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">kind</span> <span class="o">==</span> <span class="s2">&quot;vbox&quot;</span><span class="p">:</span>   <span class="c1"># not sure about vbox vs vagrant in vbox provider</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">provider</span> <span class="o">=</span> <span class="n">VboxProvider</span><span class="p">(</span><span class="s2">&quot;vagrant&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="n">f</span><span class="s2">&quot;Cloud `</span><span class="si">{self.kind}</span><span class="s2">` not supported.&quot;</span><span class="p">)</span>
 
+    <span class="nd">@DatabaseUpdate</span><span class="p">(</span><span class="s2">&quot;cloud&quot;</span><span class="p">,</span> <span class="n">ComputeNodeManagerABC</span><span class="o">.</span><span class="n">_map_default</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        start the node based on the id</span>
@@ -218,100 +207,73 @@
 <span class="sd">        :return: VM document</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">info</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">info</span><span class="o">.</span><span class="n">state</span> <span class="o">!=</span> <span class="s1">&#39;running&#39;</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">provider</span><span class="o">.</span><span class="n">ex_start_node</span><span class="p">(</span><span class="n">info</span><span class="p">)</span>
-            <span class="n">Thread</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;test&#39;</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="s1">&#39;running&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
-            <span class="n">document</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mongo</span><span class="o">.</span><span class="n">find_document</span><span class="p">(</span><span class="s1">&#39;cloud&#39;</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
-            <span class="k">return</span> <span class="n">document</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">document</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mongo</span><span class="o">.</span><span class="n">find_document</span><span class="p">(</span><span class="s1">&#39;cloud&#39;</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
-            <span class="k">return</span> <span class="n">document</span>
+        <span class="k">if</span> <span class="n">info</span><span class="p">[</span><span class="s2">&quot;state&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;running&quot;</span><span class="p">:</span>
+            <span class="n">info</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">provider</span><span class="o">.</span><span class="n">start</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">info</span>
 
-    <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">deallocate</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="nd">@DatabaseUpdate</span><span class="p">(</span><span class="s2">&quot;cloud&quot;</span><span class="p">,</span> <span class="n">ComputeNodeManagerABC</span><span class="o">.</span><span class="n">_map_default</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        stop the node based on the ide</span>
 <span class="sd">        :param name:</span>
-<span class="sd">        :param deallocate:</span>
 <span class="sd">        :return: VM document</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">info</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">info</span><span class="o">.</span><span class="n">state</span> <span class="o">!=</span> <span class="s1">&#39;stopped&#39;</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">provider</span><span class="o">.</span><span class="n">ex_stop_node</span><span class="p">(</span><span class="n">info</span><span class="p">,</span> <span class="n">deallocate</span><span class="p">)</span>
-            <span class="n">Thread</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s1">&#39;test&#39;</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="s1">&#39;stopped&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
-            <span class="n">document</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mongo</span><span class="o">.</span><span class="n">find_document</span><span class="p">(</span><span class="s1">&#39;cloud&#39;</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
-            <span class="k">return</span> <span class="n">document</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">document</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mongo</span><span class="o">.</span><span class="n">find_document</span><span class="p">(</span><span class="s1">&#39;cloud&#39;</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
-            <span class="k">return</span> <span class="n">document</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">provider</span><span class="o">.</span><span class="n">stop</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">resume</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+    <span class="nd">@DatabaseUpdate</span><span class="p">(</span><span class="s2">&quot;cloud&quot;</span><span class="p">,</span> <span class="n">ComputeNodeManagerABC</span><span class="o">.</span><span class="n">_map_default</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">resume</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        start the node based on id</span>
 <span class="sd">        :param name:</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">start</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">suspend</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+    <span class="nd">@DatabaseUpdate</span><span class="p">(</span><span class="s2">&quot;cloud&quot;</span><span class="p">,</span> <span class="n">ComputeNodeManagerABC</span><span class="o">.</span><span class="n">_map_default</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">suspend</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        stop the node based on id</span>
 <span class="sd">        :param name:</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">stop</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">provider</span><span class="o">.</span><span class="n">suspend</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">destroy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+    <span class="nd">@DatabaseUpdate</span><span class="p">(</span><span class="s2">&quot;cloud&quot;</span><span class="p">,</span> <span class="n">ComputeNodeManagerABC</span><span class="o">.</span><span class="n">_map_default</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">destroy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        delete the node based on id</span>
 <span class="sd">        :param name:</span>
 <span class="sd">        :return: True/False</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">provider</span><span class="o">.</span><span class="n">destroy_node</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">mongo</span><span class="o">.</span><span class="n">delete_document</span><span class="p">(</span><span class="s1">&#39;cloud&#39;</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">provider</span><span class="o">.</span><span class="n">destroy</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="c1"># self.mongo.delete_document(&#39;cloud&#39;, &#39;name&#39;, name)</span>
         <span class="k">return</span> <span class="n">result</span>
 
-    <span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+    <span class="nd">@DatabaseUpdate</span><span class="p">(</span><span class="s2">&quot;cloud&quot;</span><span class="p">,</span> <span class="n">ComputeNodeManagerABC</span><span class="o">.</span><span class="n">_map_vm_create</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        create a new node</span>
 <span class="sd">        :param name: the name for the new node</span>
 <span class="sd">        :return:</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">node</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">provider</span><span class="o">.</span><span class="n">create_node</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">mongo</span><span class="o">.</span><span class="n">insert_cloud_document</span><span class="p">(</span><span class="nb">vars</span><span class="p">(</span><span class="n">node</span><span class="p">))</span>
-        <span class="k">return</span> <span class="n">node</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">name</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">new_name</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">provider</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        list existed nodes</span>
-<span class="sd">        :return: all nodes&#39; information</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">provider</span><span class="o">.</span><span class="n">list_nodes</span><span class="p">()</span>
-        <span class="k">return</span> <span class="n">result</span>
+    <span class="nd">@DatabaseUpdate</span><span class="p">(</span><span class="s2">&quot;cloud&quot;</span><span class="p">,</span> <span class="n">ComputeNodeManagerABC</span><span class="o">.</span><span class="n">_map_default</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">provider</span><span class="o">.</span><span class="n">nodes</span><span class="p">()</span>
 
-    <span class="k">def</span> <span class="nf">status</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+    <span class="c1"># @DatabaseUpdate(&quot;cloud&quot;, ComputeNodeManagerABC._map_default)</span>
+    <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        show node information based on id</span>
+
+<span class="sd">        TODO: seems like this should look in mongo, not self.nodes</span>
+<span class="sd">            probably the solution is a more broad change to dynamically</span>
+<span class="sd">            set the provider based on a name/cloud lookup in mongo.</span>
+
 <span class="sd">        :param name:</span>
 <span class="sd">        :return: all information about one node</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
-        <span class="n">status</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mongo</span><span class="o">.</span><span class="n">find_document</span><span class="p">(</span><span class="s1">&#39;cloud&#39;</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="n">name</span><span class="p">)[</span><span class="s1">&#39;state&#39;</span><span class="p">]</span>
-        <span class="k">return</span> <span class="n">status</span>
-
-    <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        show node information based on id</span>
-<span class="sd">        :param name:</span>
-<span class="sd">        :return: all information about one node</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">nodes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">list</span><span class="p">()</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">nodes</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">i</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">name</span><span class="p">:</span>
-                <span class="n">document</span> <span class="o">=</span> <span class="nb">vars</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
-                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">mongo</span><span class="o">.</span><span class="n">find_document</span><span class="p">(</span><span class="s1">&#39;cloud&#39;</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">mongo</span><span class="o">.</span><span class="n">update_document</span><span class="p">(</span><span class="s1">&#39;cloud&#39;</span><span class="p">,</span> <span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">document</span><span class="p">)</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">mongo</span><span class="o">.</span><span class="n">insert_cloud_document</span><span class="p">(</span><span class="n">document</span><span class="p">)</span>
-                <span class="k">return</span> <span class="n">i</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Node: &#39;</span> <span class="o">+</span> <span class="n">name</span> <span class="o">+</span> <span class="s1">&#39; does not exist!&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">provider</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">new_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">experiment</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">group</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -388,56 +350,52 @@
 <span class="sd">    Called from cm4.command.command</span>
 <span class="sd">    :param arguments:</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">config</span> <span class="o">=</span> <span class="n">Config</span><span class="p">()</span>
+    <span class="n">default_cloud</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;cloudmesh&quot;</span><span class="p">][</span><span class="s2">&quot;default&quot;</span><span class="p">][</span><span class="s2">&quot;cloud&quot;</span><span class="p">]</span>
+    <span class="n">vm</span> <span class="o">=</span> <span class="n">Vm</span><span class="p">(</span><span class="n">default_cloud</span><span class="p">)</span>
+
     <span class="n">result</span> <span class="o">=</span> <span class="kc">None</span>
 
     <span class="k">if</span> <span class="n">arguments</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;--debug&quot;</span><span class="p">):</span>
         <span class="n">pp</span> <span class="o">=</span> <span class="n">pprint</span><span class="o">.</span><span class="n">PrettyPrinter</span><span class="p">(</span><span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;vm processing arguments&quot;</span><span class="p">)</span>
         <span class="n">pp</span><span class="o">.</span><span class="n">pprint</span><span class="p">(</span><span class="n">arguments</span><span class="p">)</span>
-
-    <span class="n">default_cloud</span> <span class="o">=</span> <span class="n">Config</span><span class="p">()</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;cloudmesh&quot;</span><span class="p">][</span><span class="s2">&quot;default&quot;</span><span class="p">][</span><span class="s2">&quot;cloud&quot;</span><span class="p">]</span>
-
-    <span class="n">vm</span> <span class="o">=</span> <span class="n">Vm</span><span class="p">(</span><span class="n">default_cloud</span><span class="p">)</span>
+        <span class="c1"># pp.pprint(config.data)</span>
 
     <span class="k">if</span> <span class="n">arguments</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;list&quot;</span><span class="p">):</span>
-        <span class="n">result</span> <span class="o">=</span> <span class="n">vm</span><span class="o">.</span><span class="n">list</span><span class="p">()</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">vm</span><span class="o">.</span><span class="n">nodes</span><span class="p">()</span>
 
     <span class="k">elif</span> <span class="n">arguments</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;start&quot;</span><span class="p">):</span>
-        <span class="c1"># TODO: Reconcile `create` behavior here and in docopts where</span>
-        <span class="c1">#       create is called with a `VMCOUNT`.</span>
-
-        <span class="n">vm_name</span> <span class="o">=</span> <span class="n">arguments</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;VMNAME&quot;</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="n">vm_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">vm_name</span> <span class="o">=</span> <span class="n">vm</span><span class="o">.</span><span class="n">new_name</span><span class="p">()</span>
-
-        <span class="n">vm</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">vm_name</span><span class="p">)</span>
-
-        <span class="n">result</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;Created </span><span class="si">{vm_name}</span><span class="s2">&quot;</span>
-
-    <span class="c1"># elif arguments.get(&quot;start&quot;):</span>
-    <span class="c1">#     vm.start(arguments.get(&quot;--vms&quot;))</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">vm</span><span class="o">.</span><span class="n">start</span><span class="p">(</span><span class="n">arguments</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;--vms&quot;</span><span class="p">))</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="n">vm_name</span> <span class="o">=</span> <span class="n">arguments</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;VMNAME&quot;</span><span class="p">)</span>
+            <span class="n">vm</span><span class="o">.</span><span class="n">create</span><span class="p">(</span><span class="n">vm_name</span><span class="p">)</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;Created </span><span class="si">{vm_name}</span><span class="s2">&quot;</span>
 
     <span class="k">elif</span> <span class="n">arguments</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;stop&quot;</span><span class="p">):</span>
-        <span class="n">vm</span><span class="o">.</span><span class="n">stop</span><span class="p">(</span><span class="n">arguments</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;--vms&quot;</span><span class="p">))</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">vm</span><span class="o">.</span><span class="n">stop</span><span class="p">(</span><span class="n">arguments</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;--vms&quot;</span><span class="p">))</span>
 
     <span class="k">elif</span> <span class="n">arguments</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;destroy&quot;</span><span class="p">):</span>
-        <span class="n">vm</span><span class="o">.</span><span class="n">destroy</span><span class="p">(</span><span class="n">arguments</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;--vms&quot;</span><span class="p">))</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">vm</span><span class="o">.</span><span class="n">destroy</span><span class="p">(</span><span class="n">arguments</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;--vms&quot;</span><span class="p">))</span>
 
     <span class="k">elif</span> <span class="n">arguments</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;status&quot;</span><span class="p">):</span>
-        <span class="n">vm</span><span class="o">.</span><span class="n">status</span><span class="p">(</span><span class="n">arguments</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;--vms&quot;</span><span class="p">))</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">vm</span><span class="o">.</span><span class="n">status</span><span class="p">(</span><span class="n">arguments</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;--vms&quot;</span><span class="p">))</span>
+
+    <span class="k">elif</span> <span class="n">arguments</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;publicip&quot;</span><span class="p">):</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">vm</span><span class="o">.</span><span class="n">get_public_ips</span><span class="p">(</span><span class="n">arguments</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;--vms&#39;</span><span class="p">))</span>
 
     <span class="k">elif</span> <span class="n">arguments</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ssh&quot;</span><span class="p">):</span>
         <span class="c1"># TODO</span>
-        <span class="k">pass</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;cm4 vm ssh command has not yet been implemented&quot;</span><span class="p">)</span>
 
     <span class="k">elif</span> <span class="n">arguments</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;run&quot;</span><span class="p">):</span>
         <span class="c1"># TODO</span>
-        <span class="k">pass</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;cm4 vm run command has not yet been implemented&quot;</span><span class="p">)</span>
 
     <span class="k">elif</span> <span class="n">arguments</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;script&quot;</span><span class="p">):</span>
         <span class="c1"># TODO</span>
-        <span class="k">pass</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;cm4 vm script command has not yet been implemented&quot;</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">result</span></div>
 </pre></div>

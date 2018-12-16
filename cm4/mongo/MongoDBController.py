@@ -18,6 +18,9 @@ class MongoInstaller(object):
         self.data = self.config.data["cloudmesh"]["data"]["mongo"]
         self.expanduser()
 
+    #
+    # TODO: THis function seems duplicated
+    #
     def expanduser(self):
         for key in self.data:
             if type(self.data[key]) == str:
@@ -107,6 +110,35 @@ class MongoInstaller(object):
         install MongoDB in Darwin system (Mac)
         """
 
+        """
+
+        preferred container and linux subsystem
+
+        We wnat to capture multiple solutions. We only support Windows 10 
+
+        check for newest version of windows
+  
+        a) container based
+
+           This worksonly on proper versions of windows 10, not home, e.g. edu and pro
+    
+        b) regular install
+           
+           https://docs.mongodb.com/manual/tutorial/install-mongodb-on-windows/
+
+        c) linux subsystem
+
+        https://docs.microsoft.com/en-us/windows/wsl/install-win10 
+        ubuntu 18.04
+
+
+        d) MOngoDB in the cloud, while making sure credentials are not in the db
+
+        https://www.mongodb.com/cloud/atlas?utm_source=install-mongodb-on-windows&utm_campaign=20-docs-in-20-days&utm_medium=docs
+
+        e) Chameleon cloud or any other cloud via cloudmesh
+
+        """
         # TODO
         raise NotImplementedError
 

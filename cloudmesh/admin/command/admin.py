@@ -21,6 +21,10 @@ class AdminCommand(PluginCommand):
             admin mongo backup FILENAME
             admin mongo load FILENAME
             admin mongo security
+            admin rest status
+            admin rest start
+            admin rest stop
+            admin status
 
           The admin command performs some adminsitrative functions, such as installing packages, software and services.
           It also is used to start services and configure them.
@@ -41,45 +45,71 @@ class AdminCommand(PluginCommand):
 
         result = None
 
-        if arguments.install:
+        if arguments.mongo:
 
-            print("MongoDB install")
-            print(79 * "=")
-            installer = MongoInstaller()
-            r = installer.install()
-            return r
+            if arguments.install:
 
-        elif arguments.security:
+                print("MongoDB install")
+                print(79 * "=")
+                installer = MongoInstaller()
+                r = installer.install()
+                return r
 
-            mongo = MongoDBController()
-            mongo.set_auth()
-            print()
+            elif arguments.security:
 
-        elif arguments.start:
+                mongo = MongoDBController()
+                mongo.set_auth()
+                print()
 
-            print("MongoDB start")
-            MongoDBController().run_mongodb(False)
+            elif arguments.start:
 
-        elif arguments.stop:
+                print("MongoDB start")
+                MongoDBController().run_mongodb(False)
 
-            print("MongoDB stop")
-            MongoDBController().shutdown_mongodb()
+            elif arguments.stop:
 
-        elif arguments.backup:
+                print("MongoDB stop")
+                MongoDBController().shutdown_mongodb()
 
-            print("MongoDB backup")
-            MongoDBController().dump(arguments.get('FILENAME'))
+            elif arguments.backup:
 
-        elif arguments.load:
+                print("MongoDB backup")
+                MongoDBController().dump(arguments.get('FILENAME'))
 
-            print("MongoDB backup")
-            MongoDBController().restore(arguments.get('FILENAME'))
+            elif arguments.load:
+
+                print("MongoDB backup")
+                MongoDBController().restore(arguments.get('FILENAME'))
+
+            elif arguments.status:
+
+                mongo = MongoDBController()
+                r = mongo.status()
+                return r
+
+        elif arguments.rest:
+
+            if arguments.start:
+
+                print("Rest Service start")
+                raise NotImplementedError
+
+            elif arguments.stop:
+
+                print("Rest Service stop")
+                raise NotImplementedError
+
+            elif arguments.status:
+
+                print("Rest Service status")
+                raise NotImplementedError
 
         elif arguments.status:
 
-            mongo = MongoDBController()
-            r = mongo.status()
-            return r
+            print("Rest Service status")
+            print("MongoDB status")
+
+            raise NotImplementedError
 
         return result
 

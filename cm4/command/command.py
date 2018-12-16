@@ -3,10 +3,6 @@
 ::
 
     Usage:
-      cm4 admin rest status
-      cm4 admin rest start
-      cm4 admin rest stop
-      cm4 admin status]
       cm4 data add FILE
       cm4 data add SERVICE FILE
       cm4 data get FILE

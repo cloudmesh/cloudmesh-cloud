@@ -20,3 +20,12 @@ nist-download:
 nist-copy:
 	cd cm4/api; rm -rf specs; mkdir specs;
 	rsync -a --prune-empty-dirs --include '*/' --include '*.yaml' --exclude '*' ../nist/services/ ./cm4/api/specs/
+
+
+#
+# TODO: BUG: This is broken
+#
+#pylint:
+#	mkdir -p docs/qc/pylint/cm
+#	pylint --output-format=html cloudmesh > docs/qc/pylint/cm/cloudmesh.html
+#	pylint --output-format=html cm4 > docs/qc/pylint/cm/cm4.html

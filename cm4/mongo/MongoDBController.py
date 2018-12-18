@@ -4,7 +4,10 @@ from sys import platform
 from cm4.configuration.config import Config
 from pprint import pprint
 from cm4.common.script import Script, SystemPath
+from cloudmesh.common.dotdict import dotdict
 from cloudmesh.common.Shell import Shell, Brew
+from cloudmesh.common.console import Console
+
 import subprocess
 
 class MongoInstaller(object):
@@ -148,10 +151,12 @@ class MongoDBController(object):
     def __init__(self):
 
         self.config = Config()
-        self.data = self.config.data["cloudmesh"]["data"]["mongo"]
+        self.data = dotdict(self.config.data["cloudmesh"]["data"]["mongo"])
         self.expanduser()
 
-        # pprint(self.config.dict())
+        if self.data.MONGO_PASSWORD in ["TBD", "admin"]:
+            Console.error("MongoDB password must not be the default")
+            raise Exception("password error")
 
     def __str__(self):
         return yaml.dump(self.data, default_flow_style=False, indent=2)
@@ -171,17 +176,17 @@ class MongoDBController(object):
         #
         # run mongodb
 
-        self.run(True)
+        self.start(True)
 
         # set up auth information
         self.set_auth()
 
         # shut down mongodb
-        self.shutdown()
+        self.stop()
 
         print("Enable the Secutiry. You will use your username and password to login the MongoDB")
 
-    def run(self, no_security=False):
+    def start(self, no_security=False):
         """
         start the MongoDB server
         """
@@ -189,13 +194,13 @@ class MongoDBController(object):
         if not no_security:
             auth = "--auth"
 
-        script = "mongod {auth} --dbpath {MONGO_PATH} --logpath {MONGO_LOG}/mongod.log --fork".format(**self.data, auth=auth)
+        script = "mongod {auth} --bind_ip {MONGO_HOST} --dbpath {MONGO_PATH} --logpath {MONGO_LOG}/mongod.log --fork".format(**self.data, auth=auth)
 
         print(script)
         run = Script(script)
 
     # noinspection PyMethodMayBeStatic
-    def shutdown(self):
+    def stop(self):
         """
         shutdown the MongoDB server
         linux and darwin have different way to shutdown the server, the common way is kill

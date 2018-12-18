@@ -18,6 +18,7 @@ class AdminCommand(PluginCommand):
           Usage:
             admin mongo install [--brew] [--download=PATH]
             admin mongo status
+            admin mongo version
             admin mongo start
             admin mongo stop
             admin mongo backup FILENAME
@@ -61,9 +62,17 @@ class AdminCommand(PluginCommand):
 
                 print("MongoDB Status")
                 print(79 * "=")
-                installer = MongoDBController()
-                r = installer.status()
-                return r
+                mongo = MongoDBController()
+                r = mongo.status()
+                print(r)
+
+            elif arguments.version:
+                print("MongoDB Version")
+                print(79 * "=")
+                mongo = MongoDBController()
+                r = mongo.version()
+                print(r)
+
             elif arguments.security:
 
                 mongo = MongoDBController()

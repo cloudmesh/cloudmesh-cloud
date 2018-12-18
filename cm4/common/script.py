@@ -42,15 +42,20 @@ class SystemPath(object):
 
 class Script(object):
 
-    def __init__(self, script):
+    @staticmethod
+    def run(script, debug=True):
         if script is not None:
-            self.run(script)
-
-    def run(self, script):
-        lines = textwrap.dedent(script).strip().split("\n")
-        print("===============")
-        print(lines)
-        print("===============")
-        for line in lines:
-            r = subprocess.check_output(line, encoding='UTF-8', shell=True)
-            return r
+            result = ""
+            lines = textwrap.dedent(script).strip().split("\n")
+            if debug:
+                print("===============")
+                print(lines)
+                print("===============")
+            for line in lines:
+                r = subprocess.check_output(line, encoding='UTF-8', shell=True)
+                if debug:
+                    print(r)
+                result = result + r
+            return result
+        else:
+            return ""

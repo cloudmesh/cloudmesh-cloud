@@ -17,6 +17,7 @@ class AdminCommand(PluginCommand):
 
           Usage:
             admin mongo install [--brew] [--download=PATH]
+            admin mongo status
             admin mongo start
             admin mongo stop
             admin mongo backup FILENAME
@@ -44,7 +45,6 @@ class AdminCommand(PluginCommand):
         """
 
         # arguments.PATH = arguments['--download'] or None
-
         result = None
 
         if arguments.mongo:
@@ -57,6 +57,13 @@ class AdminCommand(PluginCommand):
                 r = installer.install()
                 return r
 
+            elif arguments.status:
+
+                print("MongoDB Status")
+                print(79 * "=")
+                installer = MongoDBController()
+                r = installer.status()
+                return r
             elif arguments.security:
 
                 mongo = MongoDBController()

@@ -52,5 +52,5 @@ class Script(object):
         print(lines)
         print("===============")
         for line in lines:
-            r = subprocess.check_output(line, shell=True)
-            print(r)
+            r = subprocess.check_output(line, encoding='UTF-8', shell=True)
+            return r

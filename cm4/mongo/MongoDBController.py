@@ -5,7 +5,7 @@ from cm4.configuration.config import Config
 from pprint import pprint
 from cm4.common.script import Script, SystemPath
 from cloudmesh.common.Shell import Shell, Brew
-
+import subprocess
 
 class MongoInstaller(object):
 
@@ -25,7 +25,7 @@ class MongoInstaller(object):
         for key in self.data:
             if type(self.data[key]) == str:
                 self.data[key] = os.path.expanduser(self.data[key])
-        pprint(self.data)
+        # pprint(self.data)
 
     def __str__(self):
         return yaml.dump(self.data, default_flow_style=False, indent=2)
@@ -37,7 +37,7 @@ class MongoInstaller(object):
         """
         path = os.path.expanduser(self.data["MONGO_PATH"])
         print(path)
-        pprint(self.data)
+        # pprint(self.data)
 
         if not self.data["MONGO_AUTOINSTALL"]:
             print("Mongo auto install is off")
@@ -151,7 +151,7 @@ class MongoDBController(object):
         self.data = self.config.data["cloudmesh"]["data"]["mongo"]
         self.expanduser()
 
-        pprint(self.config.dict())
+        # pprint(self.config.dict())
 
     def __str__(self):
         return yaml.dump(self.data, default_flow_style=False, indent=2)
@@ -171,29 +171,31 @@ class MongoDBController(object):
         #
         # run mongodb
 
-        self.run_mongodb(True)
+        self.run(True)
 
         # set up auth information
         self.set_auth()
 
         # shut down mongodb
-        self.shutdown_mongodb()
+        self.shutdown()
 
         print("Enable the Secutiry. You will use your username and password to login the MongoDB")
 
-    def run_mongodb(self, security=False):
+    def run(self, no_security=False):
         """
         start the MongoDB server
         """
-        if security:
-            script = "mongod --dbpath {MONGO_PATH}  --logpath {MONGO_LOG}/mongod.log --fork".format(**self.data)
-        else:
-            script = "mongod --auth --dbpath {MONGO_PATH} --logpath {MONGO_LOG}/mongod.log --fork".format(**self.data)
+        auth = ""
+        if not no_security:
+            auth = "--auth"
+
+        script = "mongod {auth} --dbpath {MONGO_PATH} --logpath {MONGO_LOG}/mongod.log --fork".format(**self.data, auth=auth)
+
         print(script)
         run = Script(script)
 
     # noinspection PyMethodMayBeStatic
-    def shutdown_mongodb(self):
+    def shutdown(self):
         """
         shutdown the MongoDB server
         linux and darwin have different way to shutdown the server, the common way is kill
@@ -206,7 +208,8 @@ class MongoDBController(object):
         add admin acount into the MongoDB admin database
         """
 
-        script = """mongo --eval 'db.getSiblingDB("admin").createUser({user:"%s",pwd:"%s",roles:[{role:"root",db:"admin"}]})'""" % (self.data['MONGO_USERNAME'], self.data['MONGO_PASSWORD'])
+        script = """mongo --eval 'db.getSiblingDB("admin").createUser({user:"{MONGO_USERNAME}",pwd:"{MONGO_PASSWORD}",roles:[{role:"root",db:"admin"}]})'""".format(**self.data)
+
         run = Script(script)
 
     def dump(self, filename):
@@ -218,7 +221,7 @@ class MongoDBController(object):
         # TODO: BUG: expand user
         #
 
-        script = "mongodump --authenticationDatabase admin --archive={MONGO_HOME}/".format(**self.data)+filename+".gz --gzip -u {MONGO_USERNAME} -p {MONGO_PASSWORD}".format(**self.data)
+        script = "mongodump --authenticationDatabase admin --archive={MONGO_HOME}/{filename}.gz --gzip -u {MONGO_USERNAME} -p {MONGO_PASSWORD}".format(**self.data, filename=filename)
         run = Script(script)
 
     def restore(self, filename):
@@ -231,7 +234,7 @@ class MongoDBController(object):
         #
 
         script = "mongorestore --authenticationDatabase admin -u {MONGO_USERNAME} -p " \
-                 "{MONGO_PASSWORD} --gzip --archive={MONGO_HOME}/".format(**self.data)+filename+".gz"
+                 "{MONGO_PASSWORD} --gzip --archive={MONGO_HOME}/{filename}.gz".format(**self.data, filename=filename)
         run = Script(script)
 
     def status(self):
@@ -245,3 +248,11 @@ class MongoDBController(object):
         print(ps_output)
 
 
+    def version(self):
+        ver = None
+        try:
+            out = subprocess.check_output("mongod --version", encoding='UTF-8', shell=True).split("\n")[0].split("version")[1].strip().split(".")
+            ver = (int(out[0][1:]), int(out[1]), int(out[2]))
+        except:
+            return None
+        return ver

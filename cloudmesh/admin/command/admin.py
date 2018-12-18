@@ -21,6 +21,7 @@ class AdminCommand(PluginCommand):
             admin mongo backup FILENAME
             admin mongo load FILENAME
             admin mongo security
+            admin mongo password PASSWORD
             admin rest status
             admin rest start
             admin rest stop
@@ -64,12 +65,12 @@ class AdminCommand(PluginCommand):
             elif arguments.start:
 
                 print("MongoDB start")
-                MongoDBController().run_mongodb(False)
+                MongoDBController().run(False)
 
             elif arguments.stop:
 
                 print("MongoDB stop")
-                MongoDBController().shutdown_mongodb()
+                MongoDBController().shutdown()
 
             elif arguments.backup:
 
@@ -106,10 +107,15 @@ class AdminCommand(PluginCommand):
 
         elif arguments.status:
 
+
             print("Rest Service status")
+
             print("MongoDB status")
 
-            raise NotImplementedError
+            mongo = MongoDBController()
+            v = mongo.version()
+            print ("Version:", v)
+            mongo.set_auth()
 
         return result
 

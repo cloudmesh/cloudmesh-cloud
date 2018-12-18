@@ -4,7 +4,8 @@ from cloudmesh.shell.command import PluginCommand
 # from cloudmesh.admin.api.manager import Manager
 from cm4.mongo.MongoDBController import MongoDBController
 from cm4.mongo.MongoDBController import MongoInstaller
-
+from cm4.configuration.config import Config
+from cloudmesh.common.Printer import Printer
 
 class AdminCommand(PluginCommand):
 
@@ -107,15 +108,25 @@ class AdminCommand(PluginCommand):
 
         elif arguments.status:
 
+            config = Config()
+            data = config.data["cloudmesh"]["data"]["mongo"]
+            # self.expanduser()
+
 
             print("Rest Service status")
 
             print("MongoDB status")
 
             mongo = MongoDBController()
-            v = mongo.version()
-            print ("Version:", v)
-            mongo.set_auth()
+            # mongo.expanduser()
+            data = dict(mongo.data)
+
+            data["MONGO_VERSION"]  = '.'.join(str(x) for x in mongo.version())
+
+            print(Printer.attribute(data))
+            # mongo.set_auth()
+
+
 
         return result
 

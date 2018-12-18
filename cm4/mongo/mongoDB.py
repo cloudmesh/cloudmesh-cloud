@@ -13,8 +13,6 @@ class MongoDB(object):
         self.host = host or self.mongo["MONGO_HOST"]
         p = str(password or self.mongo["MONGO_PASSWORD"])
         u = str(username or self.mongo["MONGO_USERNAME"])
-        print ("PPPP",p, type(p))
-        print("UUUU",u, type(u))
         self.password = urllib.parse.quote_plus(p)
         self.username = urllib.parse.quote_plus(u)
         self.port = port or self.mongo["MONGO_PORT"]

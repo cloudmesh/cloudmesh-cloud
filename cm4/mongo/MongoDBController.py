@@ -288,16 +288,15 @@ class MongoDBController(object):
         """
         check the MongoDB status
         """
-
+        ret = ''
         script = "ps -ax | grep mongo | grep -v grep | grep -v cms"
 
         try:
-            ps_output = Script(script)
+            Script(script)
         except subprocess.CalledProcessError:
-            print ("No mongod running")
-        else:
-            print (ps_output)
-
+            ret = "No mongod running"
+        finally:
+            return ret
 
     def version(self):
         ver = None

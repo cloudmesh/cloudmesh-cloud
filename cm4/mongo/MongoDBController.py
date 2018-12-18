@@ -193,6 +193,12 @@ class MongoDBController(object):
         if self.data.MONGO_PASSWORD in ["TBD", "admin"]:
             Console.error("MongoDB password must not be the default")
             raise Exception("password error")
+        mongo_path = self.data["MONGO_PATH"]
+        mongo_log = self.data["MONGO_LOG"]
+        paths = [mongo_path, mongo_log]
+        for path in paths:
+            if not os.path.exists(path):
+                os.makedirs(path)
 
     def __str__(self):
         return yaml.dump(self.data, default_flow_style=False, indent=2)
@@ -283,10 +289,14 @@ class MongoDBController(object):
         check the MongoDB status
         """
 
-        script = "ps -ax | grep mongo | fgrep -v grep"
+        script = "ps -ax | grep mongo | grep -v grep | grep -v cms"
 
-        ps_output = Script(script)
-        print(ps_output)
+        try:
+            ps_output = Script(script)
+        except subprocess.CalledProcessError:
+            print ("No mongod running")
+        else:
+            print (ps_output)
 
 
     def version(self):

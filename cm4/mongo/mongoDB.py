@@ -11,8 +11,12 @@ class MongoDB(object):
 
         self.database = self.mongo["MONGO_DBNAME"]
         self.host = host or self.mongo["MONGO_HOST"]
-        self.password = urllib.parse.quote_plus(password or self.mongo["MONGO_PASSWORD"])
-        self.username = urllib.parse.quote_plus(username or self.mongo["MONGO_USERNAME"])
+        p = str(password or self.mongo["MONGO_PASSWORD"])
+        u = str(username or self.mongo["MONGO_USERNAME"])
+        print ("PPPP",p, type(p))
+        print("UUUU",u, type(u))
+        self.password = urllib.parse.quote_plus(p)
+        self.username = urllib.parse.quote_plus(u)
         self.port = port or self.mongo["MONGO_PORT"]
         self.client = None
         self.db = None
@@ -30,14 +34,14 @@ class MongoDB(object):
         set username
         :param username:
         """
-        self.username = urllib.parse.quote_plus(username)
+        self.username = urllib.parse.quote_plus(str(username))
 
     def set_password(self, password):
         """
         set password
         :param password:
         """
-        self.password = urllib.parse.quote_plus(password)
+        self.password = urllib.parse.quote_plus(str(password))
 
     def connect_db(self):
         """

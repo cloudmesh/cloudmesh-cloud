@@ -148,6 +148,42 @@ class MongoInstaller(object):
 
 class MongoDBController(object):
 
+
+    script_passwd = """
+    use admin
+    db.changeUserPassword("{MONGO_USERNAME}", "{MONGO_PASSWORD}")
+    """
+
+    script_admin = """
+    
+    use admin
+    db.createUser(
+      {
+        user: "{MONGO_USERNAME}",
+        pwd: "{MONGO_PASSWORD}",
+        roles: [ { role: "userAdminAnyDatabase", db: "admin" }, "readWriteAnyDatabase" ]
+      }
+    )
+    """
+
+    """
+    Steps to add admin
+    
+    1. start mongo
+    mongod --port {MONGO_PORT} --bind_ip {MONGO_HOST} --dbpath {MONGO_PATH}/{MONGO_DBNAME}
+    
+    
+    2. pip scriptadmin to 
+
+    mongo --port 27017
+
+    3. restart mongo
+    
+    mongod --auth --bind_ip {MONGO_HOST} --port {MONGO_PORT} --dbpath {MONGO_PATH}/{MONGO_DBNAME}
+    
+    """
+
+
     def __init__(self):
 
         self.config = Config()

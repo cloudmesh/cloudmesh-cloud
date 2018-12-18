@@ -37,7 +37,7 @@ class SystemPath(object):
         elif platform == "windows":
             script = None
             # TODO: BUG: Implement
-        installer = Script(script)
+        installer = Script.run(script)
 
 
 class Script(object):

@@ -239,7 +239,8 @@ class MongoDBController(object):
         script = "mongod {auth} --bind_ip {MONGO_HOST} --dbpath {MONGO_PATH} --logpath {MONGO_LOG}/mongod.log --fork".format(**self.data, auth=auth)
 
         print(script)
-        run = Script(script)
+        result = Script(script)
+        print(result)
 
     # noinspection PyMethodMayBeStatic
     def stop(self):
@@ -248,7 +249,8 @@ class MongoDBController(object):
         linux and darwin have different way to shutdown the server, the common way is kill
         """
         script = 'kill -2 `pgrep mongo`'
-        run = Script(script)
+        result = Script(script)
+        print(result)
 
     def set_auth(self):
         """
@@ -257,7 +259,8 @@ class MongoDBController(object):
 
         script = """mongo --eval 'db.getSiblingDB("admin").createUser({{user:"{MONGO_USERNAME}",pwd:"{MONGO_PASSWORD}",roles:[{{role:"root",db:"admin"}}]}})'""".format(**self.data)
 
-        run = Script(script)
+        result = Script(script)
+        print(result)
 
     def dump(self, filename):
         """
@@ -269,7 +272,8 @@ class MongoDBController(object):
         #
 
         script = "mongodump --authenticationDatabase admin --archive={MONGO_HOME}/{filename}.gz --gzip -u {MONGO_USERNAME} -p {MONGO_PASSWORD}".format(**self.data, filename=filename)
-        run = Script(script)
+        result = Script(script)
+        print(result)
 
     def restore(self, filename):
         """
@@ -282,7 +286,8 @@ class MongoDBController(object):
 
         script = "mongorestore --authenticationDatabase admin -u {MONGO_USERNAME} -p " \
                  "{MONGO_PASSWORD} --gzip --archive={MONGO_HOME}/{filename}.gz".format(**self.data, filename=filename)
-        run = Script(script)
+        result = Script(script)
+        print(result)
 
     def status(self):
         """
@@ -306,3 +311,9 @@ class MongoDBController(object):
         except:
             return None
         return ver
+
+    def stats(self):
+        script = """mongo --eval 'db.stats()'""".format(**self.data)
+
+        result = Script(script)
+        print(result)

@@ -98,7 +98,7 @@ class BatchCommand(PluginCommand):
                     parameter = arguments.get("PARAMETER")
                     value = arguments.get("VALUE")
                     slurm_manager.set_param("job-metadata", config_name, parameter, value)
-            elif arguments.run and arguments.job:
+            elif arguments.start and arguments.job:
                 job_name = arguments.get("JOB_NAME")
                 slurm_manager.run(job_name)
             elif arguments.get("fetch"):

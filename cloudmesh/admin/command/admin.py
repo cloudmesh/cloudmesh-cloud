@@ -65,12 +65,12 @@ class AdminCommand(PluginCommand):
             elif arguments.start:
 
                 print("MongoDB start")
-                MongoDBController().run(False)
+                MongoDBController().start(False)
 
             elif arguments.stop:
 
                 print("MongoDB stop")
-                MongoDBController().shutdown()
+                MongoDBController().stop()
 
             elif arguments.backup:
 

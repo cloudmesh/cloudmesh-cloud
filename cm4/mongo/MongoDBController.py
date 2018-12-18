@@ -79,7 +79,7 @@ class MongoInstaller(object):
         wget -P /tmp/mongodb.tgz {MONGO_CODE}
         tar -zxvf /tmp/mongodb.tgz -C {LOCAL}/mongo --strip 1
             """.format(**self.data)
-        installer = Script(script)
+        installer = Script.run(script)
         SystemPath.add("{MONGO_HOME}/bin".format(**self.data))
 
         # THIS IS BROKEN AS ITS A SUPBROCESS? '. ~/.bashrc'
@@ -103,7 +103,7 @@ class MongoInstaller(object):
             curl -o /tmp/mongodb.tgz {MONGO_CODE}
             tar -zxvf /tmp/mongodb.tgz -C {LOCAL}/mongo --strip 1
             """.format(**self.data)
-            installer = Script(script)
+            installer = Script.run(script)
             SystemPath.add("{MONGO_HOME}/bin".format(**self.data))
 
             # THIS IS BROKEN AS ITS A SUPBROCESS? '. ~/.bashrc'
@@ -239,7 +239,7 @@ class MongoDBController(object):
         script = "mongod {auth} --bind_ip {MONGO_HOST} --dbpath {MONGO_PATH} --logpath {MONGO_LOG}/mongod.log --fork".format(**self.data, auth=auth)
 
         print(script)
-        result = Script(script)
+        result = Script.run(script)
         print(result)
 
     # noinspection PyMethodMayBeStatic
@@ -249,7 +249,7 @@ class MongoDBController(object):
         linux and darwin have different way to shutdown the server, the common way is kill
         """
         script = 'kill -2 `pgrep mongo`'
-        result = Script(script)
+        result = Script.run(script)
         print(result)
 
     def set_auth(self):
@@ -259,7 +259,7 @@ class MongoDBController(object):
 
         script = """mongo --eval 'db.getSiblingDB("admin").createUser({{user:"{MONGO_USERNAME}",pwd:"{MONGO_PASSWORD}",roles:[{{role:"root",db:"admin"}}]}})'""".format(**self.data)
 
-        result = Script(script)
+        result = Script.run(script)
         print(result)
 
     def dump(self, filename):
@@ -272,7 +272,7 @@ class MongoDBController(object):
         #
 
         script = "mongodump --authenticationDatabase admin --archive={MONGO_HOME}/{filename}.gz --gzip -u {MONGO_USERNAME} -p {MONGO_PASSWORD}".format(**self.data, filename=filename)
-        result = Script(script)
+        result = Script.run(script)
         print(result)
 
     def restore(self, filename):
@@ -286,7 +286,7 @@ class MongoDBController(object):
 
         script = "mongorestore --authenticationDatabase admin -u {MONGO_USERNAME} -p " \
                  "{MONGO_PASSWORD} --gzip --archive={MONGO_HOME}/{filename}.gz".format(**self.data, filename=filename)
-        result = Script(script)
+        result = Script.run(script)
         print(result)
 
     def status(self):
@@ -297,7 +297,7 @@ class MongoDBController(object):
         script = "ps -ax | grep mongo | grep -v grep | grep -v cms"
 
         try:
-            Script(script)
+            Script.run(script)
         except subprocess.CalledProcessError:
             ret = "No mongod running"
         finally:
@@ -315,5 +315,5 @@ class MongoDBController(object):
     def stats(self):
         script = """mongo --eval 'db.stats()'""".format(**self.data)
 
-        result = Script(script)
+        result = Script.run(script)
         print(result)

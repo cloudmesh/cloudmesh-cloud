@@ -255,7 +255,7 @@ class MongoDBController(object):
         add admin acount into the MongoDB admin database
         """
 
-        script = """mongo --eval 'db.getSiblingDB("admin").createUser({user:"{MONGO_USERNAME}",pwd:"{MONGO_PASSWORD}",roles:[{role:"root",db:"admin"}]})'""".format(**self.data)
+        script = """mongo --eval 'db.getSiblingDB("admin").createUser({{user:"{MONGO_USERNAME}",pwd:"{MONGO_PASSWORD}",roles:[{{role:"root",db:"admin"}}]}})'""".format(**self.data)
 
         run = Script(script)
 

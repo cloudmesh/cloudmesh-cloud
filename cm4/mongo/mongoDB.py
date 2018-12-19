@@ -5,20 +5,26 @@ from cm4.configuration.config import Config
 
 class MongoDB(object):
 
-    def __init__(self, host=None, username=None, password=None, port=None):
-        self.config = Config().data["cloudmesh"]
-        self.mongo = self.config["data"]["mongo"]
+    __shared_state = {}
 
-        self.database = self.mongo["MONGO_DBNAME"]
-        self.host = host or self.mongo["MONGO_HOST"]
-        p = str(password or self.mongo["MONGO_PASSWORD"])
-        u = str(username or self.mongo["MONGO_USERNAME"])
-        self.password = urllib.parse.quote_plus(p)
-        self.username = urllib.parse.quote_plus(u)
-        self.port = port or self.mongo["MONGO_PORT"]
-        self.client = None
-        self.db = None
-        self.connect_db()
+    def __init__(self, host=None, username=None, password=None, port=None):
+
+        self.__dict__ = self.__shared_state
+        if "config" not in self.__dict__:
+
+            self.config = Config().data["cloudmesh"]
+            self.mongo = self.config["data"]["mongo"]
+
+            self.database = self.mongo["MONGO_DBNAME"]
+            self.host = host or self.mongo["MONGO_HOST"]
+            p = str(password or self.mongo["MONGO_PASSWORD"])
+            u = str(username or self.mongo["MONGO_USERNAME"])
+            self.password = urllib.parse.quote_plus(p)
+            self.username = urllib.parse.quote_plus(u)
+            self.port = port or self.mongo["MONGO_PORT"]
+            self.client = None
+            self.db = None
+            self.connect_db()
 
     def set_port(self, port):
         """

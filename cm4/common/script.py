@@ -18,7 +18,8 @@ from cm4.common.util import path_expand
 from distutils.spawn import find_executable
 import textwrap
 from sys import platform
-
+import os
+import psutil
 
 class SystemPath(object):
 
@@ -43,7 +44,7 @@ class SystemPath(object):
 class Script(object):
 
     @staticmethod
-    def run(script, debug=True):
+    def run(script, debug=False):
         if script is not None:
             result = ""
             lines = textwrap.dedent(script).strip().split("\n")
@@ -59,3 +60,26 @@ class Script(object):
             return result
         else:
             return ""
+
+
+
+def find_process(name):
+    "Return a list of processes matching 'name'."
+    processes = None
+    for p in psutil.process_iter():
+        try:
+            found = p.name()
+        except (psutil.AccessDenied, psutil.ZombieProcess):
+            pass
+        except psutil.NoSuchProcess:
+            continue
+        if name == found:
+            if processes is None:
+                processes = []
+            processes.append(
+                {
+                    "pid": p.pid,
+                    "command": " ".join(p.cmdline()),
+                    "created": p.create_time()
+            })
+    return processes

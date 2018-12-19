@@ -297,23 +297,32 @@ class MongoDBController(object):
         result = Script.run(script)
         print(result)
 
-    # do json
     def status(self):
         """
         check the MongoDB status
+        returns a json object with status: and pid: command
         """
 
         result = find_process("mongod")
 
         if result is None:
-            output = "No mongod running"
+            state = {"status": "error",
+                      "message": "No mongod running"
+                      }
+            output = None
         else:
-            output = ""
+            output = {}
+            state = {"status": "ok"}
             for p in result:
                 p = dotdict(p)
-                output =  output + "{pid}  {command}\n".format(**p)
 
-        return output
+                process = {
+                    "pid": str(p.pid),
+                    "command": p.command
+                }
+                output[str(p.pid)] = process
+
+        return state, output
 
 
     def version(self):

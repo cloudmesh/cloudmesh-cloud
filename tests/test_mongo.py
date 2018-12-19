@@ -1,6 +1,9 @@
 from cm4.mongo.mongoDB import MongoDB
+from cm4.mongo.MongoDBController import MongoDBController
+
 from cm4.mongo.DataBaseDecorator import DatabaseUpdate
 from cm4.common.debug import HEADING, myself
+from pprint import pprint
 
 # nosetest -v --nopature
 # nosetests -v --nocapture tests/test_mongo.py
@@ -17,12 +20,38 @@ def r_list():
         {"name": "test-dict-1", "num": 432},
     ]
 
+def PRINT(name, d):
+    print (79* "-")
+    print (name)
+    print (79* "-")
+    pprint (d)
 
 class TestMongo:
 
     def setup(self):
         self.mongo = MongoDB()
 
+    def test_01_MongoDBControler_Borg_test(self):
+        HEADING(myself())
+
+        m1 = MongoDBController()
+
+        PRINT ("m1", m1.__dict__)
+
+        m2 = MongoDBController()
+        m3 = MongoDBController()
+
+        m3.data["TEST"] = "test"
+
+        PRINT ("m1", m1.__dict__)
+        PRINT ("m2", m1.__dict__)
+        PRINT ("m3", m3.__dict__)
+
+        assert m3.data["TEST"] == "test"
+        assert m2.data["TEST"] == "test"
+        assert m1.data["TEST"] == "test"
+
+"""
     def test_01_saveto(self):
         HEADING(myself())
         d = r_dict()
@@ -42,3 +71,4 @@ class TestMongo:
 
         deleted_doc = self.mongo.find_document("test", "name", "test-dict-1")
         assert deleted_doc is None
+"""

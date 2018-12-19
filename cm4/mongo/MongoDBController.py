@@ -149,6 +149,7 @@ class MongoInstaller(object):
 
 class MongoDBController(object):
 
+    __shared_state = {}
 
     script_passwd = """
     use admin
@@ -184,22 +185,23 @@ class MongoDBController(object):
     
     """
 
-
     def __init__(self):
 
-        self.config = Config()
-        self.data = dotdict(self.config.data["cloudmesh"]["data"]["mongo"])
-        self.expanduser()
+        self.__dict__ = self.__shared_state
+        if "data" not in self.__dict__:
+            self.config = Config()
+            self.data = dotdict(self.config.data["cloudmesh"]["data"]["mongo"])
+            self.expanduser()
 
-        if self.data.MONGO_PASSWORD in ["TBD", "admin"]:
-            Console.error("MongoDB password must not be the default")
-            raise Exception("password error")
-        mongo_path = self.data["MONGO_PATH"]
-        mongo_log = self.data["MONGO_LOG"]
-        paths = [mongo_path, mongo_log]
-        for path in paths:
-            if not os.path.exists(path):
-                os.makedirs(path)
+            if self.data.MONGO_PASSWORD in ["TBD", "admin"]:
+                Console.error("MongoDB password must not be the default")
+                raise Exception("password error")
+            mongo_path = self.data["MONGO_PATH"]
+            mongo_log = self.data["MONGO_LOG"]
+            paths = [mongo_path, mongo_log]
+            for path in paths:
+                if not os.path.exists(path):
+                    os.makedirs(path)
 
     def __str__(self):
         return yaml.dump(self.data, default_flow_style=False, indent=2)
@@ -350,3 +352,4 @@ class MongoDBController(object):
         db.command("dbstats") # prints database stats for "test_db"
         db.command("collstats", "test_collection")
         """
+

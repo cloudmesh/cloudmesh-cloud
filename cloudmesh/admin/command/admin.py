@@ -62,14 +62,16 @@ class AdminCommand(PluginCommand):
 
             elif arguments.status:
 
-                print("MongoDB Status")
-                print(79 * "=")
                 mongo = MongoDBController()
-                r = mongo.status()
-                if "No mongod running" in r:
-                    Console.error(r)
+                state, r = mongo.status()
+
+                if "error" in state["status"]:
+                    Console.error(r["message"])
+                    print(Printer.attribute(r))
                 else:
-                    Console.ok(r)
+                    print(Printer.dict(r, order=["pid", "command"]))
+
+
 
             elif arguments.version:
                 print("MongoDB Version")
@@ -103,12 +105,6 @@ class AdminCommand(PluginCommand):
 
                 print("MongoDB backup")
                 MongoDBController().restore(arguments.get('FILENAME'))
-
-            elif arguments.status:
-
-                mongo = MongoDBController()
-                r = mongo.status()
-                return r
 
             elif arguments.stats:
 
@@ -155,13 +151,13 @@ class AdminCommand(PluginCommand):
 
             print (mongo)
             # mongo.expanduser()
-            data = mongo.data
-            print ("DDD", data)
+            #data = mongo.data
+            #print ("DDD", data)
 
-            data["MONGO_VERSION"]  = '.'.join(str(x) for x in mongo.version())
+            #data["MONGO_VERSION"]  = '.'.join(str(x) for x in mongo.version())
 
-            print (data)
-            print(Printer.attribute(data))
+            #print (data)
+            #print(Printer.attribute(data))
             # mongo.set_auth()
 
 

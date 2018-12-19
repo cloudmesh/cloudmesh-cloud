@@ -71,8 +71,6 @@ class AdminCommand(PluginCommand):
                 else:
                     print(Printer.dict(r, order=["pid", "command"]))
 
-
-
             elif arguments.version:
                 print("MongoDB Version")
                 print(79 * "=")
@@ -110,11 +108,16 @@ class AdminCommand(PluginCommand):
 
                 mongo = MongoDBController()
                 r = mongo.stats()
-                print(r)
+
+
                 if len(r) > 0:
+                    print(Printer.attribute(r))
                     Console.ok("ok")
                 else:
                     Console.ok("is your MongoDB server running")
+
+
+
 
 
         elif arguments.rest:

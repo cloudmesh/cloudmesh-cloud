@@ -343,14 +343,20 @@ class MongoDBController(object):
         for line in result:
             line = line.replace("Implicit session: session {", "")
             line = line.replace(") }", "")
-            line = line.replace("MongoDB shell version ", "version: ")
+            line = line.replace("MongoDB shell version", "shell_version: ")
+            line = line.replace("MongoDB server version:", "server_version: ")
+
             line = line.replace("connecting to", "endpoint")
+            line = line.replace("UUID(", "")
             line = line.strip()
             line = line.replace("}", "")
             line = line.replace("{", "")
             if ":" in line:
+                line = line.replace('"', "")
+                line = line.replace(',', "")
+
                 attribute, value = line.split(":", 1)
-                output[attribute] = value
+                output[attribute] = str(value).strip()
 
         return output
 

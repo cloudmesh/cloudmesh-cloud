@@ -8,6 +8,8 @@ from cloudmesh.shell.variables import Variables
 
 class Config(object):
 
+    __shared_state = {}
+
     def __init__(self, config_path='~/.cloudmesh/cloudmesh4.yaml'):
         """
         Initialize the Config class.
@@ -16,34 +18,37 @@ class Config(object):
             with a root element `cloudmesh`. Default: `~/.cloudmesh/cloudmesh4.yaml`
         """
 
-        self.config_path = Path(expanduser(config_path)).resolve()
-        config_folder = dirname(self.config_path)
+        self.__dict__ = self.__shared_state
+        if "data" not in self.__dict__:
 
-        if not exists(config_folder):
-            mkdir(config_folder)
+            self.config_path = Path(expanduser(config_path)).resolve()
+            self.config_folder = dirname(self.config_path)
 
-        if not isfile(self.config_path):
-            destination_path = Path(join(dirname(realpath(__file__)), "../etc/cloudmesh4.yaml"))
-            copyfile(destination_path.resolve(), self.config_path)
+            if not exists(self.config_folder):
+                mkdir(self.config_folder)
 
-        with open(self.config_path, "r") as stream:
-            self.data = yaml.load(stream)
+            if not isfile(self.config_path):
+                destination_path = Path(join(dirname(realpath(__file__)), "../etc/cloudmesh4.yaml"))
+                copyfile(destination_path.resolve(), self.config_path)
 
-        # self.data is loaded as nested OrderedDict, can not use set or get methods directly
-        if self.data is None:
-            raise EnvironmentError(
-                "Failed to load configuration file cloudmesh4.yaml, please check the path and file locally")
+            with open(self.config_path, "r") as stream:
+                self.data = yaml.load(stream)
 
-        #
-        # populate default variables
-        #
-        default = self.default()
+            # self.data is loaded as nested OrderedDict, can not use set or get methods directly
+            if self.data is None:
+                raise EnvironmentError(
+                    "Failed to load configuration file cloudmesh4.yaml, please check the path and file locally")
 
-        database = Variables(filename="~/.cloudmesh/var-data")
+            #
+            # populate default variables
+            #
 
-        for name in default:
-            if not name in database:
-                database[name] = default[name]
+            self.variable_database = Variables(filename="~/.cloudmesh/var-data")
+
+            default = self.default()
+            for name in self.default():
+                if not name in self.variable_database:
+                    self.variable_database[name] = default[name]
 
 
     def dict(self):

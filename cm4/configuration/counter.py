@@ -13,6 +13,8 @@ class Counter(object):
     vm id or the job id.
     """
 
+    __shared_state = {}
+
     def __init__(self, counter_file_path="~/.cloudmesh/counter.yaml"):
         """
         :param counter_file_path: the counter is always stored in this file.

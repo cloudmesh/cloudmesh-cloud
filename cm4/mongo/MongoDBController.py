@@ -304,7 +304,7 @@ class MongoDBController(object):
         result = find_process("mongod")
 
         if result is None:
-            result = "No mongod running"
+            output = "No mongod running"
         else:
             output = ""
             for p in result:

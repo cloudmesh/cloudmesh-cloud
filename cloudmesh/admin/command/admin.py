@@ -6,6 +6,7 @@ from cm4.mongo.MongoDBController import MongoDBController
 from cm4.mongo.MongoDBController import MongoInstaller
 from cm4.configuration.config import Config
 from cloudmesh.common.Printer import Printer
+from cloudmesh.common.console import Console
 
 class AdminCommand(PluginCommand):
 
@@ -64,7 +65,10 @@ class AdminCommand(PluginCommand):
                 print(79 * "=")
                 mongo = MongoDBController()
                 r = mongo.status()
-                print(r)
+                if "No mongod running" in r:
+                    Console.error(r)
+                else:
+                    Console.ok(r)
 
             elif arguments.version:
                 print("MongoDB Version")
@@ -134,11 +138,15 @@ class AdminCommand(PluginCommand):
             print("MongoDB status")
 
             mongo = MongoDBController()
+
+            print (mongo)
             # mongo.expanduser()
-            data = dict(mongo.data)
+            data = mongo.data
+            print ("DDD", data)
 
             data["MONGO_VERSION"]  = '.'.join(str(x) for x in mongo.version())
 
+            print (data)
             print(Printer.attribute(data))
             # mongo.set_auth()
 

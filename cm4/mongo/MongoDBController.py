@@ -7,6 +7,7 @@ from cm4.common.script import Script, SystemPath
 from cloudmesh.common.dotdict import dotdict
 from cloudmesh.common.Shell import Shell, Brew
 from cloudmesh.common.console import Console
+from cm4.common.script import find_process
 
 import subprocess
 
@@ -207,7 +208,7 @@ class MongoDBController(object):
         for key in self.data:
             if type(self.data[key]) == str:
                 self.data[key] = os.path.expanduser(self.data[key])
-        pprint(self.data)
+        # pprint(self.data)
 
     def update_auth(self):
         """
@@ -236,11 +237,16 @@ class MongoDBController(object):
         if not no_security:
             auth = "--auth"
 
-        script = "mongod {auth} --bind_ip {MONGO_HOST} --dbpath {MONGO_PATH} --logpath {MONGO_LOG}/mongod.log --fork".format(**self.data, auth=auth)
+        try:
+            script = "mongod {auth} --bind_ip {MONGO_HOST} --dbpath {MONGO_PATH} --logpath {MONGO_LOG}/mongod.log --fork".format(**self.data, auth=auth)
+            result = Script.run(script)
+        except:
+            result ="Mongo could not be started."
 
-        print(script)
-        result = Script.run(script)
-        print(result)
+        if "child process started successfully" in result:
+            print(Console.ok(result))
+        else:
+            print(Console.error(result))
 
     # noinspection PyMethodMayBeStatic
     def stop(self):
@@ -289,19 +295,24 @@ class MongoDBController(object):
         result = Script.run(script)
         print(result)
 
+    # do json
     def status(self):
         """
         check the MongoDB status
         """
-        ret = ''
-        script = "ps -ax | grep mongo | grep -v grep | grep -v cms"
 
-        try:
-            Script.run(script)
-        except subprocess.CalledProcessError:
-            ret = "No mongod running"
-        finally:
-            return ret
+        result = find_process("mongod")
+
+        if result is None:
+            result = "No mongod running"
+        else:
+            output = ""
+            for p in result:
+                p = dotdict(p)
+                output =  output + "{pid}  {command}\n".format(**p)
+
+        return output
+
 
     def version(self):
         ver = None
@@ -317,3 +328,11 @@ class MongoDBController(object):
 
         result = Script.run(script)
         print(result)
+
+        """
+        connection = pymongo.Connection(host = "127.0.0.1", port = 27017)
+        db = connection["test_db"]
+        test_collection = db["test_collection"]
+        db.command("dbstats") # prints database stats for "test_db"
+        db.command("collstats", "test_collection")
+        """

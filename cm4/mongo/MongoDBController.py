@@ -326,8 +326,22 @@ class MongoDBController(object):
     def stats(self):
         script = """mongo --eval 'db.stats()'""".format(**self.data)
 
-        result = Script.run(script)
-        print(result)
+        result = Script.run(script).split("\n")
+
+        output = {}
+        for line in result:
+            line = line.replace("Implicit session: session {", "")
+            line = line.replace(") }", "")
+            line = line.replace("MongoDB shell version ", "version: ")
+            line = line.replace("connecting to", "endpoint")
+            line = line.strip()
+            line = line.replace("}", "")
+            line = line.replace("{", "")
+            if ":" in line:
+                attribute, value = line.split(":", 1)
+                output[attribute] = value
+
+        return output
 
         """
         connection = pymongo.Connection(host = "127.0.0.1", port = 27017)

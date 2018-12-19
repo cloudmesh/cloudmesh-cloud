@@ -19,6 +19,7 @@ class AdminCommand(PluginCommand):
           Usage:
             admin mongo install [--brew] [--download=PATH]
             admin mongo status
+            admin mongo stats
             admin mongo version
             admin mongo start
             admin mongo stop
@@ -109,6 +110,17 @@ class AdminCommand(PluginCommand):
                 r = mongo.status()
                 return r
 
+            elif arguments.stats:
+
+                mongo = MongoDBController()
+                r = mongo.stats()
+                print(r)
+                if len(r) > 0:
+                    Console.ok("ok")
+                else:
+                    Console.ok("is your MongoDB server running")
+
+
         elif arguments.rest:
 
             if arguments.start:
@@ -125,6 +137,8 @@ class AdminCommand(PluginCommand):
 
                 print("Rest Service status")
                 raise NotImplementedError
+
+
 
         elif arguments.status:
 

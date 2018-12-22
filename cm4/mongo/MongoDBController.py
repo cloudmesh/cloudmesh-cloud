@@ -306,13 +306,19 @@ class MongoDBController(object):
         result = find_process("mongod")
 
         if result is None:
-            state = {"status": "error",
-                      "message": "No mongod running"
-                      }
+            state = dotdict(
+                {"status": "error",
+                 "message": "No mongod running",
+                 "output": None
+                })
             output = None
         else:
+            state = dotdict(
+                {"status": "ok",
+                 "message": "running",
+                 "output": None
+                 })
             output = {}
-            state = {"status": "ok"}
             for p in result:
                 p = dotdict(p)
 
@@ -321,8 +327,8 @@ class MongoDBController(object):
                     "command": p.command
                 }
                 output[str(p.pid)] = process
-
-        return state, output
+            state["output"] = output
+        return state
 
 
     def version(self):

@@ -44,12 +44,24 @@ class Config(object):
             #
 
             self.variable_database = Variables(filename="~/.cloudmesh/var-data")
+            self.set_debug_defaults()
 
             default = self.default()
+
+
+
             for name in self.default():
                 if not name in self.variable_database:
                     self.variable_database[name] = default[name]
+            if "cloud" in default:
+                self.cloud = default["cloud"]
+            else:
+                self.cloud = None
 
+    def set_debug_defaults(self):
+        for name in ["trace", "debug"]:
+            if not name in self.variable_database:
+                self.variable_database[name] = str(False)
 
     def dict(self):
         return self.data

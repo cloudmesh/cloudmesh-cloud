@@ -7,12 +7,26 @@ from cloudmesh.common.dotdict import dotdict
 from cm4.abstractclass.ComputeNodeManagerABC import ComputeNodeManagerABC
 from cm4.configuration.config import Config
 from cloudmesh.common.console import Console
-
+from cm4.mongo.MongoDBController import MongoDBController
 
 class VboxProvider(ComputeNodeManagerABC):
 
-    def __init__(self, config):
-        super().__init__("vagrant", config)
+    def __init__(self, cloud=None):
+
+        self.config = Config()
+        if cloud is None:
+            cloud = self.config.cloud
+
+        m = MongoDBController()
+        status = m.status()
+        if status.status == "error":
+            raise Exception("ERROR: MongoDB is not running.")
+        #
+        # BUG: Naturally the following is wrong as it depends on the name.
+        #
+        # super().__init__("vagrant", config)
+
+
 
     def start(self, name):
         """
@@ -154,18 +168,25 @@ class VboxProvider(ComputeNodeManagerABC):
         arg.path = config.data["cloudmesh"]["cloud"]["vagrant"]["default"]["path"]
         arg.directory = os.path.expanduser("{path}/{name}".format(**arg))
 
+        pprint(arg)
+
         result = Shell.execute("vagrant",
                                ["ssh-config"],
                                cwd=arg.directory)
 
-        lines = result.split("\n")
-        data = {}
-        for line in lines:
-            attribute, value = line.strip().split(" ", 1)
-            if attribute == "IdentityFile":
-                value = value.replace('"', '')
+        if result is None:
+            print ("No ssh possible to")
+            data = {}
+        else:
+            print (result)
+            lines = result.split("\n")
+            data = {}
+            for line in lines:
+                attribute, value = line.strip().split(" ", 1)
+                if attribute == "IdentityFile":
+                    value = value.replace('"', '')
 
-            data[attribute] = value
+                data[attribute] = value
 
         if source == 'vagrant':
             return data
@@ -188,6 +209,10 @@ class VboxProvider(ComputeNodeManagerABC):
             details = self._convert_assignment_to_dict(details)
             combined = {**data, **details}
             data = combined
+            data["cm_name"] = name
+            data["cm_directory"] = arg.directory
+            data["cm_path"] = arg.path
+
 
         return data
 
@@ -219,7 +244,7 @@ class VboxProvider(ComputeNodeManagerABC):
         :param name: the name of the node
         :return: the dict of the node
         """
-        pass
+        self.delete(name=name)
 
     # @classmethod
     def delete(self, name=None):

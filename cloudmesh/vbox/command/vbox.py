@@ -92,7 +92,7 @@ class VboxCommand(PluginCommand):
         arguments.verbose = arguments["-v"]
         arguments.all = arguments["--all"]
 
-        print(arguments)
+        # print(arguments)
 
         if arguments.version:
             versions = {
@@ -108,13 +108,13 @@ class VboxCommand(PluginCommand):
             _LIST_PRINT(versions, arguments.format)
 
         elif arguments.image and arguments.list:
-            l = VboxProvider.list_images()
+            l = VboxProvider().list_images()
 
             _LIST_PRINT(l, arguments.format, order=["name", "provider", "date"])
 
         elif arguments.image and arguments.add:
             try:
-                l = VboxProvider.add_image(arguments.NAME)
+                l = VboxProvider().add_image(arguments.NAME)
                 print(l)
             except Exception as e:
                 print(e)
@@ -122,7 +122,7 @@ class VboxCommand(PluginCommand):
 
         elif arguments.image and arguments.delete:
             try:
-                l = VboxProvider.delete_image(arguments.NAME)
+                l = VboxProvider().delete_image(arguments.NAME)
                 print(l)
             except Exception as e:
                 print(e)
@@ -131,7 +131,7 @@ class VboxCommand(PluginCommand):
 
         elif arguments.image and arguments.find_image:
 
-            VboxProvider.find_image(arguments.KEYWORDS)
+            VboxProvider().find_image(arguments.KEYWORDS)
             return ""
 
         elif arguments.vm and arguments.list:

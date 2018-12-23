@@ -114,7 +114,7 @@ class VboxProvider(ComputeNodeManagerABC):
         arg.name = name
         config = Config()
         cloud = "vagrant"  # TODO: must come through parameter or set cloud
-        arg.path = config.data["cloudmesh"]["cloud"]["vagrant"]["default"]["path"]
+        arg.path = config.data["cloudmesh"]["cloud"][cloud]["default"]["path"]
         arg.directory = os.path.expanduser("{path}/{name}".format(**arg))
 
         vms = self.to_dict(self.nodes())
@@ -151,11 +151,10 @@ class VboxProvider(ComputeNodeManagerABC):
             d[attribute] = value
         return d
 
-    def info(self, name=None, source="x-vagrant"):
+    def info(self, name=None):
         """
         gets the information of a node with a given name
 
-        :param source:
         :param name:
         :return: The dict representing the node including updated status
         """
@@ -166,7 +165,7 @@ class VboxProvider(ComputeNodeManagerABC):
         config = Config()
 
         cloud = "vagrant"  # TODO: must come through parameter or set cloud
-        arg.path = config.data["cloudmesh"]["cloud"]["vagrant"]["default"]["path"]
+        arg.path = config.data["cloudmesh"]["cloud"][cloud]["default"]["path"]
         arg.directory = os.path.expanduser("{path}/{name}".format(**arg))
 
         data = {
@@ -200,34 +199,31 @@ class VboxProvider(ComputeNodeManagerABC):
 
                 data_vagrant[attribute] = value
 
-        if source == 'vagrant':
-            return data_vagrant
-        else:
 
-            vms = Shell.execute('VBoxManage', ["list","vms"]).split("\n")
-            #
-            # find vm
-            #
-            vbox_name_prefix = "{name}_{name}_".format(**arg)
-            # print (vbox_name_prefix)
-            for vm in vms:
-                vm = vm.replace("\"","")
-                vname = vm.split(" {")[0]
-                if vname.startswith(vbox_name_prefix):
-                    details = Shell.execute("VBoxManage",
-                                            ["showvminfo", "--machinereadable", vname])
-                    # print (details)
-                    break;
-            vbox_dict = self._convert_assignment_to_dict(details)
+        vms = Shell.execute('VBoxManage', ["list","vms"]).split("\n")
+        #
+        # find vm
+        #
+        vbox_name_prefix = "{name}_{name}_".format(**arg)
+        # print (vbox_name_prefix)
+        for vm in vms:
+            vm = vm.replace("\"","")
+            vname = vm.split(" {")[0]
+            if vname.startswith(vbox_name_prefix):
+                details = Shell.execute("VBoxManage",
+                                        ["showvminfo", "--machinereadable", vname])
+                # print (details)
+                break;
+        vbox_dict = self._convert_assignment_to_dict(details)
 
 
-            #combined = {**data, **details}
-            #data = combined
-            if data_vagrant is not None:
-                data["vagrant"] = data_vagrant
-            data["vbox"] = vbox_dict
-            if "VMState" in vbox_dict:
-                data["cm"]["status"] = vbox_dict["VMState"]
+        #combined = {**data, **details}
+        #data = combined
+        if data_vagrant is not None:
+            data["vagrant"] = data_vagrant
+        data["vbox"] = vbox_dict
+        if "VMState" in vbox_dict:
+            data["cm"]["status"] = vbox_dict["VMState"]
 
 
         return data

@@ -8,6 +8,7 @@ from cm4.abstractclass.ComputeNodeManagerABC import ComputeNodeManagerABC
 from cm4.configuration.config import Config
 from cloudmesh.common.console import Console
 from cm4.mongo.MongoDBController import MongoDBController
+import subprocess
 
 class VboxProvider(ComputeNodeManagerABC):
 
@@ -168,28 +169,39 @@ class VboxProvider(ComputeNodeManagerABC):
         arg.path = config.data["cloudmesh"]["cloud"]["vagrant"]["default"]["path"]
         arg.directory = os.path.expanduser("{path}/{name}".format(**arg))
 
-        pprint(arg)
+        data = {
+            "cm": {
+                "name": name,
+                "directory": arg.directory,
+                "path": arg.path,
+                "cloud": cloud,
+                "status": "unkown"
+            }
+        }
+        result = None
 
         result = Shell.execute("vagrant",
                                ["ssh-config"],
-                               cwd=arg.directory)
+                               cwd=arg.directory,
+                               traceflag=False,
+                               witherror=False)
 
         if result is None:
-            print ("No ssh possible to")
-            data = {}
+            data_vagrant = None
+            data["cm"]["status"] = "poweroff"
         else:
             print (result)
             lines = result.split("\n")
-            data = {}
+            data_vagrant = {}
             for line in lines:
                 attribute, value = line.strip().split(" ", 1)
                 if attribute == "IdentityFile":
                     value = value.replace('"', '')
 
-                data[attribute] = value
+                data_vagrant[attribute] = value
 
         if source == 'vagrant':
-            return data
+            return data_vagrant
         else:
 
             vms = Shell.execute('VBoxManage', ["list","vms"]).split("\n")
@@ -197,7 +209,7 @@ class VboxProvider(ComputeNodeManagerABC):
             # find vm
             #
             vbox_name_prefix = "{name}_{name}_".format(**arg)
-            print (vbox_name_prefix)
+            # print (vbox_name_prefix)
             for vm in vms:
                 vm = vm.replace("\"","")
                 vname = vm.split(" {")[0]
@@ -206,12 +218,16 @@ class VboxProvider(ComputeNodeManagerABC):
                                             ["showvminfo", "--machinereadable", vname])
                     # print (details)
                     break;
-            details = self._convert_assignment_to_dict(details)
-            combined = {**data, **details}
-            data = combined
-            data["cm_name"] = name
-            data["cm_directory"] = arg.directory
-            data["cm_path"] = arg.path
+            vbox_dict = self._convert_assignment_to_dict(details)
+
+
+            #combined = {**data, **details}
+            #data = combined
+            if data_vagrant is not None:
+                data["vagrant"] = data_vagrant
+            data["vbox"] = vbox_dict
+            if "VMState" in vbox_dict:
+                data["cm"]["status"] = vbox_dict["VMState"]
 
 
         return data

@@ -88,7 +88,7 @@ class VboxCommand(PluginCommand):
             vbox vm ssh [NAME] [-e COMMAND]
         """
 
-        arguments.format = arguments["--format"] or "table"
+        arguments.format = arguments["--format"] or "yaml"
         arguments.verbose = arguments["-v"]
         arguments.all = arguments["--all"]
 
@@ -169,7 +169,7 @@ class VboxCommand(PluginCommand):
             # arguments.NAME
             d = VboxProvider().info(name=arguments.NAME)
 
-            result = Printer.attribute(d, output=arguments.format)
+            result = Printer.write(d, output=arguments.format)
 
             print(result)
 

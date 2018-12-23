@@ -7,9 +7,22 @@ from cm4.mongo.MongoDBController import MongoInstaller
 from cm4.configuration.config import Config
 from cloudmesh.common.Printer import Printer
 from cloudmesh.common.console import Console
+import textwrap
 
 class AdminCommand(PluginCommand):
 
+    banner = textwrap.dedent("""
+        test
+        +-------------------------------------------------------+
+        |   ____ _                 _                     _      |
+        |  / ___| | ___  _   _  __| |_ __ ___   ___  ___| |__   |
+        | | |   | |/ _ \| | | |/ _` | '_ ` _ \ / _ \/ __| '_ \  |
+        | | |___| | (_) | |_| | (_| | | | | | |  __/\__ \ | | | |
+        |  \____|_|\___/ \__,_|\__,_|_| |_| |_|\___||___/_| |_| |
+        +-------------------------------------------------------+
+        |                  Cloudmesh CMD5 Shell                 |
+        +-------------------------------------------------------+
+        """)
     # noinspection PyUnusedLocal
     @command
     def do_admin(self, args, arguments):

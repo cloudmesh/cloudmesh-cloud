@@ -20,7 +20,13 @@ class Test_vagrant:
         print (". End   .", 70 * ".")
 
 
-    def test_01_image_add(self):
+    def test_01_version(self):
+        cmd = "cms vbox version"
+        result = subprocess.check_output(cmd, shell=True).decode("utf-8")
+        assert "Vagrant Version" in result
+
+
+    def test_02_image_add(self):
         HEADING(myself())
         r = subprocess.check_output("cms vbox image add ubuntu/bionic64", shell=True).decode("utf-8")
 
@@ -28,7 +34,7 @@ class Test_vagrant:
 
         assert "ubuntu/bionic64" in r
 
-    def test_02_image_list(self):
+    def test_03_image_list(self):
         HEADING(myself())
         r = subprocess.check_output("cms vbox image list", shell=True).decode("utf-8")
         self.rprint (r)
@@ -36,7 +42,7 @@ class Test_vagrant:
         assert "ubuntu/bionic64" in r
 
 
-    def test_03_image_boot(self):
+    def test_04_image_boot(self):
         HEADING(myself())
         r = subprocess.check_output("cms vbox vm create test-bionic", shell=True).decode("utf-8")
         self.rprint (r)

@@ -17,3 +17,5 @@ Flask-PyMongo
 flask
 six
 recommonmark
+dateparser
+humanize

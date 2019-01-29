@@ -37,7 +37,6 @@
 from docopt import docopt
 from cm4.configuration.config import Config
 import cm4.vcluster.VirtualCluster
-import cm4.batch.Batch
 import cm4.data.data
 import cm4.vm.Vm
 import cm4.openstack.OpenstackCM
@@ -47,8 +46,6 @@ import cm4
 # TODO: BUG: aws has been removed
 #
 #import cm4.aws.CommandAWS
-from cm4.mongo.MongoDBController import MongoDBController
-from pprint import pprint
 from cloudmesh.common.dotdict import dotdict
 
 

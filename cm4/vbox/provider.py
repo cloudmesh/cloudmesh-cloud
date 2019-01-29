@@ -9,6 +9,8 @@ from cm4.configuration.config import Config
 from cloudmesh.common.console import Console
 from cm4.mongo.MongoDBController import MongoDBController
 import subprocess
+import humanize
+from datetime import datetime
 
 class VboxProvider(ComputeNodeManagerABC):
 
@@ -447,6 +449,9 @@ class VboxProvider(ComputeNodeManagerABC):
 
             return result
 
+    #
+    # ok
+    #
     @classmethod
     def list_images(cls):
         def convert(line):
@@ -468,6 +473,11 @@ class VboxProvider(ComputeNodeManagerABC):
             result = result.split("\n")
         lines = []
         for line in result:
-            lines.append(convert(line))
+            entry = convert(line)
+            if "date" in entry:
+                date = entry["date"]
+                # "20181203.0.1"
+                entry["date"] = datetime.strptime(date, '%Y%m%d.%H.%M')
+            lines.append(entry)
 
         return lines

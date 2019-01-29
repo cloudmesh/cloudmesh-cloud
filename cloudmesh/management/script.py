@@ -13,8 +13,8 @@ from typing import Union
 from pipes import quote
 from sys import platform
 
-from cm4.common.console import Console
-from cm4.common.util import path_expand
+from cloudmesh.common.console import Console
+from cloudmesh.common.util import path_expand
 from distutils.spawn import find_executable
 import textwrap
 from sys import platform

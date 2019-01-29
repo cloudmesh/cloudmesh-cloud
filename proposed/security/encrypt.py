@@ -1,5 +1,5 @@
 import os
-from cm4.common.util import path_expand
+from cloudmesh.common.util import path_expand
 
 
 class EncryptFile(object):

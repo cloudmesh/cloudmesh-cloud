@@ -1,8 +1,6 @@
-import time
 #from cm4.vm.Vm import Vm
-from cm4.configuration.config import Config
 # from cm4.mongo.mongoDB import MongoDB
-from cm4.common.debug import HEADING, myself
+from cloudmesh.management.debug import HEADING, myself
 import subprocess
 
 # nosetest -v --nopature

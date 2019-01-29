@@ -9,7 +9,7 @@ from cloudmesh.common.dotdict import dotdict
 from cloudmesh.shell.command import PluginCommand
 from cloudmesh.shell.command import command
 from cm4 import __version__
-from cm4.vbox.provider import VboxProvider
+from cm4.vbox import VboxProvider
 
 # from cm4.mongo.MongoDBController import MongoDBController
 # from cm4.mongo.MongoDBController import MongoInstaller

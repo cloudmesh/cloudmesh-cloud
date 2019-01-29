@@ -1,6 +1,6 @@
 import time
 from cloudmesh.vm.api.Vm import Vm
-from cm4.configuration.config import Config
+from cloudmesh.management.configuration.config import Config
 
 
 class TestCloudAzure:

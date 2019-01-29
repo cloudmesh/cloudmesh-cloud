@@ -2,9 +2,9 @@ from __future__ import print_function
 from cloudmesh.shell.command import command
 from cloudmesh.shell.command import PluginCommand
 # from cloudmesh.admin.api.manager import Manager
-from cm4.mongo.MongoDBController import MongoDBController
-from cm4.mongo.MongoDBController import MongoInstaller
-from cm4.configuration.config import Config
+from cloudmesh.mongo import MongoDBController
+from cloudmesh.mongo import MongoInstaller
+from cloudmesh.management.configuration.config import Config
 from cloudmesh.common.Printer import Printer
 from cloudmesh.common.console import Console
 import textwrap

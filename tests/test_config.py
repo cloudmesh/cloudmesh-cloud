@@ -1,5 +1,5 @@
-from cm4.configuration.config import Config
-from cm4.common.debug import myself, HEADING
+from cloudmesh.management.configuration.config import Config
+from cloudmesh.management.debug import myself, HEADING
 from pprint import pprint
 
 

@@ -20,7 +20,7 @@ from docopt import docopt
 from cloudmesh.data.api.db import LocalDBProvider
 from cloudmesh.data.api.storage import LocalStorageProvider
 from cloudmesh.data.api.storage import AzureStorageProvider
-from cm4.configuration.config import Config
+from cloudmesh.management.configuration.config import Config
 
 
 class Data(object):

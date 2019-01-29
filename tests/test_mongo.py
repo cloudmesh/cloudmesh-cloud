@@ -1,8 +1,8 @@
-from cm4.mongo.mongoDB import MongoDB
-from cm4.mongo.MongoDBController import MongoDBController
+from cloudmesh.mongo import MongoDB
+from cloudmesh.mongo import MongoDBController
 
-from cm4.mongo.DataBaseDecorator import DatabaseUpdate
-from cm4.common.debug import HEADING, myself
+from cloudmesh.mongo import DatabaseUpdate
+from cloudmesh.management.debug import HEADING, myself
 from pprint import pprint
 
 # nosetest -v --nopature

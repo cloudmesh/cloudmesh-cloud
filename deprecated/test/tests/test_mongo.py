@@ -1,5 +1,5 @@
-from cm4.mongo.mongoDB import MongoDB
-from cm4.configuration.config import Config
+from cloudmesh.mongo import MongoDB
+from cloudmesh.management.configuration.config import Config
 
 
 #

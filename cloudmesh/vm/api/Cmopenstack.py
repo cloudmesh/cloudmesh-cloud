@@ -1,5 +1,5 @@
 from cm4.openstack.OpenstackCM import OpenstackCM
-from cm4.vm.Cloud import Cloud
+from cloudmesh.vm.api.Cloud import Cloud
 
 
 class Cmopenstack(Cloud):

@@ -4,12 +4,10 @@ import webbrowser
 from pprint import pprint
 from cloudmesh.common.Shell import Shell
 from cloudmesh.common.dotdict import dotdict
-from cm4.abstractclass.ComputeNodeManagerABC import ComputeNodeManagerABC
+from cloudmesh.abstractclass import ComputeNodeManagerABC
 from cm4.configuration.config import Config
 from cloudmesh.common.console import Console
 from cm4.mongo.MongoDBController import MongoDBController
-import subprocess
-import humanize
 from datetime import datetime
 
 class VboxProvider(ComputeNodeManagerABC):

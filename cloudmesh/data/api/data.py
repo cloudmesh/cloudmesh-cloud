@@ -17,9 +17,9 @@ Options:
 """
 
 from docopt import docopt
-from cm4.data.db.LocalDBProvider import LocalDBProvider
-from cm4.data.storage.LocalStorageProvider import LocalStorageProvider
-from cm4.data.storage.AzureStorageProvider import AzureStorageProvider
+from cloudmesh.data.api.db import LocalDBProvider
+from cloudmesh.data.api.storage import LocalStorageProvider
+from cloudmesh.data.api.storage import AzureStorageProvider
 from cm4.configuration.config import Config
 
 

@@ -1,4 +1,4 @@
-from cm4.abstractclass.ProcessManagerABC import ProcessManagerABC
+from cloudmesh.abstractclass.ProcessManagerABC import ProcessManagerABC
 from deprecated.AWSoldvversion import AWSController
 from cm4.mongo.mongoDB import MongoDB
 import subprocess

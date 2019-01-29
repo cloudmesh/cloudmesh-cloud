@@ -1,7 +1,4 @@
-from cm4.vm.Vm import Vm
-from pprint import pprint
-from cm4.configuration.name import Name
-import sys
+from cloudmesh.vm.api.Vm import Vm
 
 
 def main():

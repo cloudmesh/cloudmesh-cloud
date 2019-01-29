@@ -1,5 +1,5 @@
 from cm4.mongo.DataBaseDecorator import DatabaseUpdate
-from cm4.abstractclass.ComputeNodeManagerABC import ComputeNodeManagerABC
+from cloudmesh.abstractclass import ComputeNodeManagerABC
 from libcloud.compute.base import NodeDriver
 from cloudmesh.common.dotdict import dotdict
 

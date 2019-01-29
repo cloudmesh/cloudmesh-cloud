@@ -1,4 +1,4 @@
-from cm4.vm.Vm import Vm
+from cloudmesh.vm.api.Vm import Vm
 
 def main():
 

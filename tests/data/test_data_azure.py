@@ -1,5 +1,5 @@
 from os.path import isfile
-from cm4.data.data import Data
+from cloudmesh.data.api.data import Data
 
 
 class TestDataAzure:

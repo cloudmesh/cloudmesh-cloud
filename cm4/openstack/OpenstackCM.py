@@ -9,7 +9,7 @@ Modified on Tue Nov 15 2018
 import os
 import subprocess
 import pprint
-from cm4.abstractclass.ComputeNodeManagerABC import ComputeNodeManagerABC
+from cloudmesh.abstractclass import ComputeNodeManagerABC
 from libcloud.compute.types import Provider
 from libcloud.compute.providers import get_driver
 from cm4.configuration.config import Config

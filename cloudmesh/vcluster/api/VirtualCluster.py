@@ -6,11 +6,8 @@ import subprocess
 import os
 import ntpath
 import time
-from docopt import docopt
-import hostlist
-from datetime import datetime
-from cm4.configuration.config import Config
-from cm4.configuration.generic_config import GenericConfig
+from cloudmesh.management.configuration.config import Config
+from cloudmesh.management.configuration import GenericConfig
 
 
 # noinspection PyPep8

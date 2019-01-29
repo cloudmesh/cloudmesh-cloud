@@ -1,7 +1,7 @@
 import time
 from cloudmesh.vm.api.Vm import Vm
-from cm4.configuration.config import Config
-from cm4.common.debug import HEADING, myself
+from cloudmesh.management.configuration.config import Config
+from cloudmesh.management.debug import HEADING, myself
 
 # nosetest -v --nopature tests/test_cloud_aws.py
 

@@ -4,7 +4,7 @@ Created on Tue Nov 16 23:58:09 2018
 
 @author: Rui
 """
-from cm4.configuration.config import Config
+from cloudmesh.management.configuration.config import Config
 
 """
 provide generic methods to manipulate nodes from various providers by name

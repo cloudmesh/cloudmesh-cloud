@@ -1,4 +1,4 @@
-from cm4.configuration.config import Config
+from cloudmesh.management.configuration.config import Config
 
 
 class TestConfig:

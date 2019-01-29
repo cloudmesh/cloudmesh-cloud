@@ -1,14 +1,14 @@
 import getpass
-from cm4.configuration.config import Config
-from cm4.configuration.name import Name
-from cm4.configuration.counter import Counter
-from cm4.mongo.mongoDB import MongoDB
+from cloudmesh.management.configuration.config import Config
+from cloudmesh.management.configuration import Name
+from cloudmesh.management.configuration import Counter
+from cloudmesh.mongo import MongoDB
 from cloudmesh.vm.api.Azure import AzureProvider
 from cloudmesh.vm.api.Aws import AwsProvider
-from cm4.openstack.OpenstackCM import OpenstackCM
+from cloudmesh.openstack.OpenstackCM import OpenstackCM
 from cloudmesh.abstractclass import ComputeNodeManagerABC
-from cm4.mongo.DataBaseDecorator import DatabaseUpdate
-from cm4.vbox.provider import VboxProvider
+from cloudmesh.mongo import DatabaseUpdate
+from cloudmesh.vbox.api.provider import VboxProvider
 
 #
 # if name is none, take last name from mongo, apply to last started vm

@@ -35,10 +35,10 @@
 
 """
 from docopt import docopt
-from cm4.configuration.config import Config
+from cloudmesh.management.configuration.config import Config
 import cloudmesh.vcluster.api.VirtualCluster
 import cloudmesh.data.api.data
-import cm4.openstack.OpenstackCM
+import cloudmesh.openstack.OpenstackCM
 import cm4
 
 #
@@ -61,7 +61,7 @@ def process_arguments(arguments):
         raise NotImplementedError ("THERE IS A BUG HERE, CONTACT DAVID")
 
     elif arguments.get("openstack"):
-        cm4.openstack.OpenstackCM.process_arguments(arguments)
+        cloudmesh.openstack.OpenstackCM.process_arguments(arguments)
 
     elif arguments.get("data"):
         cloudmesh.data.api.data.process_arguments(arguments)

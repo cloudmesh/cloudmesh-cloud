@@ -5,11 +5,10 @@ Created on Tue Nov 15 2018
 @author: Rui
 """
 
-from cm4.openstack.OpenstackCM import OpenstackCM
-from cm4.openstack.OpenstackRefactor import OpenstackRefactor
+from cloudmesh.openstack.OpenstackCM import OpenstackCM
+from cloudmesh.openstack.OpenstackRefactor import OpenstackRefactor
 from time import sleep
 import datetime
-import pprint as pp
 
 
 # testcode

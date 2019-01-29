@@ -87,7 +87,7 @@ keys.
 
 ### Getting Started
 
-The default `data` section in [`cloudmesh.yaml`](cm4/configuration/cloudmesh.yaml) is setup to use a local database and storage provider. 
+The default `data` section in [`cloudmesh.yaml`](cloudmesh/management/configuration/cloudmesh.yaml) is setup to use a local database and storage provider. 
 
 **Download**
 

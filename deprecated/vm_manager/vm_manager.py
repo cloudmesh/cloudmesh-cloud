@@ -17,7 +17,7 @@ Example:
    vm_manager.py vm start aws Will start the aws VMs
 """
 from docopt import docopt
-from cm4.configuration.config import Config
+from cloudmesh.management.configuration.config import Config
 from deprecated.vm_manager import AWSProvider
 
 

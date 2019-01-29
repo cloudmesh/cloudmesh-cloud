@@ -1,8 +1,6 @@
-from cm4.abstractclass.ComputeNodeManagerABC import ComputeNodeManagerABC
+from cloudmesh.abstractclass import ComputeNodeManagerABC
 from libcloud.compute.types import Provider
 from libcloud.compute.providers import get_driver
-import json
-from pprint import pprint
 
 
 # for more information:

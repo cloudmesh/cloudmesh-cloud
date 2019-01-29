@@ -1,14 +1,12 @@
 import getpass
-import pprint
-from cm4.vm.thread import Thread
 from cm4.configuration.config import Config
 from cm4.configuration.name import Name
 from cm4.configuration.counter import Counter
 from cm4.mongo.mongoDB import MongoDB
-from cm4.vm.Azure import AzureProvider
-from cm4.vm.Aws import AwsProvider
+from cloudmesh.vm.api.Azure import AzureProvider
+from cloudmesh.vm.api.Aws import AwsProvider
 from cm4.openstack.OpenstackCM import OpenstackCM
-from cm4.abstractclass.ComputeNodeManagerABC import ComputeNodeManagerABC
+from cloudmesh.abstractclass import ComputeNodeManagerABC
 from cm4.mongo.DataBaseDecorator import DatabaseUpdate
 from cm4.vbox.provider import VboxProvider
 

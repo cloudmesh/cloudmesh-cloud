@@ -1,5 +1,5 @@
-from cm4.vm.Cloud import Cloud
-from cm4.vm.LibcloudBaseProvider import LibcloudBaseProvider
+from cloudmesh.vm.api.Cloud import Cloud
+from cloudmesh.vm.api.LibcloudBaseProvider import LibcloudBaseProvider
 from libcloud.compute.types import Provider
 from libcloud.compute.providers import get_driver
 

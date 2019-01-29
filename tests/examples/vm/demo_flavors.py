@@ -5,11 +5,10 @@ Created on Tue Nov 17 00:12:19 2018
 @author: Rui
 """
 
-from cm4.vm.Vm import Vm
-from cm4.vm.VmRefactor import VmRefactor
+from cloudmesh.vm.api.Vm import Vm
+from cloudmesh.vm.api.VmRefactor import VmRefactor
 from time import sleep
 import datetime
-from pprint import pprint
 
 
 def openstack_test1():

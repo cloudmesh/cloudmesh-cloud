@@ -3,8 +3,8 @@ import time
 from libcloud.compute.base import NodeAuthSSHKey
 from libcloud.compute.base import NodeDriver
 from libcloud.compute.drivers.azure_arm import AzureNetwork, AzureSubnet, AzureNodeDriver, Node
-from cm4.vm.Cloud import Cloud
-from cm4.vm.LibcloudBaseProvider import LibcloudBaseProvider
+from cloudmesh.vm.api.Cloud import Cloud
+from cloudmesh.vm.api.LibcloudBaseProvider import LibcloudBaseProvider
 
 from cloudmesh.common.dotdict import dotdict
 

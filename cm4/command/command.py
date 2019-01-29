@@ -36,9 +36,8 @@
 """
 from docopt import docopt
 from cm4.configuration.config import Config
-import cm4.vcluster.VirtualCluster
-import cm4.data.data
-import cm4.vm.Vm
+import cloudmesh.vcluster.api.VirtualCluster
+import cloudmesh.data.api.data
 import cm4.openstack.OpenstackCM
 import cm4
 
@@ -65,7 +64,7 @@ def process_arguments(arguments):
         cm4.openstack.OpenstackCM.process_arguments(arguments)
 
     elif arguments.get("data"):
-        cm4.data.data.process_arguments(arguments)
+        cloudmesh.data.api.data.process_arguments(arguments)
 
     elif arguments.get("set"):
         config = Config()

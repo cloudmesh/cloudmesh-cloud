@@ -1,7 +1,7 @@
 import os
 import re
 
-from cm4.abstractclass.ComputeNodeManagerABC import ComputeNodeManagerABC
+from cloudmesh.abstractclass import ComputeNodeManagerABC
 
 
 def execute(cmd, data, local=True):

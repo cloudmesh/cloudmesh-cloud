@@ -83,57 +83,81 @@ class VboxCommand(PluginCommand):
             vbox vm list [--format=FORMAT] [-v]
             vbox vm delete NAME
             vbox vm ip [NAME] [--all]
-            vbox vm create [NAME] ([--memory=MEMORY] [--image=IMAGE] [--script=SCRIPT] | list)
+            vbox vm create [NAME] ([--memory=MEMORY] [--image=IMAGE] [--port=PORT] [--script=SCRIPT]  | list)
             vbox vm boot [NAME] ([--memory=MEMORY] [--image=IMAGE] [--port=PORT] [--script=SCRIPT] | list)
             vbox vm ssh [NAME] [-e COMMAND]
         """
 
-        arguments.format = arguments["--format"] or "yaml"
+        arguments.format = arguments["--format"] or "table"
         arguments.verbose = arguments["-v"]
         arguments.all = arguments["--all"]
 
-        # print(arguments)
-
-        if arguments.version:
-            versions = {
-                "vbox": {
-                    "attribute": "Vagrant Version",
-                    "version": cm4.vbox.version(),
-                },
-                "cloudmesh-vbox": {
-                    "attribute": "cloudmesh vbox Version",
-                    "version": __version__
-                }
-            }
-            _LIST_PRINT(versions, arguments.format)
-
-        elif arguments.image and arguments.list:
+        #
+        # ok
+        #
+        def list_images():
             l = VboxProvider().list_images()
-
             _LIST_PRINT(l, arguments.format, order=["name", "provider", "date"])
 
-        elif arguments.image and arguments.add:
+        #
+        # ok
+        #
+        def image_command(func):
             try:
-                l = VboxProvider().add_image(arguments.NAME)
+                l = func(arguments.NAME)
                 print(l)
+                list_images()
             except Exception as e:
                 print(e)
             return ""
 
+        #
+        # ok
+        #
+        if arguments.version:
+            versions = {
+                "cm": {
+                    "attribute":"cm",
+                    "description": "Cloudmesh vbox Version",
+                    "version": __version__
+                },
+                "vbox": {
+                    "attribute": "vbox",
+                    "description": "Vagrant Version",
+                    "version": cm4.vbox.version(),
+                }
+            }
+            result = Printer.write(versions,
+                                   order=["attribute","version", "description"],
+                                   output=arguments.format)
+            print(result)
+
+        #
+        # ok
+        #
+        elif arguments.image and arguments.list:
+            list_images()
+        #
+        # ok
+        #
         elif arguments.image and arguments.delete:
-            try:
-                l = VboxProvider().delete_image(arguments.NAME)
-                print(l)
-            except Exception as e:
-                print(e)
-            return ""
+            image_command(VboxProvider().delete_image)
+        #
+        # ok
+        #
+        elif arguments.image and arguments.add:
+            image_command(VboxProvider().add_image)
 
-
-        elif arguments.image and arguments.find_image:
-
+        #
+        # ok
+        #
+        elif arguments.image and arguments.find:
             VboxProvider().find_image(arguments.KEYWORDS)
             return ""
 
+        #
+        # ok, but only vagrant details
+        #
         elif arguments.vm and arguments.list:
 
             l = VboxProvider().nodes()
@@ -142,6 +166,9 @@ class VboxCommand(PluginCommand):
                         order=["name", "state", "id", "provider", "directory"])
             return ""
 
+        #
+        # unclear: this function is unclear
+        #
         elif arguments.create and arguments.list:
 
             result = Shell.cat("{NAME}/Vagrantfile".format(**arguments))
@@ -153,16 +180,17 @@ class VboxCommand(PluginCommand):
 
             d = defaults()
 
+            print ("LLLL", d)
+
+
             arguments.memory = arguments["--memory"] or d.memory
             arguments.image = arguments["--image"] or d.image
             arguments.script = arguments["--script"] or d.script
+            arguments.port = arguments["--port"] or d.port
+
 
             server = VboxProvider()
-            server.create(
-                name=arguments.NAME,
-                memory=arguments.memory,
-                image=arguments.image,
-                script=arguments.script)
+            server.create(**arguments)
 
         elif arguments.info:
 

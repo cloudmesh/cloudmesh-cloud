@@ -40,7 +40,6 @@ class BatchCommand(PluginCommand):
 
         print(arguments)
 
-
         debug = arguments["--debug"]
 
         if arguments.get("batch"):
@@ -69,8 +68,14 @@ class BatchCommand(PluginCommand):
                 suffix = random_suffix if arguments.get("suffix") is None else arguments.get("suffix")
                 overwrite = False if type(arguments.get("--overwrite")) is None else arguments.get("--overwrite")
                 argfile_path = '' if arguments.get("--argfile-path") is None else arguments.get("--argfile-path")
-                slurm_manager.create(job_name, cluster_name, slurm_script_path, input_type,
-                                     job_script_path, argfile_path, remote_path, local_path,
+                slurm_manager.create(job_name,
+                                     cluster_name,
+                                     slurm_script_path,
+                                     input_type,
+                                     job_script_path,
+                                     argfile_path,
+                                     remote_path,
+                                     local_path,
                                      suffix, overwrite)
 
             elif arguments.remove:

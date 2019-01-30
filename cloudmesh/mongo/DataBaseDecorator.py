@@ -1,4 +1,4 @@
-from cloudmesh.mongo import MongoDB
+from cloudmesh.mongo.mongoDB import MongoDB
 
 
 class DatabaseUpdate:

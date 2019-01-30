@@ -9,7 +9,7 @@ from cloudmesh.common.dotdict import dotdict
 from cloudmesh.shell.command import PluginCommand
 from cloudmesh.shell.command import command
 from cm4 import __version__
-from cm4.vbox import VboxProvider
+from cloudmesh.vbox.api.provider import VboxProvider
 
 
 # from cm4.mongo.MongoDBController import MongoDBController
@@ -105,8 +105,8 @@ class VboxCommand(PluginCommand):
         #
         def image_command(func):
             try:
-                l = func(arguments.NAME)
-                print(l)
+                images = func(arguments.NAME)
+                print(images)
                 list_images()
             except Exception as e:
                 print(e)

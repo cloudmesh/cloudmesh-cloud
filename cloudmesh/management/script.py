@@ -2,23 +2,10 @@
 A convenient method to execute shell commands and return their output. Note: that this method requires that the
 command be completely execute before the output is returned. FOr many activities in cloudmesh this is sufficient.
 """
-import errno
-import glob
-import os
 import subprocess
-import sys
-import zipfile
-
-from typing import Union
-from pipes import quote
-from sys import platform
-
-from cloudmesh.common.console import Console
-from cloudmesh.common.util import path_expand
-from distutils.spawn import find_executable
 import textwrap
 from sys import platform
-import os
+
 import psutil
 
 

@@ -129,10 +129,6 @@ class AdminCommand(PluginCommand):
                 else:
                     Console.ok("is your MongoDB server running")
 
-
-
-
-
         elif arguments.rest:
 
             if arguments.start:
@@ -149,8 +145,6 @@ class AdminCommand(PluginCommand):
 
                 print("Rest Service status")
                 raise NotImplementedError
-
-
 
         elif arguments.status:
 

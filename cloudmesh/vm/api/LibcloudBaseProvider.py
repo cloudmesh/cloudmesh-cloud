@@ -1,4 +1,4 @@
-from cloudmesh.mongo import DatabaseUpdate
+from cloudmesh.mongo.DataBaseDecorator import DatabaseUpdate
 from cloudmesh.abstractclass import ComputeNodeManagerABC
 from libcloud.compute.base import NodeDriver
 from cloudmesh.common.dotdict import dotdict
@@ -72,7 +72,7 @@ class LibcloudBaseProvider(ComputeNodeManagerABC):
         self.driver.destroy_node(node)
         return node
 
-    @DatabaseUpdate("sizes", ComputeNodeManagerABC._map_default)
+    @DatabaseUpdate("sizes", ComputeNodeManagerABC.map_default)
     def list_sizes(self):
         """
         list all sizes available from this provider
@@ -80,7 +80,7 @@ class LibcloudBaseProvider(ComputeNodeManagerABC):
         """
         return self.driver.list_sizes()
 
-    @DatabaseUpdate("locations", ComputeNodeManagerABC._map_default)
+    @DatabaseUpdate("locations", ComputeNodeManagerABC.map_default)
     def list_locations(self):
         """
         list all sizes available from this provider

@@ -207,7 +207,7 @@ class VboxProvider(ComputeNodeManagerABC):
                 details = Shell.execute("VBoxManage",
                                         ["showvminfo", "--machinereadable", vname])
                 # print (details)
-                break;
+                break
         vbox_dict = self._convert_assignment_to_dict(details)
 
         # combined = {**data, **details}
@@ -379,7 +379,7 @@ class VboxProvider(ComputeNodeManagerABC):
         rename a node
 
         :param name: the current name
-        :param new_name: the new name
+        :param destination: the new name
         :return: the dict with the new name
         """
         # if destination is None, increase the name counter and use the new name

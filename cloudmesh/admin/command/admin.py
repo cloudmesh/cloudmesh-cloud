@@ -2,15 +2,15 @@ from __future__ import print_function
 from cloudmesh.shell.command import command
 from cloudmesh.shell.command import PluginCommand
 # from cloudmesh.admin.api.manager import Manager
-from cloudmesh.mongo import MongoDBController
-from cloudmesh.mongo import MongoInstaller
+from cloudmesh.mongo.MongoDBController import MongoDBController
+from cloudmesh.mongo.MongoDBController import MongoInstaller
 from cloudmesh.management.configuration.config import Config
 from cloudmesh.common.Printer import Printer
 from cloudmesh.common.console import Console
 import textwrap
 
-class AdminCommand(PluginCommand):
 
+class AdminCommand(PluginCommand):
     banner = textwrap.dedent("""
         test
         +-------------------------------------------------------+
@@ -23,6 +23,7 @@ class AdminCommand(PluginCommand):
         |                  Cloudmesh CMD5 Shell                 |
         +-------------------------------------------------------+
         """)
+
     # noinspection PyUnusedLocal
     @command
     def do_admin(self, args, arguments):
@@ -122,7 +123,6 @@ class AdminCommand(PluginCommand):
                 mongo = MongoDBController()
                 r = mongo.stats()
 
-
                 if len(r) > 0:
                     print(Printer.attribute(r))
                     Console.ok("ok")
@@ -158,25 +158,21 @@ class AdminCommand(PluginCommand):
             data = config.data["cloudmesh"]["data"]["mongo"]
             # self.expanduser()
 
-
             print("Rest Service status")
 
             print("MongoDB status")
 
             mongo = MongoDBController()
 
-            print (mongo)
+            print(mongo)
             # mongo.expanduser()
-            #data = mongo.data
-            #print ("DDD", data)
+            # data = mongo.data
+            # print ("DDD", data)
 
-            #data["MONGO_VERSION"]  = '.'.join(str(x) for x in mongo.version())
+            # data["MONGO_VERSION"]  = '.'.join(str(x) for x in mongo.version())
 
-            #print (data)
-            #print(Printer.attribute(data))
+            # print (data)
+            # print(Printer.attribute(data))
             # mongo.set_auth()
 
-
-
         return result
-

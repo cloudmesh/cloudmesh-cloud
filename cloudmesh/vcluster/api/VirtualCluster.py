@@ -128,7 +128,7 @@ class VirtualCluster(object):
             for computer in self.cm_config.get('cluster.{}'.format(cluster)):
                 if computer in computer_list or computer_list == '':
                     vcluster_tosave[vcluster_name].update({computer: dict(self.cm_config.get('cluster.{}.{}'.format(
-                                                                                                cluster, computer)))})
+                        cluster, computer)))})
         self.vcluster_config.deep_set(['virtual-cluster'], vcluster_tosave)
         print("Virtual cluster created/replaced successfully.")
 
@@ -169,7 +169,8 @@ class VirtualCluster(object):
             if self.runtime_config['output-type'] == 'stdout':
                 scp_caller('%s:%s' % (dest_node_info['name'],
                                       os.path.join(job_metadata['remote_path'],
-                                       self.add_suffix_to_path('outputfile_%d' % node_idx,job_metadata['suffix']))),
+                                                   self.add_suffix_to_path('outputfile_%d' % node_idx,
+                                                                           job_metadata['suffix']))),
                            os.path.join(job_metadata['local_path'], ''))
             elif self.runtime_config['output-type'] in ['file', 'stdout+file']:
                 nested_remote_path = os.path.join(job_metadata['remote_path'], 'run{}'.format(node_idx))
@@ -202,7 +203,7 @@ class VirtualCluster(object):
 
         # directory_check = ssh_caller('if test -d %s; then echo "exist"; fi' % job_metadata['remote_path'])
         # if len(directory_check) == 0:
-        ssh_caller('cd %s && mkdir job%s' % (job_metadata['raw_remote_path'], job_metadata['suffix']) , True)
+        ssh_caller('cd %s && mkdir job%s' % (job_metadata['raw_remote_path'], job_metadata['suffix']), True)
         if self.runtime_config['output-type'].lower() in ['file', 'stdout+file']:
             ssh_caller("cd {} && mkdir run{}".format(job_metadata['remote_path'], param_idx))
             nested_remote_path = os.path.join(job_metadata['remote_path'], 'run{}'.format(param_idx),
@@ -226,9 +227,10 @@ class VirtualCluster(object):
                                                                         job_metadata['remote_script_path'],
                                                                         params,
                                                                         os.path.join(job_metadata['remote_path'],
-                                                                        self.add_suffix_to_path('outputfile_%d' % \
-                                                                                                param_idx,
-                                                                                          job_metadata['suffix']))))
+                                                                                     self.add_suffix_to_path(
+                                                                                         'outputfile_%d' % \
+                                                                                         param_idx,
+                                                                                         job_metadata['suffix']))))
         elif self.runtime_config['output-type'].lower() == 'stdout+file':
             remote_pid = ssh_caller('cd %s && nohup %s %s > %s 2>&1 </dev/null& echo $!' % \
                                     (os.path.join(job_metadata['remote_path'], 'run{}'.format(param_idx)),
@@ -257,7 +259,7 @@ class VirtualCluster(object):
         hide_errors_flag = False
         if type(args[-1]) == bool:
             hide_errors_flag = True
-            args=args[:-1]
+            args = args[:-1]
         ssh = subprocess.Popen(["ssh", hostname, '-F', sshconfigpath, *args],
                                stdout=subprocess.PIPE,
                                stderr=subprocess.PIPE)
@@ -524,8 +526,7 @@ class VirtualCluster(object):
         else:
             raise ValueError("Target of variable set not found.")
 
-
-#def main():
+# def main():
 #    """
 #    Main function for the SSH. Processes the input arguments.
 #
@@ -535,5 +536,5 @@ class VirtualCluster(object):
 #    process_arguments(arguments)
 #
 #
-#if __name__ == "__main__":
+# if __name__ == "__main__":
 #    main()

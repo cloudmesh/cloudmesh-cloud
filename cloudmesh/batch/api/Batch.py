@@ -59,7 +59,7 @@ class SlurmCluster(object):
             raise RuntimeError("The job {} exists in the configuration file, if you want to overwrite the job, \
             use --overwrite argument.".format(job_name))
         slurm_cluster = self.cm_config.get('cloudmesh').get('cluster')[slurm_cluster_name]
-        tmp_cluster = {slurm_cluster_name : dict(slurm_cluster)}
+        tmp_cluster = {slurm_cluster_name: dict(slurm_cluster)}
         self.batch_config.deep_set(['slurm_cluster'], tmp_cluster)
         job_metadata = {job_name: {}}
         job_metadata[job_name]['suffix'] = suffix
@@ -115,14 +115,19 @@ class SlurmCluster(object):
             if not os.path.exists(job_metadata['local_path']):
                 os.makedirs(job_metadata['local_path'])
             scp_caller('-r', '%s:%s' % (dest_node_info['name'], job_metadata['remote_path']),
-                       os.path.join(job_metadata ['local_path'],''))
-            os.remove(os.path.join(job_metadata['local_path'],os.path.basename(os.path.normpath(job_metadata['remote_path'])), job_metadata['script_name']))
-            os.remove(os.path.join(job_metadata['local_path'],os.path.basename(os.path.normpath(job_metadata['remote_path'])), job_metadata['slurm_script_name']))
+                       os.path.join(job_metadata['local_path'], ''))
+            os.remove(os.path.join(job_metadata['local_path'],
+                                   os.path.basename(os.path.normpath(job_metadata['remote_path'])),
+                                   job_metadata['script_name']))
+            os.remove(os.path.join(job_metadata['local_path'],
+                                   os.path.basename(os.path.normpath(job_metadata['remote_path'])),
+                                   job_metadata['slurm_script_name']))
             if job_metadata['input_type'] == 'params+file':
-                os.remove(os.path.join(job_metadata['local_path'], os.path.basename(os.path.normpath(job_metadata['remote_path'])),job_metadata['argfile_name']))
+                os.remove(os.path.join(job_metadata['local_path'],
+                                       os.path.basename(os.path.normpath(job_metadata['remote_path'])),
+                                       job_metadata['argfile_name']))
             all_job_ids.remove(dest_job_id)
             print("Results collected from %s for jobID %s" % (dest_node_info['name'], dest_job_id))
-
 
     @staticmethod
     def _ssh(hostname, sshconfigpath, *args):
@@ -137,7 +142,7 @@ class SlurmCluster(object):
         hide_errors_flag = False
         if type(args[-1]) == bool:
             hide_errors_flag = True
-            args=args[:-1]
+            args = args[:-1]
         ssh = subprocess.Popen(["ssh", hostname, '-F', sshconfigpath, *args],
                                stdout=subprocess.PIPE,
                                stderr=subprocess.PIPE)
@@ -199,8 +204,9 @@ class SlurmCluster(object):
         target_cluster_info = self.batch_config.get('slurm_cluster')[job_metadata['slurm_cluster_name']]
         remote_path = job_metadata['remote_path']
 
-        ssh_caller = lambda *x: self._ssh(target_cluster_info['name'], os.path.expanduser(target_cluster_info['credentials'] \
-                                                                                           ['sshconfigpath']), *x, True)
+        ssh_caller = lambda *x: self._ssh(target_cluster_info['name'],
+                                          os.path.expanduser(target_cluster_info['credentials'] \
+                                                                 ['sshconfigpath']), *x, True)
         ssh_caller('rm -rf {}'.format(remote_path))
         if len(ssh_caller('ls {}'.format(remote_path))) == 0:
             print("Job {} cleaned successfully.".format(job_name))
@@ -221,7 +227,6 @@ class SlurmCluster(object):
             print("Slurm Cluster {} is accessible.".format(target_node_info['name']))
         else:
             print("Error: Slurm Cluster {} cannot be accessed.".format(target_node_info['name']))
-
 
     def remove(self, target, key):
         """
@@ -297,7 +302,6 @@ class SlurmCluster(object):
                 indent = current_depth if current_depth > 1 else current_depth - 1
                 print('\t' * indent, input_dict)
 
-
     def run(self, job_name):
         """
         This method is used to create a job, validate it and run it on remote nodes
@@ -310,18 +314,20 @@ class SlurmCluster(object):
         cluster_name = job_metadata['slurm_cluster_name']
         slurm_cluster = self.batch_config.get('slurm_cluster').get(cluster_name)
         ssh_caller = lambda *x: self._ssh(slurm_cluster['name'], os.path.expanduser(slurm_cluster['credentials'] \
-                                                                                      ['sshconfigpath']), *x)
+                                                                                        ['sshconfigpath']), *x)
         scp_caller = lambda *x: self._scp(slurm_cluster['name'], os.path.expanduser(slurm_cluster['credentials'] \
-                                                                                      ['sshconfigpath']), *x)
+                                                                                        ['sshconfigpath']), *x)
         ssh_caller('cd %s && mkdir job%s' % (job_metadata['raw_remote_path'], job_metadata['suffix']), True)
-        scp_caller(job_metadata['slurm_script_path'], '%s:%s' % (slurm_cluster['name'], job_metadata['remote_slurm_script_path']))
-        scp_caller(job_metadata['job_script_path'], '%s:%s' % (slurm_cluster['name'], job_metadata['remote_script_path']))
+        scp_caller(job_metadata['slurm_script_path'],
+                   '%s:%s' % (slurm_cluster['name'], job_metadata['remote_slurm_script_path']))
+        scp_caller(job_metadata['job_script_path'],
+                   '%s:%s' % (slurm_cluster['name'], job_metadata['remote_script_path']))
         ssh_caller('chmod +x', job_metadata['remote_script_path'])
         if job_metadata['input_type'].lower() == 'params+file':
             scp_caller(job_metadata['argfile_path'], '%s:%s' % (slurm_cluster['name'], job_metadata['remote_path']))
 
         remote_job_id = ssh_caller("cd %s && qsub %s && qstat -u $USER | tail -n 1 | awk '{print $1}'" %
-                                (job_metadata['remote_path'], job_metadata['remote_slurm_script_path']))
+                                   (job_metadata['remote_path'], job_metadata['remote_slurm_script_path']))
         remote_job_id = remote_job_id.strip('\n')
         all_job_ids.append(remote_job_id)
         print('Remote job ID: %s' % remote_job_id)
@@ -346,10 +352,7 @@ class SlurmCluster(object):
         else:
             raise ValueError("Target of variable set not found.")
 
-
-
-
-#def main():
+# def main():
 #    """
 #    Main function for the batch. Processes the input arguments.
 
@@ -358,5 +361,5 @@ class SlurmCluster(object):
 #    process_arguments(arguments)
 
 
-#if __name__ == "__main__":
+# if __name__ == "__main__":
 #    main()

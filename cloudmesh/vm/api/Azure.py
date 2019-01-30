@@ -8,6 +8,7 @@ from cloudmesh.vm.api.LibcloudBaseProvider import LibcloudBaseProvider
 
 from cloudmesh.common.dotdict import dotdict
 
+
 class AzureProvider(LibcloudBaseProvider, Cloud):
 
     def __init__(self, config):
@@ -98,6 +99,7 @@ class AzureDriver(AzureNodeDriver, NodeDriver):
     Extension for the default Azure ARM driver.
     https://libcloud.readthedocs.io/en/latest/compute/drivers/azure_arm.html
     """
+
     def __init__(self, tenant_id, subscription_id, key, secret,
                  secure=True, host=None, port=None,
                  api_version=None, region=None, **kwargs):
@@ -174,7 +176,6 @@ class AzureDriver(AzureNodeDriver, NodeDriver):
         """
         Reset the node with a public IP
         :param name:
-        :param ip:
         """
         self._get_nic(name, with_public_ip=True)
 

@@ -1,6 +1,7 @@
 from cloudmesh.common.dotdict import dotdict
 import json
 
+
 class State(dotdict):
 
     def __init__(self, name=None):
@@ -12,4 +13,4 @@ class State(dotdict):
         json.dumps(
             self.__dict__,
             sort_keys=True,
-            indent = 4)
+            indent=4)

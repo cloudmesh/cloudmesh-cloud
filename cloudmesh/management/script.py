@@ -21,6 +21,7 @@ from sys import platform
 import os
 import psutil
 
+
 class SystemPath(object):
 
     @staticmethod
@@ -62,7 +63,6 @@ class Script(object):
             return ""
 
 
-
 def find_process(name):
     "Return a list of processes matching 'name'."
     processes = None
@@ -81,5 +81,5 @@ def find_process(name):
                     "pid": p.pid,
                     "command": " ".join(p.cmdline()),
                     "created": p.create_time()
-            })
+                })
     return processes

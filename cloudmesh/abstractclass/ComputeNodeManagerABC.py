@@ -146,7 +146,6 @@ class ComputeNodeManagerABC(metaclass=abc.ABCMeta):
 
         :param destination:
         :param name: the current name
-        :param new_name: the new name
         :return: the dict with the new name
         """
         # if destination is None, increase the name counter and use the new name

@@ -1,14 +1,12 @@
 import os
 from pprint import pprint
 
-import cm4
-import cm4.vbox
 from cloudmesh.common.Printer import Printer
 from cloudmesh.common.Shell import Shell
 from cloudmesh.common.dotdict import dotdict
 from cloudmesh.shell.command import PluginCommand
 from cloudmesh.shell.command import command
-from cm4 import __version__
+from cloudmesh.cm4 import __version__
 from cloudmesh.vbox.api.provider import VboxProvider
 
 

@@ -25,7 +25,7 @@ import sys
 
 __version__ = None  # suppress the version error
 # don't use import to get the version as that causes a circular dependency
-exec(open('cm4/__init__.py').read().strip())
+exec(open('cloudmesh/cm4/__init__.py').read().strip())
 
 if sys.version_info > (3, 7, 0):
     print(70 * "#")

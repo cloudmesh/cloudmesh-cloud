@@ -110,9 +110,9 @@ cm4 data add test/files/hello.txt
 
 If you're using an unmodified `cloudmesh.yaml` local test directories
 are set as the default "service".  An entry for the added file will
-appear in the local db folder [`cm4/test/data/db`](cm4/test/data/db)
+appear in the local db folder [`cm4/test/data/db`](deprecated/cm4/test/data/db)
 and the file will be stored in
-[`cm4/test/data/storage`](cm4/test/data/storage).
+[`cm4/test/data/storage`](deprecated/cm4/test/data/storage).
 
 *Note: Network shares can also be used with the local storage provider.*
 

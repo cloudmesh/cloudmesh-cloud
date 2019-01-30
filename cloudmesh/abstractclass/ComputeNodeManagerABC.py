@@ -13,7 +13,7 @@ class ComputeNodeManagerABC(metaclass=abc.ABCMeta):
         self.group = config["default"]["group"]
         self.experiment = config["default"]["experiment"]
 
-    def _map_default(self, r):
+    def map_default(self, r):
         """
         Adds common properties to libcloud results.
         Transforms result from its original strongly typed
@@ -39,7 +39,7 @@ class ComputeNodeManagerABC(metaclass=abc.ABCMeta):
         these fields should only be set when something is
         created and are unique to VM objects.
         """
-        c = self._map_default(c)
+        c = self.map_default(c)
         c["group"] = self.group
         c["experiment"] = self.experiment
         c["created_at"] = str(datetime.utcnow())

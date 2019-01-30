@@ -54,6 +54,7 @@ class GenericConfig(object):
         :param key: A string representing the value's path in the config.
         :param value: value to be set.
         """
+        # BUG: dict and set operations are different
         self._conf_dict.set(key, value)
         with open(self.config_path, "w") as stream:
             yaml.safe_dump(dict(self._conf_dict), stream, default_flow_style=False)

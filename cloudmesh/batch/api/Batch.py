@@ -4,7 +4,7 @@ import os
 import ntpath
 import time
 from cloudmesh.management.configuration.config import Config
-from cloudmesh.management.configuration import GenericConfig
+from cloudmesh.management.configuration.generic_config import GenericConfig
 
 
 # noinspection PyPep8

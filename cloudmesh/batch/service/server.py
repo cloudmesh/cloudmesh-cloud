@@ -9,7 +9,7 @@ import connexion
 
 # Create the application instance
 
-## TODO:
+# TODO:
 #
 location = "~/.cloudmesh/openai this is still nedds to be expanded"
 app = connexion.App(__name__, specification_dir=location)

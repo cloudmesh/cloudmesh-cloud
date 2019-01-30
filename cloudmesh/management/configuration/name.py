@@ -5,7 +5,7 @@ Created on Fri Oct 26 12:44:44 2018
 @author: Wu
 """
 import re
-from cloudmesh.management.configuration import Counter
+from cloudmesh.management.configuration.counter import Counter
 
 
 class Name(object):

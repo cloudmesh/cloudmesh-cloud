@@ -1,13 +1,13 @@
 import getpass
 from cloudmesh.management.configuration.config import Config
-from cloudmesh.management.configuration import Name
-from cloudmesh.management.configuration import Counter
-from cloudmesh.mongo import MongoDB
+from cloudmesh.management.configuration.name import Name
+from cloudmesh.management.configuration.counter import Counter
+from cloudmesh.mongo.mongoDB import MongoDB
 from cloudmesh.vm.api.Azure import AzureProvider
 from cloudmesh.vm.api.Aws import AwsProvider
 from cloudmesh.openstack.OpenstackCM import OpenstackCM
 from cloudmesh.abstractclass import ComputeNodeManagerABC
-from cloudmesh.mongo import DatabaseUpdate
+from cloudmesh.mongo.DataBaseDecorator import DatabaseUpdate
 from cloudmesh.vbox.api.provider import VboxProvider
 
 #

@@ -6,8 +6,8 @@ from pathlib import Path
 from cloudmesh.common.dotdict import dotdict
 from cloudmesh.shell.variables import Variables
 
-class Config(object):
 
+class Config(object):
     __shared_state = {}
 
     def __init__(self, config_path='~/.cloudmesh/cloudmesh4.yaml'):
@@ -48,10 +48,8 @@ class Config(object):
 
             default = self.default()
 
-
-
             for name in self.default():
-                if not name in self.variable_database:
+                if name not in self.variable_database:
                     self.variable_database[name] = default[name]
             if "cloud" in default:
                 self.cloud = default["cloud"]
@@ -60,7 +58,7 @@ class Config(object):
 
     def set_debug_defaults(self):
         for name in ["trace", "debug"]:
-            if not name in self.variable_database:
+            if name not in self.variable_database:
                 self.variable_database[name] = str(False)
 
     def dict(self):

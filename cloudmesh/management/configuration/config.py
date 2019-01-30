@@ -83,6 +83,7 @@ class Config(object):
         return self.data.get(key, default)
 
     def set(self, key, value):
+        # BUG
         """
         A helper function for setting values in the config without
         a chain of `set()` calls.

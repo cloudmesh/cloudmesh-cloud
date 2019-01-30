@@ -58,9 +58,13 @@ A central database provider keeps track of files stored with multiple cloud serv
 
 #### Local
 
+BUG: we will not use files, this class needs  to be eliminated, and instead mongo is to be used
+
 The [`LocalDBProvider`](cloudmesh/data/api/db/LocalDBProvider.py) uses a folder
 on the local file system or network share to store each cloud file
 entry as a yaml file.
+
+
 
 
 #### MongoDB

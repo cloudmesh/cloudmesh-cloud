@@ -34,7 +34,7 @@ class Vm(ComputeNodeManagerABC):
         else:
             raise NotImplementedError(f"Cloud `{self.kind}` not supported.")
 
-    @DatabaseUpdate("cloud", ComputeNodeManagerABC._map_default)
+    @DatabaseUpdate("cloud", ComputeNodeManagerABC.map_default)
     def start(self, name):
         """
         start the node based on the id
@@ -46,7 +46,7 @@ class Vm(ComputeNodeManagerABC):
             info = self.provider.start(name)
         return info
 
-    @DatabaseUpdate("cloud", ComputeNodeManagerABC._map_default)
+    @DatabaseUpdate("cloud", ComputeNodeManagerABC.map_default)
     def stop(self, name=None):
         """
         stop the node based on the ide
@@ -55,7 +55,7 @@ class Vm(ComputeNodeManagerABC):
         """
         return self.provider.stop(name)
 
-    @DatabaseUpdate("cloud", ComputeNodeManagerABC._map_default)
+    @DatabaseUpdate("cloud", ComputeNodeManagerABC.map_default)
     def resume(self, name=None):
         """
         start the node based on id
@@ -63,7 +63,7 @@ class Vm(ComputeNodeManagerABC):
         """
         return self.start(name)
 
-    @DatabaseUpdate("cloud", ComputeNodeManagerABC._map_default)
+    @DatabaseUpdate("cloud", ComputeNodeManagerABC.map_default)
     def suspend(self, name=None):
         """
         stop the node based on id
@@ -71,7 +71,7 @@ class Vm(ComputeNodeManagerABC):
         """
         return self.provider.suspend(name)
 
-    @DatabaseUpdate("cloud", ComputeNodeManagerABC._map_default)
+    @DatabaseUpdate("cloud", ComputeNodeManagerABC.map_default)
     def destroy(self, name=None):
         """
         delete the node based on id
@@ -82,7 +82,7 @@ class Vm(ComputeNodeManagerABC):
         # self.mongo.delete_document('cloud', 'name', name)
         return result
 
-    @DatabaseUpdate("cloud", ComputeNodeManagerABC._map_vm_create)
+    @DatabaseUpdate("cloud", ComputeNodeManagerABC.map_vm_create)
     def create(self, name=None):
         """
         create a new node
@@ -92,7 +92,7 @@ class Vm(ComputeNodeManagerABC):
         name = name or self.new_name()
         return self.provider.create(name=name)
 
-    @DatabaseUpdate("cloud", ComputeNodeManagerABC._map_default)
+    @DatabaseUpdate("cloud", ComputeNodeManagerABC.map_default)
     def nodes(self):
         return self.provider.nodes()
 

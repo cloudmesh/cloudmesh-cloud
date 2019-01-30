@@ -6,6 +6,7 @@ Created on Tue Nov 15 2018
 """
 
 
+# noinspection PyProtectedMember
 class OpenstackRefactor(object):
     def __init__(self, cm=None):
         self.cm = cm

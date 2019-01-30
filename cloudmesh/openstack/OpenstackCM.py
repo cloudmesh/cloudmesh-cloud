@@ -70,6 +70,7 @@ class OpenstackCM(ComputeNodeManagerABC):
             self.driver = self.get_driver_helper(cloud)
         return self.driver
 
+    # noinspection PyUnusedLocal
     def get_driver_helper(self, cloud):
         credential = self.os_config.get("credentials")
         openstack = get_driver(Provider.OPENSTACK)

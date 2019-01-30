@@ -3,6 +3,7 @@ from pprint import pprint
 from datetime import datetime
 
 
+# noinspection PyUnusedLocal
 class ComputeNodeManagerABC(metaclass=abc.ABCMeta):
 
     def __init__(self, cloud, config):
@@ -32,7 +33,7 @@ class ComputeNodeManagerABC(metaclass=abc.ABCMeta):
         r["updated_at"] = str(datetime.utcnow())
         return r
 
-    def _map_vm_create(self, c):
+    def map_vm_create(self, c):
         """
         Includes `group` and `experiment` fields in
         the result. Separate from `_map_default` because

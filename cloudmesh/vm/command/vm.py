@@ -5,6 +5,7 @@ from cloudmesh.management.configuration.config import Config
 from cloudmesh.vm.api.Vm import Vm
 from pprint import pprint
 
+
 # from cloudmesh.vm.api.manager import Manager
 
 class VmCommand(PluginCommand):

@@ -7,7 +7,6 @@ Main module of the server file
 from flask import jsonify
 import connexion
 
-
 # Create the application instance
 
 ## TODO:
@@ -15,11 +14,11 @@ import connexion
 location = "~/.cloudmesh/openai this is still nedds to be expanded"
 app = connexion.App(__name__, specification_dir=location)
 
-
 # Read the yaml file to configure the endpoints
 
-#app.add_api("queue.yaml")
+# app.add_api("queue.yaml")
 app.add_api("batch.yaml")
+
 
 # create a URL route in our application for "/"
 @app.route("/")

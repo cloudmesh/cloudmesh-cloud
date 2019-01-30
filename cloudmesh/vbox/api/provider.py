@@ -10,6 +10,7 @@ from cloudmesh.common.console import Console
 from cloudmesh.mongo import MongoDBController
 from datetime import datetime
 
+
 class VboxProvider(ComputeNodeManagerABC):
 
     def __init__(self, cloud=None):
@@ -26,8 +27,6 @@ class VboxProvider(ComputeNodeManagerABC):
         # BUG: Naturally the following is wrong as it depends on the name.
         #
         # super().__init__("vagrant", config)
-
-
 
     def start(self, name):
         """
@@ -76,9 +75,6 @@ class VboxProvider(ComputeNodeManagerABC):
 
         # get the dir based on anme
 
-
-
-
         print("ARG")
         pprint(arg)
         vms = self.to_dict(self.nodes())
@@ -86,7 +82,6 @@ class VboxProvider(ComputeNodeManagerABC):
         print("VMS", vms)
 
         arg = self._get_specification(**kwargs)
-
 
         pprint(arg)
 
@@ -145,8 +140,8 @@ class VboxProvider(ComputeNodeManagerABC):
         lines = content.split("\n")
         for line in lines:
             attribute, value = line.split("=", 1)
-            attribute = attribute.replace('"',"")
-            value = value.replace('"',"")
+            attribute = attribute.replace('"', "")
+            value = value.replace('"', "")
 
             d[attribute] = value
         return d
@@ -189,7 +184,7 @@ class VboxProvider(ComputeNodeManagerABC):
             data_vagrant = None
             data["cm"]["status"] = "poweroff"
         else:
-            print (result)
+            print(result)
             lines = result.split("\n")
             data_vagrant = {}
             for line in lines:
@@ -199,15 +194,14 @@ class VboxProvider(ComputeNodeManagerABC):
 
                 data_vagrant[attribute] = value
 
-
-        vms = Shell.execute('VBoxManage', ["list","vms"]).split("\n")
+        vms = Shell.execute('VBoxManage', ["list", "vms"]).split("\n")
         #
         # find vm
         #
         vbox_name_prefix = "{name}_{name}_".format(**arg)
         # print (vbox_name_prefix)
         for vm in vms:
-            vm = vm.replace("\"","")
+            vm = vm.replace("\"", "")
             vname = vm.split(" {")[0]
             if vname.startswith(vbox_name_prefix):
                 details = Shell.execute("VBoxManage",
@@ -216,15 +210,13 @@ class VboxProvider(ComputeNodeManagerABC):
                 break;
         vbox_dict = self._convert_assignment_to_dict(details)
 
-
-        #combined = {**data, **details}
-        #data = combined
+        # combined = {**data, **details}
+        # data = combined
         if data_vagrant is not None:
             data["vagrant"] = data_vagrant
         data["vbox"] = vbox_dict
         if "VMState" in vbox_dict:
             data["cm"]["status"] = vbox_dict["VMState"]
-
 
         return data
 
@@ -316,15 +308,13 @@ class VboxProvider(ComputeNodeManagerABC):
         arg = dotdict(kwargs)
         arg.port = port
         config = Config()
-        pprint (self.config)
-
+        pprint(self.config)
 
         if cloud is None:
             #
             # TOD read default cloud
             #
             cloud = "vagrant"  # TODO must come through parameter or set cloud
-
 
         print("CCC", cloud)
         spec = config.data["cloudmesh"]["cloud"][cloud]
@@ -343,7 +333,6 @@ class VboxProvider(ComputeNodeManagerABC):
         else:
             arg.image = default["image"]
             pass
-
 
         arg.path = default["path"]
         arg.directory = os.path.expanduser("{path}/{name}".format(**arg))
@@ -375,7 +364,6 @@ class VboxProvider(ComputeNodeManagerABC):
 
         if not os.path.exists(arg.directory):
             os.makedirs(arg.directory)
-
 
         configuration = self.vagrantfile(**arg)
 

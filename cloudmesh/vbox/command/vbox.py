@@ -11,6 +11,7 @@ from cloudmesh.shell.command import command
 from cm4 import __version__
 from cm4.vbox import VboxProvider
 
+
 # from cm4.mongo.MongoDBController import MongoDBController
 # from cm4.mongo.MongoDBController import MongoInstaller
 
@@ -96,8 +97,8 @@ class VboxCommand(PluginCommand):
         # ok
         #
         def list_images():
-            l = VboxProvider().list_images()
-            _LIST_PRINT(l, arguments.format, order=["name", "provider", "date"])
+            images = VboxProvider().list_images()
+            _LIST_PRINT(images, arguments.format, order=["name", "provider", "date"])
 
         #
         # ok
@@ -117,7 +118,7 @@ class VboxCommand(PluginCommand):
         if arguments.version:
             versions = {
                 "cm": {
-                    "attribute":"cm",
+                    "attribute": "cm",
                     "description": "Cloudmesh vbox Version",
                     "version": __version__
                 },
@@ -128,7 +129,7 @@ class VboxCommand(PluginCommand):
                 }
             }
             result = Printer.write(versions,
-                                   order=["attribute","version", "description"],
+                                   order=["attribute", "version", "description"],
                                    output=arguments.format)
             print(result)
 
@@ -160,8 +161,8 @@ class VboxCommand(PluginCommand):
         #
         elif arguments.vm and arguments.list:
 
-            l = VboxProvider().nodes()
-            _LIST_PRINT(l,
+            provider = VboxProvider().nodes()
+            _LIST_PRINT(provider,
                         arguments.format,
                         order=["name", "state", "id", "provider", "directory"])
             return ""
@@ -180,14 +181,12 @@ class VboxCommand(PluginCommand):
 
             d = defaults()
 
-            print ("LLLL", d)
-
+            print("LLLL", d)
 
             arguments.memory = arguments["--memory"] or d.memory
             arguments.image = arguments["--image"] or d.image
             arguments.script = arguments["--script"] or d.script
             arguments.port = arguments["--port"] or d.port
-
 
             server = VboxProvider()
             server.create(**arguments)
@@ -232,7 +231,6 @@ class VboxCommand(PluginCommand):
                         pass
                     else:
                         print(element['ip'])
-
 
         elif arguments.boot:
 

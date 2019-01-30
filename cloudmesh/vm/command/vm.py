@@ -44,6 +44,7 @@ class VmCommand(PluginCommand):
 
         print(arguments)
 
+        # noinspection PyShadowingNames
         def vm_manager():
             config = Config()
             default_cloud = config.data["cloudmesh"]["default"]["cloud"]

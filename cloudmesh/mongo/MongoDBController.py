@@ -11,6 +11,7 @@ from cloudmesh.management.script import find_process
 import subprocess
 
 
+# noinspection PyUnusedLocal
 class MongoInstaller(object):
 
     def __init__(self):
@@ -67,6 +68,7 @@ class MongoInstaller(object):
             else:
                 print("platform not found", platform)
 
+    # noinspection PyUnusedLocal
     def linux(self):
         # TODO UNTESTED
         """
@@ -85,6 +87,7 @@ class MongoInstaller(object):
 
         # THIS IS BROKEN AS ITS A SUPBROCESS? '. ~/.bashrc'
 
+    # noinspection PyUnusedLocal
     def darwin(self, brew=False):
         """
         install MongoDB in Darwin system (Mac)
@@ -242,8 +245,8 @@ class MongoDBController(object):
             script = "mongod {auth} --bind_ip {MONGO_HOST} --dbpath {MONGO_PATH} --logpath {MONGO_LOG}/mongod.log --fork".format(
                 **self.data, auth=auth)
             result = Script.run(script)
-        except:
-            result = "Mongo could not be started."
+        except Exception as e:
+            result = "Mongo could not be started." + str(e)
 
         if "child process started successfully" in result:
             print(Console.ok(result))
@@ -337,6 +340,7 @@ class MongoDBController(object):
             state["output"] = output
         return state
 
+    # noinspection PyBroadException
     def version(self):
         ver = None
         try:
@@ -345,7 +349,7 @@ class MongoDBController(object):
                     "version")[
                     1].strip().split(".")
             ver = (int(out[0][1:]), int(out[1]), int(out[2]))
-        except:
+        except Exception as e:
             return None
         return ver
 

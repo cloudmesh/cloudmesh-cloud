@@ -5,6 +5,9 @@ from cloudmesh.data.api.db import DBProviderABC
 
 
 class LocalDBProvider(DBProviderABC):
+    # BUG: this is not how we designed this and diverges from out implementation while suing
+    # if it is a local store it needs to be done in mongodb
+    # where the mongo is stored is defined in ~/.cloudmesh/cloudmesh.yaml
     """
     The local DB provider uses a folder with yaml files representing each cloud resource.
     """

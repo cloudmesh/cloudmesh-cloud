@@ -13,6 +13,7 @@ class SystemPath(object):
 
     @staticmethod
     def add(path):
+        script = None
         if platform == "darwin":
             script = """
             echo \"export PATH={path}:$PATH\" >> ~/.bash_profile
@@ -26,6 +27,7 @@ class SystemPath(object):
         elif platform == "windows":
             script = None
             # TODO: BUG: Implement
+        # noinspection PyUnusedLocal
         installer = Script.run(script)
 
 
@@ -51,9 +53,17 @@ class Script(object):
 
 
 def find_process(name):
-    "Return a list of processes matching 'name'."
+    """
+
+    :param name:
+    :return:
+
+    Return a list of processes matching 'name'.
+    """
+
     processes = None
     for p in psutil.process_iter():
+        found = None
         try:
             found = p.name()
         except (psutil.AccessDenied, psutil.ZombieProcess):

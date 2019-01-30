@@ -103,6 +103,7 @@ class VboxCommand(PluginCommand):
         #
         # ok
         #
+        # noinspection PyShadowingNames
         def image_command(func):
             try:
                 images = func(arguments.NAME)

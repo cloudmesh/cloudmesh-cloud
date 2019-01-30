@@ -11,6 +11,7 @@ from cloudmesh.mongo import MongoDBController
 from datetime import datetime
 
 
+# noinspection PyUnusedLocal
 class VboxProvider(ComputeNodeManagerABC):
 
     def __init__(self, cloud=None):
@@ -44,8 +45,8 @@ class VboxProvider(ComputeNodeManagerABC):
         :return: an array of dicts representing the nodes
         """
 
-        def convert(line):
-            entry = (' '.join(line.split())).split(' ')
+        def convert(data_line):
+            entry = (' '.join(data_line.split())).split(' ')
             data = dotdict()
             data.id = entry[0]
             data.name = entry[1]
@@ -200,6 +201,7 @@ class VboxProvider(ComputeNodeManagerABC):
         #
         vbox_name_prefix = "{name}_{name}_".format(**arg)
         # print (vbox_name_prefix)
+        details = None
         for vm in vms:
             vm = vm.replace("\"", "")
             vname = vm.split(" {")[0]
@@ -264,7 +266,7 @@ class VboxProvider(ComputeNodeManagerABC):
                                cwd=arg.directory)
         return result
 
-    def vagrantfile(cls, **kwargs):
+    def vagrantfile(self, **kwargs):
 
         arg = dotdict(kwargs)
 
@@ -440,15 +442,15 @@ class VboxProvider(ComputeNodeManagerABC):
     #
     @classmethod
     def list_images(cls):
-        def convert(line):
-            line = line.replace("(", "")
-            line = line.replace(")", "")
-            line = line.replace(",", "")
-            entry = line.split(" ")
+        def convert(data_line):
+            data_line = data_line.replace("(", "")
+            data_line = data_line.replace(")", "")
+            data_line = data_line.replace(",", "")
+            data_entry = data_line.split(" ")
             data = dotdict()
-            data.name = entry[0]
-            data.provider = entry[1]
-            data.date = entry[2]
+            data.name = data_entry[0]
+            data.provider = data_entry[1]
+            data.date = data_entry[2]
             return data
 
         result = Shell.execute("vagrant", ["box", "list"])

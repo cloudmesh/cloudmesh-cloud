@@ -5,6 +5,7 @@ admin
 
   Usage:
     admin mongo install [--brew] [--download=PATH]
+    admin mongo create
     admin mongo status
     admin mongo stats
     admin mongo version
@@ -14,6 +15,7 @@ admin
     admin mongo load FILENAME
     admin mongo security
     admin mongo password PASSWORD
+    admin mongo list
     admin rest status
     admin rest start
     admin rest stop
@@ -30,5 +32,28 @@ admin
 
   Description:
 
-    TBD
+    Mongo DB
+
+      MongoDB is managed through a number of commands.
+
+      The configuration is read from ~/.cloudmesh/cloudmesh4.yaml
+
+      First, you need to create a MongoDB database with
+
+        cms admin mongo create
+
+      Second, you need to start it with
+
+         cms admin mongo start
+
+      Now you can interact with it to find out the status, the stats,
+      and the database listing with the commands
+
+         cms admin mongo status
+         cms admin mongo stats
+         cms admin mongo list
+
+      To stop it from running use the command
+
+         cms admin mongo stop
 

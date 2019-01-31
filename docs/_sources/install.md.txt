@@ -23,29 +23,19 @@ will not yet work
 
 
 ```bash
-export SRC=~/github
-mkdir $SRC
-cd $SRC
+export SRC=`pwd`
 git clone https://github.com/cloudmesh/cloudmesh.common.git
 git clone https://github.com/cloudmesh/cloudmesh.cmd5.git
 git clone https://github.com/cloudmesh/cloudmesh.sys.git
-git clone https://github.com/cloudmesh-community/cloudmesh.cm.git
+git clone https://github.com/cloudmesh-community/cm.git
 
 cd $SRC/cloudmesh.common
-python setup.py install
-pip install -r requirements.txt
 pip install -e .
 cd $SRC/cloudmesh.cmd5
-pip install -r requirements.txt
-python setup.py install
 pip install -e .
 cd $SRC/cloudmesh.sys
-pip install -r requirements.txt
-python setup.py install
 pip install -e .
 cd $SRC/cm
-pip install -r requirements.txt
-python setup.py install
 pip install -e .
 ```
 

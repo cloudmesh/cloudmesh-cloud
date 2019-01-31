@@ -2,36 +2,41 @@
 
 Cloudmesh stores its status in a database so that you can easily
 remember which services you used where and have an accurate account of
-them.
+them. We use as a database mongoDB to store this information.
+To use cloudmesh you simply need to create and start the database service.
 
-We use as a database mongoDB to store this information
+First, you need to create a MongoDB database with
 
-To use cloudmesh you simply need to start the database service.
+```bash
+$ cms admin mongo create
+```
 
-Note: In future versions this is done automatically. For nw we just od it by hand
-
-
-You can start the database service with
+Second, you need to start it with
 
 ```bash
 $ cms admin mongo start
 ```
 
-You can stop the database service with
-
-```bash
-$ cms admin mongo start
-```
-
-You can test the database service with
+Now you can interact with it to find out the status, the stats,
+and the database listing with the commands
 
 ```bash
 $ cms admin mongo status
+$ cms admin mongo stats
+$ cms admin mongo list
 ```
 
-The database will be started on the port as specified in `~/.cloudmesh/cloudmesh4.yaml`
+To stop it from running use the command
 
-Additional values can be specified or are available to locate the downloads.
+```bash
+$ cms admin mongo stop
+```
+
+The database will be started on the information as specified in 
+`~/.cloudmesh/cloudmesh4.yaml`
+
+An example is
+
 
 ```
     mongo:
@@ -53,4 +58,10 @@ Additional values can be specified or are available to locate the downloads.
         redhat: https://repo.mongodb.org/yum/redhat/7/mongodb-org/4.0/x86_64/RPMS/mongodb-org-server-4.0.4-1.el7.x86_64.rpm
 ```
 
-TODO: describe the parameters
+We also provide a convenient install script that downloads the version defined
+in the yaml file and installs it in the system with the command
+
+```bash
+$ cms admin mongo install
+```
+

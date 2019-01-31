@@ -193,29 +193,19 @@ Please give us feedback.</p>
 <span id="source-instalation-for-development"></span><h3>2.2.1. Source instalation for development<a class="headerlink" href="#source-instalation-for-development" title="Permalink to this headline">¶</a></h3>
 <p>For now you must use the source instalation as all other instalations
 will not yet work</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span> <span class="nv">SRC</span><span class="o">=</span>~/github
-mkdir <span class="nv">$SRC</span>
-<span class="nb">cd</span> <span class="nv">$SRC</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span> <span class="nv">SRC</span><span class="o">=</span><span class="sb">`</span><span class="nb">pwd</span><span class="sb">`</span>
 git clone https://github.com/cloudmesh/cloudmesh.common.git
 git clone https://github.com/cloudmesh/cloudmesh.cmd5.git
 git clone https://github.com/cloudmesh/cloudmesh.sys.git
-git clone https://github.com/cloudmesh-community/cloudmesh.cm.git
+git clone https://github.com/cloudmesh-community/cm.git
 
 <span class="nb">cd</span> <span class="nv">$SRC</span>/cloudmesh.common
-python setup.py install
-pip install -r requirements.txt
 pip install -e .
 <span class="nb">cd</span> <span class="nv">$SRC</span>/cloudmesh.cmd5
-pip install -r requirements.txt
-python setup.py install
 pip install -e .
 <span class="nb">cd</span> <span class="nv">$SRC</span>/cloudmesh.sys
-pip install -r requirements.txt
-python setup.py install
 pip install -e .
 <span class="nb">cd</span> <span class="nv">$SRC</span>/cm
-pip install -r requirements.txt
-python setup.py install
 pip install -e .
 </pre></div>
 </div>

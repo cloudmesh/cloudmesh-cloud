@@ -89,15 +89,17 @@
 <li class="toctree-l1"><a class="reference internal" href="install.html">3. Installation</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">4. Cloudmesh Database</a></li>
 <li class="toctree-l1"><a class="reference internal" href="configuration.html">5. Configuration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="CM4README.html">6. CM4 Details</a></li>
-<li class="toctree-l1"><a class="reference internal" href="README.html">7. Cloudmesh cm v4</a></li>
-<li class="toctree-l1"><a class="reference internal" href="aws.html">8. AWS cm</a></li>
-<li class="toctree-l1"><a class="reference internal" href="ufo.html">9. CM4 REST Api</a></li>
-<li class="toctree-l1"><a class="reference internal" href="vagrant.html">10. ehvagrant: enhanced Vagrant interface with importable python module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="vcluster.html">11. Virtual Cluster</a></li>
-<li class="toctree-l1"><a class="reference internal" href="vm.html">12. VM Description</a></li>
-<li class="toctree-l1"><a class="reference internal" href="jupyter.html">13. Jupyter Integration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="code.html">14. Code Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vmproviders.html">6. VM Providers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vagrant.html">7. Vagrant</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CM4README.html">8. CM4 Details</a></li>
+<li class="toctree-l1"><a class="reference internal" href="README.html">9. Cloudmesh cm v4</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aws.html">10. AWS cm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ufo.html">11. CM4 REST Api</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vcluster.html">12. Virtual Cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vm.html">13. VM Description</a></li>
+<li class="toctree-l1"><a class="reference internal" href="jupyter.html">14. Jupyter Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="code.html">15. Code Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deprecated.html">16. Deprecated from here on</a></li>
 </ul>
 
             
@@ -171,15 +173,15 @@ them.</p>
 <p>To use cloudmesh you simply need to start the database service.</p>
 <p>Note: In future versions this is done automatically. For nw we just od it by hand</p>
 <p>You can start the database service with</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ cm4 admin mongo start
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ cms admin mongo start
 </pre></div>
 </div>
 <p>You can stop the database service with</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ cm4 admin mongo start
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ cms admin mongo start
 </pre></div>
 </div>
 <p>You can test the database service with</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ cm4 admin mongo status
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ cms admin mongo status
 </pre></div>
 </div>
 <p>The database will be started on the port as specified in <code class="docutils literal notranslate"><span class="pre">~/.cloudmesh/cloudmesh4.yaml</span></code></p>

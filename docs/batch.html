@@ -164,23 +164,28 @@
             
   <div class="section" id="batch">
 <span id="batch"></span><h1>Batch<a class="headerlink" href="#batch" title="Permalink to this headline">¶</a></h1>
-<p>The purpose of this sub-command is to facilitate job submission on clusters that use SLURM as their workload manager. Note that this tools assumes that the SLURM file is properly prepared by the user and does not modify the SLURM script in any way. Similar to other sub-commands of <code class="docutils literal notranslate"><span class="pre">cm4</span></code>, <code class="docutils literal notranslate"><span class="pre">batch</span></code> has several sub-commands itself:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cm4</span> <span class="n">batch</span> <span class="n">create</span><span class="o">-</span><span class="n">job</span> <span class="n">JOB_NAME</span> <span class="o">--</span><span class="n">slurm</span><span class="o">-</span><span class="n">script</span><span class="o">=</span><span class="n">SLURM_SCRIPT_PATH</span> <span class="o">--</span><span class="nb">input</span><span class="o">-</span><span class="nb">type</span><span class="o">=</span><span class="n">INPUT_TYPE</span> <span class="o">--</span><span class="n">slurm</span><span class="o">-</span><span class="n">cluster</span><span class="o">=</span><span class="n">SLURM_CLUSTER_NAME</span> <span class="o">--</span><span class="n">job</span><span class="o">-</span><span class="n">script</span><span class="o">-</span><span class="n">path</span><span class="o">=</span><span class="n">SCRIPT_PATH</span> <span class="o">--</span><span class="n">remote</span><span class="o">-</span><span class="n">path</span><span class="o">=</span><span class="n">REMOTE_PATH</span> <span class="o">--</span><span class="n">local</span><span class="o">-</span><span class="n">path</span><span class="o">=</span><span class="n">LOCAL_PATH</span> <span class="p">[</span><span class="o">--</span><span class="n">argfile</span><span class="o">-</span><span class="n">path</span><span class="o">=</span><span class="n">ARGUMENT_FILE_PATH</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">outfile</span><span class="o">-</span><span class="n">name</span><span class="o">=</span><span class="n">OUTPUT_FILE_NAME</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">suffix</span><span class="o">=</span><span class="n">SUFFIX</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">overwrite</span><span class="p">]</span>
-<span class="n">cm4</span> <span class="n">batch</span> <span class="n">run</span><span class="o">-</span><span class="n">job</span> <span class="n">JOB_NAME</span>
-<span class="n">cm4</span> <span class="n">batch</span> <span class="n">fetch</span> <span class="n">JOB_NAME</span>
-<span class="n">cm4</span> <span class="n">batch</span> <span class="n">test</span><span class="o">-</span><span class="n">connection</span> <span class="n">SLURM_CLUSTER_NAME</span>
-<span class="n">cm4</span> <span class="n">batch</span> <span class="nb">set</span><span class="o">-</span><span class="n">param</span> <span class="n">slurm</span><span class="o">-</span><span class="n">cluster</span> <span class="n">CLUSTER_NAME</span> <span class="n">PARAMETER</span> <span class="n">VALUE</span>
-<span class="n">cm4</span> <span class="n">batch</span> <span class="nb">set</span><span class="o">-</span><span class="n">param</span> <span class="n">job</span><span class="o">-</span><span class="n">metadata</span> <span class="n">JOB_NAME</span> <span class="n">PARAMETER</span> <span class="n">VALUE</span>
-<span class="n">cm4</span> <span class="n">batch</span> <span class="nb">list</span> <span class="n">slurm</span><span class="o">-</span><span class="n">clusters</span> <span class="p">[</span><span class="n">DEPTH</span> <span class="p">[</span><span class="n">default</span><span class="p">:</span><span class="mi">1</span><span class="p">]]</span>
-<span class="n">cm4</span> <span class="n">batch</span> <span class="nb">list</span> <span class="n">jobs</span> <span class="p">[</span><span class="n">DEPTH</span> <span class="p">[</span><span class="n">default</span><span class="p">:</span><span class="mi">1</span><span class="p">]]</span>
-<span class="n">cm4</span> <span class="n">batch</span> <span class="n">remove</span> <span class="n">slurm</span><span class="o">-</span><span class="n">cluster</span> <span class="n">CLUSTER_NAME</span>
-<span class="n">cm4</span> <span class="n">batch</span> <span class="n">remove</span> <span class="n">job</span> <span class="n">JOB_NAME</span>
-<span class="n">cm4</span> <span class="n">batch</span> <span class="n">clean</span><span class="o">-</span><span class="n">remote</span> <span class="n">JOB_NAME</span>
+<p>The purpose of this sub-command is to facilitate job submission on
+clusters that use SLURM as their workload manager. Note that this
+tools assumes that the SLURM file is properly prepared by the user and
+does not modify the SLURM script in any way. Similar to other
+sub-commands of <code class="docutils literal notranslate"><span class="pre">cm4</span></code>, <code class="docutils literal notranslate"><span class="pre">batch</span></code> has several sub-commands itself:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cms</span> <span class="n">batch</span> <span class="n">create</span><span class="o">-</span><span class="n">job</span> <span class="n">JOB_NAME</span> <span class="o">--</span><span class="n">slurm</span><span class="o">-</span><span class="n">script</span><span class="o">=</span><span class="n">SLURM_SCRIPT_PATH</span> <span class="o">--</span><span class="nb">input</span><span class="o">-</span><span class="nb">type</span><span class="o">=</span><span class="n">INPUT_TYPE</span> <span class="o">--</span><span class="n">slurm</span><span class="o">-</span><span class="n">cluster</span><span class="o">=</span><span class="n">SLURM_CLUSTER_NAME</span> <span class="o">--</span><span class="n">job</span><span class="o">-</span><span class="n">script</span><span class="o">-</span><span class="n">path</span><span class="o">=</span><span class="n">SCRIPT_PATH</span> <span class="o">--</span><span class="n">remote</span><span class="o">-</span><span class="n">path</span><span class="o">=</span><span class="n">REMOTE_PATH</span> <span class="o">--</span><span class="n">local</span><span class="o">-</span><span class="n">path</span><span class="o">=</span><span class="n">LOCAL_PATH</span> <span class="p">[</span><span class="o">--</span><span class="n">argfile</span><span class="o">-</span><span class="n">path</span><span class="o">=</span><span class="n">ARGUMENT_FILE_PATH</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">outfile</span><span class="o">-</span><span class="n">name</span><span class="o">=</span><span class="n">OUTPUT_FILE_NAME</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">suffix</span><span class="o">=</span><span class="n">SUFFIX</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">overwrite</span><span class="p">]</span>
+<span class="n">cms</span> <span class="n">batch</span> <span class="n">run</span><span class="o">-</span><span class="n">job</span> <span class="n">JOB_NAME</span>
+<span class="n">cms</span> <span class="n">batch</span> <span class="n">fetch</span> <span class="n">JOB_NAME</span>
+<span class="n">cms</span> <span class="n">batch</span> <span class="n">test</span><span class="o">-</span><span class="n">connection</span> <span class="n">SLURM_CLUSTER_NAME</span>
+<span class="n">cms</span> <span class="n">batch</span> <span class="nb">set</span><span class="o">-</span><span class="n">param</span> <span class="n">slurm</span><span class="o">-</span><span class="n">cluster</span> <span class="n">CLUSTER_NAME</span> <span class="n">PARAMETER</span> <span class="n">VALUE</span>
+<span class="n">cms</span> <span class="n">batch</span> <span class="nb">set</span><span class="o">-</span><span class="n">param</span> <span class="n">job</span><span class="o">-</span><span class="n">metadata</span> <span class="n">JOB_NAME</span> <span class="n">PARAMETER</span> <span class="n">VALUE</span>
+<span class="n">cms</span> <span class="n">batch</span> <span class="nb">list</span> <span class="n">slurm</span><span class="o">-</span><span class="n">clusters</span> <span class="p">[</span><span class="n">DEPTH</span> <span class="p">[</span><span class="n">default</span><span class="p">:</span><span class="mi">1</span><span class="p">]]</span>
+<span class="n">cms</span> <span class="n">batch</span> <span class="nb">list</span> <span class="n">jobs</span> <span class="p">[</span><span class="n">DEPTH</span> <span class="p">[</span><span class="n">default</span><span class="p">:</span><span class="mi">1</span><span class="p">]]</span>
+<span class="n">cms</span> <span class="n">batch</span> <span class="n">remove</span> <span class="n">slurm</span><span class="o">-</span><span class="n">cluster</span> <span class="n">CLUSTER_NAME</span>
+<span class="n">cms</span> <span class="n">batch</span> <span class="n">remove</span> <span class="n">job</span> <span class="n">JOB_NAME</span>
+<span class="n">cms</span> <span class="n">batch</span> <span class="n">clean</span><span class="o">-</span><span class="n">remote</span> <span class="n">JOB_NAME</span>
 </pre></div>
 </div>
 <p>The main options are:</p>
 <ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">create-job</span></code>: used for creating a job configuration (this does not run the job automatically)</li>
+<li><code class="docutils literal notranslate"><span class="pre">create-job</span></code>: used for creating a job configuration (this does not
+run the job automatically)</li>
 <li><code class="docutils literal notranslate"><span class="pre">run-job</span></code>: used for running a job configuration that is previously created.</li>
 <li><code class="docutils literal notranslate"><span class="pre">test-connection</span></code>: used for testing the connection to a SLURM cluster</li>
 <li><code class="docutils literal notranslate"><span class="pre">set-param</span></code>: used for setting a parameter in any configuration key</li>
@@ -188,10 +193,13 @@
 <li><code class="docutils literal notranslate"><span class="pre">remove</span></code>: used for removing a cluster or job</li>
 <li><code class="docutils literal notranslate"><span class="pre">clean-remote</span></code>: used for cleaning the files of a job from a cluster</li>
 </ul>
-<p>Each of these sub-commands are reviewed in the following sections with examples.</p>
+<p>Each of these sub-commands are reviewed in the following sections with
+examples.</p>
 <div class="section" id="creating-a-job-configuration">
 <span id="creating-a-job-configuration"></span><h2>Creating a job configuration<a class="headerlink" href="#creating-a-job-configuration" title="Permalink to this headline">¶</a></h2>
-<p>As can be seen, this sub-command has the most number of arguments and is the vital part of the <code class="docutils literal notranslate"><span class="pre">batch</span></code> tool. The parameters are all self-explanatory, but we will review the important ones here:</p>
+<p>As can be seen, this sub-command has the most number of arguments and
+is the vital part of the <code class="docutils literal notranslate"><span class="pre">batch</span></code> tool. The parameters are all
+self-explanatory, but we will review the important ones here:</p>
 <ul class="simple">
 <li><code class="docutils literal notranslate"><span class="pre">--slurm-script</span></code>:  defines the path to the SLURM script that is going to be submitted to the SLURM cluster.</li>
 <li><code class="docutils literal notranslate"><span class="pre">--input-type</span></code>: defines the type of input for the application that is going to be run on the cluster. This is important because if the program takes a file name as an argument, that file has to be transfered to the cluster as well. Possible values for this parameter is either <code class="docutils literal notranslate"><span class="pre">params</span></code> or <code class="docutils literal notranslate"><span class="pre">params+file</span></code>. Note that if you pass <code class="docutils literal notranslate"><span class="pre">params+file</span></code> then you have to specify the <code class="docutils literal notranslate"><span class="pre">--argfile-path</span></code> as well where you define the path to the argument file.</li>
@@ -231,27 +239,37 @@
 </div>
 <div class="section" id="testing-the-connection">
 <span id="testing-the-connection"></span><h2>Testing the connection<a class="headerlink" href="#testing-the-connection" title="Permalink to this headline">¶</a></h2>
-<p>Note that the cluster information is already extracted and added to this file. Therefore unlike <code class="docutils literal notranslate"><span class="pre">vcluster</span></code>, there is no need to add the cluster manually. So far, we have just added and updated the configuration and the job is neither submitted nor run in the cluster.  Before doing that, let’s try to test our connection to the cluster:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ cm4 batch test-connection slurm-taito
+<p>Note that the cluster information is already extracted and added to
+this file. Therefore unlike <code class="docutils literal notranslate"><span class="pre">vcluster</span></code>, there is no need to add the
+cluster manually. So far, we have just added and updated the
+configuration and the job is neither submitted nor run in the cluster.
+Before doing that, let’s try to test our connection to the cluster:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ cms batch test-connection slurm-taito
 Slurm Cluster taito is accessible.
 </pre></div>
 </div>
 </div>
 <div class="section" id="running-the-job">
 <span id="running-the-job"></span><h2>Running the Job<a class="headerlink" href="#running-the-job" title="Permalink to this headline">¶</a></h2>
-<p>Now that we are sure that the ssh connection works fine, let’s try to run the job:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ cm4 batch run-job SlurmTest1
+<p>Now that we are sure that the ssh connection works fine, let’s try to
+run the job:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ cms batch run-job SlurmTest1
 Remote job ID: 32846209
 </pre></div>
 </div>
-<p>Despite the short output, this command does a lot of work behind the seen including:</p>
+<p>Despite the short output, this command does a lot of work behind the
+seen including:</p>
 <ul class="simple">
 <li>Creating the proper folder structure in the remote</li>
-<li>Copying the SLURM script, as well as the job script and the argument files if any.</li>
+<li>Copying the SLURM script, as well as the job script and the argument
+files if any.</li>
 <li>Submitting the job</li>
-<li>Keeping the job ID and save it in the configuration file so that the results can be fetched later</li>
+<li>Keeping the job ID and save it in the configuration file so that the
+results can be fetched later</li>
 </ul>
-<p>Just for the demonstration purpose, let’s check the remote folder in the cluster and you will see that all of the files as well as the results will be available there:</p>
+<p>Just for the demonstration purpose, let’s check the remote folder in
+the cluster and you will see that all of the files as well as the
+results will be available there:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>@taito-login3:~/tmp/job_20181206_19301175$ ll
 total 28
 drwxr-xr-x 2  4096 Dec  7 02:36 ./
@@ -275,7 +293,8 @@ waiting for other results if any...
 All of the remote results collected.
 </pre></div>
 </div>
-<p>Using this, the results will be downloaded in the local path specified in the configuration file:</p>
+<p>Using this, the results will be downloaded in the local path specified
+in the configuration file:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>out$ ll job_20181206_19301175/
 total 1M
 drwxr-xr-x 2 corriel 1M Dec  6 19:40 ./

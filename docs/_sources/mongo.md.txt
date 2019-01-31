@@ -14,19 +14,19 @@ Note: In future versions this is done automatically. For nw we just od it by han
 You can start the database service with
 
 ```bash
-$ cm4 admin mongo start
+$ cms admin mongo start
 ```
 
 You can stop the database service with
 
 ```bash
-$ cm4 admin mongo start
+$ cms admin mongo start
 ```
 
 You can test the database service with
 
 ```bash
-$ cm4 admin mongo status
+$ cms admin mongo status
 ```
 
 The database will be started on the port as specified in `~/.cloudmesh/cloudmesh4.yaml`

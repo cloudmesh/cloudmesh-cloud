@@ -223,31 +223,31 @@ names and labels in the “aws” list.</p>
 <span id="o-suggestion-for-redesign"></span><h3>10.1.2. :o: Suggestion for Redesign<a class="headerlink" href="#o-suggestion-for-redesign" title="Permalink to this headline">¶</a></h3>
 <p>I propose to redising and use the old cloudmesh interface in this new
 implementation</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cm4</span> <span class="n">aws</span> <span class="n">vm</span> <span class="nb">list</span>
-<span class="n">cm4</span> <span class="n">cloud</span><span class="o">=</span><span class="n">aws</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cms</span> <span class="n">aws</span> <span class="n">vm</span> <span class="nb">list</span>
+<span class="n">cms</span> <span class="n">cloud</span><span class="o">=</span><span class="n">aws</span>
 <span class="c1"># all subsequent commands are done on aws without the ned to specify the cloud</span>
-<span class="n">cm4</span> <span class="n">group</span><span class="o">=</span><span class="n">cluster1</span>
+<span class="n">cms</span> <span class="n">group</span><span class="o">=</span><span class="n">cluster1</span>
 <span class="c1"># all subsequent commands are added to the group. The last group is set to group1, a group can have arbitrary resources in it vms, files, ...</span>
 <span class="c1"># commands applied to last vm </span>
-<span class="n">cm4</span> <span class="n">vm</span> <span class="n">start</span> <span class="p">[</span><span class="o">--</span><span class="n">cloud</span><span class="o">=</span><span class="n">CLOUD</span><span class="p">]</span>
-<span class="n">cm4</span> <span class="n">vm</span> <span class="n">stop</span> <span class="p">[</span><span class="o">--</span><span class="n">cloud</span><span class="o">=</span><span class="n">CLOUD</span><span class="p">]</span>
-<span class="n">cm4</span> <span class="n">vm</span> <span class="n">info</span> <span class="p">[</span><span class="o">--</span><span class="n">cloud</span><span class="o">=</span><span class="n">CLOUD</span><span class="p">]</span>
-<span class="n">cm4</span> <span class="n">vm</span> <span class="n">delete</span> <span class="p">[</span><span class="o">--</span><span class="n">cloud</span><span class="o">=</span><span class="n">CLOUD</span><span class="p">]</span>
-<span class="n">cm4</span> <span class="n">vm</span> <span class="n">suspend</span> <span class="p">[</span><span class="o">--</span><span class="n">cloud</span><span class="o">=</span><span class="n">CLOUD</span><span class="p">]</span>
+<span class="n">cms</span> <span class="n">vm</span> <span class="n">start</span> <span class="p">[</span><span class="o">--</span><span class="n">cloud</span><span class="o">=</span><span class="n">CLOUD</span><span class="p">]</span>
+<span class="n">cms</span> <span class="n">vm</span> <span class="n">stop</span> <span class="p">[</span><span class="o">--</span><span class="n">cloud</span><span class="o">=</span><span class="n">CLOUD</span><span class="p">]</span>
+<span class="n">cms</span> <span class="n">vm</span> <span class="n">info</span> <span class="p">[</span><span class="o">--</span><span class="n">cloud</span><span class="o">=</span><span class="n">CLOUD</span><span class="p">]</span>
+<span class="n">cms</span> <span class="n">vm</span> <span class="n">delete</span> <span class="p">[</span><span class="o">--</span><span class="n">cloud</span><span class="o">=</span><span class="n">CLOUD</span><span class="p">]</span>
+<span class="n">cms</span> <span class="n">vm</span> <span class="n">suspend</span> <span class="p">[</span><span class="o">--</span><span class="n">cloud</span><span class="o">=</span><span class="n">CLOUD</span><span class="p">]</span>
 <span class="c1">#</span>
-<span class="n">cm4</span> <span class="n">group</span> <span class="nb">list</span> <span class="p">[</span><span class="o">--</span><span class="n">group</span><span class="o">=</span><span class="n">GROUP</span><span class="p">]</span>
-<span class="n">cm4</span> <span class="n">group</span> <span class="n">delete</span> <span class="p">[</span><span class="o">--</span><span class="n">group</span><span class="o">=</span><span class="n">GROUP</span><span class="p">]</span>
+<span class="n">cms</span> <span class="n">group</span> <span class="nb">list</span> <span class="p">[</span><span class="o">--</span><span class="n">group</span><span class="o">=</span><span class="n">GROUP</span><span class="p">]</span>
+<span class="n">cms</span> <span class="n">group</span> <span class="n">delete</span> <span class="p">[</span><span class="o">--</span><span class="n">group</span><span class="o">=</span><span class="n">GROUP</span><span class="p">]</span>
 
 <span class="n">MongoDB</span> <span class="ow">is</span> <span class="n">used</span> <span class="n">to</span> <span class="n">manage</span> <span class="n">the</span> <span class="n">data</span>
 
-<span class="n">cm4</span> <span class="n">save</span> <span class="p">[</span><span class="o">--</span><span class="n">file</span><span class="o">=</span><span class="n">FILE</span><span class="p">]</span>
-<span class="n">cm4</span> <span class="n">load</span> <span class="p">[</span><span class="o">--</span><span class="n">file</span><span class="o">=</span><span class="n">FILE</span><span class="p">]</span>
+<span class="n">cms</span> <span class="n">save</span> <span class="p">[</span><span class="o">--</span><span class="n">file</span><span class="o">=</span><span class="n">FILE</span><span class="p">]</span>
+<span class="n">cms</span> <span class="n">load</span> <span class="p">[</span><span class="o">--</span><span class="n">file</span><span class="o">=</span><span class="n">FILE</span><span class="p">]</span>
 
 <span class="n">makesa</span> <span class="n">backup</span> <span class="n">of</span> <span class="n">the</span> <span class="n">data</span> <span class="ow">in</span> <span class="n">mongo</span>
 
-<span class="n">cm4</span> <span class="n">system</span> <span class="n">satus</span>
+<span class="n">cms</span> <span class="n">system</span> <span class="n">satus</span>
 
-<span class="n">looks</span> <span class="n">at</span> <span class="n">teh</span> <span class="n">system</span> <span class="n">sattus</span> <span class="n">of</span> <span class="n">mongo</span> <span class="ow">and</span> <span class="n">other</span> <span class="n">cm4</span> <span class="n">stuff</span>
+<span class="n">looks</span> <span class="n">at</span> <span class="n">teh</span> <span class="n">system</span> <span class="n">sattus</span> <span class="n">of</span> <span class="n">mongo</span> <span class="ow">and</span> <span class="n">other</span> <span class="n">cms</span> <span class="n">stuff</span>
 
 </pre></div>
 </div>

@@ -1,5 +1,34 @@
 # Cloudmesh cm v4
 
+## Installation
+
+### Source instalation for development
+
+```bash
+export SRC=~/github
+mkdir $SRC
+cd $SRC
+git clone https://github.com/cloudmesh/cloudmesh.common.git
+git clone https://github.com/cloudmesh/cloudmesh.cmd5.git
+git clone https://github.com/cloudmesh/cloudmesh.sys.git
+git clone https://github.com/cloudmesh-community/cloudmesh.cm.git
+
+cd $SRC/cloudmesh.common
+python setup.py install
+pip install -e .
+cd $SRC/cloudmesh.cmd5
+python setup.py install
+pip install -e .
+cd $SRC/cloudmesh.sys
+python setup.py install
+pip install -e .
+cd $SRC/cloudmesh-community/cloudmesh.cm
+python setup.py install
+pip install -e .
+```
+
+
+## Goal
 
 * <https://github.com/cloudmesh-community/cm>
 
@@ -39,7 +68,7 @@ sequential and + for adding results
 
 For example
 
-```
+```python
 def a():
 
    sting to be executed via ssh on a remote machine
@@ -58,9 +87,13 @@ A central database provider keeps track of files stored with multiple cloud serv
 
 #### Local
 
-The [`LocalDBProvider`](cm4/data/db/LocalDBProvider.py) uses a folder
+BUG: we will not use files, this class needs  to be eliminated, and instead mongo is to be used
+
+The [`LocalDBProvider`](cloudmesh/data/api/db/LocalDBProvider.py) uses a folder
 on the local file system or network share to store each cloud file
 entry as a yaml file.
+
+
 
 
 #### MongoDB
@@ -74,7 +107,7 @@ Storage providers are services that allow storing files.
 
 #### Local
 
-The [`LocalStorageProvider`](cm4/data/storage/LocalStorageProvider.py)
+The [`LocalStorageProvider`](cloudmesh/data/api/storage/LocalStorageProvider.py)
 uses a folder on the local file system or network share to act as a
 "cloud" storage provider.
 
@@ -87,7 +120,7 @@ keys.
 
 ### Getting Started
 
-The default `data` section in [`cloudmesh.yaml`](cm4/configuration/cloudmesh.yaml) is setup to use a local database and storage provider. 
+The default `data` section in [`cloudmesh.yaml`](cloudmesh/management/configuration/cloudmesh.yaml) is setup to use a local database and storage provider. 
 
 **Download**
 
@@ -106,9 +139,9 @@ cm4 data add test/files/hello.txt
 
 If you're using an unmodified `cloudmesh.yaml` local test directories
 are set as the default "service".  An entry for the added file will
-appear in the local db folder [`cm4/test/data/db`](cm4/test/data/db)
+appear in the local db folder [`cm4/test/data/db`](deprecated/cm4/test/data/db)
 and the file will be stored in
-[`cm4/test/data/storage`](cm4/test/data/storage).
+[`cm4/test/data/storage`](deprecated/cm4/test/data/storage).
 
 *Note: Network shares can also be used with the local storage provider.*
 

@@ -28,31 +28,31 @@ I propose to redising and use the old cloudmesh interface in this new
 implementation
 
 ```
-cm4 aws vm list
-cm4 cloud=aws
+cms aws vm list
+cms cloud=aws
 # all subsequent commands are done on aws without the ned to specify the cloud
-cm4 group=cluster1
+cms group=cluster1
 # all subsequent commands are added to the group. The last group is set to group1, a group can have arbitrary resources in it vms, files, ...
 # commands applied to last vm 
-cm4 vm start [--cloud=CLOUD]
-cm4 vm stop [--cloud=CLOUD]
-cm4 vm info [--cloud=CLOUD]
-cm4 vm delete [--cloud=CLOUD]
-cm4 vm suspend [--cloud=CLOUD]
+cms vm start [--cloud=CLOUD]
+cms vm stop [--cloud=CLOUD]
+cms vm info [--cloud=CLOUD]
+cms vm delete [--cloud=CLOUD]
+cms vm suspend [--cloud=CLOUD]
 #
-cm4 group list [--group=GROUP]
-cm4 group delete [--group=GROUP]
+cms group list [--group=GROUP]
+cms group delete [--group=GROUP]
 
 MongoDB is used to manage the data
 
-cm4 save [--file=FILE]
-cm4 load [--file=FILE]
+cms save [--file=FILE]
+cms load [--file=FILE]
 
 makesa backup of the data in mongo
 
-cm4 system satus
+cms system satus
 
-looks at teh system sattus of mongo and other cm4 stuff
+looks at teh system sattus of mongo and other cms stuff
 
 
 ```

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>3. Installation &mdash; cm4 alpha documentation</title>
+  <title>2. Installation &mdash; cm4 alpha documentation</title>
   
 
   
@@ -28,8 +28,8 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="4. Cloudmesh Database" href="mongo.html" />
-    <link rel="prev" title="2. Quickstart" href="quickstart.html" /> 
+    <link rel="next" title="3. Quickstart" href="quickstart.html" />
+    <link rel="prev" title="1. Contributors" href="contributors.html" /> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -85,14 +85,14 @@
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="contributors.html">1. Contributors</a></li>
-<li class="toctree-l1"><a class="reference internal" href="quickstart.html">2. Quickstart</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">3. Installation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#one-line-installer">3.1. One Line installer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#prerequisites">3.2. Prerequisites</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#installation-of-cloudmesh-4">3.3. Installation of Cloudmesh 4</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#installation-of-mongod">3.4. Installation of mongod</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">2. Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#one-line-installer">2.1. One Line installer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#prerequisites">2.2. Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#installation-of-cloudmesh-4">2.3. Installation of Cloudmesh 4</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#installation-of-mongod">2.4. Installation of mongod</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">3. Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="mongo.html">4. Cloudmesh Database</a></li>
 <li class="toctree-l1"><a class="reference internal" href="configuration.html">5. Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="vmproviders.html">6. VM Providers</a></li>
@@ -105,7 +105,6 @@
 <li class="toctree-l1"><a class="reference internal" href="vm.html">13. VM Description</a></li>
 <li class="toctree-l1"><a class="reference internal" href="jupyter.html">14. Jupyter Integration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="code.html">15. Code Documentation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="deprecated.html">16. Deprecated from here on</a></li>
 </ul>
 
             
@@ -151,7 +150,7 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>3. Installation</li>
+      <li>2. Installation</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -171,16 +170,16 @@
            <div itemprop="articleBody">
             
   <div class="section" id="installation">
-<span id="installation"></span><h1>3. Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
+<span id="installation"></span><h1>2. Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="one-line-installer">
-<span id="one-line-installer"></span><h2>3.1. One Line installer<a class="headerlink" href="#one-line-installer" title="Permalink to this headline">¶</a></h2>
+<span id="one-line-installer"></span><h2>2.1. One Line installer<a class="headerlink" href="#one-line-installer" title="Permalink to this headline">¶</a></h2>
 <p>Does not work yet</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>wget -qO - http://cloudmesh.github.io/get/cm4/osx <span class="p">|</span> sh 
 </pre></div>
 </div>
 </div>
 <div class="section" id="prerequisites">
-<span id="prerequisites"></span><h2>3.2. Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h2>
+<span id="prerequisites"></span><h2>2.2. Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h2>
 <p>Before you install make sure that you have at minimum python 3.7.1 installed. We
 recommend that you use a python virtualenv such as venv or pyenv to
 isolate the python installed packages as not to interfere with the
@@ -188,7 +187,7 @@ system installation.</p>
 <p>We do at this time not have a conda package or have tested it on conda.</p>
 </div>
 <div class="section" id="installation-of-cloudmesh-4">
-<span id="installation-of-cloudmesh-4"></span><h2>3.3. Installation of Cloudmesh 4<a class="headerlink" href="#installation-of-cloudmesh-4" title="Permalink to this headline">¶</a></h2>
+<span id="installation-of-cloudmesh-4"></span><h2>2.3. Installation of Cloudmesh 4<a class="headerlink" href="#installation-of-cloudmesh-4" title="Permalink to this headline">¶</a></h2>
 <p>Cloudmesh 4 can be installed from pip, or from source. For now we
 recommend the source installation</p>
 <p>.. note: the pip instalation is not yet working</p>
@@ -200,7 +199,7 @@ $ pip install .
 </div>
 </div>
 <div class="section" id="installation-of-mongod">
-<span id="installation-of-mongod"></span><h2>3.4. Installation of mongod<a class="headerlink" href="#installation-of-mongod" title="Permalink to this headline">¶</a></h2>
+<span id="installation-of-mongod"></span><h2>2.4. Installation of mongod<a class="headerlink" href="#installation-of-mongod" title="Permalink to this headline">¶</a></h2>
 <p>In case your computer does not yet have mongo db installed, you can
 easily install it with our <code class="docutils literal notranslate"><span class="pre">admin</span></code> command. It will not only install
 mongo, but also add the path to your .bash_* file. To install it
@@ -221,10 +220,10 @@ simply say</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="mongo.html" class="btn btn-neutral float-right" title="4. Cloudmesh Database" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="quickstart.html" class="btn btn-neutral float-right" title="3. Quickstart" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="quickstart.html" class="btn btn-neutral" title="2. Quickstart" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="contributors.html" class="btn btn-neutral" title="1. Contributors" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

@@ -5,6 +5,13 @@ Code Documentation
    :members:
 
 
+Commands
+========
+
+.. automodule:: cloudmesh.admin.command.admin
+   :members:
+
+
 Common
 ======
 
@@ -117,9 +124,6 @@ Controler
 
 .. automodule:: cloudmesh.cmmongo.MongoDBControler
    :members:
-
-
-
 
 Virtual Cluster
 ===============

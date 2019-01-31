@@ -80,17 +80,17 @@ class AdminCommand(PluginCommand):
                 mongo = MongoDBController()
                 state = mongo.status()
 
-                data = dotdict()
-                # data.message = state["message"]
-                for pid in state['output']:
-                    entry = state['output'][pid]
-                    data["pid"] = state['output'][pid]
-                    data["command"] = state['output'][pid]['command'].strip()
-
                 if "error" in state["status"]:
                     Console.error(state["message"])
                     print(Printer.attribute(state))
                 else:
+                    data = dotdict()
+
+                    for pid in state['output']:
+                        entry = state['output'][pid]
+                        data["pid"] = state['output'][pid]
+                        data["command"] = state['output'][pid]['command'].strip()
+
                     print(Printer.dict(data, order=["pid", "command"]))
                     Console.ok(str(data.pid['pid']) + " " + state["message"])
 

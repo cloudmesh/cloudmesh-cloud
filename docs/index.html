@@ -84,8 +84,8 @@
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="contributors.html">1. Contributors</a></li>
-<li class="toctree-l1"><a class="reference internal" href="quickstart.html">2. Quickstart</a></li>
-<li class="toctree-l1"><a class="reference internal" href="install.html">3. Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">2. Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">3. Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="mongo.html">4. Cloudmesh Database</a></li>
 <li class="toctree-l1"><a class="reference internal" href="configuration.html">5. Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="vmproviders.html">6. VM Providers</a></li>
@@ -97,7 +97,8 @@
 <li class="toctree-l1"><a class="reference internal" href="vcluster.html">12. Virtual Cluster</a></li>
 <li class="toctree-l1"><a class="reference internal" href="vm.html">13. VM Description</a></li>
 <li class="toctree-l1"><a class="reference internal" href="jupyter.html">14. Jupyter Integration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="code.html">15. Code Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual.html">15. Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="code.html">16. Code Documentation</a></li>
 </ul>
 
             
@@ -168,16 +169,16 @@
 <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="contributors.html">1. Contributors</a></li>
-<li class="toctree-l1"><a class="reference internal" href="quickstart.html">2. Quickstart</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="quickstart.html#commandline">2.1. Commandline</a></li>
-<li class="toctree-l2"><a class="reference internal" href="quickstart.html#interactive-shell">2.2. Interactive shell</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">2. Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="install.html#one-line-installer">2.1. One Line installer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install.html#prerequisites">2.2. Prerequisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install.html#installation-of-cloudmesh-4">2.3. Installation of Cloudmesh 4</a></li>
+<li class="toctree-l2"><a class="reference internal" href="install.html#installation-of-mongod">2.4. Installation of mongod</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="install.html">3. Installation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="install.html#one-line-installer">3.1. One Line installer</a></li>
-<li class="toctree-l2"><a class="reference internal" href="install.html#prerequisites">3.2. Prerequisites</a></li>
-<li class="toctree-l2"><a class="reference internal" href="install.html#installation-of-cloudmesh-4">3.3. Installation of Cloudmesh 4</a></li>
-<li class="toctree-l2"><a class="reference internal" href="install.html#installation-of-mongod">3.4. Installation of mongod</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">3. Quickstart</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#commandline">3.1. Commandline</a></li>
+<li class="toctree-l2"><a class="reference internal" href="quickstart.html#interactive-shell">3.2. Interactive shell</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="mongo.html">4. Cloudmesh Database</a></li>
@@ -241,17 +242,41 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="jupyter.html">14. Jupyter Integration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="code.html">15. Code Documentation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="code.html#common">15.1. Common</a></li>
-<li class="toctree-l2"><a class="reference internal" href="code.html#aws">15.2. AWS</a></li>
-<li class="toctree-l2"><a class="reference internal" href="code.html#mongo">15.3. Mongo</a></li>
-<li class="toctree-l2"><a class="reference internal" href="code.html#virtual-cluster">15.4. Virtual Cluster</a></li>
-<li class="toctree-l2"><a class="reference internal" href="code.html#configuration">15.5. Configuration</a></li>
-<li class="toctree-l2"><a class="reference internal" href="code.html#data">15.6. Data</a></li>
-<li class="toctree-l2"><a class="reference internal" href="code.html#server">15.7. Server</a></li>
-<li class="toctree-l2"><a class="reference internal" href="code.html#openstack">15.8. Openstack</a></li>
-<li class="toctree-l2"><a class="reference internal" href="code.html#vagrant">15.9. Vagrant</a></li>
-<li class="toctree-l2"><a class="reference internal" href="code.html#vm">15.10. VM</a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual.html">15. Manual</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="manual/commands.html">15.1. Documented commands (type help &lt;topic&gt;):</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/commands.html#undocumented-commands">15.2. Undocumented commands:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/admin.html">15.3. Command admin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/banner.html">15.4. Command banner</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/clear.html">15.5. Command clear</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/echo.html">15.6. Command echo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/default.html">15.7. Command default</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/info.html">15.8. Command info</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/pause.html">15.9. Command pause</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/plugin.html">15.10. Command plugin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/q.html">15.11. Command q</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/quit.html">15.12. Command quit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/shell.html">15.13. Command shell</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/sleep.html">15.14. Command sleep</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/stopwatch.html">15.15. Command stopwatch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/sys.html">15.16. Command sys</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/var.html">15.17. Command var</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/vbox.html">15.18. Command vbox</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/batch.html">15.19. Command batch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="manual/version.html">15.20. Command version</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="code.html">16. Code Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="code.html#module-cloudmesh.admin.command.admin">16.1. Commands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code.html#common">16.2. Common</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code.html#aws">16.3. AWS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code.html#mongo">16.4. Mongo</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code.html#virtual-cluster">16.5. Virtual Cluster</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code.html#configuration">16.6. Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code.html#data">16.7. Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code.html#server">16.8. Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code.html#openstack">16.9. Openstack</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code.html#vagrant">16.10. Vagrant</a></li>
+<li class="toctree-l2"><a class="reference internal" href="code.html#vm">16.11. VM</a></li>
 </ul>
 </li>
 </ul>

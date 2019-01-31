@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>15. Code Documentation &mdash; cm4 alpha documentation</title>
+  <title>16. Code Documentation &mdash; cm4 alpha documentation</title>
   
 
   
@@ -28,7 +28,7 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="14. Jupyter Integration" href="jupyter.html" /> 
+    <link rel="prev" title="15.20. Command version" href="manual/version.html" /> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -84,8 +84,8 @@
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="contributors.html">1. Contributors</a></li>
-<li class="toctree-l1"><a class="reference internal" href="quickstart.html">2. Quickstart</a></li>
-<li class="toctree-l1"><a class="reference internal" href="install.html">3. Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">2. Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">3. Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="mongo.html">4. Cloudmesh Database</a></li>
 <li class="toctree-l1"><a class="reference internal" href="configuration.html">5. Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="vmproviders.html">6. VM Providers</a></li>
@@ -97,36 +97,38 @@
 <li class="toctree-l1"><a class="reference internal" href="vcluster.html">12. Virtual Cluster</a></li>
 <li class="toctree-l1"><a class="reference internal" href="vm.html">13. VM Description</a></li>
 <li class="toctree-l1"><a class="reference internal" href="jupyter.html">14. Jupyter Integration</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">15. Code Documentation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#common">15.1. Common</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#module-cloudmesh.common.util">15.1.1. Util</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#dotdict">15.1.2. Dotdict</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#locations">15.1.3. Locations</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#parameter">15.1.4. Parameter</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#flatdict">15.1.5. FlatDict</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#printer">15.1.6. Printer</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#stopwatch">15.1.7. Stopwatch</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#module-cloudmesh.common.console">15.1.8. Console</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#logger">15.1.9. Logger</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#module-cloudmesh.common.error">15.1.10. Error</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#module-cloudmesh.common.Shell">15.1.11. Shell</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#module-cloudmesh.db.strdb">15.1.12. DB</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#module-cloudmesh.common.ssh.authorized_keys">15.1.13. SSH</a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual.html">15. Manual</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">16. Code Documentation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-cloudmesh.admin.command.admin">16.1. Commands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#common">16.2. Common</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#module-cloudmesh.common.util">16.2.1. Util</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#dotdict">16.2.2. Dotdict</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#locations">16.2.3. Locations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#parameter">16.2.4. Parameter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#flatdict">16.2.5. FlatDict</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#printer">16.2.6. Printer</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#stopwatch">16.2.7. Stopwatch</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-cloudmesh.common.console">16.2.8. Console</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#logger">16.2.9. Logger</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-cloudmesh.common.error">16.2.10. Error</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-cloudmesh.common.Shell">16.2.11. Shell</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-cloudmesh.db.strdb">16.2.12. DB</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-cloudmesh.common.ssh.authorized_keys">16.2.13. SSH</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#aws">15.2. AWS</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#mongo">15.3. Mongo</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#mongodb">15.3.1. MongoDB</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#controler">15.3.2. Controler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#aws">16.3. AWS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#mongo">16.4. Mongo</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#mongodb">16.4.1. MongoDB</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#controler">16.4.2. Controler</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#virtual-cluster">15.4. Virtual Cluster</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#configuration">15.5. Configuration</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#data">15.6. Data</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#server">15.7. Server</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#openstack">15.8. Openstack</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#vagrant">15.9. Vagrant</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#vm">15.10. VM</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#virtual-cluster">16.5. Virtual Cluster</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#configuration">16.6. Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#data">16.7. Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#server">16.8. Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#openstack">16.9. Openstack</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#vagrant">16.10. Vagrant</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#vm">16.11. VM</a></li>
 </ul>
 </li>
 </ul>
@@ -174,7 +176,7 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>15. Code Documentation</li>
+      <li>16. Code Documentation</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -194,12 +196,15 @@
            <div itemprop="articleBody">
             
   <div class="section" id="module-cloudmesh">
-<span id="code-documentation"></span><h1>15. Code Documentation<a class="headerlink" href="#module-cloudmesh" title="Permalink to this headline">¶</a></h1>
+<span id="code-documentation"></span><h1>16. Code Documentation<a class="headerlink" href="#module-cloudmesh" title="Permalink to this headline">¶</a></h1>
 <p>The cloudmesh namespace package</p>
+<div class="section" id="module-cloudmesh.admin.command.admin">
+<span id="commands"></span><h2>16.1. Commands<a class="headerlink" href="#module-cloudmesh.admin.command.admin" title="Permalink to this headline">¶</a></h2>
+</div>
 <div class="section" id="common">
-<h2>15.1. Common<a class="headerlink" href="#common" title="Permalink to this headline">¶</a></h2>
+<h2>16.2. Common<a class="headerlink" href="#common" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="module-cloudmesh.common.util">
-<span id="util"></span><h3>15.1.1. Util<a class="headerlink" href="#module-cloudmesh.common.util" title="Permalink to this headline">¶</a></h3>
+<span id="util"></span><h3>16.2.1. Util<a class="headerlink" href="#module-cloudmesh.common.util" title="Permalink to this headline">¶</a></h3>
 <p>Useful utility functions</p>
 <dl class="function">
 <dt id="cloudmesh.common.util.HEADING">
@@ -442,7 +447,7 @@ String matching only, does not do REs as currently implemented.</p>
 
 </div>
 <div class="section" id="dotdict">
-<h3>15.1.2. Dotdict<a class="headerlink" href="#dotdict" title="Permalink to this headline">¶</a></h3>
+<h3>16.2.2. Dotdict<a class="headerlink" href="#dotdict" title="Permalink to this headline">¶</a></h3>
 <span class="target" id="module-cloudmesh.common.dotdict"></span><p>A convenient dot dict class</p>
 <p>a = dotdict({“argument”: “value”})</p>
 <p>print (a.argument)</p>
@@ -454,7 +459,7 @@ String matching only, does not do REs as currently implemented.</p>
 
 </div>
 <div class="section" id="locations">
-<h3>15.1.3. Locations<a class="headerlink" href="#locations" title="Permalink to this headline">¶</a></h3>
+<h3>16.2.3. Locations<a class="headerlink" href="#locations" title="Permalink to this headline">¶</a></h3>
 <span class="target" id="module-cloudmesh.common.locations"></span><p>class that specifies where we read the cloudmesh.yaml file from</p>
 <dl class="function">
 <dt id="cloudmesh.common.locations.config_dir_setup">
@@ -486,10 +491,10 @@ String matching only, does not do REs as currently implemented.</p>
 
 </div>
 <div class="section" id="parameter">
-<h3>15.1.4. Parameter<a class="headerlink" href="#parameter" title="Permalink to this headline">¶</a></h3>
+<h3>16.2.4. Parameter<a class="headerlink" href="#parameter" title="Permalink to this headline">¶</a></h3>
 <span class="target" id="module-cloudmesh.common.parameter"></span></div>
 <div class="section" id="flatdict">
-<h3>15.1.5. FlatDict<a class="headerlink" href="#flatdict" title="Permalink to this headline">¶</a></h3>
+<h3>16.2.5. FlatDict<a class="headerlink" href="#flatdict" title="Permalink to this headline">¶</a></h3>
 <span class="target" id="module-cloudmesh.common.FlatDict"></span><dl class="class">
 <dt id="cloudmesh.common.FlatDict.FlatDict">
 <em class="property">class </em><code class="descclassname">cloudmesh.common.FlatDict.</code><code class="descname">FlatDict</code><span class="sig-paren">(</span><em>d</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cloudmesh/common/FlatDict.html#FlatDict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.common.FlatDict.FlatDict" title="Permalink to this definition">¶</a></dt>
@@ -553,7 +558,7 @@ at time of initialization.</p>
 
 </div>
 <div class="section" id="printer">
-<h3>15.1.6. Printer<a class="headerlink" href="#printer" title="Permalink to this headline">¶</a></h3>
+<h3>16.2.6. Printer<a class="headerlink" href="#printer" title="Permalink to this headline">¶</a></h3>
 <span class="target" id="module-cloudmesh.common.Printer"></span><p>Convenient methods and classes to print tables.</p>
 <dl class="class">
 <dt id="cloudmesh.common.Printer.Printer">
@@ -728,7 +733,7 @@ This specify the column(s) in the table for sorting.</li>
 
 </div>
 <div class="section" id="stopwatch">
-<h3>15.1.7. Stopwatch<a class="headerlink" href="#stopwatch" title="Permalink to this headline">¶</a></h3>
+<h3>16.2.7. Stopwatch<a class="headerlink" href="#stopwatch" title="Permalink to this headline">¶</a></h3>
 <span class="target" id="module-cloudmesh.common.StopWatch"></span><p>Class for starting and stopping named timers.</p>
 <p>This class is based on a similar java class in cyberaide, and java cog kit.</p>
 <dl class="class">
@@ -803,7 +808,7 @@ This specify the column(s) in the table for sorting.</li>
 
 </div>
 <div class="section" id="module-cloudmesh.common.console">
-<span id="console"></span><h3>15.1.8. Console<a class="headerlink" href="#module-cloudmesh.common.console" title="Permalink to this headline">¶</a></h3>
+<span id="console"></span><h3>16.2.8. Console<a class="headerlink" href="#module-cloudmesh.common.console" title="Permalink to this headline">¶</a></h3>
 <p>Printing messages in a console</p>
 <dl class="class">
 <dt id="cloudmesh.common.console.Console">
@@ -945,7 +950,7 @@ warnings, errors, ok and regular messages.</p>
 
 </div>
 <div class="section" id="logger">
-<h3>15.1.9. Logger<a class="headerlink" href="#logger" title="Permalink to this headline">¶</a></h3>
+<h3>16.2.9. Logger<a class="headerlink" href="#logger" title="Permalink to this headline">¶</a></h3>
 <span class="target" id="module-cloudmesh.common.logger"></span><p>simple logging convenience framework</p>
 <dl class="function">
 <dt id="cloudmesh.common.logger.LOGGER">
@@ -976,7 +981,7 @@ warnings, errors, ok and regular messages.</p>
 
 </div>
 <div class="section" id="module-cloudmesh.common.error">
-<span id="error"></span><h3>15.1.10. Error<a class="headerlink" href="#module-cloudmesh.common.error" title="Permalink to this headline">¶</a></h3>
+<span id="error"></span><h3>16.2.10. Error<a class="headerlink" href="#module-cloudmesh.common.error" title="Permalink to this headline">¶</a></h3>
 <p>A simple framework to handle error messages</p>
 <dl class="class">
 <dt id="cloudmesh.common.error.Error">
@@ -1038,7 +1043,7 @@ warnings, errors, ok and regular messages.</p>
 
 </div>
 <div class="section" id="module-cloudmesh.common.Shell">
-<span id="shell"></span><h3>15.1.11. Shell<a class="headerlink" href="#module-cloudmesh.common.Shell" title="Permalink to this headline">¶</a></h3>
+<span id="shell"></span><h3>16.2.11. Shell<a class="headerlink" href="#module-cloudmesh.common.Shell" title="Permalink to this headline">¶</a></h3>
 <p>A convenient method to execute shell commands and return their output. Note: that this method requires that the
 command be completely execute before the output is returned. FOr many activities in cloudmesh this is sufficient.</p>
 <dl class="class">
@@ -1462,7 +1467,7 @@ THis command should not be directly called. Instead use SHell</p>
 
 </div>
 <div class="section" id="module-cloudmesh.db.strdb">
-<span id="db"></span><h3>15.1.12. DB<a class="headerlink" href="#module-cloudmesh.db.strdb" title="Permalink to this headline">¶</a></h3>
+<span id="db"></span><h3>16.2.12. DB<a class="headerlink" href="#module-cloudmesh.db.strdb" title="Permalink to this headline">¶</a></h3>
 <dl class="class">
 <dt id="cloudmesh.db.strdb.YamlDB">
 <em class="property">class </em><code class="descclassname">cloudmesh.db.strdb.</code><code class="descname">YamlDB</code><span class="sig-paren">(</span><em>path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cloudmesh/db/strdb.html#YamlDB"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.db.strdb.YamlDB" title="Permalink to this definition">¶</a></dt>
@@ -1483,7 +1488,7 @@ THis command should not be directly called. Instead use SHell</p>
 
 </div>
 <div class="section" id="module-cloudmesh.common.ssh.authorized_keys">
-<span id="ssh"></span><h3>15.1.13. SSH<a class="headerlink" href="#module-cloudmesh.common.ssh.authorized_keys" title="Permalink to this headline">¶</a></h3>
+<span id="ssh"></span><h3>16.2.13. SSH<a class="headerlink" href="#module-cloudmesh.common.ssh.authorized_keys" title="Permalink to this headline">¶</a></h3>
 <p>authorized key management.</p>
 <dl class="class">
 <dt id="cloudmesh.common.ssh.authorized_keys.AuthorizedKeys">
@@ -1626,37 +1631,37 @@ TODO: this method is not implemented
 </div>
 </div>
 <div class="section" id="aws">
-<h2>15.2. AWS<a class="headerlink" href="#aws" title="Permalink to this headline">¶</a></h2>
+<h2>16.3. AWS<a class="headerlink" href="#aws" title="Permalink to this headline">¶</a></h2>
 </div>
 <div class="section" id="mongo">
-<h2>15.3. Mongo<a class="headerlink" href="#mongo" title="Permalink to this headline">¶</a></h2>
+<h2>16.4. Mongo<a class="headerlink" href="#mongo" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="mongodb">
-<h3>15.3.1. MongoDB<a class="headerlink" href="#mongodb" title="Permalink to this headline">¶</a></h3>
+<h3>16.4.1. MongoDB<a class="headerlink" href="#mongodb" title="Permalink to this headline">¶</a></h3>
 </div>
 <div class="section" id="controler">
-<h3>15.3.2. Controler<a class="headerlink" href="#controler" title="Permalink to this headline">¶</a></h3>
+<h3>16.4.2. Controler<a class="headerlink" href="#controler" title="Permalink to this headline">¶</a></h3>
 </div>
 </div>
 <div class="section" id="virtual-cluster">
-<h2>15.4. Virtual Cluster<a class="headerlink" href="#virtual-cluster" title="Permalink to this headline">¶</a></h2>
+<h2>16.5. Virtual Cluster<a class="headerlink" href="#virtual-cluster" title="Permalink to this headline">¶</a></h2>
 </div>
 <div class="section" id="configuration">
-<h2>15.5. Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h2>
+<h2>16.6. Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h2>
 </div>
 <div class="section" id="data">
-<h2>15.6. Data<a class="headerlink" href="#data" title="Permalink to this headline">¶</a></h2>
+<h2>16.7. Data<a class="headerlink" href="#data" title="Permalink to this headline">¶</a></h2>
 </div>
 <div class="section" id="server">
-<h2>15.7. Server<a class="headerlink" href="#server" title="Permalink to this headline">¶</a></h2>
+<h2>16.8. Server<a class="headerlink" href="#server" title="Permalink to this headline">¶</a></h2>
 </div>
 <div class="section" id="openstack">
-<h2>15.8. Openstack<a class="headerlink" href="#openstack" title="Permalink to this headline">¶</a></h2>
+<h2>16.9. Openstack<a class="headerlink" href="#openstack" title="Permalink to this headline">¶</a></h2>
 </div>
 <div class="section" id="vagrant">
-<h2>15.9. Vagrant<a class="headerlink" href="#vagrant" title="Permalink to this headline">¶</a></h2>
+<h2>16.10. Vagrant<a class="headerlink" href="#vagrant" title="Permalink to this headline">¶</a></h2>
 </div>
 <div class="section" id="vm">
-<h2>15.10. VM<a class="headerlink" href="#vm" title="Permalink to this headline">¶</a></h2>
+<h2>16.11. VM<a class="headerlink" href="#vm" title="Permalink to this headline">¶</a></h2>
 </div>
 </div>
 
@@ -1669,7 +1674,7 @@ TODO: this method is not implemented
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
       
-        <a href="jupyter.html" class="btn btn-neutral" title="14. Jupyter Integration" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="manual/version.html" class="btn btn-neutral" title="15.20. Command version" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

@@ -8,7 +8,8 @@ from cloudmesh.management.configuration.config import Config
 from cloudmesh.common.Printer import Printer
 from cloudmesh.common.console import Console
 import textwrap
-
+from pprint import pprint
+from cloudmesh.common.dotdict import dotdict
 
 class AdminCommand(PluginCommand):
     banner = textwrap.dedent("""
@@ -77,13 +78,21 @@ class AdminCommand(PluginCommand):
             elif arguments.status:
 
                 mongo = MongoDBController()
-                state, r = mongo.status()
+                state = mongo.status()
+
+                data = dotdict()
+                # data.message = state["message"]
+                for pid in state['output']:
+                    entry = state['output'][pid]
+                    data["pid"] = state['output'][pid]
+                    data["command"] = state['output'][pid]['command'].strip()
 
                 if "error" in state["status"]:
-                    Console.error(r["message"])
-                    print(Printer.attribute(r))
+                    Console.error(state["message"])
+                    print(Printer.attribute(state))
                 else:
-                    print(Printer.dict(r, order=["pid", "command"]))
+                    print(Printer.dict(data, order=["pid", "command"]))
+                    Console.ok(str(data.pid['pid']) + " " + state["message"])
 
             elif arguments.version:
                 print("MongoDB Version")

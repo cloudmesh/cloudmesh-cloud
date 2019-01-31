@@ -1,4 +1,4 @@
-from cloudmesh.vm.api.Vm import Vm
+from cloudmesh.draft.vm.api.Vm import Vm
 
 
 def main():

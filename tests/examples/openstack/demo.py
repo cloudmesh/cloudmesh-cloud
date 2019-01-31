@@ -1,4 +1,4 @@
-from cloudmesh.openstack.OpenstackCM import OpenstackCM
+from cloudmesh.draft.openstack import OpenstackCM
 from time import sleep
 import datetime
 

@@ -95,10 +95,7 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">9. Cloudmesh cm v4</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#documentation">9.1. Documentation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#code">9.2. Code</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#installation">9.3. Installation</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#source-instalation-for-development">9.3.1. Source instalation for development</a></li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="#installation">9.3. Installation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#goal">9.4. Goal</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#manual-cloudmesh-multi-service-data-access">9.5. Manual: Cloudmesh Multi Service Data Access</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#database-providers">9.5.1. Database Providers</a><ul>
@@ -207,31 +204,9 @@ It will be your task to correct it, and make sure the code works.</p>
 </div>
 <div class="section" id="installation">
 <span id="installation"></span><h2>9.3. Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="source-instalation-for-development">
-<span id="source-instalation-for-development"></span><h3>9.3.1. Source instalation for development<a class="headerlink" href="#source-instalation-for-development" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span> <span class="nv">SRC</span><span class="o">=</span>~/github
-mkdir <span class="nv">$SRC</span>
-<span class="nb">cd</span> <span class="nv">$SRC</span>
-git clone https://github.com/cloudmesh/cloudmesh.common.git
-git clone https://github.com/cloudmesh/cloudmesh.cmd5.git
-git clone https://github.com/cloudmesh/cloudmesh.sys.git
-git clone https://github.com/cloudmesh-community/cloudmesh.cm.git
-
-<span class="nb">cd</span> <span class="nv">$SRC</span>/cloudmesh.common
-python setup.py install
-pip install -e .
-<span class="nb">cd</span> <span class="nv">$SRC</span>/cloudmesh.cmd5
-python setup.py install
-pip install -e .
-<span class="nb">cd</span> <span class="nv">$SRC</span>/cloudmesh.sys
-python setup.py install
-pip install -e .
-<span class="nb">cd</span> <span class="nv">$SRC</span>/cloudmesh-community/cloudmesh.cm
-python setup.py install
-pip install -e .
-</pre></div>
-</div>
-</div>
+<ul class="simple">
+<li>See <a class="reference external" href="https://cloudmesh-community.github.io/cm/">https://cloudmesh-community.github.io/cm/</a></li>
+</ul>
 </div>
 <div class="section" id="goal">
 <span id="goal"></span><h2>9.4. Goal<a class="headerlink" href="#goal" title="Permalink to this headline">¶</a></h2>

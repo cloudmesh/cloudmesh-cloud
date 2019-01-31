@@ -29,7 +29,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="5. Configuration" href="configuration.html" />
-    <link rel="prev" title="3. Installation" href="install.html" /> 
+    <link rel="prev" title="3. Quickstart" href="quickstart.html" /> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -85,8 +85,8 @@
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="contributors.html">1. Contributors</a></li>
-<li class="toctree-l1"><a class="reference internal" href="quickstart.html">2. Quickstart</a></li>
-<li class="toctree-l1"><a class="reference internal" href="install.html">3. Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">2. Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">3. Quickstart</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">4. Cloudmesh Database</a></li>
 <li class="toctree-l1"><a class="reference internal" href="configuration.html">5. Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="vmproviders.html">6. VM Providers</a></li>
@@ -98,8 +98,8 @@
 <li class="toctree-l1"><a class="reference internal" href="vcluster.html">12. Virtual Cluster</a></li>
 <li class="toctree-l1"><a class="reference internal" href="vm.html">13. VM Description</a></li>
 <li class="toctree-l1"><a class="reference internal" href="jupyter.html">14. Jupyter Integration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="code.html">15. Code Documentation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="deprecated.html">16. Deprecated from here on</a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual.html">15. Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="code.html">16. Code Documentation</a></li>
 </ul>
 
             
@@ -168,24 +168,30 @@
 <span id="cloudmesh-database"></span><h1>4. Cloudmesh Database<a class="headerlink" href="#cloudmesh-database" title="Permalink to this headline">¶</a></h1>
 <p>Cloudmesh stores its status in a database so that you can easily
 remember which services you used where and have an accurate account of
-them.</p>
-<p>We use as a database mongoDB to store this information</p>
-<p>To use cloudmesh you simply need to start the database service.</p>
-<p>Note: In future versions this is done automatically. For nw we just od it by hand</p>
-<p>You can start the database service with</p>
+them. We use as a database mongoDB to store this information.
+To use cloudmesh you simply need to create and start the database service.</p>
+<p>First, you need to create a MongoDB database with</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ cms admin mongo create
+</pre></div>
+</div>
+<p>Second, you need to start it with</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ cms admin mongo start
 </pre></div>
 </div>
-<p>You can stop the database service with</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ cms admin mongo start
-</pre></div>
-</div>
-<p>You can test the database service with</p>
+<p>Now you can interact with it to find out the status, the stats,
+and the database listing with the commands</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ cms admin mongo status
+$ cms admin mongo stats
+$ cms admin mongo list
 </pre></div>
 </div>
-<p>The database will be started on the port as specified in <code class="docutils literal notranslate"><span class="pre">~/.cloudmesh/cloudmesh4.yaml</span></code></p>
-<p>Additional values can be specified or are available to locate the downloads.</p>
+<p>To stop it from running use the command</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ cms admin mongo stop
+</pre></div>
+</div>
+<p>The database will be started on the information as specified in
+<code class="docutils literal notranslate"><span class="pre">~/.cloudmesh/cloudmesh4.yaml</span></code></p>
+<p>An example is</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>    <span class="n">mongo</span><span class="p">:</span>
       <span class="n">MONGO_AUTOINSTALL</span><span class="p">:</span> <span class="kc">True</span>
       <span class="n">MONGO_BREWINSTALL</span><span class="p">:</span> <span class="kc">False</span>
@@ -205,7 +211,11 @@ them.</p>
         <span class="n">redhat</span><span class="p">:</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">repo</span><span class="o">.</span><span class="n">mongodb</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">yum</span><span class="o">/</span><span class="n">redhat</span><span class="o">/</span><span class="mi">7</span><span class="o">/</span><span class="n">mongodb</span><span class="o">-</span><span class="n">org</span><span class="o">/</span><span class="mf">4.0</span><span class="o">/</span><span class="n">x86_64</span><span class="o">/</span><span class="n">RPMS</span><span class="o">/</span><span class="n">mongodb</span><span class="o">-</span><span class="n">org</span><span class="o">-</span><span class="n">server</span><span class="o">-</span><span class="mf">4.0</span><span class="o">.</span><span class="mi">4</span><span class="o">-</span><span class="mf">1.</span><span class="n">el7</span><span class="o">.</span><span class="n">x86_64</span><span class="o">.</span><span class="n">rpm</span>
 </pre></div>
 </div>
-<p>TODO: describe the parameters</p>
+<p>We also provide a convenient install script that downloads the version defined
+in the yaml file and installs it in the system with the command</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ cms admin mongo install
+</pre></div>
+</div>
 </div>
 
 
@@ -219,7 +229,7 @@ them.</p>
         <a href="configuration.html" class="btn btn-neutral float-right" title="5. Configuration" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="install.html" class="btn btn-neutral" title="3. Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="quickstart.html" class="btn btn-neutral" title="3. Quickstart" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

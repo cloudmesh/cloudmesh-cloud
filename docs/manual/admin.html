@@ -191,6 +191,7 @@
 <h1>15.2. admin<a class="headerlink" href="#admin" title="Permalink to this headline">¶</a></h1>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Usage</span><span class="p">:</span>
   <span class="n">admin</span> <span class="n">mongo</span> <span class="n">install</span> <span class="p">[</span><span class="o">--</span><span class="n">brew</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">download</span><span class="o">=</span><span class="n">PATH</span><span class="p">]</span>
+  <span class="n">admin</span> <span class="n">mongo</span> <span class="n">create</span>
   <span class="n">admin</span> <span class="n">mongo</span> <span class="n">status</span>
   <span class="n">admin</span> <span class="n">mongo</span> <span class="n">stats</span>
   <span class="n">admin</span> <span class="n">mongo</span> <span class="n">version</span>
@@ -200,6 +201,7 @@
   <span class="n">admin</span> <span class="n">mongo</span> <span class="n">load</span> <span class="n">FILENAME</span>
   <span class="n">admin</span> <span class="n">mongo</span> <span class="n">security</span>
   <span class="n">admin</span> <span class="n">mongo</span> <span class="n">password</span> <span class="n">PASSWORD</span>
+  <span class="n">admin</span> <span class="n">mongo</span> <span class="nb">list</span>
   <span class="n">admin</span> <span class="n">rest</span> <span class="n">status</span>
   <span class="n">admin</span> <span class="n">rest</span> <span class="n">start</span>
   <span class="n">admin</span> <span class="n">rest</span> <span class="n">stop</span>
@@ -216,7 +218,30 @@
 
 <span class="n">Description</span><span class="p">:</span>
 
-  <span class="n">TBD</span>
+  <span class="n">Mongo</span> <span class="n">DB</span>
+
+    <span class="n">MongoDB</span> <span class="ow">is</span> <span class="n">managed</span> <span class="n">through</span> <span class="n">a</span> <span class="n">number</span> <span class="n">of</span> <span class="n">commands</span><span class="o">.</span>
+
+    <span class="n">The</span> <span class="n">configuration</span> <span class="ow">is</span> <span class="n">read</span> <span class="kn">from</span> <span class="o">~/.</span><span class="n">cloudmesh</span><span class="o">/</span><span class="n">cloudmesh4</span><span class="o">.</span><span class="n">yaml</span>
+
+    <span class="n">First</span><span class="p">,</span> <span class="n">you</span> <span class="n">need</span> <span class="n">to</span> <span class="n">create</span> <span class="n">a</span> <span class="n">MongoDB</span> <span class="n">database</span> <span class="k">with</span>
+
+      <span class="n">cms</span> <span class="n">admin</span> <span class="n">mongo</span> <span class="n">create</span>
+
+    <span class="n">Second</span><span class="p">,</span> <span class="n">you</span> <span class="n">need</span> <span class="n">to</span> <span class="n">start</span> <span class="n">it</span> <span class="k">with</span>
+
+       <span class="n">cms</span> <span class="n">admin</span> <span class="n">mongo</span> <span class="n">start</span>
+
+    <span class="n">Now</span> <span class="n">you</span> <span class="n">can</span> <span class="n">interact</span> <span class="k">with</span> <span class="n">it</span> <span class="n">to</span> <span class="n">find</span> <span class="n">out</span> <span class="n">the</span> <span class="n">status</span><span class="p">,</span> <span class="n">the</span> <span class="n">stats</span><span class="p">,</span>
+    <span class="ow">and</span> <span class="n">the</span> <span class="n">database</span> <span class="n">listing</span> <span class="k">with</span> <span class="n">the</span> <span class="n">commands</span>
+
+       <span class="n">cms</span> <span class="n">admin</span> <span class="n">mongo</span> <span class="n">status</span>
+       <span class="n">cms</span> <span class="n">admin</span> <span class="n">mongo</span> <span class="n">stats</span>
+       <span class="n">cms</span> <span class="n">admin</span> <span class="n">mongo</span> <span class="nb">list</span>
+
+    <span class="n">To</span> <span class="n">stop</span> <span class="n">it</span> <span class="kn">from</span> <span class="nn">running</span> <span class="n">use</span> <span class="n">the</span> <span class="n">command</span>
+
+       <span class="n">cms</span> <span class="n">admin</span> <span class="n">mongo</span> <span class="n">stop</span>
 </pre></div>
 </div>
 </div>

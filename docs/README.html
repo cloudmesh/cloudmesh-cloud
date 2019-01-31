@@ -93,18 +93,23 @@
 <li class="toctree-l1"><a class="reference internal" href="vagrant.html">7. Vagrant</a></li>
 <li class="toctree-l1"><a class="reference internal" href="CM4README.html">8. CM4 Details</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">9. Cloudmesh cm v4</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#manual-cloudmesh-multi-service-data-access">9.1. Manual: Cloudmesh Multi Service Data Access</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#database-providers">9.1.1. Database Providers</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#local">9.1.1.1. Local</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#mongodb">9.1.1.2. MongoDB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#installation">9.1. Installation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#source-instalation-for-development">9.1.1. Source instalation for development</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#storage-providers">9.1.2. Storage Providers</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#local">9.1.2.1. Local</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#azure-blob-storage">9.1.2.2. Azure Blob Storage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#goal">9.2. Goal</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#manual-cloudmesh-multi-service-data-access">9.3. Manual: Cloudmesh Multi Service Data Access</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#database-providers">9.3.1. Database Providers</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#local">9.3.1.1. Local</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mongodb">9.3.1.2. MongoDB</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#getting-started">9.1.3. Getting Started</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#storage-providers">9.3.2. Storage Providers</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#local">9.3.2.1. Local</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#azure-blob-storage">9.3.2.2. Azure Blob Storage</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#getting-started">9.3.3. Getting Started</a></li>
 </ul>
 </li>
 </ul>
@@ -182,6 +187,36 @@
             
   <div class="section" id="cloudmesh-cm-v4">
 <span id="cloudmesh-cm-v4"></span><h1>9. Cloudmesh cm v4<a class="headerlink" href="#cloudmesh-cm-v4" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="installation">
+<span id="installation"></span><h2>9.1. Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="source-instalation-for-development">
+<span id="source-instalation-for-development"></span><h3>9.1.1. Source instalation for development<a class="headerlink" href="#source-instalation-for-development" title="Permalink to this headline">¶</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span> <span class="nv">SRC</span><span class="o">=</span>~/github
+mkdir <span class="nv">$SRC</span>
+<span class="nb">cd</span> <span class="nv">$SRC</span>
+git clone https://github.com/cloudmesh/cloudmesh.common.git
+git clone https://github.com/cloudmesh/cloudmesh.cmd5.git
+git clone https://github.com/cloudmesh/cloudmesh.sys.git
+git clone https://github.com/cloudmesh-community/cloudmesh.cm.git
+
+<span class="nb">cd</span> <span class="nv">$SRC</span>/cloudmesh.common
+python setup.py install
+pip install -e .
+<span class="nb">cd</span> <span class="nv">$SRC</span>/cloudmesh.cmd5
+python setup.py install
+pip install -e .
+<span class="nb">cd</span> <span class="nv">$SRC</span>/cloudmesh.sys
+python setup.py install
+pip install -e .
+<span class="nb">cd</span> <span class="nv">$SRC</span>/cloudmesh-community/cloudmesh.cm
+python setup.py install
+pip install -e .
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="goal">
+<span id="goal"></span><h2>9.2. Goal<a class="headerlink" href="#goal" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li><a class="reference external" href="https://github.com/cloudmesh-community/cm">https://github.com/cloudmesh-community/cm</a></li>
 </ul>
@@ -212,7 +247,7 @@ calculations in parallel even if other results are not there i</p>
 providing the task in a def and using the chars | for parallel, ; for
 sequential and + for adding results</p>
 <p>For example</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">a</span><span class="p">():</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">a</span><span class="p">():</span>
 
    <span class="n">sting</span> <span class="n">to</span> <span class="n">be</span> <span class="n">executed</span> <span class="n">via</span> <span class="n">ssh</span> <span class="n">on</span> <span class="n">a</span> <span class="n">remote</span> <span class="n">machine</span>
 
@@ -221,33 +256,35 @@ sequential and + for adding results</p>
 <span class="p">(</span><span class="n">a</span> <span class="o">|</span> <span class="n">b</span><span class="o">|</span> <span class="n">c</span><span class="p">);</span> <span class="n">d</span><span class="p">;</span> <span class="n">a</span><span class="o">+</span> <span class="n">b</span><span class="o">+</span> <span class="n">c</span> <span class="o">+</span><span class="n">d</span>
 </pre></div>
 </div>
+</div>
 <div class="section" id="manual-cloudmesh-multi-service-data-access">
-<span id="manual-cloudmesh-multi-service-data-access"></span><h2>9.1. Manual: Cloudmesh Multi Service Data Access<a class="headerlink" href="#manual-cloudmesh-multi-service-data-access" title="Permalink to this headline">¶</a></h2>
+<span id="manual-cloudmesh-multi-service-data-access"></span><h2>9.3. Manual: Cloudmesh Multi Service Data Access<a class="headerlink" href="#manual-cloudmesh-multi-service-data-access" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="database-providers">
-<span id="database-providers"></span><h3>9.1.1. Database Providers<a class="headerlink" href="#database-providers" title="Permalink to this headline">¶</a></h3>
+<span id="database-providers"></span><h3>9.3.1. Database Providers<a class="headerlink" href="#database-providers" title="Permalink to this headline">¶</a></h3>
 <p>A central database provider keeps track of files stored with multiple cloud services.</p>
 <div class="section" id="local">
-<span id="local"></span><h4>9.1.2.1. Local<a class="headerlink" href="#local" title="Permalink to this headline">¶</a></h4>
-<p>The <a class="reference external" href="cm4/data/db/LocalDBProvider.py"><code class="docutils literal notranslate"><span class="pre">LocalDBProvider</span></code></a> uses a folder
+<span id="local"></span><h4>9.3.2.1. Local<a class="headerlink" href="#local" title="Permalink to this headline">¶</a></h4>
+<p>BUG: we will not use files, this class needs  to be eliminated, and instead mongo is to be used</p>
+<p>The <a class="reference external" href="cloudmesh/data/api/db/LocalDBProvider.py"><code class="docutils literal notranslate"><span class="pre">LocalDBProvider</span></code></a> uses a folder
 on the local file system or network share to store each cloud file
 entry as a yaml file.</p>
 </div>
 <div class="section" id="mongodb">
-<span id="mongodb"></span><h4>9.1.1.2. MongoDB<a class="headerlink" href="#mongodb" title="Permalink to this headline">¶</a></h4>
+<span id="mongodb"></span><h4>9.3.1.2. MongoDB<a class="headerlink" href="#mongodb" title="Permalink to this headline">¶</a></h4>
 <p>Todo</p>
 </div>
 </div>
 <div class="section" id="storage-providers">
-<span id="storage-providers"></span><h3>9.1.2. Storage Providers<a class="headerlink" href="#storage-providers" title="Permalink to this headline">¶</a></h3>
+<span id="storage-providers"></span><h3>9.3.2. Storage Providers<a class="headerlink" href="#storage-providers" title="Permalink to this headline">¶</a></h3>
 <p>Storage providers are services that allow storing files.</p>
 <div class="section" id="local">
-<span id="id1"></span><h4>9.1.2.1. Local<a class="headerlink" href="#local" title="Permalink to this headline">¶</a></h4>
-<p>The <a class="reference external" href="cm4/data/storage/LocalStorageProvider.py"><code class="docutils literal notranslate"><span class="pre">LocalStorageProvider</span></code></a>
+<span id="id1"></span><h4>9.3.2.1. Local<a class="headerlink" href="#local" title="Permalink to this headline">¶</a></h4>
+<p>The <a class="reference external" href="cloudmesh/data/api/storage/LocalStorageProvider.py"><code class="docutils literal notranslate"><span class="pre">LocalStorageProvider</span></code></a>
 uses a folder on the local file system or network share to act as a
 “cloud” storage provider.</p>
 </div>
 <div class="section" id="azure-blob-storage">
-<span id="azure-blob-storage"></span><h4>9.1.2.2. Azure Blob Storage<a class="headerlink" href="#azure-blob-storage" title="Permalink to this headline">¶</a></h4>
+<span id="azure-blob-storage"></span><h4>9.3.2.2. Azure Blob Storage<a class="headerlink" href="#azure-blob-storage" title="Permalink to this headline">¶</a></h4>
 <p>See Libcloud’s
 <a class="reference external" href="https://libcloud.readthedocs.io/en/latest/storage/drivers/azure_blobs.html">Azure Blobs Storage Driver Documentation</a>
 for instructions on how to setup a storage account and generate access
@@ -255,8 +292,8 @@ keys.</p>
 </div>
 </div>
 <div class="section" id="getting-started">
-<span id="getting-started"></span><h3>9.1.3. Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h3>
-<p>The default <code class="docutils literal notranslate"><span class="pre">data</span></code> section in <a class="reference external" href="cm4/configuration/cloudmesh.yaml"><code class="docutils literal notranslate"><span class="pre">cloudmesh.yaml</span></code></a> is setup to use a local database and storage provider.</p>
+<span id="getting-started"></span><h3>9.3.3. Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h3>
+<p>The default <code class="docutils literal notranslate"><span class="pre">data</span></code> section in <a class="reference external" href="cloudmesh/management/configuration/cloudmesh.yaml"><code class="docutils literal notranslate"><span class="pre">cloudmesh.yaml</span></code></a> is setup to use a local database and storage provider.</p>
 <p><strong>Download</strong></p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">cloudmesh</span><span class="o">-</span><span class="n">community</span><span class="o">/</span><span class="n">cm</span>
 <span class="n">cd</span> <span class="n">cm</span>
@@ -270,9 +307,9 @@ keys.</p>
 </div>
 <p>If you’re using an unmodified <code class="docutils literal notranslate"><span class="pre">cloudmesh.yaml</span></code> local test directories
 are set as the default “service”.  An entry for the added file will
-appear in the local db folder <a class="reference external" href="cm4/test/data/db"><code class="docutils literal notranslate"><span class="pre">cm4/test/data/db</span></code></a>
+appear in the local db folder <a class="reference external" href="deprecated/cm4/test/data/db"><code class="docutils literal notranslate"><span class="pre">cm4/test/data/db</span></code></a>
 and the file will be stored in
-<a class="reference external" href="cm4/test/data/storage"><code class="docutils literal notranslate"><span class="pre">cm4/test/data/storage</span></code></a>.</p>
+<a class="reference external" href="deprecated/cm4/test/data/storage"><code class="docutils literal notranslate"><span class="pre">cm4/test/data/storage</span></code></a>.</p>
 <p><em>Note: Network shares can also be used with the local storage provider.</em></p>
 <p><strong>List all files</strong></p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cm4</span> <span class="n">data</span> <span class="n">add</span> <span class="n">ls</span>

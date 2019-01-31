@@ -1,21 +1,27 @@
 # Batch
 
-The purpose of this sub-command is to facilitate job submission on clusters that use SLURM as their workload manager. Note that this tools assumes that the SLURM file is properly prepared by the user and does not modify the SLURM script in any way. Similar to other sub-commands of `cm4 `, `batch` has several sub-commands itself:
+The purpose of this sub-command is to facilitate job submission on
+clusters that use SLURM as their workload manager. Note that this
+tools assumes that the SLURM file is properly prepared by the user and
+does not modify the SLURM script in any way. Similar to other
+sub-commands of `cm4 `, `batch` has several sub-commands itself:
 
-    cm4 batch create-job JOB_NAME --slurm-script=SLURM_SCRIPT_PATH --input-type=INPUT_TYPE --slurm-cluster=SLURM_CLUSTER_NAME --job-script-path=SCRIPT_PATH --remote-path=REMOTE_PATH --local-path=LOCAL_PATH [--argfile-path=ARGUMENT_FILE_PATH] [--outfile-name=OUTPUT_FILE_NAME] [--suffix=SUFFIX] [--overwrite]
-    cm4 batch run-job JOB_NAME
-    cm4 batch fetch JOB_NAME
-    cm4 batch test-connection SLURM_CLUSTER_NAME
-    cm4 batch set-param slurm-cluster CLUSTER_NAME PARAMETER VALUE
-    cm4 batch set-param job-metadata JOB_NAME PARAMETER VALUE
-    cm4 batch list slurm-clusters [DEPTH [default:1]]
-    cm4 batch list jobs [DEPTH [default:1]]
-    cm4 batch remove slurm-cluster CLUSTER_NAME
-    cm4 batch remove job JOB_NAME
-    cm4 batch clean-remote JOB_NAME
+    cms batch create-job JOB_NAME --slurm-script=SLURM_SCRIPT_PATH --input-type=INPUT_TYPE --slurm-cluster=SLURM_CLUSTER_NAME --job-script-path=SCRIPT_PATH --remote-path=REMOTE_PATH --local-path=LOCAL_PATH [--argfile-path=ARGUMENT_FILE_PATH] [--outfile-name=OUTPUT_FILE_NAME] [--suffix=SUFFIX] [--overwrite]
+    cms batch run-job JOB_NAME
+    cms batch fetch JOB_NAME
+    cms batch test-connection SLURM_CLUSTER_NAME
+    cms batch set-param slurm-cluster CLUSTER_NAME PARAMETER VALUE
+    cms batch set-param job-metadata JOB_NAME PARAMETER VALUE
+    cms batch list slurm-clusters [DEPTH [default:1]]
+    cms batch list jobs [DEPTH [default:1]]
+    cms batch remove slurm-cluster CLUSTER_NAME
+    cms batch remove job JOB_NAME
+    cms batch clean-remote JOB_NAME
+
 The main options are: 
 
-* `create-job`: used for creating a job configuration (this does not run the job automatically) 
+* `create-job`: used for creating a job configuration (this does not
+   run the job automatically)
 * `run-job`: used for running a job configuration that is previously created. 
 * `test-connection`: used for testing the connection to a SLURM cluster
 * `set-param`: used for setting a parameter in any configuration key
@@ -23,13 +29,16 @@ The main options are:
 * `remove `: used for removing a cluster or job 
 * `clean-remote`: used for cleaning the files of a job from a cluster 
 
-Each of these sub-commands are reviewed in the following sections with examples. 
+Each of these sub-commands are reviewed in the following sections with
+examples.
 
 
 
 ## Creating a job configuration
 
-As can be seen, this sub-command has the most number of arguments and is the vital part of the `batch` tool. The parameters are all self-explanatory, but we will review the important ones here: 
+As can be seen, this sub-command has the most number of arguments and
+is the vital part of the `batch` tool. The parameters are all
+self-explanatory, but we will review the important ones here:
 
 * `--slurm-script`:  defines the path to the SLURM script that is going to be submitted to the SLURM cluster. 
 * `--input-type`: defines the type of input for the application that is going to be run on the cluster. This is important because if the program takes a file name as an argument, that file has to be transfered to the cluster as well. Possible values for this parameter is either `params` or `params+file`. Note that if you pass `params+file` then you have to specify the `--argfile-path` as well where you define the path to the argument file. 
@@ -75,10 +84,14 @@ job-metadata:
 
 ## Testing the connection
 
-Note that the cluster information is already extracted and added to this file. Therefore unlike `vcluster`, there is no need to add the cluster manually. So far, we have just added and updated the configuration and the job is neither submitted nor run in the cluster.  Before doing that, let's try to test our connection to the cluster: 
+Note that the cluster information is already extracted and added to
+this file. Therefore unlike `vcluster`, there is no need to add the
+cluster manually. So far, we have just added and updated the
+configuration and the job is neither submitted nor run in the cluster.
+Before doing that, let's try to test our connection to the cluster:
 
 ```
-$ cm4 batch test-connection slurm-taito
+$ cms batch test-connection slurm-taito
 Slurm Cluster taito is accessible.
 ```
 
@@ -86,21 +99,27 @@ Slurm Cluster taito is accessible.
 
 ## Running the Job
 
- Now that we are sure that the ssh connection works fine, let's try to run the job: 
+ Now that we are sure that the ssh connection works fine, let's try to
+ run the job:
 
 ```
-$ cm4 batch run-job SlurmTest1
+$ cms batch run-job SlurmTest1
 Remote job ID: 32846209
 ```
 
-Despite the short output, this command does a lot of work behind the seen including: 
+Despite the short output, this command does a lot of work behind the
+seen including:
 
 * Creating the proper folder structure in the remote 
-* Copying the SLURM script, as well as the job script and the argument files if any. 
+* Copying the SLURM script, as well as the job script and the argument
+  files if any.
 * Submitting the job 
-* Keeping the job ID and save it in the configuration file so that the results can be fetched later
+* Keeping the job ID and save it in the configuration file so that the
+  results can be fetched later
 
-Just for the demonstration purpose, let's check the remote folder in the cluster and you will see that all of the files as well as the results will be available there: 
+Just for the demonstration purpose, let's check the remote folder in
+the cluster and you will see that all of the files as well as the
+results will be available there:
 
 ```
 @taito-login3:~/tmp/job_20181206_19301175$ ll
@@ -129,7 +148,8 @@ waiting for other results if any...
 All of the remote results collected.
 ```
 
-Using this, the results will be downloaded in the local path specified in the configuration file: 
+Using this, the results will be downloaded in the local path specified
+in the configuration file:
 
 ```
 out$ ll job_20181206_19301175/

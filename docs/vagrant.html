@@ -28,7 +28,7 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="8. ehvagrant: enhanced Vagrant interface with importable python module" href="vagrant-other.html" />
+    <link rel="next" title="8. CM4 Details" href="CM4README.html" />
     <link rel="prev" title="6. VM Providers" href="vmproviders.html" /> 
 
   
@@ -91,17 +91,15 @@
 <li class="toctree-l1"><a class="reference internal" href="configuration.html">5. Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="vmproviders.html">6. VM Providers</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">7. Vagrant</a></li>
-<li class="toctree-l1"><a class="reference internal" href="vagrant-other.html">8. ehvagrant: enhanced Vagrant interface with importable python module</a></li>
-<li class="toctree-l1"><a class="reference internal" href="CM4README.html">9. CM4 Details</a></li>
-<li class="toctree-l1"><a class="reference internal" href="README.html">10. Cloudmesh cm v4</a></li>
-<li class="toctree-l1"><a class="reference internal" href="aws.html">11. AWS cm</a></li>
-<li class="toctree-l1"><a class="reference internal" href="ufo.html">12. CM4 REST Api</a></li>
-<li class="toctree-l1"><a class="reference internal" href="vcluster.html">13. Virtual Cluster</a></li>
-<li class="toctree-l1"><a class="reference internal" href="vm.html">14. VM Description</a></li>
-<li class="toctree-l1"><a class="reference internal" href="jupyter.html">15. Jupyter Integration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="code.html">16. Code Documentation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="deprecated.html">17. Deprecated from here on</a></li>
-<li class="toctree-l1"><a class="reference internal" href="ehvagrant.html">18. ehvagrant: enhanced Vagrant interface with importable python module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CM4README.html">8. CM4 Details</a></li>
+<li class="toctree-l1"><a class="reference internal" href="README.html">9. Cloudmesh cm v4</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aws.html">10. AWS cm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ufo.html">11. CM4 REST Api</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vcluster.html">12. Virtual Cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vm.html">13. VM Description</a></li>
+<li class="toctree-l1"><a class="reference internal" href="jupyter.html">14. Jupyter Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="code.html">15. Code Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deprecated.html">16. Deprecated from here on</a></li>
 </ul>
 
             
@@ -174,44 +172,44 @@
 </div>
 <p>See <a class="reference external" href="https://github.com/cloudmesh/vagrant">https://github.com/cloudmesh/vagrant</a></p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Usage</span><span class="p">:</span>
-  <span class="n">cm4</span> <span class="n">vbox</span> <span class="n">version</span> <span class="p">[</span><span class="o">--</span><span class="nb">format</span><span class="o">=</span><span class="n">FORMAT</span><span class="p">]</span>
-  <span class="n">cm4</span> <span class="n">vbox</span> <span class="n">image</span> <span class="nb">list</span> <span class="p">[</span><span class="o">--</span><span class="nb">format</span><span class="o">=</span><span class="n">FORMAT</span><span class="p">]</span>
-  <span class="n">cm4</span> <span class="n">vbox</span> <span class="n">image</span> <span class="n">find</span> <span class="n">NAME</span>
-  <span class="n">cm4</span> <span class="n">vbox</span> <span class="n">image</span> <span class="n">add</span> <span class="n">NAME</span>
-  <span class="n">cm4</span> <span class="n">vbox</span> <span class="n">vm</span> <span class="nb">list</span> <span class="p">[</span><span class="o">--</span><span class="nb">format</span><span class="o">=</span><span class="n">FORMAT</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">v</span><span class="p">]</span>
-  <span class="n">cm4</span> <span class="n">vbox</span> <span class="n">vm</span> <span class="n">delete</span> <span class="n">NAME</span>
-  <span class="n">cm4</span> <span class="n">vbox</span> <span class="n">vm</span> <span class="n">config</span> <span class="n">NAME</span>
-  <span class="n">cm4</span> <span class="n">vbox</span> <span class="n">vm</span> <span class="n">ip</span> <span class="n">NAME</span> <span class="p">[</span><span class="o">--</span><span class="nb">all</span><span class="p">]</span>
-  <span class="n">cm4</span> <span class="n">vbox</span> <span class="n">create</span> <span class="n">NAME</span> <span class="p">([</span><span class="o">--</span><span class="n">memory</span><span class="o">=</span><span class="n">MEMORY</span><span class="p">]</span>
+  <span class="n">cms</span> <span class="n">vbox</span> <span class="n">version</span> <span class="p">[</span><span class="o">--</span><span class="nb">format</span><span class="o">=</span><span class="n">FORMAT</span><span class="p">]</span>
+  <span class="n">cms</span> <span class="n">vbox</span> <span class="n">image</span> <span class="nb">list</span> <span class="p">[</span><span class="o">--</span><span class="nb">format</span><span class="o">=</span><span class="n">FORMAT</span><span class="p">]</span>
+  <span class="n">cms</span> <span class="n">vbox</span> <span class="n">image</span> <span class="n">find</span> <span class="n">NAME</span>
+  <span class="n">cms</span> <span class="n">vbox</span> <span class="n">image</span> <span class="n">add</span> <span class="n">NAME</span>
+  <span class="n">cms</span> <span class="n">vbox</span> <span class="n">vm</span> <span class="nb">list</span> <span class="p">[</span><span class="o">--</span><span class="nb">format</span><span class="o">=</span><span class="n">FORMAT</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">v</span><span class="p">]</span>
+  <span class="n">cms</span> <span class="n">vbox</span> <span class="n">vm</span> <span class="n">delete</span> <span class="n">NAME</span>
+  <span class="n">cms</span> <span class="n">vbox</span> <span class="n">vm</span> <span class="n">config</span> <span class="n">NAME</span>
+  <span class="n">cms</span> <span class="n">vbox</span> <span class="n">vm</span> <span class="n">ip</span> <span class="n">NAME</span> <span class="p">[</span><span class="o">--</span><span class="nb">all</span><span class="p">]</span>
+  <span class="n">cms</span> <span class="n">vbox</span> <span class="n">create</span> <span class="n">NAME</span> <span class="p">([</span><span class="o">--</span><span class="n">memory</span><span class="o">=</span><span class="n">MEMORY</span><span class="p">]</span>
                        <span class="p">[</span><span class="o">--</span><span class="n">image</span><span class="o">=</span><span class="n">IMAGE</span><span class="p">]</span>
                        <span class="p">[</span><span class="o">--</span><span class="n">script</span><span class="o">=</span><span class="n">SCRIPT</span><span class="p">]</span> <span class="o">|</span> <span class="nb">list</span><span class="p">)</span>
-  <span class="n">cm4</span> <span class="n">vbox</span> <span class="n">vm</span> <span class="n">boot</span> <span class="n">NAME</span> <span class="p">([</span><span class="o">--</span><span class="n">memory</span><span class="o">=</span><span class="n">MEMORY</span><span class="p">]</span>
+  <span class="n">cms</span> <span class="n">vbox</span> <span class="n">vm</span> <span class="n">boot</span> <span class="n">NAME</span> <span class="p">([</span><span class="o">--</span><span class="n">memory</span><span class="o">=</span><span class="n">MEMORY</span><span class="p">]</span>
                         <span class="p">[</span><span class="o">--</span><span class="n">image</span><span class="o">=</span><span class="n">IMAGE</span><span class="p">]</span>
                         <span class="p">[</span><span class="o">--</span><span class="n">port</span><span class="o">=</span><span class="n">PORT</span><span class="p">]</span>
                         <span class="p">[</span><span class="o">--</span><span class="n">script</span><span class="o">=</span><span class="n">SCRIPT</span><span class="p">]</span> <span class="o">|</span> <span class="nb">list</span><span class="p">)</span>
-  <span class="n">cm4</span> <span class="n">vbox</span> <span class="n">vm</span> <span class="n">ssh</span> <span class="n">NAME</span> <span class="p">[</span><span class="o">-</span><span class="n">e</span> <span class="n">COMMAND</span><span class="p">]</span>
+  <span class="n">cms</span> <span class="n">vbox</span> <span class="n">vm</span> <span class="n">ssh</span> <span class="n">NAME</span> <span class="p">[</span><span class="o">-</span><span class="n">e</span> <span class="n">COMMAND</span><span class="p">]</span>
 </pre></div>
 </div>
 <p>For each named vbox a directory is created in whcih a Vagrant file is placed that than is used to interact with the virtual box
 The location of teh directory is ~/.cloudmesh/vagrant/NAME.</p>
 <p>If you set however the cloud to vbox you can save yourself the vbox command in consecutive calls and just use</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Usage</span><span class="p">:</span>
-  <span class="n">cm4</span> <span class="n">version</span> <span class="p">[</span><span class="o">--</span><span class="nb">format</span><span class="o">=</span><span class="n">FORMAT</span><span class="p">]</span>
-  <span class="n">cm4</span> <span class="n">image</span> <span class="nb">list</span> <span class="p">[</span><span class="o">--</span><span class="nb">format</span><span class="o">=</span><span class="n">FORMAT</span><span class="p">]</span>
-  <span class="n">cm4</span> <span class="n">image</span> <span class="n">find</span> <span class="n">NAME</span>
-  <span class="n">cm4</span> <span class="n">image</span> <span class="n">add</span> <span class="n">NAME</span>
-  <span class="n">cm4</span> <span class="n">vm</span> <span class="nb">list</span> <span class="p">[</span><span class="o">--</span><span class="nb">format</span><span class="o">=</span><span class="n">FORMAT</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">v</span><span class="p">]</span>
-  <span class="n">cm4</span> <span class="n">vm</span> <span class="n">delete</span> <span class="n">NAME</span>
-  <span class="n">cm4</span> <span class="n">vm</span> <span class="n">config</span> <span class="n">NAME</span>
-  <span class="n">cm4</span> <span class="n">vm</span> <span class="n">ip</span> <span class="n">NAME</span> <span class="p">[</span><span class="o">--</span><span class="nb">all</span><span class="p">]</span>
-  <span class="n">cm4</span> <span class="n">create</span> <span class="n">NAME</span> <span class="p">([</span><span class="o">--</span><span class="n">memory</span><span class="o">=</span><span class="n">MEMORY</span><span class="p">]</span>
+  <span class="n">cms</span> <span class="n">version</span> <span class="p">[</span><span class="o">--</span><span class="nb">format</span><span class="o">=</span><span class="n">FORMAT</span><span class="p">]</span>
+  <span class="n">cms</span> <span class="n">image</span> <span class="nb">list</span> <span class="p">[</span><span class="o">--</span><span class="nb">format</span><span class="o">=</span><span class="n">FORMAT</span><span class="p">]</span>
+  <span class="n">cms</span> <span class="n">image</span> <span class="n">find</span> <span class="n">NAME</span>
+  <span class="n">cms</span> <span class="n">image</span> <span class="n">add</span> <span class="n">NAME</span>
+  <span class="n">cms</span> <span class="n">vm</span> <span class="nb">list</span> <span class="p">[</span><span class="o">--</span><span class="nb">format</span><span class="o">=</span><span class="n">FORMAT</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">v</span><span class="p">]</span>
+  <span class="n">cms</span> <span class="n">vm</span> <span class="n">delete</span> <span class="n">NAME</span>
+  <span class="n">cms</span> <span class="n">vm</span> <span class="n">config</span> <span class="n">NAME</span>
+  <span class="n">cms</span> <span class="n">vm</span> <span class="n">ip</span> <span class="n">NAME</span> <span class="p">[</span><span class="o">--</span><span class="nb">all</span><span class="p">]</span>
+  <span class="n">cms</span> <span class="n">create</span> <span class="n">NAME</span> <span class="p">([</span><span class="o">--</span><span class="n">memory</span><span class="o">=</span><span class="n">MEMORY</span><span class="p">]</span>
                        <span class="p">[</span><span class="o">--</span><span class="n">image</span><span class="o">=</span><span class="n">IMAGE</span><span class="p">]</span>
                        <span class="p">[</span><span class="o">--</span><span class="n">script</span><span class="o">=</span><span class="n">SCRIPT</span><span class="p">]</span> <span class="o">|</span> <span class="nb">list</span><span class="p">)</span>
-  <span class="n">cm4</span> <span class="n">vm</span> <span class="n">boot</span> <span class="n">NAME</span> <span class="p">([</span><span class="o">--</span><span class="n">memory</span><span class="o">=</span><span class="n">MEMORY</span><span class="p">]</span>
+  <span class="n">cms</span> <span class="n">vm</span> <span class="n">boot</span> <span class="n">NAME</span> <span class="p">([</span><span class="o">--</span><span class="n">memory</span><span class="o">=</span><span class="n">MEMORY</span><span class="p">]</span>
                         <span class="p">[</span><span class="o">--</span><span class="n">image</span><span class="o">=</span><span class="n">IMAGE</span><span class="p">]</span>
                         <span class="p">[</span><span class="o">--</span><span class="n">port</span><span class="o">=</span><span class="n">PORT</span><span class="p">]</span>
                         <span class="p">[</span><span class="o">--</span><span class="n">script</span><span class="o">=</span><span class="n">SCRIPT</span><span class="p">]</span> <span class="o">|</span> <span class="nb">list</span><span class="p">)</span>
-  <span class="n">cm4</span> <span class="n">vm</span> <span class="n">ssh</span> <span class="n">NAME</span> <span class="p">[</span><span class="o">-</span><span class="n">e</span> <span class="n">COMMAND</span><span class="p">]</span>
+  <span class="n">cms</span> <span class="n">vm</span> <span class="n">ssh</span> <span class="n">NAME</span> <span class="p">[</span><span class="o">-</span><span class="n">e</span> <span class="n">COMMAND</span><span class="p">]</span>
 </pre></div>
 </div>
 </div>
@@ -224,7 +222,7 @@ The location of teh directory is ~/.cloudmesh/vagrant/NAME.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="vagrant-other.html" class="btn btn-neutral float-right" title="8. ehvagrant: enhanced Vagrant interface with importable python module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="CM4README.html" class="btn btn-neutral float-right" title="8. CM4 Details" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="vmproviders.html" class="btn btn-neutral" title="6. VM Providers" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

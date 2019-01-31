@@ -28,7 +28,7 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="7. CM4 Details" href="CM4README.html" />
+    <link rel="next" title="7. Vagrant" href="vagrant.html" />
     <link rel="prev" title="5. Configuration" href="configuration.html" /> 
 
   
@@ -111,15 +111,16 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="CM4README.html">7. CM4 Details</a></li>
-<li class="toctree-l1"><a class="reference internal" href="README.html">8. Cloudmesh cm v4</a></li>
-<li class="toctree-l1"><a class="reference internal" href="aws.html">9. AWS cm</a></li>
-<li class="toctree-l1"><a class="reference internal" href="ufo.html">10. CM4 REST Api</a></li>
-<li class="toctree-l1"><a class="reference internal" href="vagrant.html">11. ehvagrant: enhanced Vagrant interface with importable python module</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vagrant.html">7. Vagrant</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CM4README.html">8. CM4 Details</a></li>
+<li class="toctree-l1"><a class="reference internal" href="README.html">9. Cloudmesh cm v4</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aws.html">10. AWS cm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ufo.html">11. CM4 REST Api</a></li>
 <li class="toctree-l1"><a class="reference internal" href="vcluster.html">12. Virtual Cluster</a></li>
 <li class="toctree-l1"><a class="reference internal" href="vm.html">13. VM Description</a></li>
 <li class="toctree-l1"><a class="reference internal" href="jupyter.html">14. Jupyter Integration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="code.html">15. Code Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="deprecated.html">16. Deprecated from here on</a></li>
 </ul>
 
             
@@ -226,29 +227,29 @@ refactor functions to support their management tasks.</p>
 </div>
 <div class="section" id="general-interface">
 <span id="general-interface"></span><h2>6.2. General Interface<a class="headerlink" href="#general-interface" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ cm4 <span class="nb">set</span> <span class="nv">cloud</span><span class="o">=</span>&lt;cloudname as defined in the ~/.cloudmesh/cloudmesh4.yaml&gt;
-$ cm4 vm start
-$ cm4 vm list
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ cms <span class="nb">set</span> <span class="nv">cloud</span><span class="o">=</span>&lt;cloudname as defined in the ~/.cloudmesh/cloudmesh4.yaml&gt;
+$ cms vm start
+$ cms vm list
 
-$ cm4 <span class="nv">flavor</span><span class="o">=</span><span class="s2">&quot;medium&quot;</span>
-$ cm4 <span class="nv">image</span><span class="o">=</span><span class="s2">&quot;ubuntu18.04&quot;</span>
+$ cms <span class="nv">flavor</span><span class="o">=</span><span class="s2">&quot;medium&quot;</span>
+$ cms <span class="nv">image</span><span class="o">=</span><span class="s2">&quot;ubuntu18.04&quot;</span>
 
-$ cm4 vm start
+$ cms vm start
 </pre></div>
 </div>
 </div>
 <div class="section" id="explicit-use-with-options">
 <span id="explicit-use-with-options"></span><h2>6.3. Explicit Use with Options<a class="headerlink" href="#explicit-use-with-options" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ cm4 vm start --cloud<span class="o">=</span>chameleon --image<span class="o">=</span>ubuntu18.04 --flavor<span class="o">=</span>medium --key<span class="o">=</span>~/.ssh/id_rsa.bub
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ cms vm start --cloud<span class="o">=</span>chameleon --image<span class="o">=</span>ubuntu18.04 --flavor<span class="o">=</span>medium --key<span class="o">=</span>~/.ssh/id_rsa.bub
 </pre></div>
 </div>
 </div>
 <div class="section" id="vagrant">
 <span id="vagrant"></span><h2>6.4. Vagrant<a class="headerlink" href="#vagrant" title="Permalink to this headline">¶</a></h2>
 <p>TODO</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ cm4 <span class="nb">set</span> <span class="nv">cloud</span><span class="o">=</span>vagrant
-$ cm4 vm start
-$ cm4 vm list
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ cms <span class="nb">set</span> <span class="nv">cloud</span><span class="o">=</span>vagrant
+$ cms vm start
+$ cms vm list
 </pre></div>
 </div>
 </div>
@@ -259,7 +260,7 @@ $ cm4 vm list
 <p>Amazon Web Service (<strong>AWS</strong>) provided by Amazon is a secure cloud
 service platform, users could start any instances with selected
 images.</p>
-<p>Before users use the <strong>cm4</strong> platform to access <strong>EC2</strong>, they have to finish these preparations:</p>
+<p>Before users use the <strong>cms</strong> platform to access <strong>EC2</strong>, they have to finish these preparations:</p>
 <ol>
 <li><p class="first">EC2 account, more information is
 <a class="reference external" href="https://aws.amazon.com/premiumsupport/knowledge-center/create-and-activate-aws-account/">here</a></p>
@@ -301,9 +302,9 @@ CPU, Memory and Storage selections. Please visit this
 information. In default setting, we use the latest <strong>Ubuntu</strong> image
 filled in default.image field. If you want to use other images, please
 update the Image ID into it.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ cm4 <span class="nb">set</span> <span class="nv">cloud</span><span class="o">=</span>aws
-$ cm4 vm start
-$ cm4 vm list
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ cms <span class="nb">set</span> <span class="nv">cloud</span><span class="o">=</span>aws
+$ cms vm start
+$ cms vm list
 </pre></div>
 </div>
 </div>
@@ -332,9 +333,9 @@ principals at this time.</p>
 </pre></div>
 </div>
 <p><em>Note:</em> <code class="docutils literal notranslate"><span class="pre">&lt;APP_ID&gt;</span></code> is provided in the output when the principal is created</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ cm4 <span class="nb">set</span> <span class="nv">cloud</span><span class="o">=</span>azure
-$ cm4 vm start
-$ cm4 vm list
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ cms <span class="nb">set</span> <span class="nv">cloud</span><span class="o">=</span>azure
+$ cms vm start
+$ cms vm list
 </pre></div>
 </div>
 </div>
@@ -352,39 +353,39 @@ make sure you are visiting the
 get proper installation. Learn more
 <a class="reference external" href="https://chameleoncloud.readthedocs.io/en/latest/technical/kvm.html">here</a>
 to properly set up yout account before proceed to your journey with
-<strong>cm4</strong>.</p>
+<strong>cms</strong>.</p>
 <div class="section" id="jetstream">
 <span id="jetstream"></span><h3>6.7.1. Jetstream<a class="headerlink" href="#jetstream" title="Permalink to this headline">¶</a></h3>
 <p>TODO</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ cm4 <span class="nb">set</span> <span class="nv">cloud</span><span class="o">=</span>jetstream
-$ cm4 vm start
-$ cm4 vm list
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ cms <span class="nb">set</span> <span class="nv">cloud</span><span class="o">=</span>jetstream
+$ cms vm start
+$ cms vm list
 </pre></div>
 </div>
 </div>
 <div class="section" id="chameleon-cloud">
 <span id="chameleon-cloud"></span><h3>6.7.2. Chameleon Cloud<a class="headerlink" href="#chameleon-cloud" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ cm4 <span class="nb">set</span> <span class="nv">cloud</span><span class="o">=</span>chameleon
-$ cm4 vm start
-$ cm4 vm list
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ cms <span class="nb">set</span> <span class="nv">cloud</span><span class="o">=</span>chameleon
+$ cms vm start
+$ cms vm list
 </pre></div>
 </div>
 </div>
 <div class="section" id="cybera">
 <span id="cybera"></span><h3>6.7.3. Cybera<a class="headerlink" href="#cybera" title="Permalink to this headline">¶</a></h3>
 <p>TODO</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ cm4 <span class="nb">set</span> <span class="nv">cloud</span><span class="o">=</span>cybera
-$ cm4 vm start
-$ cm4 vm list
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ cms <span class="nb">set</span> <span class="nv">cloud</span><span class="o">=</span>cybera
+$ cms vm start
+$ cms vm list
 </pre></div>
 </div>
 </div>
 <div class="section" id="devstack">
 <span id="devstack"></span><h3>6.7.4. DevStack<a class="headerlink" href="#devstack" title="Permalink to this headline">¶</a></h3>
 <p>TODO</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ cm4 <span class="nb">set</span> <span class="nv">cloud</span><span class="o">=</span>devstack
-$ cm4 vm start
-$ cm4 vm list
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ cms <span class="nb">set</span> <span class="nv">cloud</span><span class="o">=</span>devstack
+$ cms vm start
+$ cms vm list
 </pre></div>
 </div>
 </div>
@@ -399,7 +400,7 @@ $ cm4 vm list
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="CM4README.html" class="btn btn-neutral float-right" title="7. CM4 Details" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="vagrant.html" class="btn btn-neutral float-right" title="7. Vagrant" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="configuration.html" class="btn btn-neutral" title="5. Configuration" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

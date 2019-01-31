@@ -42,20 +42,20 @@ refactor functions to support their management tasks.
 ## General Interface
 
 ```bash
-$ cm4 set cloud=<cloudname as defined in the ~/.cloudmesh/cloudmesh4.yaml>
-$ cm4 vm start
-$ cm4 vm list
+$ cms set cloud=<cloudname as defined in the ~/.cloudmesh/cloudmesh4.yaml>
+$ cms vm start
+$ cms vm list
 
-$ cm4 flavor="medium"
-$ cm4 image="ubuntu18.04"
+$ cms flavor="medium"
+$ cms image="ubuntu18.04"
 
-$ cm4 vm start
+$ cms vm start
 ```
 
 ## Explicit Use with Options
 
 ```bash
-$ cm4 vm start --cloud=chameleon --image=ubuntu18.04 --flavor=medium --key=~/.ssh/id_rsa.bub
+$ cms vm start --cloud=chameleon --image=ubuntu18.04 --flavor=medium --key=~/.ssh/id_rsa.bub
 ```
 
 
@@ -66,9 +66,9 @@ $ cm4 vm start --cloud=chameleon --image=ubuntu18.04 --flavor=medium --key=~/.ss
 TODO
 
 ```bash
-$ cm4 set cloud=vagrant
-$ cm4 vm start
-$ cm4 vm list
+$ cms set cloud=vagrant
+$ cms vm start
+$ cms vm list
 ```
 
 ## AWS
@@ -79,7 +79,7 @@ Amazon Web Service (**AWS**) provided by Amazon is a secure cloud
 service platform, users could start any instances with selected
 images.
 
-Before users use the **cm4** platform to access **EC2**, they have to finish these preparations:
+Before users use the **cms** platform to access **EC2**, they have to finish these preparations:
 
 1. EC2 account, more information is 
    [here](https://aws.amazon.com/premiumsupport/knowledge-center/create-and-activate-aws-account/)
@@ -123,9 +123,9 @@ update the Image ID into it.
 
 
 ```bash
-$ cm4 set cloud=aws
-$ cm4 vm start
-$ cm4 vm list
+$ cms set cloud=aws
+$ cms vm start
+$ cms vm list
 ```
 
 ## Azure
@@ -169,9 +169,9 @@ az role assignment create --assignee <APP_ID> --role Owner
 
 
 ```bash
-$ cm4 set cloud=azure
-$ cm4 vm start
-$ cm4 vm list
+$ cms set cloud=azure
+$ cms vm start
+$ cms vm list
 ```
 
 ## OpenStack
@@ -188,7 +188,7 @@ make sure you are visiting the
 get proper installation. Learn more
 [here](https://chameleoncloud.readthedocs.io/en/latest/technical/kvm.html)
 to properly set up yout account before proceed to your journey with
-**cm4**.
+**cms**.
 
 
 
@@ -198,17 +198,17 @@ to properly set up yout account before proceed to your journey with
 TODO
 
 ```bash
-$ cm4 set cloud=jetstream
-$ cm4 vm start
-$ cm4 vm list
+$ cms set cloud=jetstream
+$ cms vm start
+$ cms vm list
 ```
 
 ### Chameleon Cloud
 
 ```bash
-$ cm4 set cloud=chameleon
-$ cm4 vm start
-$ cm4 vm list
+$ cms set cloud=chameleon
+$ cms vm start
+$ cms vm list
 ```
 
 ### Cybera
@@ -216,9 +216,9 @@ $ cm4 vm list
 TODO
 
 ```bash
-$ cm4 set cloud=cybera
-$ cm4 vm start
-$ cm4 vm list
+$ cms set cloud=cybera
+$ cms vm start
+$ cms vm list
 ```
 
 
@@ -227,7 +227,7 @@ $ cm4 vm list
 TODO
 
 ```bash
-$ cm4 set cloud=devstack
-$ cm4 vm start
-$ cm4 vm list
+$ cms set cloud=devstack
+$ cms vm start
+$ cms vm list
 ```

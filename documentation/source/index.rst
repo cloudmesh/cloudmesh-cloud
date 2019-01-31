@@ -21,8 +21,6 @@ Cloudmesh Version 4
    vm
    jupyter
    code
-   deprecated
-   ehvagrant
    
 Indices and tables
 ==================

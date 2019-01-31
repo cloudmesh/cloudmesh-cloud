@@ -9,10 +9,10 @@ put your names here (put your real names here and sort
 * Vafa Andalibi
 * David Michael Demeulenaere
 * Bo Feng
-* Yu Luo,
+* Yu Luo
 * Rui Li 
 * Fugang Wang
-* Sachith Danushka Withana,
+* Sachith Danushka Withana
 * Kimball Wu
 
 Code Contributions can be seen at

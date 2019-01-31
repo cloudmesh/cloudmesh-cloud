@@ -1,5 +1,20 @@
 # Cloudmesh cm v4
 
+Please note that the code and documentation are under heavy development and is likely not correct. 
+It will be your task to correct it, and make sure the code works.
+
+## Documentation
+
+The Documentation is located at 
+
+* <https://cloudmesh-community.github.io/cm/>
+
+## Code
+
+The Code is located at 
+
+* <https://github.com/cloudmesh-community/cm>
+
 ## Installation
 
 ### Source instalation for development
@@ -29,8 +44,6 @@ pip install -e .
 
 
 ## Goal
-
-* <https://github.com/cloudmesh-community/cm>
 
 The goal is to have a configuration file in which we add a number of
 computers that you can use to execute tasks via ssh calls remotely. We

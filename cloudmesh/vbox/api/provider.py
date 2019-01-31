@@ -4,7 +4,7 @@ import webbrowser
 from pprint import pprint
 from cloudmesh.common.Shell import Shell
 from cloudmesh.common.dotdict import dotdict
-from cloudmesh.abstractclass import ComputeNodeManagerABC
+# from cloudmesh.abstractclass import ComputeNodeManagerABC
 from cloudmesh.management.configuration.config import Config
 from cloudmesh.common.console import Console
 from cloudmesh.mongo import MongoDBController
@@ -12,9 +12,9 @@ from datetime import datetime
 
 
 # noinspection PyUnusedLocal
-class VboxProvider(ComputeNodeManagerABC):
+class VboxProvider:
 
-    def __init__(self, cloud=None):
+    def __init__(self, cloud=None, config=None):
 
         self.config = Config()
         if cloud is None:

@@ -1,11 +1,12 @@
-import abc
+from abc import ABCMeta, abstractmethod
 from pprint import pprint
 from datetime import datetime
 
 
 # noinspection PyUnusedLocal
-class ComputeNodeManagerABC(metaclass=abc.ABCMeta):
+class ComputeNodeManagerABC(metaclass=ABCMeta):
 
+    '''
     def __init__(self, cloud, config):
         self.cloud = cloud
         self.cm = config["cloud"][cloud]["cm"]
@@ -54,8 +55,9 @@ class ComputeNodeManagerABC(metaclass=abc.ABCMeta):
         pprint(self.default)
         print("Credentials:")
         pprint(self.credentials)
+    '''
 
-    @abc.abstractmethod
+    @abstractmethod
     def start(self, name):
         """
         start a node
@@ -65,7 +67,7 @@ class ComputeNodeManagerABC(metaclass=abc.ABCMeta):
         """
         pass
 
-    @abc.abstractmethod
+    @abstractmethod
     def stop(self, name=None):
         """
         stops the node with the given name
@@ -75,7 +77,7 @@ class ComputeNodeManagerABC(metaclass=abc.ABCMeta):
         """
         pass
 
-    @abc.abstractmethod
+    @abstractmethod
     def info(self, name=None):
         """
         gets the information of a node with a given name
@@ -85,7 +87,7 @@ class ComputeNodeManagerABC(metaclass=abc.ABCMeta):
         """
         pass
 
-    @abc.abstractmethod
+    @abstractmethod
     def suspend(self, name=None):
         """
         suspends the node with the given name
@@ -95,7 +97,7 @@ class ComputeNodeManagerABC(metaclass=abc.ABCMeta):
         """
         pass
 
-    @abc.abstractmethod
+    @abstractmethod
     def nodes(self):
         """
         list all nodes id
@@ -104,7 +106,7 @@ class ComputeNodeManagerABC(metaclass=abc.ABCMeta):
         """
         pass
 
-    @abc.abstractmethod
+    @abstractmethod
     def resume(self, name=None):
         """
         resume the named node
@@ -114,7 +116,7 @@ class ComputeNodeManagerABC(metaclass=abc.ABCMeta):
         """
         pass
 
-    @abc.abstractmethod
+    @abstractmethod
     def destroy(self, name=None):
         """
         Destroys the node
@@ -123,7 +125,7 @@ class ComputeNodeManagerABC(metaclass=abc.ABCMeta):
         """
         pass
 
-    @abc.abstractmethod
+    @abstractmethod
     def create(self, name=None, image=None, size=None, timeout=360, **kwargs):
         """
         creates a named node
@@ -141,6 +143,7 @@ class ComputeNodeManagerABC(metaclass=abc.ABCMeta):
         """
         pass
 
+    @abstractmethod
     def rename(self, name=None, destination=None):
         """
         rename a node

@@ -1,5 +1,5 @@
 import time
-from cloudmesh.vm.api.Vm import Vm
+from cloudmesh.draft.vm.api.Vm import Vm
 from cloudmesh.management.configuration.config import Config
 
 

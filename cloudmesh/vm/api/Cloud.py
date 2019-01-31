@@ -1,2 +1,0 @@
-class Cloud(object):
-    pass

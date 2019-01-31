@@ -2,7 +2,7 @@ from flask import request, jsonify
 
 from cloudmesh.mongo import MongoDB
 from cloudmesh.management.configuration.config import Config
-from cloudmesh.vm.api.Vm import Vm
+from cloudmesh.draft.vm.api.Vm import Vm
 
 config = Config()
 db = MongoDB(config.get('data.mongo.MONGO_DBNAME'),

@@ -1,21 +1,106 @@
 Code Documentation
 ******************
 
-.. automodule:: cm4
+.. automodule:: cloudmesh
    :members:
 
 
-Command
-===============
+Common
+======
 
-.. automodule:: cm4.command.command
+
+Util
+----
+
+.. automodule:: cloudmesh.common.util
    :members:
+
+Dotdict
+----
+
+.. automodule:: cloudmesh.common.dotdict
+   :members:
+
+Locations
+----
+
+.. automodule:: cloudmesh.common.locations
+   :members:
+
+Parameter
+----
+
+.. automodule:: cloudmesh.common.parameter
+   :members:
+
+FlatDict
+----
+
+.. automodule:: cloudmesh.common.FlatDict
+   :members:
+
+
+Printer
+----
+
+.. automodule:: cloudmesh.common.Printer
+   :members:
+
+Stopwatch
+----
+
+.. automodule:: cloudmesh.common.StopWatch
+   :members:
+
+Console
+-------
+
+.. automodule:: cloudmesh.common.console
+   :members:
+
+Logger
+-----
+
+.. automodule:: cloudmesh.common.logger
+   :members:
+
+Error
+-----
+
+.. automodule:: cloudmesh.common.error
+   :members:
+
+Shell
+-----
+
+.. automodule:: cloudmesh.common.Shell
+   :members:
+
+DB
+----
+
+.. automodule:: cloudmesh.db.strdb
+   :members:
+
+
+SSH
+----
+
+.. automodule:: cloudmesh.common.ssh.authorized_keys
+   :members:
+
+.. automodule:: cloudmesh.common.ssh.encrypt
+   :members:
+
+.. automodule:: cloudmesh.common.ssh.ssh_config
+   :members:
+
 
 
 AWS
 ===============
 
-.. automodule:: cm4.aws.CommandAWS
+.. automodule:: cloudmesh.aws.CommandAWS
    :members:
 
 Mongo
@@ -24,147 +109,121 @@ Mongo
 MongoDB
 -------
 
-.. automodule:: cm4.cmmongo.mongoDB
+.. automodule:: cloudmesh.cmmongo.mongoDB
    :members:
 
 Controler
 ---------
 
-.. automodule:: cm4.cmmongo.MongoDBControler
+.. automodule:: cloudmesh.cmmongo.MongoDBControler
    :members:
 
 
 
-Common
-======
-
-Util
-----
-
-.. automodule:: cm4.common.util
-   :members:
-
-Console
--------
-
-.. automodule:: cm4.common.console
-   :members:
-
-Debug
------
-
-.. automodule:: cm4.common.debug
-   :members:
-
-Shell
------
-
-.. automodule:: cm4.common.shell
-   :members:
 
 Virtual Cluster
 ===============
 
-.. automodule:: cm4.vcluster.VirtualCluster
+.. automodule:: cloudmesh.vcluster.VirtualCluster
    :members:
 
 Configuration
 =============
 
-.. automodule:: cm4.configuration.config
+.. automodule:: cloudmesh.configuration.config
    :members:
 
-.. automodule:: cm4.configuration.counter
+.. automodule:: cloudmesh.configuration.counter
    :members:
 
-.. automodule:: cm4.configuration.dot_dictionary
+.. automodule:: cloudmesh.configuration.dot_dictionary
    :members:
 
-.. automodule:: cm4.configuration.generic_config
+.. automodule:: cloudmesh.configuration.generic_config
    :members:
 
-.. automodule:: cm4.configuration.name
+.. automodule:: cloudmesh.configuration.name
    :members:
 
 Data
 ====
 
-.. automodule:: cm4.data.db.DBProviderABC
+.. automodule:: cloudmesh.data.db.DBProviderABC
    :members:
 
-.. automodule:: cm4.data.db.LocalDBProvider
+.. automodule:: cloudmesh.data.db.LocalDBProvider
    :members:
 
-.. automodule:: cm4.data.storage.CloudFile
+.. automodule:: cloudmesh.data.storage.CloudFile
    :members:
 
-.. automodule:: cm4.data.data
+.. automodule:: cloudmesh.data.data
    :members:
 
-.. automodule:: cm4.data.Driver
+.. automodule:: cloudmesh.data.Driver
    :members:
 
-.. automodule:: cm4.data.storage.AzureStorageProvider
+.. automodule:: cloudmesh.data.storage.AzureStorageProvider
    :members:
 
-.. automodule:: cm4.data.storage.LocalStorageProvider
+.. automodule:: cloudmesh.data.storage.LocalStorageProvider
    :members:
 
-.. automodule:: cm4.data.storage.StorageProviderABC
+.. automodule:: cloudmesh.data.storage.StorageProviderABC
    :members:
 
 Server
 ======
 
-.. automodule:: cm4.flask_rest_api.rest_api
+.. automodule:: cloudmesh.flask_rest_api.rest_api
    :members:
 
-.. automodule:: cm4.flask_rest_api.rest_config
+.. automodule:: cloudmesh.flask_rest_api.rest_config
    :members:
 
-.. automodule:: cm4.flask_rest_api.app.routes
+.. automodule:: cloudmesh.flask_rest_api.app.routes
    :members:
 
 Openstack
 =========
 
-.. automodule:: cm4.openstack.OpenstackCM
+.. automodule:: cloudmesh.openstack.OpenstackCM
    :members:
 
-.. automodule:: cm4.openstack.OpenstackRefactor
+.. automodule:: cloudmesh.openstack.OpenstackRefactor
    :members:
 
 Vagrant
 =======
 
-.. automodule:: cm4.vagrant.vagrant
+.. automodule:: cloudmesh.vagrant.vagrant
    :members:
 
 VM
 ==
 
-.. automodule:: cm4.vm.Cloud
+.. automodule:: cloudmesh.vm.Cloud
    :members:
 
-.. automodule:: cm4.vm.Cmaws
+.. automodule:: cloudmesh.vm.Cmaws
    :members:
 
-.. automodule:: cm4.vm.CMAzure
+.. automodule:: cloudmesh.vm.CMAzure
    :members:
 
-.. automodule:: cm4.vm.Cmopenstack
+.. automodule:: cloudmesh.vm.Cmopenstack
    :members:
 
-.. automodule:: cm4.vm.thread
+.. automodule:: cloudmesh.vm.thread
    :members:
 
-.. automodule:: cm4.vm.Vm
+.. automodule:: cloudmesh.vm.Vm
    :members:
 
-.. automodule:: cm4.vm.VmRefactor
+.. automodule:: cloudmesh.vm.VmRefactor
    :members:
 
-.. automodule:: cm4.vm.VmUtil
+.. automodule:: cloudmesh.vm.VmUtil
    :members:
 
 

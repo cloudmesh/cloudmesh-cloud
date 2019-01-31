@@ -1,7 +1,7 @@
 all: doc
 
 
-doc-help:
+manual:
 	mkdir -p documentation/source/manual
 	cms help > documentation/source/manual/commands.rst
 	cms man --kind=rst admin > documentation/source/manual/admin.rst

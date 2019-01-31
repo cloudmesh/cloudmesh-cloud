@@ -1,4 +1,4 @@
-# CMD5 INtegartion
+# CMD5 Integartion
 
 ## Install
 

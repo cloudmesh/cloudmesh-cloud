@@ -3,7 +3,11 @@ all: doc
 
 manual:
 	mkdir -p documentation/source/manual
-	cms help > documentation/source/manual/commands.rst
+	cms help > /tmp/commands.rst
+	echo "Commands" > documentation/source/manual/commands.rst
+	echo "========" >> documentation/source/manual/commands.rst
+	echo  >> documentation/source/manual/commands.rst
+	tail -n +4 /tmp/commands.rst >> documentation/source/manual/commands.rst
 	cms man --kind=rst admin > documentation/source/manual/admin.rst
 	cms man --kind=rst banner > documentation/source/manual/banner.rst
 	cms man --kind=rst clear > documentation/source/manual/clear.rst

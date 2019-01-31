@@ -1,5 +1,34 @@
 # Cloudmesh cm v4
 
+## Installation
+
+### Source instalation for development
+
+```bash
+export SRC=~/github
+mkdir $SRC
+cd $SRC
+git clone https://github.com/cloudmesh/cloudmesh.common.git
+git clone https://github.com/cloudmesh/cloudmesh.cmd5.git
+git clone https://github.com/cloudmesh/cloudmesh.sys.git
+git clone https://github.com/cloudmesh-community/cloudmesh.cm.git
+
+cd $SRC/cloudmesh.common
+python setup.py install
+pip install -e .
+cd $SRC/cloudmesh.cmd5
+python setup.py install
+pip install -e .
+cd $SRC/cloudmesh.sys
+python setup.py install
+pip install -e .
+cd $SRC/cloudmesh-community/cloudmesh.cm
+python setup.py install
+pip install -e .
+```
+
+
+## Goal
 
 * <https://github.com/cloudmesh-community/cm>
 
@@ -39,7 +68,7 @@ sequential and + for adding results
 
 For example
 
-```
+```python
 def a():
 
    sting to be executed via ssh on a remote machine

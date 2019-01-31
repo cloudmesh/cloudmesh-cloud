@@ -6,7 +6,7 @@ tools assumes that the SLURM file is properly prepared by the user and
 does not modify the SLURM script in any way. Similar to other
 sub-commands of `cm4 `, `batch` has several sub-commands itself:
 
-    cm4 batch create-job JOB_NAME --slurm-script=SLURM_SCRIPT_PATH --input-type=INPUT_TYPE --slurm-cluster=SLURM_CLUSTER_NAME --job-script-path=SCRIPT_PATH --remote-path=REMOTE_PATH --local-path=LOCAL_PATH [--argfile-path=ARGUMENT_FILE_PATH] [--outfile-name=OUTPUT_FILE_NAME] [--suffix=SUFFIX] [--overwrite]
+    cms batch create-job JOB_NAME --slurm-script=SLURM_SCRIPT_PATH --input-type=INPUT_TYPE --slurm-cluster=SLURM_CLUSTER_NAME --job-script-path=SCRIPT_PATH --remote-path=REMOTE_PATH --local-path=LOCAL_PATH [--argfile-path=ARGUMENT_FILE_PATH] [--outfile-name=OUTPUT_FILE_NAME] [--suffix=SUFFIX] [--overwrite]
     cms batch run-job JOB_NAME
     cms batch fetch JOB_NAME
     cms batch test-connection SLURM_CLUSTER_NAME

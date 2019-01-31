@@ -7,6 +7,9 @@ from cloudmesh.common.dotdict import dotdict
 from cloudmesh.common.Shell import Shell, Brew
 from cloudmesh.common.console import Console
 from cloudmesh.management.script import find_process
+from pymongo import MongoClient
+from pprint import pprint
+import urllib.parse
 
 import subprocess
 
@@ -205,6 +208,26 @@ class MongoDBController(object):
                 if not os.path.exists(path):
                     os.makedirs(path)
 
+    def login(self):
+        host = self.data["MONGO_HOST"]
+        port = int(self.data["MONGO_PORT"])
+        password = str(self.data["MONGO_PASSWORD"])
+        username = str(self.data["MONGO_USERNAME"])
+
+        username = urllib.parse.quote_plus(username.encode())
+        password = urllib.parse.quote_plus(password.encode())
+        client = MongoClient('mongodb://%s:%s@127.0.0.1' % (username, password))
+        return client
+
+    def list(self):
+        client = self.login()
+
+        data = {}
+        for db in client.list_databases():
+            data[db['name']] = db
+        return data
+
+
     def __str__(self):
         return yaml.dump(self.data, default_flow_style=False, indent=2)
 
@@ -233,12 +256,18 @@ class MongoDBController(object):
 
         print("Enable the Secutiry. You will use your username and password to login the MongoDB")
 
-    def start(self, no_security=False):
+    def create(self):
+
+        self.start(security=False)
+        self.set_auth()
+        self.stop()
+
+    def start(self, security=True):
         """
         start the MongoDB server
         """
         auth = ""
-        if not no_security:
+        if security:
             auth = "--auth"
 
         try:

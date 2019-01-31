@@ -33,6 +33,7 @@ class AdminCommand(PluginCommand):
 
           Usage:
             admin mongo install [--brew] [--download=PATH]
+            admin mongo create
             admin mongo status
             admin mongo stats
             admin mongo version
@@ -42,6 +43,7 @@ class AdminCommand(PluginCommand):
             admin mongo load FILENAME
             admin mongo security
             admin mongo password PASSWORD
+            admin mongo list
             admin rest status
             admin rest start
             admin rest stop
@@ -107,10 +109,15 @@ class AdminCommand(PluginCommand):
                 mongo.set_auth()
                 print()
 
+            elif arguments.create:
+
+                print("MongoDB create")
+                MongoDBController().create()
+
             elif arguments.start:
 
                 print("MongoDB start")
-                MongoDBController().start(False)
+                MongoDBController().start(security=True)
 
             elif arguments.stop:
 
@@ -134,6 +141,17 @@ class AdminCommand(PluginCommand):
 
                 if len(r) > 0:
                     print(Printer.attribute(r))
+                    Console.ok("ok")
+                else:
+                    Console.ok("is your MongoDB server running")
+
+            elif arguments.list:
+
+                mongo = MongoDBController()
+                r = mongo.list()
+
+                if len(r) > 0:
+                    print(Printer.dict(r, order=["name", "sizeOnDisk", "empty"]))
                     Console.ok("ok")
                 else:
                     Console.ok("is your MongoDB server running")

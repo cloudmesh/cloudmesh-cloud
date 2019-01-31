@@ -21,7 +21,7 @@ class MongoDB(object):
             u = str(username or self.mongo["MONGO_USERNAME"])
             self.password = urllib.parse.quote_plus(p)
             self.username = urllib.parse.quote_plus(u)
-            self.port = port or self.mongo["MONGO_PORT"]
+            self.port = int(port) or int(self.mongo["MONGO_PORT"])
             self.client = None
             self.db = None
             self.connect_db()
@@ -190,8 +190,14 @@ class MongoDB(object):
                     'history': history}
         return document
 
+    # why not define this elsewher
     @staticmethod
-    def job_document(name, status, input_info, output_info, commands, description='Null'):
+    def job_document(name,
+                     status,
+                     input_info,
+                     output_info,
+                     commands,
+                     description='Null'):
         """
         create job document
         :param name:
@@ -210,6 +216,7 @@ class MongoDB(object):
                     'commands': commands}
         return document
 
+    # why not define this elsewher
     @staticmethod
     def group_document(cloud, name, size, list_vms):
         """

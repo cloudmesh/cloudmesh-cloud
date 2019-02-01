@@ -13,6 +13,29 @@ cloudmesh:
     experiment: base
     cloud: azure
     cluster: clustera
+  storage:
+    box:
+      cm:
+        heading: Box
+        host: box.com
+        label: Box
+        kind: box
+        version: TBD
+    gdrive:
+      cm:
+        heading: GDrive
+        host: dgrive.google.com
+        label: GDrive
+        kind: gdrive
+        version: TBD
+      default:
+        directory: TBD
+      credentials:
+        client_id: TBD
+        prokect_id: TBD
+        auth_uri: TBD
+        token_uri: TBD
+        client_secret: TBD
   cloud:
     azure:
       cm:

@@ -2,6 +2,9 @@ from __future__ import print_function
 from cloudmesh.shell.command import command
 from cloudmesh.shell.command import PluginCommand
 from cloudmesh.storage.api.manager import Manager
+from cloudmesh.shell.variables import Variables
+from pprint import pprint
+from cloudmesh.common.console import Console
 
 class StorageCommand(PluginCommand):
 
@@ -12,48 +15,57 @@ class StorageCommand(PluginCommand):
         ::
 
           Usage:
-                starage [--service=SERVICE] put FILENAME
-                starage [--service=SERVICE] get FILENAME
-                starage [--service=SERVICE] delete FILENAME
-                starage [--service=SERVICE] size FILENAME
-                starage [--service=SERVICE] info FILENAME
-                storage [--service=SERVICE] create FILENAME
-                storage [--service=SERVICE] sync SOURCEDIR DESTDIR
+                starage [--storage=SERVICE] put FILENAME
+                starage [--storage=SERVICE] get FILENAME
+                starage [--storage=SERVICE] delete FILENAME
+                starage [--storage=SERVICE] size FILENAME
+                starage [--storage=SERVICE] info FILENAME
+                storage [--storage=SERVICE] create FILENAME
+                storage [--storage=SERVICE] sync SOURCEDIR DESTDIR
 
 
           This command does some useful things.
 
           Arguments:
               FILE   a file name
+              
 
           Options:
               -f      specify the file
 
           Example:
-            set service=box
+            set storage=box
             starage  put FILENAME
 
             is the same as 
 
-            starage  --service=box put FILENAME
+            starage  --storage=box put FILENAME
 
 
         """
-        arguments.FILE = arguments['--file'] or None
 
-        print(arguments)
+        pprint(arguments)
+
+
 
         m = Manager()
 
+        service = None
 
-        if arguments.FILE:
-            print("option a")
-            m.list(arguments.FILE)
+        filename = arguments.FILENAME[0]
+        try:
+            service = arguments["--storage"][0]
+        except Exception as e:
+            try:
+                v = Variables()
+                service = v['storage']
+            except:
+                service = None
 
-        elif arguments.list:
-            print("option b")
-            m.list("just calling list without parameter")
+        if service is None:
+            Console.error("storge service not defined")
 
-
+        if arguments.get:
+            m.get(service, filename)
 
 

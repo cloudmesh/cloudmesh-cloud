@@ -1,3 +1,5 @@
+import cloudmesh.storage.provider.gdrive.Provider
+
 class Manager(object):
 
     def __init__(self):
@@ -8,3 +10,11 @@ class Manager(object):
 
     def delete(self, filename):
         print ("delete filename")
+
+    def get(self, service, filename):
+        print("get", service, filename)
+        if service == "gdrive":
+            provider = cloudmesh.storage.provider.gdrive.Provider.Provider()
+
+        provider.get(filename)
+

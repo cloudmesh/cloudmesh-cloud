@@ -1,95 +1,77 @@
 # -*- coding: utf-8 -*-
 """
-Created on Fri Oct 26 12:44:44 2018
+We use a uniform naming convention method. The name is defined by different kinds of
+objects.
 
-@author: Wu
+a name has the following hierarchy
+
+experiment
+  group
+    user
+      kind
+        counter
+
+However the counter is always increasing
+
+Experiment: is an experiment that all cloud objects can be placed under.
+
+Group: A group formulates a number of objects that logically build an entity,
+such as a number of virtual machines building a cluster
+
+User: A user name that may control the grou
+
+Kind: A kind that identifies whit cind of resource this is
+
 """
 import re
 from cloudmesh.management.configuration.counter import Counter
+from cloudmesh.common.dotdict import dotdict
+from pprint import pprint
 
+class Name(dotdict):
 
-class Name(object):
-    def __init__(self, ntype=None, schema=None):
-        self.ntype = ntype
-        self.name_dict = None
-        self.default_schema_dict = {
-            "instance": "{experiment}-{group}-{user}-{counter}"
-        }
-        self.schema = None
-        self.schema = self._get_schema(ntype, schema, False)
-
-    def _get_schema(self, ntype, schema, throw=True):
+    def __init__(self, order=["experiment","group","user","kind","counter"], **kwargs):
         """
-        find naming schema according to available info
-        if can not found any, throw a exception if `throw`=True, else return None
+        Defines a name tag that sets the format of the name to the specified schema
+        :param schema:
         """
-        if schema:
-            return schema
-        elif self.schema:
-            return self.schema
-        elif not schema and ntype in self.default_schema_dict:
-            return self.default_schema_dict[ntype]
-        else:
-            if throw:
-                raise ValueError(
-                    "Default naming schema for {} don't exist. Please call set_schema() first!".format(ntype))
-            else:
-                return None
+        self.__dict__['order'] = order
+        self.__dict__['schema'] = "{" + "}-{".join(order) + "}"
+        for name in kwargs:
+            self.__dict__[name] = kwargs[name]
+        #self.data = kwargs
 
-    def _impute_count(self, kwargs):
-        def _incr(kwargs):
-            if not self.name_dict:
-                return Counter().get()
-            else:
-                return self.name_dict['counter'] + 1
+    def incr(self):
+        self.__dict__counter += 1
 
-        if not kwargs and not self.name_dict:
-            raise ValueError('No previous name assignment available, cannot generate unique name by incremental.')
+    def reset(self):
+        self.__dict__counter += 0
 
-        elif not kwargs and self.name_dict:
-            self.name_dict['counter'] = _incr(kwargs)
-            kwargs = self.name_dict
-
-        elif kwargs and 'counter' not in kwargs:
-            kwargs.update({'counter': _incr(kwargs)})
-
-        return kwargs
-
-    def set_schema(self, ntype=None, schema=None):
+    def get(self, kind):
         """
-        set naming schema for certain type of resource
-        
-        :param ntype: the type of resource being named
-        :param schema: naming schema
-        :return:
+        overwrites the kind
+        :param kind: The kind
+        :return: the string representation
         """
-        self.schema = self._get_schema(ntype, schema)
+        self.__dict__["kind"] = kind
+        return self.__str__()
 
-    def verify(self, kwargs, ntype=None, schema=None):
-        """
-        verify if the info contains in `kwargs` can produce a valid name for `ntype` object
-        
-        :param kwargs:
-        :param ntype: the type of resource being named
-        :param schema: naming schema        
-        """
-        schema = self._get_schema(ntype, schema)
-        schema_var = re.findall('\{(.+?)\}', schema)
-        violate = [x for x in schema_var if x not in list(kwargs.keys()) and x != 'counter']
-        if violate:
-            raise ValueError('Required information lack in `kwargs`: {}'.format(','.join(violate)))
 
-    def get(self, kwargs=None, ntype=None, schema=None):
+    def __str__(self):
+        return str(self.__dict__["schema"].format(**self.__dict__))
 
-        schema = self._get_schema(ntype, schema)
-        kwargs = self._impute_count(kwargs)
-        self.verify(kwargs, schema=schema)  # check kwargs
-        self.name_dict = kwargs  # save current format
-        return schema.format(**kwargs)
 
-    # %% usage/test
-# a={'experiment':'a','group':'b','user':'kimball', 'counter':0}
-# namer=Name()
-# namer.set_schema('instance')
-# print(namer.get(a))
-# print(namer.get())
+    def dict(self):
+        return self.__dict__
+
+# Make a unit test
+
+# %% usage/test
+# a={'experiment':'a',
+#    'group':'b',
+#    'user':'gregor',
+#    'counter':0}
+# name=Name(a)
+#
+# print(name.get(a))
+# print(name.get())

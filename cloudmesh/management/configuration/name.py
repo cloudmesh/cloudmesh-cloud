@@ -27,6 +27,10 @@ import re
 from cloudmesh.management.configuration.counter import Counter
 from cloudmesh.common.dotdict import dotdict
 from pprint import pprint
+from cloudmesh.db.strdb import YamlDB
+from cloudmesh.common.util import path_expand
+import os
+import yaml
 
 class Name(dotdict):
 
@@ -35,17 +39,35 @@ class Name(dotdict):
         Defines a name tag that sets the format of the name to the specified schema
         :param schema:
         """
+        if "path" not in kwargs:
+            self.__dict__['path'] = path_expand("~/.cloudmesh/name.yaml")
+        prefix = os.path.dirname(self.__dict__['path'])
+        if not os.path.exists(prefix):
+            os.makedirs(prefix)
+
+        if os.path.exists(self.path):
+            with open(self.path, 'rb') as dbfile:
+                self.__dict__ = yaml.safe_load(dbfile) or dict()
+
         self.__dict__['order'] = order
         self.__dict__['schema'] = "{" + "}-{".join(order) + "}"
         for name in kwargs:
             self.__dict__[name] = kwargs[name]
         #self.data = kwargs
 
+    def flush(self):
+        string = yaml.dump(self.__dict__, default_flow_style=False)
+        bits = bytes(string, encoding='utf-8')
+        with open(self.path, 'wb') as dbfile:
+            dbfile.write(bits)
+
     def incr(self):
-        self.__dict__counter += 1
+        self.__dict__["counter"] += 1
+        self.flush()
 
     def reset(self):
-        self.__dict__counter += 0
+        self.__dict__["counter"] = 1
+        self.flush()
 
     def get(self, kind):
         """

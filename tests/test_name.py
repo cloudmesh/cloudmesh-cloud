@@ -19,12 +19,23 @@ class TestName:
                  kind="vm",
                  counter=1)
 
+        n.reset()
+        assert n.counter == 1
+
         print (n)
+        assert str(n) == "exp-grp-gregor-vm-1"
 
         pprint(n.dict())
 
-        print (n.get("vm"))
+        print (n.get("container"))
         print(n)
+        assert str(n) == "exp-grp-gregor-container-1"
+
+        n.incr()
+        print(n)
+        assert str(n) == "exp-grp-gregor-container-2"
+
+        print (n.counter)
+        assert n.counter == 2
 
 
-        assert True

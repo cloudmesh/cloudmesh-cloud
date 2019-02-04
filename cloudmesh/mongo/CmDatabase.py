@@ -2,7 +2,7 @@ from pymongo import MongoClient
 import urllib.parse
 from cloudmesh.management.configuration.config import Config
 from pprint import pprint
-
+from datetime import  datetime
 
 #
 # cm:
@@ -89,15 +89,16 @@ class CmDatabase(object):
         col = self.db[collection]
 
         for entry in _entries:
+            entry["updated"] = str(datetime.utcnow())
             if replace:
                 col.replace_one({'cmid': entry['cmid']}, entry, upsert=True)
             else:
                 col.update_one({'cmid': entry['cmid']}, {"$set": entry}, upsert=True)
 
 
-    def delete(self, cmid, collection="cloudmesh"):
+    def delete(self, collection="cloudmesh", **kwargs, ):
         col = self.db[collection]
-        col.delete_one({'cmid': cmid})
+        col.delete_one(**kwargs)
 
     def command(self, command):
         """

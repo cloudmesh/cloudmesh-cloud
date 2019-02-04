@@ -12,6 +12,54 @@ Commands
    :members:
 
 
+New CM4 Library
+===============
+
+Name
+----
+
+.. automodule:: cloudmesh.management.configuration.name
+   :members:
+
+Script
+----
+
+.. automodule:: cloudmesh.management.script
+   :members:
+
+Batch
+----
+
+.. automodule:: cloudmesh.batch.api.batch
+   :members:
+
+Batch
+----
+
+.. automodule:: cloudmesh.batch.api.batch
+   :members:
+
+.. automodule:: cloudmesh.batch.command.batch
+   :members:
+
+
+VCluster
+----
+
+.. automodule:: cloudmesh.vcluster.api.vcluster
+   :members:
+
+.. automodule:: cloudmesh.vcluster.command.vcluster
+   :members:
+
+
+Service
+----
+
+.. automodule:: cloudmesh.service.server
+   :members:
+
+
 Common
 ======
 

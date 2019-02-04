@@ -1,6 +1,6 @@
 """
 A convenient method to execute shell commands and return their output. Note: that this method requires that the
-command be completely execute before the output is returned. FOr many activities in cloudmesh this is sufficient.
+command be completely executed before the output is returned. For many activities in cloudmesh this is sufficient.
 """
 import subprocess
 import textwrap
@@ -10,9 +10,18 @@ import psutil
 
 
 class SystemPath(object):
+    """Managing the Systhem path in the .bashrc or .bash_profile files"""
 
     @staticmethod
     def add(path):
+        """
+        Adds a path to the ``~/.bashrc`` or ``~/.bash_profile`` files.
+
+        TODO: Windows is not implemented yet.
+
+        :param path: The pathe to be added
+        :return:
+        """
         script = None
         if platform == "darwin":
             script = """
@@ -32,9 +41,20 @@ class SystemPath(object):
 
 
 class Script(object):
+    """Executing a sript defined by a simple text parameter"""
 
     @staticmethod
     def run(script, debug=False):
+        """
+        run the specified script line by line.
+
+        TODO: at one point this shoudl be mooved to cloudmesh.common
+
+
+        :param script: The script
+        :param debug: If true the output of the script is printed
+        :return:
+        """
         if script is not None:
             result = ""
             lines = textwrap.dedent(script).strip().split("\n")
@@ -53,10 +73,13 @@ class Script(object):
 
 
 def find_process(name):
-    """
+    """ find a process by name
 
-    :param name:
-    :return:
+    :param name: the name of the process
+    :return: A list of dicsts in which the attributes pid, command, and created are available and the name matches
+             the specified name argument.
+
+    TODO: at one point this shoudl be mooved to cloudmesh.common
 
     Return a list of processes matching 'name'.
     """

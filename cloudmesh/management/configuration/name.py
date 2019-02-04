@@ -1,26 +1,56 @@
 # -*- coding: utf-8 -*-
-"""
-We use a uniform naming convention method. The name is defined by different kinds of
-objects.
+"""We use a uniform naming convention method. The name is defined by different kinds of objects. The name is a string
+its syntax is defined in a yaml file located at ``~/.cloudmesh/name.yaml``
 
-a name has the following hierarchy
+::
 
-experiment
-  group
-    user
-      kind
-        counter
+    order:
+    - experiment
+    - group
+    - user
+    - kind
+    - counter
+    schema: '{experiment}-{group}-{user}-{kind}-{counter}'
+    experiment: exp
+    group: grp
+    user: gregor
+    kind: container
+    counter: 2
 
-However the counter is always increasing
+This file is automatically ggenerated if it does not exists by a simple `Name` object that can include an ordered
+number of dictionary keys such as
 
-Experiment: is an experiment that all cloud objects can be placed under.
+:Experiment: is an experiment that all cloud objects can be placed under.
 
-Group: A group formulates a number of objects that logically build an entity,
-such as a number of virtual machines building a cluster
+:Group: A group formulates a number of objects that logically build an entity,
+        such as a number of virtual machines building a cluster
 
-User: A user name that may control the grou
+:User: A user name that may control the grou
 
-Kind: A kind that identifies whit cind of resource this is
+:Kind: A kind that identifies whit cind of resource this is
+
+The last is a counter which is always increased and written into this file in order to assure that the latest
+value is savely included in it.
+
+
+A typical use is
+
+::
+
+    n = Name(experiment="exp",
+             group="grp",
+             user="gregor",
+             kind="vm",
+             counter=1)
+
+    n.incr()
+    counter = n.get()
+
+Which will return
+
+::
+
+    exp-grp-gregor-vm-1
 
 """
 import re
@@ -47,7 +77,9 @@ class Name(dotdict):
 
         if os.path.exists(self.path):
             with open(self.path, 'rb') as dbfile:
-                self.__dict__ = yaml.safe_load(dbfile) or dict()
+                v = yaml.safe_load(dbfile) or dict()
+            for name in v:
+                self.__dict__[name] = v[name]
 
         self.__dict__['order'] = order
         self.__dict__['schema'] = "{" + "}-{".join(order) + "}"

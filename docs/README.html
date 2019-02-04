@@ -104,7 +104,7 @@
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="#storage-providers">9.5.2. Storage Providers</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#local">9.5.2.1. Local</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id1">9.5.2.1. Local</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#azure-blob-storage">9.5.2.2. Azure Blob Storage</a></li>
 </ul>
 </li>
@@ -185,31 +185,31 @@
            <div itemprop="articleBody">
             
   <div class="section" id="cloudmesh-cm-v4">
-<span id="cloudmesh-cm-v4"></span><h1>9. Cloudmesh cm v4<a class="headerlink" href="#cloudmesh-cm-v4" title="Permalink to this headline">¶</a></h1>
+<h1>9. Cloudmesh cm v4<a class="headerlink" href="#cloudmesh-cm-v4" title="Permalink to this headline">¶</a></h1>
 <p>Please note that the code and documentation are under heavy development and is likely not correct.
 It will be your task to correct it, and make sure the code works.</p>
 <div class="section" id="documentation">
-<span id="documentation"></span><h2>9.1. Documentation<a class="headerlink" href="#documentation" title="Permalink to this headline">¶</a></h2>
+<h2>9.1. Documentation<a class="headerlink" href="#documentation" title="Permalink to this headline">¶</a></h2>
 <p>The Documentation is located at</p>
 <ul class="simple">
 <li><a class="reference external" href="https://cloudmesh-community.github.io/cm/">https://cloudmesh-community.github.io/cm/</a></li>
 </ul>
 </div>
 <div class="section" id="code">
-<span id="code"></span><h2>9.2. Code<a class="headerlink" href="#code" title="Permalink to this headline">¶</a></h2>
+<h2>9.2. Code<a class="headerlink" href="#code" title="Permalink to this headline">¶</a></h2>
 <p>The Code is located at</p>
 <ul class="simple">
 <li><a class="reference external" href="https://github.com/cloudmesh-community/cm">https://github.com/cloudmesh-community/cm</a></li>
 </ul>
 </div>
 <div class="section" id="installation">
-<span id="installation"></span><h2>9.3. Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<h2>9.3. Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li>See <a class="reference external" href="https://cloudmesh-community.github.io/cm/">https://cloudmesh-community.github.io/cm/</a></li>
 </ul>
 </div>
 <div class="section" id="goal">
-<span id="goal"></span><h2>9.4. Goal<a class="headerlink" href="#goal" title="Permalink to this headline">¶</a></h2>
+<h2>9.4. Goal<a class="headerlink" href="#goal" title="Permalink to this headline">¶</a></h2>
 <p>The goal is to have a configuration file in which we add a number of
 computers that you can use to execute tasks via ssh calls remotely. We
 wiill use no fancyful ssh library, but just subprocess. As this task
@@ -248,33 +248,33 @@ sequential and + for adding results</p>
 </div>
 </div>
 <div class="section" id="manual-cloudmesh-multi-service-data-access">
-<span id="manual-cloudmesh-multi-service-data-access"></span><h2>9.5. Manual: Cloudmesh Multi Service Data Access<a class="headerlink" href="#manual-cloudmesh-multi-service-data-access" title="Permalink to this headline">¶</a></h2>
+<h2>9.5. Manual: Cloudmesh Multi Service Data Access<a class="headerlink" href="#manual-cloudmesh-multi-service-data-access" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="database-providers">
-<span id="database-providers"></span><h3>9.5.1. Database Providers<a class="headerlink" href="#database-providers" title="Permalink to this headline">¶</a></h3>
+<h3>9.5.1. Database Providers<a class="headerlink" href="#database-providers" title="Permalink to this headline">¶</a></h3>
 <p>A central database provider keeps track of files stored with multiple cloud services.</p>
 <div class="section" id="local">
-<span id="local"></span><h4>9.5.2.1. Local<a class="headerlink" href="#local" title="Permalink to this headline">¶</a></h4>
+<h4>9.5.1.1. Local<a class="headerlink" href="#local" title="Permalink to this headline">¶</a></h4>
 <p>BUG: we will not use files, this class needs  to be eliminated, and instead mongo is to be used</p>
 <p>The <a class="reference external" href="cloudmesh/data/api/db/LocalDBProvider.py"><code class="docutils literal notranslate"><span class="pre">LocalDBProvider</span></code></a> uses a folder
 on the local file system or network share to store each cloud file
 entry as a yaml file.</p>
 </div>
 <div class="section" id="mongodb">
-<span id="mongodb"></span><h4>9.5.1.2. MongoDB<a class="headerlink" href="#mongodb" title="Permalink to this headline">¶</a></h4>
+<h4>9.5.1.2. MongoDB<a class="headerlink" href="#mongodb" title="Permalink to this headline">¶</a></h4>
 <p>Todo</p>
 </div>
 </div>
 <div class="section" id="storage-providers">
-<span id="storage-providers"></span><h3>9.5.2. Storage Providers<a class="headerlink" href="#storage-providers" title="Permalink to this headline">¶</a></h3>
+<h3>9.5.2. Storage Providers<a class="headerlink" href="#storage-providers" title="Permalink to this headline">¶</a></h3>
 <p>Storage providers are services that allow storing files.</p>
-<div class="section" id="local">
-<span id="id1"></span><h4>9.5.2.1. Local<a class="headerlink" href="#local" title="Permalink to this headline">¶</a></h4>
+<div class="section" id="id1">
+<h4>9.5.2.1. Local<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h4>
 <p>The <a class="reference external" href="cloudmesh/data/api/storage/LocalStorageProvider.py"><code class="docutils literal notranslate"><span class="pre">LocalStorageProvider</span></code></a>
 uses a folder on the local file system or network share to act as a
 “cloud” storage provider.</p>
 </div>
 <div class="section" id="azure-blob-storage">
-<span id="azure-blob-storage"></span><h4>9.5.2.2. Azure Blob Storage<a class="headerlink" href="#azure-blob-storage" title="Permalink to this headline">¶</a></h4>
+<h4>9.5.2.2. Azure Blob Storage<a class="headerlink" href="#azure-blob-storage" title="Permalink to this headline">¶</a></h4>
 <p>See Libcloud’s
 <a class="reference external" href="https://libcloud.readthedocs.io/en/latest/storage/drivers/azure_blobs.html">Azure Blobs Storage Driver Documentation</a>
 for instructions on how to setup a storage account and generate access
@@ -282,7 +282,7 @@ keys.</p>
 </div>
 </div>
 <div class="section" id="getting-started">
-<span id="getting-started"></span><h3>9.5.3. Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h3>
+<h3>9.5.3. Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h3>
 <p>The default <code class="docutils literal notranslate"><span class="pre">data</span></code> section in <a class="reference external" href="cloudmesh/management/configuration/cloudmesh.yaml"><code class="docutils literal notranslate"><span class="pre">cloudmesh.yaml</span></code></a> is setup to use a local database and storage provider.</p>
 <p><strong>Download</strong></p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">cloudmesh</span><span class="o">-</span><span class="n">community</span><span class="o">/</span><span class="n">cm</span>
@@ -362,6 +362,7 @@ and the file will be stored in
         <script type="text/javascript" src="_static/jquery.js"></script>
         <script type="text/javascript" src="_static/underscore.js"></script>
         <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
     
 
   

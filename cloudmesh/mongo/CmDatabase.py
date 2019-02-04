@@ -60,10 +60,9 @@ class CmDatabase(object):
 
     def find_by_id(self,  cmid, collection="cloudmesh"):
 
-        entry = self.database.find(collection=collection, cmid=cmid)
+        entry = self.find(collection=collection, cmid=cmid)
 
-        d = {entry['cmid']: entry}
-        return d
+        return entry
 
 
     def update(self, entries, collection="cloudmesh", replace=False):

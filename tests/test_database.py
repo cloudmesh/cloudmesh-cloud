@@ -8,7 +8,7 @@ from cloudmesh.common.Printer import Printer
 #from cloudmesh.management.debug import HEADING, myself
 from pprint import pprint
 
-from cloudmesh.mongo.DataBaseDecorator import DatabaseUpdate
+from cloudmesh.mongo.DataBaseDecorator import DatabaseUpdate, DatabaseAdd
 from cloudmesh.management.configuration.name import Name
 
 # nosetest -v --nopature
@@ -18,12 +18,31 @@ class TestMongo:
 
     def setup(self):
         self.database = CmDatabase()
+
+        self.name = Name(experiment="exp",
+                       group="grp",
+                       user="gregor",
+                       kind="vm",
+                       counter=1)
+
+    def test_00_status(self):
+        HEADING()
+
+        #print(self.name)
+        #print(self.name.counter)
+        #print(self.name.id(counter=100))
+
         self.database.clear()
+
+        r = self.database.find()
+        pprint(r)
+
+        assert len(r) == 0
 
     def test_01_status(self):
         HEADING()
         r = self.database.status()
-        pprint(r)
+        # pprint(r)
         assert "Connection refused" not in r
 
         d = {}
@@ -37,74 +56,112 @@ class TestMongo:
     def test_02_update(self):
         HEADING()
 
-        entries = [{"cmid" : 1, "name" : "Gregor"},
-                   {"cmid" : 2, "name" : "Laszewski"}]
+        entries = [{"name" : "Gregor"},
+                   {"name" : "Laszewski"}]
+
+        for entry in entries:
+            entry["cmid"] = str(self.name)
+            entry["cmcounter"] = self.name.counter
+            self.name.incr()
         self.database.update(entries)
+
+        r = self.database.find()
+
+        pprint(r)
+        assert len(r) == 2
+
 
     def test_03_update(self):
         HEADING()
 
         r = self.database.find(name="Gregor")
-
         pprint (r)
+
+        assert r[0]['name'] == "Gregor"
 
     def test_04_update(self):
         HEADING()
+        entries = [{"cmcounter" : 1, "name" : "gregor"},
+                   {"cmcounter" : 2, "name" : "laszewski"}]
+        pprint(entries)
+        for entry in entries:
+            counter = entry["cmcounter"]
+            print("Counter:", counter)
+            entry["cmid"] = self.name.id(counter=counter)
+        self.database.update(entries, replace=False)
+        r = self.database.find()
+        pprint(r)
 
-        entries = [{"cmid" : 1, "name" : "gregor"},
-                   {"cmid" : 2, "name" : "laszewski"}]
-        self.database.update(entries, replace=True)
 
     def test_05_update(self):
         HEADING()
-
         r = self.database.find(name="gregor")
-
         pprint (r)
+        assert r[0]["name"] == "gregor"
 
-    def test_06_find_by_id(self):
+
+    def test_06_find_by_counter(self):
         HEADING()
-        r = self.database.find_by_id(1)
-
+        r = self.database.find_by_counter(1)
         pprint (r)
+        assert r[0]["name"] == "gregor"
 
-        r = self.database.find_by_id(2)
-
+        r = self.database.find_by_counter(2)
         pprint (r)
+        assert r[0]["name"] == "laszewski"
 
-    def test_07_decorator(self):
+
+    def test_07_decorator_update(self):
         HEADING()
 
         @DatabaseUpdate(collection="cloudmesh")
         def entry():
-            return {"cmid" : 3, "name" : "albert"}
-
+            name = Name()
+            print (name)
+            print ("OOOO", str(name), name.counter)
+            d = {"cmid": str(name), "cmcounter" : name.counter, "name" : "albert"}
+            name.incr()
+            pprint (d)
+            return d
 
         a = entry()
 
-        r = self.database.find_by_id(3)
+        r = self.database.find_by_counter(3)
 
         pprint (r)
 
-    def test_08_find_by_id(self):
+    def test_08_decorator_add(self):
         HEADING()
+
+        @DatabaseAdd(collection="cloudmesh")
+        def entry():
+            d = {"name" : "zweistein"}
+            return d
+
+        a = entry()
+
         r = self.database.find()
 
         pprint (r)
 
-        assert len(r) == 3
+        assert len(r) == 4
+
+
 
     def test_09_overwrite(self):
         HEADING()
+        r = self.database.find(name="gregor")[0]
+        pprint (r)
+        r["color"] = "red"
 
-        entries = [{"cmid" : 1, "name" : "gregor", "phone": "android"}]
-        self.database.update(entries, replace=True)
 
-        r = self.database.find()
+        self.database.update([r], replace=True)
+
+        r = self.database.find(color="red")
 
         pprint (r)
 
-        assert len(r) == 3
+        assert len(r) == 1
 
 
     def test_10_fancy(self):
@@ -122,7 +179,7 @@ class TestMongo:
 
         entries = [{
               "cmcounter" : counter,
-              "cmid": n,
+              "cmid": str(n),
               "name" : "gregor",
               "phone": "android"
         }]
@@ -132,49 +189,5 @@ class TestMongo:
 
         pprint (r)
 
-        #assert len(r) == 3
+        assert len(r) == 4
 
-
-
-"""
-    def test_01_MongoDBControler_Borg_test(self):
-        HEADING(myself())
-
-        m1 = MongoDBController()
-
-        PRINT ("m1", m1.__dict__)
-
-        m2 = MongoDBController()
-        m3 = MongoDBController()
-
-        m3.data["TEST"] = "test"
-
-        PRINT ("m1", m1.__dict__)
-        PRINT ("m2", m1.__dict__)
-        PRINT ("m3", m3.__dict__)
-
-        assert m3.data["TEST"] == "test"
-        assert m2.data["TEST"] == "test"
-        assert m1.data["TEST"] == "test"
-"""
-"""
-    def test_01_saveto(self):
-        HEADING(myself())
-        d = r_dict()
-        assert isinstance(d, dict)
-        lst = r_list()
-        assert isinstance(lst, list)
-
-    def test_02_find(self):
-        HEADING(myself())
-        doc = self.mongo.find_document("test", "name", "test-dict-1")
-        assert doc is not None
-
-    def test_03_delete(self):
-        HEADING(myself())
-        old_doc = self.mongo.delete_document("test", "name", "test-dict-1")
-        assert old_doc is not None
-
-        deleted_doc = self.mongo.find_document("test", "name", "test-dict-1")
-        assert deleted_doc is None
-"""

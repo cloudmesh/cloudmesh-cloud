@@ -101,22 +101,20 @@ class Name(dotdict):
         self.__dict__["counter"] = 1
         self.flush()
 
-    def get(self, kind):
-        """
-        overwrites the kind
-        :param kind: The kind
-        :return: the string representation
-        """
-        self.__dict__["kind"] = kind
-        return self.__str__()
-
-
     def __str__(self):
         return str(self.__dict__["schema"].format(**self.__dict__))
 
-
     def dict(self):
         return self.__dict__
+
+    def id(self, **kwargs):
+        d = self.__dict__
+        pprint (d)
+        for e in kwargs:
+            d[e] = kwargs[e]
+        pprint (d)
+
+        return str(self.__dict__["schema"].format(**d))
 
 # Make a unit test
 

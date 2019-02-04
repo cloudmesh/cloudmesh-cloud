@@ -68,6 +68,12 @@ class CmDatabase(object):
 
         return entry
 
+    def find_by_counter(self,  cmcounter, collection="cloudmesh"):
+
+        entry = self.find(collection=collection, cmcounter=cmcounter)
+
+        return entry
+
 
     def update(self, entries, collection="cloudmesh", replace=False):
         """
@@ -89,8 +95,9 @@ class CmDatabase(object):
                 col.update_one({'cmid': entry['cmid']}, {"$set": entry}, upsert=True)
 
 
-    def delete(self, cmid):
-        pass
+    def delete(self, cmid, collection="cloudmesh"):
+        col = self.db[collection]
+        col.delete_one({'cmid': cmid})
 
     def command(self, command):
         """
@@ -121,5 +128,4 @@ class CmDatabase(object):
         """
 
         col = self.db[collection]
-
-        col.remove({})
+        col.drop()

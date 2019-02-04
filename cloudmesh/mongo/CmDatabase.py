@@ -3,6 +3,15 @@ import urllib.parse
 from cloudmesh.management.configuration.config import Config
 from pprint import pprint
 
+
+#
+# cm:
+#   id:
+#   user:
+#   experiment:
+#   kind:
+#   group:
+
 class CmDatabase(object):
 
     __shared_state = {}
@@ -15,9 +24,6 @@ class CmDatabase(object):
             self.config = Config().data["cloudmesh"]
             self.mongo = self.config["data"]["mongo"]
             self.mongo["MONGO_PASSWORD"] = str(self.mongo["MONGO_PASSWORD"])
-
-
-            pprint(self.mongo)
 
             self.database = self.mongo["MONGO_DBNAME"]
             self.host = host or self.mongo["MONGO_HOST"]
@@ -40,7 +46,6 @@ class CmDatabase(object):
         self.client = MongoClient(f"mongodb://{self.username}:{self.password}@{self.host}:{self.port}")
         self.db = self.client[self.database]
 
-
     def close_client(self):
         """
         close the connection to the database
@@ -50,13 +55,12 @@ class CmDatabase(object):
     def find(self, collection="cloudmesh", **kwrags):
         col = self.db[collection]
 
-        entries = col.find(kwrags)
+        entries = col.find(kwrags, {"_id": 0})
 
-        print (entries)
-        d = {}
+        records = []
         for entry in entries:
-            d[entry['cmid']] = entry
-        return d
+            records.append(entry)
+        return records
 
     def find_by_id(self,  cmid, collection="cloudmesh"):
 
@@ -85,8 +89,6 @@ class CmDatabase(object):
                 col.update_one({'cmid': entry['cmid']}, {"$set": entry}, upsert=True)
 
 
-
-
     def delete(self, cmid):
         pass
 
@@ -111,3 +113,13 @@ class CmDatabase(object):
         :return:
         """
         return self.command("serverStatus")
+
+    def clear(self, collection="cloudmesh"):
+        """
+        remove all entries from mongo
+        :return:
+        """
+
+        col = self.db[collection]
+
+        col.remove({})

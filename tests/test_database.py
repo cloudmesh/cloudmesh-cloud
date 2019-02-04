@@ -8,6 +8,9 @@ from cloudmesh.common.Printer import Printer
 #from cloudmesh.management.debug import HEADING, myself
 from pprint import pprint
 
+from cloudmesh.mongo.DataBaseDecorator import DatabaseUpdate
+from cloudmesh.management.configuration.name import Name
+
 # nosetest -v --nopature
 # nosetests -v --nocapture tests/test_database.py
 
@@ -15,6 +18,7 @@ class TestMongo:
 
     def setup(self):
         self.database = CmDatabase()
+        self.database.clear()
 
     def test_01_status(self):
         HEADING()
@@ -67,6 +71,69 @@ class TestMongo:
         r = self.database.find_by_id(2)
 
         pprint (r)
+
+    def test_07_decorator(self):
+        HEADING()
+
+        @DatabaseUpdate(collection="cloudmesh")
+        def entry():
+            return {"cmid" : 3, "name" : "albert"}
+
+
+        a = entry()
+
+        r = self.database.find_by_id(3)
+
+        pprint (r)
+
+    def test_08_find_by_id(self):
+        HEADING()
+        r = self.database.find()
+
+        pprint (r)
+
+        assert len(r) == 3
+
+    def test_09_overwrite(self):
+        HEADING()
+
+        entries = [{"cmid" : 1, "name" : "gregor", "phone": "android"}]
+        self.database.update(entries, replace=True)
+
+        r = self.database.find()
+
+        pprint (r)
+
+        assert len(r) == 3
+
+
+    def test_10_fancy(self):
+        HEADING()
+
+        counter = 1
+
+        n = Name(experiment="exp",
+                 group="grp",
+                 user="gregor",
+                 kind="vm",
+                 counter=counter)
+
+        print (n)
+
+        entries = [{
+              "cmcounter" : counter,
+              "cmid": n,
+              "name" : "gregor",
+              "phone": "android"
+        }]
+        self.database.update(entries, replace=True)
+
+        r = self.database.find()
+
+        pprint (r)
+
+        #assert len(r) == 3
+
 
 
 """

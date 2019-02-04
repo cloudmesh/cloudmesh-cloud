@@ -1,6 +1,7 @@
 from cloudmesh.mongo.CmDatabase import CmDatabase
 from pprint import pprint
 from cloudmesh.management.configuration.name import Name
+from datetime import datetime
 
 class DatabaseUpdate:
     """
@@ -22,6 +23,7 @@ class DatabaseUpdate:
         def wrapper(*args, **kwargs):
             result = f(*args, **kwargs)
 
+            result["updated"] = str(datetime.utcnow())
             r = self.database.update(result, collection=self.collection, replace=self.replace)
 
             return result
@@ -50,6 +52,7 @@ class DatabaseAdd:
             result = f(*args, **kwargs)
             result["cmid"] = str(self.name)
             result["cmcounter"] = str(self.name.counter)
+            result["created"] = result["updated"] = str(datetime.utcnow())
             self.name.incr()
 
             r = self.database.update(result, collection=self.collection, replace=self.replace)

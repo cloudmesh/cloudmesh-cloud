@@ -2,7 +2,7 @@ import getpass
 from cloudmesh.management.configuration.config import Config
 from cloudmesh.management.configuration.name import Name
 from cloudmesh.management.configuration.counter import Counter
-from cloudmesh.mongo.mongoDB import MongoDB
+from cloudmesh.mongo.CmDatabase import CmDatabase
 from cloudmesh.draft.vm.api.Azure import AzureProvider
 from cloudmesh.draft.vm.api.Aws import AwsProvider
 from cloudmesh.draft.openstack import OpenstackCM
@@ -18,9 +18,9 @@ from cloudmesh.vbox.api.provider import VboxProvider
 class Vm(ComputeNodeManagerABC):
 
     def __init__(self, cloud):
-        self.mongo = MongoDB()
+        self.mongo = CmDatabase()
         self.config = Config().data["cloudmesh"]
-        self.kind = self.config["cloud"][cloud]["cm"]["kind"]
+        self.kind = self.config["cloudmesh"][cloud]["cm"]["kind"]
         super().__init__(cloud, self.config)
 
         if self.kind == 'azure':
@@ -34,7 +34,7 @@ class Vm(ComputeNodeManagerABC):
         else:
             raise NotImplementedError(f"Cloud `{self.kind}` not supported.")
 
-    @DatabaseUpdate("cloud", ComputeNodeManagerABC.map_default)
+    @DatabaseUpdate(collection="cloudmesh", ComputeNodeManagerABC.map_default)
     def start(self, name):
         """
         start the node based on the id
@@ -46,7 +46,7 @@ class Vm(ComputeNodeManagerABC):
             info = self.provider.start(name)
         return info
 
-    @DatabaseUpdate("cloud", ComputeNodeManagerABC.map_default)
+    @DatabaseUpdate(collection="cloudmesh", ComputeNodeManagerABC.map_default)
     def stop(self, name=None):
         """
         stop the node based on the ide
@@ -55,7 +55,7 @@ class Vm(ComputeNodeManagerABC):
         """
         return self.provider.stop(name)
 
-    @DatabaseUpdate("cloud", ComputeNodeManagerABC.map_default)
+    @DatabaseUpdate(collection="cloudmesh", ComputeNodeManagerABC.map_default)
     def resume(self, name=None):
         """
         start the node based on id
@@ -63,7 +63,7 @@ class Vm(ComputeNodeManagerABC):
         """
         return self.start(name)
 
-    @DatabaseUpdate("cloud", ComputeNodeManagerABC.map_default)
+    @DatabaseUpdate(collection="cloudmesh", ComputeNodeManagerABC.map_default)
     def suspend(self, name=None):
         """
         stop the node based on id
@@ -71,7 +71,7 @@ class Vm(ComputeNodeManagerABC):
         """
         return self.provider.suspend(name)
 
-    @DatabaseUpdate("cloud", ComputeNodeManagerABC.map_default)
+    @DatabaseUpdate(collection="cloudmesh", ComputeNodeManagerABC.map_default)
     def destroy(self, name=None):
         """
         delete the node based on id
@@ -82,7 +82,7 @@ class Vm(ComputeNodeManagerABC):
         # self.mongo.delete_document('cloud', 'name', name)
         return result
 
-    @DatabaseUpdate("cloud", ComputeNodeManagerABC.map_vm_create)
+    @DatabaseUpdate(collection="cloudmesh", ComputeNodeManagerABC.map_vm_create)
     def create(self, name=None):
         """
         create a new node
@@ -92,11 +92,11 @@ class Vm(ComputeNodeManagerABC):
         name = name or self.new_name()
         return self.provider.create(name=name)
 
-    @DatabaseUpdate("cloud", ComputeNodeManagerABC.map_default)
+    @DatabaseUpdate(collection="cloudmesh", ComputeNodeManagerABC.map_default)
     def nodes(self):
         return self.provider.nodes()
 
-    # @DatabaseUpdate("cloud", ComputeNodeManagerABC._map_default)
+    # @DatabaseUpdate(collection="cloudmesh", ComputeNodeManagerABC._map_default)
     def info(self, name=None):
         """
         show node information based on id

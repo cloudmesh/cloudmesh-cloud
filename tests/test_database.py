@@ -60,8 +60,11 @@ class TestMongo:
 
     def test_06_find_by_id(self):
         HEADING()
-
         r = self.database.find_by_id(1)
+
+        pprint (r)
+
+        r = self.database.find_by_id(2)
 
         pprint (r)
 

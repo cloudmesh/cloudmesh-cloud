@@ -1,3 +1,5 @@
+.DS_Store
+.swp
 build/
 vagrant_workspace
 # Byte-compiled / optimized / DLL files

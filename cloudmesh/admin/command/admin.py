@@ -49,7 +49,7 @@ class AdminCommand(PluginCommand):
             admin rest stop
             admin status
 
-          The admin command performs some adminsitrative functions, such as installing packages, software and services.
+          The admin command performs some administrative functions, such as installing packages, software and services.
           It also is used to start services and configure them.
 
           Arguments:

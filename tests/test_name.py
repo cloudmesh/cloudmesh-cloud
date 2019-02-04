@@ -39,3 +39,10 @@ class TestName:
         assert n.counter == 2
 
 
+        m = Name()
+
+        pprint(n.dict())
+        pprint(m.dict())
+        print(m)
+        assert str(n) == str (m)
+

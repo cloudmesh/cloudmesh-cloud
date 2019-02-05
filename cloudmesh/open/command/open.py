@@ -1,7 +1,13 @@
 from __future__ import print_function
 from cloudmesh.shell.command import command
 from cloudmesh.shell.command import PluginCommand
-from cloudmesh.open.api.manager import Manager
+
+from cloudmesh.common.console import Console
+import webbrowser
+from cloudmesh.common.util import path_expand
+import os.path
+from pprint import pprint
+from pathlib import Path
 
 class OpenCommand(PluginCommand):
 
@@ -12,35 +18,51 @@ class OpenCommand(PluginCommand):
     def do_open(self, args, arguments):
         """
         ::
+            Usage:
+                open FILENAME
+                open doc
 
-          Usage:
-                open --file=FILE
-                open list
+            Arguments:
 
-          This command does some useful things.
+                FILENAME  the file to open in the cwd if . is
+                          specified. If file in in cwd
+                          you must specify it with ./FILENAME
 
-          Arguments:
-              FILE   a file name
+                          if the FILENAME is doc than teh documentation from the Web
+                          is opened.
 
-          Options:
-              -f      specify the file
+            Description:
 
+                Opens the given URL in a browser window.
         """
-        arguments.FILE = arguments['--file'] or None
 
-        print(arguments)
+        filename = arguments.FILENAME
 
-        m = Manager()
+        if filename == "doc":
+            filename = "https://cloudmesh-community.github.io/cm/"
 
+        if not (filename.startswith("file:") or filename.startswith("http")):
 
-        if arguments.FILE:
-            print("option a")
-            m.list(arguments.FILE)
+            if not filename.startswith(".") and not filename.startswith("/"):
+                filename = "./" + filename
 
-        elif arguments.list:
-            print("option b")
-            m.list("just calling list without parameter")
+            filename = path_expand(filename)
 
+            if os.path.isfile(Path(filename)):
+                filename = "file://" + filename
+            else:
+                Console.error(
+                    "unsupported browser format in file {0}".format(filename))
+                return ""
+
+        Console.ok("open {0}".format(filename))
+
+        try:
+            webbrowser.open("%s" % filename)
+        except:
+            Console.error(
+                "can not open browser with file {0}".format(filename))
+        return ""
 
 
 

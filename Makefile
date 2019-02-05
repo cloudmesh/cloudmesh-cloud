@@ -28,15 +28,15 @@ manual:
 	cms man --kind=rst batch > documentation/source/manual/batch.rst
 	cms man --kind=rst version > documentation/source/manual/version.rst
 	cms man --kind=rst open > documentation/source/manual/open.rst
-    cms man --kind=rst vm > documentation/source/manual/vm.rst
-    cms man --kind=rst network > documentation/source/manual/network.rst
-    cms man --kind=rst key > documentation/source/manual/key.rst
-    cms man --kind=rst secgroup > documentation/source/manual/secgroup.rst
-    cms man --kind=rst image > documentation/source/manual/image.rst
-    cms man --kind=rst flavor > documentation/source/manual/flavor.rst
-    cms man --kind=rst ssh > documentation/source/manual/ssh.rst
-    cms man --kind=rst storage > documentation/source/manual/storage.rst
-    cms man --kind=rst workflow > documentation/source/manual/workflow.rst
+	cms man --kind=rst vm > documentation/source/manual/vm.rst
+	cms man --kind=rst network > documentation/source/manual/network.rst
+	cms man --kind=rst key > documentation/source/manual/key.rst
+	cms man --kind=rst secgroup > documentation/source/manual/secgroup.rst
+	cms man --kind=rst image > documentation/source/manual/image.rst
+	cms man --kind=rst flavor > documentation/source/manual/flavor.rst
+	cms man --kind=rst ssh > documentation/source/manual/ssh.rst
+	cms man --kind=rst storage > documentation/source/manual/storage.rst
+	cms man --kind=rst workflow > documentation/source/manual/workflow.rst
 
 
 doc:

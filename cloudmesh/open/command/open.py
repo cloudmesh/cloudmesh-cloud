@@ -18,6 +18,7 @@ class OpenCommand(PluginCommand):
     def do_open(self, args, arguments):
         """
         ::
+
             Usage:
                 open FILENAME
                 open doc

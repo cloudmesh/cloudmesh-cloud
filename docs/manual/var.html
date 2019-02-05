@@ -116,18 +116,19 @@
 <li class="toctree-l2"><a class="reference internal" href="sys.html">15.15. sys</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">15.16. var</a></li>
 <li class="toctree-l2"><a class="reference internal" href="vbox.html">15.17. vbox</a></li>
-<li class="toctree-l2"><a class="reference internal" href="batch.html">15.18. batch</a></li>
-<li class="toctree-l2"><a class="reference internal" href="version.html">15.19. version</a></li>
-<li class="toctree-l2"><a class="reference internal" href="open.html">15.20. open</a></li>
-<li class="toctree-l2"><a class="reference internal" href="vm.html">15.21. vm</a></li>
-<li class="toctree-l2"><a class="reference internal" href="network.html">15.22. network</a></li>
-<li class="toctree-l2"><a class="reference internal" href="key.html">15.23. key</a></li>
-<li class="toctree-l2"><a class="reference internal" href="secgroup.html">15.24. secgroup</a></li>
-<li class="toctree-l2"><a class="reference internal" href="image.html">15.25. image</a></li>
-<li class="toctree-l2"><a class="reference internal" href="flavor.html">15.26. flavor</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ssh.html">15.27. ssh</a></li>
-<li class="toctree-l2"><a class="reference internal" href="storage.html">15.28. storage</a></li>
-<li class="toctree-l2"><a class="reference internal" href="workflow.html">15.29. workflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vcluster.html">15.18. vcluster</a></li>
+<li class="toctree-l2"><a class="reference internal" href="batch.html">15.19. batch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version.html">15.20. version</a></li>
+<li class="toctree-l2"><a class="reference internal" href="open.html">15.21. open</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vm.html">15.22. vm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="network.html">15.23. network</a></li>
+<li class="toctree-l2"><a class="reference internal" href="key.html">15.24. key</a></li>
+<li class="toctree-l2"><a class="reference internal" href="secgroup.html">15.25. secgroup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="image.html">15.26. image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="flavor.html">15.27. flavor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ssh.html">15.28. ssh</a></li>
+<li class="toctree-l2"><a class="reference internal" href="storage.html">15.29. storage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="workflow.html">15.30. workflow</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../code.html">16. Code Documentation</a></li>
@@ -199,44 +200,44 @@
             
   <div class="section" id="var">
 <h1>15.16. var<a class="headerlink" href="#var" title="Permalink to this headline">¶</a></h1>
-<dl class="docutils">
-<dt>Usage:</dt>
-<dd>var list
-var clear
-var delete NAME
-var NAME=VALUE
-var NAME</dd>
-<dt>Arguments:</dt>
-<dd>NAME      the name of the variable
-VALUE     the value of the variable
-FILENAME  the filename of the variable</dd>
-<dt>Description:</dt>
-<dd><p class="first">Manage persistent variables</p>
-<dl class="docutils">
-<dt>var NAME=VALUE</dt>
-<dd><p class="first">sets the variable with the name to the value
-if the value is one of data, time, now it will be
-replaced with the value at this time, the format will be</p>
-<blockquote class="last">
-<div>date    2017-04-14
-time    11:30:33
-now     2017-04-14 11:30:41</div></blockquote>
-</dd>
-</dl>
-<p>It will wbe replaced accordingly</p>
-<p>The value can also refer to another variable name.
-In this case the current value will be copied in the named
-variable. As we use the $ sign it is important to distinguish
-shell variables from cms variables while using proper quoting.</p>
-<p>Examples include:</p>
-<blockquote>
-<div>cms var a=$b
-cms var ‘a=$b’
-cms var a=val.b</div></blockquote>
-<p class="last">The previous command copy the value from b to a. The val command
-was added to avoid quoting.</p>
-</dd>
-</dl>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>Usage:
+    var list
+    var clear
+    var delete NAME
+    var NAME=VALUE
+    var NAME
+
+Arguments:
+    NAME      the name of the variable
+    VALUE     the value of the variable
+    FILENAME  the filename of the variable
+Description:
+    Manage persistent variables
+
+    var NAME=VALUE
+       sets the variable with the name to the value
+       if the value is one of data, time, now it will be
+       replaced with the value at this time, the format will be
+        date    2017-04-14
+        time    11:30:33
+        now     2017-04-14 11:30:41
+    It will wbe replaced accordingly
+
+    The value can also refer to another variable name.
+    In this case the current value will be copied in the named
+    variable. As we use the $ sign it is important to distinguish
+    shell variables from cms variables while using proper quoting.
+
+    Examples include:
+
+       cms var a=\$b
+       cms var &#39;a=$b&#39;
+       cms var a=val.b
+
+    The previous command copy the value from b to a. The val command
+    was added to avoid quoting.
+</pre></div>
+</div>
 </div>
 
 

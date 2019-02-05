@@ -1,4 +1,4 @@
-from cloudmesh.abstractclass import ComputeNodeManagerABC
+from cloudmesh.abstractclass import ComputeNodeABC
 from libcloud.compute.types import Provider
 from libcloud.compute.providers import get_driver
 
@@ -7,7 +7,7 @@ from libcloud.compute.providers import get_driver
 # https://libcloud.readthedocs.io/en/latest/apidocs/libcloud.compute.drivers.html#module-libcloud.compute.drivers.ec2
 
 
-class AWSController(ComputeNodeManagerABC):
+class AWSController(ComputeNodeABC):
 
     def __init__(self, ACCESS_ID, SECRET_KEY, region):
         """

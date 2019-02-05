@@ -9,7 +9,7 @@ Modified on Tue Nov 15 2018
 import os
 import subprocess
 import pprint
-from cloudmesh.abstractclass import ComputeNodeManagerABC
+from cloudmesh.abstractclass import ComputeNodeABC
 from libcloud.compute.types import Provider
 from libcloud.compute.providers import get_driver
 from cloudmesh.management.configuration.config import Config
@@ -17,7 +17,7 @@ from time import sleep
 from deprecated.draft.openstack import OpenstackRefactor
 
 
-class OpenstackCM(ComputeNodeManagerABC):
+class OpenstackCM(ComputeNodeABC):
 
     def __init__(self, cloud=None):
         config = Config().data

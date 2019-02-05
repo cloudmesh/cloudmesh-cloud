@@ -4,7 +4,7 @@ from datetime import datetime
 
 
 # noinspection PyUnusedLocal
-class ComputeNodeManagerABC(metaclass=ABCMeta):
+class ComputeNodeABC(metaclass=ABCMeta):
 
     '''
     def __init__(self, cloud, config):
@@ -98,7 +98,7 @@ class ComputeNodeManagerABC(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def nodes(self):
+    def list(self):
         """
         list all nodes id
 

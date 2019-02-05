@@ -5,8 +5,7 @@ Created on Tue Nov 15 2018
 @author: Rui
 """
 
-from cloudmesh.draft.openstack import OpenstackCM
-from cloudmesh.draft.openstack import OpenstackRefactor
+from deprecated.draft.openstack import OpenstackCM, OpenstackRefactor
 from time import sleep
 import datetime
 

@@ -5,8 +5,7 @@ Created on Tue Nov 16 2018
 @author: Rui
 """
 
-from cloudmesh.draft.openstack import OpenstackCM
-from cloudmesh.draft.openstack import OpenstackRefactor
+from deprecated.draft.openstack import OpenstackCM, OpenstackRefactor
 import pprint as pp
 
 

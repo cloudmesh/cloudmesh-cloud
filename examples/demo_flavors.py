@@ -5,8 +5,8 @@ Created on Tue Nov 17 00:12:19 2018
 @author: Rui
 """
 
-from cloudmesh.draft.vm.api.Vm import Vm
-from cloudmesh.draft.vm.api.VmRefactor import VmRefactor
+from deprecated.draft.vm.api.Vm import Vm
+from deprecated.draft.vm import VmRefactor
 from time import sleep
 import datetime
 

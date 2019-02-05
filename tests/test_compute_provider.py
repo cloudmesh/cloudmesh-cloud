@@ -21,8 +21,7 @@ class TestName:
 
     def test_02_list(self):
         HEADING()
-        self.p.list()
-
+        pprint (self.p.list())
 
     def test_03_info(self):
         HEADING()
@@ -37,7 +36,6 @@ class TestName:
         HEADING()
 
         self.p.destroy(name=self.new_name)
-
 
     #def test_01_create(self):
     #    HEADING()

@@ -104,3 +104,20 @@ class Config(object):
 
     def default(self):
         return dotdict(self.data["cloudmesh"]["default"])
+
+    def __getitem__(self, item):
+        """
+        gets an item form the dict. The key is . separated
+        use it as follows get("a.b.c")
+        :param item:
+        :type item:
+        :return:
+        """
+        if "." in item:
+            keys = item.split(".")
+        else:
+            return self.data[item]
+        element = self.data[keys[0]]
+        for key in keys[1:]:
+            element = element[key]
+        return element

@@ -1,7 +1,7 @@
 import os
 import re
 
-from cloudmesh.abstractclass import ComputeNodeManagerABC
+from cloudmesh.abstractclass import ComputeNodeABC
 
 
 def execute(cmd, data, local=True):
@@ -12,7 +12,7 @@ def execute(cmd, data, local=True):
         execute(command, data, local=True)
 
 
-class Vagrant(ComputeNodeManagerABC):
+class Vagrant(ComputeNodeABC):
     """
     Vagrant Manager.
     Provides the capabilities to manage a Vagrant Cluster of nodes via the script.

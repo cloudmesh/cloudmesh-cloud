@@ -21,6 +21,10 @@ cloudmesh:
         label: Box
         kind: box
         version: TBD
+      default:
+        directory: TBD
+      credentials:
+        name: TBD
     gdrive:
       cm:
         heading: GDrive
@@ -55,7 +59,7 @@ cloudmesh:
         AZURE_TENANT_ID: 'xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
         AZURE_SUBSCRIPTION_ID: 'xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
         AZURE_APPLICATION_ID: 'xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
-        AZURE_SECRET_KEY: 'your secret key'
+        AZURE_SECRET_KEY: TBD
     aws:
       cm:
         heading: AWS
@@ -70,9 +74,9 @@ cloudmesh:
         EC2_PRIVATE_KEY_FILE_NAME: 'aws_cert'
         EC2_SECURITY_GROUP: 'group1'
       credentials:
-        EC2_ACCESS_ID: 'your access id'
-        EC2_SECRET_KEY: 'your secret key'
-        EC2_PRIVATE_KEY_FILE_PATH: '~/Demo/aws_cert.pem'
+        EC2_ACCESS_ID: TBD
+        EC2_SECRET_KEY: TBD
+        EC2_PRIVATE_KEY_FILE_PATH: '~/.cloudmesh/aws_cert.pem'
     chameleon:
       cm:
         heading: Chameleon
@@ -213,9 +217,9 @@ cloudmesh:
         username: TBD
         pulickey: ~/.ssh/id_rsa.pub
     slurm-taito:
-      name:                       taito
+      name: taito
       credentials:
-        sshconfigpath:            ~/vms/sshconfig_slurm
+        sshconfigpath: ~/.ssh/config
     clustera:
       computer_a:
         name: computer_a
@@ -237,7 +241,7 @@ cloudmesh:
         label: one
         address: localhost
         credentials:
-          sshconfigpath: ~/vms/ubuntu14/sshconfig1
+          sshconfigpath: ~/.ssh/config
       computer_b:
         name: computer_a
         label: one
@@ -251,4 +255,4 @@ cloudmesh:
         label: two
         address: localhost
         credentials:
-          sshconfigpath: ~/vms/ubuntu14/sshconfig2
+          sshconfigpath: ~/.ssh/config

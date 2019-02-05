@@ -12,6 +12,7 @@ class WorkflowCommand(PluginCommand):
     def do_workflow(self, args, arguments):
         """
         ::
+
             Usage:
                 workflow refresh [--cloud=CLOUD] [-v]
                 workflow list [ID] [NAME] [--cloud=CLOUD] [--format=FORMAT] [--refresh] [-v]

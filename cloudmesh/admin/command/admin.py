@@ -10,6 +10,7 @@ from cloudmesh.common.console import Console
 import textwrap
 from pprint import pprint
 from cloudmesh.common.dotdict import dotdict
+from cloudmesh.management.configuration.operatingsystem import OperatingSystem
 
 class AdminCommand(PluginCommand):
     banner = textwrap.dedent("""
@@ -48,6 +49,7 @@ class AdminCommand(PluginCommand):
             admin rest start
             admin rest stop
             admin status
+            admin system info
 
           The admin command performs some administrative functions, such as installing packages, software and services.
           It also is used to start services and configure them.
@@ -218,5 +220,10 @@ class AdminCommand(PluginCommand):
             # print (data)
             # print(Printer.attribute(data))
             # mongo.set_auth()
+
+        elif arguments.system:
+
+            s = OperatingSystem.get()
+            print(Printer.attribute(s))
 
         return result

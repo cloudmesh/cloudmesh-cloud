@@ -23,3 +23,13 @@ Manual
    manual/vcluster
    manual/batch
    manual/version
+   manual/open
+   manual/vm
+   manual/network
+   manual/key
+   manual/secgroup
+   manual/image
+   manual/flavor
+   manual/ssh
+   manual/storage
+   manual/workflow

@@ -87,6 +87,11 @@ class AdminCommand(PluginCommand):
 
                  cms admin mongo stop
 
+              System information about your machine can be returned by
+
+                 cms admin system info
+
+              This can be very useful in case you are filing an issue or bug.
         """
 
         # arguments.PATH = arguments['--download'] or None

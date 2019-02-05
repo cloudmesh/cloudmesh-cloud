@@ -11,6 +11,7 @@ class SecgroupCommand(PluginCommand):
     def do_secgroup(self, args, arguments):
         """
         ::
+
             Usage:
                 secgroup list [--format=FORMAT]
                 secgroup list --cloud=CLOUD [--format=FORMAT]

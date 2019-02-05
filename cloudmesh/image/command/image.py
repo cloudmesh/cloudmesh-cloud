@@ -13,6 +13,7 @@ class ImageCommand(PluginCommand):
     def do_image(self, args, arguments):
         """
         ::
+
             Usage:
                 image refresh [--cloud=CLOUD]
                 image list [ID] [--cloud=CLOUD] [--format=FORMAT] [--refresh]

@@ -11,6 +11,7 @@ class SshCommand(PluginCommand):
     def do_ssh(self, args, arguments):
         """
         ::
+
             Usage:
                 ssh table
                 ssh list [--format=FORMAT]

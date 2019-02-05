@@ -13,6 +13,7 @@ class KeyCommand(PluginCommand):
     def do_key(self, args, arguments):
         """
         ::
+
            Usage:
              key  -h | --help
              key list --cloud=CLOUD

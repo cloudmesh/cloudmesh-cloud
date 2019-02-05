@@ -5,17 +5,38 @@ from cloudmesh.common.util import HEADING
 
 from cloudmesh.management.configuration.config import Config
 
+from libcloud.compute.providers import get_driver
+from libcloud.compute.types import Provider as LibcloudProvider
+
+
 class Provider(ComputeNodeABC):
+
+    ProviderMapper = {"openstack": LibcloudProvider.OPENSTACK,
+                      "aws": LibcloudProvider.EC2}
 
     def __init__(self, name=None, configuration="~/.cloudmesh/cloudmesh4.yaml"):
         HEADING(c=".")
-        conf = Config(configuration)
-        pprint (conf)
-        pprint (conf.get("cloudmesh"))
-        clouds = conf.get("cloudmesh.cloud")
-        pprint (clouds)
-        mycloud = clouds[name]
-        pprint (mycloud)
+        conf = Config(configuration)["cloudmesh"]
+        mycloud = conf["cloud"][name]
+        cred = mycloud["credentials"]
+        cloudkind = mycloud["cm"]["kind"]
+        #pprint (cred)
+        #print (cloudkind)
+        super().__init__(name, conf)
+        if cloudkind in Provider.ProviderMapper:
+            if cloudkind == 'openstack':
+                self.driver = get_driver(Provider.ProviderMapper[cloudkind])
+                self.cloudman = self.driver(cred["OS_USERNAME"],
+                                    cred["OS_PASSWORD"],
+                                    ex_force_auth_url=cred['OS_AUTH_URL'],
+                                    ex_force_auth_version='2.0_password',
+                                    ex_tenant_name=cred['OS_TENANT_NAME'])
+        else:
+            print ("Specified provider not available")
+            self.cloudman = None
+        self.default_image = None
+        self.default_size = None
+        self.public_key_path = conf["profile"]["key"]["public"]
 
     def start(self, name):
         """
@@ -60,6 +81,8 @@ class Provider(ComputeNodeABC):
         :return: an array of dicts representing the nodes
         """
         HEADING(c=".")
+        if self.cloudman:
+            return (self.cloudman.list_nodes())
 
     def resume(self, name=None):
         """

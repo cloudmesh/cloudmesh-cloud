@@ -6,7 +6,6 @@ from datetime import datetime
 # noinspection PyUnusedLocal
 class ComputeNodeABC(metaclass=ABCMeta):
 
-    '''
     def __init__(self, cloud, config):
         self.cloud = cloud
         self.cm = config["cloud"][cloud]["cm"]
@@ -15,6 +14,7 @@ class ComputeNodeABC(metaclass=ABCMeta):
         self.group = config["default"]["group"]
         self.experiment = config["default"]["experiment"]
 
+    '''
     def map_default(self, r):
         """
         Adds common properties to libcloud results.

@@ -200,89 +200,63 @@
             
   <div class="section" id="network">
 <h1>15.23. network<a class="headerlink" href="#network" title="Permalink to this headline">¶</a></h1>
-<dl class="docutils">
-<dt>::</dt>
-<dd><dl class="first last docutils">
-<dt>Usage:</dt>
-<dd><p class="first">network get fixed [ip] [–cloud=CLOUD] FIXED_IP
-network get floating [ip] [–cloud=CLOUD] FLOATING_IP_ID
-network reserve fixed [ip] [–cloud=CLOUD] FIXED_IP
-network unreserve fixed [ip] [–cloud=CLOUD] FIXED_IP
-network associate floating [ip] [–cloud=CLOUD] [–group=GROUP]</p>
-<blockquote>
-<div>[–instance=INS_ID_OR_NAME] [FLOATING_IP]</div></blockquote>
-<dl class="docutils">
-<dt>network disassociate floating [ip] [–cloud=CLOUD] [–group=GROUP]</dt>
-<dd>[–instance=INS_ID_OR_NAME] [FLOATING_IP]</dd>
-</dl>
-<p class="last">network create floating [ip] [–cloud=CLOUD] [–pool=FLOATING_IP_POOL]
-network delete floating [ip] [–cloud=CLOUD] [–unused] [FLOATING_IP]
-network list floating pool [–cloud=CLOUD]
-network list floating [ip] [–cloud=CLOUD] [–unused] [–instance=INS_ID_OR_NAME] [IP_OR_ID]
-network create cluster –group=demo_group
-network -h | –help</p>
-</dd>
-<dt>Options:</dt>
-<dd><table class="first last docutils option-list" frame="void" rules="none">
-<col class="option" />
-<col class="description" />
-<tbody valign="top">
-<tr><td class="option-group">
-<kbd><span class="option">-h</span></kbd></td>
-<td>help message</td></tr>
-<tr><td class="option-group">
-<kbd><span class="option">--unused</span></kbd></td>
-<td>unused floating ips</td></tr>
-<tr><td class="option-group">
-<kbd><span class="option">--cloud=<var>CLOUD</var></span></kbd></td>
-<td>Name of the IaaS cloud e.g. india_openstack_grizzly.</td></tr>
-<tr><td class="option-group">
-<kbd><span class="option">--group=<var>GROUP</var></span></kbd></td>
-<td>Name of the group in Cloudmesh</td></tr>
-<tr><td class="option-group" colspan="2">
-<kbd><span class="option">--pool=<var>FLOATING_IP_POOL</var></span></kbd></td>
-</tr>
-<tr><td>&#160;</td><td>Name of Floating IP Pool</td></tr>
-<tr><td class="option-group" colspan="2">
-<kbd><span class="option">--instance=<var>INS_ID_OR_NAME</var></span></kbd></td>
-</tr>
-<tr><td>&#160;</td><td>ID or Name of the vm instance</td></tr>
-</tbody>
-</table>
-</dd>
-<dt>Arguments:</dt>
-<dd>IP_OR_ID        IP Address or ID of IP Address
-FIXED_IP        Fixed IP Address, e.g. 10.1.5.2
-FLOATING_IP     Floating IP Address, e.g. 192.1.66.8
-FLOATING_IP_ID  ID associated with Floating IP, e.g. 185c5195-e824-4e7b-8581-703abec4bc01</dd>
-<dt>Examples:</dt>
-<dd>network get fixed ip –cloud=india 10.1.2.5
-network get fixed –cloud=india 10.1.2.5
-network get floating ip –cloud=india 185c5195-e824-4e7b-8581-703abec4bc01
-network get floating –cloud=india 185c5195-e824-4e7b-8581-703abec4bc01
-network reserve fixed ip –cloud=india 10.1.2.5
-network reserve fixed –cloud=india 10.1.2.5
-network unreserve fixed ip –cloud=india 10.1.2.5
-network unreserve fixed –cloud=india 10.1.2.5
-network associate floating ip –cloud=india –instance=albert-001 192.1.66.8
-network associate floating –cloud=india –instance=albert-001
-network associate floating –cloud=india –group=albert_group
-network disassociate floating ip –cloud=india –instance=albert-001 192.1.66.8
-network disassociate floating –cloud=india –instance=albert-001 192.1.66.8
-network create floating ip –cloud=india –pool=albert-f01
-network create floating –cloud=india –pool=albert-f01
-network delete floating ip –cloud=india 192.1.66.8 192.1.66.9
-network delete floating –cloud=india 192.1.66.8 192.1.66.9
-network list floating ip –cloud=india
-network list floating –cloud=india
-network list floating –cloud=india –unused
-network list floating –cloud=india 192.1.66.8
-network list floating –cloud=india –instance=323c5195-7yy34-4e7b-8581-703abec4b
-network list floating pool –cloud=india
-network create cluster –group=demo_group</dd>
-</dl>
-</dd>
-</dl>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Usage</span><span class="p">:</span>
+    <span class="n">network</span> <span class="n">get</span> <span class="n">fixed</span> <span class="p">[</span><span class="n">ip</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">cloud</span><span class="o">=</span><span class="n">CLOUD</span><span class="p">]</span> <span class="n">FIXED_IP</span>
+    <span class="n">network</span> <span class="n">get</span> <span class="n">floating</span> <span class="p">[</span><span class="n">ip</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">cloud</span><span class="o">=</span><span class="n">CLOUD</span><span class="p">]</span> <span class="n">FLOATING_IP_ID</span>
+    <span class="n">network</span> <span class="n">reserve</span> <span class="n">fixed</span> <span class="p">[</span><span class="n">ip</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">cloud</span><span class="o">=</span><span class="n">CLOUD</span><span class="p">]</span> <span class="n">FIXED_IP</span>
+    <span class="n">network</span> <span class="n">unreserve</span> <span class="n">fixed</span> <span class="p">[</span><span class="n">ip</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">cloud</span><span class="o">=</span><span class="n">CLOUD</span><span class="p">]</span> <span class="n">FIXED_IP</span>
+    <span class="n">network</span> <span class="n">associate</span> <span class="n">floating</span> <span class="p">[</span><span class="n">ip</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">cloud</span><span class="o">=</span><span class="n">CLOUD</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">group</span><span class="o">=</span><span class="n">GROUP</span><span class="p">]</span>
+                               <span class="p">[</span><span class="o">--</span><span class="n">instance</span><span class="o">=</span><span class="n">INS_ID_OR_NAME</span><span class="p">]</span> <span class="p">[</span><span class="n">FLOATING_IP</span><span class="p">]</span>
+    <span class="n">network</span> <span class="n">disassociate</span> <span class="n">floating</span> <span class="p">[</span><span class="n">ip</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">cloud</span><span class="o">=</span><span class="n">CLOUD</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">group</span><span class="o">=</span><span class="n">GROUP</span><span class="p">]</span>
+                                  <span class="p">[</span><span class="o">--</span><span class="n">instance</span><span class="o">=</span><span class="n">INS_ID_OR_NAME</span><span class="p">]</span> <span class="p">[</span><span class="n">FLOATING_IP</span><span class="p">]</span>
+    <span class="n">network</span> <span class="n">create</span> <span class="n">floating</span> <span class="p">[</span><span class="n">ip</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">cloud</span><span class="o">=</span><span class="n">CLOUD</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">pool</span><span class="o">=</span><span class="n">FLOATING_IP_POOL</span><span class="p">]</span>
+    <span class="n">network</span> <span class="n">delete</span> <span class="n">floating</span> <span class="p">[</span><span class="n">ip</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">cloud</span><span class="o">=</span><span class="n">CLOUD</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">unused</span><span class="p">]</span> <span class="p">[</span><span class="n">FLOATING_IP</span><span class="p">]</span>
+    <span class="n">network</span> <span class="nb">list</span> <span class="n">floating</span> <span class="n">pool</span> <span class="p">[</span><span class="o">--</span><span class="n">cloud</span><span class="o">=</span><span class="n">CLOUD</span><span class="p">]</span>
+    <span class="n">network</span> <span class="nb">list</span> <span class="n">floating</span> <span class="p">[</span><span class="n">ip</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">cloud</span><span class="o">=</span><span class="n">CLOUD</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">unused</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">instance</span><span class="o">=</span><span class="n">INS_ID_OR_NAME</span><span class="p">]</span> <span class="p">[</span><span class="n">IP_OR_ID</span><span class="p">]</span>
+    <span class="n">network</span> <span class="n">create</span> <span class="n">cluster</span> <span class="o">--</span><span class="n">group</span><span class="o">=</span><span class="n">demo_group</span>
+    <span class="n">network</span> <span class="o">-</span><span class="n">h</span> <span class="o">|</span> <span class="o">--</span><span class="n">help</span>
+
+<span class="n">Options</span><span class="p">:</span>
+    <span class="o">-</span><span class="n">h</span>                          <span class="n">help</span> <span class="n">message</span>
+    <span class="o">--</span><span class="n">unused</span>                    <span class="n">unused</span> <span class="n">floating</span> <span class="n">ips</span>
+    <span class="o">--</span><span class="n">cloud</span><span class="o">=</span><span class="n">CLOUD</span>               <span class="n">Name</span> <span class="n">of</span> <span class="n">the</span> <span class="n">IaaS</span> <span class="n">cloud</span> <span class="n">e</span><span class="o">.</span><span class="n">g</span><span class="o">.</span> <span class="n">india_openstack_grizzly</span><span class="o">.</span>
+    <span class="o">--</span><span class="n">group</span><span class="o">=</span><span class="n">GROUP</span>               <span class="n">Name</span> <span class="n">of</span> <span class="n">the</span> <span class="n">group</span> <span class="ow">in</span> <span class="n">Cloudmesh</span>
+    <span class="o">--</span><span class="n">pool</span><span class="o">=</span><span class="n">FLOATING_IP_POOL</span>     <span class="n">Name</span> <span class="n">of</span> <span class="n">Floating</span> <span class="n">IP</span> <span class="n">Pool</span>
+    <span class="o">--</span><span class="n">instance</span><span class="o">=</span><span class="n">INS_ID_OR_NAME</span>   <span class="n">ID</span> <span class="ow">or</span> <span class="n">Name</span> <span class="n">of</span> <span class="n">the</span> <span class="n">vm</span> <span class="n">instance</span>
+
+<span class="n">Arguments</span><span class="p">:</span>
+    <span class="n">IP_OR_ID</span>        <span class="n">IP</span> <span class="n">Address</span> <span class="ow">or</span> <span class="n">ID</span> <span class="n">of</span> <span class="n">IP</span> <span class="n">Address</span>
+    <span class="n">FIXED_IP</span>        <span class="n">Fixed</span> <span class="n">IP</span> <span class="n">Address</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">g</span><span class="o">.</span> <span class="mf">10.1</span><span class="o">.</span><span class="mf">5.2</span>
+    <span class="n">FLOATING_IP</span>     <span class="n">Floating</span> <span class="n">IP</span> <span class="n">Address</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">g</span><span class="o">.</span> <span class="mf">192.1</span><span class="o">.</span><span class="mf">66.8</span>
+    <span class="n">FLOATING_IP_ID</span>  <span class="n">ID</span> <span class="n">associated</span> <span class="k">with</span> <span class="n">Floating</span> <span class="n">IP</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">g</span><span class="o">.</span> <span class="mi">185</span><span class="n">c5195</span><span class="o">-</span><span class="n">e824</span><span class="o">-</span><span class="mf">4e7</span><span class="n">b</span><span class="o">-</span><span class="mi">8581</span><span class="o">-</span><span class="mi">703</span><span class="n">abec4bc01</span>
+
+<span class="n">Examples</span><span class="p">:</span>
+    <span class="n">network</span> <span class="n">get</span> <span class="n">fixed</span> <span class="n">ip</span> <span class="o">--</span><span class="n">cloud</span><span class="o">=</span><span class="n">india</span> <span class="mf">10.1</span><span class="o">.</span><span class="mf">2.5</span>
+    <span class="n">network</span> <span class="n">get</span> <span class="n">fixed</span> <span class="o">--</span><span class="n">cloud</span><span class="o">=</span><span class="n">india</span> <span class="mf">10.1</span><span class="o">.</span><span class="mf">2.5</span>
+    <span class="n">network</span> <span class="n">get</span> <span class="n">floating</span> <span class="n">ip</span> <span class="o">--</span><span class="n">cloud</span><span class="o">=</span><span class="n">india</span> <span class="mi">185</span><span class="n">c5195</span><span class="o">-</span><span class="n">e824</span><span class="o">-</span><span class="mf">4e7</span><span class="n">b</span><span class="o">-</span><span class="mi">8581</span><span class="o">-</span><span class="mi">703</span><span class="n">abec4bc01</span>
+    <span class="n">network</span> <span class="n">get</span> <span class="n">floating</span> <span class="o">--</span><span class="n">cloud</span><span class="o">=</span><span class="n">india</span> <span class="mi">185</span><span class="n">c5195</span><span class="o">-</span><span class="n">e824</span><span class="o">-</span><span class="mf">4e7</span><span class="n">b</span><span class="o">-</span><span class="mi">8581</span><span class="o">-</span><span class="mi">703</span><span class="n">abec4bc01</span>
+    <span class="n">network</span> <span class="n">reserve</span> <span class="n">fixed</span> <span class="n">ip</span> <span class="o">--</span><span class="n">cloud</span><span class="o">=</span><span class="n">india</span> <span class="mf">10.1</span><span class="o">.</span><span class="mf">2.5</span>
+    <span class="n">network</span> <span class="n">reserve</span> <span class="n">fixed</span> <span class="o">--</span><span class="n">cloud</span><span class="o">=</span><span class="n">india</span> <span class="mf">10.1</span><span class="o">.</span><span class="mf">2.5</span>
+    <span class="n">network</span> <span class="n">unreserve</span> <span class="n">fixed</span> <span class="n">ip</span> <span class="o">--</span><span class="n">cloud</span><span class="o">=</span><span class="n">india</span> <span class="mf">10.1</span><span class="o">.</span><span class="mf">2.5</span>
+    <span class="n">network</span> <span class="n">unreserve</span> <span class="n">fixed</span> <span class="o">--</span><span class="n">cloud</span><span class="o">=</span><span class="n">india</span> <span class="mf">10.1</span><span class="o">.</span><span class="mf">2.5</span>
+    <span class="n">network</span> <span class="n">associate</span> <span class="n">floating</span> <span class="n">ip</span> <span class="o">--</span><span class="n">cloud</span><span class="o">=</span><span class="n">india</span> <span class="o">--</span><span class="n">instance</span><span class="o">=</span><span class="n">albert</span><span class="o">-</span><span class="mi">001</span> <span class="mf">192.1</span><span class="o">.</span><span class="mf">66.8</span>
+    <span class="n">network</span> <span class="n">associate</span> <span class="n">floating</span> <span class="o">--</span><span class="n">cloud</span><span class="o">=</span><span class="n">india</span> <span class="o">--</span><span class="n">instance</span><span class="o">=</span><span class="n">albert</span><span class="o">-</span><span class="mi">001</span>
+    <span class="n">network</span> <span class="n">associate</span> <span class="n">floating</span> <span class="o">--</span><span class="n">cloud</span><span class="o">=</span><span class="n">india</span> <span class="o">--</span><span class="n">group</span><span class="o">=</span><span class="n">albert_group</span>
+    <span class="n">network</span> <span class="n">disassociate</span> <span class="n">floating</span> <span class="n">ip</span> <span class="o">--</span><span class="n">cloud</span><span class="o">=</span><span class="n">india</span> <span class="o">--</span><span class="n">instance</span><span class="o">=</span><span class="n">albert</span><span class="o">-</span><span class="mi">001</span> <span class="mf">192.1</span><span class="o">.</span><span class="mf">66.8</span>
+    <span class="n">network</span> <span class="n">disassociate</span> <span class="n">floating</span> <span class="o">--</span><span class="n">cloud</span><span class="o">=</span><span class="n">india</span> <span class="o">--</span><span class="n">instance</span><span class="o">=</span><span class="n">albert</span><span class="o">-</span><span class="mi">001</span> <span class="mf">192.1</span><span class="o">.</span><span class="mf">66.8</span>
+    <span class="n">network</span> <span class="n">create</span> <span class="n">floating</span> <span class="n">ip</span> <span class="o">--</span><span class="n">cloud</span><span class="o">=</span><span class="n">india</span> <span class="o">--</span><span class="n">pool</span><span class="o">=</span><span class="n">albert</span><span class="o">-</span><span class="n">f01</span>
+    <span class="n">network</span> <span class="n">create</span> <span class="n">floating</span> <span class="o">--</span><span class="n">cloud</span><span class="o">=</span><span class="n">india</span> <span class="o">--</span><span class="n">pool</span><span class="o">=</span><span class="n">albert</span><span class="o">-</span><span class="n">f01</span>
+    <span class="n">network</span> <span class="n">delete</span> <span class="n">floating</span> <span class="n">ip</span> <span class="o">--</span><span class="n">cloud</span><span class="o">=</span><span class="n">india</span> <span class="mf">192.1</span><span class="o">.</span><span class="mf">66.8</span> <span class="mf">192.1</span><span class="o">.</span><span class="mf">66.9</span>
+    <span class="n">network</span> <span class="n">delete</span> <span class="n">floating</span> <span class="o">--</span><span class="n">cloud</span><span class="o">=</span><span class="n">india</span> <span class="mf">192.1</span><span class="o">.</span><span class="mf">66.8</span> <span class="mf">192.1</span><span class="o">.</span><span class="mf">66.9</span>
+    <span class="n">network</span> <span class="nb">list</span> <span class="n">floating</span> <span class="n">ip</span> <span class="o">--</span><span class="n">cloud</span><span class="o">=</span><span class="n">india</span>
+    <span class="n">network</span> <span class="nb">list</span> <span class="n">floating</span> <span class="o">--</span><span class="n">cloud</span><span class="o">=</span><span class="n">india</span>
+    <span class="n">network</span> <span class="nb">list</span> <span class="n">floating</span> <span class="o">--</span><span class="n">cloud</span><span class="o">=</span><span class="n">india</span> <span class="o">--</span><span class="n">unused</span>
+    <span class="n">network</span> <span class="nb">list</span> <span class="n">floating</span> <span class="o">--</span><span class="n">cloud</span><span class="o">=</span><span class="n">india</span> <span class="mf">192.1</span><span class="o">.</span><span class="mf">66.8</span>
+    <span class="n">network</span> <span class="nb">list</span> <span class="n">floating</span> <span class="o">--</span><span class="n">cloud</span><span class="o">=</span><span class="n">india</span> <span class="o">--</span><span class="n">instance</span><span class="o">=</span><span class="mi">323</span><span class="n">c5195</span><span class="o">-</span><span class="mi">7</span><span class="n">yy34</span><span class="o">-</span><span class="mf">4e7</span><span class="n">b</span><span class="o">-</span><span class="mi">8581</span><span class="o">-</span><span class="mi">703</span><span class="n">abec4b</span>
+    <span class="n">network</span> <span class="nb">list</span> <span class="n">floating</span> <span class="n">pool</span> <span class="o">--</span><span class="n">cloud</span><span class="o">=</span><span class="n">india</span>
+    <span class="n">network</span> <span class="n">create</span> <span class="n">cluster</span> <span class="o">--</span><span class="n">group</span><span class="o">=</span><span class="n">demo_group</span>
+</pre></div>
+</div>
 </div>
 
 

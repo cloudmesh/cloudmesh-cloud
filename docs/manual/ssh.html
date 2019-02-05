@@ -200,85 +200,54 @@
             
   <div class="section" id="ssh">
 <h1>15.28. ssh<a class="headerlink" href="#ssh" title="Permalink to this headline">¶</a></h1>
-<dl class="docutils">
-<dt>::</dt>
-<dd><dl class="first last docutils">
-<dt>Usage:</dt>
-<dd><p class="first">ssh table
-ssh list [–format=FORMAT]
-ssh cat
-ssh register NAME PARAMETERS
-ssh ARGUMENTS</p>
-<blockquote class="last">
-<div>conducts a ssh login on a machine while using a set of
-registered machines specified in ~/.ssh/config</div></blockquote>
-</dd>
-<dt>Arguments:</dt>
-<dd><p class="first">NAME        Name or ip of the machine to log in
-list        Lists the machines that are registered and</p>
-<blockquote>
-<div>the commands to login to them</div></blockquote>
-<dl class="last docutils">
-<dt>PARAMETERS  Register te resource and add the given</dt>
-<dd>parameters to the ssh config file.  if the
-resoource exists, it will be overwritten. The
-information will be written in /.ssh/config</dd>
-</dl>
-</dd>
-<dt>Options:</dt>
-<dd><table class="first last docutils option-list" frame="void" rules="none">
-<col class="option" />
-<col class="description" />
-<tbody valign="top">
-<tr><td class="option-group">
-<kbd><span class="option">-v</span></kbd></td>
-<td>verbose mode</td></tr>
-<tr><td class="option-group" colspan="2">
-<kbd><span class="option">--format=<var>FORMAT</var></span></kbd></td>
-</tr>
-<tr><td>&#160;</td><td>the format in which this list is given
-formats incluse table, json, yaml, dict
-[default: table]</td></tr>
-<tr><td class="option-group">
-<kbd><span class="option">--user=<var>USER</var></span></kbd></td>
-<td>overwrites the username that is
-specified in ~/.ssh/config</td></tr>
-<tr><td class="option-group">
-<kbd><span class="option">--key=<var>KEY</var></span></kbd></td>
-<td>The keyname as defined in the key list
-or a location that contains a pblic key</td></tr>
-</tbody>
-</table>
-</dd>
-<dt>Description:</dt>
-<dd><dl class="first last docutils">
-<dt>ssh list</dt>
-<dd>lists the hostsnames  that are present in the
-~/.ssh/config file</dd>
-<dt>ssh cat</dt>
-<dd>prints the ~/.ssh/config file</dd>
-<dt>ssh table</dt>
-<dd>prints contents of the ~/.ssh/config file in table format</dd>
-<dt>ssh register NAME PARAMETERS</dt>
-<dd>registers a host i ~/.ssh/config file
-Parameters are attribute=value pairs
-Note: Note yet implemented</dd>
-<dt>ssh ARGUMENTS</dt>
-<dd><p class="first">executes the ssh command with the given arguments
-Example:</p>
-<blockquote class="last">
-<div><dl class="docutils">
-<dt>ssh myhost</dt>
-<dd>conducts an ssh login to myhost if it is defined in
-~/.ssh/config file</dd>
-</dl>
-</div></blockquote>
-</dd>
-</dl>
-</dd>
-</dl>
-</dd>
-</dl>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Usage</span><span class="p">:</span>
+    <span class="n">ssh</span> <span class="n">table</span>
+    <span class="n">ssh</span> <span class="nb">list</span> <span class="p">[</span><span class="o">--</span><span class="nb">format</span><span class="o">=</span><span class="n">FORMAT</span><span class="p">]</span>
+    <span class="n">ssh</span> <span class="n">cat</span>
+    <span class="n">ssh</span> <span class="n">register</span> <span class="n">NAME</span> <span class="n">PARAMETERS</span>
+    <span class="n">ssh</span> <span class="n">ARGUMENTS</span>
+        <span class="n">conducts</span> <span class="n">a</span> <span class="n">ssh</span> <span class="n">login</span> <span class="n">on</span> <span class="n">a</span> <span class="n">machine</span> <span class="k">while</span> <span class="n">using</span> <span class="n">a</span> <span class="nb">set</span> <span class="n">of</span>
+        <span class="n">registered</span> <span class="n">machines</span> <span class="n">specified</span> <span class="ow">in</span> <span class="o">~/.</span><span class="n">ssh</span><span class="o">/</span><span class="n">config</span>
+
+<span class="n">Arguments</span><span class="p">:</span>
+  <span class="n">NAME</span>        <span class="n">Name</span> <span class="ow">or</span> <span class="n">ip</span> <span class="n">of</span> <span class="n">the</span> <span class="n">machine</span> <span class="n">to</span> <span class="n">log</span> <span class="ow">in</span>
+  <span class="nb">list</span>        <span class="n">Lists</span> <span class="n">the</span> <span class="n">machines</span> <span class="n">that</span> <span class="n">are</span> <span class="n">registered</span> <span class="ow">and</span>
+              <span class="n">the</span> <span class="n">commands</span> <span class="n">to</span> <span class="n">login</span> <span class="n">to</span> <span class="n">them</span>
+  <span class="n">PARAMETERS</span>  <span class="n">Register</span> <span class="n">te</span> <span class="n">resource</span> <span class="ow">and</span> <span class="n">add</span> <span class="n">the</span> <span class="n">given</span>
+              <span class="n">parameters</span> <span class="n">to</span> <span class="n">the</span> <span class="n">ssh</span> <span class="n">config</span> <span class="n">file</span><span class="o">.</span>  <span class="k">if</span> <span class="n">the</span>
+              <span class="n">resoource</span> <span class="n">exists</span><span class="p">,</span> <span class="n">it</span> <span class="n">will</span> <span class="n">be</span> <span class="n">overwritten</span><span class="o">.</span> <span class="n">The</span>
+              <span class="n">information</span> <span class="n">will</span> <span class="n">be</span> <span class="n">written</span> <span class="ow">in</span> <span class="o">/.</span><span class="n">ssh</span><span class="o">/</span><span class="n">config</span>
+
+<span class="n">Options</span><span class="p">:</span>
+   <span class="o">-</span><span class="n">v</span>       <span class="n">verbose</span> <span class="n">mode</span>
+   <span class="o">--</span><span class="nb">format</span><span class="o">=</span><span class="n">FORMAT</span>   <span class="n">the</span> <span class="nb">format</span> <span class="ow">in</span> <span class="n">which</span> <span class="n">this</span> <span class="nb">list</span> <span class="ow">is</span> <span class="n">given</span>
+                     <span class="n">formats</span> <span class="n">incluse</span> <span class="n">table</span><span class="p">,</span> <span class="n">json</span><span class="p">,</span> <span class="n">yaml</span><span class="p">,</span> <span class="nb">dict</span>
+                     <span class="p">[</span><span class="n">default</span><span class="p">:</span> <span class="n">table</span><span class="p">]</span>
+   <span class="o">--</span><span class="n">user</span><span class="o">=</span><span class="n">USER</span>       <span class="n">overwrites</span> <span class="n">the</span> <span class="n">username</span> <span class="n">that</span> <span class="ow">is</span>
+                     <span class="n">specified</span> <span class="ow">in</span> <span class="o">~/.</span><span class="n">ssh</span><span class="o">/</span><span class="n">config</span>
+   <span class="o">--</span><span class="n">key</span><span class="o">=</span><span class="n">KEY</span>         <span class="n">The</span> <span class="n">keyname</span> <span class="k">as</span> <span class="n">defined</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">key</span> <span class="nb">list</span>
+                     <span class="ow">or</span> <span class="n">a</span> <span class="n">location</span> <span class="n">that</span> <span class="n">contains</span> <span class="n">a</span> <span class="n">pblic</span> <span class="n">key</span>
+
+<span class="n">Description</span><span class="p">:</span>
+    <span class="n">ssh</span> <span class="nb">list</span>
+        <span class="n">lists</span> <span class="n">the</span> <span class="n">hostsnames</span>  <span class="n">that</span> <span class="n">are</span> <span class="n">present</span> <span class="ow">in</span> <span class="n">the</span>
+        <span class="o">~/.</span><span class="n">ssh</span><span class="o">/</span><span class="n">config</span> <span class="n">file</span>
+    <span class="n">ssh</span> <span class="n">cat</span>
+        <span class="n">prints</span> <span class="n">the</span> <span class="o">~/.</span><span class="n">ssh</span><span class="o">/</span><span class="n">config</span> <span class="n">file</span>
+    <span class="n">ssh</span> <span class="n">table</span>
+        <span class="n">prints</span> <span class="n">contents</span> <span class="n">of</span> <span class="n">the</span> <span class="o">~/.</span><span class="n">ssh</span><span class="o">/</span><span class="n">config</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">table</span> <span class="nb">format</span>
+    <span class="n">ssh</span> <span class="n">register</span> <span class="n">NAME</span> <span class="n">PARAMETERS</span>
+        <span class="n">registers</span> <span class="n">a</span> <span class="n">host</span> <span class="n">i</span> <span class="o">~/.</span><span class="n">ssh</span><span class="o">/</span><span class="n">config</span> <span class="n">file</span>
+        <span class="n">Parameters</span> <span class="n">are</span> <span class="n">attribute</span><span class="o">=</span><span class="n">value</span> <span class="n">pairs</span>
+        <span class="n">Note</span><span class="p">:</span> <span class="n">Note</span> <span class="n">yet</span> <span class="n">implemented</span>
+    <span class="n">ssh</span> <span class="n">ARGUMENTS</span>
+        <span class="n">executes</span> <span class="n">the</span> <span class="n">ssh</span> <span class="n">command</span> <span class="k">with</span> <span class="n">the</span> <span class="n">given</span> <span class="n">arguments</span>
+        <span class="n">Example</span><span class="p">:</span>
+            <span class="n">ssh</span> <span class="n">myhost</span>
+                <span class="n">conducts</span> <span class="n">an</span> <span class="n">ssh</span> <span class="n">login</span> <span class="n">to</span> <span class="n">myhost</span> <span class="k">if</span> <span class="n">it</span> <span class="ow">is</span> <span class="n">defined</span> <span class="ow">in</span>
+                <span class="o">~/.</span><span class="n">ssh</span><span class="o">/</span><span class="n">config</span> <span class="n">file</span>
+</pre></div>
+</div>
 </div>
 
 

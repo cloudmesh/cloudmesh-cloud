@@ -2,6 +2,7 @@ ssh
 ===
 
 ::
+
     Usage:
         ssh table
         ssh list [--format=FORMAT]

@@ -2,6 +2,7 @@ image
 =====
 
 ::
+
     Usage:
         image refresh [--cloud=CLOUD]
         image list [ID] [--cloud=CLOUD] [--format=FORMAT] [--refresh]

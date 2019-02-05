@@ -2,6 +2,7 @@ secgroup
 ========
 
 ::
+
     Usage:
         secgroup list [--format=FORMAT]
         secgroup list --cloud=CLOUD [--format=FORMAT]

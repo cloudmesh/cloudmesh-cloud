@@ -2,6 +2,7 @@ network
 =======
 
 ::
+
     Usage:
         network get fixed [ip] [--cloud=CLOUD] FIXED_IP
         network get floating [ip] [--cloud=CLOUD] FLOATING_IP_ID

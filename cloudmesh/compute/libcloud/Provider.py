@@ -3,10 +3,19 @@ from pprint import pprint
 from datetime import datetime
 from cloudmesh.common.util import HEADING
 
+from cloudmesh.management.configuration.config import Config
+
 class Provider(ComputeNodeABC):
 
-    def __init__(self, name=None, configuration="~/.cloudmesh/.cloudmesh4.yaml"):
+    def __init__(self, name=None, configuration="~/.cloudmesh/cloudmesh4.yaml"):
         HEADING(c=".")
+        conf = Config(configuration)
+        pprint (conf)
+        pprint (conf.get("cloudmesh"))
+        clouds = conf.get("cloudmesh.cloud")
+        pprint (clouds)
+        mycloud = clouds[name]
+        pprint (mycloud)
 
     def start(self, name):
         """

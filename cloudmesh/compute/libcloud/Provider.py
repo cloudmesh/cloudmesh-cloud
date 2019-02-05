@@ -108,6 +108,10 @@ class Provider(ComputeNodeABC):
         :return: the dict of the node
         """
         HEADING(c=".")
+        nodes = self.list()
+        for node in nodes:
+            if node.name == name:
+                self.cloudman.destroy_node(node)
 
     def create(self, name=None, image=None, size=None, timeout=360, **kwargs):
         """
@@ -125,21 +129,21 @@ class Provider(ComputeNodeABC):
         create one node
         """
         HEADING(c=".")
-        imagename = "CC-Ubuntu16.04"
-        flavorname = "m1.medium"
+        #imagename = "CC-Ubuntu16.04"
+        #flavorname = "m1.medium"
         images = self.images()
         imageUse = None
         flavors = self.flavors()
         flavorUse = None
-        for image in images:
-            if image.name == imagename:
-                imageUse = image
+        for _image in images:
+            if _image.name == image:
+                imageUse = _image
                 break
-        for flavor in flavors:
-            if flavor.name == flavorname:
-                flavorUse = flavor
+        for _flavor in flavors:
+            if _flavor.name == size:
+                flavorUse = _flavor
                 break
-        node = self.cloudman.create_node(name='fwangTest2019', image=imageUse, size=flavorUse)
+        node = self.cloudman.create_node(name=name, image=imageUse, size=flavorUse)
         return (node)
 
     def rename(self, name=None, destination=None):

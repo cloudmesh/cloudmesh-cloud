@@ -38,6 +38,14 @@ class Provider(ComputeNodeABC):
         self.default_size = None
         self.public_key_path = conf["profile"]["key"]["public"]
 
+    def images(self):
+        if self.cloudman:
+            return (self.cloudman.list_images())
+
+    def flavors(self):
+        if self.cloudman:
+            return (self.cloudman.list_sizes())
+
     def start(self, name):
         """
         start a node
@@ -117,6 +125,22 @@ class Provider(ComputeNodeABC):
         create one node
         """
         HEADING(c=".")
+        imagename = "CC-Ubuntu16.04"
+        flavorname = "m1.medium"
+        images = self.images()
+        imageUse = None
+        flavors = self.flavors()
+        flavorUse = None
+        for image in images:
+            if image.name == imagename:
+                imageUse = image
+                break
+        for flavor in flavors:
+            if flavor.name == flavorname:
+                flavorUse = flavor
+                break
+        node = self.cloudman.create_node(name='fwangTest2019', image=imageUse, size=flavorUse)
+        return (node)
 
     def rename(self, name=None, destination=None):
         """
@@ -128,3 +152,4 @@ class Provider(ComputeNodeABC):
         """
         # if destination is None, increase the name counter and use the new name
         HEADING(c=".")
+

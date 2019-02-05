@@ -14,14 +14,21 @@ class TestName:
         self.p = Provider(name="chameleon")
 
 
-    def test_01_start(self):
-        HEADING()
-        self.p.start(name=self.name)
+    #def test_01_start(self):
+    #    HEADING()
+    #    self.p.start(name=self.name)
 
-
-    def test_02_list(self):
+    def test_02_list_vm(self):
         HEADING()
         pprint (self.p.list())
+
+    def test_02_list_images(self):
+        HEADING()
+        pprint (self.p.images())
+
+    def test_02_list_flavors(self):
+        HEADING()
+        pprint (self.p.flavors())
 
     def test_03_info(self):
         HEADING()
@@ -40,11 +47,9 @@ class TestName:
     #def test_01_create(self):
     #    HEADING()
 
-    #    self.p.create(name=self.name,
+    #    self.p.create(name=None,
     #                  image=None,
-    #                  size=None,
-    #                  timeout=360,
-    #                  **kwargs)
+    #                  size=None)
 
 
 

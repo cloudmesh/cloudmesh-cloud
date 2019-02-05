@@ -14,7 +14,7 @@ from libcloud.compute.types import Provider
 from libcloud.compute.providers import get_driver
 from cloudmesh.management.configuration.config import Config
 from time import sleep
-from cloudmesh.draft.openstack import OpenstackRefactor
+from deprecated.draft.openstack import OpenstackRefactor
 
 
 class OpenstackCM(ComputeNodeManagerABC):

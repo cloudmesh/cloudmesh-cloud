@@ -12,7 +12,7 @@ class FlavorCommand(PluginCommand):
     def do_flavor(self, args, arguments):
         """
         ::
-        
+
             Usage:
                 flavor refresh [--cloud=CLOUD] [-v]
                 flavor list [ID] [--cloud=CLOUD] [--format=FORMAT] [--refresh] [-v]

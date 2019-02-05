@@ -1,5 +1,5 @@
-from cloudmesh.draft.vm.api.Cloud import Cloud
-from cloudmesh.draft.vm.api.LibcloudBaseProvider import LibcloudBaseProvider
+from deprecated.draft.vm.api.Cloud import Cloud
+from deprecated.draft.vm.api.LibcloudBaseProvider import LibcloudBaseProvider
 from libcloud.compute.types import Provider
 from libcloud.compute.providers import get_driver
 

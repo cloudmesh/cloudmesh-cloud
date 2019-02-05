@@ -3,9 +3,9 @@ from cloudmesh.management.configuration.config import Config
 from cloudmesh.management.configuration.name import Name
 from cloudmesh.management.configuration.counter import Counter
 from cloudmesh.mongo.CmDatabase import CmDatabase
-from cloudmesh.draft.vm.api.Azure import AzureProvider
-from cloudmesh.draft.vm.api.Aws import AwsProvider
-from cloudmesh.draft.openstack import OpenstackCM
+from deprecated.draft.vm import AzureProvider
+from deprecated.draft.vm.api.Aws import AwsProvider
+from deprecated.draft.openstack import OpenstackCM
 from cloudmesh.abstractclass import ComputeNodeManagerABC
 from cloudmesh.mongo.DataBaseDecorator import DatabaseUpdate
 from cloudmesh.vbox.api.provider import VboxProvider

@@ -20,8 +20,9 @@ admin
     admin rest start
     admin rest stop
     admin status
+    admin system info
 
-  The admin command performs some adminsitrative functions, such as installing packages, software and services.
+  The admin command performs some administrative functions, such as installing packages, software and services.
   It also is used to start services and configure them.
 
   Arguments:
@@ -56,4 +57,10 @@ admin
       To stop it from running use the command
 
          cms admin mongo stop
+
+      System information about your machine can be returned by
+
+         cms admin system info
+
+      This can be very useful in case you are filing an issue or bug.
 

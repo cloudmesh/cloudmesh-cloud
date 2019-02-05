@@ -13,34 +13,33 @@ class ImageCommand(PluginCommand):
     def do_image(self, args, arguments):
         """
         ::
-
-          Usage:
-                image --file=FILE
-                image list
-
-          This command does some useful things.
-
-          Arguments:
-              FILE   a file name
-
-          Options:
-              -f      specify the file
-
+            Usage:
+                image refresh [--cloud=CLOUD]
+                image list [ID] [--cloud=CLOUD] [--format=FORMAT] [--refresh]
+                This lists out the images present for a cloud
+            Options:
+               --format=FORMAT  the output format [default: table]
+               --cloud=CLOUD    the cloud name
+               --refresh        live data taken from the cloud
+            Examples:
+                cm image refresh
+                cm image list
+                cm image list --format=csv
+                cm image list 58c9552c-8d93-42c0-9dea-5f48d90a3188 --refresh
         """
-        arguments.FILE = arguments['--file'] or None
 
         print(arguments)
 
-        m = Manager()
+        #m = Manager()
 
 
-        if arguments.FILE:
-            print("option a")
-            m.list(arguments.FILE)
+        #if arguments.FILE:
+        #    print("option a")
+        #    m.list(arguments.FILE)
 
-        elif arguments.list:
-            print("option b")
-            m.list("just calling list without parameter")
+        #elif arguments.list:
+        #    print("option b")
+        #    m.list("just calling list without parameter")
 
 
 

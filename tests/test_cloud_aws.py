@@ -1,5 +1,5 @@
 import time
-from cloudmesh.draft.vm.api.Vm import Vm
+from deprecated.draft.vm.api.Vm import Vm
 from cloudmesh.management.configuration.config import Config
 from cloudmesh.management.debug import HEADING, myself
 

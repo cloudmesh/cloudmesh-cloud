@@ -24,7 +24,7 @@ manual:
 	cms man --kind=rst sys > documentation/source/manual/sys.rst
 	cms man --kind=rst var > documentation/source/manual/var.rst
 	cms man --kind=rst vbox > documentation/source/manual/vbox.rst
-	cms man --kind=rst vcluster > documentation/source/manual/vcluster.rs
+	cms man --kind=rst vcluster > documentation/source/manual/vcluster.rst
 	cms man --kind=rst batch > documentation/source/manual/batch.rst
 	cms man --kind=rst version > documentation/source/manual/version.rst
 	cms man --kind=rst open > documentation/source/manual/open.rst

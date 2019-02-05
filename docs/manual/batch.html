@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>15.18. batch &mdash; cm4 alpha documentation</title>
+  <title>15.19. batch &mdash; cm4 alpha documentation</title>
   
 
   
@@ -28,8 +28,8 @@
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="15.19. version" href="version.html" />
-    <link rel="prev" title="15.17. vbox" href="vbox.html" /> 
+    <link rel="next" title="15.20. version" href="version.html" />
+    <link rel="prev" title="15.18. vcluster" href="vcluster.html" /> 
 
   
   <script src="../_static/js/modernizr.min.js"></script>
@@ -116,18 +116,19 @@
 <li class="toctree-l2"><a class="reference internal" href="sys.html">15.15. sys</a></li>
 <li class="toctree-l2"><a class="reference internal" href="var.html">15.16. var</a></li>
 <li class="toctree-l2"><a class="reference internal" href="vbox.html">15.17. vbox</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">15.18. batch</a></li>
-<li class="toctree-l2"><a class="reference internal" href="version.html">15.19. version</a></li>
-<li class="toctree-l2"><a class="reference internal" href="open.html">15.20. open</a></li>
-<li class="toctree-l2"><a class="reference internal" href="vm.html">15.21. vm</a></li>
-<li class="toctree-l2"><a class="reference internal" href="network.html">15.22. network</a></li>
-<li class="toctree-l2"><a class="reference internal" href="key.html">15.23. key</a></li>
-<li class="toctree-l2"><a class="reference internal" href="secgroup.html">15.24. secgroup</a></li>
-<li class="toctree-l2"><a class="reference internal" href="image.html">15.25. image</a></li>
-<li class="toctree-l2"><a class="reference internal" href="flavor.html">15.26. flavor</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ssh.html">15.27. ssh</a></li>
-<li class="toctree-l2"><a class="reference internal" href="storage.html">15.28. storage</a></li>
-<li class="toctree-l2"><a class="reference internal" href="workflow.html">15.29. workflow</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vcluster.html">15.18. vcluster</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">15.19. batch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="version.html">15.20. version</a></li>
+<li class="toctree-l2"><a class="reference internal" href="open.html">15.21. open</a></li>
+<li class="toctree-l2"><a class="reference internal" href="vm.html">15.22. vm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="network.html">15.23. network</a></li>
+<li class="toctree-l2"><a class="reference internal" href="key.html">15.24. key</a></li>
+<li class="toctree-l2"><a class="reference internal" href="secgroup.html">15.25. secgroup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="image.html">15.26. image</a></li>
+<li class="toctree-l2"><a class="reference internal" href="flavor.html">15.27. flavor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ssh.html">15.28. ssh</a></li>
+<li class="toctree-l2"><a class="reference internal" href="storage.html">15.29. storage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="workflow.html">15.30. workflow</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../code.html">16. Code Documentation</a></li>
@@ -178,7 +179,7 @@
         
           <li><a href="../manual.html">15. Manual</a> &raquo;</li>
         
-      <li>15.18. batch</li>
+      <li>15.19. batch</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -198,7 +199,7 @@
            <div itemprop="articleBody">
             
   <div class="section" id="batch">
-<h1>15.18. batch<a class="headerlink" href="#batch" title="Permalink to this headline">¶</a></h1>
+<h1>15.19. batch<a class="headerlink" href="#batch" title="Permalink to this headline">¶</a></h1>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Usage</span><span class="p">:</span>
   <span class="n">batch</span> <span class="n">job</span> <span class="n">create</span> <span class="n">JOB_NAME</span> <span class="o">--</span><span class="n">script</span><span class="o">=</span><span class="n">SLURM_SCRIPT_PATH</span> <span class="o">--</span><span class="nb">input</span><span class="o">-</span><span class="nb">type</span><span class="o">=</span><span class="n">INPUT_TYPE</span> <span class="o">--</span><span class="n">cluster</span><span class="o">=</span><span class="n">CLUSTER_NAME</span> <span class="o">--</span><span class="n">job</span><span class="o">-</span><span class="n">script</span><span class="o">-</span><span class="n">path</span><span class="o">=</span><span class="n">SCRIPT_PATH</span> <span class="o">--</span><span class="n">remote</span><span class="o">-</span><span class="n">path</span><span class="o">=</span><span class="n">REMOTE_PATH</span> <span class="o">--</span><span class="n">local</span><span class="o">-</span><span class="n">path</span><span class="o">=</span><span class="n">LOCAL_PATH</span> <span class="p">[</span><span class="o">--</span><span class="n">argfile</span><span class="o">-</span><span class="n">path</span><span class="o">=</span><span class="n">ARGUMENT_FILE_PATH</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">outfile</span><span class="o">-</span><span class="n">name</span><span class="o">=</span><span class="n">OUTPUT_FILE_NAME</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">suffix</span><span class="o">=</span><span class="n">SUFFIX</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">overwrite</span><span class="p">]</span>
   <span class="n">batch</span> <span class="n">job</span> <span class="n">run</span> <span class="n">JOB_NAME</span>
@@ -231,10 +232,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="version.html" class="btn btn-neutral float-right" title="15.19. version" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="version.html" class="btn btn-neutral float-right" title="15.20. version" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="vbox.html" class="btn btn-neutral" title="15.17. vbox" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="vcluster.html" class="btn btn-neutral" title="15.18. vcluster" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

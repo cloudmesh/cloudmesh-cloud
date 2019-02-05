@@ -2,6 +2,7 @@ open
 ====
 
 ::
+
     Usage:
         open FILENAME
         open doc

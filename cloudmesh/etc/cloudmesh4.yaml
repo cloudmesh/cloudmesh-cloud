@@ -154,6 +154,7 @@ cloudmesh:
       default:
         path: ~/.cloudmesh/vagrant
         image: ubuntu/bionic/64
+        key: ~/.ssh/id_rsa.pub
     vagrant_remote:
       cm:
         heading: Vagrant

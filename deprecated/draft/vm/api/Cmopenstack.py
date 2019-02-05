@@ -1,5 +1,5 @@
-from cloudmesh.draft.openstack import OpenstackCM
-from cloudmesh.draft.vm.api.Cloud import Cloud
+from deprecated.draft.openstack import OpenstackCM
+from deprecated.draft.vm.api.Cloud import Cloud
 
 
 class Cmopenstack(Cloud):

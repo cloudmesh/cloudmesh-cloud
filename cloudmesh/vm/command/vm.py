@@ -38,6 +38,8 @@ class VmCommand(PluginCommand):
                         [--key=KEY]
                         [--dryrun]
                 vm ping [NAME] [N]
+                vm run [--name=NAMES] [--username=USERNAME] COMMAND
+                vm script [--name=NAMES] [--username=USERNAME] SCRIPT
                 vm console [NAME]
                          [--group=GROUP]
                          [--cloud=CLOUD]
@@ -88,6 +90,7 @@ class VmCommand(PluginCommand):
                         [--format=FORMAT]
                 vm check NAME
                 vm username USERNAME [NAMES] [--cloud=CLOUD]
+                vm resize [SIZE]
 
             Arguments:
                 COMMAND        positional arguments, the commands you want to

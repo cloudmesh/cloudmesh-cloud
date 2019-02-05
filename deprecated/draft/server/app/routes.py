@@ -1,7 +1,7 @@
 from flask import jsonify
 
-from cloudmesh.draft.server import app
-from cloudmesh.draft.server import cloud
+from deprecated.draft.server import app
+from deprecated.draft.server import cloud
 
 
 @app.route('/')

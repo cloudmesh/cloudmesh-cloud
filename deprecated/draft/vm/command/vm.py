@@ -2,7 +2,7 @@ from __future__ import print_function
 from cloudmesh.shell.command import command
 from cloudmesh.shell.command import PluginCommand
 from cloudmesh.management.configuration.config import Config
-from cloudmesh.draft.vm.api.Vm import Vm
+from deprecated.draft.vm.api.Vm import Vm
 from pprint import pprint
 
 

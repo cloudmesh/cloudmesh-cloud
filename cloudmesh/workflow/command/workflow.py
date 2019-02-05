@@ -12,34 +12,45 @@ class WorkflowCommand(PluginCommand):
     def do_workflow(self, args, arguments):
         """
         ::
+            Usage:
+                workflow refresh [--cloud=CLOUD] [-v]
+                workflow list [ID] [NAME] [--cloud=CLOUD] [--format=FORMAT] [--refresh] [-v]
+                workflow add NAME LOCATION
+                workflow delete ID
+                workflow status [NAMES]
+                workflow show ID
+                workflow save NAME WORKFLOWSTR
+                workflow run NAME
+                workflow service start
+                workflow service stop
+                This lists out the workflows present for a cloud
 
-          Usage:
-                workflow --file=FILE
-                workflow list
+            Options:
+               --format=FORMAT  the output format [default: table]
+               --cloud=CLOUD    the cloud name
+               --refresh        refreshes the data before displaying it
+                                from the cloud
 
-          This command does some useful things.
-
-          Arguments:
-              FILE   a file name
-
-          Options:
-              -f      specify the file
-
+            Examples:
+                cm workflow refresh
+                cm workflow list
+                cm workflow list --format=csv
+                cm workflow show 58c9552c-8d93-42c0-9dea-5f48d90a3188 --refresh
+                cm workflow run workflow1
         """
-        arguments.FILE = arguments['--file'] or None
 
         print(arguments)
 
-        m = Manager()
+        #m = Manager()
 
 
-        if arguments.FILE:
-            print("option a")
-            m.list(arguments.FILE)
+        #if arguments.FILE:
+        #    print("option a")
+        #    m.list(arguments.FILE)
 
-        elif arguments.list:
-            print("option b")
-            m.list("just calling list without parameter")
+        #elif arguments.list:
+        #    print("option b")
+        #    m.list("just calling list without parameter")
 
 
 

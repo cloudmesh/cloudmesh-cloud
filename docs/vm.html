@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>13. VM Description &mdash; cm4 alpha documentation</title>
+  <title>14. VM Description &mdash; cm4 alpha documentation</title>
   
 
   
@@ -26,10 +26,11 @@
 
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="author" title="About these documents" href="about.html" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="14. Jupyter Integration" href="jupyter.html" />
-    <link rel="prev" title="12. Virtual Cluster" href="vcluster.html" /> 
+    <link rel="next" title="15. Jupyter Integration" href="jupyter.html" />
+    <link rel="prev" title="13. Virtual Cluster" href="vcluster.html" /> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -84,38 +85,40 @@
             
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="contributors.html">1. Contributors</a></li>
-<li class="toctree-l1"><a class="reference internal" href="install.html">2. Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="quickstart.html">3. Quickstart</a></li>
-<li class="toctree-l1"><a class="reference internal" href="mongo.html">4. Cloudmesh Database</a></li>
-<li class="toctree-l1"><a class="reference internal" href="configuration.html">5. Configuration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="vmproviders.html">6. VM Providers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="vagrant.html">7. Vagrant</a></li>
-<li class="toctree-l1"><a class="reference internal" href="CM4README.html">8. CM4 Details</a></li>
-<li class="toctree-l1"><a class="reference internal" href="README.html">9. Cloudmesh cm v4</a></li>
-<li class="toctree-l1"><a class="reference internal" href="aws.html">10. AWS cm</a></li>
-<li class="toctree-l1"><a class="reference internal" href="ufo.html">11. CM4 REST Api</a></li>
-<li class="toctree-l1"><a class="reference internal" href="vcluster.html">12. Virtual Cluster</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">13. VM Description</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#providers-cm4-could-access">13.1. Providers <em>cm4</em> could access</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#aws">13.1.1. AWS</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#azure">13.1.2. AZURE</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#azure-setup">13.1.3. Azure Setup</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#openstack">13.1.4. OPENSTACK</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#extra-vargrant">13.1.5. Extra: Vargrant</a></li>
+<li class="toctree-l1"><a class="reference internal" href="about.html">1. About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributors.html">2. Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">3. Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">4. Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mongo.html">5. Cloudmesh Database</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">6. Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vmproviders.html">7. VM Providers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vagrant.html">8. Vagrant</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CM4README.html">9. CM4 Details</a></li>
+<li class="toctree-l1"><a class="reference internal" href="README.html">10. Cloudmesh cm v4</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aws.html">11. AWS cm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ufo.html">12. CM4 REST Api</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vcluster.html">13. Virtual Cluster</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">14. VM Description</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#providers-cm4-could-access">14.1. Providers <em>cm4</em> could access</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#aws">14.1.1. AWS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#azure">14.1.2. AZURE</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#azure-setup">14.1.3. Azure Setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#openstack">14.1.4. OPENSTACK</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#extra-vargrant">14.1.5. Extra: Vargrant</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#cloudmesh4-yaml-configuration-file">13.2. [<code class="docutils literal notranslate"><span class="pre">cloudmesh4.yaml</span></code>] configuration file</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#mongodb-database">13.3. MongoDB Database</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#data-scheme-in-mongodb">13.3.1. Data Scheme in MongoDB</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#security-in-mongodb">13.3.2. Security in MongoDB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cloudmesh4-yaml-configuration-file">14.2. [<code class="docutils literal notranslate"><span class="pre">cloudmesh4.yaml</span></code>] configuration file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#mongodb-database">14.3. MongoDB Database</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#data-scheme-in-mongodb">14.3.1. Data Scheme in MongoDB</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#security-in-mongodb">14.3.2. Security in MongoDB</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="jupyter.html">14. Jupyter Integration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="manual.html">15. Manual</a></li>
-<li class="toctree-l1"><a class="reference internal" href="code.html">16. Code Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="jupyter.html">15. Jupyter Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual.html">16. Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual-dev.html">17. Manual - Dev</a></li>
+<li class="toctree-l1"><a class="reference internal" href="code.html">18. Code Documentation</a></li>
 </ul>
 
             
@@ -161,7 +164,7 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>13. VM Description</li>
+      <li>14. VM Description</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -181,7 +184,7 @@
            <div itemprop="articleBody">
             
   <div class="section" id="vm-description">
-<span id="vm-description"></span><h1>13. VM Description<a class="headerlink" href="#vm-description" title="Permalink to this headline">¶</a></h1>
+<span id="vm-description"></span><h1>14. VM Description<a class="headerlink" href="#vm-description" title="Permalink to this headline">¶</a></h1>
 <p>In cloudmesh cm4, we are using the <strong>Python</strong> tool to
 implement a program that could remotely control cloud nodes provided
 by different organizations and run experiments in parallel.</p>
@@ -196,7 +199,7 @@ sending the commands from <strong>cm4</strong> platform. Meanwhile, we embed the
 NoSQL database <strong>MongoDB</strong> into cm4 for managing the nodes and
 experiments.</p>
 <div class="section" id="providers-cm4-could-access">
-<span id="providers-cm4-could-access"></span><h2>13.1. Providers <em>cm4</em> could access<a class="headerlink" href="#providers-cm4-could-access" title="Permalink to this headline">¶</a></h2>
+<span id="providers-cm4-could-access"></span><h2>14.1. Providers <em>cm4</em> could access<a class="headerlink" href="#providers-cm4-could-access" title="Permalink to this headline">¶</a></h2>
 <p>We are using the python library
 <a class="reference external" href="https://libcloud.apache.org"><strong>Apache Libcloud</strong></a> to interact with
 cloud service providers. Currently, in the <strong>cm4</strong>, we could
@@ -226,7 +229,7 @@ support their management tasks.</p>
 <li>Revert previous operations to the node</li>
 </ul>
 <div class="section" id="aws">
-<span id="aws"></span><h3>13.1.1. AWS<a class="headerlink" href="#aws" title="Permalink to this headline">¶</a></h3>
+<span id="aws"></span><h3>14.1.1. AWS<a class="headerlink" href="#aws" title="Permalink to this headline">¶</a></h3>
 <p>Amazon Web Service (<strong>AWS</strong>) provided by Amazon is a secure cloud
 service platform, users could start any instances with selected
 images.</p>
@@ -275,11 +278,11 @@ filled in default.image field. If you want to use other images, please
 update the Image ID into it.</p>
 </div>
 <div class="section" id="azure">
-<span id="azure"></span><h3>13.1.2. AZURE<a class="headerlink" href="#azure" title="Permalink to this headline">¶</a></h3>
+<span id="azure"></span><h3>14.1.2. AZURE<a class="headerlink" href="#azure" title="Permalink to this headline">¶</a></h3>
 <p>Uses <a class="reference external" href="https://libcloud.readthedocs.io/en/latest/compute/drivers/azure_arm.html">LibCloud’s Azure ARM Compute Driver</a></p>
 </div>
 <div class="section" id="azure-setup">
-<span id="azure-setup"></span><h3>13.1.3. Azure Setup<a class="headerlink" href="#azure-setup" title="Permalink to this headline">¶</a></h3>
+<span id="azure-setup"></span><h3>14.1.3. Azure Setup<a class="headerlink" href="#azure-setup" title="Permalink to this headline">¶</a></h3>
 <p><strong>Install Azure CLI</strong></p>
 <p><a class="reference external" href="https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest">Download and install according to your platform.</a></p>
 <p><strong>Make sure subscription is registered for compute services</strong></p>
@@ -301,7 +304,7 @@ principals at this time.</p>
 <p><em>Note:</em> <code class="docutils literal notranslate"><span class="pre">&lt;APP_ID&gt;</span></code> is provided in the output when the principal is created</p>
 </div>
 <div class="section" id="openstack">
-<span id="openstack"></span><h3>13.1.4. OPENSTACK<a class="headerlink" href="#openstack" title="Permalink to this headline">¶</a></h3>
+<span id="openstack"></span><h3>14.1.4. OPENSTACK<a class="headerlink" href="#openstack" title="Permalink to this headline">¶</a></h3>
 <p>OpenStack is an Infrastructure service that allows users to utilize computing resource in cloud service platform through
 virtual environments.</p>
 <p><a class="reference external" href="https://www.chameleoncloud.org/">Chameleon Cloud</a> provides an
@@ -315,17 +318,17 @@ to properly set up yout account before proceed to your journey with
 <strong>cm4</strong>.</p>
 </div>
 <div class="section" id="extra-vargrant">
-<span id="extra-vargrant"></span><h3>13.1.5. Extra: Vargrant<a class="headerlink" href="#extra-vargrant" title="Permalink to this headline">¶</a></h3>
+<span id="extra-vargrant"></span><h3>14.1.5. Extra: Vargrant<a class="headerlink" href="#extra-vargrant" title="Permalink to this headline">¶</a></h3>
 <p>Please refer to <a class="reference external" href="https://github.com/cloudmesh-community/cm/tree/master/cm4/vagrant/README.md">here</a> to see how to setup
 Vagrant with cm4.</p>
 </div>
 </div>
 <div class="section" id="cloudmesh4-yaml-configuration-file">
-<span id="cloudmesh4-yaml-configuration-file"></span><h2>13.2. [<code class="docutils literal notranslate"><span class="pre">cloudmesh4.yaml</span></code>] configuration file<a class="headerlink" href="#cloudmesh4-yaml-configuration-file" title="Permalink to this headline">¶</a></h2>
+<span id="cloudmesh4-yaml-configuration-file"></span><h2>14.2. [<code class="docutils literal notranslate"><span class="pre">cloudmesh4.yaml</span></code>] configuration file<a class="headerlink" href="#cloudmesh4-yaml-configuration-file" title="Permalink to this headline">¶</a></h2>
 <p>Sachith</p>
 </div>
 <div class="section" id="mongodb-database">
-<span id="mongodb-database"></span><h2>13.3. MongoDB Database<a class="headerlink" href="#mongodb-database" title="Permalink to this headline">¶</a></h2>
+<span id="mongodb-database"></span><h2>14.3. MongoDB Database<a class="headerlink" href="#mongodb-database" title="Permalink to this headline">¶</a></h2>
 <p>We add the database into <strong>cm4</strong> with two reasons:</p>
 <ul class="simple">
 <li>provide the information of nodes in different providers.</li>
@@ -360,7 +363,7 @@ information when <strong>cm4</strong> queries them.</li>
 </li>
 </ul>
 <div class="section" id="data-scheme-in-mongodb">
-<span id="data-scheme-in-mongodb"></span><h3>13.3.1. Data Scheme in MongoDB<a class="headerlink" href="#data-scheme-in-mongodb" title="Permalink to this headline">¶</a></h3>
+<span id="data-scheme-in-mongodb"></span><h3>14.3.1. Data Scheme in MongoDB<a class="headerlink" href="#data-scheme-in-mongodb" title="Permalink to this headline">¶</a></h3>
 <p>There are three types of documents in MongoDB:</p>
 <ul>
 <li><p class="first">Node information in <code class="docutils literal notranslate"><span class="pre">cloud</span></code> collection.  Different cloud service
@@ -410,7 +413,7 @@ executed in a node.</p>
 </ul>
 </div>
 <div class="section" id="security-in-mongodb">
-<span id="security-in-mongodb"></span><h3>13.3.2. Security in MongoDB<a class="headerlink" href="#security-in-mongodb" title="Permalink to this headline">¶</a></h3>
+<span id="security-in-mongodb"></span><h3>14.3.2. Security in MongoDB<a class="headerlink" href="#security-in-mongodb" title="Permalink to this headline">¶</a></h3>
 <p>For data security purpose, we enable the MongoDB security
 functionality in <strong>cm4</strong>.</p>
 <p>When users first time start the <strong>MongoDB</strong>, they have to add an
@@ -438,10 +441,10 @@ localhost mongoDB client with admin account.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="jupyter.html" class="btn btn-neutral float-right" title="14. Jupyter Integration" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="jupyter.html" class="btn btn-neutral float-right" title="15. Jupyter Integration" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="vcluster.html" class="btn btn-neutral" title="12. Virtual Cluster" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="vcluster.html" class="btn btn-neutral" title="13. Virtual Cluster" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

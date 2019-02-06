@@ -6,6 +6,7 @@ Cloudmesh Version 4
    :maxdepth: 2
    :caption: Contents:
 
+   about
    contributors
    install
    quickstart
@@ -21,6 +22,7 @@ Cloudmesh Version 4
    vm
    jupyter
    manual
+   manual-dev
    code
    
 Indices and tables

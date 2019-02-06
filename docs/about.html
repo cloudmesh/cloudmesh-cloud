@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>4. Quickstart &mdash; cm4 alpha documentation</title>
+  <title>1. About &mdash; cm4 alpha documentation</title>
   
 
   
@@ -26,11 +26,11 @@
 
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="author" title="About these documents" href="#" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="5. Cloudmesh Database" href="mongo.html" />
-    <link rel="prev" title="3. Installation" href="install.html" /> 
+    <link rel="next" title="2. Contributors" href="contributors.html" />
+    <link rel="prev" title="Cloudmesh Version 4" href="index.html" /> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -85,14 +85,10 @@
             
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="about.html">1. About</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">1. About</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contributors.html">2. Contributors</a></li>
 <li class="toctree-l1"><a class="reference internal" href="install.html">3. Installation</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">4. Quickstart</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#commandline">4.1. Commandline</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#interactive-shell">4.2. Interactive shell</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">4. Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="mongo.html">5. Cloudmesh Database</a></li>
 <li class="toctree-l1"><a class="reference internal" href="configuration.html">6. Configuration</a></li>
 <li class="toctree-l1"><a class="reference internal" href="vmproviders.html">7. VM Providers</a></li>
@@ -152,13 +148,13 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>4. Quickstart</li>
+      <li>1. About</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="_sources/quickstart.md.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/about.md.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -171,49 +167,42 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="quickstart">
-<span id="quickstart"></span><h1>4. Quickstart<a class="headerlink" href="#quickstart" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="commandline">
-<span id="commandline"></span><h2>4.1. Commandline<a class="headerlink" href="#commandline" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ cms <span class="nb">set</span> <span class="nv">cloud</span><span class="o">=</span>vagrant
-$ cms vm start
-$ cms image list
-$ cms flavor list
-
-$ cms <span class="nb">set</span> <span class="nv">cloud</span><span class="o">=</span>aws
-$ cms vm start
-$ cms image list
-$ cms flavor list
-
-$ cms <span class="nb">set</span> <span class="nv">cloud</span><span class="o">=</span>azure
-$ cms vm start
-$ cms image list
-$ cms flavor list
-
-$ cms <span class="nb">set</span> <span class="nv">cloud</span><span class="o">=</span>chameleon
-$ cms vm start
-$ cms image list
-$ cms flavor list
-
-$ cms <span class="nb">set</span> <span class="nv">cloud</span><span class="o">=</span>jetstream
-$ cms vm start
-$ cms image list
-$ cms flavor list
-
-$ cms vm list
-</pre></div>
-</div>
-</div>
-<div class="section" id="interactive-shell">
-<span id="interactive-shell"></span><h2>4.2. Interactive shell<a class="headerlink" href="#interactive-shell" title="Permalink to this headline">¶</a></h2>
-<p>BUG: Feature not yet implemented.</p>
-<p>As we want to often start or interact with a lot of virtual machines, it may be easier to run cm4 as an interactive shell.  Here is a simple example that starts cm4 and simply executes the sommands within the cm4 command shell.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cms
-cms&gt; <span class="nb">set</span> <span class="nv">cloud</span><span class="o">=</span>aws
-cms&gt; vm start
-</pre></div>
-</div>
-</div>
+  <div class="section" id="about">
+<h1>1. About<a class="headerlink" href="#about" title="Permalink to this headline">¶</a></h1>
+<p>Cloudmesh version 4 is an evolution of our previous tool that has been used by hundrest of students and
+cloud cractitioners to interact easily with clouds to create a service meshup to access common cloud services
+across a number of cloud providers.</p>
+<p>It is under active development</p>
+<p>Cloudmesh version 4 will contain</p>
+<ul class="simple">
+<li>A command shell interpreter</li>
+<li>A command line</li>
+<li>A javascript based GUI</li>
+<li>A cloud Workflow interpreter</li>
+<li>A cloud high throughput broker for p[leasantly parallel parameter studies</li>
+<li>OpenAPI based REST service interfaces</li>
+<li>MongoDB as a backend for chaching</li>
+<li>Interfaces to compute services such as<ul>
+<li>AWS, Azure, Google, OpenStack</li>
+<li>SLURM</li>
+<li>SSH</li>
+<li>VirtualBox</li>
+</ul>
+</li>
+<li>Interfaces to file storage<ul>
+<li>Box</li>
+<li>Github</li>
+<li>Google Drive</li>
+<li>Azure</li>
+<li>File storage on AWS</li>
+</ul>
+</li>
+<li>Interfaces to Platforms<ul>
+<li>Hadoop</li>
+<li>Spark</li>
+</ul>
+</li>
+</ul>
 </div>
 
 
@@ -224,10 +213,10 @@ cms&gt; vm start
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="mongo.html" class="btn btn-neutral float-right" title="5. Cloudmesh Database" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="contributors.html" class="btn btn-neutral float-right" title="2. Contributors" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="install.html" class="btn btn-neutral" title="3. Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="index.html" class="btn btn-neutral" title="Cloudmesh Version 4" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

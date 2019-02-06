@@ -77,8 +77,11 @@ class CmDatabase(object):
 
     def update(self, entries, collection="cloudmesh", replace=False):
         """
+
         :param entries: an arrey of dicts where one entry is called cmid.
                         One must be carefulas it does not erase previous attributes.
+        :param collection:
+        :param replace:
         :return:
         """
         if type(entries) == dict:

@@ -60,6 +60,9 @@ requests
 termcolor
 urllib3
 six
+Flask-PyMongo
+dateparser
+humanize
 """.split("\n")
 
 

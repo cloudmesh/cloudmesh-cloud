@@ -124,7 +124,7 @@ class VboxCommand(PluginCommand):
                 "vbox": {
                     "attribute": "vbox",
                     "description": "Vagrant Version",
-                    "version": cm4.vbox.version(),
+                    "version": "TBD"  # cloudmesh.vbox.api.version(),
                 }
             }
             result = Printer.write(versions,

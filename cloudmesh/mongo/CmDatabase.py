@@ -1,8 +1,10 @@
-from pymongo import MongoClient
 import urllib.parse
+from datetime import datetime
+
+from pymongo import MongoClient
+
 from cloudmesh.management.configuration.config import Config
-from pprint import pprint
-from datetime import  datetime
+
 
 #
 # cm:
@@ -13,7 +15,6 @@ from datetime import  datetime
 #   group:
 
 class CmDatabase(object):
-
     __shared_state = {}
 
     def __init__(self, host=None, username=None, password=None, port=None):
@@ -62,18 +63,17 @@ class CmDatabase(object):
             records.append(entry)
         return records
 
-    def find_by_id(self,  cmid, collection="cloudmesh"):
+    def find_by_id(self, cmid, collection="cloudmesh"):
 
         entry = self.find(collection=collection, cmid=cmid)
 
         return entry
 
-    def find_by_counter(self,  cmcounter, collection="cloudmesh"):
+    def find_by_counter(self, cmcounter, collection="cloudmesh"):
 
         entry = self.find(collection=collection, cmcounter=cmcounter)
 
         return entry
-
 
     def update(self, entries, collection="cloudmesh", replace=False):
         """
@@ -94,7 +94,6 @@ class CmDatabase(object):
                 col.replace_one({'cmid': entry['cmid']}, entry, upsert=True)
             else:
                 col.update_one({'cmid': entry['cmid']}, {"$set": entry}, upsert=True)
-
 
     def delete(self, collection="cloudmesh", **kwargs, ):
         col = self.db[collection]

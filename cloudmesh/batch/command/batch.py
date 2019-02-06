@@ -9,7 +9,6 @@ from cloudmesh.batch.api.Batch import SlurmCluster
 
 class BatchCommand(PluginCommand):
 
-
     # see also https://github.com/cloudmesh/client/blob/master/cloudmesh_client/shell/plugins/HpcCommand.py
     # noinspection PyUnusedLocal
     @command

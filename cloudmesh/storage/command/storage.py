@@ -6,6 +6,7 @@ from cloudmesh.shell.variables import Variables
 from pprint import pprint
 from cloudmesh.common.console import Console
 
+
 class StorageCommand(PluginCommand):
 
     # noinspection PyUnusedLocal
@@ -46,8 +47,6 @@ class StorageCommand(PluginCommand):
 
         pprint(arguments)
 
-
-
         m = Manager()
 
         service = None
@@ -67,5 +66,3 @@ class StorageCommand(PluginCommand):
 
         if arguments.get:
             m.get(service, filename)
-
-

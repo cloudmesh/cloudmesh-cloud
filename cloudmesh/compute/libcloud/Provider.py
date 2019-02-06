@@ -1,19 +1,18 @@
-from cloudmesh.abstractclass.ComputeNodeABC import ComputeNodeABC
-from pprint import pprint
+import sys
 from datetime import datetime
-from cloudmesh.common.util import HEADING
-from cloudmesh.common.parameter import Parameter
-from cloudmesh.management.configuration.config import Config
+from pathlib import Path
+from pprint import pprint
 
 from libcloud.compute.providers import get_driver
 from libcloud.compute.types import Provider as LibcloudProvider
-from cloudmesh.common.util import path_expand
-from pathlib import Path
-from cloudmesh.management.configuration.SSHkey import SSHkey
-import sys
+
+from cloudmesh.abstractclass.ComputeNodeABC import ComputeNodeABC
+from cloudmesh.common.parameter import Parameter
+from cloudmesh.common.util import HEADING
+from cloudmesh.management.configuration.config import Config
+
 
 class Provider(ComputeNodeABC):
-
     # ips
     # secgroups
     # keys
@@ -37,19 +36,19 @@ class Provider(ComputeNodeABC):
         mycloud = conf["cloud"][name]
         cred = mycloud["credentials"]
         self.kind = mycloud["cm"]["kind"]
-        #pprint (cred)
-        #print (self.kind)
+        # pprint (cred)
+        # print (self.kind)
         super().__init__(name, conf)
         if self.kind in Provider.ProviderMapper:
             if self.kind == 'openstack':
                 self.driver = get_driver(Provider.ProviderMapper[self.kind])
                 self.cloudman = self.driver(cred["OS_USERNAME"],
-                                    cred["OS_PASSWORD"],
-                                    ex_force_auth_url=cred['OS_AUTH_URL'],
-                                    ex_force_auth_version='2.0_password',
-                                    ex_tenant_name=cred['OS_TENANT_NAME'])
+                                            cred["OS_PASSWORD"],
+                                            ex_force_auth_url=cred['OS_AUTH_URL'],
+                                            ex_force_auth_version='2.0_password',
+                                            ex_tenant_name=cred['OS_TENANT_NAME'])
         else:
-            print ("Specified provider not available")
+            print("Specified provider not available")
             self.cloudman = None
         self.default_image = None
         self.default_size = None
@@ -108,7 +107,6 @@ class Provider(ComputeNodeABC):
                 return element
         return None
 
-
     def keys(self, raw=False):
         """
         Lists the keys on the cloud
@@ -123,7 +121,6 @@ class Provider(ComputeNodeABC):
             else:
                 return self.dict(entries, kind="key")
         return None
-
 
     def key_upload(self, key):
         """
@@ -140,8 +137,6 @@ class Provider(ComputeNodeABC):
 
         filename = Path(key["path"])
         key = self.cloudman.import_key_pair_from_file("{user}".format(**self.user), filename)
-
-
 
     def images(self, raw=False):
         """
@@ -181,7 +176,6 @@ class Provider(ComputeNodeABC):
             else:
                 return self.dict(entries, kind="flavor")
         return None
-
 
     def flavor(self, name=None):
         """
@@ -311,7 +305,7 @@ class Provider(ComputeNodeABC):
         else:
             sys.exit("this cloud is not yet supported")
 
-        pprint (node)
+        pprint(node)
         return (self.dict(node))
         # no brackets needed?
 
@@ -326,4 +320,3 @@ class Provider(ComputeNodeABC):
         # if destination is None, increase the name counter and use the new name
         HEADING(c=".")
         return None
-

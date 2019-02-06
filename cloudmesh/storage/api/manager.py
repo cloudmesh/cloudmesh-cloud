@@ -1,6 +1,7 @@
 import cloudmesh.storage.provider.gdrive.Provider
 import cloudmesh.storage.provider.box.Provider
 
+
 class Manager(object):
 
     def __init__(self):
@@ -8,19 +9,19 @@ class Manager(object):
 
     def _provider(self, service):
         provider = None
-        if service == "gdrive":
+        if self.service == "gdrive":
             provider = cloudmesh.storage.provider.gdrive.Provider.Provider()
-        elif service == "box":
+        elif self.service == "box":
             provider = cloudmesh.storage.provider.box.Provider.Provider()
         return provider
 
     def list(self, parameter):
         print("list", parameter)
-        provider = self._provider(service)
+        provider = self._provider(self.service)
 
     def delete(self, filename):
-        print ("delete filename")
-        provider = self._provider(service)
+        print("delete filename")
+        provider = self._provider(self.service)
         provider.delete(filename)
 
     def get(self, service, filename):

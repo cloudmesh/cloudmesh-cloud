@@ -1,6 +1,5 @@
 from abc import ABCMeta, abstractmethod
-from pprint import pprint
-from datetime import datetime
+
 
 # noinspection PyUnusedLocal
 class ImageABC(metaclass=ABCMeta):

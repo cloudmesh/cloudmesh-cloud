@@ -14,7 +14,6 @@ class SSHkey(dict):
 
     def __init__(self):
 
-
         self["profile"] = Config()["cloudmesh"]["profile"]
         self["path"] = path_expand(self["profile"]["publickey"])
 
@@ -124,4 +123,3 @@ class SSHkey(dict):
         keynamenew = "%s_%s" % (
             username, keyname.replace('.', '_').replace('@', '_'))
         return keynamenew
-

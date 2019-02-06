@@ -1,10 +1,10 @@
 from __future__ import print_function
-from cloudmesh.shell.command import command
+
 from cloudmesh.shell.command import PluginCommand
-from cloudmesh.image.api.manager import Manager
+from cloudmesh.shell.command import command
+
 
 class ImageCommand(PluginCommand):
-
 
     # see https://github.com/cloudmesh/client/blob/master/cloudmesh_client/shell/plugins/ImageCommand.py
 
@@ -31,17 +31,12 @@ class ImageCommand(PluginCommand):
 
         print(arguments)
 
-        #m = Manager()
+        # m = Manager()
 
-
-        #if arguments.FILE:
+        # if arguments.FILE:
         #    print("option a")
         #    m.list(arguments.FILE)
 
-        #elif arguments.list:
+        # elif arguments.list:
         #    print("option b")
         #    m.list("just calling list without parameter")
-
-
-
-

@@ -20,9 +20,16 @@ class TestName:
     def test_01_key(self):
         HEADING()
 
-        sshkey = SSHkey(key_path="~/.ssh/id_rsa.pub")
+        sshkey = SSHkey()
 
-        pprint(sshkey.profile)
+        pprint(sshkey)
+        print(sshkey)
+
+        print(type(sshkey))
+
+
+        pprint(sshkey.__dict__)
+
 
         #pprint(sshkey.key)
 

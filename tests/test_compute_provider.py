@@ -2,7 +2,8 @@ from pprint import pprint
 from cloudmesh.common.util import HEADING
 from cloudmesh.compute.libcloud.Provider import Provider
 from cloudmesh.management.configuration.config import Config
-
+from cloudmesh.common.Printer import Printer
+from cloudmesh.common.FlatDict import FlatDict, flatten
 # nosetest -v --nopature
 # nosetests -v --nocapture tests/test_compute_provider.py
 
@@ -16,16 +17,40 @@ class TestName:
 
     def test_00_list_images(self):
         HEADING()
-        pprint (self.p.images())
+        images= self.p.images()
+        pprint(images)
+
+        print(Printer.flatwrite(images,
+                            sort_keys=("name","extra.minDisk"),
+                            order=["name", "extra.minDisk", "updated", "driver"],
+                            header=["Name", "MinDisk", "Updated", "Driver"])
+              )
+
 
     def test_01_list_flavors(self):
         HEADING()
-        pprint (self.p.flavors())
+        flavors = self.p.flavors()
+        pprint (flavors)
+
+        print(Printer.flatwrite(flavors,
+                            sort_keys=("name", "vcpus", "disk"),
+                            order=["name", "vcpus", "ram", "disk"],
+                            header=["Name", "VCPUS", "RAM", "Disk"])
+          )
+
 
     def test_02_list_vm(self):
         HEADING()
         vms = self.p.list()
         pprint (vms)
+
+
+        print(Printer.flatwrite(vms,
+                                sort_keys=("name"),
+                                order=["name", "state", "extra.task_state", "extra.vm_state", "extra.userId", "private_ips", "public_ips"],
+                                header=["Name", "State", "Task state", "VM state", "User Id",
+                                       "Private ips", "Public ips"])
+              )
 
 
     def test_03_create(self):
@@ -44,24 +69,43 @@ class TestName:
 
         assert node is not None
 
+    def test_04_printer(self):
+        HEADING()
+        nodes = self.p.list()
+
+
+        print(Printer.write(nodes, order=["name", "image", "size"]))
+
+
+
     #def test_01_start(self):
     #    HEADING()
     #    self.p.start(name=self.name)
 
-    def test_04_list_vm(self):
+    def test_05_list_vm(self):
         HEADING()
-        pprint (self.p.list())
+        vms = self.p.list()
+        pprint(vms)
 
-    def test_05_info(self):
+        print(Printer.flatwrite(vms,
+                                sort_keys=("name"),
+                                order=["name", "state", "extra.task_state", "extra.vm_state", "extra.userId",
+                                       "private_ips", "public_ips"],
+                                header=["Name", "State", "Task state", "VM state", "User Id",
+                                        "Private ips", "Public ips"])
+              )
+
+
+    def test_06_info(self):
         HEADING()
         self.p.info(name=self.name)
 
-    def test_06_rename(self):
+    def test_07_rename(self):
         HEADING()
 
         self.p.rename(name=self.name, destination=self.new_name)
 
-    def test_07_destroy(self):
+    def test_08_destroy(self):
         HEADING()
         self.p.destroy(names=self.name)
         nodes = self.p.list()
@@ -71,7 +115,7 @@ class TestName:
 
         assert node["state"] is not "running"
 
-    def test_08_list_vm(self):
+    def test_09_list_vm(self):
         HEADING()
         pprint (self.p.list())
 

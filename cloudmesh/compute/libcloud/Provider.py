@@ -36,14 +36,13 @@ class Provider(ComputeNodeABC):
         self.user = conf["profile"]
         mycloud = conf["cloud"][name]
         cred = mycloud["credentials"]
-        self.cloudkind = mycloud["cm"]["kind"]
-        self.kind = self.cloudkind
+        self.kind = mycloud["cm"]["kind"]
         #pprint (cred)
-        #print (self.cloudkind)
+        #print (self.kind)
         super().__init__(name, conf)
-        if self.cloudkind in Provider.ProviderMapper:
-            if self.cloudkind == 'openstack':
-                self.driver = get_driver(Provider.ProviderMapper[self.cloudkind])
+        if self.kind in Provider.ProviderMapper:
+            if self.kind == 'openstack':
+                self.driver = get_driver(Provider.ProviderMapper[self.kind])
                 self.cloudman = self.driver(cred["OS_USERNAME"],
                                     cred["OS_PASSWORD"],
                                     ex_force_auth_url=cred['OS_AUTH_URL'],

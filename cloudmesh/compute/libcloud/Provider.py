@@ -11,8 +11,10 @@ from libcloud.compute.types import Provider as LibcloudProvider
 
 class Provider(ComputeNodeABC):
 
-    ProviderMapper = {"openstack": LibcloudProvider.OPENSTACK,
-                      "aws": LibcloudProvider.EC2}
+    ProviderMapper = {
+        "openstack": LibcloudProvider.OPENSTACK,
+        "aws": LibcloudProvider.EC2
+    }
 
     def __init__(self, name=None, configuration="~/.cloudmesh/cloudmesh4.yaml"):
         HEADING(c=".")
@@ -42,9 +44,28 @@ class Provider(ComputeNodeABC):
         if self.cloudman:
             return (self.cloudman.list_images())
 
+    def image(self, name=None):
+        """
+        Gets the image with a given nmae
+        :param name: The name of the image
+        :return:
+        """
+        HEADING(c=".")
+        return None
+
     def flavors(self):
         if self.cloudman:
             return (self.cloudman.list_sizes())
+
+    def flavor(self, name=None):
+        """
+        Gest the flavor with a given name
+
+        :param name: The aname of the flavor
+        :return:
+        """
+        HEADING(c=".")
+        return None
 
     def start(self, name):
         """

@@ -9,6 +9,7 @@ from libcloud.compute.providers import get_driver
 from libcloud.compute.types import Provider as LibcloudProvider
 from cloudmesh.common.util import path_expand
 from pathlib import Path
+from cloudmesh.management.configuration.SSHkey import SSHkey
 
 class Provider(ComputeNodeABC):
 
@@ -86,9 +87,6 @@ class Provider(ComputeNodeABC):
                 return element
         return None
 
-    #def key(self, filename="~/.ssh/id_rsa.pub"):
-    #    filename = Path(path_expand(filename))
-    #    key = self.cloudman.import_key_pair_from_file("{user}-key".format(**self.user), filename)
 
     def keys(self, raw=False):
         if self.cloudman:
@@ -97,8 +95,20 @@ class Provider(ComputeNodeABC):
                 return entries
             else:
                 return self.dict(entries, kind="key")
-
         return None
+
+
+    def key_upload(self, key):
+
+        print(key)
+        keys = self.keys()
+        for cloudkey in keys:
+            if cloudkey['fingerprint'] == key["fingerprint"]:
+                return
+
+        filename = Path(key["path"])
+        key = self.cloudman.import_key_pair_from_file("{user}".format(**self.user), filename)
+
 
 
     def images(self, raw=False):

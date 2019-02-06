@@ -4,6 +4,8 @@ from cloudmesh.compute.libcloud.Provider import Provider
 from cloudmesh.management.configuration.config import Config
 from cloudmesh.common.Printer import Printer
 from cloudmesh.common.FlatDict import FlatDict, flatten
+from cloudmesh.management.configuration.SSHkey import SSHkey
+
 # nosetest -v --nopature
 # nosetests -v --nocapture tests/test_compute_provider.py
 
@@ -17,18 +19,25 @@ class TestName:
 
     def test_01_list_keys(self):
         HEADING()
-        keys = self.p.keys()
-        pprint(keys)
+        self.keys = self.p.keys()
+        pprint(self.keys)
 
-        print(Printer.flatwrite(keys,
+        print(Printer.flatwrite(self.keys,
                             sort_keys=("name"),
                             order=["name", "fingerprint"],
                             header=["Name", "Fingerprint"])
               )
 
+    def test_02_key_upload(self):
+        HEADING()
 
-class other:
-    def test_00_list_images(self):
+        key = SSHkey()
+        print (key.__dict__)
+
+        self.p.key_upload(key)
+
+
+    def test_03_list_images(self):
         HEADING()
         images= self.p.images()
         pprint(images)
@@ -40,7 +49,7 @@ class other:
               )
 
 
-    def test_01_list_flavors(self):
+    def test_04_list_flavors(self):
         HEADING()
         flavors = self.p.flavors()
         pprint (flavors)
@@ -52,7 +61,7 @@ class other:
           )
 
 
-    def test_02_list_vm(self):
+    def test_04_list_vm(self):
         HEADING()
         vms = self.p.list()
         pprint (vms)
@@ -66,7 +75,7 @@ class other:
               )
 
 
-    def test_03_create(self):
+    def test_06_create(self):
         HEADING()
         image = "CC-Ubuntu16.04"
         size = "m1.medium"
@@ -82,7 +91,7 @@ class other:
 
         assert node is not None
 
-    def test_04_printer(self):
+    def test_07_printer(self):
         HEADING()
         nodes = self.p.list()
 
@@ -95,7 +104,7 @@ class other:
     #    HEADING()
     #    self.p.start(name=self.name)
 
-    def test_05_list_vm(self):
+    def test_08_list_vm(self):
         HEADING()
         vms = self.p.list()
         pprint(vms)
@@ -109,16 +118,16 @@ class other:
               )
 
 
-    def test_06_info(self):
+    def test_09_info(self):
         HEADING()
         self.p.info(name=self.name)
 
-    def test_07_rename(self):
+    def test_10_rename(self):
         HEADING()
 
         self.p.rename(name=self.name, destination=self.new_name)
 
-    def test_08_destroy(self):
+    def test_11_destroy(self):
         HEADING()
         self.p.destroy(names=self.name)
         nodes = self.p.list()
@@ -128,7 +137,7 @@ class other:
 
         assert node["state"] is not "running"
 
-    def test_09_list_vm(self):
+    def test_12_list_vm(self):
         HEADING()
         pprint (self.p.list())
 

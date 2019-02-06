@@ -5,16 +5,26 @@ from cloudmesh.management.configuration.config import Config
 from cloudmesh.common.Printer import Printer
 from cloudmesh.common.FlatDict import FlatDict, flatten
 from cloudmesh.management.configuration.SSHkey import SSHkey
-
+from cloudmesh.management.configuration.name import Name
 # nosetest -v --nopature
 # nosetests -v --nocapture tests/test_compute_provider.py
 
 class TestName:
 
     def setup(self):
-        self.name = "vm-test-vm4"
+        self.user = Config()["cloudmesh"]["profile"]["user"]
+        self.name_generator = Name(
+             experiment="exp",
+             group="grp",
+             user=self.user,
+             kind="vm",
+             counter=1)
 
-        self.new_name="vm02"
+        self.name = str(self.name_generator)
+        self.name_generator.incr()
+
+        self.new_name = str(self.name_generator)
+
         self.p = Provider(name="chameleon")
 
     def test_01_list_keys(self):
@@ -111,9 +121,9 @@ class TestName:
 
         print(Printer.flatwrite(vms,
                                 sort_keys=("name"),
-                                order=["name", "state", "extra.task_state", "extra.vm_state", "extra.userId",
+                                order=["name", "key_name", "state", "extra.task_state", "extra.vm_state", "extra.userId",
                                        "private_ips", "public_ips"],
-                                header=["Name", "State", "Task state", "VM state", "User Id",
+                                header=["Name", "Key", "State", "Task state", "VM state", "User Id",
                                         "Private ips", "Public ips"])
               )
 
@@ -122,10 +132,15 @@ class TestName:
         HEADING()
         self.p.info(name=self.name)
 
+
+
+class other:
+
     def test_10_rename(self):
         HEADING()
 
         self.p.rename(name=self.name, destination=self.new_name)
+
 
     def test_11_destroy(self):
         HEADING()

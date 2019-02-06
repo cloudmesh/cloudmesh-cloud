@@ -10,6 +10,7 @@ from libcloud.compute.types import Provider as LibcloudProvider
 from cloudmesh.common.util import path_expand
 from pathlib import Path
 from cloudmesh.management.configuration.SSHkey import SSHkey
+import sys
 
 class Provider(ComputeNodeABC):
 
@@ -28,14 +29,14 @@ class Provider(ComputeNodeABC):
         self.user = conf["profile"]
         mycloud = conf["cloud"][name]
         cred = mycloud["credentials"]
-        cloudkind = mycloud["cm"]["kind"]
-        self.kind = cloudkind
+        self.cloudkind = mycloud["cm"]["kind"]
+        self.kind = self.cloudkind
         #pprint (cred)
-        #print (cloudkind)
+        #print (self.cloudkind)
         super().__init__(name, conf)
-        if cloudkind in Provider.ProviderMapper:
-            if cloudkind == 'openstack':
-                self.driver = get_driver(Provider.ProviderMapper[cloudkind])
+        if self.cloudkind in Provider.ProviderMapper:
+            if self.cloudkind == 'openstack':
+                self.driver = get_driver(Provider.ProviderMapper[self.cloudkind])
                 self.cloudman = self.driver(cred["OS_USERNAME"],
                                     cred["OS_PASSWORD"],
                                     ex_force_auth_url=cred['OS_AUTH_URL'],
@@ -266,7 +267,12 @@ class Provider(ComputeNodeABC):
             if _flavor.name == size:
                 flavorUse = _flavor
                 break
-        node = self.cloudman.create_node(name=name, image=imageUse, size=flavorUse)
+        keyname = Config()["cloudmesh"]["profile"]["user"]
+        if self.kind == "openstack":
+            node = self.cloudman.create_node(name=name, image=imageUse, size=flavorUse, ex_keyname=keyname)
+        else:
+            sys.exit("this cloud is not yet supported")
+
         pprint (node)
         return (self.dict(node))
         # no brackets needed?

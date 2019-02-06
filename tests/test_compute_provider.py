@@ -15,6 +15,19 @@ class TestName:
         self.new_name="vm02"
         self.p = Provider(name="chameleon")
 
+    def test_01_list_keys(self):
+        HEADING()
+        keys = self.p.keys()
+        pprint(keys)
+
+        print(Printer.flatwrite(keys,
+                            sort_keys=("name"),
+                            order=["name", "fingerprint"],
+                            header=["Name", "Fingerprint"])
+              )
+
+
+class other:
     def test_00_list_images(self):
         HEADING()
         images= self.p.images()

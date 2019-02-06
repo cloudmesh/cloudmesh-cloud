@@ -24,6 +24,13 @@ class Provider(ComputeNodeABC):
     }
 
     def __init__(self, name=None, configuration="~/.cloudmesh/cloudmesh4.yaml"):
+        """
+        Initializes the provider. The default parameters are read from the configutation
+        file that is defined in yaml format.
+
+        :param name: The name of the provider as defined in the yaml file
+        :param configuration: The location of the yaml configuration filw
+        """
         HEADING(c=".")
         conf = Config(configuration)["cloudmesh"]
         self.user = conf["profile"]
@@ -50,6 +57,14 @@ class Provider(ComputeNodeABC):
         self.public_key_path = conf["profile"]["publickey"]
 
     def dict(self, elements, kind=None):
+        """
+        Libcloud returns an object or list of objects With the dict method
+        this object is converted to a dict. Typically this method is used internally.
+
+        :param elements: the elements
+        :param kind: Kind is image, flavor, or node
+        :return:
+        """
         if elements is None:
             return None
         elif type(elements) == list:
@@ -83,6 +98,12 @@ class Provider(ComputeNodeABC):
         return d
 
     def find(self, elements, name=None):
+        """
+        finds an element in elements with the specified name
+        :param elements: The elements
+        :param name: The name to be found
+        :return:
+        """
         for element in elements:
             if element["name"] == name:
                 return element
@@ -90,6 +111,12 @@ class Provider(ComputeNodeABC):
 
 
     def keys(self, raw=False):
+        """
+        Lists the keys on the cloud
+        :param raw: If raw is set to True the lib cloud object is returened
+                    otherwise a dict is returened.
+        :return: dict or libcloud object
+        """
         if self.cloudman:
             entries = self.cloudman.list_key_pairs()
             if raw:
@@ -100,6 +127,11 @@ class Provider(ComputeNodeABC):
 
 
     def key_upload(self, key):
+        """
+        uploades teh key specified in the yaml configuration to the cloud
+        :param key:
+        :return:
+        """
 
         print(key)
         keys = self.keys()
@@ -113,6 +145,12 @@ class Provider(ComputeNodeABC):
 
 
     def images(self, raw=False):
+        """
+        Lists the images on the cloud
+        :param raw: If raw is set to True the lib cloud object is returened
+                    otherwise a dict is returened.
+        :return: dict or libcloud object
+        """
         if self.cloudman:
             entries = self.cloudman.list_images()
             if raw:
@@ -126,11 +164,17 @@ class Provider(ComputeNodeABC):
         """
         Gets the image with a given nmae
         :param name: The name of the image
-        :return:
+        :return: the dict of the image
         """
         return self.find(self.images(), name=name)
 
     def flavors(self, raw=False):
+        """
+        Lists the flavors on the cloud
+        :param raw: If raw is set to True the lib cloud object is returened
+                    otherwise a dict is returened.
+        :return: dict or libcloud object
+        """
         if self.cloudman:
             entries = self.cloudman.list_sizes()
             if raw:
@@ -145,13 +189,13 @@ class Provider(ComputeNodeABC):
         Gest the flavor with a given name
 
         :param name: The aname of the flavor
-        :return:
+        :return: The dict of the flavor
         """
         return self.find(self.flavors(), name=name)
 
     def start(self, name):
         """
-        start a node
+        start a node. NOT YET IMPLEMENTED.
     
         :param name: the unique node name
         :return:  The dict representing the node
@@ -161,7 +205,7 @@ class Provider(ComputeNodeABC):
 
     def stop(self, name=None):
         """
-        stops the node with the given name
+        stops the node with the given name. NOT YET IMPLEMENTED.
     
         :param name:
         :return: The dict representing the node including updated status
@@ -171,16 +215,16 @@ class Provider(ComputeNodeABC):
 
     def info(self, name=None):
         """
-        gets the information of a node with a given name
+        Gets the information of a node with a given name
     
-        :param name:
+        :param name: The name of teh virtual machine
         :return: The dict representing the node including updated status
         """
         return self.find(self.list(), name=name)
 
     def suspend(self, name=None):
         """
-        suspends the node with the given name
+        suspends the node with the given name. NOT YET IMPLEMENTED.
     
         :param name: the name of the node
         :return: The dict representing the node
@@ -190,9 +234,10 @@ class Provider(ComputeNodeABC):
 
     def list(self, raw=False):
         """
-        list all nodes id
-    
-        :return: an array of dicts representing the nodes
+        Lists the vms on the cloud
+        :param raw: If raw is set to True the lib cloud object is returened
+                    otherwise a dict is returened.
+        :return: dict or libcloud object
         """
         if self.cloudman:
             entries = self.cloudman.list_nodes()
@@ -204,7 +249,7 @@ class Provider(ComputeNodeABC):
 
     def resume(self, name=None):
         """
-        resume the named node
+        resume the named node. NOT YET IMPLEMENTED.
     
         :param name: the name of the node
         :return: the dict of the node
@@ -218,7 +263,6 @@ class Provider(ComputeNodeABC):
         :param name: the name of the node
         :return: the dict of the node
         """
-        HEADING(c=".")
 
         names = Parameter.expand(names)
 
@@ -230,7 +274,8 @@ class Provider(ComputeNodeABC):
 
     def reboot(self, name=None):
         """
-        Reboot the node
+        Reboot the node. NOT YET IMPLEMENTED.
+
         :param name: the name of the node
         :return: the dict of the node
         """
@@ -249,12 +294,6 @@ class Provider(ComputeNodeABC):
         :param kwargs: additional arguments HEADING(c=".")ed along at time of boot
         :return:
         """
-        """
-        create one node
-        """
-        HEADING(c=".")
-        #imagename = "CC-Ubuntu16.04"
-        #flavorname = "m1.medium"
         images = self.images(raw=True)
         imageUse = None
         flavors = self.flavors(raw=True)
@@ -279,7 +318,7 @@ class Provider(ComputeNodeABC):
 
     def rename(self, name=None, destination=None):
         """
-        rename a node
+        rename a node. NOT YET IMPLEMENTED.
     
         :param destination:
         :param name: the current name

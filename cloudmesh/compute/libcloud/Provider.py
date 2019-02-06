@@ -40,6 +40,12 @@ class Provider(ComputeNodeABC):
         self.default_size = None
         self.public_key_path = conf["profile"]["key"]["public"]
 
+    def _find_by_name(self, name, elements):
+        for element in elements:
+            if element.name == name:
+                return element
+        return None
+
     def images(self):
         if self.cloudman:
             return (self.cloudman.list_images())
@@ -50,8 +56,7 @@ class Provider(ComputeNodeABC):
         :param name: The name of the image
         :return:
         """
-        HEADING(c=".")
-        return None
+        return self._find_by_name(name, self.images())
 
     def flavors(self):
         if self.cloudman:
@@ -64,8 +69,7 @@ class Provider(ComputeNodeABC):
         :param name: The aname of the flavor
         :return:
         """
-        HEADING(c=".")
-        return None
+        return self._find_by_name(name, self.flavor())
 
     def start(self, name):
         """
@@ -92,7 +96,7 @@ class Provider(ComputeNodeABC):
         :param name:
         :return: The dict representing the node including updated status
         """
-        HEADING(c=".")
+        return self._find_by_name(name, self.list())
 
     def suspend(self, name=None):
         """

@@ -26,6 +26,7 @@
 
   <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <link rel="author" title="About these documents" href="../../../about.html" />
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
 
@@ -82,22 +83,24 @@
             
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../../../contributors.html">1. Contributors</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../install.html">2. Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../quickstart.html">3. Quickstart</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../mongo.html">4. Cloudmesh Database</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../configuration.html">5. Configuration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../vmproviders.html">6. VM Providers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../vagrant.html">7. Vagrant</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../CM4README.html">8. CM4 Details</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../README.html">9. Cloudmesh cm v4</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../aws.html">10. AWS cm</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../ufo.html">11. CM4 REST Api</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../vcluster.html">12. Virtual Cluster</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../vm.html">13. VM Description</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../jupyter.html">14. Jupyter Integration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../manual.html">15. Manual</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../code.html">16. Code Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../about.html">1. About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contributors.html">2. Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../install.html">3. Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../quickstart.html">4. Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../mongo.html">5. Cloudmesh Database</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../configuration.html">6. Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../vmproviders.html">7. VM Providers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../vagrant.html">8. Vagrant</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../CM4README.html">9. CM4 Details</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../README.html">10. Cloudmesh cm v4</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../aws.html">11. AWS cm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ufo.html">12. CM4 REST Api</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../vcluster.html">13. Virtual Cluster</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../vm.html">14. VM Description</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../jupyter.html">15. Jupyter Integration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../manual.html">16. Manual</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../manual-dev.html">17. Manual - Dev</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../code.html">18. Code Documentation</a></li>
 </ul>
 
             
@@ -174,12 +177,41 @@
 <span class="kn">from</span> <span class="nn">cloudmesh.common.console</span> <span class="k">import</span> <span class="n">Console</span>
 <span class="kn">from</span> <span class="nn">cloudmesh.common.dotdict</span> <span class="k">import</span> <span class="n">dotdict</span>
 <span class="kn">from</span> <span class="nn">cloudmesh.common.util</span> <span class="k">import</span> <span class="n">convert_from_unicode</span>
-
+<span class="kn">from</span> <span class="nn">cloudmesh.common.FlatDict</span> <span class="k">import</span> <span class="n">flatten</span>
 
 <div class="viewcode-block" id="Printer"><a class="viewcode-back" href="../../../code.html#cloudmesh.common.Printer.Printer">[docs]</a><span class="k">class</span> <span class="nc">Printer</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A simple Printer class with convenient methods to print dictionary, tables, csv, lists</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Printer.flatwrite"><a class="viewcode-back" href="../../../code.html#cloudmesh.common.Printer.Printer.flatwrite">[docs]</a>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">flatwrite</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">table</span><span class="p">,</span>
+              <span class="n">order</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+              <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+              <span class="n">output</span><span class="o">=</span><span class="s2">&quot;table&quot;</span><span class="p">,</span>
+              <span class="n">sort_keys</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+              <span class="n">show_none</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+              <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;.&quot;</span>
+              <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        writes the information given in the table</span>
+<span class="sd">        :param table: the table of values</span>
+<span class="sd">        :param order: the order of the columns</span>
+<span class="sd">        :param header: the header for the columns</span>
+<span class="sd">        :param output: the format (default is table, values are raw, csv, json, yaml, dict</span>
+<span class="sd">        :param sort_keys: if true the table is sorted</span>
+<span class="sd">        :param show_none: passed along to the list or dict printer</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">flat</span> <span class="o">=</span> <span class="n">flatten</span><span class="p">(</span><span class="n">table</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="n">sep</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">Printer</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">flat</span><span class="p">,</span>
+                        <span class="n">sort_keys</span><span class="o">=</span><span class="n">sort_keys</span><span class="p">,</span>
+                        <span class="n">order</span><span class="o">=</span><span class="n">order</span><span class="p">,</span>
+                        <span class="n">header</span><span class="o">=</span><span class="n">header</span><span class="p">)</span></div>
+
+
 <div class="viewcode-block" id="Printer.write"><a class="viewcode-back" href="../../../code.html#cloudmesh.common.Printer.Printer.write">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">table</span><span class="p">,</span>
               <span class="n">order</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>

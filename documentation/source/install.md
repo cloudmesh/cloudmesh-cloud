@@ -2,19 +2,12 @@
 
 ## Prerequisites
 
-Before you install make sure that you have at minimum python 3.7.1 
+Before you install make sure that you have at minimum python 3.7.2 
 installed. We
 recommend that you use a python virtualenv such as venv or pyenv to
 isolate the python installed packages as not to interfere with the
 system installation.
 
-## Anaconda and Conda
-
-At this time we do not yet support conda. But if you like to 
-contribute an instalation package, please do so.
- 
-It may just very well work with our pip installs, but we have not tested it. 
-Please give us feedback.
 
 ### Source instalation for development
 
@@ -39,18 +32,7 @@ cd $SRC/cm
 pip install -e .
 ```
 
-## One Line installer
-
-:warning: Does not work yet
-
-```bash
-wget -qO - http://cloudmesh.github.io/get/cm4/osx | sh 
-```
-
-
 ## Installation of mongod
-
-BUG: Install on windows is not yet implemented or tested
 
 In case your computer does not yet have mongo db installed, you can
 easily install it with our `admin` command. It will not only install
@@ -59,7 +41,34 @@ simply say
 
 ```bash
 $ cms admin mongo install
+$ cms admin mongo create
 ```
 
-It will download and install the version we use.
+It will download and install the version we use with the first command. The second command, 
+will create the mongo service with the correct credentials.
 
+Once the mongo db is created it and be started and stoped with 
+
+
+```bash
+$ cms admin mongo start
+$ cms admin mongo stop
+```
+
+For cloudmesh to work properly, please start mongo.
+
+## One Line installer (proposed)
+
+:warning: Does not work yet
+
+```bash
+wget -qO - http://cloudmesh.github.io/get/cm4/osx | sh 
+```
+
+## Anaconda and Conda (proposed)
+
+At this time we do not yet support conda. But if you like to 
+contribute an instalation package, please do so.
+ 
+It may just very well work with our pip installs, but we have not tested it. 
+Please give us feedback.

@@ -253,7 +253,7 @@ class Provider(ComputeNodeABC):
     def destroy(self, names=None):
         """
         Destroys the node
-        :param name: the name of the node
+        :param names: the name of the node
         :return: the dict of the node
         """
 
@@ -306,8 +306,7 @@ class Provider(ComputeNodeABC):
             sys.exit("this cloud is not yet supported")
 
         pprint(node)
-        return (self.dict(node))
-        # no brackets needed?
+        return self.dict(node)
 
     def rename(self, name=None, destination=None):
         """

@@ -2,18 +2,18 @@
 
 The contributors are listed here in alphabetical order
 
-* Gregor von Laszewski (primary contact, laszewski@gmial.com)
-
-put your names here (put your real names here and sort
-
-* Vafa Andalibi
-* David Michael Demeulenaere
-* Bo Feng
-* Yu Luo
-* Rui Li 
+* Gregor von Laszewski (primary contact, laszewski@gmial.com) and
 * Fugang Wang
-* Sachith Danushka Withana
-* Kimball Wu
+
+put your names here (put your real names here and sort by lastname
+
+* Vafa Andalibi,
+  David Michael Demeulenaere,
+  Bo Feng,
+  Yu Luo,
+  Rui Li, 
+  Sachith Danushka Withana,
+  Kimball Wu
 
 Code Contributions can be seen at
 

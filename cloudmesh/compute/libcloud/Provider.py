@@ -7,9 +7,14 @@ from cloudmesh.management.configuration.config import Config
 
 from libcloud.compute.providers import get_driver
 from libcloud.compute.types import Provider as LibcloudProvider
-
+from cloudmesh.common.util import path_expand
+from pathlib import Path
 
 class Provider(ComputeNodeABC):
+
+    # ips
+    # secgroups
+    # keys
 
     ProviderMapper = {
         "openstack": LibcloudProvider.OPENSTACK,
@@ -19,6 +24,7 @@ class Provider(ComputeNodeABC):
     def __init__(self, name=None, configuration="~/.cloudmesh/cloudmesh4.yaml"):
         HEADING(c=".")
         conf = Config(configuration)["cloudmesh"]
+        self.user = conf["profile"]
         mycloud = conf["cloud"][name]
         cred = mycloud["credentials"]
         cloudkind = mycloud["cm"]["kind"]
@@ -39,7 +45,7 @@ class Provider(ComputeNodeABC):
             self.cloudman = None
         self.default_image = None
         self.default_size = None
-        self.public_key_path = conf["profile"]["key"]["public"]
+        self.public_key_path = conf["profile"]["publickey"]
 
     def dict(self, elements, kind=None):
         if elements is None:
@@ -68,7 +74,8 @@ class Provider(ComputeNodeABC):
                 entry['created'] = entry['extra']['created']
                 entry['updated'] = entry['extra']['updated']
 
-            del entry["_uuid"]
+            if "_uuid" in entry:
+                del entry["_uuid"]
 
             d.append(entry)
         return d
@@ -78,6 +85,21 @@ class Provider(ComputeNodeABC):
             if element["name"] == name:
                 return element
         return None
+
+    #def key(self, filename="~/.ssh/id_rsa.pub"):
+    #    filename = Path(path_expand(filename))
+    #    key = self.cloudman.import_key_pair_from_file("{user}-key".format(**self.user), filename)
+
+    def keys(self, raw=False):
+        if self.cloudman:
+            entries = self.cloudman.list_key_pairs()
+            if raw:
+                return entries
+            else:
+                return self.dict(entries, kind="key")
+
+        return None
+
 
     def images(self, raw=False):
         if self.cloudman:

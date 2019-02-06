@@ -10,71 +10,41 @@ from cloudmesh.management.configuration.config import Config
 
 
 # noinspection PyBroadException
-class SSHkey(object):
+class SSHkey(dict):
 
-    def __init__(self,
-                 config_path="~/.cloudmesh/cloudmesh4.yaml",
-                 key_path="~/.ssh/id_rsa.pub"):
-        self.config = Config(config_path=config_path)
-        self.profile = self.config["cloudmesh"]["profile"]
-        self.__key__ = None
-        self.read(config_path=config_path, key_path=key_path)
+    def __init__(self):
 
-    def get(self):
-        return self.__key__
+
+        self["profile"] = Config()["cloudmesh"]["profile"]
+        self["path"] = path_expand(self["profile"]["publickey"])
+
+        self["uri"] = 'file://{path}'.format(path=self["path"])
+        self['string'] = open(Path(self["path"]), "r").read().rstrip()
+
+        (self['type'],
+         self['key'],
+         self['comment']) = SSHkey._parse(self['string'])
+
+        self['fingerprint'] = SSHkey._fingerprint(self['string'])
+        self["name"] = basename(self["path"]).replace(".pub", "").replace("id_", "")
+
+        self['comment'] = self['comment']
+        self['source'] = 'ssh'
 
     def __str__(self):
-        return self.__key__['key']
-
-    def __repr__(self):
-        return self.__key__['key']
-
-    def read(self,
-             config_path="~/.cloudmesh/cloudmesh4.yaml",
-             key_path="~/.ssh/id_rsa.pub"):
-        self.__key__ = {}
-
-        config_path = path_expand(config_path)
-        key_path = path_expand(key_path)
-
-        self.__key__ = {
-            'uri': 'file://{path}'.format(path=config_path),
-            'path': key_path,
-            'string': open(Path(config_path), "r").read().rstrip()
-        }
-
-        (self.__key__['type'],
-         self.__key__['key'],
-         self.__key__['comment']) = self._parse(self.__key__['string'])
-        self.__key__['fingerprint'] = self._fingerprint(self.__key__['string'])
-        # Workaround for multiple file entries in cloudmesh.yaml getting same name derived from file name (like id_rsa).
-        # This caused the dict to have just 1 entry as the name is the key.
-        # Change tracked in git issue #8
-        if key_path is None:
-            name = basename(config_path).replace(".pub", "").replace("id_", "")
-        else:
-            name = key_path
-
-        self.__key__['name'] = name
-        self.__key__['comment'] = self.__key__['comment']
-        self.__key__['source'] = 'ssh'
-        return self.__key__
+        return self['string']
 
     @property
     def fingerprint(self):
-        return self.__key__['fingerprint']
-
-    @property
-    def key(self):
-        return self.__key__['string']
+        return self['fingerprint']
 
     @property
     def type(self):
-        return self.__key__['type']
+        return self['type']
 
     @property
     def comment(self):
-        return self.__key__['comment']
+        return self['comment']
 
     @classmethod
     def _fingerprint(cls, entirekey):

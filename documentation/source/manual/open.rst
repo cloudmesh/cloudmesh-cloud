@@ -4,6 +4,9 @@ open
 ::
 
     Usage:
+        open chameleon baremetal tacc
+        open chameleon baremetal uc
+        open chameleon vm
         open FILENAME
         open doc
 
@@ -19,4 +22,13 @@ open
     Description:
 
         Opens the given URL in a browser window.
+
+        open chameleon baremetal tacc
+           starts horizon for baremetal for chameleon cloud at TACC
+
+        open chameleon baremetal uc
+            starts horizon for baremetal for chameleon cloud at UC
+
+        open chameleon vm
+            starts horizon for virtual machines
 

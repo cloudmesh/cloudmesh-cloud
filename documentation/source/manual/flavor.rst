@@ -2,6 +2,7 @@ flavor
 ======
 
 ::
+
     Usage:
         flavor refresh [--cloud=CLOUD] [-v]
         flavor list [ID] [--cloud=CLOUD] [--format=FORMAT] [--refresh] [-v]

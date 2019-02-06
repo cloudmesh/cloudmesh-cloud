@@ -1,13 +1,11 @@
 cloudmesh:
   profile:
-    address:
-      firstname: TBD
-      lastname: TBD
-      email: TBD
-    github:
-      username: TBD
-    key:
-      public: ~/.ssh/id_rsa.pub
+    firstname: TBD
+    lastname: TBD
+    email: TBD@sample.edu
+    user: TBD
+    github: TBD
+    publickey: ~/.ssh/id_rsa.pub
   default:
     group: cloudmesh
     experiment: base

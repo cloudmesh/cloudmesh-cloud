@@ -23,8 +23,11 @@ class DatabaseUpdate:
         def wrapper(*args, **kwargs):
             result = f(*args, **kwargs)
 
-            result["updated"] = str(datetime.utcnow())
-            r = self.database.update(result, collection=self.collection, replace=self.replace)
+            if result is not None:
+                result["updated"] = str(datetime.utcnow())
+                if "created" not in result:
+                    result["created"] = result["updated"]
+                r = self.database.update(result, collection=self.collection, replace=self.replace)
 
             return result
         return wrapper
@@ -55,7 +58,9 @@ class DatabaseAdd:
             result["created"] = result["updated"] = str(datetime.utcnow())
             self.name.incr()
 
-            r = self.database.update(result, collection=self.collection, replace=self.replace)
+            if result is not None:
+                result["created"] = result["updated"] = str(datetime.utcnow())
+                r = self.database.update(result, collection=self.collection, replace=self.replace)
 
             return result
         return wrapper

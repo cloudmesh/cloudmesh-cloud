@@ -79,6 +79,7 @@ class Provider(ComputeNodeABC):
         :return:  The dict representing the node
         """
         HEADING(c=".")
+        return None
 
     def stop(self, name=None):
         """
@@ -88,6 +89,7 @@ class Provider(ComputeNodeABC):
         :return: The dict representing the node including updated status
         """
         HEADING(c=".")
+        return None
 
     def info(self, name=None):
         """
@@ -106,6 +108,7 @@ class Provider(ComputeNodeABC):
         :return: The dict representing the node
         """
         HEADING(c=".")
+        return None
 
     def list(self):
         """
@@ -116,6 +119,7 @@ class Provider(ComputeNodeABC):
         HEADING(c=".")
         if self.cloudman:
             return (self.cloudman.list_nodes())
+        return None
 
     def resume(self, name=None):
         """
@@ -125,6 +129,7 @@ class Provider(ComputeNodeABC):
         :return: the dict of the node
         """
         HEADING(c=".")
+        return None
 
     def destroy(self, name=None):
         """
@@ -137,6 +142,16 @@ class Provider(ComputeNodeABC):
         for node in nodes:
             if node.name == name:
                 self.cloudman.destroy_node(node)
+        return None
+
+    def reboot(self, name=None):
+        """
+        Reboot the node
+        :param name: the name of the node
+        :return: the dict of the node
+        """
+        HEADING(c=".")
+        return None
 
     def create(self, name=None, image=None, size=None, timeout=360, **kwargs):
         """
@@ -181,4 +196,5 @@ class Provider(ComputeNodeABC):
         """
         # if destination is None, increase the name counter and use the new name
         HEADING(c=".")
+        return None
 

@@ -20,6 +20,9 @@ class OpenCommand(PluginCommand):
         ::
 
             Usage:
+                open chameleon baremetal tacc
+                open chameleon baremetal uc
+                open chameleon vm
                 open FILENAME
                 open doc
 
@@ -35,11 +38,30 @@ class OpenCommand(PluginCommand):
             Description:
 
                 Opens the given URL in a browser window.
+
+                open chameleon baremetal tacc
+                   starts horizon for baremetal for chameleon cloud at TACC
+
+                open chameleon baremetal uc
+                    starts horizon for baremetal for chameleon cloud at UC
+
+                open chameleon vm
+                    starts horizon for virtual machines
+
         """
 
+        pprint (arguments)
         filename = arguments.FILENAME
 
-        if filename == "doc":
+        if arguments.baremetal and arguments.tacc:
+            filename = str("https://chi.tacc.chameleoncloud.org")
+        elif arguments.baremetal and arguments.uc:
+            filename = str("https://chi.uc.chameleoncloud.org")
+        elif arguments.chameleon and arguments.vm:
+            filename = str("https://openstack.tacc.chameleoncloud.org")
+
+
+        elif filename == "doc":
             filename = "https://cloudmesh-community.github.io/cm/"
 
         if not (filename.startswith("file:") or filename.startswith("http")):
@@ -64,6 +86,5 @@ class OpenCommand(PluginCommand):
             Console.error(
                 "can not open browser with file {0}".format(filename))
         return ""
-
 
 

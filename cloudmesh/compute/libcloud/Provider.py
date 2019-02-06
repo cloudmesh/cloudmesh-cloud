@@ -2,7 +2,7 @@ from cloudmesh.abstractclass.ComputeNodeABC import ComputeNodeABC
 from pprint import pprint
 from datetime import datetime
 from cloudmesh.common.util import HEADING
-
+from cloudmesh.common.parameter import Parameter
 from cloudmesh.management.configuration.config import Config
 
 from libcloud.compute.providers import get_driver
@@ -22,6 +22,7 @@ class Provider(ComputeNodeABC):
         mycloud = conf["cloud"][name]
         cred = mycloud["credentials"]
         cloudkind = mycloud["cm"]["kind"]
+        self.kind = cloudkind
         #pprint (cred)
         #print (cloudkind)
         super().__init__(name, conf)
@@ -40,15 +41,53 @@ class Provider(ComputeNodeABC):
         self.default_size = None
         self.public_key_path = conf["profile"]["key"]["public"]
 
-    def _find_by_name(self, name, elements):
+    def dict(self, elements, kind=None):
+        if elements is None:
+            return None
+        elif type(elements) == list:
+            _elements = elements
+        else:
+            _elements = [elements]
+        d = []
+        for element in _elements:
+            entry = element.__dict__
+            entry["kind"] = kind
+            entry["driver"] = self.kind
+
+            if kind == 'node':
+                entry["updated"] = str(datetime.utcnow())
+
+                if "created_at" in entry:
+                    entry["created"] = str(entry["created_at"])
+                    del entry["created_at"]
+                else:
+                    entry["created"] = entry["modified"]
+            elif kind == 'flavor':
+                entry["created"] = entry["updated"] = str(datetime.utcnow())
+            elif kind == 'image':
+                entry['created'] = entry['extra']['created']
+                entry['updated'] = entry['extra']['updated']
+
+            del entry["_uuid"]
+
+            d.append(entry)
+        return d
+
+    def find(self, elements, name=None):
         for element in elements:
-            if element.name == name:
+            if element["name"] == name:
                 return element
         return None
 
-    def images(self):
+    def images(self, raw=False):
         if self.cloudman:
-            return (self.cloudman.list_images())
+            entries = self.cloudman.list_images()
+            if raw:
+                return entries
+            else:
+                return self.dict(entries, kind="image")
+
+        return None
 
     def image(self, name=None):
         """
@@ -56,11 +95,17 @@ class Provider(ComputeNodeABC):
         :param name: The name of the image
         :return:
         """
-        return self._find_by_name(name, self.images())
+        return self.find(self.images(), name=name)
 
-    def flavors(self):
+    def flavors(self, raw=False):
         if self.cloudman:
-            return (self.cloudman.list_sizes())
+            entries = self.cloudman.list_sizes()
+            if raw:
+                return entries
+            else:
+                return self.dict(entries, kind="flavor")
+        return None
+
 
     def flavor(self, name=None):
         """
@@ -69,7 +114,7 @@ class Provider(ComputeNodeABC):
         :param name: The aname of the flavor
         :return:
         """
-        return self._find_by_name(name, self.flavor())
+        return self.find(self.flavors(), name=name)
 
     def start(self, name):
         """
@@ -98,7 +143,7 @@ class Provider(ComputeNodeABC):
         :param name:
         :return: The dict representing the node including updated status
         """
-        return self._find_by_name(name, self.list())
+        return self.find(self.list(), name=name)
 
     def suspend(self, name=None):
         """
@@ -110,15 +155,18 @@ class Provider(ComputeNodeABC):
         HEADING(c=".")
         return None
 
-    def list(self):
+    def list(self, raw=False):
         """
         list all nodes id
     
         :return: an array of dicts representing the nodes
         """
-        HEADING(c=".")
         if self.cloudman:
-            return (self.cloudman.list_nodes())
+            entries = self.cloudman.list_nodes()
+            if raw:
+                return entries
+            else:
+                return self.dict(entries, kind="node")
         return None
 
     def resume(self, name=None):
@@ -131,16 +179,19 @@ class Provider(ComputeNodeABC):
         HEADING(c=".")
         return None
 
-    def destroy(self, name=None):
+    def destroy(self, names=None):
         """
         Destroys the node
         :param name: the name of the node
         :return: the dict of the node
         """
         HEADING(c=".")
-        nodes = self.list()
+
+        names = Parameter.expand(names)
+
+        nodes = self.list(raw=True)
         for node in nodes:
-            if node.name == name:
+            if node.name in names:
                 self.cloudman.destroy_node(node)
         return None
 
@@ -171,9 +222,9 @@ class Provider(ComputeNodeABC):
         HEADING(c=".")
         #imagename = "CC-Ubuntu16.04"
         #flavorname = "m1.medium"
-        images = self.images()
+        images = self.images(raw=True)
         imageUse = None
-        flavors = self.flavors()
+        flavors = self.flavors(raw=True)
         flavorUse = None
         for _image in images:
             if _image.name == image:
@@ -184,7 +235,9 @@ class Provider(ComputeNodeABC):
                 flavorUse = _flavor
                 break
         node = self.cloudman.create_node(name=name, image=imageUse, size=flavorUse)
-        return (node)
+        pprint (node)
+        return (self.dict(node))
+        # no brackets needed?
 
     def rename(self, name=None, destination=None):
         """

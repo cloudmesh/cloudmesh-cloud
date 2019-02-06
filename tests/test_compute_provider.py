@@ -9,7 +9,8 @@ from cloudmesh.management.configuration.config import Config
 class TestName:
 
     def setup(self):
-        self.name="vm01"
+        self.name = "vm-test-vm4"
+
         self.new_name="vm02"
         self.p = Provider(name="chameleon")
 
@@ -17,63 +18,60 @@ class TestName:
         HEADING()
         pprint (self.p.images())
 
-    def test_00_list_flavors(self):
+    def test_01_list_flavors(self):
         HEADING()
         pprint (self.p.flavors())
 
-    def test_00_list_vm(self):
+    def test_02_list_vm(self):
         HEADING()
-        pprint (self.p.list())
+        vms = self.p.list()
+        pprint (vms)
 
-    def test_01_create(self):
+
+    def test_03_create(self):
         HEADING()
-        name = "TestFromCM4"
         image = "CC-Ubuntu16.04"
         size = "m1.medium"
-        self.p.create(name=name,
+        self.p.create(name=self.name,
                       image=image,
                       size=size)
 
         nodes = self.p.list()
-        foundnode = False
-        for node in nodes:
-            if node.name == name:
-                foundnode = True
-        assert foundnode
+
+        node = self.p.find(nodes, name=self.name)
+
+        pprint(node)
+
+        assert node is not None
 
     #def test_01_start(self):
     #    HEADING()
     #    self.p.start(name=self.name)
 
-    def test_01_list_vm(self):
+    def test_04_list_vm(self):
         HEADING()
         pprint (self.p.list())
 
-    def test_03_info(self):
+    def test_05_info(self):
         HEADING()
         self.p.info(name=self.name)
 
-    def test_04_rename(self):
+    def test_06_rename(self):
         HEADING()
 
         self.p.rename(name=self.name, destination=self.new_name)
 
-    def test_05_destroy(self):
+    def test_07_destroy(self):
         HEADING()
-        name = "TestFromCM4"
-        self.p.destroy(name=name)
+        self.p.destroy(names=self.name)
         nodes = self.p.list()
-        notfoundnode = True
-        for node in nodes:
-            if node.name == name:
-                notfoundnode = False
-                break
-        #assert notfoundnode
+        node = self.p.find(nodes, name=self.name)
 
-        name = "fwangTest2019"
-        self.p.destroy(name=name)
+        pprint (node)
 
-    def test_05_list_vm(self):
+        assert node["state"] is not "running"
+
+    def test_08_list_vm(self):
         HEADING()
         pprint (self.p.list())
 

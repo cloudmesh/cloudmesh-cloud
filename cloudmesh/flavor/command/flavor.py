@@ -1,7 +1,8 @@
 from __future__ import print_function
-from cloudmesh.shell.command import command
+
 from cloudmesh.shell.command import PluginCommand
-from cloudmesh.flavor.api.manager import Manager
+from cloudmesh.shell.command import command
+
 
 class FlavorCommand(PluginCommand):
 
@@ -31,17 +32,12 @@ class FlavorCommand(PluginCommand):
 
         print(arguments)
 
-        #m = Manager()
+        # m = Manager()
 
-
-        #if arguments.FILE:
+        # if arguments.FILE:
         #    print("option a")
         #    m.list(arguments.FILE)
 
-        #elif arguments.list:
+        # elif arguments.list:
         #    print("option b")
         #    m.list("just calling list without parameter")
-
-
-
-

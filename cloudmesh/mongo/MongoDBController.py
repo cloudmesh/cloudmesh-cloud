@@ -1,17 +1,17 @@
 import os
-import yaml
+import subprocess
+import urllib.parse
 from sys import platform
-from cloudmesh.management.configuration.config import Config
-from cloudmesh.management.script import Script, SystemPath
-from cloudmesh.common.dotdict import dotdict
+
+import yaml
+from pymongo import MongoClient
+
 from cloudmesh.common.Shell import Shell, Brew
 from cloudmesh.common.console import Console
+from cloudmesh.common.dotdict import dotdict
+from cloudmesh.management.configuration.config import Config
+from cloudmesh.management.script import Script, SystemPath
 from cloudmesh.management.script import find_process
-from pymongo import MongoClient
-from pprint import pprint
-import urllib.parse
-
-import subprocess
 
 
 # noinspection PyUnusedLocal
@@ -226,7 +226,6 @@ class MongoDBController(object):
         for db in client.list_databases():
             data[db['name']] = db
         return data
-
 
     def __str__(self):
         return yaml.dump(self.data, default_flow_style=False, indent=2)

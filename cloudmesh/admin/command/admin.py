@@ -1,16 +1,18 @@
 from __future__ import print_function
-from cloudmesh.shell.command import command
-from cloudmesh.shell.command import PluginCommand
+
+import textwrap
+
+from cloudmesh.common.Printer import Printer
+from cloudmesh.common.console import Console
+from cloudmesh.common.dotdict import dotdict
+from cloudmesh.management.configuration.config import Config
+from cloudmesh.management.configuration.operatingsystem import OperatingSystem
 # from cloudmesh.admin.api.manager import Manager
 from cloudmesh.mongo.MongoDBController import MongoDBController
 from cloudmesh.mongo.MongoDBController import MongoInstaller
-from cloudmesh.management.configuration.config import Config
-from cloudmesh.common.Printer import Printer
-from cloudmesh.common.console import Console
-import textwrap
-from pprint import pprint
-from cloudmesh.common.dotdict import dotdict
-from cloudmesh.management.configuration.operatingsystem import OperatingSystem
+from cloudmesh.shell.command import PluginCommand
+from cloudmesh.shell.command import command
+
 
 class AdminCommand(PluginCommand):
     banner = textwrap.dedent("""

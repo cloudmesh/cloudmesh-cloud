@@ -4,6 +4,7 @@ from cloudmesh.management.configuration.name import Name
 from datetime import datetime
 from cloudmesh.common.util import banner
 
+
 class DatabaseUpdate:
     """
     Save the method's output to a MongoDB collection
@@ -15,6 +16,7 @@ class DatabaseUpdate:
         def foo(x):
             return {"test": "hello"}
     """
+
     def __init__(self, collection="cloudmesh", replace=False):
         self.database = CmDatabase()
         self.replace = replace
@@ -31,6 +33,7 @@ class DatabaseUpdate:
                 r = self.database.update(result, collection=self.collection, replace=self.replace)
 
             return result
+
         return wrapper
 
 
@@ -45,6 +48,7 @@ class DatabaseAdd:
         def foo(x):
             return {"test": "hello"}
     """
+
     def __init__(self, collection="cloudmesh", replace=False):
         self.database = CmDatabase()
         self.replace = replace
@@ -64,7 +68,9 @@ class DatabaseAdd:
                 r = self.database.update(result, collection=self.collection, replace=self.replace)
 
             return result
+
         return wrapper
+
 
 class DatabasePrint:
     """
@@ -76,6 +82,7 @@ class DatabasePrint:
         def foo(x):
             return {"test": "hello"}
     """
+
     def __init__(self, collection="cloudmesh", replace=False):
         self.name = Name()
 
@@ -86,18 +93,15 @@ class DatabasePrint:
             result["cmcounter"] = str(self.name.counter)
             result["created"] = result["updated"] = str(datetime.utcnow())
 
-
-            banner (result["cmid"], c=".")
+            banner(result["cmid"], c=".")
 
             if result is not None:
                 result["created"] = result["updated"] = str(datetime.utcnow())
                 pprint(result)
             else:
-                print (None)
-            print (70 * ".")
+                print(None)
+            print(70 * ".")
 
             return result
+
         return wrapper
-
-
-

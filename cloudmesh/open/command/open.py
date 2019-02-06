@@ -9,6 +9,7 @@ import os.path
 from pprint import pprint
 from pathlib import Path
 
+
 class OpenCommand(PluginCommand):
 
     # see https://github.com/cloudmesh/client/blob/master/cloudmesh_client/shell/plugins/OpenCommand.py
@@ -50,7 +51,7 @@ class OpenCommand(PluginCommand):
 
         """
 
-        pprint (arguments)
+        pprint(arguments)
         filename = arguments.FILENAME
 
         if arguments.baremetal and arguments.tacc:
@@ -86,5 +87,3 @@ class OpenCommand(PluginCommand):
             Console.error(
                 "can not open browser with file {0}".format(filename))
         return ""
-
-

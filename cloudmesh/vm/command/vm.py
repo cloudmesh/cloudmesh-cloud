@@ -1,10 +1,10 @@
 from __future__ import print_function
-from cloudmesh.shell.command import command
+
 from cloudmesh.shell.command import PluginCommand
-from cloudmesh.vm.api.manager import Manager
+from cloudmesh.shell.command import command
+
 
 class VmCommand(PluginCommand):
-
 
     # see also https://github.com/cloudmesh/client/edit/master/cloudmesh_client/shell/plugins/VmCommand.py
 
@@ -224,11 +224,11 @@ class VmCommand(PluginCommand):
 
         elif arguments["ip"] and arguments["show"]:
 
-            print ("show the ips")
+            print("show the ips")
 
         elif arguments["ip"] and arguments["assign"]:
 
-            print ("assign the public ip")
+            print("assign the public ip")
 
         elif arguments["ip"] and arguments["inventory"]:
 

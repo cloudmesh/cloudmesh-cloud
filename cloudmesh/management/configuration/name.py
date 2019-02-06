@@ -53,18 +53,18 @@ Which will return
     exp-grp-gregor-vm-1
 
 """
-import re
-from cloudmesh.management.configuration.counter import Counter
-from cloudmesh.common.dotdict import dotdict
-from pprint import pprint
-from cloudmesh.db.strdb import YamlDB
-from cloudmesh.common.util import path_expand
 import os
+from pprint import pprint
+
 import yaml
+
+from cloudmesh.common.dotdict import dotdict
+from cloudmesh.common.util import path_expand
+
 
 class Name(dotdict):
 
-    def __init__(self, order=["experiment","group","user","kind","counter"], **kwargs):
+    def __init__(self, order=["experiment", "group", "user", "kind", "counter"], **kwargs):
         """
         Defines a name tag that sets the format of the name to the specified schema
         :param schema:
@@ -85,7 +85,7 @@ class Name(dotdict):
         self.__dict__['schema'] = "{" + "}-{".join(order) + "}"
         for name in kwargs:
             self.__dict__[name] = kwargs[name]
-        #self.data = kwargs
+        # self.data = kwargs
 
     def flush(self):
         string = yaml.dump(self.__dict__, default_flow_style=False)
@@ -109,10 +109,10 @@ class Name(dotdict):
 
     def id(self, **kwargs):
         d = self.__dict__
-        pprint (d)
+        pprint(d)
         for e in kwargs:
             d[e] = kwargs[e]
-        pprint (d)
+        pprint(d)
 
         return str(self.__dict__["schema"].format(**d))
 

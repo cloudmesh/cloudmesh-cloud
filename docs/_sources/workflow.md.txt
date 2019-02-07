@@ -187,3 +187,9 @@ def a():
 ## REST 
 
 An OpenAPI specification for this is to be defined.
+
+
+## Resources
+
+* <https://github.com/xflr6/graphviz>
+* <http://visjs.org/examples/network/events/interactionEvents.html>

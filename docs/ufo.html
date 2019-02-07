@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>15. REST Service (outdated) &mdash; cm4 alpha documentation</title>
+  <title>17. REST Service (outdated) &mdash; Cloudmesh v4 alpha documentation</title>
   
 
   
@@ -29,8 +29,8 @@
     <link rel="author" title="About these documents" href="about.html" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="16. Virtual Cluster (in progress)" href="vcluster.html" />
-    <link rel="prev" title="14. AWS cm (outdated)" href="aws.html" /> 
+    <link rel="next" title="18. Virtual Cluster (in progress)" href="vcluster.html" />
+    <link rel="prev" title="16. AWS cm (outdated)" href="aws.html" /> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -49,7 +49,7 @@
           
 
           
-            <a href="index.html" class="icon icon-home"> cm4
+            <a href="index.html" class="icon icon-home"> Cloudmesh v4
           
 
           
@@ -90,26 +90,28 @@
 <li class="toctree-l1"><a class="reference internal" href="install.html">3. Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">4. Quickstart (proposed)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="configuration.html">5. Configuration (ok)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="mongo.html">6. Cloudmesh Database</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mongo.html">6. Cloudmesh Database (ok)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="manual.html">7. Manual (ok)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="manual-dev.html">8. Manual (proposed)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="jupyter.html">9. Jupyter Integration (proposed)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="vmproviders.html">10. VM Providers (outdated)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="vagrant.html">11. Vagrant (outdated)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="CM4README.html">12. CM4 Details (outdated)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="README.html">13. Cloudmesh cm v4</a></li>
-<li class="toctree-l1"><a class="reference internal" href="aws.html">14. AWS cm (outdated)</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">15. REST Service (outdated)</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#pre-requisites">15.1. Pre-requisites</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#how-to-run-the-rest-api">15.2. How to run the REST API</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#api">15.3. API</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#examples">15.4. Examples</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#dev-restricting-certain-ips-for-certain-rest-calls">15.5. Dev - restricting certain ips for certain rest calls</a></li>
+<li class="toctree-l1"><a class="reference internal" href="workflow.html">10. Infrastructure Workflow (proposed)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="goal.html">11. Goal (outdated)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="goal.html#manual-cloudmesh-multi-service-data-access">12. Manual: Cloudmesh Multi Service Data Access</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vmproviders.html">13. VM Providers (outdated)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vagrant.html">14. Vagrant (outdated)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CM4README.html">15. CM4 Details (outdated)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aws.html">16. AWS cm (outdated)</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">17. REST Service (outdated)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#pre-requisites">17.1. Pre-requisites</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#how-to-run-the-rest-api">17.2. How to run the REST API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#api">17.3. API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#examples">17.4. Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#dev-restricting-certain-ips-for-certain-rest-calls">17.5. Dev - restricting certain ips for certain rest calls</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="vcluster.html">16. Virtual Cluster (in progress)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="vm.html">17. Virtual machine management (outdated)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="code.html">18. Code Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vcluster.html">18. Virtual Cluster (in progress)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vm.html">19. Virtual machine management (outdated)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="code.html">20. Code Documentation</a></li>
 </ul>
 
             
@@ -124,7 +126,7 @@
       <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="index.html">cm4</a>
+          <a href="index.html">Cloudmesh v4</a>
         
       </nav>
 
@@ -155,7 +157,7 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>15. REST Service (outdated)</li>
+      <li>17. REST Service (outdated)</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -175,11 +177,11 @@
            <div itemprop="articleBody">
             
   <div class="section" id="rest-service-outdated">
-<h1>15. REST Service (outdated)<a class="headerlink" href="#rest-service-outdated" title="Permalink to this headline">¶</a></h1>
+<h1>17. REST Service (outdated)<a class="headerlink" href="#rest-service-outdated" title="Permalink to this headline">¶</a></h1>
 <p>The cm4 REST Api is built using flask and provides the cloud
 information retrieval functionality through HTTP calls.</p>
 <div class="section" id="pre-requisites">
-<h2>15.1. Pre-requisites<a class="headerlink" href="#pre-requisites" title="Permalink to this headline">¶</a></h2>
+<h2>17.1. Pre-requisites<a class="headerlink" href="#pre-requisites" title="Permalink to this headline">¶</a></h2>
 <p>Use pip install to install the following packages.</p>
 <ul class="simple">
 <li>Flask</li>
@@ -187,7 +189,7 @@ information retrieval functionality through HTTP calls.</p>
 </ul>
 </div>
 <div class="section" id="how-to-run-the-rest-api">
-<h2>15.2. How to run the REST API<a class="headerlink" href="#how-to-run-the-rest-api" title="Permalink to this headline">¶</a></h2>
+<h2>17.2. How to run the REST API<a class="headerlink" href="#how-to-run-the-rest-api" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li>Navigate to the cm directory. example:</li>
 </ul>
@@ -214,7 +216,7 @@ information retrieval functionality through HTTP calls.</p>
 </div>
 </div>
 <div class="section" id="api">
-<h2>15.3. API<a class="headerlink" href="#api" title="Permalink to this headline">¶</a></h2>
+<h2>17.3. API<a class="headerlink" href="#api" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li><code class="docutils literal notranslate"><span class="pre">/vms/</span></code> : Provides information on all the VMs.</li>
 <li><code class="docutils literal notranslate"><span class="pre">/vms/stopped</span></code>  : Provides information on all the stopped VMs.</li>
@@ -222,7 +224,7 @@ information retrieval functionality through HTTP calls.</p>
 </ul>
 </div>
 <div class="section" id="examples">
-<h2>15.4. Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
+<h2>17.4. Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
 <ul>
 <li><p class="first">Retrieve information about a VM</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl localhost:5000/vms/i-0fad7e92ffea8b345
@@ -232,7 +234,7 @@ information retrieval functionality through HTTP calls.</p>
 </ul>
 </div>
 <div class="section" id="dev-restricting-certain-ips-for-certain-rest-calls">
-<h2>15.5. Dev - restricting certain ips for certain rest calls<a class="headerlink" href="#dev-restricting-certain-ips-for-certain-rest-calls" title="Permalink to this headline">¶</a></h2>
+<h2>17.5. Dev - restricting certain ips for certain rest calls<a class="headerlink" href="#dev-restricting-certain-ips-for-certain-rest-calls" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">abort</span><span class="p">,</span> <span class="n">request</span>
 <span class="kn">from</span> <span class="nn">cm4.flask_rest_api.app</span> <span class="kn">import</span> <span class="n">app</span>
 
@@ -254,10 +256,10 @@ information retrieval functionality through HTTP calls.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="vcluster.html" class="btn btn-neutral float-right" title="16. Virtual Cluster (in progress)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="vcluster.html" class="btn btn-neutral float-right" title="18. Virtual Cluster (in progress)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="aws.html" class="btn btn-neutral" title="14. AWS cm (outdated)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="aws.html" class="btn btn-neutral" title="16. AWS cm (outdated)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

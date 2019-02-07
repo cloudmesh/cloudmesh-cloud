@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>10. VM Providers (outdated) &mdash; cm4 alpha documentation</title>
+  <title>13. VM Providers (outdated) &mdash; Cloudmesh v4 alpha documentation</title>
   
 
   
@@ -29,8 +29,8 @@
     <link rel="author" title="About these documents" href="about.html" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="11. Vagrant (outdated)" href="vagrant.html" />
-    <link rel="prev" title="9. Jupyter Integration (proposed)" href="jupyter.html" /> 
+    <link rel="next" title="14. Vagrant (outdated)" href="vagrant.html" />
+    <link rel="prev" title="11. Goal (outdated)" href="goal.html" /> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -49,7 +49,7 @@
           
 
           
-            <a href="index.html" class="icon icon-home"> cm4
+            <a href="index.html" class="icon icon-home"> Cloudmesh v4
           
 
           
@@ -90,40 +90,42 @@
 <li class="toctree-l1"><a class="reference internal" href="install.html">3. Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">4. Quickstart (proposed)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="configuration.html">5. Configuration (ok)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="mongo.html">6. Cloudmesh Database</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mongo.html">6. Cloudmesh Database (ok)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="manual.html">7. Manual (ok)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="manual-dev.html">8. Manual (proposed)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="jupyter.html">9. Jupyter Integration (proposed)</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">10. VM Providers (outdated)</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#general-cloud-providers-access">10.1. General Cloud Providers Access</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#general-interface">10.2. General Interface</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#explicit-use-with-options">10.3. Explicit Use with Options</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#vagrant">10.4. Vagrant</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#aws">10.5. AWS</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#setup-and-configuration">10.5.1. Setup and Configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="workflow.html">10. Infrastructure Workflow (proposed)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="goal.html">11. Goal (outdated)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="goal.html#manual-cloudmesh-multi-service-data-access">12. Manual: Cloudmesh Multi Service Data Access</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">13. VM Providers (outdated)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#general-cloud-providers-access">13.1. General Cloud Providers Access</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#general-interface">13.2. General Interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#explicit-use-with-options">13.3. Explicit Use with Options</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#vagrant">13.4. Vagrant</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#aws">13.5. AWS</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#setup-and-configuration">13.5.1. Setup and Configuration</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#azure">10.6. Azure</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id1">10.6.1. Setup and Configuration</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#azure">13.6. Azure</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id1">13.6.1. Setup and Configuration</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#openstack">10.7. OpenStack</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#jetstream">10.7.1. Jetstream</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#chameleon-cloud">10.7.2. Chameleon Cloud</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#cybera">10.7.3. Cybera</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#devstack">10.7.4. DevStack</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#openstack">13.7. OpenStack</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#jetstream">13.7.1. Jetstream</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#chameleon-cloud">13.7.2. Chameleon Cloud</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cybera">13.7.3. Cybera</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#devstack">13.7.4. DevStack</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="vagrant.html">11. Vagrant (outdated)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="CM4README.html">12. CM4 Details (outdated)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="README.html">13. Cloudmesh cm v4</a></li>
-<li class="toctree-l1"><a class="reference internal" href="aws.html">14. AWS cm (outdated)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="ufo.html">15. REST Service (outdated)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="vcluster.html">16. Virtual Cluster (in progress)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="vm.html">17. Virtual machine management (outdated)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="code.html">18. Code Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vagrant.html">14. Vagrant (outdated)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CM4README.html">15. CM4 Details (outdated)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aws.html">16. AWS cm (outdated)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ufo.html">17. REST Service (outdated)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vcluster.html">18. Virtual Cluster (in progress)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vm.html">19. Virtual machine management (outdated)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="code.html">20. Code Documentation</a></li>
 </ul>
 
             
@@ -138,7 +140,7 @@
       <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="index.html">cm4</a>
+          <a href="index.html">Cloudmesh v4</a>
         
       </nav>
 
@@ -169,7 +171,7 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>10. VM Providers (outdated)</li>
+      <li>13. VM Providers (outdated)</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -189,14 +191,14 @@
            <div itemprop="articleBody">
             
   <div class="section" id="vm-providers-outdated">
-<h1>10. VM Providers (outdated)<a class="headerlink" href="#vm-providers-outdated" title="Permalink to this headline">¶</a></h1>
+<h1>13. VM Providers (outdated)<a class="headerlink" href="#vm-providers-outdated" title="Permalink to this headline">¶</a></h1>
 <p>Cm4 works straight forward with a number of providers under the
 assumption you have accounts on these frameworks. We demonstrate hete
 how to start a singel vm on each of these providers and list the
 started vms. Defaults form the configuration file are used to select
 images and flavors. These defaults can naturally be changed.</p>
 <div class="section" id="general-cloud-providers-access">
-<h2>10.1. General Cloud Providers Access<a class="headerlink" href="#general-cloud-providers-access" title="Permalink to this headline">¶</a></h2>
+<h2>13.1. General Cloud Providers Access<a class="headerlink" href="#general-cloud-providers-access" title="Permalink to this headline">¶</a></h2>
 <p>We are using the python library
 <a class="reference external" href="https://libcloud.apache.org">Apache Libcloud</a> to interact with
 cloud service providers. Currently, in the <code class="docutils literal notranslate"><span class="pre">cm4</span></code>, we could access:</p>
@@ -229,7 +231,7 @@ refactor functions to support their management tasks.</p>
 </ul>
 </div>
 <div class="section" id="general-interface">
-<h2>10.2. General Interface<a class="headerlink" href="#general-interface" title="Permalink to this headline">¶</a></h2>
+<h2>13.2. General Interface<a class="headerlink" href="#general-interface" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ cms <span class="nb">set</span> <span class="nv">cloud</span><span class="o">=</span>&lt;cloudname as defined in the ~/.cloudmesh/cloudmesh4.yaml&gt;
 $ cms vm start
 $ cms vm list
@@ -242,13 +244,13 @@ $ cms vm start
 </div>
 </div>
 <div class="section" id="explicit-use-with-options">
-<h2>10.3. Explicit Use with Options<a class="headerlink" href="#explicit-use-with-options" title="Permalink to this headline">¶</a></h2>
+<h2>13.3. Explicit Use with Options<a class="headerlink" href="#explicit-use-with-options" title="Permalink to this headline">¶</a></h2>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ cms vm start --cloud<span class="o">=</span>chameleon --image<span class="o">=</span>ubuntu18.04 --flavor<span class="o">=</span>medium --key<span class="o">=</span>~/.ssh/id_rsa.bub
 </pre></div>
 </div>
 </div>
 <div class="section" id="vagrant">
-<h2>10.4. Vagrant<a class="headerlink" href="#vagrant" title="Permalink to this headline">¶</a></h2>
+<h2>13.4. Vagrant<a class="headerlink" href="#vagrant" title="Permalink to this headline">¶</a></h2>
 <p>TODO</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ cms <span class="nb">set</span> <span class="nv">cloud</span><span class="o">=</span>vagrant
 $ cms vm start
@@ -257,9 +259,9 @@ $ cms vm list
 </div>
 </div>
 <div class="section" id="aws">
-<h2>10.5. AWS<a class="headerlink" href="#aws" title="Permalink to this headline">¶</a></h2>
+<h2>13.5. AWS<a class="headerlink" href="#aws" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="setup-and-configuration">
-<h3>10.5.1. Setup and Configuration<a class="headerlink" href="#setup-and-configuration" title="Permalink to this headline">¶</a></h3>
+<h3>13.5.1. Setup and Configuration<a class="headerlink" href="#setup-and-configuration" title="Permalink to this headline">¶</a></h3>
 <p>Amazon Web Service (<strong>AWS</strong>) provided by Amazon is a secure cloud
 service platform, users could start any instances with selected
 images.</p>
@@ -313,10 +315,10 @@ $ cms vm list
 </div>
 </div>
 <div class="section" id="azure">
-<h2>10.6. Azure<a class="headerlink" href="#azure" title="Permalink to this headline">¶</a></h2>
+<h2>13.6. Azure<a class="headerlink" href="#azure" title="Permalink to this headline">¶</a></h2>
 <p>Uses <a class="reference external" href="https://libcloud.readthedocs.io/en/latest/compute/drivers/azure_arm.html">LibCloud’s Azure ARM Compute Driver</a></p>
 <div class="section" id="id1">
-<h3>10.6.1. Setup and Configuration<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<h3>13.6.1. Setup and Configuration<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
 <p><strong>Install Azure CLI</strong></p>
 <p><a class="reference external" href="https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest">Download and install according to your platform.</a></p>
 <p><strong>Make sure subscription is registered for compute services</strong></p>
@@ -344,7 +346,7 @@ $ cms vm list
 </div>
 </div>
 <div class="section" id="openstack">
-<h2>10.7. OpenStack<a class="headerlink" href="#openstack" title="Permalink to this headline">¶</a></h2>
+<h2>13.7. OpenStack<a class="headerlink" href="#openstack" title="Permalink to this headline">¶</a></h2>
 <p>OpenStack is an Infrastructure service that allows users to utilize
 computing resource in cloud service platform through virtual
 environments.</p>
@@ -358,7 +360,7 @@ get proper installation. Learn more
 to properly set up yout account before proceed to your journey with
 <strong>cms</strong>.</p>
 <div class="section" id="jetstream">
-<h3>10.7.1. Jetstream<a class="headerlink" href="#jetstream" title="Permalink to this headline">¶</a></h3>
+<h3>13.7.1. Jetstream<a class="headerlink" href="#jetstream" title="Permalink to this headline">¶</a></h3>
 <p>TODO</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ cms <span class="nb">set</span> <span class="nv">cloud</span><span class="o">=</span>jetstream
 $ cms vm start
@@ -367,7 +369,7 @@ $ cms vm list
 </div>
 </div>
 <div class="section" id="chameleon-cloud">
-<h3>10.7.2. Chameleon Cloud<a class="headerlink" href="#chameleon-cloud" title="Permalink to this headline">¶</a></h3>
+<h3>13.7.2. Chameleon Cloud<a class="headerlink" href="#chameleon-cloud" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ cms <span class="nb">set</span> <span class="nv">cloud</span><span class="o">=</span>chameleon
 $ cms vm start
 $ cms vm list
@@ -375,7 +377,7 @@ $ cms vm list
 </div>
 </div>
 <div class="section" id="cybera">
-<h3>10.7.3. Cybera<a class="headerlink" href="#cybera" title="Permalink to this headline">¶</a></h3>
+<h3>13.7.3. Cybera<a class="headerlink" href="#cybera" title="Permalink to this headline">¶</a></h3>
 <p>TODO</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ cms <span class="nb">set</span> <span class="nv">cloud</span><span class="o">=</span>cybera
 $ cms vm start
@@ -384,7 +386,7 @@ $ cms vm list
 </div>
 </div>
 <div class="section" id="devstack">
-<h3>10.7.4. DevStack<a class="headerlink" href="#devstack" title="Permalink to this headline">¶</a></h3>
+<h3>13.7.4. DevStack<a class="headerlink" href="#devstack" title="Permalink to this headline">¶</a></h3>
 <p>TODO</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ cms <span class="nb">set</span> <span class="nv">cloud</span><span class="o">=</span>devstack
 $ cms vm start
@@ -403,10 +405,10 @@ $ cms vm list
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="vagrant.html" class="btn btn-neutral float-right" title="11. Vagrant (outdated)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="vagrant.html" class="btn btn-neutral float-right" title="14. Vagrant (outdated)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="jupyter.html" class="btn btn-neutral" title="9. Jupyter Integration (proposed)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="goal.html" class="btn btn-neutral" title="11. Goal (outdated)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

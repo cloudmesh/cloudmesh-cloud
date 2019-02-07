@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>4. Quickstart &mdash; cm4 alpha documentation</title>
+  <title>4. Quickstart (proposed) &mdash; cm4 alpha documentation</title>
   
 
   
@@ -88,9 +88,12 @@
 <li class="toctree-l1"><a class="reference internal" href="about.html">1. About</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contributors.html">2. Contributors</a></li>
 <li class="toctree-l1"><a class="reference internal" href="install.html">3. Installation</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">4. Quickstart</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#commandline">4.1. Commandline</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#interactive-shell">4.2. Interactive shell</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">4. Quickstart (proposed)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#commandline-proposed">4.1. Commandline (proposed)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#interactive-shell-will-work-as-we-use-cmd5">4.2. Interactive shell (will work as we use cmd5)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#command-scripts">4.3. Command scripts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cache-proposed">4.4. Cache (proposed)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#manual-ok">4.5. Manual (ok)</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="mongo.html">5. Cloudmesh Database</a></li>
@@ -152,7 +155,7 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>4. Quickstart</li>
+      <li>4. Quickstart (proposed)</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -171,11 +174,23 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="quickstart">
-<span id="quickstart"></span><h1>4. Quickstart<a class="headerlink" href="#quickstart" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="commandline">
-<span id="commandline"></span><h2>4.1. Commandline<a class="headerlink" href="#commandline" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ cms <span class="nb">set</span> <span class="nv">cloud</span><span class="o">=</span>vagrant
+  <div class="section" id="quickstart-proposed">
+<h1>4. Quickstart (proposed)<a class="headerlink" href="#quickstart-proposed" title="Permalink to this headline">¶</a></h1>
+<p>One of the features up Cloudmesh is to easily start new
+virtual machines on vairous clouds. It uses defaults for these clouds that
+can be chaned, but are easily stored in a yaml file located at
+<code class="docutils literal notranslate"><span class="pre">~/.cloudmesh/cloudmesh4.yaml</span></code> This file is created upon first
+start of the shell.
+You need to edit it and include some of your cloud information.</p>
+<div class="section" id="commandline-proposed">
+<h2>4.1. Commandline (proposed)<a class="headerlink" href="#commandline-proposed" title="Permalink to this headline">¶</a></h2>
+<p>It is easy to switch beteeen clouds with the set command. Ater the set and specifying the cloud
+by name many commands will default to that cloud. The exception is the <code class="docutils literal notranslate"><span class="pre">vm</span> <span class="pre">list</span></code> command
+that lists by default all vms on all clouds. In addition the <code class="docutils literal notranslate"><span class="pre">vm</span> <span class="pre">refresh</span></code> command will also
+work on all clouds.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ cms admin mongo start
+
+$ cms <span class="nb">set</span> <span class="nv">cloud</span><span class="o">=</span>vagrant
 $ cms vm start
 $ cms image list
 $ cms flavor list
@@ -200,17 +215,84 @@ $ cms vm start
 $ cms image list
 $ cms flavor list
 
+$ cms vm refresh
+
 $ cms vm list
 </pre></div>
 </div>
+<p>In case you want a command explicitly apply to one or more clouds or one or more vms,
+they can be specified by name such as</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ cms vm list --name vm<span class="o">[</span><span class="m">0</span>-100<span class="o">]</span>
+$ cms vm list --cloud aws,azure
+</pre></div>
 </div>
-<div class="section" id="interactive-shell">
-<span id="interactive-shell"></span><h2>4.2. Interactive shell<a class="headerlink" href="#interactive-shell" title="Permalink to this headline">¶</a></h2>
-<p>BUG: Feature not yet implemented.</p>
-<p>As we want to often start or interact with a lot of virtual machines, it may be easier to run cm4 as an interactive shell.  Here is a simple example that starts cm4 and simply executes the sommands within the cm4 command shell.</p>
+<p>Defaults for the cloud and the name can be specified through set such as</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ cms <span class="nb">set</span> <span class="nv">name</span><span class="o">=</span>vm<span class="o">[</span><span class="m">0</span>-100<span class="o">]</span>
+$ cms <span class="nb">set</span> <span class="nv">cloud</span><span class="o">=</span>aws,azure
+</pre></div>
+</div>
+<p>Using the commands</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ cms vm list
+</pre></div>
+</div>
+<p>would than add the appropriate options to the command. To reset the show to all vms set name and cloud to all</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ cms <span class="nb">set</span> <span class="nv">name</span><span class="o">=</span>all
+$ cms <span class="nb">set</span> <span class="nv">cloud</span><span class="o">=</span>all
+</pre></div>
+</div>
+</div>
+<div class="section" id="interactive-shell-will-work-as-we-use-cmd5">
+<h2>4.2. Interactive shell (will work as we use cmd5)<a class="headerlink" href="#interactive-shell-will-work-as-we-use-cmd5" title="Permalink to this headline">¶</a></h2>
+<p>Cloudmesh uses cmd5 for its shell implementation and thus all commands that are typed in in the terminal can also be typed in into
+a shell that is started with cms</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cms
 cms&gt; <span class="nb">set</span> <span class="nv">cloud</span><span class="o">=</span>aws
 cms&gt; vm start
+</pre></div>
+</div>
+</div>
+<div class="section" id="command-scripts">
+<h2>4.3. Command scripts<a class="headerlink" href="#command-scripts" title="Permalink to this headline">¶</a></h2>
+<p>As we use cmd5 we also have access to piped and named scripts with</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="nb">echo</span> script.cms <span class="p">|</span> cms
+</pre></div>
+</div>
+<p>and</p>
+<p>TODO: verify the cmd5 logic for this</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">$cms</span> --script script.cms
+</pre></div>
+</div>
+</div>
+<div class="section" id="cache-proposed">
+<h2>4.4. Cache (proposed)<a class="headerlink" href="#cache-proposed" title="Permalink to this headline">¶</a></h2>
+<p>All information about for example virtual machines are cached locally. The cache for various
+information sources can be explicitly updated with the <code class="docutils literal notranslate"><span class="pre">--refresh</span></code> flag.
+Thus the command</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1">#cms vm list --refresh</span>
+</pre></div>
+</div>
+<p>would first execute a refresh while the command</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1">#cms vm list </span>
+</pre></div>
+</div>
+<p>would only read from the local cache</p>
+<p>To chang ethe behavior and alwas do a refresh you can use the command</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ cms <span class="nb">set</span> <span class="nv">refresh</span><span class="o">=</span>True
+</pre></div>
+</div>
+<p>To switch it off you can say</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ cms <span class="nb">set</span> <span class="nv">refresh</span><span class="o">=</span>False
+</pre></div>
+</div>
+</div>
+<div class="section" id="manual-ok">
+<h2>4.5. Manual (ok)<a class="headerlink" href="#manual-ok" title="Permalink to this headline">¶</a></h2>
+<p>The manaul page can be opened with</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ cms open doc
+</pre></div>
+</div>
+<p>or in case you start it in the source with</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ cms open doc <span class="nb">local</span>
 </pre></div>
 </div>
 </div>

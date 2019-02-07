@@ -1,4 +1,4 @@
-# AWS cm 
+# AWS cm (outdated)
 
 The code is designed for using awscm.py to access the aws
 instance and run scripts in it.

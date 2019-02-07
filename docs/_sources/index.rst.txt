@@ -10,8 +10,11 @@ Cloudmesh Version 4
    contributors
    install
    quickstart
-   mongo
    configuration
+   mongo
+   manual
+   manual-dev
+   jupyter
    vmproviders
    vagrant
    CM4README
@@ -20,9 +23,6 @@ Cloudmesh Version 4
    ufo
    vcluster
    vm
-   jupyter
-   manual
-   manual-dev
    code
    
 Indices and tables

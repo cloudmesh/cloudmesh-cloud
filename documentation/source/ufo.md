@@ -1,4 +1,4 @@
-## CM4 REST Api
+## REST Service (outdated)
 
 The cm4 REST Api is built using flask and provides the cloud
 information retrieval functionality through HTTP calls.

@@ -1,4 +1,4 @@
-# Virtual Cluster
+# Virtual Cluster (in progress)
 
 This is a tool used to submit jobs to remote hosts in parallel and contains the following subcommands: 
 

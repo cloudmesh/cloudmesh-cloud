@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>6. Configuration &mdash; cm4 alpha documentation</title>
+  <title>5. Configuration (ok) &mdash; cm4 alpha documentation</title>
   
 
   
@@ -29,8 +29,8 @@
     <link rel="author" title="About these documents" href="about.html" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="7. VM Providers" href="vmproviders.html" />
-    <link rel="prev" title="5. Cloudmesh Database" href="mongo.html" /> 
+    <link rel="next" title="6. Cloudmesh Database" href="mongo.html" />
+    <link rel="prev" title="4. Quickstart (proposed)" href="quickstart.html" /> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -88,19 +88,20 @@
 <li class="toctree-l1"><a class="reference internal" href="about.html">1. About</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contributors.html">2. Contributors</a></li>
 <li class="toctree-l1"><a class="reference internal" href="install.html">3. Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="quickstart.html">4. Quickstart</a></li>
-<li class="toctree-l1"><a class="reference internal" href="mongo.html">5. Cloudmesh Database</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">6. Configuration</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#clouds">6.1. Clouds</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#virtual-clusters">6.2. Virtual Clusters</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#aminsistartive-services">6.3. Aminsistartive Services</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#mongodb">6.3.1. MongoDB</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#rest">6.3.2. REST</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">4. Quickstart (proposed)</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">5. Configuration (ok)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#clouds-proposed">5.1. Clouds (proposed)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#virtual-clusters-proposed">5.2. Virtual Clusters (proposed)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#aminsistartive-services">5.3. Aminsistartive Services</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#mongodb-ok">5.3.1. MongoDB (ok)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#rest-proposed">5.3.2. REST (proposed)</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#log-file">6.4. Log File</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#log-file-proposed">5.4. Log File (proposed)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#encryption-proposed">5.5. Encryption (proposed)</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="mongo.html">6. Cloudmesh Database</a></li>
 <li class="toctree-l1"><a class="reference internal" href="vmproviders.html">7. VM Providers</a></li>
 <li class="toctree-l1"><a class="reference internal" href="vagrant.html">8. Vagrant</a></li>
 <li class="toctree-l1"><a class="reference internal" href="CM4README.html">9. CM4 Details</a></li>
@@ -158,7 +159,7 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>6. Configuration</li>
+      <li>5. Configuration (ok)</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -177,25 +178,62 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="configuration">
-<span id="configuration"></span><h1>6. Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="clouds">
-<span id="clouds"></span><h2>6.1. Clouds<a class="headerlink" href="#clouds" title="Permalink to this headline">¶</a></h2>
+  <div class="section" id="configuration-ok">
+<h1>5. Configuration (ok)<a class="headerlink" href="#configuration-ok" title="Permalink to this headline">¶</a></h1>
+<p>The Configuration of cloudmesh is controled with a yaml file that is placed in <code class="docutils literal notranslate"><span class="pre">~/.clloudmesh/cloudmesh4.yaml</span></code>. It is
+created automatically from the templace located at</p>
+<ul class="simple">
+<li><a class="reference external" href="https://github.com/cloudmesh-community/cm/blob/master/cloudmesh/etc/cloudmesh4.yaml">https://github.com/cloudmesh-community/cm/blob/master/cloudmesh/etc/cloudmesh4.yaml</a></li>
+</ul>
+<p>You can customize the file in your local directory.</p>
+<div class="section" id="clouds-proposed">
+<h2>5.1. Clouds (proposed)<a class="headerlink" href="#clouds-proposed" title="Permalink to this headline">¶</a></h2>
+<p>The default yaml file includes templates to configure various clouds. YOu can change these defaults and provide access
+to your cloud credentials to make the management of cloud virtual machines easier. Templates for AWS, Azure, Google,
+OpenStack are provided. Specific templates for Jetstream and Chameleopn cloud are included</p>
 </div>
-<div class="section" id="virtual-clusters">
-<span id="virtual-clusters"></span><h2>6.2. Virtual Clusters<a class="headerlink" href="#virtual-clusters" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="virtual-clusters-proposed">
+<h2>5.2. Virtual Clusters (proposed)<a class="headerlink" href="#virtual-clusters-proposed" title="Permalink to this headline">¶</a></h2>
 </div>
 <div class="section" id="aminsistartive-services">
-<span id="aminsistartive-services"></span><h2>6.3. Aminsistartive Services<a class="headerlink" href="#aminsistartive-services" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="mongodb">
-<span id="mongodb"></span><h3>6.3.1. MongoDB<a class="headerlink" href="#mongodb" title="Permalink to this headline">¶</a></h3>
+<h2>5.3. Aminsistartive Services<a class="headerlink" href="#aminsistartive-services" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="mongodb-ok">
+<h3>5.3.1. MongoDB (ok)<a class="headerlink" href="#mongodb-ok" title="Permalink to this headline">¶</a></h3>
+<p>The cache of cloudmesh is managed in a mongo db database with various collections. However the user does not have to
+manage thes collections as this is done for the user through cloudmesh. The mongo db can be started and stoped with the
+command</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">$cms</span> admin mongo start
+<span class="nv">$cms</span> admin mongo stop
+</pre></div>
 </div>
-<div class="section" id="rest">
-<span id="rest"></span><h3>6.3.2. REST<a class="headerlink" href="#rest" title="Permalink to this headline">¶</a></h3>
+<p>Before you can use it mongo needs to be installed and basic authentication needs to be enabled with</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">$cms</span> admin mongo install
+<span class="nv">$cms</span> admin mongo create
+</pre></div>
+</div>
+<p>The configuration detals are included in the yaml file.</p>
+</div>
+<div class="section" id="rest-proposed">
+<h3>5.3.2. REST (proposed)<a class="headerlink" href="#rest-proposed" title="Permalink to this headline">¶</a></h3>
+<p>TBD</p>
 </div>
 </div>
-<div class="section" id="log-file">
-<span id="log-file"></span><h2>6.4. Log File<a class="headerlink" href="#log-file" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="log-file-proposed">
+<h2>5.4. Log File (proposed)<a class="headerlink" href="#log-file-proposed" title="Permalink to this headline">¶</a></h2>
+<p>Log files are stored by default in <code class="docutils literal notranslate"><span class="pre">~/.cloudmesh/log</span></code> The directory can be specified in the yaml file.</p>
+</div>
+<div class="section" id="encryption-proposed">
+<h2>5.5. Encryption (proposed)<a class="headerlink" href="#encryption-proposed" title="Permalink to this headline">¶</a></h2>
+<p>The yaml file can also be encrupted which is done with the command</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">$cms</span> admin encrypt
+</pre></div>
+</div>
+<p>It will replace the yaml file with an encryoted version while using your public private key/
+You can keep the file encripted and use the command</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">$ssh</span>-add
+</pre></div>
+</div>
+<p>to access the file without using the password whenefer it is accessed.</p>
 </div>
 </div>
 
@@ -207,10 +245,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="vmproviders.html" class="btn btn-neutral float-right" title="7. VM Providers" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="mongo.html" class="btn btn-neutral float-right" title="6. Cloudmesh Database" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="mongo.html" class="btn btn-neutral" title="5. Cloudmesh Database" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="quickstart.html" class="btn btn-neutral" title="4. Quickstart (proposed)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

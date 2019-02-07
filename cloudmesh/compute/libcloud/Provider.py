@@ -190,8 +190,8 @@ class Provider(ComputeNodeABC):
             for secgroup in secgroups:
                 if secgroup.name == secgroupname:
                     thegroups.append(secgroup)
-            #pprint (secgroups)
-            #pprint (thegroups)
+            # pprint (secgroups)
+            # pprint (thegroups)
             if thegroups:
                 for thegroup in thegroups:
                     self.cloudman.ex_delete_security_group(thegroup)
@@ -201,8 +201,8 @@ class Provider(ComputeNodeABC):
 
     def add_rules_to_secgroup(self, secgroupname, newrules):
         oldrules = self.list_secgroup_rules(secgroupname)
-        pprint (oldrules)
-        pprint (newrules)
+        pprint(oldrules)
+        pprint(newrules)
         if self.cloudman:
             secgroups = self.list_secgroups(raw=True)
             for secgroup in secgroups:
@@ -220,8 +220,8 @@ class Provider(ComputeNodeABC):
 
     def remove_rules_from_secgroup(self, secgroupname, rules):
         oldrules = self.list_secgroup_rules(secgroupname)
-        pprint (oldrules)
-        pprint (rules)
+        pprint(oldrules)
+        pprint(rules)
         if self.cloudman:
             secgroups = self.list_secgroups(raw=True)
             for secgroup in secgroups:
@@ -234,9 +234,9 @@ class Provider(ComputeNodeABC):
                     for rule in rules:
                         for ruleobj in rulesobj:
                             if (ruleobj.ip_protocol == rule["ip_protocol"] and
-                                ruleobj.from_port == rule["from_port"] and
-                                ruleobj.to_port == rule["to_port"] and
-                                ruleobj.ip_range == rule["ip_range"]):
+                                    ruleobj.from_port == rule["from_port"] and
+                                    ruleobj.to_port == rule["to_port"] and
+                                    ruleobj.ip_range == rule["ip_range"]):
                                 self.cloudman.ex_delete_security_group_rule(ruleobj)
 
     def images(self, raw=False):
@@ -400,9 +400,9 @@ class Provider(ComputeNodeABC):
             if _flavor.name == size:
                 flavorUse = _flavor
                 break
-        #keyname = Config()["cloudmesh"]["profile"]["user"]
-        #ex_keyname has to be the registered keypair name in cloud
-        pprint (kwargs)
+        # keyname = Config()["cloudmesh"]["profile"]["user"]
+        # ex_keyname has to be the registered keypair name in cloud
+        pprint(kwargs)
         if self.kind == "openstack":
             if "ex_security_groups" in kwargs:
                 secgroupsobj = []

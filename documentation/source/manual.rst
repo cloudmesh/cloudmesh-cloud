@@ -1,5 +1,5 @@
-Manual
-******
+Manual (ok)
+***********
 
 .. toctree::
 

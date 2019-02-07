@@ -1,5 +1,5 @@
-Manual - Dev
-************
+Manual (proposed)
+*****************
 
 .. toctree::
 

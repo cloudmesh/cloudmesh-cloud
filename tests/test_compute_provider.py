@@ -27,10 +27,16 @@ class TestName:
 
         self.p = Provider(name="chameleon")
 
+        self.secgroupname = "CM4TestSecGroup"
+        self.secgrouprule = {"ip_protocol": "tcp",
+                              "from_port": 8080,
+                              "to_port": 8088,
+                              "ip_range": "129.79.0.0/16"}
+
     def test_01_list_keys(self):
         HEADING()
         self.keys = self.p.keys()
-        pprint(self.keys)
+        #pprint(self.keys)
 
         print(Printer.flatwrite(self.keys,
                             sort_keys=("name"),
@@ -46,11 +52,13 @@ class TestName:
 
         self.p.key_upload(key)
 
+        self.test_01_list_keys()
+
 
     def test_03_list_images(self):
         HEADING()
         images= self.p.images()
-        pprint(images)
+        #pprint(images)
 
         print(Printer.flatwrite(images,
                             sort_keys=("name","extra.minDisk"),
@@ -62,7 +70,7 @@ class TestName:
     def test_04_list_flavors(self):
         HEADING()
         flavors = self.p.flavors()
-        pprint (flavors)
+        #pprint (flavors)
 
         print(Printer.flatwrite(flavors,
                             sort_keys=("name", "vcpus", "disk"),
@@ -74,24 +82,58 @@ class TestName:
     def test_04_list_vm(self):
         HEADING()
         vms = self.p.list()
-        pprint (vms)
+        #pprint (vms)
 
 
         print(Printer.flatwrite(vms,
                                 sort_keys=("name"),
-                                order=["name", "state", "extra.task_state", "extra.vm_state", "extra.userId", "private_ips", "public_ips"],
-                                header=["Name", "State", "Task state", "VM state", "User Id",
+                                order=["name", "state", "extra.task_state", "extra.vm_state", "extra.userId", "extra.key_name", "private_ips", "public_ips"],
+                                header=["Name", "State", "Task state", "VM state", "User Id", "SSHKey",
                                        "Private ips", "Public ips"])
               )
 
 
-    def test_06_create(self):
+    def test_05_list_secgroups(self):
+        HEADING()
+        secgroups = self.p.list_secgroups()
+        for secgroup in secgroups:
+            print (secgroup["name"])
+            rules = self.p.list_secgroup_rules(secgroup["name"])
+            print(Printer.write(rules,
+                                sort_keys=("ip_protocol", "from_port", "to_port", "ip_range"),
+                                order=["ip_protocol", "from_port", "to_port", "ip_range"],
+                                header=["ip_protocol", "from_port", "to_port", "ip_range"])
+                 )
+
+    def test_06_secgroups_add(self):
+        self.p.add_secgroup(self.secgroupname)
+        self.test_05_list_secgroups()
+
+    def test_07_secgroup_rules_add(self):
+        rules = [self.secgrouprule]
+        self.p.add_rules_to_secgroup(self.secgroupname, rules)
+        self.test_05_list_secgroups()
+
+    def test_08_secgroup_rules_remove(self):
+        rules = [self.secgrouprule]
+        self.p.remove_rules_from_secgroup(self.secgroupname, rules)
+        self.test_05_list_secgroups()
+
+    def test_09_secgroups_remove(self):
+        self.p.remove_secgroup(self.secgroupname)
+        self.test_05_list_secgroups()
+
+    def test_10_create(self):
         HEADING()
         image = "CC-Ubuntu16.04"
         size = "m1.medium"
         self.p.create(name=self.name,
                       image=image,
-                      size=size)
+                      size=size,
+                      # username as the keypair name based on
+                      # the key implementation logic
+                      ex_keyname=self.user,
+                      ex_security_groups=['default'])
 
         nodes = self.p.list()
 
@@ -101,12 +143,12 @@ class TestName:
 
         assert node is not None
 
-    def test_07_printer(self):
-        HEADING()
-        nodes = self.p.list()
+    #def test_11_printer(self):
+    #    HEADING()
+    #    nodes = self.p.list()
 
 
-        print(Printer.write(nodes, order=["name", "image", "size"]))
+    #    print(Printer.write(nodes, order=["name", "image", "size"]))
 
 
 
@@ -114,35 +156,15 @@ class TestName:
     #    HEADING()
     #    self.p.start(name=self.name)
 
-    def test_08_list_vm(self):
-        HEADING()
-        vms = self.p.list()
-        pprint(vms)
-
-        print(Printer.flatwrite(vms,
-                                sort_keys=("name"),
-                                order=["name", "key_name", "state", "extra.task_state", "extra.vm_state", "extra.userId",
-                                       "private_ips", "public_ips"],
-                                header=["Name", "Key", "State", "Task state", "VM state", "User Id",
-                                        "Private ips", "Public ips"])
-              )
+    def test_12_list_vm(self):
+        self.test_04_list_vm()
 
 
-    def test_09_info(self):
+    def test_13_info(self):
         HEADING()
         self.p.info(name=self.name)
 
-
-
-class other:
-
-    def test_10_rename(self):
-        HEADING()
-
-        self.p.rename(name=self.name, destination=self.new_name)
-
-
-    def test_11_destroy(self):
+    def test_14_destroy(self):
         HEADING()
         self.p.destroy(names=self.name)
         nodes = self.p.list()
@@ -152,10 +174,15 @@ class other:
 
         assert node["state"] is not "running"
 
-    def test_12_list_vm(self):
-        HEADING()
-        pprint (self.p.list())
+    def test_15_list_vm(self):
+        self.test_04_list_vm()
 
+class other:
+
+    def test_10_rename(self):
+        HEADING()
+
+        self.p.rename(name=self.name, destination=self.new_name)
 
     #def test_01_stop(self):
     #    HEADING()

@@ -53,7 +53,7 @@ class OpenCommand(PluginCommand):
 
         """
 
-        pprint(arguments)
+        # pprint(arguments)
         filename = arguments.FILENAME
 
         if arguments.baremetal and arguments.tacc:

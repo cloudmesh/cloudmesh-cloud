@@ -5,7 +5,23 @@ from os import mkdir
 from pathlib import Path
 from cloudmesh.common.dotdict import dotdict
 from cloudmesh.shell.variables import Variables
+from pprint import pprint
 
+class Active(object):
+
+    def __init__(self, config_path='~/.cloudmesh/cloudmesh4.yaml'):
+        self.config = Config(config_path=config_path)
+
+    def clouds(self):
+        names = []
+        entries = self.config["cloudmesh"]["cloud"]
+        pprint(entries)
+        for entry in entries:
+            if entries[entry]["cm"]["active"]:
+                names.append(entry)
+        if len(names) == 0:
+            names = None
+        return names
 
 class Config(object):
     __shared_state = {}

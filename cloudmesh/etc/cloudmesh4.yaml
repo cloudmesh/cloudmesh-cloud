@@ -41,6 +41,7 @@ cloudmesh:
   cloud:
     azure:
       cm:
+        active: False
         heading: AWS
         host: azure.mocrosoft.com
         label: Azure
@@ -60,6 +61,7 @@ cloudmesh:
         AZURE_SECRET_KEY: TBD
     aws:
       cm:
+        active: False
         heading: AWS
         host: aws.amazon.com
         label: aws
@@ -77,6 +79,7 @@ cloudmesh:
         EC2_PRIVATE_KEY_FILE_PATH: '~/.cloudmesh/aws_cert.pem'
     chameleon:
       cm:
+        active: True
         heading: Chameleon
         host: chameleoncloud.org
         label: chameleon
@@ -100,6 +103,7 @@ cloudmesh:
         username: cc
     jetstream:
       cm:
+        active: True
         heading: Jetstream
         host: http://jetstream-cloud.org/
         label: jetstream
@@ -122,6 +126,7 @@ cloudmesh:
         image: Ubuntu-Server-14.04-LTS
     cybera-e:
       cm:
+        active: False
         heading: Cybera Edmonton OpenStack
         host: cybera
         label: kilo
@@ -144,6 +149,7 @@ cloudmesh:
         local: True
         hostname: localhost
       cm:
+        active: True
         heading: Vagrant
         host: TBD
         label: TBD
@@ -155,6 +161,7 @@ cloudmesh:
         key: ~/.ssh/id_rsa.pub
     vagrant_remote:
       cm:
+        active: False
         heading: Vagrant
         host: TBD
         label: TBD
@@ -205,6 +212,7 @@ cloudmesh:
         redhat: https://repo.mongodb.org/yum/redhat/7/mongodb-org/4.0/x86_64/RPMS/mongodb-org-server-4.0.4-1.el7.x86_64.rpm
   cluster:
     bigred2:
+      active: False
       name: bigred2
       label: bigred
       address: bigred2.iu.edu
@@ -212,14 +220,17 @@ cloudmesh:
         username: TBD
         pulickey: ~/.ssh/id_rsa.pub
     karst:
+      active: False
       credentials:
         username: TBD
         pulickey: ~/.ssh/id_rsa.pub
     slurm-taito:
+      active: False
       name: taito
       credentials:
         sshconfigpath: ~/.ssh/config
     clustera:
+      active: False
       computer_a:
         name: computer_a
         label: one
@@ -235,6 +246,7 @@ cloudmesh:
           username: TBD
           pulickey: ~/.ssh/id_rsa.pub
     vcluster_test1:
+      active: False
       computer_a:
         name: machine1
         label: one
@@ -249,6 +261,7 @@ cloudmesh:
           username: TBD
           pulickey: ~/.ssh/id_rsa.pub
     vcluster_test2:
+      active: False
       c2:
         name: machine2
         label: two

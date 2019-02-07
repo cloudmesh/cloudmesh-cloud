@@ -25,7 +25,9 @@ class OpenCommand(PluginCommand):
                 open chameleon baremetal uc
                 open chameleon vm
                 open FILENAME
+                open doc local
                 open doc
+
 
             Arguments:
 
@@ -61,6 +63,8 @@ class OpenCommand(PluginCommand):
         elif arguments.chameleon and arguments.vm:
             filename = str("https://openstack.tacc.chameleoncloud.org")
 
+        elif arguments.doc and arguments.local:
+            filename = "./docs/index.html"
 
         elif filename == "doc":
             filename = "https://cloudmesh-community.github.io/cm/"

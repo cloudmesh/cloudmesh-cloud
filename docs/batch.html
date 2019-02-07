@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Batch &mdash; cm4 alpha documentation</title>
+  <title>Batch &mdash; Cloudmesh v4 alpha documentation</title>
   
 
   
@@ -26,6 +26,7 @@
 
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="author" title="About these documents" href="about.html" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" /> 
 
@@ -46,7 +47,7 @@
           
 
           
-            <a href="index.html" class="icon icon-home"> cm4
+            <a href="index.html" class="icon icon-home"> Cloudmesh v4
           
 
           
@@ -82,22 +83,24 @@
             
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="contributors.html">1. Contributors</a></li>
-<li class="toctree-l1"><a class="reference internal" href="install.html">2. Installation</a></li>
-<li class="toctree-l1"><a class="reference internal" href="quickstart.html">3. Quickstart</a></li>
-<li class="toctree-l1"><a class="reference internal" href="mongo.html">4. Cloudmesh Database</a></li>
-<li class="toctree-l1"><a class="reference internal" href="configuration.html">5. Configuration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="vmproviders.html">6. VM Providers</a></li>
-<li class="toctree-l1"><a class="reference internal" href="vagrant.html">7. Vagrant</a></li>
-<li class="toctree-l1"><a class="reference internal" href="CM4README.html">8. CM4 Details</a></li>
-<li class="toctree-l1"><a class="reference internal" href="README.html">9. Cloudmesh cm v4</a></li>
-<li class="toctree-l1"><a class="reference internal" href="aws.html">10. AWS cm</a></li>
-<li class="toctree-l1"><a class="reference internal" href="ufo.html">11. CM4 REST Api</a></li>
-<li class="toctree-l1"><a class="reference internal" href="vcluster.html">12. Virtual Cluster</a></li>
-<li class="toctree-l1"><a class="reference internal" href="vm.html">13. VM Description</a></li>
-<li class="toctree-l1"><a class="reference internal" href="jupyter.html">14. Jupyter Integration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="manual.html">15. Manual</a></li>
-<li class="toctree-l1"><a class="reference internal" href="code.html">16. Code Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="about.html">1. About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="contributors.html">2. Contributors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">3. Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">4. Quickstart (proposed)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="configuration.html">5. Configuration (ok)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mongo.html">6. Cloudmesh Database (ok)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual.html">7. Manual (ok)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual-dev.html">8. Manual (proposed)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="jupyter.html">9. Jupyter Integration (proposed)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vmproviders.html">10. VM Providers (outdated)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vagrant.html">11. Vagrant (outdated)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CM4README.html">12. CM4 Details (outdated)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="README.html">13. Cloudmesh cm v4</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aws.html">14. AWS cm (outdated)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ufo.html">15. REST Service (outdated)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vcluster.html">16. Virtual Cluster (in progress)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vm.html">17. Virtual machine management (outdated)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="code.html">18. Code Documentation</a></li>
 </ul>
 
             
@@ -112,7 +115,7 @@
       <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="index.html">cm4</a>
+          <a href="index.html">Cloudmesh v4</a>
         
       </nav>
 
@@ -163,7 +166,7 @@
            <div itemprop="articleBody">
             
   <div class="section" id="batch">
-<span id="batch"></span><h1>Batch<a class="headerlink" href="#batch" title="Permalink to this headline">¶</a></h1>
+<h1>Batch<a class="headerlink" href="#batch" title="Permalink to this headline">¶</a></h1>
 <p>The purpose of this sub-command is to facilitate job submission on
 clusters that use SLURM as their workload manager. Note that this
 tools assumes that the SLURM file is properly prepared by the user and
@@ -196,7 +199,7 @@ run the job automatically)</li>
 <p>Each of these sub-commands are reviewed in the following sections with
 examples.</p>
 <div class="section" id="creating-a-job-configuration">
-<span id="creating-a-job-configuration"></span><h2>Creating a job configuration<a class="headerlink" href="#creating-a-job-configuration" title="Permalink to this headline">¶</a></h2>
+<h2>Creating a job configuration<a class="headerlink" href="#creating-a-job-configuration" title="Permalink to this headline">¶</a></h2>
 <p>As can be seen, this sub-command has the most number of arguments and
 is the vital part of the <code class="docutils literal notranslate"><span class="pre">batch</span></code> tool. The parameters are all
 self-explanatory, but we will review the important ones here:</p>
@@ -238,7 +241,7 @@ self-explanatory, but we will review the important ones here:</p>
 </div>
 </div>
 <div class="section" id="testing-the-connection">
-<span id="testing-the-connection"></span><h2>Testing the connection<a class="headerlink" href="#testing-the-connection" title="Permalink to this headline">¶</a></h2>
+<h2>Testing the connection<a class="headerlink" href="#testing-the-connection" title="Permalink to this headline">¶</a></h2>
 <p>Note that the cluster information is already extracted and added to
 this file. Therefore unlike <code class="docutils literal notranslate"><span class="pre">vcluster</span></code>, there is no need to add the
 cluster manually. So far, we have just added and updated the
@@ -250,7 +253,7 @@ Slurm Cluster taito is accessible.
 </div>
 </div>
 <div class="section" id="running-the-job">
-<span id="running-the-job"></span><h2>Running the Job<a class="headerlink" href="#running-the-job" title="Permalink to this headline">¶</a></h2>
+<h2>Running the Job<a class="headerlink" href="#running-the-job" title="Permalink to this headline">¶</a></h2>
 <p>Now that we are sure that the ssh connection works fine, let’s try to
 run the job:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ cms batch run-job SlurmTest1
@@ -284,7 +287,7 @@ drwx------ 3  4096 Dec  7 02:35 ../
 </div>
 </div>
 <div class="section" id="downloading-the-results">
-<span id="downloading-the-results"></span><h2>Downloading the Results<a class="headerlink" href="#downloading-the-results" title="Permalink to this headline">¶</a></h2>
+<h2>Downloading the Results<a class="headerlink" href="#downloading-the-results" title="Permalink to this headline">¶</a></h2>
 <p>Now that the results are ready we can fetch the results using the following command:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ cm4 batch fetch SlurmTest1
 collecting results
@@ -306,7 +309,7 @@ drwxr-xr-x 3 corriel 1M Dec  6 19:40 ../
 </div>
 </div>
 <div class="section" id="cleaning-the-remote">
-<span id="cleaning-the-remote"></span><h2>Cleaning the remote<a class="headerlink" href="#cleaning-the-remote" title="Permalink to this headline">¶</a></h2>
+<h2>Cleaning the remote<a class="headerlink" href="#cleaning-the-remote" title="Permalink to this headline">¶</a></h2>
 <p>Now that you are done, you can easily clean the remote using:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ cm4 batch clean-remote SlurmTest1
 Job SlurmTest1 cleaned successfully.
@@ -314,62 +317,62 @@ Job SlurmTest1 cleaned successfully.
 </div>
 </div>
 <div class="section" id="get-the-list-of-the-jobs-and-clusters">
-<span id="get-the-list-of-the-jobs-and-clusters"></span><h2>Get the list of the jobs and clusters<a class="headerlink" href="#get-the-list-of-the-jobs-and-clusters" title="Permalink to this headline">¶</a></h2>
+<h2>Get the list of the jobs and clusters<a class="headerlink" href="#get-the-list-of-the-jobs-and-clusters" title="Permalink to this headline">¶</a></h2>
 <p>Naturally after working with the <code class="docutils literal notranslate"><span class="pre">batch</span></code> for a while, several jobs and clusters will be accumulated in the configuration file. You can get the list of current jobs and clusters using the following commands:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ cm4 batch list slurm-clusters
  slurm-taito:
-     name
-     credentials
+	 name
+	 credentials
 $ cm4 batch list jobs
  SlurmTest1:
-     suffix
-     slurm_cluster_name
-     input_type
-     raw_remote_path
-     slurm_script_path
-     job_script_path
-     argfile_path
-     argfile_name
-     script_name
-     slurm_script_name
-     remote_path
-     remote_script_path
-     remote_slurm_script_path
-     local_path
-     jobIDs
+	 suffix
+	 slurm_cluster_name
+	 input_type
+	 raw_remote_path
+	 slurm_script_path
+	 job_script_path
+	 argfile_path
+	 argfile_name
+	 script_name
+	 slurm_script_name
+	 remote_path
+	 remote_script_path
+	 remote_slurm_script_path
+	 local_path
+	 jobIDs
 </pre></div>
 </div>
 <p>It is also possible to increase the depth of the information by adding the desired depth as the next parameter:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ cm4 batch list slurm-clusters 2
  slurm-taito:
-     name:
-         taito
-     credentials:
-         sshconfigpath:
-             ~/vms/sshconfig_slurm
+	 name:
+		 taito
+	 credentials:
+		 sshconfigpath:
+			 ~/vms/sshconfig_slurm
 </pre></div>
 </div>
 </div>
 <div class="section" id="modifying-the-configuration-by-setting-parameters">
-<span id="modifying-the-configuration-by-setting-parameters"></span><h2>Modifying the Configuration by Setting Parameters<a class="headerlink" href="#modifying-the-configuration-by-setting-parameters" title="Permalink to this headline">¶</a></h2>
+<h2>Modifying the Configuration by Setting Parameters<a class="headerlink" href="#modifying-the-configuration-by-setting-parameters" title="Permalink to this headline">¶</a></h2>
 <p>In case you want to modify or add a configuration parameter, there is no need to directly modify the file. Indeed you can use the <code class="docutils literal notranslate"><span class="pre">set-param</span></code> command to set a key for both jobs and slurm-clusters. In the next example we will add a test-key and test-value parameter to the <code class="docutils literal notranslate"><span class="pre">slurm-taito</span></code> cluster:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ cm4 batch set-param slurm-cluster slurm-taito test-key test-value
 slurm-cluster parameter test-key set to test-value successfully.
 
 $ cm4 batch list slurm-clusters 2
  slurm-taito:
-     name:
-         taito
-     credentials:
-         sshconfigpath:
-             ~/vms/sshconfig_slurm
-     test-key:
-         test-value
+	 name:
+		 taito
+	 credentials:
+		 sshconfigpath:
+			 ~/vms/sshconfig_slurm
+	 test-key:
+		 test-value
 </pre></div>
 </div>
 </div>
 <div class="section" id="removing-jobs-and-clusters">
-<span id="removing-jobs-and-clusters"></span><h2>Removing jobs and clusters<a class="headerlink" href="#removing-jobs-and-clusters" title="Permalink to this headline">¶</a></h2>
+<h2>Removing jobs and clusters<a class="headerlink" href="#removing-jobs-and-clusters" title="Permalink to this headline">¶</a></h2>
 <p>Finally, when you are done with a job, or when a cluster is not accessible anymore, you can easily remove them from the <code class="docutils literal notranslate"><span class="pre">batch</span></code> configuration file using the following:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ cm4 baremove slurm-cluster slurm-taito
 Slurm-cluster slurm-taito removeed successfully.

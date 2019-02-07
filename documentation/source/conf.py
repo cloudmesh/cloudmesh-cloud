@@ -22,7 +22,7 @@ pprint (sys.path)
 
 # -- Project information -----------------------------------------------------
 
-project = 'cm4'
+project = 'Cloudmesh v4'
 copyright = '2018, Cloudmesh Community'
 author = 'Cloudmesh Community'
 

@@ -15,10 +15,11 @@ Cloudmesh Version 4
    manual
    manual-dev
    jupyter
+   workflow
+   goal
    vmproviders
    vagrant
    CM4README
-   README
    aws
    ufo
    vcluster

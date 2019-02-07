@@ -1,4 +1,4 @@
-# VM Description
+# Virtual machine management (outdated)
 
 In cloudmesh cm4, we are using the **Python** tool to
 implement a program that could remotely control cloud nodes provided

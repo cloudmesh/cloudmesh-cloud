@@ -138,6 +138,107 @@ class Provider(ComputeNodeABC):
         filename = Path(key["path"])
         key = self.cloudman.import_key_pair_from_file("{user}".format(**self.user), filename)
 
+    def list_secgroups(self, raw=False):
+        if self.cloudman:
+            secgroups = self.cloudman.ex_list_security_groups()
+            if not raw:
+                secgroups = self.dict(secgroups, kind="secgroup")
+            return secgroups
+        return None
+
+    def list_secgroup_rules(self, secgroup='default', raw=False):
+        if self.cloudman:
+            secgroups = self.list_secgroups(raw=raw)
+            thegroup = None
+            if raw:
+                # Theoretically it's possible to have secgroups with the same name,
+                # in this case, we list rules for the first one only.
+                # In reality this don't seem like a good practice so we assume
+                # this situation MOST LIKELY does not occur.
+                for _secgroup in secgroups:
+                    if _secgroup.name == secgroup:
+                        thegroup = _secgroup
+                        break
+            else:
+                # this already returns only one entry
+                thegroup = self.find(secgroups, name=secgroup)
+
+            rules = []
+            if raw:
+                # dealing with object
+                for rule in thegroup.rules:
+                    rules.append(rule)
+            else:
+                # dealing with dict
+                for rule in thegroup["rules"]:
+                    # self.p.dict() converted the object into a list of dict,
+                    # even if there is only one object
+                    rule = self.dict(rule)[0]
+                    rules.append(rule)
+            return rules
+        return None
+
+    def add_secgroup(self, secgroupname, description=""):
+        if self.cloudman:
+            return self.cloudman.ex_create_security_group(secgroupname, description=description)
+        return None
+
+    def remove_secgroup(self, secgroupname):
+        if self.cloudman:
+            secgroups = self.list_secgroups(raw=True)
+            thegroups = []
+            for secgroup in secgroups:
+                if secgroup.name == secgroupname:
+                    thegroups.append(secgroup)
+            #pprint (secgroups)
+            #pprint (thegroups)
+            if thegroups:
+                for thegroup in thegroups:
+                    self.cloudman.ex_delete_security_group(thegroup)
+            else:
+                return False
+        return False
+
+    def add_rules_to_secgroup(self, secgroupname, newrules):
+        oldrules = self.list_secgroup_rules(secgroupname)
+        pprint (oldrules)
+        pprint (newrules)
+        if self.cloudman:
+            secgroups = self.list_secgroups(raw=True)
+            for secgroup in secgroups:
+                # for multiple secgroups with the same name,
+                # add the rules to all the groups
+                if secgroup.name == secgroupname:
+                    # supporting multiple rules at once
+                    for rule in newrules:
+                        self.cloudman.ex_create_security_group_rule(secgroup,
+                                                                    rule["ip_protocol"],
+                                                                    rule["from_port"],
+                                                                    rule["to_port"],
+                                                                    cidr=rule["ip_range"]
+                                                                    )
+
+    def remove_rules_from_secgroup(self, secgroupname, rules):
+        oldrules = self.list_secgroup_rules(secgroupname)
+        pprint (oldrules)
+        pprint (rules)
+        if self.cloudman:
+            secgroups = self.list_secgroups(raw=True)
+            for secgroup in secgroups:
+                # for multiple secgroups with the same name,
+                # remove the rules from all the groups
+                if secgroup.name == secgroupname:
+                    # supporting multiple rules at once
+                    # get all rules, in obj format
+                    rulesobj = self.list_secgroup_rules(secgroup=secgroupname, raw=True)
+                    for rule in rules:
+                        for ruleobj in rulesobj:
+                            if (ruleobj.ip_protocol == rule["ip_protocol"] and
+                                ruleobj.from_port == rule["from_port"] and
+                                ruleobj.to_port == rule["to_port"] and
+                                ruleobj.ip_range == rule["ip_range"]):
+                                self.cloudman.ex_delete_security_group_rule(ruleobj)
+
     def images(self, raw=False):
         """
         Lists the images on the cloud
@@ -299,9 +400,23 @@ class Provider(ComputeNodeABC):
             if _flavor.name == size:
                 flavorUse = _flavor
                 break
-        keyname = Config()["cloudmesh"]["profile"]["user"]
+        #keyname = Config()["cloudmesh"]["profile"]["user"]
+        #ex_keyname has to be the registered keypair name in cloud
+        pprint (kwargs)
         if self.kind == "openstack":
-            node = self.cloudman.create_node(name=name, image=imageUse, size=flavorUse, ex_keyname=keyname)
+            if "ex_security_groups" in kwargs:
+                secgroupsobj = []
+                #
+                # this gives existing secgroups in obj form
+                secgroups = self.list_secgroups(raw=True)
+                for secgroup in kwargs["ex_security_groups"]:
+                    for _secgroup in secgroups:
+                        if _secgroup.name == secgroup:
+                            secgroupsobj.append(_secgroup)
+                # now secgroup name is converted to object which
+                # is required by the libcloud api call
+                kwargs["ex_security_groups"] = secgroupsobj
+            node = self.cloudman.create_node(name=name, image=imageUse, size=flavorUse, **kwargs)
         else:
             sys.exit("this cloud is not yet supported")
 

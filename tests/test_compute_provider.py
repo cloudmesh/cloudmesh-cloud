@@ -1,4 +1,7 @@
 from pprint import pprint
+import time
+import subprocess
+import sys
 from cloudmesh.common.util import HEADING
 from cloudmesh.compute.libcloud.Provider import Provider
 from cloudmesh.management.configuration.config import Config
@@ -13,6 +16,7 @@ class TestName:
 
     def setup(self):
         self.user = Config()["cloudmesh"]["profile"]["user"]
+        self.clouduser = 'cc'
         self.name_generator = Name(
              experiment="exp",
              group="grp",
@@ -32,6 +36,7 @@ class TestName:
                               "from_port": 8080,
                               "to_port": 8088,
                               "ip_range": "129.79.0.0/16"}
+        self.testnode = None
 
     def test_01_list_keys(self):
         HEADING()
@@ -128,20 +133,53 @@ class TestName:
         image = "CC-Ubuntu16.04"
         size = "m1.medium"
         self.p.create(name=self.name,
-                      image=image,
-                      size=size,
-                      # username as the keypair name based on
-                      # the key implementation logic
-                      ex_keyname=self.user,
-                      ex_security_groups=['default'])
-
+                                      image=image,
+                                      size=size,
+                                      # username as the keypair name based on
+                                      # the key implementation logic
+                                      ex_keyname=self.user,
+                                      ex_security_groups=['default'])
+        time.sleep(5)
         nodes = self.p.list()
-
         node = self.p.find(nodes, name=self.name)
-
         pprint(node)
 
+        nodes = self.p.list(raw=True)
+        for node in nodes:
+            if node.name == self.name:
+                self.testnode = node
+                break
+
         assert node is not None
+
+    def test_11_publicIP_attach(self):
+        HEADING()
+        pubip = self.p.get_publicIP()
+        pprint (pubip)
+        nodes = self.p.list(raw=True)
+        for node in nodes:
+            if node.name == self.name:
+                self.testnode = node
+                break
+        if self.testnode:
+            print ("attaching public IP...")
+            self.p.attach_publicIP(self.testnode, pubip)
+            time.sleep(5)
+        self.test_04_list_vm()
+
+    def test_12_publicIP_detach(self):
+        print ("detaching and removing public IP...")
+        time.sleep(5)
+        nodes = self.p.list(raw=True)
+        for node in nodes:
+            if node.name == self.name:
+                self.testnode = node
+                break
+        ipaddr = self.testnode.public_ips[0]
+        pubip = self.p.cloudman.ex_get_floating_ip(ipaddr)
+        self.p.detach_publicIP(self.testnode, pubip)
+        time.sleep(5)
+        self.test_04_list_vm()
 
     #def test_11_printer(self):
     #    HEADING()
@@ -156,8 +194,8 @@ class TestName:
     #    HEADING()
     #    self.p.start(name=self.name)
 
-    def test_12_list_vm(self):
-        self.test_04_list_vm()
+    #def test_12_list_vm(self):
+    #    self.test_04_list_vm()
 
 
     def test_13_info(self):
@@ -172,9 +210,44 @@ class TestName:
 
         pprint (node)
 
-        assert node["state"] is not "running"
+        assert node["extra"]["task_state"] == "deleting"
 
     def test_15_list_vm(self):
+        self.test_04_list_vm()
+
+    def test_16_vm_login(self):
+        self.test_04_list_vm()
+        self.test_10_create()
+        # use the self.testnode for this test
+        time.sleep(30)
+        self.test_11_publicIP_attach()
+        time.sleep(5)
+        nodes = self.p.list(raw=True)
+        for node in nodes:
+            if node.name == self.name:
+                self.testnode = node
+                break
+        #pprint (self.testnode)
+        #pprint (self.testnode.public_ips)
+        pubip = self.testnode.public_ips[0]
+
+        COMMAND = "cat /etc/*release*"
+
+        ssh = subprocess.Popen(["ssh", "%s@%s" % (self.clouduser, pubip), COMMAND],
+                               shell=False,
+                               stdout=subprocess.PIPE,
+                               stderr=subprocess.PIPE)
+        result = ssh.stdout.readlines()
+        if result == []:
+            error = ssh.stderr.readlines()
+            print ("ERROR: %s" % error)
+        else:
+            print ("RESULT:")
+            for line in result:
+                line = line.decode("utf-8")
+                print (line.strip("\n"))
+
+        self.test_14_destroy()
         self.test_04_list_vm()
 
 class other:

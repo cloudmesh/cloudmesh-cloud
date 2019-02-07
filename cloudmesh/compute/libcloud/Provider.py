@@ -423,6 +423,35 @@ class Provider(ComputeNodeABC):
         pprint(node)
         return self.dict(node)
 
+    def get_publicIP(self):
+        # pools = self.cloudman.ex_list_floating_ip_pools()
+        # ex_get_floating_ip(ip)
+        # ex_create_floating_ip(ip_pool=pools[0])
+        #
+        '''
+                    ex_attach_floating_ip_to_node(node, ip)
+
+                    ex_detach_floating_ip_from_node(node, ip)
+                    ex_delete_floating_ip(ip)
+                    '''
+        ip = None
+        if self.kind == "openstack":
+            IPs = self.cloudman.ex_list_floating_ips()
+            if IPs:
+                ip = IPs[0]
+            else:
+                pools = self.cloudman.ex_list_floating_ip_pools()
+                # ex_get_floating_ip(ip)
+                ip = self.cloudman.ex_create_floating_ip(ip_pool=pools[0])
+        return ip
+
+    def attach_publicIP(self, node, ip):
+        return self.cloudman.ex_attach_floating_ip_to_node(node, ip)
+
+    def detach_publicIP(self, node, ip):
+        self.cloudman.ex_detach_floating_ip_from_node(node, ip)
+        return self.cloudman.ex_delete_floating_ip(ip)
+
     def rename(self, name=None, destination=None):
         """
         rename a node. NOT YET IMPLEMENTED.

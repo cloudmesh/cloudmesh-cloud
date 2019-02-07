@@ -2,7 +2,11 @@ from __future__ import print_function
 
 from cloudmesh.shell.command import PluginCommand
 from cloudmesh.shell.command import command
-
+from cloudmesh.shell.variables import Variables
+from cloudmesh.common.console import Console
+from pprint import pprint
+from cloudmesh.common.parameter import Parameter
+from cloudmesh.management.configuration.config import Active
 
 class VmCommand(PluginCommand):
 
@@ -15,8 +19,13 @@ class VmCommand(PluginCommand):
         ::
 
             Usage:
-                vm default [--cloud=CLOUD][--format=FORMAT]
-                vm refresh [all][--cloud=CLOUD]
+                vm ping [NAMES] [N]
+                vm refresh [all] [--cloud=CLOUDS]
+                vm start [NAMES]
+                         [--experiment=EXPERIMENT]
+                         [--group=GROUP]
+                         [--cloud=CLOUD]
+                         [--force]
                 vm boot [--name=NAME]
                         [--cloud=CLOUD]
                         [--username=USERNAME]
@@ -37,14 +46,9 @@ class VmCommand(PluginCommand):
                         [--secgroup=SECGROUP]
                         [--key=KEY]
                         [--dryrun]
-                vm ping [NAME] [N]
                 vm run [--name=NAMES] [--username=USERNAME] COMMAND
                 vm script [--name=NAMES] [--username=USERNAME] SCRIPT
                 vm console [NAME]
-                         [--group=GROUP]
-                         [--cloud=CLOUD]
-                         [--force]
-                vm start [NAMES]
                          [--group=GROUP]
                          [--cloud=CLOUD]
                          [--force]
@@ -179,7 +183,13 @@ class VmCommand(PluginCommand):
                 cm vm login gvonlasz-004 --command=\"uname -a\"
         """
 
-        print(arguments)
+        def get_clouds(arguments, variables):
+            clouds = arguments["--cloud"] or variables["cloud"]
+            if clouds is None:
+                Console.error("you need to specify a cloud")
+                return None
+            else:
+                return Parameter.expand(clouds)
 
         """
         m = Manager()
@@ -194,7 +204,46 @@ class VmCommand(PluginCommand):
             m.list("just calling list without parameter")
         """
 
-        if arguments.boot:
+        pprint(arguments)
+
+        variables = Variables()
+
+
+        if arguments.refresh:
+
+            clouds = None
+
+            if arguments.all:
+
+                Console.msg("refresh all active clouds")
+
+                active = Active()
+                clouds = active.clouds()
+
+            else:
+
+                clouds = get_clouds(arguments, variables)
+
+            for cloud in clouds:
+                Console.msg ("refresh {cloud}".format(cloud=cloud))
+                # r = vm.refresh(cloud)
+            return
+
+        elif arguments.ping:
+
+            names = Parameter.expand(arguments["NAMES"] or variables["vm"])
+            pings = arguments["N"] or 3
+
+            print (names)
+            if names is None:
+                Console.error("you need to specify a vm")
+                return None
+            else:
+                for name in names:
+                    Console.msg("ping {name}".format(name=name))
+                    # r = vm.ping(name)
+
+        elif arguments.boot:
 
             print("boot the vm")
 
@@ -205,10 +254,6 @@ class VmCommand(PluginCommand):
         elif arguments.stop:
 
             print("start the vm")
-
-        elif arguments.refresh:
-
-            print("refresh the vm")
 
         elif arguments.delete:
 
@@ -241,10 +286,6 @@ class VmCommand(PluginCommand):
         elif arguments.default:
 
             print("sets defaults for the vm")
-
-        elif arguments.ping:
-
-            print("pings the vm")
 
         elif arguments.ssh:
 

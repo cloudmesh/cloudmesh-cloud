@@ -8,6 +8,7 @@ from pprint import pprint
 from cloudmesh.common.parameter import Parameter
 from cloudmesh.management.configuration.config import Active
 
+
 class VmCommand(PluginCommand):
 
     # see also https://github.com/cloudmesh/client/edit/master/cloudmesh_client/shell/plugins/VmCommand.py
@@ -19,21 +20,26 @@ class VmCommand(PluginCommand):
         ::
 
             Usage:
-                vm ping [NAMES] [N]
-                vm refresh [all] [--cloud=CLOUDS]
-                vm start [NAMES]
-                         [--experiment=EXPERIMENT]
-                         [--group=GROUP]
-                         [--cloud=CLOUD]
-                         [--force]
+                vm ping [NAMES] [--cloud=CLOUDS] [N]
+                vm check [NAMES] [--cloud=CLOUDS]
+                vm refresh [NAMES] [--cloud=CLOUDS]
+                vm status [NAMES] [--cloud=CLOUDS]
+                vm console [NAME] [--force]
+                vm start [NAMES] [--cloud=CLOUD] [--dryrun]
+                vm stop [NAMES] [--cloud=CLOUD] [--dryrun]
+                vm terminate [NAMES] [--cloud=CLOUD] [--dryrun]
+                vm delete [NAMES] [--cloud=CLOUD] [--dryrun]
+                vm list [NAMES]
+                        [--cloud=CLOUDS]
+                        [--format=FORMAT]
+                        [--refresh]
                 vm boot [--name=NAME]
                         [--cloud=CLOUD]
                         [--username=USERNAME]
                         [--image=IMAGE]
                         [--flavor=FLAVOR]
-                        [--group=GROUP]
                         [--public]
-                        [--secgroup=SECGROUP]
+                        [--secgroup=SECGROUPs]
                         [--key=KEY]
                         [--dryrun]
                 vm boot [--n=COUNT]
@@ -41,30 +47,12 @@ class VmCommand(PluginCommand):
                         [--username=USERNAME]
                         [--image=IMAGE]
                         [--flavor=FLAVOR]
-                        [--group=GROUP]
                         [--public]
-                        [--secgroup=SECGROUP]
+                        [--secgroup=SECGROUPS]
                         [--key=KEY]
                         [--dryrun]
-                vm run [--name=NAMES] [--username=USERNAME] COMMAND
-                vm script [--name=NAMES] [--username=USERNAME] SCRIPT
-                vm console [NAME]
-                         [--group=GROUP]
-                         [--cloud=CLOUD]
-                         [--force]
-                vm stop [NAMES]
-                        [--group=GROUP]
-                        [--cloud=CLOUD]
-                        [--force]
-                vm terminate [NAMES]
-                          [--group=GROUP]
-                          [--cloud=CLOUD]
-                          [--force]
-                vm delete [NAMES]
-                          [--group=GROUP]
-                          [--cloud=CLOUD]
-                          [--keep]
-                          [--dryrun]
+                vm run [--name=NAMES] [--username=USERNAME] [--dryrun] COMMAND
+                vm script [--name=NAMES] [--username=USERNAME] [--dryrun] SCRIPT
                 vm ip assign [NAMES]
                           [--cloud=CLOUD]
                 vm ip show [NAMES]
@@ -73,28 +61,18 @@ class VmCommand(PluginCommand):
                            [--format=FORMAT]
                            [--refresh]
                 vm ip inventory [NAMES]
-                                [--header=HEADER]
-                                [--file=FILE]
-                vm ssh [NAME] [--username=USER]
+                vm ssh [NAMES] [--username=USER]
                          [--quiet]
                          [--ip=IP]
-                         [--cloud=CLOUD]
                          [--key=KEY]
                          [--command=COMMAND]
                          [--modify-knownhosts]
                 vm rename [OLDNAMES] [NEWNAMES] [--force] [--dryrun]
-                vm list [NAMES]
-                        [--cloud=CLOUDS|--active]
-                        [--group=GROUP]
-                        [--format=FORMAT]
-                        [--refresh]
-                vm status [NAMES]
                 vm wait [--cloud=CLOUD] [--interval=SECONDS]
                 vm info [--cloud=CLOUD]
                         [--format=FORMAT]
-                vm check NAME
                 vm username USERNAME [NAMES] [--cloud=CLOUD]
-                vm resize [SIZE]
+                vm resize [NAMES] [--size=SIZE]
 
             Arguments:
                 COMMAND        positional arguments, the commands you want to
@@ -183,84 +161,221 @@ class VmCommand(PluginCommand):
                 cm vm login gvonlasz-004 --command=\"uname -a\"
         """
 
+        def map_parameters(arguments, *args):
+            for arg in args:
+                flag = "--" + arg
+                if flag in arguments:
+                    arguments[arg] = arguments[flag]
+                else:
+                    arguments[arg] = None
+
         def get_clouds(arguments, variables):
-            clouds = arguments["--cloud"] or variables["cloud"]
+
+            clouds = arguments["cloud"] or arguments["--cloud"] or variables["cloud"]
+            if "active" == clouds:
+                active = Active()
+                clouds = active.clouds()
+            else:
+                clouds = Parameter.expand(clouds)
+
             if clouds is None:
                 Console.error("you need to specify a cloud")
                 return None
+
+            return clouds
+
+        def get_names(arguments, variables):
+            names = arguments["NAME"] or arguments["NAMES"] or arguments["--name"] or variables["vm"]
+            if names is None:
+                Console.error("you need to specify a vm")
+                return None
             else:
-                return Parameter.expand(clouds)
+                return Parameter.expand(names)
 
-        """
-        m = Manager()
+        def name_loop(names, label, f):
+            names = get_names(arguments, variables)
+            for name in names:
+                Console.msg("{label} {name}".format(label=label, name=name))
+                # r = f(name)
 
-
-        if arguments.FILE:
-            print("option a")
-            m.list(arguments.FILE)
-
-        elif arguments.list:
-            print("option b")
-            m.list("just calling list without parameter")
-        """
+        map_parameters(arguments,
+                       'active',
+                       'cloud',
+                       'command',
+                       'dryrun',
+                       'flavor',
+                       'force',
+                       'format',
+                       'group',
+                       'image',
+                       'interval',
+                       'ip',
+                       'key',
+                       'modify-knownhosts',
+                       'n',
+                       'name',
+                       'public',
+                       'quiet',
+                       'refresh',
+                       'secgroup',
+                       'size',
+                       'username')
 
         pprint(arguments)
 
         variables = Variables()
 
-
         if arguments.refresh:
 
-            clouds = None
+            names = []
 
-            if arguments.all:
-
-                Console.msg("refresh all active clouds")
-
-                active = Active()
-                clouds = active.clouds()
-
-            else:
-
+            if arguments["--cloud"]:
                 clouds = get_clouds(arguments, variables)
+                for cloud in clouds:
+                    Console.msg("find names in cloud {cloud}".format(cloud=cloud))
+                    # names = find all names in these clouds
+            else:
+                names = get_names(arguments, variables)
 
-            for cloud in clouds:
-                Console.msg ("refresh {cloud}".format(cloud=cloud))
-                # r = vm.refresh(cloud)
+            for name in names:
+                # r = vm.refresh(name)
+                Console.msg("{label} {name}".format(label="refresh", name=name))
             return
 
         elif arguments.ping:
 
-            names = Parameter.expand(arguments["NAMES"] or variables["vm"])
-            pings = arguments["N"] or 3
+            names = []
+            pings = int(arguments.N or 3)
 
-            print (names)
-            if names is None:
-                Console.error("you need to specify a vm")
-                return None
+            if arguments["--cloud"]:
+                clouds = get_clouds(arguments, variables)
+                for cloud in clouds:
+                    Console.msg("find names in cloud {cloud}".format(cloud=cloud))
+                    # names = find all names in these clouds
             else:
-                for name in names:
-                    Console.msg("ping {name}".format(name=name))
-                    # r = vm.ping(name)
+                names = get_names(arguments, variables)
+
+            for name in names:
+                # r = vm.ping(name)
+                Console.msg("{label} {name}".format(label="ping", name=name))
+            return
+
+        elif arguments.check:
+
+            names = []
+
+            if arguments["--cloud"]:
+                clouds = get_clouds(arguments, variables)
+                for cloud in clouds:
+                    Console.msg("find names in cloud {cloud}".format(cloud=cloud))
+                    # names = find all names in these clouds
+            else:
+                names = get_names(arguments, variables)
+
+            for name in names:
+                # r = vm.check(name)
+                Console.msg("{label} {name}".format(label="check", name=name))
+            return
+
+        elif arguments.status:
+
+            names = []
+
+            if arguments["--cloud"]:
+                clouds = get_clouds(arguments, variables)
+                for cloud in clouds:
+                    Console.msg("find names in cloud {cloud}".format(cloud=cloud))
+                    # names = find all names in these clouds
+            else:
+                names = get_names(arguments, variables)
+
+            for name in names:
+                # r = vm.check(name)
+                Console.msg("{label} {name}".format(label="status", name=name))
+            return
+
+        elif arguments.start:
+
+            names = []
+
+            if arguments["--cloud"]:
+                clouds = get_clouds(arguments, variables)
+                for cloud in clouds:
+                    Console.msg("find names in cloud {cloud}".format(cloud=cloud))
+                    # names = find all names in these clouds
+            else:
+                names = get_names(arguments, variables)
+
+            for name in names:
+                # r = vm.start(name, dryrun=arguments.dryrun)
+                Console.msg("{label} {name}".format(label="start", name=name))
+            return
+
+
+        elif arguments.stop:
+
+            names = []
+
+            if arguments["--cloud"]:
+                clouds = get_clouds(arguments, variables)
+                for cloud in clouds:
+                    Console.msg("find names in cloud {cloud}".format(cloud=cloud))
+                    # names = find all names in these clouds
+            else:
+                names = get_names(arguments, variables)
+
+            for name in names:
+                # r = vm.stop(name, dryrun=arguments.dryrun)
+                Console.msg("{label} {name}".format(label="stop", name=name))
+            return
+
+        elif arguments.terminate:
+
+            names = []
+
+            if arguments["--cloud"]:
+                clouds = get_clouds(arguments, variables)
+                for cloud in clouds:
+                    Console.msg("find names in cloud {cloud}".format(cloud=cloud))
+                    # names = find all names in these clouds
+            else:
+                names = get_names(arguments, variables)
+
+            for name in names:
+                # r = vm.terminate(name, dryrun=arguments.dryrun)
+                Console.msg("{label} {name}".format(label="terminate", name=name))
+            return
+
+        elif arguments.delete:
+
+            names = []
+
+            if arguments["--cloud"]:
+                clouds = get_clouds(arguments, variables)
+                for cloud in clouds:
+                    Console.msg("find names in cloud {cloud}".format(cloud=cloud))
+                    # names = find all names in these clouds
+            else:
+                names = get_names(arguments, variables)
+
+            for name in names:
+                # r = vm.delete(name, dryrun=arguments.dryrun)
+                Console.msg("{label} {name}".format(label="delete", name=name))
+            return
 
         elif arguments.boot:
 
             print("boot the vm")
 
-        elif arguments.start:
-
-            print("start the vm")
-
-        elif arguments.stop:
-
-            print("start the vm")
-
-        elif arguments.delete:
-
-            print("delete the vm")
-
         elif arguments.list:
+            # vm list[NAMES]
+            #   [--cloud = CLOUDS]
+            #   [--format = FORMAT]
+            #   [--refresh]
 
+            # if no clouds find the clouds of all specified vms by name
+            # find all vms of the clouds,
+            # print only thos vms specified by name, if no name is given print all for the cloud
             print("list the vms")
 
         elif arguments.rename:
@@ -291,14 +406,16 @@ class VmCommand(PluginCommand):
 
             print("ssh  the vm")
 
-
         elif arguments.console:
+            # vm console [NAME] [--force]
 
-            print("console for the vm")
+            names = get_names(arguments, variables)
 
-        elif arguments.status:
+            for name in names:
+                # r = vm.console(name,force=argument.force)
+                Console.msg("{label} {name}".format(label="console", name=name))
+            return
 
-            print("status for the vm")
 
         elif arguments.info:
 
@@ -308,6 +425,3 @@ class VmCommand(PluginCommand):
 
             print("waits for the vm till its ready and one can login")
 
-        elif arguments.wait:
-
-            print("waits for the vm till its ready and one can login")

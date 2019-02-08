@@ -1,4 +1,4 @@
-# Virtual Machine Management
+# Virtual Machine Management (proposed)
 
 CLoudmesh v4 contains sophisticated virtual machine management services that
 makes it easy for the user to manage a large number of virtual machines across

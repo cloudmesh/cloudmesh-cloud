@@ -64,11 +64,13 @@ from cloudmesh.common.util import path_expand
 
 class Name(dotdict):
 
-    def __init__(self, order=["experiment", "group", "user", "kind", "counter"], **kwargs):
+    def __init__(self, order=None, **kwargs):
         """
         Defines a name tag that sets the format of the name to the specified schema
         :param schema:
         """
+        if order is None:
+            order = ["experiment", "group", "user", "kind", "counter"]
         if "path" not in kwargs:
             self.__dict__['path'] = path_expand("~/.cloudmesh/name.yaml")
         prefix = os.path.dirname(self.__dict__['path'])

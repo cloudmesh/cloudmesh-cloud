@@ -14,7 +14,7 @@ class OpenCommand(PluginCommand):
 
     # see https://github.com/cloudmesh/client/blob/master/cloudmesh_client/shell/plugins/OpenCommand.py
 
-    # noinspection PyUnusedLocal
+    # noinspection PyUnusedLocal,PyBroadException
     @command
     def do_open(self, args, arguments):
         """

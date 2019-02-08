@@ -7,6 +7,7 @@ from cloudmesh.common.dotdict import dotdict
 from cloudmesh.shell.variables import Variables
 from pprint import pprint
 
+
 class Active(object):
 
     def __init__(self, config_path='~/.cloudmesh/cloudmesh4.yaml'):
@@ -21,6 +22,7 @@ class Active(object):
         if len(names) == 0:
             names = None
         return names
+
 
 class Config(object):
     __shared_state = {}

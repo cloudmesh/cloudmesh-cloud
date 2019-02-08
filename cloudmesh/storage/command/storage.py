@@ -7,6 +7,7 @@ from pprint import pprint
 from cloudmesh.common.console import Console
 
 
+# noinspection PyBroadException
 class StorageCommand(PluginCommand):
 
     # noinspection PyUnusedLocal
@@ -58,7 +59,7 @@ class StorageCommand(PluginCommand):
             try:
                 v = Variables()
                 service = v['storage']
-            except:
+            except Exception as e:
                 service = None
 
         if service is None:

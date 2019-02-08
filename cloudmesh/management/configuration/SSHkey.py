@@ -100,7 +100,7 @@ class SSHkey(dict):
         if keytype.lower() == "file":
             try:
                 keystring = open(key, "r").read()
-            except:
+            except Exception as e:
                 return False
         elif keytype.lower() == "string":
             keystring = key

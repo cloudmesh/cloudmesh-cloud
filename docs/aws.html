@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>16. AWS cm (outdated) &mdash; Cloudmesh v4 alpha documentation</title>
+  <title>6. AWS cm (outdated) &mdash; Cloudmesh v4 alpha documentation</title>
   
 
   
@@ -29,8 +29,8 @@
     <link rel="author" title="About these documents" href="about.html" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="17. REST Service (outdated)" href="ufo.html" />
-    <link rel="prev" title="15. CM4 Details (outdated)" href="CM4README.html" /> 
+    <link rel="next" title="7. REST Service (outdated)" href="ufo.html" />
+    <link rel="prev" title="5. CM4 Details (outdated)" href="CM4README.html" /> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -84,7 +84,7 @@
             
             
               <p class="caption"><span class="caption-text">Contents:</span></p>
-<ul class="current">
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="about.html">1. About</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contributors.html">2. Contributors</a></li>
 <li class="toctree-l1"><a class="reference internal" href="install.html">3. Installation</a></li>
@@ -94,53 +94,56 @@
 <li class="toctree-l1"><a class="reference internal" href="manual.html">7. Manual (ok)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="manual-dev.html">8. Manual (proposed)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="jupyter.html">9. Jupyter Integration (proposed)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="workflow.html">10. Infrastructure Workflow (proposed)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="goal.html">11. Goal (outdated)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="goal.html#manual-cloudmesh-multi-service-data-access">12. Manual: Cloudmesh Multi Service Data Access</a></li>
-<li class="toctree-l1"><a class="reference internal" href="vmproviders.html">13. VM Providers (outdated)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="vagrant.html">14. Vagrant (outdated)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="CM4README.html">15. CM4 Details (outdated)</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">16. AWS cm (outdated)</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#code-description">16.1. Code Description</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#cloudmesh-yaml">16.1.1. cloudmesh.yaml</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#o-suggestion-for-redesign">16.1.2. :o: Suggestion for Redesign</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#awscm-py">16.1.3. awscm.py</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#add-resources">16.1.3.1. Add resources</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#list-resources">16.1.3.2. List Resources</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#remove-resources">16.1.3.3. Remove Resources</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#view-resources">16.1.3.4. View Resources</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#copy-instances-from-file">16.1.3.5. Copy Instances from File</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#copy-instances-from-folder">16.1.3.6. Copy Instances from Folder</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#copy-instances">16.1.3.7. Copy Instances</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#delete-instances-from-file">16.1.3.8. Delete Instances from file</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#delete-instances-from-folder">16.1.3.9. Delete Instances from Folder</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#create-instances-from-folder">16.1.3.10. Create instances from folder</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#read-instances-from-folder">16.1.3.11. Read Instances from Folder</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#download-instances-from-file">16.1.3.12. Download INstances from file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vm.html">10. Virtual Machine Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="workflow.html">11. Infrastructure Workflow (proposed)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="code.html">12. Code Documentation</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="goal.html">1. Goal (outdated)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="goal.html#manual-cloudmesh-multi-service-data-access">2. Manual: Cloudmesh Multi Service Data Access</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vmproviders.html">3. VM Providers (outdated)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vagrant.html">4. Vagrant (outdated)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CM4README.html">5. CM4 Details (outdated)</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">6. AWS cm (outdated)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#code-description">6.1. Code Description</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#cloudmesh-yaml">6.1.1. cloudmesh.yaml</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#o-suggestion-for-redesign">6.1.2. :o: Suggestion for Redesign</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#awscm-py">6.1.3. awscm.py</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#add-resources">6.1.3.1. Add resources</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#list-resources">6.1.3.2. List Resources</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#remove-resources">6.1.3.3. Remove Resources</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#view-resources">6.1.3.4. View Resources</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#copy-instances-from-file">6.1.3.5. Copy Instances from File</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#copy-instances-from-folder">6.1.3.6. Copy Instances from Folder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#copy-instances">6.1.3.7. Copy Instances</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#delete-instances-from-file">6.1.3.8. Delete Instances from file</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#delete-instances-from-folder">6.1.3.9. Delete Instances from Folder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#create-instances-from-folder">6.1.3.10. Create instances from folder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#read-instances-from-folder">6.1.3.11. Read Instances from Folder</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#download-instances-from-file">6.1.3.12. Download INstances from file</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#download-instances-from-folder">16.1.4. Download instances from folder</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#check-instances">16.1.4.1. Check instances</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#run-instances-locally">16.1.4.2. Run instances locally</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#run-instances-remotely">16.1.4.3. Run instances remotely</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#run-local">16.1.4.4. Run local</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#id1">16.1.4.5. Run local</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#download-instances-from-folder">6.1.4. Download instances from folder</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#check-instances">6.1.4.1. Check instances</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#run-instances-locally">6.1.4.2. Run instances locally</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#run-instances-remotely">6.1.4.3. Run instances remotely</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#run-local">6.1.4.4. Run local</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#id1">6.1.4.5. Run local</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#config-py">16.1.5. config.py</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#resource-py">16.1.6. resource.py</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#utility-py">16.1.7. utility.py</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#run-py">16.1.8. run.py</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#advanced-py">16.1.9. advanced.py</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#config-py">6.1.5. config.py</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#resource-py">6.1.6. resource.py</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#utility-py">6.1.7. utility.py</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#run-py">6.1.8. run.py</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#advanced-py">6.1.9. advanced.py</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#todo-spark">16.2. TODO - Spark</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#todo-spark">6.2. TODO - Spark</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="ufo.html">17. REST Service (outdated)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="vcluster.html">18. Virtual Cluster (in progress)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="vm.html">19. Virtual machine management (outdated)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="code.html">20. Code Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ufo.html">7. REST Service (outdated)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vcluster.html">8. Virtual Cluster (in progress)</a></li>
 </ul>
 
             
@@ -186,7 +189,7 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>16. AWS cm (outdated)</li>
+      <li>6. AWS cm (outdated)</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -206,16 +209,16 @@
            <div itemprop="articleBody">
             
   <div class="section" id="aws-cm-outdated">
-<h1>16. AWS cm (outdated)<a class="headerlink" href="#aws-cm-outdated" title="Permalink to this headline">¶</a></h1>
+<h1>6. AWS cm (outdated)<a class="headerlink" href="#aws-cm-outdated" title="Permalink to this headline">¶</a></h1>
 <p>The code is designed for using awscm.py to access the aws
 instance and run scripts in it.</p>
 <p>In the code, we provide these commands for achieving the goal of
 conducting benchmarks on remote machines.</p>
 <div class="section" id="code-description">
-<h2>16.1. Code Description<a class="headerlink" href="#code-description" title="Permalink to this headline">¶</a></h2>
+<h2>6.1. Code Description<a class="headerlink" href="#code-description" title="Permalink to this headline">¶</a></h2>
 <p>In the awscm folder, there are several basic python files:</p>
 <div class="section" id="cloudmesh-yaml">
-<h3>16.1.1. cloudmesh.yaml<a class="headerlink" href="#cloudmesh-yaml" title="Permalink to this headline">¶</a></h3>
+<h3>6.1.1. cloudmesh.yaml<a class="headerlink" href="#cloudmesh-yaml" title="Permalink to this headline">¶</a></h3>
 <p>This file contains the property of each instance, especially the AWS
 instance. In AWS cm, we only concern about the block of
 information in “cloud” part.</p>
@@ -225,7 +228,7 @@ users to fill in the “KEY” and “ID”. Make sure there are no duplicated
 names and labels in the “aws” list.</p>
 </div>
 <div class="section" id="o-suggestion-for-redesign">
-<h3>16.1.2. :o: Suggestion for Redesign<a class="headerlink" href="#o-suggestion-for-redesign" title="Permalink to this headline">¶</a></h3>
+<h3>6.1.2. :o: Suggestion for Redesign<a class="headerlink" href="#o-suggestion-for-redesign" title="Permalink to this headline">¶</a></h3>
 <p>I propose to redising and use the old cloudmesh interface in this new
 implementation</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cms</span> <span class="n">aws</span> <span class="n">vm</span> <span class="nb">list</span>
@@ -264,12 +267,12 @@ implemented all of this logic but it uses cmd5</li>
 </ul>
 </div>
 <div class="section" id="awscm-py">
-<h3>16.1.3. awscm.py<a class="headerlink" href="#awscm-py" title="Permalink to this headline">¶</a></h3>
+<h3>6.1.3. awscm.py<a class="headerlink" href="#awscm-py" title="Permalink to this headline">¶</a></h3>
 <p>The [<code class="docutils literal notranslate"><span class="pre">awscm.py</span></code>] is the main runable python class to start the aws
 cm. It used the “docopt” to build the usage of commands.  Here are the
 version 1 commands that could be used:</p>
 <div class="section" id="add-resources">
-<h4>16.1.3.1. Add resources<a class="headerlink" href="#add-resources" title="Permalink to this headline">¶</a></h4>
+<h4>6.1.3.1. Add resources<a class="headerlink" href="#add-resources" title="Permalink to this headline">¶</a></h4>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>  <span class="n">awscm</span><span class="o">.</span><span class="n">py</span> <span class="n">resource</span> <span class="n">add</span> <span class="o">&lt;</span><span class="n">yaml_file</span><span class="o">&gt;</span>
 </pre></div>
 </div>
@@ -283,14 +286,14 @@ follow the schema of the asw instance. For example:</p>
 </div>
 </div>
 <div class="section" id="list-resources">
-<h4>16.1.3.2. List Resources<a class="headerlink" href="#list-resources" title="Permalink to this headline">¶</a></h4>
+<h4>6.1.3.2. List Resources<a class="headerlink" href="#list-resources" title="Permalink to this headline">¶</a></h4>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>  <span class="n">awscm</span><span class="o">.</span><span class="n">py</span> <span class="n">resource</span> <span class="nb">list</span> <span class="p">[</span><span class="o">--</span><span class="n">debug</span><span class="p">]</span>
 </pre></div>
 </div>
 <p>list all instances from the default yaml file</p>
 </div>
 <div class="section" id="remove-resources">
-<h4>16.1.3.3. Remove Resources<a class="headerlink" href="#remove-resources" title="Permalink to this headline">¶</a></h4>
+<h4>6.1.3.3. Remove Resources<a class="headerlink" href="#remove-resources" title="Permalink to this headline">¶</a></h4>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>  <span class="n">awscm</span><span class="o">.</span><span class="n">py</span> <span class="n">resource</span> <span class="n">remove</span> <span class="o">&lt;</span><span class="n">label_name</span><span class="o">&gt;</span>
 </pre></div>
 </div>
@@ -301,7 +304,7 @@ the correct name or label. For example:</p>
 </div>
 </div>
 <div class="section" id="view-resources">
-<h4>16.1.3.4. View Resources<a class="headerlink" href="#view-resources" title="Permalink to this headline">¶</a></h4>
+<h4>6.1.3.4. View Resources<a class="headerlink" href="#view-resources" title="Permalink to this headline">¶</a></h4>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>  <span class="n">awscm</span><span class="o">.</span><span class="n">py</span> <span class="n">resource</span> <span class="n">view</span> <span class="o">&lt;</span><span class="n">label_name</span><span class="o">&gt;</span>
 </pre></div>
 </div>
@@ -312,7 +315,7 @@ in the correct name or label. For example:</p>
 </div>
 </div>
 <div class="section" id="copy-instances-from-file">
-<h4>16.1.3.5. Copy Instances from File<a class="headerlink" href="#copy-instances-from-file" title="Permalink to this headline">¶</a></h4>
+<h4>6.1.3.5. Copy Instances from File<a class="headerlink" href="#copy-instances-from-file" title="Permalink to this headline">¶</a></h4>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>  <span class="n">awscm</span><span class="o">.</span><span class="n">py</span> <span class="n">copy</span> <span class="n">instance</span> <span class="o">&lt;</span><span class="n">label_name</span><span class="o">&gt;</span> <span class="n">file</span> <span class="o">&lt;</span><span class="n">file</span><span class="o">&gt;</span> <span class="n">to</span> <span class="o">&lt;</span><span class="n">where</span><span class="o">&gt;</span> 
 </pre></div>
 </div>
@@ -322,7 +325,7 @@ in the correct name or label. For example:</p>
 </div>
 </div>
 <div class="section" id="copy-instances-from-folder">
-<h4>16.1.3.6. Copy Instances from Folder<a class="headerlink" href="#copy-instances-from-folder" title="Permalink to this headline">¶</a></h4>
+<h4>6.1.3.6. Copy Instances from Folder<a class="headerlink" href="#copy-instances-from-folder" title="Permalink to this headline">¶</a></h4>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>  <span class="n">awscm</span><span class="o">.</span><span class="n">py</span> <span class="n">copy</span> <span class="n">instance</span> <span class="o">&lt;</span><span class="n">label_name</span><span class="o">&gt;</span> <span class="n">foler</span> <span class="o">&lt;</span><span class="n">foler</span><span class="o">&gt;</span> <span class="n">to</span> <span class="o">&lt;</span><span class="n">where</span><span class="o">&gt;</span> 
 </pre></div>
 </div>
@@ -332,7 +335,7 @@ in the correct name or label. For example:</p>
 </div>
 </div>
 <div class="section" id="copy-instances">
-<h4>16.1.3.7. Copy Instances<a class="headerlink" href="#copy-instances" title="Permalink to this headline">¶</a></h4>
+<h4>6.1.3.7. Copy Instances<a class="headerlink" href="#copy-instances" title="Permalink to this headline">¶</a></h4>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>  <span class="n">awscm</span><span class="o">.</span><span class="n">py</span> <span class="nb">list</span> <span class="n">instance</span> <span class="o">&lt;</span><span class="n">label_name</span><span class="o">&gt;</span> <span class="kn">from</span> <span class="o">&lt;</span><span class="n">where</span><span class="o">&gt;</span>
 </pre></div>
 </div>
@@ -342,7 +345,7 @@ in the correct name or label. For example:</p>
 </div>
 </div>
 <div class="section" id="delete-instances-from-file">
-<h4>16.1.3.8. Delete Instances from file<a class="headerlink" href="#delete-instances-from-file" title="Permalink to this headline">¶</a></h4>
+<h4>6.1.3.8. Delete Instances from file<a class="headerlink" href="#delete-instances-from-file" title="Permalink to this headline">¶</a></h4>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>  <span class="n">awscm</span><span class="o">.</span><span class="n">py</span> <span class="n">delete</span> <span class="n">instance</span> <span class="o">&lt;</span><span class="n">label_name</span><span class="o">&gt;</span> <span class="n">file</span> <span class="o">&lt;</span><span class="n">file</span><span class="o">&gt;</span> <span class="kn">from</span> <span class="o">&lt;</span><span class="n">where</span><span class="o">&gt;</span> 
 </pre></div>
 </div>
@@ -352,7 +355,7 @@ in the correct name or label. For example:</p>
 </div>
 </div>
 <div class="section" id="delete-instances-from-folder">
-<h4>16.1.3.9. Delete Instances from Folder<a class="headerlink" href="#delete-instances-from-folder" title="Permalink to this headline">¶</a></h4>
+<h4>6.1.3.9. Delete Instances from Folder<a class="headerlink" href="#delete-instances-from-folder" title="Permalink to this headline">¶</a></h4>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>  <span class="n">awscm</span><span class="o">.</span><span class="n">py</span> <span class="n">delete</span> <span class="n">instance</span> <span class="o">&lt;</span><span class="n">label_name</span><span class="o">&gt;</span> <span class="n">folder</span> <span class="o">&lt;</span><span class="n">folder</span><span class="o">&gt;</span> <span class="kn">from</span> <span class="o">&lt;</span><span class="n">where</span><span class="o">&gt;</span>
 </pre></div>
 </div>
@@ -362,7 +365,7 @@ in the correct name or label. For example:</p>
 </div>
 </div>
 <div class="section" id="create-instances-from-folder">
-<h4>16.1.3.10. Create instances from folder<a class="headerlink" href="#create-instances-from-folder" title="Permalink to this headline">¶</a></h4>
+<h4>6.1.3.10. Create instances from folder<a class="headerlink" href="#create-instances-from-folder" title="Permalink to this headline">¶</a></h4>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>  <span class="n">awscm</span><span class="o">.</span><span class="n">py</span> <span class="n">create</span> <span class="n">instance</span> <span class="o">&lt;</span><span class="n">label_name</span><span class="o">&gt;</span> <span class="n">folder</span> <span class="o">&lt;</span><span class="n">folder</span><span class="o">&gt;</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">where</span><span class="o">&gt;</span>
 </pre></div>
 </div>
@@ -372,7 +375,7 @@ in the correct name or label. For example:</p>
 </div>
 </div>
 <div class="section" id="read-instances-from-folder">
-<h4>16.1.3.11. Read Instances from Folder<a class="headerlink" href="#read-instances-from-folder" title="Permalink to this headline">¶</a></h4>
+<h4>6.1.3.11. Read Instances from Folder<a class="headerlink" href="#read-instances-from-folder" title="Permalink to this headline">¶</a></h4>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>  <span class="n">awscm</span><span class="o">.</span><span class="n">py</span> <span class="n">read</span> <span class="n">instance</span> <span class="o">&lt;</span><span class="n">label_name</span><span class="o">&gt;</span> <span class="n">file</span> <span class="o">&lt;</span><span class="n">file</span><span class="o">&gt;</span> <span class="kn">from</span> <span class="o">&lt;</span><span class="n">where</span><span class="o">&gt;</span>
 </pre></div>
 </div>
@@ -382,7 +385,7 @@ in the correct name or label. For example:</p>
 </div>
 </div>
 <div class="section" id="download-instances-from-file">
-<h4>16.1.3.12. Download INstances from file<a class="headerlink" href="#download-instances-from-file" title="Permalink to this headline">¶</a></h4>
+<h4>6.1.3.12. Download INstances from file<a class="headerlink" href="#download-instances-from-file" title="Permalink to this headline">¶</a></h4>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>  <span class="n">awscm</span><span class="o">.</span><span class="n">py</span> <span class="n">download</span> <span class="n">instance</span> <span class="o">&lt;</span><span class="n">label_name</span><span class="o">&gt;</span> <span class="n">file</span> <span class="o">&lt;</span><span class="n">file</span><span class="o">&gt;</span> <span class="kn">from</span> <span class="o">&lt;</span><span class="n">where</span><span class="o">&gt;</span> <span class="n">to</span> <span class="o">&lt;</span><span class="n">local</span><span class="o">&gt;</span>
 </pre></div>
 </div>
@@ -393,7 +396,7 @@ in the correct name or label. For example:</p>
 </div>
 </div>
 <div class="section" id="download-instances-from-folder">
-<h3>16.1.4. Download instances from folder<a class="headerlink" href="#download-instances-from-folder" title="Permalink to this headline">¶</a></h3>
+<h3>6.1.4. Download instances from folder<a class="headerlink" href="#download-instances-from-folder" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>  <span class="n">awscm</span><span class="o">.</span><span class="n">py</span> <span class="n">download</span> <span class="n">instance</span> <span class="o">&lt;</span><span class="n">label_name</span><span class="o">&gt;</span> <span class="n">folder</span> <span class="o">&lt;</span><span class="n">folder</span><span class="o">&gt;</span> <span class="kn">from</span> <span class="o">&lt;</span><span class="n">where</span><span class="o">&gt;</span> <span class="n">to</span> <span class="o">&lt;</span><span class="n">local</span><span class="o">&gt;</span>
 </pre></div>
 </div>
@@ -402,7 +405,7 @@ in the correct name or label. For example:</p>
 </pre></div>
 </div>
 <div class="section" id="check-instances">
-<h4>16.1.4.1. Check instances<a class="headerlink" href="#check-instances" title="Permalink to this headline">¶</a></h4>
+<h4>6.1.4.1. Check instances<a class="headerlink" href="#check-instances" title="Permalink to this headline">¶</a></h4>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>  <span class="n">awscm</span><span class="o">.</span><span class="n">py</span> <span class="n">check</span> <span class="n">instance</span> <span class="o">&lt;</span><span class="n">label_name</span><span class="o">&gt;</span> <span class="n">process_name</span> <span class="o">&lt;</span><span class="n">process</span><span class="o">&gt;</span>
 </pre></div>
 </div>
@@ -412,7 +415,7 @@ in the correct name or label. For example:</p>
 </div>
 </div>
 <div class="section" id="run-instances-locally">
-<h4>16.1.4.2. Run instances locally<a class="headerlink" href="#run-instances-locally" title="Permalink to this headline">¶</a></h4>
+<h4>6.1.4.2. Run instances locally<a class="headerlink" href="#run-instances-locally" title="Permalink to this headline">¶</a></h4>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>  <span class="n">awscm</span><span class="o">.</span><span class="n">py</span> <span class="n">run</span> <span class="n">instance</span> <span class="o">&lt;</span><span class="n">label_name</span><span class="o">&gt;</span> <span class="n">local</span> <span class="o">&lt;</span><span class="n">scripts</span><span class="o">&gt;</span>
 </pre></div>
 </div>
@@ -422,7 +425,7 @@ in the correct name or label. For example:</p>
 </div>
 </div>
 <div class="section" id="run-instances-remotely">
-<h4>16.1.4.3. Run instances remotely<a class="headerlink" href="#run-instances-remotely" title="Permalink to this headline">¶</a></h4>
+<h4>6.1.4.3. Run instances remotely<a class="headerlink" href="#run-instances-remotely" title="Permalink to this headline">¶</a></h4>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>  <span class="n">awscm</span><span class="o">.</span><span class="n">py</span> <span class="n">run</span> <span class="n">instance</span> <span class="o">&lt;</span><span class="n">label_name</span><span class="o">&gt;</span> <span class="n">remote</span> <span class="o">&lt;</span><span class="n">scripts</span><span class="o">&gt;</span>
 </pre></div>
 </div>
@@ -432,7 +435,7 @@ in the correct name or label. For example:</p>
 </div>
 </div>
 <div class="section" id="run-local">
-<h4>16.1.4.4. Run local<a class="headerlink" href="#run-local" title="Permalink to this headline">¶</a></h4>
+<h4>6.1.4.4. Run local<a class="headerlink" href="#run-local" title="Permalink to this headline">¶</a></h4>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>  <span class="n">awscm</span><span class="o">.</span><span class="n">py</span> <span class="n">run</span> <span class="n">local</span> <span class="o">&lt;</span><span class="n">scripts</span><span class="o">&gt;</span>
 </pre></div>
 </div>
@@ -442,7 +445,7 @@ in the correct name or label. For example:</p>
 </div>
 </div>
 <div class="section" id="id1">
-<h4>16.1.4.5. Run local<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h4>
+<h4>6.1.4.5. Run local<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h4>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>  <span class="n">awscm</span><span class="o">.</span><span class="n">py</span> <span class="n">run</span> <span class="n">remote</span> <span class="o">&lt;</span><span class="n">scripts</span><span class="o">&gt;</span>
 </pre></div>
 </div>
@@ -475,21 +478,21 @@ the local scripts into remote parallel instances.</p>
 </div>
 </div>
 <div class="section" id="config-py">
-<h3>16.1.5. config.py<a class="headerlink" href="#config-py" title="Permalink to this headline">¶</a></h3>
+<h3>6.1.5. config.py<a class="headerlink" href="#config-py" title="Permalink to this headline">¶</a></h3>
 <p>This python class is reading the configuration of instances. In the
 yaml file, we set three types of instances: cloud, cluster and
 default, and the [<code class="docutils literal notranslate"><span class="pre">config.py</span></code>] could return relative block information
 of them.</p>
 </div>
 <div class="section" id="resource-py">
-<h3>16.1.6. resource.py<a class="headerlink" href="#resource-py" title="Permalink to this headline">¶</a></h3>
+<h3>6.1.6. resource.py<a class="headerlink" href="#resource-py" title="Permalink to this headline">¶</a></h3>
 <p>[<code class="docutils literal notranslate"><span class="pre">resource.py</span></code>] is used to read and manage the default yaml file. In
 the class, we provides the read, update, add, remove and review
 functionalities for yaml file. And [<code class="docutils literal notranslate"><span class="pre">awscm.py</span></code>] would call these
 functions to run the commands.</p>
 </div>
 <div class="section" id="utility-py">
-<h3>16.1.7. utility.py<a class="headerlink" href="#utility-py" title="Permalink to this headline">¶</a></h3>
+<h3>6.1.7. utility.py<a class="headerlink" href="#utility-py" title="Permalink to this headline">¶</a></h3>
 <p>The [<code class="docutils literal notranslate"><span class="pre">utility.pt</span></code>] file contains the functions to do preparation
 before running scripts in remote instance. In this python class, we
 implement the functions: copy file to instance, copy folder into
@@ -499,20 +502,20 @@ instance, download file from instance, download folder from instance
 and check whether the process is running or not.</p>
 </div>
 <div class="section" id="run-py">
-<h3>16.1.8. run.py<a class="headerlink" href="#run-py" title="Permalink to this headline">¶</a></h3>
+<h3>6.1.8. run.py<a class="headerlink" href="#run-py" title="Permalink to this headline">¶</a></h3>
 <p>The [<code class="docutils literal notranslate"><span class="pre">run.py</span></code>] file contains the functions to call the scripts in
 remote instance. In this class, we provides three functions: run the
 scripts locally to the instance, run the remote scripts in the
 instance and run the scripts in parallel instances.</p>
 </div>
 <div class="section" id="advanced-py">
-<h3>16.1.9. advanced.py<a class="headerlink" href="#advanced-py" title="Permalink to this headline">¶</a></h3>
+<h3>6.1.9. advanced.py<a class="headerlink" href="#advanced-py" title="Permalink to this headline">¶</a></h3>
 <p>This class is used for the advanced approach to run a string based
 formulation of the tasks. Need to be updated later.</p>
 </div>
 </div>
 <div class="section" id="todo-spark">
-<h2>16.2. TODO - Spark<a class="headerlink" href="#todo-spark" title="Permalink to this headline">¶</a></h2>
+<h2>6.2. TODO - Spark<a class="headerlink" href="#todo-spark" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li>[ ] update more functionalities</li>
 <li>[ ] try the Spark in AWS instances</li>
@@ -530,10 +533,10 @@ formulation of the tasks. Need to be updated later.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="ufo.html" class="btn btn-neutral float-right" title="17. REST Service (outdated)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="ufo.html" class="btn btn-neutral float-right" title="7. REST Service (outdated)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="CM4README.html" class="btn btn-neutral" title="15. CM4 Details (outdated)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="CM4README.html" class="btn btn-neutral" title="5. CM4 Details (outdated)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

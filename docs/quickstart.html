@@ -90,8 +90,8 @@
 <li class="toctree-l1"><a class="reference internal" href="install.html">3. Installation</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">4. Quickstart (proposed)</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#commandline-proposed">4.1. Commandline (proposed)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#interactive-shell-will-work-as-we-use-cmd5">4.2. Interactive shell (will work as we use cmd5)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#command-scripts">4.3. Command scripts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#interactive-shell-proposed">4.2. Interactive shell (proposed)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#command-scripts-ok">4.3. Command scripts (ok)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#cache-proposed">4.4. Cache (proposed)</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#manual-ok">4.5. Manual (ok)</a></li>
 </ul>
@@ -101,15 +101,20 @@
 <li class="toctree-l1"><a class="reference internal" href="manual.html">7. Manual (ok)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="manual-dev.html">8. Manual (proposed)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="jupyter.html">9. Jupyter Integration (proposed)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="vmproviders.html">10. VM Providers (outdated)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="vagrant.html">11. Vagrant (outdated)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="CM4README.html">12. CM4 Details (outdated)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="README.html">13. Cloudmesh cm v4</a></li>
-<li class="toctree-l1"><a class="reference internal" href="aws.html">14. AWS cm (outdated)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="ufo.html">15. REST Service (outdated)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="vcluster.html">16. Virtual Cluster (in progress)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="vm.html">17. Virtual machine management (outdated)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="code.html">18. Code Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vm.html">10. Virtual Machine Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="workflow.html">11. Infrastructure Workflow (proposed)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="code.html">12. Code Documentation</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Outdated:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="goal.html">1. Goal (outdated)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="goal.html#manual-cloudmesh-multi-service-data-access">2. Manual: Cloudmesh Multi Service Data Access</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vmproviders.html">3. VM Providers (outdated)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vagrant.html">4. Vagrant (outdated)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CM4README.html">5. CM4 Details (outdated)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aws.html">6. AWS cm (outdated)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ufo.html">7. REST Service (outdated)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vcluster.html">8. Virtual Cluster (in progress)</a></li>
 </ul>
 
             
@@ -241,25 +246,24 @@ $ cms <span class="nb">set</span> <span class="nv">cloud</span><span class="o">=
 </pre></div>
 </div>
 </div>
-<div class="section" id="interactive-shell-will-work-as-we-use-cmd5">
-<h2>4.2. Interactive shell (will work as we use cmd5)<a class="headerlink" href="#interactive-shell-will-work-as-we-use-cmd5" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="interactive-shell-proposed">
+<h2>4.2. Interactive shell (proposed)<a class="headerlink" href="#interactive-shell-proposed" title="Permalink to this headline">¶</a></h2>
 <p>Cloudmesh uses cmd5 for its shell implementation and thus all commands that are typed in in the terminal can also be typed in into
 a shell that is started with cms</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cms
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ cms
 cms&gt; <span class="nb">set</span> <span class="nv">cloud</span><span class="o">=</span>aws
 cms&gt; vm start
 </pre></div>
 </div>
 </div>
-<div class="section" id="command-scripts">
-<h2>4.3. Command scripts<a class="headerlink" href="#command-scripts" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="command-scripts-ok">
+<h2>4.3. Command scripts (ok)<a class="headerlink" href="#command-scripts-ok" title="Permalink to this headline">¶</a></h2>
 <p>As we use cmd5 we also have access to piped and named scripts with</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ <span class="nb">echo</span> script.cms <span class="p">|</span> cms
 </pre></div>
 </div>
 <p>and</p>
-<p>TODO: verify the cmd5 logic for this</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">$cms</span> --script script.cms
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ cms --script script.cms
 </pre></div>
 </div>
 </div>
@@ -268,11 +272,11 @@ cms&gt; vm start
 <p>All information about for example virtual machines are cached locally. The cache for various
 information sources can be explicitly updated with the <code class="docutils literal notranslate"><span class="pre">--refresh</span></code> flag.
 Thus the command</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1">#cms vm list --refresh</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ cms vm list --refresh
 </pre></div>
 </div>
 <p>would first execute a refresh while the command</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1">#cms vm list </span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ cms vm list 
 </pre></div>
 </div>
 <p>would only read from the local cache</p>

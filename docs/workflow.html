@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>10. Infrastructure Workflow (proposed) &mdash; Cloudmesh v4 alpha documentation</title>
+  <title>11. Infrastructure Workflow (proposed) &mdash; Cloudmesh v4 alpha documentation</title>
   
 
   
@@ -29,8 +29,8 @@
     <link rel="author" title="About these documents" href="about.html" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="11. Goal (outdated)" href="goal.html" />
-    <link rel="prev" title="9. Jupyter Integration (proposed)" href="jupyter.html" /> 
+    <link rel="next" title="12. Code Documentation" href="code.html" />
+    <link rel="prev" title="10. Virtual Machine Management" href="vm.html" /> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -94,22 +94,25 @@
 <li class="toctree-l1"><a class="reference internal" href="manual.html">7. Manual (ok)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="manual-dev.html">8. Manual (proposed)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="jupyter.html">9. Jupyter Integration (proposed)</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">10. Infrastructure Workflow (proposed)</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#javascript-interface-proposed">10.1. Javascript Interface (proposed)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#rest">10.2. REST</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#resources">10.3. Resources</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vm.html">10. Virtual Machine Management</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">11. Infrastructure Workflow (proposed)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#javascript-interface-proposed">11.1. Javascript Interface (proposed)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#rest">11.2. REST</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#resources">11.3. Resources</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="goal.html">11. Goal (outdated)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="goal.html#manual-cloudmesh-multi-service-data-access">12. Manual: Cloudmesh Multi Service Data Access</a></li>
-<li class="toctree-l1"><a class="reference internal" href="vmproviders.html">13. VM Providers (outdated)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="vagrant.html">14. Vagrant (outdated)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="CM4README.html">15. CM4 Details (outdated)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="aws.html">16. AWS cm (outdated)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="ufo.html">17. REST Service (outdated)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="vcluster.html">18. Virtual Cluster (in progress)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="vm.html">19. Virtual machine management (outdated)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="code.html">20. Code Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="code.html">12. Code Documentation</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="goal.html">1. Goal (outdated)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="goal.html#manual-cloudmesh-multi-service-data-access">2. Manual: Cloudmesh Multi Service Data Access</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vmproviders.html">3. VM Providers (outdated)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vagrant.html">4. Vagrant (outdated)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CM4README.html">5. CM4 Details (outdated)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aws.html">6. AWS cm (outdated)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ufo.html">7. REST Service (outdated)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vcluster.html">8. Virtual Cluster (in progress)</a></li>
 </ul>
 
             
@@ -155,7 +158,7 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>10. Infrastructure Workflow (proposed)</li>
+      <li>11. Infrastructure Workflow (proposed)</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -175,7 +178,7 @@
            <div itemprop="articleBody">
             
   <div class="section" id="infrastructure-workflow-proposed">
-<h1>10. Infrastructure Workflow (proposed)<a class="headerlink" href="#infrastructure-workflow-proposed" title="Permalink to this headline">¶</a></h1>
+<h1>11. Infrastructure Workflow (proposed)<a class="headerlink" href="#infrastructure-workflow-proposed" title="Permalink to this headline">¶</a></h1>
 <p>Cloudmesh will support an infrastructure workflow in which we specify python functionas and map their execution on cloud
 infrastructure. The point hier is not to specify an optimal mapping between resources, but to define <code class="docutils literal notranslate"><span class="pre">a</span></code> mapping. In
 future differnt mapping strategies can be pursued.</p>
@@ -254,7 +257,7 @@ a sets of functions do be executed on a particular vm hosted on a cloud</p>
 </pre></div>
 </div>
 <div class="section" id="javascript-interface-proposed">
-<h2>10.1. Javascript Interface (proposed)<a class="headerlink" href="#javascript-interface-proposed" title="Permalink to this headline">¶</a></h2>
+<h2>11.1. Javascript Interface (proposed)<a class="headerlink" href="#javascript-interface-proposed" title="Permalink to this headline">¶</a></h2>
 <p>We are looking for someone that would chose as its project to include a rendering of some DAG in javascript. The
 javascript library must be free to use. Nodes and edges must be able to be labeled.</p>
 <p>A promissing start for a Javascript library is</p>
@@ -321,11 +324,11 @@ The workflow should also be able to be specified in yaml</p>
 </div>
 </div>
 <div class="section" id="rest">
-<h2>10.2. REST<a class="headerlink" href="#rest" title="Permalink to this headline">¶</a></h2>
+<h2>11.2. REST<a class="headerlink" href="#rest" title="Permalink to this headline">¶</a></h2>
 <p>An OpenAPI specification for this is to be defined.</p>
 </div>
 <div class="section" id="resources">
-<h2>10.3. Resources<a class="headerlink" href="#resources" title="Permalink to this headline">¶</a></h2>
+<h2>11.3. Resources<a class="headerlink" href="#resources" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li><a class="reference external" href="https://github.com/xflr6/graphviz">https://github.com/xflr6/graphviz</a></li>
 <li><a class="reference external" href="http://visjs.org/examples/network/events/interactionEvents.html">http://visjs.org/examples/network/events/interactionEvents.html</a></li>
@@ -341,10 +344,10 @@ The workflow should also be able to be specified in yaml</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="goal.html" class="btn btn-neutral float-right" title="11. Goal (outdated)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="code.html" class="btn btn-neutral float-right" title="12. Code Documentation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="jupyter.html" class="btn btn-neutral" title="9. Jupyter Integration (proposed)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="vm.html" class="btn btn-neutral" title="10. Virtual Machine Management" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

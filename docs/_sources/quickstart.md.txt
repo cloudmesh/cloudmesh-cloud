@@ -77,18 +77,18 @@ $ cms set cloud=all
 ```
 
 
-## Interactive shell (will work as we use cmd5)
+## Interactive shell (proposed)
 
 Cloudmesh uses cmd5 for its shell implementation and thus all commands that are typed in in the terminal can also be typed in into 
 a shell that is started with cms
 
 ```bash
-cms
+$ cms
 cms> set cloud=aws
 cms> vm start
 ```
 
-## Command scripts
+## Command scripts (ok)
 
 As we use cmd5 we also have access to piped and named scripts with
 
@@ -96,12 +96,10 @@ As we use cmd5 we also have access to piped and named scripts with
 $ echo script.cms | cms
 ```
 
-and 
-
-TODO: verify the cmd5 logic for this
+and
 
 ```bash
-$cms --script script.cms
+$ cms --script script.cms
 ```
 
 ## Cache (proposed)
@@ -111,13 +109,13 @@ information sources can be explicitly updated with the `--refresh` flag.
 Thus the command
 
 ```bash
-#cms vm list --refresh
+$ cms vm list --refresh
 ```
 
 would first execute a refresh while the command
 
 ```bash
-#cms vm list 
+$ cms vm list 
 ```
 
 would only read from the local cache

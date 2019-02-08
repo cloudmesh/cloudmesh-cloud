@@ -16,11 +16,11 @@ class StorageCommand(PluginCommand):
         ::
 
           Usage:
-                starage [--storage=SERVICE] put FILENAME
-                starage [--storage=SERVICE] get FILENAME
-                starage [--storage=SERVICE] delete FILENAME
-                starage [--storage=SERVICE] size FILENAME
-                starage [--storage=SERVICE] info FILENAME
+                storage [--storage=SERVICE] put FILENAME
+                storage [--storage=SERVICE] get FILENAME
+                storage [--storage=SERVICE] delete FILENAME
+                storage [--storage=SERVICE] size FILENAME
+                storage [--storage=SERVICE] info FILENAME
                 storage [--storage=SERVICE] create FILENAME
                 storage [--storage=SERVICE] sync SOURCEDIR DESTDIR
 

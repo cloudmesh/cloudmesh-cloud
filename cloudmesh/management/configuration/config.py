@@ -15,7 +15,6 @@ class Active(object):
     def clouds(self):
         names = []
         entries = self.config["cloudmesh"]["cloud"]
-        pprint(entries)
         for entry in entries:
             if entries[entry]["cm"]["active"]:
                 names.append(entry)

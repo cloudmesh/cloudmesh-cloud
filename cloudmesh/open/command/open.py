@@ -80,14 +80,14 @@ class OpenCommand(PluginCommand):
                 filename = "file://" + filename
             else:
                 Console.error(
-                    "unsupported browser format in file {0}".format(filename))
+                    "can not find the file {0}".format(filename))
                 return ""
 
         Console.ok("open {0}".format(filename))
 
         try:
             webbrowser.open("%s" % filename)
-        except:
+        except Exception as e:
             Console.error(
                 "can not open browser with file {0}".format(filename))
         return ""

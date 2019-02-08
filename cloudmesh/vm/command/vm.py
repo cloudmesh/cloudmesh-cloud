@@ -88,9 +88,11 @@ class VmCommand(PluginCommand):
                 OLDNAMES       Old names of the VM while renaming.
 
             Options:
-              -H --modify-knownhosts  Do not modify ~/.ssh/known_hosts file when ssh'ing into a machine
-                --username=USERNAME  the username to login into the vm. If not specified it will be guessed
-                                     from the image name and the cloud
+              -H --modify-knownhosts  Do not modify ~/.ssh/known_hosts file
+                                      when ssh'ing into a machine
+                --username=USERNAME   the username to login into the vm. If not
+                                      specified it will be guessed
+                                      from the image name and the cloud
                 --ip=IP          give the public ip of the server
                 --cloud=CLOUD    give a cloud to work on, if not given, selected
                                  or default cloud will be used
@@ -104,7 +106,8 @@ class VmCommand(PluginCommand):
                 --image=IMAGE    give the name or id of the image
                 --key=KEY        specify a key to use, input a string which
                                  is the full path to the private key file
-                --keypair_name=KEYPAIR_NAME   Name of the openstack keypair to be used to create VM.
+                --keypair_name=KEYPAIR_NAME   Name of the openstack keypair to
+                                              be used to create VM.
                                               Note this is not a path to key.
                 --user=USER      give the user name of the server that you want
                                  to use to login
@@ -118,12 +121,13 @@ class VmCommand(PluginCommand):
                 commands used to boot, start or delete servers of a cloud
 
                 vm default [options...]
-                    Displays default parameters that are set for vm boot either on the
-                    default cloud or the specified cloud.
+                    Displays default parameters that are set for vm boot either
+                    on the default cloud or the specified cloud.
 
                 vm boot [options...]
-                    Boots servers on a cloud, user may specify flavor, image .etc, otherwise default values
-                    will be used, see how to set default values of a cloud: cloud help
+                    Boots servers on a cloud, user may specify flavor, image
+                    .etc, otherwise default values will be used, see how to set
+                    default values of a cloud: cloud help
 
                 vm start [options...]
                     Starts a suspended or stopped vm instance.
@@ -132,8 +136,10 @@ class VmCommand(PluginCommand):
                     Stops a vm instance .
 
                 vm delete [options...]
-                    Delete servers of a cloud, user may delete a server by its name or id, delete servers
-                    of a group or servers of a cloud, give prefix and/or range to find servers by their names.
+
+                    Delete servers of a cloud, user may delete a server by its
+                    name or id, delete servers of a group or servers of a cloud,
+                    give prefix and/or range to find servers by their names.
                     Or user may specify more options to narrow the search
 
                 vm floating_ip_assign [options...]
@@ -257,6 +263,8 @@ class VmCommand(PluginCommand):
 
             for name in names:
                 # r = vm.ping(name)
+                # result = Shell.ping(host=ip, count=n)
+                # print(result)
                 Console.msg("{label} {name}".format(label="ping", name=name))
             return
 
@@ -381,28 +389,104 @@ class VmCommand(PluginCommand):
 
             print("rename the vm")
 
+
+            try:
+                oldnames = Parameter.expand(arguments["OLDNAMES"])
+                newnames = Parameter.expand(arguments["NEWNAMES"])
+                force = arguments["--force"]
+
+                if oldnames is None or newnames is None:
+                    Console.error("Wrong VMs specified for rename", traceflag=False)
+                elif len(oldnames) != len(newnames):
+                    Console.error("The number of VMs to be renamed is wrong",
+                                  traceflag=False)
+                else:
+                    for i in range(0, len(oldnames)):
+                        oldname = oldnames[i]
+                        newname = newnames[i]
+                        if arguments["--dryrun"]:
+                            Console.ok("Rename {} to {}".format(oldname, newname))
+                        else:
+                            print("rename")
+                            #
+                            #Vm.rename(cloud=cloud,
+                            #          oldname=oldname,
+                            #          newname=newname,
+                            #          force=force
+                            #          )
+                    msg = "info. OK."
+                    Console.ok(msg)
+            except Exception as e:
+                # Error.traceback(e)
+                Console.error("Problem deleting instances", traceflag=False)
+
+
         elif arguments["ip"] and arguments["show"]:
 
             print("show the ips")
+            """
+            vm ip show [NAMES]
+                   [--group=GROUP]
+                   [--cloud=CLOUD]
+                   [--format=FORMAT]
+                   [--refresh]
+
+            """
 
         elif arguments["ip"] and arguments["assign"]:
-
+            """
+            vm ip assign [NAMES] [--cloud=CLOUD]
+            """
             print("assign the public ip")
 
         elif arguments["ip"] and arguments["inventory"]:
 
+            """
+            vm ip inventory [NAMES]
+
+            """
             print("list ips that could be assigned")
 
         elif arguments.username:
 
+            """
+            vm username USERNAME [NAMES] [--cloud=CLOUD]
+            """
             print("sets the username for the vm")
 
         elif arguments.default:
 
             print("sets defaults for the vm")
 
+        elif arguments.run:
+            """
+            vm run [--name=NAMES] [--username=USERNAME] [--dryrun] COMMAND
+
+            """
+            pass
+        elif arguments.script:
+
+            """
+            vm script [--name=NAMES] [--username=USERNAME] [--dryrun] SCRIPT
+            """
+            pass
+
+        elif arguments.resize:
+            """
+            vm resize [NAMES] [--size=SIZE]
+            """
+            pass
+
         elif arguments.ssh:
 
+            """
+            vm ssh [NAMES] [--username=USER]
+                 [--quiet]
+                 [--ip=IP]
+                 [--key=KEY]
+                 [--command=COMMAND]
+                 [--modify-knownhosts]
+            """
             print("ssh  the vm")
 
         elif arguments.console:
@@ -417,8 +501,16 @@ class VmCommand(PluginCommand):
 
         elif arguments.info:
 
+            """
+            vm info [--cloud=CLOUD] [--format=FORMAT]
+            """
             print("info for the vm")
 
         elif arguments.wait:
-
+            """
+            vm wait [--cloud=CLOUD] [--interval=SECONDS]
+            """
             print("waits for the vm till its ready and one can login")
+
+
+

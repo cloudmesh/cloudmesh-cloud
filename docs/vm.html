@@ -117,7 +117,7 @@
 <li class="toctree-l1"><a class="reference internal" href="workflow.html">11. Infrastructure Workflow (proposed)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="code.html">12. Code Documentation</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Contents:</span></p>
+<p class="caption"><span class="caption-text">Outdated:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="goal.html">1. Goal (outdated)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="goal.html#manual-cloudmesh-multi-service-data-access">2. Manual: Cloudmesh Multi Service Data Access</a></li>
@@ -193,8 +193,9 @@
             
   <div class="section" id="virtual-machine-management">
 <h1>10. Virtual Machine Management<a class="headerlink" href="#virtual-machine-management" title="Permalink to this headline">¶</a></h1>
-<p>CLoudmesh v4 contains sophisticated virtual machine management services that makes it easy for the user to manage a
-large number of virtual machines across clouds with a uniform naming scheme.</p>
+<p>CLoudmesh v4 contains sophisticated virtual machine management services that
+makes it easy for the user to manage a large number of virtual machines across
+clouds with a uniform naming scheme.</p>
 <p>For now we will focus on the command line and shell interface.</p>
 <div class="section" id="command-line-and-shell-interface">
 <h2>10.1. Command Line and Shell Interface<a class="headerlink" href="#command-line-and-shell-interface" title="Permalink to this headline">¶</a></h2>
@@ -256,9 +257,10 @@ large number of virtual machines across clouds with a uniform naming scheme.</p>
 </div>
 <div class="section" id="uniform-parameter-management">
 <h2>10.2. Uniform Parameter Management<a class="headerlink" href="#uniform-parameter-management" title="Permalink to this headline">¶</a></h2>
-<p>The parameters across thes commands are uniformly managed. Most of the plural form allow a parameterized specification
-such as <code class="docutils literal notranslate"><span class="pre">a[00-03],a8</span></code> which would result in an array <code class="docutils literal notranslate"><span class="pre">[&quot;a0&quot;,</span> <span class="pre">&quot;a1&quot;,</span> <span class="pre">&quot;a2&quot;,</span> <span class="pre">&quot;a3&quot;,</span> <span class="pre">&quot;a8&quot;]</span></code>. THis especially applies to clouds
-as well as virtual machine names.</p>
+<p>The parameters across thes commands are uniformly managed. Most of the plural
+form allow a parameterized specification such as <code class="docutils literal notranslate"><span class="pre">a[00-03],a8</span></code> which would
+result in an array <code class="docutils literal notranslate"><span class="pre">[&quot;a0&quot;,</span> <span class="pre">&quot;a1&quot;,</span> <span class="pre">&quot;a2&quot;,</span> <span class="pre">&quot;a3&quot;,</span> <span class="pre">&quot;a8&quot;]</span></code>. This especially applies to
+clouds as well as virtual machine names.</p>
 <p>We destinguish the following parameterized options</p>
 <p>:–cloud=CLOUDS: which specifies one or more clouds in parameterized fashion</p>
 <p>:–names=NAMES: which specifies one or more clouds in parameterized fashion</p>
@@ -283,20 +285,21 @@ as well as virtual machine names.</p>
 <li>Resumed</li>
 <li>Destroyed</li>
 </ul>
-<p>Default behavior such as a key management nameing scheme as well as ip adress and security management is conveniently
-provided</p>
+<p>Default behavior such as a key management nameing scheme as well as ip adress
+and security management is conveniently provided</p>
 </div>
 <div class="section" id="key-management">
 <h2>10.4. Key management<a class="headerlink" href="#key-management" title="Permalink to this headline">¶</a></h2>
-<p>Access to the virtual machien is governed by SSH keys. The default key can be uploaded to the cloud with the key
-command. The name of the key in the cloud can be used to associate it with virtual machines so that this key can be used
-to log into the VM</p>
+<p>Access to the virtual machien is governed by SSH keys. The default key can be
+uploaded to the cloud with the key command. The name of the key in the cloud can
+be used to associate it with virtual machines so that this key can be used to
+log into the VM</p>
 </div>
 <div class="section" id="security-groups">
 <h2>10.5. Security groups<a class="headerlink" href="#security-groups" title="Permalink to this headline">¶</a></h2>
-<p>A security group acts as a virtual firewall for the instance.
-When we launch a instance, we want to attach security
-Groups for controlling the traffic in and out of the VM.</p>
+<p>A security group acts as a virtual firewall for the instance. When we launch a
+instance, we want to attach security Groups for controlling the traffic in and
+out of the VM.</p>
 </div>
 <div class="section" id="command-examples">
 <h2>10.6. Command Examples<a class="headerlink" href="#command-examples" title="Permalink to this headline">¶</a></h2>

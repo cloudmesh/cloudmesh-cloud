@@ -105,15 +105,20 @@
 <li class="toctree-l1"><a class="reference internal" href="manual.html">7. Manual (ok)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="manual-dev.html">8. Manual (proposed)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="jupyter.html">9. Jupyter Integration (proposed)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="vmproviders.html">10. VM Providers (outdated)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="vagrant.html">11. Vagrant (outdated)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="CM4README.html">12. CM4 Details (outdated)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="README.html">13. Cloudmesh cm v4</a></li>
-<li class="toctree-l1"><a class="reference internal" href="aws.html">14. AWS cm (outdated)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="ufo.html">15. REST Service (outdated)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="vcluster.html">16. Virtual Cluster (in progress)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="vm.html">17. Virtual machine management (outdated)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="code.html">18. Code Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vm.html">10. Virtual Machine Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="workflow.html">11. Infrastructure Workflow (proposed)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="code.html">12. Code Documentation</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Outdated:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="goal.html">1. Goal (outdated)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="goal.html#manual-cloudmesh-multi-service-data-access">2. Manual: Cloudmesh Multi Service Data Access</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vmproviders.html">3. VM Providers (outdated)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vagrant.html">4. Vagrant (outdated)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CM4README.html">5. CM4 Details (outdated)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aws.html">6. AWS cm (outdated)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ufo.html">7. REST Service (outdated)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vcluster.html">8. Virtual Cluster (in progress)</a></li>
 </ul>
 
             
@@ -180,17 +185,20 @@
             
   <div class="section" id="configuration-ok">
 <h1>5. Configuration (ok)<a class="headerlink" href="#configuration-ok" title="Permalink to this headline">¶</a></h1>
-<p>The Configuration of cloudmesh is controled with a yaml file that is placed in <code class="docutils literal notranslate"><span class="pre">~/.clloudmesh/cloudmesh4.yaml</span></code>. It is
-created automatically from the templace located at</p>
+<p>The Configuration of cloudmesh is controled with a yaml file that is placed in
+<code class="docutils literal notranslate"><span class="pre">~/.clloudmesh/cloudmesh4.yaml</span></code>. It is created automatically from the templace
+located at</p>
 <ul class="simple">
 <li><a class="reference external" href="https://github.com/cloudmesh-community/cm/blob/master/cloudmesh/etc/cloudmesh4.yaml">https://github.com/cloudmesh-community/cm/blob/master/cloudmesh/etc/cloudmesh4.yaml</a></li>
 </ul>
 <p>You can customize the file in your local directory.</p>
 <div class="section" id="clouds-proposed">
 <h2>5.1. Clouds (proposed)<a class="headerlink" href="#clouds-proposed" title="Permalink to this headline">¶</a></h2>
-<p>The default yaml file includes templates to configure various clouds. YOu can change these defaults and provide access
-to your cloud credentials to make the management of cloud virtual machines easier. Templates for AWS, Azure, Google,
-OpenStack are provided. Specific templates for Jetstream and Chameleopn cloud are included</p>
+<p>The default yaml file includes templates to configure various clouds. YOu can
+change these defaults and provide access to your cloud credentials to make the
+management of cloud virtual machines easier. Templates for AWS, Azure, Google,
+OpenStack are provided. Specific templates for Jetstream and Chameleopn cloud
+are included</p>
 </div>
 <div class="section" id="virtual-clusters-proposed">
 <h2>5.2. Virtual Clusters (proposed)<a class="headerlink" href="#virtual-clusters-proposed" title="Permalink to this headline">¶</a></h2>
@@ -199,14 +207,16 @@ OpenStack are provided. Specific templates for Jetstream and Chameleopn cloud ar
 <h2>5.3. Aminsistartive Services<a class="headerlink" href="#aminsistartive-services" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="mongodb-ok">
 <h3>5.3.1. MongoDB (ok)<a class="headerlink" href="#mongodb-ok" title="Permalink to this headline">¶</a></h3>
-<p>The cache of cloudmesh is managed in a mongo db database with various collections. However the user does not have to
-manage thes collections as this is done for the user through cloudmesh. The mongo db can be started and stoped with the
-command</p>
+<p>The cache of cloudmesh is managed in a mongo db database with various
+collections. However the user does not have to manage thes collections as this
+is done for the user through cloudmesh. The mongo db can be started and stoped
+with the command</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">$cms</span> admin mongo start
 <span class="nv">$cms</span> admin mongo stop
 </pre></div>
 </div>
-<p>Before you can use it mongo needs to be installed and basic authentication needs to be enabled with</p>
+<p>Before you can use it mongo needs to be installed and basic authentication needs
+to be enabled with</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">$cms</span> admin mongo install
 <span class="nv">$cms</span> admin mongo create
 </pre></div>
@@ -220,7 +230,8 @@ command</p>
 </div>
 <div class="section" id="log-file-proposed">
 <h2>5.4. Log File (proposed)<a class="headerlink" href="#log-file-proposed" title="Permalink to this headline">¶</a></h2>
-<p>Log files are stored by default in <code class="docutils literal notranslate"><span class="pre">~/.cloudmesh/log</span></code> The directory can be specified in the yaml file.</p>
+<p>Log files are stored by default in <code class="docutils literal notranslate"><span class="pre">~/.cloudmesh/log</span></code> The directory can be
+specified in the yaml file.</p>
 </div>
 <div class="section" id="encryption-proposed">
 <h2>5.5. Encryption (proposed)<a class="headerlink" href="#encryption-proposed" title="Permalink to this headline">¶</a></h2>
@@ -228,8 +239,8 @@ command</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">$cms</span> admin encrypt
 </pre></div>
 </div>
-<p>It will replace the yaml file with an encryoted version while using your public private key/
-You can keep the file encripted and use the command</p>
+<p>It will replace the yaml file with an encryoted version while using your public
+private key/ You can keep the file encripted and use the command</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">$ssh</span>-add
 </pre></div>
 </div>

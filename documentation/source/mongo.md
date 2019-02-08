@@ -1,9 +1,9 @@
 # Cloudmesh Database (ok)
 
-Cloudmesh stores its status in a database so that you can easily
-remember which services you used where and have an accurate account of
-them. We use as a database mongoDB to store this information.
-To use cloudmesh you simply need to create and start the database service.
+Cloudmesh stores its status in a database so that you can easily remember which
+services you used where and have an accurate account of them. We use as a
+database mongoDB to store this information. To use cloudmesh you simply need to
+create and start the database service.
 
 First, you need to create a MongoDB database with
 
@@ -17,8 +17,8 @@ Second, you need to start it with
 $ cms admin mongo start
 ```
 
-Now you can interact with it to find out the status, the stats,
-and the database listing with the commands
+Now you can interact with it to find out the status, the stats, and the database
+listing with the commands
 
 ```bash
 $ cms admin mongo status
@@ -32,7 +32,7 @@ To stop it from running use the command
 $ cms admin mongo stop
 ```
 
-The database will be started on the information as specified in 
+The database will be started on the information as specified in
 `~/.cloudmesh/cloudmesh4.yaml`
 
 An example is

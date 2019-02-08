@@ -94,15 +94,20 @@
 <li class="toctree-l1"><a class="reference internal" href="manual.html">7. Manual (ok)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="manual-dev.html">8. Manual (proposed)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="jupyter.html">9. Jupyter Integration (proposed)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="vmproviders.html">10. VM Providers (outdated)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="vagrant.html">11. Vagrant (outdated)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="CM4README.html">12. CM4 Details (outdated)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="README.html">13. Cloudmesh cm v4</a></li>
-<li class="toctree-l1"><a class="reference internal" href="aws.html">14. AWS cm (outdated)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="ufo.html">15. REST Service (outdated)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="vcluster.html">16. Virtual Cluster (in progress)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="vm.html">17. Virtual machine management (outdated)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="code.html">18. Code Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vm.html">10. Virtual Machine Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="workflow.html">11. Infrastructure Workflow (proposed)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="code.html">12. Code Documentation</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Outdated:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="goal.html">1. Goal (outdated)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="goal.html#manual-cloudmesh-multi-service-data-access">2. Manual: Cloudmesh Multi Service Data Access</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vmproviders.html">3. VM Providers (outdated)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vagrant.html">4. Vagrant (outdated)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CM4README.html">5. CM4 Details (outdated)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="aws.html">6. AWS cm (outdated)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ufo.html">7. REST Service (outdated)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vcluster.html">8. Virtual Cluster (in progress)</a></li>
 </ul>
 
             
@@ -169,10 +174,10 @@
             
   <div class="section" id="cloudmesh-database-ok">
 <h1>6. Cloudmesh Database (ok)<a class="headerlink" href="#cloudmesh-database-ok" title="Permalink to this headline">¶</a></h1>
-<p>Cloudmesh stores its status in a database so that you can easily
-remember which services you used where and have an accurate account of
-them. We use as a database mongoDB to store this information.
-To use cloudmesh you simply need to create and start the database service.</p>
+<p>Cloudmesh stores its status in a database so that you can easily remember which
+services you used where and have an accurate account of them. We use as a
+database mongoDB to store this information. To use cloudmesh you simply need to
+create and start the database service.</p>
 <p>First, you need to create a MongoDB database with</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ cms admin mongo create
 </pre></div>
@@ -181,8 +186,8 @@ To use cloudmesh you simply need to create and start the database service.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ cms admin mongo start
 </pre></div>
 </div>
-<p>Now you can interact with it to find out the status, the stats,
-and the database listing with the commands</p>
+<p>Now you can interact with it to find out the status, the stats, and the database
+listing with the commands</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ cms admin mongo status
 $ cms admin mongo stats
 $ cms admin mongo list

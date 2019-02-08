@@ -1,6 +1,7 @@
 # Jupyter Integration (proposed)
 
-As cloudmesh provides an API but also is available as command shell it is very easy to integrate it into jupyter
+As cloudmesh provides an API but also is available as command shell it is very
+easy to integrate it into jupyter
 
 In this section we describe hw to do this.
 
@@ -54,6 +55,7 @@ print(Printer.flatwrite(images,
      )
 ```
 
-The printer has a flatwrite method included that first converts the dict into a flat dict, where each attribute is
-changed to a single level dict by using a period to indicate the indentation of the dicts in case dict of dicts are
-used as in our example
+The printer has a flatwrite method included that first converts the dict into a
+flat dict, where each attribute is changed to a single level dict by using a
+period to indicate the indentation of the dicts in case dict of dicts are used
+as in our example

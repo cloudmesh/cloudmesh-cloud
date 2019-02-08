@@ -92,17 +92,20 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../../manual.html">7. Manual (ok)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../manual-dev.html">8. Manual (proposed)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../jupyter.html">9. Jupyter Integration (proposed)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../workflow.html">10. Infrastructure Workflow (proposed)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../goal.html">11. Goal (outdated)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../goal.html#manual-cloudmesh-multi-service-data-access">12. Manual: Cloudmesh Multi Service Data Access</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../vmproviders.html">13. VM Providers (outdated)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../vagrant.html">14. Vagrant (outdated)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../CM4README.html">15. CM4 Details (outdated)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../aws.html">16. AWS cm (outdated)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../ufo.html">17. REST Service (outdated)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../vcluster.html">18. Virtual Cluster (in progress)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../vm.html">19. Virtual machine management (outdated)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../../code.html">20. Code Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../vm.html">10. Virtual Machine Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../workflow.html">11. Infrastructure Workflow (proposed)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../code.html">12. Code Documentation</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Outdated:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../goal.html">1. Goal (outdated)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../goal.html#manual-cloudmesh-multi-service-data-access">2. Manual: Cloudmesh Multi Service Data Access</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../vmproviders.html">3. VM Providers (outdated)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../vagrant.html">4. Vagrant (outdated)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../CM4README.html">5. CM4 Details (outdated)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../aws.html">6. AWS cm (outdated)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../ufo.html">7. REST Service (outdated)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../vcluster.html">8. Virtual Cluster (in progress)</a></li>
 </ul>
 
             
@@ -232,11 +235,13 @@
 
 <div class="viewcode-block" id="Name"><a class="viewcode-back" href="../../../../code.html#cloudmesh.management.configuration.name.Name">[docs]</a><span class="k">class</span> <span class="nc">Name</span><span class="p">(</span><span class="n">dotdict</span><span class="p">):</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;experiment&quot;</span><span class="p">,</span> <span class="s2">&quot;group&quot;</span><span class="p">,</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;kind&quot;</span><span class="p">,</span> <span class="s2">&quot;counter&quot;</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Defines a name tag that sets the format of the name to the specified schema</span>
 <span class="sd">        :param schema:</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">order</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">order</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;experiment&quot;</span><span class="p">,</span> <span class="s2">&quot;group&quot;</span><span class="p">,</span> <span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="s2">&quot;kind&quot;</span><span class="p">,</span> <span class="s2">&quot;counter&quot;</span><span class="p">]</span>
         <span class="k">if</span> <span class="s2">&quot;path&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">[</span><span class="s1">&#39;path&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">path_expand</span><span class="p">(</span><span class="s2">&quot;~/.cloudmesh/name.yaml&quot;</span><span class="p">)</span>
         <span class="n">prefix</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">[</span><span class="s1">&#39;path&#39;</span><span class="p">])</span>

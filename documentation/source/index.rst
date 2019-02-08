@@ -15,7 +15,18 @@ Cloudmesh Version 4
    manual
    manual-dev
    jupyter
+   vm
    workflow
+   code
+
+Cloudmesh Outdated
+===============================
+
+.. toctree::
+   :numbered:
+   :maxdepth: 2
+   :caption: Outdated:
+
    goal
    vmproviders
    vagrant
@@ -23,9 +34,7 @@ Cloudmesh Version 4
    aws
    ufo
    vcluster
-   vm
-   code
-   
+
 Indices and tables
 ==================
 

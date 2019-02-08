@@ -1,8 +1,9 @@
 # Infrastructure Workflow (proposed)
 
-Cloudmesh will support an infrastructure workflow in which we specify python functionas and map their execution on cloud
-infrastructure. The point hier is not to specify an optimal mapping between resources, but to define `a` mapping. In
-future differnt mapping strategies can be pursued.
+Cloudmesh will support an infrastructure workflow in which we specify python
+functionas and map their execution on cloud infrastructure. The point hier is
+not to specify an optimal mapping between resources, but to define `a` mapping.
+In future differnt mapping strategies can be pursued.
 
 An example is given below.
 
@@ -18,9 +19,11 @@ def g(): HEADING()
 def h(): HEADING()
 ```
 
-Where headig is an internal debugging function that prints out the name of the function so we have some thing to do.
+Where headig is an internal debugging function that prints out the name of the
+function so we have some thing to do.
 
-The functions can be specified either with a workflow graph or a parallel language specification 
+The functions can be specified either with a workflow graph or a parallel
+language specification
 
 ```
 (a; b; c; d) | (e; f; g; h) & (b ; g)
@@ -28,8 +31,9 @@ The functions can be specified either with a workflow graph or a parallel langua
 
 Where 
 
-* `a ; b` is executed sequentially `a | b` is executed in parallel x & y  specifies two graphs which dependency lists
-* have to be fulfilled by parallel and sequential operators. Nodes can be in differnet subgraphs.
+* `a ; b` is executed sequentially `a | b` is executed in parallel `x & y` 
+* specifies two graphs which dependency lists have to be fulfilled by parallel
+* and sequential operators. Nodes can be in differnet subgraphs.
 
 
 or
@@ -48,7 +52,8 @@ In addition to the workflow the mapping has to be specified as follows:
 
 
 
-A possible graphviz rendering is while also rendering the state of successfully executed functions in green
+A possible graphviz rendering is while also rendering the state of successfully
+executed functions in green
 
 ```
 vm["aws0"] = (a, b, c, d) 
@@ -102,8 +107,9 @@ digraph G {
 
 ## Javascript Interface (proposed)
 
-We are looking for someone that would chose as its project to include a rendering of some DAG in javascript. The
-javascript library must be free to use. Nodes and edges must be able to be labeled.
+We are looking for someone that would chose as its project to include a
+rendering of some DAG in javascript. The javascript library must be free to use.
+Nodes and edges must be able to be labeled.
 
 A promissing start for a Javascript library is 
  
@@ -113,14 +119,18 @@ A promissing start for a Javascript library is
 
 This project is only recommended for someone that knows javascript already.
 
-You will do the rest of the project in python. It is important that the functions be specified in python and not just
-Javascript. The focus is not on specifying the DAG with a GUI, but to visualizing it at runtime with status updates
+You will do the rest of the project in python. It is important that the
+functions be specified in python and not just Javascript. The focus is not on
+specifying the DAG with a GUI, but to visualizing it at runtime with status
+updates
 
-Here is another summary that we posted earlier and is probably better as it has a dict return 
+Here is another summary that we posted earlier and is probably better as it has
+a dict return
 
-So what we want to do is something i have done previously somewhere with graphviz, but instead of using graphviz we use
-java script. W want to define tasks that depend on each other. The tasks are defined as python functions. The dependencieas are
-specified via a simple graph string
+So what we want to do is something i have done previously somewhere with
+graphviz, but instead of using graphviz we use java script. W want to define
+tasks that depend on each other. The tasks are defined as python functions. The
+dependencieas are specified via a simple graph string
 
  
 ```python
@@ -146,8 +156,9 @@ w.run()
 
  
 
-While executing the javascript would change dynamically the state and color after a calculation is completed.
-The workflow should also be able to be specified in yaml
+While executing the javascript would change dynamically the state and color
+after a calculation is completed. The workflow should also be able to be
+specified in yaml
 
 Here just one idea:
 
@@ -172,7 +183,8 @@ tasks:
          shape: circle
 ```
  
-Naturally at one point f(x,y) will be cloud related such as starting a vm and executing a command in teh vm ....
+Naturally at one point f(x,y) will be cloud related such as starting a vm and
+executing a command in teh vm ....
 
 Followup:
 
@@ -181,7 +193,11 @@ We added a value to the return. Values can be any object.
 ```python
 def a():
     x = 10
-    return return{"status": "done", "color":"green", shape:"circle", label="c", value=x}
+    return {"status": "done", 
+            "color": "green", 
+            "shape": "circle", 
+            "label": "c", 
+            "value": x}
 ```
 
 ## REST 

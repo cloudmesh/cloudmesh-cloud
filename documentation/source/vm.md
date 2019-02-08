@@ -1,7 +1,8 @@
 # Virtual Machine Management
 
-CLoudmesh v4 contains sophisticated virtual machine management services that makes it easy for the user to manage a
-large number of virtual machines across clouds with a uniform naming scheme.
+CLoudmesh v4 contains sophisticated virtual machine management services that
+makes it easy for the user to manage a large number of virtual machines across
+clouds with a uniform naming scheme.
 
 For now we will focus on the command line and shell interface.
 
@@ -65,9 +66,10 @@ vm resize [NAMES] [--size=SIZE]
 
 ## Uniform Parameter Management
 
-The parameters across thes commands are uniformly managed. Most of the plural form allow a parameterized specification
-such as `a[00-03],a8` which would result in an array `["a0", "a1", "a2", "a3", "a8"]`. THis especially applies to clouds
-as well as virtual machine names.
+The parameters across thes commands are uniformly managed. Most of the plural
+form allow a parameterized specification such as `a[00-03],a8` which would
+result in an array `["a0", "a1", "a2", "a3", "a8"]`. This especially applies to
+clouds as well as virtual machine names.
 
 
 We destinguish the following parameterized options
@@ -105,21 +107,22 @@ Virtual machines can be
 * Resumed
 * Destroyed
 
-Default behavior such as a key management nameing scheme as well as ip adress and security management is conveniently
-provided
+Default behavior such as a key management nameing scheme as well as ip adress
+and security management is conveniently provided
 
 ## Key management
 
-Access to the virtual machien is governed by SSH keys. The default key can be uploaded to the cloud with the key
-command. The name of the key in the cloud can be used to associate it with virtual machines so that this key can be used
-to log into the VM
+Access to the virtual machien is governed by SSH keys. The default key can be
+uploaded to the cloud with the key command. The name of the key in the cloud can
+be used to associate it with virtual machines so that this key can be used to
+log into the VM
 
 
 ## Security groups
 
-A security group acts as a virtual firewall for the instance.
-When we launch a instance, we want to attach security
-Groups for controlling the traffic in and out of the VM. 
+A security group acts as a virtual firewall for the instance. When we launch a
+instance, we want to attach security Groups for controlling the traffic in and
+out of the VM.
 
 
 ## Command Examples

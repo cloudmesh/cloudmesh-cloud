@@ -1,18 +1,17 @@
 # Quickstart (proposed)
 
-One of the features up Cloudmesh is to easily start new 
-virtual machines on vairous clouds. It uses defaults for these clouds that 
-can be chaned, but are easily stored in a yaml file located at 
-``~/.cloudmesh/cloudmesh4.yaml`` This file is created upon first 
-start of the shell.
-You need to edit it and include some of your cloud information.
+One of the features up Cloudmesh is to easily start new virtual machines on
+vairous clouds. It uses defaults for these clouds that can be chaned, but are
+easily stored in a yaml file located at  `~/.cloudmesh/cloudmesh4.yaml` This
+file is  created upon first start of the shell. You need to edit it and include
+some of your cloud information.
 
 ## Commandline (proposed)
 
-It is easy to switch beteeen clouds with the set command. Ater the set and specifying the cloud
-by name many commands will default to that cloud. The exception is the `vm list` command
-that lists by default all vms on all clouds. In addition the `vm refresh` command will also 
-work on all clouds.
+It is easy to switch beteeen clouds with the set command. Ater the set and
+specifying the cloud by name many commands will default to that cloud. The
+exception is the `vm list` command that lists by default all vms on all clouds.
+In addition the `vm refresh` command will also work on all clouds.
 
 ```bash
 $ cms admin mongo start
@@ -47,8 +46,8 @@ $ cms vm refresh
 $ cms vm list
 ```
 
-In case you want a command explicitly apply to one or more clouds or one or more vms, 
-they can be specified by name such as
+In case you want a command explicitly apply to one or more clouds or one or more
+vms, they can be specified by name such as
 
 ```bash
 $ cms vm list --name vm[0-100]
@@ -68,7 +67,8 @@ Using the commands
 $ cms vm list
 ```
 
-would than add the appropriate options to the command. To reset the show to all vms set name and cloud to all 
+would than add the appropriate options to the command. To reset the show to all
+vms set name and cloud to all
 
 
 ```bash
@@ -79,8 +79,9 @@ $ cms set cloud=all
 
 ## Interactive shell (proposed)
 
-Cloudmesh uses cmd5 for its shell implementation and thus all commands that are typed in in the terminal can also be typed in into 
-a shell that is started with cms
+Cloudmesh uses cmd5 for its shell implementation and thus all commands that are
+typed in in the terminal can also be typed in into a shell that is started with
+cms
 
 ```bash
 $ cms
@@ -104,9 +105,9 @@ $ cms --script script.cms
 
 ## Cache (proposed)
 
-All information about for example virtual machines are cached locally. The cache for various 
-information sources can be explicitly updated with the `--refresh` flag.
-Thus the command
+All information about for example virtual machines are cached locally. The cache
+for various information sources can be explicitly updated with the `--refresh`
+flag. Thus the command
 
 ```bash
 $ cms vm list --refresh

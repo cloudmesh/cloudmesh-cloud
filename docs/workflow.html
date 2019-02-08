@@ -103,7 +103,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="code.html">12. Code Documentation</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Contents:</span></p>
+<p class="caption"><span class="caption-text">Outdated:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="goal.html">1. Goal (outdated)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="goal.html#manual-cloudmesh-multi-service-data-access">2. Manual: Cloudmesh Multi Service Data Access</a></li>
@@ -179,9 +179,10 @@
             
   <div class="section" id="infrastructure-workflow-proposed">
 <h1>11. Infrastructure Workflow (proposed)<a class="headerlink" href="#infrastructure-workflow-proposed" title="Permalink to this headline">¶</a></h1>
-<p>Cloudmesh will support an infrastructure workflow in which we specify python functionas and map their execution on cloud
-infrastructure. The point hier is not to specify an optimal mapping between resources, but to define <code class="docutils literal notranslate"><span class="pre">a</span></code> mapping. In
-future differnt mapping strategies can be pursued.</p>
+<p>Cloudmesh will support an infrastructure workflow in which we specify python
+functionas and map their execution on cloud infrastructure. The point hier is
+not to specify an optimal mapping between resources, but to define <code class="docutils literal notranslate"><span class="pre">a</span></code> mapping.
+In future differnt mapping strategies can be pursued.</p>
 <p>An example is given below.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">cloudmesh.common.util</span> <span class="kn">import</span> <span class="n">HEADING</span>
 <span class="k">def</span> <span class="nf">a</span><span class="p">():</span> <span class="n">HEADING</span><span class="p">()</span>
@@ -194,15 +195,18 @@ future differnt mapping strategies can be pursued.</p>
 <span class="k">def</span> <span class="nf">h</span><span class="p">():</span> <span class="n">HEADING</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>Where headig is an internal debugging function that prints out the name of the function so we have some thing to do.</p>
-<p>The functions can be specified either with a workflow graph or a parallel language specification</p>
+<p>Where headig is an internal debugging function that prints out the name of the
+function so we have some thing to do.</p>
+<p>The functions can be specified either with a workflow graph or a parallel
+language specification</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">a</span><span class="p">;</span> <span class="n">b</span><span class="p">;</span> <span class="n">c</span><span class="p">;</span> <span class="n">d</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">e</span><span class="p">;</span> <span class="n">f</span><span class="p">;</span> <span class="n">g</span><span class="p">;</span> <span class="n">h</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">b</span> <span class="p">;</span> <span class="n">g</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Where</p>
 <ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">a</span> <span class="pre">;</span> <span class="pre">b</span></code> is executed sequentially <code class="docutils literal notranslate"><span class="pre">a</span> <span class="pre">|</span> <span class="pre">b</span></code> is executed in parallel x &amp; y  specifies two graphs which dependency lists</li>
-<li>have to be fulfilled by parallel and sequential operators. Nodes can be in differnet subgraphs.</li>
+<li><code class="docutils literal notranslate"><span class="pre">a</span> <span class="pre">;</span> <span class="pre">b</span></code> is executed sequentially <code class="docutils literal notranslate"><span class="pre">a</span> <span class="pre">|</span> <span class="pre">b</span></code> is executed in parallel <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">&amp;</span> <span class="pre">y</span></code></li>
+<li>specifies two graphs which dependency lists have to be fulfilled by parallel</li>
+<li>and sequential operators. Nodes can be in differnet subgraphs.</li>
 </ul>
 <p>or</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">a</span> <span class="o">-&gt;</span> <span class="n">b</span> <span class="o">-&gt;</span> <span class="n">c</span> <span class="o">-&gt;</span> <span class="n">d</span><span class="p">;</span>
@@ -215,7 +219,8 @@ future differnt mapping strategies can be pursued.</p>
 </pre></div>
 </div>
 <p>In addition to the workflow the mapping has to be specified as follows:</p>
-<p>A possible graphviz rendering is while also rendering the state of successfully executed functions in green</p>
+<p>A possible graphviz rendering is while also rendering the state of successfully
+executed functions in green</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">vm</span><span class="p">[</span><span class="s2">&quot;aws0&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span> 
 <span class="n">vm</span><span class="p">(</span><span class="s2">&quot;azure0&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">h</span><span class="p">)</span>
 </pre></div>
@@ -258,20 +263,25 @@ a sets of functions do be executed on a particular vm hosted on a cloud</p>
 </div>
 <div class="section" id="javascript-interface-proposed">
 <h2>11.1. Javascript Interface (proposed)<a class="headerlink" href="#javascript-interface-proposed" title="Permalink to this headline">¶</a></h2>
-<p>We are looking for someone that would chose as its project to include a rendering of some DAG in javascript. The
-javascript library must be free to use. Nodes and edges must be able to be labeled.</p>
+<p>We are looking for someone that would chose as its project to include a
+rendering of some DAG in javascript. The javascript library must be free to use.
+Nodes and edges must be able to be labeled.</p>
 <p>A promissing start for a Javascript library is</p>
 <ul class="simple">
 <li><a class="reference external" href="http://visjs.org/network_examples.html">http://visjs.org/network_examples.html</a></li>
 <li><a class="reference external" href="http://visjs.org/examples/network/events/interactionEvents.html">http://visjs.org/examples/network/events/interactionEvents.html</a></li>
 </ul>
 <p>This project is only recommended for someone that knows javascript already.</p>
-<p>You will do the rest of the project in python. It is important that the functions be specified in python and not just
-Javascript. The focus is not on specifying the DAG with a GUI, but to visualizing it at runtime with status updates</p>
-<p>Here is another summary that we posted earlier and is probably better as it has a dict return</p>
-<p>So what we want to do is something i have done previously somewhere with graphviz, but instead of using graphviz we use
-java script. W want to define tasks that depend on each other. The tasks are defined as python functions. The dependencieas are
-specified via a simple graph string</p>
+<p>You will do the rest of the project in python. It is important that the
+functions be specified in python and not just Javascript. The focus is not on
+specifying the DAG with a GUI, but to visualizing it at runtime with status
+updates</p>
+<p>Here is another summary that we posted earlier and is probably better as it has
+a dict return</p>
+<p>So what we want to do is something i have done previously somewhere with
+graphviz, but instead of using graphviz we use java script. W want to define
+tasks that depend on each other. The tasks are defined as python functions. The
+dependencieas are specified via a simple graph string</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span>
  
 
@@ -292,8 +302,9 @@ specified via a simple graph string</p>
 <span class="n">w</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>While executing the javascript would change dynamically the state and color after a calculation is completed.
-The workflow should also be able to be specified in yaml</p>
+<p>While executing the javascript would change dynamically the state and color
+after a calculation is completed. The workflow should also be able to be
+specified in yaml</p>
 <p>Here just one idea:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tasks</span><span class="p">:</span>
     <span class="n">task</span><span class="p">:</span>
@@ -314,12 +325,17 @@ The workflow should also be able to be specified in yaml</p>
          <span class="n">shape</span><span class="p">:</span> <span class="n">circle</span>
 </pre></div>
 </div>
-<p>Naturally at one point f(x,y) will be cloud related such as starting a vm and executing a command in teh vm ….</p>
+<p>Naturally at one point f(x,y) will be cloud related such as starting a vm and
+executing a command in teh vm ….</p>
 <p>Followup:</p>
 <p>We added a value to the return. Values can be any object.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">a</span><span class="p">():</span>
     <span class="n">x</span> <span class="o">=</span> <span class="mi">10</span>
-    <span class="k">return</span> <span class="k">return</span><span class="p">{</span><span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;done&quot;</span><span class="p">,</span> <span class="s2">&quot;color&quot;</span><span class="p">:</span><span class="s2">&quot;green&quot;</span><span class="p">,</span> <span class="n">shape</span><span class="p">:</span><span class="s2">&quot;circle&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;c&quot;</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">x</span><span class="p">}</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;done&quot;</span><span class="p">,</span> 
+            <span class="s2">&quot;color&quot;</span><span class="p">:</span> <span class="s2">&quot;green&quot;</span><span class="p">,</span> 
+            <span class="s2">&quot;shape&quot;</span><span class="p">:</span> <span class="s2">&quot;circle&quot;</span><span class="p">,</span> 
+            <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;c&quot;</span><span class="p">,</span> 
+            <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="n">x</span><span class="p">}</span>
 </pre></div>
 </div>
 </div>

@@ -34,18 +34,17 @@ pip install -e .
 
 ## Installation of mongod
 
-In case your computer does not yet have mongo db installed, you can
-easily install it with our `admin` command. It will not only install
-mongo, but also add the path to your .bash_* file. To install it
-simply say
+In case your computer does not yet have mongo db installed, you can easily
+install it with our `admin` command. It will not only install mongo, but also
+add the path to your .bash_* file. To install it simply say
 
 ```bash
 $ cms admin mongo install
 $ cms admin mongo create
 ```
 
-It will download and install the version we use with the first command. The second command, 
-will create the mongo service with the correct credentials.
+It will download and install the version we use with the first command. The
+second command, will create the mongo service with the correct credentials.
 
 Once the mongo db is created it and be started and stoped with 
 
@@ -67,8 +66,8 @@ wget -qO - http://cloudmesh.github.io/get/cm4/osx | sh
 
 ## Anaconda and Conda (proposed)
 
-At this time we do not yet support conda. But if you like to 
-contribute an instalation package, please do so.
+At this time we do not yet support conda. But if you like to contribute an
+instalation package, please do so.
  
 It may just very well work with our pip installs, but we have not tested it. 
 Please give us feedback.

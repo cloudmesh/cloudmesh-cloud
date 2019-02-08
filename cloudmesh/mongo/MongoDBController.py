@@ -407,10 +407,11 @@ class MongoDBController(object):
 
         return output
 
-        """
-        connection = pymongo.Connection(host = "127.0.0.1", port = 27017)
-        db = connection["test_db"]
-        test_collection = db["test_collection"]
-        db.command("dbstats") # prints database stats for "test_db"
-        db.command("collstats", "test_collection")
+
+"""
+connection = pymongo.Connection(host = "127.0.0.1", port = 27017)
+db = connection["test_db"]
+test_collection = db["test_collection"]
+db.command("dbstats") # prints database stats for "test_db"
+db.command("collstats", "test_collection")
         """

@@ -311,7 +311,6 @@ class VmCommand(PluginCommand):
                 Console.msg("{label} {name}".format(label="start", name=name))
             return
 
-
         elif arguments.stop:
 
             names = []
@@ -416,7 +415,6 @@ class VmCommand(PluginCommand):
                 Console.msg("{label} {name}".format(label="console", name=name))
             return
 
-
         elif arguments.info:
 
             print("info for the vm")
@@ -424,4 +422,3 @@ class VmCommand(PluginCommand):
         elif arguments.wait:
 
             print("waits for the vm till its ready and one can login")
-

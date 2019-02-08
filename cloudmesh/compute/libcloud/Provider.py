@@ -389,16 +389,16 @@ class Provider(ComputeNodeABC):
         :return:
         """
         images = self.images(raw=True)
-        imageUse = None
+        image_use = None
         flavors = self.flavors(raw=True)
-        flavorUse = None
+        flavor_use = None
         for _image in images:
             if _image.name == image:
-                imageUse = _image
+                image_use = _image
                 break
         for _flavor in flavors:
             if _flavor.name == size:
-                flavorUse = _flavor
+                flavor_use = _flavor
                 break
         # keyname = Config()["cloudmesh"]["profile"]["user"]
         # ex_keyname has to be the registered keypair name in cloud
@@ -416,7 +416,7 @@ class Provider(ComputeNodeABC):
                 # now secgroup name is converted to object which
                 # is required by the libcloud api call
                 kwargs["ex_security_groups"] = secgroupsobj
-            node = self.cloudman.create_node(name=name, image=imageUse, size=flavorUse, **kwargs)
+            node = self.cloudman.create_node(name=name, image=image_use, size=flavor_use, **kwargs)
         else:
             sys.exit("this cloud is not yet supported")
 
@@ -428,17 +428,17 @@ class Provider(ComputeNodeABC):
         # ex_get_floating_ip(ip)
         # ex_create_floating_ip(ip_pool=pools[0])
         #
-        '''
+        """
                     ex_attach_floating_ip_to_node(node, ip)
 
                     ex_detach_floating_ip_from_node(node, ip)
                     ex_delete_floating_ip(ip)
-                    '''
+        """
         ip = None
         if self.kind == "openstack":
-            IPs = self.cloudman.ex_list_floating_ips()
-            if IPs:
-                ip = IPs[0]
+            ips = self.cloudman.ex_list_floating_ips()
+            if ips:
+                ip = ips[0]
             else:
                 pools = self.cloudman.ex_list_floating_ip_pools()
                 # ex_get_floating_ip(ip)

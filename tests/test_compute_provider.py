@@ -9,12 +9,15 @@ from cloudmesh.common.Printer import Printer
 from cloudmesh.common.FlatDict import FlatDict, flatten
 from cloudmesh.management.configuration.SSHkey import SSHkey
 from cloudmesh.management.configuration.name import Name
+from cloudmesh.mongo.CmDatabase import CmDatabase
+
 # nosetest -v --nopature
 # nosetests -v --nocapture tests/test_compute_provider.py
 
 class TestName:
 
     def setup(self):
+
         self.user = Config()["cloudmesh"]["profile"]["user"]
         self.clouduser = 'cc'
         self.name_generator = Name(
@@ -92,9 +95,22 @@ class TestName:
 
         print(Printer.flatwrite(vms,
                                 sort_keys=("name"),
-                                order=["name", "state", "extra.task_state", "extra.vm_state", "extra.userId", "extra.key_name", "private_ips", "public_ips"],
-                                header=["Name", "State", "Task state", "VM state", "User Id", "SSHKey",
-                                       "Private ips", "Public ips"])
+                                order=["name",
+                                       "state",
+                                       "extra.task_state",
+                                       "extra.vm_state",
+                                       "extra.userId",
+                                       "extra.key_name",
+                                       "private_ips",
+                                       "public_ips"],
+                                header=["Name",
+                                        "State",
+                                        "Task state",
+                                        "VM state",
+                                        "User Id",
+                                        "SSHKey",
+                                        "Private ips",
+                                        "Public ips"])
               )
 
 

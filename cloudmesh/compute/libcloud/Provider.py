@@ -405,7 +405,7 @@ class Provider(ComputeNodeABC):
         # keyname = Config()["cloudmesh"]["profile"]["user"]
         # ex_keyname has to be the registered keypair name in cloud
         pprint(kwargs)
-        if self.kind == "vm":
+        if self.kind == "openstack":
             if "ex_security_groups" in kwargs:
                 secgroupsobj = []
                 #
@@ -437,7 +437,7 @@ class Provider(ComputeNodeABC):
                     ex_delete_floating_ip(ip)
         """
         ip = None
-        if self.kind == "vm":
+        if self.kind == "openstack":
             ips = self.cloudman.ex_list_floating_ips()
             if ips:
                 ip = ips[0]

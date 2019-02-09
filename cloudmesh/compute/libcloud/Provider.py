@@ -35,13 +35,13 @@ class Provider(ComputeNodeABC):
         self.user = conf["profile"]
         self.spec = conf["cloud"][name]
         cred = self.spec["credentials"]
-        self.kind = self.spec["cm"]["kind"]
+        self.cloudtype = self.spec["cm"]["kind"]
         super().__init__(name, conf)
 
         pprint (Provider.ProviderMapper)
-        if self.kind in Provider.ProviderMapper:
-            if self.kind == 'openstack':
-                self.driver = get_driver(Provider.ProviderMapper[self.kind])
+        if self.cloudtype in Provider.ProviderMapper:
+            if self.cloudtype == 'openstack':
+                self.driver = get_driver(Provider.ProviderMapper[self.cloudtype])
                 self.cloudman = self.driver(cred["OS_USERNAME"],
                                             cred["OS_PASSWORD"],
                                             ex_force_auth_url=cred['OS_AUTH_URL'],
@@ -73,7 +73,7 @@ class Provider(ComputeNodeABC):
         for element in _elements:
             entry = element.__dict__
             entry["kind"] = kind
-            entry["driver"] = self.kind
+            entry["driver"] = self.cloudtype
 
             if kind == 'node':
                 entry["updated"] = str(datetime.utcnow())
@@ -405,7 +405,7 @@ class Provider(ComputeNodeABC):
         # keyname = Config()["cloudmesh"]["profile"]["user"]
         # ex_keyname has to be the registered keypair name in cloud
         pprint(kwargs)
-        if self.kind == "openstack":
+        if self.cloudtype == "openstack":
             if "ex_security_groups" in kwargs:
                 secgroupsobj = []
                 #
@@ -437,7 +437,7 @@ class Provider(ComputeNodeABC):
                     ex_delete_floating_ip(ip)
         """
         ip = None
-        if self.kind == "openstack":
+        if self.cloudtype == "openstack":
             ips = self.cloudman.ex_list_floating_ips()
             if ips:
                 ip = ips[0]

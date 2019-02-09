@@ -49,7 +49,7 @@ class TestName:
     def test_001_list_keys(self):
         HEADING()
         pprint(self.p.user)
-        pprint(self.p.kind)
+        pprint(self.p.cloudtype)
         pprint(self.p.spec)
 
     def test_01_list_keys(self):

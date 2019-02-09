@@ -13,7 +13,7 @@ import datetime
 
 def openstack_test1():
     """
-    1. test for openstack
+    1. test for vm
     """
     vm = Vm('chameleon')
     refactor = VmRefactor(vm)

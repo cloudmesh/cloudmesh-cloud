@@ -83,10 +83,10 @@ cloudmesh:
         heading: Chameleon
         host: chameleoncloud.org
         label: chameleon
-        kind: openstack
+        kind: vm
         version: liberty
       credentials:
-        OS_AUTH_URL: https://openstack.tacc.chameleoncloud.org:5000/v2.0/tokens
+        OS_AUTH_URL: https://vm.tacc.chameleoncloud.org:5000/v2.0/tokens
         OS_USERNAME: TBD
         OS_PASSWORD: TBD
         OS_TENANT_NAME: CH-819337
@@ -107,7 +107,7 @@ cloudmesh:
         heading: Jetstream
         host: http://jetstream-cloud.org/
         label: jetstream
-        kind: openstack
+        kind: vm
         version: kilo
       credentials:
         OS_PROJECT_DOMAIN_NAME: tacc
@@ -130,11 +130,11 @@ cloudmesh:
         heading: Cybera Edmonton OpenStack
         host: cybera
         label: kilo
-        kind: openstack
+        kind: vm
         version: kilo
-      kind: openstack
+      kind: vm
       credentials:
-        OS_AUTH_URL: https://openstack.tacc.chameleoncloud.org:5000/v3
+        OS_AUTH_URL: https://vm.tacc.chameleoncloud.org:5000/v3
         OS_TENANT_ID: TBD
         OS_TENANT_NAME: TBD
         OS_PROJECT_NAME: TBD

@@ -27,10 +27,10 @@ cloudmesh:
         heading: Chameleon
         host: chameleoncloud.org
         label: chameleon
-        type: openstack
+        type: vm
         type_version: liberty
       credentials:
-        OS_AUTH_URL: https://openstack.tacc.chameleoncloud.org:5000/v3
+        OS_AUTH_URL: https://vm.tacc.chameleoncloud.org:5000/v3
         OS_PASSWORD: read
         OS_TENANT_NAME: CH-819337
         OS_TENANT_ID: CH-819337

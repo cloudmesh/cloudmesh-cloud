@@ -82,7 +82,7 @@ class VmCommand(PluginCommand):
                                you input the commands
                 NAME           server name. By default it is set to the name of last vm from database.
                 NAMES          server name. By default it is set to the name of last vm from database.
-                KEYPAIR_NAME   Name of the openstack keypair to be used to create VM. Note this is
+                KEYPAIR_NAME   Name of the vm keypair to be used to create VM. Note this is
                                not a path to key.
                 NEWNAMES       New names of the VM while renaming.
                 OLDNAMES       Old names of the VM while renaming.
@@ -106,7 +106,7 @@ class VmCommand(PluginCommand):
                 --image=IMAGE    give the name or id of the image
                 --key=KEY        specify a key to use, input a string which
                                  is the full path to the private key file
-                --keypair_name=KEYPAIR_NAME   Name of the openstack keypair to
+                --keypair_name=KEYPAIR_NAME   Name of the vm keypair to
                                               be used to create VM.
                                               Note this is not a path to key.
                 --user=USER      give the user name of the server that you want

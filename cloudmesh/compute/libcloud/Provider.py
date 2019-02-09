@@ -33,12 +33,12 @@ class Provider(ComputeNodeABC):
         HEADING(c=".")
         conf = Config(configuration)["cloudmesh"]
         self.user = conf["profile"]
-        mycloud = conf["cloud"][name]
-        cred = mycloud["credentials"]
-        self.kind = mycloud["cm"]["kind"]
-        # pprint (cred)
-        # print (self.kind)
+        self.spec = conf["cloud"][name]
+        cred = self.spec["credentials"]
+        self.kind = self.spec["cm"]["kind"]
         super().__init__(name, conf)
+
+        pprint (Provider.ProviderMapper)
         if self.kind in Provider.ProviderMapper:
             if self.kind == 'openstack':
                 self.driver = get_driver(Provider.ProviderMapper[self.kind])
@@ -287,7 +287,8 @@ class Provider(ComputeNodeABC):
         """
         return self.find(self.flavors(), name=name)
 
-    def start(self, name):
+
+    def start(self, name=None):
         """
         start a node. NOT YET IMPLEMENTED.
     
@@ -364,6 +365,7 @@ class Provider(ComputeNodeABC):
         for node in nodes:
             if node.name in names:
                 self.cloudman.destroy_node(node)
+        # bug status shoudl change to destroyed
         return None
 
     def reboot(self, name=None):
@@ -403,7 +405,7 @@ class Provider(ComputeNodeABC):
         # keyname = Config()["cloudmesh"]["profile"]["user"]
         # ex_keyname has to be the registered keypair name in cloud
         pprint(kwargs)
-        if self.kind == "openstack":
+        if self.kind == "vm":
             if "ex_security_groups" in kwargs:
                 secgroupsobj = []
                 #
@@ -435,7 +437,7 @@ class Provider(ComputeNodeABC):
                     ex_delete_floating_ip(ip)
         """
         ip = None
-        if self.kind == "openstack":
+        if self.kind == "vm":
             ips = self.cloudman.ex_list_floating_ips()
             if ips:
                 ip = ips[0]

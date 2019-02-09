@@ -8,7 +8,7 @@ class Provider(object):
 
     def __init__(self):
         config = Config()
-        self.os_config = config.get_cloud().get("openstack")
+        self.os_config = config.get_cloud().get("vm")
 
     def get_driver(self, cloud):
         credential = self.os_config.get("credentials")

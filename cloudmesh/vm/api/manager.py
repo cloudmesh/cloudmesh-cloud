@@ -7,7 +7,7 @@ class Manager(object):
         print("init {name}".format(name=self.__class__.__name__))
         config = Config()
         kind = config["cloudmesh.cloud."+name]
-        #if kind == "openstack":
+        #if kind == "vm":
         #    self.provider = cloudmesh.compute.libcloud.Provider()
 
     def list(self, parameter):

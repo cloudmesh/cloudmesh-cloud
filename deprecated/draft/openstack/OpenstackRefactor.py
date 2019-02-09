@@ -27,7 +27,7 @@ class OpenstackRefactor(object):
         """
         return self.cm.driver.list_images(location, ex_only_active)
 
-    # resize request need additional confirmation in openstack
+    # resize request need additional confirmation in vm
     def confirm_resize(self, node_id):
         """
         confirm a resizing request for a node

@@ -27,7 +27,7 @@ class Vm(ComputeNodeABC):
             self.provider = AzureProvider(self.config)
         elif self.kind == 'aws':
             self.provider = AwsProvider(self.config)
-        elif self.kind == 'openstack':
+        elif self.kind == 'vm':
             self.provider = OpenstackCM("chameleon")
         elif self.kind == "vbox":   # not sure about vbox vs vagrant in vbox provider
             self.provider = VboxProvider("vagrant")

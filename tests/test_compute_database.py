@@ -1,27 +1,23 @@
-#################################################################
-# nosetest -v --nopature
-# nosetests -v --nocapture tests/test_compute_provider.py
-#################################################################
-
 from pprint import pprint
 import time
 import subprocess
 import sys
 from cloudmesh.common.util import HEADING
-from cloudmesh.compute.libcloud.Provider import Provider
+from cloudmesh.compute.vm.Provider import Provider
 from cloudmesh.management.configuration.config import Config
 from cloudmesh.common.Printer import Printer
 from cloudmesh.common.FlatDict import FlatDict, flatten
 from cloudmesh.management.configuration.SSHkey import SSHkey
 from cloudmesh.management.configuration.name import Name
 from cloudmesh.mongo.CmDatabase import CmDatabase
-from cloudmesh.common.util import banner
 
+# nosetest -v --nopature
+# nosetests -v --nocapture tests/test_compute_database.py
 
 class TestName:
 
     def setup(self):
-        banner("setup", c="-")
+        print()
         self.user = Config()["cloudmesh"]["profile"]["user"]
         self.clouduser = 'cc'
         self.name_generator = Name(
@@ -44,24 +40,38 @@ class TestName:
                               "to_port": 8088,
                               "ip_range": "129.79.0.0/16"}
         self.testnode = None
+        print("\n")
 
-
-    def test_001_list_keys(self):
+    def test_04_list_flavors(self):
         HEADING()
-        pprint(self.p.user)
-        pprint(self.p.kind)
-        pprint(self.p.spec)
+
+        flavors = self.p.flavors()
+
+        pprint(flavors)
+
+        #        print(Printer.flatwrite(flavors,
+        #                        sort_keys=("name", "vcpus", "disk"),
+        #                        order=["name", "vcpus", "ram", "disk"],
+        #                        header=["Name", "VCPUS", "RAM", "Disk"])
+        #      )
+
+class x:
 
     def test_01_list_keys(self):
         HEADING()
         self.keys = self.p.keys()
-        #pprint(self.keys)
+        # pprint(self.keys)
 
         print(Printer.flatwrite(self.keys,
                             sort_keys=("name"),
                             order=["name", "fingerprint"],
                             header=["Name", "Fingerprint"])
               )
+
+
+
+
+class other:
 
     def test_02_key_upload(self):
         HEADING()
@@ -85,17 +95,6 @@ class TestName:
                             header=["Name", "MinDisk", "Updated", "Driver"])
               )
 
-
-    def test_04_list_flavors(self):
-        HEADING()
-        flavors = self.p.flavors()
-        #pprint (flavors)
-
-        print(Printer.flatwrite(flavors,
-                            sort_keys=("name", "vcpus", "disk"),
-                            order=["name", "vcpus", "ram", "disk"],
-                            header=["Name", "VCPUS", "RAM", "Disk"])
-          )
 
 
     def test_04_list_vm(self):

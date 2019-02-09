@@ -24,6 +24,7 @@ class OpenCommand(PluginCommand):
                 open chameleon baremetal tacc
                 open chameleon baremetal uc
                 open chameleon vm
+                open chameleon openstack
                 open FILENAME
                 open doc local
                 open doc
@@ -60,7 +61,7 @@ class OpenCommand(PluginCommand):
             filename = str("https://chi.tacc.chameleoncloud.org")
         elif arguments.baremetal and arguments.uc:
             filename = str("https://chi.uc.chameleoncloud.org")
-        elif arguments.chameleon and arguments.vm:
+        elif arguments.chameleon and (arguments.vm or arguments.openstack):
             filename = str("https://openstack.tacc.chameleoncloud.org")
 
         elif arguments.doc and arguments.local:

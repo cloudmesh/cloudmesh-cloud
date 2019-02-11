@@ -4,7 +4,9 @@ from datetime import datetime
 from pymongo import MongoClient
 
 from cloudmesh.management.configuration.config import Config
+from cloudmesh.common.console import Console
 
+from pprint import pprint
 
 #
 # cm:
@@ -20,7 +22,7 @@ class CmDatabase(object):
     def __init__(self, host=None, username=None, password=None, port=None):
 
         self.__dict__ = self.__shared_state
-        if "config" not in self.__dict__:
+        if "cnfig" not in self.__dict__:
 
             self.config = Config().data["cloudmesh"]
             self.mongo = self.config["data"]["mongo"]
@@ -46,6 +48,9 @@ class CmDatabase(object):
         """
         self.client = MongoClient(f"mongodb://{self.username}:{self.password}@{self.host}:{self.port}")
         self.db = self.client[self.database]
+
+    def collection(self, name):
+        return self.db[name]
 
     def close_client(self):
         """
@@ -75,7 +80,56 @@ class CmDatabase(object):
 
         return entry
 
-    def update(self, entries, collection="cloudmesh", replace=False):
+
+
+    def update(self, entries):
+
+        print ("YYYY", type(entries))
+        for entry in entries:
+            entry['collection'] = "{cloud}-{kind}".format(**entry)
+
+            #entry["collection"] = collection
+            try:
+                self.col = self.db[entry['collection']]
+
+                data = self.col.find_one({"kind": entry["kind"],
+                                          "cloud": entry["cloud"],
+                                          "name": entry["name"]
+                                          })
+                if data is not None:
+                    entry['created'] = data['created']
+                    entry['modified'] = str(datetime.utcnow())
+                    self.col.update({
+                        "kind": entry["kind"],
+                        "cloud": entry["cloud"],
+                        "name": entry["name"]
+                    },
+                        entry,
+                        upsert=True)
+                else:
+                    entry['created'] = entry['modified'] = str(datetime.utcnow())
+                    self.col.insert(entry)
+            except Exception as e:
+                Console.error("uploading document {entry}".format(
+                    entry=str(entry)))
+                pass
+
+        result = entry
+        return result
+
+    def insert(self, d, collection="cloudmesh"):
+        col = self.db[collection]
+        col.insert_one(d)
+
+
+
+
+
+    def update_old(self,
+               entries,
+               collection="cloudmesh",
+               replace=False,
+               **kwargs):
         """
 
         :param entries: an arrey of dicts where one entry is called cmid.
@@ -92,11 +146,19 @@ class CmDatabase(object):
         col = self.db[collection]
 
         for entry in _entries:
+
+            pprint (entry)
+            name = entry['name']
+
+            if kwargs is not None:
+                for arg in kwargs:
+                    entry[arg] = kwargs[arg]
             entry["updated"] = str(datetime.utcnow())
             if replace:
-                col.replace_one({'cmid': entry['cmid']}, entry, upsert=True)
+                col.replace_one({'name': entry[name]}, entry, upsert=True)
             else:
-                col.update_one({'cmid': entry['cmid']}, {"$set": entry}, upsert=True)
+                col.update_one({'name': entry[name]}, {"$set": entry},
+                               upsert=True)
 
     def delete(self, collection="cloudmesh", **kwargs, ):
         col = self.db[collection]

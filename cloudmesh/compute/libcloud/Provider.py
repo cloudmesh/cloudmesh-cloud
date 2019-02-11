@@ -34,6 +34,7 @@ class Provider(ComputeNodeABC):
         conf = Config(configuration)["cloudmesh"]
         self.user = conf["profile"]
         self.spec = conf["cloud"][name]
+        self.cloud = name
         cred = self.spec["credentials"]
         self.cloudtype = self.spec["cm"]["kind"]
         super().__init__(name, conf)
@@ -74,6 +75,7 @@ class Provider(ComputeNodeABC):
             entry = element.__dict__
             entry["kind"] = kind
             entry["driver"] = self.cloudtype
+            entry["cloud"] = self.cloud
 
             if kind == 'node':
                 entry["updated"] = str(datetime.utcnow())

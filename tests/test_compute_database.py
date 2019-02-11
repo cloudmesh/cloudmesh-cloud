@@ -42,12 +42,17 @@ class TestName:
         self.testnode = None
         print("\n")
 
-    def test_04_list_flavors(self):
+    def test_01_list_flavors(self):
         HEADING()
 
         flavors = self.p.flavors()
 
-        pprint(flavors)
+    def test_02_list_images(self):
+        HEADING()
+
+        flavors = self.p.images()
+
+        # pprint(flavors)
 
         #        print(Printer.flatwrite(flavors,
         #                        sort_keys=("name", "vcpus", "disk"),
@@ -55,18 +60,25 @@ class TestName:
         #                        header=["Name", "VCPUS", "RAM", "Disk"])
         #      )
 
-class x:
 
-    def test_01_list_keys(self):
+    def test_03_list_keys(self):
         HEADING()
         self.keys = self.p.keys()
-        # pprint(self.keys)
 
-        print(Printer.flatwrite(self.keys,
-                            sort_keys=("name"),
-                            order=["name", "fingerprint"],
-                            header=["Name", "Fingerprint"])
-              )
+    def test_03_list_nodes(self):
+        HEADING()
+        self.keys = self.p.list()
+
+
+
+
+     # pprint(self.keys)
+
+        #print(Printer.flatwrite(self.keys,
+        #                    sort_keys=("name"),
+        #                    order=["name", "fingerprint"],
+        #                    header=["Name", "Fingerprint"])
+        #      )
 
 
 

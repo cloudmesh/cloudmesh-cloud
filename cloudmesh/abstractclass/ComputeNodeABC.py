@@ -29,7 +29,7 @@ class ComputeNodeABC(metaclass=ABCMeta):
             r = r.__dict__
 
         r["cloud"] = self.cloud
-        r["updated_at"] = str(datetime.utcnow())
+        r["modified"] = str(datetime.utcnow())
         return r
 
     def map_vm_create(self, c):

@@ -44,22 +44,11 @@ class TestName:
 
     def test_01_list_flavors(self):
         HEADING()
-
         flavors = self.p.flavors()
 
     def test_02_list_images(self):
         HEADING()
-
         flavors = self.p.images()
-
-        # pprint(flavors)
-
-        #        print(Printer.flatwrite(flavors,
-        #                        sort_keys=("name", "vcpus", "disk"),
-        #                        order=["name", "vcpus", "ram", "disk"],
-        #                        header=["Name", "VCPUS", "RAM", "Disk"])
-        #      )
-
 
     def test_03_list_keys(self):
         HEADING()
@@ -68,8 +57,6 @@ class TestName:
     def test_03_list_nodes(self):
         HEADING()
         self.keys = self.p.list()
-
-
 
 
      # pprint(self.keys)

@@ -45,8 +45,10 @@ class Config(object):
                 mkdir(self.config_folder)
 
             if not isfile(self.config_path):
-                destination_path = Path(join(dirname(realpath(__file__)), "../etc/cloudmesh4.yaml"))
-                copyfile(destination_path.resolve(), self.config_path)
+                source = Path(join(dirname(realpath(__file__)),
+                                   "../../etc/cloudmesh4.yaml"))
+
+                copyfile(source.resolve(), self.config_path)
 
             with open(self.config_path, "r") as stream:
                 self.data = yaml.load(stream)

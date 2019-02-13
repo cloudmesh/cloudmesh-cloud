@@ -103,7 +103,7 @@
 <li class="toctree-l1"><a class="reference internal" href="manual.html">7. Manual (ok)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="manual-dev.html">8. Manual (proposed)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="jupyter.html">9. Jupyter Integration (proposed)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="vm.html">10. Virtual Machine Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vm.html">10. Virtual Machine Management (proposed)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="workflow.html">11. Infrastructure Workflow (proposed)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="code.html">12. Code Documentation</a></li>
 </ul>
@@ -214,15 +214,32 @@ pip install -e .
 </div>
 <div class="section" id="installation-of-mongod">
 <h2>3.2. Installation of mongod<a class="headerlink" href="#installation-of-mongod" title="Permalink to this headline">¶</a></h2>
-<p>In case your computer does not yet have mongo db installed, you can easily
-install it with our <code class="docutils literal notranslate"><span class="pre">admin</span></code> command. It will not only install mongo, but also
-add the path to your .bash_* file. To install it simply say</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ cms admin mongo install
-$ cms admin mongo create
+<p>First, you will need to install a <code class="docutils literal notranslate"><span class="pre">cloudmesh4.yaml</span></code> file, if you have not done
+this before. The easieast wy to do so is with the command</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ cms <span class="nb">help</span>
 </pre></div>
 </div>
-<p>It will download and install the version we use with the first command. The
-second command, will create the mongo service with the correct credentials.</p>
+<p>Now you will need to edit the file</p>
+<p><code class="docutils literal notranslate"><span class="pre">~/.cloudmesh/cloudmesh4.yaml</span></code></p>
+<p>and change the password of the mongo entry to something you like, e.g. change
+the TBD to a real strong password</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>      <span class="n">MONGO_PASSWORD</span><span class="p">:</span> <span class="n">TBD</span>
+</pre></div>
+</div>
+<p>In case you do not have mongod installed, you can do so for macOS and Ubuntu
+18.xx by setting the following variable:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>      <span class="n">MONGO_AUTOINSTALL</span><span class="p">:</span> <span class="kc">True</span>
+</pre></div>
+</div>
+<p>Now you can run the <code class="docutils literal notranslate"><span class="pre">admin</span> <span class="pre">mongo</span> <span class="pre">install</span></code> command. It will not only install
+mongo, but also add the path to your <code class="docutils literal notranslate"><span class="pre">.bash_*</span></code> file. To install it simply say</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ cms admin mongo install
+</pre></div>
+</div>
+<p>To create a password protection you than run the command</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ cms admin mongo create
+</pre></div>
+</div>
 <p>Once the mongo db is created it and be started and stoped with</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ cms admin mongo start
 $ cms admin mongo stop

@@ -93,11 +93,11 @@
 <li class="toctree-l1"><a class="reference internal" href="manual.html">7. Manual (ok)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="manual-dev.html">8. Manual (proposed)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="jupyter.html">9. Jupyter Integration (proposed)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="vm.html">10. Virtual Machine Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vm.html">10. Virtual Machine Management (proposed)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="workflow.html">11. Infrastructure Workflow (proposed)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="code.html">12. Code Documentation</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Contents:</span></p>
+<p class="caption"><span class="caption-text">Outdated:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="goal.html">1. Goal (outdated)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="goal.html#manual-cloudmesh-multi-service-data-access">2. Manual: Cloudmesh Multi Service Data Access</a></li>
@@ -197,7 +197,8 @@
 <span class="go">cms vcluster test-connection VIRTUALCLUSTER_NAME PROCESS_NUM</span>
 </pre></div>
 </div>
-<p>As can be seen, the command <code class="docutils literal notranslate"><span class="pre">vcluster</span></code> can be called with XX possible options:</p>
+<p>As can be seen, the command <code class="docutils literal notranslate"><span class="pre">vcluster</span></code> can be called with XX possible
+options:</p>
 <ul class="simple">
 <li>create<ul>
 <li>virtual-cluster</li>
@@ -224,8 +225,21 @@
 <li>clean-remote</li>
 <li>test-connection</li>
 </ul>
-<p>The information needed to create a virtual cluster, are extracted from the <code class="docutils literal notranslate"><span class="pre">yaml</span></code> file of the cloudmesh v4, aka <code class="docutils literal notranslate"><span class="pre">cms</span></code>, however, it does not modify that file. Instead, it will create a new configuration file in a folder called <code class="docutils literal notranslate"><span class="pre">vcluster_workspace</span></code>. This newly generate configuration file contains all the information about the virtual clusters, runtime configurations as well as submitted jobs and therefore the file is crucial for fetching the result of the previous runs. Although possible, it is highly recommended not to modify the file directly but instead use the <code class="docutils literal notranslate"><span class="pre">set-param</span></code> command to modify the file.</p>
-<p>When you are creating a virtual cluster, you can <em>pick</em> your nodes of interest from the cloudmesh configuration and just pass it as an argument to <code class="docutils literal notranslate"><span class="pre">create</span> <span class="pre">virtual-cluster</span></code>  and you will have your <em>Virtual Cluster</em> created this way. When you are done with a Virtual Cluster, aka <code class="docutils literal notranslate"><span class="pre">vcluster</span></code>, you can simply destroy it.</p>
+<p>The information needed to create a virtual cluster, are extracted from
+the <code class="docutils literal notranslate"><span class="pre">yaml</span></code> file of the cloudmesh v4, aka <code class="docutils literal notranslate"><span class="pre">cms</span></code>, however, it does not
+modify that file. Instead, it will create a new configuration file in
+a folder called <code class="docutils literal notranslate"><span class="pre">vcluster_workspace</span></code>. This newly generate
+configuration file contains all the information about the virtual
+clusters, runtime configurations as well as submitted jobs and
+therefore the file is crucial for fetching the result of the previous
+runs. Although possible, it is highly recommended not to modify the
+file directly but instead use the <code class="docutils literal notranslate"><span class="pre">set-param</span></code> command to modify the
+file.</p>
+<p>When you are creating a virtual cluster, you can <em>pick</em> your nodes of
+interest from the cloudmesh configuration and just pass it as an
+argument to <code class="docutils literal notranslate"><span class="pre">create</span> <span class="pre">virtual-cluster</span></code> and you will have your <em>Virtual
+Cluster</em> created this way. When you are done with a Virtual Cluster,
+aka <code class="docutils literal notranslate"><span class="pre">vcluster</span></code>, you can simply destroy it.</p>
 <div class="section" id="creating-a-virtual-cluster-and-testing-connections">
 <h2>8.1. Creating a Virtual Cluster and testing connections<a class="headerlink" href="#creating-a-virtual-cluster-and-testing-connections" title="Permalink to this headline">¶</a></h2>
 <p>Consider the following two dummy clusters in the <code class="docutils literal notranslate"><span class="pre">cloudmesh4.yaml</span></code> file:</p>
@@ -255,19 +269,25 @@
     ...
 </pre></div>
 </div>
-<p>Suppose you want to create a virtual cluster called <code class="docutils literal notranslate"><span class="pre">new_vcluster</span></code> using <code class="docutils literal notranslate"><span class="pre">computer_a</span></code> from <code class="docutils literal notranslate"><span class="pre">vcluster_test1</span></code> and <code class="docutils literal notranslate"><span class="pre">c2</span></code> from <code class="docutils literal notranslate"><span class="pre">vcluster_test2</span></code>. This can be achieved using the following command:</p>
+<p>Suppose you want to create a virtual cluster called <code class="docutils literal notranslate"><span class="pre">new_vcluster</span></code>
+using <code class="docutils literal notranslate"><span class="pre">computer_a</span></code> from <code class="docutils literal notranslate"><span class="pre">vcluster_test1</span></code> and <code class="docutils literal notranslate"><span class="pre">c2</span></code> from
+<code class="docutils literal notranslate"><span class="pre">vcluster_test2</span></code>. This can be achieved using the following command:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> cms vcluster create virtual-cluster vcluster1 --clusters<span class="o">=</span>vcluster_test1,vcluster_test2 --computers<span class="o">=</span>computer_a,c2
 <span class="go">Virtual cluster created/replaced successfully.</span>
 </pre></div>
 </div>
-<p>This command will create the <code class="docutils literal notranslate"><span class="pre">vcluster.yaml</span></code> file in the <code class="docutils literal notranslate"><span class="pre">vcluster_workspace</span></code> folder and will keep the information about the virtual cluster in there. Now, we can get the information about the virtual cluster that we just created:</p>
+<p>This command will create the <code class="docutils literal notranslate"><span class="pre">vcluster.yaml</span></code> file in the
+<code class="docutils literal notranslate"><span class="pre">vcluster_workspace</span></code> folder and will keep the information about the
+virtual cluster in there. Now, we can get the information about the
+virtual cluster that we just created:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> cms vcluster list virtual-clusters
 <span class="go"> vcluster1:</span>
 <span class="go">	 computer_a</span>
 <span class="go">	 c2</span>
 </pre></div>
 </div>
-<p>By passing a depth higher than one as an extra argument, you can get more information about the virtual clusters:</p>
+<p>By passing a depth higher than one as an extra argument, you can get
+more information about the virtual clusters:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> cms vcluster list virtual-clusters <span class="m">2</span>
 <span class="go"> vcluster1:</span>
 <span class="go">	 computer_a:</span>
@@ -290,13 +310,16 @@
 <span class="go">			 sshconfigpath</span>
 </pre></div>
 </div>
-<p>Now that the virtual cluster is created, we can test the connection to the remote nodes. We will try that using 2 processes in parallel:</p>
+<p>Now that the virtual cluster is created, we can test the connection to
+the remote nodes. We will try that using 2 processes in parallel:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> cms vcluster test-connection vcluster1 <span class="m">2</span>
 <span class="go">Node computer_a is accessible.</span>
 <span class="go">Node c2 is accessible.</span>
 </pre></div>
 </div>
-<p>The output indicates that both nodes in the <code class="docutils literal notranslate"><span class="pre">vcluster1</span></code> are accessible. In case you did not need the <code class="docutils literal notranslate"><span class="pre">vcluster1</span></code> anymore, you can easily remove it using:</p>
+<p>The output indicates that both nodes in the <code class="docutils literal notranslate"><span class="pre">vcluster1</span></code> are
+accessible. In case you did not need the <code class="docutils literal notranslate"><span class="pre">vcluster1</span></code> anymore, you can
+easily remove it using:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> cms vcluster destroy virtual-cluster vcluster1
 <span class="go">Virtual-cluster vcluster1 destroyed successfully.</span>
 </pre></div>
@@ -304,12 +327,22 @@
 </div>
 <div class="section" id="creating-a-runtime-configuration">
 <h2>8.2. Creating a runtime-configuration<a class="headerlink" href="#creating-a-runtime-configuration" title="Permalink to this headline">¶</a></h2>
-<p>Next, we have to create a <code class="docutils literal notranslate"><span class="pre">runtime-configuration</span></code> which defines the type of input and output for possibly a set of jobs that are going to be submitted later.  In the next example we will create a runtime configuration for jobs that we want to run remotely using 5 processes, fetch their results using 3 processes and the script that we want to run remotely takes just some parameter (which could be left empty for no parameters), and the output of the script is going to be printed on the standard output, and suppose we want to just submit the jobs for running on remote nodes and download them later (hence the <code class="docutils literal notranslate"><span class="pre">--download-later</span></code> flag):</p>
+<p>Next, we have to create a <code class="docutils literal notranslate"><span class="pre">runtime-configuration</span></code> which defines the
+type of input and output for possibly a set of jobs that are going to
+be submitted later.  In the next example we will create a runtime
+configuration for jobs that we want to run remotely using 5 processes,
+fetch their results using 3 processes and the script that we want to
+run remotely takes just some parameter (which could be left empty for
+no parameters), and the output of the script is going to be printed on
+the standard output, and suppose we want to just submit the jobs for
+running on remote nodes and download them later (hence the
+<code class="docutils literal notranslate"><span class="pre">--download-later</span></code> flag):</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> cms vcluster create runtime-config ParamInStdOut <span class="m">5</span> in:params out:stdout --fetch-proc-num<span class="o">=</span><span class="m">3</span> --download-later
 <span class="go">Runtime-configuration created/replaced successfully.</span>
 </pre></div>
 </div>
-<p>Let’s get the list of runtime configurations to make sure our configuration is created as we expected:</p>
+<p>Let’s get the list of runtime configurations to make sure our
+configuration is created as we expected:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> cms vcluster list runtime-configs <span class="m">2</span>
 <span class="go"> ParamInStdOut:</span>
 <span class="go">	 proc_num:</span>
@@ -324,7 +357,8 @@
 <span class="go">		 stdout</span>
 </pre></div>
 </div>
-<p>Similar to the virtual cluster, you can remove a runtime-configuration using the <code class="docutils literal notranslate"><span class="pre">destroy</span></code> sub-command:</p>
+<p>Similar to the virtual cluster, you can remove a runtime-configuration
+using the <code class="docutils literal notranslate"><span class="pre">destroy</span></code> sub-command:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> cms vcluster destroy runtime-config ParamInStdOut
 <span class="go">Runtime-configuration ParamInStdOut destroyed successfully.</span>
 </pre></div>
@@ -332,7 +366,21 @@
 </div>
 <div class="section" id="running-parallel-remote-jobs">
 <h2>8.3. Running Parallel Remote Jobs<a class="headerlink" href="#running-parallel-remote-jobs" title="Permalink to this headline">¶</a></h2>
-<p>Now that we have both the virtual cluster and runtime configuration ready, we can try to submit a batch job to our virtual cluster using <code class="docutils literal notranslate"><span class="pre">cms</span> <span class="pre">vcluster</span> <span class="pre">run-script</span></code>. This is by far the most complicated sub-command of the <code class="docutils literal notranslate"><span class="pre">vcluster</span></code>, however, the name of the arguments are pretty clear and looking at the names you would be able to pretty much find your way. In the next example, we submit the <code class="docutils literal notranslate"><span class="pre">inf_script_stdin_stdout.sh</span></code> file to the nodes of <code class="docutils literal notranslate"><span class="pre">vcluster1</span></code> and using the <code class="docutils literal notranslate"><span class="pre">ParamInStdOut</span></code> configuration we run 10 instance of that script on the virtual cluster. This script will be copied and run on the home directory of the remote nodes (<code class="docutils literal notranslate"><span class="pre">~/</span></code>).  Note that even though the remote path is set to home directory, for each job a folder with a unique suffix will be created to avoid conflicts. Also, note that this script does not take any argument, but we indicated 10 <code class="docutils literal notranslate"><span class="pre">_</span></code> separated by commas as a meaningless argument. This will notify the tool that you need 10 instances of this script to be executed:</p>
+<p>Now that we have both the virtual cluster and runtime configuration
+ready, we can try to submit a batch job to our virtual cluster using
+<code class="docutils literal notranslate"><span class="pre">cms</span> <span class="pre">vcluster</span> <span class="pre">run-script</span></code>. This is by far the most complicated
+sub-command of the <code class="docutils literal notranslate"><span class="pre">vcluster</span></code>, however, the name of the arguments are
+pretty clear and looking at the names you would be able to pretty much
+find your way. In the next example, we submit the
+<code class="docutils literal notranslate"><span class="pre">inf_script_stdin_stdout.sh</span></code> file to the nodes of <code class="docutils literal notranslate"><span class="pre">vcluster1</span></code> and
+using the <code class="docutils literal notranslate"><span class="pre">ParamInStdOut</span></code> configuration we run 10 instance of that
+script on the virtual cluster. This script will be copied and run on
+the home directory of the remote nodes (<code class="docutils literal notranslate"><span class="pre">~/</span></code>).  Note that even though
+the remote path is set to home directory, for each job a folder with a
+unique suffix will be created to avoid conflicts. Also, note that this
+script does not take any argument, but we indicated 10 <code class="docutils literal notranslate"><span class="pre">_</span></code> separated
+by commas as a meaningless argument. This will notify the tool that
+you need 10 instances of this script to be executed:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> cms vcluster run-script --script-path<span class="o">=</span>./cm4/vcluster/sample_scripts/inf_script_stdin_stdout.sh --job-name<span class="o">=</span>TestJob1 --vcluster-name<span class="o">=</span>vcluster1 --config-name<span class="o">=</span>ParamInStdOut --arguments<span class="o">=</span>_,_,_,_,_,_,_,_,_,_ --remote-path<span class="o">=</span>~/ --local-path<span class="o">=</span>./cm4/vcluster/sample_output --overwrite
 <span class="go">Remote Pid on c2: 10104</span>
 <span class="go">Remote Pid on c2: 10109</span>
@@ -360,7 +408,9 @@
 <span class="go">All of the remote results collected.</span>
 </pre></div>
 </div>
-<p>As you can see all of the jobs were submitted (using 5 processes) and results were collected afterwards (using 3 processes). We can check the existence of the results:</p>
+<p>As you can see all of the jobs were submitted (using 5 processes) and
+results were collected afterwards (using 3 processes). We can check
+the existence of the results:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> ll ./cm4/vcluster/sample_output/
 <span class="go">total 48</span>
 <span class="go">drwxr-xr-x 2 corriel 4096 Oct 31 22:12 ./</span>
@@ -377,12 +427,16 @@
 <span class="go">-rw-r--r-- 1 corriel  255 Oct 31 22:12 outputfile_9_20181031_22123465</span>
 </pre></div>
 </div>
-<p>Now, suppose the jobs were going to take so long that we could not wait for the results and we had to download them later. To prepare this scenario, we can set the <code class="docutils literal notranslate"><span class="pre">download-later</span></code> attribute of the runtime configuration to <code class="docutils literal notranslate"><span class="pre">true</span></code>:</p>
+<p>Now, suppose the jobs were going to take so long that we could not
+wait for the results and we had to download them later. To prepare
+this scenario, we can set the <code class="docutils literal notranslate"><span class="pre">download-later</span></code> attribute of the
+runtime configuration to <code class="docutils literal notranslate"><span class="pre">true</span></code>:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> cms vcluster set-param runtime-config ParamInStdOut download-later <span class="nb">true</span>
 <span class="go">Runtime-configuration parameter download-later set to true successfully.</span>
 </pre></div>
 </div>
-<p>Now that we set this parameter, we can submit the jobs and this time the tool will not wait for the results:</p>
+<p>Now that we set this parameter, we can submit the jobs and this time
+the tool will not wait for the results:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> cms vcluster run-script --script-path<span class="o">=</span>./cm4/vcluster/sample_scripts/inf_script_stdin_stdout.sh --job-name<span class="o">=</span>TestJob1 --vcluster-name<span class="o">=</span>vcluster1 --config-name<span class="o">=</span>ParamInStdOut --arguments<span class="o">=</span>_,_,_,_,_,_,_,_,_,_ --remote-path<span class="o">=</span>~/ --local-path<span class="o">=</span>./cm4/vcluster/sample_output --overwrite
 <span class="go">Remote Pid on c2: 12981</span>
 <span class="go">Remote Pid on c2: 12987</span>
@@ -396,7 +450,14 @@
 <span class="go">Remote Pid on c2: 13871</span>
 </pre></div>
 </div>
-<p>As you can see, the jobs are submitted and the script is finished. Note that since a job with that exact job name exists, you cannot submit the job unless you use the <code class="docutils literal notranslate"><span class="pre">--overwrite</span></code> flag. Now that we have submitted the jobs and their results are ready, we can fetch their produced results using the <code class="docutils literal notranslate"><span class="pre">fetch</span></code> command and all results will be collected using the same number of processes that were indicated in the runtime-configuration using which the job was submitted in the first place:</p>
+<p>As you can see, the jobs are submitted and the script is
+finished. Note that since a job with that exact job name exists, you
+cannot submit the job unless you use the <code class="docutils literal notranslate"><span class="pre">--overwrite</span></code> flag. Now that
+we have submitted the jobs and their results are ready, we can fetch
+their produced results using the <code class="docutils literal notranslate"><span class="pre">fetch</span></code> command and all results will
+be collected using the same number of processes that were indicated in
+the runtime-configuration using which the job was submitted in the
+first place:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> cms vcluster fetch TestJob1
 <span class="go">collecting results</span>
 <span class="go">Results collected from c2.</span>
@@ -416,7 +477,12 @@
 </div>
 <div class="section" id="cleaning-the-remote">
 <h2>8.4. Cleaning the remote<a class="headerlink" href="#cleaning-the-remote" title="Permalink to this headline">¶</a></h2>
-<p>By default the Virtual Cluster tool does not clean the remotes automatically and this task is left to be performed manually since important results might be lose due to mistakes. To clean the remotes, the user has to explicitly use the <code class="docutils literal notranslate"><span class="pre">clean-remote</span></code> command for a specific job and this way only the results of that particular job will be removed from <strong>ALL</strong> remotes using 2 parallel processes:</p>
+<p>By default the Virtual Cluster tool does not clean the remotes
+automatically and this task is left to be performed manually since
+important results might be lose due to mistakes. To clean the remotes,
+the user has to explicitly use the <code class="docutils literal notranslate"><span class="pre">clean-remote</span></code> command for a
+specific job and this way only the results of that particular job will
+be removed from <strong>ALL</strong> remotes using 2 parallel processes:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> cms vcluster clean-remote TestJob1 <span class="m">4</span>
 <span class="go">Node c2 cleaned successfully.</span>
 <span class="go">Node computer_a cleaned successfully.</span>

@@ -3,23 +3,23 @@ from cloudmesh.management.configuration.config import Config
 from cloudmesh.common.console import Console
 from cloudmesh.mongo.DataBaseDecorator import DatabaseUpdate
 
+
 class Provider(object):
 
-    def __init__(self, name=None, configuration="~/.cloudmesh/.cloudmesh4.yaml"):
+    def __init__(self, name=None,
+                 configuration="~/.cloudmesh/.cloudmesh4.yaml"):
         self.kind = Config(configuration)["cloudmesh"]["cloud"][name]["cm"][
             "kind"]
         self.name = name
 
-
         Console.msg("FOUND Kind", self.kind)
 
         if self.kind in ["openstack"]:
-
             self.p = LibCloudProvider(name=name, configuration=configuration)
 
-            print (self.p)
+            print(self.p)
             #            print (self.p.kind)
-            print (self.kind)
+            print(self.kind)
 
     def cloudname(self):
         return self.name
@@ -40,7 +40,6 @@ class Provider(object):
             entry['collection'] = label
         return d
 
-
     @DatabaseUpdate()
     def images(self):
         return self.p.images()
@@ -52,7 +51,6 @@ class Provider(object):
     def flavors(self):
         return self.p.flavors()
 
-
     def start(self, name=None):
         return self.p.start(name=name)
 
@@ -61,9 +59,6 @@ class Provider(object):
 
     def info(self, name=None):
         return self.p.info(name=name)
-
-    def resume(self, name=None):
-        return self.p.resume(name=name)
 
     def resume(self, name=None):
         return self.p.resume(name=name)

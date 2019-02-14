@@ -48,7 +48,6 @@ cloudmesh:
         kind: azure
         version: TBD
       default:
-        region: 'northcentralus'
         image: 'Canonical:UbuntuServer:16.04-LTS:latest'
         size: 'Basic_A0'
         resource_group: 'cloudmesh'
@@ -59,6 +58,7 @@ cloudmesh:
         AZURE_SUBSCRIPTION_ID: 'xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
         AZURE_APPLICATION_ID: 'xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
         AZURE_SECRET_KEY: TBD
+        AZURE_REGION: 'northcentralus'
     aws:
       cm:
         active: False

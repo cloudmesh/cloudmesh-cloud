@@ -177,7 +177,8 @@ class VmCommand(PluginCommand):
 
         def get_clouds(arguments, variables):
 
-            clouds = arguments["cloud"] or arguments["--cloud"] or variables["cloud"]
+            clouds = arguments["cloud"] or arguments["--cloud"] or variables[
+                "cloud"]
             if "active" == clouds:
                 active = Active()
                 clouds = active.clouds()
@@ -191,7 +192,8 @@ class VmCommand(PluginCommand):
             return clouds
 
         def get_names(arguments, variables):
-            names = arguments["NAME"] or arguments["NAMES"] or arguments["--name"] or variables["vm"]
+            names = arguments["NAME"] or arguments["NAMES"] or arguments[
+                "--name"] or variables["vm"]
             if names is None:
                 Console.error("you need to specify a vm")
                 return None
@@ -238,7 +240,8 @@ class VmCommand(PluginCommand):
             if arguments["--cloud"]:
                 clouds = get_clouds(arguments, variables)
                 for cloud in clouds:
-                    Console.msg("find names in cloud {cloud}".format(cloud=cloud))
+                    Console.msg(
+                        "find names in cloud {cloud}".format(cloud=cloud))
                     # names = find all names in these clouds
             else:
                 names = get_names(arguments, variables)
@@ -256,7 +259,8 @@ class VmCommand(PluginCommand):
             if arguments["--cloud"]:
                 clouds = get_clouds(arguments, variables)
                 for cloud in clouds:
-                    Console.msg("find names in cloud {cloud}".format(cloud=cloud))
+                    Console.msg(
+                        "find names in cloud {cloud}".format(cloud=cloud))
                     # names = find all names in these clouds
             else:
                 names = get_names(arguments, variables)
@@ -275,7 +279,8 @@ class VmCommand(PluginCommand):
             if arguments["--cloud"]:
                 clouds = get_clouds(arguments, variables)
                 for cloud in clouds:
-                    Console.msg("find names in cloud {cloud}".format(cloud=cloud))
+                    Console.msg(
+                        "find names in cloud {cloud}".format(cloud=cloud))
                     # names = find all names in these clouds
             else:
                 names = get_names(arguments, variables)
@@ -292,7 +297,8 @@ class VmCommand(PluginCommand):
             if arguments["--cloud"]:
                 clouds = get_clouds(arguments, variables)
                 for cloud in clouds:
-                    Console.msg("find names in cloud {cloud}".format(cloud=cloud))
+                    Console.msg(
+                        "find names in cloud {cloud}".format(cloud=cloud))
                     # names = find all names in these clouds
             else:
                 names = get_names(arguments, variables)
@@ -309,7 +315,8 @@ class VmCommand(PluginCommand):
             if arguments["--cloud"]:
                 clouds = get_clouds(arguments, variables)
                 for cloud in clouds:
-                    Console.msg("find names in cloud {cloud}".format(cloud=cloud))
+                    Console.msg(
+                        "find names in cloud {cloud}".format(cloud=cloud))
                     # names = find all names in these clouds
             else:
                 names = get_names(arguments, variables)
@@ -326,7 +333,8 @@ class VmCommand(PluginCommand):
             if arguments["--cloud"]:
                 clouds = get_clouds(arguments, variables)
                 for cloud in clouds:
-                    Console.msg("find names in cloud {cloud}".format(cloud=cloud))
+                    Console.msg(
+                        "find names in cloud {cloud}".format(cloud=cloud))
                     # names = find all names in these clouds
             else:
                 names = get_names(arguments, variables)
@@ -343,14 +351,16 @@ class VmCommand(PluginCommand):
             if arguments["--cloud"]:
                 clouds = get_clouds(arguments, variables)
                 for cloud in clouds:
-                    Console.msg("find names in cloud {cloud}".format(cloud=cloud))
+                    Console.msg(
+                        "find names in cloud {cloud}".format(cloud=cloud))
                     # names = find all names in these clouds
             else:
                 names = get_names(arguments, variables)
 
             for name in names:
                 # r = vm.terminate(name, dryrun=arguments.dryrun)
-                Console.msg("{label} {name}".format(label="terminate", name=name))
+                Console.msg(
+                    "{label} {name}".format(label="terminate", name=name))
             return
 
         elif arguments.delete:
@@ -360,7 +370,8 @@ class VmCommand(PluginCommand):
             if arguments["--cloud"]:
                 clouds = get_clouds(arguments, variables)
                 for cloud in clouds:
-                    Console.msg("find names in cloud {cloud}".format(cloud=cloud))
+                    Console.msg(
+                        "find names in cloud {cloud}".format(cloud=cloud))
                     # names = find all names in these clouds
             else:
                 names = get_names(arguments, variables)
@@ -389,14 +400,14 @@ class VmCommand(PluginCommand):
 
             print("rename the vm")
 
-
             try:
                 oldnames = Parameter.expand(arguments["OLDNAMES"])
                 newnames = Parameter.expand(arguments["NEWNAMES"])
                 force = arguments["--force"]
 
                 if oldnames is None or newnames is None:
-                    Console.error("Wrong VMs specified for rename", traceflag=False)
+                    Console.error("Wrong VMs specified for rename",
+                                  traceflag=False)
                 elif len(oldnames) != len(newnames):
                     Console.error("The number of VMs to be renamed is wrong",
                                   traceflag=False)
@@ -405,11 +416,12 @@ class VmCommand(PluginCommand):
                         oldname = oldnames[i]
                         newname = newnames[i]
                         if arguments["--dryrun"]:
-                            Console.ok("Rename {} to {}".format(oldname, newname))
+                            Console.ok(
+                                "Rename {} to {}".format(oldname, newname))
                         else:
                             print("rename")
                             #
-                            #Vm.rename(cloud=cloud,
+                            # Vm.rename(cloud=cloud,
                             #          oldname=oldname,
                             #          newname=newname,
                             #          force=force
@@ -419,7 +431,6 @@ class VmCommand(PluginCommand):
             except Exception as e:
                 # Error.traceback(e)
                 Console.error("Problem deleting instances", traceflag=False)
-
 
         elif arguments["ip"] and arguments["show"]:
 
@@ -511,6 +522,3 @@ class VmCommand(PluginCommand):
             vm wait [--cloud=CLOUD] [--interval=SECONDS]
             """
             print("waits for the vm till its ready and one can login")
-
-
-

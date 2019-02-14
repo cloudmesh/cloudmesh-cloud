@@ -7,6 +7,7 @@ from cloudmesh.common.dotdict import dotdict
 import json
 from cloudmesh.common.console import Console
 
+
 class DatabaseUpdateOld:
     """
     Save the method's output to a MongoDB collection
@@ -32,7 +33,8 @@ class DatabaseUpdateOld:
                 result["modified"] = str(datetime.utcnow())
                 if "created" not in result:
                     result["created"] = result["modified"]
-                r = self.database.update(result, collection=self.collection,
+                r = self.database.update(result,
+                                         collection=self.collection,
                                          replace=self.replace)
 
             return result
@@ -88,7 +90,6 @@ class DatabaseUpdate:
     """
 
     def __init__(self, **kwargs):
-
         self.database = CmDatabase()
 
     def __call__(self, f):

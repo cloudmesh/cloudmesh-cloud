@@ -19,7 +19,8 @@ class Provider(ComputeNodeABC):
 
     ProviderMapper = {
         "openstack": LibcloudProvider.OPENSTACK,
-        "aws": LibcloudProvider.EC2
+        "aws": LibcloudProvider.EC2,
+        "azure": LibcloudProvider.AZURE_ARM
     }
 
     def __init__(self, name=None, configuration="~/.cloudmesh/cloudmesh4.yaml"):
@@ -39,15 +40,26 @@ class Provider(ComputeNodeABC):
         self.cloudtype = self.spec["cm"]["kind"]
         super().__init__(name, conf)
 
-        pprint (Provider.ProviderMapper)
+        pprint(Provider.ProviderMapper)
         if self.cloudtype in Provider.ProviderMapper:
             if self.cloudtype == 'openstack':
-                self.driver = get_driver(Provider.ProviderMapper[self.cloudtype])
+                self.driver = get_driver(
+                    Provider.ProviderMapper[self.cloudtype])
                 self.cloudman = self.driver(cred["OS_USERNAME"],
                                             cred["OS_PASSWORD"],
-                                            ex_force_auth_url=cred['OS_AUTH_URL'],
+                                            ex_force_auth_url=cred[
+                                                'OS_AUTH_URL'],
                                             ex_force_auth_version='2.0_password',
-                                            ex_tenant_name=cred['OS_TENANT_NAME'])
+                                            ex_tenant_name=cred[
+                                                'OS_TENANT_NAME'])
+            elif self.cloudtype == 'azure':
+                self.cloudman = self.driver(
+                    tenant_id=cred["AZURE_TENANT_ID"],
+                    subscription_id=cred["AZURE_SUBSCRIPTION_ID"],
+                    key=cred["AZURE_APPLICATION_ID"],
+                    secret=cred["AZURE_SECRET_KEY"],
+                    region=cred["AZURE_REGION"]
+                )
         else:
             print("Specified provider not available")
             self.cloudman = None
@@ -138,7 +150,8 @@ class Provider(ComputeNodeABC):
                 return
 
         filename = Path(key["path"])
-        key = self.cloudman.import_key_pair_from_file("{user}".format(**self.user), filename)
+        key = self.cloudman.import_key_pair_from_file(
+            "{user}".format(**self.user), filename)
 
     def list_secgroups(self, raw=False):
         if self.cloudman:
@@ -182,7 +195,8 @@ class Provider(ComputeNodeABC):
 
     def add_secgroup(self, secgroupname, description=""):
         if self.cloudman:
-            return self.cloudman.ex_create_security_group(secgroupname, description=description)
+            return self.cloudman.ex_create_security_group(secgroupname,
+                                                          description=description)
         return None
 
     def remove_secgroup(self, secgroupname):
@@ -214,10 +228,14 @@ class Provider(ComputeNodeABC):
                     # supporting multiple rules at once
                     for rule in newrules:
                         self.cloudman.ex_create_security_group_rule(secgroup,
-                                                                    rule["ip_protocol"],
-                                                                    rule["from_port"],
-                                                                    rule["to_port"],
-                                                                    cidr=rule["ip_range"]
+                                                                    rule[
+                                                                        "ip_protocol"],
+                                                                    rule[
+                                                                        "from_port"],
+                                                                    rule[
+                                                                        "to_port"],
+                                                                    cidr=rule[
+                                                                        "ip_range"]
                                                                     )
 
     def remove_rules_from_secgroup(self, secgroupname, rules):
@@ -232,14 +250,16 @@ class Provider(ComputeNodeABC):
                 if secgroup.name == secgroupname:
                     # supporting multiple rules at once
                     # get all rules, in obj format
-                    rulesobj = self.list_secgroup_rules(secgroup=secgroupname, raw=True)
+                    rulesobj = self.list_secgroup_rules(secgroup=secgroupname,
+                                                        raw=True)
                     for rule in rules:
                         for ruleobj in rulesobj:
                             if (ruleobj.ip_protocol == rule["ip_protocol"] and
                                     ruleobj.from_port == rule["from_port"] and
                                     ruleobj.to_port == rule["to_port"] and
                                     ruleobj.ip_range == rule["ip_range"]):
-                                self.cloudman.ex_delete_security_group_rule(ruleobj)
+                                self.cloudman.ex_delete_security_group_rule(
+                                    ruleobj)
 
     def images(self, raw=False):
         """
@@ -288,7 +308,6 @@ class Provider(ComputeNodeABC):
         :return: The dict of the flavor
         """
         return self.find(self.flavors(), name=name)
-
 
     def start(self, name=None):
         """
@@ -420,7 +439,8 @@ class Provider(ComputeNodeABC):
                 # now secgroup name is converted to object which
                 # is required by the libcloud api call
                 kwargs["ex_security_groups"] = secgroupsobj
-            node = self.cloudman.create_node(name=name, image=image_use, size=flavor_use, **kwargs)
+            node = self.cloudman.create_node(name=name, image=image_use,
+                                             size=flavor_use, **kwargs)
         else:
             sys.exit("this cloud is not yet supported")
 

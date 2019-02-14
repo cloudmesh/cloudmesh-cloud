@@ -8,6 +8,7 @@ from cloudmesh.common.console import Console
 
 from pprint import pprint
 
+
 #
 # cm:
 #   id:
@@ -30,8 +31,10 @@ class CmDatabase(object):
 
             self.database = self.mongo["MONGO_DBNAME"]
             self.host = host or self.mongo["MONGO_HOST"]
-            self.password = urllib.parse.quote_plus(str(password or self.mongo["MONGO_PASSWORD"]))
-            self.username = urllib.parse.quote_plus(str(username or self.mongo["MONGO_USERNAME"]))
+            self.password = urllib.parse.quote_plus(
+                str(password or self.mongo["MONGO_PASSWORD"]))
+            self.username = urllib.parse.quote_plus(
+                str(username or self.mongo["MONGO_USERNAME"]))
             if port is None:
                 self.port = int(self.mongo["MONGO_PORT"])
             else:
@@ -46,7 +49,8 @@ class CmDatabase(object):
         """
         connect to the database
         """
-        self.client = MongoClient(f"mongodb://{self.username}:{self.password}@{self.host}:{self.port}")
+        self.client = MongoClient(
+            f"mongodb://{self.username}:{self.password}@{self.host}:{self.port}")
         self.db = self.client[self.database]
 
     def collection(self, name):
@@ -80,15 +84,13 @@ class CmDatabase(object):
 
         return entry
 
-
-
     def update(self, entries):
 
-        print ("YYYY", type(entries))
+        print("YYYY", type(entries))
         for entry in entries:
             entry['collection'] = "{cloud}-{kind}".format(**entry)
 
-            #entry["collection"] = collection
+            # entry["collection"] = collection
             try:
                 self.col = self.db[entry['collection']]
 
@@ -107,7 +109,8 @@ class CmDatabase(object):
                         entry,
                         upsert=True)
                 else:
-                    entry['created'] = entry['modified'] = str(datetime.utcnow())
+                    entry['created'] = entry['modified'] = str(
+                        datetime.utcnow())
                     self.col.insert(entry)
             except Exception as e:
                 Console.error("uploading document {entry}".format(
@@ -121,15 +124,11 @@ class CmDatabase(object):
         col = self.db[collection]
         col.insert_one(d)
 
-
-
-
-
     def update_old(self,
-               entries,
-               collection="cloudmesh",
-               replace=False,
-               **kwargs):
+                   entries,
+                   collection="cloudmesh",
+                   replace=False,
+                   **kwargs):
         """
 
         :param entries: an arrey of dicts where one entry is called cmid.
@@ -147,7 +146,7 @@ class CmDatabase(object):
 
         for entry in _entries:
 
-            pprint (entry)
+            pprint(entry)
             name = entry['name']
 
             if kwargs is not None:

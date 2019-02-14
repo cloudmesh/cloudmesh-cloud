@@ -1,11 +1,12 @@
-import oyaml as yaml
-from os.path import isfile, expanduser, join, dirname, realpath, exists
-from shutil import copyfile
 from os import mkdir
+from os.path import isfile, expanduser, join, dirname, realpath, exists
 from pathlib import Path
+from shutil import copyfile
+
+import oyaml as yaml
+
 from cloudmesh.common.dotdict import dotdict
 from cloudmesh.shell.variables import Variables
-from pprint import pprint
 
 
 class Active(object):

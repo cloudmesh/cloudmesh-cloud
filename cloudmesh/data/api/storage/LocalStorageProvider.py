@@ -17,7 +17,7 @@ class LocalStorageProvider(StorageProviderABC):
         """
         self._path = Path(storage_path)
 
-    def add(self, local_path):
+    def put(self, local_path):
         """
         Upload a new file.
 

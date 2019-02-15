@@ -7,40 +7,40 @@ class StorageProviderABC(metaclass=abc.ABCMeta):
     """
 
     @abc.abstractmethod
-    def get(self, cloud_file, local_dest):
+    def get(self, source, destination):
         """
         get a file stored with this provider
 
-        :param cloud_file: the cloud file entry being retrieved
-        :param local_dest: download destination
+        :param source: the cloud file entry being retrieved
+        :param destination: download destination
         :return: the downloaded cloud file binary
         """
         pass
 
     @abc.abstractmethod
-    def add(self, cloud_file):
+    def put(self, source):
         """
         upload a file
 
-        :param cloud_file: a CloudFile. todo
+        :param source: a CloudFile. todo
         :return: a CloudFile with resource information filled in
         """
         pass
 
     @abc.abstractmethod
-    def delete(self, cloud_file):
+    def delete(self, name):
         """
         delete a file from the provider
 
-        :param cloud_file: the cloud file entry being deleted
+        :param name: the cloud file entry being deleted
         """
         pass
 
     @abc.abstractmethod
-    def exists(self, file_name):
+    def exists(self, name):
         """
         if a file exists in the remote storage provider
 
-        :param file_name: a file name to check
+        :param name: a file name to check
         """
         pass

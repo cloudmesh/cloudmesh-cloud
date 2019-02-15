@@ -90,7 +90,7 @@ class Key(ListResource):
             if store:
                 try:
 
-                    cls.cm.add(thekey)
+                    cls.cm.put(thekey)
                 except:
                     Console.error("Key already in db", traceflag=False)
         if not store:
@@ -151,7 +151,7 @@ class Key(ListResource):
                     thekey["comment"] = keyname
                 if store:
                     try:
-                        cls.cm.add(thekey)
+                        cls.cm.put(thekey)
                     except:
                         Console.error("Key already in db", traceflag=False)
                 else:
@@ -223,7 +223,7 @@ class Key(ListResource):
             "category": "general",
             "user": user}
 
-        cls.cm.add(thekey)
+        cls.cm.put(thekey)
 
     @classmethod
     def add_key_to_cloud(cls, user, keyname, cloud):
@@ -320,7 +320,7 @@ class Key(ListResource):
             "certificate": certificate_path,
             "key_path": key_path,
             "pfx_path": pfx_path}
-        cls.cm.add(key_azure_obj)
+        cls.cm.put(key_azure_obj)
         Console.info("Azure key added.ok.")
 
     @classmethod

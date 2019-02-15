@@ -69,7 +69,7 @@ def process_arguments(arg):
     regular_file = config.get_config()
 
     if arg.get('add') & arg.get('resource'):
-        resource.add(regular_file, arg.get('<yaml_file>'))
+        resource.put(regular_file, arg.get('<yaml_file>'))
 
     if arg.get('list') & arg.get('resource'):
         print(yaml.dump(regular_file))

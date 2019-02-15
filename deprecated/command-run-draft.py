@@ -38,7 +38,7 @@ def main():
 
     if result.res:
         if result.add_res:
-            resource.add(content, str(result.add_res))
+            resource.put(content, str(result.add_res))
         if result.list_all:
             resource.listAll(content)
         if result.rm_res:

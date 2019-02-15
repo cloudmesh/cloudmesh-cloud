@@ -10,7 +10,7 @@ import os
 from pprint import pprint
 import pwd
 import grp
-
+from  cloudmesh.mongo.DataBaseDecorator import DatabaseUpdate
 
 # nosetest -v --nopature
 # nosetests -v --nocapture tests/test_data.py
@@ -25,17 +25,20 @@ class test_data:
 
         file = str(Path(path_expand("~/.cloudmesh/cloudmesh4.yaml")))
 
+        @DatabaseUpdate()
         def info(file):
             st = os.stat(file)
             userinfo = pwd.getpwuid(os.stat(file).st_uid)
 
             d = {
+                "kind": "file",
+                "cloud": "local",
+                "name": "{cloud}:{file}".format(cloud="local", file=file),
                 "path": file,
                 "size": st.st_size,
-                "acess": str(st.st_atime),
-                "at": type(st.st_atime),
-                "modified": None,
-                "created": None,
+                "acess": str(st.st_atime), # needs to be same format as we  use in vms
+                "modified": None, # needs to be same format as we  use in vms
+                "created": None, # needs to be same format as we  use in vms
                 "owner": userinfo.pw_name,
                 "group": {
                     "name": grp.getgrgid(userinfo.pw_gid).gr_name,
@@ -49,6 +52,11 @@ class test_data:
                 }
 
             }
-            return d
+            return [d]
 
-        pprint(info(file))
+        i = info(file)
+
+        pprint (i)
+
+
+        assert i['path']== '/Users/grey/.cloudmesh/cloudmesh4.yaml'

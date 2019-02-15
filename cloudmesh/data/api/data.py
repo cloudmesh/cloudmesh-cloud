@@ -83,8 +83,8 @@ class Data(object):
         :param provider: The storage provider where the file should be stored.
         :param file_path: The local path to the file.
         """
-        new_cloud_file = self._providers[provider or 'default'].add(file_path)
-        self._db.add(new_cloud_file)
+        new_cloud_file = self._providers[provider or 'default'].put(file_path)
+        self._db.put(new_cloud_file)
         return new_cloud_file
 
     def get(self, file_name, dest_folder='.'):

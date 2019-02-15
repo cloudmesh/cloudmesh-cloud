@@ -21,50 +21,47 @@ from libcloud.compute.types import Provider
 from libcloud.compute.providers import get_driver
 import oyaml as yaml
 import os
-
+from cloudmesh.management.configuration.config import Config
+from cloudmesh.shell.variables import Variables
 
 class Driver(object):
 
-    def __init__(self):
-        self._conf = {}
-
-    def config(self, name="~/.cloudmesh/cloudmesh4.yaml"):
+    def __init__(self, name="~/.cloudmesh/cloudmesh4.yaml"):
         name = os.path.expanduser(name)
-        # reads in the yaml file
-        with open(name, "r") as stream:
-            self._conf = yaml.load(stream)
-            print(yaml.dump(self._conf))
+        self.config = Config(name=name)
 
-    # noinspection PyPep8Naming
-    def get(self, cloudname=None):
-        # if cloudname=none get the default cloud
-        # credentials = ….
-        # return the driver for that cloud
-        # now if you do that right you cans implify libcloud use with
-        if cloudname is None:
-            cloudname = self._conf.get('cloudmesh').get('default').get('cloud')
+    def get(self, name=None):
+        connection = None
 
-        conn = None
-        if cloudname == 'azure':
-            AZURE_SUBSCRIPTION_ID = self._conf.get('cloudmesh').get('cloud').get('azure').get('credentials').get(
-                'AZURE_SUBSCRIPTION_ID')
-            AZURE_MANAGEMENT_CERT_PATH = self._conf.get('cloudmesh').get('cloud').get('azure').get('credentials').get(
-                'AZURE_MANAGEMENT_CERT_PATH')
+        if name is None:
+            variables = Variables()
+            cloudname = variables['cloud']
+
+        kind = self.config.get(
+            "cloudmesh.cloud.{name}.cm.kind".format(name=name))
+        credentials = self.config.get(
+            "cloudmesh.cloud.{name}.credentials".format(name=name))
+
+        # BUG FROM HERE ON WRONG
+
+        if kind == 'azure':
+            AZURE_SUBSCRIPTION_ID = credentials['AZURE_SUBSCRIPTION_ID']
+            AZURE_MANAGEMENT_CERT_PATH = credentials[
+                'AZURE_MANAGEMENT_CERT_PATH']
             AZDriver = get_driver(Provider.AZURE)
-            conn = AZDriver(subscription_id=AZURE_SUBSCRIPTION_ID, key_file=AZURE_MANAGEMENT_CERT_PATH)
-        elif cloudname == 'aws':
-            EC2_ACCESS_ID = self._conf.get('cloudmesh').get('cloud').get('aws').get('credentials').get('EC2_ACCESS_ID')
-            EC2_SECRET_KEY = self._conf.get('cloudmesh').get('cloud').get('aws').get('credentials').get(
-                'EC2_SECRET_KEY')
+            connection = AZDriver(subscription_id=AZURE_SUBSCRIPTION_ID,
+                                  key_file=AZURE_MANAGEMENT_CERT_PATH)
+        elif kind == 'aws':
+            EC2_ACCESS_ID = credentials['EC2_ACCESS_ID']
+            EC2_SECRET_KEY = credentials['EC2_SECRET_KEY']
             EC2Driver = get_driver(Provider.EC2)
-            conn = EC2Driver(EC2_ACCESS_ID, EC2_SECRET_KEY)
+            connection = EC2Driver(EC2_ACCESS_ID, EC2_SECRET_KEY)
 
-        return conn
+        return connection
 
 
 if __name__ == '__main__':
     cm = Driver()
-    cm.config()
     driver = cm.get("aws")
     print("driver=", driver)
     # connection = cm.get_driver("azure")

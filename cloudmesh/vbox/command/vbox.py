@@ -145,7 +145,7 @@ class VboxCommand(PluginCommand):
         #
         # ok
         #
-        elif arguments.image and arguments.add:
+        elif arguments.image and arguments.put:
             image_command(VboxProvider().add_image)
 
         #

@@ -20,7 +20,7 @@ class AzureStorageProvider(StorageProviderABC):
 
         self._container_url = self._container.extra.get('url').replace('http', 'https')
 
-    def add(self, local_path):
+    def put(self, local_path):
         """
         Upload a new file.
 

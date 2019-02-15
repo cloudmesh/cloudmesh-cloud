@@ -40,7 +40,7 @@ class UrlCommand(PluginCommand):
 
         print(arguments)
 
-        """
+        """.j
         see: http://docs.python-requests.org/en/master/
         
         r = requests.get(arguments.URL)
@@ -52,7 +52,7 @@ class UrlCommand(PluginCommand):
         'utf-8'
         >>> r.text
         u'{"type":"User"...'
-        >>> r.json()
+        >>> rson()
         """
 
         Console.error("Implement me")

@@ -2,6 +2,12 @@ from os.path import isfile
 from cloudmesh.data.api.data import Data
 
 
+# TODO: The directories and files for the test should be created on the fly.
+# for example if a 1mb data file is needed it needs to be created if it does
+# not exist. It neews do be placed in a temproary directory and not in the
+# code itself. There may be in pathlib special features to declare tmp files.
+# if not i suggest ~/.cloudmesh/tmp
+
 class TestDataLocal:
     """
     Functional tests for the local data storage service
@@ -11,6 +17,9 @@ class TestDataLocal:
         self.test_file_name = "hello.txt"
         self._data = Data()
         self._data.config("cm4/configuration/cloudmesh.yaml")
+
+        # TODO: this needs to be configured in cloudmesh4.yaml with Config()
+
 
     def test_local_01_add(self):
         self._data.add("local", f"cm4/test/data/files/{self.test_file_name}")

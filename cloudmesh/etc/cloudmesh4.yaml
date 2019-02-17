@@ -210,7 +210,7 @@ cloudmesh:
       MONGO_DOWNLOAD:
         darwin: https://fastdl.mongodb.org/osx/mongodb-osx-ssl-x86_64-4.0.4.tgz
         linux: https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-4.0.4.tgz
-        windows: https://fastdl.mongodb.org/win32/mongodb-win32-x86_64-2008plus-ssl-4.0.4-signed.msi
+        win32: https://fastdl.mongodb.org/win32/mongodb-win32-x86_64-2008plus-ssl-4.0.4-signed.msi
         redhat: https://repo.mongodb.org/yum/redhat/7/mongodb-org/4.0/x86_64/RPMS/mongodb-org-server-4.0.4-1.el7.x86_64.rpm
   cluster:
     bigred2:

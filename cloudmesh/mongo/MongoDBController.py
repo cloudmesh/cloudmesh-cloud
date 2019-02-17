@@ -66,7 +66,7 @@ class MongoInstaller(object):
                 self.linux()
             elif platform.lower() == 'darwin':
                 self.darwin()
-            elif platform.lower() == 'windows':
+            elif platform.lower() == 'win32': #Replaced windows with win32
                 self.windows()
             else:
                 print("platform not found", platform)
@@ -117,40 +117,20 @@ class MongoInstaller(object):
 
     def windows(self, brew=False):
         """
-        install MongoDB in Darwin system (Mac)
+        install MongoDB in windows
         """
-
-        """
-
-        preferred container and linux subsystem
-
-        We wnat to capture multiple solutions. We only support Windows 10 
-
-        check for newest version of windows
-  
-        a) container based
-
-           This worksonly on proper versions of windows 10, not home, e.g. edu and pro
-    
-        b) regular install
-           
-           https://docs.mongodb.com/manual/tutorial/install-mongodb-on-windows/
-
-        c) linux subsystem
-
-        https://docs.microsoft.com/en-us/windows/wsl/install-win10 
-        ubuntu 18.04
-
-
-        d) MOngoDB in the cloud, while making sure credentials are not in the db
-
-        https://www.mongodb.com/cloud/atlas?utm_source=install-mongodb-on-windows&utm_campaign=20-docs-in-20-days&utm_medium=docs
-
-        e) Chameleon cloud or any other cloud via cloudmesh
-
-        """
-        # TODO
-        raise NotImplementedError
+        #Added below code to change unix format to windows format for directory creation
+        self.data["MONGO_HOME"] = self.data["MONGO_HOME"].replace("/", "\\")
+        self.data["MONGO_PATH"] = self.data["MONGO_PATH"].replace("/", "\\")
+        self.data["MONGO_LOG"] = self.data["MONGO_LOG"].replace("/", "\\")
+        
+        script = """
+        mkdir {MONGO_PATH}
+        mkdir {MONGO_HOME}
+        mkdir {MONGO_LOG}
+        msiexec.exe /l*v {MONGO_LOG}\mdbinstall.log  /qb /i {MONGO_CODE} INSTALLLOCATION={MONGO_PATH} ADDLOCAL="all"
+        """.format(**self.data)
+        installer = Script.run(script)
 
 
 class MongoDBController(object):
@@ -256,10 +236,15 @@ class MongoDBController(object):
         print("Enable the Secutiry. You will use your username and password to login the MongoDB")
 
     def create(self):
+        
+        #Added special code for windows. Cant do start service and set_auth in same cms execution.
 
-        self.start(security=False)
-        self.set_auth()
-        self.stop()
+        if platform.lower() == 'win32':
+            self.start(security=False)
+        else:
+            self.start(security=False)
+            self.set_auth()
+            self.stop()
 
     def start(self, security=True):
         """
@@ -269,12 +254,24 @@ class MongoDBController(object):
         if security:
             auth = "--auth"
 
-        try:
-            script = "mongod {auth} --bind_ip {MONGO_HOST} --dbpath {MONGO_PATH} --logpath {MONGO_LOG}/mongod.log --fork".format(
-                **self.data, auth=auth)
-            result = Script.run(script)
-        except Exception as e:
-            result = "Mongo could not be started." + str(e)
+        if platform.lower() == 'win32':
+            try:
+                MONGO_COMMAND = "-scriptblock { " + "mongod {auth} --bind_ip {MONGO_HOST} --dbpath {MONGO_PATH} --logpath {MONGO_LOG}/mongod.log".format(**self.data, auth=auth) + " }"
+                script = """
+                powershell -noexit start-job {MONGO_COMMAND}
+                """.format(**self.data, MONGO_COMMAND=MONGO_COMMAND)
+                Script.run(script)
+                result = "child process started successfully. Program existing now"
+            except Exception as e:
+                result = "Mongo in windows could not be started." + str(e)
+        else:
+            try:
+                script = "mongod {auth} --bind_ip {MONGO_HOST} --dbpath {MONGO_PATH} --logpath {MONGO_LOG}/mongod.log --fork".format(
+                    **self.data, auth=auth)
+                result = Script.run(script)
+
+            except Exception as e:
+                result = "Mongo could not be started." + str(e)
 
         if "child process started successfully" in result:
             print(Console.ok(result))
@@ -296,8 +293,14 @@ class MongoDBController(object):
         add admin acount into the MongoDB admin database
         """
 
-        script = """mongo --eval 'db.getSiblingDB("admin").createUser({{user:"{MONGO_USERNAME}",pwd:"{MONGO_PASSWORD}",roles:[{{role:"root",db:"admin"}}]}})'""".format(
-            **self.data)
+        if platform.lower() == 'win32':
+            script = """
+            mongo --eval "db.getSiblingDB('admin').createUser({{user:'{MONGO_USERNAME}',pwd:'{MONGO_PASSWORD}',roles:[{{role:'root',db:'admin'}}]}})"
+            """.format(**self.data)
+            print(script)
+        else:
+            script = """mongo --eval 'db.getSiblingDB("admin").createUser({{user:"{MONGO_USERNAME}",pwd:"{MONGO_PASSWORD}",roles:[{{role:"root",db:"admin"}}]}})'""".format(**self.data)
+
 
         result = Script.run(script)
         print(result)
@@ -341,33 +344,63 @@ class MongoDBController(object):
         returns a json object with status: and pid: command
         """
 
-        result = find_process("mongod")
+        if platform.lower() == 'win32':
+            script = """
+            tasklist /FO LIST /FI "IMAGENAME eq mongod.exe"
+            """
+            output = Script.run(script)
+            result = {}
+            for row in output.split('\n'):
+                if ': ' in row:
+                    key, value = row.split(': ')
+                    result[key.strip()] = value.strip()
 
-        if result is None:
-            state = dotdict(
-                {"status": "error",
-                 "message": "No mongod running",
-                 "output": None
-                 })
-            output = None
-        else:
-            state = dotdict(
-                {"status": "ok",
-                 "message": "running",
-                 "output": None
-                 })
-            output = {}
-            for p in result:
-                p = dotdict(p)
-
+            if result is None:
+                state = dotdict(
+                    {"status": "error",
+                    "message": "No mongod running",
+                    "output": None
+                    })
+            else:
+                state = dotdict(
+                    {"status": "ok",
+                    "message": "running",
+                    "output": None
+                    })
                 process = {
-                    "pid": str(p.pid),
-                    "command": p.command
+                    "pid": str(result['PID']),
+                    "command": result['Image Name']
                 }
-                output[str(p.pid)] = process
-            state["output"] = output
-        return state
+                output = {}
+                output[str()] = process
+                state["output"] = output
 
+        else:
+            result = find_process("mongod")
+            if result is None:
+                state = dotdict(
+                    {"status": "error",
+                    "message": "No mongod running",
+                    "output": None
+                    })
+                output = None
+            else:
+                state = dotdict(
+                    {"status": "ok",
+                    "message": "running",
+                    "output": None
+                    })
+                output = {}
+                for p in result:
+                    p = dotdict(p)
+                    process = {
+                        "pid": str(p.pid),
+                        "command": p.command
+                    }
+                    output[str(p.pid)] = process
+                state["output"] = output
+        return state
+    
     # noinspection PyBroadException
     def version(self):
         ver = None

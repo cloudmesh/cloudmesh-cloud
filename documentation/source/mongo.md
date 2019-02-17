@@ -10,8 +10,7 @@ First, you need to create a MongoDB database with
 ```bash
 $ cms admin mongo create
 ```
-
-Second, you need to start it with
+Second, you need to start it with below command (for windows platform, open a new command prompt)
 
 ```bash
 $ cms admin mongo start
@@ -54,12 +53,13 @@ An example is
       MONGO_DOWNLOAD:
         darwin: https://fastdl.mongodb.org/osx/mongodb-osx-ssl-x86_64-4.0.4.tgz
         linux: https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-4.0.4.tgz
-        windows: https://fastdl.mongodb.org/win32/mongodb-win32-x86_64-2008plus-ssl-4.0.4-signed.msi
+        win32: https://fastdl.mongodb.org/win32/mongodb-win32-x86_64-2008plus-ssl-4.0.4-signed.msi
         redhat: https://repo.mongodb.org/yum/redhat/7/mongodb-org/4.0/x86_64/RPMS/mongodb-org-server-4.0.4-1.el7.x86_64.rpm
 ```
 
 We also provide a convenient install script that downloads the version defined
-in the yaml file and installs it in the system with the command
+in the yaml file and installs it in the system with the command. In case of windows platform, 
+you will have to set the PATH variable manually after install
 
 ```bash
 $ cms admin mongo install

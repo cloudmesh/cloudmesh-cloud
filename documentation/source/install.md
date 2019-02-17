@@ -59,7 +59,8 @@ In case you do not have mongod installed, you can do so for macOS and Ubuntu
 
 
 Now you can run the `admin mongo install` command. It will not only install
-mongo, but also add the path to your `.bash_*` file. To install it simply say
+mongo, but also add the path to your `.bash_*` file. In case of windows platform, 
+you will have to set the PATH variable manually. To install it simply say. 
 
 ```bash
 $ cms admin mongo install
@@ -70,9 +71,13 @@ To create a password protection you than run the command
 ```bash
 $ cms admin mongo create
 ```
+Incase of Windows platform, after executing above command, open a new cms session and execute below commands.
+
+```bash
+$ cms admin mongo start
+```
 
 Once the mongo db is created it and be started and stoped with 
-
 
 ```bash
 $ cms admin mongo start

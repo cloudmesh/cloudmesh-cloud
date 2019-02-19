@@ -52,7 +52,7 @@ class test_data:
                 }
 
             }
-            return [d]
+            return d
 
         i = info(file)
 

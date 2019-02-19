@@ -95,6 +95,8 @@ class DatabaseUpdate:
     def __call__(self, f):
         def wrapper(*args, **kwargs):
             current = f(*args, **kwargs)
+            if type(current) == dict:
+                current = [current]
 
             result = self.database.update(current)
 

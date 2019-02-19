@@ -20,4 +20,4 @@ recommonmark
 dateparser
 humanize
 psutil
-connexion
+connexion[swagger-ui]

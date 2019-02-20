@@ -20,7 +20,7 @@ class VirtualCluster(object):
         :param debug: switch the debug information on and off
         """
         current_path = os.path.dirname(os.path.realpath(__file__))
-        self.workspace = os.path.join(current_path, "vcluster_workspace/vcluster.yaml")
+        self.workspace = os.path.join(current_path, "vcluster_workspace/now.yaml")
         if not os.path.exists(os.path.dirname(self.workspace)):
             os.makedirs(os.path.dirname(self.workspace))
         self.cm_config = Config()

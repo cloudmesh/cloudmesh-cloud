@@ -94,7 +94,7 @@
 <li class="toctree-l1"><a class="reference internal" href="manual.html">7. Manual (ok)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="manual-dev.html">8. Manual (proposed)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="jupyter.html">9. Jupyter Integration (proposed)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="vm.html">10. Virtual Machine Management</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vm.html">10. Virtual Machine Management (proposed)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="workflow.html">11. Infrastructure Workflow (proposed)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="code.html">12. Code Documentation</a></li>
 </ul>
@@ -182,7 +182,7 @@ create and start the database service.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ cms admin mongo create
 </pre></div>
 </div>
-<p>Second, you need to start it with</p>
+<p>Second, you need to start it with below command (for windows platform, open a new command prompt)</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ cms admin mongo start
 </pre></div>
 </div>
@@ -215,12 +215,13 @@ $ cms admin mongo list
       <span class="n">MONGO_DOWNLOAD</span><span class="p">:</span>
         <span class="n">darwin</span><span class="p">:</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">fastdl</span><span class="o">.</span><span class="n">mongodb</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">osx</span><span class="o">/</span><span class="n">mongodb</span><span class="o">-</span><span class="n">osx</span><span class="o">-</span><span class="n">ssl</span><span class="o">-</span><span class="n">x86_64</span><span class="o">-</span><span class="mf">4.0</span><span class="o">.</span><span class="mf">4.</span><span class="n">tgz</span>
         <span class="n">linux</span><span class="p">:</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">fastdl</span><span class="o">.</span><span class="n">mongodb</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">linux</span><span class="o">/</span><span class="n">mongodb</span><span class="o">-</span><span class="n">linux</span><span class="o">-</span><span class="n">x86_64</span><span class="o">-</span><span class="mf">4.0</span><span class="o">.</span><span class="mf">4.</span><span class="n">tgz</span>
-        <span class="n">windows</span><span class="p">:</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">fastdl</span><span class="o">.</span><span class="n">mongodb</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">win32</span><span class="o">/</span><span class="n">mongodb</span><span class="o">-</span><span class="n">win32</span><span class="o">-</span><span class="n">x86_64</span><span class="o">-</span><span class="mi">2008</span><span class="n">plus</span><span class="o">-</span><span class="n">ssl</span><span class="o">-</span><span class="mf">4.0</span><span class="o">.</span><span class="mi">4</span><span class="o">-</span><span class="n">signed</span><span class="o">.</span><span class="n">msi</span>
+        <span class="n">win32</span><span class="p">:</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">fastdl</span><span class="o">.</span><span class="n">mongodb</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">win32</span><span class="o">/</span><span class="n">mongodb</span><span class="o">-</span><span class="n">win32</span><span class="o">-</span><span class="n">x86_64</span><span class="o">-</span><span class="mi">2008</span><span class="n">plus</span><span class="o">-</span><span class="n">ssl</span><span class="o">-</span><span class="mf">4.0</span><span class="o">.</span><span class="mi">4</span><span class="o">-</span><span class="n">signed</span><span class="o">.</span><span class="n">msi</span>
         <span class="n">redhat</span><span class="p">:</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">repo</span><span class="o">.</span><span class="n">mongodb</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">yum</span><span class="o">/</span><span class="n">redhat</span><span class="o">/</span><span class="mi">7</span><span class="o">/</span><span class="n">mongodb</span><span class="o">-</span><span class="n">org</span><span class="o">/</span><span class="mf">4.0</span><span class="o">/</span><span class="n">x86_64</span><span class="o">/</span><span class="n">RPMS</span><span class="o">/</span><span class="n">mongodb</span><span class="o">-</span><span class="n">org</span><span class="o">-</span><span class="n">server</span><span class="o">-</span><span class="mf">4.0</span><span class="o">.</span><span class="mi">4</span><span class="o">-</span><span class="mf">1.</span><span class="n">el7</span><span class="o">.</span><span class="n">x86_64</span><span class="o">.</span><span class="n">rpm</span>
 </pre></div>
 </div>
 <p>We also provide a convenient install script that downloads the version defined
-in the yaml file and installs it in the system with the command</p>
+in the yaml file and installs it in the system with the command. In case of windows platform,
+you will have to set the PATH variable manually after install</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ cms admin mongo install
 </pre></div>
 </div>

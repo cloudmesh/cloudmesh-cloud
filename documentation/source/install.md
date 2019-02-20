@@ -21,11 +21,13 @@ pip install cloudmesh.cm
 Individual packages can be installed with
 
 ```
-pip install cloudmesh.cmd5
+pip install cloudmesh.common
 pip install cloudmesh.sys
 pip install cloudmesh.cmd5
 pip install cloudmesh.openapi
 ```
+
+For the time being we recommend you conduct the source install.
 
 ### Source installation for development
 

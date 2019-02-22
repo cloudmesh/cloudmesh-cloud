@@ -82,7 +82,7 @@ class MongoInstaller(object):
         mkdir -p {MONGO_PATH}
         mkdir -p {MONGO_HOME}
         mkdir -p {MONGO_LOG}
-        wget -P /tmp/mongodb.tgz {MONGO_CODE}
+        wget -O /tmp/mongodb.tgz {MONGO_CODE}
         tar -zxvf /tmp/mongodb.tgz -C {LOCAL}/mongo --strip 1
             """.format(**self.data)
         installer = Script.run(script)

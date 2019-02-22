@@ -6,6 +6,11 @@ from cloudmesh.management.debug import HEADING, myself
 # nosetest -v --nopature tests/test_cloud_azure.py
 
 
+# to find the subscription id go to
+
+# https://portal.azure.com/#blade/Microsoft_Azure_Billing/BillingMenuBlade/Subscriptions
+
+
 class TestCloudAzure:
 
     def setup(self):

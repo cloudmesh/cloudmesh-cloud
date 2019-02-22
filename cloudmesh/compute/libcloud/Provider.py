@@ -10,6 +10,7 @@ from cloudmesh.abstractclass.ComputeNodeABC import ComputeNodeABC
 from cloudmesh.common.parameter import Parameter
 from cloudmesh.common.util import HEADING
 from cloudmesh.management.configuration.config import Config
+from cloudmesh.common.util import path_expand
 
 
 class Provider(ComputeNodeABC):
@@ -20,7 +21,8 @@ class Provider(ComputeNodeABC):
     ProviderMapper = {
         "openstack": LibcloudProvider.OPENSTACK,
         "aws": LibcloudProvider.EC2,
-        "azure": LibcloudProvider.AZURE_ARM
+        "azure_asm": LibcloudProvider.AZURE,
+        "azure_arm": LibcloudProvider.AZURE_ARM
     }
 
     def __init__(self, name=None, configuration="~/.cloudmesh/cloudmesh4.yaml"):
@@ -41,10 +43,13 @@ class Provider(ComputeNodeABC):
         super().__init__(name, conf)
 
         pprint(Provider.ProviderMapper)
+
         if self.cloudtype in Provider.ProviderMapper:
+
+            self.driver = get_driver(
+                Provider.ProviderMapper[self.cloudtype])
+
             if self.cloudtype == 'openstack':
-                self.driver = get_driver(
-                    Provider.ProviderMapper[self.cloudtype])
                 self.cloudman = self.driver(cred["OS_USERNAME"],
                                             cred["OS_PASSWORD"],
                                             ex_force_auth_url=cred[
@@ -52,22 +57,15 @@ class Provider(ComputeNodeABC):
                                             ex_force_auth_version='2.0_password',
                                             ex_tenant_name=cred[
                                                 'OS_TENANT_NAME'])
-            elif self.cloudtype == 'azure':
-                self.cloudman = self.driver(
-                    tenant_id=cred["AZURE_TENANT_ID"],
-                    subscription_id=cred["AZURE_SUBSCRIPTION_ID"],
-                    key=cred["AZURE_APPLICATION_ID"],
-                    secret=cred["AZURE_SECRET_KEY"],
-                    region=cred["AZURE_REGION"]
-                )
-            elif self.cloudtype == 'aws':
+            elif self.cloudtype == 'azure_asm':
 
-                # IMAGE_ID = 'ami-c8052d8d'
-                # SIZE_ID = 't1.micro'
-                pprint(cred)
-                print(cred["region"])
-                self.driver = get_driver(
-                    Provider.ProviderMapper[self.cloudtype])
+                self.cloudman = self.driver(
+                    subscription_id=cred['AZURE_SUBSCRIPTION_ID'],
+                    key_file=path_expand(cred['AZURE_KEY_FILE'])
+
+                )
+
+            elif self.cloudtype == 'aws':
 
                 self.cloudman = self.driver(
                     cred["EC2_ACCESS_ID"],
@@ -372,7 +370,18 @@ class Provider(ComputeNodeABC):
         :return: dict or libcloud object
         """
         if self.cloudman:
-            entries = self.cloudman.list_nodes()
+            if self.cloudtype == "azure_asm":
+                #
+                # BUG: ex_cloud_service_name needs to be defined, explore the azure documentation n how to find it
+                #
+                entries = self.cloudman.list_nodes()
+            elif self.cloudtype == "azure_arm":
+                #
+                # BUG: figure out how to use that
+                #
+                entries = self.cloudman.list_nodes()
+            else:
+                entries = self.cloudman.list_nodes()
             if raw:
                 return entries
             else:

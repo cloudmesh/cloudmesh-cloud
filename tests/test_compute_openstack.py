@@ -1,6 +1,6 @@
 #################################################################
 # nosetest -v --nopature
-# nosetests -v --nocapture tests/test_compute_provider.py
+# nosetests -v --nocapture tests/test_compute_openstack.py
 #################################################################
 
 from pprint import pprint
@@ -25,11 +25,11 @@ class TestName:
         self.user = Config()["cloudmesh"]["profile"]["user"]
         self.clouduser = 'cc'
         self.name_generator = Name(
-             experiment="exp",
-             group="grp",
-             user=self.user,
-             kind="vm",
-             counter=1)
+            experiment="exp",
+            group="grp",
+            user=self.user,
+            kind="vm",
+            counter=1)
 
         self.name = str(self.name_generator)
         self.name_generator.incr()
@@ -40,11 +40,10 @@ class TestName:
 
         self.secgroupname = "CM4TestSecGroup"
         self.secgrouprule = {"ip_protocol": "tcp",
-                              "from_port": 8080,
-                              "to_port": 8088,
-                              "ip_range": "129.79.0.0/16"}
+                             "from_port": 8080,
+                             "to_port": 8088,
+                             "ip_range": "129.79.0.0/16"}
         self.testnode = None
-
 
     def test_001_list_keys(self):
         HEADING()
@@ -55,54 +54,51 @@ class TestName:
     def test_01_list_keys(self):
         HEADING()
         self.keys = self.p.keys()
-        #pprint(self.keys)
+        # pprint(self.keys)
 
         print(Printer.flatwrite(self.keys,
-                            sort_keys=("name"),
-                            order=["name", "fingerprint"],
-                            header=["Name", "Fingerprint"])
+                                sort_keys=("name"),
+                                order=["name", "fingerprint"],
+                                header=["Name", "Fingerprint"])
               )
 
     def test_02_key_upload(self):
         HEADING()
 
         key = SSHkey()
-        print (key.__dict__)
+        print(key.__dict__)
 
         self.p.key_upload(key)
 
         self.test_01_list_keys()
 
-
     def test_03_list_images(self):
         HEADING()
-        images= self.p.images()
-        #pprint(images)
+        images = self.p.images()
+        # pprint(images)
 
         print(Printer.flatwrite(images,
-                            sort_keys=("name","extra.minDisk"),
-                            order=["name", "extra.minDisk", "updated", "driver"],
-                            header=["Name", "MinDisk", "Updated", "Driver"])
+                                sort_keys=("name", "extra.minDisk"),
+                                order=["name", "extra.minDisk", "updated",
+                                       "driver"],
+                                header=["Name", "MinDisk", "Updated", "Driver"])
               )
-
 
     def test_04_list_flavors(self):
         HEADING()
         flavors = self.p.flavors()
-        #pprint (flavors)
+        # pprint (flavors)
 
         print(Printer.flatwrite(flavors,
-                            sort_keys=("name", "vcpus", "disk"),
-                            order=["name", "vcpus", "ram", "disk"],
-                            header=["Name", "VCPUS", "RAM", "Disk"])
-          )
-
+                                sort_keys=("name", "vcpus", "disk"),
+                                order=["name", "vcpus", "ram", "disk"],
+                                header=["Name", "VCPUS", "RAM", "Disk"])
+              )
 
     def test_04_list_vm(self):
         HEADING()
         vms = self.p.list()
-        #pprint (vms)
-
+        # pprint (vms)
 
         print(Printer.flatwrite(vms,
                                 sort_keys=("name"),
@@ -124,18 +120,21 @@ class TestName:
                                         "Public ips"])
               )
 
-
     def test_05_list_secgroups(self):
         HEADING()
         secgroups = self.p.list_secgroups()
         for secgroup in secgroups:
-            print (secgroup["name"])
+            print(secgroup["name"])
             rules = self.p.list_secgroup_rules(secgroup["name"])
             print(Printer.write(rules,
-                                sort_keys=("ip_protocol", "from_port", "to_port", "ip_range"),
-                                order=["ip_protocol", "from_port", "to_port", "ip_range"],
-                                header=["ip_protocol", "from_port", "to_port", "ip_range"])
-                 )
+                                sort_keys=(
+                                "ip_protocol", "from_port", "to_port",
+                                "ip_range"),
+                                order=["ip_protocol", "from_port", "to_port",
+                                       "ip_range"],
+                                header=["ip_protocol", "from_port", "to_port",
+                                        "ip_range"])
+                  )
 
     def test_06_secgroups_add(self):
         self.p.add_secgroup(self.secgroupname)
@@ -160,12 +159,12 @@ class TestName:
         image = "CC-Ubuntu16.04"
         size = "m1.medium"
         self.p.create(name=self.name,
-                                      image=image,
-                                      size=size,
-                                      # username as the keypair name based on
-                                      # the key implementation logic
-                                      ex_keyname=self.user,
-                                      ex_security_groups=['default'])
+                      image=image,
+                      size=size,
+                      # username as the keypair name based on
+                      # the key implementation logic
+                      ex_keyname=self.user,
+                      ex_security_groups=['default'])
         time.sleep(5)
         nodes = self.p.list()
         node = self.p.find(nodes, name=self.name)
@@ -182,20 +181,20 @@ class TestName:
     def test_11_publicIP_attach(self):
         HEADING()
         pubip = self.p.get_publicIP()
-        pprint (pubip)
+        pprint(pubip)
         nodes = self.p.list(raw=True)
         for node in nodes:
             if node.name == self.name:
                 self.testnode = node
                 break
         if self.testnode:
-            print ("attaching public IP...")
+            print("attaching public IP...")
             self.p.attach_publicIP(self.testnode, pubip)
             time.sleep(5)
         self.test_04_list_vm()
 
     def test_12_publicIP_detach(self):
-        print ("detaching and removing public IP...")
+        print("detaching and removing public IP...")
         time.sleep(5)
         nodes = self.p.list(raw=True)
         for node in nodes:
@@ -208,22 +207,18 @@ class TestName:
         time.sleep(5)
         self.test_04_list_vm()
 
-    #def test_11_printer(self):
+    # def test_11_printer(self):
     #    HEADING()
     #    nodes = self.p.list()
 
-
     #    print(Printer.write(nodes, order=["name", "image", "size"]))
 
-
-
-    #def test_01_start(self):
+    # def test_01_start(self):
     #    HEADING()
     #    self.p.start(name=self.name)
 
-    #def test_12_list_vm(self):
+    # def test_12_list_vm(self):
     #    self.test_04_list_vm()
-
 
     def test_13_info(self):
         HEADING()
@@ -235,7 +230,7 @@ class TestName:
         nodes = self.p.list()
         node = self.p.find(nodes, name=self.name)
 
-        pprint (node)
+        pprint(node)
 
         assert node["extra"]["task_state"] == "deleting"
 
@@ -254,28 +249,30 @@ class TestName:
             if node.name == self.name:
                 self.testnode = node
                 break
-        #pprint (self.testnode)
-        #pprint (self.testnode.public_ips)
+        # pprint (self.testnode)
+        # pprint (self.testnode.public_ips)
         pubip = self.testnode.public_ips[0]
 
         COMMAND = "cat /etc/*release*"
 
-        ssh = subprocess.Popen(["ssh", "%s@%s" % (self.clouduser, pubip), COMMAND],
-                               shell=False,
-                               stdout=subprocess.PIPE,
-                               stderr=subprocess.PIPE)
+        ssh = subprocess.Popen(
+            ["ssh", "%s@%s" % (self.clouduser, pubip), COMMAND],
+            shell=False,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE)
         result = ssh.stdout.readlines()
         if result == []:
             error = ssh.stderr.readlines()
-            print ("ERROR: %s" % error)
+            print("ERROR: %s" % error)
         else:
-            print ("RESULT:")
+            print("RESULT:")
             for line in result:
                 line = line.decode("utf-8")
-                print (line.strip("\n"))
+                print(line.strip("\n"))
 
         self.test_14_destroy()
         self.test_04_list_vm()
+
 
 class other:
 
@@ -284,15 +281,14 @@ class other:
 
         self.p.rename(name=self.name, destination=self.new_name)
 
-    #def test_01_stop(self):
+    # def test_01_stop(self):
     #    HEADING()
     #    self.stop(name=self.name)
 
-    #def test_01_suspend(self):
+    # def test_01_suspend(self):
     #    HEADING()
     #    self.p.suspend(name=self.name)
 
-
-    #def test_01_resume(self):
+    # def test_01_resume(self):
     #    HEADING()
     #    self.p.resume(name=self.name)

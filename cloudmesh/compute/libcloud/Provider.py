@@ -60,6 +60,19 @@ class Provider(ComputeNodeABC):
                     secret=cred["AZURE_SECRET_KEY"],
                     region=cred["AZURE_REGION"]
                 )
+            elif self.cloudtype == 'aws':
+
+                # IMAGE_ID = 'ami-c8052d8d'
+                # SIZE_ID = 't1.micro'
+                pprint(cred)
+                print(cred["region"])
+                self.driver = get_driver(
+                    Provider.ProviderMapper[self.cloudtype])
+
+                self.cloudman = self.driver(
+                    cred["EC2_ACCESS_ID"],
+                    cred["EC2_SECRET_KEY"],
+                    region=cred["region"])
         else:
             print("Specified provider not available")
             self.cloudman = None
@@ -100,8 +113,11 @@ class Provider(ComputeNodeABC):
             elif kind == 'flavor':
                 entry["created"] = entry["updated"] = str(datetime.utcnow())
             elif kind == 'image':
-                entry['created'] = entry['extra']['created']
-                entry['updated'] = entry['extra']['updated']
+                if self.cloudtype == 'openstack':
+                    entry['created'] = entry['extra']['created']
+                    entry['updated'] = entry['extra']['updated']
+                else:
+                    pass
 
             if "_uuid" in entry:
                 del entry["_uuid"]

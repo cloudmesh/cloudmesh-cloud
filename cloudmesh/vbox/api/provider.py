@@ -46,6 +46,7 @@ class VboxProvider:
         """
 
         def convert(data_line):
+
             entry = (' '.join(data_line.split())).split(' ')
             data = dotdict()
             data.id = entry[0]

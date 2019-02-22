@@ -72,15 +72,15 @@ cloudmesh:
         kind: aws
         version: TBD
       default:
-        region: 'us-west-2'
-        image: 'ami-0bbe6b35405ecebdb'
+        image: 'ami-0f65671a86f061fcd'
         size: 't2.micro'
-        EC2_PRIVATE_KEY_FILE_NAME: 'aws_cert'
-        EC2_SECURITY_GROUP: 'group1'
       credentials:
+        region: 'us-west-2'
+        EC2_SECURITY_GROUP: 'group1'
         EC2_ACCESS_ID: TBD
         EC2_SECRET_KEY: TBD
         EC2_PRIVATE_KEY_FILE_PATH: '~/.cloudmesh/aws_cert.pem'
+        EC2_PRIVATE_KEY_FILE_NAME: 'aws_cert'
     chameleon:
       cm:
         active: True

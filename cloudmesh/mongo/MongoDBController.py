@@ -82,13 +82,11 @@ class MongoInstaller(object):
         mkdir -p {MONGO_PATH}
         mkdir -p {MONGO_HOME}
         mkdir -p {MONGO_LOG}
-        wget -P /tmp/mongodb.tgz {MONGO_CODE}
+        wget -O /tmp/mongodb.tgz {MONGO_CODE}
         tar -zxvf /tmp/mongodb.tgz -C {LOCAL}/mongo --strip 1
+        echo \"export PATH={MONGO_HOME}/bin:$PATH\" >> ~/.bashrc
             """.format(**self.data)
         installer = Script.run(script)
-        SystemPath.add("{MONGO_HOME}/bin".format(**self.data))
-
-        # THIS IS BROKEN AS ITS A SUPBROCESS? '. ~/.bashrc'
 
     # noinspection PyUnusedLocal
     def darwin(self, brew=False):

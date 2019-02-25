@@ -76,6 +76,15 @@ class Config(object):
             else:
                 self.cloud = None
 
+    def credentials(self, kind, name):
+        """
+
+        :param kind: the first level of attributes after cloudmesh
+        :param name: the name of the resource
+        :return:
+        """
+        return self.data["cloudmesh"][kind][name]["credentials"]
+
     def set_debug_defaults(self):
         for name in ["trace", "debug"]:
             if name not in self.variable_database:

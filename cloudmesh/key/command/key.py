@@ -142,6 +142,7 @@ class KeyCommand(PluginCommand):
         arguments.source = arguments['--source']
         arguments.dir = arguments['--dir']
 
+
         if arguments.list and arguments.source == "git":
             # this is much simpler
             config = Config()
@@ -153,6 +154,14 @@ class KeyCommand(PluginCommand):
                                     order=["id", "name", "fingerprint"],
                                     header=["Id", "Name", "Fingerprint"])
                   )
+
+        elif arguments.list and arguments.source == "ssh":
+
+            sshkey = SSHkey()
+            print(Printer.flatwrite([sshkey],
+                                    sort_keys=("name"),
+                                    order=["name", "type", "fingerprint", "comment"],
+                                    header=["Name", "Type", "Fingerprint", "Comment"]))
 
 
         elif arguments['list']:

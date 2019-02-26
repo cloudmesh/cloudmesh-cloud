@@ -28,8 +28,8 @@ class KeyCommand(PluginCommand):
              key list [--format=FORMAT]
              key load [--format=FORMAT]
              key add [NAME] [--source=FILENAME]
-             key add [NAME] [--git]
-             key add [NAME] [--ssh]
+             key add [NAME] [--source=git]
+             key add [NAME] [--source=ssh]
              key get NAME [--format=FORMAT]
              key default --select
              key delete (NAMES | --select | --all) [--dryrun]
@@ -156,6 +156,7 @@ class KeyCommand(PluginCommand):
                   )
 
         elif arguments.list and arguments.source == "ssh":
+            # this is much simpler
 
             sshkey = SSHkey()
             print(Printer.flatwrite([sshkey],

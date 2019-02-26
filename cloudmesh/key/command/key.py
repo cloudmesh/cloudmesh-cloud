@@ -4,8 +4,10 @@ from cloudmesh.key.api.manager import Manager
 from cloudmesh.key.api.key import Key
 from cloudmesh.shell.command import PluginCommand
 from cloudmesh.shell.command import command
-
-
+from cloudmesh.management.configuration.config import Config
+from cloudmesh.common.Printer import Printer
+from cloudmesh.management.configuration.SSHkey import SSHkey
+from pprint import pprint
 
 class KeyCommand(PluginCommand):
 
@@ -126,14 +128,34 @@ class KeyCommand(PluginCommand):
 
         """
 
-        print(arguments)
+        pprint(arguments)
+
         invalid_names = ['tbd', 'none', "", 'id_rsa']
         m = Manager()
 
-        if arguments['list']:
-            _format = arguments['--format']
-            _source = arguments['--source']
-            _dir = arguments['--dir']
+
+
+
+        # if condition seems complex
+
+        arguments.format = arguments['--format']
+        arguments.source = arguments['--source']
+        arguments.dir = arguments['--dir']
+
+        if arguments.list and arguments.source == "git":
+            # this is much simpler
+            config = Config()
+            username = config["cloudmesh.profile.github"]
+            print("Username:", username)
+            keys = SSHkey().get_from_git(username)
+            print(Printer.flatwrite(keys,
+                                    sort_keys=("name"),
+                                    order=["id", "name", "fingerprint"],
+                                    header=["Id", "Name", "Fingerprint"])
+                  )
+
+
+        elif arguments['list']:
 
             if "--source" not in arguments and "--cloud" not in arguments:
                 arguments["--source"] = 'db'

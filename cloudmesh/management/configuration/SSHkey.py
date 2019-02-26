@@ -42,9 +42,7 @@ class SSHkey(dict):
         uri = "https://api.github.com/users/{user}/keys".format(user=user)
 
         content = requests.get(uri).json()
-        from pprint import pprint
-        pprint(content)
-        print("======")
+
         d = []
 
         for id in range(0, len(content)):
@@ -55,6 +53,7 @@ class SSHkey(dict):
             name = "{user}_git_{id}".format(user=user, id=id)
 
             thekey = {
+                'id': id,
                 'uri': uri,
                 'string': key,
                 'fingerprint': SSHkey._fingerprint(key),

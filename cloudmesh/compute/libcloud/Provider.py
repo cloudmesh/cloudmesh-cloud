@@ -372,7 +372,8 @@ class Provider(ComputeNodeABC):
         if self.cloudman:
             if self.cloudtype == "azure_asm":
                 #
-                # BUG: ex_cloud_service_name needs to be defined, explore the azure documentation n how to find it
+                # BUG: ex_cloud_service_name needs to be defined, explore the
+                # azure documentation n how to find it
                 #
                 entries = self.cloudman.list_nodes()
             elif self.cloudtype == "azure_arm":
@@ -431,8 +432,8 @@ class Provider(ComputeNodeABC):
         :param name: the name of the node
         :param image: the image used
         :param size: the size of the image
-        :param timeout: a timeout in seconds that is invoked in case the image does not boot.
-               The default is set to 3 minutes.
+        :param timeout: a timeout in seconds that is invoked in case the image
+                        does not boot. The default is set to 3 minutes.
         :param kwargs: additional arguments HEADING(c=".")ed along at time of boot
         :return:
         """

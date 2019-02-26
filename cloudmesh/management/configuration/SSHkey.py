@@ -14,7 +14,9 @@ from cloudmesh.management.configuration.config import Config
 class SSHkey(dict):
 
     def __init__(self):
+        self.load()
 
+    def load(self):
         self["profile"] = Config()["cloudmesh"]["profile"]
         self["path"] = path_expand(self["profile"]["publickey"])
 
@@ -30,6 +32,17 @@ class SSHkey(dict):
 
         self['comment'] = self['comment']
         self['source'] = 'ssh'
+
+    def set_permissions(self, path):
+        """
+        Sets the permissions of the path assuming the path is a public or private key
+        :param path:
+        :return:
+        """
+        # TODO: implement
+        # use python os.chmod
+        # work with students that do windows and find out how to do it in windows also
+        pass
 
     def get_from_git(self, user, keyname=None):
         """

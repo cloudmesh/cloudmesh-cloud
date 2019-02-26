@@ -12,23 +12,18 @@ from cloudmesh.management.configuration.SSHkey import SSHkey
 class TestName:
 
     def setup(self):
-        #self.name = "vm-test-vm4"
-        #self.p = Provider(name="chameleon")
-        pass
+        self.sshkey = SSHkey()
 
 
     def test_01_key(self):
         HEADING()
+        pprint(self.sshkey)
+        print(self.sshkey)
 
-        sshkey = SSHkey()
-
-        pprint(sshkey)
-        print(sshkey)
-
-        print(type(sshkey))
+        print(type(self.sshkey))
 
 
-        pprint(sshkey.__dict__)
+        pprint(self.sshkey.__dict__)
 
 
         #pprint(sshkey.key)
@@ -59,6 +54,19 @@ class TestName:
         print(key_parse("ssh-rsa somestringhere")[2])
         """
 
+
+    def test_02_git(self):
+        HEADING()
+        config = Config()
+        username = config["cloudmesh.profile.github"]
+        print ("Username:", username)
+        keys = self.sshkey.get_from_git(username)
+        pprint (keys)
+        print(Printer.flatwrite(keys,
+                            sort_keys=("name"),
+                            order=["name", "fingerprint"],
+                            header=["Name", "Fingerprint"])
+              )
 
 
 class other:

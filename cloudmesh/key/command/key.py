@@ -1,15 +1,16 @@
 from __future__ import print_function
 
+from pprint import pprint
+
+from cloudmesh.common.Printer import Printer
+from cloudmesh.common.parameter import Parameter
 from cloudmesh.key.api.manager import Manager
-from cloudmesh.key.api.key import Key
+from cloudmesh.management.configuration.SSHkey import SSHkey
+from cloudmesh.management.configuration.config import Config
 from cloudmesh.shell.command import PluginCommand
 from cloudmesh.shell.command import command
-from cloudmesh.management.configuration.config import Config
-from cloudmesh.common.Printer import Printer
-from cloudmesh.management.configuration.SSHkey import SSHkey
-from pprint import pprint
 from cloudmesh.shell.variables import Variables
-from cloudmesh.common.parameter import Parameter
+
 
 class KeyCommand(PluginCommand):
 
@@ -57,7 +58,7 @@ class KeyCommand(PluginCommand):
            Options:
               --dir=DIR                     the directory with keys [default: ~/.ssh]
               --format=FORMAT               the format of the output [default: table]
-              --source=SOURCE               the source for the keys [default: db]
+              --source=SOURCE               the source for the keys [default: cm]
               --username=USERNAME           the source for the keys [default: none]
               --name=KEYNAME                The name of a key
 
@@ -142,19 +143,18 @@ class KeyCommand(PluginCommand):
         invalid_names = ['tbd', 'none', "", 'id_rsa']
         m = Manager()
 
-
-
         if arguments.list and arguments.source == "git":
             # this is much simpler
             config = Config()
             username = config["cloudmesh.profile.github"]
             print("Username:", username)
             keys = SSHkey().get_from_git(username)
-            print(Printer.flatwrite(keys,
-                                    sort_keys=("name"),
-                                    order=["id", "name", "fingerprint"],
-                                    header=["Id", "Name", "Fingerprint"])
-                  )
+            print(Printer.flatwrite(
+                keys,
+                sort_keys=["name"],
+                order=["id", "name", "fingerprint"],
+                header=["Id", "Name", "Fingerprint"])
+            )
 
             return ""
 
@@ -162,12 +162,13 @@ class KeyCommand(PluginCommand):
             # this is much simpler
 
             sshkey = SSHkey()
-            print(Printer.flatwrite([sshkey],
-                                    sort_keys=("name"),
-                                    order=["name", "type", "fingerprint", "comment"],
-                                    header=["Name", "Type", "Fingerprint", "Comment"]))
+            print(Printer.flatwrite(
+                [sshkey],
+                sort_keys=["name"],
+                order=["name", "type", "fingerprint", "comment"],
+                header=["Name", "Type", "Fingerprint", "Comment"])
+            )
             return ""
-
 
         elif arguments.list and arguments.cloud:
 
@@ -191,47 +192,4 @@ class KeyCommand(PluginCommand):
 
             return ""
 
-
-
-        ## FROM HERE ON COMPLEX IF COULD BE MADE SIMPLER
-
-
-        elif arguments['list']:
-
-            if "--source" not in arguments and "--cloud" not in arguments:
-                arguments["--source"] = 'db'
-
-
-            if arguments['--cloud']:
-                print("cloud")
-
-
-            elif arguments['--source'] == 'ssh':
-                directory = arguments['--dir']
-                publicKey =Key.get_from_dir(directory,True)
-                print(publicKey)
-
-
-
-            elif arguments['--source'] in ['cm', 'cloudmesh', 'yaml']:
-                print(arguments['--source'])
-
-
-
-            elif arguments['--source'] in ['git']:
-                print(arguments['git'])
-
-
-
-            elif arguments['--source'] == 'db':
-                print(arguments['db'])
-
-
-
-        # if arguments.FILE:
-        #    print("option a")
-        #    m.list(arguments.FILE)
-
-        # elif arguments.list:
-        #    print("option b")
-        #    m.list("just calling list without parameter")
+        return ""

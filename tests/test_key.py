@@ -19,9 +19,7 @@ class TestName:
         HEADING()
         pprint(self.sshkey)
         print(self.sshkey)
-
         print(type(self.sshkey))
-
         pprint(self.sshkey.__dict__)
 
         assert self.sshkey.__dict__  is not None

@@ -124,7 +124,7 @@ class KeyCommand(PluginCommand):
         """
 
         print(arguments)
-
+        invalid_names = ['tbd', 'none', "", 'id_rsa']
         # m = Manager()
 
         # if arguments.FILE:

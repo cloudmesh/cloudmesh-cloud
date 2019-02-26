@@ -1,7 +1,10 @@
 from __future__ import print_function
 
+from cloudmesh.key.api.manager import Manager
+from cloudmesh.key.api.key import Key
 from cloudmesh.shell.command import PluginCommand
 from cloudmesh.shell.command import command
+
 
 
 class KeyCommand(PluginCommand):
@@ -125,7 +128,42 @@ class KeyCommand(PluginCommand):
 
         print(arguments)
         invalid_names = ['tbd', 'none', "", 'id_rsa']
-        # m = Manager()
+        m = Manager()
+
+        if arguments['list']:
+            _format = arguments['--format']
+            _source = arguments['--source']
+            _dir = arguments['--dir']
+
+            if "--source" not in arguments and "--cloud" not in arguments:
+                arguments["--source"] = 'db'
+
+
+            if arguments['--cloud']:
+                print("cloud")
+
+
+            elif arguments['--source'] == 'ssh':
+                directory = arguments['--dir']
+                publicKey =Key.get_from_dir(directory,True)
+                print(publicKey)
+
+
+
+            elif arguments['--source'] in ['cm', 'cloudmesh', 'yaml']:
+                print(arguments['--source'])
+
+
+
+            elif arguments['--source'] in ['git']:
+                print(arguments['git'])
+
+
+
+            elif arguments['--source'] == 'db':
+                print(arguments['db'])
+
+
 
         # if arguments.FILE:
         #    print("option a")

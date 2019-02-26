@@ -8,6 +8,8 @@ from cloudmesh.management.configuration.config import Config
 from cloudmesh.common.Printer import Printer
 from cloudmesh.management.configuration.SSHkey import SSHkey
 from pprint import pprint
+from cloudmesh.shell.variables import Variables
+from cloudmesh.common.parameter import Parameter
 
 class KeyCommand(PluginCommand):
 
@@ -25,7 +27,7 @@ class KeyCommand(PluginCommand):
              key list --cloud=CLOUDS [--format=FORMAT]
              key list --source=ssh [--dir=DIR] [--format=FORMAT]
              key list --source=git [--format=FORMAT] [--username=USERNAME]
-             key list [--format=FORMAT]
+             key list [NAMES] [--format=FORMAT]
              key load [--format=FORMAT]
              key add [NAME] [--source=FILENAME]
              key add [NAME] [--source=git]
@@ -77,6 +79,8 @@ class KeyCommand(PluginCommand):
                 key list --source=ssh  [--dir=DIR] [--format=FORMAT]
                     lists all keys in the directory. If the directory is not
                     specified the default will be ~/.ssh
+                key list NAMES
+                    lists all keys in the named virtual machines.
 
                The keys will be uploaded into cloudmesh with the add command
                under the given name. If the name is not specified the name
@@ -128,19 +132,16 @@ class KeyCommand(PluginCommand):
 
         """
 
+        arguments.cloud = arguments['--cloud']
+        arguments.format = arguments['--format']
+        arguments.source = arguments['--source']
+        arguments.dir = arguments['--dir']
+
         pprint(arguments)
 
         invalid_names = ['tbd', 'none', "", 'id_rsa']
         m = Manager()
 
-
-
-
-        # if condition seems complex
-
-        arguments.format = arguments['--format']
-        arguments.source = arguments['--source']
-        arguments.dir = arguments['--dir']
 
 
         if arguments.list and arguments.source == "git":
@@ -155,6 +156,8 @@ class KeyCommand(PluginCommand):
                                     header=["Id", "Name", "Fingerprint"])
                   )
 
+            return ""
+
         elif arguments.list and arguments.source == "ssh":
             # this is much simpler
 
@@ -163,6 +166,34 @@ class KeyCommand(PluginCommand):
                                     sort_keys=("name"),
                                     order=["name", "type", "fingerprint", "comment"],
                                     header=["Name", "Type", "Fingerprint", "Comment"]))
+            return ""
+
+
+        elif arguments.list and arguments.cloud:
+
+            clouds = Parameter.expand(arguments.cloud)
+
+            if len(clouds) == 0:
+                variables = Variables()
+                cloudname = variables['cloud']
+                clouds = [cloudname]
+
+            print("get the keys from the cloud(s):", clouds)
+
+            return ""
+
+        elif arguments.list and arguments.source == "db":
+
+            if arguments.NAMES:
+                names = Parameter.expand(arguments.NAMES)
+
+                print("find the keys of the following vms", names)
+
+            return ""
+
+
+
+        ## FROM HERE ON COMPLEX IF COULD BE MADE SIMPLER
 
 
         elif arguments['list']:

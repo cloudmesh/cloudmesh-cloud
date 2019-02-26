@@ -5,6 +5,7 @@ import struct
 from os.path import basename
 from cloudmesh.common.util import path_expand
 from pathlib import Path
+import requests
 
 from cloudmesh.management.configuration.config import Config
 
@@ -29,6 +30,48 @@ class SSHkey(dict):
 
         self['comment'] = self['comment']
         self['source'] = 'ssh'
+
+    def get_from_git(self, user, keyname=None):
+        """
+        gets the key from github
+
+        :param user: the github username
+        :return: an array of public keys
+        :rtype: list
+        """
+        uri = "https://api.github.com/users/{user}/keys".format(user=user)
+
+        content = requests.get(uri).json()
+        from pprint import pprint
+        pprint(content)
+        print("======")
+        d = []
+
+        for id in range(0, len(content)):
+            entry = content[id]
+            key = entry['key']
+            thekey = {}
+
+            name = "{user}_git_{id}".format(user=user, id=id)
+
+            thekey = {
+                'uri': uri,
+                'string': key,
+                'fingerprint': SSHkey._fingerprint(key),
+                'name': name,
+                'comment': name,
+                'cm_id': name,
+                'source': 'git',
+                'kind': 'key'
+            }
+
+            thekey["type"], thekey["key"], thekey["comment"] = SSHkey._parse(
+                key)
+
+            if thekey["comment"] is None:
+                thekey["comment"] = name
+            d.append(thekey)
+        return d
 
     def __str__(self):
         return self['string']

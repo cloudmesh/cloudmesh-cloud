@@ -178,3 +178,4 @@ class SSHkey(dict):
         keynamenew = "%s_%s" % (
             username, keyname.replace('.', '_').replace('@', '_'))
         return keynamenew
+

@@ -41,8 +41,10 @@ class KeyCommand(PluginCommand):
              key upload [NAMES] [VMS] [--dryrun]
              key group upload [--group=GROUPNAMES] [--cloud=CLOUDS] [--dryrun]
              key group add [--group=GROUPNAMES] [--cloud=CLOUDS] [--dryrun]
+             key group add --file=FILENAME
              key group delete [--group=GROUPNAMES] [NAMES] [--dryrun]
              key group list [--group=GROUPNAMES] [--format=FORMAT]
+             key group export --group=GROUNAMES --filename=FILENAME
 
 
            Arguments:
@@ -131,6 +133,32 @@ class KeyCommand(PluginCommand):
                 key group upload [GROUPNAMES] [CLOUDS] [--dryrun]
                     uploads the named groups to the specified clouds.
 
+               In some cases you may want to store the public keys in files. For
+               this reason we support the following commands.
+
+                key group add --group=GROUPNAME --file=FILENAME
+                    the command adds the keys to the given group. The keys are
+                    written in the files in yaml format.
+
+
+                key group export --group=GROUNAMES --filename=FILENAME
+                    the command exports the keys to the given group. The keys are
+                    written in the files in yaml format.
+
+
+                The yaml format is as follows:
+
+                cloudmesh:
+                  keys:
+                    NAMEOFKEY:
+                      name: NAMEOFKEY
+                      key: ssh-rsa AAAA..... comment
+                      group:
+                      - GROUPNAME
+                    ...
+
+                If a key is included in multiple groups they will be added
+                to the grouplist of the key
         """
 
         arguments.cloud = arguments['--cloud']
@@ -191,6 +219,7 @@ class KeyCommand(PluginCommand):
                 names = Parameter.expand(arguments.NAMES)
 
                 print("find the keys of the following vms", names)
+                print("the keys will be read from mongo")
 
             return ""
 

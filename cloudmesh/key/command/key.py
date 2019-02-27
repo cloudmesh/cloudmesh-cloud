@@ -162,6 +162,7 @@ class KeyCommand(PluginCommand):
             # this is much simpler
 
             sshkey = SSHkey()
+            print(sshkey)
             print(Printer.flatwrite(
                 [sshkey],
                 sort_keys=["name"],
@@ -173,6 +174,7 @@ class KeyCommand(PluginCommand):
         elif arguments.list and arguments.cloud:
 
             clouds = Parameter.expand(arguments.cloud)
+            print(clouds)
 
             if len(clouds) == 0:
                 variables = Variables()

@@ -10,6 +10,7 @@ from cloudmesh.management.configuration.config import Config
 from cloudmesh.shell.command import PluginCommand
 from cloudmesh.shell.command import command
 from cloudmesh.shell.variables import Variables
+from cloudmesh.compute.libcloud.Provider import  Provider
 
 
 class KeyCommand(PluginCommand):
@@ -201,13 +202,25 @@ class KeyCommand(PluginCommand):
         elif arguments.list and arguments.cloud:
 
             clouds = Parameter.expand(arguments.cloud)
+            print(clouds)
 
             if len(clouds) == 0:
                 variables = Variables()
                 cloudname = variables['cloud']
                 clouds = [cloudname]
+            cloudkey =[]
+            for cloud in clouds:
+                print(cloud)
+                provider = Provider(clouds)
+                cloudkey.append(provider.keys())
 
-            print("get the keys from the cloud(s):", clouds)
+            print(Printer.flatwrite(
+                [cloudkey],
+                sort_keys=["name"],
+                order=["name", "type", "fingerprint", "comment"],
+                header=["Name", "Type", "Fingerprint", "Comment"])
+            )
+
 
             return ""
 

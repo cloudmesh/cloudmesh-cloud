@@ -29,7 +29,6 @@ class Provider(ComputeNodeABC):
         """
         Initializes the provider. The default parameters are read from the configutation
         file that is defined in yaml format.
-
         :param name: The name of the provider as defined in the yaml file
         :param configuration: The location of the yaml configuration filw
         """
@@ -82,7 +81,6 @@ class Provider(ComputeNodeABC):
         """
         Libcloud returns an object or list of objects With the dict method
         this object is converted to a dict. Typically this method is used internally.
-
         :param elements: the elements
         :param kind: Kind is image, flavor, or node
         :return:
@@ -317,7 +315,6 @@ class Provider(ComputeNodeABC):
     def flavor(self, name=None):
         """
         Gest the flavor with a given name
-
         :param name: The aname of the flavor
         :return: The dict of the flavor
         """
@@ -418,7 +415,6 @@ class Provider(ComputeNodeABC):
     def reboot(self, name=None):
         """
         Reboot the node. NOT YET IMPLEMENTED.
-
         :param name: the name of the node
         :return: the dict of the node
         """
@@ -480,7 +476,6 @@ class Provider(ComputeNodeABC):
         #
         """
                     ex_attach_floating_ip_to_node(node, ip)
-
                     ex_detach_floating_ip_from_node(node, ip)
                     ex_delete_floating_ip(ip)
         """

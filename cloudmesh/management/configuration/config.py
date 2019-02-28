@@ -150,6 +150,3 @@ class Config(object):
         for key in keys[1:]:
             element = element[key]
         return element
-
-if __name__ == "__main__":
-    config = Config()

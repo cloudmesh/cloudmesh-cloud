@@ -20,6 +20,18 @@ from cloudmesh.common.util import banner
 
 class TestName:
 
+    def print_images(self):
+        images = self.p.images()
+        print(Printer.flatwrite(images,
+                                sort_keys=("name"),
+                                order=["name", "provider", "version"],
+                                header=["Name", "Provider", "Version"]))
+
+    def next_name(self):
+        self.name_generator.incr()
+        self.new_name = str(self.name_generator)
+        return self.new_name
+
     def setup(self):
         banner("setup", c="-")
         self.user = Config()["cloudmesh.profile.user"]
@@ -37,54 +49,35 @@ class TestName:
 
     def test_01_list_images(self):
         HEADING()
-        images = self.p.images()
-        pprint(images)
+        self.print_images()
 
-        #print(Printer.flatwrite(images,
-        #                        sort_keys=("name", "extra.minDisk"),
-        #                        order=["name", "extra.minDisk", "updated",
-        #                               "driver"],
-        #                        header=["Name", "MinDisk", "Updated", "Driver"])
-        #      )
+#    def test_03_delete_image(self):
+#        HEADING()
+#        name = "hashicorp/precise64"
+#        try:
+#            images = self.p.delete_image(name)
+#            print ("delete", name)
+#        except:
+#            print ("image", name, "nor found")
+#        self.print_images()
 
-
-class oooo:
-
-    def test_02_add_image(self):
-        HEADING()
-        name = "hashicorp/precise64"
-        try:
-            images = self.p.delete_image(name)
-            print ("delete", name)
-        except:
-            print ("image", name, "nor found")
-
-        images = self.p.add_image(name)
-        pprint(images)
-        print("====")
-        images = self.p.images()
-        pprint(images)
-
-
-
-class other:
-
-    def test_04_list_flavors(self):
-        HEADING()
-        flavors = self.p.flavors()
-        # pprint (flavors)
-
-        print(Printer.flatwrite(flavors,
-                                sort_keys=("name", "vcpus", "disk"),
-                                order=["name", "vcpus", "ram", "disk"],
-                                header=["Name", "VCPUS", "RAM", "Disk"])
-              )
+#    def test_03_add_image(self):
+#        HEADING()
+#        name = "hashicorp/precise64"
+#
+#        images = self.p.add_image(name)
+#        self.print_images()
 
     def test_04_list_vm(self):
         HEADING()
-        vms = self.p.list()
-        # pprint (vms)
 
+        name = self.next_name()
+
+        print ("Name", name)
+
+        vms = self.p.list()
+        pprint (vms)
+        '''
         print(Printer.flatwrite(vms,
                                 sort_keys=("name"),
                                 order=["name",
@@ -103,6 +96,21 @@ class other:
                                         "SSHKey",
                                         "Private ips",
                                         "Public ips"])
+              )
+        '''
+
+
+class other:
+
+    def test_04_list_flavors(self):
+        HEADING()
+        flavors = self.p.flavors()
+        # pprint (flavors)
+
+        print(Printer.flatwrite(flavors,
+                                sort_keys=("name", "vcpus", "disk"),
+                                order=["name", "vcpus", "ram", "disk"],
+                                header=["Name", "VCPUS", "RAM", "Disk"])
               )
 
     def test_05_list_secgroups(self):

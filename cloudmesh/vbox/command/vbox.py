@@ -7,7 +7,7 @@ from cloudmesh.common.dotdict import dotdict
 from cloudmesh.shell.command import PluginCommand
 from cloudmesh.shell.command import command
 from cloudmesh.cm4 import __version__
-from cloudmesh.vbox.api.provider import VboxProvider
+from cloudmesh.compute.virtualbox.Provider import Provider
 
 
 # from cm4.mongo.MongoDBController import MongoDBController
@@ -95,8 +95,8 @@ class VboxCommand(PluginCommand):
         # ok
         #
         def list_images():
-            images = VboxProvider().list_images()
-            _LIST_PRINT(images, arguments.format, order=["name", "provider", "date"])
+            images = Provider().images()
+            _LIST_PRINT(images, arguments.format, order=["name", "provider", "version"])
 
         #
         # ok
@@ -106,7 +106,7 @@ class VboxCommand(PluginCommand):
             try:
                 images = func(arguments.NAME)
                 print(images)
-                list_images()
+                images()
             except Exception as e:
                 print(e)
             return ""
@@ -141,18 +141,18 @@ class VboxCommand(PluginCommand):
         # ok
         #
         elif arguments.image and arguments.delete:
-            image_command(VboxProvider().delete_image)
+            image_command(Provider().delete_image)
         #
         # ok
         #
         elif arguments.image and arguments.put:
-            image_command(VboxProvider().add_image)
+            image_command(Provider().add_image)
 
         #
         # ok
         #
         elif arguments.image and arguments.find:
-            VboxProvider().find_image(arguments.KEYWORDS)
+            Provider().find_image(arguments.KEYWORDS)
             return ""
 
         #
@@ -160,7 +160,7 @@ class VboxCommand(PluginCommand):
         #
         elif arguments.vm and arguments.list:
 
-            provider = VboxProvider().nodes()
+            provider = Provider().nodes()
             _LIST_PRINT(provider,
                         arguments.format,
                         order=["name", "state", "id", "provider", "directory"])
@@ -187,13 +187,13 @@ class VboxCommand(PluginCommand):
             arguments.script = arguments["--script"] or d.script
             arguments.port = arguments["--port"] or d.port
 
-            server = VboxProvider()
+            server = Provider()
             server.create(**arguments)
 
         elif arguments.info:
 
             # arguments.NAME
-            d = VboxProvider().info(name=arguments.NAME)
+            d = Provider().info(name=arguments.NAME)
 
             result = Printer.write(d, output=arguments.format)
 
@@ -202,7 +202,7 @@ class VboxCommand(PluginCommand):
         elif arguments.ip:
 
             data = []
-            result = VboxProvider().execute(arguments.NAME, "ifconfig")
+            result = Provider().execute(arguments.NAME, "ifconfig")
             if result is not None:
                 lines = result.splitlines()[:-1]
                 for line in lines:
@@ -242,7 +242,7 @@ class VboxCommand(PluginCommand):
             arguments.script = arguments["--script"] or d.script
             arguments.port = arguments["--port"] or d.port
 
-            node = VboxProvider().boot(
+            node = Provider().boot(
                 name=arguments.NAME,
                 memory=arguments.memory,
                 image=arguments.image,
@@ -251,7 +251,7 @@ class VboxCommand(PluginCommand):
 
         elif arguments.delete:
 
-            result = VboxProvider().delete(name=arguments.NAME)
+            result = Provider().delete(name=arguments.NAME)
             print(result)
 
         elif arguments.ssh:
@@ -259,7 +259,7 @@ class VboxCommand(PluginCommand):
             if arguments.COMMAND is None:
                 os.system("cd {NAME}; vbox ssh {NAME}".format(**arguments))
             else:
-                result = VboxProvider().execute(arguments.NAME, arguments.COMMAND)
+                result = Provider().execute(arguments.NAME, arguments.COMMAND)
                 if result is not None:
                     lines = result.splitlines()[:-1]
                     for line in lines:

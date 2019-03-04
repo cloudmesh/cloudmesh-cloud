@@ -3,12 +3,12 @@ from cloudmesh.management.configuration.config import Config
 from cloudmesh.management.configuration.name import Name
 from cloudmesh.management.configuration.counter import Counter
 from cloudmesh.mongo.CmDatabase import CmDatabase
-from deprecated.draft.vm import AzureProvider
-from deprecated.draft.vm.api.Aws import AwsProvider
-from deprecated.draft.openstack import OpenstackCM
+
+from cloudmesh.compute.virtualbox.Provider import Provider as VboxProvider
+from cloudmesh.compute.libcloud import Provider as LibcloudProvider
 from cloudmesh.abstractclass import ComputeNodeABC
 from cloudmesh.mongo.DataBaseDecorator import DatabaseUpdate
-from cloudmesh.vbox.api.provider import VboxProvider
+
 
 #
 # if name is none, take last name from mongo, apply to last started vm
@@ -24,11 +24,11 @@ class Vm(ComputeNodeABC):
         super().__init__(cloud, self.config)
 
         if self.kind == 'azure':
-            self.provider = AzureProvider(self.config)
+            self.provider = LibcloudProvider(self.config)
         elif self.kind == 'aws':
-            self.provider = AwsProvider(self.config)
+            self.provider = LibcloudProvider(self.config)
         elif self.kind == 'vm':
-            self.provider = OpenstackCM("chameleon")
+            self.provider = LibcloudProvider("chameleon")
         elif self.kind == "vbox":   # not sure about vbox vs vagrant in vbox provider
             self.provider = VboxProvider("vagrant")
         else:

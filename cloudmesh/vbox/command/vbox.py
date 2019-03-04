@@ -235,6 +235,8 @@ class VboxCommand(PluginCommand):
 
             d = defaults()
 
+            pprint (d)
+
             arguments.memory = arguments["--memory"] or d.memory
             arguments.image = arguments["--image"] or d.image
             arguments.script = arguments["--script"] or d.script

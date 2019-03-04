@@ -30,7 +30,7 @@ class KeyCommand(PluginCommand):
              key list --source=ssh [--dir=DIR] [--format=FORMAT]
              key list --source=git [--format=FORMAT] [--username=USERNAME]
              key list [NAMES] [--format=FORMAT]
-             key load [--format=FORMAT]
+             key load --filename=FILENAME [--format=FORMAT]
              key add [NAME] [--source=FILENAME]
              key add [NAME] [--source=git]
              key add [NAME] [--source=ssh]
@@ -178,11 +178,12 @@ class KeyCommand(PluginCommand):
             username = config["cloudmesh.profile.github"]
             print("Username:", username)
             keys = SSHkey().get_from_git(username)
+            pprint(keys)
             print(Printer.flatwrite(
                 keys,
                 sort_keys=["name"],
-                order=["id", "name", "fingerprint"],
-                header=["Id", "Name", "Fingerprint"])
+                order=["id", "name", "fingerprint", "source"],
+                header=["Id", "Name", "Fingerprint", "Source"])
             )
 
             return ""

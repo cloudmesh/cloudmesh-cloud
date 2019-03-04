@@ -423,37 +423,8 @@ class VboxProvider:
         link = "{location}?utf8=%E2%9C%93&sort=downloads&provider=&q=\"{key}\"".format(**d)
         webbrowser.open(link, new=2, autoraise=True)
 
-    @classmethod
-    def add_image(cls, name=None):
-        result = ""
-        if name is None:
-            pass
-            return "ERROR: please specify an image name"
-            # read name form config
-        else:
-            try:
-                # result = Shell.execute("vagrant", ["box", "add", name])
-                os.system("vagrant box add {name}".format(name=name))
-            except Exception as e:
-                print(e)
 
-            return result
 
-    @classmethod
-    def delete_image(cls, name=None):
-        result = ""
-        if name is None:
-            pass
-            return "ERROR: please specify an image name"
-            # read name form config
-        else:
-            try:
-                # result = Shell.execute("vagrant", ["box", "remove", name])
-                os.system("vagrant box remove {name}".format(name=name))
-            except Exception as e:
-                print(e)
-
-            return result
 
     #
     # ok. moved

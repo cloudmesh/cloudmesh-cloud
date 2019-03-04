@@ -1,10 +1,74 @@
 from cloudmesh.abstractclass.ComputeNodeABC import ComputeNodeABC
-
+from pprint import pprint
+from cloudmesh.common.Shell import Shell
+from cloudmesh.common.dotdict import dotdict
+from datetime import datetime
+import os
 
 class Provider(ComputeNodeABC):
 
     def __init__(self, name=None, configuration="~/.cloudmesh/.cloudmesh4.yaml"):
         pass
+
+    def images(self):
+        def convert(data_line):
+            data_line = data_line.replace("(", ",")
+            data_line = data_line.replace(")", ",")
+            data_entry = data_line.split(",")
+            data = dotdict()
+            data.name = data_entry[0].strip()
+            data.provider = data_entry[1].strip()
+            data.comment = data_entry[2].strip()
+            return data
+
+        result = Shell.execute("vagrant box list")
+
+        pprint(result)
+
+        if "There are no installed boxes" in result:
+            return None
+        else:
+            result = result.split("\n")
+        lines = []
+        for line in result:
+            entry = convert(line)
+            if "date" in entry:
+                date = entry["date"]
+                # "20181203.0.1"
+                #entry["date"] = datetime.strptime(date, '%Y%m%d.%H.%M')
+            lines.append(entry)
+
+        return lines
+
+    def delete_image(self, name=None):
+        result = ""
+        if name is None:
+            pass
+            return "ERROR: please specify an image name"
+            # read name form config
+        else:
+            try:
+                # result = Shell.execute("vagrant", ["box", "remove", name])
+                result = Shell.vagrant("box remove {name}".format(name))
+            except Exception as e:
+                print(e)
+
+            return result
+
+    def add_image(self, name=None):
+        result = ""
+        if name is None:
+            pass
+            return "ERROR: please specify an image name"
+            # read name form config
+        else:
+            try:
+                # result = Shell.execute("vagrant", ["box", "add", name])
+                result = Shell.vagrant(["box", "add", name, "--provider",  "virtualbox"])
+            except Exception as e:
+                print(e)
+
+            return result
 
     def start(self, name):
         """

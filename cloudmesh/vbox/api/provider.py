@@ -10,9 +10,26 @@ from cloudmesh.common.console import Console
 from cloudmesh.mongo import MongoDBController
 from datetime import datetime
 
+"""
+is vagrant up todate
+
+==> vagrant: A new version of Vagrant is available: 2.2.4 (installed version: 2.2.2)!
+==> vagrant: To upgrade visit: https://www.vagrantup.com/downloads.html
+"""
+
+
 
 # noinspection PyUnusedLocal
 class VboxProvider:
+
+    def _check_version(self, r):
+        """
+        checks if vargarnt version is up to date
+
+        :return:
+        """
+        return "A new version of Vagrant is available" not in r
+
 
     def __init__(self, cloud=None, config=None):
 
@@ -439,7 +456,7 @@ class VboxProvider:
             return result
 
     #
-    # ok
+    # ok. moved
     #
     @classmethod
     def list_images(cls):

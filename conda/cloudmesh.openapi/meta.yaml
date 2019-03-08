@@ -1,0 +1,21 @@
+package:
+  name: cloudmesh.openapi
+  version: 1.0
+
+source:
+  git_url: https://github.com/cloudmesh/cloudmesh.openapi.git
+
+build:
+  number: 0
+
+requirements:
+  build:
+    - python
+    - setuptools
+    - pip
+    - cloudmesh.cmd5
+
+  run:
+    - psutil
+    - pygments
+    - cloudmesh.cmd5

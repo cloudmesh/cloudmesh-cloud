@@ -12,10 +12,6 @@ requirements:
   build:
     - python
     - pyyaml
-    - cloudmesh.common
-    - cloudmesh.cmd5
-    - cloudmesh.sys
-    - cloudmesh.openapi
     - docopt
     - requests
 

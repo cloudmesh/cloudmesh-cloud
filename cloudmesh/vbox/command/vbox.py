@@ -115,6 +115,8 @@ class VboxCommand(PluginCommand):
         # ok
         #
         if arguments.version:
+            p = Provider()
+
             versions = {
                 "cm": {
                     "attribute": "cm",
@@ -124,7 +126,7 @@ class VboxCommand(PluginCommand):
                 "vbox": {
                     "attribute": "vbox",
                     "description": "Vagrant Version",
-                    "version": "TBD"  # cloudmesh.vbox.api.version(),
+                    "version": p.version()
                 }
             }
             result = Printer.write(versions,

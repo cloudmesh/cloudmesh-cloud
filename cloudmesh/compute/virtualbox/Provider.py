@@ -3,7 +3,11 @@ from pprint import pprint
 from cloudmesh.common.Shell import Shell
 from cloudmesh.common.dotdict import dotdict
 from datetime import datetime
-import os
+import io
+import time
+import subprocess
+import sys
+import shlex
 
 import os
 import textwrap
@@ -26,6 +30,17 @@ is vagrant up todate
 
 class Provider(ComputeNodeABC):
 
+    def run_command(self, command):
+        process = subprocess.Popen(shlex.split(command), stdout=subprocess.PIPE)
+        while True:
+            output = process.stdout.readline()
+            if output == '' and process.poll() is not None:
+                break
+            if output:
+                print(output.strip().decode("utf-8"))
+        rc = process.poll()
+        return rc
+
     def __init__(self, name=None, configuration="~/.cloudmesh/.cloudmesh4.yaml"):
         pass
 
@@ -40,6 +55,13 @@ class Provider(ComputeNodeABC):
         # BUG: Naturally the following is wrong as it depends on the name.
         #
         # super().__init__("vagrant", config)
+
+    def version(self):
+        result = Shell.execute("vagrant --version", shell=True)
+        txt, version = result.split(" ")
+        if "A new version of Vagrant is available" in result:
+            raise ("Vagrant is outdated. Please doenload a new version of vagrant")
+        return version
 
     def images(self):
         def convert(data_line):
@@ -63,8 +85,6 @@ class Provider(ComputeNodeABC):
             entry = convert(line)
             if "date" in entry:
                 date = entry["date"]
-                # "20181203.0.1"
-                #entry["date"] = datetime.strptime(date, '%Y%m%d.%H.%M')
             lines.append(entry)
 
         return lines
@@ -85,6 +105,10 @@ class Provider(ComputeNodeABC):
             return result
 
     def add_image(self, name=None):
+
+
+        command = "vagrant box add {name} --provider virtualbox".format(name=name)
+
         result = ""
         if name is None:
             pass
@@ -93,8 +117,9 @@ class Provider(ComputeNodeABC):
         else:
             try:
                 command = "vagrant box add {name} --provider virtualbox".format(name=name)
-                print ("AAAA", command)
-                result = Shell.execute(command, shell=True)
+                self.run_command(command)
+                #print ("AAAA", command)
+                #result = Shell.execute(command, shell=True)
             except Exception as e:
                 print(e)
                 print(result)

@@ -7,6 +7,7 @@ from cloudmesh.batch.api.Batch import SlurmCluster
 
 # from cloudmesh.batch.api.manager import Manager
 
+# TODO does docopts allow to break line in multilpe?
 class BatchCommand(PluginCommand):
 
     # see also https://github.com/cloudmesh/client/blob/master/cloudmesh_client/shell/plugins/HpcCommand.py
@@ -17,7 +18,16 @@ class BatchCommand(PluginCommand):
         ::
 
           Usage:
-            batch job create JOB_NAME --script=SLURM_SCRIPT_PATH --input-type=INPUT_TYPE --cluster=CLUSTER_NAME --job-script-path=SCRIPT_PATH --remote-path=REMOTE_PATH --local-path=LOCAL_PATH [--argfile-path=ARGUMENT_FILE_PATH] [--outfile-name=OUTPUT_FILE_NAME] [--suffix=SUFFIX] [--overwrite]
+            batch job create JOB_NAME
+                  --script=SLURM_SCRIPT_PATH
+                  --input-type=INPUT_TYPE
+                  --cluster=CLUSTER_NAME
+                  --job-script-path=SCRIPT_PATH
+                  --remote-path=REMOTE_PATH
+                  --local-path=LOCAL_PATH
+                  [--argfile-path=ARGUMENT_FILE_PATH]
+                  [--outfile-name=OUTPUT_FILE_NAME]
+                  [--suffix=SUFFIX] [--overwrite]
             batch job run JOB_NAME
             batch fetch JOB_NAME
             batch test CLUSTER_NAME
@@ -33,6 +43,7 @@ class BatchCommand(PluginCommand):
 
           Arguments:
               FILE   a file name
+              INPUT_TYPE  tbd
 
           Options:
               -f      specify the file
@@ -51,6 +62,8 @@ class BatchCommand(PluginCommand):
             #
             slurm_manager = SlurmCluster(debug=debug)
 
+            # dont use print but use ,Consile.msg(), Consile.error(), Console.ok()
+
             if arguments.job and arguments.create and arguments.get("JOB_NAME"):
                 job_name = arguments.get("JOB_NAME")
                 slurm_script_path = arguments.get("--script")
@@ -63,6 +76,8 @@ class BatchCommand(PluginCommand):
                 job_script_path = arguments.get("--job-script-path")
                 remote_path = arguments.get("--remote-path")
                 local_path = arguments.get("--local-path")
+
+                # TODO separate, make its own function?
                 random_suffix = '_' + str(datetime.now()).replace('-', '').replace(' ', '_').replace(':', '')[
                                       0:str(datetime.now()).replace('-', '').replace(' ', '_').replace(':',
                                                                                                        '').index(

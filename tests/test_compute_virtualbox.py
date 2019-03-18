@@ -22,10 +22,11 @@ class TestName:
 
     def print_images(self):
         images = self.p.images()
-        print(Printer.flatwrite(images,
-                                sort_keys=("name"),
-                                order=["name", "provider", "version"],
-                                header=["Name", "Provider", "Version"]))
+        print(Printer.flatwrite(
+            images,
+            sort_keys=("name"),
+            order=["name", "provider", "version"],
+            header=["Name", "Provider", "Version"]))
 
     def next_name(self):
         self.name_generator.incr()
@@ -46,29 +47,34 @@ class TestName:
         self.name_generator.incr()
         self.new_name = str(self.name_generator)
         self.p = Provider(name="vbox")
+        self.image_name = "generic/ubuntu1810"
 
-    def test_01_list_images(self):
+
+    def test_01_name(self):
+        HEADING()
+        print (self.name)
+        assert self.name  == "exp-grp-{user}-vm-1".format(user=self.user)
+
+    def test_02_list_images(self):
         HEADING()
         self.print_images()
 
-#    def test_03_delete_image(self):
-#        HEADING()
-#        name = "hashicorp/precise64"
-#        try:
-#            images = self.p.delete_image(name)
-#            print ("delete", name)
-#        except:
-#            print ("image", name, "nor found")
-#        self.print_images()
+    def test_03_delete_image(self):
+        HEADING()
+        name = "generic/ubuntu1810"
+        try:
+            images = self.p.delete_image(self.image_name)
+            print ("delete", self.image_name)
+        except:
+            print ("image", self.image_name, "nor found")
+        self.print_images()
 
-#    def test_03_add_image(self):
-#        HEADING()
-#        name = "hashicorp/precise64"
-#
-#        images = self.p.add_image(name)
-#        self.print_images()
+    def test_04_add_image(self):
+        HEADING()
+        images = self.p.add_image(self.image_name)
+        self.print_images()
 
-    def test_04_list_vm(self):
+    def test_05_list_vm(self):
         HEADING()
 
         name = self.next_name()

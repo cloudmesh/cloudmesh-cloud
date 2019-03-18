@@ -5,7 +5,7 @@ import ntpath
 import time
 from cloudmesh.management.configuration.config import Config
 from cloudmesh.management.configuration.generic_config import GenericConfig
-
+from cloudmesh.common.util import path_expand
 
 # noinspection PyPep8
 class SlurmCluster(object):
@@ -58,27 +58,34 @@ class SlurmCluster(object):
                 list(self.batch_config.get('job-metadata').keys()) and overwrite is False:
             raise RuntimeError("The job {} exists in the configuration file, if you want to overwrite the job, \
             use --overwrite argument.".format(job_name))
+
         slurm_cluster = self.cm_config.get('cloudmesh').get('cluster')[slurm_cluster_name]
         tmp_cluster = {slurm_cluster_name: dict(slurm_cluster)}
         self.batch_config.deep_set(['slurm_cluster'], tmp_cluster)
-        job_metadata = {job_name: {}}
-        job_metadata[job_name]['suffix'] = suffix
-        job_metadata[job_name]['slurm_cluster_name'] = slurm_cluster_name
-        job_metadata[job_name]['input_type'] = input_type
-        job_metadata[job_name]['raw_remote_path'] = remote_path
-        job_metadata[job_name]['slurm_script_path'] = os.path.abspath(slurm_script_path)
-        job_metadata[job_name]['job_script_path'] = os.path.abspath(job_script_path)
-        job_metadata[job_name]['argfile_path'] = os.path.abspath(argfile_path)
-        job_metadata[job_name]['argfile_name'] = ntpath.basename(argfile_path)
-        job_metadata[job_name]['script_name'] = ntpath.basename(job_script_path)
-        job_metadata[job_name]['slurm_script_name'] = ntpath.basename(slurm_script_path)
-        job_metadata[job_name]['remote_path'] = os.path.join(remote_path, 'job' + suffix, '')
-        job_metadata[job_name]['remote_script_path'] = os.path.join(job_metadata[job_name]['remote_path'],
-                                                                    job_metadata[job_name]['script_name'])
-        job_metadata[job_name]['remote_slurm_script_path'] = os.path.join(job_metadata[job_name]['remote_path'],
-                                                                          job_metadata[job_name]['slurm_script_name'])
-        job_metadata[job_name]['local_path'] = local_path
-        self.job_metadata = job_metadata[job_name]
+
+        job = {
+            'suffix': suffix,
+            'slurm_cluster_name': slurm_cluster_name,
+            'input_type': input_type,
+            'raw_remote_path': remote_path,
+            'slurm_script_path': os.path.abspath(slurm_script_path),
+            'job_script_path': os.path.abspath(job_script_path),
+            'argfile_path': os.path.abspath(argfile_path),
+            'argfile_name': ntpath.basename(argfile_path),
+            'script_name': ntpath.basename(job_script_path),
+            'slurm_script_name': ntpath.basename(slurm_script_path),
+            'remote_path': os.path.join(remote_path, 'job' + suffix)}
+
+        job['remote_script_path'] = os.path.join(job['remote_path'], job['script_name'])
+        job['remote_slurm_script_path'] = os.path.join(job['remote_path'], job['slurm_script_name'])
+        job['local_path'] = local_path
+
+        job_metadata = {job_name: job}
+
+
+        self.job_metadata = job
+
+
         self.batch_config.deep_set(['job-metadata'], job_metadata)
 
     @staticmethod
@@ -104,16 +111,19 @@ class SlurmCluster(object):
         :return:
         """
         dest_node_info = self.slurm_cluster
+        path = path_expand(dest_node_info['credentials']['sshconfigpath'])
         dest_job_id = job_id
-        ssh_caller = lambda *x: self._ssh(dest_node_info['name'], os.path.expanduser(dest_node_info['credentials'] \
-                                                                                         ['sshconfigpath']), *x)
-        scp_caller = lambda *x: self._scp(dest_node_info['name'], os.path.expanduser(dest_node_info['credentials'] \
-                                                                                         ['sshconfigpath']), *x)
+        ssh_caller = lambda *x: self._ssh(dest_node_info['name'], path, *x)
+        scp_caller = lambda *x: self._scp(dest_node_info['name'], path, *x)
+        #
+        # use the qstat from cloudmesh, we have a whole library for that
+        #
         ps_output = ssh_caller("qstat -u $USER | grep %s" % job_id)
         if len(ps_output) == 0 or ' c ' in ps_output.lower():
 
             if not os.path.exists(job_metadata['local_path']):
                 os.makedirs(job_metadata['local_path'])
+            # TODO: REPLACE WITH .format
             scp_caller('-r', '%s:%s' % (dest_node_info['name'], job_metadata['remote_path']),
                        os.path.join(job_metadata['local_path'], ''))
             os.remove(os.path.join(job_metadata['local_path'],
@@ -127,6 +137,7 @@ class SlurmCluster(object):
                                        os.path.basename(os.path.normpath(job_metadata['remote_path'])),
                                        job_metadata['argfile_name']))
             all_job_ids.remove(dest_job_id)
+            # TODO: REPLACE WITH .format
             print("Results collected from %s for jobID %s" % (dest_node_info['name'], dest_job_id))
 
     @staticmethod
@@ -143,6 +154,12 @@ class SlurmCluster(object):
         if type(args[-1]) == bool:
             hide_errors_flag = True
             args = args[:-1]
+        #
+        # should we use cloudmesh.common.Shell
+        # shoudl we have a better version of that
+        #
+        # (stdout, stderr) = SimpleShell(...)
+        #
         ssh = subprocess.Popen(["ssh", hostname, '-F', sshconfigpath, *args],
                                stdout=subprocess.PIPE,
                                stderr=subprocess.PIPE)
@@ -150,6 +167,7 @@ class SlurmCluster(object):
         if not result:
             error = ssh.stderr.readlines()
             if len(error) > 0 and hide_errors_flag == False:
+                # TODO: REPLACE WITH .format
                 print("ERROR in host %s: %s" % (hostname, error))
             return []
         else:
@@ -175,6 +193,7 @@ class SlurmCluster(object):
         if not middle_result:
             error = ssh.stderr.readlines()
             if len(error) > 0:
+
                 print("ERROR in host %s: %s" % (hostname, error))
 
     @staticmethod
@@ -313,10 +332,13 @@ class SlurmCluster(object):
         all_job_ids = Manager().list()
         cluster_name = job_metadata['slurm_cluster_name']
         slurm_cluster = self.batch_config.get('slurm_cluster').get(cluster_name)
-        ssh_caller = lambda *x: self._ssh(slurm_cluster['name'], os.path.expanduser(slurm_cluster['credentials'] \
-                                                                                        ['sshconfigpath']), *x)
-        scp_caller = lambda *x: self._scp(slurm_cluster['name'], os.path.expanduser(slurm_cluster['credentials'] \
-                                                                                        ['sshconfigpath']), *x)
+        path = path_expand(slurm_cluster['credentials']['sshconfigpath'])
+
+        ssh_caller = lambda *x: self._ssh(slurm_cluster['name'], path, *x)
+        scp_caller = lambda *x: self._scp(slurm_cluster['name'], path, *x)
+
+
+        # TODO replace with .format
         ssh_caller('cd %s && mkdir job%s' % (job_metadata['raw_remote_path'], job_metadata['suffix']), True)
         scp_caller(job_metadata['slurm_script_path'],
                    '%s:%s' % (slurm_cluster['name'], job_metadata['remote_slurm_script_path']))
@@ -343,6 +365,7 @@ class SlurmCluster(object):
         :param value: value of that parameter to be set
         :return:
         """
+        # TODO: .format see if .format(**local) works
         if target == 'slurm-cluster':
             self.batch_config.deep_set(['slurm_cluster', name, parameter], value)
             print("slurm-cluster parameter {} set to {} successfully.".format(parameter, value))

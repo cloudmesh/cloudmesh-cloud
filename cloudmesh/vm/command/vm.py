@@ -165,6 +165,10 @@ class VmCommand(PluginCommand):
 
             Quoting commands:
                 cm vm login gvonlasz-004 --command=\"uname -a\"
+
+            Limitations:
+
+                Azure: rename is not supported
         """
 
         def map_parameters(arguments, *args):
@@ -399,7 +403,7 @@ class VmCommand(PluginCommand):
         elif arguments.rename:
 
             print("rename the vm")
-
+            
             try:
                 oldnames = Parameter.expand(arguments["OLDNAMES"])
                 newnames = Parameter.expand(arguments["NEWNAMES"])

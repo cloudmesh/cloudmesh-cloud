@@ -162,7 +162,7 @@ class VboxCommand(PluginCommand):
         #
         elif arguments.vm and arguments.list:
 
-            provider = Provider().nodes()
+            provider = Provider().vagrant_nodes()
             _LIST_PRINT(provider,
                         arguments.format,
                         order=["name", "state", "id", "provider", "directory"])

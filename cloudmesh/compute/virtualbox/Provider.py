@@ -50,6 +50,27 @@ class Provider(ComputeNodeABC):
         entry["cloud"] = self.cloud
         return entry
 
+    output = {
+        'vm': {
+            'order':["vagrant.name",
+                     "vagrant.cloud",
+                     "vbox.name",
+                     "vagrant.id",
+                     "vagrant.provider",
+                     "vagrant.state",
+                     "vagrant.hostname"],
+            'header': ["Name",
+                       "Cloud",
+                       "Vbox",
+                       "Id",
+                       "Provider",
+                       "State",
+                       "Hostname"]
+        },
+        'image': None,
+        'flavor': None
+    }
+
     def __init__(self, name=None, configuration="~/.cloudmesh/.cloudmesh4.yaml"):
         self.config = Config()
         conf = Config(configuration)["cloudmesh"]

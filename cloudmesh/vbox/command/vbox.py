@@ -115,6 +115,8 @@ class VboxCommand(PluginCommand):
         # ok
         #
         if arguments.version:
+            p = Provider()
+
             versions = {
                 "cm": {
                     "attribute": "cm",
@@ -124,7 +126,7 @@ class VboxCommand(PluginCommand):
                 "vbox": {
                     "attribute": "vbox",
                     "description": "Vagrant Version",
-                    "version": "TBD"  # cloudmesh.vbox.api.version(),
+                    "version": p.version()
                 }
             }
             result = Printer.write(versions,
@@ -160,7 +162,7 @@ class VboxCommand(PluginCommand):
         #
         elif arguments.vm and arguments.list:
 
-            provider = Provider().nodes()
+            provider = Provider().vagrant_nodes()
             _LIST_PRINT(provider,
                         arguments.format,
                         order=["name", "state", "id", "provider", "directory"])

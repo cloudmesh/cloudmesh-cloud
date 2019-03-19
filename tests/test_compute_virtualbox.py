@@ -16,16 +16,23 @@ from cloudmesh.management.configuration.SSHkey import SSHkey
 from cloudmesh.management.configuration.name import Name
 from cloudmesh.mongo.CmDatabase import CmDatabase
 from cloudmesh.common.util import banner
-
+from pathlib import Path
+from cloudmesh.common.util import path_expand
 
 class TestName:
 
+    image_test = False
+    vbox_version = '6.0.4'
+    image_name = "generic/ubuntu1810"
+    size=1024
+
     def print_images(self):
         images = self.p.images()
-        print(Printer.flatwrite(images,
-                                sort_keys=("name"),
-                                order=["name", "provider", "version"],
-                                header=["Name", "Provider", "Version"]))
+        print(Printer.flatwrite(
+            images,
+            sort_keys=("name"),
+            order=["name", "provider", "version"],
+            header=["Name", "Provider", "Version"]))
 
     def next_name(self):
         self.name_generator.incr()
@@ -47,58 +54,112 @@ class TestName:
         self.new_name = str(self.name_generator)
         self.p = Provider(name="vbox")
 
-    def test_01_list_images(self):
+
+    def test_01_version(self):
+        HEADING()
+        r = self.p.version()
+        pprint(r)
+        assert self.vbox_version == r["virtualbox"]["extension"]["version"]
+        assert self.vbox_version == r["virtualbox"]["version"]
+
+
+    def test_02_list_os(self):
+        HEADING()
+        ostypes = self.p.list_os()
+        print(Printer.write(
+            ostypes,
+            order=["id", "64_bit", "description", "family_descr", "family_id"],
+            header=["id", "64_bit", "description", "family_descr", "family_id"]))
+
+
+    def test_03_name(self):
+        HEADING()
+        print (self.name)
+        assert self.name  == "exp-grp-{user}-vm-1".format(user=self.user)
+
+    def test_04_list_images(self):
         HEADING()
         self.print_images()
 
-#    def test_03_delete_image(self):
-#        HEADING()
-#        name = "hashicorp/precise64"
-#        try:
-#            images = self.p.delete_image(name)
-#            print ("delete", name)
-#        except:
-#            print ("image", name, "nor found")
-#        self.print_images()
+    def test_05_delete_image(self):
+        HEADING()
+        if self.image_test:
+            name = "generic/ubuntu1810"
+            try:
+                images = self.p.delete_image(self.image_name)
+                print ("delete", self.image_name)
+            except:
+                print ("image", self.image_name, "nor found")
+            self.print_images()
+        else:
+            print("not executed as image_test is not True. ok")
 
-#    def test_03_add_image(self):
-#        HEADING()
-#        name = "hashicorp/precise64"
-#
-#        images = self.p.add_image(name)
-#        self.print_images()
+    def test_06_add_image(self):
+        HEADING()
+        if self.image_test:
+            images = self.p.add_image(self.image_name)
+            print("I", images)
+            self.print_images()
+            assert images.status == 0
+        else:
+            print("not executed as image_test is not True. ok")
 
-    def test_04_list_vm(self):
+    def test_07_list_vm(self):
+        HEADING()
+
+        vms = self.p.info()
+        pprint (vms)
+        print(Printer.flatwrite(vms,
+                                order=["vagrant.name",
+                                       "vbox.name",
+                                       "vagrant.id",
+                                       "vagrant.provider",
+                                       "vagrant.state",
+                                       "vagrant.hostname"],
+                                header=["name",
+                                        "vbox",
+                                        "id",
+                                        "provider",
+                                        "state",
+                                        "hostname"]))
+
+
+
+    def test_10_create(self):
         HEADING()
 
         name = self.next_name()
 
         print ("Name", name)
 
-        vms = self.p.list()
-        pprint (vms)
-        '''
-        print(Printer.flatwrite(vms,
-                                sort_keys=("name"),
-                                order=["name",
-                                       "state",
-                                       "extra.task_state",
-                                       "extra.vm_state",
-                                       "extra.userId",
-                                       "extra.key_name",
-                                       "private_ips",
-                                       "public_ips"],
-                                header=["Name",
-                                        "State",
-                                        "Task state",
-                                        "VM state",
-                                        "User Id",
-                                        "SSHKey",
-                                        "Private ips",
-                                        "Public ips"])
-              )
-        '''
+        self.p.create(name=self.name,
+                      image=self.image_name,
+                      size=self.size,
+                      # username as the keypair name based on
+                      # the key implementation logic
+                      ex_keyname=self.user,
+                      ex_security_groups=['default'])
 
+
+        directory = Path(path_expand("~/.cloudmesh/vagrant/exp-grp-gregor-vm-1"))
+
+        assert directory.is_dir()
+
+
+        time.sleep(5)
+        nodes = self.p.list()
+        pprint(nodes)
+
+        node = self.p.find(nodes, name=self.name)
+        pprint(node)
+
+        nodes = self.p.list(raw=False)
+        for node in nodes:
+            if node.name == self.name:
+                self.testnode = node
+                break
+
+        assert node is not None
 
 class other:
 
@@ -147,29 +208,6 @@ class other:
         self.p.remove_secgroup(self.secgroupname)
         self.test_05_list_secgroups()
 
-    def test_10_create(self):
-        HEADING()
-        image = "CC-Ubuntu16.04"
-        size = "m1.medium"
-        self.p.create(name=self.name,
-                      image=image,
-                      size=size,
-                      # username as the keypair name based on
-                      # the key implementation logic
-                      ex_keyname=self.user,
-                      ex_security_groups=['default'])
-        time.sleep(5)
-        nodes = self.p.list()
-        node = self.p.find(nodes, name=self.name)
-        pprint(node)
-
-        nodes = self.p.list(raw=True)
-        for node in nodes:
-            if node.name == self.name:
-                self.testnode = node
-                break
-
-        assert node is not None
 
     def test_11_publicIP_attach(self):
         HEADING()
@@ -213,9 +251,6 @@ class other:
     # def test_12_list_vm(self):
     #    self.test_04_list_vm()
 
-    def test_13_info(self):
-        HEADING()
-        self.p.info(name=self.name)
 
     def test_14_destroy(self):
         HEADING()
@@ -267,12 +302,20 @@ class other:
         self.test_04_list_vm()
 
 
+
+
 class other:
 
-    def test_10_rename(self):
+    def test_07_rename(self):
         HEADING()
 
-        self.p.rename(name=self.name, destination=self.new_name)
+        source = 'b'
+        dest = 'c'
+
+        self.p.rename(name=source, destination=dest)
+        vms = self.p.list()
+        pprint (vms)
+
 
     # def test_01_stop(self):
     #    HEADING()

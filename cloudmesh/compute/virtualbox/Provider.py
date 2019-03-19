@@ -3,7 +3,12 @@ from pprint import pprint
 from cloudmesh.common.Shell import Shell
 from cloudmesh.common.dotdict import dotdict
 from datetime import datetime
-import os
+import io
+import time
+import subprocess
+import sys
+import shlex
+import platform
 
 import os
 import textwrap
@@ -16,6 +21,7 @@ from cloudmesh.management.configuration.config import Config
 from cloudmesh.common.console import Console
 from cloudmesh.mongo import MongoDBController
 from datetime import datetime
+from cloudmesh.common.util import path_expand
 
 """
 is vagrant up todate
@@ -26,11 +32,58 @@ is vagrant up todate
 
 class Provider(ComputeNodeABC):
 
+    def run_command(self, command):
+        process = subprocess.Popen(shlex.split(command), stdout=subprocess.PIPE)
+        while True:
+            output = process.stdout.read(1)
+            if output == b'' and process.poll() is not None:
+                break
+            if output:
+                sys.stdout.write(output.decode("utf-8"))
+                sys.stdout.flush()
+        rc = process.poll()
+        return rc
+
+    def update_dict(self, entry):
+        entry["kind"] = "vagrant"
+        entry["driver"] = self.cloudtype
+        entry["cloud"] = self.cloud
+        return entry
+
+    output = {
+        'vm': {
+            'order':["vagrant.name",
+                     "vagrant.cloud",
+                     "vbox.name",
+                     "vagrant.id",
+                     "vagrant.provider",
+                     "vagrant.state",
+                     "vagrant.hostname"],
+            'header': ["Name",
+                       "Cloud",
+                       "Vbox",
+                       "Id",
+                       "Provider",
+                       "State",
+                       "Hostname"]
+        },
+        'image': None,
+        'flavor': None
+    }
+
     def __init__(self, name=None, configuration="~/.cloudmesh/.cloudmesh4.yaml"):
-        pass
-
         self.config = Config()
+        conf = Config(configuration)["cloudmesh"]
+        self.user = conf["profile"]
+        self.spec = conf["cloud"][name]
+        self.cloud = name
+        cred = self.spec["credentials"]
+        self.cloudtype = self.spec["cm"]["kind"]
 
+        if platform.system().lower() == "darwin":
+            self.vboxmanage = "/Applications/VirtualBox.app/Contents/MacOS/VBoxManage"
+        else:
+            self.vboxmanage = "VBoxManage"
 
         # m = MongoDBController()
         #status = m.status()
@@ -41,6 +94,78 @@ class Provider(ComputeNodeABC):
         #
         # super().__init__("vagrant", config)
 
+    def version(self):
+        """
+        This command returns the versions ov vagrant and virtual box
+        :return: A dict with the information
+
+        Description:
+
+          The output looks like this
+
+          {'vagrant': '2.2.4',
+           'virtualbox': {'extension': {
+                            'description': 'USB 2.0 and USB 3.0 Host '
+                                           'Controller, Host Webcam, '
+                                           'VirtualBox RDP, PXE ROM, Disk '
+                                           'Encryption, NVMe.',
+                              'extensionpack': True,
+                              'revision': '128413',
+                              'usable': 'true',
+                              'version': '6.0.4'},
+                'version': '6.0.4'}}
+
+        """
+
+        version = {
+            "vagrant": None,
+            "virtualbox": {
+                "version": None,
+                "extension": None
+            }
+        }
+
+        try:
+            result = Shell.execute("vagrant --version", shell=True)
+            txt, version["vagrant"] = result.split(" ")
+
+            if "A new version of Vagrant is available" in result:
+                raise ("Vagrant is outdated. Please doenload a new version of vagrant")
+        except:
+            pass
+
+
+        try:
+
+
+            result = Shell.execute(self.vboxmanage, shell=True)
+            txt, version["virtualbox"]["version"]= result.split("\n")[0].split("Version ")
+
+
+
+            result = Shell.execute(self.vboxmanage + " list -l extpacks",
+                                   shell=True)
+            extension = {}
+
+            for line in result.split("\n"):
+                if "Oracle VM VirtualBox Extension Pack" in line:
+                    extension["extensionpack"] = True
+                elif "Revision:" in line:
+                    extension["revision"] = line.split(":")[1].strip()
+                elif "Usable:" in line:
+                    extension["usable"] = line.split(":")[1].strip()
+                elif "Description:" in line:
+                    extension["description"] = line.split(":")[1].strip()
+                elif "Version:" in line:
+                    extension["version"] = line.split(":")[1].strip()
+
+            version["virtualbox"]["extension"] = extension
+
+        except:
+            pass
+
+        return version
+
     def images(self):
         def convert(data_line):
             data_line = data_line.replace("(", ",")
@@ -50,6 +175,7 @@ class Provider(ComputeNodeABC):
             data.name = data_entry[0].strip()
             data.provider = data_entry[1].strip()
             data.version = data_entry[2].strip()
+            data = self.update_dict(data)
             return data
 
         result = Shell.execute("vagrant box list", shell=True)
@@ -63,8 +189,6 @@ class Provider(ComputeNodeABC):
             entry = convert(line)
             if "date" in entry:
                 date = entry["date"]
-                # "20181203.0.1"
-                #entry["date"] = datetime.strptime(date, '%Y%m%d.%H.%M')
             lines.append(entry)
 
         return lines
@@ -85,6 +209,10 @@ class Provider(ComputeNodeABC):
             return result
 
     def add_image(self, name=None):
+
+
+        command = "vagrant box add {name} --provider virtualbox".format(name=name)
+
         result = ""
         if name is None:
             pass
@@ -93,12 +221,12 @@ class Provider(ComputeNodeABC):
         else:
             try:
                 command = "vagrant box add {name} --provider virtualbox".format(name=name)
-                print ("AAAA", command)
-                result = Shell.execute(command, shell=True)
+                result = Shell.live(command)
+                assert result.status == 0
             except Exception as e:
                 print(e)
                 print(result)
-                print
+                print ()
 
             return result
 
@@ -120,7 +248,7 @@ class Provider(ComputeNodeABC):
         """
         pass
 
-    def nodes(self, verbose=False):
+    def vagrant_nodes(self, verbose=False):
         """
         list all nodes id
 
@@ -136,6 +264,7 @@ class Provider(ComputeNodeABC):
             data.provider = entry[2]
             data.state = entry[3]
             data.directory = entry[4]
+            data = self.update_dict(data)
             return data
 
         result = Shell.execute("vagrant global-status --prune", shell=True)
@@ -152,7 +281,7 @@ class Provider(ComputeNodeABC):
                 lines.append(convert(line))
         return lines
 
-    def boot(self, **kwargs):
+    def create(self, **kwargs):
 
         arg = dotdict(kwargs)
         arg.cwd = kwargs.get("cwd", None)
@@ -161,7 +290,7 @@ class Provider(ComputeNodeABC):
 
         print("ARG")
         pprint(arg)
-        vms = self.to_dict(self.nodes())
+        vms = self.to_dict(self.vagrant_nodes())
 
         print("VMS", vms)
 
@@ -175,14 +304,14 @@ class Provider(ComputeNodeABC):
             return None
 
         else:
-            self.create(**kwargs)
+            self.create_spec(**kwargs)
             Console.ok("{name} created".format(**arg))
             Console.ok("{directory}/{name} booting ...".format(**arg))
 
-            result = Shell.execute("vagrant",
-                                   ["up", arg.name],
-                                   cwd=arg.directory,
-                                   shell=True)
+
+            result = None
+            result = Shell.live("vagrant up " + arg.name,
+                                   cwd=arg.directory)
             Console.ok("{name} ok.".format(**arg))
 
             return result
@@ -199,7 +328,7 @@ class Provider(ComputeNodeABC):
             "path"]
         arg.directory = os.path.expanduser("{path}/{name}".format(**arg))
 
-        vms = self.to_dict(self.nodes())
+        vms = self.to_dict(self.vagrant_nodes())
 
         arg = "ssh {} -c {}".format(name, command)
         result = Shell.execute("vagrant", ["ssh", name, "-c", command],
@@ -230,10 +359,28 @@ class Provider(ComputeNodeABC):
         for line in lines:
             attribute, value = line.split("=", 1)
             attribute = attribute.replace('"', "")
+            attribute = attribute.replace(' ', "_")
+            attribute = attribute.replace('-', "_")
+            attribute = attribute.replace('-', "_")
+            attribute = attribute.replace('/', "_")
+            attribute = attribute.replace(')', "")
+            attribute = attribute.replace('(', "-")
+            attribute = attribute.replace(']', "")
+            attribute = attribute.replace('[', "_")
+
+
             value = value.replace('"', "")
 
             d[attribute] = value
         return d
+
+    def find(self, nodes=None, name=None):
+        if nodes == None:
+            nodes = self.vagrant_nodes()
+        pprint(nodes)
+        if name in nodes:
+            return nodes[name]
+        return None
 
     def info(self, name=None):
         """
@@ -253,39 +400,28 @@ class Provider(ComputeNodeABC):
             "path"]
         arg.directory = os.path.expanduser("{path}/{name}".format(**arg))
 
-        data = {
-            "cm": {
-                "name": name,
-                "directory": arg.directory,
-                "path": arg.path,
-                "cloud": cloud,
-                "status": "unkown"
-            }
-        }
         result = None
 
-        result = Shell.execute("vagrant",
-                               ["ssh-config"],
-                               cwd=arg.directory,
-                               traceflag=False,
-                               witherror=False,
-                               shell=True)
+        vms = Shell.execute(self.vboxmanage + " list vms", shell=True).replace('"', '').replace('{','').replace('}','').split("\n")
+        vagrant_data = self.to_dict(self.vagrant_nodes())
 
-        if result is None:
-            data_vagrant = None
-            data["cm"]["status"] = "poweroff"
-        else:
-            print(result)
-            lines = result.split("\n")
-            data_vagrant = {}
-            for line in lines:
-                attribute, value = line.strip().split(" ", 1)
-                if attribute == "IdentityFile":
-                    value = value.replace('"', '')
+        data = {}
+        for entry in vagrant_data:
+            data[entry] = {
+                "vagrant": vagrant_data[entry]
+            }
 
-                data_vagrant[attribute] = value
+        for line in vms:
+            vbox_name, id = line.split(" ")
+            vagrant_name =  vbox_name.split("_")[0]
 
-        vms = Shell.execute('VBoxManage', ["list", "vms"], shell=True).split("\n")
+            data[vagrant_name]["name"] = vagrant_name
+            data[vagrant_name]["vbox_name"] = vbox_name
+
+            data[vagrant_name]["id"] = id
+
+        vms = data
+
         #
         # find vm
         #
@@ -293,25 +429,43 @@ class Provider(ComputeNodeABC):
         # print (vbox_name_prefix)
         details = None
         for vm in vms:
-            vm = vm.replace("\"", "")
-            vname = vm.split(" {")[0]
-            if vname.startswith(vbox_name_prefix):
-                details = Shell.execute("VBoxManage",
-                                        ["showvminfo", "--machinereadable",
-                                         vname], Shell=True)
-                # print (details)
-                break
-        vbox_dict = self._convert_assignment_to_dict(details)
+            vbox_name = vms[vm]["vbox_name"]
 
-        # combined = {**data, **details}
-        # data = combined
-        if data_vagrant is not None:
-            data["vagrant"] = data_vagrant
-        data["vbox"] = vbox_dict
-        if "VMState" in vbox_dict:
-            data["cm"]["status"] = vbox_dict["VMState"]
+            details = Shell.execute(self.vboxmanage +  " showvminfo --machinereadable " + vbox_name, shell=True)
+            data[vm]["vbox"]  = self._convert_assignment_to_dict(details)
 
-        return data
+        for vm in data:
+            directory = path_expand("~/.cloudmesh/vagrant/{name}".format(name=vm))
+
+            data[vm]["cm"]= {
+                "name": vm,
+                "directory": arg.directory,
+                "path": arg.path,
+                "cloud": cloud,
+                "status": data[vm]["vagrant"]['state']
+            }
+            data[vm] = self.update_dict(data[vm])
+
+            result = Shell.execute("vagrant ssh-config",
+                                   cwd=directory,
+                                   traceflag=False,
+                                   witherror=False,
+                                   shell=True)
+            if result is not None:
+                lines = result.split("\n")
+                for line in lines:
+                    attribute, value = line.strip().split(" ")
+                    attribute = attribute.lower()
+                    data[vm]['vagrant'][attribute] = value
+
+        if name is not None:
+            return data[name]
+
+        result = []
+        for d in data:
+            print (d)
+            result.append(data[d])
+        return result
 
     def suspend(self, name=None):
         """
@@ -431,7 +585,7 @@ class Provider(ComputeNodeABC):
         arg.vagrantfile = "{directory}/Vagrantfile".format(**arg)
         return arg
 
-    def create(self, name=None, image=None, size=None, timeout=360, port=80,
+    def create_spec(self, name=None, image=None, size=1024, timeout=360, port=80,
                **kwargs):
         """
         creates a named node
@@ -456,6 +610,7 @@ class Provider(ComputeNodeABC):
         arg = self._get_specification(name=name,
                                       image=image,
                                       size=size,
+                                      memory=size,
                                       timeout=timeout,
                                       port=port,
                                       **kwargs)
@@ -496,14 +651,18 @@ class Provider(ComputeNodeABC):
 
 
 
-    def list(self):
+    def list(self, raw=True):
         """
         list all nodes id
     
         :return: an array of dicts representing the nodes
         """
-        return self.nodes()
-
+        result = None
+        if raw:
+            result = self.info()
+        else:
+            result = self.vagrant_nodes()
+        return result
 
 
     def rename(self, name=None, destination=None):
@@ -514,5 +673,42 @@ class Provider(ComputeNodeABC):
         :param name: the current name
         :return: the dict with the new name
         """
-        # if destination is None, increase the name counter and use the new name
-        pass
+
+        arguments = ['modifyvm', '"', name, '"', "--name", '"', destination, '"']
+
+        vms = Shell.execute(self.vboxmanage, arguments, shell=True).split("\n")
+        return {}
+
+    def list_os(self):
+        """
+        rename a node
+
+        :param destination:
+        :param name: the current name
+        :return: the dict with the new name
+        """
+
+        result = Shell.execute(self.vboxmanage + " list ostypes", shell=True)
+
+        data = {}
+
+
+        result = result.split("\n\n")
+        entries = {}
+
+        id = "None"
+        for element in result:
+            attributes = element.split("\n")
+            for a in attributes:
+
+                attribute, value = a.split(":")
+                value = value.strip()
+                attribute = attribute.lower()
+                attribute = attribute.replace(" ", "_")
+                print (">>>>", attribute, value)
+                if attribute == "id":
+                    id = value
+                    entries[id] = {}
+                entries[id][attribute] = value
+
+        return entries

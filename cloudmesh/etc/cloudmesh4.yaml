@@ -11,7 +11,7 @@ cloudmesh:
     experiment: base
     cloud: azure
     cluster: clustera
-  storage:
+  storge:
     box:
       cm:
         heading: Box
@@ -23,6 +23,18 @@ cloudmesh:
         directory: TBD
       credentials:
         name: TBD
+    aws-myhome:
+      cm:
+        heading: homedir
+        host: aws.com
+        label: dome-dir
+        kind: aws-s3
+        version: TBD
+      default:
+        directory: TBD
+      credentials:
+        name: TBD
+        bucket: home
     gdrive:
       cm:
         heading: GDrive

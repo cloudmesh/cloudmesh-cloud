@@ -94,7 +94,7 @@ class Vm(ComputeNodeABC):
 
     @DatabaseUpdate(collection="cloudmesh", ComputeNodeABC.map_default)
     def nodes(self):
-        return self.provider.nodes()
+        return self.provider.vagrant_nodes()
 
     # @DatabaseUpdate(collection="cloudmesh", ComputeNodeManagerABC._map_default)
     def info(self, name=None):

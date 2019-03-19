@@ -32,7 +32,6 @@ class Provider(ComputeNodeABC):
         :param name: The name of the provider as defined in the yaml file
         :param configuration: The location of the yaml configuration filw
         """
-        HEADING(c=".")
         conf = Config(configuration)["cloudmesh"]
         self.user = conf["profile"]
         self.spec = conf["cloud"][name]

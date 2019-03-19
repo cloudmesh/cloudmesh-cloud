@@ -324,6 +324,16 @@ class Provider(ComputeNodeABC):
         for line in lines:
             attribute, value = line.split("=", 1)
             attribute = attribute.replace('"', "")
+            attribute = attribute.replace(' ', "_")
+            attribute = attribute.replace('-', "_")
+            attribute = attribute.replace('-', "_")
+            attribute = attribute.replace('/', "_")
+            attribute = attribute.replace(')', "")
+            attribute = attribute.replace('(', "-")
+            attribute = attribute.replace(']', "")
+            attribute = attribute.replace('[', "_")
+
+
             value = value.replace('"', "")
 
             d[attribute] = value

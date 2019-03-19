@@ -111,18 +111,19 @@ class TestName:
         pprint (vms)
         print(Printer.flatwrite(vms,
                                 order=["vagrant.name",
+                                       "vbox.name",
                                        "vagrant.id",
                                        "vagrant.provider",
                                        "vagrant.state",
                                        "vagrant.hostname"],
                                 header=["name",
-                                       "id",
-                                       "provider",
-                                       "state",
-                                       "hostname"]))
+                                        "vbox",
+                                        "id",
+                                        "provider",
+                                        "state",
+                                        "hostname"]))
 
 
-class oooo:
 
     def test_10_create(self):
         HEADING()
@@ -131,13 +132,13 @@ class oooo:
 
         print ("Name", name)
 
-        #self.p.create(name=self.name,
-        #              image=self.image_name,
-        #              size=self.size,
-        #              # username as the keypair name based on
-        #              # the key implementation logic
-        #              ex_keyname=self.user,
-        #              ex_security_groups=['default'])
+        self.p.create(name=self.name,
+                      image=self.image_name,
+                      size=self.size,
+                      # username as the keypair name based on
+                      # the key implementation logic
+                      ex_keyname=self.user,
+                      ex_security_groups=['default'])
 
 
         directory = Path(path_expand("~/.cloudmesh/vagrant/exp-grp-gregor-vm-1"))
@@ -145,7 +146,7 @@ class oooo:
         assert directory.is_dir()
 
 
-        #time.sleep(5)
+        time.sleep(5)
         nodes = self.p.list()
         pprint(nodes)
 
@@ -250,9 +251,6 @@ class other:
     # def test_12_list_vm(self):
     #    self.test_04_list_vm()
 
-    def test_13_info(self):
-        HEADING()
-        self.p.info(name=self.name)
 
     def test_14_destroy(self):
         HEADING()

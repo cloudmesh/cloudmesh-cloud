@@ -86,7 +86,6 @@ class CmDatabase(object):
 
     def update(self, entries):
 
-        print("YYYY", type(entries))
         for entry in entries:
             entry['collection'] = "{cloud}-{kind}".format(**entry)
 

@@ -4,13 +4,14 @@ from cloudmesh.shell.command import PluginCommand
 from cloudmesh.shell.command import command
 from cloudmesh.shell.variables import Variables
 from cloudmesh.common.console import Console
-from pprint import pprint
+from pprint import pprint, pformat
 from cloudmesh.common.parameter import Parameter
 from cloudmesh.management.configuration.config import Active
 from cloudmesh.compute.vm.Provider import Provider
 from cloudmesh.mongo.CmDatabase import CmDatabase
 from cloudmesh.common.Printer import Printer
-
+from cloudmesh.common.util import banner
+from cloudmesh.terminal.Terminal import VERBOSE
 class VmCommand(PluginCommand):
 
     # see also https://github.com/cloudmesh/client/edit/master/cloudmesh_client/shell/plugins/VmCommand.py
@@ -226,6 +227,7 @@ class VmCommand(PluginCommand):
                 Console.msg("{label} {name}".format(label=label, name=name))
                 # r = f(name)
 
+
         map_parameters(arguments,
                        'active',
                        'cloud',
@@ -248,7 +250,7 @@ class VmCommand(PluginCommand):
                        'size',
                        'username')
 
-        pprint(arguments)
+        VERBOSE.print(arguments, verbose=0)
 
         variables = Variables()
 

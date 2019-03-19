@@ -355,8 +355,6 @@ class VmCommand(PluginCommand):
                     vms = db.find(collection=collection)
 
                     # pprint(vms)
-
-
                     # print(arguments.format)
                     # print(p.p.output['vm'])
 

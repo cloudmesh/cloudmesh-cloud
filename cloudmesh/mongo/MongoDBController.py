@@ -174,7 +174,9 @@ class MongoDBController(object):
         if "data" not in self.__dict__:
             self.config = Config()
             self.data = dotdict(self.config.data["cloudmesh"]["data"]["mongo"])
+            print(self.data)
             self.expanduser()
+            print(self.data.MONGO_PASSWORD)
 
             if self.data.MONGO_PASSWORD in ["TBD", "admin"]:
                 Console.error("MongoDB password must not be the default")
@@ -437,6 +439,9 @@ class MongoDBController(object):
                 output[attribute] = str(value).strip()
 
         return output
+
+
+
 
 
 """

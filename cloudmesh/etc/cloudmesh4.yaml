@@ -198,7 +198,7 @@ cloudmesh:
           GOOGLE_STORAGE_KEY: ''
           GOOGLE_STORAGE_SECRET: ''
     mongo:
-      MONGO_AUTOINSTALL: False
+      MONGO_AUTOINSTALL: True
       MONGO_BREWINSTALL: False
       LOCAL: ~/local
       MONGO_HOME: ~/local/mongo
@@ -206,9 +206,9 @@ cloudmesh:
       MONGO_LOG: ~/.cloudmesh/mongodb/log
       MONGO_DBNAME: 'cloudmesh'
       MONGO_HOST: '127.0.0.1'
-      MONGO_PORT: '27017'
-      MONGO_USERNAME: 'admin'
-      MONGO_PASSWORD: TBD
+      MONGO_PORT: '27017':
+      MONGO_USERNAME: 'xiaoyue'
+      MONGO_PASSWORD: 'xiaoyue'
       MONGO_DOWNLOAD:
         darwin: https://fastdl.mongodb.org/osx/mongodb-osx-ssl-x86_64-4.0.4.tgz
         linux: https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-4.0.4.tgz

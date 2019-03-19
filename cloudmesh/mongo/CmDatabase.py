@@ -62,7 +62,7 @@ class CmDatabase(object):
         """
         self.client.close()
 
-    def find(self, collection="cloudmesh", **kwrags):
+    def find(self, collection="cloudmesh", **kwrags,):
         col = self.db[collection]
 
         entries = col.find(kwrags, {"_id": 0})
@@ -159,7 +159,7 @@ class CmDatabase(object):
                 col.update_one({'name': entry[name]}, {"$set": entry},
                                upsert=True)
 
-    def delete(self, collection="cloudmesh", **kwargs, ):
+    def delete(self, collection="cloudmesh", **kwargs):
         col = self.db[collection]
         col.delete_one(**kwargs)
 
@@ -193,3 +193,6 @@ class CmDatabase(object):
 
         col = self.db[collection]
         col.drop()
+
+
+

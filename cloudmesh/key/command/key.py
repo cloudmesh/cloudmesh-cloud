@@ -7,6 +7,7 @@ from cloudmesh.common.parameter import Parameter
 from cloudmesh.key.api.manager import Manager
 from cloudmesh.management.configuration.SSHkey import SSHkey
 from cloudmesh.management.configuration.config import Config
+from cloudmesh.mongo.CmDatabase import CmDatabase
 from cloudmesh.shell.command import PluginCommand
 from cloudmesh.shell.command import command
 from cloudmesh.shell.variables import Variables
@@ -29,7 +30,7 @@ class KeyCommand(PluginCommand):
              key list --cloud=CLOUDS [--format=FORMAT]
              key list --source=ssh [--dir=DIR] [--format=FORMAT]
              key list --source=git [--format=FORMAT] [--username=USERNAME]
-             key list [NAMES] [--format=FORMAT]
+             key list [NAMES] [--format=FORMAT] [--source =db]
              key load --filename=FILENAME [--format=FORMAT]
              key add [NAME] [--source=FILENAME]
              key add [NAME] [--source=git]
@@ -166,6 +167,7 @@ class KeyCommand(PluginCommand):
         arguments.format = arguments['--format']
         arguments.source = arguments['--source']
         arguments.dir = arguments['--dir']
+        arguments.NAMES = arguments['NAMES']
 
         pprint(arguments)
 
@@ -215,6 +217,7 @@ class KeyCommand(PluginCommand):
                 provider = Provider(clouds)
                 cloudkey.append(provider.keys())
 
+
             print(Printer.flatwrite(
                 [cloudkey],
                 sort_keys=["name"],
@@ -227,8 +230,26 @@ class KeyCommand(PluginCommand):
 
         elif arguments.list and arguments.source == "db":
 
+
             if arguments.NAMES:
                 names = Parameter.expand(arguments.NAMES)
+                print (names)
+                records = []
+                for name in names:
+                    kwrags = {"name": name}
+                    database = CmDatabase()
+                    col = database.db["cloudmesh"]
+                    entries = col.find(kwrags, {"_id": 0})
+                    for entry in entries:
+                        records.append(entry)
+                    print (records)
+
+                print(Printer.flatwrite(
+                    records,
+                    sort_keys=["name"],
+                    order=["name", "type", "fingerprint", "comment"],
+                    header=["Name", "Type", "Fingerprint", "Comment"])
+                )
 
                 print("find the keys of the following vms", names)
                 print("the keys will be read from mongo")

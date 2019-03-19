@@ -9,6 +9,7 @@ from cloudmesh.common.parameter import Parameter
 from cloudmesh.management.configuration.config import Active
 from cloudmesh.compute.vm.Provider import Provider
 from cloudmesh.mongo.CmDatabase import CmDatabase
+from cloudmesh.common.Printer import Printer
 
 class VmCommand(PluginCommand):
 
@@ -76,6 +77,7 @@ class VmCommand(PluginCommand):
                 vm resize [NAMES] [--size=SIZE]
 
             Arguments:
+                FORMAT         the format
                 COMMAND        positional arguments, the commands you want to
                                execute on the server(e.g. ls -a) separated by ';',
                                you will get a return of executing result instead of login to
@@ -89,7 +91,8 @@ class VmCommand(PluginCommand):
                 OLDNAMES       Old names of the VM while renaming.
 
             Options:
-              -H --modify-knownhosts  Do not modify ~/.ssh/known_hosts file
+                --format=FORMAT   the format [default: table]
+                -H --modify-knownhosts  Do not modify ~/.ssh/known_hosts file
                                       when ssh'ing into a machine
                 --username=USERNAME   the username to login into the vm. If not
                                       specified it will be guessed
@@ -327,11 +330,11 @@ class VmCommand(PluginCommand):
             # if no clouds find the clouds of all specified vms by name
             # find all vms of the clouds,
             # print only thos vms specified by name, if no name is given print all for the cloud
-            print("list the vms")
+            # print("list the vms")
 
             clouds, names = get_cloud_and_names("list", arguments)
 
-            print("Clouds:", clouds)
+            # print("Clouds:", clouds)
 
             try:
                 if arguments["--refresh"]:
@@ -343,17 +346,30 @@ class VmCommand(PluginCommand):
 
                 for cloud in clouds:
                     p = Provider(cloud)
-                    pprint(p.__dict__)
-                    pprint(p.p.__dict__)
-
+                    # pprint(p.__dict__)
+                    # pprint(p.p.__dict__) # not pretty
 
                     kind = p.kind
                     collection = "{cloud}-{kind}".format(cloud=cloud, kind=p.kind)
-                    Console.error("list from mongodb not yet implemented: list " + cloud)
-                    print (collection)
                     db = CmDatabase()
-                    result = db.find(collection=collection)
-                    pprint(result)
+                    vms = db.find(collection=collection)
+
+                    # pprint(vms)
+
+
+                    # print(arguments.format)
+                    # print(p.p.output['vm'])
+
+                    order = p.p.output['vm']['order'] # not pretty
+                    header = p.p.output['vm']['header'] # not pretty
+
+                    print(Printer.flatwrite(vms,
+                                            sort_keys=("name"),
+                                            order=order,
+                                            header=header,
+                                            output=arguments.format)
+                          )
+
 
             except Exception as e:
                 print(e)

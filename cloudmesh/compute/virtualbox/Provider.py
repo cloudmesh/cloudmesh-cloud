@@ -44,8 +44,20 @@ class Provider(ComputeNodeABC):
         rc = process.poll()
         return rc
 
+    def update_dict(self, entry):
+        entry["kind"] = "vagrant"
+        entry["driver"] = self.cloudtype
+        entry["cloud"] = self.cloud
+        return entry
+
     def __init__(self, name=None, configuration="~/.cloudmesh/.cloudmesh4.yaml"):
         self.config = Config()
+        conf = Config(configuration)["cloudmesh"]
+        self.user = conf["profile"]
+        self.spec = conf["cloud"][name]
+        self.cloud = name
+        cred = self.spec["credentials"]
+        self.cloudtype = self.spec["cm"]["kind"]
 
         if platform.system().lower() == "darwin":
             self.vboxmanage = "/Applications/VirtualBox.app/Contents/MacOS/VBoxManage"
@@ -142,6 +154,7 @@ class Provider(ComputeNodeABC):
             data.name = data_entry[0].strip()
             data.provider = data_entry[1].strip()
             data.version = data_entry[2].strip()
+            data = self.update_dict(data)
             return data
 
         result = Shell.execute("vagrant box list", shell=True)
@@ -230,6 +243,7 @@ class Provider(ComputeNodeABC):
             data.provider = entry[2]
             data.state = entry[3]
             data.directory = entry[4]
+            data = self.update_dict(data)
             return data
 
         result = Shell.execute("vagrant global-status --prune", shell=True)
@@ -409,6 +423,7 @@ class Provider(ComputeNodeABC):
                 "cloud": cloud,
                 "status": data[vm]["vagrant"]['state']
             }
+            data[vm] = self.update_dict(data[vm])
 
             result = Shell.execute("vagrant ssh-config",
                                    cwd=directory,

@@ -1,4 +1,5 @@
 from cloudmesh.compute.libcloud.Provider import Provider as LibCloudProvider
+from cloudmesh.compute.virtualbox.Provider import Provider as VirtualboxCloudProvider
 from cloudmesh.management.configuration.config import Config
 from cloudmesh.common.console import Console
 from cloudmesh.mongo.DataBaseDecorator import DatabaseUpdate
@@ -12,14 +13,12 @@ class Provider(object):
             "kind"]
         self.name = name
 
-        Console.msg("FOUND Kind", self.kind)
+        # Console.msg("FOUND Kind", self.kind)
 
         if self.kind in ["openstack"]:
             self.p = LibCloudProvider(name=name, configuration=configuration)
-
-            print(self.p)
-            #            print (self.p.kind)
-            print(self.kind)
+        if self.kind in ["vagrant","virtualbox"]:
+            self.p = VirtualboxCloudProvider(name=name, configuration=configuration)
 
     def cloudname(self):
         return self.name

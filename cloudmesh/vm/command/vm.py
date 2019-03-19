@@ -7,7 +7,8 @@ from cloudmesh.common.console import Console
 from pprint import pprint
 from cloudmesh.common.parameter import Parameter
 from cloudmesh.management.configuration.config import Active
-
+from cloudmesh.compute.vm.Provider import Provider
+from cloudmesh.mongo.CmDatabase import CmDatabase
 
 class VmCommand(PluginCommand):
 
@@ -184,16 +185,11 @@ class VmCommand(PluginCommand):
             clouds = []
             if arguments["--cloud"]:
                 clouds = get_clouds(arguments, variables)
-                for cloud in clouds:
-                    Console.msg(
-                        "find names in cloud {cloud}".format(cloud=cloud))
-                    # names = find all names in these clouds
             else:
-                names = get_names(arguments, variables)
+                clouds = get_clouds(arguments, variables)
 
-            for name in names:
-                # r = vm.stop(name, dryrun=arguments.dryrun)
-                Console.msg("{label} {name}".format(label=label, name=name))
+            names = get_names(arguments, variables)
+
             return clouds, names
 
         def get_clouds(arguments, variables):
@@ -245,7 +241,6 @@ class VmCommand(PluginCommand):
                        'name',
                        'public',
                        'quiet',
-                       'refresh',
                        'secgroup',
                        'size',
                        'username')
@@ -334,7 +329,36 @@ class VmCommand(PluginCommand):
             # print only thos vms specified by name, if no name is given print all for the cloud
             print("list the vms")
 
-            cloud, names = get_cloud_and_names("list", arguments)
+            clouds, names = get_cloud_and_names("list", arguments)
+
+            print("Clouds:", clouds)
+
+            try:
+                if arguments["--refresh"]:
+                    for cloud in clouds:
+                        Console.ok("refresh " + cloud)
+
+                        p = Provider(cloud)
+                        r = p.list()
+
+                for cloud in clouds:
+                    p = Provider(cloud)
+                    pprint(p.__dict__)
+                    pprint(p.p.__dict__)
+
+
+                    kind = p.kind
+                    collection = "{cloud}-{kind}".format(cloud=cloud, kind=p.kind)
+                    Console.error("list from mongodb not yet implemented: list " + cloud)
+                    print (collection)
+                    db = CmDatabase()
+                    result = db.find(collection=collection)
+                    pprint(result)
+
+            except Exception as e:
+                print(e)
+
+
 
             return ""
 

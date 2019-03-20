@@ -25,13 +25,13 @@ class VmCommand(PluginCommand):
             Usage:
                 vm ping [NAMES] [--cloud=CLOUDS] [N]
                 vm check [NAMES] [--cloud=CLOUDS]
-                vm refresh [NAMES] [--cloud=CLOUDS]
                 vm status [NAMES] [--cloud=CLOUDS]
                 vm console [NAME] [--force]
                 vm start [NAMES] [--cloud=CLOUD] [--dryrun]
                 vm stop [NAMES] [--cloud=CLOUD] [--dryrun]
                 vm terminate [NAMES] [--cloud=CLOUD] [--dryrun]
                 vm delete [NAMES] [--cloud=CLOUD] [--dryrun]
+                vm refresh [--cloud=CLOUDS]
                 vm list [NAMES]
                         [--cloud=CLOUDS]
                         [--format=FORMAT]
@@ -161,6 +161,10 @@ class VmCommand(PluginCommand):
 
                 vm status [options...]
                     Retrieves status of last VM booted on cloud and displays it.
+
+                vm refresh [--cloud=CLOUDS]
+                    this command refreshes the data for virtual machines,
+                    images and flavors for the specified clouds.
 
             Tip:
                 give the VM name, but in a hostlist style, which is very

@@ -12,7 +12,8 @@ from cloudmesh.mongo.MongoDBController import MongoDBController
 from cloudmesh.mongo.MongoDBController import MongoInstaller
 from cloudmesh.shell.command import PluginCommand
 from cloudmesh.shell.command import command
-
+from cloudmesh.common.Shell import Shell
+from cloudmesh.common.util import path_expand
 
 class AdminCommand(PluginCommand):
     banner = textwrap.dedent("""
@@ -52,6 +53,8 @@ class AdminCommand(PluginCommand):
             admin rest stop
             admin status
             admin system info
+            admin yaml cat
+            admin yaml verify
 
           The admin command performs some administrative functions, such as installing packages, software and services.
           It also is used to start services and configure them.
@@ -187,6 +190,43 @@ class AdminCommand(PluginCommand):
                     Console.ok("ok")
                 else:
                     Console.ok("is your MongoDB server running")
+
+        elif arguments.yaml and arguments.cat:
+
+            print("TODO: implement me.")
+            print("""
+                  This command prints cats the ~/.cloudmesh4.yaml file, but 
+                  replaces in each line the password and secrest with "****"
+                  this will help during debugging sessions to verify if the yaml 
+                  file is ok. A TBD in the attribute value will not be replaced.
+            
+                  """)
+
+            secrets = [
+                "AZURE_SUBSCRIPTION_ID",
+                "AZURE_TENANTID",
+                "EC2_ACCESS_ID",
+                "EC2_SECRET_KEY",
+                "OS_PASSWORD",
+                "MONGO_PASSWORD"
+            ]
+            print(secrets)
+
+            return ""
+
+        elif arguments.yaml and arguments.verify:
+
+            print("TODO: implement me.")
+            print("""
+                  This command prints verifies if the yaml file is valid. 
+                  It prints out the errors with line and column.
+                  using the command yamllint. yamllint must be added to the
+                  dependencies.
+                  """)
+
+            path = path_expand("~/.cloudmesh/cloudmesh4.yaml")
+            r = Shell.execute('yamllint "{path}"'.format(path))
+            print(r)
 
         elif arguments.rest:
 

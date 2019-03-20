@@ -63,6 +63,7 @@ six
 Flask-PyMongo
 dateparser
 humanize
+yamllint
 """.split("\n")
 
 

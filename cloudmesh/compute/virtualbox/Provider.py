@@ -44,8 +44,8 @@ class Provider(ComputeNodeABC):
         rc = process.poll()
         return rc
 
-    def update_dict(self, entry):
-        entry["kind"] = "vagrant"
+    def update_dict(self, entry, kind="node"):
+        entry["kind"] = kind
         entry["driver"] = self.cloudtype
         entry["cloud"] = self.cloud
         return entry
@@ -176,7 +176,7 @@ class Provider(ComputeNodeABC):
             data.name = data_entry[0].strip()
             data.provider = data_entry[1].strip()
             data.version = data_entry[2].strip()
-            data = self.update_dict(data)
+            data = self.update_dict(data, kind="image")
             return data
 
         result = Shell.execute("vagrant box list", shell=True)
@@ -265,7 +265,7 @@ class Provider(ComputeNodeABC):
             data.provider = entry[2]
             data.state = entry[3]
             data.directory = entry[4]
-            data = self.update_dict(data)
+            data = self.update_dict(data, kind="node")
             return data
 
         result = Shell.execute("vagrant global-status --prune", shell=True)
@@ -445,7 +445,7 @@ class Provider(ComputeNodeABC):
                 "cloud": cloud,
                 "status": data[vm]["vagrant"]['state']
             }
-            data[vm] = self.update_dict(data[vm])
+            data[vm] = self.update_dict(data[vm], kind="node")
 
             result = Shell.execute("vagrant ssh-config",
                                    cwd=directory,

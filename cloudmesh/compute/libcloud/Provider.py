@@ -11,7 +11,8 @@ from cloudmesh.common.parameter import Parameter
 from cloudmesh.common.util import HEADING
 from cloudmesh.management.configuration.config import Config
 from cloudmesh.common.util import path_expand
-
+from cloudmesh.common.console import Console
+from cloudmesh.terminal.Terminal import VERBOSE
 
 class Provider(ComputeNodeABC):
     # ips
@@ -26,20 +27,23 @@ class Provider(ComputeNodeABC):
     }
 
     output = {
+
         "vm": {
             "sort_keys": ["name"],
-            "order": ["vagrant.name",
-                      "vbox.name",
-                      "vagrant.id",
-                      "vagrant.provider",
-                      "vagrant.state",
-                      "vagrant.hostname"],
+            "order": ["name",
+                      "state",
+                      "image",
+                      "public_ips",
+                      "private_ips",
+                      "kind",
+                      "cloud"],
             "header": ["name",
-                       "vbox",
-                       "id",
-                       "provider",
                        "state",
-                       "hostname"]
+                       "image",
+                       "public_ips",
+                       "private_ips",
+                       "kind",
+                       "cloud"]
         },
         "image": {"sort_keys": ["name",
                                 "extra.minDisk"],
@@ -80,7 +84,7 @@ class Provider(ComputeNodeABC):
         self.cloudtype = self.spec["cm"]["kind"]
         super().__init__(name, conf)
 
-        pprint(Provider.ProviderMapper)
+        VERBOSE.print(cred, verbose=8)
 
         if self.cloudtype in Provider.ProviderMapper:
 
@@ -88,6 +92,10 @@ class Provider(ComputeNodeABC):
                 Provider.ProviderMapper[self.cloudtype])
 
             if self.cloudtype == 'openstack':
+
+                if cred["OS_PASSWORD"] == 'TBD':
+                    Console.error("The password TBD is not allowed")
+
                 self.cloudman = self.driver(cred["OS_USERNAME"],
                                             cred["OS_PASSWORD"],
                                             ex_force_auth_url=cred[

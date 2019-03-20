@@ -193,14 +193,7 @@ class AdminCommand(PluginCommand):
 
         elif arguments.yaml and arguments.cat:
 
-            print("TODO: implement me.")
-            print("""
-                  This command prints cats the ~/.cloudmesh4.yaml file, but 
-                  replaces in each line the password and secrest with "****"
-                  this will help during debugging sessions to verify if the yaml 
-                  file is ok. A TBD in the attribute value will not be replaced.
-            
-                  """)
+            path = path_expand("~/.cloudmesh/cloudmesh4.yaml")
 
             secrets = [
                 "AZURE_SUBSCRIPTION_ID",
@@ -210,7 +203,16 @@ class AdminCommand(PluginCommand):
                 "OS_PASSWORD",
                 "MONGO_PASSWORD"
             ]
-            print(secrets)
+
+            with open(path) as f:
+                content = f.read().split("\n")
+            for line in content:
+                for attribute in secrets:
+                    if attribute + ":" in line:
+                        line = line.split(":")[0] + ": ********"
+                        break
+                print(line)
+
 
             return ""
 

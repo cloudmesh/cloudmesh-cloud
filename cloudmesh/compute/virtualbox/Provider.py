@@ -52,6 +52,7 @@ class Provider(ComputeNodeABC):
 
     output = {
         'vm': {
+            "sort_keys": ("name"),
             'order':["vagrant.name",
                      "vagrant.cloud",
                      "vbox.name",

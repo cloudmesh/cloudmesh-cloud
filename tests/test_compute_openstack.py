@@ -57,7 +57,7 @@ class TestName:
         # pprint(self.keys)
 
         print(Printer.flatwrite(self.keys,
-                                sort_keys=("name"),
+                                sort_keys=["name"],
                                 order=["name", "fingerprint"],
                                 header=["Name", "Fingerprint"])
               )
@@ -78,7 +78,7 @@ class TestName:
         # pprint(images)
 
         print(Printer.flatwrite(images,
-                                sort_keys=("name", "extra.minDisk"),
+                                sort_keys=["name", "extra.minDisk"],
                                 order=["name", "extra.minDisk", "updated",
                                        "driver"],
                                 header=["Name", "MinDisk", "Updated", "Driver"])
@@ -90,7 +90,7 @@ class TestName:
         # pprint (flavors)
 
         print(Printer.flatwrite(flavors,
-                                sort_keys=("name", "vcpus", "disk"),
+                                sort_keys=["name", "vcpus", "disk"],
                                 order=["name", "vcpus", "ram", "disk"],
                                 header=["Name", "VCPUS", "RAM", "Disk"])
               )

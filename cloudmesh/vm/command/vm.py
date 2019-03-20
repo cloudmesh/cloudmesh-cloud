@@ -250,7 +250,7 @@ class VmCommand(PluginCommand):
                        'size',
                        'username')
 
-        VERBOSE.print(arguments, verbose=0)
+        VERBOSE.print(arguments, verbose=9)
 
         variables = Variables()
 
@@ -324,7 +324,7 @@ class VmCommand(PluginCommand):
             print("boot the vm")
 
         elif arguments.list:
-            # vm list[NAMES]
+            # vm list [NAMES]
             #   [--cloud = CLOUDS]
             #   [--format = FORMAT]
             #   [--refresh]
@@ -338,41 +338,67 @@ class VmCommand(PluginCommand):
 
             # print("Clouds:", clouds)
 
-            try:
-                if arguments["--refresh"]:
+            if arguments.NAMES is not None:
+                names = Parameter.expand(arguments.NAMES)
+                Console.error("NAMES, not yet implemented" + str(names))
+
+                try:
+                    if arguments["--refresh"]:
+                        pass
+                        # find all clouds in db
+                        # itterate over the clouds
+                        # for each name in name queue, find it and add it to the cloud vm list
+                        # for each cloud print the vms
+                    else:
+                        pass
+                        # find all clouds in db
+                        # itterate over all clouds
+                        # find the vm with the name
+                        # add it to the cloud list
+                        # for each cloud print the vms
+                except Exception as e:
+
+                    VERBOSE.print(e, verbose=9)
+
+                return ""
+            else:
+                try:
+                    if arguments["--refresh"]:
+                        for cloud in clouds:
+                            Console.ok("refresh " + cloud)
+
+                            p = Provider(cloud)
+                            r = p.list()
+
                     for cloud in clouds:
-                        Console.ok("refresh " + cloud)
-
                         p = Provider(cloud)
-                        r = p.list()
+                        # pprint(p.__dict__)
+                        # pprint(p.p.__dict__) # not pretty
 
-                for cloud in clouds:
-                    p = Provider(cloud)
-                    # pprint(p.__dict__)
-                    # pprint(p.p.__dict__) # not pretty
+                        kind = p.kind
+                        collection = "{cloud}-{kind}".format(cloud=cloud,
+                                                             kind=p.kind)
+                        db = CmDatabase()
+                        vms = db.find(collection=collection)
 
-                    kind = p.kind
-                    collection = "{cloud}-{kind}".format(cloud=cloud, kind=p.kind)
-                    db = CmDatabase()
-                    vms = db.find(collection=collection)
+                        # pprint(vms)
+                        # print(arguments.format)
+                        # print(p.p.output['vm'])
 
-                    # pprint(vms)
-                    # print(arguments.format)
-                    # print(p.p.output['vm'])
+                        order = p.p.output['vm']['order']  # not pretty
+                        header = p.p.output['vm']['header']  # not pretty
 
-                    order = p.p.output['vm']['order'] # not pretty
-                    header = p.p.output['vm']['header'] # not pretty
-
-                    print(Printer.flatwrite(vms,
-                                            sort_keys=("name"),
-                                            order=order,
-                                            header=header,
-                                            output=arguments.format)
-                          )
+                        print(Printer.flatwrite(vms,
+                                                sort_keys=("name"),
+                                                order=order,
+                                                header=header,
+                                                output=arguments.format)
+                              )
 
 
-            except Exception as e:
-                print(e)
+                except Exception as e:
+
+                    VERBOSE.print(e, verbose=9)
 
 
 

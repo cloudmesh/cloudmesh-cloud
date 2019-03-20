@@ -25,6 +25,46 @@ class Provider(ComputeNodeABC):
         "azure_arm": LibcloudProvider.AZURE_ARM
     }
 
+    output = {
+        "vm": {
+            "sort_keys": ["name"],
+            "order": ["vagrant.name",
+                      "vbox.name",
+                      "vagrant.id",
+                      "vagrant.provider",
+                      "vagrant.state",
+                      "vagrant.hostname"],
+            "header": ["name",
+                       "vbox",
+                       "id",
+                       "provider",
+                       "state",
+                       "hostname"]
+        },
+        "image": {"sort_keys": ["name",
+                                "extra.minDisk"],
+                  "order": ["name",
+                            "extra.minDisk",
+                            "updated",
+                            "driver"],
+                  "header": ["Name",
+                             "MinDisk",
+                             "Updated",
+                             "Driver"]},
+        "flavor": {"sort_keys": ["name",
+                                 "vcpus",
+                                 "disk"],
+                   "order": ["name",
+                             "vcpus",
+                             "ram",
+                             "disk"],
+                   "header": ["Name",
+                              "VCPUS",
+                              "RAM",
+                              "Disk"]}
+
+    }
+
     def __init__(self, name=None, configuration="~/.cloudmesh/cloudmesh4.yaml"):
         """
         Initializes the provider. The default parameters are read from the configutation

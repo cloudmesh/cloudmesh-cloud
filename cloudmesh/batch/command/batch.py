@@ -8,6 +8,34 @@ from cloudmesh.batch.api.Batch import SlurmCluster
 # from cloudmesh.batch.api.manager import Manager
 
 # TODO does docopts allow to break line in multilpe?
+
+
+"""
+       ::
+
+         Usage:
+           batch job create JOB_NAME
+                 --script=SCRIPT
+                 --input-type=INPUT_TYPE
+                 --cluster=CLUSTER_NAME
+                 --job-script-path=SCRIPT_PATH
+                 --remote-path=REMOTE_PATH
+                 --local-path=LOCAL_PATH
+                 [--argfile-path=ARGUMENT_FILE_PATH]
+                 [--outfile-name=OUTPUT_FILE_NAME]
+                 [--suffix=SUFFIX] [--overwrite]
+           batch job run JOB_NAME
+           batch fetch JOB_NAME
+           batch test CLUSTER_NAME
+           batch set cluster CLUSTER_NAME PARAMETER VALUE
+           batch set job JOB_NAME PARAMETER VALUE
+           batch list clusters [DEPTH [default:1]]
+           batch list jobs [DEPTH [default:1]]
+           batch remove cluster CLUSTER_NAME
+           batch remove job JOB_NAME
+           batch clean JOB_NAME
+"""
+
 class BatchCommand(PluginCommand):
 
     # see also https://github.com/cloudmesh/client/blob/master/cloudmesh_client/shell/plugins/HpcCommand.py
@@ -47,6 +75,28 @@ class BatchCommand(PluginCommand):
 
           Options:
               -f      specify the file
+
+          Description:
+
+
+            This command allows to submit batch jobs to queuing systems hosted
+            in an HBC center as a service.
+
+            We assume that a number of experiments are conducted with possibly
+            running the script multiple times. Each experiment will safe the batch
+            script in its own folder.
+
+            The outout of the script can be safed in a destination folder. A virtual
+            directory is used to coordinate all saved files.
+
+            The files can be located due to the use of the firtual directiry on
+            multiple different data or file servises
+
+            Authentiaction to the Batch systems is done viw the underkaying center
+            authentication. We assume that the user has an account to submit on
+            these systems.
+
+            (SSH, 2 factor, XSEDE-account) TBD.
 
         """
         arguments.FILE = arguments['--file'] or None

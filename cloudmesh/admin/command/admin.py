@@ -206,14 +206,14 @@ class AdminCommand(PluginCommand):
 
             with open(path) as f:
                 content = f.read().split("\n")
+
             for line in content:
-                for attribute in secrets:
-                    if attribute + ":" in line:
-                        line = line.split(":")[0] + ": ********"
-                        break
+                if "TBD" not in line:
+                    for attribute in secrets:
+                        if attribute + ":" in line:
+                            line = line.split(":")[0] + ": ********"
+                            break
                 print(line)
-
-
             return ""
 
         elif arguments.yaml and arguments.check:

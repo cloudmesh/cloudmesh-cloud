@@ -368,16 +368,17 @@ class VmCommand(PluginCommand):
                             Console.ok("refresh " + cloud)
 
                             p = Provider(cloud)
-                            r = p.list()
+                            vms = p.list()
 
                     for cloud in clouds:
                         p = Provider(cloud)
+                        kind = p.kind
+
                         # pprint(p.__dict__)
                         # pprint(p.p.__dict__) # not pretty
 
-                        kind = p.kind
-                        collection = "{cloud}-{kind}".format(cloud=cloud,
-                                                             kind=p.kind)
+                        collection = "{cloud}-node".format(cloud=cloud,
+                                                           kind=p.kind)
                         db = CmDatabase()
                         vms = db.find(collection=collection)
 

@@ -3,7 +3,7 @@ from cloudmesh.management.debug import myself, HEADING
 from pprint import pprint
 
 
-# nosetests -v --nocapture tests/test_config.py
+# nosetests -v --nocapture tests/test_nn_service.py
 
 
 class TestConfig:

@@ -54,7 +54,7 @@ class AdminCommand(PluginCommand):
             admin status
             admin system info
             admin yaml cat
-            admin yaml verify
+            admin yaml check
 
           The admin command performs some administrative functions, such as installing packages, software and services.
           It also is used to start services and configure them.
@@ -214,19 +214,15 @@ class AdminCommand(PluginCommand):
 
             return ""
 
-        elif arguments.yaml and arguments.verify:
+        elif arguments.yaml and arguments.check:
 
-            print("TODO: implement me.")
-            print("""
-                  This command prints verifies if the yaml file is valid. 
-                  It prints out the errors with line and column.
-                  using the command yamllint. yamllint must be added to the
-                  dependencies.
-                  """)
 
             path = path_expand("~/.cloudmesh/cloudmesh4.yaml")
-            r = Shell.execute('yamllint "{path}"'.format(path))
-            print(r)
+            print()
+            r = Shell.live('/Users/grey/.pyenv/shims/yamllint ' + path)
+            print(70 * '-')
+            print(" line:column  description")
+            print()
 
         elif arguments.rest:
 

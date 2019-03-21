@@ -31,19 +31,19 @@ class Provider(ComputeNodeABC):
         "vm": {
             "sort_keys": ["name"],
             "order": ["name",
+                      "cloud",
                       "state",
                       "image",
                       "public_ips",
                       "private_ips",
-                      "kind",
-                      "cloud"],
+                      "kind"],
             "header": ["name",
+                       "cloud",
                        "state",
                        "image",
                        "public_ips",
                        "private_ips",
-                       "kind",
-                       "cloud"]
+                       "kind"]
         },
         "image": {"sort_keys": ["name",
                                 "extra.minDisk"],

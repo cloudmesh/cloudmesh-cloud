@@ -9,7 +9,7 @@ import subprocess
 import sys
 import shlex
 import platform
-
+import docker
 import os
 import textwrap
 import webbrowser
@@ -22,6 +22,8 @@ from cloudmesh.common.console import Console
 from cloudmesh.mongo import MongoDBController
 from datetime import datetime
 from cloudmesh.common.util import path_expand
+
+from docker.version import version as pydocker_version
 
 """
 is vagrant up todate
@@ -104,12 +106,27 @@ class Provider(ComputeNodeABC):
 
 
         """
-
-        return None
+        docker_version, build = Shell.execute("docker --version",
+                                              shell=True).split(",")
+        docker_build = build.split("build ")[1]
+        docker_version = docker_version.split("version ")[1]
+        versions = {
+            "pydocker": pydocker_version,
+            "docker": docker_version,
+            "build": docker_build
+        }
+        return versions
 
     def images(self):
-
-        return None
+        client = docker.from_env()
+        all = client.images.list()
+        result = []
+        for image in all:
+            image = dict(image.__dict__)
+            del image["collection"]
+            del image["client"]
+            result.append(image)
+        return result
 
     def delete_image(self, name=None):
         result = ""
@@ -226,42 +243,46 @@ class Provider(ComputeNodeABC):
 
         return None
 
-    def dockerfile(self, **kwargs):
+    def dockerfile(self,
+                   name=None,
+                   dir="~/.cloudmesh/docker/",
+                   os="ubuntu",
+                   version="18.04",
+                   **kwargs):
 
-        arg = dotdict(kwargs)
+        if name is None:
+            Console.error("name is not specified")
+            sys.exit(1)
 
-        provision = kwargs.get("script", None)
+        arg = (self.local())
+        arg.update(kwargs)
 
-        if provision is not None:
-            arg.provision = 'config.vm.provision "shell", inline: <<-SHELL\n'
-            for line in textwrap.dedent(provision).split("\n"):
-                if line.strip() != "":
-                    arg.provision += 12 * " " + "    " + line + "\n"
-            arg.provision += 12 * " " + "  " + "SHELL\n"
-        else:
-            arg.provision = ""
-
-        # not sure how I2 gets found TODO verify, comment bellow is not enough
-        # the 12 is derived from the indentation of Vagrant in the script
-        # TODO we may need not just port 80 to forward
-        script = textwrap.dedent("""
-               Vagrant.configure(2) do |config|
-
-                 config.vm.define "{name}"
-                 config.vm.hostname = "{name}"
-                 config.vm.box = "{image}"
-                 config.vm.box_check_update = true
-                 config.vm.network "forwarded_port", guest: 80, host: {port}
-                 config.vm.network "private_network", type: "dhcp"
-
-                 # config.vm.network "public_network"
-                 # config.vm.synced_folder "../data", "/vagrant_data"
-                 config.vm.provider "virtualbox" do |vb|
-                    # vb.gui = true
-                    vb.memory = "{memory}"
-                 end
-                 {provision}
-               end
+        script = {}
+        script["ubuntu"] = textwrap.dedent("""
+            #
+            # cloudmesh dockerfile
+            #
+            FROM {os}:{version}
+            
+            # update the OS
+            RUN apt-get update
+            
+            #Define the ENV variable
+            #ENV TMP /tmp
+ 
+            # COPY
+            #COPY default backup
+ 
+            #RUN mkdir ~/.cloudmesh
+ 
+            # Volume configuration
+            #VOLUME ["sample"]
+ 
+            # Configure Services and Port
+            #CMD ["cms"]
+            
+            EXPOSE 80 443
+            
            """.format(**arg))
 
         return script

@@ -12,6 +12,28 @@ cloudmesh:
     cloud: azure
     cluster: clustera
   storge:
+    storage_a:
+      cm:
+        heading: Aws Boto
+        host: aws.com
+        label: Aws
+        kind: awsboto
+        version: TBD
+      default:
+        directory: a
+      credentials:
+        name: TBD
+    storage_b:
+      cm:
+        heading: Aws Boto
+        host: aws.com
+        label: Aws
+        kind: awslibcloud
+        version: TBD
+      default:
+        directory: b
+      credentials:
+        name: TBD
     box:
       cm:
         heading: Box

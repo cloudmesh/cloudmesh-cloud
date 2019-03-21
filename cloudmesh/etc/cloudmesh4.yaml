@@ -55,6 +55,19 @@ cloudmesh:
           - "urn:ietf:wg:oauth:2.0:oob"
           - "http://localhost"
   cloud:
+    docker:
+      cm:
+        active: True
+        heading: Docker
+        host: localhost
+        label: Docker
+        kind: docker
+        version: 18.09.2
+      default:
+        os: "ubuntu"
+        version: "18.04"
+      credentials:
+        key: "~/.ssh/id_rsa"
     azure:
       cm:
         active: False

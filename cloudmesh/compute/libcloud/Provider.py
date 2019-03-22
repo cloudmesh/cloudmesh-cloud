@@ -509,7 +509,9 @@ class Provider(ComputeNodeABC):
         # keyname = Config()["cloudmesh"]["profile"]["user"]
         # ex_keyname has to be the registered keypair name in cloud
         pprint(kwargs)
-        if self.cloudtype == "openstack":
+
+        if self.cloudtype in ["openstack", aws]:
+
             for _image in images:
                 if _image.name == image:
                     image_use = _image
@@ -518,6 +520,9 @@ class Provider(ComputeNodeABC):
                 if _flavor.name == size:
                     flavor_use = _flavor
                     break
+
+        if self.cloudtype == "openstack":
+
             if "ex_security_groups" in kwargs:
                 secgroupsobj = []
                 #
@@ -530,17 +535,8 @@ class Provider(ComputeNodeABC):
                 # now secgroup name is converted to object which
                 # is required by the libcloud api call
                 kwargs["ex_security_groups"] = secgroupsobj
-            node = self.cloudman.create_node(name=name, image=image_use,
-                                             size=flavor_use, **kwargs)
-        if self.cloudtype == "aws":
-            for _image in images:
-                if _image.id == image:
-                    image_use = _image
-                    break
-            for _flavor in flavors:
-                if _flavor.id == size:
-                    flavor_use = _flavor
-                    break
+
+        if self.cloudtype in ["openstack", "aws"]:
             node = self.cloudman.create_node(name=name, image=image_use, size=flavor_use, **kwargs)
         else:
             sys.exit("this cloud is not yet supported")

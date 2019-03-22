@@ -59,10 +59,14 @@ PyYAML
 requests
 termcolor
 urllib3
-six
 Flask-PyMongo
+flask
+six
+recommonmark
 dateparser
 humanize
+psutil
+connexion[swagger-ui]
 yamllint
 """.split("\n")
 

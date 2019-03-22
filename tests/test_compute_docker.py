@@ -18,6 +18,7 @@ from cloudmesh.mongo.CmDatabase import CmDatabase
 from cloudmesh.common.util import banner
 from pathlib import Path
 from cloudmesh.common.util import path_expand
+from cloudmesh.common.Shell import Shell
 
 
 class TestName:
@@ -59,6 +60,13 @@ class TestName:
         assert 6247962 <= int(version["docker"]["build"])
         assert "18.09.2" == version.docker.version
         assert 6247962 <= int(version.docker.build)
+
+
+    def test_03_terminal(self):
+        HEADING()
+        t1 = Shell.terminal()
+        t2 = Shell.terminal(command="pwd")
+
 
 
 class d:

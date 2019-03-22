@@ -7,7 +7,7 @@ from cloudmesh.common.util import path_expand
 from pprint import pprint
 from cloudmesh.terminal.Terminal import VERBOSE
 from cloudmesh.common.Shell import Shell
-
+import os
 
 class TerminalCommand(PluginCommand):
 
@@ -18,42 +18,64 @@ class TerminalCommand(PluginCommand):
         ::
 
           Usage:
-              terminal [--os=OS] [--command=COMMAND]
+              terminal [--os=OS]
+                       [--command=COMMAND]
+                       [--shell=SHELL]
+                       [--interactive=INTERACTIVE]
+                       [--window=WINDOW]
 
           Starts a dockker container in interactive mode in a new terminal
           and executes the command in it.
 
           Arguments:
               --command=COMMAND   the command
-              --os=OS        the os
+              --os=OS        the os      [default: cloudmesh/book:1.7]
+              --shell=SHELL              [default: /bin/bash]
+              --window=WINDOW            [default: True]
+              --interactive=INTERACTIVE  [default: True]
 
           Options:
               -f      specify the file
 
 
           Description:
-              terminal --os="cloudmesh/book" --command=ls
+              terminal --os="cloudmesh/book:1.7" --command=ls
         """
 
         # m = Manager()
 
-        map_parameters(arguments, 'os', 'command')
+        map_parameters(arguments,
+                       'os',
+                       'command',
+                       'interactive',
+                       'shell',
+                       'window')
+        arguments.cwd = os.getcwd()
+
+        if arguments.command is None:
+            arguments.command = ""
+        else:
+            arguments.command += ";"
+
 
         VERBOSE.print(arguments, label='arguments', verbose=1)
 
         if arguments.os is None:
             Shell.terminal(command=arguments.command)
         else:
-            if arguments.command is not None:
-                arguments.command = '-c' + arguments.command
-            else:
-                arguments.command = ""
 
-            command = "docker run -v `pwd` -w `pwd` --rm -it {os}  /bin/bash {command}".format(
+            if arguments.interactive.lower() in ['true', 'on']:
+                arguments.interactive = "-it"
+            else:
+                arguments.interactive = ""
+                arguments.shell = ""
+
+            VERBOSE.print(arguments, label='arguments', verbose=1)
+
+
+            command = "cd {cwd}; docker run -v {cwd}:{cwd} -w {cwd} --rm {interactive} {os} {command}{shell}".format(
                 **arguments)
             print(command)
             Shell.terminal(command=command)
-
-        Console.error("not implemented")
 
         return ""

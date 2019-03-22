@@ -116,10 +116,10 @@ class Provider(ComputeNodeABC):
                 self.cloudman = self.driver(
                     cred["EC2_ACCESS_ID"],
                     cred["EC2_SECRET_KEY"],
-                    region=cred["region"])
+                    region=cred["EC2_REGION"])
         else:
             print("Specified provider not available")
-            self.cloudman = None
+            self.cloudman = False
         self.default_image = None
         self.default_size = None
         self.public_key_path = conf["profile"]["publickey"]
@@ -168,15 +168,17 @@ class Provider(ComputeNodeABC):
             d.append(entry)
         return d
 
-    def find(self, elements, name=None):
+    def find(self, elements, name=None, raw=False):
         """
         finds an element in elements with the specified name
         :param elements: The elements
         :param name: The name to be found
+        :param: If raw is True, elements is a libcloud object.
+                Otherwise elements is a dict
         :return:
         """
         for element in elements:
-            if element["name"] == name:
+            if (raw and element.name) or element["name"] == name:
                 return element
         return None
 
@@ -362,35 +364,54 @@ class Provider(ComputeNodeABC):
     def flavor(self, name=None):
         """
         Gest the flavor with a given name
-        :param name: The aname of the flavor
+        :param name: The name of the flavor
         :return: The dict of the flavor
         """
         return self.find(self.flavors(), name=name)
 
-    def start(self, name=None):
+    def apply(self, fname, names):
         """
-        start a node. NOT YET IMPLEMENTED.
-    
-        :param name: the unique node name
-        :return:  The dict representing the node
-        """
-        HEADING(c=".")
-        return None
+        apply a function to a given list of nodes
 
-    def stop(self, name=None):
+        :param fname: Name of the function to be applied to the given nodes
+        :param names: A list of node names
+        :return:  A list of dict representing the nodes
         """
-        stops the node with the given name. NOT YET IMPLEMENTED.
-    
-        :param name:
-        :return: The dict representing the node including updated status
+        if self.cloudman:
+            # names = Parameter.expand(names)
+            res = []
+
+            nodes = self.list(raw=True)
+            for node in nodes:
+                if node.name in names:
+                    fname(node)
+                    res.append(self.info(node.name))
+            return res
+        else:
+            return None
+
+    def start(self, names=None):
         """
-        HEADING(c=".")
-        return None
+        Start a list of nodes with the given names
+
+        :param names: A list of node names
+        :return:  A list of dict representing the nodes
+        """
+        return self.apply(self.cloudman.ex_start_node, names)
+
+    def stop(self, names=None):
+        """
+        Stop a list of nodes with the given names
+
+        :param names: A list of node names
+        :return:  A list of dict representing the nodes
+        """
+        return self.apply(self.cloudman.ex_stop_node, names)
 
     def info(self, name=None):
         """
         Gets the information of a node with a given name
-    
+
         :param name: The name of teh virtual machine
         :return: The dict representing the node including updated status
         """
@@ -399,7 +420,7 @@ class Provider(ComputeNodeABC):
     def suspend(self, name=None):
         """
         suspends the node with the given name. NOT YET IMPLEMENTED.
-    
+
         :param name: the name of the node
         :return: The dict representing the node
         """
@@ -436,7 +457,7 @@ class Provider(ComputeNodeABC):
     def resume(self, name=None):
         """
         resume the named node. NOT YET IMPLEMENTED.
-    
+
         :param name: the name of the node
         :return: the dict of the node
         """
@@ -459,19 +480,19 @@ class Provider(ComputeNodeABC):
         # bug status shoudl change to destroyed
         return None
 
-    def reboot(self, name=None):
+    def reboot(self, names=None):
         """
-        Reboot the node. NOT YET IMPLEMENTED.
-        :param name: the name of the node
-        :return: the dict of the node
+        Reboot a list of nodes with the given names
+
+        :param names: A list of node names
+        :return:  A list of dict representing the nodes
         """
-        HEADING(c=".")
-        return None
+        return self.apply(self.cloudman.reboot_node, names)
 
     def create(self, name=None, image=None, size=None, timeout=360, **kwargs):
         """
         creates a named node
-    
+
         :param name: the name of the node
         :param image: the image used
         :param size: the size of the image
@@ -484,18 +505,19 @@ class Provider(ComputeNodeABC):
         image_use = None
         flavors = self.flavors(raw=True)
         flavor_use = None
-        for _image in images:
-            if _image.name == image:
-                image_use = _image
-                break
-        for _flavor in flavors:
-            if _flavor.name == size:
-                flavor_use = _flavor
-                break
+
         # keyname = Config()["cloudmesh"]["profile"]["user"]
         # ex_keyname has to be the registered keypair name in cloud
         pprint(kwargs)
         if self.cloudtype == "openstack":
+            for _image in images:
+                if _image.name == image:
+                    image_use = _image
+                    break
+            for _flavor in flavors:
+                if _flavor.name == size:
+                    flavor_use = _flavor
+                    break
             if "ex_security_groups" in kwargs:
                 secgroupsobj = []
                 #
@@ -510,6 +532,16 @@ class Provider(ComputeNodeABC):
                 kwargs["ex_security_groups"] = secgroupsobj
             node = self.cloudman.create_node(name=name, image=image_use,
                                              size=flavor_use, **kwargs)
+        if self.cloudtype == "aws":
+            for _image in images:
+                if _image.id == image:
+                    image_use = _image
+                    break
+            for _flavor in flavors:
+                if _flavor.id == size:
+                    flavor_use = _flavor
+                    break
+            node = self.cloudman.create_node(name=name, image=image_use, size=flavor_use, **kwargs)
         else:
             sys.exit("this cloud is not yet supported")
 
@@ -547,7 +579,7 @@ class Provider(ComputeNodeABC):
     def rename(self, name=None, destination=None):
         """
         rename a node. NOT YET IMPLEMENTED.
-    
+
         :param destination:
         :param name: the current name
         :return: the dict with the new name

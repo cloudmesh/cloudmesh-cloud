@@ -510,7 +510,7 @@ class Provider(ComputeNodeABC):
         # ex_keyname has to be the registered keypair name in cloud
         pprint(kwargs)
 
-        if self.cloudtype in ["openstack", aws]:
+        if self.cloudtype in ["openstack", "aws"]:
 
             for _image in images:
                 if _image.name == image:

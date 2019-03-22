@@ -54,25 +54,49 @@ class Provider(ComputeNodeABC):
         return entry
 
     output = {
-        'vm': {
-            "sort_keys": ("name"),
-            'order': ["vagrant.name",
-                      "vagrant.cloud",
-                      "vbox.name",
-                      "vagrant.id",
-                      "vagrant.provider",
-                      "vagrant.state",
-                      "vagrant.hostname"],
-            'header': ["Name",
-                       "Cloud",
-                       "Vbox",
-                       "Id",
-                       "Provider",
-                       "State",
-                       "Hostname"]
+
+        "vm": {
+            "sort_keys": ["name"],
+            "order": ["name",
+                      "cloud",
+                      "state",
+                      "image",
+                      "public_ips",
+                      "private_ips",
+                      "kind"],
+            "header": ["name",
+                       "cloud",
+                       "state",
+                       "image",
+                       "public_ips",
+                       "private_ips",
+                       "kind"]
         },
-        'image': None,
-        'flavor': None
+        "image": {"sort_keys": ["Os"],
+                  "order": ["RepoTags"
+                            "repo",
+                            "tags"
+                            "Os",
+                            "Size",
+                            "Architecture"],
+                  "header": ["RepoTags",
+                             "repo",
+                             "tags"
+                             "Os",
+                             "Size",
+                             "Architecture"]},
+        "flavor": {"sort_keys": ["name",
+                                 "vcpus",
+                                 "disk"],
+                   "order": ["name",
+                             "vcpus",
+                             "ram",
+                             "disk"],
+                   "header": ["Name",
+                              "VCPUS",
+                              "RAM",
+                              "Disk"]}
+
     }
 
     def __init__(self, name=None,
@@ -106,6 +130,7 @@ class Provider(ComputeNodeABC):
 
 
         """
+
         docker_version, build = Shell.execute("docker --version",
                                               shell=True).split(",")
         docker_build = build.split("build ")[1]
@@ -115,6 +140,7 @@ class Provider(ComputeNodeABC):
             "docker": docker_version,
             "build": docker_build
         }
+
         return versions
 
     def images(self):
@@ -122,9 +148,11 @@ class Provider(ComputeNodeABC):
         all = client.images.list()
         result = []
         for image in all:
-            image = dict(image.__dict__)
-            del image["collection"]
-            del image["client"]
+            image = dict(image.__dict__)['attrs']
+            # image["repo"],image["tags"] = image["RepoTags"][0].split(":")
+            image["repo"] = None
+            image["tags"] = None
+
             result.append(image)
         return result
 
@@ -174,14 +202,16 @@ class Provider(ComputeNodeABC):
         """
         return "A new version of Vagrant is available" not in r
 
-    def start(self, name):
+    def start(self, name, version, directory):
         """
         start a node
 
         :param name: the unique node name
         :return:  The dict representing the node
         """
-        pass
+        command = "docker run -v {directory}:/share -w /share --rm -it {name}:{version}  /bin/bash".format(
+            **locals())
+        os.system(command)
 
     def create(self, **kwargs):
 

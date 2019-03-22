@@ -17,7 +17,7 @@ class Provider(object):
 
         if self.kind in ["openstack"]:
             self.p = LibCloudProvider(name=name, configuration=configuration)
-        if self.kind in ["vagrant","virtualbox"]:
+        elif self.kind in ["vagrant", "virtualbox"]:
             self.p = VirtualboxCloudProvider(name=name, configuration=configuration)
 
     def cloudname(self):

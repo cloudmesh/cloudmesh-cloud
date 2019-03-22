@@ -131,15 +131,23 @@ class Provider(ComputeNodeABC):
 
         """
 
-        docker_version, build = Shell.execute("docker --version",
+        def get_version(command):
+            data = dotdict()
+            version, build = Shell.execute("docker --version",
                                               shell=True).split(",")
-        docker_build = build.split("build ")[1]
-        docker_version = docker_version.split("version ")[1]
-        versions = {
-            "pydocker": pydocker_version,
-            "docker": docker_version,
-            "build": docker_build
-        }
+            build = build.split("build ")[1]
+            version = version.split("version ")[1]
+            data.version = version
+            data.command = command
+            data.build = build
+            return data
+
+        versions = dotdict({
+            "pydocker": dotdict({"version": pydocker_version}),
+            "docker": get_version("docker"),
+            "machine": get_version("docker-machine"),
+            "compose": get_version("docker-compose")
+        })
 
         return versions
 

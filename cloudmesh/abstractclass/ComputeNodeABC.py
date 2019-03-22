@@ -56,7 +56,7 @@ class ComputeNodeABC(metaclass=ABCMeta):
     '''
 
     @abstractmethod
-    def start(self, name):
+    def start(self, name=None):
         """
         start a node
 

@@ -29,7 +29,7 @@ class TerminalCommand(PluginCommand):
 
           Arguments:
               --command=COMMAND   the command
-              --os=OS        the os      [default: cloudmesh/book:1.7]
+              --os=OS        the os      [default: cloudmesh/book:latest]
               --shell=SHELL              [default: /bin/bash]
               --window=WINDOW            [default: True]
               --interactive=INTERACTIVE  [default: True]

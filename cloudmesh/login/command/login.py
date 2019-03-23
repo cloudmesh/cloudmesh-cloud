@@ -1,10 +1,11 @@
 from __future__ import print_function
-from cloudmesh.shell.command import command
-from cloudmesh.shell.command import PluginCommand
-from cloudmesh.login.api.manager import Manager
+
+from pprint import pprint
+
 from cloudmesh.common.console import Console
 from cloudmesh.common.util import path_expand
-from pprint import pprint
+from cloudmesh.shell.command import PluginCommand
+from cloudmesh.shell.command import command
 
 
 class LoginCommand(PluginCommand):

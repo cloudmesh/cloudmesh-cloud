@@ -1,11 +1,7 @@
-from cloudmesh.mongo.CmDatabase import CmDatabase
-from pprint import pprint
-from cloudmesh.management.configuration.name import Name
 from datetime import datetime
-from cloudmesh.common.util import banner
-from cloudmesh.common.dotdict import dotdict
-import json
-from cloudmesh.common.console import Console
+
+from cloudmesh.management.configuration.name import Name
+from cloudmesh.mongo.CmDatabase import CmDatabase
 
 
 class DatabaseUpdateOld:

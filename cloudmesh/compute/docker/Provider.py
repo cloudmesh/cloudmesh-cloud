@@ -1,29 +1,19 @@
-from cloudmesh.abstractclass.ComputeNodeABC import ComputeNodeABC
-from pprint import pprint
-from cloudmesh.common.Shell import Shell
-from cloudmesh.common.dotdict import dotdict
-from datetime import datetime
-import io
-import time
+import os
+import shlex
 import subprocess
 import sys
-import shlex
-import platform
-import docker
-import os
 import textwrap
-import webbrowser
 from pprint import pprint
+
+import docker
+from docker.version import version as pydocker_version
+
+from cloudmesh.abstractclass.ComputeNodeABC import ComputeNodeABC
 from cloudmesh.common.Shell import Shell
+from cloudmesh.common.console import Console
 from cloudmesh.common.dotdict import dotdict
 # from cloudmesh.abstractclass import ComputeNodeManagerABC
 from cloudmesh.management.configuration.config import Config
-from cloudmesh.common.console import Console
-from cloudmesh.mongo import MongoDBController
-from datetime import datetime
-from cloudmesh.common.util import path_expand
-
-from docker.version import version as pydocker_version
 
 """
 is vagrant up todate
@@ -214,6 +204,8 @@ class Provider(ComputeNodeABC):
         """
         start a node
 
+        :param version:
+        :param directory:
         :param name: the unique node name
         :return:  The dict representing the node
         """
@@ -295,8 +287,7 @@ class Provider(ComputeNodeABC):
         arg = (self.local())
         arg.update(kwargs)
 
-        script = {}
-        script["ubuntu"] = textwrap.dedent("""
+        script = {"ubuntu": textwrap.dedent("""
             #
             # cloudmesh dockerfile
             #
@@ -321,7 +312,7 @@ class Provider(ComputeNodeABC):
             
             EXPOSE 80 443
             
-           """.format(**arg))
+           """.format(**arg))}
 
         return script
 

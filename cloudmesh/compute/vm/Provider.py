@@ -2,9 +2,7 @@ from cloudmesh.compute.libcloud.Provider import Provider as LibCloudProvider
 from cloudmesh.compute.virtualbox.Provider import \
     Provider as VirtualboxCloudProvider
 from cloudmesh.management.configuration.config import Config
-from cloudmesh.common.console import Console
 from cloudmesh.mongo.DataBaseDecorator import DatabaseUpdate
-from cloudmesh.terminal.Terminal import VERBOSE
 
 
 class Provider(object):

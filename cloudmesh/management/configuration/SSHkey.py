@@ -44,10 +44,12 @@ class SSHkey(dict):
         # work with students that do windows and find out how to do it in windows also
         pass
 
+    # noinspection PyDictCreation
     def get_from_git(self, user, keyname=None):
         """
         gets the key from github
 
+        :param keyname: the keyname
         :param user: the github username
         :return: an array of public keys
         :rtype: list

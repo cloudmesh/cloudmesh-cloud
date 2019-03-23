@@ -16,10 +16,11 @@
 #    License: Apache 2.0
 #
 ########################################################################
-from libcloud.compute.types import Provider
-from libcloud.compute.providers import get_driver
-import oyaml as yaml
 import os
+
+from libcloud.compute.providers import get_driver
+from libcloud.compute.types import Provider
+
 from cloudmesh.management.configuration.config import Config
 from cloudmesh.shell.variables import Variables
 

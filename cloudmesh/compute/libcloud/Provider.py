@@ -176,6 +176,7 @@ class Provider(ComputeNodeABC):
         :param name: The name to be found
         :param: If raw is True, elements is a libcloud object.
                 Otherwise elements is a dict
+        :param raw: if raw is used the return from the driver is used and not a cleaned dict, not implemented
         :return:
         """
         for element in elements:

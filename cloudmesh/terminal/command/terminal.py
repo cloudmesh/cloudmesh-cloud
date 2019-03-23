@@ -1,12 +1,11 @@
 from __future__ import print_function
-from cloudmesh.shell.command import command, map_parameters
-from cloudmesh.shell.command import PluginCommand
-from cloudmesh.common.console import Console
-from cloudmesh.common.util import path_expand
-from pprint import pprint
-from cloudmesh.terminal.Terminal import VERBOSE
-from cloudmesh.common.Shell import Shell
+
 import os
+
+from cloudmesh.common.Shell import Shell
+from cloudmesh.shell.command import PluginCommand
+from cloudmesh.shell.command import command, map_parameters
+from cloudmesh.terminal.Terminal import VERBOSE
 
 
 class TerminalCommand(PluginCommand):

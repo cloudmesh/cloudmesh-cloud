@@ -37,7 +37,7 @@ class StorageCommand(PluginCommand):
 
           Example:
             set storage=box
-            starage  put FILENAME
+            storage  put FILENAME
 
             is the same as 
 
@@ -63,7 +63,7 @@ class StorageCommand(PluginCommand):
                 service = None
 
         if service is None:
-            Console.error("storge service not defined")
+            Console.error("storage service not defined")
 
         if arguments.get:
             m.get(service, filename)

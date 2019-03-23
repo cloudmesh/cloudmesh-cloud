@@ -16,7 +16,7 @@ from cloudmesh.common.util import path_expand
 from cloudmesh.management.configuration.config import Config
 
 """
-is vagrant up todate
+is vagrant up to date
 
 ==> vagrant: A new version of Vagrant is available: 2.2.4 (installed version: 2.2.2)!
 ==> vagrant: To upgrade visit: https://www.vagrantup.com/downloads.html

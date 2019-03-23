@@ -16,7 +16,7 @@ from cloudmesh.common.dotdict import dotdict
 from cloudmesh.management.configuration.config import Config
 
 """
-is vagrant up todate
+is vagrant up to date
 
 ==> vagrant: A new version of Vagrant is available: 2.2.4 (installed version: 2.2.2)!
 ==> vagrant: To upgrade visit: https://www.vagrantup.com/downloads.html
@@ -143,9 +143,9 @@ class Provider(ComputeNodeABC):
 
     def images(self):
         client = docker.from_env()
-        all = client.images.list()
+        images = client.images.list()
         result = []
-        for image in all:
+        for image in images:
             image = dict(image.__dict__)['attrs']
             # image["repo"],image["tags"] = image["RepoTags"][0].split(":")
             image["repo"] = None
@@ -275,7 +275,7 @@ class Provider(ComputeNodeABC):
 
     def dockerfile(self,
                    name=None,
-                   dir="~/.cloudmesh/docker/",
+                   directroy="~/.cloudmesh/docker/",
                    os="ubuntu",
                    version="18.04",
                    **kwargs):

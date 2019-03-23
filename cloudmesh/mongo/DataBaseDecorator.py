@@ -29,6 +29,7 @@ class DatabaseUpdateOld:
                 result["modified"] = str(datetime.utcnow())
                 if "created" not in result:
                     result["created"] = result["modified"]
+                # noinspection PyUnusedLocal
                 r = self.database.update(result,
                                          collection=self.collection,
                                          replace=self.replace)
@@ -66,6 +67,7 @@ class DatabaseAddOld:
 
             if result is not None:
                 result["created"] = result["modified"] = str(datetime.utcnow())
+                # noinspection PyUnusedLocal
                 r = self.database.update(result, collection=self.collection,
                                          replace=self.replace)
 
@@ -85,6 +87,7 @@ class DatabaseUpdate:
             return {"test": "hello"}
     """
 
+    # noinspection PyUnusedLocal
     def __init__(self, **kwargs):
         self.database = CmDatabase()
 

@@ -259,16 +259,16 @@ class SlurmCluster(object):
         """
         if target == 'slurm-cluster':
             self.batch_config.remove(['slurm_cluster'], key)
-            print("Slurm-cluster {} removeed successfully.".format(key))
+            print("Slurm-cluster {} removed successfully.".format(key))
         elif target == 'job':
             self.batch_config.remove(['job-metadata'], key)
-            print("Job {} removeed successfully.".format(key))
+            print("Job {} removed successfully.".format(key))
         else:
-            raise ValueError("Target of removeing not found.")
+            raise ValueError("Target to remove not found.")
 
     def fetch(self, job_name):
         """
-        This method is used to fetch resutls from remote nodes
+        This method is used to fetch results from remote nodes
 
         :param job_name: the previously submitted job name
         :return:

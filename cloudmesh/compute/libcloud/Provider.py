@@ -75,7 +75,7 @@ class Provider(ComputeNodeABC):
         Initializes the provider. The default parameters are read from the configutation
         file that is defined in yaml format.
         :param name: The name of the provider as defined in the yaml file
-        :param configuration: The location of the yaml configuration filw
+        :param configuration: The location of the yaml configuration file
         """
         conf = Config(configuration)["cloudmesh"]
         self.user = conf["profile"]
@@ -201,7 +201,7 @@ class Provider(ComputeNodeABC):
 
     def key_upload(self, key):
         """
-        uploades teh key specified in the yaml configuration to the cloud
+        uploads the key specified in the yaml configuration to the cloud
         :param key:
         :return:
         """
@@ -327,7 +327,7 @@ class Provider(ComputeNodeABC):
     def images(self, raw=False):
         """
         Lists the images on the cloud
-        :param raw: If raw is set to True the lib cloud object is returened
+        :param raw: If raw is set to True the lib cloud object is returned
                     otherwise a dict is returened.
         :return: dict or libcloud object
         """
@@ -351,7 +351,7 @@ class Provider(ComputeNodeABC):
     def flavors(self, raw=False):
         """
         Lists the flavors on the cloud
-        :param raw: If raw is set to True the lib cloud object is returened
+        :param raw: If raw is set to True the lib cloud object is returned
                     otherwise a dict is returened.
         :return: dict or libcloud object
         """
@@ -432,7 +432,7 @@ class Provider(ComputeNodeABC):
     def list(self, raw=False):
         """
         Lists the vms on the cloud
-        :param raw: If raw is set to True the lib cloud object is returened
+        :param raw: If raw is set to True the lib cloud object is returned
                     otherwise a dict is returened.
         :return: dict or libcloud object
         """
@@ -479,7 +479,7 @@ class Provider(ComputeNodeABC):
         for node in nodes:
             if node.name in names:
                 self.cloudman.destroy_node(node)
-        # bug status shoudl change to destroyed
+        # bug status should change to destroyed
         return None
 
     def reboot(self, names=None):

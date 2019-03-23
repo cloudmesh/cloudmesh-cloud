@@ -32,7 +32,7 @@ class Provider(object):
     def list(self):
         return self.p.list()
 
-    def add_colection(self, d, *args):
+    def add_collection(self, d, *args):
         if d is None:
             return None
         label = '-'.join(args)

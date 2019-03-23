@@ -128,7 +128,7 @@ class Config(object):
 
         yaml_file = self.data.copy()
         with open(self.config_path, "w") as stream:
-            print("Writing updata to cloudmesh.yaml")
+            print("Writing update to cloudmesh.yaml")
             yaml.safe_dump(yaml_file, stream, default_flow_style=False)
 
     def default(self):

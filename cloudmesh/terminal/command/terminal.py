@@ -23,7 +23,7 @@ class TerminalCommand(PluginCommand):
                        [--interactive=INTERACTIVE]
                        [--window=WINDOW]
 
-          Starts a dockker container in interactive mode in a new terminal
+          Starts a docker container in interactive mode in a new terminal
           and executes the command in it.
 
           Arguments:

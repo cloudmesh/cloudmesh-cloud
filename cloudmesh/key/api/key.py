@@ -1,5 +1,5 @@
 # See also the methods already implemented we have in cm for ssh management
-# I think you reimplement things that already exists.
+# I think you reimplemented things that already exists.
 
 # see and inspect cloudmesh.common
 import os

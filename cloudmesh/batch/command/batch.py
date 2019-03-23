@@ -90,10 +90,10 @@ class BatchCommand(PluginCommand):
             The outout of the script can be safed in a destination folder. A virtual
             directory is used to coordinate all saved files.
 
-            The files can be located due to the use of the firtual directiry on
-            multiple different data or file servises
+            The files can be located due to the use of the firtual directory on
+            multiple different data or file services
 
-            Authentiaction to the Batch systems is done viw the underkaying center
+            Authentication to the Batch systems is done viw the underlaying center
             authentication. We assume that the user has an account to submit on
             these systems.
 
@@ -113,7 +113,7 @@ class BatchCommand(PluginCommand):
             #
             slurm_manager = SlurmCluster(debug=debug)
 
-            # dont use print but use ,Consile.msg(), Consile.error(), Console.ok()
+            # do not use print but use ,Console.msg(), Console.error(), Console.ok()
 
             if arguments.job and arguments.create and arguments.get("JOB_NAME"):
                 job_name = arguments.get("JOB_NAME")

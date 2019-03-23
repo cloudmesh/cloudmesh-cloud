@@ -10,7 +10,7 @@ import psutil
 
 
 class SystemPath(object):
-    """Managing the Systhem path in the .bashrc or .bash_profile files"""
+    """Managing the System path in the .bashrc or .bash_profile files"""
 
     @staticmethod
     def add(path):
@@ -19,7 +19,7 @@ class SystemPath(object):
 
         TODO: Windows is not implemented yet.
 
-        :param path: The pathe to be added
+        :param path: The path to be added
         :return:
         """
         script = None
@@ -41,14 +41,14 @@ class SystemPath(object):
 
 
 class Script(object):
-    """Executing a sript defined by a simple text parameter"""
+    """Executing a script defined by a simple text parameter"""
 
     @staticmethod
     def run(script, debug=False):
         """
         run the specified script line by line.
 
-        TODO: at one point this shoudl be mooved to cloudmesh.common
+        TODO: at one point this should be moved to cloudmesh.common
 
 
         :param script: The script
@@ -76,10 +76,10 @@ def find_process(name):
     """ find a process by name
 
     :param name: the name of the process
-    :return: A list of dicsts in which the attributes pid, command, and created are available and the name matches
+    :return: A list of dicts in which the attributes pid, command, and created are available and the name matches
              the specified name argument.
 
-    TODO: at one point this shoudl be mooved to cloudmesh.common
+    TODO: at one point this should be moved to cloudmesh.common
 
     Return a list of processes matching 'name'.
     """

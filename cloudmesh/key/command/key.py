@@ -49,7 +49,7 @@ class KeyCommand(PluginCommand):
 
 
            Arguments:
-             VMS            Para,eterized list of virtual machines
+             VMS            Parameterized list of virtual machines
              CLOUDS         The clouds
              NAME           The name of the key.
              SOURCE         db, ssh, all
@@ -93,7 +93,7 @@ class KeyCommand(PluginCommand):
                 key add --ssh
                     adds the default key in ~/.ssh/id_rsa.pub
                 key add NAME  --source=FILENAME
-                    adds the key specifid by the filename with the given name
+                    adds the key specified by the filename with the given name
                 key add NAME --git --username=username
                     adds a named github key from a user with the given github
                     username.
@@ -101,9 +101,9 @@ class KeyCommand(PluginCommand):
                 Once the keys are uploaded to github, they can be listed
 
                 key list [NAME] [--format=FORMAT]
-                    list the keys loaded to cloudmesh in the giiven format:
-                    json, yaml, table. table is default. The NAME cabn be
-                    specified and if ommitted the name cloudmesh.profile.user
+                    list the keys loaded to cloudmesh in the given format:
+                    json, yaml, table. table is default. The NAME can be
+                    specified and if omitted the name cloudmesh.profile.user
                     is assumed.
 
                 key get NAME

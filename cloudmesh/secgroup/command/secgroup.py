@@ -25,7 +25,7 @@ class SecgroupCommand(PluginCommand):
                 --format=FORMAT Specify output format, in one of the following:
                                 table, csv, json, yaml, dict. The default value
                                 is 'table'.
-                --cloud=CLOUD   Name of the IaaS cloud e.g. kilo,chameleoon.
+                --cloud=CLOUD   Name of the IaaS cloud e.g. kilo,chameleon.
                                 The clouds are defined in the yaml file.
                                 If the name "all" is used for the cloud all
                                 clouds will be selected.
@@ -62,7 +62,7 @@ class SecgroupCommand(PluginCommand):
                     lists the security groups and rules on the specified clouds.
                 secgroup add GROUP RULE FROMPORT TOPORT PROTOCOL CIDR
                     adds a security rule with the given group and the details
-                    of the security ruls
+                    of the security rules
                 secgroup delete GROUP [--cloud=CLOUD]
                     Deletes a security group from the local database. To make
                     the change on the remote cloud, using the 'upload' command

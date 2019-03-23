@@ -11,7 +11,7 @@ from cloudmesh.mongo import MongoDBController
 from datetime import datetime
 
 """
-is vagrant up todate
+is vagrant up to date
 
 ==> vagrant: A new version of Vagrant is available: 2.2.4 (installed version: 2.2.2)!
 ==> vagrant: To upgrade visit: https://www.vagrantup.com/downloads.html
@@ -90,7 +90,7 @@ class VboxProvider:
         arg = dotdict(kwargs)
         arg.cwd = kwargs.get("cwd", None)
 
-        # get the dir based on anme
+        # get the dir based on name
 
         print("ARG")
         pprint(arg)

@@ -7,6 +7,7 @@ class Manager(object):
     def __init__(self):
         print("init {name}".format(name=self.__class__.__name__))
 
+    # TODO: service is passed as parameter but self.service is used
     def _provider(self, service):
         provider = None
         if self.service == "gdrive":

@@ -37,6 +37,7 @@ class Driver(object):
 
         if name is None:
             variables = Variables()
+            # noinspection PyUnusedLocal
             cloudname = variables['cloud']
 
         kind = self.config.get(

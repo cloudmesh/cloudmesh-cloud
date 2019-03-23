@@ -55,7 +55,7 @@ class MongoInstaller(object):
             print(
                 "MongoDB is not installed in {MONGO_PATH}".format(**self.data))
             #
-            # ask if you like to install and give infor wher it is being installed
+            # ask if you like to install and give info where it is being installed
             #
             # use cloudmesh yes no question see cloudmesh 3
             #
@@ -194,9 +194,12 @@ class MongoDBController(object):
         password = str(self.data["MONGO_PASSWORD"])
         username = str(self.data["MONGO_USERNAME"])
 
-        username = urllib.parse.quote_plus(username.encode())
-        password = urllib.parse.quote_plus(password.encode())
-        client = MongoClient('mongodb://%s:%s@127.0.0.1' % (username, password))
+        data = {
+            'username': urllib.parse.quote_plus(username.encode()),
+            'password': urllib.parse.quote_plus(password.encode())
+        }
+        connection = 'mongodb://{username}:{password}@127.0.0.1'.format(**data)
+        client = MongoClient(connection)
         return client
 
     def list(self):
@@ -218,7 +221,7 @@ class MongoDBController(object):
 
     def update_auth(self):
         """
-        create admin acount in MongoDB
+        create admin account in MongoDB
         """
         #
         # TODO: BUG: should that not be done differently, e.g. from commandline or via ENV variables
@@ -234,7 +237,7 @@ class MongoDBController(object):
         self.stop()
 
         print(
-            "Enable the Secutiry. You will use your username and password to login the MongoDB")
+            "Enable the Security. You will use your username and password to login the MongoDB")
 
     def create(self):
 
@@ -286,13 +289,14 @@ class MongoDBController(object):
         shutdown the MongoDB server
         linux and darwin have different way to shutdown the server, the common way is kill
         """
+        # TODO: there  could be more mongos running, be more specific
         script = 'kill -2 `pgrep mongo`'
         result = Script.run(script)
         print(result)
 
     def set_auth(self):
         """
-        add admin acount into the MongoDB admin database
+        add admin account into the MongoDB admin database
         """
 
         if platform.lower() == 'win32':

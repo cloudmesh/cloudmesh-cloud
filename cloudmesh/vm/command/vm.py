@@ -334,7 +334,7 @@ class VmCommand(PluginCommand):
 
             # if no clouds find the clouds of all specified vms by name
             # find all vms of the clouds,
-            # print only thos vms specified by name, if no name is given print all for the cloud
+            # print only those vms specified by name, if no name is given print all for the cloud
             # print("list the vms")
 
             clouds, names = get_cloud_and_names("list", arguments)
@@ -349,13 +349,13 @@ class VmCommand(PluginCommand):
                     if arguments["--refresh"]:
                         pass
                         # find all clouds in db
-                        # itterate over the clouds
+                        # iterate over the clouds
                         # for each name in name queue, find it and add it to the cloud vm list
                         # for each cloud print the vms
                     else:
                         pass
                         # find all clouds in db
-                        # itterate over all clouds
+                        # iterate over all clouds
                         # find the vm with the name
                         # add it to the cloud list
                         # for each cloud print the vms

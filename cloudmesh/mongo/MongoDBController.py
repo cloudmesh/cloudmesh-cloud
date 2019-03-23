@@ -52,13 +52,15 @@ class MongoInstaller(object):
             return ""
 
         if not os.path.isdir(path) and self.data["MONGO_AUTOINSTALL"]:
-            print("MongoDB is not installed in {MONGO_PATH}".format(**self.data))
+            print(
+                "MongoDB is not installed in {MONGO_PATH}".format(**self.data))
             #
             # ask if you like to install and give infor wher it is being installed
             #
             # use cloudmesh yes no question see cloudmesh 3
             #
-            print("Auto-install the MongoDB into {MONGO_PATH}".format(**self.data))
+            print("Auto-install the MongoDB into {MONGO_PATH}".format(
+                **self.data))
 
             self.data["MONGO_CODE"] = self.data["MONGO_DOWNLOAD"][platform]
 
@@ -66,7 +68,7 @@ class MongoInstaller(object):
                 self.linux()
             elif platform.lower() == 'darwin':
                 self.darwin()
-            elif platform.lower() == 'win32': #Replaced windows with win32
+            elif platform.lower() == 'win32':  # Replaced windows with win32
                 self.windows()
             else:
                 print("platform not found", platform)
@@ -117,11 +119,11 @@ class MongoInstaller(object):
         """
         install MongoDB in windows
         """
-        #Added below code to change unix format to windows format for directory creation
+        # Added below code to change unix format to windows format for directory creation
         self.data["MONGO_HOME"] = self.data["MONGO_HOME"].replace("/", "\\")
         self.data["MONGO_PATH"] = self.data["MONGO_PATH"].replace("/", "\\")
         self.data["MONGO_LOG"] = self.data["MONGO_LOG"].replace("/", "\\")
-        
+
         script = """
         mkdir {MONGO_PATH}
         mkdir {MONGO_HOME}
@@ -231,11 +233,12 @@ class MongoDBController(object):
         # shut down mongodb
         self.stop()
 
-        print("Enable the Secutiry. You will use your username and password to login the MongoDB")
+        print(
+            "Enable the Secutiry. You will use your username and password to login the MongoDB")
 
     def create(self):
-        
-        #Added special code for windows. Cant do start service and set_auth in same cms execution.
+
+        # Added special code for windows. Cant do start service and set_auth in same cms execution.
 
         if platform.lower() == 'win32':
             self.start(security=False)
@@ -298,8 +301,8 @@ class MongoDBController(object):
             """.format(**self.data)
             print(script)
         else:
-            script = """mongo --eval 'db.getSiblingDB("admin").createUser({{user:"{MONGO_USERNAME}",pwd:"{MONGO_PASSWORD}",roles:[{{role:"root",db:"admin"}}]}})'""".format(**self.data)
-
+            script = """mongo --eval 'db.getSiblingDB("admin").createUser({{user:"{MONGO_USERNAME}",pwd:"{MONGO_PASSWORD}",roles:[{{role:"root",db:"admin"}}]}})'""".format(
+                **self.data)
 
         result = Script.run(script)
         print(result)
@@ -357,15 +360,15 @@ class MongoDBController(object):
             if result is None:
                 state = dotdict(
                     {"status": "error",
-                    "message": "No mongod running",
-                    "output": None
-                    })
+                     "message": "No mongod running",
+                     "output": None
+                     })
             else:
                 state = dotdict(
                     {"status": "ok",
-                    "message": "running",
-                    "output": None
-                    })
+                     "message": "running",
+                     "output": None
+                     })
                 process = {
                     "pid": str(result['PID']),
                     "command": result['Image Name']
@@ -379,16 +382,16 @@ class MongoDBController(object):
             if result is None:
                 state = dotdict(
                     {"status": "error",
-                    "message": "No mongod running",
-                    "output": None
-                    })
+                     "message": "No mongod running",
+                     "output": None
+                     })
                 output = None
             else:
                 state = dotdict(
                     {"status": "ok",
-                    "message": "running",
-                    "output": None
-                    })
+                     "message": "running",
+                     "output": None
+                     })
                 output = {}
                 for p in result:
                     p = dotdict(p)
@@ -399,13 +402,14 @@ class MongoDBController(object):
                     output[str(p.pid)] = process
                 state["output"] = output
         return state
-    
+
     # noinspection PyBroadException
     def version(self):
         ver = None
         try:
             out = \
-                subprocess.check_output("mongod --version", encoding='UTF-8', shell=True).split("\n")[0].split(
+                subprocess.check_output("mongod --version", encoding='UTF-8',
+                                        shell=True).split("\n")[0].split(
                     "version")[
                     1].strip().split(".")
             ver = (int(out[0][1:]), int(out[1]), int(out[2]))
@@ -441,9 +445,12 @@ class MongoDBController(object):
 
 
 """
+
+# TODO: develop a nosetest for this
+
 connection = pymongo.Connection(host = "127.0.0.1", port = 27017)
 db = connection["test_db"]
 test_collection = db["test_collection"]
 db.command("dbstats") # prints database stats for "test_db"
 db.command("collstats", "test_collection")
-        """
+"""

@@ -21,6 +21,7 @@ from cloudmesh.management.configuration.config import Config
 from cloudmesh.common.console import Console
 from cloudmesh.mongo import MongoDBController
 from datetime import datetime
+
 from cloudmesh.common.util import path_expand
 
 """
@@ -29,6 +30,7 @@ is vagrant up todate
 ==> vagrant: A new version of Vagrant is available: 2.2.4 (installed version: 2.2.2)!
 ==> vagrant: To upgrade visit: https://www.vagrantup.com/downloads.html
 """
+
 
 class Provider(ComputeNodeABC):
 
@@ -53,13 +55,13 @@ class Provider(ComputeNodeABC):
     output = {
         'vm': {
             "sort_keys": ["name"],
-            'order':["vagrant.name",
-                     "vagrant.cloud",
-                     "vbox.name",
-                     "vagrant.id",
-                     "vagrant.provider",
-                     "vagrant.state",
-                     "vagrant.hostname"],
+            'order': ["vagrant.name",
+                      "vagrant.cloud",
+                      "vbox.name",
+                      "vagrant.id",
+                      "vagrant.provider",
+                      "vagrant.state",
+                      "vagrant.hostname"],
             'header': ["Name",
                        "Cloud",
                        "Vbox",
@@ -72,7 +74,8 @@ class Provider(ComputeNodeABC):
         'flavor': None
     }
 
-    def __init__(self, name=None, configuration="~/.cloudmesh/.cloudmesh4.yaml"):
+    def __init__(self, name=None,
+                 configuration="~/.cloudmesh/.cloudmesh4.yaml"):
         self.config = Config()
         conf = Config(configuration)["cloudmesh"]
         self.user = conf["profile"]
@@ -87,14 +90,15 @@ class Provider(ComputeNodeABC):
             self.vboxmanage = "VBoxManage"
 
         # m = MongoDBController()
-        #status = m.status()
-        #if status.status == "error":
+        # status = m.status()
+        # if status.status == "error":
         #    raise Exception("ERROR: MongoDB is not running.")
         #
         # BUG: Naturally the following is wrong as it depends on the name.
         #
         # super().__init__("vagrant", config)
 
+    # noinspection PyPep8
     def version(self):
         """
         This command returns the versions ov vagrant and virtual box
@@ -137,14 +141,11 @@ class Provider(ComputeNodeABC):
         except:
             pass
 
-
         try:
 
-
             result = Shell.execute(self.vboxmanage, shell=True)
-            txt, version["virtualbox"]["version"]= result.split("\n")[0].split("Version ")
-
-
+            txt, version["virtualbox"]["version"] = result.split("\n")[0].split(
+                "Version ")
 
             result = Shell.execute(self.vboxmanage + " list -l extpacks",
                                    shell=True)
@@ -213,8 +214,8 @@ class Provider(ComputeNodeABC):
 
     def add_image(self, name=None):
 
-
-        command = "vagrant box add {name} --provider virtualbox".format(name=name)
+        command = "vagrant box add {name} --provider virtualbox".format(
+            name=name)
 
         result = ""
         if name is None:
@@ -223,13 +224,14 @@ class Provider(ComputeNodeABC):
             # read name form config
         else:
             try:
-                command = "vagrant box add {name} --provider virtualbox".format(name=name)
+                command = "vagrant box add {name} --provider virtualbox".format(
+                    name=name)
                 result = Shell.live(command)
                 assert result.status == 0
             except Exception as e:
                 print(e)
                 print(result)
-                print ()
+                print()
 
             return result
 
@@ -240,7 +242,6 @@ class Provider(ComputeNodeABC):
         :return:
         """
         return "A new version of Vagrant is available" not in r
-
 
     def start(self, name):
         """
@@ -311,10 +312,9 @@ class Provider(ComputeNodeABC):
             Console.ok("{name} created".format(**arg))
             Console.ok("{directory}/{name} booting ...".format(**arg))
 
-
             result = None
             result = Shell.live("vagrant up " + arg.name,
-                                   cwd=arg.directory)
+                                cwd=arg.directory)
             Console.ok("{name} ok.".format(**arg))
 
             return result
@@ -371,14 +371,13 @@ class Provider(ComputeNodeABC):
             attribute = attribute.replace(']', "")
             attribute = attribute.replace('[', "_")
 
-
             value = value.replace('"', "")
 
             d[attribute] = value
         return d
 
     def find(self, nodes=None, name=None):
-        if nodes == None:
+        if nodes is None:
             nodes = self.vagrant_nodes()
         pprint(nodes)
         if name in nodes:
@@ -405,7 +404,8 @@ class Provider(ComputeNodeABC):
 
         result = None
 
-        vms = Shell.execute(self.vboxmanage + " list vms", shell=True).replace('"', '').replace('{','').replace('}','').split("\n")
+        vms = Shell.execute(self.vboxmanage + " list vms", shell=True).replace(
+            '"', '').replace('{', '').replace('}', '').split("\n")
         vagrant_data = self.to_dict(self.vagrant_nodes())
 
         data = {}
@@ -416,7 +416,7 @@ class Provider(ComputeNodeABC):
 
         for line in vms:
             vbox_name, id = line.split(" ")
-            vagrant_name =  vbox_name.split("_")[0]
+            vagrant_name = vbox_name.split("_")[0]
 
             data[vagrant_name]["name"] = vagrant_name
             data[vagrant_name]["vbox_name"] = vbox_name
@@ -434,13 +434,16 @@ class Provider(ComputeNodeABC):
         for vm in vms:
             vbox_name = vms[vm]["vbox_name"]
 
-            details = Shell.execute(self.vboxmanage +  " showvminfo --machinereadable " + vbox_name, shell=True)
-            data[vm]["vbox"]  = self._convert_assignment_to_dict(details)
+            details = Shell.execute(
+                self.vboxmanage + " showvminfo --machinereadable " + vbox_name,
+                shell=True)
+            data[vm]["vbox"] = self._convert_assignment_to_dict(details)
 
         for vm in data:
-            directory = path_expand("~/.cloudmesh/vagrant/{name}".format(name=vm))
+            directory = path_expand(
+                "~/.cloudmesh/vagrant/{name}".format(name=vm))
 
-            data[vm]["cm"]= {
+            data[vm]["cm"] = {
                 "name": vm,
                 "directory": arg.directory,
                 "path": arg.path,
@@ -466,7 +469,7 @@ class Provider(ComputeNodeABC):
 
         result = []
         for d in data:
-            print (d)
+            print(d)
             result.append(data[d])
         return result
 
@@ -588,8 +591,9 @@ class Provider(ComputeNodeABC):
         arg.vagrantfile = "{directory}/Vagrantfile".format(**arg)
         return arg
 
-    def create_spec(self, name=None, image=None, size=1024, timeout=360, port=80,
-               **kwargs):
+    def create_spec(self, name=None, image=None, size=1024, timeout=360,
+                    port=80,
+                    **kwargs):
         """
         creates a named node
 
@@ -630,8 +634,6 @@ class Provider(ComputeNodeABC):
 
         return arg
 
-
-
     #
     # Additional methods
     #
@@ -651,9 +653,6 @@ class Provider(ComputeNodeABC):
             **d)
         webbrowser.open(link, new=2, autoraise=True)
 
-
-
-
     def list(self, raw=True):
         """
         list all nodes id
@@ -667,7 +666,6 @@ class Provider(ComputeNodeABC):
             result = self.vagrant_nodes()
         return result
 
-
     def rename(self, name=None, destination=None):
         """
         rename a node
@@ -677,7 +675,8 @@ class Provider(ComputeNodeABC):
         :return: the dict with the new name
         """
 
-        arguments = ['modifyvm', '"', name, '"', "--name", '"', destination, '"']
+        arguments = ['modifyvm', '"', name, '"', "--name", '"', destination,
+                     '"']
 
         vms = Shell.execute(self.vboxmanage, arguments, shell=True).split("\n")
         return {}
@@ -695,7 +694,6 @@ class Provider(ComputeNodeABC):
 
         data = {}
 
-
         result = result.split("\n\n")
         entries = {}
 
@@ -708,7 +706,7 @@ class Provider(ComputeNodeABC):
                 value = value.strip()
                 attribute = attribute.lower()
                 attribute = attribute.replace(" ", "_")
-                print (">>>>", attribute, value)
+                print(">>>>", attribute, value)
                 if attribute == "id":
                     id = value
                     entries[id] = {}

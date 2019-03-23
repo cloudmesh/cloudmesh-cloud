@@ -12,6 +12,8 @@ from cloudmesh.mongo.CmDatabase import CmDatabase
 from cloudmesh.common.Printer import Printer
 from cloudmesh.common.util import banner
 from cloudmesh.terminal.Terminal import VERBOSE
+
+
 class VmCommand(PluginCommand):
 
     # see also https://github.com/cloudmesh/client/edit/master/cloudmesh_client/shell/plugins/VmCommand.py
@@ -231,7 +233,6 @@ class VmCommand(PluginCommand):
                 Console.msg("{label} {name}".format(label=label, name=name))
                 # r = f(name)
 
-
         map_parameters(arguments,
                        'active',
                        'cloud',
@@ -400,12 +401,9 @@ class VmCommand(PluginCommand):
                                                 output=arguments.format)
                               )
 
-
                 except Exception as e:
 
                     VERBOSE.print(e, verbose=9)
-
-
 
             return ""
 
@@ -416,15 +414,12 @@ class VmCommand(PluginCommand):
             """
             print("info for the vm")
 
-
             cloud, names = get_cloud_and_names("info", arguments)
-
-
 
         elif arguments.rename:
 
             print("rename the vm")
-            
+
             try:
                 oldnames = Parameter.expand(arguments["OLDNAMES"])
                 newnames = Parameter.expand(arguments["NEWNAMES"])
@@ -534,8 +529,6 @@ class VmCommand(PluginCommand):
                 # r = vm.console(name,force=argument.force)
                 Console.msg("{label} {name}".format(label="console", name=name))
             return
-
-
 
         elif arguments.wait:
             """

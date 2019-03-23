@@ -15,6 +15,7 @@ from cloudmesh.shell.command import command
 from cloudmesh.common.Shell import Shell
 from cloudmesh.common.util import path_expand
 
+
 class AdminCommand(PluginCommand):
     banner = textwrap.dedent("""
         test
@@ -217,7 +218,6 @@ class AdminCommand(PluginCommand):
             return ""
 
         elif arguments.yaml and arguments.check:
-
 
             path = path_expand("~/.cloudmesh/cloudmesh4.yaml")
             print()

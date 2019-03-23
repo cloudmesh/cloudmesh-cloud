@@ -8,6 +8,7 @@ from cloudmesh.terminal.Terminal import VERBOSE
 from cloudmesh.common.Shell import Shell
 import os
 
+
 class TerminalCommand(PluginCommand):
 
     # noinspection PyUnusedLocal
@@ -56,7 +57,6 @@ class TerminalCommand(PluginCommand):
         else:
             arguments.command += ";"
 
-
         VERBOSE.print(arguments, label='arguments', verbose=1)
 
         if arguments.os is None:
@@ -70,7 +70,6 @@ class TerminalCommand(PluginCommand):
                 arguments.shell = ""
 
             VERBOSE.print(arguments, label='arguments', verbose=1)
-
 
             command = "cd {cwd}; docker run -v {cwd}:{cwd} -w {cwd} --rm {interactive} {os} {command}{shell}".format(
                 **arguments)

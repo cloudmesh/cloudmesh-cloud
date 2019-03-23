@@ -134,7 +134,7 @@ class Provider(ComputeNodeABC):
         def get_version(command):
             data = dotdict()
             version, build = Shell.execute("docker --version",
-                                              shell=True).split(",")
+                                           shell=True).split(",")
             build = build.split("build ")[1]
             version = version.split("version ")[1]
             data.version = version

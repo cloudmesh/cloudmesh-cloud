@@ -14,6 +14,7 @@ from cloudmesh.common.util import path_expand
 from cloudmesh.common.console import Console
 from cloudmesh.terminal.Terminal import VERBOSE
 
+
 class Provider(ComputeNodeABC):
     # ips
     # secgroups
@@ -537,7 +538,8 @@ class Provider(ComputeNodeABC):
                 kwargs["ex_security_groups"] = secgroupsobj
 
         if self.cloudtype in ["openstack", "aws"]:
-            node = self.cloudman.create_node(name=name, image=image_use, size=flavor_use, **kwargs)
+            node = self.cloudman.create_node(name=name, image=image_use,
+                                             size=flavor_use, **kwargs)
         else:
             sys.exit("this cloud is not yet supported")
 

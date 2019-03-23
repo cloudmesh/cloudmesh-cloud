@@ -96,7 +96,8 @@ class VboxCommand(PluginCommand):
         #
         def list_images():
             images = Provider().images()
-            _LIST_PRINT(images, arguments.format, order=["name", "provider", "version"])
+            _LIST_PRINT(images, arguments.format,
+                        order=["name", "provider", "version"])
 
         #
         # ok
@@ -130,7 +131,8 @@ class VboxCommand(PluginCommand):
                 }
             }
             result = Printer.write(versions,
-                                   order=["attribute", "version", "description"],
+                                   order=["attribute", "version",
+                                          "description"],
                                    output=arguments.format)
             print(result)
 
@@ -237,7 +239,7 @@ class VboxCommand(PluginCommand):
 
             d = defaults()
 
-            pprint (d)
+            pprint(d)
 
             arguments.memory = arguments["--memory"] or d.memory
             arguments.image = arguments["--image"] or d.image

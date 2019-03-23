@@ -18,7 +18,6 @@ is vagrant up todate
 """
 
 
-
 # noinspection PyUnusedLocal
 class VboxProvider:
 
@@ -29,7 +28,6 @@ class VboxProvider:
         :return:
         """
         return "A new version of Vagrant is available" not in r
-
 
     def __init__(self, cloud=None, config=None):
 
@@ -105,7 +103,8 @@ class VboxProvider:
         pprint(arg)
 
         if arg.name in vms:
-            Console.error("vm {name} already booted".format(**arg), traceflag=False)
+            Console.error("vm {name} already booted".format(**arg),
+                          traceflag=False)
             return None
 
         else:
@@ -134,7 +133,8 @@ class VboxProvider:
         vms = self.to_dict(self.nodes())
 
         arg = "ssh {} -c {}".format(name, command)
-        result = Shell.execute("vagrant", ["ssh", name, "-c", command], cwd=arg.directory)
+        result = Shell.execute("vagrant", ["ssh", name, "-c", command],
+                               cwd=arg.directory)
         return result
 
     def to_dict(self, lst, id="name"):
@@ -225,7 +225,8 @@ class VboxProvider:
             vname = vm.split(" {")[0]
             if vname.startswith(vbox_name_prefix):
                 details = Shell.execute("VBoxManage",
-                                        ["showvminfo", "--machinereadable", vname])
+                                        ["showvminfo", "--machinereadable",
+                                         vname])
                 # print (details)
                 break
         vbox_dict = self._convert_assignment_to_dict(details)
@@ -324,7 +325,8 @@ class VboxProvider:
 
         return script
 
-    def _get_specification(self, cloud=None, name=None, port=None, image=None, **kwargs):
+    def _get_specification(self, cloud=None, name=None, port=None, image=None,
+                           **kwargs):
         arg = dotdict(kwargs)
         arg.port = port
         config = Config()
@@ -359,7 +361,8 @@ class VboxProvider:
         arg.vagrantfile = "{directory}/Vagrantfile".format(**arg)
         return arg
 
-    def create(self, name=None, image=None, size=None, timeout=360, port=80, **kwargs):
+    def create(self, name=None, image=None, size=None, timeout=360, port=80,
+               **kwargs):
         """
         creates a named node
 
@@ -380,7 +383,8 @@ class VboxProvider:
         # TODO BUG: if name contains not just letters and numbers and - return error, e. undersore not allowed
         #
 
-        arg = self._get_specification(name=name, image=image, size=size, timeout=timeout, port=port, **kwargs)
+        arg = self._get_specification(name=name, image=image, size=size,
+                                      timeout=timeout, port=port, **kwargs)
 
         if not os.path.exists(arg.directory):
             os.makedirs(arg.directory)
@@ -420,11 +424,9 @@ class VboxProvider:
             'key': '+'.join(keywords),
             'location': "https://app.vagrantup.com/boxes/search"
         }
-        link = "{location}?utf8=%E2%9C%93&sort=downloads&provider=&q=\"{key}\"".format(**d)
+        link = "{location}?utf8=%E2%9C%93&sort=downloads&provider=&q=\"{key}\"".format(
+            **d)
         webbrowser.open(link, new=2, autoraise=True)
-
-
-
 
     #
     # ok. moved

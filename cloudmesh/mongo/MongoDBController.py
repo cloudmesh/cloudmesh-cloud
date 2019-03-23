@@ -374,7 +374,10 @@ class MongoDBController(object):
                     "command": result['Image Name']
                 }
                 output = {}
-                output[str()] = process
+                #
+                # TODO: there was a bug here, please check, it was only str()
+                #
+                output[str(result['PID'])] = process
                 state["output"] = output
 
         else:

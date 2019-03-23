@@ -1,13 +1,13 @@
 from __future__ import print_function
-from cloudmesh.shell.command import command
-from cloudmesh.shell.command import PluginCommand
+
+import os.path
+import webbrowser
+from pathlib import Path
 
 from cloudmesh.common.console import Console
-import webbrowser
 from cloudmesh.common.util import path_expand
-import os.path
-from pprint import pprint
-from pathlib import Path
+from cloudmesh.shell.command import PluginCommand
+from cloudmesh.shell.command import command
 
 
 class OpenCommand(PluginCommand):

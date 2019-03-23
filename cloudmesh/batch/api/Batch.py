@@ -27,6 +27,7 @@ class SlurmCluster(object):
         self.slurm_cluster = {}
         self.job_metadata = {}
 
+    # noinspection PyDictCreation
     def create(self,
                job_name,
                slurm_cluster_name,
@@ -74,11 +75,12 @@ class SlurmCluster(object):
             'argfile_name': ntpath.basename(argfile_path),
             'script_name': ntpath.basename(job_script_path),
             'slurm_script_name': ntpath.basename(slurm_script_path),
-            'remote_path': os.path.join(remote_path, 'job' + suffix)}
+            'remote_path': os.path.join(remote_path, 'job' + suffix),
+            'local_path': local_path
+        }
 
         job['remote_script_path'] = os.path.join(job['remote_path'], job['script_name'])
         job['remote_slurm_script_path'] = os.path.join(job['remote_path'], job['slurm_script_name'])
-        job['local_path'] = local_path
 
         job_metadata = {job_name: job}
 

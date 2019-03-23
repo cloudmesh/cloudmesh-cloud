@@ -1,28 +1,19 @@
-from cloudmesh.abstractclass.ComputeNodeABC import ComputeNodeABC
-from pprint import pprint
-from cloudmesh.common.Shell import Shell
-from cloudmesh.common.dotdict import dotdict
-from datetime import datetime
-import io
-import time
+import os
+import platform
+import shlex
 import subprocess
 import sys
-import shlex
-import platform
-
-import os
 import textwrap
 import webbrowser
 from pprint import pprint
+
+from cloudmesh.abstractclass.ComputeNodeABC import ComputeNodeABC
 from cloudmesh.common.Shell import Shell
+from cloudmesh.common.console import Console
 from cloudmesh.common.dotdict import dotdict
+from cloudmesh.common.util import path_expand
 # from cloudmesh.abstractclass import ComputeNodeManagerABC
 from cloudmesh.management.configuration.config import Config
-from cloudmesh.common.console import Console
-from cloudmesh.mongo import MongoDBController
-from datetime import datetime
-
-from cloudmesh.common.util import path_expand
 
 """
 is vagrant up todate
@@ -683,10 +674,6 @@ class Provider(ComputeNodeABC):
 
     def list_os(self):
         """
-        rename a node
-
-        :param destination:
-        :param name: the current name
         :return: the dict with the new name
         """
 

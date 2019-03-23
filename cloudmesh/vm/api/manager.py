@@ -1,5 +1,4 @@
 from cloudmesh.management.configuration.config import Config
-from cloudmesh.compute.libcloud import Provider
 
 
 class Manager(object):

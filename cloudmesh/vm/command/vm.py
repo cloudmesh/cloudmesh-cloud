@@ -1,16 +1,14 @@
 from __future__ import print_function
 
+from cloudmesh.common.Printer import Printer
+from cloudmesh.common.console import Console
+from cloudmesh.common.parameter import Parameter
+from cloudmesh.compute.vm.Provider import Provider
+from cloudmesh.management.configuration.config import Active
+from cloudmesh.mongo.CmDatabase import CmDatabase
 from cloudmesh.shell.command import PluginCommand
 from cloudmesh.shell.command import command
 from cloudmesh.shell.variables import Variables
-from cloudmesh.common.console import Console
-from pprint import pprint, pformat
-from cloudmesh.common.parameter import Parameter
-from cloudmesh.management.configuration.config import Active
-from cloudmesh.compute.vm.Provider import Provider
-from cloudmesh.mongo.CmDatabase import CmDatabase
-from cloudmesh.common.Printer import Printer
-from cloudmesh.common.util import banner
 from cloudmesh.terminal.Terminal import VERBOSE
 
 

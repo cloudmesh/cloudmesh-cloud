@@ -52,7 +52,7 @@ class Provider(ComputeNodeABC):
 
     output = {
         'vm': {
-            "sort_keys": ("name"),
+            "sort_keys": ["name"],
             'order':["vagrant.name",
                      "vagrant.cloud",
                      "vbox.name",
@@ -131,7 +131,9 @@ class Provider(ComputeNodeABC):
             txt, version["vagrant"] = result.split(" ")
 
             if "A new version of Vagrant is available" in result:
-                raise ("Vagrant is outdated. Please doenload a new version of vagrant")
+                Console.error(
+                    "Vagrant is outdated. Please doenload a new version of vagrant")
+                raise NotImplementedError
         except:
             pass
 

@@ -394,7 +394,7 @@ class VmCommand(PluginCommand):
                         header = p.p.output['vm']['header']  # not pretty
 
                         print(Printer.flatwrite(vms,
-                                                sort_keys=("name"),
+                                                sort_keys=["name"],
                                                 order=order,
                                                 header=header,
                                                 output=arguments.format)

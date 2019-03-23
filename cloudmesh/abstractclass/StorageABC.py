@@ -7,20 +7,75 @@ class StorageABC(metaclass=ABCMeta):
     def __init__(self, cloud, config):
         raise NotImplementedError
 
-    def create_dir(service=None, directory=directorty):
+    def create_dir(self, service=None, directory=None):
+        """
+        creates a directory
+
+        :param service: the name of the service in the yaml file
+        :param directory: the name of the directory
+        :return: dict
+        """
         raise NotImplementedError
 
-    def list(service=None, source=None, recursive=False):
+    def list(self, service=None, source=None, recursive=False):
+        """
+        lists the information as dict
+
+        :param service: the name of the service in the yaml file
+        :param source: the source which either can be a directory or file
+        :param recursive: in case of directory the recursive referes to all
+                          subdirectories in the specified source
+        :return: dict
+        """
         raise NotImplementedError
 
-    def put(service=None, source=None, destination=None, recusrive=False):
+    def put(self, service=None, source=None, destination=None, recusrive=False):
+        """
+        puts the source on the service
+
+        :param service: the name of the service in the yaml file
+        :param source: the source which either can be a directory or file
+        :param destination: the destination which either can be a directory or file
+        :param recursive: in case of directory the recursive referes to all
+                          subdirectories in the specified source
+        :return: dict
+        """
         raise NotImplementedError
 
-    def get(service=None, source=None, destination=None, recusrive=False):
+    def get(self, service=None, source=None, destination=None, recusrive=False):
+        """
+        gets the destination and copies it in source
+
+        :param service: the name of the service in the yaml file
+        :param source: the source which either can be a directory or file
+        :param destination: the destination which either can be a directory or file
+        :param recursive: in case of directory the recursive referes to all
+                          subdirectories in the specified source
+        :return: dict
+        """
         raise NotImplementedError
 
-    def delete(service=None, source=None, recusrive=False):
+    def delete(self, service=None, source=None, recusrive=False):
+        """
+        deletes the source
+
+        :param service: the name of the service in the yaml file
+        :param source: the source which either can be a directory or file
+        :param recursive: in case of directory the recursive referes to all
+                          subdirectories in the specified source
+        :return: dict
+        """
         raise NotImplementedError
 
-    def search(service=None, directory=None, filename=None, recusrive=False):
+    def search(self, service=None, directory=None, filename=None,
+               recusrive=False):
+        """
+        gets the destination and copies it in source
+
+        :param service: the name of the service in the yaml file
+        :param directory: the directory which either can be a directory or file
+        :param recursive: in case of directory the recursive referes to all
+                          subdirectories in the specified source
+        :return: dict
+        """
         raise NotImplementedError

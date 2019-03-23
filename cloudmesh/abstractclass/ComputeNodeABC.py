@@ -63,7 +63,7 @@ class ComputeNodeABC(metaclass=ABCMeta):
         :param name: the unique node name
         :return:  The dict representing the node
         """
-        pass
+        raise NotImplementedError
 
     @abstractmethod
     def stop(self, name=None):
@@ -73,7 +73,7 @@ class ComputeNodeABC(metaclass=ABCMeta):
         :param name:
         :return: The dict representing the node including updated status
         """
-        pass
+        raise NotImplementedError
 
     @abstractmethod
     def info(self, name=None):
@@ -83,7 +83,7 @@ class ComputeNodeABC(metaclass=ABCMeta):
         :param name:
         :return: The dict representing the node including updated status
         """
-        pass
+        raise NotImplementedError
 
     @abstractmethod
     def suspend(self, name=None):
@@ -93,7 +93,7 @@ class ComputeNodeABC(metaclass=ABCMeta):
         :param name: the name of the node
         :return: The dict representing the node
         """
-        pass
+        raise NotImplementedError
 
     @abstractmethod
     def list(self):
@@ -102,7 +102,7 @@ class ComputeNodeABC(metaclass=ABCMeta):
 
         :return: an array of dicts representing the nodes
         """
-        pass
+        raise NotImplementedError
 
     @abstractmethod
     def resume(self, name=None):
@@ -112,7 +112,7 @@ class ComputeNodeABC(metaclass=ABCMeta):
         :param name: the name of the node
         :return: the dict of the node
         """
-        pass
+        raise NotImplementedError
 
     @abstractmethod
     def destroy(self, name=None):
@@ -121,7 +121,7 @@ class ComputeNodeABC(metaclass=ABCMeta):
         :param name: the name of the node
         :return: the dict of the node
         """
-        pass
+        raise NotImplementedError
 
     @abstractmethod
     def create(self, name=None, image=None, size=None, timeout=360, **kwargs):
@@ -139,7 +139,7 @@ class ComputeNodeABC(metaclass=ABCMeta):
         """
         create one node
         """
-        pass
+        raise NotImplementedError
 
     @abstractmethod
     def rename(self, name=None, destination=None):
@@ -151,4 +151,4 @@ class ComputeNodeABC(metaclass=ABCMeta):
         :return: the dict with the new name
         """
         # if destination is None, increase the name counter and use the new name
-        pass
+        raise NotImplementedError

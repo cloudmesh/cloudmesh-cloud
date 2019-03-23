@@ -29,6 +29,7 @@ class Driver(object):
         name = os.path.expanduser(name)
         self.config = Config(name=name)
 
+    # noinspection PyPep8Naming
     def get(self, name=None):
         connection = None
 

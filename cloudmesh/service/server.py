@@ -11,7 +11,7 @@ import connexion
 
 # TODO:
 #
-location = "~/.cloudmesh/openai this is still nedds to be expanded"
+location = "~/.cloudmesh/openai this is still needs to be expanded"
 app = connexion.App(__name__, specification_dir=location)
 
 # Read the yaml file to configure the endpoints

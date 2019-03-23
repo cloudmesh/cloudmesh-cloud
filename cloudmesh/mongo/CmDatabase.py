@@ -62,10 +62,10 @@ class CmDatabase(object):
         """
         self.client.close()
 
-    def find(self, collection="cloudmesh", **kwrags):
+    def find(self, collection="cloudmesh", **kwargs):
         col = self.db[collection]
 
-        entries = col.find(kwrags, {"_id": 0})
+        entries = col.find(kwargs, {"_id": 0})
 
         records = []
         for entry in entries:
@@ -90,6 +90,7 @@ class CmDatabase(object):
             entry['collection'] = "{cloud}-{kind}".format(**entry)
 
             # entry["collection"] = collection
+            # noinspection PyUnusedLocal
             try:
                 self.col = self.db[entry['collection']]
 
@@ -130,8 +131,8 @@ class CmDatabase(object):
                    **kwargs):
         """
 
-        :param entries: an arrey of dicts where one entry is called cmid.
-                        One must be carefulas it does not erase previous attributes.
+        :param entries: an array of dicts where one entry is called cmid.
+                        One must be careful as it does not erase previous attributes.
         :param collection:
         :param replace:
         :return:

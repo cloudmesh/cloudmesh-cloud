@@ -28,18 +28,18 @@ class SshCommand(PluginCommand):
                           the commands to login to them
               PARAMETERS  Register te resource and add the given
                           parameters to the ssh config file.  if the
-                          resoource exists, it will be overwritten. The
+                          resource exists, it will be overwritten. The
                           information will be written in /.ssh/config
 
             Options:
                -v       verbose mode
                --format=FORMAT   the format in which this list is given
-                                 formats incluse table, json, yaml, dict
+                                 formats includes table, json, yaml, dict
                                  [default: table]
                --user=USER       overwrites the username that is
                                  specified in ~/.ssh/config
                --key=KEY         The keyname as defined in the key list
-                                 or a location that contains a pblic key
+                                 or a location that contains a public key
 
             Description:
                 ssh list

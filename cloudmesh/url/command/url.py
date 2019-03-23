@@ -32,7 +32,7 @@ class UrlCommand(PluginCommand):
 
              url http://localhost:8080 --format=json
 
-               downlodas the content of the specified url and displays it in
+               downloads the content of the specified url and displays it in
                a pretty json format
 
         """

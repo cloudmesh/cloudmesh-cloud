@@ -8,18 +8,18 @@ class ProcessManagerABC(metaclass=abc.ABCMeta):
         """
         run command in node
         """
-        pass
+        raise NotImplementedError
 
     @abc.abstractmethod
     def run_script(self):
         """
         run script in node
         """
-        pass
+        raise NotImplementedError
 
     @abc.abstractmethod
     def parallel(self):
         """
         run anything in nodes parallel
         """
-        pass
+        raise NotImplementedError

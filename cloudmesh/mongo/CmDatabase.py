@@ -5,6 +5,7 @@ from pymongo import MongoClient
 
 from cloudmesh.management.configuration.config import Config
 from cloudmesh.common.console import Console
+from cloudmesh.common.parameter import Parameter
 
 from pprint import pprint
 
@@ -61,6 +62,59 @@ class CmDatabase(object):
         close the connection to the database
         """
         self.client.close()
+
+    def collections(self):
+        return self.db.collection_names()
+
+    def name_count(self, name):
+        """
+        counts the occurence of the name used in the collections
+
+        :param name: the name
+        :return:
+        """
+        count = 0
+        collections = self.collections()
+        for collection in collections:
+            entry = self.find(collection=collection, name=name)
+            count = count + len(entry)
+        return count
+
+    def find_name(self, name):
+        """
+        This function returns the entry with the given name from all collections
+        in mongodb. The name must be unique accross all collections
+
+        :param name: the unique name of the entry
+        :return:
+        """
+        entry = []
+        collections = self.collections()
+        for collection in collections:
+            entry = self.find(collection=collection, name=name)
+            if len(entry) > 0:
+                return entry
+        return entry
+
+    def find_names(self, names):
+        """
+        Assuming names specified as parameters, it returns the entries with
+        these anmes from all collections in mongodb. The names must be unique
+        across all collections.
+
+        :param names: the unique names in parameter format
+        :return:
+        """
+        result = []
+        entries = Parameter.expand(names)
+        if len(entries) > 0:
+            for entry in entries:
+                r = self.find_name(entry)
+                if r is not None:
+                    result.append(r[0])
+        return result
+
+
 
     def find(self, collection="cloudmesh", **kwargs):
         col = self.db[collection]

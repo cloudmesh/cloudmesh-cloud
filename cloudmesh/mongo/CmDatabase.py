@@ -21,7 +21,16 @@ from pprint import pprint
 class CmDatabase(object):
     __shared_state = {}
 
+    # ok
     def __init__(self, host=None, username=None, password=None, port=None):
+        """
+        create a cloudmesh database in the specified mongodb
+
+        :param host: the host
+        :param username: the username
+        :param password: the password
+        :param port: the port
+        """
 
         self.__dict__ = self.__shared_state
         if "cnfig" not in self.__dict__:
@@ -46,6 +55,7 @@ class CmDatabase(object):
 
             self.connect()
 
+    # ok
     def connect(self):
         """
         connect to the database
@@ -54,18 +64,31 @@ class CmDatabase(object):
             f"mongodb://{self.username}:{self.password}@{self.host}:{self.port}")
         self.db = self.client[self.database]
 
+    # ok
     def collection(self, name):
+        """
+        returns the named collection
+        :param name: the collection name
+        :return: teh collection
+        """
         return self.db[name]
 
+    # ok
     def close_client(self):
         """
         close the connection to the database
         """
         self.client.close()
 
+    # ok
     def collections(self):
+        """
+        the names of all collections
+        :return: list of names of all collections
+        """
         return self.db.collection_names()
 
+    # ok
     def name_count(self, name):
         """
         counts the occurence of the name used in the collections
@@ -80,6 +103,7 @@ class CmDatabase(object):
             count = count + len(entry)
         return count
 
+    # ok
     def find_name(self, name):
         """
         This function returns the entry with the given name from all collections
@@ -96,6 +120,7 @@ class CmDatabase(object):
                 return entry
         return entry
 
+    # ok
     def find_names(self, names):
         """
         Assuming names specified as parameters, it returns the entries with
@@ -114,8 +139,7 @@ class CmDatabase(object):
                     result.append(r[0])
         return result
 
-
-
+    # check
     def find(self, collection="cloudmesh", **kwargs):
         col = self.db[collection]
 
@@ -126,18 +150,21 @@ class CmDatabase(object):
             records.append(entry)
         return records
 
+    # check
     def find_by_id(self, cmid, collection="cloudmesh"):
 
         entry = self.find(collection=collection, cmid=cmid)
 
         return entry
 
+    # check
     def find_by_counter(self, cmcounter, collection="cloudmesh"):
 
         entry = self.find(collection=collection, cmcounter=cmcounter)
 
         return entry
 
+    # check
     def update(self, entries):
 
         for entry in entries:
@@ -174,10 +201,12 @@ class CmDatabase(object):
         result = entry
         return result
 
+    # check
     def insert(self, d, collection="cloudmesh"):
         col = self.db[collection]
         col.insert_one(d)
 
+    # remove
     def update_old(self,
                    entries,
                    collection="cloudmesh",
@@ -213,10 +242,12 @@ class CmDatabase(object):
                 col.update_one({'name': entry[name]}, {"$set": entry},
                                upsert=True)
 
+    # check
     def delete(self, collection="cloudmesh", **kwargs, ):
         col = self.db[collection]
         col.delete_one(**kwargs)
 
+    # check
     def command(self, command):
         """
         issue command string via the mongoDB console
@@ -232,6 +263,7 @@ class CmDatabase(object):
 
         return res
 
+    # ok
     def status(self):
         """
         test mongodb correspondent db connection
@@ -239,9 +271,10 @@ class CmDatabase(object):
         """
         return self.command("serverStatus")
 
+    # ok
     def clear(self, collection="cloudmesh"):
         """
-        remove all entries from mongo
+        drops the collection
         :return:
         """
 

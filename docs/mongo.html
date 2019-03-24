@@ -92,6 +92,8 @@
 <li class="toctree-l1"><a class="reference internal" href="configuration.html">5. Configuration (ok)</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">6. Cloudmesh Database (ok)</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#database-decorator">6.1. Database Decorator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#database-access">6.2. Database Access</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#creating-uniqe-names">6.3. creating Uniqe Names</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="manual.html">7. Manual (ok)</a></li>
@@ -290,6 +292,65 @@ implement different providers but only use one class with the same methods
 to interact for all providers with the database.</p>
 <p>In the combined provider a find function to for example search for entries
 by name across collections could be implemented.</p>
+</div>
+<div class="section" id="database-access">
+<h2>6.2. Database Access<a class="headerlink" href="#database-access" title="Permalink to this headline">¶</a></h2>
+<p>In addition to the decorator, we have a very simple database class for
+interacting across a number of collections. THis especially is useful for
+finding informtion.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="bp">self</span><span class="o">.</span><span class="n">database</span> <span class="o">=</span> <span class="n">CmDatabase</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Find the entry with the uniqe name CC-Centos</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">find_name</span><span class="p">(</span><span class="s2">&quot;CC-CentOS7&quot;</span><span class="p">)</span>
+<span class="n">pprint</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Find the entries with either CC-CentOS7 or CC-CentOS7-1811</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">find_names</span><span class="p">(</span><span class="s2">&quot;CC-CentOS7,CC-CentOS7-1811&quot;</span><span class="p">)</span>
+<span class="n">pprint</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Find out how many entries exist with the name CC-CentOS7:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">r</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">name_count</span><span class="p">(</span><span class="s2">&quot;CC-CentOS7&quot;</span><span class="p">)</span>
+<span class="n">pprint</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="creating-uniqe-names">
+<h2>6.3. creating Uniqe Names<a class="headerlink" href="#creating-uniqe-names" title="Permalink to this headline">¶</a></h2>
+<p>Uniqe names with the format <code class="docutils literal notranslate"><span class="pre">{experiment}-{group}-{user}-{counter}</span></code> can be
+created with</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">cloumesh.management.configuration.name</span> <span class="k">import</span> <span class="n">Name</span>
+
+<span class="n">name</span> <span class="o">=</span> <span class="n">Name</span><span class="p">(</span>
+    <span class="n">experiment</span><span class="o">=</span><span class="s2">&quot;exp&quot;</span><span class="p">,</span>
+    <span class="n">group</span><span class="o">=</span><span class="s2">&quot;grp&quot;</span><span class="p">,</span>
+    <span class="n">user</span><span class="o">=</span><span class="s2">&quot;gregor&quot;</span><span class="p">,</span>
+    <span class="n">kind</span><span class="o">=</span><span class="s2">&quot;vm&quot;</span><span class="p">,</span>
+    <span class="n">counter</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>To increae the counter use</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">name</span><span class="o">.</span><span class="n">incr</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>To get the name at the current counter value say</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">str</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> 
+</pre></div>
+</div>
+<p>or</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">name</span><span class="o">.</span><span class="n">id</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>The format can be chaned with <code class="docutils literal notranslate"><span class="pre">schema=</span></code> at the initailization. Thus</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">name</span> <span class="o">=</span> <span class="n">Name</span><span class="p">(</span>
+        <span class="n">user</span><span class="o">=</span><span class="s1">&#39;gregor,</span>
+        <span class="n">schema</span><span class="o">=</span><span class="s1">&#39;</span><span class="si">{user}</span><span class="s1">-</span><span class="si">{counter}</span><span class="s1">`,</span>
+        <span class="n">counter</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>would create names of the form gergor1, gergor2 and so on.</p>
 </div>
 </div>
 

@@ -139,18 +139,66 @@ to interact for all providers with the database.
 In the combined provider a find function to for example search for entries
 by name across collections could be implemented.
 
+## Database Access
+
+In addition to the decorator, we have a very simple database class for
+interacting across a number of collections. THis especially is useful for
+finding informtion.
 
 
+    self.database = CmDatabase()
 
 
+Find the entry with the uniqe name CC-Centos
+ 
+    r = self.database.find_name("CC-CentOS7")
+    pprint(r)
+
+Find the entries with either CC-CentOS7 or CC-CentOS7-1811
+ 
+    r = self.database.find_names("CC-CentOS7,CC-CentOS7-1811")
+    pprint(r)
+
+Find out how many entries exist with the name CC-CentOS7:
+        
+    r = self.database.name_count("CC-CentOS7")
+    pprint(r)
+
+## creating Uniqe Names
+
+Uniqe names with the format `{experiment}-{group}-{user}-{counter}` can be
+created with
+
+    from cloumesh.management.configuration.name import Name
+    
+    name = Name(
+        experiment="exp",
+        group="grp",
+        user="gregor",
+        kind="vm",
+        counter=1)
+    
+To increae the counter use
+
+    name.incr()
+
+To get the name at the current counter value say 
+
+    str(name) 
+    
+or
+
+    name.id()
 
 
+The format can be chaned with `schema=` at the initailization. Thus 
 
+    name = Name(
+            user='gregor,
+            schema='{user}-{counter}`,
+            counter=1)
 
-
-
-
-
+would create names of the form gergor1, gergor2 and so on.
 
 
 

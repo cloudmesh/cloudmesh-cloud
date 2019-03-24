@@ -90,7 +90,10 @@
 <li class="toctree-l1"><a class="reference internal" href="install.html">3. Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">4. Quickstart (proposed)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="configuration.html">5. Configuration (ok)</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">6. Cloudmesh Database (ok)</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">6. Cloudmesh Database (ok)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#database-decorator">6.1. Database Decorator</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="manual.html">7. Manual (ok)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="manual-dev.html">8. Manual (proposed)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="jupyter.html">9. Jupyter Integration (proposed)</a></li>
@@ -224,6 +227,69 @@ in the yaml file and installs it in the system with the command. In case of wind
 you will have to set the PATH variable manually after install</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ cms admin mongo install
 </pre></div>
+</div>
+<div class="section" id="database-decorator">
+<h2>6.1. Database Decorator<a class="headerlink" href="#database-decorator" title="Permalink to this headline">¶</a></h2>
+<p>Cloudmesh comes with a very convenient mechanism to integrate data into MongoDB.
+All you have to do is to create a list of dictionaries with a function, that
+returns this dictionary and use a decorator in the function to update the
+information into the database.</p>
+<p>The data base decorator automatically replaces an entry in the database with
+the dictionary returned by a function.</p>
+<p>It is added to a MongoDB collection. The location is determined from the
+values in the dictionary.</p>
+<p>The name of the collection is determined from cloud and kind:</p>
+<p><code class="docutils literal notranslate"><span class="pre">cloud-kind</span></code></p>
+<p>In addition each entry in the collection has a <code class="docutils literal notranslate"><span class="pre">name</span></code> that must be unique in
+that collection.</p>
+<p>In most examples it is best to separate the updload from the actual return
+class. This way we essentially provide two functions one that provide the
+dict and another that is responsible for the upload to the database.</p>
+<p>Example:</p>
+<p><code class="docutils literal notranslate"><span class="pre">cloudmesh.example.foo</span></code> contains:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Provider</span><span class="p">(</span><span class="nb">object</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">entries</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span>
+           <span class="s2">&quot;cloud&quot;</span><span class="p">:</span> <span class="s2">&quot;foo&quot;</span><span class="p">,</span>
+           <span class="s2">&quot;kind&quot;&quot;: &quot;</span><span class="n">entries</span><span class="s2">&quot;,</span>
+           <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;test01&quot;</span>
+           <span class="s2">&quot;test&quot;</span><span class="p">:</span> <span class="s2">&quot;hello&quot;</span><span class="p">}</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">cloudmesh.example.bar</span></code> contains:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Provider</span><span class="p">(</span><span class="nb">object</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">entries</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span>
+           <span class="s2">&quot;cloud&quot;</span><span class="p">:</span> <span class="s2">&quot;bar&quot;</span><span class="p">,</span>
+           <span class="s2">&quot;kind&quot;&quot;: &quot;</span><span class="n">entries</span><span class="s2">&quot;,</span>
+           <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;test01&quot;</span>
+           <span class="s2">&quot;test&quot;</span><span class="p">:</span> <span class="s2">&quot;hello&quot;</span><span class="p">}</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">cloudmesh.example.provider.foo</span></code> contains:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">cloudmesh.example.foo</span> <span class="k">import</span> <span class="n">Provider</span> <span class="k">as</span> <span class="n">FooProvider</span>
+<span class="kn">from</span> <span class="nn">cloudmesh.example.foo</span> <span class="k">import</span> <span class="n">Provider</span> <span class="k">as</span> <span class="n">BarProvider</span>
+
+<span class="k">class</span> <span class="nc">Provider</span><span class="p">(</span><span class="nb">object</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">provider</span><span class="p">):</span>
+       <span class="k">if</span> <span class="n">provider</span> <span class="o">==</span> <span class="s2">&quot;foo&quot;</span><span class="p">:</span>
+          <span class="n">provider</span> <span class="o">=</span> <span class="n">FooProvider</span><span class="p">()</span>
+       <span class="k">elif</span> <span class="n">provider</span> <span class="o">==</span> <span class="s2">&quot;bar&quot;</span><span class="p">:</span>
+          <span class="n">provider</span> <span class="o">=</span> <span class="n">BarProvider</span><span class="p">()</span>
+
+    <span class="nd">@DatabaseUpdate</span>
+    <span class="k">def</span> <span class="nf">entries</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">provider</span><span class="o">.</span><span class="n">entries</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Separating the database and the dictionary creation allows the developer to
+implement different providers but only use one class with the same methods
+to interact for all providers with the database.</p>
+<p>In the combined provider a find function to for example search for entries
+by name across collections could be implemented.</p>
 </div>
 </div>
 

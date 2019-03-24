@@ -179,14 +179,13 @@
 
 <span class="kn">import</span> <span class="nn">colorama</span>
 <span class="kn">from</span> <span class="nn">colorama</span> <span class="k">import</span> <span class="n">Fore</span><span class="p">,</span> <span class="n">Back</span><span class="p">,</span> <span class="n">Style</span>
-<span class="kn">import</span> <span class="nn">sys</span>
 
 <span class="n">colorama</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
 
 
 <div class="viewcode-block" id="indent"><a class="viewcode-back" href="../../../code.html#cloudmesh.common.console.indent">[docs]</a><span class="k">def</span> <span class="nf">indent</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">128</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    indents the given text by the indent specified and maing it maximal width wide</span>
+<span class="sd">    indents the given text by the indent specified and wrapping to the given width</span>
 <span class="sd">    </span>
 <span class="sd">    :param text: the text to print</span>
 <span class="sd">    :param indent: indent characters</span>
@@ -262,7 +261,7 @@
 <div class="viewcode-block" id="Console.set_debug"><a class="viewcode-back" href="../../../code.html#cloudmesh.common.console.Console.set_debug">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">set_debug</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        sets debuggin on or of</span>
+<span class="sd">        sets debugging on or of</span>
 <span class="sd">        :param on: if on debugging is set</span>
 <span class="sd">        :return: </span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -293,15 +292,15 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">Console</span><span class="o">.</span><span class="n">theme</span><span class="p">[</span><span class="s1">&#39;BLACK&#39;</span><span class="p">]</span></div>
 
-    <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">msg</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">79</span><span class="p">):</span>
+<div class="viewcode-block" id="Console.txt_msg"><a class="viewcode-back" href="../../../code.html#cloudmesh.common.console.Console.txt_msg">[docs]</a>    <span class="nd">@staticmethod</span>
+    <span class="k">def</span> <span class="nf">txt_msg</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">79</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        prints a message to the screen</span>
 <span class="sd">        :param message: the message to print</span>
 <span class="sd">        :param width: teh width of the line</span>
 <span class="sd">        :return: </span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">textwrap</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">width</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">textwrap</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="n">width</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Console.msg"><a class="viewcode-back" href="../../../code.html#cloudmesh.common.console.Console.msg">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">msg</span><span class="p">(</span><span class="o">*</span><span class="n">message</span><span class="p">):</span>
@@ -318,7 +317,7 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        prints an error message</span>
 <span class="sd">        :param message: the message</span>
-<span class="sd">        :param prefix: a prefix for the meassage </span>
+<span class="sd">        :param prefix: a prefix for the message</span>
 <span class="sd">        :param traceflag: if true the stack trace is retrieved and printed</span>
 <span class="sd">        :return: </span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -331,16 +330,15 @@
         <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">color</span><span class="p">:</span>
             <span class="bp">cls</span><span class="o">.</span><span class="n">cprint</span><span class="p">(</span><span class="s1">&#39;FAIL&#39;</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">message</span><span class="p">))</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">msg</span><span class="p">(</span><span class="n">text</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">message</span><span class="p">)))</span>
+            <span class="nb">print</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">txt_msg</span><span class="p">(</span><span class="n">text</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">message</span><span class="p">)))</span>
 
         <span class="k">if</span> <span class="n">traceflag</span> <span class="ow">and</span> <span class="bp">cls</span><span class="o">.</span><span class="n">debug</span><span class="p">:</span>
             <span class="n">trace</span> <span class="o">=</span> <span class="n">traceback</span><span class="o">.</span><span class="n">format_exc</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
             <span class="k">if</span> <span class="n">trace</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">()</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Trace:&quot;</span><span class="p">)</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">trace</span><span class="p">)</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()))</span>
-                <span class="nb">print</span><span class="p">()</span>
-                <span class="nb">print</span> <span class="p">(</span><span class="s2">&quot;KKKK&quot;</span><span class="p">)</span></div>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">    &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">trace</span><span class="p">)</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()))</span>
+                <span class="nb">print</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="Console.TODO"><a class="viewcode-back" href="../../../code.html#cloudmesh.common.console.Console.TODO">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">TODO</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">traceflag</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
@@ -411,7 +409,7 @@
     <span class="k">def</span> <span class="nf">ok</span><span class="p">(</span><span class="n">message</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        prints an ok message</span>
-<span class="sd">        :param message: the message</span>
+<span class="sd">        :param message: the message&lt;</span>
 <span class="sd">        :return: </span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">message</span> <span class="o">=</span> <span class="n">message</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span>

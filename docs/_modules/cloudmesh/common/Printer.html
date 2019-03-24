@@ -184,6 +184,7 @@
 <span class="kn">from</span> <span class="nn">cloudmesh.common.util</span> <span class="k">import</span> <span class="n">convert_from_unicode</span>
 <span class="kn">from</span> <span class="nn">cloudmesh.common.FlatDict</span> <span class="k">import</span> <span class="n">flatten</span>
 
+
 <div class="viewcode-block" id="Printer"><a class="viewcode-back" href="../../../code.html#cloudmesh.common.Printer.Printer">[docs]</a><span class="k">class</span> <span class="nc">Printer</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A simple Printer class with convenient methods to print dictionary, tables, csv, lists</span>
@@ -191,13 +192,13 @@
 
 <div class="viewcode-block" id="Printer.flatwrite"><a class="viewcode-back" href="../../../code.html#cloudmesh.common.Printer.Printer.flatwrite">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">flatwrite</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">table</span><span class="p">,</span>
-              <span class="n">order</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-              <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-              <span class="n">output</span><span class="o">=</span><span class="s2">&quot;table&quot;</span><span class="p">,</span>
-              <span class="n">sort_keys</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-              <span class="n">show_none</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
-              <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;.&quot;</span>
-              <span class="p">):</span>
+                  <span class="n">order</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                  <span class="n">header</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                  <span class="n">output</span><span class="o">=</span><span class="s2">&quot;table&quot;</span><span class="p">,</span>
+                  <span class="n">sort_keys</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                  <span class="n">show_none</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+                  <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;.&quot;</span>
+                  <span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        writes the information given in the table</span>
 <span class="sd">        :param table: the table of values</span>
@@ -206,16 +207,17 @@
 <span class="sd">        :param output: the format (default is table, values are raw, csv, json, yaml, dict</span>
 <span class="sd">        :param sort_keys: if true the table is sorted</span>
 <span class="sd">        :param show_none: passed along to the list or dict printer</span>
+<span class="sd">        :param sep: uses sep as the separator for csv printer</span>
 <span class="sd">        :return:</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">flat</span> <span class="o">=</span> <span class="n">flatten</span><span class="p">(</span><span class="n">table</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="n">sep</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">Printer</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">flat</span><span class="p">,</span>
-                        <span class="n">sort_keys</span><span class="o">=</span><span class="n">sort_keys</span><span class="p">,</span>
-                        <span class="n">order</span><span class="o">=</span><span class="n">order</span><span class="p">,</span>
-                        <span class="n">header</span><span class="o">=</span><span class="n">header</span><span class="p">)</span></div>
-
+                             <span class="n">sort_keys</span><span class="o">=</span><span class="n">sort_keys</span><span class="p">,</span>
+                             <span class="n">order</span><span class="o">=</span><span class="n">order</span><span class="p">,</span>
+                             <span class="n">header</span><span class="o">=</span><span class="n">header</span><span class="p">,</span>
+                             <span class="n">output</span><span class="o">=</span><span class="n">output</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Printer.write"><a class="viewcode-back" href="../../../code.html#cloudmesh.common.Printer.Printer.write">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">table</span><span class="p">,</span>
@@ -271,7 +273,6 @@
 <span class="sd">        :param output:</span>
 <span class="sd">        :param sort_keys:</span>
 <span class="sd">        :param show_none:</span>
-<span class="sd">        :param key:</span>
 <span class="sd">        :return:</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">d</span> <span class="o">=</span> <span class="p">{}</span>
@@ -308,6 +309,8 @@
 <span class="sd">        :type output: string</span>
 <span class="sd">        :param sort_keys:</span>
 <span class="sd">        :type sort_keys: bool</span>
+<span class="sd">        :param show_none: prints None if True for None values otherwise &quot;&quot;</span>
+<span class="sd">        :type show_none: bool</span>
 <span class="sd">        :return:</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">output</span> <span class="o">==</span> <span class="s2">&quot;table&quot;</span><span class="p">:</span>
@@ -410,6 +413,10 @@
 <span class="sd">        :param sort_keys:   Key(s) of the dict to be used for sorting.</span>
 <span class="sd">                            This specify the column(s) in the table for sorting.</span>
 <span class="sd">        :type sort_keys:    string or a tuple of string (for sorting with multiple columns)</span>
+<span class="sd">        :param show_none: prints None if True for None values otherwise &quot;&quot;</span>
+<span class="sd">        :type show_none: bool</span>
+<span class="sd">        :param max_width: maximum width for a cell</span>
+<span class="sd">        :type max_width: int</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="k">def</span> <span class="nf">_keys</span><span class="p">():</span>
@@ -447,7 +454,8 @@
             <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">sort_keys</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">str</span><span class="p">:</span>
                 <span class="n">sorted_list</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">d</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">sort_keys</span><span class="p">])</span>
             <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">sort_keys</span><span class="p">)</span> <span class="o">==</span> <span class="nb">tuple</span><span class="p">:</span>
-                <span class="n">sorted_list</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">([</span><span class="n">d</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">sort_key</span><span class="p">]</span> <span class="k">for</span> <span class="n">sort_key</span> <span class="ow">in</span> <span class="n">sort_keys</span><span class="p">]))</span>
+                <span class="n">sorted_list</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">d</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">(</span>
+                    <span class="p">[</span><span class="n">d</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">sort_key</span><span class="p">]</span> <span class="k">for</span> <span class="n">sort_key</span> <span class="ow">in</span> <span class="n">sort_keys</span><span class="p">]))</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">sorted_list</span> <span class="o">=</span> <span class="n">d</span>
         <span class="k">else</span><span class="p">:</span>
@@ -478,6 +486,7 @@
 <span class="sd">         :param sort_keys:   Key(s) of the dict to be used for sorting.</span>
 <span class="sd">                             This specify the column(s) in the table for sorting.</span>
 <span class="sd">         :type sort_keys:    string or a tuple of string (for sorting with multiple columns)</span>
+<span class="sd">         :param output: the output format table, csv, dict, json</span>
 <span class="sd">         &quot;&quot;&quot;</span>
 
         <span class="k">if</span> <span class="n">header</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -518,6 +527,7 @@
 <span class="sd">        :param output: the output, default is a table</span>
 <span class="sd">        :return: </span>
 <span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="k">def</span> <span class="nf">dict_from_list</span><span class="p">(</span><span class="n">l</span><span class="p">):</span>
             <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">            returns a dict from a list for printing</span>
@@ -556,6 +566,7 @@
 <span class="sd">        :param d: A dict to be printed</span>
 <span class="sd">        :param order: The order in which the columns are printed.</span>
 <span class="sd">                      The order is specified by the key names of the dict.</span>
+<span class="sd">        :param labels: The array of labels for the column</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># header</span>
         <span class="n">header</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
@@ -572,7 +583,8 @@
                 <span class="n">value_keys</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
                 <span class="n">first_key</span> <span class="o">=</span> <span class="n">value_keys</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
                 <span class="n">rest_keys</span> <span class="o">=</span> <span class="n">value_keys</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
-                <span class="n">x</span><span class="o">.</span><span class="n">add_row</span><span class="p">([</span><span class="n">key</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{0}</span><span class="s2"> : </span><span class="si">{1}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">first_key</span><span class="p">,</span> <span class="n">value</span><span class="p">[</span><span class="n">first_key</span><span class="p">])])</span>
+                <span class="n">x</span><span class="o">.</span><span class="n">add_row</span><span class="p">(</span>
+                    <span class="p">[</span><span class="n">key</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{0}</span><span class="s2"> : </span><span class="si">{1}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">first_key</span><span class="p">,</span> <span class="n">value</span><span class="p">[</span><span class="n">first_key</span><span class="p">])])</span>
                 <span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="n">rest_keys</span><span class="p">:</span>
                     <span class="n">x</span><span class="o">.</span><span class="n">add_row</span><span class="p">([</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="si">{0}</span><span class="s2"> : </span><span class="si">{1}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">element</span><span class="p">,</span> <span class="n">value</span><span class="p">[</span><span class="n">element</span><span class="p">])])</span>
             <span class="k">else</span><span class="p">:</span>

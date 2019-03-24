@@ -176,18 +176,21 @@
 
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
 
+
 <span class="kn">import</span> <span class="nn">errno</span>
 <span class="kn">import</span> <span class="nn">glob</span>
 <span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">shlex</span>
 <span class="kn">import</span> <span class="nn">subprocess</span>
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">zipfile</span>
+<span class="kn">from</span> <span class="nn">distutils.spawn</span> <span class="k">import</span> <span class="n">find_executable</span>
 <span class="kn">from</span> <span class="nn">pipes</span> <span class="k">import</span> <span class="n">quote</span>
 <span class="kn">from</span> <span class="nn">sys</span> <span class="k">import</span> <span class="n">platform</span>
 
 <span class="kn">from</span> <span class="nn">cloudmesh.common.console</span> <span class="k">import</span> <span class="n">Console</span>
+<span class="kn">from</span> <span class="nn">cloudmesh.common.dotdict</span> <span class="k">import</span> <span class="n">dotdict</span>
 <span class="kn">from</span> <span class="nn">cloudmesh.common.util</span> <span class="k">import</span> <span class="n">path_expand</span>
-<span class="kn">from</span> <span class="nn">distutils.spawn</span> <span class="k">import</span> <span class="n">find_executable</span>
 
 
 <span class="k">class</span> <span class="nc">Brew</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -278,7 +281,8 @@
 <span class="sd">    Executes a command. This class should not be directly used, but instead you should use Shell.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cmd</span><span class="p">,</span> <span class="n">cwd</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">stderr</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">,</span> <span class="n">stdout</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cmd</span><span class="p">,</span> <span class="n">cwd</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">stderr</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">,</span>
+                 <span class="n">stdout</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        execute the given command</span>
 <span class="sd">        :param cmd: the command</span>
@@ -289,7 +293,8 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">Console</span><span class="o">.</span><span class="n">debug_msg</span><span class="p">(</span><span class="s1">&#39;Running cmd: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">quote</span><span class="p">,</span> <span class="n">cmd</span><span class="p">))))</span>
 
-        <span class="n">proc</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">stderr</span><span class="o">=</span><span class="n">stderr</span><span class="p">,</span> <span class="n">stdout</span><span class="o">=</span><span class="n">stdout</span><span class="p">,</span> <span class="n">cwd</span><span class="o">=</span><span class="n">cwd</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="n">env</span><span class="p">)</span>
+        <span class="n">proc</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">stderr</span><span class="o">=</span><span class="n">stderr</span><span class="p">,</span> <span class="n">stdout</span><span class="o">=</span><span class="n">stdout</span><span class="p">,</span> <span class="n">cwd</span><span class="o">=</span><span class="n">cwd</span><span class="p">,</span>
+                                <span class="n">env</span><span class="o">=</span><span class="n">env</span><span class="p">)</span>
         <span class="n">stdout</span><span class="p">,</span> <span class="n">stderr</span> <span class="o">=</span> <span class="n">proc</span><span class="o">.</span><span class="n">communicate</span><span class="p">()</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">returncode</span> <span class="o">=</span> <span class="n">proc</span><span class="o">.</span><span class="n">returncode</span>
@@ -297,7 +302,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">stdout</span> <span class="o">=</span> <span class="n">stdout</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">returncode</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="n">SubprocessError</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">returncode</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">stderr</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">stdout</span><span class="p">)</span></div>
+            <span class="k">raise</span> <span class="n">SubprocessError</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">returncode</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">stderr</span><span class="p">,</span>
+                                  <span class="bp">self</span><span class="o">.</span><span class="n">stdout</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Shell"><a class="viewcode-back" href="../../../code.html#cloudmesh.common.Shell.Shell">[docs]</a><span class="k">class</span> <span class="nc">Shell</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
@@ -338,6 +344,41 @@
 
 <span class="sd">    &#39;&#39;&#39;</span>
 
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">terminal</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">command</span><span class="o">=</span><span class="s1">&#39;pwd&#39;</span><span class="p">):</span>
+
+        <span class="k">if</span> <span class="n">platform</span> <span class="o">==</span> <span class="s1">&#39;darwin&#39;</span><span class="p">:</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span>
+                <span class="s2">&quot;osascript -e &#39;tell application </span><span class="se">\&quot;</span><span class="s2">Terminal</span><span class="se">\&quot;</span><span class="s2"> to do script </span><span class="se">\&quot;</span><span class="si">{command}</span><span class="se">\&quot;</span><span class="s2">&#39;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="o">**</span><span class="nb">locals</span><span class="p">())</span>
+            <span class="p">)</span>
+        <span class="k">elif</span> <span class="n">platform</span> <span class="o">==</span> <span class="s2">&quot;linus&quot;</span><span class="p">:</span>  <span class="c1"># for ubuntu running gnome</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s1">&#39;gnome-terminal --command=&quot;</span><span class="si">{command}</span><span class="s1">&quot;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">**</span><span class="nb">locals</span><span class="p">()))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">live</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">command</span><span class="p">,</span> <span class="n">cwd</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">cwd</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">cwd</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
+        <span class="n">process</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">(</span><span class="n">shlex</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">command</span><span class="p">),</span> <span class="n">cwd</span><span class="o">=</span><span class="n">cwd</span><span class="p">,</span>
+                                   <span class="n">stdout</span><span class="o">=</span><span class="n">subprocess</span><span class="o">.</span><span class="n">PIPE</span><span class="p">)</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="sa">b</span><span class="s1">&#39;&#39;</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">output</span> <span class="o">=</span> <span class="n">process</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">output</span> <span class="o">==</span> <span class="sa">b</span><span class="s1">&#39;&#39;</span> <span class="ow">and</span> <span class="n">process</span><span class="o">.</span><span class="n">poll</span><span class="p">()</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">break</span>
+            <span class="k">if</span> <span class="n">output</span><span class="p">:</span>
+                <span class="n">result</span> <span class="o">=</span> <span class="n">result</span> <span class="o">+</span> <span class="n">output</span>
+                <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">output</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">))</span>
+                <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+        <span class="n">rc</span> <span class="o">=</span> <span class="n">process</span><span class="o">.</span><span class="n">poll</span><span class="p">()</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">dotdict</span><span class="p">({</span>
+            <span class="s2">&quot;status&quot;</span><span class="p">:</span> <span class="n">rc</span><span class="p">,</span>
+            <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="n">output</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
+        <span class="p">})</span>
+        <span class="k">return</span> <span class="n">data</span>
+
 <div class="viewcode-block" id="Shell.get_python"><a class="viewcode-back" href="../../../code.html#cloudmesh.common.Shell.Shell.get_python">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">get_python</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
@@ -362,33 +403,45 @@
 
         <span class="n">v_string</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">python_version</span><span class="p">]</span>
 
-        <span class="k">if</span> <span class="p">(</span><span class="n">python_version</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">2</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">python_version</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
 
             <span class="n">python_version_s</span> <span class="o">=</span> <span class="s1">&#39;.&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">v_string</span><span class="p">)</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">python_version</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">2</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">python_version</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">7</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">python_version</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">9</span><span class="p">):</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">python_version</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">2</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">python_version</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">7</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span>
+                    <span class="n">python_version</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">9</span><span class="p">):</span>
 
-                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;You are running a supported version of python: </span><span class="si">{:}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">python_version_s</span><span class="p">))</span>
+                <span class="nb">print</span><span class="p">(</span>
+                    <span class="s2">&quot;You are running a supported version of python: </span><span class="si">{:}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                        <span class="n">python_version_s</span><span class="p">))</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;WARNING: You are running an unsupported version of python: </span><span class="si">{:}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">python_version_s</span><span class="p">))</span>
+                <span class="nb">print</span><span class="p">(</span>
+                    <span class="s2">&quot;WARNING: You are running an unsupported version of python: </span><span class="si">{:}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                        <span class="n">python_version_s</span><span class="p">))</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;         We recommend you update your python&quot;</span><span class="p">)</span>
 
-        <span class="k">elif</span> <span class="p">(</span><span class="n">python_version</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">3</span><span class="p">):</span>
+        <span class="k">elif</span> <span class="n">python_version</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
 
             <span class="n">python_version_s</span> <span class="o">=</span> <span class="s1">&#39;.&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">v_string</span><span class="p">)</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">python_version</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">3</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">python_version</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">7</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">python_version</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">):</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">python_version</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">3</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">python_version</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">7</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span>
+                    <span class="n">python_version</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">):</span>
 
-                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;You are running a supported version of python: </span><span class="si">{:}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">python_version_s</span><span class="p">))</span>
+                <span class="nb">print</span><span class="p">(</span>
+                    <span class="s2">&quot;You are running a supported version of python: </span><span class="si">{:}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                        <span class="n">python_version_s</span><span class="p">))</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;WARNING: You are running an unsupported version of python: </span><span class="si">{:}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">python_version_s</span><span class="p">))</span>
+                <span class="nb">print</span><span class="p">(</span>
+                    <span class="s2">&quot;WARNING: You are running an unsupported version of python: </span><span class="si">{:}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                        <span class="n">python_version_s</span><span class="p">))</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;         We recommend you update your python&quot;</span><span class="p">)</span>
 
         <span class="c1"># pip_version = pip.__version__</span>
         <span class="n">python_version</span><span class="p">,</span> <span class="n">pip_version</span> <span class="o">=</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_python</span><span class="p">()</span>
 
         <span class="k">if</span> <span class="nb">int</span><span class="p">(</span><span class="n">pip_version</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span> <span class="o">&gt;=</span> <span class="mi">18</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;You are running a supported version of pip: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">pip_version</span><span class="p">))</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;You are running a supported version of pip: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span>
+                <span class="n">pip_version</span><span class="p">))</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;WARNING: You are running an old version of pip: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">pip_version</span><span class="p">))</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;WARNING: You are running an old version of pip: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span>
+                <span class="n">pip_version</span><span class="p">))</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;         We recommend you update your pip  with </span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;             pip install -U pip</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span></div>
 
@@ -460,7 +513,12 @@
 <span class="sd">        :param args: </span>
 <span class="sd">        :return: </span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s1">&#39;VBoxManage&#39;</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span></div>
+
+        <span class="k">if</span> <span class="n">platform</span><span class="o">.</span><span class="n">system</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;darwin&quot;</span><span class="p">:</span>
+            <span class="n">command</span> <span class="o">=</span> <span class="s2">&quot;/Applications/VirtualBox.app/Contents/MacOS/VBoxManage&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">command</span> <span class="o">=</span> <span class="s1">&#39;VBoxManage&#39;</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">command</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Shell.blockdiag"><a class="viewcode-back" href="../../../code.html#cloudmesh.common.Shell.Shell.blockdiag">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">blockdiag</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
@@ -650,7 +708,7 @@
 <span class="sd">        :param args: </span>
 <span class="sd">        :return: </span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s1">&#39;vagrant&#39;</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s1">&#39;vagrant&#39;</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Shell.pandoc"><a class="viewcode-back" href="../../../code.html#cloudmesh.common.Shell.Shell.pandoc">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">pandoc</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
@@ -795,7 +853,7 @@
                 <span class="n">witherror</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Run Shell command</span>
 
-<span class="sd">        :param witherror: if set to fasle the error will not be printed</span>
+<span class="sd">        :param witherror: if set to False the error will not be printed</span>
 <span class="sd">        :param traceflag: if set to true the trace is printed in case of an error</span>
 <span class="sd">        :param cwd: the current working directory in whcih the command is supposed to be executed.</span>
 <span class="sd">        :param shell: if set to true the subprocess is called as part of a shell</span>
@@ -843,7 +901,8 @@
                     <span class="n">cwd</span><span class="o">=</span><span class="n">cwd</span><span class="p">)</span>
         <span class="k">except</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">witherror</span><span class="p">:</span>
-                <span class="n">Console</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;problem executing subprocess&quot;</span><span class="p">,</span> <span class="n">traceflag</span><span class="o">=</span><span class="n">traceflag</span><span class="p">)</span>
+                <span class="n">Console</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;problem executing subprocess&quot;</span><span class="p">,</span>
+                              <span class="n">traceflag</span><span class="o">=</span><span class="n">traceflag</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">result</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">result</span></div>
@@ -874,6 +933,7 @@
 <div class="viewcode-block" id="Shell.unzip"><a class="viewcode-back" href="../../../code.html#cloudmesh.common.Shell.Shell.unzip">[docs]</a>    <span class="k">def</span> <span class="nf">unzip</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">source_filename</span><span class="p">,</span> <span class="n">dest_dir</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        unzips a file into the destination directory</span>
+<span class="sd">        :param source_filename: the source</span>
 <span class="sd">        :param dest_dir: the destination directory</span>
 <span class="sd">        :return:</span>
 <span class="sd">        &quot;&quot;&quot;</span>

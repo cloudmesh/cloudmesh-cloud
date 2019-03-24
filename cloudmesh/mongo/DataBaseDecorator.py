@@ -4,87 +4,81 @@ from cloudmesh.management.configuration.name import Name
 from cloudmesh.mongo.CmDatabase import CmDatabase
 
 
-class DatabaseUpdateOld:
-    """
-    Save the method's output to a MongoDB collection
-    if the output is a dict or list of dicts.
-
-    Example:
-
-        @DatabaseUpdate("test-collection")
-        def foo(x):
-            return {"test": "hello"}
-    """
-
-    def __init__(self, collection="cloudmesh", replace=False):
-        self.database = CmDatabase()
-        self.replace = replace
-        self.collection = collection
-
-    def __call__(self, f):
-        def wrapper(*args, **kwargs):
-            result = f(*args, **kwargs)
-
-            if result is not None:
-                result["modified"] = str(datetime.utcnow())
-                if "created" not in result:
-                    result["created"] = result["modified"]
-                # noinspection PyUnusedLocal
-                r = self.database.update(result,
-                                         collection=self.collection,
-                                         replace=self.replace)
-
-            return result
-
-        return wrapper
-
-
-class DatabaseAddOld:
-    """
-    Save the method's output to a MongoDB collection
-    if the output is a dict or list of dicts.
-
-    Example:
-
-        @DatabaseUpdate("test-collection")
-        def foo(x):
-            return {"test": "hello"}
-    """
-
-    def __init__(self, collection="cloudmesh", replace=False):
-        self.database = CmDatabase()
-        self.replace = replace
-        self.collection = collection
-        self.name = Name()
-
-    def __call__(self, f):
-        def wrapper(*args, **kwargs):
-            result = f(*args, **kwargs)
-            result["cmid"] = str(self.name)
-            result["cmcounter"] = str(self.name.counter)
-            result["created"] = result["modified"] = str(datetime.utcnow())
-            self.name.incr()
-
-            if result is not None:
-                result["created"] = result["modified"] = str(datetime.utcnow())
-                # noinspection PyUnusedLocal
-                r = self.database.update(result, collection=self.collection,
-                                         replace=self.replace)
-
-            return result
-
-        return wrapper
-
 
 class DatabaseUpdate:
     """
-    Prints the dict of the result but does not add it to the DB
+
+    The data base decorator utomatically replaces an entry in the database with
+    the dictionary returned by a function.
+
+    It is added to a MongoDB collection. The location is determined from the
+    values in the dictionary.
+
+    The name of the collection is determined from cloud and kind:
+
+       cloud-kind
+
+    In addition each entry in the collection has a name that must be unique in
+    that collection.
+
+    IN most examples it is pest to separate the updload from the actual return
+    class. This way we essentially provide two functions one that provide the
+    dict and another that is responsible for the upload to the database.
+
+
+
+
 
     Example:
 
-        @DatabaseUpdate("test-collection")
-        def foo(x):
-            return {"test": "hello"}
+    cloudmesh.example.foo contains:
+
+        class Provider(object)
+
+            def entries(self):
+                return {
+                   "cloud": "foo",
+                   "kind"": "entries",
+                   "name": "test01"
+                   "test": "hello"}
+
+
+    cloudmesh.example.bar contains:
+
+        class Provider(object)
+
+            def entries(self):
+                return {
+                   "cloud": "bar",
+                   "kind"": "entries",
+                   "name": "test01"
+                   "test": "hello"}
+
+    cloudmesh.example.provider.foo:
+
+        from cloudmesh.example.foo import Provider as FooProvider
+        from cloudmesh.example.foo import Provider as BarProvider
+
+        class Provider(object)
+
+            def __init__(self, provider):
+               if provider == "foo":
+                  provider = FooProvider()
+               elif provider == "bar":
+                  provider = BarProvider()
+
+            @DatabaseUpdate
+            def entries(self):
+                provider.entries()
+
+
+    Separating the database and the dictionary creation allows the developer to
+    implement different providers but only use one class with the same methods
+    to interact for all providers with the database.
+
+    In the combined provider a find function to for example search for entries
+    by name across collections could be implemented.
+
     """
 
     # noinspection PyUnusedLocal

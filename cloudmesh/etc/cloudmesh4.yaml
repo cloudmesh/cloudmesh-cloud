@@ -1,4 +1,10 @@
 cloudmesh:
+  source:
+    common: ~/Desktop/github/cloudmesh
+    cmd5: ~/Desktop/github/cloudmesh
+    openapi: ~/Desktop/github/cloudmesh
+    sys: ~/Desktop/github/cloudmesh
+    cm: ~/Desktop/github/cloudmesh-community
   profile:
     firstname: TBD
     lastname: TBD

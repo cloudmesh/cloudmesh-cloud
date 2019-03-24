@@ -1,3 +1,6 @@
+# nosetest -v --nopature
+# nosetests -v --nocapture tests/test_database.py
+#############
 from cloudmesh.common.util import HEADING
 
 from cloudmesh.mongo.CmDatabase import CmDatabase
@@ -8,11 +11,7 @@ from cloudmesh.common.Printer import Printer
 #from cloudmesh.management.debug import HEADING, myself
 from pprint import pprint
 
-from cloudmesh.mongo.DataBaseDecorator import DatabaseUpdate, DatabaseAdd
 from cloudmesh.management.configuration.name import Name
-
-# nosetest -v --nopature
-# nosetests -v --nocapture tests/test_database.py
 
 class TestMongo:
 
@@ -25,6 +24,23 @@ class TestMongo:
                        kind="vm",
                        counter=1)
 
+    def test_10_find_in_collection(self):
+        HEADING()
+        r = self.database.find_name("CC-CentOS7")
+        pprint(r)
+
+    def test_11_find_in_collections(self):
+        HEADING()
+        r = self.database.find_names("CC-CentOS7,CC-CentOS7-1811")
+        pprint(r)
+
+    def test_12_find_in_collection(self):
+        HEADING()
+        r = self.database.name_count("CC-CentOS7")
+        pprint(r)
+
+
+class t:
     def test_00_status(self):
         HEADING()
 

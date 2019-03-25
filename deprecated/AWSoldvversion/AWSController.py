@@ -65,12 +65,6 @@ class AWSController(ComputeNodeABC):
                 result = self.driver.ex_stop_node(i)
                 return result
 
-    def suspend(self, image_id):
-        print('Cannot suspend the instance, only stop operation')
-
-    def resume(self, image_id):
-        print('Cannot resume the instance, only start operation')
-
     def destroy(self, node_id):
         """
         delete the node

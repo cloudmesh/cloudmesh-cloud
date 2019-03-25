@@ -210,7 +210,7 @@ class VmCommand(PluginCommand):
 
             names = []
 
-            clouds, names = Arguments.get_cloud_and_names("refresh", arguments)
+            clouds, names = Arguments.get_cloud_and_names("refresh", arguments, variables)
 
             return ""
 
@@ -221,7 +221,7 @@ class VmCommand(PluginCommand):
 
             names = []
 
-            clouds, names = Arguments.get_cloud_and_names("ping", arguments)
+            clouds, names = Arguments.get_cloud_and_names("ping", arguments, variables)
 
             return ""
 
@@ -229,7 +229,7 @@ class VmCommand(PluginCommand):
 
             names = []
 
-            clouds, names = Arguments.get_cloud_and_names("check", arguments)
+            clouds, names = Arguments.get_cloud_and_names("check", arguments, variables)
 
             return ""
 
@@ -237,7 +237,7 @@ class VmCommand(PluginCommand):
 
             names = []
 
-            clouds, names = Arguments.get_cloud_and_names("status", arguments)
+            clouds, names = Arguments.get_cloud_and_names("status", arguments, variables)
 
             return ""
 
@@ -245,7 +245,7 @@ class VmCommand(PluginCommand):
 
             names = []
 
-            clouds, names = Arguments.get_cloud_and_names("start", arguments)
+            clouds, names = Arguments.get_cloud_and_names("start", arguments, variables)
 
             return ""
 
@@ -253,7 +253,7 @@ class VmCommand(PluginCommand):
 
             names = []
 
-            clouds, names = Arguments.get_cloud_and_names("stop", arguments)
+            clouds, names = Arguments.get_cloud_and_names("stop", arguments, variables)
 
             return ""
 
@@ -261,13 +261,13 @@ class VmCommand(PluginCommand):
 
             names = []
 
-            clouds, names = Arguments.get_cloud_and_names("terminate", arguments)
+            clouds, names = Arguments.get_cloud_and_names("terminate", arguments, variables)
 
             return ""
 
         elif arguments.delete:
 
-            clouds, names = Arguments.get_cloud_and_names("delete", arguments)
+            clouds, names = Arguments.get_cloud_and_names("delete", arguments, variables)
 
             return ""
 
@@ -286,7 +286,7 @@ class VmCommand(PluginCommand):
             # print only those vms specified by name, if no name is given print all for the cloud
             # print("list the vms")
 
-            clouds, names = Arguments.get_cloud_and_names("list", arguments)
+            clouds, names = Arguments.get_cloud_and_names("list", arguments, variables)
 
             # print("Clouds:", clouds)
 
@@ -361,7 +361,7 @@ class VmCommand(PluginCommand):
             """
             print("info for the vm")
 
-            cloud, names = Arguments.get_cloud_and_names("info", arguments)
+            cloud, names = Arguments.get_cloud_and_names("info", arguments, variables)
 
         elif arguments.rename:
 

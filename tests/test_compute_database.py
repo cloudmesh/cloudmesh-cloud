@@ -1,3 +1,5 @@
+# nosetest -v --nopature
+# nosetests -v --nocapture tests/test_compute_database.py
 from pprint import pprint
 import time
 import subprocess
@@ -10,9 +12,6 @@ from cloudmesh.common.FlatDict import FlatDict, flatten
 from cloudmesh.management.configuration.SSHkey import SSHkey
 from cloudmesh.management.configuration.name import Name
 from cloudmesh.mongo.CmDatabase import CmDatabase
-
-# nosetest -v --nopature
-# nosetests -v --nocapture tests/test_compute_database.py
 
 class TestName:
 

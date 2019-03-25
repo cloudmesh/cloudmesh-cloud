@@ -25,6 +25,7 @@ class TestName:
     vbox_version = '6.0.4'
     image_name = "generic/ubuntu1810"
     size=1024
+    cloud = "vagrant"
 
     def print_images(self):
         images = self.p.images()
@@ -52,7 +53,7 @@ class TestName:
         self.name = str(self.name_generator)
         self.name_generator.incr()
         self.new_name = str(self.name_generator)
-        self.p = Provider(name="vbox")
+        self.p = Provider(name=self.cloud)
 
 
     def test_01_version(self):

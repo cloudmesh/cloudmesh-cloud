@@ -6,7 +6,7 @@ from libcloud.compute.base import NodeAuthSSHKey
 # from cm4.vm.Vm import Vm
 
 
-class AzureVm:
+class AzureProvider(object):
 
     # def __init__(self, cloud):
     #     """

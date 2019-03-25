@@ -341,14 +341,6 @@ class Provider(ComputeNodeABC):
                 d[entry[id]] = entry
         return d
 
-    def stop(self, name=None):
-        """
-        stops the node with the given name
-
-        :param name:
-        :return: The dict representing the node including updated status
-        """
-        pass
 
     def _convert_assignment_to_dict(self, content):
         d = {}
@@ -469,13 +461,71 @@ class Provider(ComputeNodeABC):
 
     def suspend(self, name=None):
         """
+        NOT IMPLEMENTED
+
         suspends the node with the given name
 
         :param name: the name of the node
         :return: The dict representing the node
         """
         # TODO: find last name if name is None
-        result = Shell.execute("vagrant", ["suspend", name], shell=True)
+
+        arg = dotdict()
+        arg.name = name
+
+        # TODO find the vbx name from vagrantname
+
+        arg.path = self.default["path"]
+        arg.directory = os.path.expanduser("{path}/{name}".format(**arg))
+
+        result = Shell.execute("vbox", ["suspend", name], cwd=arg.directory, shell=True)
+        return result
+
+
+    def resume(self, name=None):
+        """
+        NOT IMPLEMENTED
+
+        Default: resume(start) all the VMs specified.
+        If @name is provided, only the named VM is started.
+
+        :param name: [optional], name of the Vagrant VM.
+        :return:
+        """
+        # TODO: find last name if name is None
+
+        arg = dotdict()
+        arg.name = name
+
+        # TODO find the vbx name from vagrantname
+
+        arg.path = self.default["path"]
+        arg.directory = os.path.expanduser("{path}/{name}".format(**arg))
+
+        result = Shell.execute("vbox", ["up", name], cwd=arg.directory,
+                               shell=True)
+        return result
+    def stop(self, name=None):
+        """
+        NOT IMPLEMENTED
+
+        stops the node with the given name
+
+        :param name: the name of the node
+        :return: The dict representing the node
+        """
+        # TODO: find last name if name is None
+
+        arg = dotdict()
+        arg.name = name
+
+        # TODO find the vbx name from vagrantname
+
+        arg.path = self.default["path"]
+        arg.directory = os.path.expanduser("{path}/{name}".format(**arg))
+
+        result = Shell.execute("vbox", ["stop", name], cwd=arg.directory,
+                               shell=True)
         return result
 
     def resume(self, name=None):

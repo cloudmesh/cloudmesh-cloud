@@ -93,18 +93,6 @@ class Vagrant(ComputeNodeABC):
         with open(output_path, 'w') as out:
             out.write(template.format(**kwargs))
 
-    def start(self, name=None):
-        """
-        Default: Starts all the VMs specified.
-        If @name is provided, only the named VM is started.
-
-        :param name: [optional], name of the Vagrant VM.
-        :return:
-        """
-        if name is None:
-            # start all
-            name = ""
-        self.execute("vbox up " + str(name))
 
     def resume(self, name=None):
         """

@@ -11,7 +11,7 @@ from cloudmesh.shell.command import command, map_parameters
 from cloudmesh.shell.variables import Variables
 from cloudmesh.terminal.Terminal import VERBOSE
 from cloudmesh.management.configuration.arguments import Arguments
-
+from cloudmesh.common.Shell import Shell
 class VmCommand(PluginCommand):
 
     # see also https://github.com/cloudmesh/client/edit/master/cloudmesh_client/shell/plugins/VmCommand.py
@@ -216,12 +216,21 @@ class VmCommand(PluginCommand):
 
         elif arguments.ping:
 
+            # TODO: IMPLEMENT
             names = []
             pings = int(arguments.N or 3)
 
             names = []
 
             clouds, names = Arguments.get_cloud_and_names("ping", arguments, variables)
+
+            for name in names:
+
+                ping = Shell.live(
+                    "ping -c {N} {name}".format(name=name, N=arguments.N))
+                print(ping)
+            else:
+                return True
 
             return ""
 

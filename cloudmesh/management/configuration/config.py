@@ -2,6 +2,7 @@ from os import mkdir
 from os.path import isfile, expanduser, join, dirname, realpath, exists
 from pathlib import Path
 from shutil import copyfile
+from cloudmesh.terminal.Terminal import VERBOSE
 
 import oyaml as yaml
 
@@ -38,6 +39,8 @@ class Config(object):
 
         self.__dict__ = self.__shared_state
         if "data" not in self.__dict__:
+
+            VERBOSE.print("Load config", verbose=9)
 
             self.config_path = Path(expanduser(config_path)).resolve()
             self.config_folder = dirname(self.config_path)

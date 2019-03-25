@@ -99,7 +99,7 @@ class CmDatabase(object):
         count = 0
         collections = self.collections()
         for collection in collections:
-            entry = self.find(collection=collection, name=name)
+            entry = self.find({"collection": collection, "cm.name": entry})
             count = count + len(entry)
         return count
 
@@ -115,7 +115,7 @@ class CmDatabase(object):
         entry = []
         collections = self.collections()
         for collection in collections:
-            entry = self.find(collection=collection, name=name)
+            entry = self.find({"collection":collection, "cm.name": entry})
             if len(entry) > 0:
                 return entry
         return entry
@@ -134,10 +134,21 @@ class CmDatabase(object):
         entries = Parameter.expand(names)
         if len(entries) > 0:
             for entry in entries:
-                r = self.find_name(entry)
+                r = self.find_name({"cm.name": entry})
                 if r is not None:
                     result.append(r[0])
         return result
+
+    # check
+    def find(self, query):
+        col = self.db[query["collection"]]
+
+        entries = col.find(query, {"_id": 0})
+
+        records = []
+        for entry in entries:
+            records.append(entry)
+        return records
 
     # check
     def find(self, collection="cloudmesh", **kwargs):

@@ -23,8 +23,8 @@ class Provider(ComputeNodeABC):
     ProviderMapper = {
         "openstack": LibcloudProvider.OPENSTACK,
         "aws": LibcloudProvider.EC2,
-        "azure_asm": LibcloudProvider.AZURE,
-        "azure_arm": LibcloudProvider.AZURE_ARM
+        #"azure_asm": LibcloudProvider.AZURE,
+        #"azure_arm": LibcloudProvider.AZURE_ARM
     }
 
     output = {

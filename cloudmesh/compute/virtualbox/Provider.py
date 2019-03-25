@@ -38,14 +38,17 @@ class Provider(ComputeNodeABC):
         return rc
 
     def update_dict(self, entry, kind="node"):
-        entry["kind"] = kind
-        entry["driver"] = self.cloudtype
-        entry["cloud"] = self.cloud
+        if "cm" not in entry:
+            entry["cm"] = {}
+        entry["cm"]["kind"] = kind
+        entry["cm"]["driver"] = self.cloudtype
+        entry["cm"]["cloud"] = self.cloud
         return entry
+
 
     output = {
         'vm': {
-            "sort_keys": ["name"],
+            "sort_keys": ["cm.name"],
             'order': ["vagrant.name",
                       "vagrant.cloud",
                       "vbox.name",

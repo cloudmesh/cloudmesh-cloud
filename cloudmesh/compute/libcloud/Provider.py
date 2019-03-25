@@ -165,6 +165,57 @@ class Provider(ComputeNodeABC):
 
             if "_uuid" in entry:
                 del entry["_uuid"]
+            identifier = {}
+            for key in ["name", "created", "updated", "cloud", "kind",
+                        "collection", "modified", "driver"]:
+                if key in entry:
+                    identifier[key] = entry[key]
+            entry["cm"] = identifier
+            d.append(entry)
+        return d
+
+    def dict_new(self, elements, kind=None):
+        """
+        Libcloud returns an object or list of objects With the dict method
+        this object is converted to a dict. Typically this method is used internally.
+        :param elements: the elements
+        :param kind: Kind is image, flavor, or node
+        :return:
+        """
+        if elements is None:
+            return None
+        elif type(elements) == list:
+            _elements = elements
+        else:
+            _elements = [elements]
+        d = []
+        for element in _elements:
+            entry = element.__dict__
+            entry["cm"] = {}
+            entry["cm"]["kind"] = kind
+            entry["cm"]["driver"] = self.cloudtype
+            entry["cm"]["cloud"] = self.cloud
+
+            if kind == 'node':
+                entry["cm"]["updated"] = str(datetime.utcnow())
+
+                if "created_at" in entry:
+                    entry["cm"]["created"] = str(entry["created_at"])
+                    # del entry["created_at"]
+                else:
+                    entry["cm"]["created"] = entry["modified"]
+            elif kind == 'flavor':
+                entry["cm"]["created"] = entry["cm"]["updated"] = str(
+                    datetime.utcnow())
+            elif kind == 'image':
+                if self.cloudtype == 'openstack':
+                    entry["cm"]['created'] = entry['extra']['created']
+                    entry["cm"]['updated'] = entry['extra']['updated']
+                else:
+                    pass
+
+            if "_uuid" in entry:
+                del entry["_uuid"]
 
             d.append(entry)
         return d

@@ -164,7 +164,7 @@ Find out how many entries exist with the name CC-CentOS7:
     r = self.database.name_count("CC-CentOS7")
     pprint(r)
 
-## creating Uniqe Names
+## Creating Uniqe Names
 
 Uniqe names with the format `{experiment}-{group}-{user}-{counter}` can be
 created with

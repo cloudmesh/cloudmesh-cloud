@@ -169,6 +169,9 @@ class CmDatabase(object):
 
         for entry in entries:
             entry['collection'] = "{cloud}-{kind}".format(**entry)
+            if 'cm' not in entry:
+                entry['cm'] = {}
+            entry['cm']['collection'] = entry['collection']
 
             # entry["collection"] = collection
             # noinspection PyUnusedLocal

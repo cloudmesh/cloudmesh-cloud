@@ -201,4 +201,23 @@ The format can be chaned with `schema=` at the initailization. Thus
 would create names of the form gergor1, gergor2 and so on.
 
 
+## Cloudmesh Attributes
 
+Cloudmesh elements in the database will have a special cm dictionary with a
+number of attributes defined in it. The following example showcases such an
+attribute dict. The attributs can be used to uniquely define an object in the
+database by cobining the cloud, kind, and name. In addition it contains the date
+for the object being created first and its update time.
+
+    "cm" : {
+        "name" : "m1.medium",
+        "created" : "2019-03-25 07:45:46.905623",
+        "updated" : "2019-03-25 07:45:46.905623",
+        "cloud" : "chameleon",
+        "kind" : "flavor",
+        "driver" : "openstack",
+        "collection" : "chameleon-flavor"
+    },
+    
+Using this information the object can easily be found in the database by name,
+type or cloud or a combination thereof.

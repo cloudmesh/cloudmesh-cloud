@@ -93,7 +93,8 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">6. Cloudmesh Database (ok)</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#database-decorator">6.1. Database Decorator</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#database-access">6.2. Database Access</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#creating-uniqe-names">6.3. creating Uniqe Names</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#creating-uniqe-names">6.3. Creating Uniqe Names</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#cloudmesh-attributes">6.4. Cloudmesh Attributes</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="manual.html">7. Manual (ok)</a></li>
@@ -318,7 +319,7 @@ finding informtion.</p>
 </div>
 </div>
 <div class="section" id="creating-uniqe-names">
-<h2>6.3. creating Uniqe Names<a class="headerlink" href="#creating-uniqe-names" title="Permalink to this headline">¶</a></h2>
+<h2>6.3. Creating Uniqe Names<a class="headerlink" href="#creating-uniqe-names" title="Permalink to this headline">¶</a></h2>
 <p>Uniqe names with the format <code class="docutils literal notranslate"><span class="pre">{experiment}-{group}-{user}-{counter}</span></code> can be
 created with</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">cloumesh.management.configuration.name</span> <span class="k">import</span> <span class="n">Name</span>
@@ -351,6 +352,27 @@ created with</p>
 </pre></div>
 </div>
 <p>would create names of the form gergor1, gergor2 and so on.</p>
+</div>
+<div class="section" id="cloudmesh-attributes">
+<h2>6.4. Cloudmesh Attributes<a class="headerlink" href="#cloudmesh-attributes" title="Permalink to this headline">¶</a></h2>
+<p>Cloudmesh elements in the database will have a special cm dictionary with a
+number of attributes defined in it. The following example showcases such an
+attribute dict. The attributs can be used to uniquely define an object in the
+database by cobining the cloud, kind, and name. In addition it contains the date
+for the object being created first and its update time.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="s2">&quot;cm&quot;</span> <span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;name&quot;</span> <span class="p">:</span> <span class="s2">&quot;m1.medium&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;created&quot;</span> <span class="p">:</span> <span class="s2">&quot;2019-03-25 07:45:46.905623&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;updated&quot;</span> <span class="p">:</span> <span class="s2">&quot;2019-03-25 07:45:46.905623&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;cloud&quot;</span> <span class="p">:</span> <span class="s2">&quot;chameleon&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;kind&quot;</span> <span class="p">:</span> <span class="s2">&quot;flavor&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;driver&quot;</span> <span class="p">:</span> <span class="s2">&quot;openstack&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;collection&quot;</span> <span class="p">:</span> <span class="s2">&quot;chameleon-flavor&quot;</span>
+<span class="p">},</span>
+</pre></div>
+</div>
+<p>Using this information the object can easily be found in the database by name,
+type or cloud or a combination thereof.</p>
 </div>
 </div>
 

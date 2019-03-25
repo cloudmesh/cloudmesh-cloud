@@ -24,7 +24,7 @@ class SystemPath(object):
         """
         script = None
         if platform == "darwin":
-            script = """
+            script = f"""
             echo \"export PATH={path}:$PATH\" >> ~/.bash_profile
             source ~/.bash_profile
             """.format(path=path)

@@ -1,5 +1,7 @@
+#############################################################
 # nosetest -v --nopature
 # nosetests -v --nocapture tests/test_compute_database.py
+#############################################################
 from pprint import pprint
 import time
 import subprocess
@@ -12,6 +14,7 @@ from cloudmesh.common.FlatDict import FlatDict, flatten
 from cloudmesh.management.configuration.SSHkey import SSHkey
 from cloudmesh.management.configuration.name import Name
 from cloudmesh.mongo.CmDatabase import CmDatabase
+from cloudmesh.shell.variables import Variables
 
 class TestName:
 
@@ -31,7 +34,11 @@ class TestName:
 
         self.new_name = str(self.name_generator)
 
-        self.p = Provider(name="chameleon")
+        variables = Variables()
+        cloud = variables['cloud']
+
+
+        self.p = Provider(name=cloud)
 
         self.secgroupname = "CM4TestSecGroup"
         self.secgrouprule = {"ip_protocol": "tcp",

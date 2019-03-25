@@ -15,7 +15,7 @@ class Provider(object):
 
         # Console.msg("FOUND Kind", self.kind)
 
-        if self.kind in ["openstack"]:
+        if self.kind in ["openstack", "aws"]:
             self.p = LibCloudProvider(name=name, configuration=configuration)
         elif self.kind in ["vagrant", "virtualbox"]:
             self.p = VirtualboxCloudProvider(name=name,
@@ -31,6 +31,14 @@ class Provider(object):
     @DatabaseUpdate()
     def list(self):
         return self.p.list()
+
+    @DatabaseUpdate()
+    def images(self):
+        return self.p.images()
+
+    @DatabaseUpdate()
+    def flavor(self):
+        return self.p.flavors()
 
     def add_collection(self, d, *args):
         if d is None:

@@ -14,6 +14,7 @@ from cloudmesh.common.console import Console
 from cloudmesh.common.dotdict import dotdict
 # from cloudmesh.abstractclass import ComputeNodeManagerABC
 from cloudmesh.management.configuration.config import Config
+from cloudmesh.common.util import path_expand
 
 """
 is vagrant up to date
@@ -164,7 +165,7 @@ class Provider(ComputeNodeABC):
             # read name form config
         else:
             try:
-                command = "vagrant box remove {name}".format(name=name)
+                command = f"vagrant box remove {name}"
                 result = Shell.execute(command, shell=True)
             except Exception as e:
                 print(e)
@@ -173,8 +174,7 @@ class Provider(ComputeNodeABC):
 
     def add_image(self, name=None):
 
-        command = "vagrant box add {name} --provider virtualbox".format(
-            name=name)
+        command = f"vagrant box add {name} --provider virtualbox"
 
         result = ""
         if name is None:
@@ -183,8 +183,7 @@ class Provider(ComputeNodeABC):
             # read name form config
         else:
             try:
-                command = "vagrant box add {name} --provider virtualbox".format(
-                    name=name)
+                command = f"vagrant box add {name} --provider virtualbox"
                 result = Shell.live(command)
                 assert result.status == 0
             except Exception as e:
@@ -211,8 +210,7 @@ class Provider(ComputeNodeABC):
         :param name: the unique node name
         :return:  The dict representing the node
         """
-        command = "docker run -v {directory}:/share -w /share --rm -it {name}:{version}  /bin/bash".format(
-            **locals())
+        command = f"docker run -v {directory}:/share -w /share --rm -it {name}:{version}  /bin/bash"
         os.system(command)
 
     def create(self, **kwargs):
@@ -318,7 +316,10 @@ class Provider(ComputeNodeABC):
 
         return script
 
-    def _get_specification(self, cloud=None, name=None, port=None,
+    def _get_specification(self,
+                           cloud=None,
+                           name=None,
+                           port=None,
                            image=None, **kwargs):
         arg = dotdict(kwargs)
         arg.port = port
@@ -348,7 +349,7 @@ class Provider(ComputeNodeABC):
             pass
 
         arg.path = default["path"]
-        arg.directory = os.path.expanduser("{path}/{name}".format(**arg))
+        arg.directory = path_expand("{path}/{name}".format(**arg))
         arg.vagrantfile = "{directory}/Dockerfile".format(**arg)
         return arg
 

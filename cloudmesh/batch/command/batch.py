@@ -17,45 +17,16 @@ REVISED COMMAND
        ::
 
          Usage:
-           batch job create 
-                 --name=NAME
-                 --cluster=CLUSTER
-                 --script=SCRIPT
-                 --type=TYPE
-                 --job=JOB
-                 --destination=DESTINATION      # remote-path=REMOTE_PATH
+ 
+       --destination=DESTINATION      # remote-path=REMOTE_PATH
                  --source=SOURCE                # local-path=LOCAL_PATH
                  [--argfile-path=ARGUMENT_FILE_PATH] # what is this
                  [--outfile-name=OUTPUT_FILE_NAME]   # what is this
                  [--suffix=SUFFIX] [--overwrite]     # what is this
-           batch job run [--name=NAMES]
-           batch job fetch [--name=NAMES]
-           batch job remove [--name=NAMES]
-           batch job clean [--name=NAMES]
-           batch job set [--name=NAMES] PARAMETER=VALUE
-           batch job list [--name=NAMES] [--depth=DEPTH]
-           batch cluster test [--cluster=CLUSTERS]
-           batch cluster list [--cluster=CLUSTERS] [--depth=DEPTH]
-           batch cluster remove [--cluster=CLUSTERS]
-           batch cluster set [--cluster=CLUSTERS] PARAMETER=VALUE
-           
-       Options:    
+
+
+      Old   
             --depth=DEPTH   [default: 1]
-
-"""
-
-
-
-class BatchCommand(PluginCommand):
-
-    # see also https://github.com/cloudmesh/client/blob/master/cloudmesh_client/shell/plugins/HpcCommand.py
-    # noinspection PyUnusedLocal
-    @command
-    def do_batch(self, args, arguments):
-        """
-        ::
-
-          Usage:
             batch job create JOB_NAME
                   [--script=SLURM_SCRIPT_PATH]
                   [--input-type=INPUT_TYPE]
@@ -79,15 +50,53 @@ class BatchCommand(PluginCommand):
             batch remove job JOB_NAME
             batch clean JOB_NAME
 
+
+
+"""
+
+
+
+class BatchCommand(PluginCommand):
+
+    # see also https://github.com/cloudmesh/client/blob/master/cloudmesh_client/shell/plugins/HpcCommand.py
+    # noinspection PyUnusedLocal
+    @command
+    def do_batch(self, args, arguments):
+        """
+        ::
+
+          Usage:
+            batch job create
+                 --name=NAME
+                 --cluster=CLUSTER
+                 --script=SCRIPT
+                 --type=TYPE
+                 --job=JOB
+                 --destination=DESTINATION      # remote-path=REMOTE_PATH
+                 --source=SOURCE                # local-path=LOCAL_PATH
+                 [--argfile-path=ARGUMENT_FILE_PATH] # what is this
+                 [--outfile-name=OUTPUT_FILE_NAME]   # what is this
+                 [--suffix=SUFFIX] [--overwrite]     # what is this
+            batch job run [--name=NAMES]
+            batch job fetch [--name=NAMES]
+            batch job remove [--name=NAMES]
+            batch job clean [--name=NAMES]
+            batch job set [--name=NAMES] PARAMETER=VALUE
+            batch job list [--name=NAMES] [--depth=DEPTH]
+            batch cluster test [--cluster=CLUSTERS]
+            batch cluster list [--cluster=CLUSTERS] [--depth=DEPTH]
+            batch cluster remove [--cluster=CLUSTERS]
+            batch cluster set [--cluster=CLUSTERS] PARAMETER=VALUE
+
           Arguments:
               FILE   a file name
               INPUT_TYPE  tbd
 
           Options:
               -f      specify the file
+              --depth=DEPTH   [default: 1]
 
           Description:
-
 
             This command allows to submit batch jobs to queuing systems hosted
             in an HBC center as a service.
@@ -115,24 +124,40 @@ class BatchCommand(PluginCommand):
         #
         slurm_manager = SlurmCluster(debug=arguments["--debug"])
 
+        map_parameters(arguments,
+                       "name",
+                       "cluster",
+                       "script",
+                       "type",
+                       "destination",
+                       "source")
+
+        # if not arguments.create
+
+        #    find cluster name from Variables()
+        #    if no cluster is defined look it up in yaml in batch default:
+        #    if not defined there fail
+
+        #    clusters = Parameter.expand(arguments.cluster)
+        #    name = Parameters.expand[argumnets.name)
+        #    this will return an array of clusters and names of jobs and all cluster
+        #    job or clusterc commands will be executed on them
+        #    see the vm
+        #
+        #    if active: False in the yaml file for the cluster this cluster is not used and scipped.
+
+
+
         # do not use print but use ,Console.msg(), Console.error(), Console.ok()
         if arguments.tester:
             print("running ... ")
             slurm_manager.tester()
-        elif arguments.job and arguments.create and arguments.get("JOB_NAME"):
+        elif arguments.job and arguments.create and arguments.name:
             # assert input_type in ['params', 'params+file'], "Input type can be either params or params+file"
             # if input_type == 'params+file':
             #     assert arguments.get("--argfile-path") is not None, "Input type is params+file but the input \
             #         filename is not specified"
 
-            map_parameters(arguments,
-                           "script",
-                           "cluster")
-            slurm_script_path = arguments.get("--script")
-            cluster_name = arguments.get("--cluster")
-
-            job_name = arguments.get("JOB_NAME")
-            input_type = arguments.get("--input-type")
             job_script_path = arguments.get("--job-script-path")
             remote_path = arguments.get("--remote-path")
             local_path = arguments.get("--local-path")
@@ -141,15 +166,16 @@ class BatchCommand(PluginCommand):
             suffix = random_suffix if arguments.get("suffix") is None else arguments.get("suffix")
             overwrite = False if type(arguments.get("--overwrite")) is None else arguments.get("--overwrite")
             argfile_path = '' if arguments.get("--argfile-path") is None else arguments.get("--argfile-path")
-            slurm_manager.create(job_name,
-                                 cluster_name,
-                                 slurm_script_path,
-                                 input_type,
+            slurm_manager.create(arguments.name,
+                                 arguments.cluster,
+                                 arguments.script,
+                                 arguments.type,
                                  job_script_path,
                                  argfile_path,
                                  remote_path,
                                  local_path,
-                                 suffix, overwrite)
+                                 suffix,
+                                 overwrite)
 
         elif arguments.remove:
             if arguments.cluster:

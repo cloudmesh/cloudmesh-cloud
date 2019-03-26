@@ -53,11 +53,22 @@ class SlurmCluster(object):
         r = self.database.collection("foo-entries")
         pprint(r)
         self.job_validator()
-        return  \
-            { "cloud": "slurm",
-           "kind": "jobs",
-           "name": "test012",
-           "test": "hello" }
+
+        data = {
+            "cm": {
+                "cloud": "karst_debug",
+                "kind": "batch",
+                "name": "job012",
+            },
+            "batch": {
+                "source": "~/.cloudmesh/batch/dir",
+                "destination": "~/.cloudmesh/dir/"
+
+            }
+
+        return data
+
+
 
     # noinspection PyDictCreation
     def create(self,

@@ -3,6 +3,7 @@ from os.path import isfile, expanduser, join, dirname, realpath, exists
 from pathlib import Path
 from shutil import copyfile
 from cloudmesh.terminal.Terminal import VERBOSE
+from cloudmesh.common.util import path_expand
 
 import oyaml as yaml
 
@@ -42,7 +43,7 @@ class Config(object):
 
             VERBOSE.print("Load config", verbose=9)
 
-            self.config_path = Path(expanduser(config_path)).resolve()
+            self.config_path = Path(path_expand(config_path)).resolve()
             self.config_folder = dirname(self.config_path)
 
             if not exists(self.config_folder):
@@ -54,9 +55,14 @@ class Config(object):
 
                 copyfile(source.resolve(), self.config_path)
 
+            #with open(self.config_path, "r") as stream:
+            #    # self.data = yaml.load(stream, Loader=yaml.FullLoader)
+            #    self.data = yaml.load(stream, Loader=yaml.SafeLoader)
+
             with open(self.config_path, "r") as stream:
-                # self.data = yaml.load(stream, Loader=yaml.FullLoader)
-                self.data = yaml.load(stream, Loader=yaml.SafeLoader)
+                content = stream.read()
+                content = path_expand(content)
+                self.data = yaml.load(content, Loader=yaml.SafeLoader)
 
 
             # self.data is loaded as nested OrderedDict, can not use set or get methods directly

@@ -32,7 +32,7 @@ class Counter(object):
             copyfile(destination_path.resolve(), self.counter_file_path)
 
         with open(self.counter_file_path, "r") as stream:
-            self.counters = yaml.load(stream)
+            self.counters = yaml.load(stream, Loader=yaml.FullLoader)
 
     def incr(self, name='counter'):
         """

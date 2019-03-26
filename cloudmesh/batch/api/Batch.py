@@ -3,9 +3,13 @@ import subprocess
 import os
 import ntpath
 import time
+from pathlib import Path
+from pprint import pprint
 from cloudmesh.management.configuration.config import Config
 from cloudmesh.management.configuration.generic_config import GenericConfig
 from cloudmesh.common.util import path_expand
+from cloudmesh.mongo.DataBaseDecorator import DatabaseUpdate
+from cloudmesh.mongo.CmDatabase import CmDatabase
 
 # noinspection PyPep8
 class SlurmCluster(object):
@@ -25,7 +29,35 @@ class SlurmCluster(object):
         self.debug = debug
         self.all_jobIDs = []
         self.slurm_cluster = {}
-        self.job_metadata = {}
+        self.job = {
+            'jobname': None,
+            'suffix': None,
+            'slurm_cluster_name': None,
+            'input_type': None,
+            'raw_remote_path': None,
+            'slurm_script_path': None,
+            'job_script_path': None,
+            'argfile_path': None,
+            'argfile_name': None,
+            'script_name': None,
+            'slurm_script_name': None,
+            'remote_path': None,
+            'local_path': None
+        }
+        self.database = CmDatabase()
+
+
+    @DatabaseUpdate()
+    def tester(self):
+        print("hello world!")
+        r = self.database.collection("foo-entries")
+        pprint(r)
+        self.job_validator()
+        return  \
+            { "cloud": "slurm",
+           "kind": "jobs",
+           "name": "test012",
+           "test": "hello" }
 
     # noinspection PyDictCreation
     def create(self,
@@ -65,6 +97,7 @@ class SlurmCluster(object):
         self.batch_config.deep_set(['slurm_cluster'], tmp_cluster)
 
         job = {
+            'jobname' : job_name,
             'suffix': suffix,
             'slurm_cluster_name': slurm_cluster_name,
             'input_type': input_type,
@@ -85,7 +118,7 @@ class SlurmCluster(object):
         job_metadata = {job_name: job}
 
 
-        self.job_metadata = job
+        self.job = job
 
 
         self.batch_config.deep_set(['job-metadata'], job_metadata)
@@ -377,14 +410,45 @@ class SlurmCluster(object):
         else:
             raise ValueError("Target of variable set not found.")
 
-# def main():
-#    """
-#    Main function for the batch. Processes the input arguments.
 
-#    """
-#    arguments = docopt(__doc__, version='Cloudmesh Batch 0.1')
-#    process_arguments(arguments)
+    def job_validator(self):
+        """
+        Used to validate the job-related parameters. If not all of them are
+        met, then the user will be informed about the missing parameter.
+
+        :return: Boolean
+        """
+        # job = {
+        #     'suffix': suffix,
+        #     'slurm_cluster_name': slurm_cluster_name,
+        #     'input_type': input_type,
+        #     'raw_remote_path': remote_path,
+        #     'slurm_script_path': os.path.abspath(slurm_script_path),
+        #     'job_script_path': os.path.abspath(job_script_path),
+        #     'argfile_path': os.path.abspath(argfile_path),
+        #     'argfile_name': ntpath.basename(argfile_path),
+        #     'script_name': ntpath.basename(job_script_path),
+        #     'remote_path': os.path.join(remote_path, 'job' + suffix),
+        #     'local_path': local_path
+        # }
+
+        mandatory_params = ['slurm_cluster_name', 'input_type',
+                          'slurm_jobfile_path','binary_path','datafile_path',
+                          "remote_path",'local_path']
+        missing_param = None
+        if self.job['slurm_cluster_name'] is None:
+            missing_param = 'slurm_cluster_name'
+            print ("Slurm cluster name not defiend. ")
 
 
-# if __name__ == "__main__":
-#    main()
+        if missing_param is not None:
+            print("Set {} using the following command:".format(missing_param))
+            print("\t cms batch {} set {} {}".format(self.job['jobname'],
+                                                     missing_param,
+                                                          missing_param.upper()))
+            return
+
+        # assert input_type in ['params', 'params+file'], "Input type can be either params or params+file"
+        # if input_type == 'params+file':
+        #     assert arguments.get("--argfile-path") is not None, "Input type is params+file but the input \
+        #         filename is not specified"

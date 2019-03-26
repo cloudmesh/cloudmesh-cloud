@@ -48,17 +48,19 @@ class BatchCommand(PluginCommand):
 
           Usage:
             batch job create JOB_NAME
-                  --script=SLURM_SCRIPT_PATH
-                  --input-type=INPUT_TYPE
-                  --cluster=CLUSTER_NAME
-                  --job-script-path=SCRIPT_PATH
-                  --remote-path=REMOTE_PATH
-                  --local-path=LOCAL_PATH
+                  [--script=SLURM_SCRIPT_PATH]
+                  [--input-type=INPUT_TYPE]
+                  [--cluster=CLUSTER_NAME]
+                  [--job-script-path=SCRIPT_PATH]
+                  [--remote-path=REMOTE_PATH]
+                  [--local-path=LOCAL_PATH]
                   [--argfile-path=ARGUMENT_FILE_PATH]
                   [--outfile-name=OUTPUT_FILE_NAME]
                   [--suffix=SUFFIX] [--overwrite]
+                  [--debug]
             batch job run JOB_NAME
             batch fetch JOB_NAME
+            batch tester
             batch test CLUSTER_NAME
             batch set cluster CLUSTER_NAME PARAMETER VALUE
             batch set job JOB_NAME PARAMETER VALUE
@@ -67,8 +69,6 @@ class BatchCommand(PluginCommand):
             batch remove cluster CLUSTER_NAME
             batch remove job JOB_NAME
             batch clean JOB_NAME
-
-          This command does some useful things.
 
           Arguments:
               FILE   a file name
@@ -100,86 +100,88 @@ class BatchCommand(PluginCommand):
             (SSH, 2 factor, XSEDE-account) TBD.
 
         """
-        arguments.FILE = arguments['--file'] or None
 
-        print(arguments)
+        #
+        # create slurm manager so it can be used in all commands
+        #
+        slurm_manager = SlurmCluster(debug=arguments["--debug"])
 
-        debug = arguments["--debug"]
+        # do not use print but use ,Console.msg(), Console.error(), Console.ok()
+        if arguments.tester:
+            print("running ... ")
+            slurm_manager.tester()
+        elif arguments.job and arguments.create and arguments.get("JOB_NAME"):
+            job_name = arguments.get("JOB_NAME")
+            slurm_script_path = arguments.get("--script")
+            input_type = arguments.get("--input-type")
+            # assert input_type in ['params', 'params+file'], "Input type can be either params or params+file"
+            # if input_type == 'params+file':
+            #     assert arguments.get("--argfile-path") is not None, "Input type is params+file but the input \
+            #         filename is not specified"
+            cluster_name = arguments.get("--cluster")
+            job_script_path = arguments.get("--job-script-path")
+            remote_path = arguments.get("--remote-path")
+            local_path = arguments.get("--local-path")
 
-        if arguments.get("batch"):
+            random_suffix = self.suffix_generator()
+            suffix = random_suffix if arguments.get("suffix") is None else arguments.get("suffix")
+            overwrite = False if type(arguments.get("--overwrite")) is None else arguments.get("--overwrite")
+            argfile_path = '' if arguments.get("--argfile-path") is None else arguments.get("--argfile-path")
+            slurm_manager.create(job_name,
+                                 cluster_name,
+                                 slurm_script_path,
+                                 input_type,
+                                 job_script_path,
+                                 argfile_path,
+                                 remote_path,
+                                 local_path,
+                                 suffix, overwrite)
 
-            #
-            # create slurm manager so it can be used in all commands
-            #
-            slurm_manager = SlurmCluster(debug=debug)
+        elif arguments.remove:
+            if arguments.cluster:
+                slurm_manager.remove("cluster", arguments.get("CLUSTER_NAME"))
+            if arguments.job:
+                slurm_manager.remove("job", arguments.get("JOB_NAME"))
 
-            # do not use print but use ,Console.msg(), Console.error(), Console.ok()
+        elif arguments.list:
+            max_depth = 1 if arguments.get("DEPTH") is None else int(arguments.get("DEPTH"))
+            if arguments.get("clusters"):
+                slurm_manager.list("clusters", max_depth)
+            elif arguments.get("jobs"):
+                slurm_manager.list("jobs", max_depth)
 
-            if arguments.job and arguments.create and arguments.get("JOB_NAME"):
-                job_name = arguments.get("JOB_NAME")
-                slurm_script_path = arguments.get("--script")
-                input_type = arguments.get("--input-type")
-                assert input_type in ['params', 'params+file'], "Input type can be either params or params+file"
-                if input_type == 'params+file':
-                    assert arguments.get("--argfile-path") is not None, "Input type is params+file but the input \
-                        filename is not specified"
-                cluster_name = arguments.get("--cluster")
-                job_script_path = arguments.get("--job-script-path")
-                remote_path = arguments.get("--remote-path")
-                local_path = arguments.get("--local-path")
-
-                # TODO separate, make its own function?
-                random_suffix = '_' + str(datetime.now()).replace('-', '').replace(' ', '_').replace(':', '')[
-                                      0:str(datetime.now()).replace('-', '').replace(' ', '_').replace(':',
-                                                                                                       '').index(
-                                          '.') + 3].replace('.', '')
-                suffix = random_suffix if arguments.get("suffix") is None else arguments.get("suffix")
-                overwrite = False if type(arguments.get("--overwrite")) is None else arguments.get("--overwrite")
-                argfile_path = '' if arguments.get("--argfile-path") is None else arguments.get("--argfile-path")
-                slurm_manager.create(job_name,
-                                     cluster_name,
-                                     slurm_script_path,
-                                     input_type,
-                                     job_script_path,
-                                     argfile_path,
-                                     remote_path,
-                                     local_path,
-                                     suffix, overwrite)
-
-            elif arguments.remove:
-                if arguments.cluster:
-                    slurm_manager.remove("cluster", arguments.get("CLUSTER_NAME"))
-                if arguments.job:
-                    slurm_manager.remove("job", arguments.get("JOB_NAME"))
-
-            elif arguments.list:
-                max_depth = 1 if arguments.get("DEPTH") is None else int(arguments.get("DEPTH"))
-                if arguments.get("clusters"):
-                    slurm_manager.list("clusters", max_depth)
-                elif arguments.get("jobs"):
-                    slurm_manager.list("jobs", max_depth)
-
-            elif arguments.set:
-                if arguments.get("cluster"):
-                    cluster_name = arguments.get("CLUSTER_NAME")
-                    parameter = arguments.get("PARAMETER")
-                    value = arguments.get("VALUE")
-                    slurm_manager.set_param("cluster", cluster_name, parameter, value)
-
-                if arguments.job:
-                    config_name = arguments.get("JOB_NAME")
-                    parameter = arguments.get("PARAMETER")
-                    value = arguments.get("VALUE")
-                    slurm_manager.set_param("job-metadata", config_name, parameter, value)
-            elif arguments.start and arguments.job:
-                job_name = arguments.get("JOB_NAME")
-                slurm_manager.run(job_name)
-            elif arguments.get("fetch"):
-                job_name = arguments.get("JOB_NAME")
-                slurm_manager.fetch(job_name)
-            elif arguments.test:
+        elif arguments.set:
+            if arguments.get("cluster"):
                 cluster_name = arguments.get("CLUSTER_NAME")
-                slurm_manager.connection_test(cluster_name)
-            elif arguments.clean:
-                job_name = arguments.get("JOB_NAME")
-                slurm_manager.clean_remote(job_name)
+                parameter = arguments.get("PARAMETER")
+                value = arguments.get("VALUE")
+                slurm_manager.set_param("cluster", cluster_name, parameter, value)
+
+            if arguments.job:
+                config_name = arguments.get("JOB_NAME")
+                parameter = arguments.get("PARAMETER")
+                value = arguments.get("VALUE")
+                slurm_manager.set_param("job-metadata", config_name, parameter, value)
+        elif arguments.start and arguments.job:
+            job_name = arguments.get("JOB_NAME")
+            slurm_manager.run(job_name)
+        elif arguments.get("fetch"):
+            job_name = arguments.get("JOB_NAME")
+            slurm_manager.fetch(job_name)
+        elif arguments.test:
+            cluster_name = arguments.get("CLUSTER_NAME")
+            slurm_manager.connection_test(cluster_name)
+        elif arguments.clean:
+            job_name = arguments.get("JOB_NAME")
+            slurm_manager.clean_remote(job_name)
+
+    def suffix_generator(self):
+        """
+        Generate random suffix based on the time
+
+        :return: string
+        """
+        return '_' + str(datetime.now()).replace('-', '').\
+               replace(' ', '_').replace(':', '')\
+               [0:str(datetime.now()).replace('-', '').replace(' ', '_').\
+               replace(':','').index('.') + 3].replace('.', '')

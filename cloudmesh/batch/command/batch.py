@@ -1,5 +1,5 @@
 from __future__ import print_function
-from cloudmesh.shell.command import command
+from cloudmesh.shell.command import command, map_parameters
 from cloudmesh.shell.command import PluginCommand
 from datetime import datetime
 from cloudmesh.batch.api.Batch import SlurmCluster
@@ -11,30 +11,39 @@ from cloudmesh.batch.api.Batch import SlurmCluster
 
 
 """
+
+REVISED COMMAND
+
        ::
 
          Usage:
-           batch job create JOB_NAME
+           batch job create 
+                 --name=NAME
+                 --cluster=CLUSTER
                  --script=SCRIPT
-                 --input-type=INPUT_TYPE
-                 --cluster=CLUSTER_NAME
-                 --job-script-path=SCRIPT_PATH
-                 --remote-path=REMOTE_PATH
-                 --local-path=LOCAL_PATH
-                 [--argfile-path=ARGUMENT_FILE_PATH]
-                 [--outfile-name=OUTPUT_FILE_NAME]
-                 [--suffix=SUFFIX] [--overwrite]
-           batch job run JOB_NAME
-           batch fetch JOB_NAME
-           batch test CLUSTER_NAME
-           batch set cluster CLUSTER_NAME PARAMETER VALUE
-           batch set job JOB_NAME PARAMETER VALUE
-           batch list clusters [DEPTH [default:1]]
-           batch list jobs [DEPTH [default:1]]
-           batch remove cluster CLUSTER_NAME
-           batch remove job JOB_NAME
-           batch clean JOB_NAME
+                 --type=TYPE
+                 --job=JOB
+                 --destination=DESTINATION      # remote-path=REMOTE_PATH
+                 --source=SOURCE                # local-path=LOCAL_PATH
+                 [--argfile-path=ARGUMENT_FILE_PATH] # what is this
+                 [--outfile-name=OUTPUT_FILE_NAME]   # what is this
+                 [--suffix=SUFFIX] [--overwrite]     # what is this
+           batch job run [--name=NAMES]
+           batch job fetch [--name=NAMES]
+           batch job remove [--name=NAMES]
+           batch job clean [--name=NAMES]
+           batch job set [--name=NAMES] PARAMETER=VALUE
+           batch job list [--name=NAMES] [--depth=DEPTH]
+           batch cluster test [--cluster=CLUSTERS]
+           batch cluster list [--cluster=CLUSTERS] [--depth=DEPTH]
+           batch cluster remove [--cluster=CLUSTERS]
+           batch cluster set [--cluster=CLUSTERS] PARAMETER=VALUE
+           
+       Options:    
+            --depth=DEPTH   [default: 1]
+
 """
+
 
 
 class BatchCommand(PluginCommand):
@@ -90,7 +99,7 @@ class BatchCommand(PluginCommand):
             The outout of the script can be safed in a destination folder. A virtual
             directory is used to coordinate all saved files.
 
-            The files can be located due to the use of the firtual directory on
+            The files can be located due to the use of the virtual directory on
             multiple different data or file services
 
             Authentication to the Batch systems is done viw the underlaying center
@@ -111,14 +120,19 @@ class BatchCommand(PluginCommand):
             print("running ... ")
             slurm_manager.tester()
         elif arguments.job and arguments.create and arguments.get("JOB_NAME"):
-            job_name = arguments.get("JOB_NAME")
-            slurm_script_path = arguments.get("--script")
-            input_type = arguments.get("--input-type")
             # assert input_type in ['params', 'params+file'], "Input type can be either params or params+file"
             # if input_type == 'params+file':
             #     assert arguments.get("--argfile-path") is not None, "Input type is params+file but the input \
             #         filename is not specified"
+
+            map_parameters(arguments,
+                           "script",
+                           "cluster")
+            slurm_script_path = arguments.get("--script")
             cluster_name = arguments.get("--cluster")
+
+            job_name = arguments.get("JOB_NAME")
+            input_type = arguments.get("--input-type")
             job_script_path = arguments.get("--job-script-path")
             remote_path = arguments.get("--remote-path")
             local_path = arguments.get("--local-path")

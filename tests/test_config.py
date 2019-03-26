@@ -3,7 +3,7 @@ from cloudmesh.management.debug import myself, HEADING
 from pprint import pprint
 
 
-# nosetests -v --nocapture tests/test_nn_service.py
+# nosetests -v --nocapture tests/test_config.py
 
 
 class TestConfig:
@@ -18,15 +18,9 @@ class TestConfig:
 
         print(self.config)
         print(type(self.config.data))
-        #pprint(config.credentials('local'))
 
         assert self.config is not None
-        #assert 'cloud' in config.cloud
 
-    def test_10_config_print(self):
-        HEADING(myself())
-        print(self.config)
-        assert True is True
 
     def test_20_config_subscriptable(self):
         HEADING(myself())

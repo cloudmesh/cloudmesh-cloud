@@ -46,12 +46,8 @@ class SlurmCluster(object):
         }
         self.database = CmDatabase()
 
+    def job_specification(self):
 
-    @DatabaseUpdate()
-    def tester(self):
-        print("hello world!")
-        r = self.database.collection("foo-entries")
-        pprint(r)
         self.job_validator()
 
         data = {
@@ -63,14 +59,15 @@ class SlurmCluster(object):
             "batch": {
                 "source": "~/.cloudmesh/batch/dir",
                 "destination": "~/.cloudmesh/dir/"
-
             }
+        }
 
         return data
 
 
 
     # noinspection PyDictCreation
+    @DatabaseUpdate()
     def create(self,
                job_name,
                slurm_cluster_name,
@@ -133,6 +130,10 @@ class SlurmCluster(object):
 
 
         self.batch_config.deep_set(['job-metadata'], job_metadata)
+
+        data = self.job_specification()
+
+
 
     @staticmethod
     def _execute_in_parallel(func_args):

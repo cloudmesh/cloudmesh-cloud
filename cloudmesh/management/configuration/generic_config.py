@@ -24,7 +24,7 @@ class GenericConfig(object):
             open(self.config_path, 'a').close()
 
         with open(self.config_path, "r") as stream:
-            self._conf_dict = yaml.load(stream, Loader=yaml.FullLoader)
+            self._conf_dict = yaml.load(stream, Loader=yaml.SafeLoader)
             if self._conf_dict is None:
                 self._conf_dict = {}
 

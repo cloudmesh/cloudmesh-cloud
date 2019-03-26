@@ -8,7 +8,7 @@ from cloudmesh.key.api.manager import Manager
 from cloudmesh.management.configuration.SSHkey import SSHkey
 from cloudmesh.management.configuration.config import Config
 from cloudmesh.shell.command import PluginCommand
-from cloudmesh.shell.command import command
+from cloudmesh.shell.command import command, map_parameters
 from cloudmesh.shell.variables import Variables
 from cloudmesh.compute.libcloud.Provider import Provider
 
@@ -162,10 +162,11 @@ class KeyCommand(PluginCommand):
                 to the grouplist of the key
         """
 
-        arguments.cloud = arguments['--cloud']
-        arguments.format = arguments['--format']
-        arguments.source = arguments['--source']
-        arguments.dir = arguments['--dir']
+        map_parameters(arguments,
+                       'cloud',
+                       'format',
+                       'source',
+                       'dir')
 
         pprint(arguments)
 

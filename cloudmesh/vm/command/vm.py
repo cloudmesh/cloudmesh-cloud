@@ -12,6 +12,8 @@ from cloudmesh.shell.variables import Variables
 from cloudmesh.terminal.Terminal import VERBOSE
 from cloudmesh.management.configuration.arguments import Arguments
 from cloudmesh.common.Shell import Shell
+
+
 class VmCommand(PluginCommand):
 
     # see also https://github.com/cloudmesh/client/edit/master/cloudmesh_client/shell/plugins/VmCommand.py

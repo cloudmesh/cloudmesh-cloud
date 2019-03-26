@@ -46,19 +46,21 @@ class SlurmCluster(object):
         }
         self.database = CmDatabase()
 
-    def job_specification(self):
+    @staticmethod
+    def job_specification():
 
-        self.job_validator()
+        # self.job_validator()
 
         data = {
             "cm": {
                 "cloud": "karst_debug",
-                "kind": "batch",
+                "kind": "batch-job",
                 "name": "job012",
             },
             "batch": {
                 "source": "~/.cloudmesh/batch/dir",
-                "destination": "~/.cloudmesh/dir/"
+                "destination": "~/.cloudmesh/dir/",
+                "status": "running"
             }
         }
 
@@ -132,7 +134,7 @@ class SlurmCluster(object):
         self.batch_config.deep_set(['job-metadata'], job_metadata)
 
         data = self.job_specification()
-
+        return [data]
 
 
     @staticmethod
@@ -333,6 +335,8 @@ class SlurmCluster(object):
             print("waiting for other results if any...")
         print("All of the remote results collected.")
 
+    '''
+    @DatabaseUpdate
     def list(self, target, max_depth, current_depth=1, input_dict=None):
         """
         listing the target slurm clusters or job-metadata
@@ -367,6 +371,10 @@ class SlurmCluster(object):
             else:
                 indent = current_depth if current_depth > 1 else current_depth - 1
                 print('\t' * indent, input_dict)
+
+        data = [{}, {}]
+        return data
+    '''
 
     def run(self, job_name):
         """

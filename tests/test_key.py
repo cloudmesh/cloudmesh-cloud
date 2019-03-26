@@ -1,10 +1,10 @@
 from pprint import pprint
-from cloudmesh.common.util import HEADING
-from cloudmesh.compute.libcloud.Provider import Provider
-from cloudmesh.management.configuration.config import Config
+
 from cloudmesh.common.Printer import Printer
-from cloudmesh.common.FlatDict import FlatDict, flatten
+from cloudmesh.common.util import HEADING
 from cloudmesh.management.configuration.SSHkey import SSHkey
+from cloudmesh.management.configuration.config import Config
+
 
 # nosetest -v --nopature
 # nosetests -v --nocapture tests/test_key.py

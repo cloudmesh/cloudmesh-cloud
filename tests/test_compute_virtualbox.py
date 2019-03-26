@@ -3,21 +3,19 @@
 # nosetests -v --nocapture tests/test_compute_virtualbox.py
 #################################################################
 
-from pprint import pprint
-import time
 import subprocess
-import sys
+import time
+from pathlib import Path
+from pprint import pprint
+
+from cloudmesh.common.Printer import Printer
 from cloudmesh.common.util import HEADING
+from cloudmesh.common.util import banner
+from cloudmesh.common.util import path_expand
 from cloudmesh.compute.virtualbox.Provider import Provider
 from cloudmesh.management.configuration.config import Config
-from cloudmesh.common.Printer import Printer
-from cloudmesh.common.FlatDict import FlatDict, flatten
-from cloudmesh.management.configuration.SSHkey import SSHkey
 from cloudmesh.management.configuration.name import Name
-from cloudmesh.mongo.CmDatabase import CmDatabase
-from cloudmesh.common.util import banner
-from pathlib import Path
-from cloudmesh.common.util import path_expand
+
 
 class TestName:
 

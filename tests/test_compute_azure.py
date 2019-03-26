@@ -3,19 +3,17 @@
 # nosetests -v --nocapture tests/test_compute_azure.py
 #################################################################
 
-from pprint import pprint
-import time
 import subprocess
-import sys
-from cloudmesh.common.util import HEADING
-from cloudmesh.compute.libcloud.Provider import Provider
-from cloudmesh.management.configuration.config import Config
+import time
+from pprint import pprint
+
 from cloudmesh.common.Printer import Printer
-from cloudmesh.common.FlatDict import FlatDict, flatten
-from cloudmesh.management.configuration.SSHkey import SSHkey
-from cloudmesh.management.configuration.name import Name
-from cloudmesh.mongo.CmDatabase import CmDatabase
+from cloudmesh.common.util import HEADING
 from cloudmesh.common.util import banner
+from cloudmesh.compute.libcloud.Provider import Provider
+from cloudmesh.management.configuration.SSHkey import SSHkey
+from cloudmesh.management.configuration.config import Config
+from cloudmesh.management.configuration.name import Name
 
 
 class TestName:

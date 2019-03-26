@@ -172,8 +172,8 @@ cloudmesh:
         OS_PROJECT_ID: 7bfa792867a141e6855fdaaa2a960a4e
         OS_PROJECT_NAME: TG-CIE170003
         OS_TENANT_NAME: TG-CIE170003
-        OS_USERNAME: tg455498
-        OS_PASSWORD: Sol5uMvOxMc1
+        OS_USERNAME: TBD
+        OS_PASSWORD: TBD
         OS_AUTH_URL: https://tacc.jetstream-cloud.org:5000
         OS_IDENTITY_API_VERSION: 3
         OS_INTERFACE: public

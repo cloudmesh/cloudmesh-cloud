@@ -3,19 +3,18 @@
 # nosetests -v --nocapture tests/test_compute_openstack.py
 #################################################################
 
-from pprint import pprint
-import time
 import subprocess
-import sys
-from cloudmesh.common.util import HEADING
-from cloudmesh.compute.libcloud.Provider import Provider
-from cloudmesh.management.configuration.config import Config
+import time
+from pprint import pprint
+
 from cloudmesh.common.Printer import Printer
-from cloudmesh.common.FlatDict import FlatDict, flatten
-from cloudmesh.management.configuration.SSHkey import SSHkey
-from cloudmesh.management.configuration.name import Name
-from cloudmesh.mongo.CmDatabase import CmDatabase
+from cloudmesh.common.util import HEADING
 from cloudmesh.common.util import banner
+from cloudmesh.compute.libcloud.Provider import Provider
+from cloudmesh.management.configuration.SSHkey import SSHkey
+from cloudmesh.management.configuration.config import Config
+from cloudmesh.management.configuration.name import Name
+from cloudmesh.shell.variables import Variables
 
 
 class TestName:
@@ -36,7 +35,10 @@ class TestName:
 
         self.new_name = str(self.name_generator)
 
-        self.p = Provider(name="chameleon")
+        variables = Variables()
+        cloud = variables['cloud']
+
+        self.p = Provider(name=cloud)
 
         self.secgroupname = "CM4TestSecGroup"
         self.secgrouprule = {"ip_protocol": "tcp",
@@ -128,8 +130,8 @@ class TestName:
             rules = self.p.list_secgroup_rules(secgroup["name"])
             print(Printer.write(rules,
                                 sort_keys=(
-                                "ip_protocol", "from_port", "to_port",
-                                "ip_range"),
+                                    "ip_protocol", "from_port", "to_port",
+                                    "ip_range"),
                                 order=["ip_protocol", "from_port", "to_port",
                                        "ip_range"],
                                 header=["ip_protocol", "from_port", "to_port",
@@ -253,10 +255,10 @@ class TestName:
         # pprint (self.testnode.public_ips)
         pubip = self.testnode.public_ips[0]
 
-        COMMAND = "cat /etc/*release*"
+        command = "cat /etc/*release*"
 
         ssh = subprocess.Popen(
-            ["ssh", "%s@%s" % (self.clouduser, pubip), COMMAND],
+            ["ssh", "%s@%s" % (self.clouduser, pubip), command],
             shell=False,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE)

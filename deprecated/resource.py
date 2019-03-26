@@ -21,7 +21,7 @@ class Resource(ResourceABC):
         cloudmesh = ""
         with open(yaml_file, "r") as stream:
             try:
-                cloudmesh = yaml.load(stream)
+                cloudmesh = yaml.load(stream, Loader=yaml.FullLoader)
             except yaml.YAMLError as exc:
                 print(exc)
         return cloudmesh

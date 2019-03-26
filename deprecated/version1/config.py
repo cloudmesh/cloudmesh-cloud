@@ -29,7 +29,7 @@ class Config(object):
 
         with open(self.yaml, "r") as stream:
             try:
-                self._conf = yaml.load(stream)
+                self._conf = yaml.load(stream, Loader=yaml.FullLoader)
             except yaml.YAMLError as exc:
                 print(exc)
 

@@ -84,7 +84,7 @@ class LocalDBProvider(DBProviderABC):
         obj = {}
         with open(yaml_file_path, "r") as stream:
             try:
-                obj = yaml.load(stream)
+                obj = yaml.load(stream, Loader=yaml.FullLoader)
             except yaml.YAMLError as ex:
                 print(ex)
         return obj

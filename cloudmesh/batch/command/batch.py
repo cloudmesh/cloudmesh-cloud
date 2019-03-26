@@ -217,6 +217,10 @@ class BatchCommand(PluginCommand):
 
     def suffix_generator(self):
         """
+
+        We do not want a random suffix, we want a numbered suffix. THis can be
+        generated with the name method in the name.py function which can take a
+        schema, so yo ucan create a schema for job or clusternames if needed
         Generate random suffix based on the time
 
         :return: string

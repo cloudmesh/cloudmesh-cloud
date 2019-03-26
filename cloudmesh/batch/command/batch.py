@@ -3,7 +3,12 @@ from cloudmesh.shell.command import command, map_parameters
 from cloudmesh.shell.command import PluginCommand
 from datetime import datetime
 from cloudmesh.batch.api.Batch import SlurmCluster
+from cloudmesh.shell.variables import Variables
+from cloudmesh.terminal.Terminal import VERBOSE
+from cloudmesh.management.configuration.arguments import Arguments
+from cloudmesh.common.Printer import Printer
 
+from pprint import pprint
 
 # from cloudmesh.batch.api.manager import Manager
 
@@ -77,7 +82,7 @@ class BatchCommand(PluginCommand):
                  [--argfile-path=ARGUMENT_FILE_PATH] # what is this
                  [--outfile-name=OUTPUT_FILE_NAME]   # what is this
                  [--suffix=SUFFIX] [--overwrite]     # what is this
-            batch job run [--name=NAMES]
+            batch job run [--name=NAMES] [--format=FORMAT]
             batch job fetch [--name=NAMES]
             batch job remove [--name=NAMES]
             batch job clean [--name=NAMES]
@@ -95,6 +100,7 @@ class BatchCommand(PluginCommand):
           Options:
               -f      specify the file
               --depth=DEPTH   [default: 1]
+              --format=FORMAT    [default: table]
 
           Description:
 
@@ -122,15 +128,20 @@ class BatchCommand(PluginCommand):
         #
         # create slurm manager so it can be used in all commands
         #
-        slurm_manager = SlurmCluster(debug=arguments["--debug"])
+        slurm_manager = SlurmCluster(True)  # debug=arguments["--debug"])
+
+        arguments["--cloud"] = "test"
+        arguments["NAME"] = "fix"
 
         map_parameters(arguments,
+                       "cloud",
                        "name",
                        "cluster",
                        "script",
                        "type",
                        "destination",
-                       "source")
+                       "source",
+                       "format")
 
         # if not arguments.create
 
@@ -146,12 +157,48 @@ class BatchCommand(PluginCommand):
         #
         #    if active: False in the yaml file for the cluster this cluster is not used and scipped.
 
+        VERBOSE.print(arguments, verbose=9)
 
+        variables = Variables()
 
         # do not use print but use ,Console.msg(), Console.error(), Console.ok()
         if arguments.tester:
             print("running ... ")
             slurm_manager.tester()
+        elif arguments.run and arguments.job:
+
+            # config = Config()["cloudmesh.batch"]
+
+            names = []
+
+            clouds, names = Arguments.get_cloud_and_names("refresh", arguments,
+                                                          variables)
+
+            data = SlurmCluster.job_specification()
+
+            '''
+             data = {
+            "cm": {
+                "cloud": "karst_debug",
+                "kind": "batch-job",
+                "name": "job012",
+            },
+            "batch": {
+                "source": "~/.cloudmesh/batch/dir",
+                "destination": "~/.cloudmesh/dir/",
+                "status": "running"
+            }
+            }'''
+
+            pprint(data)
+            print(Printer.flatwrite(
+                [data],
+                order=["cm.name", "cm.kind", "batch.status"],
+                header=["Name", "Kind", "Status"],
+                output=arguments.format)
+            )
+
+            return ""
         elif arguments.job and arguments.create and arguments.name:
             # assert input_type in ['params', 'params+file'], "Input type can be either params or params+file"
             # if input_type == 'params+file':

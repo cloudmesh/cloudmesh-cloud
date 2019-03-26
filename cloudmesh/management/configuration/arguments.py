@@ -9,6 +9,7 @@ class Arguments(object):
     def get_cloud_and_names(label, arguments, variables):
         names = []
         clouds = []
+
         if arguments["--cloud"]:
             clouds = Arguments.get_clouds(arguments, variables)
         else:

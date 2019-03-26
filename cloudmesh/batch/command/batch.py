@@ -7,6 +7,8 @@ from cloudmesh.shell.variables import Variables
 from cloudmesh.terminal.Terminal import VERBOSE
 from cloudmesh.management.configuration.arguments import Arguments
 from cloudmesh.common.Printer import Printer
+from cloudmesh.common.parameter import Parameter
+from cloudmesh.common.console import Console
 
 from pprint import pprint
 
@@ -123,6 +125,11 @@ class BatchCommand(PluginCommand):
 
             (SSH, 2 factor, XSEDE-account) TBD.
 
+             batch job run [--name=NAMES] [--format=FORMAT]
+
+                runs jobs with the given names
+
+
         """
 
         #
@@ -169,12 +176,15 @@ class BatchCommand(PluginCommand):
 
             # config = Config()["cloudmesh.batch"]
 
-            names = []
+            names = Parameter.expand(arguments.name)
 
-            clouds, names = Arguments.get_cloud_and_names("refresh", arguments,
-                                                          variables)
+            # clouds, names = Arguments.get_cloud_and_names("refresh", arguments,
+            #                                    variables)
 
-            data = SlurmCluster.job_specification()
+            data = []
+            for name in names:
+                entry = SlurmCluster.job_specification()
+                data.append(entry)
 
             '''
              data = {
@@ -190,9 +200,15 @@ class BatchCommand(PluginCommand):
             }
             }'''
 
+            try:
+
+                raise NotImplementedError
+            except Exception as e:
+                Console.error("Haha", traceflag=True)
+
             pprint(data)
             print(Printer.flatwrite(
-                [data],
+                data,
                 order=["cm.name", "cm.kind", "batch.status"],
                 header=["Name", "Kind", "Status"],
                 output=arguments.format)

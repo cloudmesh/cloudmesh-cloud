@@ -139,20 +139,24 @@ class TestName:
                   )
 
     def test_06_secgroups_add(self):
+        HEADING()
         self.p.add_secgroup(self.secgroupname)
         self.test_05_list_secgroups()
 
     def test_07_secgroup_rules_add(self):
+        HEADING()
         rules = [self.secgrouprule]
         self.p.add_rules_to_secgroup(self.secgroupname, rules)
         self.test_05_list_secgroups()
 
     def test_08_secgroup_rules_remove(self):
+        HEADING()
         rules = [self.secgrouprule]
         self.p.remove_rules_from_secgroup(self.secgroupname, rules)
         self.test_05_list_secgroups()
 
     def test_09_secgroups_remove(self):
+        HEADING()
         self.p.remove_secgroup(self.secgroupname)
         self.test_05_list_secgroups()
 
@@ -196,6 +200,7 @@ class TestName:
         self.test_04_list_vm()
 
     def test_12_publicIP_detach(self):
+        HEADING()
         print("detaching and removing public IP...")
         time.sleep(5)
         nodes = self.p.list(raw=True)
@@ -237,9 +242,11 @@ class TestName:
         assert node["extra"]["task_state"] == "deleting"
 
     def test_15_list_vm(self):
+        HEADING()
         self.test_04_list_vm()
 
     def test_16_vm_login(self):
+        HEADING()
         self.test_04_list_vm()
         self.test_10_create()
         # use the self.testnode for this test

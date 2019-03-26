@@ -141,20 +141,24 @@ class other:
                  )
 
     def test_06_secgroups_add(self):
+        HEADING()
         self.p.add_secgroup(self.secgroupname)
         self.test_05_list_secgroups()
 
     def test_07_secgroup_rules_add(self):
+        HEADING()
         rules = [self.secgrouprule]
         self.p.add_rules_to_secgroup(self.secgroupname, rules)
         self.test_05_list_secgroups()
 
     def test_08_secgroup_rules_remove(self):
+        HEADING()
         rules = [self.secgrouprule]
         self.p.remove_rules_from_secgroup(self.secgroupname, rules)
         self.test_05_list_secgroups()
 
     def test_09_secgroups_remove(self):
+        HEADING()
         self.p.remove_secgroup(self.secgroupname)
         self.test_05_list_secgroups()
 

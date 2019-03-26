@@ -1,32 +1,40 @@
 import time
 from libcloud.compute.drivers.azure_arm import AzureNetwork, AzureSubnet, AzureIPAddress
 from libcloud.compute.base import NodeAuthSSHKey
+from cloudmesh.management.configuration.config import Config
+from libcloud.compute.providers import get_driver
+from libcloud.compute.types import Provider as LibCloudProvider
 
 
-# from cm4.vm.Vm import Vm
-
+#
+# TODO: possibly replace get names, images, as teher may be many images matching,
+# we should assume they are in db with download, or could sheck if they do not exists so we load them.
+#
 
 class AzureProvider(object):
 
-    # def __init__(self, cloud):
-    #     """
-    #     Initialize AzureManager
-    #     """
-    #     config = Config()
-    #     cred = config.get("cloud.azure.credentials")
-    #
-    #     self.defaults = config.get("cloud.azure.default")
-    #     self.resource_group = self.defaults["resource_group"]
-    #     self.subscription_id = cred["AZURE_TENANT_ID"]
-    #
-    #     cls = get_driver(Provider.AZURE_ARM)
-    #     self.provider = cls(
-    #         tenant_id=cred["AZURE_TENANT_ID"],
-    #         subscription_id=cred["AZURE_SUBSCRIPTION_ID"],
-    #         key=cred["AZURE_APPLICATION_ID"],
-    #         secret=cred["AZURE_SECRET_KEY"],
-    #         region=self.defaults["region"]
-    #     )
+    def __init__(self, cloud):
+        """
+        Initialize the provider for the yaml file
+        """
+        config = Config()
+        cred = config.get("cloud.azure.credentials")
+
+        self.defaults = config.get("cloud.azure.default")
+        self.resource_group = self.defaults["resource_group"]
+        self.subscription_id = cred["AZURE_TENANT_ID"]
+
+        cls = get_driver(LibCloudProvider.AZURE_ARM)
+        self.api_version = {"api-version": "2018-08-01"}
+
+        self.provider = cls(
+            tenant_id=cred["AZURE_TENANT_ID"],
+            subscription_id=cred["AZURE_SUBSCRIPTION_ID"],
+            key=cred["AZURE_APPLICATION_ID"],
+            secret=cred["AZURE_SECRET_KEY"],
+            region=cred["AZURE_REGION"]
+        )
+
 
     def suspend(self, name):
         """
@@ -48,7 +56,7 @@ class AzureProvider(object):
         # Libcloud does not delete public IP addresses
         self._ex_delete_public_ip(f"{name}-ip")
 
-    def create(self, name):
+    def create(self, name, image_name=None, size=None):
         """
         Create a node
         """
@@ -57,9 +65,20 @@ class AzureProvider(object):
 
         auth = NodeAuthSSHKey(self.defaults["public_key"])
 
-        image = self.provider.get_image(self.defaults["image"])
-        sizes = self.provider.list_sizes()
-        size = [s for s in sizes if s.id == self.defaults["size"]][0]
+        # TODO: must be parameter
+        if image_name is None:
+            image_name = self.defaults["image"]
+
+        image = self.provider.get_image(image_name)
+
+        # TODO_ must be parameter
+
+        if size is None:
+            #
+            # TODO: can this be done with get, e.g. get_size seems not to exist though
+            #
+            sizes = self.provider.list_sizes()
+            size = [s for s in sizes if s.id == self.defaults["size"]][0]
 
         # Create a network and default subnet if none exists
         network_name = self.defaults["network"]
@@ -154,13 +173,15 @@ class AzureProvider(object):
             }
         }
 
-        action = "/subscriptions/%s/resourceGroups/%s/providers/" \
-                 "Microsoft.Network/virtualNetworks/%s" \
-                 % (self.provider.connection.subscription_id, self.resource_group, name)
+        subscription = self.provider.connection.subscription_id
+        resource_group = self.resource_group
+
+        action = f"/subscriptions/{subscription}/resourceGroups/{resource_group}/providers/" \
+            "Microsoft.Network/virtualNetworks/{name}"
 
         r = self.provider.connection.request(
             action,
-            params={"api-version": "2018-08-01"},
+            params=self.api_version,
             method="PUT",
             data=data
         )
@@ -176,13 +197,16 @@ class AzureProvider(object):
         """
         Delete a network
         """
-        action = "/subscriptions/%s/resourceGroups/%s/providers/" \
-                 "Microsoft.Network/virtualNetworks/%s" \
-                 % (self.provider.connection.subscription_id, self.resource_group, name)
+
+        subscription = self.provider.connection.subscription_id
+        resource_group = self.resource_group
+
+        action = f"/subscriptions/{subscription}/resourceGroups/{resource_group}/providers/" \
+            "Microsoft.Network/virtualNetworks/{name}"
 
         r = self.provider.connection.request(
             action,
-            params={"api-version": "2018-08-01"},
+            params=self.api_version,
             method="DELETE"
         )
 
@@ -198,13 +222,15 @@ class AzureProvider(object):
             }
         }
 
-        action = "/subscriptions/%s/resourceGroups/%s/providers/" \
-                 "Microsoft.Network/virtualNetworks/%s/subnets/%s" \
-                 % (self.provider.connection.subscription_id, self.resource_group, network_name, name)
+        subscription = self.provider.connection.subscription_id
+        resource_group = self.resource_group
+
+        action = "/subscriptions/{subscription}/resourceGroups/{resource_group}/providers/" \
+                 "Microsoft.Network/virtualNetworks/{network_name}/subnets/{name}"
 
         r = self.provider.connection.request(
             action,
-            params={"api-version": "2018-08-01"},
+            params=self.api_version,
             method="PUT",
             data=data
         )
@@ -220,9 +246,11 @@ class AzureProvider(object):
         Create a public IP resources.
         """
 
-        target = "/subscriptions/%s/resourceGroups/%s/" \
-                 "providers/Microsoft.Network/publicIPAddresses/%s" \
-                 % (self.subscription_id, self.resource_group, name)
+        subscription = self.provider.connection.subscription_id
+        resource_group = self.resource_group
+
+        target = "/subscriptions/{subscription}/resourceGroups/{resource_gropu}/" \
+                 "providers/Microsoft.Network/publicIPAddresses/name"
 
         data = {
             "location": self.provider.default_location.id,
@@ -234,7 +262,7 @@ class AzureProvider(object):
 
         r = self.connection.request(
             target,
-            params={"api-version": "2018-08-01"},
+            params=self.api_version,
             data=data,
             method='PUT'
         )
@@ -251,13 +279,16 @@ class AzureProvider(object):
         :param name:
         :return:
         """
-        action = "/subscriptions/%s/resourceGroups/%s/providers/" \
-                 "Microsoft.Network/publicIPAddresses/%s" \
-                 % (self.provider.connection.subscription_id, self.resource_group, name)
+
+        subscription = self.provider.connection.subscription_id
+        resource_group = self.resource_group
+
+        action = "/subscriptions/{subscription}/resourceGroups/{resource_group}/providers/" \
+                 "Microsoft.Network/publicIPAddresses/{name}"
 
         r = self.provider.connection.request(
             action,
-            params={"api-version": "2018-08-01"},
+            params=self.api_version,
             method="DELETE"
         )
 

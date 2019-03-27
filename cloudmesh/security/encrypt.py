@@ -15,6 +15,13 @@ from cloudmesh.common.Shell import Shell
 # brew install openssh --with-libressl
 
 class EncryptFile(object):
+    """
+
+    keys must be generated with
+
+        ssh-keygen -t rsa -m pem
+
+    """
     def __init__(self, filename, secret):
         self.data = dotdict({
             'file': filename,

@@ -1,24 +1,27 @@
 import os
 from cloudmesh.common.util import path_expand
-
+from cloudmesh.common.dotdict import dotdict
+from cloudmesh.terminal.Terminal import VERBOSE
 
 class EncryptFile(object):
-    def __init__(self, file_in, file_out, debug=False):
-        self.data = {
-            'file': file_in,
-            'secret': file_out,
+    def __init__(self, filename, secret):
+        self.data = dotdict({
+            'file': filename,
+            'secret': secret,
             'pem': path_expand('~/.ssh/id_rsa.pub.pem'),
-            'key': path_expand(' ~/.ssh/id_rsa')
-        }
-        self.debug = debug
+            'key': path_expand('~/.ssh/id_rsa')
+        })
+        VERBOSE.print(self.data, verbose=9)
+        if not os.path.exists(self.data["pem"]):
+            self.pem_create()
 
     def _execute(self, command):
-        if self.debug:
-            print(command)
+        VERBOSE.print(command, verbose=9)
         os.system(command)
 
     def pem_create(self):
         command = path_expand("openssl rsa -in {key} -pubout  > {pem}".format(**self.data))
+        # command = path_expand("openssl rsa -in id_rsa -pubout  > {pem}".format(**self.data))
         self._execute(command)
 
     #

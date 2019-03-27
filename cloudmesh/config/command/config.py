@@ -27,6 +27,9 @@ class ConfigCommand(PluginCommand):
              config set ATTRIBUTE=VALUE
              config verify
              config check
+             config ssh-keygen
+
+
 
 
            Arguments:
@@ -93,11 +96,19 @@ class ConfigCommand(PluginCommand):
             e.pem_verify()
 
         elif arguments.check:
-            e.check_passphrase()
+            key = "~/.ssh/id_rsa"
+            r = e.check_key(key)
+            if r:
+                Console.ok(f"Key {key} is valid")
+            # e.check_passphrase()
 
         elif arguments.set:
 
             Console.error("not implemented")
             raise NotImplementedError
+
+        elif arguments["ssh-keygen"]:
+
+            e.ssh_keygen()
 
         return ""

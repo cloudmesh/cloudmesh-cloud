@@ -25,6 +25,8 @@ class ConfigCommand(PluginCommand):
              config encrypt [SOURCE]
              config decrypt [SOURCE]
              config set ATTRIBUTE=VALUE
+             config verify
+             config check
 
 
            Arguments:
@@ -46,6 +48,10 @@ class ConfigCommand(PluginCommand):
 
 
            Description:
+
+             config check
+                checks if the ssh key ~/.ssh/id_rsa has a password. Verifies it
+                through entering the passphrase
 
                 ssh-keygen
                 ssh-add
@@ -82,6 +88,12 @@ class ConfigCommand(PluginCommand):
 
             Console.ok("file decrypted")
             return ""
+
+        elif arguments.verify:
+            e.pem_verify()
+
+        elif arguments.check:
+            e.check_passphrase()
 
         elif arguments.set:
 

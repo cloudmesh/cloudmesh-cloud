@@ -28,6 +28,7 @@ class ConfigCommand(PluginCommand):
              config verify
              config check
              config ssh-keygen
+             config pem
 
 
 
@@ -61,6 +62,7 @@ class ConfigCommand(PluginCommand):
                 Keys must be generated with
 
                     ssh-keygen -t rsa -m pem
+                    openssl rsa -in ~/.ssh/id_rsa -out ~/.ssh/id_rsa.pem
 
                 or
                     cms config ssh-keygen
@@ -119,6 +121,10 @@ class ConfigCommand(PluginCommand):
                 Console.ok(f"Key {key} is valid")
             # does not work as it does not change it to pem format
             # e.check_passphrase()
+
+        elif arguments.pem:
+
+            r = e.pem_create()
 
         elif arguments.set:
 

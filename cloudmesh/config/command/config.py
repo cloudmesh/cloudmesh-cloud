@@ -24,30 +24,26 @@ class ConfigCommand(PluginCommand):
              config  -h | --help
              config encrypt [SOURCE]
              config decrypt [SOURCE]
+             config edit [SOURCE]
              config set ATTRIBUTE=VALUE
-             config verify
-             config check
-             config ssh-keygen
-             config pem
-
-
-
+             config set ATTRIBUTE
+             config ssh keygen
+             config ssh verify
+             config ssh check
+             config ssh pem
 
            Arguments:
-             VMS            Para,eterized list of virtual machines
-             CLOUDS         The clouds
-             NAME           The name of the key.
-             SOURCE         db, ssh, all
-             KEYNAME        The name of a key. For key upload it defaults to the default key name.
-             FORMAT         The format of the output (table, json, yaml)
-             FILENAME       The filename with full path in which the key
-                            is located
+             SOURCE           the file to encrypted or decrypted.
+                              an .enc is added to the filename or removed form it
+                              dependent of if you encrypt or decrypt
+             ATTRIBUTE=VALUE  sets the attribute with . notation in the
+                              configuration file.
+             ATTRIBUTE        reads the attribute from the terminal and sets it
+                              in the configuration file
+                              If the attribute is a password, * is written instead
+                              of the character included
 
            Options:
-              --dir=DIR                     the directory with keys [default: ~/.ssh]
-              --format=FORMAT               the format of the output [default: table]
-              --source=SOURCE               the source for the keys [default: cm]
-              --username=USERNAME           the source for the keys [default: none]
               --name=KEYNAME                The name of a key
 
 
@@ -65,7 +61,7 @@ class ConfigCommand(PluginCommand):
                     openssl rsa -in ~/.ssh/id_rsa -out ~/.ssh/id_rsa.pem
 
                 or
-                    cms config ssh-keygen
+                    cms config ssh keygen
 
                 Key validity can be checked with
 
@@ -111,10 +107,10 @@ class ConfigCommand(PluginCommand):
             Console.ok("file decrypted")
             return ""
 
-        elif arguments.verify:
+        elif arguments.ssh and arguments.verify:
             e.pem_verify()
 
-        elif arguments.check:
+        elif arguments.ssh and arguments.check:
             key = "~/.ssh/id_rsa"
             r = e.check_key(key)
             if r:
@@ -122,7 +118,7 @@ class ConfigCommand(PluginCommand):
             # does not work as it does not change it to pem format
             # e.check_passphrase()
 
-        elif arguments.pem:
+        elif arguments.ssh and arguments.pem:
 
             r = e.pem_create()
 
@@ -131,7 +127,7 @@ class ConfigCommand(PluginCommand):
             Console.error("not implemented")
             raise NotImplementedError
 
-        elif arguments["ssh-keygen"]:
+        elif arguments.ssh and arguments.keygen:
 
             e.ssh_keygen()
 

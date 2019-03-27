@@ -20,6 +20,7 @@ class EncryptFile(object):
     keys must be generated with
 
         ssh-keygen -t rsa -m pem
+        openssl rsa -in id_rsa -out id_rsa.pem
 
     """
     def __init__(self, filename, secret):
@@ -36,6 +37,7 @@ class EncryptFile(object):
     def ssh_keygen(self):
         command = "ssh-keygen -t rsa -m pem"
         os.system(command)
+        self.pem_create()
 
     def check_key(self, filename):
         error = False
@@ -99,13 +101,7 @@ class EncryptFile(object):
         self._execute(command)
 
     def pem_create(self):
-        if platform.system().lower() == "darwin":
-            command = "ssh-keygen -f {key}.pub -m pem -e > {key}.pem".format(
-                **self.data)
-
-        else:
-            command = path_expand(
-                "openssl rsa -in {key} -pubout  > {pem}".format(**self.data))
+        command = path_expand("openssl rsa -in {key} -pubout  > {pem}".format(**self.data))
 
         # command = path_expand("openssl rsa -in id_rsa -pubout  > {pem}".format(**self.data))
         self._execute(command)
@@ -123,7 +119,7 @@ class EncryptFile(object):
         # encrypt the file into secret.txt
         print(self.data)
         command = path_expand(
-            "openssl rsautl -encrypt -pubin -inkey {pem} -in {file} -out {secret}".format(**self.data))
+            "openssl rsautl -encrypt -pubin -inkey {key}.pem -in {file} -out {secret}".format(**self.data))
         self._execute(command)
 
     def decrypt(self, filename=None):
@@ -131,7 +127,7 @@ class EncryptFile(object):
             self.data['secret'] = filename
 
         command = path_expand(
-            "openssl rsautl -decrypt -inkey {pem} -in {secret} -out {file}".format(
+            "openssl rsautl -decrypt -inkey {key} -in {secret} -out {file}".format(
                 **self.data))
         self._execute(command)
 

@@ -42,7 +42,9 @@ class EncryptFile(object):
         if filename is not None:
             self.data['secret'] = filename
 
-        command = path_expand("openssl rsautl -decrypt -inkey {key} -in {secret}".format(**self.data))
+        command = path_expand(
+            "openssl rsautl -decrypt -inkey {pem} -in {secret} -out {file}".format(
+                **self.data))
         self._execute(command)
 
 

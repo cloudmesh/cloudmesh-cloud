@@ -61,6 +61,8 @@ class EncryptFile(object):
 
     def check_passphrase(self):
         """
+        this does not work with pem
+
         cecks if the ssh key has a password
         :return:
         """
@@ -85,7 +87,10 @@ class EncryptFile(object):
         return False
 
     def pem_verify(self):
-
+        """
+        this does not work
+        :return:
+        """
         if platform.system().lower() == 'darwin':
             command = "security verify-cert -c {key}.pem".format(**self.data)
             self._execute(command)

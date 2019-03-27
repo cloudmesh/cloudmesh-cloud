@@ -30,7 +30,8 @@ class Active(object):
 class Config(object):
     __shared_state = {}
 
-    def __init__(self, config_path='~/.cloudmesh/cloudmesh4.yaml'):
+    def __init__(self, config_path='~/.cloudmesh/cloudmesh4.yaml',
+                 encrypted=False):
         """
         Initialize the Config class.
 

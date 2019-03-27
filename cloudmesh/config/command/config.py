@@ -77,7 +77,15 @@ class ConfigCommand(PluginCommand):
                 cms config encrypt ~/.cloudmesh/cloudmesh4.yaml
                 cms config decrypt ~/.cloudmesh/cloudmesh4.yaml
 
+
+                config set ATTRIBUTE=VALUE
+
+                    config set profile.name=Gregor
+
+
         """
+        # d = Config()                #~/.cloudmesh/cloudmesh4.yaml
+        # d = Config(encryted=True)   # ~/.cloudmesh/cloudmesh4.yaml.enc
 
         arguments.SOURCE = arguments.SOURCE or \
                            path_expand("~/.cloudmesh/cloudmesh4.yaml")

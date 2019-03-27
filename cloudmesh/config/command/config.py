@@ -56,7 +56,24 @@ class ConfigCommand(PluginCommand):
                 checks if the ssh key ~/.ssh/id_rsa has a password. Verifies it
                 through entering the passphrase
 
-                ssh-keygen
+             Key generation
+
+                Keys must be generated with
+
+                    ssh-keygen -t rsa -m pem
+
+                or
+                    cms config ssh-keygen
+
+                Key validity can be checked with
+
+                    cms config check
+
+                The key password can be verified with
+
+                    cms config verify
+
+
                 ssh-add
 
                 cms config encrypt ~/.cloudmesh/cloudmesh4.yaml
@@ -100,6 +117,7 @@ class ConfigCommand(PluginCommand):
             r = e.check_key(key)
             if r:
                 Console.ok(f"Key {key} is valid")
+            # does not work as it does not change it to pem format
             # e.check_passphrase()
 
         elif arguments.set:

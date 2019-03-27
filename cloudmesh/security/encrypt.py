@@ -26,6 +26,28 @@ class EncryptFile(object):
         if not os.path.exists(self.data["pem"]):
             self.pem_create()
 
+    def ssh_keygen(self):
+        command = "ssh-keygen -t rsa -m pem"
+        os.system(command)
+
+    def check_key(self, filename):
+        error = False
+        with open(self.data["key"]) as key:
+            content = key.read()
+
+        if "BEGIN RSA PRIVATE KEY" not in content:
+            Console.error("Key is not a pure RSA key")
+            error = True
+        if "Proc-Type: 4,ENCRYPTED" in content and "DEK-Info:" not in content:
+            Console.error("Key has no passphrase")
+            error = True
+
+        if error:
+            Console.error("Key is not valid for cloudmesh")
+            return False
+        else:
+            return True
+
     def _execute(self, command):
         VERBOSE.print(command, verbose=9)
         os.system(command)

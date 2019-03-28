@@ -185,7 +185,10 @@
 <span class="c1"># import pip</span>
 <span class="kn">import</span> <span class="nn">time</span>
 <span class="kn">from</span> <span class="nn">contextlib</span> <span class="k">import</span> <span class="n">contextmanager</span>
-<span class="kn">from</span> <span class="nn">pathlib</span> <span class="k">import</span> <span class="n">Path</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">pathlib</span> <span class="k">import</span> <span class="n">Path</span>
+<span class="k">except</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">pathlib2</span> <span class="k">import</span> <span class="n">Path</span>
 
 <span class="kn">from</span> <span class="nn">six.moves</span> <span class="k">import</span> <span class="nb">input</span>
 
@@ -261,19 +264,18 @@
 <div class="viewcode-block" id="path_expand"><a class="viewcode-back" href="../../../code.html#cloudmesh.common.util.path_expand">[docs]</a><span class="k">def</span> <span class="nf">path_expand</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot; returns a string with expanded variable.</span>
 
-<span class="sd">    :param text: the path to be expanded, which can include ~ and $ variables</span>
+<span class="sd">    :param text: the path to be expanded, which can include ~ and environment $ variables</span>
 <span class="sd">    :param text: string</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">result</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
-
-    <span class="c1"># os.path.expandvars(path)</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expandvars</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="n">text</span><span class="p">))</span>
 
     <span class="c1"># template = Template(text)</span>
     <span class="c1"># result = template.substitute(os.environ)</span>
 
     <span class="k">if</span> <span class="n">result</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">):</span>
         <span class="n">result</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">(),</span> <span class="mi">1</span><span class="p">)</span>
+
     <span class="k">return</span> <span class="n">result</span></div>
 
 

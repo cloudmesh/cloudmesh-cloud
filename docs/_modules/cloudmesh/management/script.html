@@ -195,7 +195,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">script</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">if</span> <span class="n">platform</span> <span class="o">==</span> <span class="s2">&quot;darwin&quot;</span><span class="p">:</span>
-            <span class="n">script</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+            <span class="n">script</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;&quot;&quot;</span>
 <span class="s2">            echo </span><span class="se">\&quot;</span><span class="s2">export PATH=</span><span class="si">{path}</span><span class="s2">:$PATH</span><span class="se">\&quot;</span><span class="s2"> &gt;&gt; ~/.bash_profile</span>
 <span class="s2">            source ~/.bash_profile</span>
 <span class="s2">            &quot;&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">path</span><span class="o">=</span><span class="n">path</span><span class="p">)</span>

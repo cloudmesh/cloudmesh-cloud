@@ -10,6 +10,9 @@ from cloudmesh.management.configuration.generic_config import GenericConfig
 from cloudmesh.common.util import path_expand
 from cloudmesh.mongo.DataBaseDecorator import DatabaseUpdate
 from cloudmesh.mongo.CmDatabase import CmDatabase
+from cloudmesh.management.configuration.name import Name
+
+
 
 # noinspection PyPep8
 class SlurmCluster(object):
@@ -37,7 +40,7 @@ class SlurmCluster(object):
             'experiment_name': None,
             'companion_file': None,
         }
-        # self.database = CmDatabase()
+        self.database = CmDatabase()
 
     @staticmethod
     def job_specification():
@@ -71,8 +74,7 @@ class SlurmCluster(object):
                destination,
                source,
                experiment_name,
-               companion_file,
-               overwrite=False):
+               companion_file):
 
         """
         This method is used to create a job for running on remote slurm cluster
@@ -144,7 +146,7 @@ class SlurmCluster(object):
         # self.batch_config.deep_set(['job-metadata'], job_metadata)
 
         # data = self.job_specification()
-        return self.job
+        return [self.job]
 
 
     @staticmethod
@@ -298,6 +300,9 @@ class SlurmCluster(object):
         :param slurm_cluster_name: name of the slurm cluster which is going to be tested
         :return:
         """
+        r = self.database.find_name("job_20190327_22265228")
+        print(r)
+        return
         target_node_info = self.batch_config.get('slurm_cluster')[slurm_cluster_name]
         ssh_caller = lambda *x: self._ssh(target_node_info['name'], os.path.expanduser(target_node_info['credentials'] \
                                                                                            ['sshconfigpath']), *x)
@@ -441,44 +446,44 @@ class SlurmCluster(object):
             raise ValueError("Target of variable set not found.")
 
 
-    def job_validator(self):
-        """
-        Used to validate the job-related parameters. If not all of them are
-        met, then the user will be informed about the missing parameter.
-
-        :return: Boolean
-        """
-        # job = {
-        #     'suffix': suffix,
-        #     'slurm_cluster_name': slurm_cluster_name,
-        #     'input_type': input_type,
-        #     'raw_remote_path': remote_path,
-        #     'slurm_script_path': os.path.abspath(slurm_script_path),
-        #     'job_script_path': os.path.abspath(job_script_path),
-        #     'argfile_path': os.path.abspath(argfile_path),
-        #     'argfile_name': ntpath.basename(argfile_path),
-        #     'script_name': ntpath.basename(job_script_path),
-        #     'remote_path': os.path.join(remote_path, 'job' + suffix),
-        #     'local_path': local_path
-        # }
-
-        mandatory_params = ['slurm_cluster_name', 'input_type',
-                          'slurm_jobfile_path','binary_path','datafile_path',
-                          "remote_path",'local_path']
-        missing_param = None
-        if self.job['slurm_cluster_name'] is None:
-            missing_param = 'slurm_cluster_name'
-            print ("Slurm cluster name not defiend. ")
-
-
-        if missing_param is not None:
-            print("Set {} using the following command:".format(missing_param))
-            print("\t cms batch {} set {} {}".format(self.job['jobname'],
-                                                     missing_param,
-                                                          missing_param.upper()))
-            return
-
-        # assert input_type in ['params', 'params+file'], "Input type can be either params or params+file"
-        # if input_type == 'params+file':
-        #     assert arguments.get("--argfile-path") is not None, "Input type is params+file but the input \
-        #         filename is not specified"
+    # def job_validator(self):
+    #     """
+    #     Used to validate the job-related parameters. If not all of them are
+    #     met, then the user will be informed about the missing parameter.
+    #
+    #     :return: Boolean
+    #     """
+    #     # job = {
+    #     #     'suffix': suffix,
+    #     #     'slurm_cluster_name': slurm_cluster_name,
+    #     #     'input_type': input_type,
+    #     #     'raw_remote_path': remote_path,
+    #     #     'slurm_script_path': os.path.abspath(slurm_script_path),
+    #     #     'job_script_path': os.path.abspath(job_script_path),
+    #     #     'argfile_path': os.path.abspath(argfile_path),
+    #     #     'argfile_name': ntpath.basename(argfile_path),
+    #     #     'script_name': ntpath.basename(job_script_path),
+    #     #     'remote_path': os.path.join(remote_path, 'job' + suffix),
+    #     #     'local_path': local_path
+    #     # }
+    #
+    #     mandatory_params = ['slurm_cluster_name', 'input_type',
+    #                       'slurm_jobfile_path','binary_path','datafile_path',
+    #                       "remote_path",'local_path']
+    #     missing_param = None
+    #     if self.job['slurm_cluster_name'] is None:
+    #         missing_param = 'slurm_cluster_name'
+    #         print ("Slurm cluster name not defiend. ")
+    #
+    #
+    #     if missing_param is not None:
+    #         print("Set {} using the following command:".format(missing_param))
+    #         print("\t cms batch {} set {} {}".format(self.job['jobname'],
+    #                                                  missing_param,
+    #                                                       missing_param.upper()))
+    #         return
+    #
+    #     # assert input_type in ['params', 'params+file'], "Input type can be either params or params+file"
+    #     # if input_type == 'params+file':
+    #     #     assert arguments.get("--argfile-path") is not None, "Input type is params+file but the input \
+    #     #         filename is not specified"

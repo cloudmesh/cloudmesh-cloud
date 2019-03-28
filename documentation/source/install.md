@@ -59,7 +59,7 @@ pip install -e .
 ## Installation of mongod
 
 First, you will need to install a `cloudmesh4.yaml` file, if you have
-not done this before. The easieast wy to do so is with the command
+not done this before. The easieast way to do so is with the command
 
 ```bash
 $ cms help
@@ -95,7 +95,7 @@ $ cms admin mongo install
 
 To create a password protection you than run the command
 
-```bash $ cms admin mongo create ``` Incase of Windows platform, after
+```bash $ cms admin mongo create ``` In case of Windows platform, after
 executing above command, open a new cms session and execute below
 commands.
 
@@ -103,7 +103,7 @@ commands.
 $ cms admin mongo start
 ```
 
-Once the mongo db is created it and be started and stoped with 
+Once the mongo db is created it can be started and stoped with 
 
 ```bash
 $ cms admin mongo start

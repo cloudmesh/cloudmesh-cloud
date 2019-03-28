@@ -18,52 +18,6 @@ from pprint import pprint
 # TODO does docopts allow to break line in multilpe?
 
 
-"""
-
-REVISED COMMAND
-
-       ::
-
-         Usage:
- 
-       --destination=DESTINATION      # remote-path=REMOTE_PATH
-                 --source=SOURCE                # local-path=LOCAL_PATH
-                 [--argfile-path=ARGUMENT_FILE_PATH] # what is this
-                 [--outfile-name=OUTPUT_FILE_NAME]   # what is this
-                 [--suffix=SUFFIX] [--overwrite]     # what is this
-
-
-      Old   
-            --depth=DEPTH   [default: 1]
-            batch job create JOB_NAME
-                  [--script=SLURM_SCRIPT_PATH]
-                  [--input-type=INPUT_TYPE]
-                  [--cluster=CLUSTER_NAME]
-                  [--job-script-path=SCRIPT_PATH]
-                  [--remote-path=REMOTE_PATH]
-                  [--local-path=LOCAL_PATH]
-                  [--argfile-path=ARGUMENT_FILE_PATH]
-                  [--outfile-name=OUTPUT_FILE_NAME]
-                  [--suffix=SUFFIX] [--overwrite]
-                  [--debug]
-            batch job run JOB_NAME
-            batch fetch JOB_NAME
-            batch tester
-            batch test CLUSTER_NAME
-            batch set cluster CLUSTER_NAME PARAMETER VALUE
-            batch set job JOB_NAME PARAMETER VALUE
-            batch list clusters [DEPTH [default:1]]
-            batch list jobs [DEPTH [default:1]]
-            batch remove cluster CLUSTER_NAME
-            batch remove job JOB_NAME
-            batch clean JOB_NAME
-
-
-
-"""
-
-
-
 class BatchCommand(PluginCommand):
 
     # see also https://github.com/cloudmesh/client/blob/master/cloudmesh_client/shell/plugins/HpcCommand.py
@@ -83,7 +37,8 @@ class BatchCommand(PluginCommand):
                 --source=SOURCE
                 [--companion-file=COMPANION_FILE]
                 [--outfile-name=OUTPUT_FILE_NAME]
-                [--suffix=SUFFIX] [--overwrite]
+                [--suffix=SUFFIX]
+                [--overwrite]
             batch job run [--name=NAMES] [--format=FORMAT]
             batch job fetch [--name=NAMES]
             batch job remove [--name=NAMES]
@@ -107,27 +62,35 @@ class BatchCommand(PluginCommand):
           Description:
 
             This command allows to submit batch jobs to queuing systems hosted
-            in an HBC center as a service.
+            in an HBC center as a service directly form your commandline.
 
             We assume that a number of experiments are conducted with possibly
-            running the script multiple times. Each experiment will safe the batch
-            script in its own folder.
+            running the script multiple times. Each experiment will save the
+            batch script in its own folder.
 
-            The outout of the script can be safed in a destination folder. A virtual
+            The output of the script can be saved in a destination folder. A virtual
             directory is used to coordinate all saved files.
 
             The files can be located due to the use of the virtual directory on
             multiple different data or file services
 
-            Authentication to the Batch systems is done viw the underlaying center
-            authentication. We assume that the user has an account to submit on
-            these systems.
+            Authentication to the Batch systems is done viw the underlaying HPC
+            center authentication. We assume that the user has an account to
+            submit on these systems.
 
             (SSH, 2 factor, XSEDE-account) TBD.
+
+          Examples:
 
              batch job run [--name=NAMES] [--format=FORMAT]
 
                 runs jobs with the given names
+
+             LOTS OF DOCUMENTATION MISSING HERE
+
+                [--companion-file=COMPANION_FILE]
+                [--outfile-name=OUTPUT_FILE_NAME]
+                [--suffix=SUFFIX] [--overwrite]
 
 
         """

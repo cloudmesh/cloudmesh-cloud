@@ -1,13 +1,13 @@
+############################################
+# nosetest -v --nopature
+# nosetests -v --nocapture tests/test_key.py
+############################################
 from pprint import pprint
-
 from cloudmesh.common.Printer import Printer
 from cloudmesh.common.util import HEADING
 from cloudmesh.management.configuration.SSHkey import SSHkey
 from cloudmesh.management.configuration.config import Config
 
-
-# nosetest -v --nopature
-# nosetests -v --nocapture tests/test_key.py
 
 class TestName:
 

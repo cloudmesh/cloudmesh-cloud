@@ -19,6 +19,13 @@ Cloudmesh Version 4
    workflow
    code
 
+.. toctree::
+   :numbered:
+   :maxdepth: 2
+   :caption: Conventions:
+
+   conventions
+
 Cloudmesh Outdated
 ===============================
 

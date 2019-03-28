@@ -25,6 +25,7 @@ Cloudmesh Version 4
    :caption: Conventions:
 
    conventions
+   nosetests
 
 Cloudmesh Outdated
 ===============================

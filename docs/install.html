@@ -100,13 +100,19 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">4. Quickstart (proposed)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="configuration.html">5. Configuration (ok)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="mongo.html">6. Cloudmesh Database (ok)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="manual.html">7. Manual (ok)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="manual-dev.html">8. Manual (proposed)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="jupyter.html">9. Jupyter Integration (proposed)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="vm.html">10. Virtual Machine Management (proposed)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="workflow.html">11. Infrastructure Workflow (proposed)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="code.html">12. Code Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="yaml.html">6. Cloudmesh yaml file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mongo.html">7. Cloudmesh Database (ok)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual.html">8. Manual (ok)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual-dev.html">9. Manual (proposed)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="jupyter.html">10. Jupyter Integration (proposed)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vm.html">11. Virtual Machine Management (proposed)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="workflow.html">12. Infrastructure Workflow (proposed)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="code.html">13. Code Documentation</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Conventions:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="conventions.html">1. Code Conventions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nosetests.html">2. Nosetests</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Outdated:</span></p>
 <ul>
@@ -236,7 +242,7 @@ pip install -e .
 <div class="section" id="installation-of-mongod">
 <h2>3.2. Installation of mongod<a class="headerlink" href="#installation-of-mongod" title="Permalink to this headline">¶</a></h2>
 <p>First, you will need to install a <code class="docutils literal notranslate"><span class="pre">cloudmesh4.yaml</span></code> file, if you have
-not done this before. The easieast wy to do so is with the command</p>
+not done this before. The easieast way to do so is with the command</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ cms <span class="nb">help</span>
 </pre></div>
 </div>
@@ -260,13 +266,13 @@ manually. To install it simply say.</p>
 </pre></div>
 </div>
 <p>To create a password protection you than run the command</p>
-<p><code class="docutils literal notranslate"><span class="pre">bash</span> <span class="pre">$</span> <span class="pre">cms</span> <span class="pre">admin</span> <span class="pre">mongo</span> <span class="pre">create</span></code> Incase of Windows platform, after
+<p><code class="docutils literal notranslate"><span class="pre">bash</span> <span class="pre">$</span> <span class="pre">cms</span> <span class="pre">admin</span> <span class="pre">mongo</span> <span class="pre">create</span></code> In case of Windows platform, after
 executing above command, open a new cms session and execute below
 commands.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ cms admin mongo start
 </pre></div>
 </div>
-<p>Once the mongo db is created it and be started and stoped with</p>
+<p>Once the mongo db is created it can be started and stoped with</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ cms admin mongo start
 $ cms admin mongo stop
 </pre></div>

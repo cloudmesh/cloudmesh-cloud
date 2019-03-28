@@ -4,6 +4,11 @@ We use nosetests and not `__main__` to test all functionality so they can me
 automatically run and reports can be generated. A project that does not have a
 sufficient number of tests to make sure the module works can not be accepted.
 
+To use them you need to install nose with
+
+```bash
+$ pip install nose
+```
 
 All nose tests are included in the folder `tests`.
 
@@ -17,7 +22,7 @@ A simple example is
 Note that all tests have specific function names 
 of the form
 
-`test_number_topic`
+`def test_number_topic (self)`
 
 the number is defined to order them and is typically something like `001`, note
 the leading spaces. the topic is a descriptive term on what we test.

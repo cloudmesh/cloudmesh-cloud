@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Search &mdash; Cloudmesh v4 alpha documentation</title>
+  <title>1. Code Conventions &mdash; Cloudmesh v4 alpha documentation</title>
   
 
   
@@ -28,7 +28,9 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="author" title="About these documents" href="about.html" />
     <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="#" /> 
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="1. Goal (outdated)" href="goal.html" />
+    <link rel="prev" title="12. Code Documentation" href="code.html" /> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -64,7 +66,7 @@
 
           
 <div role="search">
-  <form id="rtd-search-form" class="wy-form" action="#" method="get">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
     <input type="text" name="q" placeholder="Search docs" />
     <input type="hidden" name="check_keywords" value="yes" />
     <input type="hidden" name="area" value="default" />
@@ -97,9 +99,8 @@
 <li class="toctree-l1"><a class="reference internal" href="code.html">12. Code Documentation</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Conventions:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="conventions.html">1. Code Conventions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="nosetests.html">2. Nosetests</a></li>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">1. Code Conventions</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Outdated:</span></p>
 <ul>
@@ -156,12 +157,14 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>Search</li>
+      <li>1. Code Conventions</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
+            <a href="_sources/conventions.md.txt" rel="nofollow"> View page source</a>
+          
         
       </li>
     
@@ -173,24 +176,56 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <noscript>
-  <div id="fallback" class="admonition warning">
-    <p class="last">
-      Please activate JavaScript to enable the search
-      functionality.
-    </p>
-  </div>
-  </noscript>
+  <div class="section" id="code-conventions">
+<h1>1. Code Conventions<a class="headerlink" href="#code-conventions" title="Permalink to this headline">¶</a></h1>
+<ul>
+<li><p class="first">Python lint: All code must be formatted with the pyCHarm inspect method which
+will suggest a reformat with pyCharm and allows good error and python issue
+detection. Please fix as many as you can.</p>
+</li>
+<li><p class="first">Printing errors:</p>
+<p>In case you need to print errors please do not use print, but use</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">cloudmesh.common.console</span> <span class="kn">import</span> <span class="n">Console</span>
 
-  
-  <div id="search-results">
-  
-  </div>
+<span class="n">Console</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;this is an example&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">Printing debug messages in verbose mode</p>
+<p>In case yo ulike to do debug messages use</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>from cloudmesh.terminal.Terminal import VERBOSE
+
+VERBOSE.print(&quot;this is an example&quot;, verbose=9)  
+```
+</pre></div>
+</div>
+</li>
+<li><p class="first">Managing debug and verbose mode</p>
+<p>Verbosity and debugging can be controlled with</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">cms</span> <span class="nb">set</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">10</span>
+<span class="n">cms</span> <span class="nb">set</span> <span class="n">debug</span><span class="o">=</span><span class="bp">True</span>
+<span class="n">cms</span> <span class="nb">set</span> <span class="n">trace</span><span class="o">=</span><span class="bp">True</span>
+</pre></div>
+</div>
+<p>anything that is smaller than 10will be printed.</p>
+</li>
+</ul>
+</div>
+
 
            </div>
            
           </div>
           <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="goal.html" class="btn btn-neutral float-right" title="1. Goal (outdated)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="code.html" class="btn btn-neutral" title="12. Code Documentation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
   
 
   <hr/>
@@ -223,7 +258,6 @@
         <script type="text/javascript" src="_static/underscore.js"></script>
         <script type="text/javascript" src="_static/doctools.js"></script>
         <script type="text/javascript" src="_static/language_data.js"></script>
-        <script type="text/javascript" src="_static/searchtools.js"></script>
     
 
   
@@ -234,14 +268,7 @@
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script>
-  <script type="text/javascript">
-    jQuery(function() { Search.loadIndex("searchindex.js"); });
-  </script>
-  
-  <script type="text/javascript" id="searchindexloader"></script>
-   
-
+  </script> 
 
 </body>
 </html>

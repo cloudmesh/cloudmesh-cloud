@@ -15,7 +15,7 @@ class Provider(object):
 
         # Console.msg("FOUND Kind", self.kind)
 
-        if self.kind in ["openstack", "aws"]:
+        if self.kind in ["openstack", "aws", "google"]:
             self.p = LibCloudProvider(name=name, configuration=configuration)
         elif self.kind in ["vagrant", "virtualbox"]:
             self.p = VirtualboxCloudProvider(name=name,

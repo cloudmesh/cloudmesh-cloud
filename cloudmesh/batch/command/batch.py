@@ -9,6 +9,7 @@ from cloudmesh.management.configuration.arguments import Arguments
 from cloudmesh.common.Printer import Printer
 from cloudmesh.common.parameter import Parameter
 from cloudmesh.common.console import Console
+from pathlib import Path
 
 from pprint import pprint
 
@@ -74,16 +75,15 @@ class BatchCommand(PluginCommand):
 
           Usage:
             batch job create
-                 --name=NAME
-                 --cluster=CLUSTER
-                 --script=SCRIPT
-                 --type=TYPE
-                 --job=JOB
-                 --destination=DESTINATION      # remote-path=REMOTE_PATH
-                 --source=SOURCE                # local-path=LOCAL_PATH
-                 [--argfile-path=ARGUMENT_FILE_PATH] # what is this
-                 [--outfile-name=OUTPUT_FILE_NAME]   # what is this
-                 [--suffix=SUFFIX] [--overwrite]     # what is this
+                --name=NAME
+                --cluster=CLUSTER
+                --script=SCRIPT
+                --executable=EXECUTABLE
+                --destination=DESTINATION
+                --source=SOURCE
+                [--companion-file=COMPANION_FILE]
+                [--outfile-name=OUTPUT_FILE_NAME]
+                [--suffix=SUFFIX] [--overwrite]
             batch job run [--name=NAMES] [--format=FORMAT]
             batch job fetch [--name=NAMES]
             batch job remove [--name=NAMES]
@@ -135,7 +135,7 @@ class BatchCommand(PluginCommand):
         #
         # create slurm manager so it can be used in all commands
         #
-        slurm_manager = SlurmCluster(True)  # debug=arguments["--debug"])
+        slurm_manager = SlurmCluster()  # debug=arguments["--debug"])
 
         arguments["--cloud"] = "test"
         arguments["NAME"] = "fix"
@@ -167,7 +167,6 @@ class BatchCommand(PluginCommand):
         VERBOSE.print(arguments, verbose=9)
 
         variables = Variables()
-
         # do not use print but use ,Console.msg(), Console.error(), Console.ok()
         if arguments.tester:
             print("running ... ")
@@ -201,7 +200,6 @@ class BatchCommand(PluginCommand):
             }'''
 
             try:
-
                 raise NotImplementedError
             except Exception as e:
                 Console.error("Haha", traceflag=True)
@@ -215,30 +213,46 @@ class BatchCommand(PluginCommand):
             )
 
             return ""
-        elif arguments.job and arguments.create and arguments.name:
+        elif arguments.job and arguments.create:
+            # if not arguments.name:
+                # raise ValueError
             # assert input_type in ['params', 'params+file'], "Input type can be either params or params+file"
             # if input_type == 'params+file':
             #     assert arguments.get("--argfile-path") is not None, "Input type is params+file but the input \
             #         filename is not specified"
-
-            job_script_path = arguments.get("--job-script-path")
-            remote_path = arguments.get("--remote-path")
-            local_path = arguments.get("--local-path")
-
-            random_suffix = self.suffix_generator()
-            suffix = random_suffix if arguments.get("suffix") is None else arguments.get("suffix")
-            overwrite = False if type(arguments.get("--overwrite")) is None else arguments.get("--overwrite")
-            argfile_path = '' if arguments.get("--argfile-path") is None else arguments.get("--argfile-path")
-            slurm_manager.create(arguments.name,
-                                 arguments.cluster,
-                                 arguments.script,
-                                 arguments.type,
-                                 job_script_path,
-                                 argfile_path,
-                                 remote_path,
-                                 local_path,
-                                 suffix,
-                                 overwrite)
+            job_name = arguments.name
+            cluster_name = arguments.cluster
+            script_path = Path(arguments.script)
+            if not script_path.exists():
+                raise FileNotFoundError
+            executable_path = Path(arguments['--executable'])
+            if not executable_path.exists():
+                raise FileNotFoundError
+            destination = Path(arguments.destination)
+            if not destination.is_absolute():
+                Console.error("destination path must be absolute",
+                              traceflag=True)
+                raise FileNotFoundError
+            source = Path(arguments.source)
+            if not source.exists():
+                raise FileNotFoundError
+            if arguments.experiment is None:
+                experiment_name = 'job' + self.suffix_generator()
+            else:
+                experiment_name = arguments.experiment + self.suffix_generator()
+            # overwrite = False if type(arguments.get("--overwrite")) is None else arguments.get("--overwrite")
+            if arguments.get("--companion-file") is None:
+                companion_file = Path()
+            else:
+                companion_file = Path(arguments.get("--companion-file"))
+            slurm_manager.create(job_name,
+                                 cluster_name,
+                                 script_path,
+                                 executable_path,
+                                 destination,
+                                 source,
+                                 experiment_name,
+                                 companion_file)
 
         elif arguments.remove:
             if arguments.cluster:

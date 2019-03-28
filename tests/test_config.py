@@ -3,6 +3,8 @@ from cloudmesh.common.util import HEADING
 from pprint import pprint
 import textwrap
 import oyaml as yaml
+import munch
+import re
 
 # nosetests -v --nocapture tests/test_config.py
 
@@ -30,27 +32,35 @@ class TestConfig:
 
     def test_30_dictreplace(self):
         HEADING()
+
         spec = textwrap.dedent("""
         cloudmesh:
           profile:
             name: Gregor
           unordered:
-            name: {cloudmesh.other.name}
+            name: "{cloudmesh.other.name}.postfix"
           other:
-            name: {cloudmesh.profile.name}
+            name: "{cloudmesh.profile.name}"
         
         """)
 
         print(spec)
-        spec = spec.replace("{", "{{")
-        spec = spec.replace("}", "{}")
 
-        data = yaml.load(spec)
+        # spec = spec.replace("{", "{{")
+        # spec = spec.replace("}", "}}")
 
+        # print(spec)
+
+        result = self.config.spec_replace(spec)
+
+        print(result)
+        data = yaml.load(result)
         pprint(data)
 
-        for i in range(0, 1):
-            spec = spec.format(data)
-            pprint(data)
+        assert data["cloudmesh"]["unordered"]["name"] == "Gregor.postfix"
+        assert data["cloudmesh"]["other"]["name"] == "Gregor"
 
-        print(spec)
+    def test_31_configreplace(self):
+        HEADING()
+        self.config = Config()
+        pprint(self.config["cloudmesh"]["profile"])

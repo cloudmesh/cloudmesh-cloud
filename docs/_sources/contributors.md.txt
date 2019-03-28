@@ -27,7 +27,7 @@ or profesional to edit your code. Before committing we like that you run
 including PEP8 format suggestions. It also notifies you of issues you may not
 think about while doing other code inspection.
 
-THe reason we ask you to do so is that pycharms code inspection is very good,
+The reason we ask you to do so is that pycharms code inspection is very good,
 and that if everyone uses pycharm the format of the code is uinform and we do
 not run in to formatting issues.
 
@@ -41,11 +41,11 @@ Typically we run a code inspection every week.
 ## Documentation Management
 
 To increase readability of the documentation we ask you to try to use 80
-character line limits if possible. THis is important for better editing
-experience in github. A good editor to do this with is emacs withe its `ESc-q`
-command and pycharm with its `Edit-Wrap LIne to` column or paragraph features.
-ON macOS this can be called with `CONTROL-SHIFT-COMMNAD-W` or
-`CONTROL-SHIFT-COMMNAD-P`
+character line limits if possible. This is important for better editing
+experience in github. A good editor to do this with is emacs withe its `Esc-q`
+command and pycharm with its `Edit-Wrap Line to` column or paragraph features.
+On macOS this can be called with `CONTROL-SHIFT-COMMAND-W` or
+`CONTROL-SHIFT-COMMAND-P`
 
 ## Security Management (needs further investigation if useful and secure)
 

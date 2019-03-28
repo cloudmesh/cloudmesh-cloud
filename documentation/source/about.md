@@ -1,8 +1,8 @@
 # About
 
 [Cloudmesh version 4](https://cloudmesh-community.github.io/cm/) is an evolution
-of our previous tool that has been used by hundrest of students and cloud
-cractitioners to interact easily with clouds to create a service meshup to
+of our previous tool that has been used by hundreds of students and cloud
+practitioners to interact easily with clouds to create a service meshup to
 access common cloud services across a number of cloud providers.
 
 It is under active development. It is managed in github at 
@@ -16,9 +16,9 @@ Cloudmesh version 4 will contain
 * A command line 
 * A javascript based GUI
 * A cloud Workflow interpreter
-* A cloud high throughput broker for p[leasantly parallel parameter studies
+* A cloud high throughput broker for pleasantly parallel parameter studies
 * OpenAPI based REST service interfaces
-* MongoDB as a backend for chaching
+* MongoDB as a backend for caching
 
 * Interfaces to compute services such as 
 

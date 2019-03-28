@@ -23,10 +23,24 @@ class Provider(ComputeNodeABC):
     ProviderMapper = {
         "openstack": LibcloudProvider.OPENSTACK,
         "aws": LibcloudProvider.EC2,
+        "google": LibcloudProvider.GCE
         #"azure_asm": LibcloudProvider.AZURE,
         #"azure_arm": LibcloudProvider.AZURE_ARM
     }
 
+    """
+    this may be buggy as the fields could be differentbased on the provider
+    TODO: fix output base on provider
+    so we may need to do 
+    
+    output = {"aws": {"vm": ....,,
+                      "image": ....,,
+                      "flavor": ....,,
+              "google": {"vm": ....,,
+                      "image": ....,,
+                      "flavor": ....,,
+    """
+    
     output = {
 
         "vm": {
@@ -118,6 +132,13 @@ class Provider(ComputeNodeABC):
                     cred["EC2_ACCESS_ID"],
                     cred["EC2_SECRET_KEY"],
                     region=cred["EC2_REGION"])
+
+            if self.cloudtype == 'google':
+                self.cloudman = self.driver(
+                    cred["client_email"],
+                    cred["path_to_json_file"],  # should be placed in .cloudmesh
+                    project=cred["project"]
+                )
         else:
             print("Specified provider not available")
             self.cloudman = False

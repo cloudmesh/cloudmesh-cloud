@@ -182,6 +182,10 @@
 <p>We use nosetests and not <code class="docutils literal notranslate"><span class="pre">__main__</span></code> to test all functionality so they can me
 automatically run and reports can be generated. A project that does not have a
 sufficient number of tests to make sure the module works can not be accepted.</p>
+<p>To use them you need to install nose with</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ pip install nose
+</pre></div>
+</div>
 <p>All nose tests are included in the folder <code class="docutils literal notranslate"><span class="pre">tests</span></code>.</p>
 <ul class="simple">
 <li><a class="reference external" href="https://github.com/cloudmesh-community/cm/tree/master/tests">https://github.com/cloudmesh-community/cm/tree/master/tests</a></li>
@@ -192,7 +196,7 @@ sufficient number of tests to make sure the module works can not be accepted.</p
 </ul>
 <p>Note that all tests have specific function names
 of the form</p>
-<p><code class="docutils literal notranslate"><span class="pre">test_number_topic</span></code></p>
+<p><code class="docutils literal notranslate"><span class="pre">def</span> <span class="pre">test_number_topic</span> <span class="pre">(self)</span></code></p>
 <p>the number is defined to order them and is typically something like <code class="docutils literal notranslate"><span class="pre">001</span></code>, note
 the leading spaces. the topic is a descriptive term on what we test.</p>
 <p>in <code class="docutils literal notranslate"><span class="pre">def</span> <span class="pre">setup(self)</span></code> we declare a setup that is run prior to each test being

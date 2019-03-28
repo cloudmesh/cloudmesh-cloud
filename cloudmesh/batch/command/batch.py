@@ -90,7 +90,7 @@ class BatchCommand(PluginCommand):
             batch job clean [--name=NAMES]
             batch job set [--name=NAMES] PARAMETER=VALUE
             batch job list [--name=NAMES] [--depth=DEPTH]
-            batch cluster test [--cluster=CLUSTERS]
+            batch connection_test --job=JOB
             batch cluster list [--cluster=CLUSTERS] [--depth=DEPTH]
             batch cluster remove [--cluster=CLUSTERS]
             batch cluster set [--cluster=CLUSTERS] PARAMETER=VALUE
@@ -213,13 +213,15 @@ class BatchCommand(PluginCommand):
             )
 
             return ""
-        elif arguments.job and arguments.create:
-            # if not arguments.name:
-                # raise ValueError
-            # assert input_type in ['params', 'params+file'], "Input type can be either params or params+file"
-            # if input_type == 'params+file':
-            #     assert arguments.get("--argfile-path") is not None, "Input type is params+file but the input \
-            #         filename is not specified"
+        # handling batch job create
+        elif    arguments.job and \
+                arguments.create and \
+                arguments.name and \
+                arguments.cluster and \
+                arguments.script and \
+                arguments['--executable'] and \
+                arguments.destination and \
+                arguments.source :
             job_name = arguments.name
             cluster_name = arguments.cluster
             script_path = Path(arguments.script)
@@ -240,7 +242,6 @@ class BatchCommand(PluginCommand):
                 experiment_name = 'job' + self.suffix_generator()
             else:
                 experiment_name = arguments.experiment + self.suffix_generator()
-            # overwrite = False if type(arguments.get("--overwrite")) is None else arguments.get("--overwrite")
             if arguments.get("--companion-file") is None:
                 companion_file = Path()
             else:
@@ -285,9 +286,8 @@ class BatchCommand(PluginCommand):
         elif arguments.get("fetch"):
             job_name = arguments.get("JOB_NAME")
             slurm_manager.fetch(job_name)
-        elif arguments.test:
-            cluster_name = arguments.get("CLUSTER_NAME")
-            slurm_manager.connection_test(cluster_name)
+        elif arguments.connection_test :
+            slurm_manager.connection_test(arguments.job)
         elif arguments.clean:
             job_name = arguments.get("JOB_NAME")
             slurm_manager.clean_remote(job_name)

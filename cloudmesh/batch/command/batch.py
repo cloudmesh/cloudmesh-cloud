@@ -80,6 +80,25 @@ class BatchCommand(PluginCommand):
 
             (SSH, 2 factor, XSEDE-account) TBD.
 
+          Experiments:
+
+            experiments are jobs that can be run multiple times and create input
+            and output file sin them
+
+            cloudmesh:
+             experiment:
+               job:
+                 name: {cloudmesh.profile.user.name}-01
+                 directory: ~/experiment/{experiment.job.name}
+                 output:  {cloudmesh.experiment.job.name}/output
+                 input:  ~/experiment/{experiment.job.name}/input
+                 script: script.sh
+                 source ,,,
+                 destination: {cloudmesh.experiment.job.directory}
+
+
+            I do not know what companion file is
+
           Examples:
 
              batch job run [--name=NAMES] [--format=FORMAT]
@@ -91,6 +110,8 @@ class BatchCommand(PluginCommand):
                 [--companion-file=COMPANION_FILE]
                 [--outfile-name=OUTPUT_FILE_NAME]
                 [--suffix=SUFFIX] [--overwrite]
+
+
 
 
         """

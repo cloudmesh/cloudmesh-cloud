@@ -93,10 +93,25 @@ print ("%s%s%s" % ('*'*30, 'security groups', '*'*30))
 secgroups = driver.ex_list_network_security_groups(resgroup)
 print (secgroups)
 
+print ("%s%s%s" % ('*'*30, 'List public IPs', '*'*30))
+pubips = driver.ex_list_public_ips(resgroup)
+print (pubips)
+
+print ("%s%s%s" % ('*'*30, 'create a public IP', '*'*30))
+pubip = driver.ex_create_public_ip(name='pubip1',
+                                   resource_group=resgroup
+                                   )
+print (pubip)
+
+print ("%s%s%s" % ('*'*30, 'List public IPs', '*'*30))
+pubips = driver.ex_list_public_ips(resgroup)
+print (pubips)
+
 print ("%s%s%s" % ('*'*30, 'nics', '*'*30))
 nic = driver.ex_create_network_interface(name='cminternal',
                                          subnet=subnets[0],
-                                         resource_group='cmtest',
+                                         resource_group=resgroup,
+                                         public_ip=pubip
                                         )
 nics = driver.ex_list_nics()
 print (nics)
@@ -113,7 +128,7 @@ node = driver.create_node(name="fwpytest",
                           image=image,
                           auth=auth,
                           # the following three were created in azure portal
-                          ex_resource_group='cmtest',
+                          ex_resource_group=resgroup,
                           # for storage account, use the default v2 setting
                           ex_storage_account='cmtestfw',
                           # under the storage account, blobs services, 
@@ -126,3 +141,4 @@ print (node)
 print ("%s%s%s" % ('*'*30, 'nodes', '*'*30))
 nodes = driver.list_nodes()
 print (nodes)
+

@@ -89,7 +89,8 @@ $ nosetests -v --nocapture tests/test_key.py`
 
 ```python
 ############################################
-# nosetest -v --nopature
+# nosetest -v --nocapture 
+# nosetests tests/test_key.py
 # nosetests -v --nocapture tests/test_key.py
 ############################################
 from pprint import pprint
@@ -131,3 +132,31 @@ class TestKey:
         assert len(keys) > 0
 
 ```
+
+The output in with `nosetests tests/test_key.py` does not provide any detail,
+but just reports if tests fail or succeed.
+
+```
+----------------------------------------------------------------------
+Ran 2 tests in 0.457s
+
+OK
+```
+
+The output with  `nosetests -v tests/test_key.py`
+
+results in 
+
+```
+tests.test_key.TestName.test_01_key ... ok
+tests.test_key.TestName.test_02_git ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 1.072s
+
+OK
+```
+
+During development phase you want to use `nosetests -v --nocapture tests/test_key.py`
+
+WHich prints all print statements also

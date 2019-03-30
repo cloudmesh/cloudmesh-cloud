@@ -143,7 +143,7 @@ class AzureProvider(object):
         ip = self.get_ip_vm(resource_group=resource_group, name=name)
         address = ip[0]['virtualMachine']['network']['publicIpAddresses'][0][
             'ipAddress']
-        c = f"ssh {user}@{address} {command}"
+        c = f'ssh -o "StrictHostKeyChecking no" {user}@{address} {command}'
         return Shell.execute(c, shell=True)
 
     def get_ip_vm(self,

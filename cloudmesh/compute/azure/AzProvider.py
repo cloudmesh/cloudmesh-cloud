@@ -117,7 +117,7 @@ class AzureProvider(object):
         return self.az(command)
 
     def stop_vm(self,
-                esource_group=None,
+                resource_group=None,
                 name=None):
         command = \
             f"az vm stop" \
@@ -155,62 +155,67 @@ class AzureProvider(object):
         return self.az(command)
 
 
-p = AzureProvider("test")
-# r = p.login()
-# pprint(r)
+if __name__ == "__main__":
+    #
+    # TODO: convert this to nsoetests
+    #
 
-# p.portal()
+    p = AzureProvider("test")
+    # r = p.login()
+    # pprint(r)
 
-name = "vm3"
-group = "test1"
-location = "eastus"
-# r = p.create_resource_group(name=group, location=location)
-# print(type(r))
-# pprint(r)
-# r = p.delete_resource_group(name=group)
-# print(type(r))
-# pprint(r)
+    # p.portal()
 
-r = p.list_vm(resource_group=group)
-print(type(r))
-pprint(r)
+    name = "vm3"
+    group = "test1"
+    location = "eastus"
+    # r = p.create_resource_group(name=group, location=location)
+    # print(type(r))
+    # pprint(r)
+    # r = p.delete_resource_group(name=group)
+    # print(type(r))
+    # pprint(r)
 
-'''
-r = p.create_vm(resource_group=group,
-                name=name,
-                image="UbuntuLTS",
-                username="ubuntu")
-print(type(r))
-pprint(r)
+    r = p.list_vm(resource_group=group)
+    print(type(r))
+    pprint(r)
 
-r = p.list_vm(resource_group=group)
-print(type(r))
-pprint(r)
+    '''
+    r = p.create_vm(resource_group=group,
+                    name=name,
+                    image="UbuntuLTS",
+                    username="ubuntu")
+    print(type(r))
+    pprint(r)
+    
+    r = p.list_vm(resource_group=group)
+    print(type(r))
+    pprint(r)
+    
+    # az vm get-instance-view --name vm3 --resource-group test1 --query instanceView.statuses[1]
+    
+    r = p.status_vm(resource_group=group,
+                    name=name)
+    print(type(r))
+    pprint(r)
+    '''
 
-# az vm get-instance-view --name vm3 --resource-group test1 --query instanceView.statuses[1]
+    r = p.ssh_vm(
+        user="ubuntu",
+        resource_group=group,
+        name=name,
+        command="uname -a")
 
-r = p.status_vm(resource_group=group,
-                name=name)
-print(type(r))
-pprint(r)
-'''
+    print(r)
 
-r = p.ssh_vm(
-    user="ubuntu",
-    resource_group=group,
-    name=name,
-    command="uname -a")
-
-print(r)
-
-'''
-r = p.delete_vm(resource_group=group,
-                name=name)
-
-print(type(r))
-pprint(r)
-
-r = p.list_vm(resource_group=group)
-print(type(r))
-pprint(r)
-'''
+    '''
+    r = p.delete_vm(resource_group=group,
+                    name=name)
+    
+    print(type(r))
+    pprint(r)
+    
+    r = p.list_vm(resource_group=group)
+    print(type(r))
+    pprint(r)
+    '''

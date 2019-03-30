@@ -141,7 +141,9 @@ class AzureProvider(object):
                resource_group=None,  # we need to get the ip not pass it
                name=None):
         ip = self.get_ip_vm(resource_group=resource_group, name=name)
-        c = f"ssh {user}@{ip} {command}"
+        address = ip[0]['virtualMachine']['network']['publicIpAddresses'][0][
+            'ipAddress']
+        c = f"ssh {user}@{address} {command}"
         return Shell.execute(c, shell=True)
 
     def get_ip_vm(self,
@@ -173,6 +175,7 @@ r = p.list_vm(resource_group=group)
 print(type(r))
 pprint(r)
 
+'''
 r = p.create_vm(resource_group=group,
                 name=name,
                 image="UbuntuLTS",
@@ -190,10 +193,13 @@ r = p.status_vm(resource_group=group,
                 name=name)
 print(type(r))
 pprint(r)
+'''
 
-r = p.ssh_vm(resource_group=group,
-             name=name,
-             command="uname -a")
+r = p.ssh_vm(
+    user="ubuntu",
+    resource_group=group,
+    name=name,
+    command="uname -a")
 
 print(r)
 

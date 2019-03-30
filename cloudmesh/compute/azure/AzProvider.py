@@ -136,7 +136,6 @@ class AzureProvider(object):
 
     def ssh_vm(self,
                user=None,
-               ip=None,
                command=None,
                resource_group=None,  # we need to get the ip not pass it
                name=None):

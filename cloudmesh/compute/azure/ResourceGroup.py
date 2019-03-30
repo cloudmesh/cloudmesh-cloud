@@ -20,6 +20,7 @@ def timer(func):
 
     return decorated_func
 
+
 class AzureProvider(object):
     """
 
@@ -115,6 +116,42 @@ class AzureProvider(object):
                 f" --query instanceView.statuses[1]"
         return self.az(command)
 
+    def stop_vm(self,
+                esource_group=None,
+                name=None):
+        command = \
+            f"az vm stop" \
+                f" --resource-group {resource_group}" \
+                f" --name {name}"
+        return self.az(command)
+
+    def restart_vm(self,
+                   resource_group=None,
+                   name=None):
+        command = \
+            f"az vm restart" \
+                f" --resource-group {resource_group}" \
+                f" --name {name}"
+        return self.az(command)
+
+    def ssh_vm(self,
+               user=None,
+               ip=None,
+               command=None,
+               resource_group=None,  # we need to get the ip not pass it
+               name=None):
+        ip = self.get_ip_vm(resource_group=resource_group, name=name)
+        c = f"ssh {user}@{ip} {command}"
+        return Shell.execute(c, shell=True)
+
+    def get_ip_vm(self,
+                  resource_group=None,
+                  name=None):
+        command = f"az vm list-ip-addresses" \
+            f" --resource-group {resource_group}" \
+            f" --name {name}"
+        return self.az(command)
+
 
 p = AzureProvider("test")
 # r = p.login()
@@ -153,6 +190,12 @@ r = p.status_vm(resource_group=group,
                 name=name)
 print(type(r))
 pprint(r)
+
+r = p.ssh_vm(resource_group=group,
+             name=name,
+             command="uname -a")
+
+print(r)
 
 '''
 r = p.delete_vm(resource_group=group,

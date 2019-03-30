@@ -7,9 +7,18 @@ import json
 import textwrap
 from cloudmesh.compute.libcloud.Provider import Provider
 from cloudmesh.common.dotdict import dotdict
+from cloudmesh.common.StopWatch import StopWatch
 
 
+def timer(func):
+    def decorated_func(*args, **kwargs):
+        StopWatch.start(func.__name__)
+        result = func(*args, **kwargs)
+        StopWatch.stop(func.__name__)
+        print(StopWatch.get(func.__name__))
+        return result
 
+    return decorated_func
 
 class AzureProvider(object):
     """
@@ -29,6 +38,7 @@ class AzureProvider(object):
     def __init__(self, resourcegroup=None):
         pass
 
+    @timer
     def az(self, command):
         print(command)
         r = Shell.execute(command, shell=True)
@@ -53,10 +63,9 @@ class AzureProvider(object):
     def delete_resource_group(self, name=None):
         if name is None:
             raise ValueError(f"Reosurce can not be found, Name: {name}")
-        r = Shell.execute(f"az group delete --yes --name {name}", shell=True)
-        r = Shell.execute(f"az group exists --name {name}", shell=True)
-        data = json.loads(r)
-        return data
+        r = self.az(f"az group delete --yes --name {name}")
+        r = self.az(f"az group exists --name {name}")
+        return r
 
     def list_resource_group(self):
         return self.az("az group list")
@@ -88,9 +97,22 @@ class AzureProvider(object):
 
     def list_vm(self,
                 resource_group=None):
+        try:
+            command = \
+                "az vm list " \
+                    f" --resource-group {resource_group}"
+            return self.az(command)
+        except:
+            return []
+
+    def status_vm(self,
+                  resource_group=None,
+                  name=None):
         command = \
-            "az vm list " \
-                f" --resource-group {resource_group}"
+            "az vm get-instance-view" \
+                f" --name {name}" \
+                f" --resource-group {resource_group}" \
+                f" --query instanceView.statuses[1]"
         return self.az(command)
 
 
@@ -100,6 +122,7 @@ p = AzureProvider("test")
 
 # p.portal()
 
+name = "vm3"
 group = "test1"
 location = "eastus"
 # r = p.create_resource_group(name=group, location=location)
@@ -114,7 +137,7 @@ print(type(r))
 pprint(r)
 
 r = p.create_vm(resource_group=group,
-                name="vm01",
+                name=name,
                 image="UbuntuLTS",
                 username="ubuntu")
 print(type(r))
@@ -124,8 +147,16 @@ r = p.list_vm(resource_group=group)
 print(type(r))
 pprint(r)
 
+# az vm get-instance-view --name vm3 --resource-group test1 --query instanceView.statuses[1]
+
+r = p.status_vm(resource_group=group,
+                name=name)
+print(type(r))
+pprint(r)
+
+'''
 r = p.delete_vm(resource_group=group,
-                name="vm01")
+                name=name)
 
 print(type(r))
 pprint(r)
@@ -133,3 +164,4 @@ pprint(r)
 r = p.list_vm(resource_group=group)
 print(type(r))
 pprint(r)
+'''

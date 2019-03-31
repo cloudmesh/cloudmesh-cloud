@@ -68,6 +68,7 @@ humanize
 psutil
 connexion[swagger-ui]
 yamllint
+azure
 """.split("\n")
 
 
@@ -94,7 +95,7 @@ setup(
     name="cloudmesh_cm4",
     description="cloudmesh_cm4 - A heterogeneous multi cloud command "
                 "client and shell",
-    long_description=read('README-1.md'),
+    long_description=read('README.md'),
     license="Apache License, Version 2.0",
     author="Gregor von Laszewski, cloudmesh.org",
     author_email="laszewski@gmail.com",

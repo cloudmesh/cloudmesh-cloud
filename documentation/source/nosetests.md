@@ -11,7 +11,7 @@ sufficient number of tests to make sure the module works can not be accepted.
 The nose module can be installed with the help of pip utility
 
 ```python
-   $ pip install nose
+$ pip install nose
 ```
 
 This will install the nose module in the current Python distribution as well 
@@ -51,11 +51,10 @@ All nose tests are included in the folder `tests`.
 +cm
   + cloudmesh
   + tests
-    - test1file.....py
-    - test2file.....py
-    - test3file.....py
+    - test_01_topic1.py
+    - test_02_topic2.py
+    - test_03_topic2.py
 ```
-
 Note that all tests have specific function names of the form
 
 `def test_number_topic (self)`
@@ -79,12 +78,6 @@ A simple example is
 
 
 ## Test Case execution 
-
-Once you are in the cm directory, testcases can be executed using.
-
-```python
-   $ nosetests -v --nocapture tests/test_data_s3.py
-```
 
 Nose collects tests from unittest.TestCase subclasses, of course. We can also 
 write simple test functions, as well as test classes that are not subclasses of 
@@ -164,3 +157,5 @@ class TestName:
         self.user = Config()["cloudmesh.profile.user"]
         self.p = Provider(name="aws")
         
+During development phase you want to use `nosetests -v --nocapture tests/test_key.py`
+which prints all print statements also

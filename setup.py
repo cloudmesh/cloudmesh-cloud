@@ -27,10 +27,12 @@ __version__ = None  # suppress the version error
 # don't use import to get the version as that causes a circular dependency
 exec(open('cloudmesh/cm4/__init__.py').read().strip())
 
-if sys.version_info > (3, 7, 0):
+v = sys.version_info
+if v.major != 3 and v.minor != 7 and v.micro < 2:
     print(70 * "#")
-    print("WARNING: upgrade to a python greater than 3.7.0 "
-          "other version are not supported. Your version is {}. failed.".format(sys.version_info))
+    print("WARNING: upgrade to a python greater or eaqual to 3.7.2 "
+          "other version may not be  supported. "
+          "Your version is {version}. ".format(version=sys.version_info))
     print(70 * "#")
 
 command = None
@@ -68,6 +70,7 @@ humanize
 psutil
 connexion[swagger-ui]
 yamllint
+azure
 """.split("\n")
 
 
@@ -94,7 +97,7 @@ setup(
     name="cloudmesh_cm4",
     description="cloudmesh_cm4 - A heterogeneous multi cloud command "
                 "client and shell",
-    long_description=read('README-1.md'),
+    long_description=read('README.md'),
     license="Apache License, Version 2.0",
     author="Gregor von Laszewski, cloudmesh.org",
     author_email="laszewski@gmail.com",

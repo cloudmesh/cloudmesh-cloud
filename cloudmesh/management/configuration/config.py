@@ -94,8 +94,6 @@ class Config(object):
 
         variables = re.findall("\{\w.+\}", spec)
 
-        print(variables)
-        print(len(variables))
         for i in range(0, len(variables)):
             data = yaml.load(spec, Loader=yaml.SafeLoader)
 
@@ -104,7 +102,6 @@ class Config(object):
             for variable in variables:
                 text = variable
                 variable = variable[1:-1]
-                print(variable)
                 value = eval(f"m.{variable}")
                 if "{" not in value:
                     spec = spec.replace(text, value)

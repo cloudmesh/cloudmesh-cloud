@@ -37,6 +37,12 @@ class DatabaseUpdate:
 
             def entries(self):
                 return {
+                   "cm": {
+                     "cloud": "foo",
+                     "kind"": "entries",
+                     "name": "test01"
+                     "test": "hello"}
+                   }
                    "cloud": "foo",
                    "kind"": "entries",
                    "name": "test01"

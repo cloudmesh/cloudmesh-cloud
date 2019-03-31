@@ -11,6 +11,7 @@ Cloudmesh Version 4
    install
    quickstart
    configuration
+   yaml
    mongo
    manual
    manual-dev

@@ -90,18 +90,23 @@
 <li class="toctree-l1"><a class="reference internal" href="install.html">3. Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">4. Quickstart (proposed)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="configuration.html">5. Configuration (ok)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="mongo.html">6. Cloudmesh Database (ok)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="manual.html">7. Manual (ok)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="manual-dev.html">8. Manual (proposed)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="jupyter.html">9. Jupyter Integration (proposed)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="vm.html">10. Virtual Machine Management (proposed)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="workflow.html">11. Infrastructure Workflow (proposed)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="code.html">12. Code Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="yaml.html">6. Cloudmesh yaml file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mongo.html">7. Cloudmesh Database (ok)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual.html">8. Manual (ok)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual-dev.html">9. Manual (proposed)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="jupyter.html">10. Jupyter Integration (proposed)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vm.html">11. Virtual Machine Management (proposed)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="workflow.html">12. Infrastructure Workflow (proposed)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="code.html">13. Code Documentation</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Conventions:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="conventions.html">1. Code Conventions</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">2. Nosetests</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">2. Nosetests</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#installation">2.1. Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#example">2.2. Example</a></li>
+</ul>
+</li>
 </ul>
 <p class="caption"><span class="caption-text">Outdated:</span></p>
 <ul>
@@ -179,44 +184,137 @@
             
   <div class="section" id="nosetests">
 <h1>2. Nosetests<a class="headerlink" href="#nosetests" title="Permalink to this headline">¶</a></h1>
+<p>Nosetest is a utility to unit test python code.</p>
 <p>We use nosetests and not <code class="docutils literal notranslate"><span class="pre">__main__</span></code> to test all functionality so they can me
 automatically run and reports can be generated. A project that does not have a
 sufficient number of tests to make sure the module works can not be accepted.</p>
-<p>To use them you need to install nose with</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ pip install nose
+<div class="section" id="installation">
+<h2>2.1. Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<p>The&nbsp;nose&nbsp;module can be installed with the help of pip utility</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>$ pip install nose
 </pre></div>
 </div>
-<p>All nose tests are included in the folder <code class="docutils literal notranslate"><span class="pre">tests</span></code>.</p>
+<p>This will install the nose module in the current Python distribution as well
+as a nosetest.exe, which means the test can be run using this utility as well as using <code class="docutils literal notranslate"><span class="pre">–m</span></code> switch.
+All nose tests are included in the folder <code class="docutils literal notranslate"><span class="pre">tests</span></code>.</p>
 <ul class="simple">
 <li><a class="reference external" href="https://github.com/cloudmesh-community/cm/tree/master/tests">https://github.com/cloudmesh-community/cm/tree/master/tests</a></li>
 </ul>
-<p>A simple example is</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">+</span><span class="n">cm</span>
+  <span class="o">+</span> <span class="n">cloudmesh</span>
+  <span class="o">+</span> <span class="n">tests</span>
+    <span class="o">-</span> <span class="n">test_01_topic1</span><span class="o">.</span><span class="n">py</span>
+    <span class="o">-</span> <span class="n">test_02_topic2</span><span class="o">.</span><span class="n">py</span>
+    <span class="o">-</span> <span class="n">test_03_topic2</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+<p>Note: That at this time we have not yet introduced the order of the tests by
+introducing numbers in the tests.</p>
+</div>
+<div class="section" id="example">
+<h2>2.2. Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
+<p>A simple example for a test is</p>
 <ul class="simple">
 <li><a class="reference external" href="https://github.com/cloudmesh-community/cm/blob/master/tests/test_key.py">https://github.com/cloudmesh-community/cm/blob/master/tests/test_key.py</a></li>
 </ul>
-<p>Note that all tests have specific function names
+<p>Note that all test python programs have specific function names
 of the form</p>
 <p><code class="docutils literal notranslate"><span class="pre">def</span> <span class="pre">test_number_topic</span> <span class="pre">(self)</span></code></p>
-<p>the number is defined to order them and is typically something like <code class="docutils literal notranslate"><span class="pre">001</span></code>, note
-the leading spaces. the topic is a descriptive term on what we test.</p>
-<p>in <code class="docutils literal notranslate"><span class="pre">def</span> <span class="pre">setup(self)</span></code> we declare a setup that is run prior to each test being
-executed.</p>
-<p>an assert simply returns tru or false through a condition that is checked to see
-if the test succeds or fails.</p>
-<p>Note that all nosetest functions start with a <code class="docutils literal notranslate"><span class="pre">HEADING()</span></code> which conveniently
+<p>The number is defined to order them and is typically something like <code class="docutils literal notranslate"><span class="pre">001</span></code>, note
+the leading spaces. The topic is a descriptive term on what we test.</p>
+<p>Each test starts with a setup function <code class="docutils literal notranslate"><span class="pre">def</span> <span class="pre">setup(self)</span></code> we declare a setup that
+is run prior to each test being executed. Other functions will use the setup
+prior to execution.</p>
+<p>A function includes one or multiple asserts that check if a particular test
+succeeds and reports this to nose to expose the information if a tess succeds or
+fails, when running it</p>
+<p>Note that all nosetest functions start with a <code class="docutils literal notranslate"><span class="pre">HEADING()</span></code> in the body which conveniently
 prints a banner with the function name and thus helps in debugging in case of
 errors.</p>
 <p>Invocation is simply done with the comment lines you see on top that you will include.</p>
-<p>in our case the test is called <code class="docutils literal notranslate"><span class="pre">test_key.py</span></code> so we include on the top</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">#############################################</span>
+<p>in our case the test is called test_key.py so we include on the top</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#############################################</span>
 <span class="c1"># nosetest -v --nopature</span>
 <span class="c1"># nosetests -v --nocapture tests/test_key.py</span>
 <span class="c1">#############################################</span>
 </pre></div>
 </div>
-<p>you can than execute the test with either command. More information is printed with the command</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ nosetests -v --nocapture tests/test_key.py
+<p>You can than execute the test with either command. More information is printed
+with the command</p>
+<p>Make sure that you place this comment in your nosetests.</p>
+<p>The following is our simple nosetests for key. THe file is stored at
+<code class="docutils literal notranslate"><span class="pre">tests/test_key.py</span></code></p>
+<p>First, we import the needed classes and methods we like to test.
+We define a class, and than we define the methods. such as the setup and the actual tests.</p>
+<p>your run it with</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ nosetests -v --nocapture tests/test_key.py<span class="sb">`</span>
 </pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">############################################</span>
+<span class="c1"># nosetest -v --nocapture </span>
+<span class="c1"># nosetests tests/test_key.py</span>
+<span class="c1"># nosetests -v --nocapture tests/test_key.py</span>
+<span class="c1">############################################</span>
+<span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pprint</span>
+<span class="kn">from</span> <span class="nn">cloudmesh.common.Printer</span> <span class="kn">import</span> <span class="n">Printer</span>
+<span class="kn">from</span> <span class="nn">cloudmesh.common.util</span> <span class="kn">import</span> <span class="n">HEADING</span>
+<span class="kn">from</span> <span class="nn">cloudmesh.management.configuration.SSHkey</span> <span class="kn">import</span> <span class="n">SSHkey</span>
+<span class="kn">from</span> <span class="nn">cloudmesh.management.configuration.config</span> <span class="kn">import</span> <span class="n">Config</span>
+
+
+<span class="k">class</span> <span class="nc">TestKey</span><span class="p">:</span>
+
+    <span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sshkey</span> <span class="o">=</span> <span class="n">SSHkey</span><span class="p">()</span>
+
+
+    <span class="k">def</span> <span class="nf">test_01_key</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">HEADING</span><span class="p">()</span>
+        <span class="n">pprint</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sshkey</span><span class="p">)</span>
+        <span class="k">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sshkey</span><span class="p">)</span>
+        <span class="k">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sshkey</span><span class="p">))</span>
+        <span class="n">pprint</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sshkey</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">)</span>
+
+        <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">sshkey</span><span class="o">.</span><span class="vm">__dict__</span>  <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span>
+
+
+    <span class="k">def</span> <span class="nf">test_02_git</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">HEADING</span><span class="p">()</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="n">Config</span><span class="p">()</span>
+        <span class="n">username</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;cloudmesh.profile.github&quot;</span><span class="p">]</span>
+        <span class="k">print</span> <span class="p">(</span><span class="s2">&quot;Username:&quot;</span><span class="p">,</span> <span class="n">username</span><span class="p">)</span>
+        <span class="n">keys</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sshkey</span><span class="o">.</span><span class="n">get_from_git</span><span class="p">(</span><span class="n">username</span><span class="p">)</span>
+        <span class="n">pprint</span> <span class="p">(</span><span class="n">keys</span><span class="p">)</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">Printer</span><span class="o">.</span><span class="n">flatwrite</span><span class="p">(</span><span class="n">keys</span><span class="p">,</span>
+                            <span class="n">sort_keys</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">),</span>
+                            <span class="n">order</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">,</span> <span class="s2">&quot;fingerprint&quot;</span><span class="p">],</span>
+                            <span class="n">header</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Name&quot;</span><span class="p">,</span> <span class="s2">&quot;Fingerprint&quot;</span><span class="p">])</span>
+              <span class="p">)</span>
+
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">keys</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span>
+</pre></div>
+</div>
+<p>The output in with <code class="docutils literal notranslate"><span class="pre">nosetests</span> <span class="pre">tests/test_key.py</span></code> does not provide any detail,
+but just reports if tests fail or succeed.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">----------------------------------------------------------------------</span>
+<span class="n">Ran</span> <span class="mi">2</span> <span class="n">tests</span> <span class="ow">in</span> <span class="mf">0.457</span><span class="n">s</span>
+
+<span class="n">OK</span>
+</pre></div>
+</div>
+<p>The output with  <code class="docutils literal notranslate"><span class="pre">nosetests</span> <span class="pre">-v</span> <span class="pre">tests/test_key.py</span></code></p>
+<p>results in</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">tests</span><span class="o">.</span><span class="n">test_key</span><span class="o">.</span><span class="n">TestName</span><span class="o">.</span><span class="n">test_01_key</span> <span class="o">...</span> <span class="n">ok</span>
+<span class="n">tests</span><span class="o">.</span><span class="n">test_key</span><span class="o">.</span><span class="n">TestName</span><span class="o">.</span><span class="n">test_02_git</span> <span class="o">...</span> <span class="n">ok</span>
+
+<span class="o">----------------------------------------------------------------------</span>
+<span class="n">Ran</span> <span class="mi">2</span> <span class="n">tests</span> <span class="ow">in</span> <span class="mf">1.072</span><span class="n">s</span>
+
+<span class="n">OK</span>
+</pre></div>
+</div>
+<p>During development phase you want to use <code class="docutils literal notranslate"><span class="pre">nosetests</span> <span class="pre">-v</span> <span class="pre">--nocapture</span> <span class="pre">tests/test_key.py</span></code></p>
+<p>WHich prints all print statements also</p>
 </div>
 </div>
 

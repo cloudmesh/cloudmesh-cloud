@@ -4,7 +4,8 @@ from pathlib import Path
 from shutil import copyfile
 from cloudmesh.terminal.Terminal import VERBOSE
 from cloudmesh.common.util import path_expand
-
+import munch
+import re
 import oyaml as yaml
 
 from cloudmesh.common.dotdict import dotdict
@@ -63,6 +64,7 @@ class Config(object):
             with open(self.config_path, "r") as stream:
                 content = stream.read()
                 content = path_expand(content)
+                content = self.spec_replace(content)
                 self.data = yaml.load(content, Loader=yaml.SafeLoader)
 
 
@@ -87,6 +89,23 @@ class Config(object):
                 self.cloud = default["cloud"]
             else:
                 self.cloud = None
+
+    def spec_replace(self, spec):
+
+        variables = re.findall("\{\w.+\}", spec)
+
+        for i in range(0, len(variables)):
+            data = yaml.load(spec, Loader=yaml.SafeLoader)
+
+            m = munch.DefaultMunch.fromDict(data)
+
+            for variable in variables:
+                text = variable
+                variable = variable[1:-1]
+                value = eval(f"m.{variable}")
+                if "{" not in value:
+                    spec = spec.replace(text, value)
+        return spec
 
     def credentials(self, kind, name):
         """

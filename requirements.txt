@@ -22,3 +22,4 @@ humanize
 psutil
 connexion[swagger-ui]
 yamllint
+azure

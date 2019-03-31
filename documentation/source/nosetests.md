@@ -16,16 +16,47 @@ The nose module can be installed with the help of pip utility
 
 This will install the nose module in the current Python distribution as well 
 as a nosetest.exe, which means the test can be run using this utility as well as using `–m` switch.
+
+##  Nosetest Testing Aids
+
+These are the testing aids that is useful, including decorators for restricting test execution time and testing for exceptions.
+
+1. nose.tools.ok_(expr, msg = None) − Shorthand for assert.
+
+2. nose.tools.eq_(a, b, msg = None) − Shorthand for ‘assert a == b, “%r != %r” % (a, b)
+
+3. nose.tools.make_decorator(func) − Wraps a test decorator so as to properly replicate metadata of the decorated function, 
+   including nose’s additional stuff (namely, setup and teardown).
+
+4. nose.tools.raises(*exceptions) − Test must raise one of expected exceptions to pass.
+
+5. nose.tools.timed(limit) − Test must finish within specified time limit to pass
+
+6. nose.tools.istest(func) − Decorator to mark a function or method as a test
+
+7. nose.tools.nottest(func) − Decorator to mark a function or method as not a test
+
+Example :
+ nose.tools._eq_ that takes two values and compares them using the == operator. U
+ pon failure, it gives a nice message, something like "expected 5 but was given 4", 
+ helping you to indentify and fix the source of the broken test quickly.
+
+## Directory structure in cloudmesh
+
 All nose tests are included in the folder `tests`.
 
 * <https://github.com/cloudmesh-community/cm/tree/master/tests>
 
-A simple example is 
+```
++cm
+  + cloudmesh
+  + tests
+    - test1file.....py
+    - test2file.....py
+    - test3file.....py
+```
 
-* <https://github.com/cloudmesh-community/cm/blob/master/tests/test_key.py>
-
-Note that all tests have specific function names 
-of the form
+Note that all tests have specific function names of the form
 
 `def test_number_topic (self)`
 
@@ -42,17 +73,10 @@ Note that all nosetest functions start with a `HEADING()` which conveniently
 prints a banner with the function name and thus helps in debugging in case of
 errors.
 
-## Directory structure in cloudmesh
+A simple example is 
 
-Test cases can be placed in the cm/tests directory.
-```
-+cm
-  + cloudmesh
-  + tests
-    - test1file.....py
-    - test2file.....py
-    - test3file.....py
-```
+* <https://github.com/cloudmesh-community/cm/blob/master/tests/test_key.py>
+
 
 ## Test Case execution 
 

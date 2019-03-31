@@ -25,8 +25,8 @@ class VmCommand(PluginCommand):
         ::
 
             Usage:
-                vm ping [NAMES] [--cloud=CLOUDS] [N]
-                vm check [NAMES] [--cloud=CLOUDS]
+                vm ping [NAMES] [--cloud=CLOUDS] [--count=N] [--processors=PROCESSORS]
+                vm check [NAMES] [--cloud=CLOUDS] [--processors=PROCESSORS]
                 vm status [NAMES] [--cloud=CLOUDS]
                 vm console [NAME] [--force]
                 vm start [NAMES] [--cloud=CLOUD] [--dryrun]
@@ -167,6 +167,14 @@ class VmCommand(PluginCommand):
                 vm refresh [--cloud=CLOUDS]
                     this command refreshes the data for virtual machines,
                     images and flavors for the specified clouds.
+
+                vm ping [NAMES] [--cloud=CLOUDS] [--count=N] [--processors=PROCESSORS]
+                     pings the specified virtual machines, while using at most N pings.
+                     The ping is executed in parallel.
+                     If names are specifies the ping is restricted to the given names in
+                     parameter format. If clouds are specified, names that are not in
+                     these clouds are ignored. If the name is set in the variables
+                     this name is used.
 
             Tip:
                 give the VM name, but in a hostlist style, which is very

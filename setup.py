@@ -71,6 +71,7 @@ psutil
 connexion[swagger-ui]
 yamllint
 azure
+docker
 munch
 """.split("\n")
 

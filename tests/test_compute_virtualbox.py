@@ -318,7 +318,7 @@ class other:
         source = 'b'
         dest = 'c'
 
-        self.p.rename(name=source, destination=dest)
+        self.p.rename(source=source, destination=dest)
         vms = self.p.list()
         pprint (vms)
 

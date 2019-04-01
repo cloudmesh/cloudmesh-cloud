@@ -95,5 +95,5 @@ class Provider(object):
             timeout=360,
             **kwargs)
 
-    def rename(self, name=None, destination=None):
-        self.p.rename(name=name, destination=name)
+    def rename(self, source=None, destination=None):
+        self.p.rename(source=source, destination=destination)

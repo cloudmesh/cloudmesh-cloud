@@ -289,7 +289,7 @@ class other:
     def test_30_rename(self):
         HEADING()
 
-        self.p.rename(name=self.name, destination=self.new_name)
+        self.p.rename(source=self.name, destination=self.new_name)
 
     #def test_01_stop(self):
     #    HEADING()

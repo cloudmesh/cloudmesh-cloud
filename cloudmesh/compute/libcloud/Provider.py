@@ -44,36 +44,36 @@ class Provider(ComputeNodeABC):
     output = {
 
         "vm": {
-            "sort_keys": ["name"],
-            "order": ["name",
-                      "cloud",
+            "sort_keys": ["cm.name"],
+            "order": ["cm.name",
+                      "cm.cloud",
                       "state",
                       "image",
                       "public_ips",
                       "private_ips",
-                      "kind"],
-            "header": ["name",
-                       "cloud",
+                      "cm.kind"],
+            "header": ["cm.name",
+                       "cm.cloud",
                        "state",
                        "image",
                        "public_ips",
                        "private_ips",
-                       "kind"]
+                       "cm.kind"]
         },
-        "image": {"sort_keys": ["name",
+        "image": {"sort_keys": ["cm.name",
                                 "extra.minDisk"],
-                  "order": ["name",
+                  "order": ["cm.name",
                             "extra.minDisk",
                             "updated",
-                            "driver"],
+                            "cm.driver"],
                   "header": ["Name",
                              "MinDisk",
                              "Updated",
                              "Driver"]},
-        "flavor": {"sort_keys": ["name",
+        "flavor": {"sort_keys": ["cm.name",
                                  "vcpus",
                                  "disk"],
-                   "order": ["name",
+                   "order": ["cm.name",
                              "vcpus",
                              "ram",
                              "disk"],
@@ -146,7 +146,7 @@ class Provider(ComputeNodeABC):
         self.default_size = None
         self.public_key_path = conf["profile"]["publickey"]
 
-    def dict(self, elements, kind=None):
+    def update_dict(self, elements, kind=None):
         """
         Libcloud returns an object or list of objects With the dict method
         this object is converted to a dict. Typically this method is used internally.
@@ -163,62 +163,14 @@ class Provider(ComputeNodeABC):
         d = []
         for element in _elements:
             entry = element.__dict__
-            entry["kind"] = kind
-            entry["driver"] = self.cloudtype
-            entry["cloud"] = self.cloud
-
-            if kind == 'node':
-                entry["updated"] = str(datetime.utcnow())
-
-                if "created_at" in entry:
-                    entry["created"] = str(entry["created_at"])
-                    del entry["created_at"]
-                else:
-                    entry["created"] = entry["modified"]
-            elif kind == 'flavor':
-                entry["created"] = entry["updated"] = str(datetime.utcnow())
-            elif kind == 'image':
-                if self.cloudtype == 'openstack':
-                    entry['created'] = entry['extra']['created']
-                    entry['updated'] = entry['extra']['updated']
-                else:
-                    pass
-
-            if "_uuid" in entry:
-                del entry["_uuid"]
-            identifier = {}
-            for key in ["name", "created", "updated", "cloud", "kind",
-                        "collection", "modified", "driver"]:
-                if key in entry:
-                    identifier[key] = entry[key]
-            entry["cm"] = identifier
-            d.append(entry)
-        return d
-
-    def dict_new(self, elements, kind=None):
-        """
-        Libcloud returns an object or list of objects With the dict method
-        this object is converted to a dict. Typically this method is used internally.
-        :param elements: the elements
-        :param kind: Kind is image, flavor, or node
-        :return:
-        """
-        if elements is None:
-            return None
-        elif type(elements) == list:
-            _elements = elements
-        else:
-            _elements = [elements]
-        d = []
-        for element in _elements:
-            entry = element.__dict__
-            entry["cm"] = {}
-            entry["cm"]["kind"] = kind
-            entry["cm"]["driver"] = self.cloudtype
-            entry["cm"]["cloud"] = self.cloud
-
+            entry["cm"] = {
+                "kind": kind,
+                "driver": 'openstack',
+                "cloud": self.cloud
+            }
             if kind == 'node':
                 entry["cm"]["updated"] = str(datetime.utcnow())
+                entry["cm"]["name"] = entry["name"]
 
                 if "created_at" in entry:
                     entry["cm"]["created"] = str(entry["created_at"])
@@ -226,20 +178,26 @@ class Provider(ComputeNodeABC):
                 else:
                     entry["cm"]["created"] = entry["modified"]
             elif kind == 'flavor':
-                entry["cm"]["created"] = entry["cm"]["updated"] = str(
+                entry["cm"]["created"] = entry["updated"] = str(
                     datetime.utcnow())
+                entry["cm"]["name"] = entry["name"]
+
             elif kind == 'image':
                 if self.cloudtype == 'openstack':
-                    entry["cm"]['created'] = entry['extra']['created']
-                    entry["cm"]['updated'] = entry['extra']['updated']
+                    entry['cm']['created'] = entry['extra']['created']
+                    entry['cm']['updated'] = entry['extra']['updated']
+                    entry["cm"]["name"] = entry["name"]
                 else:
                     pass
 
             if "_uuid" in entry:
                 del entry["_uuid"]
+            if "driver" in entry:
+                del entry["driver"]
 
             d.append(entry)
         return d
+
 
     def find(self, elements, name=None, raw=False):
         """
@@ -268,7 +226,7 @@ class Provider(ComputeNodeABC):
             if raw:
                 return entries
             else:
-                return self.dict(entries, kind="key")
+                return self.update_dict(entries, kind="key")
         return None
 
     def key_upload(self, key):
@@ -292,7 +250,7 @@ class Provider(ComputeNodeABC):
         if self.cloudman:
             secgroups = self.cloudman.ex_list_security_groups()
             if not raw:
-                secgroups = self.dict(secgroups, kind="secgroup")
+                secgroups = self.update_dict(secgroups, kind="secgroup")
             return secgroups
         return None
 
@@ -323,7 +281,7 @@ class Provider(ComputeNodeABC):
                 for rule in thegroup["rules"]:
                     # self.p.dict() converted the object into a list of dict,
                     # even if there is only one object
-                    rule = self.dict(rule)[0]
+                    rule = self.update_dict(rule)[0]
                     rules.append(rule)
             return rules
         return None
@@ -408,7 +366,7 @@ class Provider(ComputeNodeABC):
             if raw:
                 return entries
             else:
-                return self.dict(entries, kind="image")
+                return self.update_dict(entries, kind="image")
 
         return None
 
@@ -432,7 +390,7 @@ class Provider(ComputeNodeABC):
             if raw:
                 return entries
             else:
-                return self.dict(entries, kind="flavor")
+                return self.update_dict(entries, kind="flavor")
         return None
 
     def flavor(self, name=None):
@@ -542,7 +500,7 @@ class Provider(ComputeNodeABC):
             if raw:
                 return entries
             else:
-                return self.dict(entries, kind="node")
+                return self.update_dict(entries, kind="node")
         return None
 
     def resume(self, name=None):
@@ -634,7 +592,7 @@ class Provider(ComputeNodeABC):
             sys.exit("this cloud is not yet supported")
 
         pprint(node)
-        return self.dict(node)
+        return self.update_dict(node)
 
     def get_publicIP(self):
         # pools = self.cloudman.ex_list_floating_ip_pools()

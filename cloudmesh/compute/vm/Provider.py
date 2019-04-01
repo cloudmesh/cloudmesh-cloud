@@ -1,25 +1,39 @@
 from cloudmesh.compute.libcloud.Provider import Provider as LibCloudProvider
+from cloudmesh.compute.docker.Provider import Provider as DockerProvider
 from cloudmesh.compute.virtualbox.Provider import \
     Provider as VirtualboxCloudProvider
 from cloudmesh.management.configuration.config import Config
 from cloudmesh.mongo.DataBaseDecorator import DatabaseUpdate
-
+from cloudmesh.common.console import Console
 
 class Provider(object):
 
     def __init__(self, name=None,
                  configuration="~/.cloudmesh/.cloudmesh4.yaml"):
-        self.kind = Config(configuration)["cloudmesh"]["cloud"][name]["cm"][
-            "kind"]
-        self.name = name
+        try:
+            self.kind = Config(configuration)["cloudmesh"]["cloud"][name]["cm"][
+                "kind"]
+            self.name = name
+        except:
+            Console.error(f"proider {name} not found in {configuration}")
+            raise ValueError(f"proider {name} not found in {configuration}")
 
-        # Console.msg("FOUND Kind", self.kind)
+        provider = None
 
         if self.kind in ["openstack", "aws", "google"]:
-            self.p = LibCloudProvider(name=name, configuration=configuration)
+            provider = LibCloudProvider
         elif self.kind in ["vagrant", "virtualbox"]:
-            self.p = VirtualboxCloudProvider(name=name,
-                                             configuration=configuration)
+            provider = VirtualboxCloudProvider
+        elif self.kind in ["docker"]:
+            provider = VirtualboxCloudProvider
+
+        if provider is None:
+            Console.error(f"proider {name} not supported")
+            raise ValueError(f"proider {name} not supported")
+
+        self.p = provider(name=name, configuration=configuration)
+
+
 
     def cloudname(self):
         return self.name

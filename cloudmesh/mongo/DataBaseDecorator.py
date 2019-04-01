@@ -98,7 +98,7 @@ class DatabaseUpdate:
                 current = [current]
 
             if current is None:
-                return
+                return []
 
             result = self.database.update(current)
 

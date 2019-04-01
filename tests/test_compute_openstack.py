@@ -15,9 +15,10 @@ from cloudmesh.management.configuration.SSHkey import SSHkey
 from cloudmesh.management.configuration.config import Config
 from cloudmesh.management.configuration.name import Name
 from cloudmesh.shell.variables import Variables
-
+from cloudmesh.terminal.Terminal import VERBOSE
 
 class TestName:
+
 
     def setup(self):
         banner("setup", c="-")
@@ -49,6 +50,7 @@ class TestName:
 
     def test_001_list_keys(self):
         HEADING()
+        print(256 * "@")
         pprint(self.p.user)
         pprint(self.p.cloudtype)
         pprint(self.p.spec)
@@ -77,7 +79,8 @@ class TestName:
     def test_03_list_images(self):
         HEADING()
         images = self.p.images()
-        # pprint(images)
+
+        VERBOSE.print(images, verbose=9)
 
         print(Printer.flatwrite(images,
                                 sort_keys=["name", "extra.minDisk"],
@@ -91,6 +94,8 @@ class TestName:
         flavors = self.p.flavors()
         # pprint (flavors)
 
+        VERBOSE.print(flavors, verbose=9)
+
         print(Printer.flatwrite(flavors,
                                 sort_keys=["name", "vcpus", "disk"],
                                 order=["name", "vcpus", "ram", "disk"],
@@ -101,6 +106,8 @@ class TestName:
         HEADING()
         vms = self.p.list()
         # pprint (vms)
+
+        VERBOSE.print(vms, verbose=9)
 
         print(Printer.flatwrite(vms,
                                 sort_keys=("name"),
@@ -121,6 +128,9 @@ class TestName:
                                         "Private ips",
                                         "Public ips"])
               )
+
+
+class o:
 
     def test_05_list_secgroups(self):
         HEADING()

@@ -260,10 +260,15 @@ dict and another that is responsible for the upload to the database.</p>
 
     <span class="k">def</span> <span class="nf">entries</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">{</span>
-           <span class="s2">&quot;cloud&quot;</span><span class="p">:</span> <span class="s2">&quot;foo&quot;</span><span class="p">,</span>
-           <span class="s2">&quot;kind&quot;&quot;: &quot;</span><span class="n">entries</span><span class="s2">&quot;,</span>
-           <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;test01&quot;</span>
-           <span class="s2">&quot;test&quot;</span><span class="p">:</span> <span class="s2">&quot;hello&quot;</span><span class="p">}</span>
+         <span class="s2">&quot;cm&quot;</span> <span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;kind&quot;</span> <span class="p">:</span> <span class="s2">&quot;flavor&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;driver&quot;</span> <span class="p">:</span> <span class="s2">&quot;openstack&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;cloud&quot;</span> <span class="p">:</span> <span class="s2">&quot;foo&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;created&quot;</span> <span class="p">:</span> <span class="s2">&quot;2019-04-01 15:59:39.815993&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;name&quot;</span> <span class="p">:</span> <span class="s2">&quot;m1.xxxlarge&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;collection&quot;</span> <span class="p">:</span> <span class="s2">&quot;chameleon-flavor&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;modified&quot;</span> <span class="p">:</span> <span class="s2">&quot;2019-04-01 16:01:11.720274&quot;</span>
+        <span class="p">},</span>
 </pre></div>
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">cloudmesh.example.bar</span></code> contains:</p>
@@ -271,10 +276,15 @@ dict and another that is responsible for the upload to the database.</p>
 
     <span class="k">def</span> <span class="nf">entries</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">{</span>
-           <span class="s2">&quot;cloud&quot;</span><span class="p">:</span> <span class="s2">&quot;bar&quot;</span><span class="p">,</span>
-           <span class="s2">&quot;kind&quot;&quot;: &quot;</span><span class="n">entries</span><span class="s2">&quot;,</span>
-           <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;test01&quot;</span>
-           <span class="s2">&quot;test&quot;</span><span class="p">:</span> <span class="s2">&quot;hello&quot;</span><span class="p">}</span>
+         <span class="s2">&quot;cm&quot;</span> <span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;kind&quot;</span> <span class="p">:</span> <span class="s2">&quot;flavor&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;driver&quot;</span> <span class="p">:</span> <span class="s2">&quot;openstack&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;cloud&quot;</span> <span class="p">:</span> <span class="s2">&quot;bar&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;created&quot;</span> <span class="p">:</span> <span class="s2">&quot;2019-04-01 15:59:39.815993&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;name&quot;</span> <span class="p">:</span> <span class="s2">&quot;m1.xxxlarge&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;collection&quot;</span> <span class="p">:</span> <span class="s2">&quot;chameleon-flavor&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;modified&quot;</span> <span class="p">:</span> <span class="s2">&quot;2019-04-01 16:01:11.720274&quot;</span>
+        <span class="p">},</span>
 </pre></div>
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">cloudmesh.example.provider.foo</span></code> contains:</p>

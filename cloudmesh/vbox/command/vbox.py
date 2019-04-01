@@ -73,13 +73,13 @@ class VboxCommand(PluginCommand):
         ::
 
           Usage:
-            vbox version [--format=FORMAT]
-            vbox image list [--format=FORMAT]
+            vbox version [--output=OUTPUT]
+            vbox image list [--output=OUTPUT]
             vbox image find KEYWORDS...
             vbox image add NAME
             vbox image delete NAME
             vbox vm info NAME
-            vbox vm list [--format=FORMAT] [-v]
+            vbox vm list [--output=OUTPUT] [-v]
             vbox vm delete NAME
             vbox vm ip [NAME] [--all]
             vbox vm create [NAME] ([--memory=MEMORY] [--image=IMAGE] [--port=PORT] [--script=SCRIPT]  | list)
@@ -87,7 +87,7 @@ class VboxCommand(PluginCommand):
             vbox vm ssh [NAME] [-e COMMAND]
         """
 
-        arguments.format = arguments["--format"] or "table"
+        arguments.output = arguments["--output"] or "table"
         arguments.verbose = arguments["-v"]
         arguments.all = arguments["--all"]
 
@@ -96,7 +96,7 @@ class VboxCommand(PluginCommand):
         #
         def list_images():
             images = Provider().images()
-            _LIST_PRINT(images, arguments.format,
+            _LIST_PRINT(images, arguments.output,
                         order=["name", "provider", "version"])
 
         #
@@ -133,7 +133,7 @@ class VboxCommand(PluginCommand):
             result = Printer.write(versions,
                                    order=["attribute", "version",
                                           "description"],
-                                   output=arguments.format)
+                                   output=arguments.output)
             print(result)
 
         #
@@ -166,7 +166,7 @@ class VboxCommand(PluginCommand):
 
             provider = Provider().vagrant_nodes()
             _LIST_PRINT(provider,
-                        arguments.format,
+                        arguments.output,
                         order=["name", "state", "id", "provider", "directory"])
             return ""
 
@@ -199,7 +199,7 @@ class VboxCommand(PluginCommand):
             # arguments.NAME
             d = Provider().info(name=arguments.NAME)
 
-            result = Printer.write(d, output=arguments.format)
+            result = Printer.write(d, output=arguments.output)
 
             print(result)
 
@@ -225,7 +225,7 @@ class VboxCommand(PluginCommand):
                 for e in data:
                     d[str(i)] = e
                     i = i + 1
-                result = Printer.attribute(d, output=arguments.format)
+                result = Printer.attribute(d, output=arguments.output)
                 print(result)
             else:
                 for element in data:

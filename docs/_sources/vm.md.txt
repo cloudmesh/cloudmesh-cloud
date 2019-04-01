@@ -21,7 +21,7 @@ vm terminate [NAMES] [--cloud=CLOUD] [--dryrun]
 vm delete [NAMES] [--cloud=CLOUD] [--dryrun]
 vm list [NAMES]
         [--cloud=CLOUDS]
-        [--format=FORMAT]
+        [--output=OUTPUT]
         [--refresh]
 vm boot [--name=NAME]
         [--cloud=CLOUD]
@@ -47,7 +47,7 @@ vm ip assign [NAMES]
           [--cloud=CLOUD]
 vm ip show [NAMES]
            [--cloud=CLOUD]
-           [--format=FORMAT]
+           [--output=OUTPUT]
            [--refresh]
 vm ip inventory [NAMES]
 vm ssh [NAMES] [--username=USER]
@@ -59,7 +59,7 @@ vm ssh [NAMES] [--username=USER]
 vm rename [OLDNAMES] [NEWNAMES] [--force] [--dryrun]
 vm wait [--cloud=CLOUD] [--interval=SECONDS]
 vm info [--cloud=CLOUD]
-        [--format=FORMAT]
+        [--output=OUTPUT]
 vm username USERNAME [NAMES] [--cloud=CLOUD]
 vm resize [NAMES] [--size=SIZE]
 ```
@@ -82,7 +82,7 @@ We distinguish the following regular options
 
 :--interval=INTERVAL: a specified interval in seconds
 
-:--format=FORMAT: The output format: txt, csv, table
+:--output=OUTPUT: The output format: txt, csv, table
 
 :--refresh: To update the state of the vms specified with clouds and names
 

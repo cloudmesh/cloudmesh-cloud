@@ -4,7 +4,7 @@ default
 ::
 
   Usage:
-      default list [--context=CONTEXT] [--format=FORMAT]
+      default list [--context=CONTEXT] [--output=OUTPUT]
       default delete --context=CONTEXT
       default delete KEY [--context=CONTEXT]
       default KEY [--context=CONTEXT]
@@ -16,7 +16,7 @@ default
 
   Options:
      --context=CONTEXT    the name of the context
-     --format=FORMAT  the output format. Values include
+     --output=OUTPUT  the output format. Values include
                       table, json, csv, yaml.
 
   Description:

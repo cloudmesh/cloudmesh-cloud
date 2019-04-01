@@ -4,7 +4,7 @@ vm
 ::
 
     Usage:
-        vm default [--cloud=CLOUD][--format=FORMAT]
+        vm default [--cloud=CLOUD][--output=OUTPUT]
         vm refresh [all][--cloud=CLOUD]
         vm boot [--name=NAME]
                 [--cloud=CLOUD]
@@ -55,7 +55,7 @@ vm
         vm ip show [NAMES]
                    [--group=GROUP]
                    [--cloud=CLOUD]
-                   [--format=FORMAT]
+                   [--output=OUTPUT]
                    [--refresh]
         vm ip inventory [NAMES]
                         [--header=HEADER]
@@ -71,12 +71,12 @@ vm
         vm list [NAMES]
                 [--cloud=CLOUDS|--active]
                 [--group=GROUP]
-                [--format=FORMAT]
+                [--output=OUTPUT]
                 [--refresh]
         vm status [NAMES]
         vm wait [--cloud=CLOUD] [--interval=SECONDS]
         vm info [--cloud=CLOUD]
-                [--format=FORMAT]
+                [--output=OUTPUT]
         vm check NAME
         vm username USERNAME [NAMES] [--cloud=CLOUD]
         vm resize [SIZE]

@@ -32,7 +32,7 @@ class SourceCommand(PluginCommand):
           Options:
               -f      specify the file
               --protocol=PROTOCOL   [default: ssh]
-              --format=FORMAT       [default: table]
+              --output=OUTPUT       [default: table]
 
           Description:
 
@@ -70,7 +70,7 @@ class SourceCommand(PluginCommand):
 
         if arguments.list:
 
-            print(Printer.attribute(config, output=arguments["format"]))
+            print(Printer.attribute(config, output=arguments["output"]))
 
         elif arguments["install"]:
 

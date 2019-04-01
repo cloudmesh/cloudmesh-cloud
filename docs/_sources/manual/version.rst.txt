@@ -5,11 +5,11 @@ version
 
   Usage:
     version pip [PACKAGE]
-    version [--format=FORMAT] [--check=CHECK]
+    version [--output=OUTPUT] [--check=CHECK]
 
 
   Options:
-    --format=FORMAT  the format to print the versions in [default: table]
+    --output=OUTPUT  the format to print the versions in [default: table]
     --check=CHECK    boolean tp conduct an additional check [default: True]
 
   Description:

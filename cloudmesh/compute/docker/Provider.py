@@ -46,7 +46,8 @@ class Provider(ComputeNodeABC):
         entry["cm"]["kind"] = kind
         entry["cm"]["driver"] = self.cloudtype
         entry["cm"]["cloud"] = self.cloud
-        entry["cm"]["name"] = entry["Name"]
+        if "RepoTags" in entry:
+            entry["cm"]["name"] = entry["RepoTags"][0]
 
         if kind == 'node':
             entry["cm"]["updated"] = str(datetime.utcnow())
@@ -155,20 +156,37 @@ class Provider(ComputeNodeABC):
 
         return versions
 
+    def list(self, raw=True):
+        """
+        list all nodes id
+
+        :return: an array of dicts representing the nodes
+        """
+        client = docker.from_env()
+        containers = client.containers.list()
+        pprint(containers)
+        result = []
+        for container in containers:
+            container = dict(container.__dict__)['attrs']
+            container["repo"] = None
+            container["tags"] = None
+            container = self.update_dict(container, "node")
+            result.append(container)
+
+        pprint(result)
+        return result
+
     def images(self):
         client = docker.from_env()
         images = client.images.list()
-        pprint(images)
         result = []
         for image in images:
             image = dict(image.__dict__)['attrs']
             # image["repo"],image["tags"] = image["RepoTags"][0].split(":")
             image["repo"] = None
             image["tags"] = None
-            image = self.update_dict(image, self.cloudtype)
+            image = self.update_dict(image, "image")
             result.append(image)
-
-        pprint(result)
         return result
 
     def delete_image(self, name=None):
@@ -410,26 +428,6 @@ class Provider(ComputeNodeABC):
 
         return arg
 
-    def list(self, raw=True):
-        """
-        list all nodes id
-    
-        :return: an array of dicts representing the nodes
-        """
-        client = docker.from_env()
-        containers = client.containers.list()
-        pprint(containers)
-        result = []
-        for container in containers:
-            container = dict(container.__dict__)['attrs']
-            # image["repo"],image["tags"] = image["RepoTags"][0].split(":")
-            container["repo"] = None
-            container["tags"] = None
-            container = self.update_dict(container, "node")
-            result.append(container)
-
-        pprint(result)
-        return result
 
     def rename(self, name=None, destination=None):
         """

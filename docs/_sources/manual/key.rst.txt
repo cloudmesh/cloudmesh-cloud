@@ -6,12 +6,12 @@ key
    Usage:
      key  -h | --help
      key list --cloud=CLOUD
-     key list --source=db [--format=FORMAT]
-     key list --source=yaml [--format=FORMAT]
-     key list --source=ssh [--dir=DIR] [--format=FORMAT]
-     key list --source=git [--format=FORMAT] [--username=USERNAME]
+     key list --source=db [--output=OUTPUT]
+     key list --source=yaml [--output=OUTPUT]
+     key list --source=ssh [--dir=DIR] [--output=OUTPUT]
+     key list --source=git [--output=OUTPUT] [--username=USERNAME]
      key list
-     key load [--format=FORMAT]
+     key load [--output=OUTPUT]
      key add [NAME] [--source=FILENAME]
      key add [NAME] [--git]
      key add [NAME] [--ssh]
@@ -33,7 +33,7 @@ key
      NAME_ON_CLOUD  Typically the name of the keypair on the cloud.
    Options:
       --dir=DIR                     the directory with keys [default: ~/.ssh]
-      --format=FORMAT               the format of the output [default: table]
+      --output=OUTPUT               the format of the output [default: table]
       --source=SOURCE               the source for the keys [default: db]
       --username=USERNAME           the source for the keys [default: none]
       --name=KEYNAME                The name of a key
@@ -44,13 +44,13 @@ key
    key list --source=git  [--username=USERNAME]
       lists all keys in git for the specified user. If the
       name is not specified it is read from cloudmesh.yaml
-   key list --source=ssh  [--dir=DIR] [--format=FORMAT]
+   key list --source=ssh  [--dir=DIR] [--output=OUTPUT]
       lists all keys in the directory. If the directory is not
       specified the default will be ~/.ssh
-   key list --source=yaml  [--dir=DIR] [--format=FORMAT]
+   key list --source=yaml  [--dir=DIR] [--output=OUTPUT]
       lists all keys in cloudmesh.yaml file in the specified directory.
        dir is by default ~/.cloudmesh
-   key list [--format=FORMAT]
+   key list [--output=OUTPUT]
        list the keys in the giiven format: json, yaml,
        table. table is default
    key list

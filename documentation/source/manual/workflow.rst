@@ -5,7 +5,7 @@ workflow
 
     Usage:
         workflow refresh [--cloud=CLOUD] [-v]
-        workflow list [ID] [NAME] [--cloud=CLOUD] [--format=FORMAT] [--refresh] [-v]
+        workflow list [ID] [NAME] [--cloud=CLOUD] [--output=OUTPUT] [--refresh] [-v]
         workflow add NAME LOCATION
         workflow delete ID
         workflow status [NAMES]
@@ -17,7 +17,7 @@ workflow
         This lists out the workflows present for a cloud
 
     Options:
-       --format=FORMAT  the output format [default: table]
+       --output=OUTPUT  the output format [default: table]
        --cloud=CLOUD    the cloud name
        --refresh        refreshes the data before displaying it
                         from the cloud

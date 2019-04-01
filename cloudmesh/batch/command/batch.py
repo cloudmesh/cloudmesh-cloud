@@ -39,7 +39,7 @@ class BatchCommand(PluginCommand):
                 [--outfile-name=OUTPUT_FILE_NAME]
                 [--suffix=SUFFIX]
                 [--overwrite]
-            batch job run [--name=NAMES] [--format=FORMAT]
+            batch job run [--name=NAMES] [--output=OUTPUT]
             batch job fetch [--name=NAMES]
             batch job remove [--name=NAMES]
             batch job clean [--name=NAMES]
@@ -57,7 +57,7 @@ class BatchCommand(PluginCommand):
           Options:
               -f      specify the file
               --depth=DEPTH   [default: 1]
-              --format=FORMAT    [default: table]
+              --output=OUTPUT    [default: table]
 
           Description:
 
@@ -106,7 +106,7 @@ class BatchCommand(PluginCommand):
 
           Examples:
 
-             batch job run [--name=NAMES] [--format=FORMAT]
+             batch job run [--name=NAMES] [--output=OUTPUT]
 
                 runs jobs with the given names
 
@@ -137,7 +137,7 @@ class BatchCommand(PluginCommand):
                        "type",
                        "destination",
                        "source",
-                       "format")
+                       "output")
 
         # if not arguments.create
 
@@ -198,7 +198,7 @@ class BatchCommand(PluginCommand):
                 data,
                 order=["cm.name", "cm.kind", "batch.status"],
                 header=["Name", "Kind", "Status"],
-                output=arguments.format)
+                output=arguments.output)
             )
 
             return ""

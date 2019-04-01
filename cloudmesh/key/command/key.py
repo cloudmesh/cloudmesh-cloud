@@ -26,15 +26,15 @@ class KeyCommand(PluginCommand):
 
            Usage:
              key  -h | --help
-             key list --cloud=CLOUDS [--format=FORMAT]
-             key list --source=ssh [--dir=DIR] [--format=FORMAT]
-             key list --source=git [--format=FORMAT] [--username=USERNAME]
-             key list [NAMES] [--format=FORMAT]
-             key load --filename=FILENAME [--format=FORMAT]
+             key list --cloud=CLOUDS [--output=OUTPUT]
+             key list --source=ssh [--dir=DIR] [--output=OUTPUT]
+             key list --source=git [--output=OUTPUT] [--username=USERNAME]
+             key list [NAMES] [--output=OUTPUT]
+             key load --filename=FILENAME [--output=OUTPUT]
              key add [NAME] [--source=FILENAME]
              key add [NAME] [--source=git]
              key add [NAME] [--source=ssh]
-             key get NAME [--format=FORMAT]
+             key get NAME [--output=OUTPUT]
              key default --select
              key delete (NAMES | --select | --all) [--dryrun]
              key delete NAMES --cloud=CLOUDS [--dryrun]
@@ -44,7 +44,7 @@ class KeyCommand(PluginCommand):
              key group add [--group=GROUPNAMES] [--cloud=CLOUDS] [--dryrun]
              key group add --file=FILENAME
              key group delete [--group=GROUPNAMES] [NAMES] [--dryrun]
-             key group list [--group=GROUPNAMES] [--format=FORMAT]
+             key group list [--group=GROUPNAMES] [--output=OUTPUT]
              key group export --group=GROUNAMES --filename=FILENAME
 
 
@@ -60,7 +60,7 @@ class KeyCommand(PluginCommand):
 
            Options:
               --dir=DIR                     the directory with keys [default: ~/.ssh]
-              --format=FORMAT               the format of the output [default: table]
+              --output=OUTPUT               the format of the output [default: table]
               --source=SOURCE               the source for the keys [default: cm]
               --username=USERNAME           the source for the keys [default: none]
               --name=KEYNAME                The name of a key
@@ -80,7 +80,7 @@ class KeyCommand(PluginCommand):
                 key list --source=git  [--username=USERNAME]
                     lists all keys in git for the specified user. If the
                     name is not specified it is read from cloudmesh4.yaml
-                key list --source=ssh  [--dir=DIR] [--format=FORMAT]
+                key list --source=ssh  [--dir=DIR] [--output=OUTPUT]
                     lists all keys in the directory. If the directory is not
                     specified the default will be ~/.ssh
                 key list NAMES
@@ -100,7 +100,7 @@ class KeyCommand(PluginCommand):
 
                 Once the keys are uploaded to github, they can be listed
 
-                key list [NAME] [--format=FORMAT]
+                key list [NAME] [--output=OUTPUT]
                     list the keys loaded to cloudmesh in the given format:
                     json, yaml, table. table is default. The NAME can be
                     specified and if omitted the name cloudmesh.profile.user
@@ -128,7 +128,7 @@ class KeyCommand(PluginCommand):
                 key group delete [GROUPNAMES] [NAMES] [--dryrun]
                     deletes the named keys from the named groups.
 
-                key group list [GROUPNAMES] [--format=FORMAT]
+                key group list [GROUPNAMES] [--output=OUTPUT]
                     list the key names and details in the group.
 
                 key group upload [GROUPNAMES] [CLOUDS] [--dryrun]

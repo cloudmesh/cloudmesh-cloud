@@ -25,14 +25,13 @@ class Provider(object):
         elif self.kind in ["vagrant", "virtualbox"]:
             provider = VirtualboxCloudProvider
         elif self.kind in ["docker"]:
-            provider = VirtualboxCloudProvider
+            provider = DockerProvider
 
         if provider is None:
             Console.error(f"proider {name} not supported")
             raise ValueError(f"proider {name} not supported")
 
         self.p = provider(name=name, configuration=configuration)
-
 
 
     def cloudname(self):

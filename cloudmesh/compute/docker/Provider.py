@@ -16,6 +16,7 @@ from cloudmesh.common.dotdict import dotdict
 from cloudmesh.management.configuration.config import Config
 from cloudmesh.common.util import path_expand
 from cloudmesh.terminal.Terminal import VERBOSE
+from datetime import datetime
 
 """
 is vagrant up to date
@@ -45,6 +46,16 @@ class Provider(ComputeNodeABC):
         entry["cm"]["kind"] = kind
         entry["cm"]["driver"] = self.cloudtype
         entry["cm"]["cloud"] = self.cloud
+        entry["cm"]["name"] = entry["Name"]
+
+        if kind == 'node':
+            entry["cm"]["updated"] = str(datetime.utcnow())
+            #entry["cm"]["name"] = entry["name"]
+
+            if "Created_at" in entry:
+                entry["cm"]["created"] = str(entry["Created"])
+            if entry["State"]["StartedAt"]:
+                entry["cm"]["started"] = entry["State"]["StartedAt"]
         return entry
 
     output = {
@@ -407,7 +418,20 @@ class Provider(ComputeNodeABC):
     
         :return: an array of dicts representing the nodes
         """
-        return None
+        client = docker.from_env()
+        containers = client.containers.list()
+        pprint(containers)
+        result = []
+        for container in containers:
+            container = dict(container.__dict__)['attrs']
+            # image["repo"],image["tags"] = image["RepoTags"][0].split(":")
+            container["repo"] = None
+            container["tags"] = None
+            container = self.update_dict(container, "node")
+            result.append(container)
+
+        pprint(result)
+        return result
 
     def rename(self, name=None, destination=None):
         """

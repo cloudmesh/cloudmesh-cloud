@@ -139,6 +139,7 @@ class CmDatabase(object):
                     result.append(r[0])
         return result
 
+    """
     # check
     def find(self, query):
         col = self.db[query["collection"]]
@@ -149,8 +150,8 @@ class CmDatabase(object):
         for entry in entries:
             records.append(entry)
         return records
-
     """
+
     # check TODO BUG see previous
     def find(self, collection="cloudmesh", **kwargs):
         col = self.db[collection]
@@ -161,7 +162,6 @@ class CmDatabase(object):
         for entry in entries:
             records.append(entry)
         return records
-    """
 
     # check
     def find_by_id(self, cmid, collection="cloudmesh"):

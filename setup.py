@@ -112,6 +112,7 @@ setup(
         "License :: OSI Approved :: Apache Software License",
         "Operating System :: MacOS :: MacOS X",
         "Operating System :: POSIX :: Linux",
+        "Operating System :: Windows :: 10",
         "Programming Language :: Python :: 3.7",
         "Topic :: Scientific/Engineering",
         "Topic :: System :: Clustering",

@@ -11,8 +11,9 @@ from cloudmesh.common.util import path_expand
 from cloudmesh.mongo.DataBaseDecorator import DatabaseUpdate
 from cloudmesh.mongo.CmDatabase import CmDatabase
 from cloudmesh.management.configuration.name import Name
+from cloudmesh.common.console import Console
 
-
+from cloudmesh.management.configuration.counter import Counter
 
 # noinspection PyPep8
 class SlurmCluster(object):
@@ -62,6 +63,12 @@ class SlurmCluster(object):
 
         return data
 
+    # @DatabaseUpdate
+    # def status(self,job_name):
+    #     return {
+    #         "cloud": self.job.cluster_name,
+    #
+    #     }
 
 
     # noinspection PyDictCreation
@@ -103,32 +110,25 @@ class SlurmCluster(object):
         # tmp_cluster = {cluster_name: dict(slurm_cluster)}
         # slurm_cluster = self.cm_config.get('cloudmesh').get('cluster')[cluster_name]
         # self.batch_config.deep_set(['slurm_cluster'], tmp_cluster)
-
-
-        # self.job = {
-        #     "cm": {
-        #         "cloud": cluster_name,
-        #         "kind": "batch-job",
-        #         "name": job_name,
-        #         "cluster": self.cm_config.get('cloudmesh').get('cluster')[cluster_name]
-        #     },
-        #     "batch": {
-        #         "status": "pending",
-        #         'script_path': script_path.as_posix(),
-        #         'executable_path': executable_path.as_posix(),
-        #         'destination': destination.as_posix(),
-        #         'source': source.as_posix(),
-        #         'experiment_name': experiment_name,
-        #         'companion_file': companion_file.as_posix()
-        #     }
-        # }
-
+        name = Name(order=["name","experiment_name"],
+                    name=job_name,
+                    experiment_name=experiment_name)
+        uid = name.id(name=job_name, experiment_name=experiment_name)
+        print(uid)
+        # return
+        # TODO: remove cloud and kind after fixing CmDatabased update
         self.job = {
+            'uid': uid,
+            "cloud": cluster_name,
+            "kind": "batch-job",
+            "name" :job_name,
+            "cm": {
                 "cloud": cluster_name,
                 "kind": "batch-job",
                 "name": job_name,
-                "cluster": self.cm_config.get('cloudmesh').get('cluster')[
-                    cluster_name],
+                "cluster": self.cm_config.get('cloudmesh').get('cluster')[cluster_name]
+            },
+            "batch": {
                 "status": "pending",
                 'script_path': script_path.as_posix(),
                 'executable_path': executable_path.as_posix(),
@@ -136,7 +136,23 @@ class SlurmCluster(object):
                 'source': source.as_posix(),
                 'experiment_name': experiment_name,
                 'companion_file': companion_file.as_posix()
+            }
         }
+
+        # self.job = {
+        #         "cloud": cluster_name,
+        #         "kind": "batch-job",
+        #         "name": job_name,
+        #         "cluster": self.cm_config.get('cloudmesh').get('cluster')[
+        #             cluster_name],
+        #         "status": "pending",
+        #         'script_path': script_path.as_posix(),
+        #         'executable_path': executable_path.as_posix(),
+        #         'destination': destination.as_posix(),
+        #         'source': source.as_posix(),
+        #         'experiment_name': experiment_name,
+        #         'companion_file': companion_file.as_posix()
+        # }
 
         # job['destination'] = os.path.join(job['remote_path'], job['script_name'])
         # job['remote_slurm_script_path'] = os.path.join(job['remote_path'], job['slurm_script_name'])
@@ -146,8 +162,10 @@ class SlurmCluster(object):
         # self.batch_config.deep_set(['job-metadata'], job_metadata)
 
         # data = self.job_specification()
+        if self.database.exists(self.job)[0]:
+            Console.error("Job already exists")
+            return
         return [self.job]
-
 
     @staticmethod
     def _execute_in_parallel(func_args):

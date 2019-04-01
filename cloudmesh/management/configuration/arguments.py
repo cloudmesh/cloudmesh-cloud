@@ -38,8 +38,10 @@ class Arguments(object):
 
     @staticmethod
     def get_names(arguments, variables):
-        names = arguments["NAME"] or arguments["NAMES"] or arguments[
-            "--name"] or variables["vm"]
+        names = arguments.get("NAME") or arguments.get(
+            "NAMES") or arguments.get(
+            "--name") or variables["vm"]
+        # TODO: bug this only works for vm, but not images and so on
         if names is None:
             Console.error("you need to specify a vm")
             return None

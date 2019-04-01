@@ -5,10 +5,10 @@ flavor
 
     Usage:
         flavor refresh [--cloud=CLOUD] [-v]
-        flavor list [ID] [--cloud=CLOUD] [--format=FORMAT] [--refresh] [-v]
+        flavor list [ID] [--cloud=CLOUD] [--output=OUTPUT] [--refresh] [-v]
         This lists out the flavors present for a cloud
     Options:
-       --format=FORMAT  the output format [default: table]
+       --output=OUTPUT  the output format [default: table]
        --cloud=CLOUD    the cloud name
        --refresh        refreshes the data before displaying it
                         from the cloud

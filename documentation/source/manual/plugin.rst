@@ -7,7 +7,7 @@ plugin
     plugin install PLUGIN [-s]
     plugin uninstall PLUGIN
     plugin list
-    plugin ? [--format=FORMAT]
+    plugin ? [--output=OUTPUT]
 
   Arguments:
     PLUGIN   the name of the plugin

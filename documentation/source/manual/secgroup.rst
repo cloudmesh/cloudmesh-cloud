@@ -4,15 +4,15 @@ secgroup
 ::
 
     Usage:
-        secgroup list [--format=FORMAT]
-        secgroup list --cloud=CLOUD [--format=FORMAT]
-        secgroup list GROUP [--format=FORMAT]
+        secgroup list [--output=OUTPUT]
+        secgroup list --cloud=CLOUD [--output=OUTPUT]
+        secgroup list GROUP [--output=OUTPUT]
         secgroup add GROUP RULE FROMPORT TOPORT PROTOCOL CIDR
         secgroup delete GROUP [--cloud=CLOUD]
         secgroup delete GROUP RULE
         secgroup upload [GROUP] [--cloud=CLOUD]
     Options:
-        --format=FORMAT Specify output format, in one of the following:
+        --output=OUTPUT Specify output format, in one of the following:
                         table, csv, json, yaml, dict. The default value
                         is 'table'.
         --cloud=CLOUD   Name of the IaaS cloud e.g. kilo,chameleoon.
@@ -43,12 +43,12 @@ secgroup
         specified cloud and tenant.
         Security groups are first assembled in a local database.
         Once they are defined they can be added to the clouds.
-        secgroup list [--format=FORMAT]
+        secgroup list [--output=OUTPUT]
             lists all security groups and rules in the database
-        secgroup list GROUP [--format=FORMAT]
+        secgroup list GROUP [--output=OUTPUT]
             lists a given security group and its rules defined
             locally in the database
-        secgroup list --cloud=CLOUD [--format=FORMAT]
+        secgroup list --cloud=CLOUD [--output=OUTPUT]
             lists the security groups and rules on the specified clouds.
         secgroup add GROUP RULE FROMPORT TOPORT PROTOCOL CIDR
             adds a security rule with the given group and the details

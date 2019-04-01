@@ -21,36 +21,23 @@ class ImageCommand(PluginCommand):
         ::
 
             Usage:
-                image list [NAMES] [--cloud=CLOUD] [--refresh] [--format=FORMAT]
+                image list [NAMES] [--cloud=CLOUD] [--refresh] [--output=OUTPUT]
 
             Options:
-               --format=FORMAT  the output format [default: table]
+               --output=OUTPUT  the output format [default: table]
                --cloud=CLOUD    the cloud name
                --refresh        live data taken from the cloud
 
             Description:
-                cm image refresh
                 cm image list
-                cm image list --format=csv
+                cm image list --output=csv
                 cm image list 58c9552c-8d93-42c0-9dea-5f48d90a3188 --refresh
         """
-
-        pprint(arguments)
-
-        # m = Manager()
-
-        # if arguments.FILE:
-        #    print("option a")
-        #    m.list(arguments.FILE)
-
-        # elif arguments.list:
-        #    print("option b")
-        #    m.list("just calling list without parameter")
 
         map_parameters(arguments,
                        "refresh",
                        "cloud",
-                       "format")
+                       "output")
 
         VERBOSE.print(arguments, verbose=9)
 
@@ -70,9 +57,18 @@ class ImageCommand(PluginCommand):
                 provider = Provider(name=cloud)
                 images = provider.images()
 
-                # pprint(images)
+                order = provider.p.output['vm']['order']  # not pretty
+                header = provider.p.output['vm']['header']  # not pretty
 
+                print(Printer.flatwrite(images,
+                                        sort_keys=["name"],
+                                        order=order,
+                                        header=header,
+                                        output=arguments.output)
+                      )
             return ""
+
+
 
         elif arguments.list:
 
@@ -89,17 +85,10 @@ class ImageCommand(PluginCommand):
                     p = Provider(cloud)
                     kind = p.kind
 
-                    # pprint(p.__dict__)
-                    # pprint(p.p.__dict__) # not pretty
-
-                    collection = "{cloud}-node".format(cloud=cloud,
+                    collection = "{cloud}-image".format(cloud=cloud,
                                                        kind=p.kind)
                     db = CmDatabase()
                     vms = db.find(collection=collection)
-
-                    # pprint(vms)
-                    # print(arguments.format)
-                    # print(p.p.output['vm'])
 
                     order = p.p.output['vm']['order']  # not pretty
                     header = p.p.output['vm']['header']  # not pretty
@@ -108,7 +97,7 @@ class ImageCommand(PluginCommand):
                                             sort_keys=["name"],
                                             order=order,
                                             header=header,
-                                            output=arguments.format)
+                                            output=arguments.output)
                           )
 
             except Exception as e:

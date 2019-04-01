@@ -36,7 +36,7 @@ class VmCommand(PluginCommand):
                 vm refresh [--cloud=CLOUDS]
                 vm list [NAMES]
                         [--cloud=CLOUDS]
-                        [--format=FORMAT]
+                        [--output=OUTPUT]
                         [--refresh]
                 vm boot [--name=NAME]
                         [--cloud=CLOUD]
@@ -63,7 +63,7 @@ class VmCommand(PluginCommand):
                 vm ip show [NAMES]
                            [--group=GROUP]
                            [--cloud=CLOUD]
-                           [--format=FORMAT]
+                           [--output=OUTPUT]
                            [--refresh]
                 vm ip inventory [NAMES]
                 vm ssh [NAMES] [--username=USER]
@@ -75,7 +75,7 @@ class VmCommand(PluginCommand):
                 vm rename [OLDNAMES] [NEWNAMES] [--force] [--dryrun]
                 vm wait [--cloud=CLOUD] [--interval=SECONDS]
                 vm info [--cloud=CLOUD]
-                        [--format=FORMAT]
+                        [--output=OUTPUT]
                 vm username USERNAME [NAMES] [--cloud=CLOUD]
                 vm resize [NAMES] [--size=SIZE]
 
@@ -94,7 +94,7 @@ class VmCommand(PluginCommand):
                 OLDNAMES       Old names of the VM while renaming.
 
             Options:
-                --format=FORMAT   the format [default: table]
+                --output=OUTPUT   the format [default: table]
                 -H --modify-knownhosts  Do not modify ~/.ssh/known_hosts file
                                       when ssh'ing into a machine
                 --username=USERNAME   the username to login into the vm. If not
@@ -354,7 +354,7 @@ class VmCommand(PluginCommand):
                         vms = db.find(collection=collection)
 
                         # pprint(vms)
-                        # print(arguments.format)
+                        # print(arguments.output)
                         # print(p.p.output['vm'])
 
                         order = p.p.output['vm']['order']  # not pretty
@@ -364,7 +364,7 @@ class VmCommand(PluginCommand):
                                                 sort_keys=["name"],
                                                 order=order,
                                                 header=header,
-                                                output=arguments.format)
+                                                output=arguments.output)
                               )
 
                 except Exception as e:
@@ -376,7 +376,7 @@ class VmCommand(PluginCommand):
         elif arguments.info:
 
             """
-            vm info [--cloud=CLOUD] [--format=FORMAT]
+            vm info [--cloud=CLOUD] [--output=OUTPUT]
             """
             print("info for the vm")
 
@@ -425,7 +425,7 @@ class VmCommand(PluginCommand):
             vm ip show [NAMES]
                    [--group=GROUP]
                    [--cloud=CLOUD]
-                   [--format=FORMAT]
+                   [--output=OUTPUT]
                    [--refresh]
 
             """

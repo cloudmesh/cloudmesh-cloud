@@ -15,7 +15,7 @@ class SshCommand(PluginCommand):
 
             Usage:
                 ssh table
-                ssh list [--format=FORMAT]
+                ssh list [--output=OUTPUT]
                 ssh cat
                 ssh register NAME PARAMETERS
                 ssh ARGUMENTS
@@ -33,7 +33,7 @@ class SshCommand(PluginCommand):
 
             Options:
                -v       verbose mode
-               --format=FORMAT   the format in which this list is given
+               --output=OUTPUT   the format in which this list is given
                                  formats includes table, json, yaml, dict
                                  [default: table]
                --user=USER       overwrites the username that is

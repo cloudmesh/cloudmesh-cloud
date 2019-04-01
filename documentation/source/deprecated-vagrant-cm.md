@@ -18,11 +18,11 @@ Manual Page
 -----------
 
     Usage:
-      cm-vbox version [--format=FORMAT]
-      cm-vbox image list [--format=FORMAT]
+      cm-vbox version [--output=OUTPUT]
+      cm-vbox image list [--output=OUTPUT]
       cm-vbox image find NAME
       cm-vbox image add NAME
-      cm-vbox vm list [--format=FORMAT] [-v]
+      cm-vbox vm list [--output=OUTPUT] [-v]
       cm-vbox vm delete NAME
       cm-vbox vm config NAME
       cm-vbox vm ip NAME [--all]

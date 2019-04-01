@@ -11,11 +11,11 @@ See <https://github.com/cloudmesh/vagrant>
 
 ```
 Usage:
-  cms vbox version [--format=FORMAT]
-  cms vbox image list [--format=FORMAT]
+  cms vbox version [--output=OUTPUT]
+  cms vbox image list [--output=OUTPUT]
   cms vbox image find NAME
   cms vbox image add NAME
-  cms vbox vm list [--format=FORMAT] [-v]
+  cms vbox vm list [--output=OUTPUT] [-v]
   cms vbox vm delete NAME
   cms vbox vm config NAME
   cms vbox vm ip NAME [--all]
@@ -38,11 +38,11 @@ If you set however the cloud to vbox you can save yourself the vbox command in c
 
 ```
 Usage:
-  cms version [--format=FORMAT]
-  cms image list [--format=FORMAT]
+  cms version [--output=OUTPUT]
+  cms image list [--output=OUTPUT]
   cms image find NAME
   cms image add NAME
-  cms vm list [--format=FORMAT] [-v]
+  cms vm list [--output=OUTPUT] [-v]
   cms vm delete NAME
   cms vm config NAME
   cms vm ip NAME [--all]

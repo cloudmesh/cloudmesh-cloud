@@ -188,7 +188,6 @@ class CmDatabase(object):
             # noinspection PyUnusedLocal
             try:
                 self.col = self.db[entry['collection']]
-
                 data = self.col.find_one({"kind": entry["kind"],
                                           "cloud": entry["cloud"],
                                           "name": entry["name"]
@@ -214,6 +213,34 @@ class CmDatabase(object):
 
         result = entry
         return result
+
+    def alter(self, entries):
+        # for entry in entries:
+        for entry in entries:
+            try:
+                # self.db["{cloud}-{kind}".format(**entry)].update(uniqueKeyVal,{'$set': keyvalToUpdate})
+                entry['modified'] = str(datetime.utcnow())
+                self.db["{cloud}-{kind}".format(**entry)].update({'cm': entry['cm']},{'$set':entry})
+            except Exception as e:
+                Console.error("modifying document {entry}".format(
+                    entry=str(entry)))
+                pass
+        return entries
+
+    def exists(self, entries):
+        '''
+        Check if entry exists in the database
+        :param entries:
+        :return:
+        '''
+        exist_status = []
+        if type(entries) is dict:
+            entries = [entries]
+        for entry in entries:
+            collection = self.db["{cloud}-{kind}".format(**entry)]
+            status = collection.find({'cm': {'$exists':entry['cm']}}).count()>0
+            exist_status.append(status)
+        return exist_status
 
     # check
     def insert(self, d, collection="cloudmesh"):
@@ -243,7 +270,7 @@ class CmDatabase(object):
 
         for entry in _entries:
 
-            pprint(entry)
+            # pprint(entry)
             name = entry['name']
 
             if kwargs is not None:
@@ -294,3 +321,4 @@ class CmDatabase(object):
 
         col = self.db[collection]
         col.drop()
+

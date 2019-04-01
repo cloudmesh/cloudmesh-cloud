@@ -1,6 +1,8 @@
 # Cloudmesh cm v4
 
 [![Downloads](https://img.shields.io/pypi/dm/cm.svg)](https://pypi.python.org/pypi/cloudmesh-community/cm)
+[![Latest Version](https://img.shields.io/pypi/v/cm.svg)](https://pypi.python.org/pypi/cloudmesh-community/cm/)
+[![Supported Python versions](https://img.shields.io/pypi/pyversions/cm.svg)](https://pypi.python.org/pypi/cloudmesh-community/cm/)
 
 
 Please note that the code and documentation are under heavy development and is likely not correct. 

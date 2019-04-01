@@ -97,11 +97,16 @@ Example:
 
         def entries(self):
             return {
-               "cloud": "foo",
-               "kind"": "entries",
-               "name": "test01"
-               "test": "hello"}
-
+             "cm" : {
+                "kind" : "flavor",
+                "driver" : "openstack",
+                "cloud" : "foo",
+                "created" : "2019-04-01 15:59:39.815993",
+                "name" : "m1.xxxlarge",
+                "collection" : "chameleon-flavor",
+                "modified" : "2019-04-01 16:01:11.720274"
+            },
+            
 
 `cloudmesh.example.bar` contains:
 
@@ -109,10 +114,15 @@ Example:
 
         def entries(self):
             return {
-               "cloud": "bar",
-               "kind"": "entries",
-               "name": "test01"
-               "test": "hello"}
+             "cm" : {
+                "kind" : "flavor",
+                "driver" : "openstack",
+                "cloud" : "bar",
+                "created" : "2019-04-01 15:59:39.815993",
+                "name" : "m1.xxxlarge",
+                "collection" : "chameleon-flavor",
+                "modified" : "2019-04-01 16:01:11.720274"
+            },
 
 `cloudmesh.example.provider.foo` contains:
 

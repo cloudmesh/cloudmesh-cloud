@@ -15,6 +15,7 @@ from cloudmesh.common.dotdict import dotdict
 # from cloudmesh.abstractclass import ComputeNodeManagerABC
 from cloudmesh.management.configuration.config import Config
 from cloudmesh.common.util import path_expand
+from cloudmesh.terminal.Terminal import VERBOSE
 
 """
 is vagrant up to date
@@ -94,6 +95,7 @@ class Provider(ComputeNodeABC):
 
     def __init__(self, name=None,
                  configuration="~/.cloudmesh/.cloudmesh4.yaml"):
+        VERBOSE.print(f"Init Docker {name}", verbose=9)
         self.config = Config()
         conf = Config(configuration)["cloudmesh"]
         self.user = conf["profile"]
@@ -147,14 +149,17 @@ class Provider(ComputeNodeABC):
     def images(self):
         client = docker.from_env()
         images = client.images.list()
+        pprint(images)
         result = []
         for image in images:
             image = dict(image.__dict__)['attrs']
             # image["repo"],image["tags"] = image["RepoTags"][0].split(":")
             image["repo"] = None
             image["tags"] = None
-
+            image = self.update_dict(image, self.cloudtype)
             result.append(image)
+
+        pprint(result)
         return result
 
     def delete_image(self, name=None):

@@ -6,7 +6,7 @@ from pymongo import MongoClient
 from cloudmesh.management.configuration.config import Config
 from cloudmesh.common.console import Console
 from cloudmesh.common.parameter import Parameter
-
+from cloudmesh.common.util import banner
 from pprint import pprint
 
 
@@ -178,40 +178,43 @@ class CmDatabase(object):
     # check
     def update(self, entries):
 
+        result = []
         for entry in entries:
-            entry['collection'] = "{cloud}-{kind}".format(**entry)
-            if 'cm' not in entry:
-                entry['cm'] = {}
-            entry['cm']['collection'] = entry['collection']
 
-            # entry["collection"] = collection
+            if 'cm' not in entry:
+                raise ValueError("The cm attribute is not in the entry")
+            entry['cm']['collection'] = "{cloud}-{kind}".format(**entry["cm"])
+
             # noinspection PyUnusedLocal
             try:
-                self.col = self.db[entry['collection']]
-                data = self.col.find_one({"kind": entry["kind"],
-                                          "cloud": entry["cloud"],
-                                          "name": entry["name"]
+                self.col = self.db[entry['cm']['collection']]
+
+                data = self.col.find_one({"cm.kind": entry["cm"]["kind"],
+                                          "cm.cloud": entry["cm"]["cloud"],
+                                          "cm.name": entry["cm"]["name"]
                                           })
+
                 if data is not None:
-                    entry['created'] = data['created']
-                    entry['modified'] = str(datetime.utcnow())
-                    self.col.update({
-                        "kind": entry["kind"],
-                        "cloud": entry["cloud"],
-                        "name": entry["name"]
-                    },
+                    entry['cm']['created'] = data["cm"]['created']
+                    entry['cm']['modified'] = str(datetime.utcnow())
+                    self.col.update(
+                        {
+                            "cm.kind": entry['cm']["kind"],
+                            "cm.cloud": entry['cm']["cloud"],
+                            "cm.name": entry['cm']["name"]
+                        },
                         entry,
                         upsert=True)
                 else:
-                    entry['created'] = entry['modified'] = str(
+                    entry['cm']['created'] = entry['cm']['modified'] = str(
                         datetime.utcnow())
                     self.col.insert(entry)
             except Exception as e:
                 Console.error("uploading document {entry}".format(
                     entry=str(entry)))
                 pass
+            result.append(entry)
 
-        result = entry
         return result
 
     def alter(self, entries):

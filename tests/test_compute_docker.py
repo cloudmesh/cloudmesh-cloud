@@ -59,15 +59,13 @@ class TestName:
         assert "18.09.2" == version.docker.version
         assert 6247962 <= int(version.docker.build)
 
-
+    '''
     def test_03_terminal(self):
         HEADING()
         t1 = Shell.terminal()
         t2 = Shell.terminal(command="pwd")
+    '''
 
-
-
-class d:
     def test_03_images(self):
         HEADING
         images = self.p.images()
@@ -82,6 +80,10 @@ class d:
                                 header=header,
                                 output="table"))
         """
+
+
+class d:
+
 
     def test_04_containers(self):
         HEADING()

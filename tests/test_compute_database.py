@@ -13,9 +13,10 @@ from cloudmesh.management.configuration.SSHkey import SSHkey
 from cloudmesh.management.configuration.config import Config
 from cloudmesh.management.configuration.name import Name
 from cloudmesh.shell.variables import Variables
+from cloudmesh.common.util import banner
 
 
-class TestName:
+class TestDatabase:
 
     def setup(self):
         print()
@@ -47,21 +48,27 @@ class TestName:
         self.testnode = None
         print("\n")
 
+    def test_00_banner(self):
+        banner("START", color="RED")
+
     def test_01_list_flavors(self):
         HEADING()
         flavors = self.p.flavors()
 
     def test_02_list_images(self):
         HEADING()
-        flavors = self.p.images()
-
-    def test_03_list_keys(self):
-        HEADING()
-        self.keys = self.p.keys()
+        images = self.p.images()
 
     def test_03_list_nodes(self):
         HEADING()
-        self.keys = self.p.list()
+        nodes = self.p.list()
+
+
+class a:
+
+    def test_04_list_keys(self):
+        HEADING()
+        self.keys = self.p.keys()
 
 
      # pprint(self.keys)
@@ -72,12 +79,7 @@ class TestName:
         #                    header=["Name", "Fingerprint"])
         #      )
 
-
-
-
-class other:
-
-    def test_02_key_upload(self):
+    def test_05_key_upload(self):
         HEADING()
 
         key = SSHkey()
@@ -87,8 +89,7 @@ class other:
 
         self.test_01_list_keys()
 
-
-    def test_03_list_images(self):
+    def test_06_list_images(self):
         HEADING()
         images= self.p.images()
         #pprint(images)
@@ -99,9 +100,7 @@ class other:
                             header=["Name", "MinDisk", "Updated", "Driver"])
               )
 
-
-
-    def test_04_list_vm(self):
+    def test_07_list_vm(self):
         HEADING()
         vms = self.p.list()
         #pprint (vms)
@@ -128,7 +127,9 @@ class other:
               )
 
 
-    def test_05_list_secgroups(self):
+class a:
+
+    def test_8_list_secgroups(self):
         HEADING()
         secgroups = self.p.list_secgroups()
         for secgroup in secgroups:
@@ -140,29 +141,29 @@ class other:
                                 header=["ip_protocol", "from_port", "to_port", "ip_range"])
                  )
 
-    def test_06_secgroups_add(self):
+    def test_09_secgroups_add(self):
         HEADING()
         self.p.add_secgroup(self.secgroupname)
         self.test_05_list_secgroups()
 
-    def test_07_secgroup_rules_add(self):
+    def test_10_secgroup_rules_add(self):
         HEADING()
         rules = [self.secgrouprule]
         self.p.add_rules_to_secgroup(self.secgroupname, rules)
         self.test_05_list_secgroups()
 
-    def test_08_secgroup_rules_remove(self):
+    def test_11_secgroup_rules_remove(self):
         HEADING()
         rules = [self.secgrouprule]
         self.p.remove_rules_from_secgroup(self.secgroupname, rules)
         self.test_05_list_secgroups()
 
-    def test_09_secgroups_remove(self):
+    def test_12_secgroups_remove(self):
         HEADING()
         self.p.remove_secgroup(self.secgroupname)
         self.test_05_list_secgroups()
 
-    def test_10_create(self):
+    def test_13_create(self):
         HEADING()
         image = "CC-Ubuntu16.04"
         size = "m1.medium"
@@ -186,7 +187,7 @@ class other:
 
         assert node is not None
 
-    def test_11_publicIP_attach(self):
+    def test_14_publicIP_attach(self):
         HEADING()
         pubip = self.p.get_publicIP()
         pprint (pubip)
@@ -201,7 +202,7 @@ class other:
             time.sleep(5)
         self.test_04_list_vm()
 
-    def test_12_publicIP_detach(self):
+    def test_15_publicIP_detach(self):
         print ("detaching and removing public IP...")
         time.sleep(5)
         nodes = self.p.list(raw=True)
@@ -231,12 +232,11 @@ class other:
     #def test_12_list_vm(self):
     #    self.test_04_list_vm()
 
-
-    def test_13_info(self):
+    def test_16_info(self):
         HEADING()
         self.p.info(name=self.name)
 
-    def test_14_destroy(self):
+    def test_17_destroy(self):
         HEADING()
         self.p.destroy(names=self.name)
         nodes = self.p.list()
@@ -246,10 +246,10 @@ class other:
 
         assert node["extra"]["task_state"] == "deleting"
 
-    def test_15_list_vm(self):
+    def test_18_list_vm(self):
         self.test_04_list_vm()
 
-    def test_16_vm_login(self):
+    def test_19_vm_login(self):
         self.test_04_list_vm()
         self.test_10_create()
         # use the self.testnode for this test
@@ -286,7 +286,7 @@ class other:
 
 class other:
 
-    def test_10_rename(self):
+    def test_30_rename(self):
         HEADING()
 
         self.p.rename(name=self.name, destination=self.new_name)

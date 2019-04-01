@@ -46,12 +46,14 @@ class Provider(ComputeNodeABC):
         entry["cm"]["kind"] = kind
         entry["cm"]["driver"] = self.cloudtype
         entry["cm"]["cloud"] = self.cloud
-        if "RepoTags" in entry:
-            entry["cm"]["name"] = entry["RepoTags"][0]
+        if kind == "image":
+            if "RepoTags" in entry:
+                entry["cm"]["name"] = entry["RepoTags"][0]
 
         if kind == 'node':
+
             entry["cm"]["updated"] = str(datetime.utcnow())
-            #entry["cm"]["name"] = entry["name"]
+            entry["cm"]["name"] = entry["Name"]
 
             if "Created_at" in entry:
                 entry["cm"]["created"] = str(entry["Created"])
@@ -161,9 +163,11 @@ class Provider(ComputeNodeABC):
 
         :return: an array of dicts representing the nodes
         """
+
+        print("x")
         client = docker.from_env()
         containers = client.containers.list()
-        pprint(containers)
+
         result = []
         for container in containers:
             container = dict(container.__dict__)['attrs']
@@ -435,14 +439,27 @@ class Provider(ComputeNodeABC):
         return arg
 
 
-    def rename(self, name=None, destination=None):
+    def rename(self, source=None, destination=None):
         """
         rename a node
     
         :param destination:
-        :param name: the current name
+        :param source: the current name
         :return: the dict with the new name
         """
-        raise NotImplementedError
+        result = None
+        client = docker.from_env()
+        containers = client.containers.list()
 
-        return None
+        for container in containers:
+            pprint (container)
+            pprint(container.__dict__['attrs'])
+            entry = container.__dict__['attrs']
+            # if container["cm"]["name"] == source:
+            if entry["Name"] == source:
+                container.rename(destination)
+                result = dict(container.__dict__)['attrs']
+                result = self.update_dict(result, "node")
+                break
+
+        return result

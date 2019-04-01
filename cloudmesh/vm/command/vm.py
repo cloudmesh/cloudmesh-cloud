@@ -12,7 +12,8 @@ from cloudmesh.shell.variables import Variables
 from cloudmesh.terminal.Terminal import VERBOSE
 from cloudmesh.management.configuration.arguments import Arguments
 from cloudmesh.common.Shell import Shell
-
+from cloudmesh.common.error import Error
+from pprint import pprint
 
 class VmCommand(PluginCommand):
 
@@ -80,7 +81,7 @@ class VmCommand(PluginCommand):
                 vm resize [NAMES] [--size=SIZE]
 
             Arguments:
-                FORMAT         the format
+                OUTPUT         the output format
                 COMMAND        positional arguments, the commands you want to
                                execute on the server(e.g. ls -a) separated by ';',
                                you will get a return of executing result instead of login to
@@ -94,7 +95,7 @@ class VmCommand(PluginCommand):
                 OLDNAMES       Old names of the VM while renaming.
 
             Options:
-                --output=OUTPUT   the format [default: table]
+                --output=OUTPUT   the output format [default: table]
                 -H --modify-knownhosts  Do not modify ~/.ssh/known_hosts file
                                       when ssh'ing into a machine
                 --username=USERNAME   the username to login into the vm. If not
@@ -104,7 +105,7 @@ class VmCommand(PluginCommand):
                 --cloud=CLOUD    give a cloud to work on, if not given, selected
                                  or default cloud will be used
                 --count=COUNT    give the number of servers to start
-                --detail         for table print format, a brief version
+                --detail         for table, a brief version
                                  is used as default, use this flag to print
                                  detailed table
                 --flavor=FLAVOR  give the name or id of the flavor
@@ -197,7 +198,7 @@ class VmCommand(PluginCommand):
                        'dryrun',
                        'flavor',
                        'force',
-                       'format',
+                       'output',
                        'group',
                        'image',
                        'interval',
@@ -296,8 +297,8 @@ class VmCommand(PluginCommand):
 
         elif arguments.list:
             # vm list [NAMES]
-            #   [--cloud = CLOUDS]
-            #   [--format = FORMAT]
+            #   [--cloud=CLOUDS]
+            #   [--output=OUPTUT]
             #   [--refresh]
 
             # if no clouds find the clouds of all specified vms by name
@@ -341,31 +342,43 @@ class VmCommand(PluginCommand):
                             p = Provider(cloud)
                             vms = p.list()
 
-                    for cloud in clouds:
-                        p = Provider(cloud)
-                        kind = p.kind
+                            order = p.p.output['vm']['order']  # not pretty
+                            header = p.p.output['vm']['header']  # not pretty
 
-                        # pprint(p.__dict__)
-                        # pprint(p.p.__dict__) # not pretty
+                            print(Printer.flatwrite(vms,
+                                                    sort_keys=["cm.name"],
+                                                    order=order,
+                                                    header=header,
+                                                    output=arguments.output)
+                                  )
 
-                        collection = "{cloud}-node".format(cloud=cloud,
-                                                           kind=p.kind)
-                        db = CmDatabase()
-                        vms = db.find(collection=collection)
+                    else:
+                        for cloud in clouds:
+                            p = Provider(cloud)
+                            kind = p.kind
 
-                        # pprint(vms)
-                        # print(arguments.output)
-                        # print(p.p.output['vm'])
+                            # pprint(p.__dict__)
+                            # pprint(p.p.__dict__) # not pretty
 
-                        order = p.p.output['vm']['order']  # not pretty
-                        header = p.p.output['vm']['header']  # not pretty
+                            collection = "{cloud}-node".format(cloud=cloud,
+                                                               kind=p.kind)
+                            db = CmDatabase()
+                            vms = db.find(collection=collection)
 
-                        print(Printer.flatwrite(vms,
-                                                sort_keys=["name"],
-                                                order=order,
-                                                header=header,
-                                                output=arguments.output)
-                              )
+                            # pprint(vms)
+                            # print(arguments.output)
+                            # print(p.p.output['vm'])
+
+                            order = p.p.output['vm']['order']  # not pretty
+                            header = p.p.output['vm']['header']  # not pretty
+
+
+                            print(Printer.flatwrite(vms,
+                                                    sort_keys=["cm.name"],
+                                                    order=order,
+                                                    header=header,
+                                                    output=arguments.output)
+                                  )
 
                 except Exception as e:
 
@@ -386,6 +399,11 @@ class VmCommand(PluginCommand):
 
             print("rename the vm")
 
+            v = Variables()
+            cloud = v["cloud"]
+
+            p = Provider(cloud)
+
             try:
                 oldnames = Parameter.expand(arguments["OLDNAMES"])
                 newnames = Parameter.expand(arguments["NEWNAMES"])
@@ -398,6 +416,8 @@ class VmCommand(PluginCommand):
                     Console.error("The number of VMs to be renamed is wrong",
                                   traceflag=False)
                 else:
+                    print(oldnames)
+                    print(newnames)
                     for i in range(0, len(oldnames)):
                         oldname = oldnames[i]
                         newname = newnames[i]
@@ -405,18 +425,16 @@ class VmCommand(PluginCommand):
                             Console.ok(
                                 "Rename {} to {}".format(oldname, newname))
                         else:
-                            print("rename")
-                            #
-                            # Vm.rename(cloud=cloud,
-                            #          oldname=oldname,
-                            #          newname=newname,
-                            #          force=force
-                            #          )
+                            print(f"rename {oldname} -> {newname}")
+
+
+                            p.rename(source=oldname, destination=newname)
+
                     msg = "info. OK."
                     Console.ok(msg)
             except Exception as e:
-                # Error.traceback(e)
-                Console.error("Problem deleting instances", traceflag=False)
+                Error.traceback(e)
+                Console.error("Problem renameing instances", traceflag=True)
 
         elif arguments["ip"] and arguments["show"]:
 

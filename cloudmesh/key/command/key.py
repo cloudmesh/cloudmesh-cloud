@@ -54,7 +54,7 @@ class KeyCommand(PluginCommand):
              NAME           The name of the key.
              SOURCE         db, ssh, all
              KEYNAME        The name of a key. For key upload it defaults to the default key name.
-             FORMAT         The format of the output (table, json, yaml)
+             OUTPUT         The format of the output (table, json, yaml)
              FILENAME       The filename with full path in which the key
                             is located
 
@@ -164,7 +164,7 @@ class KeyCommand(PluginCommand):
 
         map_parameters(arguments,
                        'cloud',
-                       'format',
+                       'output',
                        'source',
                        'dir')
 

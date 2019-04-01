@@ -210,7 +210,7 @@ class Provider(ComputeNodeABC):
         :return:
         """
         for element in elements:
-            if (raw and element.name) or element["name"] == name:
+            if (raw and element.name) or element["cm"]["name"] == name:
                 return element
         return None
 

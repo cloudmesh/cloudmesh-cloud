@@ -5,6 +5,7 @@ colorama
 config
 coverage
 docopt
+docker
 idna
 oyaml
 pymongo

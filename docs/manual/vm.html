@@ -197,7 +197,7 @@
   <div class="section" id="vm">
 <h1>9.4. vm<a class="headerlink" href="#vm" title="Permalink to this headline">¶</a></h1>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Usage</span><span class="p">:</span>
-    <span class="n">vm</span> <span class="n">default</span> <span class="p">[</span><span class="o">--</span><span class="n">cloud</span><span class="o">=</span><span class="n">CLOUD</span><span class="p">][</span><span class="o">--</span><span class="nb">format</span><span class="o">=</span><span class="n">FORMAT</span><span class="p">]</span>
+    <span class="n">vm</span> <span class="n">default</span> <span class="p">[</span><span class="o">--</span><span class="n">cloud</span><span class="o">=</span><span class="n">CLOUD</span><span class="p">][</span><span class="o">--</span><span class="n">output</span><span class="o">=</span><span class="n">OUTPUT</span><span class="p">]</span>
     <span class="n">vm</span> <span class="n">refresh</span> <span class="p">[</span><span class="nb">all</span><span class="p">][</span><span class="o">--</span><span class="n">cloud</span><span class="o">=</span><span class="n">CLOUD</span><span class="p">]</span>
     <span class="n">vm</span> <span class="n">boot</span> <span class="p">[</span><span class="o">--</span><span class="n">name</span><span class="o">=</span><span class="n">NAME</span><span class="p">]</span>
             <span class="p">[</span><span class="o">--</span><span class="n">cloud</span><span class="o">=</span><span class="n">CLOUD</span><span class="p">]</span>
@@ -248,7 +248,7 @@
     <span class="n">vm</span> <span class="n">ip</span> <span class="n">show</span> <span class="p">[</span><span class="n">NAMES</span><span class="p">]</span>
                <span class="p">[</span><span class="o">--</span><span class="n">group</span><span class="o">=</span><span class="n">GROUP</span><span class="p">]</span>
                <span class="p">[</span><span class="o">--</span><span class="n">cloud</span><span class="o">=</span><span class="n">CLOUD</span><span class="p">]</span>
-               <span class="p">[</span><span class="o">--</span><span class="nb">format</span><span class="o">=</span><span class="n">FORMAT</span><span class="p">]</span>
+               <span class="p">[</span><span class="o">--</span><span class="n">output</span><span class="o">=</span><span class="n">OUTPUT</span><span class="p">]</span>
                <span class="p">[</span><span class="o">--</span><span class="n">refresh</span><span class="p">]</span>
     <span class="n">vm</span> <span class="n">ip</span> <span class="n">inventory</span> <span class="p">[</span><span class="n">NAMES</span><span class="p">]</span>
                     <span class="p">[</span><span class="o">--</span><span class="n">header</span><span class="o">=</span><span class="n">HEADER</span><span class="p">]</span>
@@ -264,12 +264,12 @@
     <span class="n">vm</span> <span class="nb">list</span> <span class="p">[</span><span class="n">NAMES</span><span class="p">]</span>
             <span class="p">[</span><span class="o">--</span><span class="n">cloud</span><span class="o">=</span><span class="n">CLOUDS</span><span class="o">|--</span><span class="n">active</span><span class="p">]</span>
             <span class="p">[</span><span class="o">--</span><span class="n">group</span><span class="o">=</span><span class="n">GROUP</span><span class="p">]</span>
-            <span class="p">[</span><span class="o">--</span><span class="nb">format</span><span class="o">=</span><span class="n">FORMAT</span><span class="p">]</span>
+            <span class="p">[</span><span class="o">--</span><span class="n">output</span><span class="o">=</span><span class="n">OUTPUT</span><span class="p">]</span>
             <span class="p">[</span><span class="o">--</span><span class="n">refresh</span><span class="p">]</span>
     <span class="n">vm</span> <span class="n">status</span> <span class="p">[</span><span class="n">NAMES</span><span class="p">]</span>
     <span class="n">vm</span> <span class="n">wait</span> <span class="p">[</span><span class="o">--</span><span class="n">cloud</span><span class="o">=</span><span class="n">CLOUD</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">interval</span><span class="o">=</span><span class="n">SECONDS</span><span class="p">]</span>
     <span class="n">vm</span> <span class="n">info</span> <span class="p">[</span><span class="o">--</span><span class="n">cloud</span><span class="o">=</span><span class="n">CLOUD</span><span class="p">]</span>
-            <span class="p">[</span><span class="o">--</span><span class="nb">format</span><span class="o">=</span><span class="n">FORMAT</span><span class="p">]</span>
+            <span class="p">[</span><span class="o">--</span><span class="n">output</span><span class="o">=</span><span class="n">OUTPUT</span><span class="p">]</span>
     <span class="n">vm</span> <span class="n">check</span> <span class="n">NAME</span>
     <span class="n">vm</span> <span class="n">username</span> <span class="n">USERNAME</span> <span class="p">[</span><span class="n">NAMES</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">cloud</span><span class="o">=</span><span class="n">CLOUD</span><span class="p">]</span>
     <span class="n">vm</span> <span class="n">resize</span> <span class="p">[</span><span class="n">SIZE</span><span class="p">]</span>

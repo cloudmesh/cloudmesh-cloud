@@ -93,9 +93,10 @@
 <li class="toctree-l3"><a class="reference internal" href="#source-installation-for-development">3.1.2. Source installation for development</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#installation-of-mongod">3.2. Installation of mongod</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#one-line-installer-proposed">3.3. One Line installer (proposed)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#anaconda-and-conda-proposed">3.4. Anaconda and Conda (proposed)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#updating-cloudmesh-from-source">3.2. Updating cloudmesh from source</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#installation-of-mongod">3.3. Installation of mongod</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#one-line-installer-proposed">3.4. One Line installer (proposed)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#anaconda-and-conda-proposed">3.5. Anaconda and Conda (proposed)</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">4. Quickstart (proposed)</a></li>
@@ -240,8 +241,50 @@ pip install -e .
 </div>
 </div>
 </div>
+<div class="section" id="updating-cloudmesh-from-source">
+<h2>3.2. Updating cloudmesh from source<a class="headerlink" href="#updating-cloudmesh-from-source" title="Permalink to this headline">¶</a></h2>
+<p>To update cloudmesh form source you will need yo update all source packages.
+Make sure to place all your code in the current directory, or locate the
+directory in your system where you prviously have git cloned it Now the update
+is easy:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span> <span class="nv">SRC</span><span class="o">=</span><span class="sb">`</span><span class="nb">pwd</span><span class="sb">`</span>
+
+<span class="nb">cd</span> <span class="nv">$SRC</span>/cloudmesh.common
+git pull
+pip install -e .
+<span class="nb">cd</span> <span class="nv">$SRC</span>/cloudmesh.cmd5
+git pull
+pip install -e .
+<span class="nb">cd</span> <span class="nv">$SRC</span>/cloudmesh.sys
+git pull
+pip install -e .
+<span class="nb">cd</span> <span class="nv">$SRC</span>/cloudmesh.openapi
+git pull
+pip install -e .
+git pull
+<span class="nb">cd</span> <span class="nv">$SRC</span>/cm
+pip install -e .
+</pre></div>
+</div>
+<p>However we also have a command called</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ cms <span class="nb">source</span> install
+</pre></div>
+</div>
+<p>assuming you use ssh as the protocoll to interface with git.
+Please make sure your cloudmesh4.yaml file contains the location where
+you like to install cloudmesh in. An example is</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cloudmesh</span><span class="p">:</span>
+  <span class="n">source</span><span class="p">:</span>
+    <span class="n">common</span><span class="p">:</span> <span class="o">~/</span><span class="n">Desktop</span><span class="o">/</span><span class="n">github</span><span class="o">/</span><span class="n">cloudmesh</span>
+    <span class="n">cmd5</span><span class="p">:</span> <span class="o">~/</span><span class="n">Desktop</span><span class="o">/</span><span class="n">github</span><span class="o">/</span><span class="n">cloudmesh</span>
+    <span class="n">openapi</span><span class="p">:</span> <span class="o">~/</span><span class="n">Desktop</span><span class="o">/</span><span class="n">github</span><span class="o">/</span><span class="n">cloudmesh</span>
+    <span class="n">sys</span><span class="p">:</span> <span class="o">~/</span><span class="n">Desktop</span><span class="o">/</span><span class="n">github</span><span class="o">/</span><span class="n">cloudmesh</span>
+    <span class="n">cm</span><span class="p">:</span> <span class="o">~/</span><span class="n">Desktop</span><span class="o">/</span><span class="n">github</span><span class="o">/</span><span class="n">cloudmesh</span><span class="o">-</span><span class="n">community</span>
+</pre></div>
+</div>
+</div>
 <div class="section" id="installation-of-mongod">
-<h2>3.2. Installation of mongod<a class="headerlink" href="#installation-of-mongod" title="Permalink to this headline">¶</a></h2>
+<h2>3.3. Installation of mongod<a class="headerlink" href="#installation-of-mongod" title="Permalink to this headline">¶</a></h2>
 <p>First, you will need to install a <code class="docutils literal notranslate"><span class="pre">cloudmesh4.yaml</span></code> file, if you have
 not done this before. The easieast way to do so is with the command</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ cms <span class="nb">help</span>
@@ -281,14 +324,14 @@ $ cms admin mongo stop
 <p>For cloudmesh to work properly, please start mongo.</p>
 </div>
 <div class="section" id="one-line-installer-proposed">
-<h2>3.3. One Line installer (proposed)<a class="headerlink" href="#one-line-installer-proposed" title="Permalink to this headline">¶</a></h2>
+<h2>3.4. One Line installer (proposed)<a class="headerlink" href="#one-line-installer-proposed" title="Permalink to this headline">¶</a></h2>
 <p>:warning: Does not work yet</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>wget -qO - http://cloudmesh.github.io/get/cm4/osx <span class="p">|</span> sh 
 </pre></div>
 </div>
 </div>
 <div class="section" id="anaconda-and-conda-proposed">
-<h2>3.4. Anaconda and Conda (proposed)<a class="headerlink" href="#anaconda-and-conda-proposed" title="Permalink to this headline">¶</a></h2>
+<h2>3.5. Anaconda and Conda (proposed)<a class="headerlink" href="#anaconda-and-conda-proposed" title="Permalink to this headline">¶</a></h2>
 <p>At this time we do not yet support conda. But if you like to
 contribute an instalation package, please do so.</p>
 <p>It may just very well work with our pip installs, but we have not

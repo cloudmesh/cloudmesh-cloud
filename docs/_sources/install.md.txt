@@ -58,6 +58,55 @@ cd $SRC/cm
 pip install -e .
 ```
 
+## Updating cloudmesh from source
+
+To update cloudmesh form source you will need yo update all source packages.
+Make sure to place all your code in the current directory, or locate the
+directory in your system where you prviously have git cloned it Now the update
+is easy: 
+
+
+```bash
+export SRC=`pwd`
+
+cd $SRC/cloudmesh.common
+git pull
+pip install -e .
+cd $SRC/cloudmesh.cmd5
+git pull
+pip install -e .
+cd $SRC/cloudmesh.sys
+git pull
+pip install -e .
+cd $SRC/cloudmesh.openapi
+git pull
+pip install -e .
+git pull
+cd $SRC/cm
+pip install -e .
+```
+
+However we also have a command called 
+
+```bash
+$ cms source install
+```
+
+assuming you use ssh as the protocoll to interface with git.
+Please make sure your cloudmesh4.yaml file contains the location where 
+you like to install cloudmesh in. An example is
+
+```
+cloudmesh:
+  source:
+    common: ~/Desktop/github/cloudmesh
+    cmd5: ~/Desktop/github/cloudmesh
+    openapi: ~/Desktop/github/cloudmesh
+    sys: ~/Desktop/github/cloudmesh
+    cm: ~/Desktop/github/cloudmesh-community
+```
+
+
 ## Installation of mongod
 
 First, you will need to install a `cloudmesh4.yaml` file, if you have

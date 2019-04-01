@@ -71,6 +71,7 @@ psutil
 connexion[swagger-ui]
 yamllint
 azure
+munch
 """.split("\n")
 
 

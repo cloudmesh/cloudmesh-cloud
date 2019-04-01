@@ -27,7 +27,7 @@ class MongoInstaller(object):
         self.expanduser()
 
     #
-    # TODO: THis function seems duplicated
+    # TODO: This function seems duplicated
     #
     def expanduser(self):
         for key in self.data:

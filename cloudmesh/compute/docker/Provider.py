@@ -89,6 +89,7 @@ class Provider(ComputeNodeABC):
                              "Os",
                              "Size",
                              "Architecture"]},
+        # TODO: FLAVORS ARE NOT DEFINED
         "flavor": {"sort_keys": ["name",
                                  "vcpus",
                                  "disk"],
@@ -132,8 +133,6 @@ class Provider(ComputeNodeABC):
 
           The output looks like this
 
-
-
         """
 
         def get_version(command):
@@ -173,7 +172,6 @@ class Provider(ComputeNodeABC):
             container = self.update_dict(container, "node")
             result.append(container)
 
-        pprint(result)
         return result
 
     def images(self):
@@ -197,8 +195,7 @@ class Provider(ComputeNodeABC):
             # read name form config
         else:
             try:
-                command = f"vagrant box remove {name}"
-                result = Shell.execute(command, shell=True)
+                raise NotImplementedError
             except Exception as e:
                 print(e)
 
@@ -215,9 +212,7 @@ class Provider(ComputeNodeABC):
             # read name form config
         else:
             try:
-                command = f"vagrant box add {name} --provider virtualbox"
-                result = Shell.live(command)
-                assert result.status == 0
+                raise NotImplementedError
             except Exception as e:
                 print(e)
                 print(result)
@@ -231,7 +226,7 @@ class Provider(ComputeNodeABC):
 
         :return:
         """
-        return "A new version of Vagrant is available" not in r
+        raise NotImplementedError
 
     def start(self, name, version, directory):
         """
@@ -246,6 +241,7 @@ class Provider(ComputeNodeABC):
         os.system(command)
 
     def create(self, **kwargs):
+        raise NotImplementedError
 
         return None
 
@@ -259,6 +255,8 @@ class Provider(ComputeNodeABC):
         :param name:
         :return: The dict representing the node including updated status
         """
+        raise NotImplementedError
+
         pass
 
     def info(self, name=None):
@@ -268,6 +266,7 @@ class Provider(ComputeNodeABC):
         :param name:
         :return: The dict representing the node including updated status
         """
+        raise NotImplementedError
 
         return None
 
@@ -279,6 +278,8 @@ class Provider(ComputeNodeABC):
         :return: The dict representing the node
         """
         # TODO: find last name if name is None
+        raise NotImplementedError
+
         return None
 
     def resume(self, name=None):
@@ -289,6 +290,8 @@ class Provider(ComputeNodeABC):
         :return: the dict of the node
         """
         # TODO: find last name if name is None
+        raise NotImplementedError
+
         return None
 
     def destroy(self, name=None):
@@ -297,11 +300,14 @@ class Provider(ComputeNodeABC):
         :param name: the name of the node
         :return: the dict of the node
         """
+        raise NotImplementedError
+
         return None
 
     # @classmethod
     def delete(self, name=None):
         # TODO: check
+        raise NotImplementedError
 
         return None
 
@@ -437,4 +443,6 @@ class Provider(ComputeNodeABC):
         :param name: the current name
         :return: the dict with the new name
         """
+        raise NotImplementedError
+
         return None

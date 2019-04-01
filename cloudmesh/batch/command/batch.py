@@ -96,6 +96,11 @@ class BatchCommand(PluginCommand):
                  source ,,,
                  destination: {cloudmesh.experiment.job.directory}
 
+            - queue associates with server (cloud)
+            - job could be run on queue and is associated with one or multiple
+            servers
+            - experiment is same as job, but gives some facility to run it
+            multiple times
 
             I do not know what companion file is
 
@@ -197,7 +202,10 @@ class BatchCommand(PluginCommand):
             )
 
             return ""
-        # handling batch job create
+        # handling batch job create sample command c
+        # cms batch job create --name newjob1 --cluster slurm-taito
+        # --script ./1_argsin_stdout.slurm --executable
+        # ./1_argsin_stdout_script.sh --destination /home/vafanda --source ~/tmp
         elif    arguments.job and \
                 arguments.create and \
                 arguments.name and \

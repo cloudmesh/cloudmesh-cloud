@@ -260,3 +260,58 @@ The manual page can be called with
 ```bash
 $ sniffer --help
 ```
+
+## Profiling
+
+Nosetest can be augmented with profiles that showcase some of the internal time
+spend on different functions and methods. To do so install 
+
+* <https://github.com/msherry/nose-cprof>
+
+```bash
+$ pip install nose-cprof
+$ pip install cprofilev
+$ pip install snakeviz
+```
+
+Then call the nosetest with the additional option 
+
+```bash
+$ nosetests --with-cprofile
+```
+
+The output will be stored by default in `stats.dat`
+
+To view it use cprofilev
+
+```bash
+$ cprofilev -f stats.dat
+```
+
+To view it with snakeviz use 
+
+```bash
+$ snakeviz -f stats.dat
+```
+
+
+To visualize the call graph we use pygraphviz. Unfortunatley it has an error and only produces png files.
+Thus we use a modified version and instal it from source:
+
+```bash
+cd /tmp
+$ git clone git@github.com:laszewsk/pycallgraph.git
+$ cd pycallgraph
+$ pip install .
+```
+
+Next we go to the cm directory and can creat a call graph from a python program
+and open the output
+
+```bash
+$ pycallgraph graphviz -- ../tests/test_key.py 
+$ open pycallgraph.pdf 
+```
+
+
+

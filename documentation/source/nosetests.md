@@ -160,3 +160,22 @@ OK
 During development phase you want to use `nosetests -v --nocapture tests/test_key.py`
 
 WHich prints all print statements also
+
+## Timed decorator
+
+In some cases you may want to use a timed decorator that limits the time a test
+is executed for. An example is given next:
+
+```python
+############################################
+# nosetest -v --nocapture 
+# nosetests tests/test_timed.py
+# nosetests -v --nocapture tests/test_timed.py
+############################################
+
+class TestTimed:
+
+    @timed(1.0)
+    def test_10_sleep_which_fails():
+        time.sleep(2.0)
+```

@@ -179,3 +179,24 @@ class TestTimed:
     def test_10_sleep_which_fails():
         time.sleep(2.0)
 ```
+
+## Setup
+
+The setup in a class can be controlled by the following functions. We include in
+the print statement when they are called:
+
+```python
+   def setup(self):
+        print ("setup() is called before each test method")
+ 
+    def teardown(self):
+        print ("teardown() is called after each test method")
+ 
+    @classmethod
+    def setup_class(cls):
+        print ("setup_class()is called before any methods in this class")
+ 
+    @classmethod
+    def teardown_class(cls):
+        print ("teardown_class() is called after any methods in this class")
+```

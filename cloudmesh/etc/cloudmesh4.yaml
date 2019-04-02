@@ -102,7 +102,7 @@ cloudmesh:
         heading: AWS
         host: azure.mocrosoft.com
         label: Azure
-        kind: azure
+        kind: azure_arm
         version: TBD
       default:
         image: 'Canonical:UbuntuServer:16.04-LTS:latest'

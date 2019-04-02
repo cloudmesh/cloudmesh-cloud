@@ -21,7 +21,7 @@ class TestName:
     def setup(self):
         banner("setup", c="-")
         self.user = Config()["cloudmesh"]["profile"]["user"]
-        self.clouduser = 'cc'
+        self.clouduser = 'azureuser'
         self.name_generator = Name(
             experiment="exp",
             group="grp",
@@ -43,12 +43,78 @@ class TestName:
                              "ip_range": "129.79.0.0/16"}
         self.testnode = None
 
-    def test_001_list_keys(self):
+    def test_00_show_conf(self):
         HEADING()
         pprint(self.p.user)
         pprint(self.p.cloudtype)
         pprint(self.p.spec)
 
+    def test_03_list_flavors(self):
+        HEADING()
+        flavors = self.p.flavors()
+        #pprint(flavors)
+
+        print(Printer.flatwrite(flavors,
+                                sort_keys=(
+                                    "name", "ram", "disk",
+                                    "extra.numberOfCores",
+                                    "price"),
+                                order=["name", "ram", "disk",
+                                       "extra.numberOfCores",
+                                       "price"],
+                                header=["Name", "ram (MB)", "disk (GB)",
+                                        "Cores",
+                                        "price"])
+              )
+
+        """
+        {'bandwidth': 0,
+          'cm': {'cloud': 'azure',
+                 'created': '2019-04-02 18:22:54.929946',
+                 'driver': 'openstack',
+                 'kind': 'flavor',
+                 'name': 'Standard_L4s'},
+          'disk': 678.0,
+          'extra': {'maxDataDiskCount': 16,
+                    'numberOfCores': 4,
+                    'osDiskSizeInMB': 1047552},
+          'id': 'Standard_L4s',
+          'name': 'Standard_L4s',
+          'price': 0,
+          'ram': 32768,
+          'updated': '2019-04-02 18:22:54.929946'},
+        """
+
+    def test_04_list_vm(self):
+        HEADING()
+        vms = self.p.list()
+        #pprint(vms)
+
+        #'''
+        print(Printer.flatwrite(vms,
+                                sort_keys=("name"),
+                                order=["name",
+                                       "state",
+                                       "extra.properties.hardwareProfile.vmSize",
+                                       "extra.properties.storageProfile.imageReference.sku",
+                                       "extra.properties.storageProfile.osDisk.osType",
+                                       "extra.properties.storageProfile.osDisk.diskSizeGB",
+                                       "extra.properties.osProfile.adminUsername",
+                                       "private_ips",
+                                       "public_ips"],
+                                header=["Name",
+                                        "State",
+                                        "vmSize",
+                                        "Image",
+                                        "OS Type",
+                                        "Disk (GB)",
+                                        "Admin User",
+                                        "Private ips",
+                                        "Public ips"])
+              )
+        #'''
+
+class a:
     def test_01_list_keys(self):
         HEADING()
         self.keys = self.p.keys()
@@ -69,61 +135,6 @@ class TestName:
         self.p.key_upload(key)
 
         self.test_01_list_keys()
-
-    def test_03_list_flavors(self):
-        HEADING()
-        flavors = self.p.flavors()
-        pprint(flavors)
-
-        print(Printer.flatwrite(flavors,
-                                sort_keys=(
-                                    "name", "extra.cores",
-                                    "extra.max_data_disks", "price"),
-                                order=["name", "extra.cores",
-                                       "extra.max_data_disks", "price"],
-                                header=["Name", "VCPUS", "max_data_disks",
-                                        "Price"])
-              )
-
-        """
-        {'bandwidth': None,
-          'cloud': 'azure',
-          'created': '2019-02-22 21:15:09.897719',
-          'disk': 127,
-          'driver': 'azure_asm',
-          'extra': {'cores': 16, 'max_data_disks': 32},
-          'id': 'Standard_D14',
-          'kind': 'flavor',
-          'name': 'D14 Faster Compute Instance',
-          'price': '1.6261',
-          'ram': 114688,
-          'updated': '2019-02-22 21:15:09.897719'}
-        """
-
-    def test_04_list_vm(self):
-        HEADING()
-        vms = self.p.list()
-        pprint(vms)
-
-        print(Printer.flatwrite(vms,
-                                sort_keys=("name"),
-                                order=["name",
-                                       "state",
-                                       "extra.task_state",
-                                       "extra.vm_state",
-                                       "extra.userId",
-                                       "extra.key_name",
-                                       "private_ips",
-                                       "public_ips"],
-                                header=["Name",
-                                        "State",
-                                        "Task state",
-                                        "VM state",
-                                        "User Id",
-                                        "SSHKey",
-                                        "Private ips",
-                                        "Public ips"])
-              )
 
     def test_17_list_images(self):
         HEADING()

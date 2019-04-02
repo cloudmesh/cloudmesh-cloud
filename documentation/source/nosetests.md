@@ -272,6 +272,7 @@ spend on different functions and methods. To do so install
 $ pip install nose-cprof
 $ pip install cprofilev
 $ pip install snakeviz
+$ pip install profiling
 ```
 
 Then call the nosetest with the additional option 
@@ -309,9 +310,20 @@ Next we go to the cm directory and can creat a call graph from a python program
 and open the output
 
 ```bash
-$ pycallgraph graphviz -- ../tests/test_key.py 
+$ pycallgraph graphviz -- tests/test_key.py 
 $ open pycallgraph.pdf 
 ```
 
+Another very usefule module is `profiling` which can be invoked with
 
+```bash
+$ profiling tests/test_key.py
+```
+
+
+To do live profiling you can use
+
+```bash
+$ profiling live-profile tests/test_key.py
+```
 

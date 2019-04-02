@@ -230,3 +230,33 @@ Will print the time for each test as shown in this partial output:
 ----------------------------------------------------------------------
 Ran 2 tests in 0.334s
 ```
+
+## Doctests in Cloudmesh
+
+Out of principal we will not create an test running doctests.
+
+
+## Sniffer (not tested)
+
+often we make changes frequently and like to get an imediate feedback on the
+changes made. For the automatic repeated execution on change we can use the tool
+`sniffer`.
+
+```bash
+$ sniffer -x--with-spec -x--spec-color
+```
+
+This will execute the nosetests upon change. To specify a specific test you can
+pass along the name of the python test.
+
+To install it use
+
+```bash
+$ pip install sniffer
+```
+
+The manual page can be called with 
+
+```bash
+$ sniffer --help
+```

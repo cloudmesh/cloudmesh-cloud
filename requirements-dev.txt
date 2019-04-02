@@ -2,3 +2,6 @@ pylint
 sphinx
 recommonmark
 sphinx_rtd_theme
+nose-timer
+nose
+flake8

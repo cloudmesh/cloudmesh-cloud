@@ -200,3 +200,33 @@ the print statement when they are called:
     def teardown_class(cls):
         print ("teardown_class() is called after any methods in this class")
 ```
+
+## Timer
+
+The following extension adds timers to nosetests
+
+* <https://github.com/mahmoudimus/nose-timer>
+
+It is installed with 
+
+```bash
+$ pip install nose-timer
+```
+
+It is started with the flag `--with-timer`
+
+Thus, 
+
+```bash
+$ nosetests -v --nocapture --with-timer tests/test_key.py
+```
+
+Will print the time for each test as shown in this partial output:
+
+```
+...
+[success] 58.61% tests.test_key.TestName.test_02_git: 0.1957s
+[success] 41.39% tests.test_key.TestName.test_01_key: 0.1382s
+----------------------------------------------------------------------
+Ran 2 tests in 0.334s
+```

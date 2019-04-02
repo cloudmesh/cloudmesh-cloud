@@ -23,9 +23,8 @@ class Provider(ComputeNodeABC):
     ProviderMapper = {
         "openstack": LibcloudProvider.OPENSTACK,
         "aws": LibcloudProvider.EC2,
-        "google": LibcloudProvider.GCE
-        #"azure_asm": LibcloudProvider.AZURE,
-        #"azure_arm": LibcloudProvider.AZURE_ARM
+        "google": LibcloudProvider.GCE,
+        "azure_arm": LibcloudProvider.AZURE_ARM
     }
 
     """
@@ -118,12 +117,14 @@ class Provider(ComputeNodeABC):
                                             ex_force_auth_version='2.0_password',
                                             ex_tenant_name=cred[
                                                 'OS_TENANT_NAME'])
-            elif self.cloudtype == 'azure_asm':
+            elif self.cloudtype == 'azure_arm':
 
                 self.cloudman = self.driver(
+                    tenant_id=cred['AZURE_TENANT_ID'],
                     subscription_id=cred['AZURE_SUBSCRIPTION_ID'],
-                    key_file=path_expand(cred['AZURE_KEY_FILE'])
-
+                    key=cred['AZURE_APPLICATION_ID'],
+                    secret=cred['AZURE_SECRET_KEY'],
+                    region=cred['AZURE_REGION']
                 )
 
             elif self.cloudtype == 'aws':

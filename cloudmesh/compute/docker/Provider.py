@@ -41,6 +41,22 @@ class Provider(ComputeNodeABC):
         return rc
 
     def update_dict(self, entry, kind="node"):
+        """
+        updates the dict with
+
+          "cm": {
+             "kind": ...,
+             "name": ...,
+             "cloud": ...,
+             "driver" ...,
+             }
+        :param entry: the entru
+        :type entry: dict
+        :param kind: a string representing the kind
+        :type kind: string
+        :return: the modified entry
+        :rtype: dict
+        """
         if "cm" not in entry:
             entry["cm"] = {}
         entry["cm"]["kind"] = kind

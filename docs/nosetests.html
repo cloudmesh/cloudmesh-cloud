@@ -104,7 +104,12 @@
 <li class="toctree-l1"><a class="reference internal" href="conventions.html">1. Code Conventions</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">2. Nosetests</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#installation">2.1. Installation</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#example">2.2. Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#test-specification-and-execution">2.2. Test Specification and Execution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#timed-decorator">2.3. Timed decorator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#test-setup">2.4. Test Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#test-timer">2.5. Test Timer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#doctests-in-cloudmesh">2.6. Doctests in Cloudmesh</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#sniffer-not-tested">2.7. Sniffer (not tested)</a></li>
 </ul>
 </li>
 </ul>
@@ -211,8 +216,8 @@ All nose tests are included in the folder <code class="docutils literal notransl
 <p>Note: That at this time we have not yet introduced the order of the tests by
 introducing numbers in the tests.</p>
 </div>
-<div class="section" id="example">
-<h2>2.2. Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="test-specification-and-execution">
+<h2>2.2. Test Specification and Execution<a class="headerlink" href="#test-specification-and-execution" title="Permalink to this headline">¶</a></h2>
 <p>A simple example for a test is</p>
 <ul class="simple">
 <li><a class="reference external" href="https://github.com/cloudmesh-community/cm/blob/master/tests/test_key.py">https://github.com/cloudmesh-community/cm/blob/master/tests/test_key.py</a></li>
@@ -247,7 +252,7 @@ with the command</p>
 <p>First, we import the needed classes and methods we like to test.
 We define a class, and than we define the methods. such as the setup and the actual tests.</p>
 <p>your run it with</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ nosetests -v --nocapture tests/test_key.py<span class="sb">`</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ nosetests -v --nocapture tests/test_key.py
 </pre></div>
 </div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">############################################</span>
@@ -315,6 +320,91 @@ but just reports if tests fail or succeed.</p>
 </div>
 <p>During development phase you want to use <code class="docutils literal notranslate"><span class="pre">nosetests</span> <span class="pre">-v</span> <span class="pre">--nocapture</span> <span class="pre">tests/test_key.py</span></code></p>
 <p>WHich prints all print statements also</p>
+</div>
+<div class="section" id="timed-decorator">
+<h2>2.3. Timed decorator<a class="headerlink" href="#timed-decorator" title="Permalink to this headline">¶</a></h2>
+<p>In some cases you may want to use a timed decorator that limits the time a test
+is executed for. An example is given next:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">############################################</span>
+<span class="c1"># nosetest -v --nocapture </span>
+<span class="c1"># nosetests tests/test_timed.py</span>
+<span class="c1"># nosetests -v --nocapture tests/test_timed.py</span>
+<span class="c1">############################################</span>
+
+<span class="k">class</span> <span class="nc">TestTimed</span><span class="p">:</span>
+
+    <span class="nd">@timed</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">test_10_sleep_which_fails</span><span class="p">():</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">2.0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="test-setup">
+<h2>2.4. Test Setup<a class="headerlink" href="#test-setup" title="Permalink to this headline">¶</a></h2>
+<p>The setup in a class can be controlled by the following functions. We include in
+the print statement when they are called:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>   <span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">print</span> <span class="p">(</span><span class="s2">&quot;setup() is called before each test method&quot;</span><span class="p">)</span>
+ 
+    <span class="k">def</span> <span class="nf">teardown</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">print</span> <span class="p">(</span><span class="s2">&quot;teardown() is called after each test method&quot;</span><span class="p">)</span>
+ 
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">setup_class</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="k">print</span> <span class="p">(</span><span class="s2">&quot;setup_class()is called before any methods in this class&quot;</span><span class="p">)</span>
+ 
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">teardown_class</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="k">print</span> <span class="p">(</span><span class="s2">&quot;teardown_class() is called after any methods in this class&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="test-timer">
+<h2>2.5. Test Timer<a class="headerlink" href="#test-timer" title="Permalink to this headline">¶</a></h2>
+<p>The following extension adds timers to nosetests</p>
+<ul class="simple">
+<li><a class="reference external" href="https://github.com/mahmoudimus/nose-timer">https://github.com/mahmoudimus/nose-timer</a></li>
+</ul>
+<p>It is installed with</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ pip install nose-timer
+</pre></div>
+</div>
+<p>It is started with the flag <code class="docutils literal notranslate"><span class="pre">--with-timer</span></code></p>
+<p>Thus,</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ nosetests -v --nocapture --with-timer tests/test_key.py
+</pre></div>
+</div>
+<p>Will print the time for each test as shown in this partial output:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">...</span>
+<span class="p">[</span><span class="n">success</span><span class="p">]</span> <span class="mf">58.61</span><span class="o">%</span> <span class="n">tests</span><span class="o">.</span><span class="n">test_key</span><span class="o">.</span><span class="n">TestName</span><span class="o">.</span><span class="n">test_02_git</span><span class="p">:</span> <span class="mf">0.1957</span><span class="n">s</span>
+<span class="p">[</span><span class="n">success</span><span class="p">]</span> <span class="mf">41.39</span><span class="o">%</span> <span class="n">tests</span><span class="o">.</span><span class="n">test_key</span><span class="o">.</span><span class="n">TestName</span><span class="o">.</span><span class="n">test_01_key</span><span class="p">:</span> <span class="mf">0.1382</span><span class="n">s</span>
+<span class="o">----------------------------------------------------------------------</span>
+<span class="n">Ran</span> <span class="mi">2</span> <span class="n">tests</span> <span class="ow">in</span> <span class="mf">0.334</span><span class="n">s</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="doctests-in-cloudmesh">
+<h2>2.6. Doctests in Cloudmesh<a class="headerlink" href="#doctests-in-cloudmesh" title="Permalink to this headline">¶</a></h2>
+<p>Out of principal we will not create an test running doctests.</p>
+</div>
+<div class="section" id="sniffer-not-tested">
+<h2>2.7. Sniffer (not tested)<a class="headerlink" href="#sniffer-not-tested" title="Permalink to this headline">¶</a></h2>
+<p>often we make changes frequently and like to get an imediate feedback on the
+changes made. For the automatic repeated execution on change we can use the tool
+<code class="docutils literal notranslate"><span class="pre">sniffer</span></code>.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ sniffer -x--with-spec -x--spec-color
+</pre></div>
+</div>
+<p>This will execute the nosetests upon change. To specify a specific test you can
+pass along the name of the python test.</p>
+<p>To install it use</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ pip install sniffer
+</pre></div>
+</div>
+<p>The manual page can be called with</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ sniffer --help
+</pre></div>
+</div>
 </div>
 </div>
 

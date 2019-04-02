@@ -110,6 +110,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#test-timer">2.5. Test Timer</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#doctests-in-cloudmesh">2.6. Doctests in Cloudmesh</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#sniffer-not-tested">2.7. Sniffer (not tested)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#profiling">2.8. Profiling</a></li>
 </ul>
 </li>
 </ul>
@@ -403,6 +404,46 @@ pass along the name of the python test.</p>
 </div>
 <p>The manual page can be called with</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ sniffer --help
+</pre></div>
+</div>
+</div>
+<div class="section" id="profiling">
+<h2>2.8. Profiling<a class="headerlink" href="#profiling" title="Permalink to this headline">¶</a></h2>
+<p>Nosetest can be augmented with profiles that showcase some of the internal time
+spend on different functions and methods. To do so install</p>
+<ul class="simple">
+<li><a class="reference external" href="https://github.com/msherry/nose-cprof">https://github.com/msherry/nose-cprof</a></li>
+</ul>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ pip install nose-cprof
+$ pip install cprofilev
+$ pip install snakeviz
+</pre></div>
+</div>
+<p>Then call the nosetest with the additional option</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ nosetests --with-cprofile
+</pre></div>
+</div>
+<p>The output will be stored by default in <code class="docutils literal notranslate"><span class="pre">stats.dat</span></code></p>
+<p>To view it use cprofilev</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ cprofilev -f stats.dat
+</pre></div>
+</div>
+<p>To view it with snakeviz use</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ snakeviz -f stats.dat
+</pre></div>
+</div>
+<p>To visualize the call graph we use pygraphviz. Unfortunatley it has an error and only produces png files.
+Thus we use a modified version and instal it from source:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> /tmp
+$ git clone git@github.com:laszewsk/pycallgraph.git
+$ <span class="nb">cd</span> pycallgraph
+$ pip install .
+</pre></div>
+</div>
+<p>Next we go to the cm directory and can creat a call graph from a python program
+and open the output</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ pycallgraph graphviz -- ../tests/test_key.py 
+$ open pycallgraph.pdf 
 </pre></div>
 </div>
 </div>

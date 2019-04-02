@@ -417,6 +417,7 @@ spend on different functions and methods. To do so install</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ pip install nose-cprof
 $ pip install cprofilev
 $ pip install snakeviz
+$ pip install profiling
 </pre></div>
 </div>
 <p>Then call the nosetest with the additional option</p>
@@ -442,8 +443,16 @@ $ pip install .
 </div>
 <p>Next we go to the cm directory and can creat a call graph from a python program
 and open the output</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ pycallgraph graphviz -- ../tests/test_key.py 
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ pycallgraph graphviz -- tests/test_key.py 
 $ open pycallgraph.pdf 
+</pre></div>
+</div>
+<p>Another very usefule module is <code class="docutils literal notranslate"><span class="pre">profiling</span></code> which can be invoked with</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ profiling tests/test_key.py
+</pre></div>
+</div>
+<p>To do live profiling you can use</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ profiling live-profile tests/test_key.py
 </pre></div>
 </div>
 </div>

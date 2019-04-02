@@ -32,7 +32,7 @@ All nose tests are included in the folder `tests`.
 Note: That at this time we have not yet introduced the order of the tests by
 introducing numbers in the tests.
 
-## Example
+## Test Specification and Execution
 
 A simple example for a test is 
 
@@ -84,7 +84,7 @@ We define a class, and than we define the methods. such as the setup and the act
 your run it with 
 
 ```bash
-$ nosetests -v --nocapture tests/test_key.py`
+$ nosetests -v --nocapture tests/test_key.py
 ```
 
 ```python
@@ -180,7 +180,7 @@ class TestTimed:
         time.sleep(2.0)
 ```
 
-## Setup
+## Test Setup
 
 The setup in a class can be controlled by the following functions. We include in
 the print statement when they are called:
@@ -201,7 +201,7 @@ the print statement when they are called:
         print ("teardown_class() is called after any methods in this class")
 ```
 
-## Timer
+## Test Timer
 
 The following extension adds timers to nosetests
 

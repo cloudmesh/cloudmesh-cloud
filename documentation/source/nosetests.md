@@ -55,29 +55,132 @@ All nose tests are included in the folder `tests`.
     - test_02_topic2.py
     - test_03_topic2.py
 ```
-Note that all tests have specific function names of the form
+Note: That at this time we have not yet introduced the order of the tests by
+introducing numbers in the tests.
+
+## Test Case specification 
+
+All test python programs have specific function names of the form
 
 `def test_number_topic (self)`
 
-the number is defined to order them and is typically something like `001`, note
-the leading spaces. the topic is a descriptive term on what we test.
+The number is defined to order them and is typically something like `001`, note
+the leading spaces. The topic is a descriptive term on what we test.
 
-in `def setup(self)` we declare a setup that is run prior to each test being
-executed.
+Each test starts with a setup function `def setup(self)` we declare a setup that
+is run prior to each test being executed. Other functions will use the setup
+prior to execution.
 
-an assert simply returns tru or false through a condition that is checked to see 
-if the test succeds or fails.
+A function includes one or multiple asserts that check if a particular test
+succeeds and reports this to nose to expose the information if a tess succeds or
+fails, when running it
 
-Note that all nosetest functions start with a `HEADING()` which conveniently
+Note that all nosetest functions start with a `HEADING()` in the body which conveniently
 prints a banner with the function name and thus helps in debugging in case of
 errors.
 
-A simple example is 
+Invocation is simply done with the comment lines you see on top that you will include.
 
-* <https://github.com/cloudmesh-community/cm/blob/master/tests/test_key.py>
+in our case the test is called test_key.py so we include on the top
+
+```
+#############################################
+# nosetest -v --nopature
+# nosetests -v --nocapture tests/test_key.py
+#############################################
+```
+
+You can than execute the test with either command. More information is printed
+with the command
+
+Make sure that you place this comment in your nosetests.
+
+The following is our simple nosetests for key. THe file is stored at 
+`tests/test_key.py`
+
+## Test Case Execution
+
+First, we import the needed classes and methods we like to test. 
+We define a class, and than we define the methods. such as the setup and the actual tests.
+
+your run it with 
+
+```bash
+$ nosetests -v --nocapture tests/test_key.py`
+```
+
+```python
+############################################
+# nosetest -v --nocapture 
+# nosetests tests/test_key.py
+# nosetests -v --nocapture tests/test_key.py
+############################################
+from pprint import pprint
+from cloudmesh.common.Printer import Printer
+from cloudmesh.common.util import HEADING
+from cloudmesh.management.configuration.SSHkey import SSHkey
+from cloudmesh.management.configuration.config import Config
 
 
-## Test Case execution 
+class TestKey:
+
+    def setup(self):
+        self.sshkey = SSHkey()
+
+
+    def test_01_key(self):
+        HEADING()
+        pprint(self.sshkey)
+        print(self.sshkey)
+        print(type(self.sshkey))
+        pprint(self.sshkey.__dict__)
+
+        assert self.sshkey.__dict__  is not None
+
+
+    def test_02_git(self):
+        HEADING()
+        config = Config()
+        username = config["cloudmesh.profile.github"]
+        print ("Username:", username)
+        keys = self.sshkey.get_from_git(username)
+        pprint (keys)
+        print(Printer.flatwrite(keys,
+                            sort_keys=("name"),
+                            order=["name", "fingerprint"],
+                            header=["Name", "Fingerprint"])
+              )
+
+        assert len(keys) > 0
+
+```
+
+The output in with `nosetests tests/test_key.py` does not provide any detail,
+but just reports if tests fail or succeed.
+
+```
+----------------------------------------------------------------------
+Ran 2 tests in 0.457s
+
+OK
+```
+
+The output with  `nosetests -v tests/test_key.py`
+
+results in 
+
+```
+tests.test_key.TestName.test_01_key ... ok
+tests.test_key.TestName.test_02_git ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 1.072s
+
+OK
+```
+
+During development phase you want to use `nosetests -v --nocapture tests/test_key.py`
+which prints all print statements also
 
 Nose collects tests from unittest.TestCase subclasses, of course. We can also 
 write simple test functions, as well as test classes that are not subclasses of 
@@ -125,37 +228,3 @@ As with py.test or unittest fixtures, setup always runs before any test (or coll
 test packages and modules); teardown runs if setup has completed successfully, regardless of the 
 status of the test run.
 
-## Cloudmesh sample test example
-
-```python
-#################################################################
-# nosetest -v --nopature
-# nosetests -v --nocapture tests/test_data_s3.py
-#################################################################
-from pprint import pprint
-import time
-import subprocess
-import sys
-from cloudmesh.common.util import HEADING
-from cloudmesh.storage.provider.aws.Provider import Provider
-from cloudmesh.management.configuration.config import Config
-from cloudmesh.common.Printer import Printer
-from cloudmesh.common.FlatDict import FlatDict, flatten
-from cloudmesh.management.configuration.SSHkey import SSHkey
-from cloudmesh.management.configuration.name import Name
-from cloudmesh.mongo.CmDatabase import CmDatabase
-from cloudmesh.common.util import banner
-
-
-# ~/.cloudmesh/tmp/storage .....
-
-
-class TestName:
-
-    def setup(self):
-        banner("setup", c="-")
-        self.user = Config()["cloudmesh.profile.user"]
-        self.p = Provider(name="aws")
-        
-During development phase you want to use `nosetests -v --nocapture tests/test_key.py`
-which prints all print statements also

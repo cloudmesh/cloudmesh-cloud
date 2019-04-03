@@ -1,6 +1,6 @@
 # Installation
 
-[![Downloads](https://img.shields.io/pypi/dm/cm.svg)](https://pypi.python.org/pypi/cloudmesh-community/cm/)
+[![Downloads](https://img.shields.io/pypi/dm/cm.svg)](https://pypi.python.org/pypi/cloudmesh/cloudmesh-cm4/)
 
 ## Prerequisites
 

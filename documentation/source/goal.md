@@ -93,7 +93,7 @@ The default `data` section in [`cloudmesh.yaml`](cloudmesh/management/configurat
 **Download**
 
 ```
-git clone https://github.com/cloudmesh-community/cm
+git clone https://github.com/cloudmesh/cloudmesh-cm4
 cd cm
 pip install -r requirements.txt
 cd data

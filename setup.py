@@ -103,7 +103,7 @@ setup(
     license="Apache License, Version 2.0",
     author="Gregor von Laszewski, cloudmesh.org",
     author_email="laszewski@gmail.com",
-    url="https://github.com/cloudmesh-community/cm",
+    url="https://github.com/cloudmesh/cloudmesh-cm4",
     classifiers=[
         "Intended Audience :: Developers",
         "Intended Audience :: Education",

@@ -56,3 +56,37 @@ $ pip install bandit
 $ bandit -r ./cloudmesh 
 ```
 
+## Version Managemt
+
+This is only done by Gregor
+
+To create a development version we say 
+
+```bash
+$ make build
+```
+
+To increase the patch number, say 
+
+```bash
+$ make patch
+```
+
+To increase the minor number
+
+```bash
+$ make minor
+```
+
+The major number will stay to 4, so this is not changed
+
+To create a release say
+
+```bash
+$ make release
+```
+
+After the release is done the minor number will be increased and the buld number
+will be reset.
+
+

@@ -67,3 +67,41 @@ nist-copy:
 #	mkdir -p docs/qc/pylint/cm
 #	pylint --output-format=html cloudmesh > docs/qc/pylint/cm/cloudmesh.html
 #	pylint --output-format=html cm4 > docs/qc/pylint/cm/cm4.html
+
+######################################################################
+# PYPI
+######################################################################
+
+
+twine:
+	pip install -U twine
+
+dist:
+	python setup.py sdist bdist_wheel
+	twine check dist/*
+
+patch: clean
+	$(call banner, patch to testpypi)
+	bumpversion --allow-dirty patch
+	python setup.py sdist bdist_wheel
+	git push origin master --tags
+	twine check dist/*
+	twine upload --repository testpypi https://test.pypi.org/legacy/ dist/*
+
+release: clean dist
+	$(call banner, release to pypi)
+	bumpversion release
+	python setup.py sdist bdist_wheel
+	git push origin master --tags
+	twine check dist/*
+	twine upload dist/*
+
+pip: patch
+	pip install --index-url https://test.pypi.org/simple/ \
+	    --extra-index-url https://pypi.org/simple cloudmesh-$(package)
+
+log:
+	$(call banner, log)
+	gitchangelog | fgrep -v ":dev:" | fgrep -v ":new:" > ChangeLog
+	git commit -m "chg: dev: Update ChangeLog" ChangeLog
+	git push

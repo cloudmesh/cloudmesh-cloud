@@ -5,6 +5,15 @@
 [![Supported Python versions](https://img.shields.io/pypi/pyversions/cm.svg)](https://pypi.python.org/pypi/cloudmesh-community/cm/)
 
 
+[![image](https://img.shields.io/travis/TankerHQ/cloudmesh-cm4.svg?branch=master)](https://travis-ci.org/TankerHQ/cloudmesn-cm4)
+
+[![image](https://img.shields.io/pypi/pyversions/cloudmesh-cm4.svg)](https://pypi.org/project/cloudmesh-cm4)
+
+[![image](https://img.shields.io/pypi/v/cloudmesh-cm4.svg)](https://pypi.org/project/cloudmesh-cm4/)
+
+[![image](https://img.shields.io/github/license/TankerHQ/python-cloudmesh-cm4.svg)](https://github.com/TankerHQ/python-cloudmesh-cm4/blob/master/LICENSE)
+
+
 Please note that the code and documentation are under heavy development and is likely not correct. 
 It will be your task to correct it, and make sure the code works.
 

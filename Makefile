@@ -1,4 +1,34 @@
-all: doc
+package=cloud
+UNAME=$(shell uname)
+VERSION=`head -1 VERSION`
+
+define banner
+	@echo
+	@echo "###################################"
+	@echo $(1)
+	@echo "###################################"
+endef
+
+all:doc
+
+source:
+	cd ../cloudmesh.common; make source
+	$(call banner, "Install cloudmesh-cmd5")
+	pip install -e . -U
+	cms help
+
+clean:
+	$(call banner, "CLEAN")
+	rm -rf dist
+	rm -rf *.zip
+	rm -rf *.egg-info
+	rm -rf *.eggs
+	rm -rf docs/build
+	rm -rf build
+	find . -name '__pycache__' -delete
+	find . -name '*.pyc' -delete
+	rm -rf .tox
+	rm -f *.whl
 
 
 manual:

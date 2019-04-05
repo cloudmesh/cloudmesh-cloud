@@ -753,3 +753,6 @@ class Provider(ComputeNodeABC):
                 entries[id][attribute] = value
 
         return entries
+
+    def key_upload(self, key):
+        raise NotImplementedError

@@ -618,8 +618,9 @@ class Provider(ComputeNodeABC):
                 ip = ips[0]
             else:
                 pools = self.cloudman.ex_list_floating_ip_pools()
+                # pprint (pools)
                 # ex_get_floating_ip(ip)
-                ip = self.cloudman.ex_create_floating_ip(ip_pool=pools[0])
+                ip = self.cloudman.ex_create_floating_ip(ip_pool=pools[0].name)
         return ip
 
     def attach_publicIP(self, node, ip):

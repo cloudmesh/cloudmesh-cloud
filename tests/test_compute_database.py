@@ -86,7 +86,7 @@ class TestDatabase:
 
         self.p.key_upload(key)
 
-        self.test_01_list_keys()
+        self.test_04_list_keys()
 
     def test_06_list_images(self):
         HEADING()

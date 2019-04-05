@@ -15,17 +15,25 @@
 # See the License for the specific language governing permissions and     #
 # limitations under the License.                                          #
 # ------------------------------------------------------------------------#
-from __future__ import print_function
 from setuptools import setup, find_packages
 
 import os
 import platform
 import sys
+import io
 
+from setuptools import find_packages, setup
 
-__version__ = None  # suppress the version error
-# don't use import to get the version as that causes a circular dependency
-exec(open('cloudmesh/cloud/__init__.py').read().strip())
+def readfile(filename):
+    """
+    Read a file
+    :param filename: name of the file
+    :return: returns the content of the file as string
+    """
+    with io.open(filename, encoding="utf-8") as stream:
+        return stream.read()
+
+version = readfile("VERSION").strip()
 
 v = sys.version_info
 if v.major != 3 and v.minor != 7 and v.micro < 2:
@@ -82,62 +90,47 @@ cloudmesh-sys
 def read(fname):
     return open(os.path.join(os.path.dirname(__file__), fname)).read()
 
+with open('README.md') as f:
+    long_description = f.read()
 
-home = os.path.expanduser("~")
-
-# data_files= [
-#    (os.path.join(home, '.cloudmesh'),
-#    [os.path.join(d, f) for f in files]) for d, folders, files in os.walk(
-#                os.path.join('cloudmesh_cm4', 'etc'))]
-#
-# print ("DDDD", data_files)
-
-# package_data={
-#   'cloudmesh_cm4.etc': ['*.yaml', '*.py'],
-# },
+NAME = "cloudmesh-cloud"
+DESCRIPTION = "A dynamic extensible CMD based command shell"
+AUTHOR = "Gregor von Laszewski"
+AUTHOR_EMAIL = "laszewski@gmail.com"
+URL = "https://github.com/cloudmesh/cloudmesh-cloud"
 
 
 setup(
-    version=__version__,
-    name="cloudmesh-cloud",
-    description="cloudmesh_cloud - A heterogeneous multi cloud command "
-                "client and shell",
-    long_description=read('README.md'),
-    license="Apache License, Version 2.0",
-    author="Gregor von Laszewski, cloudmesh.org",
-    author_email="laszewski@gmail.com",
-    url="https://github.com/cloudmesh/cloudmesh-cloud",
+    name=NAME,
+    author=AUTHOR,
+    author_email=AUTHOR_EMAIL,
+    description=DESCRIPTION,
+    long_description=long_description,
+    long_description_content_type="text/markdown",
+    version=version,
+    license="Apache 2.0",
+    url=URL,
+    packages=find_packages(exclude=("tests","deprecated","propose", "examples", "conda")),
     classifiers=[
+        "Development Status :: 5 - Production/Stable",
+        "Environment :: Web Environment",
         "Intended Audience :: Developers",
-        "Intended Audience :: Education",
-        "Intended Audience :: Science/Research",
-        "Development Status :: 2 - Pre-Alpha",
-        "Intended Audience :: Developers",
-        "License :: OSI Approved :: Apache Software License",
-        "Operating System :: MacOS :: MacOS X",
-        "Operating System :: POSIX :: Linux",
-        "Operating System :: Windows :: 10",
-        "Programming Language :: Python :: 3.7",
-        "Topic :: Scientific/Engineering",
-        "Topic :: System :: Clustering",
-        "Topic :: System :: Distributed Computing",
-        "Topic :: Software Development :: Libraries :: Python Modules",
-        "Environment :: Console"
+        "License :: OSI Approved :: BSD License",
+        "Operating System :: OS Independent",
+        "Programming Language :: Python",
+        "Programming Language :: Python :: 2",
+        "Programming Language :: Python :: 3",
     ],
-    keywords="cloud cmd commandshell plugins",
-    packages=find_packages(),
     install_requires=requiers,
+    tests_require=[
+        "flake8",
+        "coverage",
+    ],
+    zip_safe=False,
     namespace_packages=['cloudmesh'],
-    include_package_data=True,
-    # data_files= data_files,
-    package_data={
-        'cloud.etc': ['*.yaml', '*.py'],
+    entry_points={
+        'console_scripts': [
+            'cms = cloudmesh.shell.shell:main',
+        ],
     },
-    #entry_points={
-    #    'console_scripts': [
-    #        'cloud = cloud.command.command:main',
-    #    ],
-    #},
-    # tests_require=['tox'],
-    # dependency_links = []
 )

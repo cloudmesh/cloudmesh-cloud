@@ -15,19 +15,26 @@ class FlavorCommand(PluginCommand):
         ::
 
             Usage:
-                flavor refresh [--cloud=CLOUD] [-v]
-                flavor list [ID] [--cloud=CLOUD] [--output=OUTPUT] [--refresh] [-v]
-                This lists out the flavors present for a cloud
+                flavor list [NAMES] [--cloud=CLOUD] [--refresh] [--output=OUTPUT]
+
+
             Options:
                --output=OUTPUT  the output format [default: table]
                --cloud=CLOUD    the cloud name
                --refresh        refreshes the data before displaying it
-                                from the cloud
+
+            Description:
+
+                This lists out the flavors present for a cloud
+
             Examples:
                 cm flavor refresh
                 cm flavor list
-                cm flavor list --format=csv
-                cm flavor show 58c9552c-8d93-42c0-9dea-5f48d90a3188 --refresh
+                cm flavor list --output=csv
+                cm flavor list 58c9552c-8d93-42c0-9dea-5f48d90a3188 --refresh
+
+                please remember that a uuid or the falvor name can be used to
+                identify a flavor.
         """
 
         print(arguments)

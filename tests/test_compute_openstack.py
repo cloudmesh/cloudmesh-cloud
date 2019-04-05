@@ -37,9 +37,13 @@ class TestName:
         self.new_name = str(self.name_generator)
 
         variables = Variables()
+        # this gives the current default cloud
         cloud = variables['cloud']
 
-        self.p = Provider(name=cloud)
+        # specify the cloud name to make sure this test
+        # is done for the openstack cloud
+        #
+        self.p = Provider(name="chameleon")
 
         self.secgroupname = "CM4TestSecGroup"
         self.secgrouprule = {"ip_protocol": "tcp",
@@ -128,9 +132,6 @@ class TestName:
                                         "Private ips",
                                         "Public ips"])
               )
-
-
-class o:
 
     def test_05_list_secgroups(self):
         HEADING()

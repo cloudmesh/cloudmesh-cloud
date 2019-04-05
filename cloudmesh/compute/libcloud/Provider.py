@@ -190,6 +190,11 @@ class Provider(ComputeNodeABC):
                     entry["cm"]["name"] = entry["name"]
                 else:
                     pass
+            elif kind == 'secgroup':
+                if self.cloudtype == 'openstack':
+                    entry["cm"]["name"] = entry["name"]
+                else:
+                    pass
 
             if "_uuid" in entry:
                 del entry["_uuid"]
@@ -211,6 +216,7 @@ class Provider(ComputeNodeABC):
         :return:
         """
         for element in elements:
+            # pprint (element)
             if (raw and element.name) or element["cm"]["name"] == name:
                 return element
         return None

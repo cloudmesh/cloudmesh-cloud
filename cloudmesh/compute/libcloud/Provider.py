@@ -248,9 +248,14 @@ class Provider(ComputeNodeABC):
         :return:
         """
 
-        print(key)
+        #
+        # TODO: if you have a key in the local machine that is different from an
+        # already uploaded ky this function will fail. The key in the cloud
+        # needs to be removed first
+        #
         keys = self.keys()
         for cloudkey in keys:
+            pprint(cloudkey)
             if cloudkey['fingerprint'] == key["fingerprint"]:
                 return
 

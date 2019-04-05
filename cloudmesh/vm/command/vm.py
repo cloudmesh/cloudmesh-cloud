@@ -39,7 +39,7 @@ class VmCommand(PluginCommand):
                         [--cloud=CLOUDS]
                         [--output=OUTPUT]
                         [--refresh]
-                vm boot [--name=NAME]
+                vm boot [--name=VMNAMES]
                         [--cloud=CLOUD]
                         [--username=USERNAME]
                         [--image=IMAGE]
@@ -57,7 +57,7 @@ class VmCommand(PluginCommand):
                         [--secgroup=SECGROUPS]
                         [--key=KEY]
                         [--dryrun]
-                vm run [--name=NAMES] [--username=USERNAME] [--dryrun] COMMAND
+                vm run [--name=VMNAMES] [--username=USERNAME] [--dryrun] COMMAND
                 vm script [--name=NAMES] [--username=USERNAME] [--dryrun] SCRIPT
                 vm ip assign [NAMES]
                           [--cloud=CLOUD]

@@ -1,13 +1,7 @@
-class Manager(object):
+class Image(object):
 
-    def __init__(self):
-        print("init {name}".format(name=self.__class__.__name__))
-
-    def list(self, parameter):
-        print("list", parameter)
-
-    @classmethod
-    def guess_username(cls, name, cloud=None):
+    @staticmethod
+    def guess_username(name, cloud=None):
         """
         gues the default usernamed based on the VM name and cloud
 

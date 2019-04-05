@@ -39,7 +39,7 @@ class FlavorCommand(PluginCommand):
 
         print(arguments)
 
-        # m = Manager()
+
 
         # if arguments.FILE:
         #    print("option a")

@@ -6,3 +6,4 @@ nose-timer
 nose
 flake8
 nose-cprof
+twine

@@ -6,7 +6,7 @@ import oyaml as yaml
 import munch
 import re
 
-# nosetests -v --nocapture tests/test_emr_manager.py
+# nosetests -v --nocapture tests/test_config.py
 
 
 class TestConfig:

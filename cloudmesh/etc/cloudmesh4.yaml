@@ -1,10 +1,12 @@
 cloudmesh:
   source:
-    common: ~/Desktop/github/cloudmesh
-    cmd5: ~/Desktop/github/cloudmesh
-    openapi: ~/Desktop/github/cloudmesh
-    sys: ~/Desktop/github/cloudmesh
-    cm: ~/Desktop/github/cloudmesh-community
+    location: ~/Desktop/github/cloudmesh
+    packages:
+      cloudmesh-common: https://github.com/cloudmesh/cloudmesh-common
+      cloudmesh-cmd5: https://github.com/cloudmesh/cloudmesh-cmd5
+      cloudmesh-openapi: https://github.com/cloudmesh/cloudmesh-openapi
+      cloudmesh-sys: https://github.com/cloudmesh/cloudmesh-sys
+      cloudmesh-cm4: https://github.com/cloudmesh/cloudmesh-cm4
   profile:
     firstname: TBD
     lastname: TBD

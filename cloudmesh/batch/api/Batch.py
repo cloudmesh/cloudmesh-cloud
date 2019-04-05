@@ -82,7 +82,6 @@ class SlurmCluster(object):
                source,
                experiment_name,
                companion_file):
-
         """
         This method is used to create a job for running on remote slurm cluster
 

@@ -1,5 +1,5 @@
-#from cm4.vm.Vm import Vm
-# from cm4.mongo.mongoDB import MongoDB
+#from cloud.vm.Vm import Vm
+# from cloud.mongo.mongoDB import MongoDB
 from cloudmesh.management.debug import HEADING, myself
 import subprocess
 

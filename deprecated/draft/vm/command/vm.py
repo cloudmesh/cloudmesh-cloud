@@ -98,20 +98,20 @@ class VmCommand(PluginCommand):
             vm = vm_manager()
 
             # TODO
-            raise NotImplementedError("cm4 vm ssh command has not yet been implemented")
+            raise NotImplementedError("cloud vm ssh command has not yet been implemented")
 
         elif arguments.get("run"):
 
             vm = vm_manager()
 
             # TODO
-            raise NotImplementedError("cm4 vm run command has not yet been implemented")
+            raise NotImplementedError("cloud vm run command has not yet been implemented")
 
         elif arguments.get("script"):
 
             vm = vm_manager()
 
             # TODO
-            raise NotImplementedError("cm4 vm script command has not yet been implemented")
+            raise NotImplementedError("cloud vm script command has not yet been implemented")
 
         return result

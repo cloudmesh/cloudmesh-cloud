@@ -25,7 +25,7 @@ job-metadata:
     cluster_name: vcluster1
     config_name: ParamInStdOut
     raw_remote_path: ~/
-    script_path: /home/corriel/gitrepos/courses/e516_CloudComputing_cloudmesh/cm4/vcluster/batch/inf_script_stdin_stdout.sh
+    script_path: /home/corriel/gitrepos/courses/e516_CloudComputing_cloudmesh/cloud/vcluster/batch/inf_script_stdin_stdout.sh
     argfile_path: ''
     argfile_name: ''
     params_list:
@@ -44,7 +44,7 @@ job-metadata:
     script_name_with_suffix: inf_script_stdin_stdout_20181031_22352006.sh
     remote_path: ~/job_20181031_22352006/
     remote_script_path: ~/job_20181031_22352006/inf_script_stdin_stdout_20181031_22352006.sh
-    local_path: ./cm4/vcluster/sample_output
+    local_path: ./cloud/vcluster/sample_output
     nodes-pids:
     - - c2
       - '17307'

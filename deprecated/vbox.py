@@ -31,7 +31,7 @@ class VboxCommand(PluginCommand):
               cms vbox run command COMMAND [--vms=VMLIST] [--debug]
               cms vbox run script SCRIPT [--data=PATH] [--vms=VMLIST] [--debug]
 
-              cm4 -h
+              cloud -h
 
             Options:
               -h --help     Show this screen.

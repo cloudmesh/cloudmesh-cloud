@@ -304,7 +304,7 @@ class OpenstackCM(ComputeNodeABC):
 def process_arguments(arguments):
     """
     Process command line arguments to execute VM actions.
-    Called from cm4.command.command
+    Called from cloud.command.command
     :param arguments:
     """
     result = None

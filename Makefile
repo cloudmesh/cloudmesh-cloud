@@ -68,6 +68,20 @@ nist-copy:
 #	pylint --output-format=html cloudmesh > docs/qc/pylint/cm/cloudmesh.html
 #	pylint --output-format=html cloud > docs/qc/pylint/cm/cloud.html
 
+clean:
+	$(call banner, "CLEAN")
+	rm -rf dist
+	rm -rf *.zip
+	rm -rf *.egg-info
+	rm -rf *.eggs
+	rm -rf docs/build
+	rm -rf build
+	find . -name '__pycache__' -delete
+	find . -name '*.pyc' -delete
+	rm -rf .tox
+	rm -f *.whl
+
+
 ######################################################################
 # PYPI
 ######################################################################

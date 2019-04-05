@@ -73,6 +73,10 @@ yamllint
 azure
 docker
 munch
+cloudmesh-common
+cloudmesh-cmd5
+cloudmesh-sys
+cloudmesh-openapi
 """.split("\n")
 
 

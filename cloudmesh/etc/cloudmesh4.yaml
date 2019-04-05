@@ -6,7 +6,7 @@ cloudmesh:
       cloudmesh-cmd5: https://github.com/cloudmesh/cloudmesh-cmd5
       cloudmesh-openapi: https://github.com/cloudmesh/cloudmesh-openapi
       cloudmesh-sys: https://github.com/cloudmesh/cloudmesh-sys
-      cloudmesh-cm4: https://github.com/cloudmesh/cloudmesh-cm4
+      cloudmesh-cm4: https://github.com/cloudmesh/cloudmesh-cloud
   profile:
     firstname: TBD
     lastname: TBD
@@ -239,10 +239,10 @@ cloudmesh:
       service: local
     db:
       local:
-        CMDATA_DB_FOLDER: '~/cloudmesh/cm4/test/data/db'
+        CMDATA_DB_FOLDER: '~/cloudmesh/cloud/test/data/db'
     service:
       local:
-        CMDATA_STORAGE_FOLDER: '~/cloudmesh/cm4/test/data/storage'
+        CMDATA_STORAGE_FOLDER: '~/cloudmesh/cloud/test/data/storage'
       azure:
         container: 'cmdata'
         credentials:

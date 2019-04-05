@@ -10,8 +10,8 @@ from cloudmesh.cm4 import __version__
 from cloudmesh.compute.virtualbox.Provider import Provider
 
 
-# from cm4.mongo.MongoDBController import MongoDBController
-# from cm4.mongo.MongoDBController import MongoInstaller
+# from cloud.mongo.MongoDBController import MongoDBController
+# from cloud.mongo.MongoDBController import MongoInstaller
 
 
 # pprint (vbox.vm.list())

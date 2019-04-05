@@ -1,14 +1,14 @@
 """Cloudmesh Multi Service Data Access
 
 Usage:
-  cm4 data add FILE
-  cm4 data add SERVICE FILE
-  cm4 data get FILE
-  cm4 data get FILE DEST_FOLDER
-  cm4 data del FILE
-  cm4 data (ls | dir)
-  cm4 data (-h | --help)
-  cm4 data --version
+  cloud data add FILE
+  cloud data add SERVICE FILE
+  cloud data get FILE
+  cloud data get FILE DEST_FOLDER
+  cloud data del FILE
+  cloud data (ls | dir)
+  cloud data (-h | --help)
+  cloud data --version
 
 Options:
   -h --help     Show this screen.

@@ -20,7 +20,7 @@ class TestDataAzure:
         # TODO: this needs to be configured in cloudmesh4.yaml with Config()
 
     def test_azure_01_add(self):
-        cloud_file = self._data.add("azure", f"cm4/test/data/files/{self.test_file_name}")
+        cloud_file = self._data.add("azure", f"cloud/test/data/files/{self.test_file_name}")
         assert len(cloud_file.url) > 0
 
     def test_azure_02_ls(self):
@@ -28,8 +28,8 @@ class TestDataAzure:
         assert len(files) > 0
 
     def test_azure_03_get(self):
-        self._data.get(self.test_file_name, "cm4/test/data/download/")
-        dl_ok = isfile(f"cm4/test/data/download/{self.test_file_name}")
+        self._data.get(self.test_file_name, "cloud/test/data/download/")
+        dl_ok = isfile(f"cloud/test/data/download/{self.test_file_name}")
         assert dl_ok is True
 
     def test_azure_04_del(self):

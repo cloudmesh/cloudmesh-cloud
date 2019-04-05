@@ -2,16 +2,16 @@
 """Vagrant Manager.
 
 Usage:
-    cm4 vbox create --count <vm_number> [--debug]
-    cm4 vbox start [--vms=<vmList>] [--debug]
-    cm4 vbox stop [--vms=<vmList>] [--debug]
-    cm4 vbox destroy [--vms=<vmList>] [--debug]
-    cm4 vbox status [--vms=<vmList>]
-    cm4 vbox list
-    cm4 vbox ssh NAME
-    cm4 vbox run COMMAND  [--vms=<vmList>]
+    cloud vbox create --count <vm_number> [--debug]
+    cloud vbox start [--vms=<vmList>] [--debug]
+    cloud vbox stop [--vms=<vmList>] [--debug]
+    cloud vbox destroy [--vms=<vmList>] [--debug]
+    cloud vbox status [--vms=<vmList>]
+    cloud vbox list
+    cloud vbox ssh NAME
+    cloud vbox run COMMAND  [--vms=<vmList>]
 
-    cm4 -h
+    cloud -h
 
 Options:
   -h --help     Show this screen.

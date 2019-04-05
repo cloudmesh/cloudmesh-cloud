@@ -25,7 +25,7 @@ import sys
 
 __version__ = None  # suppress the version error
 # don't use import to get the version as that causes a circular dependency
-exec(open('cloudmesh/cm4/__init__.py').read().strip())
+exec(open('cloudmesh/cloud/__init__.py').read().strip())
 
 v = sys.version_info
 if v.major != 3 and v.minor != 7 and v.micro < 2:
@@ -100,14 +100,14 @@ home = os.path.expanduser("~")
 
 setup(
     version=__version__,
-    name="cloudmesh-cm4",
-    description="cloudmesh_cm4 - A heterogeneous multi cloud command "
+    name="cloudmesh-cloud",
+    description="cloudmesh_cloud - A heterogeneous multi cloud command "
                 "client and shell",
     long_description=read('README.md'),
     license="Apache License, Version 2.0",
     author="Gregor von Laszewski, cloudmesh.org",
     author_email="laszewski@gmail.com",
-    url="https://github.com/cloudmesh/cloudmesh-cm4",
+    url="https://github.com/cloudmesh/cloudmesh-cloud",
     classifiers=[
         "Intended Audience :: Developers",
         "Intended Audience :: Education",
@@ -132,11 +132,11 @@ setup(
     include_package_data=True,
     # data_files= data_files,
     package_data={
-        'cm4.etc': ['*.yaml', '*.py'],
+        'cloud.etc': ['*.yaml', '*.py'],
     },
     #entry_points={
     #    'console_scripts': [
-    #        'cm4 = cm4.command.command:main',
+    #        'cloud = cloud.command.command:main',
     #    ],
     #},
     # tests_require=['tox'],

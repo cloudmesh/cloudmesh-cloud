@@ -66,7 +66,7 @@ nist-copy:
 #pylint:
 #	mkdir -p docs/qc/pylint/cm
 #	pylint --output-format=html cloudmesh > docs/qc/pylint/cm/cloudmesh.html
-#	pylint --output-format=html cm4 > docs/qc/pylint/cm/cm4.html
+#	pylint --output-format=html cloud > docs/qc/pylint/cm/cloud.html
 
 ######################################################################
 # PYPI

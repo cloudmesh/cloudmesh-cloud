@@ -7,7 +7,7 @@ from deprecated.draft.server import cloud
 @app.route('/')
 @app.route('/index')
 def index():
-    return "This is the REST API for cm4"
+    return "This is the REST API for cloud"
 
 
 @app.route('/vms/', methods=['GET'])

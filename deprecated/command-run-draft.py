@@ -6,7 +6,7 @@ Created on Sun Sep  9 17:19:52 2018
 @author: yuluo
 """
 
-# TODO: please change to using docopts and integrate in cm4.command.py
+# TODO: please change to using docopts and integrate in cloud.command.py
 # TODO: we do not want to use argparse
 
 import argparse

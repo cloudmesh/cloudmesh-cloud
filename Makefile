@@ -32,48 +32,48 @@ clean:
 
 
 manual:
-	mkdir -p documentation/source/manual
+	mkdir -p docs-source/source/manual
 	cms help > /tmp/commands.rst
-	echo "Commands" > documentation/source/manual/commands.rst
-	echo "========" >> documentation/source/manual/commands.rst
-	echo  >> documentation/source/manual/commands.rst
-	tail -n +4 /tmp/commands.rst >> documentation/source/manual/commands.rst
-	cms man --kind=rst admin > documentation/source/manual/admin.rst
-	cms man --kind=rst banner > documentation/source/manual/banner.rst
-	cms man --kind=rst clear > documentation/source/manual/clear.rst
-	cms man --kind=rst echo > documentation/source/manual/echo.rst
-	cms man --kind=rst default > documentation/source/manual/default.rst
-	cms man --kind=rst info > documentation/source/manual/info.rst
-	cms man --kind=rst pause > documentation/source/manual/pause.rst
-	cms man --kind=rst plugin > documentation/source/manual/plugin.rst
-	cms man --kind=rst q > documentation/source/manual/q.rst
-	cms man --kind=rst quit > documentation/source/manual/quit.rst
-	cms man --kind=rst shell > documentation/source/manual/shell.rst
-	cms man --kind=rst sleep > documentation/source/manual/sleep.rst
-	cms man --kind=rst stopwatch > documentation/source/manual/stopwatch.rst
-	cms man --kind=rst sys > documentation/source/manual/sys.rst
-	cms man --kind=rst var > documentation/source/manual/var.rst
-	cms man --kind=rst vbox > documentation/source/manual/vbox.rst
-	cms man --kind=rst vcluster > documentation/source/manual/vcluster.rst
-	cms man --kind=rst batch > documentation/source/manual/batch.rst
-	cms man --kind=rst version > documentation/source/manual/version.rst
-	cms man --kind=rst open > documentation/source/manual/open.rst
-	cms man --kind=rst vm > documentation/source/manual/vm.rst
-	cms man --kind=rst network > documentation/source/manual/network.rst
-	cms man --kind=rst key > documentation/source/manual/key.rst
-	cms man --kind=rst secgroup > documentation/source/manual/secgroup.rst
-	cms man --kind=rst image > documentation/source/manual/image.rst
-	cms man --kind=rst flavor > documentation/source/manual/flavor.rst
-	cms man --kind=rst ssh > documentation/source/manual/ssh.rst
-	cms man --kind=rst storage > documentation/source/manual/storage.rst
-	cms man --kind=rst workflow > documentation/source/manual/workflow.rst
+	echo "Commands" > docs-source/source/manual/commands.rst
+	echo "========" >> docs-source/source/manual/commands.rst
+	echo  >> docs-source/source/manual/commands.rst
+	tail -n +4 /tmp/commands.rst >> docs-source/source/manual/commands.rst
+	cms man --kind=rst admin > docs-source/source/manual/admin.rst
+	cms man --kind=rst banner > docs-source/source/manual/banner.rst
+	cms man --kind=rst clear > docs-source/source/manual/clear.rst
+	cms man --kind=rst echo > docs-source/source/manual/echo.rst
+	cms man --kind=rst default > docs-source/source/manual/default.rst
+	cms man --kind=rst info > docs-source/source/manual/info.rst
+	cms man --kind=rst pause > docs-source/source/manual/pause.rst
+	cms man --kind=rst plugin > docs-source/source/manual/plugin.rst
+	cms man --kind=rst q > docs-source/source/manual/q.rst
+	cms man --kind=rst quit > docs-source/source/manual/quit.rst
+	cms man --kind=rst shell > docs-source/source/manual/shell.rst
+	cms man --kind=rst sleep > docs-source/source/manual/sleep.rst
+	cms man --kind=rst stopwatch > docs-source/source/manual/stopwatch.rst
+	cms man --kind=rst sys > docs-source/source/manual/sys.rst
+	cms man --kind=rst var > docs-source/source/manual/var.rst
+	cms man --kind=rst vbox > docs-source/source/manual/vbox.rst
+	cms man --kind=rst vcluster > docs-source/source/manual/vcluster.rst
+	cms man --kind=rst batch > docs-source/source/manual/batch.rst
+	cms man --kind=rst version > docs-source/source/manual/version.rst
+	cms man --kind=rst open > docs-source/source/manual/open.rst
+	cms man --kind=rst vm > docs-source/source/manual/vm.rst
+	cms man --kind=rst network > docs-source/source/manual/network.rst
+	cms man --kind=rst key > docs-source/source/manual/key.rst
+	cms man --kind=rst secgroup > docs-source/source/manual/secgroup.rst
+	cms man --kind=rst image > docs-source/source/manual/image.rst
+	cms man --kind=rst flavor > docs-source/source/manual/flavor.rst
+	cms man --kind=rst ssh > docs-source/source/manual/ssh.rst
+	cms man --kind=rst storage > docs-source/source/manual/storage.rst
+	cms man --kind=rst workflow > docs-source/source/manual/workflow.rst
 
 
 doc:
 	rm -rf docs
 	mkdir -p dest
-	cd documentation; make html
-	cp -r documentation/build/html/ docs
+	cd docs-source; make html
+	cp -r docs-source/build/html/ docs
 
 view:
 	open docs/index.html

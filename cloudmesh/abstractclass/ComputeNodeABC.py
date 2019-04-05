@@ -152,3 +152,4 @@ class ComputeNodeABC(metaclass=ABCMeta):
         """
         # if destination is None, increase the name counter and use the new name
         raise NotImplementedError
+

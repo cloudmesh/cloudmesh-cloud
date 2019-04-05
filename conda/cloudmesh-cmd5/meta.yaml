@@ -1,9 +1,9 @@
 package:
-  name: cloudmesh.cmd5
+  name: cloudmesh-cmd5
   version: 1.0
 
 source:
-  git_url: https://github.com/cloudmesh/cloudmesh.cmd5.git
+  git_url: https://github.com/cloudmesh/cloudmesh-cmd5.git
 
 build:
   number: 0
@@ -17,6 +17,6 @@ requirements:
 
   run:
     - pyyaml
-    - cloudmesh.common
+    - cloudmesh-common
     - docopt
     - requests

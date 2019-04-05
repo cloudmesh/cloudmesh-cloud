@@ -1,9 +1,9 @@
 package:
-  name: cloudmesh.common
+  name: cloudmesh-common
   version: 1.0
 
 source:
-  git_url: https://github.com/cloudmesh/cloudmesh.common.git
+  git_url: https://github.com/cloudmesh/cloudmesh-common.git
 
 build:
   number: 0

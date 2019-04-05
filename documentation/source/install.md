@@ -1,6 +1,6 @@
 # Installation
 
-[![Downloads](https://img.shields.io/pypi/dm/cm.svg)](https://pypi.python.org/pypi/cloudmesh-community/cm/)
+[![Downloads](https://img.shields.io/pypi/dm/cm.svg)](https://pypi.python.org/pypi/cloudmesh/cloudmesh-cm4/)
 
 ## Prerequisites
 
@@ -17,16 +17,16 @@ we recommend that you use the source installation instead.
 In future cloudmesh version 4 will be installed with
 
 ```bash
-pip install cloudmesh.cm
+pip install cloudmesh-cm4
 ```
 
 Individual packages can be installed with
 
 ```
-pip install cloudmesh.common
-pip install cloudmesh.sys
-pip install cloudmesh.cmd5
-pip install cloudmesh.openapi
+pip install cloudmesh-common
+pip install cloudmesh-sys
+pip install cloudmesh-cmd5
+pip install cloudmesh-openapi
 ```
 
 For the time being we recommend you conduct the source install.
@@ -39,22 +39,22 @@ will not yet work
 
 ```bash
 export SRC=`pwd`
-git clone https://github.com/cloudmesh/cloudmesh.common.git
-git clone https://github.com/cloudmesh/cloudmesh.cmd5.git
-git clone https://github.com/cloudmesh/cloudmesh.sys.git
-git clone https://github.com/cloudmesh/cloudmesh.openapi.git
-git clone https://github.com/cloudmesh-community/cm.git
+git clone https://github.com/cloudmesh/cloudmesh-common.git
+git clone https://github.com/cloudmesh/cloudmesh-cmd5.git
+git clone https://github.com/cloudmesh/cloudmesh-sys.git
+git clone https://github.com/cloudmesh/cloudmesh-openapi.git
+git clone https://github.com/cloudmesh-community/cloudmesh-cm4.git
 
 
-cd $SRC/cloudmesh.common
+cd $SRC/cloudmesh-common
 pip install -e .
-cd $SRC/cloudmesh.cmd5
+cd $SRC/cloudmesh-cmd5
 pip install -e .
-cd $SRC/cloudmesh.sys
+cd $SRC/cloudmesh-sys
 pip install -e .
-cd $SRC/cloudmesh.openapi
+cd $SRC/cloudmesh-openapi
 pip install -e .
-cd $SRC/cm
+cd $SRC/cloudmesh-cm4
 pip install -e .
 ```
 
@@ -69,16 +69,16 @@ is easy:
 ```bash
 export SRC=`pwd`
 
-cd $SRC/cloudmesh.common
+cd $SRC/cloudmesh-common
 git pull
 pip install -e .
-cd $SRC/cloudmesh.cmd5
+cd $SRC/cloudmesh-cmd5
 git pull
 pip install -e .
-cd $SRC/cloudmesh.sys
+cd $SRC/cloudmesh-sys
 git pull
 pip install -e .
-cd $SRC/cloudmesh.openapi
+cd $SRC/cloudmesh-openapi
 git pull
 pip install -e .
 git pull
@@ -98,12 +98,13 @@ you like to install cloudmesh in. An example is
 
 ```
 cloudmesh:
-  source:
-    common: ~/Desktop/github/cloudmesh
-    cmd5: ~/Desktop/github/cloudmesh
-    openapi: ~/Desktop/github/cloudmesh
-    sys: ~/Desktop/github/cloudmesh
-    cm: ~/Desktop/github/cloudmesh-community
+  destination:
+    cloudmesh-common: ~/Desktop/github/cloudmesh
+    cloudmesh-cmd5: ~/Desktop/github/cloudmesh
+    cloudmesh-openapi: ~/Desktop/github/cloudmesh
+    cloudmesh-sys: ~/Desktop/github/cloudmesh
+    cloudmesh-cm4: ~/Desktop/github/cloudmesh
+      git: https://github.com/cloudmesh-community/cloudmesh-cm4
 ```
 
 

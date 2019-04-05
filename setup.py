@@ -96,14 +96,14 @@ home = os.path.expanduser("~")
 
 setup(
     version=__version__,
-    name="cloudmesh_cm4",
+    name="cloudmesh-cm4",
     description="cloudmesh_cm4 - A heterogeneous multi cloud command "
                 "client and shell",
     long_description=read('README.md'),
     license="Apache License, Version 2.0",
     author="Gregor von Laszewski, cloudmesh.org",
     author_email="laszewski@gmail.com",
-    url="https://github.com/cloudmesh-community/cm",
+    url="https://github.com/cloudmesh/cloudmesh-cm4",
     classifiers=[
         "Intended Audience :: Developers",
         "Intended Audience :: Education",
@@ -130,11 +130,11 @@ setup(
     package_data={
         'cm4.etc': ['*.yaml', '*.py'],
     },
-    entry_points={
-        'console_scripts': [
-            'cm4 = cm4.command.command:main',
-        ],
-    },
+    #entry_points={
+    #    'console_scripts': [
+    #        'cm4 = cm4.command.command:main',
+    #    ],
+    #},
     # tests_require=['tox'],
     # dependency_links = []
 )

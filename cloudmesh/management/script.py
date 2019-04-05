@@ -5,6 +5,7 @@ command be completely executed before the output is returned. For many activitie
 import subprocess
 import textwrap
 from sys import platform
+from cloudmesh.common.Shell import Shell
 
 import psutil
 
@@ -44,7 +45,7 @@ class Script(object):
     """Executing a script defined by a simple text parameter"""
 
     @staticmethod
-    def run(script, debug=False):
+    def run(script, live=False, debug=False):
         """
         run the specified script line by line.
 
@@ -63,13 +64,18 @@ class Script(object):
                 print(lines)
                 print("===============")
             for line in lines:
-                r = subprocess.check_output(line, encoding='UTF-8', shell=True)
+                if live:
+                    r = Shell.live(line)
+                else:
+                    r = subprocess.check_output(line, encoding='UTF-8', shell=True)
                 if debug:
                     print(r)
                 result = result + r
             return result
         else:
             return ""
+
+
 
 
 def find_process(name):

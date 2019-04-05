@@ -14,7 +14,8 @@ class Key(object):
     @classmethod
     def get_from_dir(cls, directory=None, store=True):
         directory = directory or path_expand("~/.ssh")
-        # find way that also works on windows, code always must work on windows and Linux, if not you need to have if condition
+        # find way that also works on windows, code always must work on windows
+        # and Linux, if not you need to have if condition
         os.system("chmod 700 $HOME /.ssh")
         files = [file for file in os.listdir(expanduser(path_expand(directory)))
                  if file.lower().endswith(".pub")]
@@ -22,7 +23,8 @@ class Key(object):
         for file in files:
             print(file)
             path = directory + "/" + file
-            # find way that also works on windows, code always must work on windows and Linux, if not you need to have if condition
+            # find way that also works on windows, code always must work on
+            # windows and Linux, if not you need to have if condition
 
             os.system("chmod 700 $HOME /.ssh")
             with open(path) as fd:

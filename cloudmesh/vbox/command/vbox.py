@@ -6,7 +6,7 @@ from cloudmesh.common.Shell import Shell
 from cloudmesh.common.dotdict import dotdict
 from cloudmesh.shell.command import PluginCommand
 from cloudmesh.shell.command import command
-from cloudmesh.cm4 import __version__
+from cloudmesh.cloud import __version__
 from cloudmesh.compute.virtualbox.Provider import Provider
 
 

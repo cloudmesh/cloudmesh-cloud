@@ -14,7 +14,7 @@ from cloudmesh.management.configuration.config import Config
 from cloudmesh.management.configuration.name import Name
 from cloudmesh.shell.variables import Variables
 from cloudmesh.common.util import banner
-
+from cloudmesh.common.parameter import Parameter
 
 class TestDatabase:
 
@@ -35,7 +35,8 @@ class TestDatabase:
         self.new_name = str(self.name_generator)
 
         variables = Variables()
-        cloud = variables['cloud']
+        clouds = Parameter.expand(variables['cloud'])
+        cloud = clouds[0]
 
 
         self.p = Provider(name=cloud)
@@ -63,8 +64,6 @@ class TestDatabase:
         HEADING()
         nodes = self.p.list()
 
-
-class a:
 
     def test_04_list_keys(self):
         HEADING()

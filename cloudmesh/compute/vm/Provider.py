@@ -97,3 +97,7 @@ class Provider(object):
 
     def rename(self, source=None, destination=None):
         self.p.rename(source=source, destination=destination)
+
+
+    def key_upload(self, key):
+        self.p.key_upload(key)

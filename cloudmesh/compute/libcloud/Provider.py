@@ -195,6 +195,11 @@ class Provider(ComputeNodeABC):
                     entry["cm"]["name"] = entry["name"]
                 else:
                     pass
+            elif kind == 'key':
+                if self.cloudtype == 'openstack':
+                    entry["cm"]["name"] = entry["name"]
+                else:
+                    pass
 
             if "_uuid" in entry:
                 del entry["_uuid"]

@@ -81,7 +81,7 @@ with open('README.md') as f:
     long_description = f.read()
 
 NAME = "cloudmesh-cloud"
-DESCRIPTION = "A dynamic extensible CMD based command shell"
+DESCRIPTION = "Cloudmesh Multicloud Cloud Plugins for Cloudmesh cmd5 CMD"
 AUTHOR = "Gregor von Laszewski"
 AUTHOR_EMAIL = "laszewski@gmail.com"
 URL = "https://github.com/cloudmesh/cloudmesh-cloud"

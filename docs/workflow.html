@@ -17,13 +17,20 @@
   
 
   
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="author" title="About these documents" href="about.html" />
@@ -31,21 +38,16 @@
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="13. Code Documentation" href="code.html" />
     <link rel="prev" title="11. Virtual Machine Management (proposed)" href="vm.html" /> 
-
-  
-  <script src="_static/js/modernizr.min.js"></script>
-
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -210,9 +212,9 @@ language specification</p>
 </div>
 <p>Where</p>
 <ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">a</span> <span class="pre">;</span> <span class="pre">b</span></code> is executed sequentially <code class="docutils literal notranslate"><span class="pre">a</span> <span class="pre">|</span> <span class="pre">b</span></code> is executed in parallel <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">&amp;</span> <span class="pre">y</span></code></li>
-<li>specifies two graphs which dependency lists have to be fulfilled by parallel</li>
-<li>and sequential operators. Nodes can be in differnet subgraphs.</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">a</span> <span class="pre">;</span> <span class="pre">b</span></code> is executed sequentially <code class="docutils literal notranslate"><span class="pre">a</span> <span class="pre">|</span> <span class="pre">b</span></code> is executed in parallel <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">&amp;</span> <span class="pre">y</span></code></p></li>
+<li><p>specifies two graphs which dependency lists have to be fulfilled by parallel</p></li>
+<li><p>and sequential operators. Nodes can be in differnet subgraphs.</p></li>
 </ul>
 <p>or</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">a</span> <span class="o">-&gt;</span> <span class="n">b</span> <span class="o">-&gt;</span> <span class="n">c</span> <span class="o">-&gt;</span> <span class="n">d</span><span class="p">;</span>
@@ -274,8 +276,8 @@ rendering of some DAG in javascript. The javascript library must be free to use.
 Nodes and edges must be able to be labeled.</p>
 <p>A promissing start for a Javascript library is</p>
 <ul class="simple">
-<li><a class="reference external" href="http://visjs.org/network_examples.html">http://visjs.org/network_examples.html</a></li>
-<li><a class="reference external" href="http://visjs.org/examples/network/events/interactionEvents.html">http://visjs.org/examples/network/events/interactionEvents.html</a></li>
+<li><p><a class="reference external" href="http://visjs.org/network_examples.html">http://visjs.org/network_examples.html</a></p></li>
+<li><p><a class="reference external" href="http://visjs.org/examples/network/events/interactionEvents.html">http://visjs.org/examples/network/events/interactionEvents.html</a></p></li>
 </ul>
 <p>This project is only recommended for someone that knows javascript already.</p>
 <p>You will do the rest of the project in python. It is important that the
@@ -352,8 +354,8 @@ executing a command in teh vm ….</p>
 <div class="section" id="resources">
 <h2>12.3. Resources<a class="headerlink" href="#resources" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li><a class="reference external" href="https://github.com/xflr6/graphviz">https://github.com/xflr6/graphviz</a></li>
-<li><a class="reference external" href="http://visjs.org/examples/network/events/interactionEvents.html">http://visjs.org/examples/network/events/interactionEvents.html</a></li>
+<li><p><a class="reference external" href="https://github.com/xflr6/graphviz">https://github.com/xflr6/graphviz</a></p></li>
+<li><p><a class="reference external" href="http://visjs.org/examples/network/events/interactionEvents.html">http://visjs.org/examples/network/events/interactionEvents.html</a></p></li>
 </ul>
 </div>
 </div>
@@ -369,7 +371,7 @@ executing a command in teh vm ….</p>
         <a href="code.html" class="btn btn-neutral float-right" title="13. Code Documentation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="vm.html" class="btn btn-neutral" title="11. Virtual Machine Management (proposed)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="vm.html" class="btn btn-neutral float-left" title="11. Virtual Machine Management (proposed)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -395,26 +397,16 @@ executing a command in teh vm ….</p>
   
 
 
-  
-
-    
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script type="text/javascript" src="_static/jquery.js"></script>
-        <script type="text/javascript" src="_static/underscore.js"></script>
-        <script type="text/javascript" src="_static/doctools.js"></script>
-        <script type="text/javascript" src="_static/language_data.js"></script>
-    
-
-  
-
-  <script type="text/javascript" src="_static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

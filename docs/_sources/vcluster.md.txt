@@ -251,7 +251,7 @@ results were collected afterwards (using 3 processes). We can check
 the existence of the results:
 
 ```console
-$ ll ./cm4/vcluster/sample_output/
+$ ll ./cloudmesh-cloud/vcluster/sample_output/
 total 48
 drwxr-xr-x 2 corriel 4096 Oct 31 22:12 ./
 drwxr-xr-x 8 corriel 4096 Oct 31 22:12 ../
@@ -281,7 +281,7 @@ Now that we set this parameter, we can submit the jobs and this time
 the tool will not wait for the results:
 
 ```console
-$ cms vcluster run-script --script-path=./cm4/vcluster/sample_scripts/inf_script_stdin_stdout.sh --job-name=TestJob1 --vcluster-name=vcluster1 --config-name=ParamInStdOut --arguments=_,_,_,_,_,_,_,_,_,_ --remote-path=~/ --local-path=./cm4/vcluster/sample_output --overwrite
+$ cms vcluster run-script --script-path=./cloudmesh-cloud/vcluster/sample_scripts/inf_script_stdin_stdout.sh --job-name=TestJob1 --vcluster-name=vcluster1 --config-name=ParamInStdOut --arguments=_,_,_,_,_,_,_,_,_,_ --remote-path=~/ --local-path=./cloudmesh-cloud/vcluster/sample_output --overwrite
 Remote Pid on c2: 12981
 Remote Pid on c2: 12987
 Remote Pid on c2: 13280

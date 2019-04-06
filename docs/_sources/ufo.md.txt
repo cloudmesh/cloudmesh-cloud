@@ -1,6 +1,6 @@
 ## REST Service (outdated)
 
-The cm4 REST Api is built using flask and provides the cloud
+The REST Api is built using flask and provides the cloud
 information retrieval functionality through HTTP calls.
 
 #### Pre-requisites
@@ -18,13 +18,13 @@ Use pip install to install the following packages.
 cd ~/git/cloudmesh/cm
 ```
 
-- Configure the cm4
+- Configure cloudmesh
 
 ```bash
 pip install .
 ```
 
-- Add the MongoDB information in the cm4 configuration file
+- Add the MongoDB information in the configuration file
 
 ```bash
 vi ~/.cloudmesh/cloudmesh4.yaml

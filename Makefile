@@ -155,8 +155,8 @@ release: clean
 	$(call banner, "install")
 	@cat VERSION
 	@echo
-	sleep 10
-	pip install -U cloudmesh-common
+	#sleep 10
+	#pip install -U cloudmesh-common
 
 
 dev:

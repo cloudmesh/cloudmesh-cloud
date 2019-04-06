@@ -283,7 +283,7 @@ class CmDatabase(object):
                     entry[arg] = kwargs[arg]
             entry["updated"] = str(datetime.utcnow())
             if replace:
-                col.replace_one({'name': entry[name]}, entry, upsert=True)
+                col.update({'name': entry[name]}, entry, upsert=True)
             else:
                 col.update_one({'name': entry[name]}, {"$set": entry},
                                upsert=True)

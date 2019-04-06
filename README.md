@@ -1,4 +1,4 @@
-# Cloudmesh cm v4
+# Cloudmesh Cloud Interfaces
 
 [![image](https://img.shields.io/pypi/pyversions/cloudmesh-cloud.svg)](https://pypi.org/project/cloudmesh-cloud)
 [![image](https://img.shields.io/pypi/v/cloudmesh-cloud.svg)](https://pypi.org/project/cloudmesh-cloud/)

@@ -56,7 +56,7 @@ class TestName:
         #pprint(self.keys)
 
         print(Printer.flatwrite(self.keys,
-                            sort_keys=("name"),
+                            sort_keys=["name"],
                             order=["name", "fingerprint"],
                             header=["Name", "Fingerprint"])
               )
@@ -78,8 +78,8 @@ class TestName:
         pprint(flavors)
 
         print(Printer.flatwrite(flavors,
-                                sort_keys=(
-                                "name", "extra.vcpu", "extra.memory", "price"),
+                                sort_keys=[
+                                "name", "extra.vcpu", "extra.memory", "price"],
                                 order=["name", "extra.vcpu", "extra.memory",
                                        "extra.clockSpeed", "price"],
                                 header=["Name", "VCPUS", "RAM", "Speed",
@@ -123,7 +123,7 @@ class TestName:
 
 
         print(Printer.flatwrite(vms,
-                                sort_keys=("name"),
+                                sort_keys=["name"],
                                 order=["name",
                                        "state",
                                        "extra.task_state",
@@ -153,7 +153,7 @@ class forstudentstocomplete:
             rules = self.p.list_secgroup_rules(secgroup["name"])
 
             print(Printer.write(rules,
-                                sort_keys=("ip_protocol", "from_port", "to_port", "ip_range"),
+                                sort_keys=["ip_protocol", "from_port", "to_port", "ip_range"],
                                 order=["ip_protocol", "from_port", "to_port", "ip_range"],
                                 header=["ip_protocol", "from_port", "to_port", "ip_range"])
                  )
@@ -307,7 +307,7 @@ class takestoolong:
         pprint(images[:10])
 
         print(Printer.flatwrite(images[:10],
-                                sort_keys=("id", "name"),
+                                sort_keys=["id", "name"],
                                 order=["name", "id", 'architecture',
                                        'hypervisor'],
                                 header=["Name", "id", 'architecture',

@@ -55,10 +55,10 @@ class TestName:
         #pprint(flavors)
 
         print(Printer.flatwrite(flavors,
-                                sort_keys=(
+                                sort_keys=[
                                     "name", "ram", "disk",
                                     "extra.numberOfCores",
-                                    "price"),
+                                    "price"],
                                 order=["name", "ram", "disk",
                                        "extra.numberOfCores",
                                        "price"],
@@ -92,7 +92,7 @@ class TestName:
 
         #'''
         print(Printer.flatwrite(vms,
-                                sort_keys=("name"),
+                                sort_keys=["name"],
                                 order=["name",
                                        "state",
                                        "extra.properties.hardwareProfile.vmSize",
@@ -121,7 +121,7 @@ class a:
         # pprint(self.keys)
 
         print(Printer.flatwrite(self.keys,
-                                sort_keys=("name"),
+                                sort_keys=["name"],
                                 order=["name", "fingerprint"],
                                 header=["Name", "Fingerprint"])
               )
@@ -142,7 +142,7 @@ class a:
         pprint(images[:10])
 
         print(Printer.flatwrite(images[:10],
-                                sort_keys=("id", "name"),
+                                sort_keys=["id", "name"],
                                 order=["name", "id", 'extra.os'],
                                 header=["Name", "id", 'extra.os'])
               )
@@ -191,9 +191,9 @@ class forstudentstocomplete:
             rules = self.p.list_secgroup_rules(secgroup["name"])
 
             print(Printer.write(rules,
-                                sort_keys=(
+                                sort_keys=[
                                 "ip_protocol", "from_port", "to_port",
-                                "ip_range"),
+                                "ip_range"],
                                 order=["ip_protocol", "from_port", "to_port",
                                        "ip_range"],
                                 header=["ip_protocol", "from_port", "to_port",

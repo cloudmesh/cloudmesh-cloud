@@ -24,7 +24,6 @@ import io
 
 from setuptools import find_packages, setup
 
-version = readfile("VERSION").strip()
 
 v = sys.version_info
 if v.major != 3 and v.minor != 7 and v.micro < 2:
@@ -95,7 +94,7 @@ setup(
     description=DESCRIPTION,
     long_description=long_description,
     long_description_content_type="text/markdown",
-    version=version,
+    version="4.0.23",
     license="Apache 2.0",
     url=URL,
     packages=find_packages(exclude=("tests",

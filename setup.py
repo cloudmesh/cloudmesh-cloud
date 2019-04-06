@@ -130,7 +130,6 @@ setup(
         "Topic :: System :: Distributed Computing",
         "Topic :: System :: Shells",
         "Topic :: Utilities",
-        "Topic :: Cloud"
     ],
     install_requires=requiers,
     tests_require=[

@@ -81,9 +81,6 @@ yamllint
 azure
 docker
 munch
-cloudmesh-common
-cloudmesh-cmd5
-cloudmesh-sys
 """.split("\n")
 
 

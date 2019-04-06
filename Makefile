@@ -136,7 +136,9 @@ patch: clean
 	# sleep 10
 	# pip install --index-url https://test.pypi.org/simple/ cloudmesh-$(package) -U
 	make
-	
+	git commit -m "update ocumentation" docs
+	git push
+
 minor: clean
 	$(call banner, "minor")
 	bump2version minor --allow-dirty

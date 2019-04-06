@@ -9,13 +9,11 @@
 [![Supported Python versions](https://img.shields.io/pypi/pyversions/cloudmesh-cloud.svg)](https://pypi.python.org/pypi/cloudmesh/cloudmesh-cloud)
 
 
-[![image](https://img.shields.io/travis/TankerHQ/cloudmesh-cm4.svg?branch=master)](https://travis-ci.org/TankerHQ/cloudmesn-cm4)
+[![image](https://img.shields.io/travis/TankerHQ/cloudmesh-cloud.svg?branch=master)](https://travis-ci.org/TankerHQ/cloudmesn-cloud)
 
-[![image](https://img.shields.io/pypi/pyversions/cloudmesh-cm4.svg)](https://pypi.org/project/cloudmesh-cm4)
+[![image](https://img.shields.io/pypi/pyversions/cloudmesh-cloud.svg)](https://pypi.org/project/cloudmesh-cloud)
 
-[![image](https://img.shields.io/pypi/v/cloudmesh-cm4.svg)](https://pypi.org/project/cloudmesh-cm4/)
-
-[![image](https://img.shields.io/github/license/TankerHQ/python-cloudmesh-cm4.svg)](https://github.com/TankerHQ/python-cloudmesh-cm4/blob/master/LICENSE)
+[![image](https://img.shields.io/pypi/v/cloudmesh-cloud.svg)](https://pypi.org/project/cloudmesh-cloud/)
 
 
 Please note that the code and documentation are under heavy development and is likely not correct. 

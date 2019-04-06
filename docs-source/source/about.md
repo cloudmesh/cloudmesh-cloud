@@ -7,8 +7,8 @@ access common cloud services across a number of cloud providers.
 
 It is under active development. It is managed in github at 
 
-* Documentation: <https://cloudmesh.github.io/cloudmesh-cm4/>
-* Code: <https://github.com/cloudmesh/cloudmesh-cm4>
+* Documentation: <https://cloudmesh.github.io/cloudmesh-cloud/>
+* Code: <https://github.com/cloudmesh/cloudmesh-cloud>
 
 Cloudmesh version 4 will contain
 

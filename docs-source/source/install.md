@@ -1,6 +1,6 @@
 # Installation
 
-[![Downloads](https://img.shields.io/pypi/dm/cm.svg)](https://pypi.python.org/pypi/cloudmesh/cloudmesh-cm4/)
+[![Downloads](https://img.shields.io/pypi/dm/cm.svg)](https://pypi.python.org/pypi/cloudmesh/cloudmesh-cloud/)
 
 ## Prerequisites
 
@@ -17,7 +17,7 @@ we recommend that you use the source installation instead.
 In future cloudmesh version 4 will be installed with
 
 ```bash
-pip install cloudmesh-cm4
+pip install cloudmesh-cloud
 ```
 
 Individual packages can be installed with
@@ -43,7 +43,7 @@ git clone https://github.com/cloudmesh/cloudmesh-common.git
 git clone https://github.com/cloudmesh/cloudmesh-cmd5.git
 git clone https://github.com/cloudmesh/cloudmesh-sys.git
 git clone https://github.com/cloudmesh/cloudmesh-openapi.git
-git clone https://github.com/cloudmesh-community/cloudmesh-cm4.git
+git clone https://github.com/cloudmesh-community/cloudmesh-cloud.git
 
 
 cd $SRC/cloudmesh-common
@@ -54,7 +54,7 @@ cd $SRC/cloudmesh-sys
 pip install -e .
 cd $SRC/cloudmesh-openapi
 pip install -e .
-cd $SRC/cloudmesh-cm4
+cd $SRC/cloudmesh-cloud
 pip install -e .
 ```
 
@@ -103,8 +103,8 @@ cloudmesh:
     cloudmesh-cmd5: ~/Desktop/github/cloudmesh
     cloudmesh-openapi: ~/Desktop/github/cloudmesh
     cloudmesh-sys: ~/Desktop/github/cloudmesh
-    cloudmesh-cm4: ~/Desktop/github/cloudmesh
-      git: https://github.com/cloudmesh-community/cloudmesh-cm4
+    cloudmesh-cloud: ~/Desktop/github/cloudmesh
+      git: https://github.com/cloudmesh-community/cloudmesh-cloud
 ```
 
 

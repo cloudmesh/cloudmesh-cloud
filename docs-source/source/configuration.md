@@ -4,7 +4,7 @@ The Configuration of cloudmesh is controled with a yaml file that is placed in
 `~/.clloudmesh/cloudmesh4.yaml`. It is created automatically from the templace
 located at
 
-* <https://github.com/cloudmesh/cloudmesh-cm4/blob/master/cloudmesh/etc/cloudmesh4.yaml>
+* <https://github.com/cloudmesh/cloudmesh-cloud/blob/master/cloudmesh/etc/cloudmesh4.yaml>
 
 You can customize the file in your local directory.
 

@@ -21,7 +21,7 @@ experiments.
 
 TODO: update the link
 
-Please refer to [here](https://github.com/cloudmesh/cloudmesh-cm4/tree/master/cm4/vagrant/README.md) to see how to setup 
+Please refer to [here](https://github.com/cloudmesh/cloudmesh-cloud/tree/master/cm4/vagrant/README.md) to see how to setup 
 Vagrant with cm4.
 
 ## What we have implemented 
@@ -38,13 +38,13 @@ Vagrant with cm4.
 * cm4/command/command.py : the python class defines the interface for the command-line `cm4` 
 
 ``` commandline
-$ cm4
+$ cms
 Usage:
-      cm4 admin mongo install [--brew] [--download=PATH]
-      cm4 admin mongo status
-      cm4 admin mongo start
-      cm4 admin mongo stop
-      cm4 admin mongo backup FILENAME
+      cms admin mongo install [--brew] [--download=PATH]
+      cms admin mongo status
+      cms admin mongo start
+      cms admin mongo stop
+      cms admin mongo backup FILENAME
       ...
 ```
 
@@ -292,7 +292,7 @@ Here are some samples for running these operations by using `cm4`:
 
 First, user would create the virtual machine in AWS.
 ```commandline
-$ cm4 vm create
+$ cms vm create
 Collection(Database(MongoClient(host=['127.0.0.1:27017'], document_class=dict, tz_aware=False, connect=True), 'cloudmesh'), 'cloud')
 Thread: updating the status of node
 Created base-cloudmesh-yuluo-4
@@ -318,7 +318,7 @@ you the virtual machine from MongoDB record with a thread updating the new infor
 `status` method to check the status of the virtual machine.
 
 ```commandline
-$ cm4 vm stop --vms=base-cloudmesh-yuluo-4
+$ cms vm stop --vms=base-cloudmesh-yuluo-4
 Thread: updating the status of node
 {'_id': ObjectId('5c09c65f56c5a939942a9911'), 
 'id': 'i-01ca62f33728f4931', 
@@ -326,14 +326,14 @@ Thread: updating the status of node
 'state': 'running', 
 'public_ips': ['52.39.13.229'],
 ...}
-$ cm4 vm status --vms=base-cloudmesh-yuluo-4
+$ cms vm status --vms=base-cloudmesh-yuluo-4
 stopped
 ```
 
 When user wants to start the stopped virtual machine, he has to type the command of below sample.
 
 ```commandline
-$ cm4 vm start --vms=base-cloudmesh-yuluo-4
+$ cms vm start --vms=base-cloudmesh-yuluo-4
 Thread: updating the status of node
 {'_id': ObjectId('5c09c65f56c5a939942a9911'), 
 'id': 'i-01ca62f33728f4931', 
@@ -346,21 +346,21 @@ PING 54.191.109.54 (54.191.109.54): 56 data bytes
 --- 54.191.109.54 ping statistics ---
 1 packets transmitted, 0 packets received, 100.0% packet loss
 
-$ cm4 vm status --vms=base-cloudmesh-yuluo-4
+$ cms vm status --vms=base-cloudmesh-yuluo-4
 running
 ```
 
 There is a way for users to get the public ip of a virtual machine.
 
 ```commandline
-$ cm4 vm publicip --vms=base-cloudmesh-yuluo-4
+$ cms vm publicip --vms=base-cloudmesh-yuluo-4
 {'base-cloudmesh-yuluo-4': ['54.191.109.54']}
 ```
 
 Also, if user wants to know the information of virtual machines under his AWS account, he could do this.
 
 ```commandline
-$ cm4 vm list
+$ cms vm list
 <Node: uuid=9b46e75095f586471e2cfe8ebc6b1021ead0e86b, name=a-b-luoyu-0, state=STOPPED, public_ips=[], 
 private_ips=['172.31.28.147'], provider=Amazon EC2 ...>, 
 <Node: uuid=da309c8acbbc7bc1f21295600323d073afffb04a, name=base-cloudmesh-yuluo-1, state=TERMINATED, 
@@ -372,7 +372,7 @@ public_ips=['54.191.109.54'], private_ips=['172.31.41.197'], provider=Amazon EC2
 Finally, if user wants to delete the virtual machine, he could do this.
 
 ```commandline
-$ cm4 vm destroy --vms=base-cloudmesh-yuluo-4
+$ cms vm destroy --vms=base-cloudmesh-yuluo-4
 True
 ```
 
@@ -404,7 +404,7 @@ you need to make sure the global default cloud parameter has been set
 to 'Chameleon' by:
 
 ```commandline
-$ cm4 vm set cloud chameleon
+$ cms vm set cloud chameleon
 Setting env parameter cloud to: chameleon
 Writing updata to cloudmesh.yaml
 Config has been updated.
@@ -444,9 +444,9 @@ Use pip install to install the following packages.
 #### How to run the REST API
 
 ```bash
-$ cm4 admin rest status
-$ cm4 admin rest start
-$ cm4 admin rest stop
+$ cms admin rest status
+$ cms admin rest start
+$ cms admin rest stop
 ```
 
 - Navigate to the cm directory. example:
@@ -514,7 +514,7 @@ describing the job history of each virtual machine.
 For example, user wants to run `pwd` command to `base-cloudmesh-yulou-5` machine in AWS.
 
 ```commandline
-$ cm4 aws run command pwd --vm=base-cloudmesh-yuluo-5
+$ cms aws run command pwd --vm=base-cloudmesh-yuluo-5
 Running command pwdin Instance base-cloudmesh-yuluo-5:
 /home/ubuntu
 ```
@@ -533,7 +533,7 @@ The `job` collection and `status` collection in MongoDB will have below document
 If user run script file containing '#!/bin/sh\npwd' in `base-cloudmesh-yulou-5` machine:
 
 ```commandline
-$ cm4 aws run script /Users/yuluo/Desktop/cm.sh --vm=base-cloudmesh-yuluo-5
+$ cms aws run script /Users/yuluo/Desktop/cm.sh --vm=base-cloudmesh-yuluo-5
 Running command /Users/yuluo/Desktop/cm.shin Instance base-cloudmesh-yuluo-5:
 /home/ubuntu
 ```

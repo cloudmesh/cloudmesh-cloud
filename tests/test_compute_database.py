@@ -16,12 +16,12 @@ from cloudmesh.shell.variables import Variables
 from cloudmesh.common.util import banner
 from cloudmesh.common.parameter import Parameter
 
-import pytest
+#import pytest
 
-@pytest.mark.incremental
+#@pytest.mark.incremental
 class Test_Compute_Database:
 
-    def setup_class(self):
+    def setup(self):
         print()
         self.user = Config()["cloudmesh"]["profile"]["user"]
         self.clouduser = 'cc'

@@ -17,13 +17,20 @@
   
 
   
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="author" title="About these documents" href="about.html" />
@@ -31,21 +38,16 @@
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="1. Goal (outdated)" href="goal.html" />
     <link rel="prev" title="1. Code Conventions" href="conventions.html" /> 
-
-  
-  <script src="_static/js/modernizr.min.js"></script>
-
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -196,7 +198,7 @@ automatically run and reports can be generated. A project that does not have a
 sufficient number of tests to make sure the module works can not be accepted.</p>
 <div class="section" id="installation">
 <h2>2.1. Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
-<p>The&nbsp;nose&nbsp;module can be installed with the help of pip utility</p>
+<p>The nose module can be installed with the help of pip utility</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span>$ pip install nose
 </pre></div>
 </div>
@@ -204,7 +206,7 @@ sufficient number of tests to make sure the module works can not be accepted.</p
 as a nosetest.exe, which means the test can be run using this utility as well as using <code class="docutils literal notranslate"><span class="pre">–m</span></code> switch.
 All nose tests are included in the folder <code class="docutils literal notranslate"><span class="pre">tests</span></code>.</p>
 <ul class="simple">
-<li><a class="reference external" href="https://github.com/cloudmesh-community/cm/tree/master/tests">https://github.com/cloudmesh-community/cm/tree/master/tests</a></li>
+<li><p><a class="reference external" href="https://github.com/cloudmesh/cloudmesh-cloud/tree/master/tests">https://github.com/cloudmesh/cloudmesh-cloud/tree/master/tests</a></p></li>
 </ul>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">+</span><span class="n">cm</span>
   <span class="o">+</span> <span class="n">cloudmesh</span>
@@ -221,7 +223,7 @@ introducing numbers in the tests.</p>
 <h2>2.2. Test Specification and Execution<a class="headerlink" href="#test-specification-and-execution" title="Permalink to this headline">¶</a></h2>
 <p>A simple example for a test is</p>
 <ul class="simple">
-<li><a class="reference external" href="https://github.com/cloudmesh-community/cm/blob/master/tests/test_key.py">https://github.com/cloudmesh-community/cm/blob/master/tests/test_key.py</a></li>
+<li><p><a class="reference external" href="https://github.com/cloudmesh/cloudmesh-cloud/blob/master/tests/test_key.py">https://github.com/cloudmesh/cloudmesh-cloud/blob/master/tests/test_key.py</a></p></li>
 </ul>
 <p>Note that all test python programs have specific function names
 of the form</p>
@@ -364,7 +366,7 @@ the print statement when they are called:</p>
 <h2>2.5. Test Timer<a class="headerlink" href="#test-timer" title="Permalink to this headline">¶</a></h2>
 <p>The following extension adds timers to nosetests</p>
 <ul class="simple">
-<li><a class="reference external" href="https://github.com/mahmoudimus/nose-timer">https://github.com/mahmoudimus/nose-timer</a></li>
+<li><p><a class="reference external" href="https://github.com/mahmoudimus/nose-timer">https://github.com/mahmoudimus/nose-timer</a></p></li>
 </ul>
 <p>It is installed with</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ pip install nose-timer
@@ -412,7 +414,7 @@ pass along the name of the python test.</p>
 <p>Nosetest can be augmented with profiles that showcase some of the internal time
 spend on different functions and methods. To do so install</p>
 <ul class="simple">
-<li><a class="reference external" href="https://github.com/msherry/nose-cprof">https://github.com/msherry/nose-cprof</a></li>
+<li><p><a class="reference external" href="https://github.com/msherry/nose-cprof">https://github.com/msherry/nose-cprof</a></p></li>
 </ul>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ pip install nose-cprof
 $ pip install cprofilev
@@ -469,7 +471,7 @@ $ open pycallgraph.pdf
         <a href="goal.html" class="btn btn-neutral float-right" title="1. Goal (outdated)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="conventions.html" class="btn btn-neutral" title="1. Code Conventions" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="conventions.html" class="btn btn-neutral float-left" title="1. Code Conventions" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -495,26 +497,16 @@ $ open pycallgraph.pdf
   
 
 
-  
-
-    
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script type="text/javascript" src="_static/jquery.js"></script>
-        <script type="text/javascript" src="_static/underscore.js"></script>
-        <script type="text/javascript" src="_static/doctools.js"></script>
-        <script type="text/javascript" src="_static/language_data.js"></script>
-    
-
-  
-
-  <script type="text/javascript" src="_static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

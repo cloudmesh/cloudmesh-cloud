@@ -17,13 +17,20 @@
   
 
   
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="author" title="About these documents" href="about.html" />
@@ -31,21 +38,16 @@
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="3. Installation" href="install.html" />
     <link rel="prev" title="1. About" href="about.html" /> 
-
-  
-  <script src="_static/js/modernizr.min.js"></script>
-
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -90,6 +92,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#code-management">2.1. Code Management</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#documentation-management">2.2. Documentation Management</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#security-management-needs-further-investigation-if-useful-and-secure">2.3. Security Management (needs further investigation if useful and secure)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#version-managemt">2.4. Version Managemt</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="install.html">3. Installation</a></li>
@@ -187,22 +190,22 @@
 <h1>2. Contributors<a class="headerlink" href="#contributors" title="Permalink to this headline">¶</a></h1>
 <p>The contributors are listed here in alphabetical order</p>
 <ul class="simple">
-<li>Gregor von Laszewski (primary contact, laszewski&#64;gmial.com) and</li>
-<li>Fugang Wang</li>
+<li><p>Gregor von Laszewski (primary contact, laszewski&#64;gmial.com) and</p></li>
+<li><p>Fugang Wang</p></li>
 </ul>
 <p>put your names here (put your real names here and sort by lastname</p>
 <ul class="simple">
-<li>Vafa Andalibi,
+<li><p>Vafa Andalibi,
 David Michael Demeulenaere,
 Bo Feng,
 Yu Luo,
 Rui Li,
 Sachith Danushka Withana,
-Kimball Wu</li>
+Kimball Wu</p></li>
 </ul>
 <p>Code Contributions can be seen at</p>
 <ul class="simple">
-<li><a class="reference external" href="https://github.com/cloudmesh-community/cm/graphs/contributors">https://github.com/cloudmesh-community/cm/graphs/contributors</a></li>
+<li><p><a class="reference external" href="https://github.com/cloudmesh/cloudmesh-cloud/graphs/contributors">https://github.com/cloudmesh/cloudmesh-cloud/graphs/contributors</a></p></li>
 </ul>
 <div class="section" id="code-management">
 <h2>2.1. Code Management<a class="headerlink" href="#code-management" title="Permalink to this headline">¶</a></h2>
@@ -236,6 +239,29 @@ $ bandit -r ./cloudmesh
 </pre></div>
 </div>
 </div>
+<div class="section" id="version-managemt">
+<h2>2.4. Version Managemt<a class="headerlink" href="#version-managemt" title="Permalink to this headline">¶</a></h2>
+<p>This is only done by Gregor</p>
+<p>To create a development version we say</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ make build
+</pre></div>
+</div>
+<p>To increase the patch number, say</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ make patch
+</pre></div>
+</div>
+<p>To increase the minor number</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ make minor
+</pre></div>
+</div>
+<p>The major number will stay to 4, so this is not changed</p>
+<p>To create a release say</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ make release
+</pre></div>
+</div>
+<p>After the release is done the minor number will be increased and the buld number
+will be reset.</p>
+</div>
 </div>
 
 
@@ -249,7 +275,7 @@ $ bandit -r ./cloudmesh
         <a href="install.html" class="btn btn-neutral float-right" title="3. Installation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="about.html" class="btn btn-neutral" title="1. About" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="about.html" class="btn btn-neutral float-left" title="1. About" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -275,26 +301,16 @@ $ bandit -r ./cloudmesh
   
 
 
-  
-
-    
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script type="text/javascript" src="_static/jquery.js"></script>
-        <script type="text/javascript" src="_static/underscore.js"></script>
-        <script type="text/javascript" src="_static/doctools.js"></script>
-        <script type="text/javascript" src="_static/language_data.js"></script>
-    
-
-  
-
-  <script type="text/javascript" src="_static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

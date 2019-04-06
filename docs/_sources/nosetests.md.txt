@@ -18,7 +18,7 @@ This will install the nose module in the current Python distribution as well
 as a nosetest.exe, which means the test can be run using this utility as well as using `–m` switch.
 All nose tests are included in the folder `tests`.
 
-* <https://github.com/cloudmesh-community/cm/tree/master/tests>
+* <https://github.com/cloudmesh/cloudmesh-cloud/tree/master/tests>
 
 ```
 +cm
@@ -36,7 +36,7 @@ introducing numbers in the tests.
 
 A simple example for a test is 
 
-* <https://github.com/cloudmesh-community/cm/blob/master/tests/test_key.py>
+* <https://github.com/cloudmesh/cloudmesh-cloud/blob/master/tests/test_key.py>
 
 Note that all test python programs have specific function names 
 of the form

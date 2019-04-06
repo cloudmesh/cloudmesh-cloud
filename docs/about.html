@@ -17,13 +17,20 @@
   
 
   
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="author" title="About these documents" href="#" />
@@ -31,21 +38,16 @@
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="2. Contributors" href="contributors.html" />
     <link rel="prev" title="Cloudmesh Version 4" href="index.html" /> 
-
-  
-  <script src="_static/js/modernizr.min.js"></script>
-
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -90,13 +92,14 @@
 <li class="toctree-l1"><a class="reference internal" href="install.html">3. Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">4. Quickstart (proposed)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="configuration.html">5. Configuration (ok)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="mongo.html">6. Cloudmesh Database (ok)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="manual.html">7. Manual (ok)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="manual-dev.html">8. Manual (proposed)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="jupyter.html">9. Jupyter Integration (proposed)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="vm.html">10. Virtual Machine Management (proposed)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="workflow.html">11. Infrastructure Workflow (proposed)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="code.html">12. Code Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="yaml.html">6. Cloudmesh yaml file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mongo.html">7. Cloudmesh Database (ok)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual.html">8. Manual (ok)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual-dev.html">9. Manual (proposed)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="jupyter.html">10. Jupyter Integration (proposed)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vm.html">11. Virtual Machine Management (proposed)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="workflow.html">12. Infrastructure Workflow (proposed)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="code.html">13. Code Documentation</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Conventions:</span></p>
 <ul>
@@ -185,36 +188,39 @@ practitioners to interact easily with clouds to create a service meshup to
 access common cloud services across a number of cloud providers.</p>
 <p>It is under active development. It is managed in github at</p>
 <ul class="simple">
-<li>Documentation: <a class="reference external" href="https://cloudmesh-community.github.io/cm/">https://cloudmesh-community.github.io/cm/</a></li>
-<li>Code: <a class="reference external" href="https://github.com/cloudmesh-community/cm">https://github.com/cloudmesh-community/cm</a></li>
+<li><p>Documentation: <a class="reference external" href="https://cloudmesh.github.io/cloudmesh-cloud/">https://cloudmesh.github.io/cloudmesh-cloud/</a></p></li>
+<li><p>Code: <a class="reference external" href="https://github.com/cloudmesh/cloudmesh-cloud">https://github.com/cloudmesh/cloudmesh-cloud</a></p></li>
 </ul>
 <p>Cloudmesh version 4 will contain</p>
 <ul class="simple">
-<li>A command shell interpreter</li>
-<li>A command line</li>
-<li>A javascript based GUI</li>
-<li>A cloud Workflow interpreter</li>
-<li>A cloud high throughput broker for pleasantly parallel parameter studies</li>
-<li>OpenAPI based REST service interfaces</li>
-<li>MongoDB as a backend for caching</li>
-<li>Interfaces to compute services such as<ul>
-<li>AWS, Azure, Google, OpenStack</li>
-<li>SLURM</li>
-<li>SSH</li>
-<li>VirtualBox</li>
+<li><p>A command shell interpreter</p></li>
+<li><p>A command line</p></li>
+<li><p>A javascript based GUI</p></li>
+<li><p>A cloud Workflow interpreter</p></li>
+<li><p>A cloud high throughput broker for pleasantly parallel parameter studies</p></li>
+<li><p>OpenAPI based REST service interfaces</p></li>
+<li><p>MongoDB as a backend for caching</p></li>
+<li><p>Interfaces to compute services such as</p>
+<ul>
+<li><p>AWS, Azure, Google, OpenStack</p></li>
+<li><p>SLURM</p></li>
+<li><p>SSH</p></li>
+<li><p>VirtualBox</p></li>
 </ul>
 </li>
-<li>Interfaces to file storage<ul>
-<li>Box</li>
-<li>Github</li>
-<li>Google Drive</li>
-<li>Azure</li>
-<li>File storage on AWS</li>
+<li><p>Interfaces to file storage</p>
+<ul>
+<li><p>Box</p></li>
+<li><p>Github</p></li>
+<li><p>Google Drive</p></li>
+<li><p>Azure</p></li>
+<li><p>File storage on AWS</p></li>
 </ul>
 </li>
-<li>Interfaces to Platforms<ul>
-<li>Hadoop</li>
-<li>Spark</li>
+<li><p>Interfaces to Platforms</p>
+<ul>
+<li><p>Hadoop</p></li>
+<li><p>Spark</p></li>
 </ul>
 </li>
 </ul>
@@ -231,7 +237,7 @@ access common cloud services across a number of cloud providers.</p>
         <a href="contributors.html" class="btn btn-neutral float-right" title="2. Contributors" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="index.html" class="btn btn-neutral" title="Cloudmesh Version 4" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="index.html" class="btn btn-neutral float-left" title="Cloudmesh Version 4" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -257,26 +263,16 @@ access common cloud services across a number of cloud providers.</p>
   
 
 
-  
-
-    
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script type="text/javascript" src="_static/jquery.js"></script>
-        <script type="text/javascript" src="_static/underscore.js"></script>
-        <script type="text/javascript" src="_static/doctools.js"></script>
-        <script type="text/javascript" src="_static/language_data.js"></script>
-    
-
-  
-
-  <script type="text/javascript" src="_static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

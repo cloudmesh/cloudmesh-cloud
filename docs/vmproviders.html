@@ -17,13 +17,20 @@
   
 
   
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="author" title="About these documents" href="about.html" />
@@ -31,21 +38,16 @@
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="4. Vagrant (outdated)" href="vagrant.html" />
     <link rel="prev" title="1. Goal (outdated)" href="goal.html" /> 
-
-  
-  <script src="_static/js/modernizr.min.js"></script>
-
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -90,15 +92,21 @@
 <li class="toctree-l1"><a class="reference internal" href="install.html">3. Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">4. Quickstart (proposed)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="configuration.html">5. Configuration (ok)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="mongo.html">6. Cloudmesh Database (ok)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="manual.html">7. Manual (ok)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="manual-dev.html">8. Manual (proposed)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="jupyter.html">9. Jupyter Integration (proposed)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="vm.html">10. Virtual Machine Management</a></li>
-<li class="toctree-l1"><a class="reference internal" href="workflow.html">11. Infrastructure Workflow (proposed)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="code.html">12. Code Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="yaml.html">6. Cloudmesh yaml file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mongo.html">7. Cloudmesh Database (ok)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual.html">8. Manual (ok)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual-dev.html">9. Manual (proposed)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="jupyter.html">10. Jupyter Integration (proposed)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vm.html">11. Virtual Machine Management (proposed)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="workflow.html">12. Infrastructure Workflow (proposed)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="code.html">13. Code Documentation</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Contents:</span></p>
+<p class="caption"><span class="caption-text">Conventions:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="conventions.html">1. Code Conventions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nosetests.html">2. Nosetests</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Outdated:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="goal.html">1. Goal (outdated)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="goal.html#manual-cloudmesh-multi-service-data-access">2. Manual: Cloudmesh Multi Service Data Access</a></li>
@@ -204,33 +212,33 @@ images and flavors. These defaults can naturally be changed.</p>
 <h2>3.1. General Cloud Providers Access<a class="headerlink" href="#general-cloud-providers-access" title="Permalink to this headline">¶</a></h2>
 <p>We are using the python library
 <a class="reference external" href="https://libcloud.apache.org">Apache Libcloud</a> to interact with
-cloud service providers. Currently, in the <code class="docutils literal notranslate"><span class="pre">cm4</span></code>, we could access:</p>
+cloud service providers. Currently, in <code class="docutils literal notranslate"><span class="pre">cms</span></code>, we could access:</p>
 <ul class="simple">
-<li><a class="reference external" href="https://aws.amazon.com">AWS</a></li>
-<li><a class="reference external" href="https://azure.microsoft.com/en-us/">AZURE</a></li>
-<li>any cloud service providers using <em>OpenStack</em>.
+<li><p><a class="reference external" href="https://aws.amazon.com">AWS</a></p></li>
+<li><p><a class="reference external" href="https://azure.microsoft.com/en-us/">AZURE</a></p></li>
+<li><p>any cloud service providers using <em>OpenStack</em>.
 For example, <a class="reference external" href="https://www.chameleoncloud.org">Chameleon</a> and
-<a class="reference external" href="https://jetstream-cloud.org">Jetstream</a></li>
+<a class="reference external" href="https://jetstream-cloud.org">Jetstream</a></p></li>
 </ul>
 <p>By using the <em>Apache Libcloud</em> API, we could do these operations for
 nodes in above cloud service providers:</p>
 <ul class="simple">
-<li>Start the node</li>
-<li>Stop the node</li>
-<li>Resume the node</li>
-<li>Suspend the node</li>
-<li>Destory the node</li>
-<li>Create the node</li>
+<li><p>Start the node</p></li>
+<li><p>Stop the node</p></li>
+<li><p>Resume the node</p></li>
+<li><p>Suspend the node</p></li>
+<li><p>Destory the node</p></li>
+<li><p>Create the node</p></li>
 </ul>
 <p><strong>Improvement</strong>: Sometimes adjustments to nodes are necessary (switch
 between different images/OS and service sizes).  Cm4 also allow users
 to customize their instances across multiple providers by using
 refactor functions to support their management tasks.</p>
 <ul class="simple">
-<li>Resize the node</li>
-<li>Rebuild(with different image) the node</li>
-<li>Rename the node</li>
-<li>Revert previous operations to the node</li>
+<li><p>Resize the node</p></li>
+<li><p>Rebuild(with different image) the node</p></li>
+<li><p>Rename the node</p></li>
+<li><p>Revert previous operations to the node</p></li>
 </ul>
 </div>
 <div class="section" id="general-interface">
@@ -270,10 +278,9 @@ service platform, users could start any instances with selected
 images.</p>
 <p>Before users use the <strong>cms</strong> platform to access <strong>EC2</strong>, they have to finish these preparations:</p>
 <ol>
-<li><p class="first">EC2 account, more information is
-<a class="reference external" href="https://aws.amazon.com/premiumsupport/knowledge-center/create-and-activate-aws-account/">here</a></p>
-</li>
-<li><p class="first">Log in the EC2 account, update your <strong>Access Key</strong>.</p>
+<li><p>EC2 account, more information is
+<a class="reference external" href="https://aws.amazon.com/premiumsupport/knowledge-center/create-and-activate-aws-account/">here</a></p></li>
+<li><p>Log in the EC2 account, update your <strong>Access Key</strong>.</p>
 <p><strong>Access Keys</strong> has two parts: <strong>Access Key ID</strong> and <strong>Secret
 Access Key</strong>. These <strong>Access Keys</strong> are the only way you could
 authentically access the AWS though AWS API requests.  (create new
@@ -282,25 +289,22 @@ Access Key: Account (right upper corner) &gt; My Security Credentials</p>
 <div><p>Access Keys &gt; Create New Access Key)</p>
 </div></blockquote>
 </li>
-<li><p class="first"><strong>Private Key file</strong> is a key pairs to encrypt and decrypt login
+<li><p><strong>Private Key file</strong> is a key pairs to encrypt and decrypt login
 information. While using <strong>Private Key file</strong>, there is no need to
 use username or password to login the instance of AWS. For sshing
 the instance, the ssh client would use the <strong>private key file</strong>
 instead of credential information. (create new key pairs: Network &amp;
-Security (left column bar) &gt; Key Pairs &gt; Create Key Pair)</p>
-</li>
-<li><p class="first"><strong>Security Group</strong> acts as a virtual firewall for the instance.
+Security (left column bar) &gt; Key Pairs &gt; Create Key Pair)</p></li>
+<li><p><strong>Security Group</strong> acts as a virtual firewall for the instance.
 When you launch a instance, we have to attach the <strong>Security
 Group</strong> to it for controlling the traffic in and out. So before you
 are using any nodes in AWS, you have to pre-define the <strong>Security
 Group</strong> that you will use.  (create new Security Group: Network $
 Security (left column bar) &gt; Security Group &gt; Create Security
-Group)</p>
-</li>
-<li><p class="first"><strong>Region</strong> is the service location where you start the instance.
+Group)</p></li>
+<li><p><strong>Region</strong> is the service location where you start the instance.
 AWS hosts services in different regions, you should select the
-region where you want to start you instance.</p>
-</li>
+region where you want to start you instance.</p></li>
 </ol>
 <p>When you finish all above things, you should update information into
 the block ‘aws’ of <strong>cloudmesh4.yaml</strong> file in <strong>ETC</strong> folder</p>
@@ -411,7 +415,7 @@ $ cms vm list
         <a href="vagrant.html" class="btn btn-neutral float-right" title="4. Vagrant (outdated)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="goal.html" class="btn btn-neutral" title="1. Goal (outdated)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="goal.html" class="btn btn-neutral float-left" title="1. Goal (outdated)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -437,26 +441,16 @@ $ cms vm list
   
 
 
-  
-
-    
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script type="text/javascript" src="_static/jquery.js"></script>
-        <script type="text/javascript" src="_static/underscore.js"></script>
-        <script type="text/javascript" src="_static/doctools.js"></script>
-        <script type="text/javascript" src="_static/language_data.js"></script>
-    
-
-  
-
-  <script type="text/javascript" src="_static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

@@ -1,48 +1,50 @@
 # CM4 Details (outdated)
 
 
-In cloudmesh cm4, we are using the **Python** tool to implement a
+In cloudmesh, we are using the **Python** tool to implement a
 program that could remotely control cloud nodes provided by different
 organizations and run experiments in parallel.
 
-The goal of *`cm4`* is to provide a platform that users could directly
+The goal of *`cloudmesh`* is to provide a platform that users could directly
 control the nodes they have, like AWS, Azure, and OPENSTACK
 instances. Users could decide to start, stop, destroy, create, resume,
 and suspend different nodes without accessing the **Console**
 interfaces of providers. Then users could install experiment
 environment, software, and other required tools in these running
 nodes. Finally, an experiment could be executed in running nodes by
-sending the commands from *`cm4`* platform. Meanwhile, we embed the
-NoSQL database **MongoDB** into cm4 for managing the nodes and
+sending the commands from *`cloudmesh`* platform. Meanwhile, we embed the
+NoSQL database **MongoDB** into cloudmesh for managing the nodes and
 experiments.
 
 
 ### Extra: Vargrant
 
-Please refer to [here](https://github.com/cloudmesh-community/cm/tree/master/cm4/vagrant/README.md) to see how to setup 
-Vagrant with cm4.
+TODO: update the link
+
+Please refer to [here](https://github.com/cloudmesh/cloudmesh-cloud/tree/master/cloudmesh-cloud/vagrant/README.md) to see how to setup 
+Vagrant with cloudmesh.
 
 ## What we have implemented 
 
-* the function to install `cm4` and its required packages
+* the function to install `cms` and its required packages
 * the function to manage the virtual machines from cloud service providers (Azure, AWS, and Openstack)
 * the function to use *MongoDB* for saving data
 
 
-### The Preparation for installing `cm4` (David)
+### The Preparation for installing cloudmesh (David)
 
 * requriements.txt : the required packages
 * setup.py
-* cm4/command/command.py : the python class defines the interface for the command-line `cm4` 
+* cloudmesh-cloud/command/command.py : the python class defines the interface for the command-line `cms` 
 
 ``` commandline
-$ cm4
+$ cms
 Usage:
-      cm4 admin mongo install [--brew] [--download=PATH]
-      cm4 admin mongo status
-      cm4 admin mongo start
-      cm4 admin mongo stop
-      cm4 admin mongo backup FILENAME
+      cms admin mongo install [--brew] [--download=PATH]
+      cms admin mongo status
+      cms admin mongo start
+      cms admin mongo stop
+      cms admin mongo backup FILENAME
       ...
 ```
 
@@ -57,7 +59,7 @@ object provided by that class to access and manipulate the configuration file.
 
 ##### Getting the config object
 ```python
-from cm4.configuration.config import Config
+from cloudmesh.cloud.configuration.config import Config
 config = Config().data["cloudmesh"]
 ```
 
@@ -77,7 +79,7 @@ The counter file is located at
 #### Using the counter
 
 ```python
-from cm4.configuration.counter import Counter
+from cloudmesh.cloud.configuration.counter import Counter
 counter = Counter()
 ```
 
@@ -100,15 +102,15 @@ counter.set("<VM_NAME>", "value")
 ```
 
 
-### The MongoDB Database in `cm4` (Yu)
+### The MongoDB Database in `cloudmesh` (Yu)
 
-We add the database into `cm4` with two reasons:
+We add the database into `cloudmesh` with two reasons:
 
 * provide the information of nodes in different providers.
-* record the experiment executed through cm4, easy for next re-execution.
+* record the experiment executed through cloudmesh, easy for next re-execution.
 
 
-Every time the user use the `cm4` platform, the server would access the running MongoDB database, querying the nodes'
+Every time the user use the cloudmesh platform, the server would access the running MongoDB database, querying the nodes'
 information, showing relative metadata, and then updating all necessary data.
 
 The *MongoDB* would finish below tasks:
@@ -125,11 +127,11 @@ The *MongoDB* would finish below tasks:
   1. the changes updated on the nodes, like stop running node, or start stopped node.
   2. the changes updated on the [`cloudmesh4.yaml`], like add new nodes.
   3. when the experiment is done, output and experiment status would be updated.
-  4. new group is created while using `cm4` will be updated
+  4. new group is created while using `cms` will be updated
 
 * return required information:
 	
-  1. return the node information, group information, and experiment information when `cm4` queries them.
+  1. return the node information, group information, and experiment information when `cms` queries them.
 
 #### Data Scheme in MongoDB
 
@@ -173,7 +175,7 @@ There are three types of documents in MongoDB:
 
 #### Security in MongoDB
 
-For data security purpose, we enable the MongoDB security functionality in `cm4`.
+For data security purpose, we enable the MongoDB security functionality in `cms`.
 
 When users first time start the *MongoDB*, they have to add an account and open an port to access all database in MongoDB. Because we save all nodes' information into MongoDB inclduing the *Authorization* information. If your MongoDB is open to everyone, it is easy for hacker to steal your information. So you are requried to set the *username* and *password* for the security purpose. 
 
@@ -188,9 +190,9 @@ Here is a quick reference about how to
 
 If you want to know how to install MongoDB into local, you can review [Install MongoDB](https://docs.mongodb.com/manual/installation/)
 
-And if you want to use `cm4` to help you install MongoDB, you have to update the information required for installing MongoDB into [`cloudmesh4.yaml`] file.
+And if you want to use `cms` to help you install MongoDB, you have to update the information required for installing MongoDB into [`cloudmesh4.yaml`] file.
 
-The `cm4/cmmongo/MongoDBController.py` has the functions to install MongoDB for Linux and Darwin system. 
+The `cloudmesh-cloud/cmmongo/MongoDBController.py` has the functions to install MongoDB for Linux and Darwin system. 
 
 The logic of installing MongoDB is:
 
@@ -214,7 +216,7 @@ When we finish installing MongoDB to local, we have to:
 
 #### Insert and Update Documents in MongoDB
 
-We have different documents in different collections. The operations in `cm4/vm/Vm.py` will call `mongoDB.py` to accomplish
+We have different documents in different collections. The operations in `cloudmesh-cloud/vm/Vm.py` will call `mongoDB.py` to accomplish
 inserting and updating the document.
 
 ```text
@@ -254,7 +256,7 @@ db_connection: test connection to local mongoDB host
 ### 4. The Virtual Machine Provider
 
 
-In the `cm4`, we developed the `cm4/vm/Vm.py` class to implement the operations for different virtual machines from AWS, 
+In `cloudmesh`, we developed the `cloudmesh-cloud/vm/Vm.py` class to implement the operations for different virtual machines from AWS, 
 Azure, and Chameleon by using the python library [*Apache Libcloud*](https://libcloud.apache.org) to interact with 
 cloud service providers. 
 
@@ -281,16 +283,16 @@ Below we list some sample of running these functions for virtual machines in  AW
 Before using the AWS Vm code, user has to update their AWS information into `cloudmesh4.yaml` file in *etc* folder.
 
 The *Libcloud* library has enough methods to support the operations for managing virtual machines in AWS. We use a 
-`cm4/vm/Aws.py` to create the driver based on the configuration to connect to AWS.  
+`cloudmesh-cloud/vm/Aws.py` to create the driver based on the configuration to connect to AWS.  
 
 Inherit the *Libcloud* library, we did some modifications on `AWSDriver` to extend the operation. The `create_node`
 method would create a virtual machine in AWS based on the configuration of `cloudmesh4.yaml` file  
 
-Here are some samples for running these operations by using `cm4`:
+Here are some samples for running these operations by using `cloudmesh-cloud`:
 
 First, user would create the virtual machine in AWS.
 ```commandline
-$ cm4 vm create
+$ cms vm create
 Collection(Database(MongoClient(host=['127.0.0.1:27017'], document_class=dict, tz_aware=False, connect=True), 'cloudmesh'), 'cloud')
 Thread: updating the status of node
 Created base-cloudmesh-yuluo-4
@@ -316,7 +318,7 @@ you the virtual machine from MongoDB record with a thread updating the new infor
 `status` method to check the status of the virtual machine.
 
 ```commandline
-$ cm4 vm stop --vms=base-cloudmesh-yuluo-4
+$ cms vm stop --vms=base-cloudmesh-yuluo-4
 Thread: updating the status of node
 {'_id': ObjectId('5c09c65f56c5a939942a9911'), 
 'id': 'i-01ca62f33728f4931', 
@@ -324,14 +326,14 @@ Thread: updating the status of node
 'state': 'running', 
 'public_ips': ['52.39.13.229'],
 ...}
-$ cm4 vm status --vms=base-cloudmesh-yuluo-4
+$ cms vm status --vms=base-cloudmesh-yuluo-4
 stopped
 ```
 
 When user wants to start the stopped virtual machine, he has to type the command of below sample.
 
 ```commandline
-$ cm4 vm start --vms=base-cloudmesh-yuluo-4
+$ cms vm start --vms=base-cloudmesh-yuluo-4
 Thread: updating the status of node
 {'_id': ObjectId('5c09c65f56c5a939942a9911'), 
 'id': 'i-01ca62f33728f4931', 
@@ -344,21 +346,21 @@ PING 54.191.109.54 (54.191.109.54): 56 data bytes
 --- 54.191.109.54 ping statistics ---
 1 packets transmitted, 0 packets received, 100.0% packet loss
 
-$ cm4 vm status --vms=base-cloudmesh-yuluo-4
+$ cms vm status --vms=base-cloudmesh-yuluo-4
 running
 ```
 
 There is a way for users to get the public ip of a virtual machine.
 
 ```commandline
-$ cm4 vm publicip --vms=base-cloudmesh-yuluo-4
+$ cms vm publicip --vms=base-cloudmesh-yuluo-4
 {'base-cloudmesh-yuluo-4': ['54.191.109.54']}
 ```
 
 Also, if user wants to know the information of virtual machines under his AWS account, he could do this.
 
 ```commandline
-$ cm4 vm list
+$ cms vm list
 <Node: uuid=9b46e75095f586471e2cfe8ebc6b1021ead0e86b, name=a-b-luoyu-0, state=STOPPED, public_ips=[], 
 private_ips=['172.31.28.147'], provider=Amazon EC2 ...>, 
 <Node: uuid=da309c8acbbc7bc1f21295600323d073afffb04a, name=base-cloudmesh-yuluo-1, state=TERMINATED, 
@@ -370,7 +372,7 @@ public_ips=['54.191.109.54'], private_ips=['172.31.41.197'], provider=Amazon EC2
 Finally, if user wants to delete the virtual machine, he could do this.
 
 ```commandline
-$ cm4 vm destroy --vms=base-cloudmesh-yuluo-4
+$ cms vm destroy --vms=base-cloudmesh-yuluo-4
 True
 ```
 
@@ -402,7 +404,7 @@ you need to make sure the global default cloud parameter has been set
 to 'Chameleon' by:
 
 ```commandline
-$ cm4 vm set cloud chameleon
+$ cms vm set cloud chameleon
 Setting env parameter cloud to: chameleon
 Writing updata to cloudmesh.yaml
 Config has been updated.
@@ -410,8 +412,9 @@ Config has been updated.
 
  
  ### VM Refactor (Rui)
- In addition, in order to offer more flexibilities to our users, we also developed vmrefactor (`cm4/vm/VmRefactor.py`)
+ In addition, in order to offer more flexibilities to our users, we also developed vmrefactor (`cloudmesh-cloud/vm/VmRefactor.py`)
 to allow users to customize the flavors of their running instances and services in different providers.
+
 ```text
 1. resize(vm_name, size) : resize the virtual machine with specified size object
 2. confirm_resize(vm_name) : some providers requires confirmation message to complete resize() operation
@@ -430,7 +433,7 @@ thier management tasks especially when they have many different tasks on the run
  ## Flask Rest API (Sachith)
  
  
-The cm4 REST Api is built using flask and provides the cloud information retrieval functionality through HTTP calls.
+The cloudmesh REST Api is built using flask and provides the cloud information retrieval functionality through HTTP calls.
 
 #### Pre-requisites
 
@@ -442,9 +445,9 @@ Use pip install to install the following packages.
 #### How to run the REST API
 
 ```bash
-$ cm4 admin rest status
-$ cm4 admin rest start
-$ cm4 admin rest stop
+$ cms admin rest status
+$ cms admin rest start
+$ cms admin rest stop
 ```
 
 - Navigate to the cm directory. example:
@@ -453,13 +456,13 @@ $ cm4 admin rest stop
 cd ~/git/cloudmesh/cm
 ```
 
-- Configure the cm4
+- Configure cloudmesh
 
 ```bash
 pip install .
 ```
 
-- Add the MongoDB information in the cm4 configuration file
+- Add the MongoDB information in the cloudmesh configuration file
 
 ```bash
 vi ~/.cloudmesh/cloudmesh4.yaml
@@ -498,12 +501,12 @@ def limit_remote_addr():
         abort(403)  # Forbidden
 ```
  
- ## Extra: Run Command/Script in AWS by `cm4`
+ ## Extra: Run Command/Script in AWS 
  
-The `cm4/aws/CommandAWS.py` contains some methods to run commands/scripts from local to remote AWS virtual machines.
+The `cloudmesh-cloud/aws/CommandAWS.py` contains some methods to run commands/scripts from local to remote AWS virtual machines.
 Any command/script operations executed by `CommandAWS.py` would be saved into MongoDB.
  
-In `cm4`, we use python running *ssh* client to connect the AWS virtual machines. Before running the commands 
+In `cloudmesh-cloud`, we use python running *ssh* client to connect the AWS virtual machines. Before running the commands 
 or scripts remotely, the `CommandAWS.py` would create the job document in MongoDB for saving the experiment information.
 This job document contains the information of virtual machine name, the running command or script, and job status, input, 
 output and description. Meanwhile, the job document_id would be added into status document of the `status` collection for 
@@ -512,7 +515,7 @@ describing the job history of each virtual machine.
 For example, user wants to run `pwd` command to `base-cloudmesh-yulou-5` machine in AWS.
 
 ```commandline
-$ cm4 aws run command pwd --vm=base-cloudmesh-yuluo-5
+$ cms aws run command pwd --vm=base-cloudmesh-yuluo-5
 Running command pwdin Instance base-cloudmesh-yuluo-5:
 /home/ubuntu
 ```
@@ -531,7 +534,7 @@ The `job` collection and `status` collection in MongoDB will have below document
 If user run script file containing '#!/bin/sh\npwd' in `base-cloudmesh-yulou-5` machine:
 
 ```commandline
-$ cm4 aws run script /Users/yuluo/Desktop/cm.sh --vm=base-cloudmesh-yuluo-5
+$ cms aws run script /Users/yuluo/Desktop/cm.sh --vm=base-cloudmesh-yuluo-5
 Running command /Users/yuluo/Desktop/cm.shin Instance base-cloudmesh-yuluo-5:
 /home/ubuntu
 ```

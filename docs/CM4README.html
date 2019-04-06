@@ -17,13 +17,20 @@
   
 
   
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="author" title="About these documents" href="about.html" />
@@ -31,21 +38,16 @@
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="6. AWS cm (outdated)" href="aws.html" />
     <link rel="prev" title="4. Vagrant (outdated)" href="vagrant.html" /> 
-
-  
-  <script src="_static/js/modernizr.min.js"></script>
-
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -90,15 +92,21 @@
 <li class="toctree-l1"><a class="reference internal" href="install.html">3. Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">4. Quickstart (proposed)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="configuration.html">5. Configuration (ok)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="mongo.html">6. Cloudmesh Database (ok)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="manual.html">7. Manual (ok)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="manual-dev.html">8. Manual (proposed)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="jupyter.html">9. Jupyter Integration (proposed)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="vm.html">10. Virtual Machine Management</a></li>
-<li class="toctree-l1"><a class="reference internal" href="workflow.html">11. Infrastructure Workflow (proposed)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="code.html">12. Code Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="yaml.html">6. Cloudmesh yaml file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mongo.html">7. Cloudmesh Database (ok)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual.html">8. Manual (ok)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual-dev.html">9. Manual (proposed)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="jupyter.html">10. Jupyter Integration (proposed)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vm.html">11. Virtual Machine Management (proposed)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="workflow.html">12. Infrastructure Workflow (proposed)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="code.html">13. Code Documentation</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Contents:</span></p>
+<p class="caption"><span class="caption-text">Conventions:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="conventions.html">1. Code Conventions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nosetests.html">2. Nosetests</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Outdated:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="goal.html">1. Goal (outdated)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="goal.html#manual-cloudmesh-multi-service-data-access">2. Manual: Cloudmesh Multi Service Data Access</a></li>
@@ -107,7 +115,7 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">5. CM4 Details (outdated)</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#extra-vargrant">5.1. Extra: Vargrant</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#what-we-have-implemented">5.2. What we have implemented</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#the-preparation-for-installing-cm4-david">5.2.1. The Preparation for installing <code class="docutils literal notranslate"><span class="pre">cm4</span></code> (David)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#the-preparation-for-installing-cloudmesh-david">5.2.1. The Preparation for installing cloudmesh (David)</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#the-configuration-files-and-some-relative-function-classes-sachith">5.2.2. The Configuration files and some relative function classes (Sachith)</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#use-the-configurations-file">5.2.2.1. Use the Configurations file</a></li>
 </ul>
@@ -116,7 +124,7 @@
 <li class="toctree-l4"><a class="reference internal" href="#using-the-counter">5.2.3.1. Using the counter</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#the-mongodb-database-in-cm4-yu">5.2.4. The MongoDB Database in <code class="docutils literal notranslate"><span class="pre">cm4</span></code> (Yu)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#the-mongodb-database-in-cloudmesh-yu">5.2.4. The MongoDB Database in <code class="docutils literal notranslate"><span class="pre">cloudmesh</span></code> (Yu)</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="#data-scheme-in-mongodb">5.2.4.1. Data Scheme in MongoDB</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#security-in-mongodb">5.2.4.2. Security in MongoDB</a></li>
 <li class="toctree-l4"><a class="reference internal" href="#install-mongodb-into-local">5.2.4.3. Install MongoDB Into Local</a></li>
@@ -142,7 +150,7 @@
 <li class="toctree-l3"><a class="reference internal" href="#dev-restricting-certain-ips-for-certain-rest-calls">5.3.5. Dev - restricting certain ips for certain rest calls</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#extra-run-command-script-in-aws-by-cm4">5.4. Extra: Run Command/Script in AWS by <code class="docutils literal notranslate"><span class="pre">cm4</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#extra-run-command-script-in-aws">5.4. Extra: Run Command/Script in AWS</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="aws.html">6. AWS cm (outdated)</a></li>
@@ -214,45 +222,46 @@
             
   <div class="section" id="cm4-details-outdated">
 <h1>5. CM4 Details (outdated)<a class="headerlink" href="#cm4-details-outdated" title="Permalink to this headline">¶</a></h1>
-<p>In cloudmesh cm4, we are using the <strong>Python</strong> tool to implement a
+<p>In cloudmesh, we are using the <strong>Python</strong> tool to implement a
 program that could remotely control cloud nodes provided by different
 organizations and run experiments in parallel.</p>
-<p>The goal of <em><code class="docutils literal notranslate"><span class="pre">cm4</span></code></em> is to provide a platform that users could directly
+<p>The goal of <em><code class="docutils literal notranslate"><span class="pre">cloudmesh</span></code></em> is to provide a platform that users could directly
 control the nodes they have, like AWS, Azure, and OPENSTACK
 instances. Users could decide to start, stop, destroy, create, resume,
 and suspend different nodes without accessing the <strong>Console</strong>
 interfaces of providers. Then users could install experiment
 environment, software, and other required tools in these running
 nodes. Finally, an experiment could be executed in running nodes by
-sending the commands from <em><code class="docutils literal notranslate"><span class="pre">cm4</span></code></em> platform. Meanwhile, we embed the
-NoSQL database <strong>MongoDB</strong> into cm4 for managing the nodes and
+sending the commands from <em><code class="docutils literal notranslate"><span class="pre">cloudmesh</span></code></em> platform. Meanwhile, we embed the
+NoSQL database <strong>MongoDB</strong> into cloudmesh for managing the nodes and
 experiments.</p>
 <div class="section" id="extra-vargrant">
 <h2>5.1. Extra: Vargrant<a class="headerlink" href="#extra-vargrant" title="Permalink to this headline">¶</a></h2>
-<p>Please refer to <a class="reference external" href="https://github.com/cloudmesh-community/cm/tree/master/cm4/vagrant/README">here</a> to see how to setup
-Vagrant with cm4.</p>
+<p>TODO: update the link</p>
+<p>Please refer to <a class="reference external" href="https://github.com/cloudmesh/cloudmesh-cloud/tree/master/cloudmesh-cloud/vagrant/README">here</a> to see how to setup
+Vagrant with cloudmesh.</p>
 </div>
 <div class="section" id="what-we-have-implemented">
 <h2>5.2. What we have implemented<a class="headerlink" href="#what-we-have-implemented" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li>the function to install <code class="docutils literal notranslate"><span class="pre">cm4</span></code> and its required packages</li>
-<li>the function to manage the virtual machines from cloud service providers (Azure, AWS, and Openstack)</li>
-<li>the function to use <em>MongoDB</em> for saving data</li>
+<li><p>the function to install <code class="docutils literal notranslate"><span class="pre">cms</span></code> and its required packages</p></li>
+<li><p>the function to manage the virtual machines from cloud service providers (Azure, AWS, and Openstack)</p></li>
+<li><p>the function to use <em>MongoDB</em> for saving data</p></li>
 </ul>
-<div class="section" id="the-preparation-for-installing-cm4-david">
-<h3>5.2.1. The Preparation for installing <code class="docutils literal notranslate"><span class="pre">cm4</span></code> (David)<a class="headerlink" href="#the-preparation-for-installing-cm4-david" title="Permalink to this headline">¶</a></h3>
+<div class="section" id="the-preparation-for-installing-cloudmesh-david">
+<h3>5.2.1. The Preparation for installing cloudmesh (David)<a class="headerlink" href="#the-preparation-for-installing-cloudmesh-david" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
-<li>requriements.txt : the required packages</li>
-<li>setup.py</li>
-<li>cm4/command/command.py : the python class defines the interface for the command-line <code class="docutils literal notranslate"><span class="pre">cm4</span></code></li>
+<li><p>requriements.txt : the required packages</p></li>
+<li><p>setup.py</p></li>
+<li><p>cloudmesh-cloud/command/command.py : the python class defines the interface for the command-line <code class="docutils literal notranslate"><span class="pre">cms</span></code></p></li>
 </ul>
-<div class="highlight-commandline notranslate"><div class="highlight"><pre><span></span>$ cm4
+<div class="highlight-commandline notranslate"><div class="highlight"><pre><span></span>$ cms
 Usage:
-      cm4 admin mongo install [--brew] [--download=PATH]
-      cm4 admin mongo status
-      cm4 admin mongo start
-      cm4 admin mongo stop
-      cm4 admin mongo backup FILENAME
+      cms admin mongo install [--brew] [--download=PATH]
+      cms admin mongo status
+      cms admin mongo start
+      cms admin mongo stop
+      cms admin mongo backup FILENAME
       ...
 </pre></div>
 </div>
@@ -267,7 +276,7 @@ By default it’s located in the Cloudmesh home directory (~/.cloudmesh/cloudmes
 object provided by that class to access and manipulate the configuration file.</p>
 <div class="section" id="getting-the-config-object">
 <h5>5.2.2.1.1. Getting the config object<a class="headerlink" href="#getting-the-config-object" title="Permalink to this headline">¶</a></h5>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">cm4.configuration.config</span> <span class="kn">import</span> <span class="n">Config</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">cloudmesh.cloud.configuration.config</span> <span class="kn">import</span> <span class="n">Config</span>
 <span class="n">config</span> <span class="o">=</span> <span class="n">Config</span><span class="p">()</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;cloudmesh&quot;</span><span class="p">]</span>
 </pre></div>
 </div>
@@ -290,7 +299,7 @@ The counter file is located at</p>
 </div>
 <div class="section" id="using-the-counter">
 <h4>5.2.3.1. Using the counter<a class="headerlink" href="#using-the-counter" title="Permalink to this headline">¶</a></h4>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">cm4.configuration.counter</span> <span class="kn">import</span> <span class="n">Counter</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">cloudmesh.cloud.configuration.counter</span> <span class="kn">import</span> <span class="n">Counter</span>
 <span class="n">counter</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -316,33 +325,36 @@ The counter file is located at</p>
 </div>
 </div>
 </div>
-<div class="section" id="the-mongodb-database-in-cm4-yu">
-<h3>5.2.4. The MongoDB Database in <code class="docutils literal notranslate"><span class="pre">cm4</span></code> (Yu)<a class="headerlink" href="#the-mongodb-database-in-cm4-yu" title="Permalink to this headline">¶</a></h3>
-<p>We add the database into <code class="docutils literal notranslate"><span class="pre">cm4</span></code> with two reasons:</p>
+<div class="section" id="the-mongodb-database-in-cloudmesh-yu">
+<h3>5.2.4. The MongoDB Database in <code class="docutils literal notranslate"><span class="pre">cloudmesh</span></code> (Yu)<a class="headerlink" href="#the-mongodb-database-in-cloudmesh-yu" title="Permalink to this headline">¶</a></h3>
+<p>We add the database into <code class="docutils literal notranslate"><span class="pre">cloudmesh</span></code> with two reasons:</p>
 <ul class="simple">
-<li>provide the information of nodes in different providers.</li>
-<li>record the experiment executed through cm4, easy for next re-execution.</li>
+<li><p>provide the information of nodes in different providers.</p></li>
+<li><p>record the experiment executed through cloudmesh, easy for next re-execution.</p></li>
 </ul>
-<p>Every time the user use the <code class="docutils literal notranslate"><span class="pre">cm4</span></code> platform, the server would access the running MongoDB database, querying the nodes’
+<p>Every time the user use the cloudmesh platform, the server would access the running MongoDB database, querying the nodes’
 information, showing relative metadata, and then updating all necessary data.</p>
 <p>The <em>MongoDB</em> would finish below tasks:</p>
 <ul class="simple">
-<li>saving all information:<ol>
-<li>the nodes’ information queried from cloud service, like name, id, status, and other metadata about this node.</li>
-<li>saving the executing or executed experiment information, like which node we run the experiment, the input, the
-command, and the output.</li>
-<li>saving the group information users defined.</li>
+<li><p>saving all information:</p>
+<ol class="simple">
+<li><p>the nodes’ information queried from cloud service, like name, id, status, and other metadata about this node.</p></li>
+<li><p>saving the executing or executed experiment information, like which node we run the experiment, the input, the
+command, and the output.</p></li>
+<li><p>saving the group information users defined.</p></li>
 </ol>
 </li>
-<li>updating any changes:<ol>
-<li>the changes updated on the nodes, like stop running node, or start stopped node.</li>
-<li>the changes updated on the [<code class="docutils literal notranslate"><span class="pre">cloudmesh4.yaml</span></code>], like add new nodes.</li>
-<li>when the experiment is done, output and experiment status would be updated.</li>
-<li>new group is created while using <code class="docutils literal notranslate"><span class="pre">cm4</span></code> will be updated</li>
+<li><p>updating any changes:</p>
+<ol class="simple">
+<li><p>the changes updated on the nodes, like stop running node, or start stopped node.</p></li>
+<li><p>the changes updated on the [<code class="docutils literal notranslate"><span class="pre">cloudmesh4.yaml</span></code>], like add new nodes.</p></li>
+<li><p>when the experiment is done, output and experiment status would be updated.</p></li>
+<li><p>new group is created while using <code class="docutils literal notranslate"><span class="pre">cms</span></code> will be updated</p></li>
 </ol>
 </li>
-<li>return required information:<ol>
-<li>return the node information, group information, and experiment information when <code class="docutils literal notranslate"><span class="pre">cm4</span></code> queries them.</li>
+<li><p>return required information:</p>
+<ol class="simple">
+<li><p>return the node information, group information, and experiment information when <code class="docutils literal notranslate"><span class="pre">cms</span></code> queries them.</p></li>
 </ol>
 </li>
 </ul>
@@ -350,12 +362,11 @@ command, and the output.</li>
 <h4>5.2.4.1. Data Scheme in MongoDB<a class="headerlink" href="#data-scheme-in-mongodb" title="Permalink to this headline">¶</a></h4>
 <p>There are three types of documents in MongoDB:</p>
 <ul>
-<li><p class="first">Node information in <code class="docutils literal notranslate"><span class="pre">cloud</span></code> collection.
+<li><p>Node information in <code class="docutils literal notranslate"><span class="pre">cloud</span></code> collection.
 Different cloud service providers would return different schemas of node information. It is hard to manipulate
 different nodes’ information into same schema, so we decide to dump the return mesaage into MongoDB without
-any changes.</p>
-</li>
-<li><p class="first">Node’s experiment status in <code class="docutils literal notranslate"><span class="pre">status</span></code> collection.
+any changes.</p></li>
+<li><p>Node’s experiment status in <code class="docutils literal notranslate"><span class="pre">status</span></code> collection.
 The document in <code class="docutils literal notranslate"><span class="pre">status</span></code> collection is going to save the information of experiments executed in a node.</p>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>{&#39;_id&#39;: node_id,
 &#39;status&#39;: status,
@@ -364,7 +375,7 @@ The document in <code class="docutils literal notranslate"><span class="pre">sta
 </pre></div>
 </div>
 </li>
-<li><p class="first">Experiment information in <code class="docutils literal notranslate"><span class="pre">job</span></code> collection.</p>
+<li><p>Experiment information in <code class="docutils literal notranslate"><span class="pre">job</span></code> collection.</p>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>{&#39;_id&#39;: experiment_id
 &#39;name&#39;: name,
 &#39;status&#39;: status,
@@ -375,7 +386,7 @@ The document in <code class="docutils literal notranslate"><span class="pre">sta
 </pre></div>
 </div>
 </li>
-<li><p class="first">Group information in <code class="docutils literal notranslate"><span class="pre">group</span></code> collection.</p>
+<li><p>Group information in <code class="docutils literal notranslate"><span class="pre">group</span></code> collection.</p>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>{&#39;cloud&#39;: cloud,
 &#39;name&#39;: name,
 &#39;size&#39;: size,
@@ -387,7 +398,7 @@ The document in <code class="docutils literal notranslate"><span class="pre">sta
 </div>
 <div class="section" id="security-in-mongodb">
 <h4>5.2.4.2. Security in MongoDB<a class="headerlink" href="#security-in-mongodb" title="Permalink to this headline">¶</a></h4>
-<p>For data security purpose, we enable the MongoDB security functionality in <code class="docutils literal notranslate"><span class="pre">cm4</span></code>.</p>
+<p>For data security purpose, we enable the MongoDB security functionality in <code class="docutils literal notranslate"><span class="pre">cms</span></code>.</p>
 <p>When users first time start the <em>MongoDB</em>, they have to add an account and open an port to access all database in MongoDB. Because we save all nodes’ information into MongoDB inclduing the <em>Authorization</em> information. If your MongoDB is open to everyone, it is easy for hacker to steal your information. So you are requried to set the <em>username</em> and <em>password</em> for the security purpose.</p>
 <p>If you want to learn more about the <em>Security</em> in MongoDB, you can visit this <a class="reference external" href="https://docs.mongodb.com/manual/security/">page</a> or visit the brief introduction about the MongoDB</p>
 <p>Here is a quick reference about how to
@@ -396,8 +407,8 @@ The document in <code class="docutils literal notranslate"><span class="pre">sta
 <div class="section" id="install-mongodb-into-local">
 <h4>5.2.4.3. Install MongoDB Into Local<a class="headerlink" href="#install-mongodb-into-local" title="Permalink to this headline">¶</a></h4>
 <p>If you want to know how to install MongoDB into local, you can review <a class="reference external" href="https://docs.mongodb.com/manual/installation/">Install MongoDB</a></p>
-<p>And if you want to use <code class="docutils literal notranslate"><span class="pre">cm4</span></code> to help you install MongoDB, you have to update the information required for installing MongoDB into [<code class="docutils literal notranslate"><span class="pre">cloudmesh4.yaml</span></code>] file.</p>
-<p>The <code class="docutils literal notranslate"><span class="pre">cm4/cmmongo/MongoDBController.py</span></code> has the functions to install MongoDB for Linux and Darwin system.</p>
+<p>And if you want to use <code class="docutils literal notranslate"><span class="pre">cms</span></code> to help you install MongoDB, you have to update the information required for installing MongoDB into [<code class="docutils literal notranslate"><span class="pre">cloudmesh4.yaml</span></code>] file.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">cloudmesh-cloud/cmmongo/MongoDBController.py</span></code> has the functions to install MongoDB for Linux and Darwin system.</p>
 <p>The logic of installing MongoDB is:</p>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>1. install prepared tools
 2. download the MonoDB .tgz tarball
@@ -417,7 +428,7 @@ The document in <code class="docutils literal notranslate"><span class="pre">sta
 </div>
 <div class="section" id="insert-and-update-documents-in-mongodb">
 <h4>5.2.4.4. Insert and Update Documents in MongoDB<a class="headerlink" href="#insert-and-update-documents-in-mongodb" title="Permalink to this headline">¶</a></h4>
-<p>We have different documents in different collections. The operations in <code class="docutils literal notranslate"><span class="pre">cm4/vm/Vm.py</span></code> will call <code class="docutils literal notranslate"><span class="pre">mongoDB.py</span></code> to accomplish
+<p>We have different documents in different collections. The operations in <code class="docutils literal notranslate"><span class="pre">cloudmesh-cloud/vm/Vm.py</span></code> will call <code class="docutils literal notranslate"><span class="pre">mongoDB.py</span></code> to accomplish
 inserting and updating the document.</p>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>insert_cloud_document(document) : insert the document into &#39;cloud&#39; collection
 insert_status_document(document) : insert the document into &#39;status&#39; collection
@@ -454,7 +465,7 @@ db_connection: test connection to local mongoDB host
 </div>
 <div class="section" id="id1">
 <h3>5.2.6. 4. The Virtual Machine Provider<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
-<p>In the <code class="docutils literal notranslate"><span class="pre">cm4</span></code>, we developed the <code class="docutils literal notranslate"><span class="pre">cm4/vm/Vm.py</span></code> class to implement the operations for different virtual machines from AWS,
+<p>In <code class="docutils literal notranslate"><span class="pre">cloudmesh</span></code>, we developed the <code class="docutils literal notranslate"><span class="pre">cloudmesh-cloud/vm/Vm.py</span></code> class to implement the operations for different virtual machines from AWS,
 Azure, and Chameleon by using the python library <a class="reference external" href="https://libcloud.apache.org"><em>Apache Libcloud</em></a> to interact with
 cloud service providers.</p>
 <p>The basic functions are:</p>
@@ -477,12 +488,12 @@ cloud service providers.</p>
 <h3>5.2.7. AWS VM Operations (Yu)<a class="headerlink" href="#aws-vm-operations-yu" title="Permalink to this headline">¶</a></h3>
 <p>Before using the AWS Vm code, user has to update their AWS information into <code class="docutils literal notranslate"><span class="pre">cloudmesh4.yaml</span></code> file in <em>etc</em> folder.</p>
 <p>The <em>Libcloud</em> library has enough methods to support the operations for managing virtual machines in AWS. We use a
-<code class="docutils literal notranslate"><span class="pre">cm4/vm/Aws.py</span></code> to create the driver based on the configuration to connect to AWS.</p>
+<code class="docutils literal notranslate"><span class="pre">cloudmesh-cloud/vm/Aws.py</span></code> to create the driver based on the configuration to connect to AWS.</p>
 <p>Inherit the <em>Libcloud</em> library, we did some modifications on <code class="docutils literal notranslate"><span class="pre">AWSDriver</span></code> to extend the operation. The <code class="docutils literal notranslate"><span class="pre">create_node</span></code>
 method would create a virtual machine in AWS based on the configuration of <code class="docutils literal notranslate"><span class="pre">cloudmesh4.yaml</span></code> file</p>
-<p>Here are some samples for running these operations by using <code class="docutils literal notranslate"><span class="pre">cm4</span></code>:</p>
+<p>Here are some samples for running these operations by using <code class="docutils literal notranslate"><span class="pre">cloudmesh-cloud</span></code>:</p>
 <p>First, user would create the virtual machine in AWS.</p>
-<div class="highlight-commandline notranslate"><div class="highlight"><pre><span></span>$ cm4 vm create
+<div class="highlight-commandline notranslate"><div class="highlight"><pre><span></span>$ cms vm create
 Collection(Database(MongoClient(host=[&#39;127.0.0.1:27017&#39;], document_class=dict, tz_aware=False, connect=True), &#39;cloudmesh&#39;), &#39;cloud&#39;)
 Thread: updating the status of node
 Created base-cloudmesh-yuluo-4
@@ -504,7 +515,7 @@ PING 52.39.13.229 (52.39.13.229): 56 data bytes
 <p>If user want to stop the virtual machine, then he has to type below command with virtual machine name. The code will return
 you the virtual machine from MongoDB record with a thread updating the new information. When the thread is done, you can use
 <code class="docutils literal notranslate"><span class="pre">status</span></code> method to check the status of the virtual machine.</p>
-<div class="highlight-commandline notranslate"><div class="highlight"><pre><span></span>$ cm4 vm stop --vms=base-cloudmesh-yuluo-4
+<div class="highlight-commandline notranslate"><div class="highlight"><pre><span></span>$ cms vm stop --vms=base-cloudmesh-yuluo-4
 Thread: updating the status of node
 {&#39;_id&#39;: ObjectId(&#39;5c09c65f56c5a939942a9911&#39;), 
 &#39;id&#39;: &#39;i-01ca62f33728f4931&#39;, 
@@ -512,12 +523,12 @@ Thread: updating the status of node
 &#39;state&#39;: &#39;running&#39;, 
 &#39;public_ips&#39;: [&#39;52.39.13.229&#39;],
 ...}
-$ cm4 vm status --vms=base-cloudmesh-yuluo-4
+$ cms vm status --vms=base-cloudmesh-yuluo-4
 stopped
 </pre></div>
 </div>
 <p>When user wants to start the stopped virtual machine, he has to type the command of below sample.</p>
-<div class="highlight-commandline notranslate"><div class="highlight"><pre><span></span>$ cm4 vm start --vms=base-cloudmesh-yuluo-4
+<div class="highlight-commandline notranslate"><div class="highlight"><pre><span></span>$ cms vm start --vms=base-cloudmesh-yuluo-4
 Thread: updating the status of node
 {&#39;_id&#39;: ObjectId(&#39;5c09c65f56c5a939942a9911&#39;), 
 &#39;id&#39;: &#39;i-01ca62f33728f4931&#39;, 
@@ -530,17 +541,17 @@ PING 54.191.109.54 (54.191.109.54): 56 data bytes
 --- 54.191.109.54 ping statistics ---
 1 packets transmitted, 0 packets received, 100.0% packet loss
 
-$ cm4 vm status --vms=base-cloudmesh-yuluo-4
+$ cms vm status --vms=base-cloudmesh-yuluo-4
 running
 </pre></div>
 </div>
 <p>There is a way for users to get the public ip of a virtual machine.</p>
-<div class="highlight-commandline notranslate"><div class="highlight"><pre><span></span>$ cm4 vm publicip --vms=base-cloudmesh-yuluo-4
+<div class="highlight-commandline notranslate"><div class="highlight"><pre><span></span>$ cms vm publicip --vms=base-cloudmesh-yuluo-4
 {&#39;base-cloudmesh-yuluo-4&#39;: [&#39;54.191.109.54&#39;]}
 </pre></div>
 </div>
 <p>Also, if user wants to know the information of virtual machines under his AWS account, he could do this.</p>
-<div class="highlight-commandline notranslate"><div class="highlight"><pre><span></span>$ cm4 vm list
+<div class="highlight-commandline notranslate"><div class="highlight"><pre><span></span>$ cms vm list
 &lt;Node: uuid=9b46e75095f586471e2cfe8ebc6b1021ead0e86b, name=a-b-luoyu-0, state=STOPPED, public_ips=[], 
 private_ips=[&#39;172.31.28.147&#39;], provider=Amazon EC2 ...&gt;, 
 &lt;Node: uuid=da309c8acbbc7bc1f21295600323d073afffb04a, name=base-cloudmesh-yuluo-1, state=TERMINATED, 
@@ -550,7 +561,7 @@ public_ips=[&#39;54.191.109.54&#39;], private_ips=[&#39;172.31.41.197&#39;], pro
 </pre></div>
 </div>
 <p>Finally, if user wants to delete the virtual machine, he could do this.</p>
-<div class="highlight-commandline notranslate"><div class="highlight"><pre><span></span>$ cm4 vm destroy --vms=base-cloudmesh-yuluo-4
+<div class="highlight-commandline notranslate"><div class="highlight"><pre><span></span>$ cms vm destroy --vms=base-cloudmesh-yuluo-4
 True
 </pre></div>
 </div>
@@ -577,7 +588,7 @@ Chameleon Openstack expose same
 operations as AWS to users. Notice that before running your command,
 you need to make sure the global default cloud parameter has been set
 to ‘Chameleon’ by:</p>
-<div class="highlight-commandline notranslate"><div class="highlight"><pre><span></span>$ cm4 vm set cloud chameleon
+<div class="highlight-commandline notranslate"><div class="highlight"><pre><span></span>$ cms vm set cloud chameleon
 Setting env parameter cloud to: chameleon
 Writing updata to cloudmesh.yaml
 Config has been updated.
@@ -586,7 +597,7 @@ Config has been updated.
 </div>
 <div class="section" id="vm-refactor-rui">
 <h3>5.2.10. VM Refactor (Rui)<a class="headerlink" href="#vm-refactor-rui" title="Permalink to this headline">¶</a></h3>
-<p>In addition, in order to offer more flexibilities to our users, we also developed vmrefactor (<code class="docutils literal notranslate"><span class="pre">cm4/vm/VmRefactor.py</span></code>)
+<p>In addition, in order to offer more flexibilities to our users, we also developed vmrefactor (<code class="docutils literal notranslate"><span class="pre">cloudmesh-cloud/vm/VmRefactor.py</span></code>)
 to allow users to customize the flavors of their running instances and services in different providers.</p>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>1. resize(vm_name, size) : resize the virtual machine with specified size object
 2. confirm_resize(vm_name) : some providers requires confirmation message to complete resize() operation
@@ -603,42 +614,42 @@ thier management tasks especially when they have many different tasks on the run
 </div>
 <div class="section" id="flask-rest-api-sachith">
 <h2>5.3. Flask Rest API (Sachith)<a class="headerlink" href="#flask-rest-api-sachith" title="Permalink to this headline">¶</a></h2>
-<p>The cm4 REST Api is built using flask and provides the cloud information retrieval functionality through HTTP calls.</p>
+<p>The cloudmesh REST Api is built using flask and provides the cloud information retrieval functionality through HTTP calls.</p>
 <div class="section" id="pre-requisites">
 <h3>5.3.1. Pre-requisites<a class="headerlink" href="#pre-requisites" title="Permalink to this headline">¶</a></h3>
 <p>Use pip install to install the following packages.</p>
 <ul class="simple">
-<li>Flask</li>
-<li>Flask-PyMongo</li>
+<li><p>Flask</p></li>
+<li><p>Flask-PyMongo</p></li>
 </ul>
 </div>
 <div class="section" id="how-to-run-the-rest-api">
 <h3>5.3.2. How to run the REST API<a class="headerlink" href="#how-to-run-the-rest-api" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ cm4 admin rest status
-$ cm4 admin rest start
-$ cm4 admin rest stop
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ cms admin rest status
+$ cms admin rest start
+$ cms admin rest stop
 </pre></div>
 </div>
 <ul class="simple">
-<li>Navigate to the cm directory. example:</li>
+<li><p>Navigate to the cm directory. example:</p></li>
 </ul>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> ~/git/cloudmesh/cm
 </pre></div>
 </div>
 <ul class="simple">
-<li>Configure the cm4</li>
+<li><p>Configure cloudmesh</p></li>
 </ul>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install .
 </pre></div>
 </div>
 <ul class="simple">
-<li>Add the MongoDB information in the cm4 configuration file</li>
+<li><p>Add the MongoDB information in the cloudmesh configuration file</p></li>
 </ul>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>vi ~/.cloudmesh/cloudmesh4.yaml
 </pre></div>
 </div>
 <ul class="simple">
-<li>Run the REST API</li>
+<li><p>Run the REST API</p></li>
 </ul>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python cm4/flask_rest_api/rest_api.py
 </pre></div>
@@ -647,15 +658,15 @@ $ cm4 admin rest stop
 <div class="section" id="api">
 <h3>5.3.3. API<a class="headerlink" href="#api" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">/vms/</span></code> : Provides information on all the VMs.</li>
-<li><code class="docutils literal notranslate"><span class="pre">/vms/stopped</span></code>  : Provides information on all the stopped VMs.</li>
-<li><code class="docutils literal notranslate"><span class="pre">/vms/&lt;id&gt;</span></code> : Provides information on the VM identified by the <id></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">/vms/</span></code> : Provides information on all the VMs.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">/vms/stopped</span></code>  : Provides information on all the stopped VMs.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">/vms/&lt;id&gt;</span></code> : Provides information on the VM identified by the <id></p></li>
 </ul>
 </div>
 <div class="section" id="examples">
 <h3>5.3.4. Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h3>
 <ul>
-<li><p class="first">Retrieve information about a VM</p>
+<li><p>Retrieve information about a VM</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl localhost:5000/vms/i-0fad7e92ffea8b345
 </pre></div>
 </div>
@@ -676,17 +687,17 @@ $ cm4 admin rest stop
 </div>
 </div>
 </div>
-<div class="section" id="extra-run-command-script-in-aws-by-cm4">
-<h2>5.4. Extra: Run Command/Script in AWS by <code class="docutils literal notranslate"><span class="pre">cm4</span></code><a class="headerlink" href="#extra-run-command-script-in-aws-by-cm4" title="Permalink to this headline">¶</a></h2>
-<p>The <code class="docutils literal notranslate"><span class="pre">cm4/aws/CommandAWS.py</span></code> contains some methods to run commands/scripts from local to remote AWS virtual machines.
+<div class="section" id="extra-run-command-script-in-aws">
+<h2>5.4. Extra: Run Command/Script in AWS<a class="headerlink" href="#extra-run-command-script-in-aws" title="Permalink to this headline">¶</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">cloudmesh-cloud/aws/CommandAWS.py</span></code> contains some methods to run commands/scripts from local to remote AWS virtual machines.
 Any command/script operations executed by <code class="docutils literal notranslate"><span class="pre">CommandAWS.py</span></code> would be saved into MongoDB.</p>
-<p>In <code class="docutils literal notranslate"><span class="pre">cm4</span></code>, we use python running <em>ssh</em> client to connect the AWS virtual machines. Before running the commands
+<p>In <code class="docutils literal notranslate"><span class="pre">cloudmesh-cloud</span></code>, we use python running <em>ssh</em> client to connect the AWS virtual machines. Before running the commands
 or scripts remotely, the <code class="docutils literal notranslate"><span class="pre">CommandAWS.py</span></code> would create the job document in MongoDB for saving the experiment information.
 This job document contains the information of virtual machine name, the running command or script, and job status, input,
 output and description. Meanwhile, the job document_id would be added into status document of the <code class="docutils literal notranslate"><span class="pre">status</span></code> collection for
 describing the job history of each virtual machine.</p>
 <p>For example, user wants to run <code class="docutils literal notranslate"><span class="pre">pwd</span></code> command to <code class="docutils literal notranslate"><span class="pre">base-cloudmesh-yulou-5</span></code> machine in AWS.</p>
-<div class="highlight-commandline notranslate"><div class="highlight"><pre><span></span>$ cm4 aws run command pwd --vm=base-cloudmesh-yuluo-5
+<div class="highlight-commandline notranslate"><div class="highlight"><pre><span></span>$ cms aws run command pwd --vm=base-cloudmesh-yuluo-5
 Running command pwdin Instance base-cloudmesh-yuluo-5:
 /home/ubuntu
 </pre></div>
@@ -701,7 +712,7 @@ Running command pwdin Instance base-cloudmesh-yuluo-5:
 </pre></div>
 </div>
 <p>If user run script file containing ‘#!/bin/sh\npwd’ in <code class="docutils literal notranslate"><span class="pre">base-cloudmesh-yulou-5</span></code> machine:</p>
-<div class="highlight-commandline notranslate"><div class="highlight"><pre><span></span>$ cm4 aws run script /Users/yuluo/Desktop/cm.sh --vm=base-cloudmesh-yuluo-5
+<div class="highlight-commandline notranslate"><div class="highlight"><pre><span></span>$ cms aws run script /Users/yuluo/Desktop/cm.sh --vm=base-cloudmesh-yuluo-5
 Running command /Users/yuluo/Desktop/cm.shin Instance base-cloudmesh-yuluo-5:
 /home/ubuntu
 </pre></div>
@@ -733,7 +744,7 @@ Running command /Users/yuluo/Desktop/cm.shin Instance base-cloudmesh-yuluo-5:
         <a href="aws.html" class="btn btn-neutral float-right" title="6. AWS cm (outdated)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="vagrant.html" class="btn btn-neutral" title="4. Vagrant (outdated)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="vagrant.html" class="btn btn-neutral float-left" title="4. Vagrant (outdated)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -759,26 +770,16 @@ Running command /Users/yuluo/Desktop/cm.shin Instance base-cloudmesh-yuluo-5:
   
 
 
-  
-
-    
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script type="text/javascript" src="_static/jquery.js"></script>
-        <script type="text/javascript" src="_static/underscore.js"></script>
-        <script type="text/javascript" src="_static/doctools.js"></script>
-        <script type="text/javascript" src="_static/language_data.js"></script>
-    
-
-  
-
-  <script type="text/javascript" src="_static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

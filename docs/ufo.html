@@ -17,13 +17,20 @@
   
 
   
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+        <script type="text/javascript" src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
   <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="author" title="About these documents" href="about.html" />
@@ -31,21 +38,16 @@
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="8. Virtual Cluster (in progress)" href="vcluster.html" />
     <link rel="prev" title="6. AWS cm (outdated)" href="aws.html" /> 
-
-  
-  <script src="_static/js/modernizr.min.js"></script>
-
 </head>
 
 <body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -90,15 +92,21 @@
 <li class="toctree-l1"><a class="reference internal" href="install.html">3. Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="quickstart.html">4. Quickstart (proposed)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="configuration.html">5. Configuration (ok)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="mongo.html">6. Cloudmesh Database (ok)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="manual.html">7. Manual (ok)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="manual-dev.html">8. Manual (proposed)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="jupyter.html">9. Jupyter Integration (proposed)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="vm.html">10. Virtual Machine Management</a></li>
-<li class="toctree-l1"><a class="reference internal" href="workflow.html">11. Infrastructure Workflow (proposed)</a></li>
-<li class="toctree-l1"><a class="reference internal" href="code.html">12. Code Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="yaml.html">6. Cloudmesh yaml file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mongo.html">7. Cloudmesh Database (ok)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual.html">8. Manual (ok)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="manual-dev.html">9. Manual (proposed)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="jupyter.html">10. Jupyter Integration (proposed)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="vm.html">11. Virtual Machine Management (proposed)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="workflow.html">12. Infrastructure Workflow (proposed)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="code.html">13. Code Documentation</a></li>
 </ul>
-<p class="caption"><span class="caption-text">Contents:</span></p>
+<p class="caption"><span class="caption-text">Conventions:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="conventions.html">1. Code Conventions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="nosetests.html">2. Nosetests</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Outdated:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="goal.html">1. Goal (outdated)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="goal.html#manual-cloudmesh-multi-service-data-access">2. Manual: Cloudmesh Multi Service Data Access</a></li>
@@ -181,38 +189,38 @@
             
   <div class="section" id="rest-service-outdated">
 <h1>7. REST Service (outdated)<a class="headerlink" href="#rest-service-outdated" title="Permalink to this headline">¶</a></h1>
-<p>The cm4 REST Api is built using flask and provides the cloud
+<p>The REST Api is built using flask and provides the cloud
 information retrieval functionality through HTTP calls.</p>
 <div class="section" id="pre-requisites">
 <h2>7.1. Pre-requisites<a class="headerlink" href="#pre-requisites" title="Permalink to this headline">¶</a></h2>
 <p>Use pip install to install the following packages.</p>
 <ul class="simple">
-<li>Flask</li>
-<li>Flask-PyMongo</li>
+<li><p>Flask</p></li>
+<li><p>Flask-PyMongo</p></li>
 </ul>
 </div>
 <div class="section" id="how-to-run-the-rest-api">
 <h2>7.2. How to run the REST API<a class="headerlink" href="#how-to-run-the-rest-api" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li>Navigate to the cm directory. example:</li>
+<li><p>Navigate to the cm directory. example:</p></li>
 </ul>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> ~/git/cloudmesh/cm
 </pre></div>
 </div>
 <ul class="simple">
-<li>Configure the cm4</li>
+<li><p>Configure cloudmesh</p></li>
 </ul>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install .
 </pre></div>
 </div>
 <ul class="simple">
-<li>Add the MongoDB information in the cm4 configuration file</li>
+<li><p>Add the MongoDB information in the configuration file</p></li>
 </ul>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>vi ~/.cloudmesh/cloudmesh4.yaml
 </pre></div>
 </div>
 <ul class="simple">
-<li>Run the REST API</li>
+<li><p>Run the REST API</p></li>
 </ul>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python cm4/flask_rest_api/rest_api.py
 </pre></div>
@@ -221,15 +229,15 @@ information retrieval functionality through HTTP calls.</p>
 <div class="section" id="api">
 <h2>7.3. API<a class="headerlink" href="#api" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
-<li><code class="docutils literal notranslate"><span class="pre">/vms/</span></code> : Provides information on all the VMs.</li>
-<li><code class="docutils literal notranslate"><span class="pre">/vms/stopped</span></code>  : Provides information on all the stopped VMs.</li>
-<li><code class="docutils literal notranslate"><span class="pre">/vms/&lt;id&gt;</span></code> : Provides information on the VM identified by the <id></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">/vms/</span></code> : Provides information on all the VMs.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">/vms/stopped</span></code>  : Provides information on all the stopped VMs.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">/vms/&lt;id&gt;</span></code> : Provides information on the VM identified by the <id></p></li>
 </ul>
 </div>
 <div class="section" id="examples">
 <h2>7.4. Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h2>
 <ul>
-<li><p class="first">Retrieve information about a VM</p>
+<li><p>Retrieve information about a VM</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>curl localhost:5000/vms/i-0fad7e92ffea8b345
 </pre></div>
 </div>
@@ -262,7 +270,7 @@ information retrieval functionality through HTTP calls.</p>
         <a href="vcluster.html" class="btn btn-neutral float-right" title="8. Virtual Cluster (in progress)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="aws.html" class="btn btn-neutral" title="6. AWS cm (outdated)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="aws.html" class="btn btn-neutral float-left" title="6. AWS cm (outdated)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -288,26 +296,16 @@ information retrieval functionality through HTTP calls.</p>
   
 
 
-  
-
-    
-    
-      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-        <script type="text/javascript" src="_static/jquery.js"></script>
-        <script type="text/javascript" src="_static/underscore.js"></script>
-        <script type="text/javascript" src="_static/doctools.js"></script>
-        <script type="text/javascript" src="_static/language_data.js"></script>
-    
-
-  
-
-  <script type="text/javascript" src="_static/js/theme.js"></script>
-
   <script type="text/javascript">
       jQuery(function () {
           SphinxRtdTheme.Navigation.enable(true);
       });
-  </script> 
+  </script>
+
+  
+  
+    
+   
 
 </body>
 </html>

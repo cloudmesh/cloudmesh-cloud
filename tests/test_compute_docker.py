@@ -75,7 +75,7 @@ class TestName:
         header = self.p.output['image']['header']  # not pretty
 
         print(Printer.flatwrite(images,
-                                sort_keys=("Os"),
+                                sort_keys=["Os"],
                                 order=order,
                                 header=header,
                                 output="table"))
@@ -96,7 +96,7 @@ class d:
         header = self.p.output['vm']['header']  # not pretty
 
         print(Printer.flatwrite(containers,
-                                sort_keys=("Os"),
+                                sort_keys=["Os"],
                                 order=order,
                                 header=header,
                                 output="table"))
@@ -217,7 +217,7 @@ class other:
         # pprint (flavors)
 
         print(Printer.flatwrite(flavors,
-                                sort_keys=("name", "vcpus", "disk"),
+                                sort_keys=["name", "vcpus", "disk"],
                                 order=["name", "vcpus", "ram", "disk"],
                                 header=["Name", "VCPUS", "RAM", "Disk"])
               )
@@ -229,9 +229,9 @@ class other:
             print(secgroup["name"])
             rules = self.p.list_secgroup_rules(secgroup["name"])
             print(Printer.write(rules,
-                                sort_keys=(
+                                sort_keys=[
                                     "ip_protocol", "from_port", "to_port",
-                                    "ip_range"),
+                                    "ip_range"],
                                 order=["ip_protocol", "from_port", "to_port",
                                        "ip_range"],
                                 header=["ip_protocol", "from_port", "to_port",

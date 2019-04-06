@@ -114,7 +114,7 @@ class TestName:
         VERBOSE.print(vms, verbose=9)
 
         print(Printer.flatwrite(vms,
-                                sort_keys=("name"),
+                                sort_keys=["name"],
                                 order=["name",
                                        "state",
                                        "extra.task_state",
@@ -140,9 +140,9 @@ class TestName:
             print(secgroup["name"])
             rules = self.p.list_secgroup_rules(secgroup["name"])
             print(Printer.write(rules,
-                                sort_keys=(
+                                sort_keys=[
                                     "ip_protocol", "from_port", "to_port",
-                                    "ip_range"),
+                                    "ip_range"],
                                 order=["ip_protocol", "from_port", "to_port",
                                        "ip_range"],
                                 header=["ip_protocol", "from_port", "to_port",

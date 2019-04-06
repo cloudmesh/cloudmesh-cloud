@@ -16,9 +16,12 @@ from cloudmesh.shell.variables import Variables
 from cloudmesh.common.util import banner
 from cloudmesh.common.parameter import Parameter
 
-class TestDatabase:
+import pytest
 
-    def setup(self):
+@pytest.mark.incremental
+class Test_Compute_Database:
+
+    def setup_class(self):
         print()
         self.user = Config()["cloudmesh"]["profile"]["user"]
         self.clouduser = 'cc'
@@ -73,7 +76,7 @@ class TestDatabase:
      # pprint(self.keys)
 
         #print(Printer.flatwrite(self.keys,
-        #                    sort_keys=("name"),
+        #                    sort_keys=["name"],
         #                    order=["name", "fingerprint"],
         #                    header=["Name", "Fingerprint"])
         #      )
@@ -94,7 +97,7 @@ class TestDatabase:
         #pprint(images)
 
         print(Printer.flatwrite(images,
-                            sort_keys=("name","extra.minDisk"),
+                            sort_keys=["name","extra.minDisk"],
                             order=["name", "extra.minDisk", "updated", "driver"],
                             header=["Name", "MinDisk", "Updated", "Driver"])
               )
@@ -106,7 +109,7 @@ class TestDatabase:
 
 
         print(Printer.flatwrite(vms,
-                                sort_keys=("name"),
+                                sort_keys=["name"],
                                 order=["name",
                                        "state",
                                        "extra.task_state",
@@ -135,7 +138,7 @@ class a:
             print (secgroup["name"])
             rules = self.p.list_secgroup_rules(secgroup["name"])
             print(Printer.write(rules,
-                                sort_keys=("ip_protocol", "from_port", "to_port", "ip_range"),
+                                sort_keys=["ip_protocol", "from_port", "to_port", "ip_range"],
                                 order=["ip_protocol", "from_port", "to_port", "ip_range"],
                                 header=["ip_protocol", "from_port", "to_port", "ip_range"])
                  )

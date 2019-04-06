@@ -33,7 +33,7 @@ class TestName:
         keys = self.sshkey.get_from_git(username)
         pprint (keys)
         print(Printer.flatwrite(keys,
-                            sort_keys=("name"),
+                            sort_keys=["name"],
                             order=["name", "fingerprint"],
                             header=["Name", "Fingerprint"])
               )

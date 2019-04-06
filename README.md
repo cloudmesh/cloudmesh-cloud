@@ -1,5 +1,9 @@
 # Cloudmesh cm v4
 
+[![image](https://img.shields.io/pypi/pyversions/cloudmesh-cloud.svg)](https://pypi.org/project/cloudmesh-cloud)
+[![image](https://img.shields.io/pypi/v/cloudmesh-cloud.svg)](https://pypi.org/project/cloudmesh-cloud/)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/cloudmesh/cloudmesh-cloud/blob/master/LICENSE)
+
 [![Downloads](https://img.shields.io/pypi/cloudmesh/cloudmesh-cloud.svg)](https://pypi.python.org/pypi/cloudmesh/cloudmesh-cloud)
 [![Latest Version](https://img.shields.io/pypi/v/cloudmesh/cloudmesh-cloud.svg)](https://pypi.python.org/pypi/cloudmesh/cloudmesh-cloud)
 [![Supported Python versions](https://img.shields.io/pypi/pyversions/cloudmesh-cloud.svg)](https://pypi.python.org/pypi/cloudmesh/cloudmesh-cloud)

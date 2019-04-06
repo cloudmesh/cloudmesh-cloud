@@ -102,12 +102,12 @@ cd data
 **Add a file to the default storage service**
 
 ```
-cm4 data add test/files/hello.txt
+$ cms data add test/files/hello.txt
 ```
 
 If you're using an unmodified `cloudmesh.yaml` local test directories
 are set as the default "service".  An entry for the added file will
-appear in the local db folder [`cm4/test/data/db`](deprecated/cm4/test/data/db)
+appear in the local db folder [`cloudmesh-cloud/test/data/db`](deprecated/cloudmesh-cloud/test/data/db)
 and the file will be stored in
 [`cm4/test/data/storage`](deprecated/cm4/test/data/storage).
 

@@ -119,7 +119,7 @@ html_static_path = ['_static']
 # -- Options for HTMLHelp output ---------------------------------------------
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'cm4doc'
+htmlhelp_basename = 'cloudmeshdoc'
 
 
 # -- Options for LaTeX output ------------------------------------------------

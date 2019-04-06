@@ -1,8 +1,8 @@
 # Cloudmesh cm v4
 
-[![Downloads](https://img.shields.io/pypi/dm/cm.svg)](https://pypi.python.org/pypi/cloudmesh-community/cm)
-[![Latest Version](https://img.shields.io/pypi/v/cm.svg)](https://pypi.python.org/pypi/cloudmesh-community/cm/)
-[![Supported Python versions](https://img.shields.io/pypi/pyversions/cm.svg)](https://pypi.python.org/pypi/cloudmesh-community/cm/)
+[![Downloads](https://img.shields.io/pypi/cloudmesh/cloudmesh-cloud.svg)](https://pypi.python.org/pypi/cloudmesh/cloudmesh-cloud)
+[![Latest Version](https://img.shields.io/pypi/v/cloudmesh/cloudmesh-cloud.svg)](https://pypi.python.org/pypi/cloudmesh/cloudmesh-cloud)
+[![Supported Python versions](https://img.shields.io/pypi/pyversions/cloudmesh-cloud.svg)](https://pypi.python.org/pypi/cloudmesh/cloudmesh-cloud)
 
 
 [![image](https://img.shields.io/travis/TankerHQ/cloudmesh-cm4.svg?branch=master)](https://travis-ci.org/TankerHQ/cloudmesn-cm4)

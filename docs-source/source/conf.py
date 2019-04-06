@@ -27,7 +27,7 @@ copyright = '2018, Cloudmesh Community'
 author = 'Cloudmesh Community'
 
 # The short X.Y version
-version = '4.0.19'
+version = '4.0.20'
 # The full version, including alpha/beta/rc tags
 release = 'alpha'
 

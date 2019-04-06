@@ -4,9 +4,9 @@
 [![Latest Version](https://img.shields.io/pypi/v/cloudmesh/cloudmesh-cloud.svg)](https://pypi.python.org/pypi/cloudmesh/cloudmesh-cloud)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/cloudmesh/cloudmesh-cloud/blob/master/LICENSE)
 [![Supported Python versions](https://img.shields.io/pypi/pyversions/cloudmesh-cloud.svg)](https://pypi.python.org/pypi/cloudmesh/cloudmesh-cloud)
-[![Downloads](https://img.shields.io/github/downloads/cloudmesh/cloudmesh-cloud/total.svg)](https://pypi.org/project/cloudmesh-cloud/)
+[![Downloads git](https://img.shields.io/github/downloads/cloudmesh/cloudmesh-cloud/total.svg)](https://github.com/cloudmesh/cloudmesh-cloud)
 
-
+[![Downloads pypi](https://img.shields.io/pypi/dm/cloudmesh-cloud.svg)][https://pypi.org/project/cloudmesh-cloud/]
 
 Please note that the code and documentation are under heavy development and is likely not correct. 
 It will be your task to correct it, and make sure the code works.

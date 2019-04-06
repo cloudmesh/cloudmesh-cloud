@@ -24,15 +24,6 @@ import io
 
 from setuptools import find_packages, setup
 
-def readfile(filename):
-    """
-    Read a file
-    :param filename: name of the file
-    :return: returns the content of the file as string
-    """
-    with io.open(filename, encoding="utf-8") as stream:
-        return stream.read()
-
 version = readfile("VERSION").strip()
 
 v = sys.version_info
@@ -107,15 +98,41 @@ setup(
     version=version,
     license="Apache 2.0",
     url=URL,
-    packages=find_packages(exclude=("tests","deprecated","propose", "examples", "conda")),
+    packages=find_packages(exclude=("tests",
+                                    "deprecated",
+                                    "propose",
+                                    "examples",
+                                    "conda")),
     classifiers=[
         "Development Status :: 5 - Production/Stable",
-        "Environment :: Web Environment",
+        "Environment :: Console",
+        "Environment :: MacOS X",
+        "Environment :: OpenStack",
+        "Environment :: Other Environment",
+        "Environment :: Plugins",
+        "Intended Audience :: Information Technology",
         "Intended Audience :: Developers",
-        "License :: OSI Approved :: BSD License",
+        "Intended Audience :: Education",
+        "Intended Audience :: Science/Research",
+        "Intended Audience :: System Administrators",
+        "License :: OSI Approved :: Apache Software License",
+        "Natural Language :: English",
         "Operating System :: OS Independent",
+        "Operating System :: MacOS",
+        "Operating System :: Microsoft :: Windows :: Windows 10",
+        "Operating System :: Unix",
         "Programming Language :: Python",
+        "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.7.2",
+        "Topic :: Internet",
+        "Topic :: Scientific/Engineering",
+        "Topic :: Software Development :: Libraries",
+        "Topic :: Software Development :: User Interfaces",
+        "Topic :: System",
+        "Topic :: System :: Distributed Computing",
+        "Topic :: System :: Shells",
+        "Topic :: Utilities",
+        "Topic :: Cloud"
     ],
     install_requires=requiers,
     tests_require=[

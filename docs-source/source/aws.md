@@ -269,7 +269,7 @@ Run advanced
 this command is running the advanced algorithm. Developing a string
 based formulation of the tasks while providing the task in a def and
 using the chars | for parallel, ; for sequential and + for adding
-results.  In cm4, we only develop simples string to be
+results.  In cloudmesh, we only develop simples string to be
 executed via ssh on a remote machines. The default setting is running
 the local scripts into remote parallel instances.
 

@@ -10,7 +10,7 @@ images and flavors. These defaults can naturally be changed.
 
 We are using the python library
 [Apache Libcloud](https://libcloud.apache.org) to interact with
-cloud service providers. Currently, in the `cm4`, we could access:
+cloud service providers. Currently, in `cms`, we could access:
 
 * [AWS](https://aws.amazon.com)
 * [AZURE](https://azure.microsoft.com/en-us/)

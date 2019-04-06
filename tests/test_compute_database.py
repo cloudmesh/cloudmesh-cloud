@@ -15,6 +15,7 @@ from cloudmesh.management.configuration.name import Name
 from cloudmesh.shell.variables import Variables
 from cloudmesh.common.util import banner
 from cloudmesh.common.parameter import Parameter
+from cloudmesh.common.console import Console
 
 #import pytest
 
@@ -95,37 +96,28 @@ class Test_Compute_Database:
         HEADING()
         images= self.p.images()
         #pprint(images)
+        sort_keys = self.p.p.output['image']['sort_keys']  # not pretty
+        order = self.p.p.output['image']['order']  # not pretty
+        header = self.p.p.output['image']['header']  # not pretty
 
         print(Printer.flatwrite(images,
-                            sort_keys=["name","extra.minDisk"],
-                            order=["name", "extra.minDisk", "updated", "driver"],
-                            header=["Name", "MinDisk", "Updated", "Driver"])
-              )
+                                sort_keys=sort_keys,
+                                order=order,
+                                header=header))
 
     def test_07_list_vm(self):
         HEADING()
         vms = self.p.list()
-        #pprint (vms)
+        # pprint (vms)
 
+        sort_keys = self.p.p.output['vm']['sort_keys']  # not pretty
+        order = self.p.p.output['vm']['order']  # not pretty
+        header = self.p.p.output['vm']['header']  # not pretty
 
         print(Printer.flatwrite(vms,
-                                sort_keys=["name"],
-                                order=["name",
-                                       "state",
-                                       "extra.task_state",
-                                       "extra.vm_state",
-                                       "extra.userId",
-                                       "extra.key_name",
-                                       "private_ips",
-                                       "public_ips"],
-                                header=["Name",
-                                        "State",
-                                        "Task state",
-                                        "VM state",
-                                        "User Id",
-                                        "SSHKey",
-                                        "Private ips",
-                                        "Public ips"])
+                                sort_keys=sort_keys,
+                                order=order,
+                                header=header)
               )
 
 

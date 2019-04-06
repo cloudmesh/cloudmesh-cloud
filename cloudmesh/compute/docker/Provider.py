@@ -93,24 +93,22 @@ class Provider(ComputeNodeABC):
                        "image",
                        "public_ips",
                        "kind"]
-        },
-        "image": {"sort_keys": ["Os"],
-                  "order": ["RepoTags"
+            },
+            "image": {
+                "sort_keys": ["cm.name"],
+                "order": ["RepoTags",
                             "repo",
-                            "tags"
+                            "tags",
                             "Os",
                             "Size",
                             "Architecture"],
                   "header": ["RepoTags",
                              "repo",
-                             "tags"
+                             "tags",
                              "Os",
                              "Size",
                              "Architecture"]},
-        # TODO: FLAVORS ARE NOT DEFINED
-        "flavor": {"sort_keys": ["name",
-                                 "vcpus",
-                                 "disk"],
+            "flavor": {"sort_keys": ["cm.name"],
                    "order": ["name",
                              "vcpus",
                              "ram",
@@ -479,3 +477,16 @@ class Provider(ComputeNodeABC):
                 break
 
         return result
+
+    def flavors(self):
+        Console.error("flavors not implemented")
+        return None
+
+    def keys(self):
+        Console.error("keys not implemented")
+        return None
+
+    def key_upload(self, key):
+        Console.error("keys upload implemented")
+        return None
+

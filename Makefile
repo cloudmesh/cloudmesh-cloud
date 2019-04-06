@@ -134,7 +134,8 @@ patch: clean
 	$(call banner, "install")
 	sleep 10
 	pip install --index-url https://test.pypi.org/simple/ cloudmesh-$(package) -U
-
+	make
+	
 minor: clean
 	$(call banner, "minor")
 	bump2version minor --allow-dirty

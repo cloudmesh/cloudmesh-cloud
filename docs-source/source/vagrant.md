@@ -3,7 +3,7 @@
 This has to be reimplemented for Python 3
 
 ```bash
-cm4 set cloud=vagrant
+cms set cloud=vagrant
 ```
 
 See <https://github.com/cloudmesh/vagrant>

@@ -2,7 +2,7 @@
 
 cpy the file
 
-* <https://github.com/cloudmesh/cloudmesh-cm4/blob/master/cloudmesh/etc/cloudmesh4.yaml>
+* <https://github.com/cloudmesh/cloudmesh-cloud/blob/master/cloudmesh/etc/cloudmesh4.yaml>
 
 to `~/.cloudmesh/cloudmesh4.yaml`
 

@@ -93,7 +93,7 @@ The default `data` section in [`cloudmesh.yaml`](cloudmesh/management/configurat
 **Download**
 
 ```
-git clone https://github.com/cloudmesh/cloudmesh-cm4
+git clone https://github.com/cloudmesh/cloudmesh-cloud
 cd cm
 pip install -r requirements.txt
 cd data
@@ -116,17 +116,17 @@ and the file will be stored in
 **List all files**
 
 ```
-cm4 data add ls
+cms data add ls
 ```
 
 **Download file**
 
 ```
-cm4 data get hello.txt ../test
+cms data get hello.txt ../test
 ```
 
 **Delete file**
 
 ```
-cm4 data del hello.txt
+cms data del hello.txt
 ```

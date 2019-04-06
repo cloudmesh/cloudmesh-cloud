@@ -50,7 +50,7 @@ self-explanatory, but we will review the important ones here:
 Consider the following example :
 
 ```
-$ cm4 batch create-job SlurmTest1 --slurm-script=./1_argsin_stdout.slurm --input-type=params --slurm-cluster=slurm-taito --job-script-path=./1_argsin_stdout_script.sh --remote-path=~/tmp --local-path=../batch/sample_scripts/out --overwrite
+$ cms batch create-job SlurmTest1 --slurm-script=./1_argsin_stdout.slurm --input-type=params --slurm-cluster=slurm-taito --job-script-path=./1_argsin_stdout_script.sh --remote-path=~/tmp --local-path=../batch/sample_scripts/out --overwrite
 ```
 
 This will create a job that looks like this in the `slurm_batch` configuration file placed in the workspace directory: 
@@ -141,7 +141,7 @@ drwx------ 3  4096 Dec  7 02:35 ../
 Now that the results are ready we can fetch the results using the following command: 
 
 ```
-$ cm4 batch fetch SlurmTest1
+$ cms batch fetch SlurmTest1
 collecting results
 Results collected from taito for jobID 32846209
 waiting for other results if any...
@@ -168,7 +168,7 @@ drwxr-xr-x 3 corriel 1M Dec  6 19:40 ../
 Now that you are done, you can easily clean the remote using:
 
 ```
-$ cm4 batch clean-remote SlurmTest1
+$ cms batch clean-remote SlurmTest1
 Job SlurmTest1 cleaned successfully.
 ```
 
@@ -179,11 +179,11 @@ Job SlurmTest1 cleaned successfully.
 Naturally after working with the `batch` for a while, several jobs and clusters will be accumulated in the configuration file. You can get the list of current jobs and clusters using the following commands: 
 
 ```
-$ cm4 batch list slurm-clusters
+$ cms batch list slurm-clusters
  slurm-taito:
 	 name
 	 credentials
-$ cm4 batch list jobs
+$ cms batch list jobs
  SlurmTest1:
 	 suffix
 	 slurm_cluster_name
@@ -205,7 +205,7 @@ $ cm4 batch list jobs
 It is also possible to increase the depth of the information by adding the desired depth as the next parameter: 
 
 ```
-$ cm4 batch list slurm-clusters 2
+$ cms batch list slurm-clusters 2
  slurm-taito:
 	 name:
 		 taito
@@ -221,10 +221,10 @@ $ cm4 batch list slurm-clusters 2
 In case you want to modify or add a configuration parameter, there is no need to directly modify the file. Indeed you can use the `set-param` command to set a key for both jobs and slurm-clusters. In the next example we will add a test-key and test-value parameter to the `slurm-taito` cluster: 
 
 ```
-$ cm4 batch set-param slurm-cluster slurm-taito test-key test-value
+$ cms batch set-param slurm-cluster slurm-taito test-key test-value
 slurm-cluster parameter test-key set to test-value successfully.
 
-$ cm4 batch list slurm-clusters 2
+$ cms batch list slurm-clusters 2
  slurm-taito:
 	 name:
 		 taito
@@ -242,13 +242,13 @@ $ cm4 batch list slurm-clusters 2
 Finally, when you are done with a job, or when a cluster is not accessible anymore, you can easily remove them from the `batch` configuration file using the following: 
 
 ```
-$ cm4 baremove slurm-cluster slurm-taito
+$ cms baremove slurm-cluster slurm-taito
 Slurm-cluster slurm-taito removeed successfully.
 ```
 
 similarly, you can remove a obsolete job using the following command: 
 
 ```
-$ cm4 batch remove job SlurmTest1
+$ cms batch remove job SlurmTest1
 Job SlurmTest1 removeed successfully.
 ```

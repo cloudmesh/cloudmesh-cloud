@@ -90,6 +90,7 @@ class AzureProvider(object):
     def delete_vm(self,
                   resource_group=None,
                   name=None):
+        r = self.stop_vm(resource_group=resource_group, name=name)
         command = \
             "az vm delete --yes" \
                 f" --resource-group {resource_group}" \
@@ -125,6 +126,17 @@ class AzureProvider(object):
                 f" --name {name}"
         return self.az(command)
 
+    def start_vm(self,
+                   resource_group=None,
+                   name=None):
+        command = \
+            f"az vm start" \
+                f" --resource-group {resource_group}" \
+                f" --name {name}"
+        #return self.az(command)
+        print(command)
+        r = Shell.execute(command, shell=True)
+    
     def restart_vm(self,
                    resource_group=None,
                    name=None):
@@ -152,6 +164,20 @@ class AzureProvider(object):
             f" --resource-group {resource_group}" \
             f" --name {name}"
         return self.az(command)
+
+        def connect_vm(self,
+                   resource_group=None,
+                   name=None,
+                   user=None):
+        print("connecting to vm...")
+        ip = self.get_ip_vm(resource_group=resource_group, name=name)
+        address = ip[0]['virtualMachine']['network']['publicIpAddresses'][0][
+            'ipAddress']
+        print(address)
+        #command = f"ssh {user}@{address}"
+        r = Shell.live("ssh {user}@{publicIdAddress}".format(user=user,\
+                                                             publicIdAddress=address))
+        return r
 
 
 if __name__ == "__main__":

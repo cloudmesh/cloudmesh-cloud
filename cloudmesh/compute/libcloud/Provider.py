@@ -12,7 +12,7 @@ from cloudmesh.common.util import HEADING
 from cloudmesh.management.configuration.config import Config
 from cloudmesh.common.util import path_expand
 from cloudmesh.common.console import Console
-from cloudmesh.terminal.Terminal import VERBOSE
+from cloudmesh.DEBUG import VERBOSE
 
 
 class Provider(ComputeNodeABC):

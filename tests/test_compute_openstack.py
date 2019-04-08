@@ -15,7 +15,7 @@ from cloudmesh.management.configuration.SSHkey import SSHkey
 from cloudmesh.management.configuration.config import Config
 from cloudmesh.management.configuration.name import Name
 from cloudmesh.shell.variables import Variables
-from cloudmesh.terminal.Terminal import VERBOSE
+from cloudmesh.DEBUG import VERBOSE
 
 class TestName:
 

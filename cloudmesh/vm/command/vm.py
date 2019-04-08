@@ -9,7 +9,7 @@ from cloudmesh.mongo.CmDatabase import CmDatabase
 from cloudmesh.shell.command import PluginCommand
 from cloudmesh.shell.command import command, map_parameters
 from cloudmesh.shell.variables import Variables
-from cloudmesh.terminal.Terminal import VERBOSE
+from cloudmesh.DEBUG import VERBOSE
 from cloudmesh.management.configuration.arguments import Arguments
 from cloudmesh.common.Shell import Shell
 from cloudmesh.common.error import Error

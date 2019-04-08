@@ -2,7 +2,7 @@ from os import mkdir
 from os.path import isfile, expanduser, join, dirname, realpath, exists
 from pathlib import Path
 from shutil import copyfile
-from cloudmesh.terminal.Terminal import VERBOSE
+# from cloudmesh.DEBUG import VERBOSE
 from cloudmesh.common.util import path_expand
 import munch
 import re
@@ -92,7 +92,7 @@ class Config(object):
 
     def spec_replace(self, spec):
 
-        variables = re.findall("\{\w.+\}", spec)
+        variables = re.findall(r"\{\w.+\}", spec)
 
         for i in range(0, len(variables)):
             data = yaml.load(spec, Loader=yaml.SafeLoader)

@@ -20,7 +20,7 @@
   In case yo ulike to do debug messages use
 
   ````python
-  from cloudmesh.terminal.Terminal import VERBOSE
+  from cloudmesh.DEBUG import VERBOSE
 
   VERBOSE.print("this is an example", verbose=9)  
   ```

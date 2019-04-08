@@ -4,7 +4,7 @@ from cloudmesh.shell.command import PluginCommand
 from datetime import datetime
 from cloudmesh.queue.api.Queue import Queue
 from cloudmesh.shell.variables import Variables
-from cloudmesh.terminal.Terminal import VERBOSE
+from cloudmesh.DEBUG import VERBOSE
 from cloudmesh.management.configuration.arguments import Arguments
 from cloudmesh.common.Printer import Printer
 from cloudmesh.common.parameter import Parameter

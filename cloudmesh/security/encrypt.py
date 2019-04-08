@@ -1,7 +1,7 @@
 import os
 from cloudmesh.common.util import path_expand
 from cloudmesh.common.dotdict import dotdict
-from cloudmesh.terminal.Terminal import VERBOSE
+from cloudmesh.DEBUG import VERBOSE
 import platform
 from getpass import getpass
 from cloudmesh.common.console import Console

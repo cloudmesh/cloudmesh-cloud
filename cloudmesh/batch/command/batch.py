@@ -4,8 +4,7 @@ from cloudmesh.shell.command import PluginCommand
 from datetime import datetime
 from cloudmesh.batch.api.Batch import SlurmCluster
 from cloudmesh.shell.variables import Variables
-from cloudmesh.terminal.Terminal import VERBOSE
-from cloudmesh.management.configuration.arguments import Arguments
+from cloudmesh.DEBUG import VERBOSE
 from cloudmesh.common.Printer import Printer
 from cloudmesh.common.parameter import Parameter
 from cloudmesh.common.console import Console
@@ -153,7 +152,7 @@ class BatchCommand(PluginCommand):
         #
         #    if active: False in the yaml file for the cluster this cluster is not used and scipped.
 
-        VERBOSE.print(arguments, verbose=9)
+        VERBOSE.print(arguments)
 
         variables = Variables()
         # do not use print but use ,Console.msg(), Console.error(), Console.ok()

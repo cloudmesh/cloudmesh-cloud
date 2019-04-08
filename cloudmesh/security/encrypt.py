@@ -30,7 +30,7 @@ class EncryptFile(object):
             'pem': path_expand('~/.ssh/id_rsa.pem'),
             'key': path_expand('~/.ssh/id_rsa')
         })
-        VERBOSE.print(self.data, verbose=9)
+        VERBOSE(self.data)
         if not os.path.exists(self.data["pem"]):
             self.pem_create()
 
@@ -58,7 +58,7 @@ class EncryptFile(object):
             return True
 
     def _execute(self, command):
-        VERBOSE.print(command, verbose=9)
+        VERBOSE(command)
         os.system(command)
 
     def check_passphrase(self):

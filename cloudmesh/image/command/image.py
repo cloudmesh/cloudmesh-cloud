@@ -39,7 +39,7 @@ class ImageCommand(PluginCommand):
                        "cloud",
                        "output")
 
-        VERBOSE.print(arguments, verbose=9)
+        VERBOSE(arguments)
 
         variables = Variables()
 
@@ -102,6 +102,6 @@ class ImageCommand(PluginCommand):
 
             except Exception as e:
 
-                VERBOSE.print(e, verbose=9)
+                VERBOSE(e)
 
             return ""

@@ -84,7 +84,7 @@ class TestName:
         HEADING()
         images = self.p.images()
 
-        VERBOSE.print(images, verbose=9)
+        VERBOSE(images)
 
         print(Printer.flatwrite(images,
                                 sort_keys=["name", "extra.minDisk"],
@@ -98,7 +98,7 @@ class TestName:
         flavors = self.p.flavors()
         # pprint (flavors)
 
-        VERBOSE.print(flavors, verbose=9)
+        VERBOSE(flavors)
 
         print(Printer.flatwrite(flavors,
                                 sort_keys=["name", "vcpus", "disk"],
@@ -111,7 +111,7 @@ class TestName:
         vms = self.p.list()
         # pprint (vms)
 
-        VERBOSE.print(vms, verbose=9)
+        VERBOSE(vms)
 
         print(Printer.flatwrite(vms,
                                 sort_keys=["name"],

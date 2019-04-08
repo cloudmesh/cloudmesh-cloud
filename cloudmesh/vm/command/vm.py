@@ -213,7 +213,7 @@ class VmCommand(PluginCommand):
                        'size',
                        'username')
 
-        VERBOSE.print(arguments, verbose=9)
+        VERBOSE(arguments)
 
         variables = Variables()
 
@@ -330,7 +330,7 @@ class VmCommand(PluginCommand):
                         # for each cloud print the vms
                 except Exception as e:
 
-                    VERBOSE.print(e, verbose=9)
+                    VERBOSE(e)
 
                 return ""
             else:
@@ -382,7 +382,7 @@ class VmCommand(PluginCommand):
 
                 except Exception as e:
 
-                    VERBOSE.print(e, verbose=9)
+                    VERBOSE(e)
 
             return ""
 

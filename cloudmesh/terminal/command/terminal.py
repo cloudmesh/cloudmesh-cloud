@@ -56,7 +56,7 @@ class TerminalCommand(PluginCommand):
         else:
             arguments.command += ";"
 
-        VERBOSE.print(arguments, label='arguments', verbose=1)
+        VERBOSE(arguments, label='arguments', verbose=1)
 
         if arguments.os is None:
             Shell.terminal(command=arguments.command)
@@ -68,7 +68,7 @@ class TerminalCommand(PluginCommand):
                 arguments.interactive = ""
                 arguments.shell = ""
 
-            VERBOSE.print(arguments, label='arguments', verbose=1)
+            VERBOSE(arguments, label='arguments', verbose=1)
 
             command = "cd {cwd}; docker run -v {cwd}:{cwd} -w {cwd} --rm {interactive} {os} {command}{shell}".format(
                 **arguments)

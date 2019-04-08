@@ -91,7 +91,7 @@ class ConfigCommand(PluginCommand):
                            path_expand("~/.cloudmesh/cloudmesh4.yaml")
         arguments.DESTINATION = arguments.SOURCE + ".enc"
 
-        # VERBOSE.print(arguments, verbose=9)
+        # VERBOSE(arguments)
 
         e = EncryptFile(arguments.SOURCE, arguments.DESTINATION)
 

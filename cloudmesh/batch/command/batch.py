@@ -152,7 +152,7 @@ class BatchCommand(PluginCommand):
         #
         #    if active: False in the yaml file for the cluster this cluster is not used and scipped.
 
-        VERBOSE.print(arguments)
+        VERBOSE(arguments)
 
         variables = Variables()
         # do not use print but use ,Console.msg(), Console.error(), Console.ok()

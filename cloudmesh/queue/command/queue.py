@@ -110,7 +110,7 @@ class QueueCommand(PluginCommand):
         #
         #    if active: False in the yaml file for the cluster this cluster is not used and scipped.
 
-        VERBOSE.print(arguments, verbose=9)
+        VERBOSE(arguments)
         implemented_policies = ['FIFO','FILO']
         variables = Variables()
 

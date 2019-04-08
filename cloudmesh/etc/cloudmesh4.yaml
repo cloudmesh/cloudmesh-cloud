@@ -96,6 +96,9 @@ cloudmesh:
         resource_group: 'cloudmesh'
         location: TBD
       credentials:
+        account_name: TBD
+        account_key: TBD
+        container: TBD
         AZURE_TENANT_ID: 'xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
         AZURE_SUBSCRIPTION_ID: 'xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
         AZURE_APPLICATION_ID: 'xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'

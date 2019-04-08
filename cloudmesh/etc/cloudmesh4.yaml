@@ -84,6 +84,23 @@ cloudmesh:
         redirect_uris:
           - "urn:ietf:wg:oauth:2.0:oob"
           - "http://localhost"
+    azure:
+      cm:
+        active: False
+        heading: AWS
+        host: azure.mocrosoft.com
+        label: Azure
+        kind: azureblob
+        version: TBD
+      default:
+        resource_group: 'cloudmesh'
+        location: TBD
+      credentials:
+        AZURE_TENANT_ID: 'xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
+        AZURE_SUBSCRIPTION_ID: 'xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
+        AZURE_APPLICATION_ID: 'xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
+        AZURE_SECRET_KEY: TBD
+        AZURE_REGION: 'northcentralus'
   cloud:
     docker:
       cm:

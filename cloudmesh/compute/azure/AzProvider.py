@@ -169,15 +169,15 @@ class AzureProvider(object):
                    resource_group=None,
                    name=None,
                    user=None):
-        print("connecting to vm...")
-        ip = self.get_ip_vm(resource_group=resource_group, name=name)
-        address = ip[0]['virtualMachine']['network']['publicIpAddresses'][0][
-            'ipAddress']
-        print(address)
-        #command = f"ssh {user}@{address}"
-        r = Shell.live("ssh {user}@{publicIdAddress}".format(user=user,\
-                                                             publicIdAddress=address))
-        return r
+            print("connecting to vm...")
+            ip = self.get_ip_vm(resource_group=resource_group, name=name)
+            address = ip[0]['virtualMachine']['network']['publicIpAddresses'][0][
+                'ipAddress']
+            print(address)
+            #command = f"ssh {user}@{address}"
+            r = Shell.live("ssh {user}@{publicIdAddress}".format(user=user,\
+                                                                 publicIdAddress=address))
+            return r
 
 
 if __name__ == "__main__":

@@ -5,6 +5,7 @@ from pprint import pprint
 
 from libcloud.compute.providers import get_driver
 from libcloud.compute.types import Provider as LibcloudProvider
+from libcloud.compute.base import NodeAuthSSHKey
 
 from cloudmesh.abstractclass.ComputeNodeABC import ComputeNodeABC
 from cloudmesh.common.parameter import Parameter
@@ -371,7 +372,7 @@ class Provider(ComputeNodeABC):
                                 self.cloudman.ex_delete_security_group_rule(
                                     ruleobj)
 
-    def images(self, raw=False):
+    def images(self, raw=False, **kwargs):
         """
         Lists the images on the cloud
         :param raw: If raw is set to True the lib cloud object is returned
@@ -379,21 +380,41 @@ class Provider(ComputeNodeABC):
         :return: dict or libcloud object
         """
         if self.cloudman:
-            entries = self.cloudman.list_images()
-            if raw:
-                return entries
+            if self.cloudtype in ["openstack", "aws"]:
+                entries = self.cloudman.list_images()
+                if raw:
+                    return entries
+                else:
+                    return self.update_dict(entries, kind="image")
+            elif self.cloudtype == "azure_arm":
+                if "publisher" in kwargs and \
+                    "offer" in kwargs and \
+                    "sku" in kwargs:
+                    entries = self.cloudman.list_images(
+                                        ex_publisher=kwargs["publisher"],
+                                        ex_offer=kwargs["offer"],
+                                        ex_sku=kwargs["sku"]
+                                        )
+                    if raw:
+                        return entries
+                    else:
+                        return self.update_dict(entries, kind="image")
+                # azure image query without given more parameters cost
+                # too long to return
+                else:
+                    return None
             else:
-                return self.update_dict(entries, kind="image")
+                pass
 
         return None
 
-    def image(self, name=None):
+    def image(self, name=None, **kwargs):
         """
         Gets the image with a given nmae
         :param name: The name of the image
         :return: the dict of the image
         """
-        return self.find(self.images(), name=name)
+        return self.find(self.images(raw=False, **kwargs), name=name)
 
     def flavors(self, raw=False):
         """
@@ -567,26 +588,26 @@ class Provider(ComputeNodeABC):
         :param kwargs: additional arguments HEADING(c=".")ed along at time of boot
         :return:
         """
-        images = self.images(raw=True)
         image_use = None
-        flavors = self.flavors(raw=True)
         flavor_use = None
-
         # keyname = Config()["cloudmesh"]["profile"]["user"]
         # ex_keyname has to be the registered keypair name in cloud
         pprint(kwargs)
 
         if self.cloudtype in ["openstack", "aws"]:
-
+            images = self.images(raw=True)
             for _image in images:
                 if _image.name == image:
                     image_use = _image
                     break
-            for _flavor in flavors:
-                if _flavor.name == size:
-                    flavor_use = _flavor
-                    break
+        elif self.cloudtype == 'azure_arm':
+            image_use = self.cloudman.get_image(image)
 
+        flavors = self.flavors(raw=True)
+        for _flavor in flavors:
+            if _flavor.name == size:
+                flavor_use = _flavor
+                break
         if self.cloudtype == "openstack":
 
             if "ex_security_groups" in kwargs:
@@ -605,6 +626,48 @@ class Provider(ComputeNodeABC):
         if self.cloudtype in ["openstack", "aws"]:
             node = self.cloudman.create_node(name=name, image=image_use,
                                              size=flavor_use, **kwargs)
+        elif self.cloudtype == 'azure_arm':
+            auth = None
+            if "sshpubkey" in kwargs:
+                auth = NodeAuthSSHKey(kwargs["sshpubkey"])
+            pubip = self.cloudman.ex_create_public_ip(
+                                        name='{nodename}-ip'.format(
+                                                nodename=name),
+                                        resource_group=kwargs["resource_group"]
+                                        )
+            networks = self.cloudman.ex_list_networks()
+            network_use = None
+            for network in networks:
+                if network.name == kwargs["network"]:
+                    network_use = network
+                    pprint (network_use)
+                    break
+            subnets = self.cloudman.ex_list_subnets(network_use)
+            subnet_use = None
+            for subnet in subnets:
+                if subnet.name == kwargs["subnet"]:
+                    subnet_use = subnet
+                    break
+            nic_use = self.cloudman.ex_create_network_interface(
+                                        name='{nodename}-nic'.format(
+                                            nodename=name),
+                                        subnet=subnet_use,
+                                        resource_group=kwargs["resource_group"],
+                                        public_ip=pubip
+                                        )
+            node = self.cloudman.create_node(name=name,
+                          image=image_use,
+                          size=flavor_use,
+                          auth=auth,
+                          # the following three were created in azure portal
+                          ex_resource_group=kwargs["resource_group"],
+                          # for storage account, use the default v2 setting
+                          ex_storage_account=kwargs["storage_account"],
+                          # under the storage account, blobs services,
+                          # create 'vhds' container
+                          ex_blob_container=kwargs["blob_container"],
+                          ex_nic=nic_use
+                          )
         else:
             sys.exit("this cloud is not yet supported")
 

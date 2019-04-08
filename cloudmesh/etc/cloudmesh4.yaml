@@ -132,6 +132,8 @@ cloudmesh:
         resource_group: 'cloudmesh'
         storage_account: 'cmdrive'
         network: 'cmnetwork'
+        subnet: 'cmsubnet'
+        blob_container: 'vhds'
       credentials:
         AZURE_TENANT_ID: 'xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
         AZURE_SUBSCRIPTION_ID: 'xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'

@@ -114,37 +114,21 @@ class TestName:
               )
         #'''
 
-class a:
-    def test_01_list_keys(self):
-        HEADING()
-        self.keys = self.p.keys()
-        # pprint(self.keys)
-
-        print(Printer.flatwrite(self.keys,
-                                sort_keys=["name"],
-                                order=["name", "fingerprint"],
-                                header=["Name", "Fingerprint"])
-              )
-
-    def test_02_key_upload(self):
-        HEADING()
-
-        key = SSHkey()
-        print(key.__dict__)
-
-        self.p.key_upload(key)
-
-        self.test_01_list_keys()
-
     def test_17_list_images(self):
         HEADING()
-        images = self.p.images()
-        pprint(images[:10])
+        publishername = 'Canonical'
+        offername = 'UbuntuServer'
+        skuname = '18.04-LTS'
+        images = self.p.images(raw=False,
+                               publisher=publishername,
+                               offer=offername,
+                               sku=skuname)
+        #pprint (images)
 
-        print(Printer.flatwrite(images[:10],
+        print(Printer.flatwrite(images,
                                 sort_keys=["id", "name"],
-                                order=["name", "id", 'extra.os'],
-                                header=["Name", "id", 'extra.os'])
+                                order=["name", "id", 'version'],
+                                header=["Name", "id", 'Version'])
               )
 
         """
@@ -177,8 +161,66 @@ class a:
           'kind': 'image',
           'name': 'Visual Studio Community 2015 Update 3 with Azure SDK 2.9 on Windows '
                   'Server 2012 R2'},
-        
+
         """
+
+    #'''
+    def test_10_create(self):
+        HEADING()
+        image = "Canonical:UbuntuServer:18.04-LTS:18.04.201903200"
+        size = "Standard_B1s"
+        resgroup = 'xxx'
+        storage_account = 'xxx'
+        blob_container = 'xxx'
+        network = 'xxx'
+        subnet = 'xxx'
+        sshpubkey = 'ssh-rsa YOUR_KEY_STRING'
+        self.p.create(name=self.name,
+                      image=image,
+                      size=size,
+                      sshpubkey=sshpubkey,
+                      resource_group=resgroup,
+                      storage_account=storage_account,
+                      blob_container=blob_container,
+                      network=network,
+                      subnet=subnet)
+        time.sleep(5)
+        nodes = self.p.list()
+        node = self.p.find(nodes, name=self.name)
+        pprint(node)
+
+        nodes = self.p.list(raw=True)
+        for node in nodes:
+            if node.name == self.name:
+                self.testnode = node
+                break
+
+        assert node is not None
+    #'''
+
+class a:
+    def test_01_list_keys(self):
+        HEADING()
+        self.keys = self.p.keys()
+        # pprint(self.keys)
+
+        print(Printer.flatwrite(self.keys,
+                                sort_keys=["name"],
+                                order=["name", "fingerprint"],
+                                header=["Name", "Fingerprint"])
+              )
+
+    def test_02_key_upload(self):
+        HEADING()
+
+        key = SSHkey()
+        print(key.__dict__)
+
+        self.p.key_upload(key)
+
+        self.test_01_list_keys()
+
+
 
 
 class forstudentstocomplete:
@@ -217,30 +259,6 @@ class forstudentstocomplete:
     def test_09_secgroups_remove(self):
         self.p.remove_secgroup(self.secgroupname)
         self.test_05_list_secgroups()
-
-    def test_10_create(self):
-        HEADING()
-        image = "CC-Ubuntu16.04"
-        size = "m1.medium"
-        self.p.create(name=self.name,
-                      image=image,
-                      size=size,
-                      # username as the keypair name based on
-                      # the key implementation logic
-                      ex_keyname=self.user,
-                      ex_security_groups=['default'])
-        time.sleep(5)
-        nodes = self.p.list()
-        node = self.p.find(nodes, name=self.name)
-        pprint(node)
-
-        nodes = self.p.list(raw=True)
-        for node in nodes:
-            if node.name == self.name:
-                self.testnode = node
-                break
-
-        assert node is not None
 
     def test_11_publicIP_attach(self):
         HEADING()

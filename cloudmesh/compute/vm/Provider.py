@@ -1,4 +1,5 @@
 from cloudmesh.compute.libcloud.Provider import Provider as LibCloudProvider
+from cloudmesh.compute.azure.AzProvider import Provider as AzAzureProvider
 from cloudmesh.compute.docker.Provider import Provider as DockerProvider
 from cloudmesh.compute.virtualbox.Provider import \
     Provider as VirtualboxCloudProvider
@@ -26,6 +27,8 @@ class Provider(object):
             provider = VirtualboxCloudProvider
         elif self.kind in ["docker"]:
             provider = DockerProvider
+        elif self.kind in ["azure"]:
+            provider = AzAzureProvider
 
         if provider is None:
             Console.error(f"proider {name} not supported")

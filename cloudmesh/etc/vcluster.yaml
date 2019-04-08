@@ -25,7 +25,7 @@ job-metadata:
     cluster_name: vcluster1
     config_name: ParamInStdOut
     raw_remote_path: ~/
-    script_path: /home/corriel/gitrepos/courses/e516_CloudComputing_cloudmesh/cloud/vcluster/batch/inf_script_stdin_stdout.sh
+    script_path: ~/.cludmesh/vcluster/batch/inf_script_stdin_stdout.sh
     argfile_path: ''
     argfile_name: ''
     params_list:

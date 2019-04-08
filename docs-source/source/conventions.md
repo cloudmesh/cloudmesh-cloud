@@ -22,7 +22,7 @@
   ````python
   from cloudmesh.DEBUG import VERBOSE
 
-  VERBOSE.print("this is an example", verbose=9)  
+  VERBOSE("this is an example")  
   ```
 
 * Managing debug and verbose mode

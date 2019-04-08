@@ -99,7 +99,7 @@ class Provider(ComputeNodeABC):
         self.cloudtype = self.spec["cm"]["kind"]
         super().__init__(name, conf)
 
-        VERBOSE.print(cred, verbose=8)
+        VERBOSE(cred, verbose=8)
 
         if self.cloudtype in Provider.ProviderMapper:
 

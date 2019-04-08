@@ -122,7 +122,7 @@ class Provider(ComputeNodeABC):
 
     def __init__(self, name=None,
                  configuration="~/.cloudmesh/.cloudmesh4.yaml"):
-        VERBOSE.print(f"Init Docker {name}", verbose=9)
+        VERBOSE(f"Init Docker {name}")
         self.config = Config()
         conf = Config(configuration)["cloudmesh"]
         self.user = conf["profile"]

@@ -146,7 +146,7 @@ class Queue(object):
         # TODO: remove the queues info from the DB based on the ['cm']
         return
 
-    @DatabaseUpdate # this should update the record not create a new one
+    @DatabaseUpdate()   # this should update the record not create a new one
     def push(self,job):
         '''
         push job to stack
@@ -158,7 +158,7 @@ class Queue(object):
         self.updateStatus()
         return self.info
 
-    @DatabaseUpdate  # this should update the record not create a new one
+    @DatabaseUpdate()  # this should update the record not create a new one
     def pop(self):
         '''
         pop job from stack based on the policy
@@ -197,7 +197,7 @@ class Queue(object):
             return False
         return True
 
-    @DatabaseUpdate  # this should update the record not create a new one
+    @DatabaseUpdate()  # this should update the record not create a new one
     def activate(self):
         '''
         activates the queue
@@ -209,7 +209,7 @@ class Queue(object):
         self.info.queue.active = True
         return self.info
 
-    @DatabaseUpdate  # this should update the record not create a new one
+    @DatabaseUpdate()  # this should update the record not create a new one
     def deactivate(self):
         '''
         deactivates the queue
@@ -219,7 +219,7 @@ class Queue(object):
         self.info.queue.active = False
         return self.info
 
-    @DatabaseUpdate  # this should update the record not create a new one
+    @DatabaseUpdate()  # this should update the record not create a new one
     def updateStatus(self):
         '''
         checks number of jobs and updates queue status
@@ -229,7 +229,7 @@ class Queue(object):
             self.info.queue.status = 'FULL'
         return self.info
 
-    @DatabaseUpdate
+    @DatabaseUpdate()
     def setParam(self,param,val):
         '''
         set a particular parameter in the queue

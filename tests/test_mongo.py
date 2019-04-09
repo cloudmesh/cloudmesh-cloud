@@ -5,6 +5,7 @@ from cloudmesh.mongo import DatabaseUpdate
 from cloudmesh.management.debug import HEADING, myself
 from pprint import pprint
 
+
 # nosetest -v --nopature
 # nosetests -v --nocapture tests/test_mongo.py
 
@@ -20,11 +21,13 @@ def r_list():
         {"name": "test-dict-1", "num": 432},
     ]
 
+
 def PRINT(name, d):
-    print (79* "-")
-    print (name)
-    print (79* "-")
-    pprint (d)
+    print(79 * "-")
+    print(name)
+    print(79 * "-")
+    pprint(d)
+
 
 class TestMongo:
 
@@ -36,20 +39,21 @@ class TestMongo:
 
         m1 = MongoDBController()
 
-        PRINT ("m1", m1.__dict__)
+        PRINT("m1", m1.__dict__)
 
         m2 = MongoDBController()
         m3 = MongoDBController()
 
         m3.data["TEST"] = "test"
 
-        PRINT ("m1", m1.__dict__)
-        PRINT ("m2", m1.__dict__)
-        PRINT ("m3", m3.__dict__)
+        PRINT("m1", m1.__dict__)
+        PRINT("m2", m1.__dict__)
+        PRINT("m3", m3.__dict__)
 
         assert m3.data["TEST"] == "test"
         assert m2.data["TEST"] == "test"
         assert m1.data["TEST"] == "test"
+
 
 """
     def test_01_saveto(self):

@@ -2,6 +2,7 @@ from pprint import pprint
 from cloudmesh.common.util import HEADING
 from cloudmesh.management.configuration.name import Name
 
+
 # nosetest -v --nopature
 # nosetests -v --nocapture tests/test_name.py
 
@@ -22,12 +23,12 @@ class TestName:
         n.reset()
         assert n.counter == 1
 
-        print (n)
+        print(n)
         assert str(n) == "exp-grp-gregor-vm-1"
 
         pprint(n.dict())
 
-        print (n.get("container"))
+        print(n.get("container"))
         print(n)
         assert str(n) == "exp-grp-gregor-container-1"
 
@@ -35,14 +36,12 @@ class TestName:
         print(n)
         assert str(n) == "exp-grp-gregor-container-2"
 
-        print (n.counter)
+        print(n.counter)
         assert n.counter == 2
-
 
         m = Name()
 
         pprint(n.dict())
         pprint(m.dict())
         print(m)
-        assert str(n) == str (m)
-
+        assert str(n) == str(m)

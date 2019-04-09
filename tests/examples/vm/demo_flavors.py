@@ -22,8 +22,9 @@ def openstack_test1():
     sizes = refactor.list_sizes()  # available sizes
     images = refactor.list_images()  # available images
 
-    ## create new instance if necessary
-    ## create and auto start
+    # create new instance if necessary
+    # create and auto start
+
     print("creating instance with provider: chameleon")
     node = vm.provider.create('testgroup-experiment-01')
     node_id = node.id
@@ -62,7 +63,7 @@ def openstack_test1():
     input("Press Enter to continue...")
     node = refactor.rename(name, "new name")
 
-    ## destroy
+    # destroy
     input("Press Enter to continue...")
     print("call d.destroy() function")
     vm.destroy(name)

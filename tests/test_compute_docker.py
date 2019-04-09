@@ -84,7 +84,6 @@ class TestName:
 
 class d:
 
-
     def test_04_containers(self):
         HEADING()
         client = docker.from_env()
@@ -112,6 +111,7 @@ class ooo:
         pprint(r)
 
 
+# noinspection PyPep8,PyPep8
 class other:
     def test_02_list_os(self):
         HEADING()

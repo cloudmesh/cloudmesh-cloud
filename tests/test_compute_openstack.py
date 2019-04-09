@@ -17,8 +17,8 @@ from cloudmesh.management.configuration.name import Name
 from cloudmesh.shell.variables import Variables
 from cloudmesh.DEBUG import VERBOSE
 
-class TestName:
 
+class TestName:
 
     def setup(self):
         banner("setup", c="-")

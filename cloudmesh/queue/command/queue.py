@@ -29,88 +29,36 @@ class QueueCommand(PluginCommand):
             queue create --name=NAME --policy=POLICY --cluster=CLUSTER
                 [--charge=CHARGE]
                 [--unit=UNIT]
-            queue activate [--name=NAME]
-            queue deactivate [--name=NAME]
-            queue set unit
-            queue connection_test --job=JOB
-            queue cluster list [--cluster=CLUSTERS] [--depth=DEPTH]
-            queue cluster remove [--cluster=CLUSTERS]
-            queue cluster set [--cluster=CLUSTERS] PARAMETER=VALUE
+            queue activate --name=NAME
+            queue deactivate --name=NAME
+            queue set PARAMETER=VALUE --name=NAME
+            queue list all
+            queue list jobs [--cluster=CLUSTERS] [--name=NAME]
+            queue remove --name=NAME
+
 
           Arguments:
               FILE   a file name
               INPUT_TYPE  tbd
 
           Options:
-              -f      specify the file
               --depth=DEPTH   [default: 1]
               --format=FORMAT    [default: table]
 
           Description:
 
             This command creates a queue that is associated with a cloud.
-
-            We assume that a number of experiments are conducted with possibly
-            running the script multiple times. Each experiment will save the
-            batch script in its own folder.
-
-            The output of the script can be saved in a destination folder. A virtual
-            directory is used to coordinate all saved files.
-
-            The files can be located due to the use of the virtual directory on
-            multiple different data or file services
-
-            Authentication to the Batch systems is done viw the underlaying HPC
-            center authentication. We assume that the user has an account to
-            submit on these systems.
-
-            (SSH, 2 factor, XSEDE-account) TBD.
+            Each queue is associated with a cluster and can have several jobs
+            in it.
+            It is possible to get the list of the jobs in a queue either
+            based on the queue name or based on the cluster name with which
+            the queue is interacting.
 
           Examples:
 
-             LOTS OF DOCUMENTATION MISSING HERE
-
-                [--companion-file=COMPANION_FILE]
-                [--outfile-name=OUTPUT_FILE_NAME]
-                [--suffix=SUFFIX] [--overwrite]
-
-
-
-
         """
 
-        #
-        # create slurm manager so it can be used in all commands
-        #
         queue = Queue()  # debug=arguments["--debug"])
-
-        # arguments["--cloud"] = "test"
-        # arguments["NAME"] = "fix"
-
-        # map_parameters(arguments,
-        #                "cloud",
-        #                "name",
-        #                "cluster",
-        #                "script",
-        #                "type",
-        #                "destination",
-        #                "source",
-        #                "format")
-
-        # if not arguments.create
-
-        #    find cluster name from Variables()
-        #    if no cluster is defined look it up in yaml in batch default:
-        #    if not defined there fail
-
-        #    clusters = Parameter.expand(arguments.cluster)
-        #    name = Parameters.expand[argumnets.name)
-        #    this will return an array of clusters and names of jobs and all cluster
-        #    job or clusterc commands will be executed on them
-        #    see the vm
-        #
-        #    if active: False in the yaml file for the cluster this cluster is not used and scipped.
-
         VERBOSE(arguments)
         implemented_policies = ['FIFO', 'FILO']
         variables = Variables()
@@ -137,6 +85,46 @@ class QueueCommand(PluginCommand):
                          policy,
                          charge,
                          unit)
+        elif arguments.activate and \
+            arguments['--name']:
+            queue.findQueueByName(arguments['--name'])
+            queue.activate()
+
+        elif arguments.deactivate and \
+            arguments['--name']:
+            queue.findQueueByName(arguments['--name'])
+            queue.deactivate()
+
+        elif arguments.list and \
+            arguments.jobs:
+
+            if arguments['--name']:
+                name = arguments['--name']
+                queue.findQueueByName(name)
+                queue.listJobs()
+            elif arguments['--cluster']:
+                cluster = arguments['--cluster']
+                queue.findQueueByName(cluster)
+                queue.listJobs()
+
+        elif arguments.list and arguments.all:
+            queue.findAllQueues()
+
+        elif arguments.set and arguments['--name']:
+            name = arguments['--name']
+            param = arguments.get("PARAMETER")
+            val = arguments.get("PARAMETER")
+            queue.findQueueByName(name)
+            queue.setParam(param,val)
+
+        elif arguments.remove and arguments['--name']:
+            name = arguments['--name']
+            queue.findQueueByName(name)
+            queue.removeQueue()
+
+
+
+
 
         # elif arguments.remove:
         #     if arguments.cluster:

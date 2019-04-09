@@ -35,7 +35,6 @@ class AzureProvider(object):
             region=cred["AZURE_REGION"]
         )
 
-
     def suspend(self, name):
         """
         Suspend a running node.

@@ -12,6 +12,7 @@ from cloudmesh.common.console import Console
 from pathlib import Path
 from pprint import pprint
 
+
 # from cloudmesh.batch.api.manager import Manager
 
 
@@ -111,15 +112,15 @@ class QueueCommand(PluginCommand):
         #    if active: False in the yaml file for the cluster this cluster is not used and scipped.
 
         VERBOSE(arguments)
-        implemented_policies = ['FIFO','FILO']
+        implemented_policies = ['FIFO', 'FILO']
         variables = Variables()
 
         # docopt for some reason does not show all of the arguments in dot
         # format that's the reason I used -- format.
-        if   arguments.create and \
-             arguments['--name'] and \
-             arguments['--cluster'] and \
-             arguments['--policy']:
+        if arguments.create and \
+            arguments['--name'] and \
+            arguments['--cluster'] and \
+            arguments['--policy']:
 
             queue_name = arguments['--name']
             cluster_name = arguments['--cluster']
@@ -127,7 +128,7 @@ class QueueCommand(PluginCommand):
             if policy.upper() not in ['FIFO', 'FILO']:
                 Console.error("Policy {policy} not defined, currently "
                               "implemented policies are {policies} ".format(
-                    policy = policy.upper(),policies=implemented_policies))
+                    policy=policy.upper(), policies=implemented_policies))
                 return
             charge = arguments['--charge']
             unit = arguments['--unit']
@@ -184,7 +185,7 @@ class QueueCommand(PluginCommand):
 
         :return: string
         """
-        return '_' + str(datetime.now()).replace('-', '').\
-               replace(' ', '_').replace(':', '')\
-               [0:str(datetime.now()).replace('-', '').replace(' ', '_').\
-               replace(':','').index('.') + 3].replace('.', '')
+        return '_' + str(datetime.now()).replace('-', ''). \
+                         replace(' ', '_').replace(':', '') \
+            [0:str(datetime.now()).replace('-', '').replace(' ', '_'). \
+                   replace(':', '').index('.') + 3].replace('.', '')

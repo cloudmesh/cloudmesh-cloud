@@ -5,6 +5,7 @@ from cloudmesh.common.util import path_expand
 from cloudmesh.common.console import Console
 from cloudmesh.management.script import Script
 
+
 class Manager(object):
 
     def __init__(self, config, protocol="ssh"):
@@ -40,7 +41,6 @@ class Manager(object):
                     "git"] = "https://github.com/{community}/{preface}{software}.git".format(
                     **dict(source))
 
-
     def clean(self):
         script = f"""
                     rm -rf *.zip
@@ -68,7 +68,7 @@ class Manager(object):
 	                pip install --index-url https://test.pypi.org/simple/ cloudmesh-{package} -U
                   """
         installer = Script.live(script)
-        #print (installer)
+        # print (installer)
 
     def dist(self):
         script = f"""
@@ -76,17 +76,16 @@ class Manager(object):
 	                twine check dist/*
                   """
         installer = Script.live(script)
-        #print (installer)
+        # print (installer)
 
     def minor(self):
         script = f"bump2version minor --allow-dirty"
         installer = Script.live(script)
         # print (installer)
 
-
     def release(self):
         with open("VERSION") as f:
-            version=f.read().strip()
+            version = f.read().strip()
         script = f''''
                     git tag "v{version}"
                     git push origin master --tags
@@ -97,8 +96,7 @@ class Manager(object):
                     pip install -U cloudmesh-common
                 '''
         installer = Script.live(script)
-        #print (installer)
-
+        # print (installer)
 
     def install(self):
 

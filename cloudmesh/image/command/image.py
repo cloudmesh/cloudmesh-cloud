@@ -10,6 +10,7 @@ from cloudmesh.compute.vm.Provider import Provider
 from cloudmesh.mongo.CmDatabase import CmDatabase
 from cloudmesh.common.Printer import Printer
 
+
 class ImageCommand(PluginCommand):
 
     # see https://github.com/cloudmesh/client/blob/master/cloudmesh_client/shell/plugins/ImageCommand.py
@@ -86,7 +87,7 @@ class ImageCommand(PluginCommand):
                     kind = p.kind
 
                     collection = "{cloud}-image".format(cloud=cloud,
-                                                       kind=p.kind)
+                                                        kind=p.kind)
                     db = CmDatabase()
                     vms = db.find(collection=collection)
 

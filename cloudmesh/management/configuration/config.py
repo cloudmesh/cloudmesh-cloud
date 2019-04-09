@@ -57,7 +57,7 @@ class Config(object):
 
                 copyfile(source.resolve(), self.config_path)
 
-            #with open(self.config_path, "r") as stream:
+            # with open(self.config_path, "r") as stream:
             #    # self.data = yaml.load(stream, Loader=yaml.FullLoader)
             #    self.data = yaml.load(stream, Loader=yaml.SafeLoader)
 
@@ -66,7 +66,6 @@ class Config(object):
                 content = path_expand(content)
                 content = self.spec_replace(content)
                 self.data = yaml.load(content, Loader=yaml.SafeLoader)
-
 
             # self.data is loaded as nested OrderedDict, can not use set or get methods directly
             if self.data is None:

@@ -7,6 +7,7 @@ from cloudmesh.management.configuration.config import Config
 from cloudmesh.mongo.DataBaseDecorator import DatabaseUpdate
 from cloudmesh.common.console import Console
 
+
 class Provider(object):
 
     def __init__(self, name=None,
@@ -35,7 +36,6 @@ class Provider(object):
             raise ValueError(f"proider {name} not supported")
 
         self.p = provider(name=name, configuration=configuration)
-
 
     def cloudname(self):
         return self.name
@@ -100,7 +100,6 @@ class Provider(object):
 
     def rename(self, source=None, destination=None):
         self.p.rename(source=source, destination=destination)
-
 
     def key_upload(self, key):
         self.p.key_upload(key)

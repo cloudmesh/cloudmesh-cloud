@@ -115,7 +115,7 @@ class CmDatabase(object):
         entry = []
         collections = self.collections()
         for collection in collections:
-            entry = self.find({"collection":collection, "cm.name": entry})
+            entry = self.find({"collection": collection, "cm.name": entry})
             if len(entry) > 0:
                 return entry
         return entry
@@ -225,7 +225,7 @@ class CmDatabase(object):
             try:
                 # self.db["{cloud}-{kind}".format(**entry)].update(uniqueKeyVal,{'$set': keyvalToUpdate})
                 entry['modified'] = str(datetime.utcnow())
-                self.db["{cloud}-{kind}".format(**entry)].update({'cm': entry['cm']},{'$set':entry})
+                self.db["{cloud}-{kind}".format(**entry)].update({'cm': entry['cm']}, {'$set': entry})
             except Exception as e:
                 Console.error("modifying document {entry}".format(
                     entry=str(entry)))
@@ -243,7 +243,7 @@ class CmDatabase(object):
             entries = [entries]
         for entry in entries:
             collection = self.db["{cloud}-{kind}".format(**entry)]
-            status = collection.find({'cm': {'$exists':entry['cm']}}).count()>0
+            status = collection.find({'cm': {'$exists': entry['cm']}}).count() > 0
             exist_status.append(status)
         return exist_status
 
@@ -326,4 +326,3 @@ class CmDatabase(object):
 
         col = self.db[collection]
         col.drop()
-

@@ -93,22 +93,22 @@ class Provider(ComputeNodeABC):
                        "image",
                        "public_ips",
                        "kind"]
-            },
-            "image": {
-                "sort_keys": ["cm.name"],
-                "order": ["RepoTags",
-                            "repo",
-                            "tags",
-                            "Os",
-                            "Size",
-                            "Architecture"],
-                  "header": ["RepoTags",
-                             "repo",
-                             "tags",
-                             "Os",
-                             "Size",
-                             "Architecture"]},
-            "flavor": {"sort_keys": ["cm.name"],
+        },
+        "image": {
+            "sort_keys": ["cm.name"],
+            "order": ["RepoTags",
+                      "repo",
+                      "tags",
+                      "Os",
+                      "Size",
+                      "Architecture"],
+            "header": ["RepoTags",
+                       "repo",
+                       "tags",
+                       "Os",
+                       "Size",
+                       "Architecture"]},
+        "flavor": {"sort_keys": ["cm.name"],
                    "order": ["name",
                              "vcpus",
                              "ram",
@@ -452,7 +452,6 @@ class Provider(ComputeNodeABC):
 
         return arg
 
-
     def rename(self, source=None, destination=None):
         """
         rename a node
@@ -466,7 +465,7 @@ class Provider(ComputeNodeABC):
         containers = client.containers.list()
 
         for container in containers:
-            pprint (container)
+            pprint(container)
             pprint(container.__dict__['attrs'])
             entry = container.__dict__['attrs']
             # if container["cm"]["name"] == source:
@@ -489,4 +488,3 @@ class Provider(ComputeNodeABC):
     def key_upload(self, key):
         Console.error("keys upload implemented")
         return None
-

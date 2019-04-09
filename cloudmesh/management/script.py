@@ -76,8 +76,6 @@ class Script(object):
             return ""
 
 
-
-
 def find_process(name):
     """ find a process by name
 

@@ -25,6 +25,3 @@ connexion[swagger-ui]
 yamllint
 azure
 munch
-cloudmesh-common
-cloudmesh-cmd5
-cloudmesh-sys

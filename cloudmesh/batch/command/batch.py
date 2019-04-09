@@ -12,6 +12,7 @@ from pathlib import Path
 
 from pprint import pprint
 
+
 # from cloudmesh.batch.api.manager import Manager
 
 # TODO does docopts allow to break line in multilpe?
@@ -205,14 +206,14 @@ class BatchCommand(PluginCommand):
         # cms batch job create --name newjob1 --cluster slurm-taito
         # --script ./1_argsin_stdout.slurm --executable
         # ./1_argsin_stdout_script.sh --destination /home/vafanda --source ~/tmp
-        elif    arguments.job and \
-                arguments.create and \
-                arguments.name and \
-                arguments.cluster and \
-                arguments.script and \
-                arguments['--executable'] and \
-                arguments.destination and \
-                arguments.source :
+        elif arguments.job and \
+            arguments.create and \
+            arguments.name and \
+            arguments.cluster and \
+            arguments.script and \
+            arguments['--executable'] and \
+            arguments.destination and \
+            arguments.source:
             job_name = arguments.name
             cluster_name = arguments.cluster
             script_path = Path(arguments.script)
@@ -277,7 +278,7 @@ class BatchCommand(PluginCommand):
         elif arguments.get("fetch"):
             job_name = arguments.get("JOB_NAME")
             slurm_manager.fetch(job_name)
-        elif arguments.connection_test :
+        elif arguments.connection_test:
             slurm_manager.connection_test(arguments.job)
         elif arguments.clean:
             job_name = arguments.get("JOB_NAME")
@@ -293,7 +294,7 @@ class BatchCommand(PluginCommand):
 
         :return: string
         """
-        return '_' + str(datetime.now()).replace('-', '').\
-               replace(' ', '_').replace(':', '')\
-               [0:str(datetime.now()).replace('-', '').replace(' ', '_').\
-               replace(':','').index('.') + 3].replace('.', '')
+        return '_' + str(datetime.now()).replace('-', ''). \
+                         replace(' ', '_').replace(':', '') \
+            [0:str(datetime.now()).replace('-', '').replace(' ', '_'). \
+                   replace(':', '').index('.') + 3].replace('.', '')

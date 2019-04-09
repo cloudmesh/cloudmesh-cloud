@@ -39,8 +39,6 @@ class FlavorCommand(PluginCommand):
 
         print(arguments)
 
-
-
         # if arguments.FILE:
         #    print("option a")
         #    m.list(arguments.FILE)

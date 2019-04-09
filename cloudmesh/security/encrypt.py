@@ -23,6 +23,7 @@ class EncryptFile(object):
         openssl rsa -in id_rsa -out id_rsa.pem
 
     """
+
     def __init__(self, filename, secret):
         self.data = dotdict({
             'file': filename,
@@ -148,4 +149,3 @@ if __name__ == "__main__":
     e = EncryptFile('file.txt', 'secret.txt')
     e.encrypt()
     e.decrypt()
-

@@ -4,8 +4,8 @@ from pprint import pformat
 from pprint import pprint
 import inspect
 
-def VERBOSE(msg, label=None, color="BLUE", verbose=9):
 
+def VERBOSE(msg, label=None, color="BLUE", verbose=9):
     if label is None:
         label = inspect.stack()[1][4][0].strip().replace("VERBOSE(", "")
         label = label.split(",")[0][:-1]

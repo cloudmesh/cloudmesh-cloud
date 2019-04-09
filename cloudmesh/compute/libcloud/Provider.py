@@ -40,7 +40,7 @@ class Provider(ComputeNodeABC):
                       "image": ....,,
                       "flavor": ....,,
     """
-    
+
     output = {
 
         "vm": {
@@ -210,7 +210,6 @@ class Provider(ComputeNodeABC):
             d.append(entry)
         return d
 
-
     def find(self, elements, name=None, raw=False):
         """
         finds an element in elements with the specified name
@@ -366,9 +365,9 @@ class Provider(ComputeNodeABC):
                     for rule in rules:
                         for ruleobj in rulesobj:
                             if (ruleobj.ip_protocol == rule["ip_protocol"] and
-                                    ruleobj.from_port == rule["from_port"] and
-                                    ruleobj.to_port == rule["to_port"] and
-                                    ruleobj.ip_range == rule["ip_range"]):
+                                ruleobj.from_port == rule["from_port"] and
+                                ruleobj.to_port == rule["to_port"] and
+                                ruleobj.ip_range == rule["ip_range"]):
                                 self.cloudman.ex_delete_security_group_rule(
                                     ruleobj)
 
@@ -391,10 +390,10 @@ class Provider(ComputeNodeABC):
                     "offer" in kwargs and \
                     "sku" in kwargs:
                     entries = self.cloudman.list_images(
-                                        ex_publisher=kwargs["publisher"],
-                                        ex_offer=kwargs["offer"],
-                                        ex_sku=kwargs["sku"]
-                                        )
+                        ex_publisher=kwargs["publisher"],
+                        ex_offer=kwargs["offer"],
+                        ex_sku=kwargs["sku"]
+                    )
                     if raw:
                         return entries
                     else:
@@ -505,7 +504,7 @@ class Provider(ComputeNodeABC):
             if node.name in names:
                 r = self.cloudman.ex_stop_node(self._get_node(node.name),
                                                deallocate=False)
-                print (r)
+                print(r)
                 self.cloudman.destroy_node(node)
 
         raise NotImplementedError
@@ -631,16 +630,16 @@ class Provider(ComputeNodeABC):
             if "sshpubkey" in kwargs:
                 auth = NodeAuthSSHKey(kwargs["sshpubkey"])
             pubip = self.cloudman.ex_create_public_ip(
-                                        name='{nodename}-ip'.format(
-                                                nodename=name),
-                                        resource_group=kwargs["resource_group"]
-                                        )
+                name='{nodename}-ip'.format(
+                    nodename=name),
+                resource_group=kwargs["resource_group"]
+            )
             networks = self.cloudman.ex_list_networks()
             network_use = None
             for network in networks:
                 if network.name == kwargs["network"]:
                     network_use = network
-                    pprint (network_use)
+                    pprint(network_use)
                     break
             subnets = self.cloudman.ex_list_subnets(network_use)
             subnet_use = None
@@ -649,25 +648,25 @@ class Provider(ComputeNodeABC):
                     subnet_use = subnet
                     break
             nic_use = self.cloudman.ex_create_network_interface(
-                                        name='{nodename}-nic'.format(
-                                            nodename=name),
-                                        subnet=subnet_use,
-                                        resource_group=kwargs["resource_group"],
-                                        public_ip=pubip
-                                        )
+                name='{nodename}-nic'.format(
+                    nodename=name),
+                subnet=subnet_use,
+                resource_group=kwargs["resource_group"],
+                public_ip=pubip
+            )
             node = self.cloudman.create_node(name=name,
-                          image=image_use,
-                          size=flavor_use,
-                          auth=auth,
-                          # the following three were created in azure portal
-                          ex_resource_group=kwargs["resource_group"],
-                          # for storage account, use the default v2 setting
-                          ex_storage_account=kwargs["storage_account"],
-                          # under the storage account, blobs services,
-                          # create 'vhds' container
-                          ex_blob_container=kwargs["blob_container"],
-                          ex_nic=nic_use
-                          )
+                                             image=image_use,
+                                             size=flavor_use,
+                                             auth=auth,
+                                             # the following three were created in azure portal
+                                             ex_resource_group=kwargs["resource_group"],
+                                             # for storage account, use the default v2 setting
+                                             ex_storage_account=kwargs["storage_account"],
+                                             # under the storage account, blobs services,
+                                             # create 'vhds' container
+                                             ex_blob_container=kwargs["blob_container"],
+                                             ex_nic=nic_use
+                                             )
         else:
             sys.exit("this cloud is not yet supported")
 

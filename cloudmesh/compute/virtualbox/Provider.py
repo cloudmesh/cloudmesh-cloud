@@ -45,7 +45,6 @@ class Provider(ComputeNodeABC):
         entry["cm"]["cloud"] = self.cloud
         return entry
 
-
     output = {
         'vm': {
             "sort_keys": ["cm.name"],
@@ -341,7 +340,6 @@ class Provider(ComputeNodeABC):
                 d[entry[id]] = entry
         return d
 
-
     def _convert_assignment_to_dict(self, content):
         d = {}
         lines = content.split("\n")
@@ -481,7 +479,6 @@ class Provider(ComputeNodeABC):
         result = Shell.execute("vbox", ["suspend", name], cwd=arg.directory, shell=True)
         return result
 
-
     def resume(self, name=None):
         """
         NOT IMPLEMENTED
@@ -505,6 +502,7 @@ class Provider(ComputeNodeABC):
         result = Shell.execute("vbox", ["up", name], cwd=arg.directory,
                                shell=True)
         return result
+
     def stop(self, name=None):
         """
         NOT IMPLEMENTED

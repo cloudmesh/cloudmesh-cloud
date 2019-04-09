@@ -6,7 +6,7 @@ class Printer(object):
         self.header = header
 
     def print(self, d, format='table'):
-        print(self.value(d,format=format))
+        print(self.value(d, format=format))
 
     def value(self, d, format='table'):
         return Printer.flatwrite(
@@ -14,4 +14,4 @@ class Printer(object):
             sort_keys=self.keys,
             order=self.order,
             header=self.header
-            )
+        )

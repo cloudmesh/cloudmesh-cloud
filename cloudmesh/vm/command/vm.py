@@ -15,6 +15,7 @@ from cloudmesh.common.Shell import Shell
 from cloudmesh.common.error import Error
 from pprint import pprint
 
+
 class VmCommand(PluginCommand):
 
     # see also https://github.com/cloudmesh/client/edit/master/cloudmesh_client/shell/plugins/VmCommand.py
@@ -372,7 +373,6 @@ class VmCommand(PluginCommand):
                             order = p.p.output['vm']['order']  # not pretty
                             header = p.p.output['vm']['header']  # not pretty
 
-
                             print(Printer.flatwrite(vms,
                                                     sort_keys=["cm.name"],
                                                     order=order,
@@ -426,7 +426,6 @@ class VmCommand(PluginCommand):
                                 "Rename {} to {}".format(oldname, newname))
                         else:
                             print(f"rename {oldname} -> {newname}")
-
 
                             p.rename(source=oldname, destination=newname)
 

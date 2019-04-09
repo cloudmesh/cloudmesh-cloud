@@ -62,8 +62,8 @@ class TestName:
     '''
     def test_03_terminal(self):
         HEADING()
-        t1 = Shell.container()
-        t2 = Shell.container(command="pwd")
+        t1 = Shell.terminal()
+        t2 = Shell.terminal(command="pwd")
     '''
 
     def test_03_images(self):

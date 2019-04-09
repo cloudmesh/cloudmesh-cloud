@@ -8,22 +8,22 @@ from cloudmesh.shell.command import command, map_parameters
 from cloudmesh.DEBUG import VERBOSE
 
 
-class TerminalCommand(PluginCommand):
+class ContainerCommand(PluginCommand):
 
     # noinspection PyUnusedLocal
     @command
-    def do_terminal(self, args, arguments):
+    def do_container(self, args, arguments):
         """
         ::
 
           Usage:
-              terminal [--os=OS]
-                       [--command=COMMAND]
-                       [--shell=SHELL]
-                       [--interactive=INTERACTIVE]
-                       [--window=WINDOW]
+              container [--os=OS]
+                        [--command=COMMAND]
+                        [--shell=SHELL]
+                        [--interactive=INTERACTIVE]
+                        [--window=WINDOW]
 
-          Starts a docker container in interactive mode in a new terminal
+          Starts a docker container in interactive mode in a new container
           and executes the command in it.
 
           Arguments:
@@ -38,7 +38,7 @@ class TerminalCommand(PluginCommand):
 
 
           Description:
-              terminal --os="cloudmesh/book:1.7" --command=ls
+              container --os="cloudmesh/book:1.7" --command=ls
         """
 
         # m = Manager()

@@ -38,7 +38,7 @@ class ConfigCommand(PluginCommand):
                               dependent of if you encrypt or decrypt
              ATTRIBUTE=VALUE  sets the attribute with . notation in the
                               configuration file.
-             ATTRIBUTE        reads the attribute from the terminal and sets it
+             ATTRIBUTE        reads the attribute from the container and sets it
                               in the configuration file
                               If the attribute is a password, * is written instead
                               of the character included

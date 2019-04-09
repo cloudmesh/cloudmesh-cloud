@@ -14,6 +14,7 @@ import re
 from cloudmesh.common.Shell import Shell
 from cloudmesh.DEBUG import VERBOSE
 
+
 class TestConfig:
 
     def test_01_help(self):
@@ -21,18 +22,15 @@ class TestConfig:
 
         result = Shell.execute("cms help", shell=True)
 
-
         VERBOSE(result)
 
         assert "quit" in result
         assert "clear" in result
 
-
     def test_01_vm(self):
         HEADING()
 
         result = Shell.execute("cms help vm", shell=True)
-
 
         VERBOSE(result)
 
@@ -43,13 +41,6 @@ class TestConfig:
 
         result = Shell.execute("cms help storage", shell=True)
 
-
         VERBOSE(result)
 
-
         assert "storage put SOURCE DESTINATION --recursive" in result
-
-
-
-
-

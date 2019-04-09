@@ -97,12 +97,56 @@ class Queue(object):
             'FILO': self.popFILO
             }
         )
-
+        # list of parameters that can be set
+        self.settable_params = ['policy','charge','unit']
         if self.database.exists(self.info)[0]:
             Console.error("Queue already exists")
             return
         return [self.info]
 
+    def findQueueByName(self,name):
+        '''
+        finds a queue in the database based on the name
+        :param name: name of the queue
+        :return:
+        '''
+        # TODO: find queue info from the DB and set it to self.info
+        return
+
+    def findQueueByCluster(self,clusterName):
+        '''
+        finds a queue in the database based on its cluster name
+        :param name: name of the queue's cluster
+        :return:
+        '''
+        # TODO: find queue info from the DB and set it to self.info
+        return
+
+
+    def findAllQueues(self):
+        '''
+        finds all queues in the database based on the name
+        :return:
+        '''
+        # TODO: find all queues info from the DB based on the ['cm']
+        return
+
+    def listJobs(self):
+        '''
+        list the jobs in the current queue
+        :return:
+        '''
+        return
+
+    def removeQueue(self):
+        '''
+        remove the queue from the database
+        :return:
+        '''
+        # TODO: remove the queues info from the DB based on the ['cm']
+        return
+
+    @DatabaseUpdate # this should update the record not create a new one
     def push(self,job):
         '''
         push job to stack
@@ -112,8 +156,9 @@ class Queue(object):
         self.info.queue.joblist.append(job)
         self.info.queue.numJobs += 1
         self.updateStatus()
-        return
+        return self.info
 
+    @DatabaseUpdate  # this should update the record not create a new one
     def pop(self):
         '''
         pop job from stack based on the policy
@@ -152,6 +197,7 @@ class Queue(object):
             return False
         return True
 
+    @DatabaseUpdate  # this should update the record not create a new one
     def activate(self):
         '''
         activates the queue
@@ -161,8 +207,9 @@ class Queue(object):
         # TODO: start submitting jobs, what's the rate for submission,
         #  is it parallel ?
         self.info.queue.active = True
+        return self.info
 
-
+    @DatabaseUpdate  # this should update the record not create a new one
     def deactivate(self):
         '''
         deactivates the queue
@@ -170,7 +217,9 @@ class Queue(object):
         '''
         # TODO: stop all jobs
         self.info.queue.active = False
+        return self.info
 
+    @DatabaseUpdate  # this should update the record not create a new one
     def updateStatus(self):
         '''
         checks number of jobs and updates queue status
@@ -178,6 +227,20 @@ class Queue(object):
         '''
         if self.info.queue.numJobs > 0:
             self.info.queue.status = 'FULL'
+        return self.info
+
+    @DatabaseUpdate
+    def setParam(self,param,val):
+        '''
+        set a particular parameter in the queue
+        :param param: the parameter
+        :param val:  value of the parameter
+        :return:
+        '''
+        if param in self.settable_params:
+            self.info.queue[param] = val
+        return self.info
+
 
 
     # the followings are gonna be used:

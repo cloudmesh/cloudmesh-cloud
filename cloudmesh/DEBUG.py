@@ -5,6 +5,7 @@ from pprint import pprint
 import inspect
 
 
+# noinspection PyPep8Naming
 def VERBOSE(msg, label=None, color="BLUE", verbose=9):
     if label is None:
         label = inspect.stack()[1][4][0].strip().replace("VERBOSE(", "")

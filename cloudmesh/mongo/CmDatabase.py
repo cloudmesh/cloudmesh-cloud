@@ -1,13 +1,10 @@
 import urllib.parse
 from datetime import datetime
 
-from pymongo import MongoClient
-
-from cloudmesh.management.configuration.config import Config
 from cloudmesh.common.console import Console
 from cloudmesh.common.parameter import Parameter
-from cloudmesh.common.util import banner
-from pprint import pprint
+from cloudmesh.management.configuration.config import Config
+from pymongo import MongoClient
 
 
 #

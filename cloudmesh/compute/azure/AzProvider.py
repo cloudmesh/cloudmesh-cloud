@@ -1,12 +1,9 @@
-from azure.mgmt.resource import ResourceManagementClient
-from cloudmesh.management.configuration.config import Config
 from cloudmesh.common.Shell import Shell
-from pprint import pprint
-import webbrowser
 import json
-import textwrap
-from cloudmesh.compute.libcloud.Provider import Provider
-from cloudmesh.common.dotdict import dotdict
+import webbrowser
+from pprint import pprint
+
+from cloudmesh.common.Shell import Shell
 from cloudmesh.common.StopWatch import StopWatch
 
 

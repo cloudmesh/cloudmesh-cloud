@@ -1,13 +1,9 @@
 from __future__ import print_function
 
-from pprint import pprint
-
-from cloudmesh.common.console import Console
-from cloudmesh.common.util import path_expand
+from cloudmesh.common.Printer import Printer
+from cloudmesh.management.configuration.config import Config
 from cloudmesh.shell.command import PluginCommand
 from cloudmesh.shell.command import command, map_parameters
-from cloudmesh.management.configuration.config import Config
-from cloudmesh.common.Printer import Printer
 from cloudmesh.source.api.manager import Manager
 
 

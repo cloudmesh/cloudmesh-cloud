@@ -12,8 +12,9 @@ from cloudmesh.mongo.DataBaseDecorator import DatabaseUpdate
 from cloudmesh.mongo.CmDatabase import CmDatabase
 from cloudmesh.management.configuration.name import Name
 from cloudmesh.common.console import Console
-
+from cloudmesh.batch.api.Batch import SlurmCluster
 from cloudmesh.management.configuration.counter import Counter
+from munch import Munch
 
 # noinspection PyPep8
 class Queue(object):
@@ -25,17 +26,25 @@ class Queue(object):
         """
 
         self.cm_config = Config()
-        self.queue = {
+        self.info = {
             'uid': None,
-            'queue_name' : None,
-            'cluster_name': None,
-            'policy': None,
-            'status': None,
-            'active': None,
-            'charge': None,
-            'unit': None,
+            "cloud": None,
+            "kind": "batch-queue",
+            "name": None,
+            "cm": {},
+            "queue": {
+                'policy': None,
+                'status': None,
+                'active': False,
+                'charge': None,
+                'unit': None,
+                "numJobs": 0,
+                "numRunningJobs": 0,
+                'joblist': []
+            }
         }
         self.database = CmDatabase()
+
 
     @DatabaseUpdate()
     def create(self,
@@ -46,10 +55,13 @@ class Queue(object):
                unit = None):
 
         """
-        This method is used to create a job for running on remote slurm cluster
+        This method is used to create a queue
 
         :param queue_name: name of the queue to create
         :param cluster_name: slurm cluster on which the job is gonna run
+        :param policy: policy of the queue
+        :param charge: charge of the queue
+        :param unit: unit of the charge for the queue
         :return:
         """
         name = Name(
@@ -57,7 +69,7 @@ class Queue(object):
         uid = name.id(cloud=cluster_name, name=queue_name)
         print(uid)
 
-        self.queue = {
+        self.info = Munch({
             'uid': uid,
             "cloud": cluster_name,
             "kind": "batch-queue",
@@ -71,18 +83,25 @@ class Queue(object):
             },
             "queue": {
                 'policy': policy,
-                'status': 'Empty',
+                'status': 'EMPTY',
                 'active': False,
                 'charge': charge,
                 'unit': unit,
                 "numJobs": 0,
                 "numRunningJobs": 0,
             }
-        }
-        if self.database.exists(self.queue)[0]:
+        })
+        self.policyFunctionMap = Munch (
+            {
+            'FIFO': self.popFIFO,
+            'FILO': self.popFILO
+            }
+        )
+
+        if self.database.exists(self.info)[0]:
             Console.error("Queue already exists")
             return
-        return [self.queue]
+        return [self.info]
 
     def push(self,job):
         '''
@@ -90,43 +109,48 @@ class Queue(object):
         :param job:
         :return:
         '''
+        self.info.queue.joblist.append(job)
+        self.info.queue.numJobs += 1
+        self.updateStatus()
         return
 
-    def pop(self,job):
+    def pop(self):
         '''
         pop job from stack based on the policy
         :param job:
         :return:
         '''
-        policy_mapping = {
-            'FIFO': self.popFIFO,
-            'FILO': self.popFILO
-        }
 
-        return
+        self.info.queue.numJobs -= 1
+        self.updateStatus()
+        policy = self.info.queue.policy
+        return self.policyFunctionMap[policy]()
 
-    def popFIFO(self,job):
+
+    def popFIFO(self):
         '''
         pop job from stack based on FIFO policy
         :param job:
         :return:
         '''
-        return
+        return self.info['queue']['joblist'].pop(0)
 
-    def popFILO(self, job):
+    def popFILO(self):
         '''
         pop job from stack based on FIFO policy
         :param job:
         :return:
         '''
-        return
+        return self.info['queue']['joblist'].pop()
 
     def isEmpty(self):
         '''
         checks if the queue is empty
         :return:
         '''
-        return
+        if self.info.queue.numJobs > 0 :
+            return False
+        return True
 
     def activate(self):
         '''
@@ -134,15 +158,27 @@ class Queue(object):
 
         :return:
         '''
-        return
+        # TODO: start submitting jobs, what's the rate for submission,
+        #  is it parallel ?
+        self.info.queue.active = True
+
 
     def deactivate(self):
         '''
         deactivates the queue
         :return:
         '''
-        return
-        
+        # TODO: stop all jobs
+        self.info.queue.active = False
+
+    def updateStatus(self):
+        '''
+        checks number of jobs and updates queue status
+        :return:
+        '''
+        if self.info.queue.numJobs > 0:
+            self.info.queue.status = 'FULL'
+
 
     # the followings are gonna be used:
 

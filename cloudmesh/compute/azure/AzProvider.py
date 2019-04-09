@@ -18,7 +18,7 @@ def timer(func):
     return decorated_func
 
 
-class AzureProvider(object):
+class Provider(object):
     """
 
     az commands

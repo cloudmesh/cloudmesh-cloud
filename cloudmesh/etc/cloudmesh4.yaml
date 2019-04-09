@@ -19,7 +19,7 @@ cloudmesh:
     experiment: base
     cloud: azure
     cluster: clustera
-  storge:
+  storage:
     storage_a:
       cm:
         heading: Aws Boto

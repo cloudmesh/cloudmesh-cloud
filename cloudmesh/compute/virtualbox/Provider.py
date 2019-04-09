@@ -503,6 +503,17 @@ class Provider(ComputeNodeABC):
                                shell=True)
         return result
 
+    def resume(self, name=None):
+        """
+        resume the named node
+
+        :param name: the name of the node
+        :return: the dict of the node
+        """
+        # TODO: find last name if name is None
+        result = Shell.execute("vagrant", ["resume", name], shell=True)
+        return result
+
     def stop(self, name=None):
         """
         NOT IMPLEMENTED
@@ -526,16 +537,7 @@ class Provider(ComputeNodeABC):
                                shell=True)
         return result
 
-    def resume(self, name=None):
-        """
-        resume the named node
 
-        :param name: the name of the node
-        :return: the dict of the node
-        """
-        # TODO: find last name if name is None
-        result = Shell.execute("vagrant", ["resume", name], shell=True)
-        return result
 
     def destroy(self, name=None):
         """

@@ -41,7 +41,7 @@ class TestConfig:
     def test_01_storage(self):
         HEADING()
 
-        result = Shell.execute("cms help storabe", shell=True)
+        result = Shell.execute("cms help storage", shell=True)
 
 
         VERBOSE(result)

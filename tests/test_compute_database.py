@@ -17,9 +17,10 @@ from cloudmesh.common.util import banner
 from cloudmesh.common.parameter import Parameter
 from cloudmesh.common.console import Console
 
-#import pytest
 
-#@pytest.mark.incremental
+# import pytest
+
+# @pytest.mark.incremental
 class Test_Compute_Database:
 
     def setup(self):
@@ -27,11 +28,11 @@ class Test_Compute_Database:
         self.user = Config()["cloudmesh"]["profile"]["user"]
         self.clouduser = 'cc'
         self.name_generator = Name(
-             experiment="exp",
-             group="grp",
-             user=self.user,
-             kind="vm",
-             counter=1)
+            experiment="exp",
+            group="grp",
+            user=self.user,
+            kind="vm",
+            counter=1)
 
         self.name = str(self.name_generator)
         self.name_generator.incr()
@@ -42,14 +43,13 @@ class Test_Compute_Database:
         clouds = Parameter.expand(variables['cloud'])
         cloud = clouds[0]
 
-
         self.p = Provider(name=cloud)
 
         self.secgroupname = "CM4TestSecGroup"
         self.secgrouprule = {"ip_protocol": "tcp",
-                              "from_port": 8080,
-                              "to_port": 8088,
-                              "ip_range": "129.79.0.0/16"}
+                             "from_port": 8080,
+                             "to_port": 8088,
+                             "ip_range": "129.79.0.0/16"}
         self.testnode = None
         print("\n")
 
@@ -68,25 +68,23 @@ class Test_Compute_Database:
         HEADING()
         nodes = self.p.list()
 
-
     def test_04_list_keys(self):
         HEADING()
         self.keys = self.p.keys()
 
+    # pprint(self.keys)
 
-     # pprint(self.keys)
-
-        #print(Printer.flatwrite(self.keys,
-        #                    sort_keys=["name"],
-        #                    order=["name", "fingerprint"],
-        #                    header=["Name", "Fingerprint"])
-        #      )
+    # print(Printer.flatwrite(self.keys,
+    #                    sort_keys=["name"],
+    #                    order=["name", "fingerprint"],
+    #                    header=["Name", "Fingerprint"])
+    #      )
 
     def test_05_key_upload(self):
         HEADING()
 
         key = SSHkey()
-        print (key.__dict__)
+        print(key.__dict__)
 
         self.p.key_upload(key)
 
@@ -94,8 +92,8 @@ class Test_Compute_Database:
 
     def test_06_list_images(self):
         HEADING()
-        images= self.p.images()
-        #pprint(images)
+        images = self.p.images()
+        # pprint(images)
         sort_keys = self.p.p.output['image']['sort_keys']  # not pretty
         order = self.p.p.output['image']['order']  # not pretty
         header = self.p.p.output['image']['header']  # not pretty
@@ -127,13 +125,13 @@ class a:
         HEADING()
         secgroups = self.p.list_secgroups()
         for secgroup in secgroups:
-            print (secgroup["name"])
+            print(secgroup["name"])
             rules = self.p.list_secgroup_rules(secgroup["name"])
             print(Printer.write(rules,
                                 sort_keys=["ip_protocol", "from_port", "to_port", "ip_range"],
                                 order=["ip_protocol", "from_port", "to_port", "ip_range"],
                                 header=["ip_protocol", "from_port", "to_port", "ip_range"])
-                 )
+                  )
 
     def test_09_secgroups_add(self):
         HEADING()
@@ -162,12 +160,12 @@ class a:
         image = "CC-Ubuntu16.04"
         size = "m1.medium"
         self.p.create(name=self.name,
-                                      image=image,
-                                      size=size,
-                                      # username as the keypair name based on
-                                      # the key implementation logic
-                                      ex_keyname=self.user,
-                                      ex_security_groups=['default'])
+                      image=image,
+                      size=size,
+                      # username as the keypair name based on
+                      # the key implementation logic
+                      ex_keyname=self.user,
+                      ex_security_groups=['default'])
         time.sleep(5)
         nodes = self.p.list()
         node = self.p.find(nodes, name=self.name)
@@ -184,20 +182,20 @@ class a:
     def test_14_publicIP_attach(self):
         HEADING()
         pubip = self.p.get_publicIP()
-        pprint (pubip)
+        pprint(pubip)
         nodes = self.p.list(raw=True)
         for node in nodes:
             if node.name == self.name:
                 self.testnode = node
                 break
         if self.testnode:
-            print ("attaching public IP...")
+            print("attaching public IP...")
             self.p.attach_publicIP(self.testnode, pubip)
             time.sleep(5)
         self.test_04_list_vm()
 
     def test_15_publicIP_detach(self):
-        print ("detaching and removing public IP...")
+        print("detaching and removing public IP...")
         time.sleep(5)
         nodes = self.p.list(raw=True)
         for node in nodes:
@@ -210,20 +208,17 @@ class a:
         time.sleep(5)
         self.test_04_list_vm()
 
-    #def test_11_printer(self):
+    # def test_11_printer(self):
     #    HEADING()
     #    nodes = self.p.list()
 
-
     #    print(Printer.write(nodes, order=["name", "image", "size"]))
 
-
-
-    #def test_01_start(self):
+    # def test_01_start(self):
     #    HEADING()
     #    self.p.start(name=self.name)
 
-    #def test_12_list_vm(self):
+    # def test_12_list_vm(self):
     #    self.test_04_list_vm()
 
     def test_16_info(self):
@@ -236,7 +231,7 @@ class a:
         nodes = self.p.list()
         node = self.p.find(nodes, name=self.name)
 
-        pprint (node)
+        pprint(node)
 
         assert node["extra"]["task_state"] == "deleting"
 
@@ -255,8 +250,8 @@ class a:
             if node.name == self.name:
                 self.testnode = node
                 break
-        #pprint (self.testnode)
-        #pprint (self.testnode.public_ips)
+        # pprint (self.testnode)
+        # pprint (self.testnode.public_ips)
         pubip = self.testnode.public_ips[0]
 
         COMMAND = "cat /etc/*release*"
@@ -268,15 +263,16 @@ class a:
         result = ssh.stdout.readlines()
         if result == []:
             error = ssh.stderr.readlines()
-            print ("ERROR: %s" % error)
+            print("ERROR: %s" % error)
         else:
-            print ("RESULT:")
+            print("RESULT:")
             for line in result:
                 line = line.decode("utf-8")
-                print (line.strip("\n"))
+                print(line.strip("\n"))
 
         self.test_14_destroy()
         self.test_04_list_vm()
+
 
 class other:
 
@@ -285,15 +281,14 @@ class other:
 
         self.p.rename(source=self.name, destination=self.new_name)
 
-    #def test_01_stop(self):
+    # def test_01_stop(self):
     #    HEADING()
     #    self.stop(name=self.name)
 
-    #def test_01_suspend(self):
+    # def test_01_suspend(self):
     #    HEADING()
     #    self.p.suspend(name=self.name)
 
-
-    #def test_01_resume(self):
+    # def test_01_resume(self):
     #    HEADING()
     #    self.p.resume(name=self.name)

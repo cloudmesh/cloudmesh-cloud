@@ -17,12 +17,12 @@ from cloudmesh.management.configuration.config import Config
 from cloudmesh.management.configuration.name import Name
 
 
+# noinspection PyPep8
 class TestName:
-
     image_test = False
     vbox_version = '6.0.4'
     image_name = "generic/ubuntu1810"
-    size=1024
+    size = 1024
     cloud = "vagrant"
 
     def print_images(self):
@@ -53,14 +53,12 @@ class TestName:
         self.new_name = str(self.name_generator)
         self.p = Provider(name=self.cloud)
 
-
     def test_01_version(self):
         HEADING()
         r = self.p.version()
         pprint(r)
         assert self.vbox_version == r["virtualbox"]["extension"]["version"]
         assert self.vbox_version == r["virtualbox"]["version"]
-
 
     def test_02_list_os(self):
         HEADING()
@@ -70,11 +68,10 @@ class TestName:
             order=["id", "64_bit", "description", "family_descr", "family_id"],
             header=["id", "64_bit", "description", "family_descr", "family_id"]))
 
-
     def test_03_name(self):
         HEADING()
-        print (self.name)
-        assert self.name  == "exp-grp-{user}-vm-1".format(user=self.user)
+        print(self.name)
+        assert self.name == "exp-grp-{user}-vm-1".format(user=self.user)
 
     def test_04_list_images(self):
         HEADING()
@@ -86,9 +83,9 @@ class TestName:
             name = "generic/ubuntu1810"
             try:
                 images = self.p.delete_image(self.image_name)
-                print ("delete", self.image_name)
+                print("delete", self.image_name)
             except:
-                print ("image", self.image_name, "nor found")
+                print("image", self.image_name, "nor found")
             self.print_images()
         else:
             print("not executed as image_test is not True. ok")
@@ -107,7 +104,7 @@ class TestName:
         HEADING()
 
         vms = self.p.info()
-        pprint (vms)
+        pprint(vms)
         print(Printer.flatwrite(vms,
                                 order=["vagrant.name",
                                        "vbox.name",
@@ -122,14 +119,12 @@ class TestName:
                                         "state",
                                         "hostname"]))
 
-
-
     def test_10_create(self):
         HEADING()
 
         name = self.next_name()
 
-        print ("Name", name)
+        print("Name", name)
 
         self.p.create(name=self.name,
                       image=self.image_name,
@@ -139,11 +134,9 @@ class TestName:
                       ex_keyname=self.user,
                       ex_security_groups=['default'])
 
-
         directory = Path(path_expand("~/.cloudmesh/vagrant/exp-grp-gregor-vm-1"))
 
         assert directory.is_dir()
-
 
         time.sleep(5)
         nodes = self.p.list()
@@ -159,6 +152,7 @@ class TestName:
                 break
 
         assert node is not None
+
 
 class other:
 
@@ -181,8 +175,8 @@ class other:
             rules = self.p.list_secgroup_rules(secgroup["name"])
             print(Printer.write(rules,
                                 sort_keys=[
-                                "ip_protocol", "from_port", "to_port",
-                                "ip_range"],
+                                    "ip_protocol", "from_port", "to_port",
+                                    "ip_range"],
                                 order=["ip_protocol", "from_port", "to_port",
                                        "ip_range"],
                                 header=["ip_protocol", "from_port", "to_port",
@@ -210,7 +204,6 @@ class other:
         HEADING()
         self.p.remove_secgroup(self.secgroupname)
         self.test_05_list_secgroups()
-
 
     def test_11_publicIP_attach(self):
         HEADING()
@@ -254,7 +247,6 @@ class other:
 
     # def test_12_list_vm(self):
     #    self.test_04_list_vm()
-
 
     def test_14_destroy(self):
         HEADING()
@@ -308,8 +300,6 @@ class other:
         self.test_04_list_vm()
 
 
-
-
 class other:
 
     def test_07_rename(self):
@@ -320,8 +310,7 @@ class other:
 
         self.p.rename(source=source, destination=dest)
         vms = self.p.list()
-        pprint (vms)
-
+        pprint(vms)
 
     # def test_01_stop(self):
     #    HEADING()

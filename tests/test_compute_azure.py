@@ -52,7 +52,7 @@ class TestName:
     def test_03_list_flavors(self):
         HEADING()
         flavors = self.p.flavors()
-        #pprint(flavors)
+        # pprint(flavors)
 
         print(Printer.flatwrite(flavors,
                                 sort_keys=[
@@ -88,9 +88,9 @@ class TestName:
     def test_04_list_vm(self):
         HEADING()
         vms = self.p.list()
-        #pprint(vms)
+        # pprint(vms)
 
-        #'''
+        # '''
         print(Printer.flatwrite(vms,
                                 sort_keys=["name"],
                                 order=["name",
@@ -112,7 +112,7 @@ class TestName:
                                         "Private ips",
                                         "Public ips"])
               )
-        #'''
+        # '''
 
     def test_17_list_images(self):
         HEADING()
@@ -123,7 +123,7 @@ class TestName:
                                publisher=publishername,
                                offer=offername,
                                sku=skuname)
-        #pprint (images)
+        # pprint (images)
 
         print(Printer.flatwrite(images,
                                 sort_keys=["id", "name"],
@@ -164,7 +164,7 @@ class TestName:
 
         """
 
-    #'''
+    # '''
     def test_10_create(self):
         HEADING()
         image = "Canonical:UbuntuServer:18.04-LTS:18.04.201903200"
@@ -196,7 +196,8 @@ class TestName:
                 break
 
         assert node is not None
-    #'''
+    # '''
+
 
 class a:
     def test_01_list_keys(self):
@@ -221,8 +222,6 @@ class a:
         self.test_01_list_keys()
 
 
-
-
 class forstudentstocomplete:
 
     def test_05_list_secgroups(self):
@@ -234,8 +233,8 @@ class forstudentstocomplete:
 
             print(Printer.write(rules,
                                 sort_keys=[
-                                "ip_protocol", "from_port", "to_port",
-                                "ip_range"],
+                                    "ip_protocol", "from_port", "to_port",
+                                    "ip_range"],
                                 order=["ip_protocol", "from_port", "to_port",
                                        "ip_range"],
                                 header=["ip_protocol", "from_port", "to_port",

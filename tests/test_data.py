@@ -30,9 +30,9 @@ class test_data:
                 "name": "{cloud}:{file}".format(cloud="local", file=file),
                 "path": file,
                 "size": st.st_size,
-                "acess": str(st.st_atime), # needs to be same format as we  use in vms
-                "modified": None, # needs to be same format as we  use in vms
-                "created": None, # needs to be same format as we  use in vms
+                "acess": str(st.st_atime),  # needs to be same format as we  use in vms
+                "modified": None,  # needs to be same format as we  use in vms
+                "created": None,  # needs to be same format as we  use in vms
                 "owner": userinfo.pw_name,
                 "group": {
                     "name": grp.getgrgid(userinfo.pw_gid).gr_name,
@@ -50,7 +50,6 @@ class test_data:
 
         i = info(file)
 
-        pprint (i)
+        pprint(i)
 
-
-        assert i['path']== '/Users/grey/.cloudmesh/cloudmesh4.yaml'
+        assert i['path'] == '/Users/grey/.cloudmesh/cloudmesh4.yaml'

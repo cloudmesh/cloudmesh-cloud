@@ -16,6 +16,7 @@ from cloudmesh.management.configuration.config import Config
 from cloudmesh.management.configuration.name import Name
 from azprovider import AzureProvider
 
+
 class Testazure(object):
 
     def setup(self):
@@ -50,9 +51,8 @@ class Testazure(object):
         HEADING()
         self.p.connect_vm(resource_group=self.group,
                           name=self.name,
-		          user='ubuntu')
+                          user='ubuntu')
 
-  
     def test_06_stop_vm(self):
         HEADING()
         self.p.stop_vm(resource_group=self.group,
@@ -69,4 +69,3 @@ class Testazure(object):
         HEADING()
         self.p.delete_vm(resource_group=self.group,
                          name=self.name)
-            

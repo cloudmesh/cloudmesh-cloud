@@ -14,7 +14,6 @@ class TestName:
     def setup(self):
         self.sshkey = SSHkey()
 
-
     def test_01_key(self):
         HEADING()
         pprint(self.sshkey)
@@ -22,20 +21,19 @@ class TestName:
         print(type(self.sshkey))
         pprint(self.sshkey.__dict__)
 
-        assert self.sshkey.__dict__  is not None
-
+        assert self.sshkey.__dict__ is not None
 
     def test_02_git(self):
         HEADING()
         config = Config()
         username = config["cloudmesh.profile.github"]
-        print ("Username:", username)
+        print("Username:", username)
         keys = self.sshkey.get_from_git(username)
-        pprint (keys)
+        pprint(keys)
         print(Printer.flatwrite(keys,
-                            sort_keys=["name"],
-                            order=["name", "fingerprint"],
-                            header=["Name", "Fingerprint"])
+                                sort_keys=["name"],
+                                order=["name", "fingerprint"],
+                                header=["Name", "Fingerprint"])
               )
 
         assert len(keys) > 0

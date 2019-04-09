@@ -5,13 +5,14 @@ from cloudmesh.common.util import HEADING
 
 from cloudmesh.mongo.CmDatabase import CmDatabase
 from cloudmesh.common.Printer import Printer
-#from cloudmesh.mongo import MongoDBController
+# from cloudmesh.mongo import MongoDBController
 
-#from cloudmesh.mongo import DatabaseUpdate
-#from cloudmesh.management.debug import HEADING, myself
+# from cloudmesh.mongo import DatabaseUpdate
+# from cloudmesh.management.debug import HEADING, myself
 from pprint import pprint
 
 from cloudmesh.management.configuration.name import Name
+
 
 class TestMongo:
 
@@ -19,10 +20,10 @@ class TestMongo:
         self.database = CmDatabase()
 
         self.name = Name(experiment="exp",
-                       group="grp",
-                       user="gregor",
-                       kind="vm",
-                       counter=1)
+                         group="grp",
+                         user="gregor",
+                         kind="vm",
+                         counter=1)
 
     def test_10_find_in_collection(self):
         HEADING()
@@ -44,9 +45,9 @@ class t:
     def test_00_status(self):
         HEADING()
 
-        #print(self.name)
-        #print(self.name.counter)
-        #print(self.name.id(counter=100))
+        # print(self.name)
+        # print(self.name.counter)
+        # print(self.name.id(counter=100))
 
         self.database.clear()
 
@@ -63,17 +64,17 @@ class t:
 
         d = {}
         for field in ['uptime', 'pid', 'version', 'host']:
-            d[field]=r[field]
+            d[field] = r[field]
 
-        print (Printer.attribute(d))
+        print(Printer.attribute(d))
 
         assert d is not None
 
     def test_02_update(self):
         HEADING()
 
-        entries = [{"name" : "Gregor"},
-                   {"name" : "Laszewski"}]
+        entries = [{"name": "Gregor"},
+                   {"name": "Laszewski"}]
 
         for entry in entries:
             entry["cmid"] = str(self.name)
@@ -86,19 +87,18 @@ class t:
         pprint(r)
         assert len(r) == 2
 
-
     def test_03_update(self):
         HEADING()
 
         r = self.database.find(name="Gregor")
-        pprint (r)
+        pprint(r)
 
         assert r[0]['name'] == "Gregor"
 
     def test_04_update(self):
         HEADING()
-        entries = [{"cmcounter" : 1, "name" : "gregor"},
-                   {"cmcounter" : 2, "name" : "laszewski"}]
+        entries = [{"cmcounter": 1, "name": "gregor"},
+                   {"cmcounter": 2, "name": "laszewski"}]
         pprint(entries)
         for entry in entries:
             counter = entry["cmcounter"]
@@ -108,24 +108,21 @@ class t:
         r = self.database.find()
         pprint(r)
 
-
     def test_05_update(self):
         HEADING()
         r = self.database.find(name="gregor")
-        pprint (r)
+        pprint(r)
         assert r[0]["name"] == "gregor"
-
 
     def test_06_find_by_counter(self):
         HEADING()
         r = self.database.find_by_counter(1)
-        pprint (r)
+        pprint(r)
         assert r[0]["name"] == "gregor"
 
         r = self.database.find_by_counter(2)
-        pprint (r)
+        pprint(r)
         assert r[0]["name"] == "laszewski"
-
 
     def test_07_decorator_update(self):
         HEADING()
@@ -133,52 +130,48 @@ class t:
         @DatabaseUpdate(collection="cloudmesh")
         def entry():
             name = Name()
-            print (name)
-            print ("OOOO", str(name), name.counter)
-            d = {"cmid": str(name), "cmcounter" : name.counter, "name" : "albert"}
+            print(name)
+            print("OOOO", str(name), name.counter)
+            d = {"cmid": str(name), "cmcounter": name.counter, "name": "albert"}
             name.incr()
-            pprint (d)
+            pprint(d)
             return d
 
         a = entry()
 
         r = self.database.find_by_counter(3)
 
-        pprint (r)
+        pprint(r)
 
     def test_08_decorator_add(self):
         HEADING()
 
         @DatabaseAdd(collection="cloudmesh")
         def entry():
-            d = {"name" : "zweistein"}
+            d = {"name": "zweistein"}
             return d
 
         a = entry()
 
         r = self.database.find()
 
-        pprint (r)
+        pprint(r)
 
         assert len(r) == 4
-
-
 
     def test_09_overwrite(self):
         HEADING()
         r = self.database.find(name="gregor")[0]
-        pprint (r)
+        pprint(r)
         r["color"] = "red"
-
 
         self.database.update([r], replace=True)
 
         r = self.database.find(color="red")
 
-        pprint (r)
+        pprint(r)
 
         assert len(r) == 1
-
 
     def test_10_fancy(self):
         HEADING()
@@ -191,19 +184,18 @@ class t:
                  kind="vm",
                  counter=counter)
 
-        print (n)
+        print(n)
 
         entries = [{
-              "cmcounter" : counter,
-              "cmid": str(n),
-              "name" : "gregor",
-              "phone": "android"
+            "cmcounter": counter,
+            "cmid": str(n),
+            "name": "gregor",
+            "phone": "android"
         }]
         self.database.update(entries, replace=True)
 
         r = self.database.find()
 
-        pprint (r)
+        pprint(r)
 
         assert len(r) == 4
-

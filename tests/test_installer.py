@@ -42,7 +42,7 @@ class Test_configdict:
         cmd = "cd tmp; cloudmesh-installer install cms -e"
         result = run(cmd)
         print(result)
-        assert os.path.isdir("tmp/cloudmesh-cmd5/cloudmesh_cmd5.egg-info")
+        assert os.path.isdir("tmp/cloudmesh-cloud/cloudmesh_cmd5.egg-info")
 
     def test_cms_help(self):
         cmd = "cms help"

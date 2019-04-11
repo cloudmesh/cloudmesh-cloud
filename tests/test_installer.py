@@ -56,7 +56,7 @@ class Test_configdict:
         print(result)
         assert "cloudmesh.common" in result
 
-    def test_cms_verion(self):
+    def test_cms_version(self):
         cmd = "cms version"
         result = run(cmd)
         print(result)
@@ -74,7 +74,7 @@ class Test_configdict:
         print(result)
         assert "cloudmesh.cloud" in result
 
-    def test_cms_help(self):
+    def test_cms_vm(self):
         cmd = "cms help"
         result = run(cmd)
         print(result)
@@ -86,7 +86,7 @@ class Test_configdict:
         print(result)
         assert "cloudmesh.common" in result
 
-    def test_cms_verion(self):
+    def test_cms_version(self):
         cmd = "cms version"
         result = run(cmd)
         print(result)

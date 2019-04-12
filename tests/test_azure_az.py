@@ -17,6 +17,7 @@ from cloudmesh.management.configuration.name import Name
 from azprovider import AzureProvider
 import pytest
 
+@pytest.mark.incremental
 class Testazure(object):
 
     def setup(self):

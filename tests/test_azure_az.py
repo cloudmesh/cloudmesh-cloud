@@ -1,6 +1,6 @@
 #################################################################
-# nosetest -v --nopature
-# nosetests -v --nocapture tests/test_azure_cli.py
+# pytest -v --pature=no
+# pytests -v --capture=no tests/test_azure_cli.py
 #################################################################
 
 import subprocess
@@ -15,7 +15,7 @@ from cloudmesh.management.configuration.SSHkey import SSHkey
 from cloudmesh.management.configuration.config import Config
 from cloudmesh.management.configuration.name import Name
 from azprovider import AzureProvider
-
+import pytest
 
 class Testazure(object):
 

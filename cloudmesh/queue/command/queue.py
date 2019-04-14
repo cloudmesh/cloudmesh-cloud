@@ -3,7 +3,7 @@ from cloudmesh.shell.command import command, map_parameters
 from cloudmesh.shell.command import PluginCommand
 from datetime import datetime
 from cloudmesh.queue.api.Queue import Queue
-from cloudmesh.shell.variables import Variables
+from cloudmesh.variables import Variables
 from cloudmesh.DEBUG import VERBOSE
 from cloudmesh.management.configuration.arguments import Arguments
 from cloudmesh.common.Printer import Printer

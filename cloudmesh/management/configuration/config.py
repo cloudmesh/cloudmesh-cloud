@@ -9,7 +9,7 @@ import re
 import oyaml as yaml
 
 from cloudmesh.common.dotdict import dotdict
-from cloudmesh.shell.variables import Variables
+from cloudmesh.variables import Variables
 
 
 class Active(object):

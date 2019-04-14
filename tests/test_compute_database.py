@@ -12,7 +12,7 @@ from cloudmesh.compute.vm.Provider import Provider
 from cloudmesh.management.configuration.SSHkey import SSHkey
 from cloudmesh.management.configuration.config import Config
 from cloudmesh.management.configuration.name import Name
-from cloudmesh.shell.variables import Variables
+from cloudmesh.variables import Variables
 from cloudmesh.common.util import banner
 from cloudmesh.common.parameter import Parameter
 from cloudmesh.common.console import Console

@@ -5,7 +5,7 @@ from cloudmesh.common.console import Console
 from cloudmesh.common.parameter import Parameter
 from cloudmesh.management.configuration.config import Config
 from pymongo import MongoClient
-
+from munch import Munch
 
 #
 # cm:
@@ -174,6 +174,22 @@ class CmDatabase(object):
 
         return entry
 
+    #tested
+    def find_by_KeyValue(self, collection_name, KeyValue=None):
+        collection = self.db[collection_name]
+        if collection.count() == 0:
+            Console.error("Collection {collection} not found".format(
+                collection=collection_name))
+            return []
+        entries = collection.find(KeyValue)
+        if entries.count() > 1:
+            Console.warning("More than one instance with the same name was "
+                          "found in the Database")
+        elif entries.count() == 0:
+            Console.error("Entry not found: {KeyVal}".format(KeyVal=KeyValue))
+            return []
+        return entries
+
     # check
     def update(self, entries):
 
@@ -236,7 +252,7 @@ class CmDatabase(object):
         :return:
         '''
         exist_status = []
-        if type(entries) is dict:
+        if type(entries) is dict or type(entries) is Munch:
             entries = [entries]
         for entry in entries:
             collection = self.db["{cloud}-{kind}".format(**entry)]

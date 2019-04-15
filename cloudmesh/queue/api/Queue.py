@@ -14,7 +14,10 @@ from cloudmesh.management.configuration.name import Name
 from cloudmesh.common.console import Console
 from cloudmesh.batch.api.Batch import SlurmCluster
 from cloudmesh.management.configuration.counter import Counter
-from munch import Munch
+import munch
+from cloudmesh.common.console import Console
+from pymongo import cursor
+
 
 # noinspection PyPep8
 class Queue(object):
@@ -26,7 +29,7 @@ class Queue(object):
         """
 
         self.cm_config = Config()
-        self.info = {
+        self.info = munch.munchify({
             'uid': None,
             "cloud": None,
             "kind": "batch-queue",
@@ -42,14 +45,16 @@ class Queue(object):
                 "numRunningJobs": 0,
                 'joblist': []
             }
-        }
+        })
+        # list of parameters that can be set
+        self.settable_params = ['policy', 'charge', 'unit']
         self.database = CmDatabase()
 
 
     @DatabaseUpdate()
     def create(self,
                queue_name,
-               cluster_name,
+               cloud_name,
                policy,
                charge = None,
                unit = None):
@@ -58,28 +63,28 @@ class Queue(object):
         This method is used to create a queue
 
         :param queue_name: name of the queue to create
-        :param cluster_name: slurm cluster on which the job is gonna run
+        :param cloud_name: slurm cluster on which the job is gonna run
         :param policy: policy of the queue
         :param charge: charge of the queue
         :param unit: unit of the charge for the queue
         :return:
         """
         name = Name(
-            order=["cloud","name"], cloud=cluster_name, name=queue_name)
-        uid = name.id(cloud=cluster_name, name=queue_name)
-        print(uid)
+            order=["cloud","name"], cloud=cloud_name, name=queue_name)
+        uid = name.id(cloud=cloud_name, name=queue_name)
+        # print(uid)
 
-        self.info = Munch({
+        self.info = munch.munchify({
             'uid': uid,
-            "cloud": cluster_name,
+            "cloud": cloud_name,
             "kind": "batch-queue",
             "name": queue_name,
             "cm": {
-                "cloud": cluster_name,
+                "cloud": cloud_name,
                 "kind": "batch-queue",
                 "name": queue_name,
                 "cluster": self.cm_config.get('cloudmesh').get('cluster')[
-                    cluster_name]
+                    cloud_name]
             },
             "queue": {
                 'policy': policy,
@@ -91,45 +96,58 @@ class Queue(object):
                 "numRunningJobs": 0,
             }
         })
-        self.policyFunctionMap = Munch (
+        # Console.error(self.info)
+        self.policyFunctionMap = munch.munchify (
             {
             'FIFO': self.popFIFO,
             'FILO': self.popFILO
             }
         )
-        # list of parameters that can be set
-        self.settable_params = ['policy','charge','unit']
         if self.database.exists(self.info)[0]:
             Console.error("Queue already exists")
             return
         return [self.info]
 
-    def findQueueByName(self,name):
+    def findQueue(self, cloud_name, queue_name):
         '''
         finds a queue in the database based on the name
         :param name: name of the queue
         :return:
         '''
-        # TODO: find queue info from the DB and set it to self.info
-        return
+        # if self.database.exists(self.info)[0]:
+        #     Console.error("Queue already exists")
+        name = Name(order=["cloud","name"], cloud=cloud_name, name=queue_name)
+        uid = name.id(cloud=cloud_name, name=queue_name)
+        queue = self.database.find_by_KeyValue(
+            collection_name="{cloud}-{kind}".format(cloud=cloud_name,kind='batch-queue'),
+            KeyValue={'uid':uid})
+        if type(queue) is cursor.Cursor :
+            self.info = munch.munchify(queue[0])
+            return True # # queue found
+        elif type(queue) is list and len(queue) == 0:
+            return False # queue not found
 
-    def findQueueByCluster(self,clusterName):
+    def findClouds(self):
         '''
-        finds a queue in the database based on its cluster name
-        :param name: name of the queue's cluster
+        finds all queues in the database based on the name
         :return:
         '''
-        # TODO: find queue info from the DB and set it to self.info
-        return
+        for collection in self.database.collections():
+            if 'batch-queue' in collection:
+                print(collection)
+                # all_queues = self.database.db.find()
+                # print(all_queues)
 
-
-    def findAllQueues(self):
+    def findQueues(self, cloud_name):
         '''
         finds all queues in the database based on the name
         :return:
         '''
         # TODO: find all queues info from the DB based on the ['cm']
-        return
+        all_queues =  self.database.find_by_KeyValue(collection_name=cloud_name)
+        all_queues = [munch.munchify(queue) for queue in all_queues]
+        for queue in all_queues:
+            print(queue.uid)
 
     def listJobs(self):
         '''
@@ -204,8 +222,7 @@ class Queue(object):
 
         :return:
         '''
-        # TODO: start submitting jobs, what's the rate for submission,
-        #  is it parallel ?
+        # TODO: activating a queue should start submitting jobs
         self.info.queue.active = True
         return self.info
 
@@ -239,6 +256,9 @@ class Queue(object):
         '''
         if param in self.settable_params:
             self.info.queue[param] = val
+        else:
+            Console.error("Only the following parameters could be set in a "
+                          "queue: \n"+ ', '.join(self.settable_params))
         return self.info
 
 

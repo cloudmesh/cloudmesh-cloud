@@ -26,14 +26,15 @@ class QueueCommand(PluginCommand):
         ::
 
           Usage:
-            queue create --name=NAME --policy=POLICY --cluster=CLUSTER
+            queue create --name=NAME --policy=POLICY --cloud=CLOUD
                 [--charge=CHARGE]
                 [--unit=UNIT]
-            queue activate --name=NAME
-            queue deactivate --name=NAME
-            queue set PARAMETER=VALUE --name=NAME
-            queue list all
-            queue list jobs [--cluster=CLUSTERS] [--name=NAME]
+            queue activate --cloud=CLOUD --queue=NAME
+            queue deactivate --cloud=CLOUD --queue=NAME
+            queue set --cloud=CLOUD --queue=QUEUE --param=PARAM --val=VALUE
+            queue list clouds
+            queue list queues --cloud=CLOUD
+            queue list jobs --queue=QUEUE
             queue remove --name=NAME
 
 
@@ -67,11 +68,11 @@ class QueueCommand(PluginCommand):
         # format that's the reason I used -- format.
         if arguments.create and \
             arguments['--name'] and \
-            arguments['--cluster'] and \
+            arguments['--cloud'] and \
             arguments['--policy']:
 
             queue_name = arguments['--name']
-            cluster_name = arguments['--cluster']
+            cloud_name = arguments['--cloud']
             policy = arguments['--policy']
             if policy.upper() not in ['FIFO', 'FILO']:
                 Console.error("Policy {policy} not defined, currently "
@@ -81,46 +82,52 @@ class QueueCommand(PluginCommand):
             charge = arguments['--charge']
             unit = arguments['--unit']
             queue.create(queue_name,
-                         cluster_name,
+                         cloud_name,
                          policy,
                          charge,
                          unit)
         elif arguments.activate and \
-            arguments['--name']:
-            queue.findQueueByName(arguments['--name'])
-            queue.activate()
+            arguments['--cloud'] and \
+            arguments['--queue']:
+            queue_found = queue.findQueue(arguments['--cloud'], arguments[
+                '--queue'])
+            if queue_found:
+                queue.activate()
 
         elif arguments.deactivate and \
-            arguments['--name']:
-            queue.findQueueByName(arguments['--name'])
-            queue.deactivate()
+            arguments['--cloud'] and \
+            arguments['--queue']:
+            queue_found = queue.findQueue(arguments['--cloud'], arguments[
+                '--queue'])
+            if queue_found:
+                queue.deactivate()
 
         elif arguments.list and \
-            arguments.jobs:
+            arguments.clouds:
+            queue.findClouds()
 
-            if arguments['--name']:
-                name = arguments['--name']
-                queue.findQueueByName(name)
-                queue.listJobs()
-            elif arguments['--cluster']:
-                cluster = arguments['--cluster']
-                queue.findQueueByName(cluster)
-                queue.listJobs()
+        elif arguments.list and \
+            arguments.queues:
+            cloud = arguments['--cloud']
+            queue.findQueues(cloud)
 
-        elif arguments.list and arguments.all:
-            queue.findAllQueues()
+        elif arguments.list and arguments.jobs:
+            queue.findQueues()
 
-        elif arguments.set and arguments['--name']:
-            name = arguments['--name']
-            param = arguments.get("PARAMETER")
-            val = arguments.get("PARAMETER")
-            queue.findQueueByName(name)
-            queue.setParam(param,val)
+        elif arguments.set and arguments['--cloud'] and arguments['--queue'] \
+            and arguments['--param'] and arguments['--val']:
+            param = arguments['--param']
+            val = arguments['--val']
+            queue_found = queue.findQueue(arguments['--cloud'], arguments[
+                '--queue'])
+            if queue_found:
+                queue.setParam(param,val)
 
         elif arguments.remove and arguments['--name']:
             name = arguments['--name']
-            queue.findQueueByName(name)
-            queue.removeQueue()
+            queue_found = queue.findQueue(name)
+            if queue_found:
+                queue.removeQueue()
 
 
 

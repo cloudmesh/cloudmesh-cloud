@@ -111,7 +111,7 @@ class Name(dotdict):
 
     def id(self, **kwargs):
         d = self.__dict__
-        pprint(d)
+        # pprint(d)
         for e in kwargs:
             d[e] = kwargs[e]
         pprint(d)

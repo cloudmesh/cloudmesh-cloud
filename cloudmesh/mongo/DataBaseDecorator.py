@@ -2,7 +2,7 @@ from datetime import datetime
 
 from cloudmesh.management.configuration.name import Name
 from cloudmesh.mongo.CmDatabase import CmDatabase
-
+from munch import Munch
 
 class DatabaseUpdate:
     """
@@ -93,7 +93,7 @@ class DatabaseUpdate:
     def __call__(self, f):
         def wrapper(*args, **kwargs):
             current = f(*args, **kwargs)
-            if type(current) == dict:
+            if type(current) == dict or type(current) == Munch:
                 current = [current]
 
             if current is None:

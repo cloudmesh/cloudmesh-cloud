@@ -1,3 +1,8 @@
+###############################################################
+# pytest -v --capture=no tests/test_config.py
+# pytest -v  tests/test_config.py
+# pytest -v --capture=no -v --nocapture tests/test_config.py:Test_config.<METHIDNAME>
+###############################################################
 from cloudmesh.management.configuration.config import Config
 from cloudmesh.common.util import HEADING
 from pprint import pprint
@@ -5,11 +10,10 @@ import textwrap
 import oyaml as yaml
 import munch
 import re
+import pytest
 
 
-# nosetests -v --nocapture tests/test_config.py
-
-
+@pytest.mark.incremental
 class TestConfig:
 
     def setup(self):

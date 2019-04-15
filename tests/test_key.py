@@ -1,14 +1,16 @@
-############################################
-# nosetest -v --nopature
-# nosetests -v --nocapture tests/test_key.py
-############################################
+###############################################################
+# pytest -v --capture=no tests/test_key.py
+# pytest -v  tests/test_key.py
+# pytest -v --capture=no -v --nocapture tests/test_key.py:Test_key.<METHIDNAME>
+###############################################################
 from pprint import pprint
 from cloudmesh.common.Printer import Printer
 from cloudmesh.common.util import HEADING
 from cloudmesh.management.configuration.SSHkey import SSHkey
 from cloudmesh.management.configuration.config import Config
+import pytest
 
-
+@pytest.mark.incremental
 class TestName:
 
     def setup(self):

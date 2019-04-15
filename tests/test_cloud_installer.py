@@ -10,7 +10,7 @@ import shutil
 import os
 import pytest
 from cloudmesh_installer.install.test import readfile, run
-
+import pytest
 
 @pytest.mark.incremental
 class Test_cloud_installer:

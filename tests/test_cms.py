@@ -1,7 +1,7 @@
 ###############################################################
-# pip install .; pytest -v --capture=no -v --nocapture tests/test_configdict.py:Test_configdict.test_001
-# pytest -v --capture=no tests/test_configdictr.py
-# pytest -v  tests/test_configdict.py
+# pytest -v --capture=no tests/test_cms.py
+# pytest -v  tests/test_cms.py
+# pytest -v --capture=no -v --nocapture tests/test_cms.py:Test_cms.<METHIDNAME>
 ###############################################################
 from cloudmesh.management.configuration.config import Config
 from cloudmesh.common.util import HEADING
@@ -13,8 +13,9 @@ import re
 
 from cloudmesh.common.Shell import Shell
 from cloudmesh.DEBUG import VERBOSE
+import pytest
 
-
+@pytest.mark.incremental
 class TestConfig:
 
     def test_01_help(self):

@@ -1,7 +1,7 @@
 ###############################################################
-# pip install .; pytest -v --capture=no -v --nocapture tests/test_mongo.py:Test_mongo.test_001
 # pytest -v --capture=no tests/test_mongo.py
 # pytest -v  tests/test_mongo.py
+# pytest -v --capture=no -v --nocapture tests/test_mongo.py:Test_mongo.<METHIDNAME>
 ###############################################################
 
 from __future__ import print_function

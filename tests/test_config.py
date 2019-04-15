@@ -11,7 +11,7 @@ import oyaml as yaml
 import munch
 import re
 import pytest
-
+import os
 
 @pytest.mark.incremental
 class TestConfig:
@@ -68,3 +68,11 @@ class TestConfig:
         HEADING()
         self.config = Config()
         pprint(self.config["cloudmesh"]["profile"])
+
+    def test_if_yaml_file_exists(self):
+        self.config = Config()
+        self.config.create()
+
+        assert os.path.isfile(Path(exp))
+
+

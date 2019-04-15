@@ -1,34 +1,50 @@
-from cloudmesh.mongo import MongoDB
-from cloudmesh.mongo import MongoDBController
+###############################################################
+# pip install .; pytest -v --capture=no -v --nocapture tests/test_mongo.py:Test_mongo.test_001
+# pytest -v --capture=no tests/test_mongo.py
+# pytest -v  tests/test_mongo.py
+###############################################################
 
-from cloudmesh.mongo import DatabaseUpdate
-from cloudmesh.management.debug import HEADING, myself
+from __future__ import print_function
+import shutil
+
+import os
+import pytest
+from cloudmesh.mongo.DataBaseDecorator import DatabaseUpdate
+
+from cloudmesh.mongo.CmDatabase import CmDatabase
 from pprint import pprint
 
 
-# nosetest -v --nopature
-# nosetests -v --nocapture tests/test_mongo.py
+@pytest.mark.incremental
+class TestMongo:
 
+    def setup_class(self):
+        self.database = CmDatabase()
 
-@DatabaseUpdate("test")
-def r_dict():
-    return {"name": "test-dict-1", "num": 123}
+        self.data = {
+            "cm": {
+                "kind": "test",
+                "cloud": "testcloud",
+                "name": "hello"
+            },
+            "kind": "test",
+            "cloud": "testcloud",
+            "name": "hello",
+            "type": "test"
+        }
 
+    def test_dict(self):
+        assert self.data["cm"]["kind"] == "test"
 
-@DatabaseUpdate("test")
-def r_list():
-    return [
-        {"name": "test-dict-1", "num": 432},
-    ]
+    def test_update_decorator(self):
 
+        @DatabaseUpdate()
+        def test():
+            return self.data
 
-def PRINT(name, d):
-    print(79 * "-")
-    print(name)
-    print(79 * "-")
-    pprint(d)
+        result = test()
 
-
+"""
 class TestMongo:
 
     def setup(self):
@@ -54,7 +70,7 @@ class TestMongo:
         assert m2.data["TEST"] == "test"
         assert m1.data["TEST"] == "test"
 
-
+"""
 """
     def test_01_saveto(self):
         HEADING(myself())

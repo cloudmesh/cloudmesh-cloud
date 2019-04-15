@@ -102,7 +102,7 @@
 <p class="caption"><span class="caption-text">Conventions:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../conventions.html">1. Code Conventions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../nosetests.html">2. Nosetests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pytest.html">2. Pytest</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Outdated:</span></p>
 <ul>
@@ -182,7 +182,6 @@
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
 
-<span class="kn">import</span> <span class="nn">collections</span>
 <span class="kn">import</span> <span class="nn">glob</span>
 <span class="kn">import</span> <span class="nn">inspect</span>
 <span class="kn">import</span> <span class="nn">os</span>
@@ -193,6 +192,13 @@
 <span class="c1"># import pip</span>
 <span class="kn">import</span> <span class="nn">time</span>
 <span class="kn">from</span> <span class="nn">contextlib</span> <span class="k">import</span> <span class="n">contextmanager</span>
+<span class="kn">import</span> <span class="nn">collections</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">collectionsAbc</span> <span class="o">=</span> <span class="n">collections</span><span class="o">.</span><span class="n">abc</span>
+<span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+    <span class="n">collectionsAbc</span> <span class="o">=</span> <span class="n">collections</span>
+
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">pathlib</span> <span class="k">import</span> <span class="n">Path</span>
 <span class="k">except</span><span class="p">:</span>
@@ -297,9 +303,9 @@
 
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">collections</span><span class="o">.</span><span class="n">Mapping</span><span class="p">):</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">collectionsAbc</span><span class="o">.</span><span class="n">Mapping</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">convert_from_unicode</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">items</span><span class="p">()))</span>
-    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">collections</span><span class="o">.</span><span class="n">Iterable</span><span class="p">):</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">collectionsAbc</span><span class="o">.</span><span class="n">Iterable</span><span class="p">):</span>
         <span class="k">return</span> <span class="nb">type</span><span class="p">(</span><span class="n">data</span><span class="p">)(</span><span class="nb">map</span><span class="p">(</span><span class="n">convert_from_unicode</span><span class="p">,</span> <span class="n">data</span><span class="p">))</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">data</span></div>
@@ -454,7 +460,9 @@
 
 <div class="viewcode-block" id="auto_create_requirements"><a class="viewcode-back" href="../../../code.html#cloudmesh.common.util.auto_create_requirements">[docs]</a><span class="k">def</span> <span class="nf">auto_create_requirements</span><span class="p">(</span><span class="n">requirements</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    creates a requirement.txt file form the requirements in the list. If the file exists, it get changed only if the</span>
+
+<span class="sd">    creates a requirement.txt file form the requirements in the list. If the file</span>
+<span class="sd">    exists, it get changed only if the</span>
 <span class="sd">    requirements in the list are different from the existing file</span>
 
 <span class="sd">    :param requirements: the requirements in a list</span>
@@ -505,9 +513,8 @@
 <span class="sd">    :param content: teh content</span>
 <span class="sd">    :return: </span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">outfile</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">path_expand</span><span class="p">(</span><span class="n">filename</span><span class="p">),</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span>
-    <span class="n">outfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
-    <span class="n">outfile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path_expand</span><span class="p">(</span><span class="n">filename</span><span class="p">),</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">outfile</span><span class="p">:</span>
+        <span class="n">outfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">content</span><span class="p">)</span></div>
 
 
 <span class="c1"># Reference: http://interactivepython.org/runestone/static/everyday/2013/01/3_password.html</span>

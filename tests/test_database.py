@@ -1,6 +1,8 @@
-# nosetest -v --nopature
-# nosetests -v --nocapture tests/test_database.py
-#############
+###############################################################
+# pytest -v --capture=no tests/test_database.py
+# pytest -v  tests/test_database.py
+# pytest -v --capture=no -v --nocapture tests/test_database.py:Test_database.<METHIDNAME>
+###############################################################
 from cloudmesh.common.util import HEADING
 
 from cloudmesh.mongo.CmDatabase import CmDatabase
@@ -12,8 +14,9 @@ from cloudmesh.common.Printer import Printer
 from pprint import pprint
 
 from cloudmesh.management.configuration.name import Name
+import pytest
 
-
+@pytest.mark.incremental
 class TestMongo:
 
     def setup(self):

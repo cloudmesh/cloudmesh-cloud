@@ -1,8 +1,8 @@
-#################################################################
-# nosetest -v --nopature
-# nosetests -v --nocapture tests/test_compute_virtualbox.py
-#################################################################
-
+###############################################################
+# pytest -v --capture=no tests/test_compute_virtualbox.py
+# pytest -v  tests/test_compute_virtualbox.py
+# pytest -v --capture=no -v --nocapture tests/test_compute_virtualbox.py:Test_compute_virtualbox.<METHIDNAME>
+###############################################################
 import subprocess
 import time
 from pathlib import Path
@@ -15,12 +15,12 @@ from cloudmesh.common.util import path_expand
 from cloudmesh.compute.virtualbox.Provider import Provider
 from cloudmesh.management.configuration.config import Config
 from cloudmesh.management.configuration.name import Name
+import pytest
 
-
-# noinspection PyPep8
+@pytest.mark.incremental
 class TestName:
     image_test = False
-    vbox_version = '6.0.4'
+    vbox = '6.0.4'
     image_name = "generic/ubuntu1810"
     size = 1024
     cloud = "vagrant"

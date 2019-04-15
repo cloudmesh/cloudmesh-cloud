@@ -1,13 +1,16 @@
+###############################################################
+# pytest -v --capture=no tests/test_vbox.py
+# pytest -v  tests/test_vbox.py
+# pytest -v --capture=no -v --nocapture tests/test_vbox.py:Test_vbox.<METHIDNAME>
+###############################################################
 # from cloud.vm.Vm import Vm
 # from cloud.mongo.mongoDB import MongoDB
 from cloudmesh.management.debug import HEADING, myself
 import subprocess
+import pytest
 
 
-# nosetest -v --nopature
-# nosetests -v --nocapture tests/test_vbox.py
-
-
+@pytest.mark.incremental
 class Test_vagrant:
 
     def setup(self):

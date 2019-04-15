@@ -1,7 +1,8 @@
-#################################################################
-# nosetest -v --nopature
-# nosetests -v --nocapture tests/test_compute_docker.py
-#################################################################
+###############################################################
+# pytest -v --capture=no tests/test_compute_docker.py
+# pytest -v  tests/test_compute_docker.py
+# pytest -v --capture=no -v --nocapture tests/test_compute_docker.py:Test_compute_docker.<METHIDNAME>
+###############################################################
 import subprocess
 import time
 from pathlib import Path
@@ -17,8 +18,9 @@ from cloudmesh.common.util import path_expand
 from cloudmesh.compute.docker.Provider import Provider
 from cloudmesh.management.configuration.config import Config
 from cloudmesh.management.configuration.name import Name
+import pytest
 
-
+@pytest.mark.incremental
 class TestName:
     os = "ubuntu"
     version = "18.04"

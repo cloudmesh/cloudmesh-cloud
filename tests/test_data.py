@@ -1,14 +1,20 @@
+###############################################################
+# pytest -v --capture=no tests/test_data.py
+# pytest -v  tests/test_data.py
+# pytest -v --capture=no -v --nocapture tests/test_data.py:Test_data.<METHIDNAME>
+###############################################################
 from cloudmesh.common.util import HEADING
 from pprint import pprint
 
 from cloudmesh.common.util import HEADING
 from cloudmesh.common.util import path_expand
 from cloudmesh.mongo.DataBaseDecorator import DatabaseUpdate
-
+import pytest
 
 # nosetest -v --nopature
 # nosetests -v --nocapture tests/test_data.py
 
+@pytest.mark.incremental
 class test_data:
 
     def setup(self):

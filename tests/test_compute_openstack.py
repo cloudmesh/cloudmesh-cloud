@@ -1,8 +1,8 @@
-#################################################################
-# nosetest -v --nopature
-# nosetests -v --nocapture tests/test_compute_openstack.py
-#################################################################
-
+###############################################################
+# pytest -v --capture=no tests/test_compute_openstack.py
+# pytest -v  tests/test_compute_openstack.py
+# pytest -v --capture=no -v --nocapture tests/test_compute_openstack.py:Test_compute_openstack.<METHIDNAME>
+###############################################################
 import subprocess
 import time
 from pprint import pprint
@@ -16,8 +16,9 @@ from cloudmesh.management.configuration.config import Config
 from cloudmesh.management.configuration.name import Name
 from cloudmesh.variables import Variables
 from cloudmesh.DEBUG import VERBOSE
+import pytest
 
-
+@pytest.mark.incremental
 class TestName:
 
     def setup(self):

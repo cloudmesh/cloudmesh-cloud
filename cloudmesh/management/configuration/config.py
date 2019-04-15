@@ -9,7 +9,7 @@ import re
 import oyaml as yaml
 
 from cloudmesh.common.dotdict import dotdict
-from cloudmesh.shell.variables import Variables
+from cloudmesh.variables import Variables
 
 
 class Active(object):
@@ -31,6 +31,30 @@ class Active(object):
 class Config(object):
     __shared_state = {}
 
+    def create(self, config_path='~/.cloudmesh/cloudmesh4.yaml'):
+        """
+        creates the cloudmesh4.yaml file in the specified location. The default is
+
+            ~/.cloudmesh/cloudmesh4.yaml
+
+        If the file does not exist, it is initialized with a default. You still
+        need to edit the file.
+
+        :param config_path:  The yaml file to create
+        :type config_path: string
+        """
+        self.config_path = Path(path_expand(config_path)).resolve()
+        self.config_folder = dirname(self.config_path)
+
+        if not exists(self.config_folder):
+            mkdir(self.config_folder)
+
+        if not isfile(self.config_path):
+            source = Path(join(dirname(realpath(__file__)),
+                               "../../etc/cloudmesh4.yaml"))
+
+            copyfile(source.resolve(), self.config_path)
+
     def __init__(self, config_path='~/.cloudmesh/cloudmesh4.yaml',
                  encrypted=False):
         """
@@ -48,18 +72,7 @@ class Config(object):
             self.config_path = Path(path_expand(config_path)).resolve()
             self.config_folder = dirname(self.config_path)
 
-            if not exists(self.config_folder):
-                mkdir(self.config_folder)
-
-            if not isfile(self.config_path):
-                source = Path(join(dirname(realpath(__file__)),
-                                   "../../etc/cloudmesh4.yaml"))
-
-                copyfile(source.resolve(), self.config_path)
-
-            # with open(self.config_path, "r") as stream:
-            #    # self.data = yaml.load(stream, Loader=yaml.FullLoader)
-            #    self.data = yaml.load(stream, Loader=yaml.SafeLoader)
+            self.create(config_path=config_path)
 
             with open(self.config_path, "r") as stream:
                 content = stream.read()
@@ -67,10 +80,13 @@ class Config(object):
                 content = self.spec_replace(content)
                 self.data = yaml.load(content, Loader=yaml.SafeLoader)
 
-            # self.data is loaded as nested OrderedDict, can not use set or get methods directly
+            # self.data is loaded as nested OrderedDict, can not use set or get
+            # methods directly
+
             if self.data is None:
                 raise EnvironmentError(
-                    "Failed to load configuration file cloudmesh4.yaml, please check the path and file locally")
+                    "Failed to load configuration file cloudmesh4.yaml, "
+                    "please check the path and file locally")
 
             #
             # populate default variables

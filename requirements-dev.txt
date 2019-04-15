@@ -2,8 +2,6 @@ pylint
 sphinx
 recommonmark
 sphinx_rtd_theme
-nose-timer
-nose
+pytest
 flake8
-nose-cprof
 twine

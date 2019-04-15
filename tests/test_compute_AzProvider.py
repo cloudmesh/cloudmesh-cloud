@@ -1,6 +1,6 @@
 #################################################################
-# nosetest -v --nopature
-# nosetests -v --nocapture tests/test_azure_cli.py
+# pytest -v --pature=no
+# pytests -v --capture=no tests/test_azure_cli.py
 #################################################################
 
 import subprocess
@@ -14,9 +14,18 @@ from cloudmesh.compute.libcloud.Provider import Provider
 from cloudmesh.management.configuration.SSHkey import SSHkey
 from cloudmesh.management.configuration.config import Config
 from cloudmesh.management.configuration.name import Name
+#
+# BUG !!!! you are not testing our provider
+#
 from azprovider import AzureProvider
 
+#
+# BUG: all tests are missing assertions
+#
 
+import pytest
+
+@pytest.mark.incremental
 class Testazure(object):
 
     def setup(self):

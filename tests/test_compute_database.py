@@ -1,7 +1,8 @@
-#############################################################
-# nosetest -v --nopature
-# nosetests -v --nocapture tests/test_compute_database.py
-#############################################################
+f###############################################################
+# pytest -v --capture=no tests/test_compute_database.py
+# pytest -v  tests/test_compute_database.py
+# pytest -v --capture=no -v --nocapture tests/test_compute_database.py:Test_compute_database.<METHIDNAME>
+###############################################################rom cloudmesh.management.configuration.name import Name
 import subprocess
 import time
 from pprint import pprint
@@ -11,16 +12,14 @@ from cloudmesh.common.util import HEADING
 from cloudmesh.compute.vm.Provider import Provider
 from cloudmesh.management.configuration.SSHkey import SSHkey
 from cloudmesh.management.configuration.config import Config
-from cloudmesh.management.configuration.name import Name
-from cloudmesh.shell.variables import Variables
+from cloudmesh.variables import Variables
 from cloudmesh.common.util import banner
 from cloudmesh.common.parameter import Parameter
 from cloudmesh.common.console import Console
+import pytest
 
 
-# import pytest
-
-# @pytest.mark.incremental
+@pytest.mark.incremental
 class Test_Compute_Database:
 
     def setup(self):

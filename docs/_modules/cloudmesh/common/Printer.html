@@ -102,7 +102,7 @@
 <p class="caption"><span class="caption-text">Conventions:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../conventions.html">1. Code Conventions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../nosetests.html">2. Nosetests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../pytest.html">2. Pytest</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Outdated:</span></p>
 <ul>
@@ -185,7 +185,8 @@
 <span class="kn">import</span> <span class="nn">json</span>
 
 <span class="kn">import</span> <span class="nn">oyaml</span> <span class="k">as</span> <span class="nn">yaml</span>
-<span class="kn">from</span> <span class="nn">prettytable</span> <span class="k">import</span> <span class="n">PrettyTable</span>
+<span class="c1">#from prettytable import PrettyTable</span>
+<span class="kn">from</span> <span class="nn">cloudmesh.common.prettytable</span> <span class="k">import</span> <span class="n">PrettyTable</span>
 
 <span class="kn">from</span> <span class="nn">cloudmesh.common.console</span> <span class="k">import</span> <span class="n">Console</span>
 <span class="kn">from</span> <span class="nn">cloudmesh.common.dotdict</span> <span class="k">import</span> <span class="n">dotdict</span>

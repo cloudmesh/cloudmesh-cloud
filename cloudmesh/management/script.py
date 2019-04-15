@@ -1,6 +1,7 @@
 """
-A convenient method to execute shell commands and return their output. Note: that this method requires that the
-command be completely executed before the output is returned. For many activities in cloudmesh this is sufficient.
+A convenient method to execute shell commands and return their output. Note:
+that this method requires that the command be completely executed before the
+output is returned. For many activities in cloudmesh this is sufficient.
 """
 import subprocess
 import textwrap

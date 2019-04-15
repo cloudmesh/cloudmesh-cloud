@@ -145,7 +145,7 @@
 <p class="caption"><span class="caption-text">Conventions:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="conventions.html">1. Code Conventions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="nosetests.html">2. Nosetests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pytest.html">2. Pytest</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Outdated:</span></p>
 <ul>
@@ -389,7 +389,8 @@ nosetests to better distinguish them.</p>
 <dl class="function">
 <dt id="cloudmesh.common.util.auto_create_requirements">
 <code class="descclassname">cloudmesh.common.util.</code><code class="descname">auto_create_requirements</code><span class="sig-paren">(</span><em>requirements</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cloudmesh/common/util.html#auto_create_requirements"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.common.util.auto_create_requirements" title="Permalink to this definition">¶</a></dt>
-<dd><p>creates a requirement.txt file form the requirements in the list. If the file exists, it get changed only if the
+<dd><p>creates a requirement.txt file form the requirements in the list. If the file
+exists, it get changed only if the
 requirements in the list are different from the existing file</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1099,7 +1100,7 @@ warnings, errors, ok and regular messages.</p>
 <code class="descclassname">cloudmesh.common.logger.</code><code class="descname">LOGGER</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/cloudmesh/common/logger.html#LOGGER"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#cloudmesh.common.logger.LOGGER" title="Permalink to this definition">¶</a></dt>
 <dd><p>creates a logger with the given name.</p>
 <p>You can use it as follows:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">log</span> <span class="o">=</span> <span class="n">cloudmesh</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">LOGGER</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">log</span> <span class="o">=</span> <span class="n">cloudmesh</span><span class="o">.</span><span class="n">common</span><span class="o">.</span><span class="n">LOGGER</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span>
 <span class="n">log</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;this is an error&quot;</span><span class="p">)</span>
 <span class="n">log</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;this is an info&quot;</span><span class="p">)</span>
 <span class="n">log</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;this is a warning&quot;</span><span class="p">)</span>

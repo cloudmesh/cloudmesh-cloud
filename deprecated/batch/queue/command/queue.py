@@ -1,16 +1,11 @@
 from __future__ import print_function
-from cloudmesh.shell.command import command, map_parameters
+from cloudmesh.shell.command import command
 from cloudmesh.shell.command import PluginCommand
 from datetime import datetime
-from cloudmesh.queue.api.Queue import Queue
+from deprecated.batch.queue import Queue
 from cloudmesh.variables import Variables
 from cloudmesh.DEBUG import VERBOSE
-from cloudmesh.management.configuration.arguments import Arguments
-from cloudmesh.common.Printer import Printer
-from cloudmesh.common.parameter import Parameter
 from cloudmesh.common.console import Console
-from pathlib import Path
-from pprint import pprint
 
 
 # from cloudmesh.batch.api.manager import Manager

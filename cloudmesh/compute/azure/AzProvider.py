@@ -41,7 +41,21 @@ class Provider(object):
         print(command)
         r = Shell.execute(command, shell=True)
         data = json.loads(r)
+        if command.startswith('az vm create'):
+            data['id']=None 
+        if command.startswith('az vm list --resource-group'):
+            data[0]['id']=None
+            data[0]['networkProfile']['networkInterfaces'][0]['id']=None
+            data[0]['storageProfile']['osDisk']['managedDisk']['id']=None
+        if command.startswith('az vm list-ip-addresses'):
+            data[0]['virtualMachine']['network']['publicIpAddresses'][0]['id']=None
+        pprint(data)
         return data
+   
+    def az_2(self,command):
+        print(command)
+        r = Shell.live(command)
+        return r
 
     def login(self):
         r = Shell.execute("az login", shell=True)
@@ -92,13 +106,15 @@ class Provider(object):
             "az vm delete --yes" \
                 f" --resource-group {resource_group}" \
                 f" --name {name}"
-        return self.az(command)
+        #print(command)
+        #r = Shell.execute(command, shell=True)
+        return self.az_2(command)
 
     def list_vm(self,
                 resource_group=None):
         try:
             command = \
-                "az vm list " \
+                "az vm list" \
                     f" --resource-group {resource_group}"
             return self.az(command)
         except:
@@ -121,7 +137,9 @@ class Provider(object):
             f"az vm stop" \
                 f" --resource-group {resource_group}" \
                 f" --name {name}"
-        return self.az(command)
+        #print(command)
+        #r = Shell.execute(command, shell=True)
+        return self.az_2(command)
 
     def start_vm(self,
                  resource_group=None,
@@ -131,8 +149,9 @@ class Provider(object):
                 f" --resource-group {resource_group}" \
                 f" --name {name}"
         # return self.az(command)
-        print(command)
-        r = Shell.execute(command, shell=True)
+        #print(command)
+        #r = Shell.execute(command, shell=True)
+        return self.az_2(command)
 
     def restart_vm(self,
                    resource_group=None,
@@ -162,27 +181,24 @@ class Provider(object):
             f" --name {name}"
         return self.az(command)
 
-        def connect_vm(self,
-                       resource_group=None,
-                       name=None,
-                       user=None):
-            print("connecting to vm...")
-            ip = self.get_ip_vm(resource_group=resource_group, name=name)
-            address = ip[0]['virtualMachine']['network']['publicIpAddresses'][0][
+    def connect_vm(self,
+                   resource_group=None,
+                   name=None,
+                   user=None):
+        print("connecting to vm...")
+        ip = self.get_ip_vm(resource_group=resource_group, name=name)
+        address = ip[0]['virtualMachine']['network']['publicIpAddresses'][0][
                 'ipAddress']
-            print(address)
-            # command = f"ssh {user}@{address}"
-            r = Shell.live("ssh {user}@{publicIdAddress}".format(user=user, \
-                                                                 publicIdAddress=address))
-            return r
+        print(address)
+        # command = f"ssh {user}@{address}"
+        command = "ssh {user}@{publicIdAddress}".format(user=user, \
+                                                        publicIdAddress=address)
+        return self.az_2(command)
 
 
 if __name__ == "__main__":
-    #
-    # TODO: convert this to nsoetests
-    #
 
-    p = AzureProvider("test")
+    p = Provider("test")
     # r = p.login()
     # pprint(r)
 

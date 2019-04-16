@@ -138,9 +138,4 @@ setup(
     ],
     zip_safe=False,
     namespace_packages=['cloudmesh'],
-    entry_points={
-        'console_scripts': [
-            'cms = cloudmesh.shell.shell:main',
-        ],
-    },
 )

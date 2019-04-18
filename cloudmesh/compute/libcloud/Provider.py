@@ -92,10 +92,12 @@ class Provider(ComputeNodeABC):
         :param configuration: The location of the yaml configuration file
         """
         conf = Config(configuration)["cloudmesh"]
-        self.user = conf["profile"]
+        #self.user = conf["profile"]
+        self.user = Config()["cloudmesh"]["profile"]["user"]
         self.spec = conf["cloud"][name]
         self.cloud = name
         cred = self.spec["credentials"]
+        deft = self.spec["default"]
         self.cloudtype = self.spec["cm"]["kind"]
         super().__init__(name, conf)
 
@@ -144,9 +146,13 @@ class Provider(ComputeNodeABC):
         else:
             print("Specified provider not available")
             self.cloudman = False
-        self.default_image = None
-        self.default_size = None
+        #self.default_image = deft["image"]
+        #self.default_size = deft["size"]
+        #self.default.location = cred["datacenter"]
         self.public_key_path = conf["profile"]["publickey"]
+        self.key_path = path_expand(Config()["cloudmesh"]["profile"]["publickey"])
+        f = open(self.key_path, 'r')
+        self.key_val = f.read()
 
     def update_dict(self, elements, kind=None):
         """
@@ -165,9 +171,10 @@ class Provider(ComputeNodeABC):
         d = []
         for element in _elements:
             entry = element.__dict__
+            del entry["extra"] #Remove extra from google node
             entry["cm"] = {
                 "kind": kind,
-                "driver": 'openstack',
+                "driver": self.cloudtype,
                 "cloud": self.cloud
             }
             if kind == 'node':
@@ -185,12 +192,9 @@ class Provider(ComputeNodeABC):
                 entry["cm"]["name"] = entry["name"]
 
             elif kind == 'image':
-                if self.cloudtype == 'openstack':
-                    entry['cm']['created'] = entry['extra']['created']
-                    entry['cm']['updated'] = entry['extra']['updated']
-                    entry["cm"]["name"] = entry["name"]
-                else:
-                    pass
+                entry['cm']['created'] = str(datetime.utcnow())
+                entry['cm']['updated'] = str(datetime.utcnow())
+                entry["cm"]["name"] = entry["name"]
             elif kind == 'secgroup':
                 if self.cloudtype == 'openstack':
                     entry["cm"]["name"] = entry["name"]
@@ -379,7 +383,7 @@ class Provider(ComputeNodeABC):
         :return: dict or libcloud object
         """
         if self.cloudman:
-            if self.cloudtype in ["openstack", "aws"]:
+            if self.cloudtype in ["openstack", "aws","google"]:
                 entries = self.cloudman.list_images()
                 if raw:
                     return entries
@@ -475,6 +479,7 @@ class Provider(ComputeNodeABC):
         :param names: A list of node names
         :return:  A list of dict representing the nodes
         """
+
         return self.apply(self.cloudman.ex_stop_node, names)
 
     def info(self, name=None):
@@ -575,7 +580,7 @@ class Provider(ComputeNodeABC):
         """
         return self.apply(self.cloudman.reboot_node, names)
 
-    def create(self, name=None, image=None, size=None, timeout=360, **kwargs):
+    def create(self, name=None, image=None, size=None, location=None,  timeout=360, **kwargs):
         """
         creates a named node
 
@@ -593,7 +598,7 @@ class Provider(ComputeNodeABC):
         # ex_keyname has to be the registered keypair name in cloud
         pprint(kwargs)
 
-        if self.cloudtype in ["openstack", "aws"]:
+        if self.cloudtype in ["openstack", "aws","google"]:
             images = self.images(raw=True)
             for _image in images:
                 if _image.name == image:
@@ -667,7 +672,12 @@ class Provider(ComputeNodeABC):
                                              ex_blob_container=kwargs["blob_container"],
                                              ex_nic=nic_use
                                              )
-        else:
+        elif self.cloudtype == 'google':
+            location_use = self.spec["credentials"]["datacenter"]
+            print(location)
+            metadata = {"items": [{"value": self.user+":"+self.key_val, "key": "ssh-keys"}]}
+            node = self.cloudman.create_node(name=name, image=image_use,size=flavor_use, location=location_use,ex_metadata=metadata, **kwargs)
+        else:    
             sys.exit("this cloud is not yet supported")
 
         pprint(node)

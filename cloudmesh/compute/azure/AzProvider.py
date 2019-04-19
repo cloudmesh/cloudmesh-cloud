@@ -195,6 +195,51 @@ class Provider(object):
                                                         publicIdAddress=address)
         return self.az_2(command)
 
+    def list_image(self,
+                  location=None):
+        command = \
+            "az vm image list" \
+                f" --location {location}"
+        return self.az_2(command)
+
+    def list_size(self,
+                  location=None):
+        command = \
+            "az vm list-sizes" \
+                f" --location {location}"
+        return self.az_2(command)
+
+    def connect_to_all_vm(self,
+                          resource_group=None):
+        vm_list = self.list_vm(resource_group=resource_group)
+        for i in range(len(vm_list)):
+            vm_name = vm_list[i]['name']
+            username = vm_list[i]['osProfile']['adminUsername']
+            self.wait(resource_group, vm_name, username)
+
+    def wait(self,
+             resource_group=None,
+             vm_name=None,
+             username=None):
+        re_try = 5
+        print("connecting to: {}".format(vm_name))
+        try:
+            r = self.connect_vm(resource_group=resource_group, name=vm_name, user=username)
+        except:
+            for i in range(re_try):
+                time.sleep(120)#wait for two minutes before re-try to connect 
+                result = self.connect_vm(self, resource_group=resource_group,name=vm_name, user=username)
+                if result:
+                    break
+
+    def info_vm(self,
+                   resource_group=None,
+                   name=None):
+        command = f"az vm show" \
+            f" --resource-group {resource_group}" \
+            f" --name {name}"
+        return self.az(command)
+
 
 if __name__ == "__main__":
 

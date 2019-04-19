@@ -5,6 +5,7 @@ from pprint import pprint
 
 from cloudmesh.common.Shell import Shell
 from cloudmesh.common.StopWatch import StopWatch
+import time
 
 
 def timer(func):
@@ -42,17 +43,18 @@ class Provider(object):
         r = Shell.execute(command, shell=True)
         data = json.loads(r)
         if command.startswith('az vm create'):
-            data['id']=None 
+            data['id'] = None
         if command.startswith('az vm list --resource-group'):
-            data[0]['id']=None
-            data[0]['networkProfile']['networkInterfaces'][0]['id']=None
-            data[0]['storageProfile']['osDisk']['managedDisk']['id']=None
+            data[0]['id'] = None
+            data[0]['networkProfile']['networkInterfaces'][0]['id'] = None
+            data[0]['storageProfile']['osDisk']['managedDisk']['id'] = None
         if command.startswith('az vm list-ip-addresses'):
-            data[0]['virtualMachine']['network']['publicIpAddresses'][0]['id']=None
+            data[0]['virtualMachine']['network']['publicIpAddresses'][0][
+                'id'] = None
         pprint(data)
         return data
-   
-    def az_2(self,command):
+
+    def az_2(self, command):
         print(command)
         r = Shell.live(command)
         return r
@@ -106,8 +108,8 @@ class Provider(object):
             "az vm delete --yes" \
                 f" --resource-group {resource_group}" \
                 f" --name {name}"
-        #print(command)
-        #r = Shell.execute(command, shell=True)
+        # print(command)
+        # r = Shell.execute(command, shell=True)
         return self.az_2(command)
 
     def list_vm(self,
@@ -137,8 +139,8 @@ class Provider(object):
             f"az vm stop" \
                 f" --resource-group {resource_group}" \
                 f" --name {name}"
-        #print(command)
-        #r = Shell.execute(command, shell=True)
+        # print(command)
+        # r = Shell.execute(command, shell=True)
         return self.az_2(command)
 
     def start_vm(self,
@@ -149,8 +151,8 @@ class Provider(object):
                 f" --resource-group {resource_group}" \
                 f" --name {name}"
         # return self.az(command)
-        #print(command)
-        #r = Shell.execute(command, shell=True)
+        # print(command)
+        # r = Shell.execute(command, shell=True)
         return self.az_2(command)
 
     def restart_vm(self,
@@ -188,15 +190,15 @@ class Provider(object):
         print("connecting to vm...")
         ip = self.get_ip_vm(resource_group=resource_group, name=name)
         address = ip[0]['virtualMachine']['network']['publicIpAddresses'][0][
-                'ipAddress']
+            'ipAddress']
         print(address)
         # command = f"ssh {user}@{address}"
-        command = "ssh {user}@{publicIdAddress}".format(user=user, \
+        command = "ssh {user}@{publicIdAddress}".format(user=user,
                                                         publicIdAddress=address)
         return self.az_2(command)
 
     def list_image(self,
-                  location=None):
+                   location=None):
         command = \
             "az vm image list" \
                 f" --location {location}"
@@ -215,26 +217,30 @@ class Provider(object):
         for i in range(len(vm_list)):
             vm_name = vm_list[i]['name']
             username = vm_list[i]['osProfile']['adminUsername']
-            self.wait(resource_group, vm_name, username)
+            self.wait_orig(resource_group, vm_name, username)
 
-    def wait(self,
-             resource_group=None,
-             vm_name=None,
-             username=None):
+    def wait_orig(self,
+                  resource_group=None,
+                  vm_name=None,
+                  username=None,
+                  time=10):
         re_try = 5
         print("connecting to: {}".format(vm_name))
         try:
-            r = self.connect_vm(resource_group=resource_group, name=vm_name, user=username)
+            r = self.connect_vm(resource_group=resource_group, name=vm_name,
+                                user=username)
         except:
             for i in range(re_try):
-                time.sleep(120)#wait for two minutes before re-try to connect 
-                result = self.connect_vm(self, resource_group=resource_group,name=vm_name, user=username)
+                time.sleep(
+                    120)  # wait for two minutes before re-try to connect
+                result = self.connect_vm(self, resource_group=resource_group,
+                                         name=vm_name, user=username)
                 if result:
                     break
 
     def info_vm(self,
-                   resource_group=None,
-                   name=None):
+                resource_group=None,
+                name=None):
         command = f"az vm show" \
             f" --resource-group {resource_group}" \
             f" --name {name}"
@@ -242,7 +248,6 @@ class Provider(object):
 
 
 if __name__ == "__main__":
-
     p = Provider("test")
     # r = p.login()
     # pprint(r)

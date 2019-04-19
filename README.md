@@ -13,7 +13,7 @@
 
 The Documentation is located at 
 
-* <https://cloudmesh.github.io/cloudmesh-cloud/>
+* <https://cloudmesh.github.io/cloudmesh-manual/>
 
 ## Code
 
@@ -26,5 +26,5 @@ instalation documentation.
 
 ## Installation
 
-* See <https://github.com/cloudmesh/get>
+* See <https://github.com/cloudmesh/cloudmesh-installer>
 

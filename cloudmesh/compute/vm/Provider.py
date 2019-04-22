@@ -76,11 +76,11 @@ class Provider(ComputeNodeABC):
 
     @DatabaseUpdate()
     def start(self, name=None):
-        return self.p.start(name=name)
+        return self.p.start(names=names)
 
     @DatabaseUpdate()
     def stop(self, name=None):
-        return self.p.stop(name=name)
+        return self.p.stop(names=names)
 
     def info(self, name=None):
         return self.p.info(name=name)
@@ -107,6 +107,13 @@ class Provider(ComputeNodeABC):
 
     def key_upload(self, key):
         self.p.key_upload(key)
+        
+    def destroy(self, names=None):
+        return self.p.destroy(names=names)
+
+    def ssh(self, name=None, command=None):
+        return self.p.ssh(name=name,command=command)
+
 
     def login(self):
         if self.kind != "azure":
@@ -121,3 +128,4 @@ class Provider(ComputeNodeABC):
     @DatabaseUpdate()
     def destroy(self, name=None):
         raise NotImplementedError
+

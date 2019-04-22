@@ -74,18 +74,22 @@ class Provider(ComputeNodeABC):
     def flavors(self):
         return self.p.flavors()
 
+    @DatabaseUpdate()
     def start(self, name=None):
         return self.p.start(name=name)
 
+    @DatabaseUpdate()
     def stop(self, name=None):
         return self.p.stop(name=name)
 
     def info(self, name=None):
         return self.p.info(name=name)
 
+    @DatabaseUpdate()
     def resume(self, name=None):
         return self.p.resume(name=name)
 
+    @DatabaseUpdate()
     def reboot(self, name=None):
         return self.p.reboot(name=name)
 
@@ -110,8 +114,10 @@ class Provider(ComputeNodeABC):
         else:
             self.p.login()
 
+    @DatabaseUpdate()
     def suspend(self, name=None):
         raise NotImplementedError
 
+    @DatabaseUpdate()
     def destroy(self, name=None):
         raise NotImplementedError

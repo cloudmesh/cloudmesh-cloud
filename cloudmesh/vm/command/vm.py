@@ -266,17 +266,29 @@ class VmCommand(PluginCommand):
 
             names = []
 
-            clouds, names = Arguments.get_cloud_and_names("start", arguments, variables)
-
-            return ""
+            #clouds, names = Arguments.get_cloud_and_names("start", arguments, variables)
+            print("Starting the requested vm")
+            clouds, names = Arguments.get_commands("start", arguments,variables)
+            if clouds is None or names is None:
+                return ""
+            else:
+                for cloud in clouds:
+                    p = Provider(cloud)
+                    p.start(names)
 
         elif arguments.stop:
 
             names = []
 
-            clouds, names = Arguments.get_cloud_and_names("stop", arguments, variables)
-
-            return ""
+            #clouds, names = Arguments.get_cloud_and_names("stop", arguments, variables)
+            print("Stopping the requested vm")
+            clouds, names = Arguments.get_commands("stop", arguments,variables)
+            if clouds is None or names is None:
+                return ""
+            else:
+                for cloud in clouds:
+                    p = Provider(cloud)
+                    p.stop(names)
 
         elif arguments.terminate:
 
@@ -288,13 +300,48 @@ class VmCommand(PluginCommand):
 
         elif arguments.delete:
 
-            clouds, names = Arguments.get_cloud_and_names("delete", arguments, variables)
-
-            return ""
+            #clouds, names = Arguments.get_cloud_and_names("delete", arguments, variables)
+            print("Deleting the requested vm")
+            clouds, names = Arguments.get_commands("delete", arguments,variables)
+            if clouds is None or names is None:
+                return ""
+            else:
+                for cloud in clouds:
+                    p = Provider(cloud)
+                    p.destroy(names)
 
         elif arguments.boot:
 
-            print("boot the vm")
+            #clouds, names = Arguments.get_cloud_and_names("delete", arguments, variables)
+            #for cloud in clouds:
+            #    p = Provider(cloud)
+            #    node = p.create(name=names, size=flavor, image=image)
+            #    order = p.p.output['vm']['order']  # not pretty
+            #    header = p.p.output['vm']['header']  # not pretty
+            #    print(Printer.flatwrite(node,
+            #        sort_keys=["cm.name"],
+            #        order=order,
+            #        header=header,
+            #        output=arguments.output)
+            #        )
+            print("Creating a new vm")
+            clouds, names, image, flavor = Arguments.get_commands("boot", arguments, variables)
+            if clouds is None or names is None or image is None or flavor is None:
+                return ""
+            else:
+                for cloud in clouds:
+                    p = Provider(cloud)
+                    for name in names:
+                        node = p.create(name=name, size=flavor, image=image)
+                        order = p.p.output['vm']['order']  # not pretty
+                        header = p.p.output['vm']['header']  # not pretty
+                        print(Printer.flatwrite(node,
+                            sort_keys=["cm.name"],
+                            order=order,
+                            header=header,
+                            output=arguments.output)
+                            ) 
+
 
         elif arguments.list:
             # vm list [NAMES]
@@ -338,14 +385,12 @@ class VmCommand(PluginCommand):
                 try:
                     if arguments["--refresh"]:
                         for cloud in clouds:
-                            Console.ok("refresh " + cloud)
-
+                            Console.ok("refreshing db from cloud:  " + cloud)
                             p = Provider(cloud)
                             vms = p.list()
-
                             order = p.p.output['vm']['order']  # not pretty
                             header = p.p.output['vm']['header']  # not pretty
-
+                            
                             print(Printer.flatwrite(vms,
                                                     sort_keys=["cm.name"],
                                                     order=order,
@@ -365,7 +410,7 @@ class VmCommand(PluginCommand):
                                                                kind=p.kind)
                             db = CmDatabase()
                             vms = db.find(collection=collection)
-
+#
                             # pprint(vms)
                             # print(arguments.output)
                             # print(p.p.output['vm'])
@@ -501,7 +546,17 @@ class VmCommand(PluginCommand):
                  [--command=COMMAND]
                  [--modify-knownhosts]
             """
-            print("ssh  the vm")
+            #print("ssh  the vm")
+            print("ssh  into the vm and execute command")
+
+            clouds, names, command = Arguments.get_commands("ssh", arguments, variables)
+            if clouds is None or names is None or command is None:
+                return ""
+            else:
+                for cloud in clouds:
+                    p = Provider(cloud)
+                    for name in names:
+                        p.ssh(name=name, command=command)
 
         elif arguments.console:
             # vm console [NAME] [--force]

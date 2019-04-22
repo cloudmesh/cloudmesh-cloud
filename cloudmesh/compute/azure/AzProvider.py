@@ -39,14 +39,10 @@ class Provider(ComputeNodeABC):
 
     def __init__(self, name=None, configuration="~/.cloudmesh/cloudmesh4.yaml"):
         configuration = path_expand(configuration)
-        VERBOSE(name)
-        VERBOSE(configuration)
         conf = Config(name, configuration)["cloudmesh"]
 
-        VERBOSE(conf)
-
-
         super().__init__(cloud=name, configuration=configuration)
+
 
 
         self.user = conf["profile"]["user"]
@@ -56,6 +52,8 @@ class Provider(ComputeNodeABC):
         deft = self.spec["default"]
         self.cloudtype = self.spec["cm"]["kind"]
         self.resource_group = cred["resourcegroup"]
+        VERBOSE(self.credentials)
+
 
 
     @timer

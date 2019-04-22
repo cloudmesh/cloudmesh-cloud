@@ -260,6 +260,13 @@ class Provider(ComputeNodeABC):
     def rename(self, name=None, destination=None):
         raise NotImplementedError
 
+    def resume(self, name=None):
+        raise NotImplementedError
+
+    def suspend(self, name=None):
+        raise NotImplementedError
+
+
 if __name__ == "__main__":
     p = Provider("test")
     # r = p.login()

@@ -41,7 +41,7 @@ class Provider(ComputeNodeABC):
         configuration = path_expand(configuration)
         conf = Config(name, configuration)["cloudmesh"]
 
-        super().__init__(name, configuration)
+        # super().__init__(name, configuration)
 
 
 

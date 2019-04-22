@@ -22,7 +22,7 @@ import pytest
 class Testazure(object):
     
     def setup(self):
-        self.p = Provider()
+        self.p = Provider(name="az")
         self.name = "testvm1"
         self.group = "test"
         self.location = "eastus"

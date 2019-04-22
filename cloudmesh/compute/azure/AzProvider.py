@@ -39,6 +39,7 @@ class Provider(ComputeNodeABC):
     def __init__(self, name=None, configuration="~/.cloudmesh/cloudmesh4.yaml"):
         VERBOSE(name)
         VERBOSE(configuration)
+        import sys; sys.exit(1)
         conf = Config(name, configuration)["cloudmesh"]
 
         super().__init__(cloud=name, configuration=configuration)

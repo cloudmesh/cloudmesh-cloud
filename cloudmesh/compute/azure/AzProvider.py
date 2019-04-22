@@ -105,6 +105,7 @@ class Provider(ComputeNodeABC):
         entry["cm"]["kind"] = kind
         entry["cm"]["driver"] = self.cloudtype
         entry["cm"]["cloud"] = self.cloud
+        entry["cm"]["name"] = entry["name"]
         return entry
 
     def update_list(self, data):

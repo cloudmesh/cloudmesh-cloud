@@ -1,8 +1,9 @@
-f  ###############################################################
+###############################################################
 # pytest -v --capture=no tests/test_compute_database.py
 # pytest -v  tests/test_compute_database.py
 # pytest -v --capture=no tests/test_compute_database.py:Test_compute_database.<METHIDNAME>
-###############################################################rom cloudmesh.management.configuration.name import Name
+###############################################################
+from cloudmesh.management.configuration.name import Name
 import subprocess
 import time
 from pprint import pprint

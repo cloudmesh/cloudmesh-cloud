@@ -29,18 +29,19 @@ class TestName:
     def setup(self):
         banner("setup", c="-")
         self.user = Config()["cloudmesh"]["profile"]["user"]
-        self.key_path = path_expand(Config()["cloudmesh"]["profile"]["publickey"])
+        self.key_path = path_expand(
+            Config()["cloudmesh"]["profile"]["publickey"])
         f = open(self.key_path, 'r')
         self.key_val = f.read()
-  
+
         self.clouduser = 'cc'
         self.name_generator = Name(
             experiment="exp",
             group="grp",
-            user = "user",
+            user="user",
             kind="vm",
             counter=1)
-        
+
         self.name = str(self.name_generator)
         self.name_generator.incr()
 
@@ -103,6 +104,7 @@ class TestName:
                                         "Private ips",
                                         "Public ips"])
               )
+
     def test_list_secgroups(self):
         HEADING()
         print("List security group method is not supported by google")
@@ -118,7 +120,7 @@ class TestName:
 
     def test_secgroups_remove(self):
         print("Remove security groups method is not supported by google")
- 
+
     def test_create(self):
         HEADING()
         image = "ubuntu-minimal-1810-cosmic-v20190402"
@@ -156,7 +158,7 @@ class TestName:
         HEADING()
         time.sleep(120)
         self.p.stop(names=self.name)
-        #self.test_list_vm()
+        # self.test_list_vm()
 
     def test_list(self):
         HEADING()
@@ -175,7 +177,7 @@ class TestName:
     def test_stop(self):
         HEADING()
         self.test_stop()
-        
+
     def test_destroy(self):
         HEADING()
         time.sleep(120)
@@ -205,7 +207,7 @@ class TestName:
 
         ssh = subprocess.Popen(
             ["ssh", "%s" % (pubip), "%s" % (command)],
-            #["ssh", "%s@%s" % (self.clouduser, pubip), COMMAND],
+            # ["ssh", "%s@%s" % (self.clouduser, pubip), COMMAND],
             shell=False,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE)
@@ -218,7 +220,7 @@ class TestName:
             for line in result:
                 line = line.decode("utf-8")
                 print(line.strip("\n"))
-     
+
     def test_stop(self):
         HEADING()
         self.test_stop()
@@ -235,4 +237,3 @@ class TestName:
     def test_list(self):
         HEADING()
         self.test_list_vm()
-

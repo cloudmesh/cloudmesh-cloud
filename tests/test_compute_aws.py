@@ -1,7 +1,7 @@
 ###############################################################
 # pytest -v --capture=no tests/test_compute_awas.py
 # pytest -v  tests/test_compute_awas.py
-# pytest -v --capture=no -v --nocapture tests/test_compute_awas.py:Test_compute_awas.<METHIDNAME>
+# pytest -v --capture=no  tests/test_compute_awas.py:Test_compute_awas.<METHIDNAME>
 ###############################################################
 import subprocess
 import time
@@ -45,13 +45,13 @@ class TestName:
                              "ip_range": "129.79.0.0/16"}
         self.testnode = None
 
-    def test_001_list_keys(self):
+    def test_list_keys(self):
         HEADING()
         pprint(self.p.user)
         pprint(self.p.cloudtype)
         pprint(self.p.spec)
 
-    def test_01_list_keys(self):
+    def test_list_keys(self):
         HEADING()
         self.keys = self.p.keys()
         # pprint(self.keys)
@@ -62,7 +62,7 @@ class TestName:
                                 header=["Name", "Fingerprint"])
               )
 
-    def test_02_key_upload(self):
+    def test_key_upload(self):
         HEADING()
 
         key = SSHkey()
@@ -72,7 +72,7 @@ class TestName:
 
         self.test_01_list_keys()
 
-    def test_03_list_flavors(self):
+    def test_list_flavors(self):
         HEADING()
         flavors = self.p.flavors()
         pprint(flavors)
@@ -115,7 +115,7 @@ class TestName:
              'updated': '2019-02-22 19:27:54.965053'},
         """
 
-    def test_04_list_vm(self):
+    def test_list_vm(self):
         HEADING()
         vms = self.p.list()
         pprint(vms)
@@ -140,10 +140,7 @@ class TestName:
                                         "Public ips"])
               )
 
-
-class forstudentstocomplete:
-
-    def test_05_list_secgroups(self):
+    def test_list_secgroups(self):
         HEADING()
         secgroups = self.p.list_secgroups()
         for secgroup in secgroups:
@@ -156,25 +153,25 @@ class forstudentstocomplete:
                                 header=["ip_protocol", "from_port", "to_port", "ip_range"])
                   )
 
-    def test_06_secgroups_add(self):
+    def test_secgroups_add(self):
         self.p.add_secgroup(self.secgroupname)
         self.test_05_list_secgroups()
 
-    def test_07_secgroup_rules_add(self):
+    def test_secgroup_rules_add(self):
         rules = [self.secgrouprule]
         self.p.add_rules_to_secgroup(self.secgroupname, rules)
         self.test_05_list_secgroups()
 
-    def test_08_secgroup_rules_remove(self):
+    def test_secgroup_rules_remove(self):
         rules = [self.secgrouprule]
         self.p.remove_rules_from_secgroup(self.secgroupname, rules)
         self.test_05_list_secgroups()
 
-    def test_09_secgroups_remove(self):
+    def test_secgroups_remove(self):
         self.p.remove_secgroup(self.secgroupname)
         self.test_05_list_secgroups()
 
-    def test_10_create(self):
+    def test_create(self):
         HEADING()
         image = "CC-Ubuntu16.04"
         size = "m1.medium"
@@ -198,7 +195,7 @@ class forstudentstocomplete:
 
         assert node is not None
 
-    def test_11_publicip_attach(self):
+    def test_publicip_attach(self):
         HEADING()
         pubip = self.p.get_publicIP()
         pprint(pubip)
@@ -213,7 +210,7 @@ class forstudentstocomplete:
             time.sleep(5)
         self.test_04_list_vm()
 
-    def test_12_publicip_detach(self):
+    def test_publicip_detach(self):
         print("detaching and removing public IP...")
         time.sleep(5)
         nodes = self.p.list(raw=True)
@@ -240,11 +237,11 @@ class forstudentstocomplete:
     # def test_12_list_vm(self):
     #    self.test_04_list_vm()
 
-    def test_13_info(self):
+    def test_info(self):
         HEADING()
         self.p.info(name=self.name)
 
-    def test_14_destroy(self):
+    def test_destroy(self):
         HEADING()
         self.p.destroy(names=self.name)
         nodes = self.p.list()
@@ -254,10 +251,10 @@ class forstudentstocomplete:
 
         assert node["extra"]["task_state"] == "deleting"
 
-    def test_15_list_vm(self):
+    def test_list_vm(self):
         self.test_04_list_vm()
 
-    def test_16_vm_login(self):
+    def test_vm_login(self):
         self.test_04_list_vm()
         self.test_10_create()
         # use the self.testnode for this test
@@ -295,7 +292,7 @@ class forstudentstocomplete:
 
 class takestoolong:
 
-    def test_17_list_images(self):
+    def test_list_images(self):
         HEADING()
         images = self.p.images()
         pprint(images[:10])
@@ -345,7 +342,7 @@ class takestoolong:
 
 class other:
 
-    def test_10_rename(self):
+    def test_rename(self):
         HEADING()
 
         self.p.rename(source=self.name, destination=self.new_name)

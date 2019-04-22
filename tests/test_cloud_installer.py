@@ -1,16 +1,17 @@
 ###############################################################
-# pip install .; pytest -v --capture=no -v --nocapture tests/test_cloud_installer.py:Test_cloud_installer.test_001
+# pip install .; pytest -v --capture=no  tests/test_cloud_installer.py:Test_cloud_installer.test_001
 # pytest -v --capture=no tests/test_cloud_installerr.py
 # pytest -v  tests/test_cloud_installer.py
 ###############################################################
 
 from __future__ import print_function
-import shutil
 
 import os
+import shutil
+
 import pytest
-from cloudmesh_installer.install.test import readfile, run
-import pytest
+from cloudmesh_installer.install.test import run
+
 
 @pytest.mark.incremental
 class Test_cloud_installer:

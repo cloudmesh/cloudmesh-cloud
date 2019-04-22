@@ -1,7 +1,7 @@
 ###############################################################
 # pytest -v --capture=no tests/test_mongo.py
 # pytest -v  tests/test_mongo.py
-# pytest -v --capture=no -v --nocapture tests/test_mongo.py:Test_mongo.<METHIDNAME>
+# pytest -v --capture=no  tests/test_mongo.py:Test_mongo.<METHIDNAME>
 ###############################################################
 
 from __future__ import print_function
@@ -37,12 +37,12 @@ class TestMongo:
         assert self.data["cm"]["kind"] == "test"
 
     def test_update_decorator(self):
-
         @DatabaseUpdate()
         def test():
             return self.data
 
         result = test()
+
 
 """
 class TestMongo:

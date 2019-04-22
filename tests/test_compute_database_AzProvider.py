@@ -18,9 +18,10 @@ from cloudmesh.compute.vm.Provider import Provider
 
 import pytest
 
+
 @pytest.mark.incremental
 class Testazure(object):
-    
+
     def setup(self):
         self.p = Provider(name="az")
         self.vm_name = "testvm2"
@@ -41,47 +42,46 @@ class Testazure(object):
 
     def test_create_vm(self):
         HEADING()
-        r = self.p.create(resource_group=self.group,
-                                name=self.vm_name,
-                                image="UbuntuLTS",
-                                username="ubuntu")
+        r = self.p.create(
+            name=self.vm_name,
+            image="UbuntuLTS",
+            username="ubuntu")
         assert r["location"] == 'eastus'
 
     def test_list_vm(self):
         HEADING()
-        r = self.p.list(resource_group=self.group)   
+        r = self.p.list()
         assert r[0]["name"] == "testvm1"
 
     def test_ssh_vm(self):
         HEADING()
         self.p.ssh(user="ubuntu",
-                      resource_group=self.group,
-                      name=self.vm_name,
-                      command="uname -a")
+                   name=self.vm_name,
+                   command="uname -a")
 
     def test_connect_vm(self):
         HEADING()
-        r = self.p.connect(resource_group=self.group,
-                          name=self.vm_name,
-                          user='ubuntu')
+        r = self.p.connect(
+            name=self.vm_name,
+            user='ubuntu')
         assert r['status'] == 0
 
     def test_stop_vm(self):
         HEADING()
-        r=self.p.stop(resource_group=self.group,
-                       name=self.vm_name)
-        #time.sleep(100)
+        r = self.p.stop(
+            name=self.vm_name)
+        # time.sleep(100)
         assert r['status'] == 0
 
     def test_start_vm(self):
         HEADING()
-        r=self.p.start(resource_group=self.group,
-                        name=self.vm_name)
-        #time.sleep(100)
+        r = self.p.start(
+            name=self.vm_name)
+        # time.sleep(100)
         assert r['status'] == 0
 
     def test_delete_vm(self):
         HEADING()
-        r = self.p.delete(resource_group=self.group,
-                             name=self.vm_name)
+        r = self.p.delete(
+            name=self.vm_name)
         assert r['status'] == 0

@@ -502,6 +502,9 @@ class Provider(ComputeNodeABC):
         :return: The dict representing the node
         """
 
+        return None
+
+        """
         raise NotImplementedError
 
         #
@@ -523,6 +526,7 @@ class Provider(ComputeNodeABC):
         #
         
         return None
+        """
 
     def resume(self, name=None):
         """
@@ -532,7 +536,11 @@ class Provider(ComputeNodeABC):
         :return: the dict of the node
         """
 
+        return None
+        """
+        # the following does not return the dict
         return self.apply(self.cloudman.ex_start_node, name)
+        """
 
     def list(self, raw=False):
         """

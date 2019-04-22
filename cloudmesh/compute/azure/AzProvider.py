@@ -6,7 +6,10 @@ from pprint import pprint
 from cloudmesh.common.Shell import Shell
 from cloudmesh.common.StopWatch import StopWatch
 import time
-
+from cloudmesh.management.configuration.config import Config
+from cloudmesh.abstractclass.ComputeNodeABC import ComputeNodeABC
+from cloudmesh.DEBUG import VERBOSE
+from cloudmesh.common.util import path_expand
 
 def timer(func):
     def decorated_func(*args, **kwargs):
@@ -19,7 +22,7 @@ def timer(func):
     return decorated_func
 
 
-class Provider(object):
+class Provider(ComputeNodeABC):
     """
 
     az commands
@@ -34,8 +37,82 @@ class Provider(object):
 
     """
 
-    def __init__(self, resourcegroup=None):
-        pass
+    """
+    # THIS NEED STO BE DEFINED ONCE WE SEE THE OUTPUT
+    
+    output = {
+
+        "vm": {
+            "sort_keys": ["cm.name"],
+            "order": ["cm.name",
+                      "cm.cloud",
+                      "state",
+                      "image",
+                      "public_ips",
+                      "private_ips",
+                      "cm.kind"],
+            "header": ["cm.name",
+                       "cm.cloud",
+                       "state",
+                       "image",
+                       "public_ips",
+                       "private_ips",
+                       "cm.kind"]
+        },
+        "image": {"sort_keys": ["cm.name",
+                                "extra.minDisk"],
+                  "order": ["cm.name",
+                            "extra.minDisk",
+                            "updated",
+                            "cm.driver"],
+                  "header": ["Name",
+                             "MinDisk",
+                             "Updated",
+                             "Driver"]},
+        "flavor": {"sort_keys": ["cm.name",
+                                 "vcpus",
+                                 "disk"],
+                   "order": ["cm.name",
+                             "vcpus",
+                             "ram",
+                             "disk"],
+                   "header": ["Name",
+                              "VCPUS",
+                              "RAM",
+                              "Disk"]}
+
+    }
+    """
+
+
+    def __init__(self, name=None, configuration="~/.cloudmesh/cloudmesh4.yaml"):
+        configuration = path_expand(configuration)
+        conf = Config(name, configuration)["cloudmesh"]
+
+        super().__init__(name, configuration)
+        self.user = conf["profile"]["user"]
+        self.spec = conf["cloud"][name]
+        self.cloud = name
+        cred = self.spec["credentials"]
+        deft = self.spec["default"]
+        self.cloudtype = self.spec["cm"]["kind"]
+        self.resource_group = cred["resourcegroup"]
+        self.credentials = cred
+
+    def update_dict(self, entry, kind="node"):
+        if "cm" not in entry:
+            entry["cm"] = {}
+        entry["cm"]["kind"] = kind
+        entry["cm"]["driver"] = self.cloudtype
+        entry["cm"]["cloud"] = self.cloud
+        entry["cm"]["name"] = entry["name"]
+        return entry
+
+    def update_list(self, data):
+        for entry in data:
+            data = self.update_dict(entry)
+        return data
+
 
     @timer
     def az(self, command):
@@ -84,15 +161,13 @@ class Provider(object):
     def list_resource_group(self):
         return self.az("az group list")
 
-    def create_vm(self,
-                  resource_group=None,
-                  name=None,
-                  image=None,
-                  username=None):
+    def create(self, name=None, image=None, size=None, timeout=360, **kwargs):
+        username = kwargs["username"]
+
         # first check if vm exists, if it does return error
         command = \
             "az vm create" \
-                f" --resource-group {resource_group}" \
+                f" --resource-group {self.resource_group}" \
                 f" --name {name}" \
                 f" --image {image}" \
                 f" --admin-username {username}" \
@@ -100,95 +175,95 @@ class Provider(object):
 
         return self.az(command)
 
-    def delete_vm(self,
-                  resource_group=None,
-                  name=None):
-        r = self.stop_vm(resource_group=resource_group, name=name)
+    def destroy(self, name=None):
+        r = self.stop(name=name)
         command = \
             "az vm delete --yes" \
-                f" --resource-group {resource_group}" \
+                f" --resource-group {self.resource_group}" \
                 f" --name {name}"
         # print(command)
         # r = Shell.execute(command, shell=True)
+        # BUG MUST RETURN A DICT
         return self.az_2(command)
 
-    def list_vm(self,
-                resource_group=None):
+    def list(self):
         try:
             command = \
                 "az vm list" \
-                    f" --resource-group {resource_group}"
-            return self.az(command)
+                    f" --resource-group {self.resource_group}"
+            data = self.az(command)
+            data = self.update_list(data)
+            VERBOSE(data)
+            return data
         except:
             return []
 
-    def status_vm(self,
-                  resource_group=None,
-                  name=None):
+    def info(self, name=None):
+        command = f"az vm show" \
+            f" --resource-group {self.resource_group}" \
+            f" --name {name}"
+        return self.az(command)
+
+    def status(self, name=None):
         command = \
             "az vm get-instance-view" \
                 f" --name {name}" \
-                f" --resource-group {resource_group}" \
+                f" --resource-group {self.resource_group}" \
                 f" --query instanceView.statuses[1]"
         return self.az(command)
 
-    def stop_vm(self,
-                resource_group=None,
-                name=None):
+    def stop(self, name=None):
         command = \
             f"az vm stop" \
-                f" --resource-group {resource_group}" \
+                f" --resource-group {self.resource_group}" \
                 f" --name {name}"
         # print(command)
         # r = Shell.execute(command, shell=True)
         return self.az_2(command)
 
-    def start_vm(self,
-                 resource_group=None,
-                 name=None):
+    def start(self, name=None):
         command = \
             f"az vm start" \
-                f" --resource-group {resource_group}" \
+                f" --resource-group {self.resource_group}" \
                 f" --name {name}"
         # return self.az(command)
         # print(command)
         # r = Shell.execute(command, shell=True)
+        # MUST BE RETURNING A DICT
         return self.az_2(command)
 
-    def restart_vm(self,
-                   resource_group=None,
-                   name=None):
+    def restart(self,
+                name=None):
         command = \
             f"az vm restart" \
-                f" --resource-group {resource_group}" \
+                f" --resource-group {self.resource_group}" \
                 f" --name {name}"
         return self.az(command)
 
-    def ssh_vm(self,
-               user=None,
-               command=None,
-               resource_group=None,  # we need to get the ip not pass it
-               name=None):
-        ip = self.get_ip_vm(resource_group=resource_group, name=name)
+    def ssh(self,
+            user=None,
+            command=None,
+            name=None):
+        ip = self.get_ip(name=name)
         address = ip[0]['virtualMachine']['network']['publicIpAddresses'][0][
             'ipAddress']
         c = f'ssh -o "StrictHostKeyChecking no" {user}@{address} {command}'
         return Shell.execute(c, shell=True)
 
-    def get_ip_vm(self,
-                  resource_group=None,
-                  name=None):
+    def get_ip(self,
+
+               name=None):
         command = f"az vm list-ip-addresses" \
-            f" --resource-group {resource_group}" \
+            f" --resource-group {self.resource_group}" \
             f" --name {name}"
         return self.az(command)
 
-    def connect_vm(self,
-                   resource_group=None,
-                   name=None,
-                   user=None):
+    def connect(self,
+
+                name=None,
+                user=None):
         print("connecting to vm...")
-        ip = self.get_ip_vm(resource_group=resource_group, name=name)
+        ip = self.get_ip(name=name)
         address = ip[0]['virtualMachine']['network']['publicIpAddresses'][0][
             'ipAddress']
         print(address)
@@ -202,6 +277,7 @@ class Provider(object):
         command = \
             "az vm image list" \
                 f" --location {location}"
+        # THIS OUGHT TO RETURN A DICT
         return self.az_2(command)
 
     def list_size(self,
@@ -209,42 +285,54 @@ class Provider(object):
         command = \
             "az vm list-sizes" \
                 f" --location {location}"
+        # THIS SHOUL RETURN A DICT
         return self.az_2(command)
 
-    def connect_to_all_vm(self,
-                          resource_group=None):
-        vm_list = self.list_vm(resource_group=resource_group)
+    def connect_to_all(self):
+        vm_list = self.list()
         for i in range(len(vm_list)):
             vm_name = vm_list[i]['name']
             username = vm_list[i]['osProfile']['adminUsername']
-            self.wait_orig(resource_group, vm_name, username)
+            self.wait_orig(self.resource_group, vm_name, username)
 
     def wait_orig(self,
-                  resource_group=None,
+
                   vm_name=None,
                   username=None,
                   time=10):
         re_try = 5
         print("connecting to: {}".format(vm_name))
         try:
-            r = self.connect_vm(resource_group=resource_group, name=vm_name,
-                                user=username)
+            r = self.connect(
+                name=vm_name,
+                user=username)
         except:
             for i in range(re_try):
                 time.sleep(
                     120)  # wait for two minutes before re-try to connect
-                result = self.connect_vm(self, resource_group=resource_group,
-                                         name=vm_name, user=username)
+                result = self.connect(self,
+
+                                      name=vm_name, user=username)
                 if result:
                     break
 
-    def info_vm(self,
-                resource_group=None,
-                name=None):
-        command = f"az vm show" \
-            f" --resource-group {resource_group}" \
-            f" --name {name}"
-        return self.az(command)
+    def rename(self, name=None, destination=None):
+        raise NotImplementedError
+        # RETURN A DICT
+
+    def resume(self, name=None):
+        raise NotImplementedError
+        # THIS SHOUL RETURN A DICT
+
+
+    def suspend(self, name=None):
+        raise NotImplementedError
+        # THIS SHOUL RETURN A DICT
+
+
+    def destroy(self, name=None):
+        raise NotImplementedError
+        # THIS SHOUL RETURN A DICT
 
 
 if __name__ == "__main__":
@@ -264,46 +352,45 @@ if __name__ == "__main__":
     # print(type(r))
     # pprint(r)
 
-    r = p.list_vm(resource_group=group)
+    r = p.list()
     print(type(r))
     pprint(r)
 
     '''
-    r = p.create_vm(resource_group=group,
+    r = p.create(
                     name=name,
                     image="UbuntuLTS",
                     username="ubuntu")
     print(type(r))
     pprint(r)
     
-    r = p.list_vm(resource_group=group)
+    r = p.list()
     print(type(r))
     pprint(r)
     
     # az vm get-instance-view --name vm3 --resource-group test1 --query instanceView.statuses[1]
     
-    r = p.status_vm(resource_group=group,
+    r = p.status(
                     name=name)
     print(type(r))
     pprint(r)
     '''
 
-    r = p.ssh_vm(
+    r = p.ssh(
         user="ubuntu",
-        resource_group=group,
         name=name,
         command="uname -a")
 
     print(r)
 
     '''
-    r = p.delete_vm(resource_group=group,
+    r = p.delete(
                     name=name)
     
     print(type(r))
     pprint(r)
     
-    r = p.list_vm(resource_group=group)
+    r = p.list()
     print(type(r))
     pprint(r)
     '''

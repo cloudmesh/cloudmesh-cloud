@@ -232,15 +232,15 @@ class Provider(ComputeNodeABC):
         print("connecting to: {}".format(vm_name))
         try:
             r = self.connect(
-                                name=vm_name,
-                                user=username)
+                name=vm_name,
+                user=username)
         except:
             for i in range(re_try):
                 time.sleep(
                     120)  # wait for two minutes before re-try to connect
                 result = self.connect(self,
 
-                                         name=vm_name, user=username)
+                                      name=vm_name, user=username)
                 if result:
                     break
 

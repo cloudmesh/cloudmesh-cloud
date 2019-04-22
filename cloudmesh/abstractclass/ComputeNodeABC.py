@@ -6,7 +6,7 @@ from cloudmesh.DEBUG import VERBOSE
 class ComputeNodeABC(metaclass=ABCMeta):
 
     def __init__(self, cloud, path):
-        config = Config(config_path=path)
+        config = Config(config_path=path)["cloudmesh"]
         VERBOSE(config)
         self.cm = config["cloud"][cloud]["cm"]
         self.default = config["cloud"][cloud]["default"]

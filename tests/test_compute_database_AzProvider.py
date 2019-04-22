@@ -15,7 +15,6 @@ from cloudmesh.management.configuration.SSHkey import SSHkey
 from cloudmesh.management.configuration.config import Config
 from cloudmesh.management.configuration.name import Name
 from cloudmesh.compute.vm.Provider import Provider
-from cloudmesh.compute.azure.AzProvider import Provider as AzProvider
 
 import pytest
 
@@ -24,14 +23,13 @@ class Testazure(object):
     
     def setup(self):
         self.p = Provider()
-        self.login = AzProvider()
         self.name = "testvm1"
         self.group = "test"
         self.location = "eastus"
 
     def test_login(self):
         HEADING()
-        r = self.login.login()
+        r = self.p.login()
 
     def test_create_vm(self):
         HEADING()

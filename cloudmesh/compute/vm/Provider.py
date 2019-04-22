@@ -15,6 +15,9 @@ class Provider(object):
         try:
             self.kind = Config(configuration)["cloudmesh"]["cloud"][name]["cm"][
                 "kind"]
+            self.credentials = Config(configuration)["cloudmesh"]["cloud"][name]["credentials"][
+                "kind"]
+
             self.name = name
         except:
             Console.error(f"provider {name} not found in {configuration}")

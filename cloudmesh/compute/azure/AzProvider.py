@@ -38,9 +38,8 @@ class Provider(ComputeNodeABC):
 
     def __init__(self, name=None, configuration="~/.cloudmesh/cloudmesh4.yaml"):
         super().__init__(name, configuration)
-        conf = Config(configuration)["cloudmesh"]
-        # self.user = conf["profile"]
-        self.user = Config()["cloudmesh"]["profile"]["user"]
+        conf = Config(name, configuration)["cloudmesh"]
+        self.user = conf["profile"]["user"]
         self.spec = conf["cloud"][name]
         self.cloud = name
         cred = self.spec["credentials"]

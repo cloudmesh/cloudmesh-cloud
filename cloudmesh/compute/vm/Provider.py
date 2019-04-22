@@ -51,6 +51,7 @@ class Provider(ComputeNodeABC):
             return Parameter.expand(names)
 
     def loop(self, names, func):
+        # SHOULD BE A POOL
         names = self.expand(names)
         r = []
         for name in names:

@@ -41,7 +41,7 @@ class Provider(ComputeNodeABC):
         configuration = path_expand(configuration)
         conf = Config(name, configuration)["cloudmesh"]
 
-        # super().__init__(name, configuration)
+        super().__init__(name, configuration)
 
 
         self.user = conf["profile"]["user"]
@@ -52,7 +52,6 @@ class Provider(ComputeNodeABC):
         self.cloudtype = self.spec["cm"]["kind"]
         self.resource_group = cred["resourcegroup"]
         self.credentials = cred
-        VERBOSE(self.credentials)
 
 
 

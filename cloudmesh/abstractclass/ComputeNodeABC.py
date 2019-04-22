@@ -10,7 +10,6 @@ class ComputeNodeABC(metaclass=ABCMeta):
         self.cm = config["cloud"][cloud]["cm"]
         self.default = config["cloud"][cloud]["default"]
         self.credentials = config["cloud"][cloud]["credentials"]
-        VERBOSE(self.credentials)
         self.group = config["default"]["group"]
         self.experiment = config["default"]["experiment"]
 

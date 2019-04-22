@@ -6,6 +6,8 @@ from pprint import pprint
 from cloudmesh.common.Shell import Shell
 from cloudmesh.common.StopWatch import StopWatch
 import time
+from cloudmesh.management.configuration.config import Config
+
 
 
 def timer(func):
@@ -34,8 +36,17 @@ class Provider(object):
 
     """
 
-    def __init__(self, name=None, resourcegroup=None):
-        pass
+    def __init__(self, name=None, configuration="~/.cloudmesh/cloudmesh4.yaml"):
+        conf = Config(configuration)["cloudmesh"]
+        # self.user = conf["profile"]
+        self.user = Config()["cloudmesh"]["profile"]["user"]
+        self.spec = conf["cloud"][name]
+        self.cloud = name
+        cred = self.spec["credentials"]
+        deft = self.spec["default"]
+        self.cloudtype = self.spec["cm"]["kind"]
+        self.resourcegroup = cred["resourcegroup"]
+        super().__init__(name, conf)
 
     @timer
     def az(self, command):

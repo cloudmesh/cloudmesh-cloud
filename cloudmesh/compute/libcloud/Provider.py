@@ -501,20 +501,22 @@ class Provider(ComputeNodeABC):
         :param name: the name of the node
         :return: The dict representing the node
         """
-        HEADING(c=".")
 
-        #names = Parameter.expand(names)
+        raise NotImplementedError
 
+        #
+        # BUG THIS CODE DOES NOT WORK
+        #
         nodes = self.list(raw=True)
         for node in nodes:
             if node.name == name:
                 r = self.cloudman.ex_stop_node(self._get_node(node.name),
                                                deallocate=False)
                 # print(r)
+                # BUG THIS IS NOT A DICT
                 return(node, name=name)
                 self.cloudman.destroy_node(node)
 
-        raise NotImplementedError
         #
         # should return the updated names dict, e.g. status and so on
         # the above specification is for one name

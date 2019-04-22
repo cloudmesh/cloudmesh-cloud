@@ -34,7 +34,7 @@ class Provider(object):
 
     """
 
-    def __init__(self, resourcegroup=None):
+    def __init__(self, name=None, resourcegroup=None):
         pass
 
     @timer

@@ -524,6 +524,16 @@ class Provider(ComputeNodeABC):
         
         return None
 
+    def resume(self, name=None):
+        """
+        resume a stopped node.
+
+        :param name: the name of the node
+        :return: the dict of the node
+        """
+
+        return self.apply(self.cloudman.ex_start_node, name)
+
     def list(self, raw=False):
         """
         Lists the vms on the cloud
@@ -551,15 +561,6 @@ class Provider(ComputeNodeABC):
                 return self.update_dict(entries, kind="node")
         return None
 
-    def resume(self, name=None):
-        """
-        resume a stopped node. 
-
-        :param name: the name of the node
-        :return: the dict of the node
-        """
-        
-        return self.apply(self.cloudman.ex_start_node, name)
 
     def destroy(self, names=None):
         """

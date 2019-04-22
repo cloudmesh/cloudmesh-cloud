@@ -75,7 +75,7 @@ class TestConfig:
         self.config = Config()
         self.config.create()
         filename = path_expand("~/.cloudmesh/cloudmesh4.yaml")
-        assert os.path.isfile(Path())
+        assert os.path.isfile(Path(filename))
 
 
 

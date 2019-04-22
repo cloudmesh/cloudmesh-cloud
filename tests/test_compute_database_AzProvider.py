@@ -23,7 +23,7 @@ class Testazure(object):
     
     def setup(self):
         self.p = Provider(name="az")
-        self.vm_name = "testvm1"
+        self.vm_name = "testvm2"
         self.group = self.p.credentials["resourcegroup"]
         self.location = self.p.credentials["location"]
 

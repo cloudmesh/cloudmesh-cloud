@@ -95,7 +95,7 @@ class Provider(ComputeNodeABC):
     def list_resource_group(self):
         return self.az("az group list")
 
-    def create_vm(self,
+    def create(self,
                   resource_group=None,
                   name=None,
                   image=None,
@@ -111,7 +111,7 @@ class Provider(ComputeNodeABC):
 
         return self.az(command)
 
-    def delete_vm(self,
+    def destroy(self,
                   resource_group=None,
                   name=None):
         r = self.stop_vm(resource_group=resource_group, name=name)
@@ -123,7 +123,7 @@ class Provider(ComputeNodeABC):
         # r = Shell.execute(command, shell=True)
         return self.az_2(command)
 
-    def list_vm(self,
+    def list(self,
                 resource_group=None):
         try:
             command = \
@@ -133,7 +133,15 @@ class Provider(ComputeNodeABC):
         except:
             return []
 
-    def status_vm(self,
+    def info(self,
+                resource_group=None,
+                name=None):
+        command = f"az vm show" \
+            f" --resource-group {resource_group}" \
+            f" --name {name}"
+        return self.az(command)
+
+    def status(self,
                   resource_group=None,
                   name=None):
         command = \
@@ -143,7 +151,7 @@ class Provider(ComputeNodeABC):
                 f" --query instanceView.statuses[1]"
         return self.az(command)
 
-    def stop_vm(self,
+    def stop(self,
                 resource_group=None,
                 name=None):
         command = \
@@ -154,7 +162,7 @@ class Provider(ComputeNodeABC):
         # r = Shell.execute(command, shell=True)
         return self.az_2(command)
 
-    def start_vm(self,
+    def start(self,
                  resource_group=None,
                  name=None):
         command = \
@@ -166,7 +174,7 @@ class Provider(ComputeNodeABC):
         # r = Shell.execute(command, shell=True)
         return self.az_2(command)
 
-    def restart_vm(self,
+    def restart(self,
                    resource_group=None,
                    name=None):
         command = \
@@ -175,7 +183,7 @@ class Provider(ComputeNodeABC):
                 f" --name {name}"
         return self.az(command)
 
-    def ssh_vm(self,
+    def ssh(self,
                user=None,
                command=None,
                resource_group=None,  # we need to get the ip not pass it
@@ -186,7 +194,7 @@ class Provider(ComputeNodeABC):
         c = f'ssh -o "StrictHostKeyChecking no" {user}@{address} {command}'
         return Shell.execute(c, shell=True)
 
-    def get_ip_vm(self,
+    def get_ip(self,
                   resource_group=None,
                   name=None):
         command = f"az vm list-ip-addresses" \
@@ -194,7 +202,7 @@ class Provider(ComputeNodeABC):
             f" --name {name}"
         return self.az(command)
 
-    def connect_vm(self,
+    def connect(self,
                    resource_group=None,
                    name=None,
                    user=None):
@@ -222,7 +230,7 @@ class Provider(ComputeNodeABC):
                 f" --location {location}"
         return self.az_2(command)
 
-    def connect_to_all_vm(self,
+    def connect_to_all(self,
                           resource_group=None):
         vm_list = self.list_vm(resource_group=resource_group)
         for i in range(len(vm_list)):
@@ -249,14 +257,8 @@ class Provider(ComputeNodeABC):
                 if result:
                     break
 
-    def info_vm(self,
-                resource_group=None,
-                name=None):
-        command = f"az vm show" \
-            f" --resource-group {resource_group}" \
-            f" --name {name}"
-        return self.az(command)
-
+    def rename(self, name=None, destination=None):
+        raise NotImplementedError
 
 if __name__ == "__main__":
     p = Provider("test")

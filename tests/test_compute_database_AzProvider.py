@@ -23,14 +23,17 @@ class Testazure(object):
     
     def setup(self):
         self.p = Provider(name="az")
-        self.name = "testvm1"
-        self.group = "test"
-        self.location = "eastus"
+        self.vm_name = "testvm1"
+        self.group = self.p.credentials["resource_group"]
+        self.location = self.p.credentials["location"]
 
     def test_config(self):
         print(self.p.name)
         print(self.p.kind)
         print(self.p.credentials)
+        print(self.location)
+        print(self.group)
+        assert self.p.name == "az"
 
     def test_login(self):
         HEADING()
@@ -39,7 +42,7 @@ class Testazure(object):
     def test_create_vm(self):
         HEADING()
         r = self.p.create(resource_group=self.group,
-                                name=self.name,
+                                name=self.vm_name,
                                 image="UbuntuLTS",
                                 username="ubuntu")
         assert r["location"] == 'eastus'
@@ -53,32 +56,32 @@ class Testazure(object):
         HEADING()
         self.p.ssh(user="ubuntu",
                       resource_group=self.group,
-                      name=self.name,
+                      name=self.vm_name,
                       command="uname -a")
 
     def test_connect_vm(self):
         HEADING()
         r = self.p.connect(resource_group=self.group,
-                          name=self.name,
+                          name=self.vm_name,
                           user='ubuntu')
         assert r['status'] == 0
 
     def test_stop_vm(self):
         HEADING()
         r=self.p.stop(resource_group=self.group,
-                       name=self.name)
+                       name=self.vm_name)
         #time.sleep(100)
         assert r['status'] == 0
 
     def test_start_vm(self):
         HEADING()
         r=self.p.start(resource_group=self.group,
-                        name=self.name)
+                        name=self.vm_name)
         #time.sleep(100)
         assert r['status'] == 0
 
     def test_delete_vm(self):
         HEADING()
         r = self.p.delete(resource_group=self.group,
-                             name=self.name)
+                             name=self.vm_name)
         assert r['status'] == 0

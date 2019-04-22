@@ -8,7 +8,7 @@ from cloudmesh.common.StopWatch import StopWatch
 import time
 from cloudmesh.management.configuration.config import Config
 from cloudmesh.abstractclass.ComputeNodeABC import ComputeNodeABC
-
+from cloudmesh.DEBUG import VERBOSE
 
 def timer(func):
     def decorated_func(*args, **kwargs):
@@ -39,6 +39,8 @@ class Provider(ComputeNodeABC):
     def __init__(self, name=None, configuration="~/.cloudmesh/cloudmesh4.yaml"):
         super().__init__(name, configuration)
         conf = Config(name, configuration)["cloudmesh"]
+        VERBOSE(conf)
+
         self.user = conf["profile"]["user"]
         self.spec = conf["cloud"][name]
         self.cloud = name

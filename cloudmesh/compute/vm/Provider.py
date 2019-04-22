@@ -7,6 +7,7 @@ from cloudmesh.management.configuration.config import Config
 from cloudmesh.mongo.DataBaseDecorator import DatabaseUpdate
 from cloudmesh.common.console import Console
 from cloudmesh.abstractclass.ComputeNodeABC import ComputeNodeABC
+from cloudmesh.common.parameter import Parameter
 
 class Provider(ComputeNodeABC):
 
@@ -43,6 +44,20 @@ class Provider(ComputeNodeABC):
     def cloudname(self):
         return self.name
 
+    def expand(self, names):
+        if type(names) == list:
+            return names
+        else:
+            return Parameter.expand(names)
+
+    def loop(self, names, func):
+        names = self.expand(names)
+        r = []
+        for name in names:
+            vm = func(names=names)
+            vm.append(r)
+        return r
+
     @DatabaseUpdate()
     def keys(self):
         return self.p.keys()
@@ -76,34 +91,36 @@ class Provider(ComputeNodeABC):
 
     @DatabaseUpdate()
     def start(self, names=None):
-        return self.p.start(names=names)
+        return self.loop(names, self.p.start)
 
     @DatabaseUpdate()
     def stop(self, names=None):
-        return self.p.stop(names=names)
+        return self.loop(names, self.p.stop)
 
     def info(self, name=None):
         return self.p.info(name=name)
 
     @DatabaseUpdate()
     def resume(self, names=None):
-        for name in names:
-            return self.p.resume(name=name)
+        return self.loop(names, self.p.resume)
 
     @DatabaseUpdate()
     def reboot(self, names=None):
-        for name in names:
-            return self.p.reboot(name=name)
+        return self.loop(names, self.p.reboot)
 
     @DatabaseUpdate()
     def create(self, names=None, image=None, size=None, timeout=360, **kwargs):
+        names = self.expand(names)
+        r = []
         for name in names:
-            return self.p.create(
+            entry = self.p.create(
                         name=name,
                         image=image,
                         size=size,
                         timeout=360,
                         **kwargs)
+            r.append(entry)
+        return r
 
     def rename(self, source=None, destination=None):
         self.p.rename(source=source, destination=destination)
@@ -115,6 +132,7 @@ class Provider(ComputeNodeABC):
         return self.p.destroy(names=names)
 
     def ssh(self, names=None, command=None):
+        names = self.expand(names)
         for name in names:
             return self.p.ssh(name=names,command=command)
 

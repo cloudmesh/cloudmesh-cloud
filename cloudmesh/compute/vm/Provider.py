@@ -17,8 +17,8 @@ class Provider(object):
                 "kind"]
             self.name = name
         except:
-            Console.error(f"proider {name} not found in {configuration}")
-            raise ValueError(f"proider {name} not found in {configuration}")
+            Console.error(f"provider {name} not found in {configuration}")
+            raise ValueError(f"provider {name} not found in {configuration}")
 
         provider = None
 
@@ -32,8 +32,8 @@ class Provider(object):
             provider = AzAzureProvider
 
         if provider is None:
-            Console.error(f"proider {name} not supported")
-            raise ValueError(f"proider {name} not supported")
+            Console.error(f"provider {name} not supported")
+            raise ValueError(f"provider {name} not supported")
 
         self.p = provider(name=name, configuration=configuration)
 

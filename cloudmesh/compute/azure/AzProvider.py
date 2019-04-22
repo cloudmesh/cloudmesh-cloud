@@ -7,7 +7,7 @@ from cloudmesh.common.Shell import Shell
 from cloudmesh.common.StopWatch import StopWatch
 import time
 from cloudmesh.management.configuration.config import Config
-
+from cloudmesh.abstractclass.ComputeNodeABC import ComputeNodeABC
 
 
 def timer(func):
@@ -21,7 +21,7 @@ def timer(func):
     return decorated_func
 
 
-class Provider(object):
+class Provider(ComputeNodeABC):
     """
 
     az commands

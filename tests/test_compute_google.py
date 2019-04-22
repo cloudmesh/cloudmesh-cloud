@@ -1,6 +1,6 @@
 #################################################################
-# nosetest -v --nopature
-# nosetests -v --nocapture tests/test_compute_google.py
+# pytest -v --capture=no
+# pytest -v --capture=no tests/test_compute_google.py
 #################################################################
 
 from pprint import pprint
@@ -20,7 +20,10 @@ from Crypto.PublicKey import RSA
 from pathlib import Path
 from cloudmesh.common.util import path_expand
 
+import pytest
 
+
+@pytest.mark.incremental
 class TestName:
 
     def setup(self):
@@ -52,15 +55,15 @@ class TestName:
                              "ip_range": "129.79.0.0/16"}
         self.testnode = None
 
-    def test_01_list_keys(self):
+    def test_list_keys(self):
         HEADING()
         print("List Key Method is not supported by google")
 
-    def test_02_key_upload(self):
+    def test_key_upload(self):
         HEADING()
         print("Upload Key method is not supported by google")
 
-    def test_03_list_images(self):
+    def test_list_images(self):
         HEADING()
         images = self.p.images()
         print(Printer.flatwrite(images,
@@ -69,7 +72,7 @@ class TestName:
                                 header=["Name", "Id", "Driver"])
               )
 
-    def test_04_list_flavors(self):
+    def test_list_flavors(self):
         HEADING()
         flavors = self.p.flavors()
         print(Printer.flatwrite(flavors,
@@ -78,7 +81,7 @@ class TestName:
                                 header=["Name", "Id", "RAM", "Disk"])
               )
 
-    def test_04_list_vm(self):
+    def test_list_vm(self):
         HEADING()
         vms = self.p.list()
         print(Printer.flatwrite(vms,
@@ -100,23 +103,23 @@ class TestName:
                                         "Private ips",
                                         "Public ips"])
               )
-    def test_05_list_secgroups(self):
+    def test_list_secgroups(self):
         HEADING()
         print("List security group method is not supported by google")
 
-    def test_06_secgroups_add(self):
+    def test_secgroups_add(self):
         print("List add security groups method is not supported by google")
 
-    def test_07_secgroup_rules_add(self):
+    def test_secgroup_rules_add(self):
         print("List Add security group rules method is not supported by google")
 
-    def test_08_secgroup_rules_remove(self):
+    def test_secgroup_rules_remove(self):
         print("Remove security group rules method is not supported by google")
 
-    def test_09_secgroups_remove(self):
+    def test_secgroups_remove(self):
         print("Remove security groups method is not supported by google")
  
-    def test_10_create(self):
+    def test_create(self):
         HEADING()
         image = "ubuntu-minimal-1810-cosmic-v20190402"
         size = "n1-standard-4"
@@ -138,42 +141,42 @@ class TestName:
 
         assert node is not None
 
-    def test_11_publicIP_attach(self):
+    def test_publicIP_attach(self):
         HEADING()
         print("Attach Public IP method is not supported by google")
 
-    def test_12_publicIP_detach(self):
+    def test_publicIP_detach(self):
         print("Detach Public IP method is not supported by google")
 
-    def test_13_info(self):
+    def test_info(self):
         HEADING()
         self.p.info(name=self.name)
 
-    def test_14_stop(self):
+    def test_stop(self):
         HEADING()
         time.sleep(120)
         self.p.stop(names=self.name)
-        #self.test_04_list_vm()
+        #self.test_list_vm()
 
-    def test_15_list(self):
+    def test_list(self):
         HEADING()
-        self.test_04_list_vm()
+        self.test_list_vm()
 
-    def test_16_start(self):
+    def test_start(self):
         HEADING()
         time.sleep(120)
         self.p.start(names=self.name)
-        self.test_04_list_vm()
+        self.test_list_vm()
 
-    def test_17_list(self):
+    def test_list(self):
         HEADING()
-        self.test_04_list_vm()
+        self.test_list_vm()
 
-    def test_18_stop(self):
+    def test_stop(self):
         HEADING()
-        self.test_14_stop()
+        self.test_stop()
         
-    def test_19_destroy(self):
+    def test_destroy(self):
         HEADING()
         time.sleep(120)
         self.p.destroy(names=self.name)
@@ -182,14 +185,14 @@ class TestName:
 
         assert node is None
 
-    def test_20_list_vm(self):
+    def test_list_vm(self):
         HEADING()
-        self.test_04_list_vm()
+        self.test_list_vm()
 
-    def test_21_vm_login(self):
+    def test_vm_login(self):
         HEADING()
-        self.test_04_list_vm()
-        self.test_10_create()
+        self.test_list_vm()
+        self.test_create()
         time.sleep(60)
         nodes = self.p.list(raw=True)
         for node in nodes:
@@ -216,20 +219,20 @@ class TestName:
                 line = line.decode("utf-8")
                 print(line.strip("\n"))
      
-    def test_22_stop(self):
+    def test_stop(self):
         HEADING()
-        self.test_14_stop()
+        self.test_stop()
 
-    def test_23_list(self):
+    def test_list(self):
         HEADING()
-        self.test_04_list_vm()
+        self.test_list_vm()
 
-    def test_23_destroy(self):
+    def test_destroy(self):
         HEADING()
         time.sleep(120)
-        self.test_19_destroy()
+        self.test_destroy()
 
-    def test_24_list(self):
+    def test_list(self):
         HEADING()
-        self.test_04_list_vm()
+        self.test_list_vm()
 

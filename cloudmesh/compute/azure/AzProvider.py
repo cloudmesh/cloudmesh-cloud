@@ -107,6 +107,12 @@ class Provider(ComputeNodeABC):
         entry["cm"]["cloud"] = self.cloud
         return entry
 
+    def update_list(self, data):
+        for entry in data:
+            data = self.update_dict(entry)
+        return data
+
+
     @timer
     def az(self, command):
         print(command)
@@ -122,7 +128,7 @@ class Provider(ComputeNodeABC):
             data[0]['virtualMachine']['network']['publicIpAddresses'][0][
                 'id'] = None
         pprint(data)
-        return self.update_dict(data)
+        return data
 
     def az_2(self, command):
         print(command)
@@ -184,7 +190,8 @@ class Provider(ComputeNodeABC):
             command = \
                 "az vm list" \
                     f" --resource-group {self.resource_group}"
-            return self.az(command)
+            data = self.az(command)
+            data = self.update_list(data)
         except:
             return []
 

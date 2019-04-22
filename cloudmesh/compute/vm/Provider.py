@@ -113,3 +113,9 @@ class Provider(ComputeNodeABC):
             raise NotImplementedError
         else:
             self.p.login()
+
+    def suspend(self, name=None):
+        raise NotImplementedError
+
+    def destroy(self, name=None):
+        raise NotImplementedError

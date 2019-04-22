@@ -192,6 +192,7 @@ class Provider(ComputeNodeABC):
                     f" --resource-group {self.resource_group}"
             data = self.az(command)
             data = self.update_list(data)
+            return data
         except:
             return []
 

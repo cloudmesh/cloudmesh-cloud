@@ -9,6 +9,7 @@ import time
 from cloudmesh.management.configuration.config import Config
 from cloudmesh.abstractclass.ComputeNodeABC import ComputeNodeABC
 from cloudmesh.DEBUG import VERBOSE
+from cloudmesh.common.util import path_expand
 
 def timer(func):
     def decorated_func(*args, **kwargs):
@@ -37,8 +38,10 @@ class Provider(ComputeNodeABC):
     """
 
     def __init__(self, name=None, configuration="~/.cloudmesh/cloudmesh4.yaml"):
+        configuration = path_expand(configuration)
         VERBOSE(name)
         VERBOSE(configuration)
+
         import sys; sys.exit(1)
         conf = Config(name, configuration)["cloudmesh"]
 

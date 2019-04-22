@@ -37,13 +37,59 @@ class Provider(ComputeNodeABC):
 
     """
 
+    """
+    # THIS NEED STO BE DEFINED ONCE WE SEE THE OUTPUT
+    
+    output = {
+
+        "vm": {
+            "sort_keys": ["cm.name"],
+            "order": ["cm.name",
+                      "cm.cloud",
+                      "state",
+                      "image",
+                      "public_ips",
+                      "private_ips",
+                      "cm.kind"],
+            "header": ["cm.name",
+                       "cm.cloud",
+                       "state",
+                       "image",
+                       "public_ips",
+                       "private_ips",
+                       "cm.kind"]
+        },
+        "image": {"sort_keys": ["cm.name",
+                                "extra.minDisk"],
+                  "order": ["cm.name",
+                            "extra.minDisk",
+                            "updated",
+                            "cm.driver"],
+                  "header": ["Name",
+                             "MinDisk",
+                             "Updated",
+                             "Driver"]},
+        "flavor": {"sort_keys": ["cm.name",
+                                 "vcpus",
+                                 "disk"],
+                   "order": ["cm.name",
+                             "vcpus",
+                             "ram",
+                             "disk"],
+                   "header": ["Name",
+                              "VCPUS",
+                              "RAM",
+                              "Disk"]}
+
+    }
+    """
+
+
     def __init__(self, name=None, configuration="~/.cloudmesh/cloudmesh4.yaml"):
         configuration = path_expand(configuration)
         conf = Config(name, configuration)["cloudmesh"]
 
         super().__init__(name, configuration)
-
-
         self.user = conf["profile"]["user"]
         self.spec = conf["cloud"][name]
         self.cloud = name
@@ -53,7 +99,13 @@ class Provider(ComputeNodeABC):
         self.resource_group = cred["resourcegroup"]
         self.credentials = cred
 
-
+    def update_dict(self, entry, kind="node"):
+        if "cm" not in entry:
+            entry["cm"] = {}
+        entry["cm"]["kind"] = kind
+        entry["cm"]["driver"] = self.cloudtype
+        entry["cm"]["cloud"] = self.cloud
+        return entry
 
     @timer
     def az(self, command):
@@ -70,7 +122,7 @@ class Provider(ComputeNodeABC):
             data[0]['virtualMachine']['network']['publicIpAddresses'][0][
                 'id'] = None
         pprint(data)
-        return data
+        return self.update_dict(data)
 
     def az_2(self, command):
         print(command)
@@ -124,6 +176,7 @@ class Provider(ComputeNodeABC):
                 f" --name {name}"
         # print(command)
         # r = Shell.execute(command, shell=True)
+        # BUG MUST RETURN A DICT
         return self.az_2(command)
 
     def list(self):
@@ -166,6 +219,7 @@ class Provider(ComputeNodeABC):
         # return self.az(command)
         # print(command)
         # r = Shell.execute(command, shell=True)
+        # MUST BE RETURNING A DICT
         return self.az_2(command)
 
     def restart(self,
@@ -213,6 +267,7 @@ class Provider(ComputeNodeABC):
         command = \
             "az vm image list" \
                 f" --location {location}"
+        # THIS OUGHT TO RETURN A DICT
         return self.az_2(command)
 
     def list_size(self,
@@ -220,6 +275,7 @@ class Provider(ComputeNodeABC):
         command = \
             "az vm list-sizes" \
                 f" --location {location}"
+        # THIS SHOUL RETURN A DICT
         return self.az_2(command)
 
     def connect_to_all(self):
@@ -252,15 +308,21 @@ class Provider(ComputeNodeABC):
 
     def rename(self, name=None, destination=None):
         raise NotImplementedError
+        # RETURN A DICT
 
     def resume(self, name=None):
         raise NotImplementedError
+        # THIS SHOUL RETURN A DICT
+
 
     def suspend(self, name=None):
         raise NotImplementedError
+        # THIS SHOUL RETURN A DICT
+
 
     def destroy(self, name=None):
         raise NotImplementedError
+        # THIS SHOUL RETURN A DICT
 
 
 if __name__ == "__main__":

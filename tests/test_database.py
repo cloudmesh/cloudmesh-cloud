@@ -1,7 +1,7 @@
 ###############################################################
 # pytest -v --capture=no tests/test_database.py
 # pytest -v  tests/test_database.py
-# pytest -v --capture=no -v --nocapture tests/test_database.py:Test_database.<METHIDNAME>
+# pytest -v --capture=no  tests/test_database.py:Test_database.<METHIDNAME>
 ###############################################################
 from cloudmesh.common.util import HEADING
 
@@ -16,6 +16,7 @@ from pprint import pprint
 from cloudmesh.management.configuration.name import Name
 import pytest
 
+
 @pytest.mark.incremental
 class TestMongo:
 
@@ -28,24 +29,24 @@ class TestMongo:
                          kind="vm",
                          counter=1)
 
-    def test_10_find_in_collection(self):
+    def test_find_in_collection(self):
         HEADING()
         r = self.database.find_name("CC-CentOS7")
         pprint(r)
 
-    def test_11_find_in_collections(self):
+    def test_find_in_collections(self):
         HEADING()
         r = self.database.find_names("CC-CentOS7,CC-CentOS7-1811")
         pprint(r)
 
-    def test_12_find_in_collection(self):
+    def test_find_in_collection(self):
         HEADING()
         r = self.database.name_count("CC-CentOS7")
         pprint(r)
 
 
 class t:
-    def test_00_status(self):
+    def test_status(self):
         HEADING()
 
         # print(self.name)
@@ -59,7 +60,7 @@ class t:
 
         assert len(r) == 0
 
-    def test_01_status(self):
+    def test_status(self):
         HEADING()
         r = self.database.status()
         # pprint(r)
@@ -73,7 +74,7 @@ class t:
 
         assert d is not None
 
-    def test_02_update(self):
+    def test_update(self):
         HEADING()
 
         entries = [{"name": "Gregor"},
@@ -90,7 +91,7 @@ class t:
         pprint(r)
         assert len(r) == 2
 
-    def test_03_update(self):
+    def test_update2(self):
         HEADING()
 
         r = self.database.find(name="Gregor")
@@ -98,7 +99,7 @@ class t:
 
         assert r[0]['name'] == "Gregor"
 
-    def test_04_update(self):
+    def test_update3(self):
         HEADING()
         entries = [{"cmcounter": 1, "name": "gregor"},
                    {"cmcounter": 2, "name": "laszewski"}]
@@ -111,13 +112,13 @@ class t:
         r = self.database.find()
         pprint(r)
 
-    def test_05_update(self):
+    def test_update4(self):
         HEADING()
         r = self.database.find(name="gregor")
         pprint(r)
         assert r[0]["name"] == "gregor"
 
-    def test_06_find_by_counter(self):
+    def test_find_by_counter(self):
         HEADING()
         r = self.database.find_by_counter(1)
         pprint(r)
@@ -127,7 +128,7 @@ class t:
         pprint(r)
         assert r[0]["name"] == "laszewski"
 
-    def test_07_decorator_update(self):
+    def test_decorator_update(self):
         HEADING()
 
         @DatabaseUpdate(collection="cloudmesh")
@@ -146,7 +147,7 @@ class t:
 
         pprint(r)
 
-    def test_08_decorator_add(self):
+    def test_decorator_add(self):
         HEADING()
 
         @DatabaseAdd(collection="cloudmesh")
@@ -162,7 +163,7 @@ class t:
 
         assert len(r) == 4
 
-    def test_09_overwrite(self):
+    def test_overwrite(self):
         HEADING()
         r = self.database.find(name="gregor")[0]
         pprint(r)
@@ -176,7 +177,7 @@ class t:
 
         assert len(r) == 1
 
-    def test_10_fancy(self):
+    def test_fancy(self):
         HEADING()
 
         counter = 1

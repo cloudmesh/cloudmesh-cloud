@@ -1,7 +1,7 @@
 ###############################################################
 # pytest -v --capture=no tests/test_compute_azure.py
 # pytest -v  tests/test_compute_azure.py
-# pytest -v --capture=no -v --nocapture tests/test_compute_azure.py:Test_compute_azure.<METHIDNAME>
+# pytest -v --capture=no  tests/test_compute_azure.py:Test_compute_azure.<METHIDNAME>
 ###############################################################
 import subprocess
 import time
@@ -15,6 +15,7 @@ from cloudmesh.management.configuration.SSHkey import SSHkey
 from cloudmesh.management.configuration.config import Config
 from cloudmesh.management.configuration.name import Name
 import pytest
+
 
 @pytest.mark.incremental
 class TestName:
@@ -44,13 +45,13 @@ class TestName:
                              "ip_range": "129.79.0.0/16"}
         self.testnode = None
 
-    def test_00_show_conf(self):
+    def test_show_conf(self):
         HEADING()
         pprint(self.p.user)
         pprint(self.p.cloudtype)
         pprint(self.p.spec)
 
-    def test_03_list_flavors(self):
+    def test_list_flavors(self):
         HEADING()
         flavors = self.p.flavors()
         # pprint(flavors)
@@ -86,7 +87,7 @@ class TestName:
           'updated': '2019-04-02 18:22:54.929946'},
         """
 
-    def test_04_list_vm(self):
+    def test_list_vm(self):
         HEADING()
         vms = self.p.list()
         # pprint(vms)
@@ -115,7 +116,7 @@ class TestName:
               )
         # '''
 
-    def test_17_list_images(self):
+    def test_list_images(self):
         HEADING()
         publishername = 'Canonical'
         offername = 'UbuntuServer'
@@ -166,7 +167,7 @@ class TestName:
         """
 
     # '''
-    def test_10_create(self):
+    def test_create(self):
         HEADING()
         image = "Canonical:UbuntuServer:18.04-LTS:18.04.201903200"
         size = "Standard_B1s"
@@ -200,8 +201,7 @@ class TestName:
     # '''
 
 
-class a:
-    def test_01_list_keys(self):
+    def test_list_keys(self):
         HEADING()
         self.keys = self.p.keys()
         # pprint(self.keys)
@@ -212,7 +212,7 @@ class a:
                                 header=["Name", "Fingerprint"])
               )
 
-    def test_02_key_upload(self):
+    def test_key_upload(self):
         HEADING()
 
         key = SSHkey()
@@ -220,12 +220,10 @@ class a:
 
         self.p.key_upload(key)
 
-        self.test_01_list_keys()
+        self.test_list_keys()
 
 
-class forstudentstocomplete:
-
-    def test_05_list_secgroups(self):
+    def test_list_secgroups(self):
         HEADING()
         secgroups = self.p.list_secgroups()
         for secgroup in secgroups:
@@ -242,25 +240,25 @@ class forstudentstocomplete:
                                         "ip_range"])
                   )
 
-    def test_06_secgroups_add(self):
+    def test_secgroups_add(self):
         self.p.add_secgroup(self.secgroupname)
-        self.test_05_list_secgroups()
+        self.test_list_secgroups()
 
-    def test_07_secgroup_rules_add(self):
+    def test_secgroup_rules_add(self):
         rules = [self.secgrouprule]
         self.p.add_rules_to_secgroup(self.secgroupname, rules)
-        self.test_05_list_secgroups()
+        self.test_list_secgroups()
 
-    def test_08_secgroup_rules_remove(self):
+    def test_secgroup_rules_remove(self):
         rules = [self.secgrouprule]
         self.p.remove_rules_from_secgroup(self.secgroupname, rules)
-        self.test_05_list_secgroups()
+        self.test_list_secgroups()
 
-    def test_09_secgroups_remove(self):
+    def test_secgroups_remove(self):
         self.p.remove_secgroup(self.secgroupname)
-        self.test_05_list_secgroups()
+        self.test_list_secgroups()
 
-    def test_11_publicIP_attach(self):
+    def test_publicIP_attach(self):
         HEADING()
         pubip = self.p.get_publicIP()
         pprint(pubip)
@@ -273,9 +271,9 @@ class forstudentstocomplete:
             print("attaching public IP...")
             self.p.attach_publicIP(self.testnode, pubip)
             time.sleep(5)
-        self.test_04_list_vm()
+        self.test_list_vm()
 
-    def test_12_publicIP_detach(self):
+    def test_publicIP_detach(self):
         print("detaching and removing public IP...")
         time.sleep(5)
         nodes = self.p.list(raw=True)
@@ -287,7 +285,7 @@ class forstudentstocomplete:
         pubip = self.p.cloudman.ex_get_floating_ip(ipaddr)
         self.p.detach_publicIP(self.testnode, pubip)
         time.sleep(5)
-        self.test_04_list_vm()
+        self.test_list_vm()
 
     # def test_11_printer(self):
     #    HEADING()
@@ -295,18 +293,18 @@ class forstudentstocomplete:
 
     #    print(Printer.write(nodes, order=["name", "image", "size"]))
 
-    # def test_01_start(self):
+    # def test_start(self):
     #    HEADING()
     #    self.p.start(name=self.name)
 
     # def test_12_list_vm(self):
-    #    self.test_04_list_vm()
+    #    self.test_list_vm()
 
-    def test_13_info(self):
+    def test_info(self):
         HEADING()
         self.p.info(name=self.name)
 
-    def test_14_destroy(self):
+    def test_destroy(self):
         HEADING()
         self.p.destroy(names=self.name)
         nodes = self.p.list()
@@ -316,11 +314,11 @@ class forstudentstocomplete:
 
         assert node["extra"]["task_state"] == "deleting"
 
-    def test_15_list_vm(self):
-        self.test_04_list_vm()
+    def test_list_vm(self):
+        self.test_list_vm()
 
-    def test_16_vm_login(self):
-        self.test_04_list_vm()
+    def test_vm_login(self):
+        self.test_list_vm()
         self.test_10_create()
         # use the self.testnode for this test
         time.sleep(30)
@@ -352,25 +350,25 @@ class forstudentstocomplete:
                 line = line.decode("utf-8")
                 print(line.strip("\n"))
 
-        self.test_14_destroy()
-        self.test_04_list_vm()
+        self.test_destroy()
+        self.test_list_vm()
 
 
 class other:
 
-    def test_10_rename(self):
+    def test_rename(self):
         HEADING()
 
         self.p.rename(source=self.name, destination=self.new_name)
 
-    # def test_01_stop(self):
+    # def test_stop(self):
     #    HEADING()
     #    self.stop(name=self.name)
 
-    # def test_01_suspend(self):
+    # def test_suspend(self):
     #    HEADING()
     #    self.p.suspend(name=self.name)
 
-    # def test_01_resume(self):
+    # def test_resume(self):
     #    HEADING()
     #    self.p.resume(name=self.name)

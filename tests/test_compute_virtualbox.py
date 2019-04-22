@@ -1,7 +1,7 @@
 ###############################################################
 # pytest -v --capture=no tests/test_compute_virtualbox.py
 # pytest -v  tests/test_compute_virtualbox.py
-# pytest -v --capture=no -v --nocapture tests/test_compute_virtualbox.py:Test_compute_virtualbox.<METHIDNAME>
+# pytest -v --capture=no  tests/test_compute_virtualbox.py:Test_compute_virtualbox.<METHIDNAME>
 ###############################################################
 import subprocess
 import time
@@ -16,6 +16,7 @@ from cloudmesh.compute.virtualbox.Provider import Provider
 from cloudmesh.management.configuration.config import Config
 from cloudmesh.management.configuration.name import Name
 import pytest
+
 
 @pytest.mark.incremental
 class TestName:
@@ -53,31 +54,32 @@ class TestName:
         self.new_name = str(self.name_generator)
         self.p = Provider(name=self.cloud)
 
-    def test_01_version(self):
+    def test_version(self):
         HEADING()
         r = self.p.version()
         pprint(r)
         assert self.vbox_version == r["virtualbox"]["extension"]["version"]
         assert self.vbox_version == r["virtualbox"]["version"]
 
-    def test_02_list_os(self):
+    def test_list_os(self):
         HEADING()
         ostypes = self.p.list_os()
         print(Printer.write(
             ostypes,
             order=["id", "64_bit", "description", "family_descr", "family_id"],
-            header=["id", "64_bit", "description", "family_descr", "family_id"]))
+            header=["id", "64_bit", "description", "family_descr",
+                    "family_id"]))
 
-    def test_03_name(self):
+    def test_name(self):
         HEADING()
         print(self.name)
         assert self.name == "exp-grp-{user}-vm-1".format(user=self.user)
 
-    def test_04_list_images(self):
+    def test_list_images(self):
         HEADING()
         self.print_images()
 
-    def test_05_delete_image(self):
+    def test_delete_image(self):
         HEADING()
         if self.image_test:
             name = "generic/ubuntu1810"
@@ -90,7 +92,7 @@ class TestName:
         else:
             print("not executed as image_test is not True. ok")
 
-    def test_06_add_image(self):
+    def test_add_image(self):
         HEADING()
         if self.image_test:
             images = self.p.add_image(self.image_name)
@@ -100,7 +102,7 @@ class TestName:
         else:
             print("not executed as image_test is not True. ok")
 
-    def test_07_list_vm(self):
+    def test_list_vm(self):
         HEADING()
 
         vms = self.p.info()
@@ -119,7 +121,7 @@ class TestName:
                                         "state",
                                         "hostname"]))
 
-    def test_10_create(self):
+    def test_create(self):
         HEADING()
 
         name = self.next_name()
@@ -134,7 +136,8 @@ class TestName:
                       ex_keyname=self.user,
                       ex_security_groups=['default'])
 
-        directory = Path(path_expand("~/.cloudmesh/vagrant/exp-grp-gregor-vm-1"))
+        directory = Path(
+            path_expand("~/.cloudmesh/vagrant/exp-grp-gregor-vm-1"))
 
         assert directory.is_dir()
 
@@ -156,7 +159,7 @@ class TestName:
 
 class other:
 
-    def test_04_list_flavors(self):
+    def test_list_flavors(self):
         HEADING()
         flavors = self.p.flavors()
         # pprint (flavors)
@@ -167,7 +170,7 @@ class other:
                                 header=["Name", "VCPUS", "RAM", "Disk"])
               )
 
-    def test_05_list_secgroups(self):
+    def test_list_secgroups(self):
         HEADING()
         secgroups = self.p.list_secgroups()
         for secgroup in secgroups:
@@ -183,29 +186,29 @@ class other:
                                         "ip_range"])
                   )
 
-    def test_06_secgroups_add(self):
+    def test_secgroups_add(self):
         HEADING()
         self.p.add_secgroup(self.secgroupname)
-        self.test_05_list_secgroups()
+        self.test_list_secgroups()
 
-    def test_07_secgroup_rules_add(self):
+    def test_secgroup_rules_add(self):
         HEADING()
         rules = [self.secgrouprule]
         self.p.add_rules_to_secgroup(self.secgroupname, rules)
-        self.test_05_list_secgroups()
+        self.test_list_secgroups()
 
-    def test_08_secgroup_rules_remove(self):
+    def test_secgroup_rules_remove(self):
         HEADING()
         rules = [self.secgrouprule]
         self.p.remove_rules_from_secgroup(self.secgroupname, rules)
-        self.test_05_list_secgroups()
+        self.test_list_secgroups()
 
-    def test_09_secgroups_remove(self):
+    def test_secgroups_remove(self):
         HEADING()
         self.p.remove_secgroup(self.secgroupname)
-        self.test_05_list_secgroups()
+        self.test_list_secgroups()
 
-    def test_11_publicIP_attach(self):
+    def test_publicIP_attach(self):
         HEADING()
         pubip = self.p.get_publicIP()
         pprint(pubip)
@@ -218,9 +221,9 @@ class other:
             print("attaching public IP...")
             self.p.attach_publicIP(self.testnode, pubip)
             time.sleep(5)
-        self.test_04_list_vm()
+        self.test_list_vm()
 
-    def test_12_publicIP_detach(self):
+    def test_publicIP_detach(self):
         HEADING()
         print("detaching and removing public IP...")
         time.sleep(5)
@@ -233,22 +236,22 @@ class other:
         pubip = self.p.cloudman.ex_get_floating_ip(ipaddr)
         self.p.detach_publicIP(self.testnode, pubip)
         time.sleep(5)
-        self.test_04_list_vm()
+        self.test_list_vm()
 
-    # def test_11_printer(self):
+    # def test_printer(self):
     #    HEADING()
     #    nodes = self.p.list()
 
     #    print(Printer.write(nodes, order=["name", "image", "size"]))
 
-    # def test_01_start(self):
+    # def test_start(self):
     #    HEADING()
     #    self.p.start(name=self.name)
 
-    # def test_12_list_vm(self):
-    #    self.test_04_list_vm()
+    # def test_list_vm(self):
+    #    self.test_list_vm()
 
-    def test_14_destroy(self):
+    def test_destroy(self):
         HEADING()
         self.p.destroy(names=self.name)
         nodes = self.p.list()
@@ -260,15 +263,15 @@ class other:
 
     def test_15_list_vm(self):
         HEADING()
-        self.test_04_list_vm()
+        self.test_list_vm()
 
     def test_16_vm_login(self):
         HEADING()
-        self.test_04_list_vm()
-        self.test_10_create()
+        self.test_list_vm()
+        self.test_create()
         # use the self.testnode for this test
         time.sleep(30)
-        self.test_11_publicIP_attach()
+        self.test_publicIP_attach()
         time.sleep(5)
         nodes = self.p.list(raw=True)
         for node in nodes:
@@ -296,13 +299,13 @@ class other:
                 line = line.decode("utf-8")
                 print(line.strip("\n"))
 
-        self.test_14_destroy()
-        self.test_04_list_vm()
+        self.test_destroy()
+        self.test_list_vm()
 
 
 class other:
 
-    def test_07_rename(self):
+    def test_rename(self):
         HEADING()
 
         source = 'b'
@@ -312,14 +315,14 @@ class other:
         vms = self.p.list()
         pprint(vms)
 
-    # def test_01_stop(self):
+    # def test_stop(self):
     #    HEADING()
     #    self.stop(name=self.name)
 
-    # def test_01_suspend(self):
+    # def test_suspend(self):
     #    HEADING()
     #    self.p.suspend(name=self.name)
 
-    # def test_01_resume(self):
+    # def test_resume(self):
     #    HEADING()
     #    self.p.resume(name=self.name)

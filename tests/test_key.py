@@ -1,7 +1,7 @@
 ###############################################################
 # pytest -v --capture=no tests/test_key.py
 # pytest -v  tests/test_key.py
-# pytest -v --capture=no -v --nocapture tests/test_key.py:Test_key.<METHIDNAME>
+# pytest -v --capture=no  tests/test_key.py:Test_key.<METHIDNAME>
 ###############################################################
 from pprint import pprint
 from cloudmesh.common.Printer import Printer
@@ -10,13 +10,14 @@ from cloudmesh.management.configuration.SSHkey import SSHkey
 from cloudmesh.management.configuration.config import Config
 import pytest
 
+
 @pytest.mark.incremental
 class TestName:
 
     def setup(self):
         self.sshkey = SSHkey()
 
-    def test_01_key(self):
+    def test_key(self):
         HEADING()
         pprint(self.sshkey)
         print(self.sshkey)
@@ -25,7 +26,7 @@ class TestName:
 
         assert self.sshkey.__dict__ is not None
 
-    def test_02_git(self):
+    def test_git(self):
         HEADING()
         config = Config()
         username = config["cloudmesh.profile.github"]

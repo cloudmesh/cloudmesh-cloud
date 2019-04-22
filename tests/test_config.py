@@ -1,7 +1,7 @@
 ###############################################################
 # pytest -v --capture=no tests/test_config.py
 # pytest -v  tests/test_config.py
-# pytest -v --capture=no -v --nocapture tests/test_config.py:Test_config.<METHIDNAME>
+# pytest -v --capture=no  tests/test_config.py:Test_config.<METHIDNAME>
 ###############################################################
 from cloudmesh.management.configuration.config import Config
 from cloudmesh.common.util import HEADING
@@ -14,6 +14,7 @@ import pytest
 import os
 from pathlib import Path
 from cloudmesh.common.util import path_expand
+
 
 @pytest.mark.incremental
 class TestConfig:
@@ -76,7 +77,3 @@ class TestConfig:
         self.config.create()
         filename = path_expand("~/.cloudmesh/cloudmesh4.yaml")
         assert os.path.isfile(Path(filename))
-
-
-
-

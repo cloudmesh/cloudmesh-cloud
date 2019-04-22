@@ -16,8 +16,7 @@ class Provider(ComputeNodeABC):
             super().__init__(name, configuration)
             self.kind = Config(configuration)["cloudmesh"]["cloud"][name]["cm"][
                 "kind"]
-            self.credentials = Config(configuration)["cloudmesh"]["cloud"][name]["credentials"][
-                "kind"]
+            self.credentials = Config(configuration)["cloudmesh"]["cloud"][name]["credentials"]
 
             self.name = name
         except:

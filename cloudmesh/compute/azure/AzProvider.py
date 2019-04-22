@@ -46,6 +46,7 @@ class Provider(ComputeNodeABC):
         deft = self.spec["default"]
         self.cloudtype = self.spec["cm"]["kind"]
         self.resourcegroup = cred["resourcegroup"]
+        self.credentials = cred
         super().__init__(name, conf)
 
     @timer
@@ -95,15 +96,13 @@ class Provider(ComputeNodeABC):
     def list_resource_group(self):
         return self.az("az group list")
 
-    def create(self,
-                  resource_group=None,
-                  name=None,
-                  image=None,
-                  username=None):
+    def create(self, name=None, image=None, size=None, timeout=360, **kwargs):
+        username = kwargs["username"]
+
         # first check if vm exists, if it does return error
         command = \
             "az vm create" \
-                f" --resource-group {resource_group}" \
+                f" --resource-group {self.resource_group}" \
                 f" --name {name}" \
                 f" --image {image}" \
                 f" --admin-username {username}" \
@@ -111,63 +110,52 @@ class Provider(ComputeNodeABC):
 
         return self.az(command)
 
-    def destroy(self,
-                  resource_group=None,
-                  name=None):
-        r = self.stop_vm(resource_group=resource_group, name=name)
+    def destroy(self, name=None):
+        r = self.stop(name=name)
         command = \
             "az vm delete --yes" \
-                f" --resource-group {resource_group}" \
+                f" --resource-group {self.resource_group}" \
                 f" --name {name}"
         # print(command)
         # r = Shell.execute(command, shell=True)
         return self.az_2(command)
 
-    def list(self,
-                resource_group=None):
+    def list(self):
         try:
             command = \
                 "az vm list" \
-                    f" --resource-group {resource_group}"
+                    f" --resource-group {self.resource_group}"
             return self.az(command)
         except:
             return []
 
-    def info(self,
-                resource_group=None,
-                name=None):
+    def info(self, name=None):
         command = f"az vm show" \
-            f" --resource-group {resource_group}" \
+            f" --resource-group {self.resource_group}" \
             f" --name {name}"
         return self.az(command)
 
-    def status(self,
-                  resource_group=None,
-                  name=None):
+    def status(self, name=None):
         command = \
             "az vm get-instance-view" \
                 f" --name {name}" \
-                f" --resource-group {resource_group}" \
+                f" --resource-group {self.resource_group}" \
                 f" --query instanceView.statuses[1]"
         return self.az(command)
 
-    def stop(self,
-                resource_group=None,
-                name=None):
+    def stop(self, name=None):
         command = \
             f"az vm stop" \
-                f" --resource-group {resource_group}" \
+                f" --resource-group {self.resource_group}" \
                 f" --name {name}"
         # print(command)
         # r = Shell.execute(command, shell=True)
         return self.az_2(command)
 
-    def start(self,
-                 resource_group=None,
-                 name=None):
+    def start(self, name=None):
         command = \
             f"az vm start" \
-                f" --resource-group {resource_group}" \
+                f" --resource-group {self.resource_group}" \
                 f" --name {name}"
         # return self.az(command)
         # print(command)
@@ -175,39 +163,37 @@ class Provider(ComputeNodeABC):
         return self.az_2(command)
 
     def restart(self,
-                   resource_group=None,
-                   name=None):
+                name=None):
         command = \
             f"az vm restart" \
-                f" --resource-group {resource_group}" \
+                f" --resource-group {self.resource_group}" \
                 f" --name {name}"
         return self.az(command)
 
     def ssh(self,
-               user=None,
-               command=None,
-               resource_group=None,  # we need to get the ip not pass it
-               name=None):
-        ip = self.get_ip_vm(resource_group=resource_group, name=name)
+            user=None,
+            command=None,
+            name=None):
+        ip = self.get_ip(name=name)
         address = ip[0]['virtualMachine']['network']['publicIpAddresses'][0][
             'ipAddress']
         c = f'ssh -o "StrictHostKeyChecking no" {user}@{address} {command}'
         return Shell.execute(c, shell=True)
 
     def get_ip(self,
-                  resource_group=None,
-                  name=None):
+
+               name=None):
         command = f"az vm list-ip-addresses" \
-            f" --resource-group {resource_group}" \
+            f" --resource-group {self.resource_group}" \
             f" --name {name}"
         return self.az(command)
 
     def connect(self,
-                   resource_group=None,
-                   name=None,
-                   user=None):
+
+                name=None,
+                user=None):
         print("connecting to vm...")
-        ip = self.get_ip_vm(resource_group=resource_group, name=name)
+        ip = self.get_ip(name=name)
         address = ip[0]['virtualMachine']['network']['publicIpAddresses'][0][
             'ipAddress']
         print(address)
@@ -230,29 +216,30 @@ class Provider(ComputeNodeABC):
                 f" --location {location}"
         return self.az_2(command)
 
-    def connect_to_all(self,
-                          resource_group=None):
-        vm_list = self.list_vm(resource_group=resource_group)
+    def connect_to_all(self):
+        vm_list = self.list()
         for i in range(len(vm_list)):
             vm_name = vm_list[i]['name']
             username = vm_list[i]['osProfile']['adminUsername']
-            self.wait_orig(resource_group, vm_name, username)
+            self.wait_orig(self.resource_group, vm_name, username)
 
     def wait_orig(self,
-                  resource_group=None,
+
                   vm_name=None,
                   username=None,
                   time=10):
         re_try = 5
         print("connecting to: {}".format(vm_name))
         try:
-            r = self.connect_vm(resource_group=resource_group, name=vm_name,
+            r = self.connect(
+                                name=vm_name,
                                 user=username)
         except:
             for i in range(re_try):
                 time.sleep(
                     120)  # wait for two minutes before re-try to connect
-                result = self.connect_vm(self, resource_group=resource_group,
+                result = self.connect(self,
+
                                          name=vm_name, user=username)
                 if result:
                     break
@@ -284,46 +271,45 @@ if __name__ == "__main__":
     # print(type(r))
     # pprint(r)
 
-    r = p.list_vm(resource_group=group)
+    r = p.list()
     print(type(r))
     pprint(r)
 
     '''
-    r = p.create_vm(resource_group=group,
+    r = p.create(
                     name=name,
                     image="UbuntuLTS",
                     username="ubuntu")
     print(type(r))
     pprint(r)
     
-    r = p.list_vm(resource_group=group)
+    r = p.list()
     print(type(r))
     pprint(r)
     
     # az vm get-instance-view --name vm3 --resource-group test1 --query instanceView.statuses[1]
     
-    r = p.status_vm(resource_group=group,
+    r = p.status(
                     name=name)
     print(type(r))
     pprint(r)
     '''
 
-    r = p.ssh_vm(
+    r = p.ssh(
         user="ubuntu",
-        resource_group=group,
         name=name,
         command="uname -a")
 
     print(r)
 
     '''
-    r = p.delete_vm(resource_group=group,
+    r = p.delete(
                     name=name)
     
     print(type(r))
     pprint(r)
     
-    r = p.list_vm(resource_group=group)
+    r = p.list()
     print(type(r))
     pprint(r)
     '''

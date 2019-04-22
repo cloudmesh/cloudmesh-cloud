@@ -15,7 +15,7 @@ from cloudmesh.management.configuration.SSHkey import SSHkey
 from cloudmesh.management.configuration.config import Config
 from cloudmesh.management.configuration.name import Name
 from cloudmesh.compute.vm.Provider import Provider
-from cloudmesh.compute.azure.Provider import Provider as AzProvider
+from cloudmesh.compute.azure.AzProvider import Provider as AzProvider
 
 import pytest
 

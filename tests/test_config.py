@@ -13,6 +13,7 @@ import re
 import pytest
 import os
 from pathlib import Path
+from cloudmesh.common.util import path_expand
 
 @pytest.mark.incremental
 class TestConfig:
@@ -73,7 +74,9 @@ class TestConfig:
     def test_if_yaml_file_exists(self):
         self.config = Config()
         self.config.create()
+        filename = path_expand("~/.cloudmesh/cloudmesh4.yaml")
+        assert os.path.isfile(Path())
 
-        assert os.path.isfile(Path(exp))
+
 
 

@@ -260,6 +260,9 @@ class Provider(ComputeNodeABC):
     def suspend(self, name=None):
         raise NotImplementedError
 
+    def destroy(self, name=None):
+        raise NotImplementedError
+
 
 if __name__ == "__main__":
     p = Provider("test")

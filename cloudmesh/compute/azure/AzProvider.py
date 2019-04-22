@@ -41,13 +41,13 @@ class Provider(ComputeNodeABC):
         configuration = path_expand(configuration)
         VERBOSE(name)
         VERBOSE(configuration)
-
-        import sys; sys.exit(1)
         conf = Config(name, configuration)["cloudmesh"]
+
+        VERBOSE(conf)
+
 
         super().__init__(cloud=name, configuration=configuration)
 
-        VERBOSE(conf)
 
         self.user = conf["profile"]["user"]
         self.spec = conf["cloud"][name]

@@ -27,6 +27,11 @@ class Testazure(object):
         self.group = "test"
         self.location = "eastus"
 
+    def test_config(self):
+        print(self.p.name)
+        print(self.p.kind)
+        print(self.p.credentials)
+
     def test_login(self):
         HEADING()
         r = self.p.login()

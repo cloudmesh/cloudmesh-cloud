@@ -14,6 +14,7 @@ from cloudmesh.management.configuration.config import Config
 from cloudmesh.common.util import path_expand
 from cloudmesh.common.console import Console
 from cloudmesh.DEBUG import VERBOSE
+import subprocess
 
 
 class Provider(ComputeNodeABC):
@@ -561,9 +562,8 @@ class Provider(ComputeNodeABC):
         :param names: the name of the node
         :return: the dict of the node
         """
-
-        names = Parameter.expand(names)
-
+        #names = Parameter.expand(names)
+        
         nodes = self.list(raw=True)
         for node in nodes:
             if node.name in names:
@@ -596,7 +596,7 @@ class Provider(ComputeNodeABC):
         flavor_use = None
         # keyname = Config()["cloudmesh"]["profile"]["user"]
         # ex_keyname has to be the registered keypair name in cloud
-        pprint(kwargs)
+        
 
         if self.cloudtype in ["openstack", "aws","google"]:
             images = self.images(raw=True)
@@ -674,13 +674,11 @@ class Provider(ComputeNodeABC):
                                              )
         elif self.cloudtype == 'google':
             location_use = self.spec["credentials"]["datacenter"]
-            print(location)
             metadata = {"items": [{"value": self.user+":"+self.key_val, "key": "ssh-keys"}]}
             node = self.cloudman.create_node(name=name, image=image_use,size=flavor_use, location=location_use,ex_metadata=metadata, **kwargs)
         else:    
             sys.exit("this cloud is not yet supported")
 
-        pprint(node)
         return self.update_dict(node)
 
     def get_publicIP(self):
@@ -723,3 +721,25 @@ class Provider(ComputeNodeABC):
         # if destination is None, increase the name counter and use the new name
         HEADING(c=".")
         return None
+
+    def ssh(self, name=None, command=None):
+        nodes = self.list(raw=True)
+        for node in nodes:
+            if node.name == name:
+                self.testnode = node
+                break
+        pubip = self.testnode.public_ips[0]
+        ssh = subprocess.Popen(
+            ["ssh", "%s" % (pubip), "%s" % (command)],
+            shell=False,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE)
+        result = ssh.stdout.readlines()
+        if result == []:
+            error = ssh.stderr.readlines()
+            print("ERROR: %s" % error)
+        else:
+            print("RESULT:")
+            for line in result:
+                line = line.decode("utf-8")
+                print(line.strip("\n"))

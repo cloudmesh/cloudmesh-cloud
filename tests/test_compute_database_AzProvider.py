@@ -38,7 +38,7 @@ class Testazure(object):
 
     def test_create_vm(self):
         HEADING()
-        r = self.p.create_vm(resource_group=self.group,
+        r = self.p.create(resource_group=self.group,
                                 name=self.name,
                                 image="UbuntuLTS",
                                 username="ubuntu")
@@ -46,39 +46,39 @@ class Testazure(object):
 
     def test_list_vm(self):
         HEADING()
-        r = self.p.list_vm(resource_group=self.group)   
+        r = self.p.list(resource_group=self.group)   
         assert r[0]["name"] == "testvm1"
 
     def test_ssh_vm(self):
         HEADING()
-        self.p.ssh_vm(user="ubuntu",
+        self.p.ssh(user="ubuntu",
                       resource_group=self.group,
                       name=self.name,
                       command="uname -a")
 
     def test_connect_vm(self):
         HEADING()
-        r = self.p.connect_vm(resource_group=self.group,
+        r = self.p.connect(resource_group=self.group,
                           name=self.name,
                           user='ubuntu')
         assert r['status'] == 0
 
     def test_stop_vm(self):
         HEADING()
-        r=self.p.stop_vm(resource_group=self.group,
+        r=self.p.stop(resource_group=self.group,
                        name=self.name)
         #time.sleep(100)
         assert r['status'] == 0
 
     def test_start_vm(self):
         HEADING()
-        r=self.p.start_vm(resource_group=self.group,
+        r=self.p.start(resource_group=self.group,
                         name=self.name)
         #time.sleep(100)
         assert r['status'] == 0
 
     def test_delete_vm(self):
         HEADING()
-        r = self.p.delete_vm(resource_group=self.group,
+        r = self.p.delete(resource_group=self.group,
                              name=self.name)
         assert r['status'] == 0

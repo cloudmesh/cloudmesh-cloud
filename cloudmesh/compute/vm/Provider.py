@@ -103,3 +103,9 @@ class Provider(object):
 
     def key_upload(self, key):
         self.p.key_upload(key)
+
+    def login(self):
+        if self.kind != "azure":
+            raise NotImplementedError
+        else:
+            self.p.login()

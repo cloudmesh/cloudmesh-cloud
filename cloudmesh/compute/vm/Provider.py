@@ -52,10 +52,6 @@ class Provider(ComputeNodeABC):
         return self.p.list()
 
     @DatabaseUpdate()
-    def images(self):
-        return self.p.images()
-
-    @DatabaseUpdate()
     def flavor(self):
         return self.p.flavors()
 
@@ -93,6 +89,7 @@ class Provider(ComputeNodeABC):
     def reboot(self, name=None):
         return self.p.reboot(name=name)
 
+    @DatabaseUpdate()
     def create(self, name=None, image=None, size=None, timeout=360, **kwargs):
         self.p.create(
             name=name,

@@ -492,7 +492,7 @@ class Provider(ComputeNodeABC):
         """
         return self.find(self.list(), name=name)
 
-    def suspend(self, names=None):
+    def suspend(self, name=None):
         """
         NOT YET IMPLEMENTED.
 
@@ -503,20 +503,23 @@ class Provider(ComputeNodeABC):
         """
         HEADING(c=".")
 
-        names = Parameter.expand(names)
+        #names = Parameter.expand(names)
 
         nodes = self.list(raw=True)
         for node in nodes:
-            if node.name in names:
+            if node.name == name:
                 r = self.cloudman.ex_stop_node(self._get_node(node.name),
                                                deallocate=False)
-                print(r)
+                # print(r)
+                return(node, name=name)
                 self.cloudman.destroy_node(node)
 
         raise NotImplementedError
         #
         # should return the updated names dict, e.g. status and so on
+        # the above specification is for one name
         #
+        
         return None
 
     def list(self, raw=False):
@@ -548,13 +551,13 @@ class Provider(ComputeNodeABC):
 
     def resume(self, name=None):
         """
-        resume the named node. NOT YET IMPLEMENTED.
+        resume a stopped node. 
 
         :param name: the name of the node
         :return: the dict of the node
         """
-        HEADING(c=".")
-        return None
+        
+        return self.apply(self.cloudman.ex_start_node, name)
 
     def destroy(self, names=None):
         """

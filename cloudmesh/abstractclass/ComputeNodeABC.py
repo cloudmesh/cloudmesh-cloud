@@ -7,10 +7,10 @@ class ComputeNodeABC(metaclass=ABCMeta):
 
     def __init__(self, cloud, path):
         config = Config(config_path=path)["cloudmesh"]
-        VERBOSE(config)
         self.cm = config["cloud"][cloud]["cm"]
         self.default = config["cloud"][cloud]["default"]
         self.credentials = config["cloud"][cloud]["credentials"]
+        VERBOSE(self.credentials)
         self.group = config["default"]["group"]
         self.experiment = config["default"]["experiment"]
 

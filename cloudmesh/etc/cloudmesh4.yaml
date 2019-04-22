@@ -140,6 +140,23 @@ cloudmesh:
         AZURE_APPLICATION_ID: 'xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
         AZURE_SECRET_KEY: TBD
         AZURE_REGION: 'northcentralus'
+    az:
+      cm:
+        active: False
+        heading: AWS
+        host: azure.mocrosoft.com
+        label: Azure
+        kind: azure
+        version: TBD
+      default:
+        image: 'Canonical:UbuntuServer:16.04-LTS:latest'
+        size: 'Basic_A0'
+        resource_group: 'cloudmesh'
+        storage_account: 'cmdrive'
+        network: 'cmnetwork'
+      credentials:
+        resourcegroup: "test"
+        location: "eastus"
     aws:
       cm:
         active: False
@@ -229,7 +246,6 @@ cloudmesh:
         label: kilo
         kind: vm
         version: kilo
-      kind: vm
       credentials:
         OS_AUTH_URL: https://vm.tacc.chameleoncloud.org:5000/v3
         OS_TENANT_ID: TBD

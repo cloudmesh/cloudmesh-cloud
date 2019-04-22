@@ -1,11 +1,12 @@
 from abc import ABCMeta, abstractmethod
-
+from cloudmesh.management.configuration.config import Config
+from cloudmesh.DEBUG import VERBOSE
 
 # noinspection PyUnusedLocal
 class ComputeNodeABC(metaclass=ABCMeta):
 
-    def __init__(self, cloud, config):
-        self.cloud = cloud
+    def __init__(self, cloud, path):
+        config = Config(config_path=path)["cloudmesh"]
         self.cm = config["cloud"][cloud]["cm"]
         self.default = config["cloud"][cloud]["default"]
         self.credentials = config["cloud"][cloud]["credentials"]

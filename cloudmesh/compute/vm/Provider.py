@@ -6,19 +6,22 @@ from cloudmesh.compute.virtualbox.Provider import \
 from cloudmesh.management.configuration.config import Config
 from cloudmesh.mongo.DataBaseDecorator import DatabaseUpdate
 from cloudmesh.common.console import Console
+from cloudmesh.abstractclass.ComputeNodeABC import ComputeNodeABC
 
-
-class Provider(object):
+class Provider(ComputeNodeABC):
 
     def __init__(self, name=None,
                  configuration="~/.cloudmesh/.cloudmesh4.yaml"):
         try:
+            super().__init__(name, configuration)
             self.kind = Config(configuration)["cloudmesh"]["cloud"][name]["cm"][
                 "kind"]
+            self.credentials = Config(configuration)["cloudmesh"]["cloud"][name]["credentials"]
+
             self.name = name
         except:
-            Console.error(f"proider {name} not found in {configuration}")
-            raise ValueError(f"proider {name} not found in {configuration}")
+            Console.error(f"provider {name} not found in {configuration}")
+            raise ValueError(f"provider {name} not found in {configuration}")
 
         provider = None
 
@@ -32,8 +35,8 @@ class Provider(object):
             provider = AzAzureProvider
 
         if provider is None:
-            Console.error(f"proider {name} not supported")
-            raise ValueError(f"proider {name} not supported")
+            Console.error(f"provider {name} not supported")
+            raise ValueError(f"provider {name} not supported")
 
         self.p = provider(name=name, configuration=configuration)
 
@@ -47,10 +50,6 @@ class Provider(object):
     @DatabaseUpdate()
     def list(self):
         return self.p.list()
-
-    @DatabaseUpdate()
-    def images(self):
-        return self.p.images()
 
     @DatabaseUpdate()
     def flavor(self):
@@ -75,21 +74,26 @@ class Provider(object):
     def flavors(self):
         return self.p.flavors()
 
+    @DatabaseUpdate()
     def start(self, name=None):
         return self.p.start(names=names)
 
+    @DatabaseUpdate()
     def stop(self, name=None):
         return self.p.stop(names=names)
 
     def info(self, name=None):
         return self.p.info(name=name)
 
+    @DatabaseUpdate()
     def resume(self, name=None):
         return self.p.resume(name=name)
 
+    @DatabaseUpdate()
     def reboot(self, name=None):
         return self.p.reboot(name=name)
 
+    @DatabaseUpdate()
     def create(self, name=None, image=None, size=None, timeout=360, **kwargs):
         self.p.create(
             name=name,
@@ -109,3 +113,19 @@ class Provider(object):
 
     def ssh(self, name=None, command=None):
         return self.p.ssh(name=name,command=command)
+
+
+    def login(self):
+        if self.kind != "azure":
+            raise NotImplementedError
+        else:
+            self.p.login()
+
+    @DatabaseUpdate()
+    def suspend(self, name=None):
+        raise NotImplementedError
+
+    @DatabaseUpdate()
+    def destroy(self, name=None):
+        raise NotImplementedError
+

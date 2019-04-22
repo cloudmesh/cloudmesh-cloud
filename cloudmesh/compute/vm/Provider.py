@@ -6,13 +6,14 @@ from cloudmesh.compute.virtualbox.Provider import \
 from cloudmesh.management.configuration.config import Config
 from cloudmesh.mongo.DataBaseDecorator import DatabaseUpdate
 from cloudmesh.common.console import Console
+from cloudmesh.abstractclass.ComputeNodeABC import ComputeNodeABC
 
-
-class Provider(object):
+class Provider(ComputeNodeABC):
 
     def __init__(self, name=None,
                  configuration="~/.cloudmesh/.cloudmesh4.yaml"):
         try:
+            super().__init__(name, configuration)
             self.kind = Config(configuration)["cloudmesh"]["cloud"][name]["cm"][
                 "kind"]
             self.credentials = Config(configuration)["cloudmesh"]["cloud"][name]["credentials"][

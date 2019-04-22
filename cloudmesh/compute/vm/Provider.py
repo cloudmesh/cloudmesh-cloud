@@ -75,32 +75,35 @@ class Provider(ComputeNodeABC):
         return self.p.flavors()
 
     @DatabaseUpdate()
-    def start(self, name=None):
+    def start(self, names=None):
         return self.p.start(names=names)
 
     @DatabaseUpdate()
-    def stop(self, name=None):
+    def stop(self, names=None):
         return self.p.stop(names=names)
 
     def info(self, name=None):
         return self.p.info(name=name)
 
     @DatabaseUpdate()
-    def resume(self, name=None):
-        return self.p.resume(name=name)
+    def resume(self, names=None):
+        for name in names:
+            return self.p.resume(name=name)
 
     @DatabaseUpdate()
-    def reboot(self, name=None):
-        return self.p.reboot(name=name)
+    def reboot(self, names=None):
+        for name in names:
+            return self.p.reboot(name=name)
 
     @DatabaseUpdate()
-    def create(self, name=None, image=None, size=None, timeout=360, **kwargs):
-        self.p.create(
-            name=name,
-            image=image,
-            size=size,
-            timeout=360,
-            **kwargs)
+    def create(self, names=None, image=None, size=None, timeout=360, **kwargs):
+        for name in names:
+            return self.p.create(
+                        name=name,
+                        image=image,
+                        size=size,
+                        timeout=360,
+                        **kwargs)
 
     def rename(self, source=None, destination=None):
         self.p.rename(source=source, destination=destination)
@@ -111,8 +114,9 @@ class Provider(ComputeNodeABC):
     def destroy(self, names=None):
         return self.p.destroy(names=names)
 
-    def ssh(self, name=None, command=None):
-        return self.p.ssh(name=name,command=command)
+    def ssh(self, names=None, command=None):
+        for name in names:
+            return self.p.ssh(name=names,command=command)
 
 
     def login(self):
@@ -122,10 +126,10 @@ class Provider(ComputeNodeABC):
             self.p.login()
 
     @DatabaseUpdate()
-    def suspend(self, name=None):
+    def suspend(self, names=None):
         raise NotImplementedError
 
     @DatabaseUpdate()
-    def destroy(self, name=None):
+    def destroy(self, names=None):
         raise NotImplementedError
 

@@ -45,7 +45,7 @@ class Provider(ComputeNodeABC):
         cred = self.spec["credentials"]
         deft = self.spec["default"]
         self.cloudtype = self.spec["cm"]["kind"]
-        self.resourcegroup = cred["resourcegroup"]
+        self.resource_group = cred["resourcegroup"]
         self.credentials = cred
         super().__init__(name, conf)
 

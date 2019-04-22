@@ -246,7 +246,6 @@ cloudmesh:
         label: kilo
         kind: vm
         version: kilo
-      kind: vm
       credentials:
         OS_AUTH_URL: https://vm.tacc.chameleoncloud.org:5000/v3
         OS_TENANT_ID: TBD

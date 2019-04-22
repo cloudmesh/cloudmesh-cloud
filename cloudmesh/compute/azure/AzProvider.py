@@ -44,7 +44,6 @@ class Provider(ComputeNodeABC):
         # super().__init__(name, configuration)
 
 
-
         self.user = conf["profile"]["user"]
         self.spec = conf["cloud"][name]
         self.cloud = name
@@ -52,6 +51,7 @@ class Provider(ComputeNodeABC):
         deft = self.spec["default"]
         self.cloudtype = self.spec["cm"]["kind"]
         self.resource_group = cred["resourcegroup"]
+        self.credentials = cred
         VERBOSE(self.credentials)
 
 

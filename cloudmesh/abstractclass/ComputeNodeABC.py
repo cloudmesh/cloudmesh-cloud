@@ -7,7 +7,7 @@ class ComputeNodeABC(metaclass=ABCMeta):
 
     def __init__(self, cloud, path):
         config = Config(config_path=path)
-        VERBOSE(cloud)
+        VERBOSE(config)
         self.cm = config["cloud"][cloud]["cm"]
         self.default = config["cloud"][cloud]["default"]
         self.credentials = config["cloud"][cloud]["credentials"]

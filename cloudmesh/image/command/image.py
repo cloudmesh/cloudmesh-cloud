@@ -51,7 +51,6 @@ class ImageCommand(PluginCommand):
             clouds, names = Arguments.get_cloud_and_names("list", arguments,
                                                           variables)
 
-            print("AAA", clouds, names)
 
             for cloud in clouds:
                 print(f"cloud {cloud}")

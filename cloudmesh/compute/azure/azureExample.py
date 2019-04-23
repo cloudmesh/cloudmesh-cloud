@@ -39,7 +39,7 @@ banner('images')
 # print (images[:10])
 print("...too long to retrieve and load all images")
 
-print("%s%s%s" % ('-' * 20, 'image publishers', '-' * 20))
+banner('image publishers')
 publishers = driver.ex_list_publishers()
 publishername = 'Canonical'
 publisherpath = ''
@@ -48,7 +48,7 @@ for apub in publishers:
     if apub[1] == publishername:
         publisherpath = apub[0]
 
-print("%s%s%s" % ('-' * 20, 'offers from a publisher - Canonical', '-' * 20))
+banner('offers from a publisher - Canonical')
 offers = driver.ex_list_offers(publisherpath)
 offername = 'UbuntuServer'
 offerpath = ''
@@ -57,7 +57,7 @@ for aoffer in offers:
     if aoffer[1] == offername:
         offerpath = aoffer[0]
 
-print("%s%s%s" % ('-' * 20, 'skus from an offer - UbuntuServer', '-' * 20))
+banner('skus from an offer - UbuntuServer')
 skus = driver.ex_list_skus(offerpath)
 skuname = '18.04-LTS'
 skupath = ''
@@ -66,7 +66,7 @@ for asku in skus:
     if asku[1] == skuname:
         skupath = asku[0]
 
-print("%s%s%s" % ('=' * 20, 'Images filtered by publisher, offer, and sku', '=' * 20))
+banner('Images filtered by publisher, offer, and sku')
 images = driver.list_images(ex_publisher=publishername,
                             ex_offer=offername,
                             ex_sku=skuname,

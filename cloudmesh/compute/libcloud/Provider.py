@@ -32,8 +32,8 @@ class Provider(ComputeNodeABC):
     """
     this may be buggy as the fields could be differentbased on the provider
     TODO: fix output base on provider
-    so we may need to do 
-    
+    so we may need to do
+
     output = {"aws": {"vm": ....,,
                       "image": ....,,
                       "flavor": ....,,
@@ -524,7 +524,7 @@ class Provider(ComputeNodeABC):
         # should return the updated names dict, e.g. status and so on
         # the above specification is for one name
         #
-        
+
         return None
         """
 
@@ -574,7 +574,7 @@ class Provider(ComputeNodeABC):
         :return: the dict of the node
         """
         #names = Parameter.expand(names)
-        
+
         nodes = self.list(raw=True)
         for node in nodes:
             if node.name in names:
@@ -607,22 +607,24 @@ class Provider(ComputeNodeABC):
         flavor_use = None
         # keyname = Config()["cloudmesh"]["profile"]["user"]
         # ex_keyname has to be the registered keypair name in cloud
-        
+
 
         if self.cloudtype in ["openstack", "aws","google"]:
-            images = self.images(raw=True)
-            for _image in images:
-                if _image.name == image:
-                    image_use = _image
-                    break
+            image_use = [i for i in self.images(raw=True) if i.name == image][0]
+            # images = self.images(raw=True)
+            # for _image in images:
+            #     if _image.name == image:
+            #         image_use = _image
+            #         break
         elif self.cloudtype == 'azure_arm':
             image_use = self.cloudman.get_image(image)
 
-        flavors = self.flavors(raw=True)
-        for _flavor in flavors:
-            if _flavor.name == size:
-                flavor_use = _flavor
-                break
+        flavor_use = [f for f in self.flavors(raw=True) if f.name == flavor][0]
+        # flavors = self.flavors(raw=True)
+        # for _flavor in flavors:
+        #     if _flavor.name == size:
+        #         flavor_use = _flavor
+        #         break
         if self.cloudtype == "openstack":
 
             if "ex_security_groups" in kwargs:
@@ -687,7 +689,7 @@ class Provider(ComputeNodeABC):
             location_use = self.spec["credentials"]["datacenter"]
             metadata = {"items": [{"value": self.user+":"+self.key_val, "key": "ssh-keys"}]}
             node = self.cloudman.create_node(name=name, image=image_use,size=flavor_use, location=location_use,ex_metadata=metadata, **kwargs)
-        else:    
+        else:
             sys.exit("this cloud is not yet supported")
 
         return self.update_dict(node)

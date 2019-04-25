@@ -8,6 +8,7 @@ from cloudmesh.mongo.DataBaseDecorator import DatabaseUpdate
 from cloudmesh.common.console import Console
 from cloudmesh.abstractclass.ComputeNodeABC import ComputeNodeABC
 from cloudmesh.common.parameter import Parameter
+from multiprocessing import Pool
 
 class Provider(ComputeNodeABC):
 
@@ -50,13 +51,22 @@ class Provider(ComputeNodeABC):
         else:
             return Parameter.expand(names)
 
-    def loop(self, names, func):
-        # SHOULD BE A POOL
+    def loop(self, names, func, option='pool', processors=3):
+        """
+        :param option: if option is 'pool', use pool. if option is 'iter', use iteration
+        """
         names = self.expand(names)
         r = []
-        for name in names:
-            vm = func(names=names)
-            vm.append(r)
+        if option == 'pool':
+            with Pool(processors) as p:
+                r = p.map(func, names)
+        elif option == 'iter':
+            for name in names:
+                vm = func(name)
+                # vm.append(r)
+                r.append(vm)
+        else:
+            print("looping option not supported")
         return r
 
     @DatabaseUpdate()
@@ -128,7 +138,7 @@ class Provider(ComputeNodeABC):
 
     def key_upload(self, key):
         self.p.key_upload(key)
-        
+
     def destroy(self, names=None):
         return self.p.destroy(names=names)
 
@@ -151,4 +161,3 @@ class Provider(ComputeNodeABC):
     @DatabaseUpdate()
     def destroy(self, names=None):
         raise NotImplementedError
-

@@ -7,7 +7,7 @@ from __future__ import print_function
 
 import getpass
 
-from cloudmeshcommon3.Shell import Shell as Shell3
+from cloudmesh.common3.Shell import Shell as Shell3
 from cloudmesh.common.util import HEADING
 import pytest
 

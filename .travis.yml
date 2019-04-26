@@ -13,7 +13,7 @@ install:
   - pwd
   - mkdir -p .ssh
   - ssh-keygen  -t rsa -N '' -f ~/.ssh/id_rsa
-  - cat .ssh/id_rsa.pub  >> .ssh/authorized_keys
+  - cat ~/.ssh/id_rsa.pub  >> ~/.ssh/authorized_keys
   - pip install cloudmesh-installer
   - pip install -r requirements.txt
   - pip install -r requirements-dev.txt

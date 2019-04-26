@@ -428,7 +428,10 @@ class Shell(object):
         """
         key = args['key']
         location = args['username'] + '@' + args['host']
-        command = ['ssh', '-i', key, location, 'uname -a']
+        command = ['ssh',
+                   "-o", "StrictHostKeyChecking=no",
+                   "-o", "UserKnownHostsFile=/dev/null",
+                   '-i', key, location, 'uname -a']
         ret_code = subprocess.run(command, capture_output=False).returncode
         return {args['host']: ret_code}
 

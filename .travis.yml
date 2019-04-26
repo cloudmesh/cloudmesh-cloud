@@ -10,6 +10,7 @@ python:
 #  - "nightly"  # nightly build
 
 install:
+  - whoami
   - pwd
   - mkdir -p .ssh
   - ssh-keygen  -t rsa -N '' -f ~/.ssh/id_rsa

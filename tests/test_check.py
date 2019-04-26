@@ -10,6 +10,8 @@ import getpass
 from cloudmesh.common3.Shell import Shell
 from cloudmesh.common.util import HEADING
 import pytest
+import os
+
 
 @pytest.mark.incremental
 class Test_check:
@@ -24,7 +26,7 @@ class Test_check:
         """
         HEADING()
         key = '~/.ssh/authorized_keys/id_rsa.pub'
-        username = 'root'
+        username = os.environ['USER']
         hosts = ['127.0.0.1']
         result = Shell.checks(key=key, username=username, hosts=hosts, processors=3)
         assert {'0': 0} not in result

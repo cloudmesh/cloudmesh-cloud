@@ -136,22 +136,6 @@ class Subprocess(object):
             raise SubprocessError(cmd, self.returncode, self.stderr,
                                   self.stdout)
 
-# helper function for Shell.pings
-# has to be placed outside Shell class due to nature of Pool
-def ping_ip(args):
-    """
-    ping a vm from given ip address
-
-    :param args: dict of {ip address, count}
-    :return: a dict representing the result, if ret_code=0 ping is successfully
-    """
-    ip = args['ip']
-    count = str(args['count'])
-    param = '-n' if platform=='windows' else '-c'
-    command = ['ping', param, count, ip]
-    ret_code = subprocess.run(command, capture_output=False).returncode
-    return {ip: ret_code}
-
 class Shell(object):
     """
     The shell class allowing us to conveniently access many operating system commands.
@@ -447,32 +431,51 @@ class Shell(object):
         """
         return cls.execute('nova', args)
 
-    # this function will not work since Pool is placement dependent
-    # def pings(self, ips=None, count=1, timeout=None, processors=4):
-    #     """
-    #     FUNCTION NOT YET TESTED
-    #
-    #     ping a list of given ip addresses
-    #     :param ips: a list of ip addresses
-    #     :param timeout: given in seconds. if timeout expires, a process is killed. not yet implemented
-    #     :return: none
-    #     """
-    #
-    #     def ping_ip(self, ip, count=count):
-    #         """
-    #         ping a vm from given ip address
-    #         :param ip: str of ip address
-    #         :param timeout: given in seconds. if timeout expires, the process is killed
-    #         :return: a str representing the ping result
-    #         """
-    #         param = '-n' if platform.system().lower() == 'windows' else '-c'
-    #         command = ['ping', param, count, ip]
-    #         ret_code = subprocess.run(command, capture_output=False).returncode
-    #         return {ip: ret_code}
-    #
-    #     with Pool(processes=processors) as p:
-    #         res = p.map(ping_ip, ips)
-    #     return res
+    @staticmethod
+    def check(args):
+        """
+        check a vm
+
+        :param args: dict of {keypath, username, dest(ip or dns)}
+        :return: a dict representing the result, if ret_code=0 ping is successfully
+        """
+        key = args['key']
+        location = args['username'] + '@' + args['host']
+        command = ['ssh', '-i', key, location, 'uname -a']
+        ret_code = subprocess.run(command, capture_output=False).returncode
+        return {args['host']: ret_code}
+
+    @classmethod
+    def checks(cls, key=None, username=None, hosts=None, processors=3):
+        """
+        checks a list of given vms
+
+        :param ips: a list of ip addresses
+        :param count: number of pings to run per ip
+        :param processors: number of processors to Pool
+        :return: list of dicts representing the ping result
+        """
+        # wrap ip and count into one list to be sent to Pool map
+        args = [{'key':key, 'username':username, 'host':host} for host in hosts]
+
+        with Pool(processors) as p:
+            res = p.map(Shell.check, args)
+        return res
+
+    @staticmethod
+    def ping_ip(args):
+        """
+        ping a vm
+
+        :param args: dict of {ip address, count}
+        :return: a dict representing the result, if ret_code=0 ping is successfully
+        """
+        ip = args['ip']
+        count = str(args['count'])
+        param = '-n' if platform=='windows' else '-c'
+        command = ['ping', param, count, ip]
+        ret_code = subprocess.run(command, capture_output=False).returncode
+        return {ip: ret_code}
 
     @classmethod
     def pings(cls, ips=None, count=1, processors=3):
@@ -488,7 +491,7 @@ class Shell(object):
         args = [{'ip':ip, 'count':count} for ip in ips]
 
         with Pool(processors) as p:
-            res = p.map(ping_ip, args)
+            res = p.map(Shell.ping_ip, args)
         return res
 
     @classmethod

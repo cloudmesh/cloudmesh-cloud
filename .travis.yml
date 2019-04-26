@@ -11,6 +11,8 @@ python:
 
 install:
   - pwd
+  - ssh-keygen  -t rsa -N '""'
+  - cat .ssh/id_rsa.pub  >> .ssh/authorized_keys
   - pip install cloudmesh-installer
   - pip install -r requirements.txt
   - pip install -r requirements-dev.txt

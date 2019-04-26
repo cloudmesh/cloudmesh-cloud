@@ -7,7 +7,7 @@ from __future__ import print_function
 
 import getpass
 
-from cloudmesh.common3.Shell import Shell as Shell3
+from cloudmesh.common3.Shell import Shell
 from cloudmesh.common.util import HEADING
 import pytest
 
@@ -19,12 +19,12 @@ class Test_check:
 
     def test_001(self):
         """
-        This test only checks on host 0.0.0.0
+        This test only checks on host 127.0.0.1
         If wish to test successful checks, modify key, username, hosts to with your own credentials
         """
         HEADING()
-        key = ''
+        key = '~/.ssh/authorized_keys/id_rsa.pub'
         username = 'root'
-        hosts = ['0']
-        result = Shell3.checks(key=key, username=username, hosts=hosts, processors=3)
+        hosts = ['127.0.0.1']
+        result = Shell.checks(key=key, username=username, hosts=hosts, processors=3)
         assert {'0': 0} not in result

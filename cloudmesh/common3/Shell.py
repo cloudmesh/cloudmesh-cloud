@@ -433,6 +433,10 @@ class Shell(object):
                    "-o", "UserKnownHostsFile=/dev/null",
                    '-i', key, location, 'uname -a']
         ret_code = subprocess.run(command, capture_output=False).returncode
+        if ret_code == 0:
+            Console.ok(args['host'] + '\t...ok')
+        else:
+            Console.error(args['host'] + '\t...error')
         return {args['host']: ret_code}
 
     @classmethod
@@ -465,6 +469,10 @@ class Shell(object):
         param = '-n' if platform=='windows' else '-c'
         command = ['ping', param, count, ip]
         ret_code = subprocess.run(command, capture_output=False).returncode
+        if ret_code == 0:
+            Console.ok(ip + '\t...ok')
+        else:
+            Console.error(ip + '\t...error')
         return {ip: ret_code}
 
     @classmethod

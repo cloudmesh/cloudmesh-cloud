@@ -6,6 +6,8 @@ from pprint import pprint
 from libcloud.compute.providers import get_driver
 from libcloud.compute.types import Provider as LibcloudProvider
 from libcloud.compute.base import NodeAuthSSHKey
+from libcloud.compute.base import NodeSize
+from libcloud.compute.base import NodeImage
 
 from cloudmesh.abstractclass.ComputeNodeABC import ComputeNodeABC
 from cloudmesh.common.parameter import Parameter
@@ -187,6 +189,9 @@ class Provider(ComputeNodeABC):
                     # del entry["created_at"]
                 else:
                     entry["cm"]["created"] = entry["modified"]
+
+                # if self.cloudtype in ['aws']:
+                #     del entry['tzinfo']
             elif kind == 'flavor':
                 entry["cm"]["created"] = entry["updated"] = str(
                     datetime.utcnow())
@@ -442,45 +447,27 @@ class Provider(ComputeNodeABC):
         """
         return self.find(self.flavors(), name=name)
 
-    def apply(self, fname, names):
+    def start(self, name=None):
         """
-        apply a function to a given list of nodes
+        Start a node
 
-        :param fname: Name of the function to be applied to the given nodes
-        :param names: A list of node names
-        :return:  A list of dict representing the nodes
+        :param name: node name
+        :return: A dict representing the node
         """
-        if self.cloudman:
-            # names = Parameter.expand(names)
-            res = []
+        node = self.find(self.list(raw=True), name=name, raw=True)
+        self.cloudman.ex_start_node(node)
+        return self.update_dict(node, kind='node')[0]
 
-            nodes = self.list(raw=True)
-            for node in nodes:
-                if node.name in names:
-                    fname(node)
-                    res.append(self.info(node.name))
-            return res
-        else:
-            return None
-
-    def start(self, names=None):
+    def stop(self, name=None):
         """
-        Start a list of nodes with the given names
+        Stop a node
 
-        :param names: A list of node names
-        :return:  A list of dict representing the nodes
+        :param name: node name
+        :return: A dict representing the node
         """
-        return self.apply(self.cloudman.ex_start_node, names)
-
-    def stop(self, names=None):
-        """
-        Stop a list of nodes with the given names
-
-        :param names: A list of node names
-        :return:  A list of dict representing the nodes
-        """
-
-        return self.apply(self.cloudman.ex_stop_node, names)
+        node = self.find(self.list(raw=True), name=name, raw=True)
+        self.cloudman.ex_stop_node(node)
+        return self.update_dict(node, kind='node')[0]
 
     def info(self, name=None):
         """
@@ -534,9 +521,9 @@ class Provider(ComputeNodeABC):
         :param name: the name of the node
         :return: the dict of the node
         """
-
-        # the following does not return the dict
-        return self.apply(self.cloudman.ex_start_node, name)
+        node = self.find(self.list(raw=True), name=name, raw=True)
+        self.cloudman.ex_start_node(node)
+        return self.update_dict(node, kind='node')[0]
 
     def list(self, raw=False):
         """
@@ -566,29 +553,27 @@ class Provider(ComputeNodeABC):
         return None
 
 
-    def destroy(self, names=None):
+    def destroy(self, name=None):
         """
-        Destroys the node
-        :param names: the name of the node
-        :return: the dict of the node
-        """
-        #names = Parameter.expand(names)
+        Destroy a node
 
-        nodes = self.list(raw=True)
-        for node in nodes:
-            if node.name in names:
-                self.cloudman.destroy_node(node)
-        # bug status should change to destroyed
-        return None
+        :param name: node name
+        :return: A dict representing the node
+        """
+        node = self.find(self.list(raw=True), name=name, raw=True)
+        self.cloudman.destroy_node(node)
+        return self.update_dict(node, kind='node')[0]
 
     def reboot(self, names=None):
         """
-        Reboot a list of nodes with the given names
+        Reboot a node
 
-        :param names: A list of node names
-        :return:  A list of dict representing the nodes
+        :param name: node name
+        :return: A dict representing the node
         """
-        return self.apply(self.cloudman.reboot_node, names)
+        node = self.find(self.list(raw=True), name=name, raw=True)
+        self.cloudman.reboot_node(node)
+        return self.update_dict(node, kind='node')[0]
 
     def create(self, name=None, image=None, size=None, location=None,  timeout=360, **kwargs):
         """
@@ -606,7 +591,6 @@ class Provider(ComputeNodeABC):
         flavor_use = None
         # keyname = Config()["cloudmesh"]["profile"]["user"]
         # ex_keyname has to be the registered keypair name in cloud
-
 
         if self.cloudtype in ["openstack", "aws","google"]:
             image_use = [i for i in self.images(raw=True) if i.name == image][0]

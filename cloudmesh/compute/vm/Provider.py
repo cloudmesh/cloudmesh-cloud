@@ -102,12 +102,12 @@ class Provider(ComputeNodeABC):
         return self.p.flavors()
 
     @DatabaseUpdate()
-    def start(self, names=None):
-        return self.loop(names, self.p.start)
+    def start(self, names=None, **kwargs):
+        return self.loop(names, self.p.start, **kwargs)
 
     @DatabaseUpdate()
-    def stop(self, names=None):
-        return self.loop(names, self.p.stop)
+    def stop(self, names=None, **kwargs):
+        return self.loop(names, self.p.stop, **kwargs)
 
     def info(self, name=None):
         return self.p.info(name=name)
@@ -140,8 +140,8 @@ class Provider(ComputeNodeABC):
     def key_upload(self, key):
         self.p.key_upload(key)
 
-    def destroy(self, names=None):
-        return self.p.destroy(names=names)
+    def destroy(self, names=None, **kwargs):
+        return self.loop(names, self.p.destroy, **kwargs)
 
     def ssh(self, names=None, command=None):
         names = self.expand(names)

@@ -51,13 +51,14 @@ class Provider(ComputeNodeABC):
         else:
             return Parameter.expand(names)
 
-    def loop(self, names, func, option='pool', processors=3):
+    def loop(self, names, func, option='iter', processors=3):
         """
         :param option: if option is 'pool', use pool. if option is 'iter', use iteration
         """
         names = self.expand(names)
         r = []
         if option == 'pool':
+            ### BUG: objc_initializeAfterForkError ###
             with Pool(processors) as p:
                 r = p.map(func, names)
         elif option == 'iter':

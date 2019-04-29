@@ -226,8 +226,7 @@ class Provider(ComputeNodeABC):
         :return:
         """
         for element in elements:
-            # pprint (element)
-            if (raw and element.name) or element["cm"]["name"] == name:
+            if (raw and element.name==name) or (not raw and element["cm"]["name"] == name):
                 return element
         return None
 

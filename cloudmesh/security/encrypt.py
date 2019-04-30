@@ -109,7 +109,7 @@ class EncryptFile(object):
         command = "chmod go-rwx {key}.pem".format(**self.data)
         self._execute(command)
 
-    #
+    #openssl rsa -in ~/.ssh/id_rsa -out ~/.ssh/id_rsa.pem
     # TODO: BUG
     #
     def pem_cat(self):

@@ -140,14 +140,14 @@ class Provider(ComputeNodeABC):
     def key_upload(self, key):
         self.p.key_upload(key)
 
+    @DatabaseUpdate()
     def destroy(self, names=None, **kwargs):
+        ## this should later check and remove destroyed nodes, not implemented
         return self.loop(names, self.p.destroy, **kwargs)
 
-    def ssh(self, names=None, command=None):
-        names = self.expand(names)
-        for name in names:
-            return self.p.ssh(name=names,command=command)
-
+    def ssh(self, name_ips, **kwargs):
+        for name, ips in name_ips.items():
+            self.p.ssh(name=name, ips=ips, **kwargs)
 
     def login(self):
         if self.kind != "azure":
@@ -157,8 +157,4 @@ class Provider(ComputeNodeABC):
 
     @DatabaseUpdate()
     def suspend(self, names=None):
-        raise NotImplementedError
-
-    @DatabaseUpdate()
-    def destroy(self, names=None):
         raise NotImplementedError

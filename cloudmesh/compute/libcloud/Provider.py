@@ -12,9 +12,10 @@ from libcloud.compute.base import NodeImage
 from cloudmesh.abstractclass.ComputeNodeABC import ComputeNodeABC
 from cloudmesh.common.parameter import Parameter
 from cloudmesh.common.util import HEADING
-from cloudmesh.management.configuration.config import Config
 from cloudmesh.common.util import path_expand
 from cloudmesh.common.console import Console
+from cloudmesh.management.configuration.config import Config
+from cloudmesh.mongo.CmDatabase import CmDatabase
 from cloudmesh.DEBUG import VERBOSE
 import subprocess
 
@@ -587,27 +588,33 @@ class Provider(ComputeNodeABC):
         :param kwargs: additional arguments HEADING(c=".")ed along at time of boot
         :return:
         """
+        if image == None:
+            image = self.spec["default"]['flavor']
+        if size == None:
+            size = self.spec["default"]['size']
+
+        database = CmDatabase()
         image_use = None
         flavor_use = None
-        # keyname = Config()["cloudmesh"]["profile"]["user"]
-        # ex_keyname has to be the registered keypair name in cloud
 
         if self.cloudtype in ["openstack", "aws","google"]:
-            image_use = [i for i in self.images(raw=True) if i.name == image][0]
-            # images = self.images(raw=True)
-            # for _image in images:
-            #     if _image.name == image:
-            #         image_use = _image
-            #         break
+            image_dict = database.find(collection='{}-image'.format(self.cloudtype), name=image)[0]
+
+            image_use = NodeImage(id=image_dict['id'],
+                                name=image_dict['name'],
+                                driver=self.driver)
         elif self.cloudtype == 'azure_arm':
             image_use = self.cloudman.get_image(image)
 
-        flavor_use = [f for f in self.flavors(raw=True) if f.name == flavor][0]
-        # flavors = self.flavors(raw=True)
-        # for _flavor in flavors:
-        #     if _flavor.name == size:
-        #         flavor_use = _flavor
-        #         break
+        flavor_dict = database.find(collection='{}-flavor'.format(self.cloudtype), name=size)[0]
+        flavor_use = NodeSize(id=flavor_dict['id'],
+                            name=flavor_dict['name'],
+                            ram=flavor_dict['ram'],
+                            disk=flavor_dict['disk'],
+                            bandwidth=flavor_dict['bandwidth'],
+                            price=flavor_dict['price'],
+                            driver=self.driver)
+
         if self.cloudtype == "openstack":
 
             if "ex_security_groups" in kwargs:
@@ -624,8 +631,7 @@ class Provider(ComputeNodeABC):
                 kwargs["ex_security_groups"] = secgroupsobj
 
         if self.cloudtype in ["openstack", "aws"]:
-            node = self.cloudman.create_node(name=name, image=image_use,
-                                             size=flavor_use, **kwargs)
+            node = self.cloudman.create_node(name=name, image=image_use, size=flavor_use, **kwargs)
         elif self.cloudtype == 'azure_arm':
             auth = None
             if "sshpubkey" in kwargs:
@@ -675,7 +681,7 @@ class Provider(ComputeNodeABC):
         else:
             sys.exit("this cloud is not yet supported")
 
-        return self.update_dict(node)
+        return self.update_dict(node, kind='node')[0]
 
     def get_publicIP(self):
         # pools = self.cloudman.ex_list_floating_ip_pools()
@@ -718,24 +724,37 @@ class Provider(ComputeNodeABC):
         HEADING(c=".")
         return None
 
-    def ssh(self, name=None, command=None):
-        nodes = self.list(raw=True)
-        for node in nodes:
-            if node.name == name:
-                self.testnode = node
-                break
-        pubip = self.testnode.public_ips[0]
-        ssh = subprocess.Popen(
-            ["ssh", "%s" % (pubip), "%s" % (command)],
-            shell=False,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE)
-        result = ssh.stdout.readlines()
-        if result == []:
-            error = ssh.stderr.readlines()
-            print("ERROR: %s" % error)
-        else:
-            print("RESULT:")
-            for line in result:
-                line = line.decode("utf-8")
-                print(line.strip("\n"))
+    # def ssh(self, name=None, command=None):
+    #     nodes = self.list(raw=True)
+    #     for node in nodes:
+    #         if node.name == name:
+    #             self.testnode = node
+    #             break
+    #     pubip = self.testnode.public_ips[0]
+    #     ssh = subprocess.Popen(
+    #         ["ssh", "%s" % (pubip), "%s" % (command)],
+    #         shell=False,
+    #         stdout=subprocess.PIPE,
+    #         stderr=subprocess.PIPE)
+    #     result = ssh.stdout.readlines()
+    #     if result == []:
+    #         error = ssh.stderr.readlines()
+    #         print("ERROR: %s" % error)
+    #     else:
+    #         print("RESULT:")
+    #         for line in result:
+    #             line = line.decode("utf-8")
+    #             print(line.strip("\n"))
+
+    def ssh(self, name, ips, username=None, key=None, quiet=None, command=None, script=None, modify_knownhosts=None):
+        if key == None:
+            key = self.spec['credentials']['EC2_PRIVATE_KEY_FILE_PATH'] + self.spec['credentials']['EC2_PRIVATE_KEY_FILE_NAME']
+        for ip in ips:
+            location = username + '@' + ip
+            if command != None:
+                ssh_command = ['ssh', '-i', key, location, command]
+                subprocess.run(ssh_command)
+            elif script != None:
+                # BUG, doesn't work#
+                ssh_command = ['ssh', '-i', key, location, 'bash', '-s', '<', script]
+                subprocess.call(ssh_command, shell=True)

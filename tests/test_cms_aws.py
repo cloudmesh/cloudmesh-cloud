@@ -17,6 +17,7 @@ from cloudmesh.DEBUG import VERBOSE
 from cloudmesh.mongo.CmDatabase import CmDatabase
 import pytest
 from cloudmesh.common.StopWatch import StopWatch
+from cloudmesh.common.util import banner
 
 @pytest.mark.incremental
 class Test_cms_aws:
@@ -188,16 +189,16 @@ class Test_cms_aws:
 
         assert "run command uname on vms: ['test_boot_01']" in result
 
-    def test_02_run(self):
-        HEADING()
-
-        StopWatch.start("cms vm run dryrun")
-        result = Shell.execute("cms vm run --name=test_boot_01 --username=ubuntu uname", shell=True)
-        StopWatch.stop("cms vm run dryrun")
-
-        VERBOSE(result)
-
-        assert "Linux" in result
+    # def test_02_run(self):
+    #     HEADING()
+    #
+    #     StopWatch.start("cms vm run dryrun")
+    #     result = Shell.execute("cms vm run --name=test_boot_01 --username=ubuntu uname", shell=True)
+    #     StopWatch.stop("cms vm run dryrun")
+    #
+    #     VERBOSE(result)
+    #
+    #     assert "Linux" in result
 
     def test_01_script(self):
         HEADING()
@@ -210,16 +211,16 @@ class Test_cms_aws:
 
         assert "run script ./test_cms_aws.sh on vms: ['test_boot_01']" in result
 
-    def test_02_script(self):
-        HEADING()
-
-        StopWatch.start("cms vm script dryrun")
-        result = Shell.execute("cms vm script --name=test_boot_01 --username=ubuntu ./test_cms_aws.sh", shell=True)
-        StopWatch.stop("cms vm script dryrun")
-
-        VERBOSE(result)
-
-        assert "Linux" in result
+    # def test_02_script(self):
+    #     HEADING()
+    #
+    #     StopWatch.start("cms vm script dryrun")
+    #     result = Shell.execute("cms vm script --name=test_boot_01 --username=ubuntu ./test_cms_aws.sh", shell=True)
+    #     StopWatch.stop("cms vm script dryrun")
+    #
+    #     VERBOSE(result)
+    #
+    #     assert "Linux" in result
 
     def test_01_start(self):
         HEADING()
@@ -337,3 +338,7 @@ class Test_cms_aws:
         VERBOSE(result)
 
         assert "test_boot_02" in result
+
+    def test_results(self):
+        banner(f"Benchmark results for AWS")
+        StopWatch.benchmark()

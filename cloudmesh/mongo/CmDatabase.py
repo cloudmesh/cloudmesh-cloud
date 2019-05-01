@@ -207,7 +207,7 @@ class CmDatabase(object):
                 else:
                     entry['cm']['created'] = entry['cm']['modified'] = str(
                         datetime.utcnow())
-                    self.col.insert(entry)
+                    self.col.insert_one(entry)
             except Exception as e:
                 Console.error("uploading document {entry}".format(
                     entry=str(entry)))

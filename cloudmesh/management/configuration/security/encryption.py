@@ -13,6 +13,9 @@ import shutil
 
 class EncryptFile(object):
     def __init__(self, file_in, file_out, certificate,debug=False,):
+        #
+        # Bug: some of this data, but not all needs to be a named argument
+        #
         plain_file = file_out + '.plain'
         self.data = {
             'file_in': file_in,
@@ -28,6 +31,10 @@ class EncryptFile(object):
         self.debug = debug
 
     def _execute(self, command):
+        #
+        # Future QUESTION: should this be replaced with Shell.execute?
+        # after project is finished
+        #
         if self.debug:
             print(command)
         os.system(command)
@@ -89,6 +96,10 @@ class EncryptFile(object):
         self._execute(command)
 
     def ssh_keygen(self):
+        #
+        # FUTURE: this could be expanded to use parameters to pass along the pass phrase just as we do in the travis test.
+        # comment for future improvement after project is done
+        #
         command = "ssh-keygen -t rsa -m pem"
         os.system(command)
         command = ""
@@ -140,8 +151,21 @@ class EncryptFile(object):
         configDict[key]= value
 
     def edit(self):
-        command = "vim {file_in}".format(**self.data)
-        self._execute(command)
+
+        if "EDITOR" in os.environ:
+            editor = os.environ["EDITOR"]
+            command = "{editor} {file_in}".format(**self.data, editor=editor)
+        else:
+            order = ["emacs", "vim", "vi", "pico", "nano"]
+            editor = None
+            for editor in order:
+                try:
+                    command = "{editor} {file_in}".format(**self.data, editor=editor)
+                    self._execute(command)
+                    return
+                except:
+                    pass
+
 
     def delete_folder(self):
 

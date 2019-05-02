@@ -98,7 +98,7 @@ class Config(object):
 
         self.__dict__ = self.__shared_state
         if "data" not in self.__dict__:
-            self.load(path=config_path)
+            self.load(config_path=config_path)
 
 
     def load(self, config_path='~/.cloudmesh/cloudmesh4.yaml'):

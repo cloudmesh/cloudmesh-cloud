@@ -13,13 +13,7 @@ import shutil
 
 class EncryptFile(object):
 
-    @staticmethod
-    def mkdir(path):
-        #
-        # BUG: the class does not have a secure mkdir that not only calsl Shell.mkdir,
-        # but also sets the access rights to go-rwx
-        #
-        raise NotImplementedError
+
 
     def __init__(self, file_in, file_out, certificate,debug=False,):
         #
@@ -38,6 +32,7 @@ class EncryptFile(object):
             'password_enc_plain': path_expand('~/.cloudmesh/key.bin.enc.plain')
         }
         self.debug = debug
+        self.tmp = path_expand("~/.cloudmesh/tmp")
 
     def _execute(self, command):
         #
@@ -192,14 +187,20 @@ class EncryptFile(object):
                 except:
                     pass
 
+    @staticmethod
+    def mkdir(path):
+        #
+        # BUG: the class does not have a secure mkdir that not only calsl Shell.mkdir,
+        # but also sets the access rights to go-rwx
+        #
+        Shell.mkdir(path)
+        raise NotImplementedError
 
     def delete_folder(self):
-
         # delete the tmp folder
-        path = '~/.cloudmesh/tmp'
-        folder = os.path.exists(path)
+        folder = os.path.exists(self.tmp)
         if folder:
-            shutil.rmtree(path)
+            shutil.rmtree(self.tmp)
 
 
 if __name__ == "__main__":

@@ -12,6 +12,15 @@ from cloudmesh.common.ConfigDict import ConfigDict
 import shutil
 
 class EncryptFile(object):
+
+    @staticmethod
+    def mkdir(path):
+        #
+        # BUG: the class does not have a secure mkdir that not only calsl Shell.mkdir,
+        # but also sets the access rights to go-rwx
+        #
+        raise NotImplementedError
+
     def __init__(self, file_in, file_out, certificate,debug=False,):
         #
         # Bug: some of this data, but not all needs to be a named argument

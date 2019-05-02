@@ -77,3 +77,8 @@ class TestConfig:
         self.config.create()
         filename = path_expand("~/.cloudmesh/cloudmesh4.yaml")
         assert os.path.isfile(Path(filename))
+
+    def test_set(self):
+        self.config["cloudmesh.test.nested"] = "Gregor"
+        print (self.config["cloudmesh.test.nested"])
+        assert self.config["cloudmesh.test.nested"] == "Gregor"

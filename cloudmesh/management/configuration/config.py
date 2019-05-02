@@ -156,12 +156,68 @@ class Config(object):
         :param default:
         :param key: A string representing the value's path in the config.
         """
-        return self.data.get(key, default)
+        try:
+            return self.data.get(key, default)
+        except KeyError:
+            path = self.config_path
+            Console.error(f"The key '{key}' couold not be found in the yaml file '{path}'")
+            sys.exit(1)
+        except Exception as e:
+            print (e)
+            sys.exit(1)
+
+    def __setitem__(self, key, value):
+        self.set(key, value)
 
     def set(self, key, value):
-        # BUG
         """
-        A helper function for setting values in the config without
+        A helper function for setting the deafult cloud in the config without
+        a chain of `set()` calls.
+
+        Usage:
+            mongo_conn = conf.set('db.mongo.MONGO_CONNECTION_STRING', "https://localhost:3232")
+
+        :param key: A string representing the value's path in the config.
+        :param value: value to be set.
+        """
+
+        try:
+            if "." in key:
+                keys = key.split(".")
+                #
+                # create parents
+                #
+                parents = keys[:-1]
+                location = self.data
+                for parent in parents:
+                    if parent not in location:
+                        location[parent] = {}
+                    location = location[parent]
+                #
+                # create entry
+                #
+                location[keys[len(keys)-1]] = value
+            else:
+                self.data[key] = value
+
+        except KeyError:
+            path = self.config_path
+            Console.error(
+                f"The key '{key}' couold not be found in the yaml file '{path}'")
+            sys.exit(1)
+        except Exception as e:
+            print(e)
+            sys.exit(1)
+
+        yaml_file = self.data.copy()
+        with open(self.config_path, "w") as stream:
+            print("Writing update to cloudmesh.yaml")
+            yaml.safe_dump(yaml_file, stream, default_flow_style=False)
+
+
+    def set_cloud(self, key, value):
+        """
+        A helper function for setting the deafult cloud in the config without
         a chain of `set()` calls.
 
         Usage:
@@ -205,3 +261,5 @@ class Config(object):
             print (e)
             sys.exit(1)
         return element
+
+

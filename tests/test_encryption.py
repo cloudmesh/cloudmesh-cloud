@@ -22,17 +22,17 @@ import datetime
 @pytest.mark.incremental
 class Test_configdict:
 
-
-
     def setup_class(self):
 
         self.mkdirer(self)
         self.copy_file(self)
-
-        self.e = EncryptFile('~/.cloudmesh/tmp/cloudmesh4.yaml', '~/.cloudmesh/tmp/cloudmesh4.yaml.enc', '')
-
+        self.e = EncryptFile('~/.cloudmesh/tmp/cloudmesh4.yaml',
+                             '~/.cloudmesh/tmp/cloudmesh4.yaml.enc', '')
 
     def mkdirer(self):
+        #
+        # Shell.mkdir('~/.cloudmesh/tmp') does the same
+        #
         path = path_expand('~/.cloudmesh/tmp')
         folder = os.path.exists(path)
         if not folder:
@@ -43,7 +43,6 @@ class Test_configdict:
         source = path_expand('~/.cloudmesh/cloudmesh4.yaml')
         target =path_expand('~/.cloudmesh/tmp')
         shutil.copy(source, target)
-
 
     def test_getRandonPassword(self):
         self.e.getRandonPassword()
@@ -58,7 +57,6 @@ class Test_configdict:
             password = None
         assert  len(password) > 20
 
-
     def test_encrypt(self):
         self.e.encrypt()
         exists = os.path.isfile(path_expand('~/.cloudmesh/tmp/cloudmesh4.yaml.enc'))
@@ -70,8 +68,6 @@ class Test_configdict:
         orginal_size = orginal_size *10000/ float(1024 * 1024)
         print(orginal_size)
         assert abs(enc_size - orginal_size) < 10
-
-
 
     def test_encryptPassword(self):
         self.e.encryptPassword()
@@ -88,9 +84,6 @@ class Test_configdict:
         endTime = datetime.datetime.strptime(currenttime, "%Y-%m-%d %H:%M:%S")
         assert (endTime - startTime).seconds < 4
 
-
-        
-
     def test_decryptRandomKey(self):
         self.e.decryptRandomKey()
         exists = os.path.isfile(path_expand('~/.cloudmesh/key.bin.enc.plain'))
@@ -105,7 +98,6 @@ class Test_configdict:
         endTime = datetime.datetime.strptime(currenttime, "%Y-%m-%d %H:%M:%S")
         assert (endTime - startTime).seconds < 4
 
-
     def test_decrypt(self):
         self.e.decrypt()
         exists = os.path.isfile(path_expand('~/.cloudmesh/tmp/cloudmesh4.yaml.enc.plain'))
@@ -118,10 +110,6 @@ class Test_configdict:
         print(orginal_size)
         assert abs(dec_size - orginal_size) < 2
 
-        assert True
-
-
-
     def test_ssh_keygen(self):
         self.e.ssh_keygen()
         for file in os.listdir(path_expand("~/.ssh")):
@@ -131,9 +119,6 @@ class Test_configdict:
                     flag = True
                     assert flag
                     return
-
-
-
 
     def test_pem_create(self):
         self.e.pem_create()
@@ -145,11 +130,9 @@ class Test_configdict:
                     assert flag
                     return
 
-
     def test_pem_verify(self):
         self.e.pem_verify()
         assert True
-
 
     def test_set(self):
        filename = path_expand( "~/.cloudmesh/tmp/cloudmesh4.yaml")
@@ -166,11 +149,6 @@ class Test_configdict:
        endTime = datetime.datetime.strptime(currenttime, "%Y-%m-%d %H:%M:%S")
        assert (endTime - startTime).seconds < 4
 
-
-
-
-
-
     def test__config(self):
 
         #test original yaml file
@@ -183,24 +161,19 @@ class Test_configdict:
         configDict = ConfigDict(path_expand("~/.cloudmesh/tmp/cloudmesh4.yaml"))
         assert configDict.__getitem__("meta.version")
 
-
         # test enc_yaml file
-
 
         with pytest.raises(UnicodeDecodeError) as e:
             con = Config(path_expand("~/.cloudmesh/tmp/cloudmesh4.yaml.enc"))
             assert con
 
-
         # test dec_yaml file
         config = Config(config_path="~/.cloudmesh/cloudmesh4.yaml.enc")
         assert configDict.__getitem__("meta.version")
 
-
     def test_edit(self):
         self.e.edit()
         assert True
-
 
     def delete_folder(self):
         self.e.delete_folder()

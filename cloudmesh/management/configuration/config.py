@@ -96,44 +96,66 @@ class Config(object):
 
         self.__dict__ = self.__shared_state
         if "data" not in self.__dict__:
+            self.load(path=config_path)
 
-            # VERBOSE("Load config")
 
-            self.config_path = Path(path_expand(config_path)).resolve()
-            self.config_folder = dirname(self.config_path)
+    def load(self, config_path='~/.cloudmesh/cloudmesh4.yaml'):
+        """
+        loads a configuration file
+        :param path:
+        :type path:
+        :return:
+        :rtype:
+        """
 
-            self.create(config_path=config_path)
+        # VERBOSE("Load config")
 
-            with open(self.config_path, "r") as stream:
-                content = stream.read()
-                content = path_expand(content)
-                content = self.spec_replace(content)
-                self.data = yaml.load(content, Loader=yaml.SafeLoader)
+        self.config_path = Path(path_expand(config_path)).resolve()
+        self.config_folder = dirname(self.config_path)
 
-            # self.data is loaded as nested OrderedDict, can not use set or get
-            # methods directly
+        self.create(config_path=config_path)
 
-            if self.data is None:
-                raise EnvironmentError(
-                    "Failed to load configuration file cloudmesh4.yaml, "
-                    "please check the path and file locally")
+        with open(self.config_path, "r") as stream:
+            content = stream.read()
+            content = path_expand(content)
+            content = self.spec_replace(content)
+            self.data = yaml.load(content, Loader=yaml.SafeLoader)
 
-            #
-            # populate default variables
-            #
+        # self.data is loaded as nested OrderedDict, can not use set or get
+        # methods directly
 
-            self.variable_database = Variables(filename="~/.cloudmesh/var-data")
-            self.set_debug_defaults()
+        if self.data is None:
+            raise EnvironmentError(
+                "Failed to load configuration file cloudmesh4.yaml, "
+                "please check the path and file locally")
 
-            default = self.default()
+        #
+        # populate default variables
+        #
 
-            for name in self.default():
-                if name not in self.variable_database:
-                    self.variable_database[name] = default[name]
-            if "cloud" in default:
-                self.cloud = default["cloud"]
-            else:
-                self.cloud = None
+        self.variable_database = Variables(filename="~/.cloudmesh/var-data")
+        self.set_debug_defaults()
+
+        default = self.default()
+
+        for name in self.default():
+            if name not in self.variable_database:
+                self.variable_database[name] = default[name]
+        if "cloud" in default:
+            self.cloud = default["cloud"]
+        else:
+            self.cloud = None
+
+
+    def save(self, path="~/.cloudmesh/cloudmesh4.yaml"):
+        """
+        saves th dic into the file
+        :param path:
+        :type path:
+        :return:
+        :rtype:
+        """
+        raise NotImplementedError
 
     def spec_replace(self, spec):
 
@@ -294,6 +316,9 @@ class Config(object):
 
     def __delitem__(self, item):
         """
+        #
+        # BUG THIS DOES NOT WORK
+        #
         gets an item form the dict. The key is . separated
         use it as follows get("a.b.c")
         :param item:
@@ -305,9 +330,11 @@ class Config(object):
                 keys = item.split(".")
             else:
                 return self.data[item]
-            element = self.data[keys[0]]
-            for key in keys[1:]:
+            element = self.data
+            print (keys)
+            for key in keys:
                 element = element[key]
+            del element
         except KeyError:
             path = self.config_path
             Console.error(f"The key '{item}' couold not be found in the yaml file '{path}'")
@@ -315,4 +342,4 @@ class Config(object):
         except Exception as e:
             print (e)
             sys.exit(1)
-        return element
+

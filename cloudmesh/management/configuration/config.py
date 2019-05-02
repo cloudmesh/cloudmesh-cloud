@@ -199,7 +199,7 @@ class Config(object):
                 element = element[key]
         except KeyError:
             path = self.config_path
-            Console.error(f"The key '{key}' couold not be found in the yaml file '{path}'")
+            Console.error(f"The key '{item}' couold not be found in the yaml file '{path}'")
             sys.exit(1)
         except Exception as e:
             print (e)

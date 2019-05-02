@@ -66,28 +66,45 @@ class EncryptFile(object):
     '''
 
 
-    # extract public key from a certificate
     def getPublicKey(self):
+        """
+        extract public key from a certificate
+
+        :return:
+        :rtype:
+        """
         command = path_expand(
             "openssl rsa -in {certificate} -out {pem} -outform PEM -pubout".format(**self.data))
         self._execute(command)
 
 
-    # Generate the random password file
     def getRandonPassword(self):
+        """
+        Generate the random password file
+        :return:
+        :rtype:
+        """
         command = path_expand(
             "openssl rand -hex 64 -out {password}".format(**self.data))
         self._execute(command)
 
-    # Encrypt the file with the random key
     def encrypt(self):
+        """
+        Encrypt the file with the random key
+        :return:
+        :rtype:
+        """
         command = path_expand(
             "openssl enc -aes-256-cbc -salt -in {file_in} -out {file_out} -pass file:{password}".format(**self.data))
         self._execute(command)
 
 
-    # Encrypt the random key with the public keyfile
     def encryptPassword(self):
+        """
+        Encrypt the random key with the public keyfile
+        :return:
+        :rtype:
+        """
         command = path_expand(
             "openssl rsautl -encrypt -inkey {pem} -pubin -in {password} -out {password_enc}".format(**self.data))
         self._execute(command)

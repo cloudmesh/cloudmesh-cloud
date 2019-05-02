@@ -292,3 +292,27 @@ class Config(object):
         return element
 
 
+    def __delitem__(self, item):
+        """
+        gets an item form the dict. The key is . separated
+        use it as follows get("a.b.c")
+        :param item:
+        :type item:
+        :return:
+        """
+        try:
+            if "." in item:
+                keys = item.split(".")
+            else:
+                return self.data[item]
+            element = self.data[keys[0]]
+            for key in keys[1:]:
+                element = element[key]
+        except KeyError:
+            path = self.config_path
+            Console.error(f"The key '{item}' couold not be found in the yaml file '{path}'")
+            sys.exit(1)
+        except Exception as e:
+            print (e)
+            sys.exit(1)
+        return element

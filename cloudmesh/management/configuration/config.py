@@ -8,7 +8,9 @@ import munch
 import re
 import oyaml as yaml
 import sys
+import shutil
 
+from cloudmesh.common.util import backup_name
 from cloudmesh.common.dotdict import dotdict
 from cloudmesh.variables import Variables
 from cloudmesh.common.console import Console
@@ -147,15 +149,27 @@ class Config(object):
             self.cloud = None
 
 
-    def save(self, path="~/.cloudmesh/cloudmesh4.yaml"):
+    def save(self, path="~/.cloudmesh/cloudmesh4.yaml", backup=True):
         """
-        saves th dic into the file
+        #
+        # not tested
+        #
+        saves th dic into the file. It also creates a backup if set to true The
+        backup filename  appends a .bak.NO where number is a number that is not
+        yet used in the backup directory.
+
         :param path:
         :type path:
         :return:
         :rtype:
         """
-        raise NotImplementedError
+        if backup:
+            destination = backup_name(path)
+            shutil.copyfile(path, destination)
+        yaml_file = self.data.copy()
+        with open(self.config_path, "w") as stream:
+            yaml.safe_dump(yaml_file, stream, default_flow_style=False)
+
 
     def spec_replace(self, spec):
 
@@ -262,7 +276,6 @@ class Config(object):
 
         yaml_file = self.data.copy()
         with open(self.config_path, "w") as stream:
-            print("Writing update to cloudmesh.yaml")
             yaml.safe_dump(yaml_file, stream, default_flow_style=False)
 
 

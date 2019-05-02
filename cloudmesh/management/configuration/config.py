@@ -7,10 +7,11 @@ from cloudmesh.common.util import path_expand
 import munch
 import re
 import oyaml as yaml
+import sys
 
 from cloudmesh.common.dotdict import dotdict
 from cloudmesh.variables import Variables
-
+from cloudmesh.common.console import Console
 
 class Active(object):
 
@@ -188,11 +189,19 @@ class Config(object):
         :type item:
         :return:
         """
-        if "." in item:
-            keys = item.split(".")
-        else:
-            return self.data[item]
-        element = self.data[keys[0]]
-        for key in keys[1:]:
-            element = element[key]
+        try:
+            if "." in item:
+                keys = item.split(".")
+            else:
+                return self.data[item]
+            element = self.data[keys[0]]
+            for key in keys[1:]:
+                element = element[key]
+        except KeyError:
+            path = self.config_path
+            Console.error(f"The key '{key}' couold not be found in the yaml file '{path}'")
+            sys.exit(1)
+        except Exception as e:
+            print (e)
+            sys.exit(1)
         return element

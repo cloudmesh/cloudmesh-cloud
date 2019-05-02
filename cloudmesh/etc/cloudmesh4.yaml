@@ -50,9 +50,9 @@ cloudmesh:
         kind: box
         version: TBD
       default:
-        directory: TBD
+        directory: /
       credentials:
-        name: TBD
+        config_path: TBD
     aws-myhome:
       cm:
         heading: homedir

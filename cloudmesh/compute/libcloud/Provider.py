@@ -15,7 +15,6 @@ from cloudmesh.common.util import HEADING
 from cloudmesh.common.util import path_expand
 from cloudmesh.common.console import Console
 from cloudmesh.management.configuration.config import Config
-from cloudmesh.mongo.CmDatabase import CmDatabase
 from cloudmesh.DEBUG import VERBOSE
 import subprocess
 
@@ -724,28 +723,30 @@ class Provider(ComputeNodeABC):
         HEADING(c=".")
         return None
 
-    # def ssh(self, name=None, command=None):
-    #     nodes = self.list(raw=True)
-    #     for node in nodes:
-    #         if node.name == name:
-    #             self.testnode = node
-    #             break
-    #     pubip = self.testnode.public_ips[0]
-    #     ssh = subprocess.Popen(
-    #         ["ssh", "%s" % (pubip), "%s" % (command)],
-    #         shell=False,
-    #         stdout=subprocess.PIPE,
-    #         stderr=subprocess.PIPE)
-    #     result = ssh.stdout.readlines()
-    #     if result == []:
-    #         error = ssh.stderr.readlines()
-    #         print("ERROR: %s" % error)
-    #     else:
-    #         print("RESULT:")
-    #         for line in result:
-    #             line = line.decode("utf-8")
-    #             print(line.strip("\n"))
+    def ssh(self, name=None, command=None):
+        nodes = self.list(raw=True)
+        for node in nodes:
+            if node.name == name:
+                self.testnode = node
+                break
+        pubip = self.testnode.public_ips[0]
+        ssh = subprocess.Popen(
+            ["ssh", "%s" % (pubip), "%s" % (command)],
+            shell=False,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE)
+        result = ssh.stdout.readlines()
+        if result == []:
+            error = ssh.stderr.readlines()
+            print("ERROR: %s" % error)
+        else:
+            print("RESULT:")
+            for line in result:
+                line = line.decode("utf-8")
+                print(line.strip("\n"))
 
+    """
+    THIS CODE IS BUUGY AS IT OVERWRITES ALL PROVIDERS, THE CODE ABOVE SEEMS TO WORK
     def ssh(self, name, ips, username=None, key=None, quiet=None, command=None, script=None, modify_knownhosts=None):
         if key == None:
             key = self.spec['credentials']['EC2_PRIVATE_KEY_FILE_PATH'] + self.spec['credentials']['EC2_PRIVATE_KEY_FILE_NAME']
@@ -755,6 +756,7 @@ class Provider(ComputeNodeABC):
                 ssh_command = ['ssh', '-i', key, location, command]
                 subprocess.run(ssh_command)
             elif script != None:
-                # BUG, doesn't work#
+                BUG, doesn't work#
                 ssh_command = ['ssh', '-i', key, location, 'bash', '-s', '<', script]
                 subprocess.call(ssh_command, shell=True)
+    """

@@ -251,12 +251,9 @@ class TestName:
         node = self.p.find(nodes, name=self.name)
 
         pprint(node)
+        self.test_list_vm()
 
         assert node["extra"]["task_state"] == "deleting"
-
-    def test_list_vm(self):
-        HEADING()
-        self.test_list_vm()
 
     def test_vm_login(self):
         HEADING()

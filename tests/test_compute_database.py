@@ -17,7 +17,7 @@ from cloudmesh.compute.vm.Provider import Provider
 from cloudmesh.management.configuration.SSHkey import SSHkey
 from cloudmesh.management.configuration.config import Config
 from cloudmesh.variables import Variables
-
+import sys
 
 @pytest.mark.incremental
 class Test_Compute_Database:
@@ -116,9 +116,6 @@ class Test_Compute_Database:
                                 order=order,
                                 header=header)
               )
-
-
-class a:
 
     def test_list_secgroups(self):
         HEADING()
@@ -234,11 +231,10 @@ class a:
         node = self.p.find(nodes, name=self.name)
 
         pprint(node)
+        self.test_list_vm()
 
         assert node["extra"]["task_state"] == "deleting"
 
-    def test_18_list_vm(self):
-        self.test_list_vm()
 
     def test_19_vm_login(self):
         self.test_list_vm()
@@ -295,3 +291,4 @@ class other:
     # def test_resume(self):
     #    HEADING()
     #    self.p.resume(name=self.name)
+

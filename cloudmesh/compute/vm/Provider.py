@@ -9,6 +9,7 @@ from cloudmesh.common.console import Console
 from cloudmesh.abstractclass.ComputeNodeABC import ComputeNodeABC
 from cloudmesh.common.parameter import Parameter
 from multiprocessing import Pool
+from cloudmesh.DEBUG import VERBOSE
 
 class Provider(ComputeNodeABC):
 
@@ -16,10 +17,8 @@ class Provider(ComputeNodeABC):
                  configuration="~/.cloudmesh/cloudmesh4.yaml"):
         try:
             super().__init__(name, configuration)
-            self.kind = Config(configuration)["cloudmesh"]["cloud"][name]["cm"][
-                "kind"]
-            self.credentials = Config(configuration)["cloudmesh"]["cloud"][name]["credentials"]
-
+            self.kind = Config(configuration)[f"cloudmesh.cloud.{name}.cm.kind"]
+            self.credentials = Config(configuration)[f"cloudmesh.cloud.{name}.credentials"]
             self.name = name
         except:
             Console.error(f"provider {name} not found in {configuration}")

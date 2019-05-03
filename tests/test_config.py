@@ -82,3 +82,10 @@ class TestConfig:
         self.config["cloudmesh.test.nested"] = "Gregor"
         print (self.config["cloudmesh.test.nested"])
         assert self.config["cloudmesh.test.nested"] == "Gregor"
+
+    ''' THIS TEST DOE FAIL
+    def test_del(self):
+        del self.config["cloudmesh.test.nested"]
+
+        assert self.config["cloudmesh.test.nested"] != "Gregor"
+    '''

@@ -6,15 +6,17 @@ from pprint import pprint
 from libcloud.compute.providers import get_driver
 from libcloud.compute.types import Provider as LibcloudProvider
 from libcloud.compute.base import NodeAuthSSHKey
-from libcloud.compute.base import NodeSize
-from libcloud.compute.base import NodeImage
 
 from cloudmesh.abstractclass.ComputeNodeABC import ComputeNodeABC
 from cloudmesh.common.parameter import Parameter
 from cloudmesh.common.util import HEADING
+from cloudmesh.management.configuration.config import Config
 from cloudmesh.common.util import path_expand
 from cloudmesh.common.console import Console
+<<<<<<< HEAD
 from cloudmesh.management.configuration.config import Config
+=======
+>>>>>>> origin/master
 from cloudmesh.DEBUG import VERBOSE
 import subprocess
 
@@ -34,8 +36,8 @@ class Provider(ComputeNodeABC):
     """
     this may be buggy as the fields could be differentbased on the provider
     TODO: fix output base on provider
-    so we may need to do
-
+    so we may need to do 
+    
     output = {"aws": {"vm": ....,,
                       "image": ....,,
                       "flavor": ....,,
@@ -189,9 +191,6 @@ class Provider(ComputeNodeABC):
                     # del entry["created_at"]
                 else:
                     entry["cm"]["created"] = entry["modified"]
-
-                # if self.cloudtype in ['aws']:
-                #     del entry['tzinfo']
             elif kind == 'flavor':
                 entry["cm"]["created"] = entry["updated"] = str(
                     datetime.utcnow())
@@ -231,7 +230,8 @@ class Provider(ComputeNodeABC):
         :return:
         """
         for element in elements:
-            if (raw and element.name==name) or (not raw and element["cm"]["name"] == name):
+            # pprint (element)
+            if (raw and element.name) or element["cm"]["name"] == name:
                 return element
         return None
 
@@ -447,27 +447,45 @@ class Provider(ComputeNodeABC):
         """
         return self.find(self.flavors(), name=name)
 
-    def start(self, name=None):
+    def apply(self, fname, names):
         """
-        Start a node
+        apply a function to a given list of nodes
 
-        :param name: node name
-        :return: A dict representing the node
+        :param fname: Name of the function to be applied to the given nodes
+        :param names: A list of node names
+        :return:  A list of dict representing the nodes
         """
-        node = self.find(self.list(raw=True), name=name, raw=True)
-        self.cloudman.ex_start_node(node)
-        return self.update_dict(node, kind='node')[0]
+        if self.cloudman:
+            # names = Parameter.expand(names)
+            res = []
 
-    def stop(self, name=None):
-        """
-        Stop a node
+            nodes = self.list(raw=True)
+            for node in nodes:
+                if node.name in names:
+                    fname(node)
+                    res.append(self.info(node.name))
+            return res
+        else:
+            return None
 
-        :param name: node name
-        :return: A dict representing the node
+    def start(self, names=None):
         """
-        node = self.find(self.list(raw=True), name=name, raw=True)
-        self.cloudman.ex_stop_node(node)
-        return self.update_dict(node, kind='node')[0]
+        Start a list of nodes with the given names
+
+        :param names: A list of node names
+        :return:  A list of dict representing the nodes
+        """
+        return self.apply(self.cloudman.ex_start_node, names)
+
+    def stop(self, names=None):
+        """
+        Stop a list of nodes with the given names
+
+        :param names: A list of node names
+        :return:  A list of dict representing the nodes
+        """
+
+        return self.apply(self.cloudman.ex_stop_node, names)
 
     def info(self, name=None):
         """
@@ -510,7 +528,7 @@ class Provider(ComputeNodeABC):
         # should return the updated names dict, e.g. status and so on
         # the above specification is for one name
         #
-
+        
         return None
         """
 
@@ -521,9 +539,9 @@ class Provider(ComputeNodeABC):
         :param name: the name of the node
         :return: the dict of the node
         """
-        node = self.find(self.list(raw=True), name=name, raw=True)
-        self.cloudman.ex_start_node(node)
-        return self.update_dict(node, kind='node')[0]
+
+        # the following does not return the dict
+        return self.apply(self.cloudman.ex_start_node, name)
 
     def list(self, raw=False):
         """
@@ -553,27 +571,29 @@ class Provider(ComputeNodeABC):
         return None
 
 
-    def destroy(self, name=None):
+    def destroy(self, names=None):
         """
-        Destroy a node
-
-        :param name: node name
-        :return: A dict representing the node
+        Destroys the node
+        :param names: the name of the node
+        :return: the dict of the node
         """
-        node = self.find(self.list(raw=True), name=name, raw=True)
-        self.cloudman.destroy_node(node)
-        return self.update_dict(node, kind='node')[0]
+        #names = Parameter.expand(names)
+        
+        nodes = self.list(raw=True)
+        for node in nodes:
+            if node.name in names:
+                self.cloudman.destroy_node(node)
+        # bug status should change to destroyed
+        return None
 
     def reboot(self, names=None):
         """
-        Reboot a node
+        Reboot a list of nodes with the given names
 
-        :param name: node name
-        :return: A dict representing the node
+        :param names: A list of node names
+        :return:  A list of dict representing the nodes
         """
-        node = self.find(self.list(raw=True), name=name, raw=True)
-        self.cloudman.reboot_node(node)
-        return self.update_dict(node, kind='node')[0]
+        return self.apply(self.cloudman.reboot_node, names)
 
     def create(self, name=None, image=None, size=None, location=None,  timeout=360, **kwargs):
         """
@@ -587,33 +607,26 @@ class Provider(ComputeNodeABC):
         :param kwargs: additional arguments HEADING(c=".")ed along at time of boot
         :return:
         """
-        if image == None:
-            image = self.spec["default"]['flavor']
-        if size == None:
-            size = self.spec["default"]['size']
-
-        database = CmDatabase()
         image_use = None
         flavor_use = None
+        # keyname = Config()["cloudmesh"]["profile"]["user"]
+        # ex_keyname has to be the registered keypair name in cloud
+        
 
         if self.cloudtype in ["openstack", "aws","google"]:
-            image_dict = database.find(collection='{}-image'.format(self.cloudtype), name=image)[0]
-
-            image_use = NodeImage(id=image_dict['id'],
-                                name=image_dict['name'],
-                                driver=self.driver)
+            images = self.images(raw=True)
+            for _image in images:
+                if _image.name == image:
+                    image_use = _image
+                    break
         elif self.cloudtype == 'azure_arm':
             image_use = self.cloudman.get_image(image)
 
-        flavor_dict = database.find(collection='{}-flavor'.format(self.cloudtype), name=size)[0]
-        flavor_use = NodeSize(id=flavor_dict['id'],
-                            name=flavor_dict['name'],
-                            ram=flavor_dict['ram'],
-                            disk=flavor_dict['disk'],
-                            bandwidth=flavor_dict['bandwidth'],
-                            price=flavor_dict['price'],
-                            driver=self.driver)
-
+        flavors = self.flavors(raw=True)
+        for _flavor in flavors:
+            if _flavor.name == size:
+                flavor_use = _flavor
+                break
         if self.cloudtype == "openstack":
 
             if "ex_security_groups" in kwargs:
@@ -630,7 +643,8 @@ class Provider(ComputeNodeABC):
                 kwargs["ex_security_groups"] = secgroupsobj
 
         if self.cloudtype in ["openstack", "aws"]:
-            node = self.cloudman.create_node(name=name, image=image_use, size=flavor_use, **kwargs)
+            node = self.cloudman.create_node(name=name, image=image_use,
+                                             size=flavor_use, **kwargs)
         elif self.cloudtype == 'azure_arm':
             auth = None
             if "sshpubkey" in kwargs:
@@ -677,10 +691,10 @@ class Provider(ComputeNodeABC):
             location_use = self.spec["credentials"]["datacenter"]
             metadata = {"items": [{"value": self.user+":"+self.key_val, "key": "ssh-keys"}]}
             node = self.cloudman.create_node(name=name, image=image_use,size=flavor_use, location=location_use,ex_metadata=metadata, **kwargs)
-        else:
+        else:    
             sys.exit("this cloud is not yet supported")
 
-        return self.update_dict(node, kind='node')[0]
+        return self.update_dict(node)
 
     def get_publicIP(self):
         # pools = self.cloudman.ex_list_floating_ip_pools()
@@ -744,6 +758,7 @@ class Provider(ComputeNodeABC):
             for line in result:
                 line = line.decode("utf-8")
                 print(line.strip("\n"))
+<<<<<<< HEAD
 
     """
     THIS CODE IS BUUGY AS IT OVERWRITES ALL PROVIDERS, THE CODE ABOVE SEEMS TO WORK
@@ -760,3 +775,5 @@ class Provider(ComputeNodeABC):
                 ssh_command = ['ssh', '-i', key, location, 'bash', '-s', '<', script]
                 subprocess.call(ssh_command, shell=True)
     """
+=======
+>>>>>>> origin/master

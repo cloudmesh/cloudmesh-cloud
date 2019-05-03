@@ -13,7 +13,7 @@ from multiprocessing import Pool
 class Provider(ComputeNodeABC):
 
     def __init__(self, name=None,
-                 configuration="~/.cloudmesh/.cloudmesh4.yaml"):
+                 configuration="~/.cloudmesh/cloudmesh4.yaml"):
         try:
             super().__init__(name, configuration)
             self.kind = Config(configuration)["cloudmesh"]["cloud"][name]["cm"][

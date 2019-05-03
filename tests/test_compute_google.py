@@ -131,7 +131,6 @@ class TestName:
                       size=size,
                       location=location
                       )
-        time.sleep(120)
         nodes = self.p.list()
         node = self.p.find(nodes, name=self.name)
 
@@ -156,9 +155,11 @@ class TestName:
 
     def test_stop(self):
         HEADING()
-        time.sleep(120)
-        self.p.stop(names=self.name)
-        # self.test_list_vm()
+        try:
+            self.p.stop(names=self.name)
+            self.test_list_vm()
+        except:
+            self.test_list_vm()
 
     def test_list(self):
         HEADING()
@@ -166,74 +167,33 @@ class TestName:
 
     def test_start(self):
         HEADING()
-        time.sleep(120)
         self.p.start(names=self.name)
         self.test_list_vm()
 
-    def test_list(self):
-        HEADING()
-        self.test_list_vm()
-
-    def test_stop(self):
-        HEADING()
-        self.test_stop()
 
     def test_destroy(self):
         HEADING()
-        time.sleep(120)
+        try:
+            self.p.stop(names=self.name)
+            self.test_list_vm()
+        except:
+            self.test_list_vm()
         self.p.destroy(names=self.name)
         nodes = self.p.list()
         node = self.p.find(nodes, name=self.name)
 
         assert node is None
 
-    def test_list_vm(self):
-        HEADING()
-        self.test_list_vm()
 
     def test_vm_login(self):
         HEADING()
         self.test_list_vm()
         self.test_create()
-        time.sleep(60)
-        nodes = self.p.list(raw=True)
-        for node in nodes:
-            if node.name == self.name:
-                self.testnode = node
-                break
-        pubip = self.testnode.public_ips[0]
+        self.p.ssh(name=self.name, command = "cat /etc/*release*")
+        try:
+            self.p.stop(names=self.name)
+            self.test_list_vm()
+        except:
+            self.test_list_vm()
 
-        command = "cat /etc/*release*"
-
-        ssh = subprocess.Popen(
-            ["ssh", "%s" % (pubip), "%s" % (command)],
-            # ["ssh", "%s@%s" % (self.clouduser, pubip), COMMAND],
-            shell=False,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE)
-        result = ssh.stdout.readlines()
-        if result == []:
-            error = ssh.stderr.readlines()
-            print("ERROR: %s" % error)
-        else:
-            print("RESULT:")
-            for line in result:
-                line = line.decode("utf-8")
-                print(line.strip("\n"))
-
-    def test_stop(self):
-        HEADING()
-        self.test_stop()
-
-    def test_list(self):
-        HEADING()
-        self.test_list_vm()
-
-    def test_destroy(self):
-        HEADING()
-        time.sleep(120)
-        self.test_destroy()
-
-    def test_list(self):
-        HEADING()
-        self.test_list_vm()
+        self.p.destroy(names=self.name)

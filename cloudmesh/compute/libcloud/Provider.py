@@ -691,7 +691,7 @@ class Provider(ComputeNodeABC):
         else:    
             sys.exit("this cloud is not yet supported")
 
-        return self.update_dict(node)
+        return self.update_dict(node,kind="node")[0]
 
     def get_publicIP(self):
         # pools = self.cloudman.ex_list_floating_ip_pools()

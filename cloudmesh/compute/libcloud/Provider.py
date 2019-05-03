@@ -735,14 +735,28 @@ class Provider(ComputeNodeABC):
         return None
 
     def ssh(self, name=None, command=None):
+        #
+        #Bug we are setting the key location and not reading it from the provider
+        #
+        #key = path_expand("~/.ssh/id_rsa.pub")
+        key = self.key_path.replace(".pub","")
+        #
+        #Bug end
+        #
         nodes = self.list(raw=True)
         for node in nodes:
             if node.name == name:
                 self.testnode = node
                 break
         pubip = self.testnode.public_ips[0]
-        ssh = subprocess.Popen(
-            ["ssh", "%s" % (pubip), "%s" % (command)],
+        location = self.user + '@' + pubip
+        cmd = ['ssh',
+                   "-o", "StrictHostKeyChecking=no",
+                   "-o", "UserKnownHostsFile=/dev/null",
+                   '-i', key, location, command]
+        VERBOSE(" ".join(cmd))
+        
+        ssh = subprocess.Popen(cmd,
             shell=False,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE)

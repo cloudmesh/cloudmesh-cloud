@@ -144,9 +144,10 @@ class Provider(ComputeNodeABC):
         ## this should later check and remove destroyed nodes, not implemented
         return self.loop(names, self.p.destroy, **kwargs)
 
-    def ssh(self, name_ips, **kwargs):
-        for name, ips in name_ips.items():
-            self.p.ssh(name=name, ips=ips, **kwargs)
+    def ssh(self, name, command):
+        self.p.ssh(name=name, command=command)
+        #for name, ips in name_ips.items():
+            #self.p.ssh(name=name, ips=ips, **kwargs)
 
     def login(self):
         if self.kind != "azure":

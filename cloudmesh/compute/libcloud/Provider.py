@@ -13,10 +13,7 @@ from cloudmesh.common.util import HEADING
 from cloudmesh.management.configuration.config import Config
 from cloudmesh.common.util import path_expand
 from cloudmesh.common.console import Console
-<<<<<<< HEAD
 from cloudmesh.management.configuration.config import Config
-=======
->>>>>>> origin/master
 from cloudmesh.DEBUG import VERBOSE
 import subprocess
 
@@ -758,7 +755,6 @@ class Provider(ComputeNodeABC):
             for line in result:
                 line = line.decode("utf-8")
                 print(line.strip("\n"))
-<<<<<<< HEAD
 
     """
     THIS CODE IS BUUGY AS IT OVERWRITES ALL PROVIDERS, THE CODE ABOVE SEEMS TO WORK
@@ -775,5 +771,3 @@ class Provider(ComputeNodeABC):
                 ssh_command = ['ssh', '-i', key, location, 'bash', '-s', '<', script]
                 subprocess.call(ssh_command, shell=True)
     """
-=======
->>>>>>> origin/master

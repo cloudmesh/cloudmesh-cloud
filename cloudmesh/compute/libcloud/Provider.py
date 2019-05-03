@@ -735,14 +735,7 @@ class Provider(ComputeNodeABC):
         return None
 
     def ssh(self, name=None, command=None):
-        #
-        #Bug we are setting the key location and not reading it from the provider
-        #
-        #key = path_expand("~/.ssh/id_rsa.pub")
         key = self.key_path.replace(".pub","")
-        #
-        #Bug end
-        #
         nodes = self.list(raw=True)
         for node in nodes:
             if node.name == name:

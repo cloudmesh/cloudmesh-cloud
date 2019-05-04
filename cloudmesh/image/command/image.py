@@ -22,7 +22,7 @@ class ImageCommand(PluginCommand):
         ::
 
             Usage:
-                image list [NAMES] [--cloud=CLOUD] [--refresh] [--output=OUTPUT]
+                image list [NAMES] [--cloud=CLOUD] [--refresh] [--output=OUTPUT] [--query=QUERY]
 
             Options:
                --output=OUTPUT  the output format [default: table]
@@ -43,6 +43,34 @@ class ImageCommand(PluginCommand):
         VERBOSE(arguments)
 
         variables = Variables()
+
+        if arguments.list and arguments["--query"]:
+            names = []
+
+            clouds, names = Arguments.get_cloud_and_names("list", arguments,
+                                                          variables)
+            cloud = clouds[0]
+            query = arguments["--query"]
+
+            provider = Provider(name=cloud)
+
+            images = []
+            #
+            # images = provider.images(query=query)
+            #
+
+
+            order = provider.p.output['vm']['order']  # not pretty
+            header = provider.p.output['vm']['header']  # not pretty
+
+            print(Printer.flatwrite(images,
+                                    sort_keys=["name"],
+                                    order=order,
+                                    header=header,
+                                    output=arguments.output)
+                  )
+            return ""
+
 
         if arguments.list and arguments.refresh:
 

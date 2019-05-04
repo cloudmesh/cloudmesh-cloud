@@ -200,7 +200,7 @@ cloudmesh:
         kind: vm
         version: liberty
       credentials:
-        OS_AUTH_URL: https://vm.tacc.chameleoncloud.org:5000/v2.0/tokens
+        OS_AUTH_URL: https://openstack.tacc.chameleoncloud.org:5000/v2.0/tokens
         OS_USERNAME: TBD
         OS_PASSWORD: TBD
         OS_TENANT_NAME: CH-819337
@@ -210,7 +210,7 @@ cloudmesh:
         OS_USER_DOMAIN_ID: default
         OS_VERSION: liberty
         OS_REGION_NAME: RegionOne
-        OS_KEY_PATH: TBD
+        OS_KEY_PATH: ~/.ssh/id_rsa.pub
       default:
         flavor: m1.small
         image: CC-Ubuntu16.04

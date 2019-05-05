@@ -9,6 +9,7 @@ from cloudmesh.shell.command import command, map_parameters
 from cloudmesh.common.dotdict import dotdict
 from pprint import pprint
 from cloudmesh.common.parameter import Parameter
+from cloudmesh.group.Group import Group
 
 
 class GroupCommand(PluginCommand):

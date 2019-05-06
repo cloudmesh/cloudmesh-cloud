@@ -99,8 +99,8 @@ class FlavorCommand(PluginCommand):
                     db = CmDatabase()
                     vms = db.find(collection=collection)
 
-                    order = p.p.output['vm']['order']  # not pretty
-                    header = p.p.output['vm']['header']  # not pretty
+                    order = p.p.output['flavor']['order']  # not pretty
+                    header = p.p.output['flavor']['header']  # not pretty
 
                     print(Printer.flatwrite(vms,
                                             sort_keys=["name"],

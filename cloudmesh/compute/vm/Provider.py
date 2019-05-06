@@ -90,8 +90,8 @@ class Provider(ComputeNodeABC):
         return d
 
     @DatabaseUpdate()
-    def images(self):
-        return self.p.images()
+    def images(self, **kwargs):
+        return self.p.images(**kwargs)
 
     # name
     # cloud

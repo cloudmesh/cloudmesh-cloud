@@ -33,8 +33,8 @@ class Provider(ComputeNodeABC):
     """
     this may be buggy as the fields could be differentbased on the provider
     TODO: fix output base on provider
-    so we may need to do 
-    
+    so we may need to do
+
     output = {"aws": {"vm": ....,,
                       "image": ....,,
                       "flavor": ....,,
@@ -386,7 +386,7 @@ class Provider(ComputeNodeABC):
         """
         if self.cloudman:
             if self.cloudtype in ["openstack", "aws","google"]:
-                entries = self.cloudman.list_images()
+                entries = self.cloudman.list_images(**kwargs)
                 if raw:
                     return entries
                 else:
@@ -525,7 +525,7 @@ class Provider(ComputeNodeABC):
         # should return the updated names dict, e.g. status and so on
         # the above specification is for one name
         #
-        
+
         return None
         """
 
@@ -575,7 +575,7 @@ class Provider(ComputeNodeABC):
         :return: the dict of the node
         """
         #names = Parameter.expand(names)
-        
+
         nodes = self.list(raw=True)
         for node in nodes:
             if node.name in names:
@@ -608,7 +608,7 @@ class Provider(ComputeNodeABC):
         flavor_use = None
         # keyname = Config()["cloudmesh"]["profile"]["user"]
         # ex_keyname has to be the registered keypair name in cloud
-        
+
 
         if self.cloudtype in ["openstack", "aws","google"]:
             images = self.images(raw=True)
@@ -688,7 +688,7 @@ class Provider(ComputeNodeABC):
             location_use = self.spec["credentials"]["datacenter"]
             metadata = {"items": [{"value": self.user+":"+self.key_val, "key": "ssh-keys"}]}
             node = self.cloudman.create_node(name=name, image=image_use,size=flavor_use, location=location_use,ex_metadata=metadata, **kwargs)
-        else:    
+        else:
             sys.exit("this cloud is not yet supported")
 
         return self.update_dict(node,kind="node")[0]
@@ -748,7 +748,7 @@ class Provider(ComputeNodeABC):
                    "-o", "UserKnownHostsFile=/dev/null",
                    '-i', key, location, command]
         VERBOSE(" ".join(cmd))
-        
+
         ssh = subprocess.Popen(cmd,
             shell=False,
             stdout=subprocess.PIPE,

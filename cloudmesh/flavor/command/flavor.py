@@ -66,8 +66,8 @@ class FlavorCommand(PluginCommand):
                 provider = Provider(name=cloud)
                 flavors = provider.flavors()
 
-                order = provider.p.output['vm']['order']  # not pretty
-                header = provider.p.output['vm']['header']  # not pretty
+                order = provider.p.output['flavor']['order']  # not pretty
+                header = provider.p.output['flavor']['header']  # not pretty
 
                 print(Printer.flatwrite(flavors,
                                         sort_keys=["name"],

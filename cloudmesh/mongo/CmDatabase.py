@@ -5,7 +5,8 @@ from cloudmesh.common.console import Console
 from cloudmesh.common.parameter import Parameter
 from cloudmesh.management.configuration.config import Config
 from pymongo import MongoClient
-
+from pprint import pprint
+from pymongo import ReturnDocument
 
 #
 # cm:
@@ -104,6 +105,29 @@ class CmDatabase(object):
         return count
 
     # ok
+    def find_group(self, name):
+        """
+        This function returns the entry with the given name from all collections
+        in mongodb. The name must be unique accross all collections
+
+        :param name: the unique name of the entry
+        :return:
+        """
+        entries = []
+        collections = self.collections()
+        for collection in collections:
+            try:
+                col = self.db[collection]
+                cursor = col.find({"cm.group": name})
+                for entry in cursor:
+                    entries.append(entry)
+            except Exception as e:
+                print (e)
+                pass
+        return entries
+
+
+    # ok
     def find_name(self, name):
         """
         This function returns the entry with the given name from all collections
@@ -115,14 +139,11 @@ class CmDatabase(object):
         entries = []
         collections = self.collections()
         for collection in collections:
-            print(collection, name)
             try:
                 col = self.db[collection]
                 cursor = col.find({"cm.name": name})
-                if cursor.count() > 0:
-                    print ("FOUND")
-                for e in cursor:
-                    entries.append(e)
+                for entry in cursor:
+                    entries.append(entry)
             except:
                 pass
             if cursor.count() > 0:
@@ -206,9 +227,11 @@ class CmDatabase(object):
                                           })
 
                 if data is not None:
+
                     entry['cm']['created'] = data["cm"]['created']
                     entry['cm']['modified'] = str(datetime.utcnow())
-                    self.col.update(
+
+                    post = self.col.replace_one(
                         {
                             "cm.kind": entry['cm']["kind"],
                             "cm.cloud": entry['cm']["cloud"],

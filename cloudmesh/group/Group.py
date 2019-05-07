@@ -49,24 +49,16 @@ class Group(object):
 
     """
 
-    def update_dict(self,elements):
-        d = []
-        for entry in elements:
-            entry["cm"] = {
-                "kind": "storage",
-                "cloud": 'group',
-                "name": entry["name"]
-            }
-            for c in ['modified_at', 'created_at', 'size']:
-                if c in entry.keys():
-                    entry['cm'][c]: entry[c]
-                else:
-                    entry['cm'][c]: None
-            d.append(entry)
-        return d
-
-    def list(self, filter):
-        raise NotImplementedError
+    def list(self, group=None):
+        cm = CmDatabase()
+        entries = []
+        try:
+            cursor = cm.find_group(group)
+            for entry in cursor:
+                entries.append(entry)
+        except Exception as e:
+            pass
+        return entries
 
     @DatabaseUpdate()
     def add(self, services=None, group=None):
@@ -79,13 +71,10 @@ class Group(object):
                 entry = dict(cm.find_name(service)[0])
                 del entry["_id"]
                 entry["cm"]["group"] = group
-                pprint(entry)
-                print (type(entry))
                 entries.append(entry)
             except Exception as e:
                 break
-        pprint(entries)
-        return self.update_dict(entries)
+        return entries
 
     def delete(self, elements):
         raise NotImplementedError

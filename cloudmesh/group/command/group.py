@@ -12,6 +12,7 @@ from cloudmesh.common.parameter import Parameter
 from cloudmesh.group.Group import Group
 from cloudmesh.common.parameter import Parameter
 from cloudmesh.group.Group import Group
+from cloudmesh.common.Printer import Printer
 
 class GroupCommand(PluginCommand):
 
@@ -23,7 +24,7 @@ class GroupCommand(PluginCommand):
             Usage:
                 group list [GROUPNAME] [--format=FORMAT]
                 group remove NAMES [--group=GROUPNAME]
-                group add NAMES [--type=TYPE] [--group=GROUPNAME]
+                group add NAMES [--type=TYPE] [--group=GROUPNAME] [--format=FORMAT]
                 group delete GROUPS
                 group copy FROM TO
                 group merge GROUPA GROUPB MERGEDGROUP
@@ -41,7 +42,7 @@ class GroupCommand(PluginCommand):
                 MERGEDGROUP  name of a group
 
             Options:
-                --format=FORMAT     the output format
+                --format=FORMAT     the output format [default: table]
                 --type=TYPE         the resource type
                 --name=NAME         the name of the group
                 --id=IDS            the ID(s) to add to the group
@@ -77,17 +78,59 @@ class GroupCommand(PluginCommand):
         """
         # pprint(arguments)
 
+        order = [
+            'cm.name',
+            'cm.cloud',
+            'cm.group',
+            'cm.kind',
+            'cm.modified',
+            'cm.created']
+
+        header = [
+            'Name',
+            'Cloud',
+            'Group',
+            'Kind',
+            'Modified',
+            'Created']
+
+
         if arguments.add:
 
-
-            "group add NAMES [--type=TYPE] [--group=GROUPNAME]"
-
+            # "group add NAMES [--type=TYPE] [--group=GROUPNAME]"
+            #
+            # tod doe not yet serch for type = kind
+            #
             names = Parameter.expand(arguments.NAMES)
             group = arguments["--group"] or "default"
 
             g = Group()
-            g.add(services=names, group=group)
+            entry = g.add(services=names, group=group)
 
+            pprint(entry)
+
+
+            print(Printer.flatwrite(entry,
+                                    order=order,
+                                    header=header,
+                                    output=arguments["--format"]))
+
+        elif arguments.list:
+
+            # group list [GROUPNAME] [--format=FORMAT]
+
+            group = arguments.GROUPNAME or "default"
+
+            g = Group()
+            entry = g.list(group=group)
+
+            if arguments["--format"] == "list":
+                pprint(entry)
+            else:
+                print(Printer.flatwrite(entry,
+                                        order=order,
+                                        header=header,
+                                        output=arguments["--format"]))
 
 
         """

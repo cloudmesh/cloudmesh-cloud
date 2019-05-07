@@ -79,17 +79,15 @@ class GroupCommand(PluginCommand):
         # pprint(arguments)
 
         order = [
-            'cm.name',
-            'cm.cloud',
             'cm.group',
+            'cm.name',
             'cm.kind',
             'cm.modified',
             'cm.created']
 
         header = [
-            'Name',
-            'Cloud',
             'Group',
+            'Name',
             'Kind',
             'Modified',
             'Created']

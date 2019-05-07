@@ -96,8 +96,11 @@ class CmDatabase(object):
         count = 0
         collections = self.collections()
         for collection in collections:
-            entry = self.find({"collection": collection, "cm.name": entry})
-            count = count + len(entry)
+            try:
+                entry = self.find({"cm.name": name})
+                count = count + len(entry)
+            except:
+                pass
         return count
 
     # ok
@@ -109,13 +112,22 @@ class CmDatabase(object):
         :param name: the unique name of the entry
         :return:
         """
-        entry = []
+        entries = []
         collections = self.collections()
         for collection in collections:
-            entry = self.find({"collection": collection, "cm.name": entry})
-            if len(entry) > 0:
-                return entry
-        return entry
+            print(collection, name)
+            try:
+                col = self.db[collection]
+                cursor = col.find({"cm.name": name})
+                if cursor.count() > 0:
+                    print ("FOUND")
+                for e in cursor:
+                    entries.append(e)
+            except:
+                pass
+            if cursor.count() > 0:
+                return entries
+        return entries
 
     # ok
     def find_names(self, names):
@@ -131,7 +143,7 @@ class CmDatabase(object):
         entries = Parameter.expand(names)
         if len(entries) > 0:
             for entry in entries:
-                r = self.find_name({"cm.name": entry})
+                r = self.find_name(entry)
                 if r is not None:
                     result.append(r[0])
         return result

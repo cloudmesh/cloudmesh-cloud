@@ -82,6 +82,7 @@ class GroupCommand(PluginCommand):
             'cm.group',
             'cm.name',
             'cm.kind',
+            'cm.status',
             'cm.modified',
             'cm.created']
 
@@ -89,6 +90,7 @@ class GroupCommand(PluginCommand):
             'Group',
             'Name',
             'Kind',
+            'Status',
             'Modified',
             'Created']
 
@@ -132,62 +134,7 @@ class GroupCommand(PluginCommand):
 
 
         """
-        if arguments["list"]:
-
-            output = arguments["--format"] or Default.get(name="format", category="general") or "table"
-            name = arguments["GROUPNAME"]
-            if name is None:
-
-                result = Group.list(output=output)
-                if result:
-                    print(result)
-                else:
-                    print("No groups found other than the default group but it has no members.")
-
-            else:
-
-                result = Group.list(name=name,
-                                    output=output)
-
-                if result:
-                    print(result)
-                else:
-                    msg_a = ("No group found with name `{name}` found in the "
-                             "category `{category}`.".format(**locals()))
-
-                '''
-                    # find alternate
-                    result = Group.get(name=name)
-
-                    msg_b = ""
-                    if result is not None and len(result) < 0:
-                        msg_b = " However we found such a variable in " \
-                                "category `{category}`. Please consider " \
-                                "using --category={category}".format(**locals())
-                        Console.error(msg_a + msg_b)
-                    else:
-                        Console.error("No group with name {name} exists.".format(**locals()))
-                '''
-
-                return ""
-
-        elif arguments["add"]:
-            # group add NAME... [--type=TYPE] [--category=CLOUD] [--group=GROUP]
-
-            print ("AAA", arguments["NAMES"])
-            members = Parameter.expand(arguments["NAMES"])
-            print ("MMMM", members)
-            data = dotdict({
-                "species": arguments["--type"] or "vm",
-                "name": arguments["--group"] or Default.group
-            })
-            print ("DDD", data)
-            for member in members:
-                data.member = member
-                pprint(data)
-                Group.add(**data)
-
-            return ""
+    
 
         elif arguments["delete"]:
             groups = Parameter.expand(arguments["GROUPS"])

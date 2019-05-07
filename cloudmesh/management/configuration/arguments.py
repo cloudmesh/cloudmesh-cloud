@@ -50,18 +50,30 @@ class Arguments(object):
 
     @staticmethod
     def name_loop(names, label, f):
+        raise NotImplementedError
         names = Arguments.get_names(arguments, variables)
         for name in names:
             Console.msg("{label} {name}".format(label=label, name=name))
             # r = f(name)
+
     @staticmethod
-    def get_image(arguments, variables):
-            image = arguments["image"] or arguments["--image"]
-            if image is None:
-                Console.error("you need to specify an image")
+    def get_attribute(attribute, arguments, variables):
+            value = arguments[attribute] or arguments[f"--{attribute}"]
+            if value is None:
+                Console.error(f"you need to specify an `{attribute}")
                 return None
             else:
-                return image
+                return value
+
+    @staticmethod
+    def get_flavor(arguments, variables):
+        return Arguments.get_attribute("flavor", arguments, variables)
+
+    @staticmethod
+    def get_image(arguments, variables):
+        return Arguments.get_attribute("image", arguments, variables)
+
+
     @staticmethod
     def get_command(arguments, variables):
             command = arguments["command"] or arguments["--command"]
@@ -70,46 +82,29 @@ class Arguments(object):
                 return None
             else:
                 return command
-    @staticmethod
-    def get_flavor(arguments, variables):
-            flavor = arguments["flavor"] or arguments["--flavor"]
-            if flavor is None:
-                Console.error("you need to specify a flavor")
-                return None
-            else:
-                return flavor
+
     @staticmethod
     def get_commands(label, arguments, variables):
-            names = []
-            if "images" == label:
-                clouds = Arguments.get_clouds(arguments, variables)
-                return clouds
-            if "flavors" == label:
-                clouds = Arguments.get_clouds(arguments, variables)
-                return clouds
-            if "boot" == label:
-                clouds = Arguments.get_clouds(arguments, variables)
-                names = Arguments.get_names(arguments, variables)
-                image = Arguments.get_image(arguments, variables)
-                flavor = Arguments.get_flavor(arguments, variables)
-                return clouds, names, image, flavor
-            if "stop" == label:
-                clouds = Arguments.get_clouds(arguments, variables)
-                names = Arguments.get_names(arguments, variables)
-                return clouds, names
-            if "start" == label:
-                clouds = Arguments.get_clouds(arguments, variables)
-                names = Arguments.get_names(arguments, variables)
-                return clouds, names
-            if "list" == label:
-                clouds = Arguments.get_clouds(arguments, variables)
-                return clouds
-            if "ssh" == label:
-                clouds = Arguments.get_clouds(arguments, variables)
-                names = Arguments.get_names(arguments, variables)
-                command = Arguments.get_command(arguments, variables)
-                return clouds, names, command
-            if "delete" == label:
-                clouds = Arguments.get_clouds(arguments, variables)
-                names = Arguments.get_names(arguments, variables)
-                return clouds, names
+        #
+        # TODO: why are onp all commands looking for clouds and names, likely a bug
+        #
+        names = []
+        if label in ["images", "flavors", "list"]:
+            clouds = Arguments.get_clouds(arguments, variables)
+            return clouds
+        if "boot" == label:
+            clouds = Arguments.get_clouds(arguments, variables)
+            names = Arguments.get_names(arguments, variables)
+            image = Arguments.get_image(arguments, variables)
+            flavor = Arguments.get_flavor(arguments, variables)
+            return clouds, names, image, flavor
+        if label in ["stop", "start", "delete"]:
+            clouds = Arguments.get_clouds(arguments, variables)
+            names = Arguments.get_names(arguments, variables)
+            return clouds, names
+        if "ssh" == label:
+            clouds = Arguments.get_clouds(arguments, variables)
+            names = Arguments.get_names(arguments, variables)
+            command = Arguments.get_command(arguments, variables)
+            return clouds, names, command
+        return names

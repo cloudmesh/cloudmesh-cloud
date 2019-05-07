@@ -1,3 +1,7 @@
+from cloudmesh.mongo.DataBaseDecorator import DatabaseUpdate
+from cloudmesh.mongo.CmDatabase import CmDatabase
+from pprint import pprint
+
 class Group(object):
     """
     group elements are dicts that point to information in the cloudmesh database.
@@ -45,12 +49,43 @@ class Group(object):
 
     """
 
+    def update_dict(self,elements):
+        d = []
+        for entry in elements:
+            entry["cm"] = {
+                "kind": "storage",
+                "cloud": 'group',
+                "name": entry["name"]
+            }
+            for c in ['modified_at', 'created_at', 'size']:
+                if c in entry.keys():
+                    entry['cm'][c]: entry[c]
+                else:
+                    entry['cm'][c]: None
+            d.append(entry)
+        return d
 
     def list(self, filter):
         raise NotImplementedError
 
-    def add(self, elements):
-        raise NotImplementedError
+    @DatabaseUpdate()
+    def add(self, services=None, group=None):
+        # check if non and raise error
+
+        cm = CmDatabase()
+        entries = []
+        for service in services:
+            try:
+                entry = dict(cm.find_name(service)[0])
+                del entry["_id"]
+                entry["cm"]["group"] = group
+                pprint(entry)
+                print (type(entry))
+                entries.append(entry)
+            except Exception as e:
+                break
+        pprint(entries)
+        return self.update_dict(entries)
 
     def delete(self, elements):
         raise NotImplementedError

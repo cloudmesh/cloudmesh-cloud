@@ -10,7 +10,8 @@ from cloudmesh.common.dotdict import dotdict
 from pprint import pprint
 from cloudmesh.common.parameter import Parameter
 from cloudmesh.group.Group import Group
-
+from cloudmesh.common.parameter import Parameter
+from cloudmesh.group.Group import Group
 
 class GroupCommand(PluginCommand):
 
@@ -76,7 +77,18 @@ class GroupCommand(PluginCommand):
         """
         # pprint(arguments)
 
-        raise NotImplementedError
+        if arguments.add:
+
+
+            "group add NAMES [--type=TYPE] [--group=GROUPNAME]"
+
+            names = Parameter.expand(arguments.NAMES)
+            group = arguments["--group"] or "default"
+
+            g = Group()
+            g.add(services=names, group=group)
+
+
 
         """
         if arguments["list"]:

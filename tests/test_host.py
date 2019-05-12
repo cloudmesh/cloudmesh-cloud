@@ -32,5 +32,5 @@ class Test_host:
         key = '~/.ssh/authorized_keys/id_rsa.pub'
         username = os.environ['USER']
         hosts = ['127.0.0.1']
-        result = Host.check(ips=key, username=username, hosts=hosts, processors=3)
+        result = Host.check(key=key, username=username, hosts=hosts, processors=3)
         assert {'0': 0} not in result

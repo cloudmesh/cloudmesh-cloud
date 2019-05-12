@@ -1,25 +1,29 @@
 ###############################################################
-# pip install .; npytest -v --capture=no  tests/test_check.py:Test_check.test_001
-# pytest -v --capture=no  tests/test_check.py
-# pytest -v tests/test_check.py
+# pytest -v --capture=no  tests/test_host.py:Test_host.test_ping
+# pytest -v --capture=no  tests/test_host.py
+# pytest -v tests/test_host.py
 ###############################################################
-from __future__ import print_function
-
-import getpass
-
-from cloudmesh.common3.Host import Host
+from cloudmesh.common3.host import Host
 from cloudmesh.common.util import HEADING
 import pytest
 import os
 
 
 @pytest.mark.incremental
-class Test_check:
+class Test_host:
 
     def setup(self):
         pass
 
-    def test_001(self):
+    def test_ping(self):
+        HEADING()
+        result = Host.pings(ips=['google.com', 'youtube.com', 'com'], count=3, processors=3)
+        assert {'google.com': 0} in result
+        assert {'youtube.com': 0} in result
+        assert {'com': 0} not in result
+
+
+    def test_check(self):
         """
         This test only checks on host 127.0.0.1
         If wish to test successful checks, modify key, username, hosts to with your own credentials

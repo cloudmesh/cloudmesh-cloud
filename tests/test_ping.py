@@ -3,11 +3,7 @@
 # pytest -v --capture=no  tests/test_ping.py
 # pytest -v tests/test_ping.py
 ###############################################################
-from __future__ import print_function
-
-import getpass
-
-from cloudmesh.common.host import Host
+from cloudmesh.common3.host import Host
 from cloudmesh.common.util import HEADING
 import pytest
 

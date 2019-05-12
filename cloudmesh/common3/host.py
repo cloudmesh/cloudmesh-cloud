@@ -59,7 +59,7 @@ class Host(object):
         return res
 
     @classmethod
-    def pings(cls, hosts==None, count=1, processors=3):
+    def pings(cls, hosts=None, count=1, processors=3):
         """
         ping a list of given ip addresses
 

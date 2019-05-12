@@ -11,7 +11,7 @@ from cloudmesh.common.parameter import Parameter
 class Host(object):
 
     @staticmethod
-    def check(args):
+    def _check(args):
         """
         check a vm
 
@@ -34,8 +34,8 @@ class Host(object):
             Console.error(f"{host}  ... could not login")
         return {host: ret_code}
 
-    @classmethod
-    def checks(cls, hosts=None, username=None, key="~/.ssh/id_ras.pub", processors=3):
+    @staticmethod
+    def check(hosts=None, username=None, key="~/.ssh/id_ras.pub", processors=3):
         #
         # BUG: this code has a bug and does not deal with different usernames on the host to be checked.
         #
@@ -55,7 +55,7 @@ class Host(object):
         args = [{'key': key, 'username': username, 'host': host} for host in hosts]
 
         with Pool(processors) as p:
-            res = p.map(Host.check, args)
+            res = p.map(Host._check, args)
         return res
 
     @classmethod

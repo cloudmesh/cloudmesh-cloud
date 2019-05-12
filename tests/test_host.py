@@ -17,7 +17,7 @@ class Test_host:
 
     def test_ping(self):
         HEADING()
-        result = Host.pings(ips=['google.com', 'youtube.com', 'com'], count=3, processors=3)
+        result = Host.pings(hosts=['google.com', 'youtube.com', 'com'], count=3, processors=3)
         assert {'google.com': 0} in result
         assert {'youtube.com': 0} in result
         assert {'com': 0} not in result
@@ -29,7 +29,7 @@ class Test_host:
         If wish to test successful checks, modify key, username, hosts to with your own credentials
         """
         HEADING()
-        key = '~/.ssh/authorized_keys/id_rsa.pub'
+        key = '~/.ssh/id_rsa.pub'
         username = os.environ['USER']
         hosts = ['127.0.0.1']
         result = Host.check(key=key, username=username, hosts=hosts, processors=3)

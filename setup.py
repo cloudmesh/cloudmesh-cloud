@@ -28,7 +28,7 @@ from setuptools import find_packages, setup
 v = sys.version_info
 if v.major != 3 and v.minor != 7 and v.micro < 2:
     print(70 * "#")
-    print("WARNING: upgrade to a python greater or eaqual to 3.7.2 "
+    print("WARNING: upgrade to a python greater or equal to 3.7.3 "
           "other version may not be  supported. "
           "Your version is {version}. ".format(version=sys.version_info))
     print(70 * "#")

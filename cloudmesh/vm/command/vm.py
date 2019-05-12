@@ -11,8 +11,7 @@ from cloudmesh.shell.command import command, map_parameters
 from cloudmesh.variables import Variables
 from cloudmesh.DEBUG import VERBOSE
 from cloudmesh.management.configuration.arguments import Arguments
-# from cloudmesh.common.Shell import Shell
-from cloudmesh.common3.Shell import Shell as Shell3
+from cloudmesh.common3.host import Host
 from cloudmesh.common.error import Error
 from datetime import datetime
 import hashlib
@@ -256,7 +255,7 @@ class VmCommand(PluginCommand):
                         public_ips.append(node['public_ips'])
                 public_ips = [y for x in public_ips for y in x]
 
-                Shell3.pings(ips=public_ips, **params)
+                Host.ping(ips=public_ips, **params)
 
         elif arguments.check:
             if arguments.NAMES:
@@ -285,7 +284,7 @@ class VmCommand(PluginCommand):
                         public_ips.append(node['public_ips'])
                 public_ips = [y for x in public_ips for y in x]
 
-                Shell3.checks(hosts=public_ips, **params)
+                Host.check(hosts=public_ips, **params)
 
         elif arguments.status:
             if arguments.NAMES:

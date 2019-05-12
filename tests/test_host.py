@@ -17,7 +17,7 @@ class Test_host:
 
     def test_ping(self):
         HEADING()
-        result = Host.pings(hosts=['google.com', 'youtube.com', 'com'], count=3, processors=3)
+        result = Host.ping(hosts=['google.com', 'youtube.com', 'com'], count=3, processors=3)
         assert {'google.com': 0} in result
         assert {'youtube.com': 0} in result
         assert {'com': 0} not in result

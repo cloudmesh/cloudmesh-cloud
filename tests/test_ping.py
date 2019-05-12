@@ -7,7 +7,7 @@ from __future__ import print_function
 
 import getpass
 
-from cloudmesh.common3.Shell import Shell as Shell3
+from cloudmesh.common.host import Host
 from cloudmesh.common.util import HEADING
 import pytest
 
@@ -19,7 +19,7 @@ class Test_ping:
 
     def test_001(self):
         HEADING()
-        result = Shell3.pings(ips=['google.com', 'youtube.com', 'com'], count=3, processors=3)
+        result = Host.pings(ips=['google.com', 'youtube.com', 'com'], count=3, processors=3)
         assert {'google.com': 0} in result
         assert {'youtube.com': 0} in result
         assert {'com': 0} not in result

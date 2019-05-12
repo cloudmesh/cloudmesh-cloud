@@ -59,7 +59,7 @@ class Host(object):
         return res
 
     @classmethod
-    def pings(cls, ips=None, count=1, processors=3):
+    def pings(cls, hosts==None, count=1, processors=3):
         """
         ping a list of given ip addresses
 
@@ -89,11 +89,11 @@ class Host(object):
 
             # first expand the ips to a list
 
-        if type(ips) != list:
-            ips = Parameter.expand(ips)
+        if type(hosts) != list:
+            hosts = Parameter.expand(hosts)
 
             # wrap ip and count into one list to be sent to Pool map
-        args = [{'ip': ip, 'count': count} for ip in ips]
+        args = [{'ip': ip, 'count': count} for ip in hosts]
 
         with Pool(processors) as p:
             res = p.map(ping, args)

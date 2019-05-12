@@ -58,8 +58,27 @@ class Host(object):
             res = p.map(Host._check, args)
         return res
 
-    @classmethod
-    def pings(cls, hosts=None, count=1, processors=3):
+    @staticmethod
+    def _ping(args):
+        """
+            ping a vm
+
+            :param args: dict of {ip address, count}
+            :return: a dict representing the result, if ret_code=0 ping is successfully
+            """
+        ip = args['ip']
+        count = str(args['count'])
+        count_flag = '-n' if platform == 'windows' else '-c'
+        command = ['ping', count_flag, count, ip]
+        ret_code = subprocess.run(command, capture_output=False).returncode
+        if ret_code == 0:
+            Console.ok(f"{ip} ... ok")
+        else:
+            Console.error(f"{ip} ... error")
+        return {ip: ret_code}
+
+    @staticmethod
+    def ping(hosts=None, count=1, processors=3):
         """
         ping a list of given ip addresses
 
@@ -69,23 +88,6 @@ class Host(object):
         :return: list of dicts representing the ping result
         """
 
-        def ping(args):
-            """
-                ping a vm
-
-                :param args: dict of {ip address, count}
-                :return: a dict representing the result, if ret_code=0 ping is successfully
-                """
-            ip = args['ip']
-            count = str(args['count'])
-            count_flag = '-n' if platform == 'windows' else '-c'
-            command = ['ping', count_flag, count, ip]
-            ret_code = subprocess.run(command, capture_output=False).returncode
-            if ret_code == 0:
-                Console.ok(f"{ip} ... ok")
-            else:
-                Console.error(f"{ip} ... error")
-            return {ip: ret_code}
 
             # first expand the ips to a list
 
@@ -96,6 +98,6 @@ class Host(object):
         args = [{'ip': ip, 'count': count} for ip in hosts]
 
         with Pool(processors) as p:
-            res = p.map(ping, args)
+            res = p.map(Host._ping, args)
 
         return res

@@ -29,7 +29,7 @@ class Test_host:
         If wish to test successful checks, modify key, username, hosts to with your own credentials
         """
         HEADING()
-        key = '~/.ssh/id_rsa.pub'
+        key = '~/.ssh/authorized_keys/id_rsa.pub'
         username = os.environ['USER']
         hosts = ['127.0.0.1']
         result = Host.check(key=key, username=username, hosts=hosts, processors=3)

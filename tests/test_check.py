@@ -7,7 +7,7 @@ from __future__ import print_function
 
 import getpass
 
-from cloudmesh.common3.Shell import Shell
+from cloudmesh.common3.Host import Host
 from cloudmesh.common.util import HEADING
 import pytest
 import os
@@ -28,5 +28,5 @@ class Test_check:
         key = '~/.ssh/authorized_keys/id_rsa.pub'
         username = os.environ['USER']
         hosts = ['127.0.0.1']
-        result = Shell.checks(key=key, username=username, hosts=hosts, processors=3)
+        result = Host.check(ips=key, username=username, hosts=hosts, processors=3)
         assert {'0': 0} not in result

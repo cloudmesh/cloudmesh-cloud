@@ -4,7 +4,7 @@
 
 ## Prerequisites
 
-Before you install make sure that you have at minimum python 3.7.2
+Before you install make sure that you have at minimum python 3.7.3
 installed. We recommend that you use a python virtualenv such as `venv`
 or `pyenv` to isolate the python installed packages as not to interfere
 with the system installation.

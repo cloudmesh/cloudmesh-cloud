@@ -12,7 +12,7 @@ python:
 install:
   - whoami
   - pwd
-  - mkdir -p .ssh
+  - chmod go-rwx ~/.ssh/
   - ssh-keygen  -t rsa -N '' -f ~/.ssh/id_rsa
   - cat ~/.ssh/id_rsa.pub  >> ~/.ssh/authorized_keys
   - pip install cloudmesh-installer

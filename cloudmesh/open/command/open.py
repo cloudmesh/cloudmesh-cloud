@@ -68,7 +68,8 @@ class OpenCommand(PluginCommand):
             filename = "./docs/index.html"
 
         elif filename == "doc":
-            filename = "https://cloudmesh-community.github.io/cm/"
+            # filename = "https://cloudmesh-community.github.io/"
+            filename = "https://cloudmesh.github.io/cloudmesh-manual/"
 
         if not (filename.startswith("file:") or filename.startswith("http")):
 

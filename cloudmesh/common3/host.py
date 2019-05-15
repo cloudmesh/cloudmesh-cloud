@@ -86,8 +86,7 @@ class Host(object):
         :return: list of dicts representing the ping result
         """
 
-
-            # first expand the ips to a list
+        # first expand the ips to a list
 
         if type(hosts) != list:
             hosts = Parameter.expand(hosts)

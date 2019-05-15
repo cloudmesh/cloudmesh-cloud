@@ -185,6 +185,7 @@ class Provider(ComputeNodeABC):
         # BUG MUST RETURN A DICT
         return self.az_2(command)
 
+    # noinspection PyPep8
     def list(self):
         try:
             # noinspection PyPep8
@@ -301,6 +302,7 @@ class Provider(ComputeNodeABC):
             username = vm_list[i]['osProfile']['adminUsername']
             self.wait_orig(self.resource_group, vm_name, username)
 
+    # noinspection PyPep8
     def wait_orig(self,
 
                   vm_name=None,

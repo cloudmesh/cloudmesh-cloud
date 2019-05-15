@@ -34,18 +34,19 @@ class BenchmarkFiles(object):
         :rtype: float
         """
         location = path_expand(path)
-        size = 1048576 * n # size in bytes
+        size = 1048576 * n  # size in bytes
         with open(path, "wb") as f:
             f.write(os.urandom(size))
 
         s = os.path.getsize(location)
-        #try:
+        # try:
         #    os.system(f"ls -lhs {location}")
         #    os.system(f"du -h {location}")
-        #except:
+        # except:
         #    pass
 
-        return s/1048576.0
+        return s / 1048576.0
+
 
 if __name__ == "__main__":
     BenchmarkFiles.yaml("./t.yaml", 10)

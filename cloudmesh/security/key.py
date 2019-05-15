@@ -2,7 +2,7 @@
 # TODO THIS IS CODE FROM THE PREVIOUS CLOUDMESH, WE NEEED TO CLEAN AND POSSIBLY SIMPLIFY
 #
 
-# noinspection PyPep8Naming
+# noinspection PyPep8Naming,PyPep8
 class Key(ListResource):
 
     @classmethod

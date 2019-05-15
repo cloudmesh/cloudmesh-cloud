@@ -16,7 +16,7 @@ class Manager(object):
         :return: the proposed username
         """
         name = name.lower()
-        if name.startswith("cc-") or cloud=='chameleon':
+        if name.startswith("cc-") or cloud == 'chameleon':
             username = "cc"
         elif any(x in name for x in ["ubuntu", "wily", "xenial"]):
             username = "ubuntu"

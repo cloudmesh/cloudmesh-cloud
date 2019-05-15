@@ -73,8 +73,6 @@ class FlavorCommand(PluginCommand):
                       )
             return ""
 
-
-
         elif arguments.list:
 
             names = []

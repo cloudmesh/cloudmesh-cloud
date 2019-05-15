@@ -336,9 +336,7 @@ class Provider(ComputeNodeABC):
         raise NotImplementedError
         # THIS SHOUL RETURN A DICT
 
-    def destroy(self, name=None):
-        raise NotImplementedError
-        # THIS SHOUL RETURN A DICT
+
 
 
 if __name__ == "__main__":

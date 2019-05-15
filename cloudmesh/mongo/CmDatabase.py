@@ -5,8 +5,7 @@ from cloudmesh.common.console import Console
 from cloudmesh.common.parameter import Parameter
 from cloudmesh.management.configuration.config import Config
 from pymongo import MongoClient
-from pprint import pprint
-from pymongo import ReturnDocument
+
 
 #
 # cm:
@@ -122,10 +121,9 @@ class CmDatabase(object):
                 for entry in cursor:
                     entries.append(entry)
             except Exception as e:
-                print (e)
+                print(e)
                 pass
         return entries
-
 
     # ok
     def find_name(self, name):

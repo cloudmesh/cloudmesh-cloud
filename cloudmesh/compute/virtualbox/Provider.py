@@ -537,8 +537,6 @@ class Provider(ComputeNodeABC):
                                shell=True)
         return result
 
-
-
     def destroy(self, name=None):
         """
         Destroys the node

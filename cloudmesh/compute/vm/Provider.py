@@ -1,15 +1,16 @@
-from cloudmesh.compute.libcloud.Provider import Provider as LibCloudProvider
+from multiprocessing import Pool
+
+from cloudmesh.abstractclass.ComputeNodeABC import ComputeNodeABC
+from cloudmesh.common.console import Console
+from cloudmesh.common.parameter import Parameter
 from cloudmesh.compute.azure.AzProvider import Provider as AzAzureProvider
 from cloudmesh.compute.docker.Provider import Provider as DockerProvider
+from cloudmesh.compute.libcloud.Provider import Provider as LibCloudProvider
 from cloudmesh.compute.virtualbox.Provider import \
     Provider as VirtualboxCloudProvider
 from cloudmesh.management.configuration.config import Config
 from cloudmesh.mongo.DataBaseDecorator import DatabaseUpdate
-from cloudmesh.common.console import Console
-from cloudmesh.abstractclass.ComputeNodeABC import ComputeNodeABC
-from cloudmesh.common.parameter import Parameter
-from multiprocessing import Pool
-from cloudmesh.DEBUG import VERBOSE
+
 
 class Provider(ComputeNodeABC):
 
@@ -125,11 +126,11 @@ class Provider(ComputeNodeABC):
         r = []
         for name in names:
             entry = self.p.create(
-                        name=name,
-                        image=image,
-                        size=size,
-                        timeout=360,
-                        **kwargs)
+                name=name,
+                image=image,
+                size=size,
+                timeout=360,
+                **kwargs)
             r.append(entry)
         return r
 
@@ -146,8 +147,8 @@ class Provider(ComputeNodeABC):
 
     def ssh(self, name, command):
         self.p.ssh(name=name, command=command)
-        #for name, ips in name_ips.items():
-            #self.p.ssh(name=name, ips=ips, **kwargs)
+        # for name, ips in name_ips.items():
+        # self.p.ssh(name=name, ips=ips, **kwargs)
 
     def login(self):
         if self.kind != "azure":

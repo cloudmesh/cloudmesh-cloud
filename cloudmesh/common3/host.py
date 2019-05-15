@@ -1,5 +1,3 @@
-from __future__ import print_function
-
 import subprocess
 from multiprocessing import Pool
 from sys import platform

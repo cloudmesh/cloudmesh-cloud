@@ -59,14 +59,15 @@ class Manager(object):
         print(installer)
 
     def patch(self, package):
-        script = f"""
-                    bump2version --allow-dirty patch
-	                python setup.py sdist bdist_wheel
-                    twine check dist/*
-	                twine upload --repository testpypi  dist/*
-                    sleep 10    
-	                pip install --index-url https://test.pypi.org/simple/ cloudmesh-{package} -U
-                  """
+        script = \
+            f"""
+            bump2version --allow-dirty patch
+            python setup.py sdist bdist_wheel
+            twine check dist/*
+            twine upload --repository testpypi  dist/*
+            sleep 10    
+            pip install --index-url https://test.pypi.org/simple/ cloudmesh-{package} -U
+            """
         installer = Script.live(script)
         # print (installer)
 

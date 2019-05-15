@@ -15,6 +15,7 @@ from cloudmesh.common.dotdict import dotdict
 from cloudmesh.variables import Variables
 from cloudmesh.common.console import Console
 
+
 class Active(object):
 
     def __init__(self, config_path='~/.cloudmesh/cloudmesh4.yaml'):
@@ -100,7 +101,6 @@ class Config(object):
         if "data" not in self.__dict__:
             self.load(config_path=config_path)
 
-
     def load(self, config_path='~/.cloudmesh/cloudmesh4.yaml'):
         """
         loads a configuration file
@@ -148,7 +148,6 @@ class Config(object):
         else:
             self.cloud = None
 
-
     def save(self, path="~/.cloudmesh/cloudmesh4.yaml", backup=True):
         """
         #
@@ -169,7 +168,6 @@ class Config(object):
         yaml_file = self.data.copy()
         with open(self.config_path, "w") as stream:
             yaml.safe_dump(yaml_file, stream, default_flow_style=False)
-
 
     def spec_replace(self, spec):
 
@@ -228,7 +226,7 @@ class Config(object):
             Console.error(f"The key '{key}' couold not be found in the yaml file '{path}'")
             sys.exit(1)
         except Exception as e:
-            print (e)
+            print(e)
             sys.exit(1)
 
     def __setitem__(self, key, value):
@@ -261,7 +259,7 @@ class Config(object):
                 #
                 # create entry
                 #
-                location[keys[len(keys)-1]] = value
+                location[keys[len(keys) - 1]] = value
             else:
                 self.data[key] = value
 
@@ -277,7 +275,6 @@ class Config(object):
         yaml_file = self.data.copy()
         with open(self.config_path, "w") as stream:
             yaml.safe_dump(yaml_file, stream, default_flow_style=False)
-
 
     def set_cloud(self, key, value):
         """
@@ -322,10 +319,9 @@ class Config(object):
             Console.error(f"The key '{item}' couold not be found in the yaml file '{path}'")
             sys.exit(1)
         except Exception as e:
-            print (e)
+            print(e)
             sys.exit(1)
         return element
-
 
     def __delitem__(self, item):
         """
@@ -344,7 +340,7 @@ class Config(object):
             else:
                 return self.data[item]
             element = self.data
-            print (keys)
+            print(keys)
             for key in keys:
                 element = element[key]
             del element
@@ -353,6 +349,5 @@ class Config(object):
             Console.error(f"The key '{item}' couold not be found in the yaml file '{path}'")
             sys.exit(1)
         except Exception as e:
-            print (e)
+            print(e)
             sys.exit(1)
-

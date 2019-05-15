@@ -58,12 +58,12 @@ class Arguments(object):
 
     @staticmethod
     def get_attribute(attribute, arguments, variables):
-            value = arguments[attribute] or arguments[f"--{attribute}"]
-            if value is None:
-                Console.error(f"you need to specify an `{attribute}")
-                return None
-            else:
-                return value
+        value = arguments[attribute] or arguments[f"--{attribute}"]
+        if value is None:
+            Console.error(f"you need to specify an `{attribute}")
+            return None
+        else:
+            return value
 
     @staticmethod
     def get_flavor(arguments, variables):
@@ -73,15 +73,14 @@ class Arguments(object):
     def get_image(arguments, variables):
         return Arguments.get_attribute("image", arguments, variables)
 
-
     @staticmethod
     def get_command(arguments, variables):
-            command = arguments["command"] or arguments["--command"]
-            if command is None:
-                Console.error("you need to specify a command")
-                return None
-            else:
-                return command
+        command = arguments["command"] or arguments["--command"]
+        if command is None:
+            Console.error("you need to specify a command")
+            return None
+        else:
+            return command
 
     @staticmethod
     def get_commands(label, arguments, variables):

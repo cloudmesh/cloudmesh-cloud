@@ -1,14 +1,11 @@
-from __future__ import print_function
-
+from cloudmesh.DEBUG import VERBOSE
+from cloudmesh.common.Printer import Printer
+from cloudmesh.compute.vm.Provider import Provider
+from cloudmesh.management.configuration.arguments import Arguments
+from cloudmesh.mongo.CmDatabase import CmDatabase
 from cloudmesh.shell.command import PluginCommand
 from cloudmesh.shell.command import command, map_parameters
-from pprint import pprint
-from cloudmesh.DEBUG import VERBOSE
 from cloudmesh.variables import Variables
-from cloudmesh.management.configuration.arguments import Arguments
-from cloudmesh.compute.vm.Provider import Provider
-from cloudmesh.mongo.CmDatabase import CmDatabase
-from cloudmesh.common.Printer import Printer
 
 
 class FlavorCommand(PluginCommand):
@@ -60,7 +57,6 @@ class FlavorCommand(PluginCommand):
             clouds, names = Arguments.get_cloud_and_names("list", arguments,
                                                           variables)
 
-
             for cloud in clouds:
                 print(f"cloud {cloud}")
                 provider = Provider(name=cloud)
@@ -95,7 +91,7 @@ class FlavorCommand(PluginCommand):
                     kind = p.kind
 
                     collection = "{cloud}-flavor".format(cloud=cloud,
-                                                        kind=p.kind)
+                                                         kind=p.kind)
                     db = CmDatabase()
                     vms = db.find(collection=collection)
 

@@ -124,6 +124,7 @@ class MongoInstaller(object):
         self.data["MONGO_PATH"] = self.data["MONGO_PATH"].replace("/", "\\")
         self.data["MONGO_LOG"] = self.data["MONGO_LOG"].replace("/", "\\")
 
+        # noinspection PyPep8
         script = """
         mkdir {MONGO_PATH}
         mkdir {MONGO_HOME}

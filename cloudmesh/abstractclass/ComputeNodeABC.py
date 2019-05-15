@@ -1,6 +1,7 @@
 from abc import ABCMeta, abstractmethod
+
 from cloudmesh.management.configuration.config import Config
-from cloudmesh.DEBUG import VERBOSE
+
 
 # noinspection PyUnusedLocal
 class ComputeNodeABC(metaclass=ABCMeta):
@@ -153,4 +154,3 @@ class ComputeNodeABC(metaclass=ABCMeta):
         """
         # if destination is None, increase the name counter and use the new name
         raise NotImplementedError
-

@@ -1,5 +1,3 @@
-from __future__ import print_function
-
 import textwrap
 
 from cloudmesh.common.Printer import Printer
@@ -17,6 +15,7 @@ from cloudmesh.common.util import path_expand
 
 
 class AdminCommand(PluginCommand):
+    # noinspection PyPep8
     banner = textwrap.dedent("""
         test
         +-------------------------------------------------------+

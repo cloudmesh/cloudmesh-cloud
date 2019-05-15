@@ -1,15 +1,14 @@
-from cloudmesh.common.Shell import Shell
 import json
 import webbrowser
 from pprint import pprint
 
+from cloudmesh.DEBUG import VERBOSE
+from cloudmesh.abstractclass.ComputeNodeABC import ComputeNodeABC
 from cloudmesh.common.Shell import Shell
 from cloudmesh.common.StopWatch import StopWatch
-import time
-from cloudmesh.management.configuration.config import Config
-from cloudmesh.abstractclass.ComputeNodeABC import ComputeNodeABC
-from cloudmesh.DEBUG import VERBOSE
 from cloudmesh.common.util import path_expand
+from cloudmesh.management.configuration.config import Config
+
 
 def timer(func):
     def decorated_func(*args, **kwargs):
@@ -84,7 +83,6 @@ class Provider(ComputeNodeABC):
     }
     """
 
-
     def __init__(self, name=None, configuration="~/.cloudmesh/cloudmesh4.yaml"):
         configuration = path_expand(configuration)
         conf = Config(name, configuration)["cloudmesh"]
@@ -112,7 +110,6 @@ class Provider(ComputeNodeABC):
         for entry in data:
             data = self.update_dict(entry)
         return data
-
 
     @timer
     def az(self, command):
@@ -165,6 +162,7 @@ class Provider(ComputeNodeABC):
         username = kwargs["username"]
 
         # first check if vm exists, if it does return error
+        # noinspection PyPep8
         command = \
             "az vm create" \
                 f" --resource-group {self.resource_group}" \
@@ -177,6 +175,7 @@ class Provider(ComputeNodeABC):
 
     def destroy(self, name=None):
         r = self.stop(name=name)
+        # noinspection PyPep8
         command = \
             "az vm delete --yes" \
                 f" --resource-group {self.resource_group}" \
@@ -188,6 +187,7 @@ class Provider(ComputeNodeABC):
 
     def list(self):
         try:
+            # noinspection PyPep8
             command = \
                 "az vm list" \
                     f" --resource-group {self.resource_group}"
@@ -205,6 +205,7 @@ class Provider(ComputeNodeABC):
         return self.az(command)
 
     def status(self, name=None):
+        # noinspection PyPep8
         command = \
             "az vm get-instance-view" \
                 f" --name {name}" \
@@ -213,6 +214,7 @@ class Provider(ComputeNodeABC):
         return self.az(command)
 
     def stop(self, name=None):
+        # noinspection PyPep8
         command = \
             f"az vm stop" \
                 f" --resource-group {self.resource_group}" \
@@ -222,6 +224,7 @@ class Provider(ComputeNodeABC):
         return self.az_2(command)
 
     def start(self, name=None):
+        # noinspection PyPep8
         command = \
             f"az vm start" \
                 f" --resource-group {self.resource_group}" \
@@ -234,6 +237,7 @@ class Provider(ComputeNodeABC):
 
     def restart(self,
                 name=None):
+        # noinspection PyPep8
         command = \
             f"az vm restart" \
                 f" --resource-group {self.resource_group}" \
@@ -274,6 +278,7 @@ class Provider(ComputeNodeABC):
 
     def list_image(self,
                    location=None):
+        # noinspection PyPep8
         command = \
             "az vm image list" \
                 f" --location {location}"
@@ -282,6 +287,7 @@ class Provider(ComputeNodeABC):
 
     def list_size(self,
                   location=None):
+        # noinspection PyPep8
         command = \
             "az vm list-sizes" \
                 f" --location {location}"
@@ -324,11 +330,9 @@ class Provider(ComputeNodeABC):
         raise NotImplementedError
         # THIS SHOUL RETURN A DICT
 
-
     def suspend(self, name=None):
         raise NotImplementedError
         # THIS SHOUL RETURN A DICT
-
 
     def destroy(self, name=None):
         raise NotImplementedError

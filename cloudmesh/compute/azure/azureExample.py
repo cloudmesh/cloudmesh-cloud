@@ -1,9 +1,7 @@
-from libcloud.compute.types import Provider
-from libcloud.compute.providers import get_driver
-
-from libcloud.compute.drivers.azure_arm import AzureNodeDriver
-from libcloud.compute.base import NodeAuthSSHKey
 from cloudmesh.common.util import banner
+from libcloud.compute.base import NodeAuthSSHKey
+from libcloud.compute.providers import get_driver
+from libcloud.compute.types import Provider
 
 cls = get_driver(Provider.AZURE_ARM)
 driver = cls(tenant_id='...',

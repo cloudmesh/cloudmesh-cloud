@@ -1,6 +1,6 @@
-from cloudmesh.mongo.DataBaseDecorator import DatabaseUpdate
 from cloudmesh.mongo.CmDatabase import CmDatabase
-from pprint import pprint
+from cloudmesh.mongo.DataBaseDecorator import DatabaseUpdate
+
 
 class Group(object):
     """
@@ -90,9 +90,3 @@ class Group(object):
 
     def status(self, group, filter):
         raise NotImplementedError
-
-
-
-
-
-

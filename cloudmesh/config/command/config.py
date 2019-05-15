@@ -1,13 +1,12 @@
-from __future__ import print_function
-from pprint import pprint
 import os
+import sys
+
+from cloudmesh.common.console import Console
+from cloudmesh.common.util import path_expand
 from cloudmesh.security.encrypt import EncryptFile
 from cloudmesh.shell.command import PluginCommand
 from cloudmesh.shell.command import command
-from cloudmesh.common.util import path_expand
-from cloudmesh.DEBUG import VERBOSE
-from cloudmesh.common.console import Console
-import sys
+
 
 class ConfigCommand(PluginCommand):
 
@@ -90,7 +89,6 @@ class ConfigCommand(PluginCommand):
         source = arguments.SOURCE or path_expand("~/.cloudmesh/cloudmesh4.yaml")
         destination = source + ".enc"
 
-
         arguments.keep = arguments["--keep"]
         # VERBOSE(arguments)
 
@@ -121,7 +119,6 @@ class ConfigCommand(PluginCommand):
             if os.path.exists(destination):
                 Console.error(f"decrypted file {destination} does already exist")
                 sys.exit(1)
-
 
             e.decrypt(source)
             Console.ok(f"{source} --> {source}")

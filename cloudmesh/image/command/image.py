@@ -1,14 +1,11 @@
-from __future__ import print_function
-
+from cloudmesh.DEBUG import VERBOSE
+from cloudmesh.common.Printer import Printer
+from cloudmesh.compute.vm.Provider import Provider
+from cloudmesh.management.configuration.arguments import Arguments
+from cloudmesh.mongo.CmDatabase import CmDatabase
 from cloudmesh.shell.command import PluginCommand
 from cloudmesh.shell.command import command, map_parameters
-from pprint import pprint
-from cloudmesh.DEBUG import VERBOSE
 from cloudmesh.variables import Variables
-from cloudmesh.management.configuration.arguments import Arguments
-from cloudmesh.compute.vm.Provider import Provider
-from cloudmesh.mongo.CmDatabase import CmDatabase
-from cloudmesh.common.Printer import Printer
 
 
 class ImageCommand(PluginCommand):

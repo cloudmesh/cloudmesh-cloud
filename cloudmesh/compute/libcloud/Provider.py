@@ -1,21 +1,18 @@
+import subprocess
 import sys
 from datetime import datetime
 from pathlib import Path
 from pprint import pprint
 
+from cloudmesh.DEBUG import VERBOSE
+from cloudmesh.abstractclass.ComputeNodeABC import ComputeNodeABC
+from cloudmesh.common.console import Console
+from cloudmesh.common.util import HEADING
+from cloudmesh.common.util import path_expand
+from cloudmesh.management.configuration.config import Config
+from libcloud.compute.base import NodeAuthSSHKey
 from libcloud.compute.providers import get_driver
 from libcloud.compute.types import Provider as LibcloudProvider
-from libcloud.compute.base import NodeAuthSSHKey
-
-from cloudmesh.abstractclass.ComputeNodeABC import ComputeNodeABC
-from cloudmesh.common.parameter import Parameter
-from cloudmesh.common.util import HEADING
-from cloudmesh.management.configuration.config import Config
-from cloudmesh.common.util import path_expand
-from cloudmesh.common.console import Console
-from cloudmesh.management.configuration.config import Config
-from cloudmesh.DEBUG import VERBOSE
-import subprocess
 
 
 class Provider(ComputeNodeABC):
@@ -94,7 +91,7 @@ class Provider(ComputeNodeABC):
         :param configuration: The location of the yaml configuration file
         """
         conf = Config(configuration)["cloudmesh"]
-        #self.user = conf["profile"]
+        # self.user = conf["profile"]
         self.user = Config()["cloudmesh"]["profile"]["user"]
         self.spec = conf["cloud"][name]
         self.cloud = name
@@ -148,9 +145,9 @@ class Provider(ComputeNodeABC):
         else:
             print("Specified provider not available")
             self.cloudman = False
-        #self.default_image = deft["image"]
-        #self.default_size = deft["size"]
-        #self.default.location = cred["datacenter"]
+        # self.default_image = deft["image"]
+        # self.default_size = deft["size"]
+        # self.default.location = cred["datacenter"]
         self.public_key_path = conf["profile"]["publickey"]
         self.key_path = path_expand(Config()["cloudmesh"]["profile"]["publickey"])
         f = open(self.key_path, 'r')
@@ -173,7 +170,7 @@ class Provider(ComputeNodeABC):
         d = []
         for element in _elements:
             entry = element.__dict__
-            del entry["extra"] #Remove extra from google node
+            del entry["extra"]  # Remove extra from google node
             entry["cm"] = {
                 "kind": kind,
                 "driver": self.cloudtype,
@@ -385,7 +382,7 @@ class Provider(ComputeNodeABC):
         :return: dict or libcloud object
         """
         if self.cloudman:
-            if self.cloudtype in ["openstack", "aws","google"]:
+            if self.cloudtype in ["openstack", "aws", "google"]:
                 entries = self.cloudman.list_images()
                 if raw:
                     return entries
@@ -567,15 +564,14 @@ class Provider(ComputeNodeABC):
                 return self.update_dict(entries, kind="node")
         return None
 
-
     def destroy(self, names=None):
         """
         Destroys the node
         :param names: the name of the node
         :return: the dict of the node
         """
-        #names = Parameter.expand(names)
-        
+        # names = Parameter.expand(names)
+
         nodes = self.list(raw=True)
         for node in nodes:
             if node.name in names:
@@ -592,7 +588,7 @@ class Provider(ComputeNodeABC):
         """
         return self.apply(self.cloudman.reboot_node, names)
 
-    def create(self, name=None, image=None, size=None, location=None,  timeout=360, **kwargs):
+    def create(self, name=None, image=None, size=None, location=None, timeout=360, **kwargs):
         """
         creates a named node
 
@@ -608,9 +604,8 @@ class Provider(ComputeNodeABC):
         flavor_use = None
         # keyname = Config()["cloudmesh"]["profile"]["user"]
         # ex_keyname has to be the registered keypair name in cloud
-        
 
-        if self.cloudtype in ["openstack", "aws","google"]:
+        if self.cloudtype in ["openstack", "aws", "google"]:
             images = self.images(raw=True)
             for _image in images:
                 if _image.name == image:
@@ -686,12 +681,13 @@ class Provider(ComputeNodeABC):
                                              )
         elif self.cloudtype == 'google':
             location_use = self.spec["credentials"]["datacenter"]
-            metadata = {"items": [{"value": self.user+":"+self.key_val, "key": "ssh-keys"}]}
-            node = self.cloudman.create_node(name=name, image=image_use,size=flavor_use, location=location_use,ex_metadata=metadata, **kwargs)
-        else:    
+            metadata = {"items": [{"value": self.user + ":" + self.key_val, "key": "ssh-keys"}]}
+            node = self.cloudman.create_node(name=name, image=image_use, size=flavor_use, location=location_use,
+                                             ex_metadata=metadata, **kwargs)
+        else:
             sys.exit("this cloud is not yet supported")
 
-        return self.update_dict(node,kind="node")[0]
+        return self.update_dict(node, kind="node")[0]
 
     def get_publicIP(self):
         # pools = self.cloudman.ex_list_floating_ip_pools()
@@ -735,7 +731,7 @@ class Provider(ComputeNodeABC):
         return None
 
     def ssh(self, name=None, command=None):
-        key = self.key_path.replace(".pub","")
+        key = self.key_path.replace(".pub", "")
         nodes = self.list(raw=True)
         for node in nodes:
             if node.name == name:
@@ -744,15 +740,15 @@ class Provider(ComputeNodeABC):
         pubip = self.testnode.public_ips[0]
         location = self.user + '@' + pubip
         cmd = ['ssh',
-                   "-o", "StrictHostKeyChecking=no",
-                   "-o", "UserKnownHostsFile=/dev/null",
-                   '-i', key, location, command]
+               "-o", "StrictHostKeyChecking=no",
+               "-o", "UserKnownHostsFile=/dev/null",
+               '-i', key, location, command]
         VERBOSE(" ".join(cmd))
-        
+
         ssh = subprocess.Popen(cmd,
-            shell=False,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE)
+                               shell=False,
+                               stdout=subprocess.PIPE,
+                               stderr=subprocess.PIPE)
         result = ssh.stdout.readlines()
         if result == []:
             error = ssh.stderr.readlines()

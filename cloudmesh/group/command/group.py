@@ -1,18 +1,14 @@
-from __future__ import print_function
-
-#from cloudmesh_client.cloud.group import Group
-#rom cloudmesh_client.default import Default
-#from cloudmesh_client.shell.command import command
-from cloudmesh.common.console import Console
-from cloudmesh.shell.command import PluginCommand
-from cloudmesh.shell.command import command, map_parameters
-from cloudmesh.common.dotdict import dotdict
 from pprint import pprint
-from cloudmesh.common.parameter import Parameter
-from cloudmesh.group.Group import Group
-from cloudmesh.common.parameter import Parameter
-from cloudmesh.group.Group import Group
+
 from cloudmesh.common.Printer import Printer
+from cloudmesh.common.parameter import Parameter
+from cloudmesh.group.Group import Group
+# from cloudmesh_client.cloud.group import Group
+# rom cloudmesh_client.default import Default
+# from cloudmesh_client.shell.command import command
+from cloudmesh.shell.command import PluginCommand
+from cloudmesh.shell.command import command
+
 
 class GroupCommand(PluginCommand):
 
@@ -94,7 +90,6 @@ class GroupCommand(PluginCommand):
             'Modified',
             'Created']
 
-
         if arguments.add:
 
             # "group add NAMES [--type=TYPE] [--group=GROUPNAME]"
@@ -108,7 +103,6 @@ class GroupCommand(PluginCommand):
             entry = g.add(services=names, group=group)
 
             pprint(entry)
-
 
             print(Printer.flatwrite(entry,
                                     order=order,
@@ -131,7 +125,6 @@ class GroupCommand(PluginCommand):
                                         order=order,
                                         header=header,
                                         output=arguments["--format"]))
-
 
         """
     

@@ -1,21 +1,16 @@
 import os
-from cloudmesh.common.util import path_expand
-import os
-from cloudmesh.common.util import path_expand
-from cloudmesh.common.dotdict import dotdict
-from cloudmesh.DEBUG import VERBOSE
 import platform
-from getpass import getpass
-from cloudmesh.common.console import Console
-from cloudmesh.common.Shell import Shell
-from cloudmesh.common.ConfigDict import ConfigDict
 import shutil
+
+from cloudmesh.common.ConfigDict import ConfigDict
+from cloudmesh.common.Shell import Shell
+from cloudmesh.common.console import Console
+from cloudmesh.common.util import path_expand
+
 
 class EncryptFile(object):
 
-
-
-    def __init__(self, file_in, file_out, certificate,debug=False,):
+    def __init__(self, file_in, file_out, certificate, debug=False, ):
         #
         # Bug: some of this data, but not all needs to be a named argument
         #
@@ -60,7 +55,6 @@ class EncryptFile(object):
         self._execute(command)
     '''
 
-
     def getPublicKey(self):
         """
         extract public key from a certificate
@@ -71,7 +65,6 @@ class EncryptFile(object):
         command = path_expand(
             "openssl rsa -in {certificate} -out {pem} -outform PEM -pubout".format(**self.data))
         self._execute(command)
-
 
     def getRandonPassword(self):
         """
@@ -93,7 +86,6 @@ class EncryptFile(object):
             "openssl enc -aes-256-cbc -salt -in {file_in} -out {file_out} -pass file:{password}".format(**self.data))
         self._execute(command)
 
-
     def encryptPassword(self):
         """
         Encrypt the random key with the public keyfile
@@ -104,16 +96,15 @@ class EncryptFile(object):
             "openssl rsautl -encrypt -inkey {pem} -pubin -in {password} -out {password_enc}".format(**self.data))
         self._execute(command)
 
-
     def decryptRandomKey(self):
         command = path_expand(
             "openssl rsautl -decrypt -inkey  {key} -in {password_enc} -out {password_enc_plain}".format(**self.data))
         self._execute(command)
 
-
     def decrypt(self):
         command = path_expand(
-            "openssl enc -d -aes-256-cbc -in {file_out} -out {file_out_plain} -pass file:{password_enc_plain}".format(**self.data))
+            "openssl enc -d -aes-256-cbc -in {file_out} -out {file_out_plain} -pass file:{password_enc_plain}".format(
+                **self.data))
         self._execute(command)
 
     def ssh_keygen(self):
@@ -146,7 +137,6 @@ class EncryptFile(object):
         command = "openssl verify  {pem}".format(**self.data)
         self._execute(command)
 
-
     def check_key(self, filename):
         error = False
         with open(self.data["key"]) as key:
@@ -165,11 +155,10 @@ class EncryptFile(object):
         else:
             return True
 
-
-    def set(self,filename, key, value):
+    def set(self, filename, key, value):
 
         configDict = ConfigDict(filename)
-        configDict[key]= value
+        configDict[key] = value
 
     def edit(self):
 
@@ -216,9 +205,8 @@ if __name__ == "__main__":
     with open("file.txt", "w") as f:
         f.write("Big Data is here.")
     '''
-    e = EncryptFile('/Users/xiaoyue/Desktop/test.yaml', '/Users/xiaoyue/Desktop/test.yaml.enc','')
+    e = EncryptFile('/Users/xiaoyue/Desktop/test.yaml', '/Users/xiaoyue/Desktop/test.yaml.enc', '')
     e.decrypt()
-
 
     '''
     # if the file is existed
@@ -230,4 +218,3 @@ if __name__ == "__main__":
         os.system(r"touch {}".format(file_out))  # create the file
     
     '''
-

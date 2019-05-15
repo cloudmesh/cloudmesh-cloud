@@ -1,4 +1,3 @@
-from __future__ import print_function
 from os.path import isfile, expanduser, join, dirname, realpath, exists
 from os import mkdir
 from shutil import copyfile

@@ -2,9 +2,6 @@
 A convenient method to execute shell commands and return their output. Note: that this method requires that the
 command be completely execute before the output is returned. FOr many activities in cloudmesh this is sufficient.
 """
-
-from __future__ import print_function
-
 import sys
 
 from cloudmesh.common.Shell import Shell as Shell2

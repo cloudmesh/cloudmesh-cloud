@@ -7,7 +7,7 @@ from cloudmesh.shell.command import command
 from cloudmesh.common.util import path_expand
 from cloudmesh.DEBUG import VERBOSE
 from cloudmesh.common.console import Console
-
+import sys
 
 class ConfigCommand(PluginCommand):
 
@@ -22,7 +22,7 @@ class ConfigCommand(PluginCommand):
 
            Usage:
              config  -h | --help
-             config encrypt [SOURCE]
+             config encrypt [SOURCE] [--keep]
              config decrypt [SOURCE]
              config edit [SOURCE]
              config set ATTRIBUTE=VALUE
@@ -87,30 +87,44 @@ class ConfigCommand(PluginCommand):
         # d = Config()                #~/.cloudmesh/cloudmesh4.yaml
         # d = Config(encryted=True)   # ~/.cloudmesh/cloudmesh4.yaml.enc
 
-        arguments.SOURCE = arguments.SOURCE or \
-                           path_expand("~/.cloudmesh/cloudmesh4.yaml")
-        arguments.DESTINATION = arguments.SOURCE + ".enc"
+        source = arguments.SOURCE or path_expand("~/.cloudmesh/cloudmesh4.yaml")
+        destination = source + ".enc"
 
+
+        arguments.keep = arguments["--keep"]
         # VERBOSE(arguments)
 
-        e = EncryptFile(arguments.SOURCE, arguments.DESTINATION)
+        e = EncryptFile(source, destination)
 
         if arguments.encrypt:
 
             e.encrypt()
-            Console.ok("{SOURCE} --> {DESTINATION}".format(**arguments))
+            Console.ok(f"{source} --> {destination}")
+            if not arguments.keep:
+                os.remove(source)
+
             Console.ok("file encrypted")
+
             return ""
 
         elif arguments.decrypt:
-            # if the file is existed
-            if not os.path.exists(arguments.DESTINATION):
-                Console.error(
-                    "encrypted file {DESTINATION} does not exist".format(
-                        **arguments))
 
-            e.decrypt(arguments.SOURCE, arguments.DESTINATION)
-            Console.ok("{DESTINATION} --> {SOURCE}".format(**arguments))
+            if ".enc" not in source:
+                source = source + ".enc"
+            else:
+                destination = source.replace(".enc", "")
+
+            if not os.path.exists(source):
+                Console.error(f"encrypted file {source} does not exist")
+                sys.exit(1)
+
+            if os.path.exists(destination):
+                Console.error(f"decrypted file {destination} does already exist")
+                sys.exit(1)
+
+
+            e.decrypt(source)
+            Console.ok(f"{source} --> {source}")
 
             Console.ok("file decrypted")
             return ""

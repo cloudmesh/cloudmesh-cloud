@@ -16,6 +16,7 @@ class Provider(ComputeNodeABC):
 
     def __init__(self, name=None,
                  configuration="~/.cloudmesh/cloudmesh4.yaml"):
+        # noinspection PyPep8
         try:
             super().__init__(name, configuration)
             self.kind = Config(configuration)[f"cloudmesh.cloud.{name}.cm.kind"]
@@ -58,7 +59,7 @@ class Provider(ComputeNodeABC):
         names = self.expand(names)
         r = []
         if option == 'pool':
-            ### BUG: objc_initializeAfterForkError ###
+            # BUG: objc_initializeAfterForkError ###
             with Pool(processors) as p:
                 r = p.map(func, names)
         elif option == 'iter':
@@ -142,7 +143,7 @@ class Provider(ComputeNodeABC):
 
     @DatabaseUpdate()
     def destroy(self, names=None, **kwargs):
-        ## this should later check and remove destroyed nodes, not implemented
+        # this should later check and remove destroyed nodes, not implemented
         return self.loop(names, self.p.destroy, **kwargs)
 
     def ssh(self, name, command):

@@ -56,7 +56,6 @@ class ImageCommand(PluginCommand):
             # images = provider.images(query=query)
             #
 
-
             order = provider.p.output['vm']['order']  # not pretty
             header = provider.p.output['vm']['header']  # not pretty
 
@@ -68,14 +67,12 @@ class ImageCommand(PluginCommand):
                   )
             return ""
 
-
         if arguments.list and arguments.refresh:
 
             names = []
 
             clouds, names = Arguments.get_cloud_and_names("list", arguments,
                                                           variables)
-
 
             for cloud in clouds:
                 print(f"cloud {cloud}")
@@ -92,8 +89,6 @@ class ImageCommand(PluginCommand):
                                         output=arguments.output)
                       )
             return ""
-
-
 
         elif arguments.list:
 

@@ -266,8 +266,9 @@ class VmCommand(PluginCommand):
                 provider = Provider(cloud)
                 params = {}
 
-                params['key'] = provider.p.spec["credentials"]['EC2_PRIVATE_KEY_FILE_PATH'] + \
-                                provider.p.spec["credentials"]['EC2_PRIVATE_KEY_FILE_NAME']
+                params['key'] = \
+                    provider.p.spec["credentials"]['EC2_PRIVATE_KEY_FILE_PATH'] + \
+                    provider.p.spec["credentials"]['EC2_PRIVATE_KEY_FILE_NAME']
 
                 params['username'] = arguments['--username']  # or get from db
 

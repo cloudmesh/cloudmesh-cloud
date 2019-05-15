@@ -72,10 +72,11 @@ class Manager(object):
         # print (installer)
 
     def dist(self):
-        script = f"""
-                    python setup.py sdist bdist_wheel
-	                twine check dist/*
-                  """
+        script = \
+            f"""
+            python setup.py sdist bdist_wheel
+            twine check dist/*
+            """
         installer = Script.live(script)
         # print (installer)
 

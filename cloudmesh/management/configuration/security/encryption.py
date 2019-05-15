@@ -160,6 +160,7 @@ class EncryptFile(object):
         configDict = ConfigDict(filename)
         configDict[key] = value
 
+    # noinspection PyPep8
     def edit(self):
 
         if "EDITOR" in os.environ:

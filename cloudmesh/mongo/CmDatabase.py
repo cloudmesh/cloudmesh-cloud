@@ -86,6 +86,7 @@ class CmDatabase(object):
         return self.db.collection_names()
 
     # ok
+    # noinspection PyPep8
     def name_count(self, name):
         """
         counts the occurence of the name used in the collections
@@ -126,6 +127,7 @@ class CmDatabase(object):
         return entries
 
     # ok
+    # noinspection PyPep8
     def find_name(self, name):
         """
         This function returns the entry with the given name from all collections

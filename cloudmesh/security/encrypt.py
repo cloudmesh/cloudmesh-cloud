@@ -62,6 +62,7 @@ class EncryptFile(object):
         VERBOSE(command)
         os.system(command)
 
+    # noinspection PyPep8
     def check_passphrase(self):
         """
         this does not work with pem

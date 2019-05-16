@@ -26,7 +26,7 @@ class ConfigCommand(PluginCommand):
              config  -h | --help
              config encrypt [SOURCE] [--keep]
              config decrypt [SOURCE]
-             config edit [SOURCE]
+             config edit [ATTRIBUTE]
              config set ATTRIBUTE=VALUE
              config get ATTRIBUTE [--format=FORMAT]
              config ssh keygen
@@ -98,7 +98,19 @@ class ConfigCommand(PluginCommand):
 
         e = EncryptFile(source, destination)
 
-        if arguments.encrypt:
+        if arguments["edit"] and arguments["ATTRIBUTE"]:
+
+            attribute = arguments.ATTRIBUTE
+
+            config = Config()
+
+            config.edit(attribute)
+
+            config.save()
+
+            return ""
+
+        elif arguments.encrypt:
 
             e.encrypt()
             Console.ok(f"{source} --> {destination}")
@@ -168,5 +180,6 @@ class ConfigCommand(PluginCommand):
         elif arguments.ssh and arguments.keygen:
 
             e.ssh_keygen()
+
 
         return ""

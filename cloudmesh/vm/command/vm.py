@@ -2,7 +2,7 @@ import hashlib
 from datetime import datetime
 from pprint import pprint
 
-from cloudmesh.DEBUG import VERBOSE
+from cloudmesh.common.DEBUG import VERBOSE
 from cloudmesh.common.Printer import Printer
 from cloudmesh.common.console import Console
 from cloudmesh.common.error import Error
@@ -13,7 +13,7 @@ from cloudmesh.management.configuration.arguments import Arguments
 from cloudmesh.mongo.CmDatabase import CmDatabase
 from cloudmesh.shell.command import PluginCommand
 from cloudmesh.shell.command import command, map_parameters
-from cloudmesh.variables import Variables
+from cloudmesh.common.variables import Variables
 
 
 class VmCommand(PluginCommand):

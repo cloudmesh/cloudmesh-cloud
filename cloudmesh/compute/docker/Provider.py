@@ -15,7 +15,7 @@ from cloudmesh.common.dotdict import dotdict
 # from cloudmesh.abstractclass import ComputeNodeManagerABC
 from cloudmesh.management.configuration.config import Config
 from cloudmesh.common.util import path_expand
-from cloudmesh.DEBUG import VERBOSE
+from cloudmesh.common.DEBUG import VERBOSE
 from datetime import datetime
 
 """

@@ -3,7 +3,7 @@ import os
 from cloudmesh.common.Shell import Shell
 from cloudmesh.shell.command import PluginCommand
 from cloudmesh.shell.command import command, map_parameters
-from cloudmesh.DEBUG import VERBOSE
+from cloudmesh.common.DEBUG import VERBOSE
 
 
 class ContainerCommand(PluginCommand):

@@ -2,7 +2,7 @@ import json
 import webbrowser
 from pprint import pprint
 
-from cloudmesh.DEBUG import VERBOSE
+from cloudmesh.common.DEBUG import VERBOSE
 from cloudmesh.abstractclass.ComputeNodeABC import ComputeNodeABC
 from cloudmesh.common.Shell import Shell
 from cloudmesh.common.StopWatch import StopWatch

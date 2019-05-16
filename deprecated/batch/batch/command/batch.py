@@ -3,8 +3,8 @@ from cloudmesh.shell.command import command, map_parameters
 from cloudmesh.shell.command import PluginCommand
 from datetime import datetime
 from cloudmesh.batch.api.Batch import SlurmCluster
-from cloudmesh.variables import Variables
-from cloudmesh.DEBUG import VERBOSE
+from cloudmesh.common.variables import Variables
+from cloudmesh.common.DEBUG import VERBOSE
 from cloudmesh.common.Printer import Printer
 from cloudmesh.common.parameter import Parameter
 from cloudmesh.common.console import Console

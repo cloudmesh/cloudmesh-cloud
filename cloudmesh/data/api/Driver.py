@@ -22,7 +22,7 @@ from libcloud.compute.providers import get_driver
 from libcloud.compute.types import Provider
 
 from cloudmesh.management.configuration.config import Config
-from cloudmesh.variables import Variables
+from cloudmesh.common.variables import Variables
 
 
 class Driver(object):

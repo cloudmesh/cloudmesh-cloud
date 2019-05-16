@@ -16,8 +16,8 @@ from cloudmesh.common.util import banner
 from cloudmesh.compute.vm.Provider import Provider
 from cloudmesh.management.configuration.SSHkey import SSHkey
 from cloudmesh.management.configuration.config import Config
-from cloudmesh.variables import Variables
-import sys
+from cloudmesh.common.variables import Variables
+
 
 @pytest.mark.incremental
 class Test_Compute_Database:

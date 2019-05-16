@@ -1,5 +1,5 @@
 from os import mkdir
-from os.path import isfile, expanduser, join, dirname, realpath, exists
+from os.path import isfile, join, dirname, realpath, exists
 from pathlib import Path
 from shutil import copyfile
 # from cloudmesh.DEBUG import VERBOSE
@@ -12,7 +12,7 @@ import shutil
 
 from cloudmesh.common.util import backup_name
 from cloudmesh.common.dotdict import dotdict
-from cloudmesh.variables import Variables
+from cloudmesh.common.variables import Variables
 from cloudmesh.common.console import Console
 
 

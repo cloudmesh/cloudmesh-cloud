@@ -7,7 +7,7 @@ from cloudmesh.management.configuration.SSHkey import SSHkey
 from cloudmesh.management.configuration.config import Config
 from cloudmesh.shell.command import PluginCommand
 from cloudmesh.shell.command import command, map_parameters
-from cloudmesh.variables import Variables
+from cloudmesh.common.variables import Variables
 from cloudmesh.compute.libcloud.Provider import Provider
 
 

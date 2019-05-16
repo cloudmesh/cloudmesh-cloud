@@ -3,18 +3,12 @@
 # pytest -v  benchmark/test_cms.py
 # pytest -v --capture=no benchmark/test_cms.py:Test_cms.<METHIDNAME>
 ###############################################################
-import os
-import sys
-import platform
 
 import pytest
-from cloudmesh.DEBUG import VERBOSE
-from cloudmesh.common.Printer import Printer
+from cloudmesh.common.DEBUG import VERBOSE
 from cloudmesh.common.Shell import Shell
 from cloudmesh.common.StopWatch import StopWatch
 from cloudmesh.common.util import HEADING
-from cloudmesh.common.systeminfo import systeminfo
-from pprint import pprint
 
 
 @pytest.mark.incremental

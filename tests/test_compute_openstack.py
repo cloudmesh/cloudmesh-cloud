@@ -14,8 +14,8 @@ from cloudmesh.compute.libcloud.Provider import Provider
 from cloudmesh.management.configuration.SSHkey import SSHkey
 from cloudmesh.management.configuration.config import Config
 from cloudmesh.management.configuration.name import Name
-from cloudmesh.variables import Variables
-from cloudmesh.DEBUG import VERBOSE
+from cloudmesh.common.variables import Variables
+from cloudmesh.common.DEBUG import VERBOSE
 import pytest
 
 

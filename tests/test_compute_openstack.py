@@ -15,7 +15,7 @@ from cloudmesh.management.configuration.SSHkey import SSHkey
 from cloudmesh.management.configuration.config import Config
 from cloudmesh.management.configuration.name import Name
 from cloudmesh.common.variables import Variables
-from cloudmesh.common.DEBUG import VERBOSE
+from cloudmesh.common.debug import VERBOSE
 import pytest
 
 

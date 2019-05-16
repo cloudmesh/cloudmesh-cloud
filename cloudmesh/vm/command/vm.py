@@ -2,7 +2,7 @@ import hashlib
 from datetime import datetime
 from pprint import pprint
 
-from cloudmesh.common.DEBUG import VERBOSE
+from cloudmesh.common.debug import VERBOSE
 from cloudmesh.common.Printer import Printer
 from cloudmesh.common.console import Console
 from cloudmesh.common.error import Error

@@ -1,4 +1,4 @@
-from cloudmesh.common.DEBUG import VERBOSE
+from cloudmesh.common.debug import VERBOSE
 from cloudmesh.common.Printer import Printer
 from cloudmesh.compute.vm.Provider import Provider
 from cloudmesh.management.configuration.arguments import Arguments

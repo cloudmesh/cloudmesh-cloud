@@ -4,7 +4,7 @@ from datetime import datetime
 from pathlib import Path
 from pprint import pprint
 
-from cloudmesh.common.DEBUG import VERBOSE
+from cloudmesh.common.debug import VERBOSE
 from cloudmesh.abstractclass.ComputeNodeABC import ComputeNodeABC
 from cloudmesh.common.console import Console
 from cloudmesh.common.util import HEADING

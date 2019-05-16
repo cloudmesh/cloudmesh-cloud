@@ -4,7 +4,7 @@
 # pytest -v --capture=no  tests/test_cms.py:Test_cms.<METHIDNAME>
 ###############################################################
 import pytest
-from cloudmesh.DEBUG import VERBOSE
+from cloudmesh.common.DEBUG import VERBOSE
 from cloudmesh.common.Shell import Shell
 from cloudmesh.common.util import HEADING
 

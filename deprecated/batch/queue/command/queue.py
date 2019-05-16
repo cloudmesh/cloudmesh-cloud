@@ -3,8 +3,8 @@ from cloudmesh.shell.command import command
 from cloudmesh.shell.command import PluginCommand
 from datetime import datetime
 from deprecated.batch.queue import Queue
-from cloudmesh.variables import Variables
-from cloudmesh.DEBUG import VERBOSE
+from cloudmesh.common.variables import Variables
+from cloudmesh.common.DEBUG import VERBOSE
 from cloudmesh.common.console import Console
 
 

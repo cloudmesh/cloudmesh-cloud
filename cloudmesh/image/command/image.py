@@ -1,11 +1,11 @@
-from cloudmesh.DEBUG import VERBOSE
+from cloudmesh.common.DEBUG import VERBOSE
 from cloudmesh.common.Printer import Printer
 from cloudmesh.compute.vm.Provider import Provider
 from cloudmesh.management.configuration.arguments import Arguments
 from cloudmesh.mongo.CmDatabase import CmDatabase
 from cloudmesh.shell.command import PluginCommand
 from cloudmesh.shell.command import command, map_parameters
-from cloudmesh.variables import Variables
+from cloudmesh.common.variables import Variables
 
 
 class ImageCommand(PluginCommand):

@@ -14,7 +14,9 @@ from cloudmesh.common.util import backup_name
 from cloudmesh.common.dotdict import dotdict
 from cloudmesh.common.variables import Variables
 from cloudmesh.common.console import Console
+from pprint import pprint
 
+# see also https://github.com/cloudmesh/client/blob/master/cloudmesh_client/cloud/register.py
 
 class Active(object):
 
@@ -352,3 +354,35 @@ class Config(object):
         except Exception as e:
             print(e)
             sys.exit(1)
+
+    def edit(self, attribute):
+        """
+        edits the dict specified by the attribute and filles out all TBD values.
+        :param attribute:
+        :type attribute: string
+        :return:
+        """
+
+        Console.ok(f"Filling out: {attribute}")
+
+        try:
+            config = Config()
+            values = config[attribute]
+
+            print(f"Editing the values for {attribute}")
+
+            print ("Current Values:")
+
+            print (yaml.dump(values, indent=2))
+
+            for key in values:
+
+                if values[key] == "TBD":
+                    result = input(f"Please enter new value for {key}: ")
+                    values[key] = result
+
+            config.save()
+        except Exception as e:
+            print(e)
+            Console.error(f"could not find the attribute '{attribute}' in the yaml file.")
+

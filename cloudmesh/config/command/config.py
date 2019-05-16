@@ -6,7 +6,10 @@ from cloudmesh.common.util import path_expand
 from cloudmesh.security.encrypt import EncryptFile
 from cloudmesh.shell.command import PluginCommand
 from cloudmesh.shell.command import command
-
+from cloudmesh.management.configuration.config import Config
+from cloudmesh.common.Printer import Printer
+import oyaml as yaml
+from pprint import pprint
 
 class ConfigCommand(PluginCommand):
 
@@ -25,7 +28,7 @@ class ConfigCommand(PluginCommand):
              config decrypt [SOURCE]
              config edit [SOURCE]
              config set ATTRIBUTE=VALUE
-             config set ATTRIBUTE
+             config get ATTRIBUTE [--format=FORMAT]
              config ssh keygen
              config ssh verify
              config ssh check
@@ -44,6 +47,7 @@ class ConfigCommand(PluginCommand):
 
            Options:
               --name=KEYNAME                The name of a key
+              --format=FORMAT     The output format [default: yaml]
 
 
            Description:
@@ -143,8 +147,23 @@ class ConfigCommand(PluginCommand):
 
         elif arguments.set:
 
-            Console.error("not implemented")
-            raise NotImplementedError
+            line = arguments["ATTRIBUTE=VALUE"]
+            attribute, value = line.split("=",1)
+            config = Config()
+            config[attribute] = value
+            config.save()
+
+        elif arguments.get:
+
+            attribute = arguments.ATTRIBUTE
+            config = Config()
+            value = config[attribute]
+
+            output = arguments["--format"]
+            if type(value) == dict:
+                print(Printer.write(value, output=output))
+            else:
+                print (f"{attribute}={value}")
 
         elif arguments.ssh and arguments.keygen:
 

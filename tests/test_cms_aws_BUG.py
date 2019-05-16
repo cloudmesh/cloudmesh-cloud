@@ -7,7 +7,7 @@ from cloudmesh.management.configuration.config import Config
 from cloudmesh.common.util import HEADING
 
 from cloudmesh.common.Shell import Shell
-from cloudmesh.common.DEBUG import VERBOSE
+from cloudmesh.common.debug import VERBOSE
 import pytest
 from cloudmesh.common.StopWatch import StopWatch
 

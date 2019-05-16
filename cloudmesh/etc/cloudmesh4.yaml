@@ -27,6 +27,7 @@ cloudmesh:
         label: Aws
         kind: awsboto
         version: TBD
+        service: storage
       default:
         directory: a
       credentials:
@@ -38,6 +39,7 @@ cloudmesh:
         label: Aws
         kind: awslibcloud
         version: TBD
+        service: storage
       default:
         directory: b
       credentials:
@@ -49,6 +51,7 @@ cloudmesh:
         label: Box
         kind: box
         version: TBD
+        service: storage
       default:
         directory: /
       credentials:
@@ -60,6 +63,7 @@ cloudmesh:
         label: dome-dir
         kind: aws-s3
         version: TBD
+        service: storage
       default:
         directory: TBD
       credentials:
@@ -72,6 +76,7 @@ cloudmesh:
         label: GDrive
         kind: gdrive
         version: TBD
+        service: storage
       default:
         directory: TBD
       credentials:
@@ -92,6 +97,7 @@ cloudmesh:
         label: Azure
         kind: azureblob
         version: TBD
+        service: storage
       default:
         resource_group: 'cloudmesh'
         location: TBD
@@ -113,6 +119,7 @@ cloudmesh:
         label: Docker
         kind: docker
         version: 18.09.2
+        service: compute
       default:
         os: "ubuntu"
         version: "18.04"
@@ -126,6 +133,7 @@ cloudmesh:
         label: Azure
         kind: azure_arm
         version: TBD
+        service: storage
       default:
         image: 'Canonical:UbuntuServer:16.04-LTS:latest'
         size: 'Basic_A0'
@@ -148,6 +156,7 @@ cloudmesh:
         label: Azure
         kind: azure
         version: TBD
+        service: compute
       default:
         image: 'Canonical:UbuntuServer:16.04-LTS:latest'
         size: 'Basic_A0'
@@ -165,6 +174,7 @@ cloudmesh:
         label: aws
         kind: aws
         version: TBD
+        service: compute
       default:
         image: 'ami-0f65671a86f061fcd'
         size: 't2.micro'
@@ -183,6 +193,7 @@ cloudmesh:
         label: google
         kind: google
         version: TBD
+        service: compute
       default:
         image: 'Image Name'
         size: 'n1-standard-4'
@@ -199,6 +210,7 @@ cloudmesh:
         label: chameleon
         kind: vm
         version: liberty
+        service: compute
       credentials:
         OS_AUTH_URL: https://openstack.tacc.chameleoncloud.org:5000/v2.0/tokens
         OS_USERNAME: TBD
@@ -223,6 +235,7 @@ cloudmesh:
         label: jetstream
         kind: vm
         version: kilo
+        service: compute
       credentials:
         OS_PROJECT_DOMAIN_NAME: tacc
         OS_USER_DOMAIN_NAME: tacc
@@ -246,6 +259,7 @@ cloudmesh:
         label: kilo
         kind: vm
         version: kilo
+        service: compute
       credentials:
         OS_AUTH_URL: https://vm.tacc.chameleoncloud.org:5000/v3
         OS_TENANT_ID: TBD
@@ -268,6 +282,7 @@ cloudmesh:
         label: TBD
         kind: TBD
         version: TBD
+        service: compute
       default:
         path: ~/.cloudmesh/vagrant
         image: ubuntu/bionic/64
@@ -288,6 +303,8 @@ cloudmesh:
       default:
         path: '~/.cloudmesh/vagrant'
   data:
+    bug:
+      comment: this type is not supported use storage instead
     default:
       db: local
       service: local
@@ -325,6 +342,7 @@ cloudmesh:
         redhat: https://repo.mongodb.org/yum/redhat/7/mongodb-org/4.0/x86_64/RPMS/mongodb-org-server-4.0.4-1.el7.x86_64.rpm
   cluster:
     bigred2:
+      cm: missing
       active: False
       name: bigred2
       label: bigred
@@ -333,16 +351,19 @@ cloudmesh:
         username: TBD
         pulickey: ~/.ssh/id_rsa.pub
     karst:
+      cm: missing
       active: False
       credentials:
         username: TBD
         pulickey: ~/.ssh/id_rsa.pub
     slurm-taito:
+      cm: missing
       active: False
       name: taito
       credentials:
         sshconfigpath: ~/.ssh/config
     clustera:
+      cm: missing
       active: False
       computer_a:
         name: computer_a
@@ -352,6 +373,7 @@ cloudmesh:
           username: TBD
           pulickey: ~/.ssh/id_rsa.pub
       computer_b:
+        cm: missing
         name: computer_b
         label: two
         address: localhost
@@ -359,6 +381,7 @@ cloudmesh:
           username: TBD
           pulickey: ~/.ssh/id_rsa.pub
     vcluster_test1:
+      cm: missing
       active: False
       computer_a:
         name: machine1
@@ -374,6 +397,7 @@ cloudmesh:
           username: TBD
           pulickey: ~/.ssh/id_rsa.pub
     vcluster_test2:
+      cm: missing
       active: False
       c2:
         name: machine2

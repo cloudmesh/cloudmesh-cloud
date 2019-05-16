@@ -162,6 +162,7 @@ class Config(object):
         :return:
         :rtype:
         """
+        path = path_expand(path)
         if backup:
             destination = backup_name(path)
             shutil.copyfile(path, destination)

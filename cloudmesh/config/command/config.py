@@ -161,6 +161,9 @@ class ConfigCommand(PluginCommand):
 
             line = arguments["ATTRIBUTE=VALUE"]
             attribute, value = line.split("=",1)
+            if not attribute.startswith("cloudmesh."):
+                attribute = f"cloudmesh.{attribute}"
+
             config = Config()
             config[attribute] = value
             config.save()

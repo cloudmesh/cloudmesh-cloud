@@ -1,16 +1,14 @@
 import os
 import sys
 
+from cloudmesh.common.Printer import Printer
 from cloudmesh.common.console import Console
 from cloudmesh.common.util import path_expand
+from cloudmesh.management.configuration.config import Config
 from cloudmesh.security.encrypt import EncryptFile
 from cloudmesh.shell.command import PluginCommand
 from cloudmesh.shell.command import command
-from cloudmesh.management.configuration.config import Config
-from cloudmesh.common.Printer import Printer
-import oyaml as yaml
-from pprint import pprint
-from cloudmesh.common.debug import VERBOSE
+
 
 class ConfigCommand(PluginCommand):
 
@@ -161,7 +159,7 @@ class ConfigCommand(PluginCommand):
         elif arguments.set:
 
             line = arguments["ATTRIBUTE=VALUE"]
-            attribute, value = line.split("=",1)
+            attribute, value = line.split("=", 1)
             if not attribute.startswith("cloudmesh."):
                 attribute = f"cloudmesh.{attribute}"
 
@@ -182,11 +180,10 @@ class ConfigCommand(PluginCommand):
             if type(value) == dict:
                 print(Printer.write(value, output=output))
             else:
-                print (f"{attribute}={value}")
+                print(f"{attribute}={value}")
 
         elif arguments.ssh and arguments.keygen:
 
             e.ssh_keygen()
-
 
         return ""

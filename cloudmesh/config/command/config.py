@@ -10,6 +10,7 @@ from cloudmesh.management.configuration.config import Config
 from cloudmesh.common.Printer import Printer
 import oyaml as yaml
 from pprint import pprint
+from cloudmesh.common.debug import VERBOSE
 
 class ConfigCommand(PluginCommand):
 

@@ -168,6 +168,9 @@ class ConfigCommand(PluginCommand):
         elif arguments.get:
 
             attribute = arguments.ATTRIBUTE
+            if not attribute.startswith("cloudmesh."):
+                attribute = f"cloudmesh.{attribute}"
+
             config = Config()
             value = config[attribute]
 

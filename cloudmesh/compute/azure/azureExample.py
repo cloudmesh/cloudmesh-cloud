@@ -3,6 +3,14 @@ from libcloud.compute.base import NodeAuthSSHKey
 from libcloud.compute.providers import get_driver
 from libcloud.compute.types import Provider
 
+
+#
+# This example is wrong as it shuld use COnfig()
+#
+# IT SETS A VERY WRONG EXAMPLE OF HARDCODING CREDENTIALS
+#
+
+
 cls = get_driver(Provider.AZURE_ARM)
 driver = cls(tenant_id='...',
              subscription_id='...',

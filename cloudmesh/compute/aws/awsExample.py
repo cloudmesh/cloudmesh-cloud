@@ -1,6 +1,11 @@
 from libcloud.compute.providers import get_driver
 from libcloud.compute.types import Provider
 
+#
+# This example is wrong and does not use Config()
+#
+# IT SETS A VERY DANGEROUS EXAMPLE OF HOW NOT TO DOD IT.
+#
 ACCESS_ID = 'your access id'
 SECRET_KEY = 'your secret key'
 

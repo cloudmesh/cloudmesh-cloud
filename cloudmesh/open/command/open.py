@@ -26,6 +26,7 @@ class OpenCommand(PluginCommand):
                 open FILENAME
                 open doc local
                 open doc
+                open account aws [NAME]
 
 
             Arguments:
@@ -50,12 +51,24 @@ class OpenCommand(PluginCommand):
                 open chameleon vm
                     starts horizon for virtual machines
 
+                open account aws [NAME]
+                    opens the aws users web page, if the NAME is users or is
+                    ommitted, it goes to the page that allows you to create a user
+
         """
 
         # pprint(arguments)
         filename = arguments.FILENAME
 
-        if arguments.baremetal and arguments.tacc:
+        if arguments.aws and arguments.account:
+            name = arguments.NAME or "users"
+
+            if name == "users":
+                filename = f"https://console.aws.amazon.com/iam/home#/users"
+            else:
+                filename = "https://console.aws.amazon.com/iam/home#/users" \
+                         f"/{name}?section=security_credentials"
+        elif arguments.baremetal and arguments.tacc:
             filename = str("https://chi.tacc.chameleoncloud.org")
         elif arguments.baremetal and arguments.uc:
             filename = str("https://chi.uc.chameleoncloud.org")
@@ -68,6 +81,10 @@ class OpenCommand(PluginCommand):
         elif filename == "doc":
             # filename = "https://cloudmesh-community.github.io/"
             filename = "https://cloudmesh.github.io/cloudmesh-manual/"
+
+
+
+
 
         if not (filename.startswith("file:") or filename.startswith("http")):
 

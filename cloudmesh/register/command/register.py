@@ -15,15 +15,19 @@ class RegisterCommand(PluginCommand):
         ::
 
           Usage:
-              login [KEY]
+              cms register aws [FILENAME] [--keep]
 
-          This command does some useful things.
+
+          This command adds the registrarion information the th cloudmesh
+          yaml file. The permissions of theFILENAME will also be changed.
+          A y/n question will be asked if the files with the filename shoudl
+          be deleted after integration
 
           Arguments:
-              KEY   a file name
+              FILENME   a filename in which the cloud credentials are stored
 
           Options:
-              -f      specify the file
+              --keep    keeps the file with the filename.
 
         """
 

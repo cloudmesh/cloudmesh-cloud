@@ -27,7 +27,7 @@ class RegisterCommand(PluginCommand):
           be deleted after integration
 
           Arguments:
-              FILENME   a filename in which the cloud credentials are stored
+              FILENAME   a filename in which the cloud credentials are stored
 
           Options:
               --keep    keeps the file with the filename.

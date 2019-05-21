@@ -16,6 +16,9 @@ class RegisterCommand(PluginCommand):
 
           Usage:
               cms register aws [FILENAME] [--keep]
+              cms register azure [FILENAME] [--keep]
+              cms register google [FILENAME] [--keep]
+              cms register chameleon [FILENAME] [--keep]
 
 
           This command adds the registrarion information the th cloudmesh
@@ -29,18 +32,51 @@ class RegisterCommand(PluginCommand):
           Options:
               --keep    keeps the file with the filename.
 
+          Description:
+
+            AWS
+
+                AWS dependent on how you downloaded the creadentials will either
+                use the filename `credentials.csv` or `accessKey.csv`
+
+                Our command is smart provides some convenience functionality.
+
+
+                1. If either file is found in ~/Downloads, it is moved to
+                   ~/.cloudmesh and the permissions are changed
+                2. If such a file already exists there it will ask if it should
+                   be overwritten in case the content is not the same
+                3. The content of the file will be read to determine if it is
+                   likely to be an AWS credential
+                4. The credential will be added to the cloudmesh yaml file
+
+            Azure
+
+                Is not yet implemented
+
+            Google
+
+                Is not yet implemented
+
+            Chameleon Cloud
+
+                is not yet implemented
         """
 
-        # m = Manager()
+        if arguments.aws:
 
-        if arguments.KEY is None:
-            arguments.KEY = "~/.ssh/id_rsa.pub"
+            Console.error("not yet implemented")
 
-        pprint(arguments)
+        elif arguments.azure:
 
-        key = path_expand(arguments.KEY)
+            Console.error("not yet implemented")
 
-        Console.msg("Login with", key)
-        Console.error("not implemented")
+        elif arguments.google:
+
+            Console.error("not yet implemented")
+
+        elif arguments.chameleon:
+
+            Console.error("not yet implemented")
 
         return ""

@@ -1,7 +1,24 @@
-class Manager(object):
+class Register(object):
 
     def __init__(self):
         print("init {name}".format(name=self.__class__.__name__))
 
-    def list(self, parameter):
-        print("list", parameter)
+    def aws(self, filename):
+        print("register", filename)
+
+        raise NotImplementedError
+
+    def azure(self, filename):
+        print("register", filename)
+
+        raise NotImplementedError
+
+    def google(self, filename):
+        print("register", filename)
+
+        raise NotImplementedError
+
+    def chameleon(self, filename):
+        print("register", filename)
+
+        raise NotImplementedError

@@ -56,8 +56,8 @@ class ImageCommand(PluginCommand):
             # images = provider.images(query=query)
             #
 
-            order = provider.p.output['vm']['order']  # not pretty
-            header = provider.p.output['vm']['header']  # not pretty
+            order = provider.p.output['image']['order']  # not pretty
+            header = provider.p.output['image']['header']  # not pretty
 
             print(Printer.flatwrite(images,
                                     sort_keys=["name"],
@@ -79,8 +79,8 @@ class ImageCommand(PluginCommand):
                 provider = Provider(name=cloud)
                 images = provider.images()
 
-                order = provider.p.output['vm']['order']  # not pretty
-                header = provider.p.output['vm']['header']  # not pretty
+                order = provider.p.output['image']['order']  # not pretty
+                header = provider.p.output['image']['header']  # not pretty
 
                 print(Printer.flatwrite(images,
                                         sort_keys=["name"],
@@ -110,8 +110,8 @@ class ImageCommand(PluginCommand):
                     db = CmDatabase()
                     vms = db.find(collection=collection)
 
-                    order = p.p.output['vm']['order']  # not pretty
-                    header = p.p.output['vm']['header']  # not pretty
+                    order = p.p.output['image']['order']  # not pretty
+                    header = p.p.output['image']['header']  # not pretty
 
                     print(Printer.flatwrite(vms,
                                             sort_keys=["name"],

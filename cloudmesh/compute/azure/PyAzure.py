@@ -39,7 +39,7 @@ class Provider(ComputeNodeABC):
 
         VERBOSE(cred, verbose=10)
 
-        if self.cloudtype != 'azure':
+        if self.cloudtype != 'pyazure':
             Console.error("This class is meant for azure cloud")
 
         # ServicePrincipalCredentials related Variables to configure in cloudmesh4.yaml file

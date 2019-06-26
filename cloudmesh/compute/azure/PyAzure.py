@@ -86,53 +86,15 @@ class Provider(ComputeNodeABC):
         imgSKU               = image[3]
         imgVersion           = image[4]
 
-        # Parse Image2 from yaml file
-        image2               = self.default["image2"].split(":")
-
-        # TODO make this code more efficient
-        if image2 != None:
-            if image2 != '':
-                imgOS2           = image2[0]
-                imgPublisher2    = image2[1]
-                imgOffer2        = image2[2]
-                imgSKU2          = image2[3]
-                imgVersion2      = image2[4]
-
-                # Declare Virtual Machine Settings
-                self.VM_REFERENCE = {
-                    imgOS: {
-                        'publisher': imgPublisher,
-                        'offer': imgOffer,
-                        'sku': imgSKU,
-                        'version': imgVersion
-                    },
-                    imgOS2: {
-                        'publisher': imgPublisher2,
-                        'offer': imgOffer2,
-                        'sku': imgSKU2,
-                        'version': imgVersion2
-                    }
-                }
-            else:
-                # Declare Virtual Machine Settings
-                self.VM_REFERENCE = {
-                    imgOS: {
-                        'publisher': imgPublisher,
-                        'offer': imgOffer,
-                        'sku': imgSKU,
-                        'version': imgVersion
-                    }
-                }
-        else:
-            # Declare Virtual Machine Settings
-            self.VM_REFERENCE = {
-                imgOS: {
-                    'publisher': imgPublisher,
-                    'offer': imgOffer,
-                    'sku': imgSKU,
-                    'version': imgVersion
-                }
+        # Declare Virtual Machine Settings
+        self.VM_REFERENCE = {
+            imgOS: {
+                'publisher': imgPublisher,
+                'offer': imgOffer,
+                'sku': imgSKU,
+                'version': imgVersion
             }
+        }
 
         # Create or Update Resource group
         print('\nCreate Azure Virtual Machine Resource Group')

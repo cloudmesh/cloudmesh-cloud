@@ -16,7 +16,7 @@ from azure.mgmt.compute.models import DiskCreateOption
 
 from msrestazure.azure_exceptions import CloudError
 
-class NativeProvider(ComputeNodeABC):
+class Provider(ComputeNodeABC):
 
     def __init__(self, name=None, configuration="~/.cloudmesh/cloudmesh4.yaml"):
         """

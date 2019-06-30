@@ -29,6 +29,9 @@ class Provider(ComputeNodeABC):
         conf = Config(configuration)["cloudmesh"]
 
         self.user = Config()["cloudmesh"]["profile"]["user"]
+
+        VERBOSE("JAE "+self.user, verbose=10)
+
         self.spec = conf["cloud"][name]
         self.cloud = name
 
@@ -40,7 +43,7 @@ class Provider(ComputeNodeABC):
         VERBOSE(cred, verbose=10)
 
         if self.cloudtype != 'pyazure':
-            Console.error("This class is meant for azure cloud")
+            Console.error("This class is meant for pyazure cloud")
 
         # ServicePrincipalCredentials related Variables to configure in cloudmesh4.yaml file
         # AZURE_APPLICATION_ID = '<Application ID from Azure Active Directory App Registration Process>'
@@ -78,34 +81,62 @@ class Provider(ComputeNodeABC):
         self.PASSWORD        = self.default["AZURE_VM_PASSWORD"]
         self.VM_NAME         = self.default["AZURE_VM_NAME"]
 
-        # Parse Image1 from yaml file
-        image                = self.default["image"].split(":")
-        imgOS                = image[0]
-        imgPublisher         = image[1]
-        imgOffer             = image[2]
-        imgSKU               = image[3]
-        imgVersion           = image[4]
-
-        # Declare Virtual Machine Settings
-        self.VM_REFERENCE = {
-            imgOS: {
-                'publisher': imgPublisher,
-                'offer': imgOffer,
-                'sku': imgSKU,
-                'version': imgVersion
-            }
-        }
-
         # Create or Update Resource group
         print('\nCreate Azure Virtual Machine Resource Group')
         self.resource_client.resource_groups.create_or_update(self.GROUP_NAME, {'location': self.LOCATION})
 
-        if self.NIC_ID is None:
-            try:
-                self.nic    = self.create_nic()
-                self.NIC_ID = self.nic.id
-            except CloudError:
-                print('A VM operation failed:\n{}'.format(traceback.format_exc()))
+
+    def create_nic(self):
+        """
+            Create a Network Interface for a Virtual Machine
+
+        :return:
+        """
+        # Create Virtual Network
+        print('\nCreate Vnet')
+        async_vnet_creation = self.network_client.virtual_networks.create_or_update(
+            self.GROUP_NAME,
+            self.VNET_NAME,
+            {
+                'location': self.LOCATION,
+                'address_space': {
+                    'address_prefixes': ['10.0.0.0/16']
+                }
+            }
+        )
+        async_vnet_creation.wait()
+
+        # Create Subnet
+        print('\nCreate Subnet')
+        async_subnet_creation = self.network_client.subnets.create_or_update(
+            self.GROUP_NAME,
+            self.VNET_NAME,
+            self.SUBNET_NAME,
+            {'address_prefix': '10.0.0.0/24'}
+        )
+        subnet_info = async_subnet_creation.result()
+
+        # Create NIC
+        print('\nCreate NIC')
+        async_nic_creation = self.network_client.network_interfaces.create_or_update(
+            self.GROUP_NAME,
+            self.NIC_NAME,
+            {
+                'location': self.LOCATION,
+                'ip_configurations': [{
+                    'name': self.IP_CONFIG_NAME,
+                    'subnet': {
+                        'id': subnet_info.id
+                    }
+                }]
+            }
+        )
+
+        nic = async_nic_creation.result()
+        self.NIC_ID = nic.id
+
+        return nic
+        # must return dict
 
     def start(self, groupName=None, vmName=None):
         """
@@ -238,6 +269,11 @@ class Provider(ComputeNodeABC):
         """
         create one node
         """
+        VM_PARAMETERS = self.create_vm_parameters()
+        async_vm_creation = self.compute_client.virtual_machines.create_or_update(self.GROUP_NAME, self.VM_NAME, VM_PARAMETERS)
+        async_vm_creation.wait()
+
+        return None
         # must return dict
 
     # TODO Implement Rename Method
@@ -255,59 +291,30 @@ class Provider(ComputeNodeABC):
         HEADING(c=".")
         return None
 
-    def create_nic(self):
-        """
-            Create a Network Interface for a Virtual Machine
 
-        :return:
-        """
-        # Create Virtual Network
-        print('\nCreate Vnet')
-        async_vnet_creation = self.network_client.virtual_networks.create_or_update(
-            self.GROUP_NAME,
-            self.VNET_NAME,
-            {
-                'location': self.LOCATION,
-                'address_space': {
-                    'address_prefixes': ['10.0.0.0/16']
-                }
-            }
-        )
-        async_vnet_creation.wait()
-
-        # Create Subnet
-        print('\nCreate Subnet')
-        async_subnet_creation = self.network_client.subnets.create_or_update(
-            self.GROUP_NAME,
-            self.VNET_NAME,
-            self.SUBNET_NAME,
-            {'address_prefix': '10.0.0.0/24'}
-        )
-        subnet_info = async_subnet_creation.result()
-
-        # Create NIC
-        print('\nCreate NIC')
-        async_nic_creation = self.network_client.network_interfaces.create_or_update(
-            self.GROUP_NAME,
-            self.NIC_NAME,
-            {
-                'location': self.LOCATION,
-                'ip_configurations': [{
-                    'name': self.IP_CONFIG_NAME,
-                    'subnet': {
-                        'id': subnet_info.id
-                    }
-                }]
-            }
-        )
-        return async_nic_creation.result()
-        # must return dict
 
     def create_vm_parameters(self):
         """
             Create the VM parameters structure.
         """
-        return {
+        # Parse Image1 from yaml file
+        image                = self.default["image"].split(":")
+        imgOS                = image[0]
+        imgPublisher         = image[1]
+        imgOffer             = image[2]
+        imgSKU               = image[3]
+        imgVersion           = image[4]
+
+        myNic = self.network_client.network_interfaces.get(self.GROUP_NAME, self.NIC_NAME)
+
+        print('myNicId->: '+myNic.id)
+
+        # Declare Virtual Machine Settings
+
+        """
+            Create the VM parameters structure.
+        """
+        VM_PARAMETERS={
             'location': self.LOCATION,
             'os_profile': {
                 'computer_name': self.VM_NAME,
@@ -318,19 +325,20 @@ class Provider(ComputeNodeABC):
                 'vm_size': 'Standard_DS1_v2'
             },
             'storage_profile': {
-                'image_reference': {
-                    'publisher': self.vm_reference['publisher'],
-                    'offer': self.vm_reference['offer'],
-                    'sku': self.vm_reference['sku'],
-                    'version': self.vm_reference['version']
+                imgOS: {
+                    'publisher': imgPublisher,
+                    'offer': imgOffer,
+                    'sku': imgSKU,
+                    'version': imgVersion
                 },
             },
             'network_profile': {
                 'network_interfaces': [{
-                    'id': self.nic_id,
+                    'id': myNic.id,
                 }]
             },
         }
+        return VM_PARAMETERS
 
     def update_dict(self, elements, kind=None):
         """
@@ -377,7 +385,7 @@ class Provider(ComputeNodeABC):
                 entry['cm']['updated']  = str(datetime.utcnow())
                 entry["cm"]["name"]     = entry["name"]
             elif kind == 'secgroup':
-                if self.cloudtype == 'azure':
+                if self.cloudtype == 'pyazure':
                     entry["cm"]["name"] = entry["name"]
                 else:
                     pass

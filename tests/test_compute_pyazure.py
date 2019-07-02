@@ -46,6 +46,15 @@ class Test_compute:
 
         print()
 
+    def test_resource_group(self):
+        HEADING()
+        StopWatch.start("Retrieve Resource Group Started")
+        test_resource_group = self.p.get_resource_group()
+        VERBOSE(" ".join('RESOURCE GROUP ID: ' + test_resource_group.id))
+        StopWatch.stop("Retrieve Resource Group Finished")
+
+        assert test_resource_group is not None
+
     def test_create_nic(self):
         HEADING()
 
@@ -64,3 +73,13 @@ class Test_compute:
         StopWatch.stop("Create VM Finished")
 
         assert test_vm is None
+
+
+    def test_delete(self):
+        HEADING()
+
+        StopWatch.start("Delete VM Started")
+        destroy_vm = self.p.destroy()
+        StopWatch.stop("Delete VM Finished")
+
+        assert destroy_vm is not None

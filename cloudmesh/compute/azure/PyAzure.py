@@ -82,9 +82,16 @@ class Provider(ComputeNodeABC):
         self.VM_NAME         = self.default["AZURE_VM_NAME"]
 
         # Create or Update Resource group
-        print('\nCreate Azure Virtual Machine Resource Group')
-        self.resource_client.resource_groups.create_or_update(self.GROUP_NAME, {'location': self.LOCATION})
+#        self.resource_client.resource_groups.create_or_update(self.GROUP_NAME, {'location': self.LOCATION})
 
+    def get_resource_group(self):
+
+        if self.resource_client.resource_groups.check_existence(self.GROUP_NAME):
+            return self.resource_client.resource_groups.get(self.GROUP_NAME)
+        else:
+            # Create or Update Resource group
+            print('\nCreate Azure Virtual Machine Resource Group')
+            return self.resource_client.resource_groups.create_or_update(self.GROUP_NAME, {'location': self.LOCATION})
 
     def create_nic(self):
         """
@@ -248,12 +255,15 @@ class Provider(ComputeNodeABC):
             vmName = self.VM_NAME
 
         # Delete VM
-        VERBOSE(" ".join('Deleteing Azure Virtual Machine'))
-        async_vm_delete = self.compute_client.virtual_machines.delete(groupName, vmName)
-        async_vm_delete.wait()
+        #VERBOSE(" ".join('Deleteing Azure Virtual Machine'))
+        #async_vm_delete = self.compute_client.virtual_machines.delete(groupName, vmName)
+        #async_vm_delete.wait()
+
+        VERBOSE(" ".join('Deleteing Azure Resource Group'))
+        async_group_delete = self.resource_client.resource_groups.delete(groupName)
+        async_group_delete.wait()
         return self.info(groupName)
 
-    # TODO Migrate code from Init that is meant for creating a Node
     def create(self, name=None, image=None, size=None, timeout=360, **kwargs):
         """
         creates a named node
@@ -272,6 +282,43 @@ class Provider(ComputeNodeABC):
         VM_PARAMETERS = self.create_vm_parameters()
         async_vm_creation = self.compute_client.virtual_machines.create_or_update(self.GROUP_NAME, self.VM_NAME, VM_PARAMETERS)
         async_vm_creation.wait()
+
+        # Creating a Managed Data Disk
+        async_disk_creation = self.compute_client.disks.create_or_update(
+            self.GROUP_NAME,
+            'cloudmesh-datadisk1',
+            {
+                'location': self.LOCATION,
+                'disk_size_gb': 1,
+                'creation_data': {
+                    'create_option': DiskCreateOption.empty
+                }
+            }
+        )
+        data_disk = async_disk_creation.result()
+
+        # Get the virtual machine by name
+        virtual_machine = self.compute_client.virtual_machines.get(
+            self.GROUP_NAME,
+            self.VM_NAME
+        )
+
+        # Attaching Data Disk to a Virtual Machine
+        virtual_machine.storage_profile.data_disks.append({
+            'lun': 12,
+            'name': 'cloudmesh-datadisk1',
+            'create_option': DiskCreateOption.attach,
+            'managed_disk': {
+                'id': data_disk.id
+            }
+        })
+        async_disk_attach = self.compute_client.virtual_machines.create_or_update(
+            self.GROUP_NAME,
+            virtual_machine.name,
+            virtual_machine
+        )
+        async_disk_attach.wait()
+
 
         return None
         # must return dict

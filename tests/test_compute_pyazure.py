@@ -55,15 +55,15 @@ class Test_compute:
 
         assert test_resource_group is not None
 
-    def test_create_nic(self):
-        HEADING()
-
-        StopWatch.start("Create Nic Started")
-        test_nic = self.p.create_nic()
-        VERBOSE(" ".join('NIC ID: '+ test_nic.id))
-        StopWatch.stop("Create Nic Finished")
-
-        assert test_nic is not None
+#    def test_create_nic(self):
+#        HEADING()
+#
+#        StopWatch.start("Create Nic Started")
+#        test_nic = self.p.create_nic()
+#        VERBOSE(" ".join('NIC ID: '+ test_nic.id))
+#        StopWatch.stop("Create Nic Finished")
+#
+#        assert test_nic is not None
 
     def test_create_vm(self):
         HEADING()
@@ -81,16 +81,7 @@ class Test_compute:
         start_vm = self.p.start()
         StopWatch.stop("Start VM Finished")
 
-        assert start_vm is not None
-
-    def test_stop(self):
-        HEADING()
-
-        StopWatch.start("Stop VM Started")
-        stop_vm = self.p.stop()
-        StopWatch.stop("Stop VM Finished")
-
-        assert stop_vm is not None
+        assert start_vm is None
 
     def test_restart(self):
         HEADING()
@@ -99,7 +90,16 @@ class Test_compute:
         restart_vm = self.p.restart()
         StopWatch.stop("Restart VM Finished")
 
-        assert restart_vm is not None
+        assert restart_vm is None
+
+    def test_stop(self):
+        HEADING()
+
+        StopWatch.start("Stop VM Started")
+        stop_vm = self.p.stop()
+        StopWatch.stop("Stop VM Finished")
+
+        assert stop_vm is None
 
     def test_delete(self):
         HEADING()
@@ -108,7 +108,7 @@ class Test_compute:
         destroy_vm = self.p.destroy()
         StopWatch.stop("Delete VM Finished")
 
-        assert destroy_vm is not None
+        assert destroy_vm is None
 
     # TODO test_resume
     # TODO test_suspend

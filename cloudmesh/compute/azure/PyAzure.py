@@ -82,7 +82,7 @@ class Provider(ComputeNodeABC):
         self.VM_NAME         = self.default["AZURE_VM_NAME"]
 
         # Create or Update Resource group
-#        self.resource_client.resource_groups.create_or_update(self.GROUP_NAME, {'location': self.LOCATION})
+        self.get_resource_group()
 
     def get_resource_group(self):
 
@@ -96,9 +96,11 @@ class Provider(ComputeNodeABC):
     def create_nic(self):
         """
             Create a Network Interface for a Virtual Machine
-
         :return:
         """
+        # A Resource group needs to be in place
+        self.get_resource_group()
+
         # Create Virtual Network
         print('\nCreate Vnet')
         async_vnet_creation = self.network_client.virtual_networks.create_or_update(
@@ -140,9 +142,108 @@ class Provider(ComputeNodeABC):
         )
 
         nic = async_nic_creation.result()
-        self.NIC_ID = nic.id
 
         return nic
+
+    def create_vm_parameters(self):
+
+        nic     = self.create_nic()
+        NIC_ID  = nic.id
+
+        # Parse Image from yaml file
+        image               = self.default["image"].split(":")
+        imgPublisher        = image[0]
+        imgOffer            = image[1]
+        imgSKU              = image[2]
+        imgVersion          = image[3]
+
+        # Declare Virtual Machine Settings
+
+        """
+            Create the VM parameters structure.
+        """
+        VM_PARAMETERS={
+            'location': self.LOCATION,
+            'os_profile': {
+                'computer_name': self.VM_NAME,
+                'admin_username': self.USERNAME,
+                'admin_password': self.PASSWORD
+            },
+            'hardware_profile': {
+                'vm_size': 'Standard_DS1_v2'
+            },
+            'storage_profile': {
+                'image_reference': {
+                    'publisher': imgPublisher,
+                    'offer': imgOffer,
+                    'sku': imgSKU,
+                    'version': imgVersion
+                },
+            },
+            'network_profile': {
+                'network_interfaces': [{
+                    'id': NIC_ID,
+                }]
+            },
+        }
+
+        return VM_PARAMETERS
+
+    def create(self, name=None, image=None, size=None, timeout=360, **kwargs):
+        """
+        creates a named node
+
+        :param name: the name of the node
+        :param image: the image used
+        :param size: the size of the image
+        :param timeout: a timeout in seconds that is invoked in case the image does not boot.
+               The default is set to 3 minutes.
+        :param kwargs: additional arguments passed along at time of boot
+        :return:
+        """
+
+        VM_PARAMETERS = self.create_vm_parameters()
+
+        async_vm_creation = self.compute_client.virtual_machines.create_or_update(self.GROUP_NAME, self.VM_NAME, VM_PARAMETERS)
+        async_vm_creation.wait()
+
+        # Creating a Managed Data Disk
+        async_disk_creation = self.compute_client.disks.create_or_update(
+            self.GROUP_NAME,
+            'cloudmesh-datadisk1',
+            {
+                'location': self.LOCATION,
+                'disk_size_gb': 1,
+                'creation_data': {
+                    'create_option': DiskCreateOption.empty
+                }
+            }
+        )
+        data_disk = async_disk_creation.result()
+
+        # Get the virtual machine by name
+        virtual_machine = self.compute_client.virtual_machines.get(
+            self.GROUP_NAME,
+            self.VM_NAME
+        )
+
+        # Attaching Data Disk to a Virtual Machine
+        virtual_machine.storage_profile.data_disks.append({
+            'lun': 12,
+            'name': 'cloudmesh-datadisk1',
+            'create_option': DiskCreateOption.attach,
+            'managed_disk': {
+                'id': data_disk.id
+            }
+        })
+        async_disk_attach = self.compute_client.virtual_machines.create_or_update(
+            self.GROUP_NAME,
+            virtual_machine.name,
+            virtual_machine
+        )
+        async_disk_attach.wait()
+
+        return None
         # must return dict
 
     def start(self, groupName=None, vmName=None):
@@ -159,9 +260,11 @@ class Provider(ComputeNodeABC):
 
         # Start the VM
         VERBOSE(" ".join('Starting Azure VM'))
+        VERBOSE('Starting Azure VM')
         async_vm_start = self.compute_client.virtual_machines.start(groupName, vmName)
         async_vm_start.wait()
-        return self.info(groupName)
+        #return self.info(groupName)
+        return None
 
     def restart(self, groupName=None, vmName=None):
         """
@@ -177,9 +280,11 @@ class Provider(ComputeNodeABC):
 
         # Restart the VM
         VERBOSE(" ".join('Restarting Azure VM'))
+        print('Restarting Azure VM')
         async_vm_restart = self.compute_client.virtual_machines.restart(groupName, vmName)
         async_vm_restart.wait()
-        return self.info(groupName)
+        #return self.info(groupName)
+        return None
 
     def stop(self, groupName=None, vmName=None):
         """
@@ -195,9 +300,11 @@ class Provider(ComputeNodeABC):
 
         # Stop the VM
         VERBOSE(" ".join('Stopping Azure VM'))
+        print('Stopping Azure VM')
         async_vm_stop = self.compute_client.virtual_machines.power_off(groupName, vmName)
         async_vm_stop.wait()
-        return self.info(groupName)
+        #return self.info(groupName)
+        return None
 
     def info(self, groupName=None):
         """
@@ -243,6 +350,7 @@ class Provider(ComputeNodeABC):
         raise NotImplementedError
         # must return dict
 
+
     def destroy(self, groupName=None, vmName=None):
         """
         Destroys the node
@@ -255,73 +363,20 @@ class Provider(ComputeNodeABC):
             vmName = self.VM_NAME
 
         # Delete VM
-        #VERBOSE(" ".join('Deleteing Azure Virtual Machine'))
-        #async_vm_delete = self.compute_client.virtual_machines.delete(groupName, vmName)
-        #async_vm_delete.wait()
+        VERBOSE(" ".join('Deleteing Azure Virtual Machine'))
+        print('Deleteing Azure Virtual Machine')
+        async_vm_delete = self.compute_client.virtual_machines.delete(groupName, vmName)
+        async_vm_delete.wait()
 
+        # Delete Resource Group
         VERBOSE(" ".join('Deleteing Azure Resource Group'))
+        print('Deleteing Azure Resource Group')
         async_group_delete = self.resource_client.resource_groups.delete(groupName)
         async_group_delete.wait()
-        return self.info(groupName)
 
-    def create(self, name=None, image=None, size=None, timeout=360, **kwargs):
-        """
-        creates a named node
-
-        :param name: the name of the node
-        :param image: the image used
-        :param size: the size of the image
-        :param timeout: a timeout in seconds that is invoked in case the image does not boot.
-               The default is set to 3 minutes.
-        :param kwargs: additional arguments passed along at time of boot
-        :return:
-        """
-        """
-        create one node
-        """
-        VM_PARAMETERS = self.create_vm_parameters()
-        async_vm_creation = self.compute_client.virtual_machines.create_or_update(self.GROUP_NAME, self.VM_NAME, VM_PARAMETERS)
-        async_vm_creation.wait()
-
-        # Creating a Managed Data Disk
-        async_disk_creation = self.compute_client.disks.create_or_update(
-            self.GROUP_NAME,
-            'cloudmesh-datadisk1',
-            {
-                'location': self.LOCATION,
-                'disk_size_gb': 1,
-                'creation_data': {
-                    'create_option': DiskCreateOption.empty
-                }
-            }
-        )
-        data_disk = async_disk_creation.result()
-
-        # Get the virtual machine by name
-        virtual_machine = self.compute_client.virtual_machines.get(
-            self.GROUP_NAME,
-            self.VM_NAME
-        )
-
-        # Attaching Data Disk to a Virtual Machine
-        virtual_machine.storage_profile.data_disks.append({
-            'lun': 12,
-            'name': 'cloudmesh-datadisk1',
-            'create_option': DiskCreateOption.attach,
-            'managed_disk': {
-                'id': data_disk.id
-            }
-        })
-        async_disk_attach = self.compute_client.virtual_machines.create_or_update(
-            self.GROUP_NAME,
-            virtual_machine.name,
-            virtual_machine
-        )
-        async_disk_attach.wait()
-
-
+        # return self.info(groupName)
         return None
-        # must return dict
+
 
     # TODO Implement Rename Method
     def rename(self, name=None, destination=None):
@@ -337,55 +392,6 @@ class Provider(ComputeNodeABC):
 
         HEADING(c=".")
         return None
-
-
-
-    def create_vm_parameters(self):
-        """
-            Create the VM parameters structure.
-        """
-        # Parse Image1 from yaml file
-        image                = self.default["image"].split(":")
-        imgOS                = image[0]
-        imgPublisher         = image[1]
-        imgOffer             = image[2]
-        imgSKU               = image[3]
-        imgVersion           = image[4]
-
-        myNic = self.network_client.network_interfaces.get(self.GROUP_NAME, self.NIC_NAME)
-
-        print('myNicId->: '+myNic.id)
-
-        # Declare Virtual Machine Settings
-
-        """
-            Create the VM parameters structure.
-        """
-        VM_PARAMETERS={
-            'location': self.LOCATION,
-            'os_profile': {
-                'computer_name': self.VM_NAME,
-                'admin_username': self.USERNAME,
-                'admin_password': self.PASSWORD
-            },
-            'hardware_profile': {
-                'vm_size': 'Standard_DS1_v2'
-            },
-            'storage_profile': {
-                imgOS: {
-                    'publisher': imgPublisher,
-                    'offer': imgOffer,
-                    'sku': imgSKU,
-                    'version': imgVersion
-                },
-            },
-            'network_profile': {
-                'network_interfaces': [{
-                    'id': myNic.id,
-                }]
-            },
-        }
-        return VM_PARAMETERS
 
     def update_dict(self, elements, kind=None):
         """

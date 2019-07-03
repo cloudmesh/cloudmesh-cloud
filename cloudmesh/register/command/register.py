@@ -4,7 +4,16 @@ from cloudmesh.common.console import Console
 from cloudmesh.common.util import path_expand
 from cloudmesh.shell.command import PluginCommand
 from cloudmesh.shell.command import command
-
+from sys import platform
+from shell import shell
+import selenium as sel
+from selenium import webdriver
+import getpass
+from time import sleep
+import random
+from pathlib import Path, PurePath, PurePosixPath
+import yaml
+import pandas
 
 class RegisterCommand(PluginCommand):
 
@@ -15,10 +24,11 @@ class RegisterCommand(PluginCommand):
         ::
 
           Usage:
-              cms register aws [FILENAME] [--keep]
-              cms register azure [FILENAME] [--keep]
-              cms register google [FILENAME] [--keep]
-              cms register chameleon [FILENAME] [--keep]
+              register aws yaml
+              register aws [FILENAME] [--keep]
+              register azure [FILENAME] [--keep]
+              register google [FILENAME] [--keep]
+              register chameleon [FILENAME] [--keep]
 
 
           This command adds the registrarion information the th cloudmesh
@@ -64,11 +74,97 @@ class RegisterCommand(PluginCommand):
         """
 
         if arguments.aws:
+            if arguments.createkey:
+                if platform == "linux" or platform == "linux2":
+                    # check if chrome installed
+                    try:
+                        chrome_ver1 = shell('google-chrome-stable --version')
+                        chrome_ver2 = shell('google-chrome --version')
+                        driver = sel.webdriver.Chrome()
+                        email = input("Enter your email: ")
+                        passw = getpass.getpass("Enter your password: ")
+                        driver.get("https://console.aws.amazon.com/iam/home#/users")
+                        assert "Amazon Web Services" in driver.title, "Unexpected login page, aborting"
+                        sleep(1)
+                        driver.find_element_by_id("resolving_input").send_keys(email)
+                        driver.find_element_by_id("next_button").click()
+                        self.check_captcha(driver)
+                        sleep(1)
+                        driver.find_element_by_id("password").send_keys(passw)
+                        driver.find_element_by_id("signin_button").click()
+                        sleep(1)
+                        self.check_captcha(driver)
+                        # adding cloudmesh user
+                        driver.find_element_by_link_text("Add user").click()
+                        sleep(1)
+                        driver.find_element_by_id("awsui-textfield-17").send_keys("cloudmesh")
+                        driver.find_element_by_name("accessKey").click()
+                        sleep(1)
+                        driver.find_element_by_class_name("wizard-next-button").click()
+                        sleep(1)
+                        driver.find_element_by_class_name("awsui-util-pt-s").click()
+                        sleep(1)
+                        driver.find_element_by_xpath("//awsui-textfield[@ng-model='createGroupModal.groupName']/input").send_keys("cloudmesh")
+                        sleep(1)
+                        driver.find_element_by_xpath('//*/policies-table//table-search//search/div/input').send_keys(
+                             "AmazonEC2FullAccess")
+                        sleep(1)
+                        driver.find_element_by_xpath('//div[@data-item-id="arn:aws:iam::aws:policy/AmazonEC2FullAccess"]//awsui-checkbox//div').click()
+                        sleep(1)
+                        driver.find_element_by_xpath("//awsui-button[@click-tracker='CreateGroup']").click()
+                        Console.info("'cloudmesh' group created")
+                        sleep(1)
+                        driver.find_element_by_class_name("wizard-next-button").click()
+                        sleep(1)
+                        driver.find_element_by_class_name("wizard-next-button").click()
+                        Console.info("'cloudmesh' user created")
+                        sleep(1)
+                        driver.find_element_by_class_name("wizard-next-button").click()
+                        sleep(1)
+                        driver.find_element_by_xpath("//awsui-button[@text='Download .csv']").click()
+                        Console.info("credentials.csv downloaded")
+                        sleep(2)
+                        driver.find_element_by_xpath("//awsui-button[@text='Close']").click()
+                        sleep(4)
+                        credentials_csv_path = '{Downloads}/credentials.csv'.format(Downloads=PurePosixPath(Path.home()).joinpath('Downloads').as_posix())
+                        cloudmesh_folder = '{Home}/.cloudmesh'.format(Home=Path.home().as_posix())
+                        shell('mv {cred} {cm}'.format(cred=credentials_csv_path,cm=cloudmesh_folder))
+                        Console.info("credentials.csv moved to ~/.cloudmesh folder")
 
-            Console.error("not yet implemented")
+                        with open("{cm}/cloudmesh4.yaml".format(cm=cloudmesh_folder)) as f:
+                            cloudmesh_conf = yaml.load(f, Loader=yaml.FullLoader)
+
+                        creds = pandas.read_csv("{cm}/credentials.csv".format(cm=cloudmesh_folder))
+
+                        cloudmesh_conf['cloudmesh']['cloud']['aws']['credentials']['EC2_ACCESS_ID'] = \
+                            creds['Access key ID'][0]
+                        cloudmesh_conf['cloudmesh']['cloud']['aws']['credentials']['EC2_SECRET_KEY'] = \
+                            creds['Secret access key'][0]
+
+                        with open("{cm}/cloudmesh4.yaml".format(cm=cloudmesh_folder), "w") as f:
+                            yaml.dump(cloudmesh_conf, f)
+
+                        Console.info("AWS 'Access Key ID' and 'Secret Access Key' in the cloudmesh4.yaml updated")
+
+                    except FileNotFoundError:
+                        Console.error("google chrome not installed")
+                    except sel.common.exceptions.WebDriverException:
+                        Console.error("Chrome geckodriver not installed. Follow these steps for installation: \n"
+                                      "1) Download the driver from the following link: \n\t "
+                                      "https://sites.google.com/a/chromium.org/chromedriver/downloads \n"
+                                      "2) Copy the `chromedriver` to '/usr/bin' \n"
+                                      "3) Set the permission using:\n\t"
+                                      "'sudo chmod +x /usr/bin/chromedriver'")
+
+                elif platform == "darwin":
+                    Console.error("aws registration is not yet tested in macOS")
+                elif platform == "win32":
+                    Console.error("aws registration is not yet tested in Windows")
+
+            else:
+                Console.error("not yet implemented")
 
         elif arguments.azure:
-
             Console.error("not yet implemented")
 
         elif arguments.google:
@@ -80,3 +176,15 @@ class RegisterCommand(PluginCommand):
             Console.error("not yet implemented")
 
         return ""
+
+    def slow_typer(self,element, text):
+        for character in text:
+            element.send_keys(character)
+            sleep(random.random() * 0.05)
+
+    def check_captcha(self,driver):
+        if "Type the characters seen in the image below" in driver.page_source:
+            text = input("Captcha encountered. Please enter the captcha and press Submit then press Enter to continue")
+            while (text != ""):
+                text = input(
+                    "Captcha encountered. Please enter the captcha and press Submit then press Enter to continue")

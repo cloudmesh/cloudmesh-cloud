@@ -55,16 +55,6 @@ class Test_compute:
 
         assert test_resource_group is not None
 
-#    def test_create_nic(self):
-#        HEADING()
-#
-#        StopWatch.start("Create Nic Started")
-#        test_nic = self.p.create_nic()
-#        VERBOSE(" ".join('NIC ID: '+ test_nic.id))
-#        StopWatch.stop("Create Nic Finished")
-#
-#        assert test_nic is not None
-
     def test_create_vm(self):
         HEADING()
 

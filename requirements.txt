@@ -28,4 +28,6 @@ connexion[swagger-ui]
 yamllint
 azure
 munch
-
+shell
+selenium
+pandas

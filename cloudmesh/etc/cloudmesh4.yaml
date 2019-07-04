@@ -158,7 +158,7 @@ cloudmesh:
         version: 'latest'
         service: compute
       default:
-        image: 'linux:Canonical:UbuntuServer:16.04-LTS:latest'
+        image: 'Canonical:UbuntuServer:16.04.0-LTS:latest'
         size: 'Basic_A0'
         resource_group: 'cloudmesh'
         storage_account: 'cmdrive'

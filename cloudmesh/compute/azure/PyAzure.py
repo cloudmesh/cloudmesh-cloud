@@ -1,5 +1,6 @@
 import traceback
 
+import json
 from datetime import datetime
 from cloudmesh.abstractclass.ComputeNodeABC import ComputeNodeABC
 from cloudmesh.management.configuration.config import Config
@@ -12,7 +13,7 @@ from azure.common.credentials import ServicePrincipalCredentials
 from azure.mgmt.resource import ResourceManagementClient
 from azure.mgmt.network import NetworkManagementClient
 from azure.mgmt.compute import ComputeManagementClient
-from azure.mgmt.compute.models import DiskCreateOption
+#from azure.mgmt.compute.models import DiskCreateOption
 
 from msrestazure.azure_exceptions import CloudError
 
@@ -215,7 +216,7 @@ class Provider(ComputeNodeABC):
                 'location': self.LOCATION,
                 'disk_size_gb': 1,
                 'creation_data': {
-                    'create_option': DiskCreateOption.empty
+                    'create_option': 'Empty'
                 }
             }
         )
@@ -231,7 +232,7 @@ class Provider(ComputeNodeABC):
         virtual_machine.storage_profile.data_disks.append({
             'lun': 12,
             'name': 'cloudmesh-datadisk1',
-            'create_option': DiskCreateOption.attach,
+            'create_option': 'Attach',
             'managed_disk': {
                 'id': data_disk.id
             }
@@ -250,7 +251,8 @@ class Provider(ComputeNodeABC):
         """
         start a node
 
-        :param name: the unique node name
+        :param groupName: the unique Resource Group name
+        :param vmName: the unique Virtual Machine name
         :return:  The dict representing the node
         """
         if groupName is None:
@@ -260,11 +262,11 @@ class Provider(ComputeNodeABC):
 
         # Start the VM
         VERBOSE(" ".join('Starting Azure VM'))
-        VERBOSE('Starting Azure VM')
+        print('Starting Azure VM')
         async_vm_start = self.compute_client.virtual_machines.start(groupName, vmName)
         async_vm_start.wait()
-        #return self.info(groupName)
-        return None
+        return self.info(groupName, vmName)
+        #return None
 
     def restart(self, groupName=None, vmName=None):
         """
@@ -283,8 +285,8 @@ class Provider(ComputeNodeABC):
         print('Restarting Azure VM')
         async_vm_restart = self.compute_client.virtual_machines.restart(groupName, vmName)
         async_vm_restart.wait()
-        #return self.info(groupName)
-        return None
+        return self.info(groupName, vmName)
+        #return None
 
     def stop(self, groupName=None, vmName=None):
         """
@@ -303,10 +305,10 @@ class Provider(ComputeNodeABC):
         print('Stopping Azure VM')
         async_vm_stop = self.compute_client.virtual_machines.power_off(groupName, vmName)
         async_vm_stop.wait()
-        #return self.info(groupName)
-        return None
+        return self.info(groupName, vmName)
+        #return None
 
-    def info(self, groupName=None):
+    def info(self, groupName=None, vmName=None):
         """
         gets the information of a node with a given name
         List VM in resource group
@@ -316,8 +318,12 @@ class Provider(ComputeNodeABC):
         if groupName is None:
             groupName = self.GROUP_NAME
 
-        node = self.compute_client.virtual_machines.list_all(groupName)
-        return self.update_dict(node, kind="node")
+        if vmName is None:
+            vmName = self.VM_NAME
+
+        node = self.compute_client.virtual_machines.get(groupName, vmName)
+
+        return self.update_dict(node.as_dict(), kind="node")
 
     def list(self):
         """
@@ -409,7 +415,7 @@ class Provider(ComputeNodeABC):
             _elements = [elements]
         d = []
         for element in _elements:
-            entry = element.__dict__
+            entry = element
             entry["cm"] = {
                 "kind": kind,
                 "driver": self.cloudtype,
@@ -418,17 +424,8 @@ class Provider(ComputeNodeABC):
             if kind == 'node':
                 entry["cm"]["updated"] = str(datetime.utcnow())
                 entry["cm"]["name"] = entry["name"]
-                entry["cm"]["region"] = entry["region"] #Check feasibility of the following items
-                entry["cm"]["size"] = entry["size"] #Check feasibility of the following items
-                entry["cm"]["state"] = entry["state"] #Check feasibility of the following items
-                entry["cm"]["public_ips"] = entry["public_ips"] #Check feasibility of the following items
-                entry["cm"]["private_ips"] = entry["private_ips"] #Check feasibility of the following items
-                entry["cm"]["cloud"] = entry["cloud"] #Check feasibility of the following items
-                entry["cm"]["cloud_id"] = entry["cloud_id"] #Check feasibility of the following items
-                if "created_at" in entry:
-                    entry["cm"]["created"] = str(entry["created_at"])
-                else:
-                    entry["cm"]["created"] = entry["modified"]
+                entry["cm"]["type"] = entry["type"] #Check feasibility of the following items
+                entry["cm"]["location"] = entry["location"] #Check feasibility of the following items
             elif kind == 'flavor':
                 entry["cm"]["created"]  = str(datetime.utcnow())
                 entry["cm"]["updated"]  = str(datetime.utcnow())

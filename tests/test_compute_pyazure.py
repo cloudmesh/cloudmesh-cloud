@@ -71,7 +71,16 @@ class Test_compute:
         start_vm = self.p.start()
         StopWatch.stop("Start VM Finished")
 
-        assert start_vm is None
+        assert start_vm is not None
+
+    def test_info(self):
+        HEADING()
+
+        StopWatch.start("List VM info Started")
+        list_vm = self.p.info(None, None)
+        StopWatch.stop("List VM Info Finished")
+
+        assert list_vm is not None
 
     def test_restart(self):
         HEADING()
@@ -80,7 +89,7 @@ class Test_compute:
         restart_vm = self.p.restart()
         StopWatch.stop("Restart VM Finished")
 
-        assert restart_vm is None
+        assert restart_vm is not None
 
     def test_stop(self):
         HEADING()
@@ -89,7 +98,7 @@ class Test_compute:
         stop_vm = self.p.stop()
         StopWatch.stop("Stop VM Finished")
 
-        assert stop_vm is None
+        assert stop_vm is not None
 
     def test_delete(self):
         HEADING()
@@ -99,6 +108,5 @@ class Test_compute:
         StopWatch.stop("Delete VM Finished")
 
         assert destroy_vm is None
-
     # TODO test_resume
     # TODO test_suspend

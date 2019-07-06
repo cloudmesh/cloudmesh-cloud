@@ -5,7 +5,6 @@ from cloudmesh.common.util import path_expand
 from cloudmesh.shell.command import PluginCommand
 from cloudmesh.shell.command import command
 from sys import platform
-from shell import shell
 import selenium as sel
 from selenium import webdriver
 import getpass
@@ -15,6 +14,8 @@ from pathlib import Path, PurePath, PurePosixPath,PureWindowsPath
 import yaml
 import pandas
 import os
+import subprocess
+
 
 class RegisterCommand(PluginCommand):
 
@@ -79,13 +80,16 @@ class RegisterCommand(PluginCommand):
                 if platform == "linux" or platform == "linux2":
                     # check if chrome installed
                     try:
-                        chrome_ver1 = shell('google-chrome-stable --version')
-                        chrome_ver2 = shell('google-chrome --version')
+                        chrome_ver1 = subprocess.getoutput('google-chrome-stable --version')
+                        chrome_ver2 = subprocess.getoutput('google-chrome --version')
+                        if 'not found' in chrome_ver1.lower() or 'not found' in chrome_ver2.lower():
+                            Console.error("google chrome is not installed")
+                            return
                         self.driver = sel.webdriver.Chrome()
                         self.create_user()
-                        credentials_csv_path = '{Downloads}/credentials.csv'.format(Downloads=PurePosixPath(Path.home()).joinpath('Downloads').as_posix())
-                        cloudmesh_folder = '{Home}/.cloudmesh'.format(Home=Path.home().as_posix())
-                        shell('mv {cred} {cm}'.format(cred=credentials_csv_path,cm=cloudmesh_folder))
+                        credentials_csv_path = Path.home().joinpath('Downloads').joinpath('credentials.csv').resolve()
+                        cloudmesh_folder = Path.home().joinpath('.cloudmesh').resolve()
+                        os.rename(credentials_csv_path, cloudmesh_folder.joinpath('credentials.csv').resolve())
                         Console.info("credentials.csv moved to ~/.cloudmesh folder")
 
                         with open("{cm}/cloudmesh4.yaml".format(cm=cloudmesh_folder)) as f:
@@ -103,8 +107,6 @@ class RegisterCommand(PluginCommand):
 
                         Console.info("AWS 'Access Key ID' and 'Secret Access Key' in the cloudmesh4.yaml updated")
 
-                    except FileNotFoundError:
-                        Console.error("google chrome is not installed")
                     except sel.common.exceptions.Webself.driverException:
                         Console.error("Chrome geckodriver not installed. Follow these steps for installation: \n"
                                       "1) Download the driver from the following link: \n\t "
@@ -119,6 +121,7 @@ class RegisterCommand(PluginCommand):
                     chrome = Path("C:\Program Files (x86)\Google\Chrome\Application\Chrome.exe")
                     if not chrome.is_file():
                         Console.error("Google chrome is not installed")
+                        return
                     try:
                         self.driver = sel.webdriver.Chrome()
                     except sel.common.exceptions.WebDriverException:
@@ -126,11 +129,11 @@ class RegisterCommand(PluginCommand):
                                       "1) Download the driver from the following link: \n\t "
                                       "https://sites.google.com/a/chromium.org/chromedriver/downloads \n"
                                       "2) Copy the `chromedriver` to path, for instance you can add it to the followtin path: \n\t %USERPROFILE%\AppData\Local\Microsoft\WindowsApps")
+                        return
                     self.create_user()
-                    credentials_csv_path = PureWindowsPath('{Downloads}/credentials.csv'.format(
-                        Downloads=PurePosixPath(Path.home()).joinpath('Downloads')))
-                    cloudmesh_folder = PureWindowsPath('{Home}/.cloudmesh'.format(Home=Path.home().as_posix()))
-                    os.system('move {cred} {cm}'.format(cred=credentials_csv_path, cm=cloudmesh_folder))
+                    credentials_csv_path = Path.home().joinpath('Downloads').joinpath('credentials.csv').resolve()
+                    cloudmesh_folder = Path.home().joinpath('.cloudmesh').resolve()
+                    os.rename(credentials_csv_path, cloudmesh_folder.joinpath('credentials.csv').resolve())
                     Console.info("credentials.csv moved to ~/.cloudmesh folder")
 
                     with open("{cm}/cloudmesh4.yaml".format(cm=cloudmesh_folder)) as f:

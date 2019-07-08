@@ -116,7 +116,40 @@ class RegisterCommand(PluginCommand):
                                       "'sudo chmod +x /usr/bin/chromedriver'")
 
                 elif platform == "darwin":
-                    Console.error("aws registration is not yet tested in macOS")
+                    chrome = Path("/Applications/Google Chrome.app/Contents/MacOS/Google Chrome")
+                    if not chrome.is_file():
+                        Console.error("Google chrome is not installed")
+                        return
+                    try:
+                        self.driver = sel.webdriver.Chrome()
+                    except sel.common.exceptions.WebDriverException:
+                        Console.error("Chrome geckodriver not installed. Follow these steps for installation: \n"
+                                      "1) Download the driver from the following link: \n\t "
+                                      "https://sites.google.com/a/chromium.org/chromedriver/downloads \n"
+                                      "2) Copy the `chromedriver` to '/usr/local/bin' \n"
+                                      "3) Set the permission using:\n\t"
+                                      "'chmod +x /usr/local/bin/chromedriver'")
+                        return
+                    self.create_user()
+                    credentials_csv_path = Path.home().joinpath('Downloads').joinpath('credentials.csv').resolve()
+                    cloudmesh_folder = Path.home().joinpath('.cloudmesh').resolve()
+                    os.rename(credentials_csv_path, cloudmesh_folder.joinpath('credentials.csv').resolve())
+                    Console.info("credentials.csv moved to ~/.cloudmesh folder")
+
+                    with open("{cm}/cloudmesh4.yaml".format(cm=cloudmesh_folder)) as f:
+                        cloudmesh_conf = yaml.load(f, Loader=yaml.FullLoader)
+
+                    creds = pandas.read_csv("{cm}/credentials.csv".format(cm=cloudmesh_folder))
+
+                    cloudmesh_conf['cloudmesh']['cloud']['aws']['credentials']['EC2_ACCESS_ID'] = creds['Access key ID'][0]
+                    cloudmesh_conf['cloudmesh']['cloud']['aws']['credentials']['EC2_SECRET_KEY'] = creds['Secret access key'][0]
+
+                    with open("{cm}/cloudmesh4.yaml".format(cm=cloudmesh_folder), "w") as f:
+                        yaml.dump(cloudmesh_conf, f)
+
+                    Console.info("AWS 'Access Key ID' and 'Secret Access Key' in the cloudmesh4.yaml updated")
+
+
                 elif platform == "win32":
                     chrome = Path("C:\Program Files (x86)\Google\Chrome\Application\Chrome.exe")
                     if not chrome.is_file():

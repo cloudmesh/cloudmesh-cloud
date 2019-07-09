@@ -225,7 +225,7 @@ cloudmesh:
         OS_KEY_PATH: ~/.ssh/id_rsa.pub
       default:
         flavor: m1.small
-        image: CC-Ubuntu16.04
+        image: CC-Ubuntu18.04
         username: cc
     jetstream:
       cm:

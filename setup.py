@@ -76,6 +76,7 @@ docker
 munch
 selenium
 pandas
+yamllint
 """.split("\n")
 
 

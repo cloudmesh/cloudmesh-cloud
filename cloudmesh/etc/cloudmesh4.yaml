@@ -17,9 +17,10 @@ cloudmesh:
   storage:
     storage_a:
       cm:
+        active: False
         heading: Aws Boto
         host: aws.com
-        label: Aws
+        label: aws_boto
         kind: awsboto
         version: TBD
         service: storage
@@ -29,9 +30,10 @@ cloudmesh:
         name: TBD
     storage_b:
       cm:
+        active: False
         heading: Aws Boto
         host: aws.com
-        label: Aws
+        label: aws_libcloud
         kind: awslibcloud
         version: TBD
         service: storage
@@ -41,9 +43,10 @@ cloudmesh:
         name: TBD
     box:
       cm:
+        active: False
         heading: Box
         host: box.com
-        label: Box
+        label: box
         kind: box
         version: TBD
         service: storage
@@ -53,9 +56,10 @@ cloudmesh:
         config_path: TBD
     aws-myhome:
       cm:
+        active: False
         heading: homedir
         host: aws.com
-        label: dome-dir
+        label: home-dir
         kind: aws-s3
         version: TBD
         service: storage
@@ -66,9 +70,10 @@ cloudmesh:
         bucket: home
     gdrive:
       cm:
+        active: False
         heading: GDrive
         host: dgrive.google.com
-        label: GDrive
+        label: gdrive
         kind: gdrive
         version: TBD
         service: storage
@@ -89,7 +94,7 @@ cloudmesh:
         active: False
         heading: AWS
         host: azure.mocrosoft.com
-        label: Azure
+        label: azure_blob
         kind: azureblob
         version: TBD
         service: storage
@@ -111,7 +116,7 @@ cloudmesh:
         active: True
         heading: Docker
         host: localhost
-        label: Docker
+        label: docker
         kind: docker
         version: 18.09.2
         service: compute
@@ -125,7 +130,7 @@ cloudmesh:
         active: False
         heading: AWS
         host: azure.mocrosoft.com
-        label: Azure
+        label: azure_arm
         kind: azure_arm
         version: TBD
         service: storage
@@ -148,7 +153,7 @@ cloudmesh:
         active: False
         heading: AWS
         host: azure.mocrosoft.com
-        label: Azure
+        label: azure_az
         kind: azure
         version: TBD
         service: compute

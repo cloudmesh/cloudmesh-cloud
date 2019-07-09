@@ -18,6 +18,7 @@ from pprint import pprint
 from cloudmesh.common.FlatDict import flatten
 import oyaml as yaml
 from cloudmesh.common.util import banner
+from cloudmesh.common.variables import Variables
 
 # see also https://github.com/cloudmesh/client/blob/master/cloudmesh_client/cloud/register.py
 
@@ -63,6 +64,17 @@ class Config(object):
                                "../../etc/cloudmesh4.yaml"))
 
             copyfile(source.resolve(), self.config_path)
+
+            # read defaults
+            self.__init__()
+
+            defaults = self["cloudmesh.default"]
+
+            pprint(defaults)
+            d = Variables()
+            for key in defaults:
+                print (key, defaults[key])
+                d[key] = defaults[key]
 
     @staticmethod
     def check_for_tabs(filename, verbose=True):

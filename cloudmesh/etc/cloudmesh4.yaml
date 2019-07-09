@@ -1,12 +1,4 @@
 cloudmesh:
-  source:
-    location: ~/Desktop/github/cloudmesh
-    packages:
-      cloudmesh-common: https://github.com/cloudmesh/cloudmesh-common
-      cloudmesh-cmd5: https://github.com/cloudmesh/cloudmesh-cmd5
-      cloudmesh-openapi: https://github.com/cloudmesh/cloudmesh-openapi
-      cloudmesh-sys: https://github.com/cloudmesh/cloudmesh-sys
-      cloudmesh-cm4: https://github.com/cloudmesh/cloudmesh-cloud
   profile:
     firstname: TBD
     lastname: TBD
@@ -17,8 +9,11 @@ cloudmesh:
   default:
     group: cloudmesh
     experiment: base
-    cloud: azure
+    cloud: chameleon
     cluster: clustera
+    trace: true
+    debug: true
+    timer: false
   storage:
     storage_a:
       cm:

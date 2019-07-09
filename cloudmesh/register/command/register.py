@@ -5,16 +5,10 @@ from cloudmesh.common.util import path_expand
 from cloudmesh.shell.command import PluginCommand
 from cloudmesh.shell.command import command
 from sys import platform
-import selenium as sel
-from selenium import webdriver
-import getpass
-from time import sleep
-import random
-from pathlib import Path, PurePath, PurePosixPath,PureWindowsPath
-import yaml
-import pandas
 import os
 import subprocess
+import yaml
+from pathlib import Path, PurePath, PurePosixPath, PureWindowsPath
 
 
 class RegisterCommand(PluginCommand):
@@ -76,7 +70,25 @@ class RegisterCommand(PluginCommand):
         """
 
         if arguments.aws:
+
+            # TODO: This code should be moved to AWSRegister
+
+            #
+            # Do dynamic loading in AWSRegister as a function
+            #
+            import selenium as sel
+            from cloudmesh.register.AWSRegister import AWSRegister
+            #
+            # Pandas should not be used, but
+            # TODO: change csv
+            # import csv
+            # the csv code needs to be changed
+
+            import pandas
+
             if arguments.yaml:
+
+
                 if platform == "linux" or platform == "linux2":
                     # check if chrome installed
                     try:
@@ -86,7 +98,9 @@ class RegisterCommand(PluginCommand):
                             Console.error("google chrome is not installed")
                             return
                         self.driver = sel.webdriver.Chrome()
-                        self.create_user()
+                        # TODO: this does not have the return check as the others have?
+                        register = AWSRegister(self.driver)
+                        register.create_user()
                         credentials_csv_path = Path.home().joinpath('Downloads').joinpath('credentials.csv').resolve()
                         cloudmesh_folder = Path.home().joinpath('.cloudmesh').resolve()
                         os.rename(credentials_csv_path, cloudmesh_folder.joinpath('credentials.csv').resolve())
@@ -130,7 +144,7 @@ class RegisterCommand(PluginCommand):
                                       "3) Set the permission using:\n\t"
                                       "'chmod +x /usr/local/bin/chromedriver'")
                         return
-                    self.create_user()
+                    register = AWSRegister(self.driver)
                     credentials_csv_path = Path.home().joinpath('Downloads').joinpath('credentials.csv').resolve()
                     cloudmesh_folder = Path.home().joinpath('.cloudmesh').resolve()
                     os.rename(credentials_csv_path, cloudmesh_folder.joinpath('credentials.csv').resolve())
@@ -163,7 +177,8 @@ class RegisterCommand(PluginCommand):
                                       "https://sites.google.com/a/chromium.org/chromedriver/downloads \n"
                                       "2) Copy the `chromedriver` to path, for instance you can add it to the followtin path: \n\t %USERPROFILE%\AppData\Local\Microsoft\WindowsApps")
                         return
-                    self.create_user()
+                    self.driver = sel.webdriver.Chrome()
+                    register = AWSRegister(self.driver)
                     credentials_csv_path = Path.home().joinpath('Downloads').joinpath('credentials.csv').resolve()
                     cloudmesh_folder = Path.home().joinpath('.cloudmesh').resolve()
                     os.rename(credentials_csv_path, cloudmesh_folder.joinpath('credentials.csv').resolve())
@@ -197,63 +212,3 @@ class RegisterCommand(PluginCommand):
 
         return ""
 
-    def slow_typer(self,element, text):
-        for character in text:
-            element.send_keys(character)
-            sleep(random.random() * 0.05)
-
-    def check_captcha(self):
-        if "Type the characters seen in the image below" in self.driver.page_source:
-            text = input("Captcha encountered. Please enter the captcha and press Submit then press Enter to continue")
-            while (text != ""):
-                text = input(
-                    "Captcha encountered. Please enter the captcha and press Submit then press Enter to continue")
-
-    def create_user(self):
-        email = input("Enter your email: ")
-        passw = getpass.getpass("Enter your password: ")
-        self.driver.get("https://console.aws.amazon.com/iam/home#/users")
-        assert "Amazon Web Services" in self.driver.title, "Unexpected login page, aborting"
-        sleep(1)
-        self.driver.find_element_by_id("resolving_input").send_keys(email)
-        self.driver.find_element_by_id("next_button").click()
-        self.check_captcha()
-        sleep(1)
-        self.driver.find_element_by_id("password").send_keys(passw)
-        self.driver.find_element_by_id("signin_button").click()
-        sleep(1)
-        self.check_captcha()
-        # adding cloudmesh user
-        self.driver.find_element_by_link_text("Add user").click()
-        sleep(1)
-        self.driver.find_element_by_id("awsui-textfield-17").send_keys("cloudmesh")
-        self.driver.find_element_by_name("accessKey").click()
-        sleep(1)
-        self.driver.find_element_by_class_name("wizard-next-button").click()
-        sleep(1)
-        self.driver.find_element_by_class_name("awsui-util-pt-s").click()
-        sleep(1)
-        self.driver.find_element_by_xpath("//awsui-textfield[@ng-model='createGroupModal.groupName']/input").send_keys(
-            "cloudmesh")
-        sleep(1)
-        self.driver.find_element_by_xpath('//*/policies-table//table-search//search/div/input').send_keys(
-            "AmazonEC2FullAccess")
-        sleep(1)
-        self.driver.find_element_by_xpath(
-            '//div[@data-item-id="arn:aws:iam::aws:policy/AmazonEC2FullAccess"]//awsui-checkbox//div').click()
-        sleep(1)
-        self.driver.find_element_by_xpath("//awsui-button[@click-tracker='CreateGroup']").click()
-        Console.info("'cloudmesh' group created")
-        sleep(1)
-        self.driver.find_element_by_class_name("wizard-next-button").click()
-        sleep(1)
-        self.driver.find_element_by_class_name("wizard-next-button").click()
-        Console.info("'cloudmesh' user created")
-        sleep(1)
-        self.driver.find_element_by_class_name("wizard-next-button").click()
-        sleep(1)
-        self.driver.find_element_by_xpath("//awsui-button[@text='Download .csv']").click()
-        Console.info("credentials.csv downloaded")
-        sleep(2)
-        self.driver.find_element_by_xpath("//awsui-button[@text='Close']").click()
-        sleep(4)

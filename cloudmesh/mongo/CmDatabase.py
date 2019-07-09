@@ -5,7 +5,7 @@ from cloudmesh.common.console import Console
 from cloudmesh.common.parameter import Parameter
 from cloudmesh.management.configuration.config import Config
 from pymongo import MongoClient
-
+from cloudmesh.common.debug import VERBOSE
 
 #
 # cm:
@@ -210,6 +210,7 @@ class CmDatabase(object):
     # check
     def update(self, entries):
 
+        VERBOSE(entries)
         result = []
         for entry in entries:
 

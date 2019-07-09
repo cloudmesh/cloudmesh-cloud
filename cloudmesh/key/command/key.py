@@ -182,7 +182,7 @@ class KeyCommand(PluginCommand):
             VERBOSE(username)
             keys = SSHkey().get_from_git(username)
             # pprint(keys)
-            print(Printer.flatwrite(
+            print(Printer.write(
                 keys,
                 sort_keys=["name"],
                 order=["id", "name", "fingerprint", "source"],
@@ -195,8 +195,11 @@ class KeyCommand(PluginCommand):
         elif arguments.list and arguments.source == "ssh":
             # this is much simpler
 
+
             sshkey = SSHkey()
-            print(Printer.flatwrite(
+
+
+            print(Printer.write(
                 [sshkey],
                 sort_keys=["name"],
                 order=["name", "type", "fingerprint", "comment"],
@@ -220,7 +223,7 @@ class KeyCommand(PluginCommand):
                 provider = Provider(clouds)
                 cloudkey.append(provider.keys())
 
-            print(Printer.flatwrite(
+            print(Printer.write(
                 [cloudkey],
                 sort_keys=["name"],
                 order=["name", "type", "fingerprint", "comment"],
@@ -246,5 +249,12 @@ class KeyCommand(PluginCommand):
 
             raise NotImplementedError
 
+        elif arguments.get:
+
+            raise NotImplementedError
+
+        elif arguments.group:
+
+            raise NotImplementedError
 
         return ""

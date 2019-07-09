@@ -15,6 +15,15 @@ class SSHkey(dict):
     def __init__(self):
         self.load()
 
+    @staticmethod
+    def _update_dict(name, d):
+        d["cm"] = {
+            "kind": "key",
+            "cloud": "key",
+            "name": name
+        }
+        return d
+
     def load(self):
         self["profile"] = Config()["cloudmesh"]["profile"]
         self["path"] = path_expand(self["profile"]["publickey"])
@@ -31,6 +40,7 @@ class SSHkey(dict):
 
         self['comment'] = self['comment']
         self['source'] = 'ssh'
+        self = self._update_dict(self['name'], self)
 
     def set_permissions(self, path):
         """
@@ -73,16 +83,16 @@ class SSHkey(dict):
                 'fingerprint': SSHkey._fingerprint(key),
                 'name': name,
                 'comment': name,
-                'cm_id': name,
                 'source': 'git',
                 'kind': 'key'
             }
 
             thekey["type"], thekey["key"], thekey["comment"] = SSHkey._parse(
                 key)
-
             if thekey["comment"] is None:
                 thekey["comment"] = name
+            thekey = self._update_dict(name, thekey)
+
             d.append(thekey)
         return d
 

@@ -55,6 +55,15 @@ class Test_compute:
 
         assert test_resource_group is not None
 
+    def test_list_images(self):
+        HEADING()
+
+        StopWatch.start("List Images Started")
+        test_images = self.p.list_images()
+        StopWatch.stop("List Images Finished")
+
+        assert test_images is not None
+
     def test_create_vm(self):
         HEADING()
 
@@ -108,5 +117,6 @@ class Test_compute:
         StopWatch.stop("Delete VM Finished")
 
         assert destroy_vm is None
+
     # TODO test_resume
     # TODO test_suspend

@@ -74,6 +74,8 @@ yamllint
 azure
 docker
 munch
+selenium
+pandas
 """.split("\n")
 
 

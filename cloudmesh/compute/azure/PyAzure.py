@@ -13,7 +13,6 @@ from azure.common.credentials import ServicePrincipalCredentials
 from azure.mgmt.resource import ResourceManagementClient
 from azure.mgmt.network import NetworkManagementClient
 from azure.mgmt.compute import ComputeManagementClient
-#from azure.mgmt.compute.models import DiskCreateOption
 
 from msrestazure.azure_exceptions import CloudError
 
@@ -30,8 +29,6 @@ class Provider(ComputeNodeABC):
         conf = Config(configuration)["cloudmesh"]
 
         self.user = Config()["cloudmesh"]["profile"]["user"]
-
-        VERBOSE("JAE "+self.user, verbose=10)
 
         self.spec = conf["cloud"][name]
         self.cloud = name
@@ -94,102 +91,6 @@ class Provider(ComputeNodeABC):
             print('\nCreate Azure Virtual Machine Resource Group')
             return self.resource_client.resource_groups.create_or_update(self.GROUP_NAME, {'location': self.LOCATION})
 
-    def create_nic(self):
-        """
-            Create a Network Interface for a Virtual Machine
-        :return:
-        """
-        # A Resource group needs to be in place
-        self.get_resource_group()
-
-        # Create Virtual Network
-        print('\nCreate Vnet')
-        async_vnet_creation = self.network_client.virtual_networks.create_or_update(
-            self.GROUP_NAME,
-            self.VNET_NAME,
-            {
-                'location': self.LOCATION,
-                'address_space': {
-                    'address_prefixes': ['10.0.0.0/16']
-                }
-            }
-        )
-        async_vnet_creation.wait()
-
-        # Create Subnet
-        print('\nCreate Subnet')
-        async_subnet_creation = self.network_client.subnets.create_or_update(
-            self.GROUP_NAME,
-            self.VNET_NAME,
-            self.SUBNET_NAME,
-            {'address_prefix': '10.0.0.0/24'}
-        )
-        subnet_info = async_subnet_creation.result()
-
-        # Create NIC
-        print('\nCreate NIC')
-        async_nic_creation = self.network_client.network_interfaces.create_or_update(
-            self.GROUP_NAME,
-            self.NIC_NAME,
-            {
-                'location': self.LOCATION,
-                'ip_configurations': [{
-                    'name': self.IP_CONFIG_NAME,
-                    'subnet': {
-                        'id': subnet_info.id
-                    }
-                }]
-            }
-        )
-
-        nic = async_nic_creation.result()
-
-        return nic
-
-    def create_vm_parameters(self):
-
-        nic     = self.create_nic()
-        NIC_ID  = nic.id
-
-        # Parse Image from yaml file
-        image               = self.default["image"].split(":")
-        imgPublisher        = image[0]
-        imgOffer            = image[1]
-        imgSKU              = image[2]
-        imgVersion          = image[3]
-
-        # Declare Virtual Machine Settings
-
-        """
-            Create the VM parameters structure.
-        """
-        VM_PARAMETERS={
-            'location': self.LOCATION,
-            'os_profile': {
-                'computer_name': self.VM_NAME,
-                'admin_username': self.USERNAME,
-                'admin_password': self.PASSWORD
-            },
-            'hardware_profile': {
-                'vm_size': 'Standard_DS1_v2'
-            },
-            'storage_profile': {
-                'image_reference': {
-                    'publisher': imgPublisher,
-                    'offer': imgOffer,
-                    'sku': imgSKU,
-                    'version': imgVersion
-                },
-            },
-            'network_profile': {
-                'network_interfaces': [{
-                    'id': NIC_ID,
-                }]
-            },
-        }
-
-        return VM_PARAMETERS
-
     def create(self, name=None, image=None, size=None, timeout=360, **kwargs):
         """
         creates a named node
@@ -246,6 +147,102 @@ class Provider(ComputeNodeABC):
 
         return None
         # must return dict
+
+    def create_vm_parameters(self):
+
+        nic     = self.create_nic()
+        NIC_ID  = nic.id
+
+        # Parse Image from yaml file
+        image               = self.default["image"].split(":")
+        imgPublisher        = image[0]
+        imgOffer            = image[1]
+        imgSKU              = image[2]
+        imgVersion          = image[3]
+
+        # Declare Virtual Machine Settings
+
+        """
+            Create the VM parameters structure.
+        """
+        VM_PARAMETERS={
+            'location': self.LOCATION,
+            'os_profile': {
+                'computer_name': self.VM_NAME,
+                'admin_username': self.USERNAME,
+                'admin_password': self.PASSWORD
+            },
+            'hardware_profile': {
+                'vm_size': 'Standard_DS1_v2'
+            },
+            'storage_profile': {
+                'image_reference': {
+                    'publisher': imgPublisher,
+                    'offer': imgOffer,
+                    'sku': imgSKU,
+                    'version': imgVersion
+                },
+            },
+            'network_profile': {
+                'network_interfaces': [{
+                    'id': NIC_ID,
+                }]
+            },
+        }
+
+        return VM_PARAMETERS
+
+    def create_nic(self):
+        """
+            Create a Network Interface for a Virtual Machine
+        :return:
+        """
+        # A Resource group needs to be in place
+        self.get_resource_group()
+
+        # Create Virtual Network
+        print('\nCreate Vnet')
+        async_vnet_creation = self.network_client.virtual_networks.create_or_update(
+            self.GROUP_NAME,
+            self.VNET_NAME,
+            {
+                'location': self.LOCATION,
+                'address_space': {
+                    'address_prefixes': ['10.0.0.0/16']
+                }
+            }
+        )
+        async_vnet_creation.wait()
+
+        # Create Subnet
+        print('\nCreate Subnet')
+        async_subnet_creation = self.network_client.subnets.create_or_update(
+            self.GROUP_NAME,
+            self.VNET_NAME,
+            self.SUBNET_NAME,
+            {'address_prefix': '10.0.0.0/24'}
+        )
+        subnet_info = async_subnet_creation.result()
+
+        # Create NIC
+        print('\nCreate NIC')
+        async_nic_creation = self.network_client.network_interfaces.create_or_update(
+            self.GROUP_NAME,
+            self.NIC_NAME,
+            {
+                'location': self.LOCATION,
+                'ip_configurations': [{
+                    'name': self.IP_CONFIG_NAME,
+                    'subnet': {
+                        'id': subnet_info.id
+                    }
+                }]
+            }
+        )
+
+        nic = async_nic_creation.result()
+
+        return nic
 
     def start(self, groupName=None, vmName=None):
         """
@@ -383,6 +380,55 @@ class Provider(ComputeNodeABC):
         # return self.info(groupName)
         return None
 
+    def list_images(self):
+
+        region = self.LOCATION
+
+        image_list = list()
+
+        result_list_pub = self.compute_client.virtual_machine_images.list_publishers(
+            region,
+        )
+
+        for publisher in result_list_pub:
+            result_list_offers = self.compute_client.virtual_machine_images.list_offers(
+                region,
+                publisher.name,
+            )
+
+            for offer in result_list_offers:
+                result_list_skus = self.compute_client.virtual_machine_images.list_skus(
+                    region,
+                    publisher.name,
+                    offer.name,
+                )
+
+                for sku in result_list_skus:
+                    result_list = self.compute_client.virtual_machine_images.list(
+                        region,
+                        publisher.name,
+                        offer.name,
+                        sku.name,
+                    )
+
+                    for version in result_list:
+                        result_get = self.compute_client.virtual_machine_images.get(
+                            region,
+                            publisher.name,
+                            offer.name,
+                            sku.name,
+                            version.name,
+                        )
+
+                        print('PUBLISHER: {0}, OFFER: {1}, SKU: {2}, VERSION: {3}'.format(
+                            publisher.name,
+                            offer.name,
+                            sku.name,
+                            version.name,
+                        ))
+                        image_list.append(result_get)
+
+        return image_list
 
     # TODO Implement Rename Method
     def rename(self, name=None, destination=None):

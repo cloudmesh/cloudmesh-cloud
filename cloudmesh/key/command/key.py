@@ -2,14 +2,13 @@ from pprint import pprint
 
 from cloudmesh.common.Printer import Printer
 from cloudmesh.common.parameter import Parameter
-from cloudmesh.key.api.manager import Manager
 from cloudmesh.management.configuration.SSHkey import SSHkey
 from cloudmesh.management.configuration.config import Config
 from cloudmesh.shell.command import PluginCommand
 from cloudmesh.shell.command import command, map_parameters
 from cloudmesh.common.variables import Variables
 from cloudmesh.compute.libcloud.Provider import Provider
-
+from cloudmesh.common.debug import VERBOSE
 
 class KeyCommand(PluginCommand):
 
@@ -33,7 +32,7 @@ class KeyCommand(PluginCommand):
              key add [NAME] [--source=git]
              key add [NAME] [--source=ssh]
              key get NAME [--output=OUTPUT]
-             key default --select
+             key select
              key delete (NAMES | --select | --all) [--dryrun]
              key delete NAMES --cloud=CLOUDS [--dryrun]
              key upload [NAMES] [--cloud=CLOUDS] [--dryrun]
@@ -72,23 +71,13 @@ class KeyCommand(PluginCommand):
                Manages public keys is an essential component of accessing
                virtual machine sin the cloud. There are a number of sources
                where you can find public keys. This includes teh ~/.ssh
-               directory and for example github. To list these keys the
-               following list functions are provided.
+               directory and for example github.
 
-                key list --source=git  [--username=USERNAME]
-                    lists all keys in git for the specified user. If the
-                    name is not specified it is read from cloudmesh4.yaml
-                key list --source=ssh  [--dir=DIR] [--output=OUTPUT]
-                    lists all keys in the directory. If the directory is not
-                    specified the default will be ~/.ssh
-                key list NAMES
-                    lists all keys in the named virtual machines.
-
-               The keys will be uploaded into cloudmesh with the add command
-               under the given name. If the name is not specified the name
+               Keys will be uploaded into cloudmesh database with the add
+               command under the given NAME. If the name is not specified the name
                cloudmesh.profile.user is assumed.
 
-                key add --ssh
+                key add NAME  --source=ssh
                     adds the default key in ~/.ssh/id_rsa.pub
                 key add NAME  --source=FILENAME
                     adds the key specified by the filename with the given name
@@ -96,27 +85,44 @@ class KeyCommand(PluginCommand):
                     adds a named github key from a user with the given github
                     username.
 
-                Once the keys are uploaded to github, they can be listed
+               Once the keys are uploaded to github, they can be listed
+               To list these keys the following list functions are provided.
 
-                key list [NAME] [--output=OUTPUT]
+                key list --source=git  [--username=USERNAME]
+                    lists all keys in git for the specified user. If the
+                    name is not specified it is read from cloudmesh4.yaml
+                key list --source=ssh  [--dir=DIR] [--output=OUTPUT]
+                    lists all keys in the directory. If the directory is not
+                    specified the default will be ~/.ssh
+
+                key list NAMES
+                    lists all keys in the named virtual machines.
+
+
+                List command can use the [--output=OUTPUT] option
+
                     list the keys loaded to cloudmesh in the given format:
                     json, yaml, table. table is default. The NAME can be
                     specified and if omitted the name cloudmesh.profile.user
                     is assumed.
 
+                To get keys from the cloudmesh database the folloing commands
+                are available:
+
                 key get NAME
                     Retrieves the key indicated by the NAME parameter from
-                    cloudmesh and prints its details.
-                key default --select
+                    cloudmesh database and prints its details.
+                key select
                     Select the default key interactively
                 key delete NAMES
-                    deletes the keys. This may also have an impact on groups
+                    deletes the Named keys. This may also have an impact on groups
                 key rename NAME NEW
                     renames the key from NAME to NEW.
 
                Group management of keys is an important concept in cloudmesh,
-               allowing multiple users to be added to virtual machines.
-               The keys must be uploaded to cloudmesh with a name so they can
+               allowing multiple users to be added to virtual machines while
+               managing the keys associated with them.
+               The keys must be uploaded to cloudmesh database with a name so they can
                be used in a group. The --dryrun option executes the command
                without uploading the information to the clouds. If no groupname
                is specified the groupname default is assumed. If no cloudnames
@@ -164,25 +170,24 @@ class KeyCommand(PluginCommand):
                        'cloud',
                        'output',
                        'source',
-                       'dir')
-
-        pprint(arguments)
+                       'dir',
+                       'output')
 
         invalid_names = ['tbd', 'none', "", 'id_rsa']
-        m = Manager()
 
         if arguments.list and arguments.source == "git":
             # this is much simpler
             config = Config()
             username = config["cloudmesh.profile.github"]
-            print("Username:", username)
+            VERBOSE(username)
             keys = SSHkey().get_from_git(username)
-            pprint(keys)
+            # pprint(keys)
             print(Printer.flatwrite(
                 keys,
                 sort_keys=["name"],
                 order=["id", "name", "fingerprint", "source"],
-                header=["Id", "Name", "Fingerprint", "Source"])
+                header=["Id", "Name", "Fingerprint", "Source"],
+                output=arguments.output)
             )
 
             return ""
@@ -195,7 +200,8 @@ class KeyCommand(PluginCommand):
                 [sshkey],
                 sort_keys=["name"],
                 order=["name", "type", "fingerprint", "comment"],
-                header=["Name", "Type", "Fingerprint", "Comment"])
+                header=["Name", "Type", "Fingerprint", "Comment"],
+                output=arguments.output)
             )
             return ""
 
@@ -218,7 +224,8 @@ class KeyCommand(PluginCommand):
                 [cloudkey],
                 sort_keys=["name"],
                 order=["name", "type", "fingerprint", "comment"],
-                header=["Name", "Type", "Fingerprint", "Comment"])
+                header=["Name", "Type", "Fingerprint", "Comment"],
+                output=arguments.output)
             )
 
             return ""
@@ -231,6 +238,13 @@ class KeyCommand(PluginCommand):
                 print("find the keys of the following vms", names)
                 print("the keys will be read from mongo")
 
+                raise NotImplementedError
+
             return ""
+
+        elif arguments.add:
+
+            raise NotImplementedError
+
 
         return ""

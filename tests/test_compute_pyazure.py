@@ -117,6 +117,6 @@ class Test_compute:
         StopWatch.stop("Delete VM Finished")
 
         assert destroy_vm is None
-
+    
     # TODO test_resume
     # TODO test_suspend

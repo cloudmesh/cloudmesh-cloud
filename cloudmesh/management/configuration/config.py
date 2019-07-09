@@ -15,6 +15,9 @@ from cloudmesh.common.dotdict import dotdict
 from cloudmesh.common.variables import Variables
 from cloudmesh.common.console import Console
 from pprint import pprint
+from cloudmesh.common.FlatDict import flatten
+import oyaml as yaml
+from cloudmesh.common.util import banner
 
 # see also https://github.com/cloudmesh/client/blob/master/cloudmesh_client/cloud/register.py
 
@@ -197,6 +200,23 @@ class Config(object):
         :return:
         """
         return self.data["cloudmesh"][kind][name]["credentials"]
+
+    def check_for_TBD(self, kind, name):
+
+        configuration = Config()[f"cloudmesh.{kind}.{name}"]
+
+        result = {"cloudmesh": {"cloud": {name: configuration}}}
+
+        banner(f"checking cloudmesh.{kind}.{name} in ~/.cloudmesh/cloudmesh4.yaml file")
+
+        print (yaml.dump(result))
+
+        flat = flatten(configuration, sep=".")
+
+        for attribute in flat:
+            if "TBD" in str(flat[attribute]):
+                Console.error(f"~/.cloudmesh4.yaml: Attribute cloudmesh.{name}.{attribute} contains TBD")
+
 
     def set_debug_defaults(self):
         for name in ["trace", "debug"]:

@@ -29,7 +29,7 @@ class VmCommand(PluginCommand):
             Usage:
                 vm ping [NAMES] [--cloud=CLOUDS] [--count=N] [--processors=PROCESSORS]
                 vm check [NAMES] [--cloud=CLOUDS] [--username=USERNAME] [--processors=PROCESSORS]
-                vm status [NAMES] [--cloud=CLOUDS]
+                vm status [NAMES] [--cloud=CLOUDS] [--output=OUTPUT]
                 vm console [NAME] [--force]
                 vm start [NAMES] [--cloud=CLOUD] [--parallel] [--processors=PROCESSORS] [--dryrun]
                 vm stop [NAMES] [--cloud=CLOUD] [--parallel] [--processors=PROCESSORS] [--dryrun]
@@ -212,7 +212,8 @@ class VmCommand(PluginCommand):
                        'quiet',
                        'secgroup',
                        'size',
-                       'username')
+                       'username',
+                       'output')
 
         VERBOSE(arguments)
 
@@ -296,12 +297,25 @@ class VmCommand(PluginCommand):
             # gets status from database
             for cloud in clouds:
                 provider = Provider(cloud)
-                status = {}
+                status = []
                 cursor = database.db['{}-node'.format(cloud)]
                 for name in names:
                     for node in cursor.find({'name': name}):
-                        status[name] = node['state']
-                pprint(status)
+                        entry  = {
+                            "name": name,
+                            "status": node['state']
+                        }
+                        status.append(entry)
+
+                print(Printer.write(
+                    status,
+                    sort_keys=["name"],
+                    order=["name", "status"],
+                    header=["Name", "Status"],
+                    output=arguments.output)
+                )
+                return ""
+
 
         elif arguments.start:
             if arguments.NAMES:

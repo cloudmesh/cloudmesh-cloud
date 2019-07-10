@@ -10,7 +10,7 @@ from cloudmesh.compute.virtualbox.Provider import \
     Provider as VirtualboxCloudProvider
 from cloudmesh.management.configuration.config import Config
 from cloudmesh.mongo.DataBaseDecorator import DatabaseUpdate
-
+from cloudmesh.common.debug import VERBOSE
 
 class Provider(ComputeNodeABC):
 
@@ -52,23 +52,20 @@ class Provider(ComputeNodeABC):
         else:
             return Parameter.expand(names)
 
-    def loop(self, names, func, option='iter', processors=3):
+    def loop(self, names, func, **kwargs):
         """
         :param option: if option is 'pool', use pool. if option is 'iter', use iteration
         """
         names = self.expand(names)
         r = []
-        if option == 'pool':
-            # BUG: objc_initializeAfterForkError ###
-            with Pool(processors) as p:
-                r = p.map(func, names)
-        elif option == 'iter':
-            for name in names:
-                vm = func(name)
-                # vm.append(r)
-                r.append(vm)
-        else:
-            print("looping option not supported")
+        for name in names:
+            VERBOSE(name)
+            VERBOSE(func)
+
+            vm = func(name)
+            VERBOSE(vm)
+            r.append(vm)
+            VERBOSE(r)
         return r
 
     @DatabaseUpdate()
@@ -104,6 +101,8 @@ class Provider(ComputeNodeABC):
 
     @DatabaseUpdate()
     def start(self, names=None, **kwargs):
+        VERBOSE(names)
+        VERBOSE(kwargs)
         return self.loop(names, self.p.start, **kwargs)
 
     @DatabaseUpdate()

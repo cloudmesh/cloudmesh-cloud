@@ -81,7 +81,7 @@ cloudmesh:
         directory: TBD
       credentials:
         client_id: TBD
-        prokect_id: TBD
+        project_id: TBD
         auth_uri: "https://accounts.google.com/o/oauth2/auth"
         token_uri: TBD
         client_secret: TBD

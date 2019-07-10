@@ -469,6 +469,7 @@ class Provider(ComputeNodeABC):
         :param names: A list of node names
         :return:  A list of dict representing the nodes
         """
+        VERBOSE(names)
         return self.apply(self.cloudman.ex_start_node, names)
 
     def stop(self, names=None):

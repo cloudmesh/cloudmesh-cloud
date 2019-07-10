@@ -493,7 +493,7 @@ class VmCommand(PluginCommand):
 
                 params['order'] = provider.p.output['vm']['order']
                 params['header'] = provider.p.output['vm']['header']
-                params['output'] = 'table'
+                #params['output'] = 'table'
 
                 if arguments['--refresh']:
                     provider.list()
@@ -505,7 +505,7 @@ class VmCommand(PluginCommand):
                 else:
                     vms = database.find(collection='{}-node'.format(cloud))
 
-                print(Printer.flatwrite(vms, **params))
+                print(Printer.flatwrite(vms, **params, output=arguments.output))
         #
         #             clouds, names = Arguments.get_cloud_and_names("list", arguments, variables)
         #

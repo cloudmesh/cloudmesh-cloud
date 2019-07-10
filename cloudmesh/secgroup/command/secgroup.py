@@ -13,7 +13,7 @@ class SecgroupCommand(PluginCommand):
 
             Usage:
                 secgroup list [--output=OUTPUT]
-                secgroup list --cloud=CLOUD [--output=OUTPUT]
+                secgroup list  --cloud=CLOUD [--output=OUTPUT]
                 secgroup list GROUP [--output=OUTPUT]
                 secgroup add GROUP RULE FROMPORT TOPORT PROTOCOL CIDR
                 secgroup delete GROUP [--cloud=CLOUD]

@@ -35,9 +35,9 @@ class KeyCommand(PluginCommand):
              key select
              key delete (NAMES | --select | --all) [--dryrun]
              key delete NAMES --cloud=CLOUDS [--dryrun]
-             key upload [NAMES] [--cloud=CLOUDS] [--dryrun]
-             key upload [NAMES] [VMS] [--dryrun]
-             key group upload [--group=GROUPNAMES] [--cloud=CLOUDS] [--dryrun]
+             key upload KEYNAME [NAMES] [--cloud=CLOUDS] [--dryrun]
+             key upload KEYNAME [NAMES] [VMS] [--dryrun]
+             key group upload [NAMES] [--group=GROUPNAMES] [--cloud=CLOUDS] [--dryrun]
              key group add [--group=GROUPNAMES] [--cloud=CLOUDS] [--dryrun]
              key group add --file=FILENAME
              key group delete [--group=GROUPNAMES] [NAMES] [--dryrun]

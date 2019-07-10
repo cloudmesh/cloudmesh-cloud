@@ -28,13 +28,13 @@ class VmCommand(PluginCommand):
 
             Usage:
                 vm ping [NAMES] [--cloud=CLOUDS] [--count=N]
-                vm check [NAMES] [--cloud=CLOUDS] [--username=USERNAME] [--processors=PROCESSORS]
+                vm check [NAMES] [--cloud=CLOUDS] [--username=USERNAME]
                 vm status [NAMES] [--cloud=CLOUDS] [--output=OUTPUT]
                 vm console [NAME] [--force]
-                vm start [NAMES] [--cloud=CLOUD] [--parallel] [--processors=PROCESSORS] [--dryrun]
-                vm stop [NAMES] [--cloud=CLOUD] [--parallel] [--processors=PROCESSORS] [--dryrun]
-                vm terminate [NAMES] [--cloud=CLOUD] [--parallel] [--processors=PROCESSORS] [--dryrun]
-                vm delete [NAMES] [--cloud=CLOUD] [--parallel] [--processors=PROCESSORS] [--dryrun]
+                vm start [NAMES] [--cloud=CLOUD] [--dryrun]
+                vm stop [NAMES] [--cloud=CLOUD] [--dryrun]
+                vm terminate [NAMES] [--cloud=CLOUD] [--dryrun]
+                vm delete [NAMES] [--cloud=CLOUD] [--dryrun]
                 vm refresh [--cloud=CLOUDS]
                 vm list [NAMES]
                         [--cloud=CLOUDS]
@@ -286,7 +286,7 @@ class VmCommand(PluginCommand):
 
                 # gets public ips from database
                 public_ips = []
-                cursor = database.db['{}-node'.format(cloud)]
+                cursor = database.db['{cloud}-node']
                 for name in names:
                     for node in cursor.find({'name': name}):
                         public_ips.append(node['public_ips'])
@@ -305,7 +305,7 @@ class VmCommand(PluginCommand):
             for cloud in clouds:
                 provider = Provider(cloud)
                 status = []
-                cursor = database.db['{}-node'.format(cloud)]
+                cursor = database.db[f'{cloud}-node']
                 for name in names:
                     for node in cursor.find({'name': name}):
                         entry  = {
@@ -326,31 +326,37 @@ class VmCommand(PluginCommand):
 
         elif arguments.start:
             if arguments.NAMES:
-                variables['vm'] = arguments.NAMES
+                names = variables['vm'] = arguments.NAMES
+
             if arguments['--cloud']:
                 variables['cloud'] = arguments['--cloud']
             clouds, names = Arguments.get_cloud_and_names("stop", arguments, variables)
 
-            for cloud in clouds:
-                params = {}
+            cloud = clouds[0]
+            print (cloud)
+            print (names)
+
+
+
+
+            for name in names:
+
                 provider = Provider(cloud)
 
-                processors = arguments['--processors']
-
-                if arguments['--parallel']:
-                    params['option'] = 'pool'
-                    if processors:
-                        params['processors'] = int(processors[0])
-                else:
-                    params['option'] = 'iter'
-
                 if arguments['--dryrun']:
-                    print("start nodes {}\noption - {}\nprocessors - {}".format(names, params['option'], processors))
+                    print(f"start node {name}")
                 else:
-                    vms = provider.start(names, **params)
+                    vms = provider.start(name)
+
+
                     order = provider.p.output['vm']['order']
                     header = provider.p.output['vm']['header']
-                    print(Printer.flatwrite(vms, order=order, header=header, output='table'))
+                    print(Printer.flatwrite(vms,
+                                            order=order,
+                                            header=header,
+                                            output='table'))
+
+            return ""
 
         elif arguments.stop:
             if arguments.NAMES:

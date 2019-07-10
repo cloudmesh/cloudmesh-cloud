@@ -9,6 +9,7 @@ from cloudmesh.shell.command import command, map_parameters
 from cloudmesh.common.variables import Variables
 from cloudmesh.compute.libcloud.Provider import Provider
 from cloudmesh.common.debug import VERBOSE
+from cloudmesh.key.api.key import Key
 
 class KeyCommand(PluginCommand):
 
@@ -247,7 +248,18 @@ class KeyCommand(PluginCommand):
 
         elif arguments.add:
 
-            raise NotImplementedError
+            """
+             key add [NAME] [--source=FILENAME]
+             key add [NAME] [--source=git]
+             key add [NAME] [--source=ssh]
+             """
+            key = Key()
+            if arguments["--source"] == "ssh":
+                key.add("ssh", "ssh")
+            if arguments["--source"] == "git":
+                key.add("git", "git")
+            else:
+                raise NotImplementedError
 
         elif arguments.get:
 

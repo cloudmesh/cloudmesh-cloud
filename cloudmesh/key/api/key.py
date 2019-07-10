@@ -6,7 +6,11 @@ import os
 from os.path import expanduser
 # see content of path_expand it does expanduser as far as I know
 from cloudmesh.common.util import path_expand
-
+from cloudmesh.management.configuration.SSHkey import SSHkey
+from cloudmesh.mongo.DataBaseDecorator import DatabaseUpdate
+from cloudmesh.common.debug import VERBOSE
+from pprint import pprint
+from cloudmesh.management.configuration.config import Config
 
 # noinspection PyPep8Naming
 class Key(object):
@@ -37,6 +41,29 @@ class Key(object):
 
         return d
 
+    @DatabaseUpdate()
+    def add(self, name, source):
+        """
+        key add [NAME] [--source=FILENAME]
+        key add [NAME] [--source=git]
+        key add [NAME] [--source=ssh]
+        """
+        keys = None
+        if source == "git":
+            config = Config()
+            username = config["cloudmesh.profile.github"]
+            keys = SSHkey().get_from_git(username)
+
+        elif source == "ssh":
+            key = SSHkey()
+            key["name"] = "ssh"
+            keys = [key]
+
+        else:
+            raise NotImplementedError
+            # source is filename
+
+        return keys
 
 if __name__ == "__main__":
     Key.get_from_dir(None, True)

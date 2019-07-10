@@ -14,7 +14,7 @@ from cloudmesh.mongo.CmDatabase import CmDatabase
 from cloudmesh.shell.command import PluginCommand
 from cloudmesh.shell.command import command, map_parameters
 from cloudmesh.common.variables import Variables
-
+from cloudmesh.common.Shell import Shell
 
 class VmCommand(PluginCommand):
 
@@ -27,7 +27,7 @@ class VmCommand(PluginCommand):
         ::
 
             Usage:
-                vm ping [NAMES] [--cloud=CLOUDS] [--count=N] [--processors=PROCESSORS]
+                vm ping [NAMES] [--cloud=CLOUDS] [--count=N]
                 vm check [NAMES] [--cloud=CLOUDS] [--username=USERNAME] [--processors=PROCESSORS]
                 vm status [NAMES] [--cloud=CLOUDS] [--output=OUTPUT]
                 vm console [NAME] [--force]
@@ -213,7 +213,8 @@ class VmCommand(PluginCommand):
                        'secgroup',
                        'size',
                        'username',
-                       'output')
+                       'output',
+                       'count')
 
         VERBOSE(arguments)
 
@@ -229,32 +230,38 @@ class VmCommand(PluginCommand):
             return ""
 
         elif arguments.ping:
+
+            """
+            vm ping [NAMES] [--cloud=CLOUDS] [--count=N]
+            """
             if arguments.NAMES:
                 variables['vm'] = arguments.NAMES
             if arguments['--cloud']:
                 variables['cloud'] = arguments['--cloud']
-            clouds, names = Arguments.get_cloud_and_names("status", arguments, variables)
+            clouds, names = Arguments.get_cloud_and_names("status",
+                                                          arguments,
+                                                          variables)
+
+            count = arguments.count
+            if arguments.count:
+                count = int(count)
+            else:
+                count = 1
+
+            ips = set()
 
             for cloud in clouds:
                 params = {}
-
-                count = arguments['--count']
-                if count:
-                    params['count'] = int(count)
-
-                processors = arguments['--processors']
-                if processors:
-                    params['processors'] = int(processors[0])
-
                 # gets public ips from database
-                public_ips = []
-                cursor = database.db['{}-node'.format(cloud)]
+                cursor = database.db[f'{cloud}-node']
                 for name in names:
                     for node in cursor.find({'name': name}):
-                        public_ips.append(node['public_ips'])
-                public_ips = [y for x in public_ips for y in x]
+                        ips.update(set(node['public_ips']))
+                ips = list(ips)
+                pprint (ips)
 
-                Host.ping(ips=public_ips, **params)
+            for ip in ips:
+                Shell.ping(host=ip, count=count)
 
         elif arguments.check:
             if arguments.NAMES:

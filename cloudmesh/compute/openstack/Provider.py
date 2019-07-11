@@ -507,7 +507,14 @@ class Provider(ComputeNodeABC):
         """
         return self.apply(self.cloudman.reboot_node, names)
 
-    def create(self, name=None, image=None, size=None, location=None, timeout=360, **kwargs):
+    def create(self,
+               name=None,
+               image=None,
+               size=None,
+               location=None,
+               timeout=360,
+               key=None,
+               **kwargs):
         """
         creates a named node
 
@@ -521,6 +528,7 @@ class Provider(ComputeNodeABC):
         """
         image_use = None
         flavor_use = None
+
         # keyname = Config()["cloudmesh"]["profile"]["user"]
         # ex_keyname has to be the registered keypair name in cloud
 
@@ -550,7 +558,10 @@ class Provider(ComputeNodeABC):
             kwargs["ex_security_groups"] = secgroupsobj
 
 
-        return self.update_dict(node, kind="node")[0]
+        raise NotImplementedError
+
+        #return self.update_dict(node, kind="node")[0]
+        return None
 
     def get_publicIP(self):
         # pools = self.cloudman.ex_list_floating_ip_pools()

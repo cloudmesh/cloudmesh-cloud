@@ -217,28 +217,12 @@ class VmCommand(PluginCommand):
                        'size',
                        'username',
                        'output',
-                       'count')
+                       'count',
+                       'refresh')
 
         variables = Variables()
         database = CmDatabase()
 
-        #if arguments.refresh:
-
-        #    names = []
-
-        #    clouds, names = Arguments.get_cloud_and_names("refresh",
-        #    arguments, variables)
-
-        #    return ""
-
-        # elif arguments.list:
-        #
-        #    if arguments.NAMES:
-        #        variables['vm'] = arguments.NAMES
-        #    if arguments['--cloud']:
-        #        variables['cloud'] = arguments['--cloud']
-        #    clouds, names = Arguments.get_cloud_and_names("stop", arguments,
-        #    variables)
 
         if arguments.list and arguments.refresh:
 
@@ -250,7 +234,7 @@ class VmCommand(PluginCommand):
             for cloud in clouds:
                 print(f"cloud {cloud}")
                 provider = Provider(name=cloud)
-                vms = provider.servers()
+                vms = provider.list()
 
                 provider.Print(arguments.output, "vm", vms)
 

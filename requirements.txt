@@ -31,3 +31,4 @@ munch
 selenium
 pandas
 yamllint
+openstack

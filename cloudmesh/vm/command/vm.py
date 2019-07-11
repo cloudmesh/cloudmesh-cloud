@@ -15,6 +15,9 @@ from cloudmesh.shell.command import PluginCommand
 from cloudmesh.shell.command import command, map_parameters
 from cloudmesh.common.variables import Variables
 from cloudmesh.common.Shell import Shell
+from cloudmesh.common.parameter import Parameter
+from cloudmesh.common.dotdict import dotdict
+from cloudmesh.management.configuration.config import Config
 
 class VmCommand(PluginCommand):
 
@@ -31,8 +34,8 @@ class VmCommand(PluginCommand):
                 vm check [NAMES] [--cloud=CLOUDS] [--username=USERNAME]
                 vm status [NAMES] [--cloud=CLOUDS] [--output=OUTPUT]
                 vm console [NAME] [--force]
-                vm start [NAMES] [--cloud=CLOUD] [--dryrun]
-                vm stop [NAMES] [--cloud=CLOUD] [--dryrun]
+                vm stop [NAMES]  [--dryrun]
+                vm start [NAMES] [--dryrun]
                 vm terminate [NAMES] [--cloud=CLOUD] [--dryrun]
                 vm delete [NAMES] [--cloud=CLOUD] [--dryrun]
                 vm refresh [--cloud=CLOUDS]
@@ -262,6 +265,15 @@ class VmCommand(PluginCommand):
                 Shell.ping(host=ip, count=count)
 
         elif arguments.check:
+
+            raise NotImplementedError
+            """
+            vm check [NAMES] [--cloud=CLOUDS] [--username=USERNAME]
+            """
+            """
+            
+            THIS IS ALL WRONG AS PROVIDER DEPENDENT !!!
+            
             if arguments.NAMES:
                 variables['vm'] = arguments.NAMES
             if arguments['--cloud']:
@@ -291,6 +303,7 @@ class VmCommand(PluginCommand):
                 public_ips = [y for x in public_ips for y in x]
 
                 Host.check(hosts=public_ips, **params)
+            """
 
         elif arguments.status:
             if arguments.NAMES:
@@ -333,8 +346,6 @@ class VmCommand(PluginCommand):
             cloud = clouds[0]
             print (cloud)
             print (names)
-
-
 
 
             for name in names:
@@ -442,67 +453,79 @@ class VmCommand(PluginCommand):
 
         # TODO: username, secgroup
         elif arguments.boot:
-            # clouds, names, image, flavor = Arguments.get_commands("boot", arguments, variables)
-            # if clouds is None or names is None or image is None or flavor is None:
-            #     return ""
-            # else:
-            #     for cloud in clouds:
-            #         p = Provider(cloud)
-            #         for name in names:
-            #             node = p.create(name=name, size=flavor, image=image)
-            #             order = p.p.output['vm']['order']  # not pretty
-            #             header = p.p.output['vm']['header']  # not pretty
-            #             print(Printer.flatwrite(node,
-            #                 sort_keys=["cm.name"],
-            #                 order=order,
-            #                 header=header,
-            #                 output=arguments.output)
-            #                 )
-            if arguments['--cloud']:
-                variables['cloud'] = arguments['--cloud']
-            clouds = Arguments.get_clouds(arguments, variables)
 
-            for cloud in clouds:
+            """
+                vm boot [--name=VMNAMES]
+                        [--cloud=CLOUD]
+                        [--username=USERNAME]
+                        [--image=IMAGE]
+                        [--flavor=FLAVOR]
+                        [--public]
+                        [--secgroup=SECGROUPs]
+                        [--key=KEY]
+                        [--dryrun]
+            """
+            # for name in names:
+            #    node = p.create(name=name, size=flavor, image=image)
+
+            parameters = dotdict()
+
+            names = Parameter.expand(arguments.name)
+            cloud = Parameter.find("cloud",
+                                   arguments,
+                                   variables.dict())
+            defaults = Config()[f"cloudmesh.cloud.{cloud}.default"]
+
+            # print ("CCC", defaults)
+            # print("CCC", "cloud" in arguments)
+            # print ("CCC", cloud)
+            # print("CCC", variables.dict())
+
+            parameters.image = Parameter.find("image",
+                                   arguments,
+                                   variables.dict(),
+                                   defaults)
+            parameters.flavor = Parameter.find("flavor",
+                                    arguments,
+                                    variables.dict(),
+                                    defaults)
+
+
+            parameters.public = None
+            parameters.key = None
+            parameters.secgroup = None
+
+            #public = arguments['--public']
+            #if public:
+            #    params['ex_assign_public_ip'] = public
+
+            #secgroup = Parameter.expand(arguments['--secgroup'])
+            #if secgroup:
+            #    params['ex_security_groups'] = secgroup
+
+            #key = arguments['--key']
+            #if key:
+            #    params['ex_keyname'] = key
+
+            if arguments['--dryrun']:
+
+                print(f"cloud : {cloud}")
+                print(f"nodes : {names}")
+                print("Parameters:")
+                pprint(parameters)
+
+
+            else:
                 provider = Provider(cloud)
-                if arguments['--name']:
-                    names = Parameter.expand(arguments['--name'])
-                elif arguments['n']:
-                    n = int(arguments['n'])
-                    names = []
-                    for i in range(n):  # generate random names
-                        m = hashlib.blake2b(digest_size=8)
-                        m.update(str(datetime.utcnow()).encode('utf-8'))
-                        names.append(m.hexdigest())
-                else:
-                    print("please provide name or count to boot vm")
+                vms = provider.create(names=names, **parameters)
 
-                # username = arguments['--username']
-                image = arguments['--image']
-                flavor = arguments['--flavor']
-
-                params = {}
-
-                public = arguments['--public']
-                if public:
-                    params['ex_assign_public_ip'] = public
-
-                secgroup = Parameter.expand(arguments['--secgroup'])
-                if secgroup:
-                    params['ex_security_groups'] = secgroup
-
-                key = arguments['--key']
-                if key:
-                    params['ex_keyname'] = key
-
-                if arguments['--dryrun']:
-                    print(
-                        "create nodes {} \nimage - {} \nflavor - {} \nassign public ip - {} \nsecurity groups - {} \nkeypair name - {}".format(
-                            names, image, flavor, public, secgroup, key))
-                else:
-                    order = provider.p.output['vm']['order']
-                    header = provider.p.output['vm']['header']
-                    vms = provider.create(names=names, image=image, size=flavor, **params)
-                    print(Printer.flatwrite(vms, order=order, header=header, output='table'))
+                order = provider.p.output['vm']['order']
+                header = provider.p.output['vm']['header']
+                print(Printer.flatwrite(vms,
+                                        sort_keys=["cm.name"],
+                                        order=order,
+                                        header=header,
+                                        output=arguments.output))
 
         elif arguments.list:
             if arguments.NAMES:

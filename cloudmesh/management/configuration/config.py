@@ -70,10 +70,15 @@ class Config(object):
 
             defaults = self["cloudmesh.default"]
 
-            pprint(defaults)
+            #pprint(defaults)
+
             d = Variables()
+            if defaults is not None:
+                print(f"# Set default from yaml file:")
+
             for key in defaults:
-                print (key, defaults[key])
+                value = defaults[key]
+                print (f"set {key}={value}")
                 d[key] = defaults[key]
 
     @staticmethod

@@ -6,11 +6,18 @@ from cloudmesh.common.parameter import Parameter
 from cloudmesh.compute.azure.AzProvider import Provider as AzAzureProvider
 from cloudmesh.compute.docker.Provider import Provider as DockerProvider
 from cloudmesh.compute.libcloud.Provider import Provider as LibCloudProvider
+from cloudmesh.compute.openstack.Provider import Provider as \
+    OpenStackCloudProvider
 from cloudmesh.compute.virtualbox.Provider import \
     Provider as VirtualboxCloudProvider
 from cloudmesh.management.configuration.config import Config
 from cloudmesh.mongo.DataBaseDecorator import DatabaseUpdate
 from cloudmesh.common.debug import VERBOSE
+from cloudmesh.common.dotdict import dotdict
+from cloudmesh.mongo.CmDatabase import CmDatabase
+from cloudmesh.common.variables import Variables
+from pprint import pprint
+from cloudmesh.common.Printer import Printer
 
 class Provider(ComputeNodeABC):
 
@@ -28,6 +35,8 @@ class Provider(ComputeNodeABC):
 
         provider = None
 
+        if self.kind in ["openstack"]:
+            provider = OpenStackCloudProvider
         if self.kind in ["openstack", "aws", "google"]:
             provider = LibCloudProvider
         elif self.kind in ["vagrant", "virtualbox"]:
@@ -61,8 +70,7 @@ class Provider(ComputeNodeABC):
         for name in names:
             VERBOSE(name)
             VERBOSE(func)
-
-            vm = func(name)
+            vm = func(name, kwargs)
             VERBOSE(vm)
             r.append(vm)
             VERBOSE(r)
@@ -100,10 +108,69 @@ class Provider(ComputeNodeABC):
         return self.p.flavors()
 
     @DatabaseUpdate()
-    def start(self, names=None, **kwargs):
-        VERBOSE(names)
-        VERBOSE(kwargs)
-        return self.loop(names, self.p.start, **kwargs)
+    def start(self, names=None, cloud=None, **kwargs):
+
+        arguments = dotdict(kwargs)
+        vms = self.expand(names)
+
+        #
+        # Step 0, find the cloud
+        #
+        variables = Variables()
+        if cloud is None:
+            arguments.cloud = cloud = variables['cloud']
+
+        # Step 1. iterate through the names to see if they already exist in
+        # the DB and fail if one of them already exists
+
+        database = CmDatabase()
+        defaults = Config()[f"cloudmesh.cloud.{cloud}.default"]
+        pprint (defaults)
+        duplicates = []
+        for vm in vms:
+            duplicates += database.find(collection=f'{cloud}-node', name=vm)
+
+        if len(duplicates) > 0:
+            print(Printer.flatwrite(duplicates,
+                                    order=['name', 'cm.cloud', 'state',
+                                           'image',
+                                           'size',
+                                           'public_ips', 'cm.created'],
+                                    header=['Name', 'Cloud', 'State', 'Image',
+                                            'Size',
+                                           'Public ips', 'created'],
+                                    output='table'))
+            raise Exception("these vms already exists")
+            return None
+
+        # Step 2. identify the image and flavor from kwargs and if they do
+        # not exist read them for that cloud from the yaml file
+
+        arguments.image = self.find_attribute('image', [variables, defaults])
+        pprint(arguments.image)
+        if 'image' is None:
+            raise ValueError("image not specifeied")
+
+        arguments.flavor = self.find_attribute('flavor', [variables, defaults])
+        pprint(arguments.flavor)
+        if 'flavor' is None:
+            raise ValueError("image not specifeied")
+
+        # Step 3: use the create command to create the vms
+
+        pprint(arguments)
+
+        created = self.loop(names, self.p.create, **arguments)
+
+        pprint(created)
+        return created
+
+    def find_attribute (self, name, dicts):
+        for d in dicts:
+            if name in d:
+                return d[name]
+        return None
+
 
     @DatabaseUpdate()
     def stop(self, names=None, **kwargs):

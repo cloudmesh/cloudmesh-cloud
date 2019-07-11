@@ -16,13 +16,6 @@ from libcloud.compute.types import Provider as LibcloudProvider
 
 
 class Provider(ComputeNodeABC):
-    # ips
-    # secgroups
-    # keys
-
-    ProviderMapper = {
-        "openstack": LibcloudProvider.OPENSTACK,
-    }
 
     output = {
 
@@ -339,31 +332,11 @@ class Provider(ComputeNodeABC):
         :return: dict or libcloud object
         """
         if self.cloudman:
-            if self.cloudtype in ["openstack", "aws", "google"]:
-                entries = self.cloudman.list_images()
-                if raw:
-                    return entries
-                else:
-                    return self.update_dict(entries, kind="image")
-            elif self.cloudtype == "azure_arm":
-                if "publisher" in kwargs and \
-                    "offer" in kwargs and \
-                    "sku" in kwargs:
-                    entries = self.cloudman.list_images(
-                        ex_publisher=kwargs["publisher"],
-                        ex_offer=kwargs["offer"],
-                        ex_sku=kwargs["sku"]
-                    )
-                    if raw:
-                        return entries
-                    else:
-                        return self.update_dict(entries, kind="image")
-                # azure image query without given more parameters cost
-                # too long to return
-                else:
-                    return None
+            entries = self.cloudman.list_images()
+            if raw:
+                return entries
             else:
-                pass
+                return self.update_dict(entries, kind="image")
 
         return None
 
@@ -503,19 +476,7 @@ class Provider(ComputeNodeABC):
         :return: dict or libcloud object
         """
         if self.cloudman:
-            if self.cloudtype == "azure_asm":
-                #
-                # BUG: ex_cloud_service_name needs to be defined, explore the
-                # azure documentation n how to find it
-                #
-                entries = self.cloudman.list_nodes()
-            elif self.cloudtype == "azure_arm":
-                #
-                # BUG: figure out how to use that
-                #
-                entries = self.cloudman.list_nodes()
-            else:
-                entries = self.cloudman.list_nodes()
+            entries = self.cloudman.list_nodes()
             if raw:
                 return entries
             else:
@@ -563,87 +524,31 @@ class Provider(ComputeNodeABC):
         # keyname = Config()["cloudmesh"]["profile"]["user"]
         # ex_keyname has to be the registered keypair name in cloud
 
-        if self.cloudtype in ["openstack", "aws", "google"]:
-            images = self.images(raw=True)
-            for _image in images:
-                if _image.name == image:
-                    image_use = _image
-                    break
-        elif self.cloudtype == 'azure_arm':
-            image_use = self.cloudman.get_image(image)
+        images = self.images(raw=True)
+        for _image in images:
+            if _image.name == image:
+                image_use = _image
+                break
 
         flavors = self.flavors(raw=True)
         for _flavor in flavors:
             if _flavor.name == size:
                 flavor_use = _flavor
                 break
-        if self.cloudtype == "openstack":
 
-            if "ex_security_groups" in kwargs:
-                secgroupsobj = []
-                #
-                # this gives existing secgroups in obj form
-                secgroups = self.list_secgroups(raw=True)
-                for secgroup in kwargs["ex_security_groups"]:
-                    for _secgroup in secgroups:
-                        if _secgroup.name == secgroup:
-                            secgroupsobj.append(_secgroup)
-                # now secgroup name is converted to object which
-                # is required by the libcloud api call
-                kwargs["ex_security_groups"] = secgroupsobj
+        if "ex_security_groups" in kwargs:
+            secgroupsobj = []
+            #
+            # this gives existing secgroups in obj form
+            secgroups = self.list_secgroups(raw=True)
+            for secgroup in kwargs["ex_security_groups"]:
+                for _secgroup in secgroups:
+                    if _secgroup.name == secgroup:
+                        secgroupsobj.append(_secgroup)
+            # now secgroup name is converted to object which
+            # is required by the libcloud api call
+            kwargs["ex_security_groups"] = secgroupsobj
 
-        if self.cloudtype in ["openstack", "aws"]:
-            node = self.cloudman.create_node(name=name, image=image_use,
-                                             size=flavor_use, **kwargs)
-        elif self.cloudtype == 'azure_arm':
-            auth = None
-            if "sshpubkey" in kwargs:
-                auth = NodeAuthSSHKey(kwargs["sshpubkey"])
-            pubip = self.cloudman.ex_create_public_ip(
-                name='{nodename}-ip'.format(
-                    nodename=name),
-                resource_group=kwargs["resource_group"]
-            )
-            networks = self.cloudman.ex_list_networks()
-            network_use = None
-            for network in networks:
-                if network.name == kwargs["network"]:
-                    network_use = network
-                    pprint(network_use)
-                    break
-            subnets = self.cloudman.ex_list_subnets(network_use)
-            subnet_use = None
-            for subnet in subnets:
-                if subnet.name == kwargs["subnet"]:
-                    subnet_use = subnet
-                    break
-            nic_use = self.cloudman.ex_create_network_interface(
-                name='{nodename}-nic'.format(
-                    nodename=name),
-                subnet=subnet_use,
-                resource_group=kwargs["resource_group"],
-                public_ip=pubip
-            )
-            node = self.cloudman.create_node(name=name,
-                                             image=image_use,
-                                             size=flavor_use,
-                                             auth=auth,
-                                             # the following three were created in azure portal
-                                             ex_resource_group=kwargs["resource_group"],
-                                             # for storage account, use the default v2 setting
-                                             ex_storage_account=kwargs["storage_account"],
-                                             # under the storage account, blobs services,
-                                             # create 'vhds' container
-                                             ex_blob_container=kwargs["blob_container"],
-                                             ex_nic=nic_use
-                                             )
-        elif self.cloudtype == 'google':
-            location_use = self.spec["credentials"]["datacenter"]
-            metadata = {"items": [{"value": self.user + ":" + self.key_val, "key": "ssh-keys"}]}
-            node = self.cloudman.create_node(name=name, image=image_use, size=flavor_use, location=location_use,
-                                             ex_metadata=metadata, **kwargs)
-        else:
-            sys.exit("this cloud is not yet supported")
 
         return self.update_dict(node, kind="node")[0]
 
@@ -658,15 +563,15 @@ class Provider(ComputeNodeABC):
                     ex_delete_floating_ip(ip)
         """
         ip = None
-        if self.cloudtype == "openstack":
-            ips = self.cloudman.ex_list_floating_ips()
-            if ips:
-                ip = ips[0]
-            else:
-                pools = self.cloudman.ex_list_floating_ip_pools()
-                # pprint (pools)
-                # ex_get_floating_ip(ip)
-                ip = self.cloudman.ex_create_floating_ip(ip_pool=pools[0].name)
+        ips = self.cloudman.ex_list_floating_ips()
+        if ips:
+            ip = ips[0]
+        else:
+            pools = self.cloudman.ex_list_floating_ip_pools()
+            # pprint (pools)
+            # ex_get_floating_ip(ip)
+            ip = self.cloudman.ex_create_floating_ip(ip_pool=pools[0].name)
+
         return ip
 
     def attach_publicIP(self, node, ip):
@@ -717,18 +622,3 @@ class Provider(ComputeNodeABC):
                 line = line.decode("utf-8")
                 print(line.strip("\n"))
 
-    """
-    THIS CODE IS BUUGY AS IT OVERWRITES ALL PROVIDERS, THE CODE ABOVE SEEMS TO WORK
-    def ssh(self, name, ips, username=None, key=None, quiet=None, command=None, script=None, modify_knownhosts=None):
-        if key == None:
-            key = self.spec['credentials']['EC2_PRIVATE_KEY_FILE_PATH'] + self.spec['credentials']['EC2_PRIVATE_KEY_FILE_NAME']
-        for ip in ips:
-            location = username + '@' + ip
-            if command != None:
-                ssh_command = ['ssh', '-i', key, location, command]
-                subprocess.run(ssh_command)
-            elif script != None:
-                BUG, doesn't work#
-                ssh_command = ['ssh', '-i', key, location, 'bash', '-s', '<', script]
-                subprocess.call(ssh_command, shell=True)
-    """

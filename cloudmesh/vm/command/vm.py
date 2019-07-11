@@ -216,8 +216,6 @@ class VmCommand(PluginCommand):
                        'output',
                        'count')
 
-        VERBOSE(arguments)
-
         variables = Variables()
         database = CmDatabase()
 
@@ -346,8 +344,7 @@ class VmCommand(PluginCommand):
                 if arguments['--dryrun']:
                     print(f"start node {name}")
                 else:
-                    vms = provider.start(name)
-
+                    vms = provider.start(names=name, cloud=cloud)
 
                     order = provider.p.output['vm']['order']
                     header = provider.p.output['vm']['header']

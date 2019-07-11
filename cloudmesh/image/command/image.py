@@ -77,7 +77,7 @@ class ImageCommand(PluginCommand):
                 provider = Provider(name=cloud)
                 images = provider.images()
 
-                provider.Print(arguments.output, images)
+                provider.Print(arguments.output, "image", images)
 
             return ""
 
@@ -101,7 +101,7 @@ class ImageCommand(PluginCommand):
                     db = CmDatabase()
                     images = db.find(collection=collection)
 
-                    p.Print(arguments.output, images)
+                    p.Print(arguments.output, "image", images)
 
 
             except Exception as e:

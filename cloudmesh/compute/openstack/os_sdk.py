@@ -23,6 +23,7 @@ def credentials():
     d['version'] = '2'
     d['username'] = config['OS_USERNAME']
     d['password'] = config['OS_PASSWORD']
+    # while libcloud uses token, here we do not use it in auth_url
     d['auth_url'] = "https://openstack.tacc.chameleoncloud.org:5000/v2.0"
     d['project_id'] = config['OS_TENANT_NAME']
     d['region_name'] = config['OS_REGION_NAME']

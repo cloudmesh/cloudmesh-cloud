@@ -37,7 +37,7 @@ class Provider(ComputeNodeABC):
 
         if self.kind in ["openstack"]:
             provider = OpenStackCloudProvider
-        if self.kind in ["openstack", "aws", "google"]:
+        elif self.kind in ["aws", "google"]:
             provider = LibCloudProvider
         elif self.kind in ["vagrant", "virtualbox"]:
             provider = VirtualboxCloudProvider
@@ -88,6 +88,10 @@ class Provider(ComputeNodeABC):
     def flavor(self):
         return self.p.flavors()
 
+    @DatabaseUpdate()
+    def flavors(self):
+        return self.p.flavors()
+
     def add_collection(self, d, *args):
         if d is None:
             return None
@@ -100,15 +104,20 @@ class Provider(ComputeNodeABC):
     def images(self):
         return self.p.images()
 
-    # name
-    # cloud
-    # kind
-    @DatabaseUpdate()
-    def flavors(self):
-        return self.p.flavors()
+
 
     @DatabaseUpdate()
     def start(self, names=None, cloud=None, **kwargs):
+
+        #
+        # this is used to resume a vm, after it was stoped
+        #
+        raise NotImplementedError
+
+
+    @DatabaseUpdate()
+    def create2(self, names=None, cloud=None, **kwargs):
+
 
         arguments = dotdict(kwargs)
         vms = self.expand(names)
@@ -227,9 +236,9 @@ class Provider(ComputeNodeABC):
     def suspend(self, names=None):
         raise NotImplementedError
 
-    def Print(self, output, data):
-        order = self.p.output['flavor']['order']  # not pretty
-        header = self.p.output['flavor']['header']  # not pretty
+    def Print(self, output, kind, data):
+        order = self.p.output[kind]['order']  # not pretty
+        header = self.p.output[kind]['header']  # not pretty
 
         if output == "table":
             print(Printer.flatwrite(data,

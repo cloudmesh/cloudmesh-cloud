@@ -48,16 +48,18 @@ pprint(config)
 connection = openstack.connect(**config)
 cloud = connection.compute
 
+if False:
+    flavors = cloud.flavors()
+    for entry in flavors:
+        pprint(entry)
 
-flavors = cloud.flavors()
-for entry in flavors:
-    pprint(entry)
+if False:
+    images = cloud.images()
+    for entry in images:
+        pprint(entry)
 
-images = cloud.images()
-for entry in images:
-    pprint(entry)
-
-servers = cloud.servers()
-for entry in servers:
-    pprint(entry)
+if True:
+    servers = cloud.servers()
+    for entry in servers:
+        pprint(entry)
 

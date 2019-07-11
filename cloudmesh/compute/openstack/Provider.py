@@ -36,12 +36,16 @@ class Provider(ComputeNodeABC):
         "image": {"sort_keys": ["cm.name",
                                 "extra.minDisk"],
                   "order": ["cm.name",
-                            "extra.minDisk",
-                            "updated",
+                            "size",
+                            "min_disk",
+                            "min_ram",
+                            "status",
                             "cm.driver"],
                   "header": ["Name",
-                             "MinDisk",
-                             "Updated",
+                             "Size (Bytes)",
+                             "MinDisk (GB)",
+                             "MinRam (MB)",
+                             "Status",
                              "Driver"]},
         "flavor": {"sort_keys": ["cm.name",
                                  "vcpus",
@@ -57,9 +61,9 @@ class Provider(ComputeNodeABC):
 
     }
 
-    def credentials(cloud):
+    @staticmethod
+    def _get_credentials(config):
         d = {}
-        config = Config()[f"cloudmesh.cloud.{cloud}.credentials"]
         d['version'] = '2'
         d['username'] = config['OS_USERNAME']
         d['password'] = config['OS_PASSWORD']
@@ -78,24 +82,28 @@ class Provider(ComputeNodeABC):
         :param name: The name of the provider as defined in the yaml file
         :param configuration: The location of the yaml configuration file
         """
+
         conf = Config(configuration)["cloudmesh"]
-        # self.user = conf["profile"]
+        super().__init__(name, conf)
+
         self.user = Config()["cloudmesh"]["profile"]["user"]
         self.spec = conf["cloud"][name]
         self.cloud = name
-        cred = self.spec["credentials"]
-        deft = self.spec["default"]
+
+
+
+        self.default = self.spec["default"]
         self.cloudtype = self.spec["cm"]["kind"]
-        super().__init__(name, conf)
 
 
-        cred = self.credentials()
-
-        if cred["OS_PASSWORD"] == 'TBD':
+        self.cred = self.spec["credentials"]
+        if self.cred["OS_PASSWORD"] == 'TBD':
             Console.error("The password TBD is not allowed")
+        credential = self._get_credentials(self.cred)
 
 
-        connection = openstack.connect(**cred)
+
+        connection = openstack.connect(**credential)
         self.cloudman = connection.compute
 
 
@@ -128,9 +136,8 @@ class Provider(ComputeNodeABC):
         else:
             _elements = [elements]
         d = []
-        for element in _elements:
-            entry = element.__dict__
-            del entry["extra"]  # Remove extra from google node
+        for entry in _elements:
+
             entry["cm"] = {
                 "kind": kind,
                 "driver": self.cloudtype,
@@ -155,20 +162,9 @@ class Provider(ComputeNodeABC):
                 entry['cm']['updated'] = str(datetime.utcnow())
                 entry["cm"]["name"] = entry["name"]
             elif kind == 'secgroup':
-                if self.cloudtype == 'openstack':
-                    entry["cm"]["name"] = entry["name"]
-                else:
-                    pass
+                entry["cm"]["name"] = entry["name"]
             elif kind == 'key':
-                if self.cloudtype == 'openstack':
-                    entry["cm"]["name"] = entry["name"]
-                else:
-                    pass
-
-            if "_uuid" in entry:
-                del entry["_uuid"]
-            if "driver" in entry:
-                del entry["driver"]
+                entry["cm"]["name"] = entry["name"]
 
             d.append(entry)
         return d
@@ -334,7 +330,7 @@ class Provider(ComputeNodeABC):
                                 self.cloudman.ex_delete_security_group_rule(
                                     ruleobj)
 
-    def images(self, raw=False, **kwargs):
+    def get_list(self, d, kind=None, raw=False, **kwargs):
         """
         Lists the images on the cloud
         :param raw: If raw is set to True the lib cloud object is returned
@@ -342,14 +338,26 @@ class Provider(ComputeNodeABC):
         :return: dict or libcloud object
         """
         if self.cloudman:
-            entries = self.cloudman.images()
-            pprint(entries)
+
+            all = self.cloudman.images()
+            entries = []
+            for entry in d:
+                entries.append(dict(entry))
             if raw:
                 return entries
             else:
-                return self.update_dict(entries, kind="image")
+                return self.update_dict(entries, kind=kind)
 
         return None
+
+    def images(self, raw=False, **kwargs):
+        """
+        Lists the images on the cloud
+        :param raw: If raw is set to True the lib cloud object is returned
+                    otherwise a dict is returened.
+        :return: dict or libcloud object
+        """
+        return self.get_list(self.cloudman.images(),kind="images", raw=raw)
 
     def image(self, name=None, **kwargs):
         """
@@ -366,14 +374,7 @@ class Provider(ComputeNodeABC):
                     otherwise a dict is returened.
         :return: dict or libcloud object
         """
-        if self.cloudman:
-            entries = self.cloudman.flavors()
-            print("FFFFFF", entries)
-            if raw:
-                return entries
-            else:
-                return self.update_dict(entries, kind="flavor")
-        return None
+        return self.get_list(self.cloudman.flavors(),kind="flavor", raw=raw)
 
     def flavor(self, name=None):
         """
@@ -487,13 +488,8 @@ class Provider(ComputeNodeABC):
                     otherwise a dict is returened.
         :return: dict or libcloud object
         """
-        if self.cloudman:
-            entries = self.cloudman.servers()
-            if raw:
-                return entries
-            else:
-                return self.update_dict(entries, kind="node")
-        return None
+        return self.get_list(self.cloudman.servers(), kind="node", raw=raw)
+
 
     def destroy(self, names=None):
         """

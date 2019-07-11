@@ -222,13 +222,68 @@ class VmCommand(PluginCommand):
         variables = Variables()
         database = CmDatabase()
 
-        if arguments.refresh:
+        #if arguments.refresh:
+
+        #    names = []
+
+        #    clouds, names = Arguments.get_cloud_and_names("refresh",
+        #    arguments, variables)
+
+        #    return ""
+
+        # elif arguments.list:
+        #
+        #    if arguments.NAMES:
+        #        variables['vm'] = arguments.NAMES
+        #    if arguments['--cloud']:
+        #        variables['cloud'] = arguments['--cloud']
+        #    clouds, names = Arguments.get_cloud_and_names("stop", arguments,
+        #    variables)
+
+        if arguments.list and arguments.refresh:
 
             names = []
 
-            clouds, names = Arguments.get_cloud_and_names("refresh", arguments, variables)
+            clouds, names = Arguments.get_cloud_and_names("list", arguments,
+                                                          variables)
+
+            for cloud in clouds:
+                print(f"cloud {cloud}")
+                provider = Provider(name=cloud)
+                vms = provider.servers()
+
+                provider.Print(arguments.output, "vm", vms)
+
+        elif arguments.list:
+
+            names = []
+
+            clouds, names = Arguments.get_cloud_and_names("list",
+                                                          arguments,
+                                                          variables)
+
+            print(clouds, names)
+            try:
+
+                for cloud in clouds:
+                    print(f"List {cloud}")
+                    p = Provider(cloud)
+                    kind = p.kind
+
+                    collection = "{cloud}-node".format(cloud=cloud,
+                                                       kind=p.kind)
+                    db = CmDatabase()
+                    images = db.find(collection=collection)
+
+                    p.Print(arguments.output, "vm", images)
+
+
+            except Exception as e:
+
+                VERBOSE(e)
 
             return ""
+
 
         elif arguments.ping:
 
@@ -527,111 +582,6 @@ class VmCommand(PluginCommand):
                                         header=header,
                                         output=arguments.output))
 
-        elif arguments.list:
-            if arguments.NAMES:
-                variables['vm'] = arguments.NAMES
-            if arguments['--cloud']:
-                variables['cloud'] = arguments['--cloud']
-            clouds, names = Arguments.get_cloud_and_names("stop", arguments, variables)
-
-            for cloud in clouds:
-                provider = Provider(cloud)
-                params = {}
-
-                params['order'] = provider.p.output['vm']['order']
-                params['header'] = provider.p.output['vm']['header']
-                #params['output'] = 'table'
-
-                if arguments['--refresh']:
-                    provider.list()
-
-                if arguments.NAMES:
-                    vms = []
-                    for name in names:
-                        vms += database.find(collection='{}-node'.format(cloud), name=name)
-                else:
-                    vms = database.find(collection='{}-node'.format(cloud))
-
-                if arguments.output == "table":
-                    print(Printer.flatwrite(vms, **params, output=arguments.output))
-                else:
-                    print(Printer.write(vms, output=arguments.output))
-        #
-        #             clouds, names = Arguments.get_cloud_and_names("list", arguments, variables)
-        #
-        #             # print("Clouds:", clouds)
-        #
-        #             if arguments.NAMES is not None:
-        #                 names = Parameter.expand(arguments.NAMES)
-        #
-        #                 try:
-        #                     if arguments["--refresh"]:
-        #                         pass
-        #                         # find all clouds in db
-        #                         # iterate over the clouds
-        #                         # for each name in name queue, find it and add it to the cloud vm list
-        #                         # for each cloud print the vms
-        #                     else:
-        #                         pass
-        #                         # find all clouds in db
-        #                         # iterate over all clouds
-        #                         # find the vm with the name
-        #                         # add it to the cloud list
-        #                         # for each cloud print the vms
-        #                 except Exception as e:
-        #
-        #                     VERBOSE(e)
-        #
-        #                 return ""
-        #             else:
-        #                 try:
-        #                     if arguments["--refresh"]:
-        #                         for cloud in clouds:
-        #                             Console.ok("refreshing db from cloud:  " + cloud)
-        #                             p = Provider(cloud)
-        #                             vms = p.list()
-        #                             order = p.p.output['vm']['order']  # not pretty
-        #                             header = p.p.output['vm']['header']  # not pretty
-        #
-        #                             print(Printer.flatwrite(vms,
-        #                                                     sort_keys=["cm.name"],
-        #                                                     order=order,
-        #                                                     header=header,
-        #                                                     output=arguments.output)
-        #                                   )
-        #
-        #                     else:
-        #                         for cloud in clouds:
-        #                             p = Provider(cloud)
-        #                             kind = p.kind
-        #
-        #                             # pprint(p.__dict__)
-        #                             # pprint(p.p.__dict__) # not pretty
-        #
-        #                             collection = "{cloud}-node".format(cloud=cloud,
-        #                                                                kind=p.kind)
-        #                             db = CmDatabase()
-        #                             vms = db.find(collection=collection)
-        # #
-        #                             # pprint(vms)
-        #                             # print(arguments.output)
-        #                             # print(p.p.output['vm'])
-        #
-        #                             order = p.p.output['vm']['order']  # not pretty
-        #                             header = p.p.output['vm']['header']  # not pretty
-        #
-        #                             print(Printer.flatwrite(vms,
-        #                                                     sort_keys=["cm.name"],
-        #                                                     order=order,
-        #                                                     header=header,
-        #                                                     output=arguments.output)
-        #                                   )
-        #
-        #                 except Exception as e:
-        #
-        #                     VERBOSE(e)
-        #
-        #             return ""
 
         elif arguments.info:
 

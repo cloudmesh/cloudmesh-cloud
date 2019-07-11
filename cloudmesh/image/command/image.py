@@ -41,6 +41,7 @@ class ImageCommand(PluginCommand):
 
         variables = Variables()
 
+
         if arguments.list and arguments["--query"]:
             names = []
 
@@ -56,15 +57,12 @@ class ImageCommand(PluginCommand):
             # images = provider.images(query=query)
             #
 
-            order = provider.p.output['image']['order']  # not pretty
-            header = provider.p.output['image']['header']  # not pretty
 
-            print(Printer.flatwrite(images,
-                                    sort_keys=["name"],
-                                    order=order,
-                                    header=header,
-                                    output=arguments.output)
-                  )
+            return NotImplementedError
+
+            provider.Print(arguments.output, images)
+
+
             return ""
 
         if arguments.list and arguments.refresh:
@@ -79,15 +77,8 @@ class ImageCommand(PluginCommand):
                 provider = Provider(name=cloud)
                 images = provider.images()
 
-                order = provider.p.output['image']['order']  # not pretty
-                header = provider.p.output['image']['header']  # not pretty
+                provider.Print(arguments.output, images)
 
-                print(Printer.flatwrite(images,
-                                        sort_keys=["name"],
-                                        order=order,
-                                        header=header,
-                                        output=arguments.output)
-                      )
             return ""
 
         elif arguments.list:
@@ -108,17 +99,10 @@ class ImageCommand(PluginCommand):
                     collection = "{cloud}-image".format(cloud=cloud,
                                                         kind=p.kind)
                     db = CmDatabase()
-                    vms = db.find(collection=collection)
+                    images = db.find(collection=collection)
 
-                    order = p.p.output['image']['order']  # not pretty
-                    header = p.p.output['image']['header']  # not pretty
+                    p.Print(arguments.output, images)
 
-                    print(Printer.flatwrite(vms,
-                                            sort_keys=["name"],
-                                            order=order,
-                                            header=header,
-                                            output=arguments.output)
-                          )
 
             except Exception as e:
 

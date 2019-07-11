@@ -62,15 +62,8 @@ class FlavorCommand(PluginCommand):
                 provider = Provider(name=cloud)
                 flavors = provider.flavors()
 
-                order = provider.p.output['flavor']['order']  # not pretty
-                header = provider.p.output['flavor']['header']  # not pretty
+                provider.Print(arguments.output, flavors)
 
-                print(Printer.flatwrite(flavors,
-                                        sort_keys=["name"],
-                                        order=order,
-                                        header=header,
-                                        output=arguments.output)
-                      )
             return ""
 
         elif arguments.list:
@@ -91,28 +84,13 @@ class FlavorCommand(PluginCommand):
                     collection = "{cloud}-flavor".format(cloud=cloud,
                                                          kind=p.kind)
                     db = CmDatabase()
-                    vms = db.find(collection=collection)
+                    flavors = db.find(collection=collection)
 
-                    order = p.p.output['flavor']['order']  # not pretty
-                    header = p.p.output['flavor']['header']  # not pretty
+                    p.Print(arguments.output, flavors)
 
-                    print(Printer.flatwrite(vms,
-                                            sort_keys=["name"],
-                                            order=order,
-                                            header=header,
-                                            output=arguments.output)
-                          )
 
             except Exception as e:
 
                 VERBOSE(e)
 
             return ""
-
-        # if arguments.FILE:
-        #    print("option a")
-        #    m.list(arguments.FILE)
-
-        # elif arguments.list:
-        #    print("option b")
-        #    m.list("just calling list without parameter")

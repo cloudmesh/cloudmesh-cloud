@@ -552,7 +552,10 @@ class VmCommand(PluginCommand):
                 else:
                     vms = database.find(collection='{}-node'.format(cloud))
 
-                print(Printer.flatwrite(vms, **params, output=arguments.output))
+                if arguments.output == "table":
+                    print(Printer.flatwrite(vms, **params, output=arguments.output))
+                else:
+                    print(Printer.write(vms, output=arguments.output))
         #
         #             clouds, names = Arguments.get_cloud_and_names("list", arguments, variables)
         #

@@ -226,3 +226,17 @@ class Provider(ComputeNodeABC):
     @DatabaseUpdate()
     def suspend(self, names=None):
         raise NotImplementedError
+
+    def Print(self, output, data):
+        order = self.p.output['flavor']['order']  # not pretty
+        header = self.p.output['flavor']['header']  # not pretty
+
+        if output == "table":
+            print(Printer.flatwrite(data,
+                                    sort_keys=["name"],
+                                    order=order,
+                                    header=header,
+                                    output=output)
+                  )
+        else:
+            print(Printer.write(data, output=output))

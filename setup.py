@@ -77,6 +77,7 @@ munch
 selenium
 pandas
 yamllint
+openstack
 """.split("\n")
 
 

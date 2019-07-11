@@ -10,7 +10,10 @@ from cloudmesh.common.console import Console
 from cloudmesh.common.util import HEADING
 from cloudmesh.common.util import path_expand
 from cloudmesh.management.configuration.config import Config
-import openstack
+from libcloud.compute.base import NodeAuthSSHKey
+from libcloud.compute.providers import get_driver
+from libcloud.compute.types import Provider as LibcloudProvider
+
 
 class Provider(ComputeNodeABC):
 
@@ -57,20 +60,6 @@ class Provider(ComputeNodeABC):
 
     }
 
-    def credentials(cloud):
-        d = {}
-        config = Config()[f"cloudmesh.cloud.{cloud}.credentials"]
-        d['version'] = '2'
-        d['username'] = config['OS_USERNAME']
-        d['password'] = config['OS_PASSWORD']
-        # while libcloud uses token, here we do not use it in auth_url
-        d['auth_url'] = config['OS_AUTH_URL'].replace("/tokens", "")
-        d['project_id'] = config['OS_TENANT_NAME']
-        d['region_name'] = config['OS_REGION_NAME']
-        # d['project_domain_name'] = config['OS_PROJECT_NAME']
-        d['tenant_id'] = config['OS_TENANT_ID']
-        return d
-
     def __init__(self, name=None, configuration="~/.cloudmesh/cloudmesh4.yaml"):
         """
         Initializes the provider. The default parameters are read from the configutation
@@ -88,17 +77,18 @@ class Provider(ComputeNodeABC):
         self.cloudtype = self.spec["cm"]["kind"]
         super().__init__(name, conf)
 
-
-        cred = self.credentials()
+        self.driver = get_driver(LibcloudProvider.OPENSTACK)
 
         if cred["OS_PASSWORD"] == 'TBD':
             Console.error("The password TBD is not allowed")
 
-
-        connection = openstack.connect(**cred)
-        self.cloudman = connection.compute
-
-
+        self.cloudman = self.driver(cred["OS_USERNAME"],
+                                    cred["OS_PASSWORD"],
+                                    ex_force_auth_url=cred[
+                                        'OS_AUTH_URL'],
+                                    ex_force_auth_version='2.0_password',
+                                    ex_tenant_name=cred[
+                                        'OS_TENANT_NAME'])
 
         # self.default_image = deft["image"]
         # self.default_size = deft["size"]
@@ -342,8 +332,7 @@ class Provider(ComputeNodeABC):
         :return: dict or libcloud object
         """
         if self.cloudman:
-            entries = self.cloudman.images()
-            pprint(entries)
+            entries = self.cloudman.list_images()
             if raw:
                 return entries
             else:
@@ -367,8 +356,7 @@ class Provider(ComputeNodeABC):
         :return: dict or libcloud object
         """
         if self.cloudman:
-            entries = self.cloudman.flavors()
-            print("FFFFFF", entries)
+            entries = self.cloudman.list_sizes()
             if raw:
                 return entries
             else:
@@ -488,7 +476,7 @@ class Provider(ComputeNodeABC):
         :return: dict or libcloud object
         """
         if self.cloudman:
-            entries = self.cloudman.servers()
+            entries = self.cloudman.list_nodes()
             if raw:
                 return entries
             else:

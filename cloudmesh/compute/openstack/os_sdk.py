@@ -1,6 +1,11 @@
+#
+# python cloudmesh/compute/openstack/os_sdk.py
+#
+
 from cloudmesh.management.configuration.config import Config
 from pprint import pprint
 import openstack
+
 
 """
 see : https://docs.openstack.org/openstacksdk/latest/user/guides/compute.html
@@ -40,17 +45,19 @@ config = credentials()
 
 pprint(config)
 
-conn = openstack.connect(**config)
+connection = openstack.connect(**config)
+cloud = connection.compute
 
-flavors = conn.compute.flavors()
+
+flavors = cloud.flavors()
 for entry in flavors:
     pprint(entry)
 
-images = conn.compute.images()
+images = cloud.images()
 for entry in images:
     pprint(entry)
 
-servers = conn.compute.servers()
+servers = cloud.servers()
 for entry in servers:
     pprint(entry)
 

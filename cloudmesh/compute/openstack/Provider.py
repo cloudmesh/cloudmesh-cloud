@@ -147,12 +147,11 @@ class Provider(ComputeNodeABC):
             entry["cm"] = {
                 "kind": kind,
                 "driver": self.cloudtype,
-                "cloud": self.cloud
+                "cloud": self.cloud,
+                "name": entry['name']
             }
-            if kind == 'node':
+            if kind == 'vm' or kind == 'node':
                 entry["cm"]["updated"] = str(datetime.utcnow())
-                entry["cm"]["name"] = entry["name"]
-
                 if "created_at" in entry:
                     entry["cm"]["created"] = str(entry["created_at"])
                     # del entry["created_at"]
@@ -161,16 +160,14 @@ class Provider(ComputeNodeABC):
             elif kind == 'flavor':
                 entry["cm"]["created"] = entry["updated"] = str(
                     datetime.utcnow())
-                entry["cm"]["name"] = entry["name"]
 
             elif kind == 'image':
                 entry['cm']['created'] = str(datetime.utcnow())
                 entry['cm']['updated'] = str(datetime.utcnow())
-                entry["cm"]["name"] = entry["name"]
             elif kind == 'secgroup':
-                entry["cm"]["name"] = entry["name"]
+                pass
             elif kind == 'key':
-                entry["cm"]["name"] = entry["name"]
+                pass
 
             d.append(entry)
         return d

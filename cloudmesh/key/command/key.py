@@ -180,12 +180,11 @@ class KeyCommand(PluginCommand):
         invalid_names = ['tbd', 'none', "", 'id_rsa']
 
         if arguments["list"] and arguments.source == "git":
-            # this is much simpler
+
             config = Config()
             username = config["cloudmesh.profile.github"]
-            VERBOSE(username)
             keys = SSHkey().get_from_git(username)
-            # pprint(keys)
+
             print(Printer.write(
                 keys,
                 sort_keys=["name"],
@@ -199,9 +198,7 @@ class KeyCommand(PluginCommand):
         elif arguments["list"] and arguments.source == "ssh":
             # this is much simpler
 
-
             sshkey = SSHkey()
-
 
             print(Printer.write(
                 [sshkey],
@@ -214,9 +211,6 @@ class KeyCommand(PluginCommand):
 
         elif arguments["list"] and arguments.cloud:
 
-            raise NotImplementedError
-
-            """
             clouds = Parameter.expand(arguments.cloud)
             print(clouds)
 
@@ -234,7 +228,6 @@ class KeyCommand(PluginCommand):
 
                 provider.Print(arguments.output, "key", keys)
 
-            """
             return ""
 
         elif arguments.list and arguments.source == "db":

@@ -21,7 +21,7 @@ class SecgroupRule(object):
             "ports": ports,
             "ip_range": ip_range,
         }
-
+        VERBOSE(entry)
         return self.update_dict_list([entry])
 
     def delete(self, name=None):

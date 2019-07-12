@@ -136,5 +136,5 @@ VERBOSE(data)
 pprint (data)
 
 banner("upload")
-rules.add(data)
+rules.add(**data)
 

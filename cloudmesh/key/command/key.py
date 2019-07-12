@@ -1,19 +1,16 @@
-from pprint import pprint
-
 from cloudmesh.common.Printer import Printer
+from cloudmesh.common.console import Console
 from cloudmesh.common.parameter import Parameter
-from cloudmesh.management.configuration.SSHkey import SSHkey
-from cloudmesh.management.configuration.config import Config
-from cloudmesh.shell.command import PluginCommand
-from cloudmesh.shell.command import command, map_parameters
 from cloudmesh.common.variables import Variables
 from cloudmesh.compute.vm.Provider import Provider
-from cloudmesh.common.debug import VERBOSE
 from cloudmesh.key.api.key import Key
-from cloudmesh.mongo.CmDatabase import CmDatabase
+from cloudmesh.management.configuration.SSHkey import SSHkey
 from cloudmesh.management.configuration.arguments import Arguments
-from cloudmesh.common.variables import Variables
-from cloudmesh.common.console import Console
+from cloudmesh.management.configuration.config import Config
+from cloudmesh.mongo.CmDatabase import CmDatabase
+from cloudmesh.shell.command import PluginCommand
+from cloudmesh.shell.command import command, map_parameters
+
 
 class KeyCommand(PluginCommand):
 
@@ -32,12 +29,11 @@ class KeyCommand(PluginCommand):
              key list --source=ssh [--dir=DIR] [--output=OUTPUT]
              key list --source=git [--output=OUTPUT] [--username=USERNAME]
              key list [--output=OUTPUT]
-             key load --filename=FILENAME [--output=OUTPUT]
+             key add NAME --filename=FILENAME [--output=OUTPUT]
              key add [NAME] [--source=FILENAME]
              key add [NAME] [--source=git]
              key add [NAME] [--source=ssh]
-             key delete (NAMES | --select | --all) [--dryrun]
-             key delete NAMES --cloud=CLOUDS [--dryrun]
+             key delete NAMES [--cloud=CLOUDS] [--dryrun]
              key upload [NAMES] [--cloud=CLOUDS] [--dryrun]
              key upload [NAMES] [VMS] [--dryrun]
              key group upload [NAMES] [--group=GROUPNAMES] [--cloud=CLOUDS] [--dryrun]
@@ -179,10 +175,10 @@ class KeyCommand(PluginCommand):
                        'source',
                        'dir',
                        'output',
-                       'source')
+                       'source',
+                       'dryrun')
 
         variables = Variables()
-        print (variables["cloud"])
 
         if arguments.list and arguments.source == "git":
 
@@ -252,10 +248,6 @@ class KeyCommand(PluginCommand):
             else:
                 raise NotImplementedError
 
-        elif arguments.group:
-
-            raise NotImplementedError
-
         elif arguments.upload:
 
             """
@@ -282,7 +274,6 @@ class KeyCommand(PluginCommand):
                 Console.error("No keys with the names found in cloudmesh. \n"
                               "       Use the command 'key add' to add the key.")
 
-
             #
             # Step 2. iterate over the clouds to upload
             #
@@ -294,25 +285,62 @@ class KeyCommand(PluginCommand):
             for cloud in clouds:
                 print(f"cloud {cloud}")
                 provider = Provider(name=cloud)
-                for key in keys:
+                for key in db_keys:
                     name = key['name']
-                    if 'location' not in key:
-                        Console.error(f"key '{name}' does not have a "
-                                      f"pysical location")
-                    else:
-                        r = provider.key_upload(key)
-                        if r is None:
-                            Console.error(f"upload error for key '{name}'. "
-                                          f"Make sure the name is unique in "
-                                          f"'{cloud}'.")
+                    if name in names:
+                        if 'location' not in key:
+                            Console.error(f"key '{name}' does not have a "
+                                          f"pysical location")
                         else:
-                            Console.error(f"upload key '{name} sucessful'. ")
-
-            #
-            #p = Provider(name=cloud)
+                            try:
+                                r = provider.key_upload(key)
+                                Console.ok(f"upload key '{name} sucessful'. ")
+                            except ValueError as e:
+                                Console.error(f"key '{name} already exists in {cloud}.")
 
 
             return ""
 
+
+        elif arguments.delete and arguments.cloud and arguments.NAMES:
+
+            # key delete NAMES --cloud=CLOUDS [--dryrun]
+            names = Parameter.expand(arguments.NAMES)
+            clouds = Parameter.expand(arguments.cloud)
+
+            for cloud in clouds:
+                provider = Provider(name=cloud)
+                for name in names:
+                    if arguments.dryrun:
+                        Console.ok(f"Dryrun: delete {name} in {cloud}")
+                    else:
+                        images = provider.key_delete(name)
+
+            return ""
+
+        elif arguments.delete and arguments.NAMES:
+            # key delete NAMES [--dryrun]
+
+            names = Parameter.expand(arguments.NAMES)
+
+            cloud = "local"
+            db = CmDatabase()
+            db_keys = db.find(collection=f"{cloud}-key")
+
+            error = []
+            for key in db_keys:
+                name = key['name']
+                if name in names:
+                    if arguments.dryrun:
+                        Console.ok(f"Dryrun: delete {name}")
+                    else:
+                        db.delete(collection="local-key",
+                                  name=name)
+                        Console.ok(f"delete {name}")
+            return ""
+
+        elif arguments.group:
+
+            raise NotImplementedError
 
         return ""

@@ -324,7 +324,7 @@ class CmDatabase(object):
     # check
     def delete(self, collection="cloudmesh", **kwargs, ):
         col = self.db[collection]
-        col.delete_one(**kwargs)
+        col.delete_one(kwargs)
 
     # check
     def command(self, command):

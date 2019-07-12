@@ -1,19 +1,17 @@
 import subprocess
-import sys
 from datetime import datetime
 from pathlib import Path
 from pprint import pprint
 
-from cloudmesh.common.debug import VERBOSE
+import openstack
 from cloudmesh.abstractclass.ComputeNodeABC import ComputeNodeABC
 from cloudmesh.common.console import Console
-from cloudmesh.common.util import HEADING
+from cloudmesh.common.debug import VERBOSE
 from cloudmesh.common.util import path_expand
 from cloudmesh.management.configuration.config import Config
-import openstack
+
 
 class Provider(ComputeNodeABC):
-
     output = {
 
         "vm": {
@@ -39,32 +37,46 @@ class Provider(ComputeNodeABC):
                        "Started at",
                        "Kind"]
         },
-        "image": {"sort_keys": ["cm.name",
-                                "extra.minDisk"],
-                  "order": ["cm.name",
-                            "size",
-                            "min_disk",
-                            "min_ram",
-                            "status",
-                            "cm.driver"],
-                  "header": ["Name",
-                             "Size (Bytes)",
-                             "MinDisk (GB)",
-                             "MinRam (MB)",
-                             "Status",
-                             "Driver"]},
-        "flavor": {"sort_keys": ["cm.name",
-                                 "vcpus",
-                                 "disk"],
-                   "order": ["cm.name",
-                             "vcpus",
-                             "ram",
-                             "disk"],
-                   "header": ["Name",
-                              "VCPUS",
-                              "RAM",
-                              "Disk"]}
-
+        "image": {
+            "sort_keys": ["cm.name",
+                          "extra.minDisk"],
+            "order": ["cm.name",
+                      "size",
+                      "min_disk",
+                      "min_ram",
+                      "status",
+                      "cm.driver"],
+            "header": ["Name",
+                       "Size (Bytes)",
+                       "MinDisk (GB)",
+                       "MinRam (MB)",
+                       "Status",
+                       "Driver"]
+        },
+        "flavor": {
+            "sort_keys": ["cm.name",
+                          "vcpus",
+                          "disk"],
+            "order": ["cm.name",
+                      "vcpus",
+                      "ram",
+                      "disk"],
+            "header": ["Name",
+                       "VCPUS",
+                       "RAM",
+                       "Disk"]
+        },
+        "key": {
+            "sort_keys": ["name"],
+            "order": ["name",
+                      "type",
+                      "fingerprint",
+                      "comment"],
+            "header": ["Name",
+                       "Type",
+                       "Fingerprint",
+                       "Comment"]
+        }
     }
 
     @staticmethod
@@ -99,16 +111,12 @@ class Provider(ComputeNodeABC):
         self.default = self.spec["default"]
         self.cloudtype = self.spec["cm"]["kind"]
 
-
         self.cred = self.spec["credentials"]
         if self.cred["OS_PASSWORD"] == 'TBD':
             Console.error("The password TBD is not allowed")
         credential = self._get_credentials(self.cred)
 
-        connection = openstack.connect(**credential)
-        self.cloudman = connection.compute
-
-
+        self.cloudman = openstack.connect(**credential)
 
         # self.default_image = deft["image"]
         # self.default_size = deft["size"]
@@ -116,7 +124,8 @@ class Provider(ComputeNodeABC):
 
         try:
             self.public_key_path = conf["profile"]["publickey"]
-            self.key_path = path_expand(Config()["cloudmesh"]["profile"]["publickey"])
+            self.key_path = path_expand(
+                Config()["cloudmesh"]["profile"]["publickey"])
             f = open(self.key_path, 'r')
             self.key_val = f.read()
         except:
@@ -146,7 +155,7 @@ class Provider(ComputeNodeABC):
                 "cloud": self.cloud,
                 "name": entry['name']
             }
-            if kind == 'vm' or kind == 'node':
+            if kind == 'vm':
                 entry["cm"]["updated"] = str(datetime.utcnow())
                 if "created_at" in entry:
                     entry["cm"]["created"] = str(entry["created_at"])
@@ -191,13 +200,10 @@ class Provider(ComputeNodeABC):
                     otherwise a dict is returened.
         :return: dict or libcloud object
         """
-        if self.cloudman:
-            entries = self.cloudman.list_key_pairs()
-            if raw:
-                return entries
-            else:
-                return self.update_dict(entries, kind="key")
-        return None
+        # conn.key_manager.secrets()
+
+        return self.get_list(self.cloudman.key_manager.secrets(), kind="key",
+                             raw=raw)
 
     def key_upload(self, key):
         """
@@ -205,6 +211,7 @@ class Provider(ComputeNodeABC):
         :param key:
         :return:
         """
+        raise NotImplementedError
 
         #
         # TODO: if you have a key in the local machine that is different from an
@@ -222,6 +229,7 @@ class Provider(ComputeNodeABC):
             "{user}".format(**self.user), filename)
 
     def list_secgroups(self, raw=False):
+        raise NotImplementedError
         if self.cloudman:
             secgroups = self.cloudman.ex_list_security_groups()
             if not raw:
@@ -230,6 +238,7 @@ class Provider(ComputeNodeABC):
         return None
 
     def list_secgroup_rules(self, secgroup='default', raw=False):
+        raise NotImplementedError
         if self.cloudman:
             secgroups = self.list_secgroups(raw=raw)
             thegroup = None
@@ -262,12 +271,14 @@ class Provider(ComputeNodeABC):
         return None
 
     def add_secgroup(self, secgroupname, description=""):
+        raise NotImplementedError
         if self.cloudman:
             return self.cloudman.ex_create_security_group(secgroupname,
                                                           description=description)
         return None
 
     def remove_secgroup(self, secgroupname):
+        raise NotImplementedError
         if self.cloudman:
             secgroups = self.list_secgroups(raw=True)
             thegroups = []
@@ -284,6 +295,7 @@ class Provider(ComputeNodeABC):
         return False
 
     def add_rules_to_secgroup(self, secgroupname, newrules):
+        raise NotImplementedError
         oldrules = self.list_secgroup_rules(secgroupname)
         pprint(oldrules)
         pprint(newrules)
@@ -307,6 +319,7 @@ class Provider(ComputeNodeABC):
                                                                     )
 
     def remove_rules_from_secgroup(self, secgroupname, rules):
+        raise NotImplementedError
         oldrules = self.list_secgroup_rules(secgroupname)
         pprint(oldrules)
         pprint(rules)
@@ -338,7 +351,6 @@ class Provider(ComputeNodeABC):
         """
         if self.cloudman:
 
-            all = self.cloudman.images()
             entries = []
             for entry in d:
                 entries.append(dict(entry))
@@ -356,7 +368,9 @@ class Provider(ComputeNodeABC):
                     otherwise a dict is returened.
         :return: dict or libcloud object
         """
-        return self.get_list(self.cloudman.images(),kind="images", raw=raw)
+        return self.get_list(self.cloudman.compute.images(),
+                             kind="image",
+                             raw=raw)
 
     def image(self, name=None, **kwargs):
         """
@@ -373,7 +387,8 @@ class Provider(ComputeNodeABC):
                     otherwise a dict is returened.
         :return: dict or libcloud object
         """
-        return self.get_list(self.cloudman.flavors(),kind="flavor", raw=raw)
+        return self.get_list(self.cloudman.compute.flavors(), kind="flavor",
+                             raw=raw)
 
     def flavor(self, name=None):
         """
@@ -391,6 +406,7 @@ class Provider(ComputeNodeABC):
         :param names: A list of node names
         :return:  A list of dict representing the nodes
         """
+        raise NotImplementedError
         if self.cloudman:
             # names = Parameter.expand(names)
             res = []
@@ -412,6 +428,7 @@ class Provider(ComputeNodeABC):
         :return:  A list of dict representing the nodes
         """
         VERBOSE(names)
+        raise NotImplementedError
         return self.apply(self.cloudman.ex_start_node, names)
 
     def stop(self, names=None):
@@ -421,7 +438,7 @@ class Provider(ComputeNodeABC):
         :param names: A list of node names
         :return:  A list of dict representing the nodes
         """
-
+        raise NotImplementedError
         return self.apply(self.cloudman.ex_stop_node, names)
 
     def info(self, name=None):
@@ -431,6 +448,7 @@ class Provider(ComputeNodeABC):
         :param name: The name of teh virtual machine
         :return: The dict representing the node including updated status
         """
+        raise NotImplementedError
         return self.find(self.list(), name=name)
 
     def suspend(self, name=None):
@@ -442,7 +460,7 @@ class Provider(ComputeNodeABC):
         :param name: the name of the node
         :return: The dict representing the node
         """
-
+        raise NotImplementedError
         return None
 
         """
@@ -476,7 +494,7 @@ class Provider(ComputeNodeABC):
         :param name: the name of the node
         :return: the dict of the node
         """
-
+        raise NotImplementedError
         # the following does not return the dict
         return self.apply(self.cloudman.ex_start_node, name)
 
@@ -487,8 +505,9 @@ class Provider(ComputeNodeABC):
                     otherwise a dict is returened.
         :return: dict or libcloud object
         """
-        return self.get_list(self.cloudman.servers(), kind="node", raw=raw)
-
+        return self.get_list(self.cloudman.compute.servers(),
+                             kind="vm",
+                             raw=raw)
 
     def destroy(self, names=None):
         """
@@ -497,7 +516,7 @@ class Provider(ComputeNodeABC):
         :return: the dict of the node
         """
         # names = Parameter.expand(names)
-
+        raise NotImplementedError
         nodes = self.list(raw=True)
         for node in nodes:
             if node.name in names:
@@ -512,6 +531,7 @@ class Provider(ComputeNodeABC):
         :param names: A list of node names
         :return:  A list of dict representing the nodes
         """
+        raise NotImplementedError
         return self.apply(self.cloudman.reboot_node, names)
 
     def create(self,
@@ -539,6 +559,8 @@ class Provider(ComputeNodeABC):
         # keyname = Config()["cloudmesh"]["profile"]["user"]
         # ex_keyname has to be the registered keypair name in cloud
 
+        raise NotImplementedError
+
         images = self.images(raw=True)
         for _image in images:
             if _image.name == image:
@@ -564,10 +586,9 @@ class Provider(ComputeNodeABC):
             # is required by the libcloud api call
             kwargs["ex_security_groups"] = secgroupsobj
 
-
         raise NotImplementedError
 
-        #return self.update_dict(node, kind="node")[0]
+        # return self.update_dict(node, kind="vm")[0]
         return None
 
     def get_publicIP(self):
@@ -580,6 +601,7 @@ class Provider(ComputeNodeABC):
                     ex_detach_floating_ip_from_node(node, ip)
                     ex_delete_floating_ip(ip)
         """
+        raise NotImplementedError
         ip = None
         ips = self.cloudman.ex_list_floating_ips()
         if ips:
@@ -593,9 +615,11 @@ class Provider(ComputeNodeABC):
         return ip
 
     def attach_publicIP(self, node, ip):
+        raise NotImplementedError
         return self.cloudman.ex_attach_floating_ip_to_node(node, ip)
 
     def detach_publicIP(self, node, ip):
+        raise NotImplementedError
         self.cloudman.ex_detach_floating_ip_from_node(node, ip)
         return self.cloudman.ex_delete_floating_ip(ip)
 
@@ -608,10 +632,11 @@ class Provider(ComputeNodeABC):
         :return: the dict with the new name
         """
         # if destination is None, increase the name counter and use the new name
-        HEADING(c=".")
+        raise NotImplementedError
         return None
 
     def ssh(self, name=None, command=None):
+        raise NotImplementedError
         key = self.key_path.replace(".pub", "")
         nodes = self.list(raw=True)
         for node in nodes:
@@ -639,4 +664,3 @@ class Provider(ComputeNodeABC):
             for line in result:
                 line = line.decode("utf-8")
                 print(line.strip("\n"))
-

@@ -45,7 +45,8 @@ class ImageCommand(PluginCommand):
         if arguments.list and arguments["--query"]:
             names = []
 
-            clouds, names = Arguments.get_cloud_and_names("list", arguments,
+            clouds, names = Arguments.get_cloud_and_names("list",
+                                                          arguments,
                                                           variables)
             cloud = clouds[0]
             query = arguments["--query"]
@@ -69,7 +70,8 @@ class ImageCommand(PluginCommand):
 
             names = []
 
-            clouds, names = Arguments.get_cloud_and_names("list", arguments,
+            clouds, names = Arguments.get_cloud_and_names("list",
+                                                          arguments,
                                                           variables)
 
             for cloud in clouds:
@@ -85,21 +87,23 @@ class ImageCommand(PluginCommand):
 
             names = []
 
-            clouds, names = Arguments.get_cloud_and_names("list", arguments,
+            clouds, names = Arguments.get_cloud_and_names("list",
+                                                          arguments,
                                                           variables)
 
             print(clouds, names)
+            print("find images")
             try:
 
                 for cloud in clouds:
                     print(f"List {cloud}")
-                    p = Provider(cloud)
-                    kind = p.kind
+                    p = Provider(name=cloud)
 
-                    collection = "{cloud}-image".format(cloud=cloud,
-                                                        kind=p.kind)
                     db = CmDatabase()
-                    images = db.find(collection=collection)
+                    images = db.find(collection=f"{cloud}-image")
+
+                    print (images)
+                    print(p)
 
                     p.Print(arguments.output, "image", images)
 

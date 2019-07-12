@@ -5,7 +5,7 @@
 from cloudmesh.management.configuration.config import Config
 from pprint import pprint
 import openstack
-
+from cloudmesh.common.util import banner
 
 """
 see : https://docs.openstack.org/openstacksdk/latest/user/guides/compute.html
@@ -45,21 +45,44 @@ config = credentials()
 
 pprint(config)
 
-connection = openstack.connect(**config)
-cloud = connection.compute
+cloud = openstack.connect(**config)
+
 
 if False:
-    flavors = cloud.flavors()
+    banner("Flavors")
+    flavors = cloud.compute.flavors()
     for entry in flavors:
         pprint(entry)
 
 if False:
-    images = cloud.images()
+    banner("Images")
+
+    images = cloud.compute.images()
     for entry in images:
         pprint(entry)
 
-if True:
-    servers = cloud.servers()
+if False:
+    banner("Servers")
+
+    servers = cloud.compute.servers()
     for entry in servers:
         pprint(entry)
 
+
+if True:
+    banner("Secrets")
+
+    keys = cloud.key_manager.secrets()
+    for entry in keys:
+        print(entry)
+
+
+"""
+def list_secrets_query(conn):
+    print("List Secrets:")
+
+    for secret in conn.key_manager.secrets(
+            secret_type="symmetric",
+            expiration="gte:2020-01-01T00:00:00"):
+        print(secret)
+"""

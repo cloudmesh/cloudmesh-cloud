@@ -55,8 +55,7 @@ class Key(object):
             keys = SSHkey().get_from_git(username)
 
         elif source == "ssh":
-            key = SSHkey()
-            key["name"] = "ssh"
+            key = SSHkey(name=name)
             keys = [key]
 
         else:

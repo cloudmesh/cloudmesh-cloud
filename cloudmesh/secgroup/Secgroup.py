@@ -1,5 +1,8 @@
 from cloudmesh.common.parameter import Parameter
-
+from cloudmesh.mongo.DataBaseDecorator import DatabaseUpdate
+from cloudmesh.common.debug import VERBOSE
+from cloudmesh.mongo.CmDatabase import CmDatabase
+from cloudmesh.common.variables import Variables
 #
 # use CmDatabase for interacting with the db, you will find also a simple find
 # function there.
@@ -8,10 +11,18 @@ from cloudmesh.common.parameter import Parameter
 class SecgroupRule(object):
 
     def __init__(self):
-        pass
+        self.db = CmDatabase()
 
-    def add(self, rule, fromport, toport, protocol, cidr):
-        raise NotImplementedError
+    @DatabaseUpdate()
+    def add(self, rule, protocol, ports, ip_range):
+        entry = {
+            "name": rule,
+            "protocol": protocol,
+            "ports": ports,
+            "ip_range": ip_range,
+        }
+
+        return self.update_dict_list(entry)
 
     def delete(self, rule=None):
         rules = Parameter.expand(rule)
@@ -49,8 +60,15 @@ class SecgroupRule(object):
 class Secgroup(object):
 
     def __init__(self):
-        pass
+        self.db = CmDatabase()
 
+
+    def find(self, **kwargs):
+        cloud = "local"
+        entries = self.db.find(collection=f"{cloud}-image", **kwargs)
+        return entries
+
+    @DatabaseUpdate()
     def add(self, group, rule):
         """
         adds a rule to a given group. If the group does not exist, it will be created.
@@ -59,9 +77,11 @@ class Secgroup(object):
         :param rule:
         :return:
         """
-        entry = None # find the entry in the db
-        found = self.update_dict_list(entry)
-        raise NotImplementedError
+        # not sure how to do the query yet
+        entry = self.find({"cm.type":"group"}) # find the entry in the db
+
+        # update it
+        return self.update_dict_list(entry)
 
     def delete(self, group=None):
         """

@@ -219,6 +219,9 @@ class Provider(ComputeNodeABC):
     def key_upload(self, key):
         self.p.key_upload(key)
 
+    def key_delete(self, key):
+        self.p.key_delete(key)
+
     @DatabaseUpdate()
     def destroy(self, names=None, **kwargs):
         # this should later check and remove destroyed nodes, not implemented

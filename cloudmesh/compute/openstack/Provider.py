@@ -249,13 +249,38 @@ class Provider(ComputeNodeABC):
                       "--os-password={password} ".format(**self.credential)
 
         command = "openstack keypair create {credential} " \
-                  "--public-key {public} ".format(**data)
+                  "--public-key={public} {name}; exit 0".format(**data)
+
+        r = subprocess.check_output(command,
+                stderr = subprocess.STDOUT,
+                shell = True)
+        if "already exists" in str(r):
+            raise ValueError(f"key already exists: {name}")
+        #r = Shell.execute(command, traceflag=False, shell=True)
+        return r
+
+    def key_delete(self, name):
+        """
+        uploads the key specified in the yaml configuration to the cloud
+        :param key:
+        :return:
+        """
+
+        cloud = self.cloud
+        Console.msg (f"delete the key: {name} -> {cloud}")
+
+        credential= " --os-auth-url={auth_url} " \
+                      "--os-project-name={project_id} --os-username={username} " \
+                      "--os-password={password} ".format(**self.credential)
+
+        command = f"openstack keypair delete {credential} {name} "
 
         try:
             r = Shell.execute(command, traceflag=False, shell=True)
             return r
         except:
             return None
+
 
     def list_secgroups(self, raw=False):
         raise NotImplementedError

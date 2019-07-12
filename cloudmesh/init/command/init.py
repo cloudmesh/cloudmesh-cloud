@@ -19,7 +19,7 @@ class InitCommand(PluginCommand):
         ::
 
             Usage:
-                init
+                init [CLOUD]
 
             Description:
 
@@ -43,4 +43,13 @@ class InitCommand(PluginCommand):
         print("MongoDB create")
         os.system("cms admin mongo create")
         os.system("cms admin mongo start")
+
+        if arguments.CLOUD is not None:
+            cloud = arguments.CLOUD
+            os.system(f"cms set cloud={cloud}")
+            os.system(f"cms flavor list --refresh")
+            os.system(f"cms image list --refresh")
+            os.system(f"cms vm list --refresh")
+            os.system(f"cms set list")
+
 

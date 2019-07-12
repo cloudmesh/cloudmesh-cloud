@@ -10,6 +10,10 @@ from cloudmesh.common.debug import VERBOSE
 from cloudmesh.common.util import path_expand
 from cloudmesh.management.configuration.config import Config
 from cloudmesh.common.Shell import Shell
+from subprocess import Popen, PIPE, STDOUT
+
+
+from cloudmesh.management.configuration.SSHkey import SSHkey
 
 class Provider(ComputeNodeABC):
     output = {
@@ -233,22 +237,25 @@ class Provider(ComputeNodeABC):
         :param key:
         :return:
         """
-        raise NotImplementedError
 
-        #
-        # TODO: if you have a key in the local machine that is different from an
-        # already uploaded ky this function will fail. The key in the cloud
-        # needs to be removed first
-        #
-        keys = self.keys()
-        for cloudkey in keys:
-            pprint(cloudkey)
-            if cloudkey['fingerprint'] == key["fingerprint"]:
-                return
+        name = key["name"]
+        cloud = self.cloud
+        Console.msg (f"upload the key: {name} -> {cloud}")
 
-        filename = Path(key["path"])
-        key = self.cloudman.import_key_pair_from_file(
-            "{user}".format(**self.user), filename)
+        data = dict(key['location'])
+        data['name'] = key['name']
+        data['credential'] = " --os-auth-url={auth_url} " \
+                      "--os-project-name={project_id} --os-username={username} " \
+                      "--os-password={password} ".format(**self.credential)
+
+        command = "openstack keypair create {credential} " \
+                  "--public-key {public} ".format(**data)
+
+        try:
+            r = Shell.execute(command, traceflag=False, shell=True)
+            return r
+        except:
+            return None
 
     def list_secgroups(self, raw=False):
         raise NotImplementedError

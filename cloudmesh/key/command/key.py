@@ -10,6 +10,10 @@ from cloudmesh.common.variables import Variables
 from cloudmesh.compute.vm.Provider import Provider
 from cloudmesh.common.debug import VERBOSE
 from cloudmesh.key.api.key import Key
+from cloudmesh.mongo.CmDatabase import CmDatabase
+from cloudmesh.management.configuration.arguments import Arguments
+from cloudmesh.common.variables import Variables
+from cloudmesh.common.console import Console
 
 class KeyCommand(PluginCommand):
 
@@ -32,12 +36,10 @@ class KeyCommand(PluginCommand):
              key add [NAME] [--source=FILENAME]
              key add [NAME] [--source=git]
              key add [NAME] [--source=ssh]
-             key get NAME [--output=OUTPUT]
-             key select
              key delete (NAMES | --select | --all) [--dryrun]
              key delete NAMES --cloud=CLOUDS [--dryrun]
-             key upload KEYNAME [NAMES] [--cloud=CLOUDS] [--dryrun]
-             key upload KEYNAME [NAMES] [VMS] [--dryrun]
+             key upload [NAMES] [--cloud=CLOUDS] [--dryrun]
+             key upload [NAMES] [VMS] [--dryrun]
              key group upload [NAMES] [--group=GROUPNAMES] [--cloud=CLOUDS] [--dryrun]
              key group add [--group=GROUPNAMES] [--cloud=CLOUDS] [--dryrun]
              key group add --file=FILENAME
@@ -59,7 +61,7 @@ class KeyCommand(PluginCommand):
            Options:
               --dir=DIR                     the directory with keys [default: ~/.ssh]
               --output=OUTPUT               the format of the output [default: table]
-              --source=SOURCE               the source for the keys [default: cm]
+              --source=SOURCE               the source for the keys
               --username=USERNAME           the source for the keys [default: none]
               --name=KEYNAME                The name of a key
 
@@ -110,15 +112,10 @@ class KeyCommand(PluginCommand):
                 To get keys from the cloudmesh database the folloing commands
                 are available:
 
-                key get NAME
-                    Retrieves the key indicated by the NAME parameter from
-                    cloudmesh database and prints its details.
-                key select
-                    Select the default key interactively
                 key delete NAMES
                     deletes the Named keys. This may also have an impact on groups
                 key rename NAME NEW
-                    renames the key from NAME to NEW.
+                    renames the key from NAME to NEW in the cloudmesh database.
 
                Group management of keys is an important concept in cloudmesh,
                allowing multiple users to be added to virtual machines while
@@ -167,6 +164,15 @@ class KeyCommand(PluginCommand):
                 to the grouplist of the key
         """
 
+        def print_keys(keys):
+            print(Printer.write(
+                keys,
+                sort_keys=["name"],
+                order=["name", "type", "fingerprint", "comment"],
+                header=["Name", "Type", "Fingerprint", "Comment"],
+                output=arguments.output)
+            )
+
         map_parameters(arguments,
                        'cloud',
                        'output',
@@ -175,44 +181,31 @@ class KeyCommand(PluginCommand):
                        'output',
                        'source')
 
-        VERBOSE(arguments)
+        variables = Variables()
+        print (variables["cloud"])
 
-        invalid_names = ['tbd', 'none', "", 'id_rsa']
-
-        if arguments["list"] and arguments.source == "git":
+        if arguments.list and arguments.source == "git":
 
             config = Config()
             username = config["cloudmesh.profile.github"]
             keys = SSHkey().get_from_git(username)
 
-            print(Printer.write(
-                keys,
-                sort_keys=["name"],
-                order=["id", "name", "fingerprint", "source"],
-                header=["Id", "Name", "Fingerprint", "Source"],
-                output=arguments.output)
-            )
+            print_keys(keys)
 
             return ""
 
-        elif arguments["list"] and arguments.source == "ssh":
+        elif arguments.list and arguments.source == "ssh":
             # this is much simpler
 
             sshkey = SSHkey()
 
-            print(Printer.write(
-                [sshkey],
-                sort_keys=["name"],
-                order=["name", "type", "fingerprint", "comment"],
-                header=["Name", "Type", "Fingerprint", "Comment"],
-                output=arguments.output)
-            )
+            print_keys([sshkey])
+
             return ""
 
-        elif arguments["list"] and arguments.cloud:
+        elif arguments.list and arguments.cloud:
 
             clouds = Parameter.expand(arguments.cloud)
-            print(clouds)
 
             if len(clouds) == 0:
                 variables = Variables()
@@ -230,39 +223,96 @@ class KeyCommand(PluginCommand):
 
             return ""
 
-        elif arguments.list and arguments.source == "db":
+        elif arguments.list:
 
-            if arguments.NAMES:
-                names = Parameter.expand(arguments.NAMES)
+            cloud = "local"
+            db = CmDatabase()
+            keys = db.find(collection=f"{cloud}-key")
 
-                print("find the keys of the following vms", names)
-                print("the keys will be read from mongo")
-
-                raise NotImplementedError
+            print_keys(keys)
 
             return ""
+
 
         elif arguments.add:
 
             """
-             key add [NAME] [--source=FILENAME]
+             key add [NAME] [--source=FILENAME] # NOT IMPLEMENTED YET
              key add [NAME] [--source=git]
              key add [NAME] [--source=ssh]
              """
             key = Key()
+
             if arguments["--source"] == "ssh":
-                key.add("ssh", "ssh")
-            if arguments["--source"] == "git":
+                name = arguments.NAME or "ssh"
+                key.add(name, "ssh")
+            elif arguments["--source"] == "git":
+                name = arguments.NAME or "git"
                 key.add("git", "git")
             else:
                 raise NotImplementedError
 
-        elif arguments.get:
-
-            raise NotImplementedError
-
         elif arguments.group:
 
             raise NotImplementedError
+
+        elif arguments.upload:
+
+            """
+            key upload [NAMES] [--cloud=CLOUDS] [--dryrun]
+            key upload [NAMES] [VMS] [--dryrun]
+            """
+
+            names = Parameter.expand(arguments.NAMES)
+
+            #
+            # Step 1. keys = find keys to upload
+            #
+
+            cloud = "local"
+            db = CmDatabase()
+            db_keys = db.find(collection=f"{cloud}-key")
+
+            keys = []
+            for key in db_keys:
+                if key["name"] in names:
+                    keys.append(key)
+
+            if len(keys) == 0:
+                Console.error("No keys with the names found in cloudmesh. \n"
+                              "       Use the command 'key add' to add the key.")
+
+
+            #
+            # Step 2. iterate over the clouds to upload
+            #
+
+            clouds, names = Arguments.get_cloud_and_names("list",
+                                                          arguments,
+                                                          variables)
+
+            for cloud in clouds:
+                print(f"cloud {cloud}")
+                provider = Provider(name=cloud)
+                for key in keys:
+                    name = key['name']
+                    if 'location' not in key:
+                        Console.error(f"key '{name}' does not have a "
+                                      f"pysical location")
+                    else:
+                        r = provider.key_upload(key)
+                        if r is None:
+                            Console.error(f"upload error for key '{name}'. "
+                                          f"Make sure the name is unique in "
+                                          f"'{cloud}'.")
+                        else:
+                            Console.error(f"upload key '{name} sucessful'. ")
+
+            #
+            #p = Provider(name=cloud)
+
+
+            return ""
+
 
         return ""

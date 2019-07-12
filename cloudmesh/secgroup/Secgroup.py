@@ -14,18 +14,18 @@ class SecgroupRule(object):
         self.db = CmDatabase()
 
     @DatabaseUpdate()
-    def add(self, rule, protocol, ports, ip_range):
+    def add(self, name=None, protocol=None, ports=None, ip_range=None):
         entry = {
-            "name": rule,
+            "name": name,
             "protocol": protocol,
             "ports": ports,
             "ip_range": ip_range,
         }
 
-        return self.update_dict_list(entry)
+        return self.update_dict_list([entry])
 
-    def delete(self, rule=None):
-        rules = Parameter.expand(rule)
+    def delete(self, name=None):
+        rules = Parameter.expand(name)
         # delete the rules
         for rule in rules:
             # delete the rule in the db
@@ -33,21 +33,21 @@ class SecgroupRule(object):
 
         raise NotImplementedError
 
-    def list(self, rule=None):
+    def list(self, name=None):
         found = []
-        if rule is None:
+        if name is None:
             # find all rules in the db
             found = []
             raise NotImplementedError
         else:
-            rules = Parameter.expand(rule)
+            rules = Parameter.expand(name)
             # find only the rules specified in the db
             find = []
             raise NotImplementedError
         found = self.update_dict_list(entries)
         return found
 
-    def update_dict_list(self, entries, name):
+    def update_dict_list(self, entries):
         for entry in entries:
             entry['cm'] = {
                 "kind": "secgroup",
@@ -69,7 +69,7 @@ class Secgroup(object):
         return entries
 
     @DatabaseUpdate()
-    def add(self, group, rule):
+    def add(self, group=None, rule=None):
         """
         adds a rule to a given group. If the group does not exist, it will be created.
 
@@ -108,7 +108,7 @@ class Secgroup(object):
         found = self.update_dict_list(entries)
         return found
 
-    def update_dict_list(self, entries, name):
+    def update_dict_list(self, entries):
         for entry in entries:
             entry['cm'] = {
                 "kind": "secgroup",

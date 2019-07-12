@@ -6,6 +6,7 @@ from cloudmesh.management.configuration.config import Config
 from pprint import pprint
 import openstack
 from cloudmesh.common.util import banner
+from cloudmesh.common.Shell import Shell
 
 """
 see : https://docs.openstack.org/openstacksdk/latest/user/guides/compute.html
@@ -70,11 +71,24 @@ if False:
 
 
 if True:
+
+    command = "openstack keypair list --os-auth-url={auth_url} " \
+        "--os-project-name={project_id} --os-username={username} "\
+        "--os-password={password} -f=json".format(**config)
+    # print (command)
+    r = Shell.execute(command, shell=True)
+    d = eval(r)
+    print (type(d))
+    print (d)
+
+
+if False:
     banner("Secrets")
 
     keys = cloud.key_manager.secrets()
     for entry in keys:
         print(entry)
+
 
 
 """

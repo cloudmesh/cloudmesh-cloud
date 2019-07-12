@@ -9,7 +9,7 @@ from cloudmesh.common.console import Console
 from cloudmesh.common.debug import VERBOSE
 from cloudmesh.common.util import path_expand
 from cloudmesh.management.configuration.config import Config
-
+from cloudmesh.common.Shell import Shell
 
 class Provider(ComputeNodeABC):
     output = {
@@ -114,9 +114,9 @@ class Provider(ComputeNodeABC):
         self.cred = self.spec["credentials"]
         if self.cred["OS_PASSWORD"] == 'TBD':
             Console.error("The password TBD is not allowed")
-        credential = self._get_credentials(self.cred)
+        self.credential = self._get_credentials(self.cred)
 
-        self.cloudman = openstack.connect(**credential)
+        self.cloudman = openstack.connect(**self.credential)
 
         # self.default_image = deft["image"]
         # self.default_size = deft["size"]
@@ -149,6 +149,10 @@ class Provider(ComputeNodeABC):
         d = []
         for entry in _elements:
 
+            if kind == 'key':
+                entry['name'] = entry['Name']
+                entry['fingerprint'] = entry['Fingerprint']
+
             entry["cm"] = {
                 "kind": kind,
                 "driver": self.cloudtype,
@@ -169,10 +173,8 @@ class Provider(ComputeNodeABC):
             elif kind == 'image':
                 entry['cm']['created'] = str(datetime.utcnow())
                 entry['cm']['updated'] = str(datetime.utcnow())
-            elif kind == 'secgroup':
-                pass
-            elif kind == 'key':
-                pass
+            #elif kind == 'secgroup':
+            #    pass
 
             d.append(entry)
         return d
@@ -199,11 +201,31 @@ class Provider(ComputeNodeABC):
         :param raw: If raw is set to True the lib cloud object is returened
                     otherwise a dict is returened.
         :return: dict or libcloud object
+
         """
+
+        # needs to be replacedd with api calls
+        try:
+            command = "openstack keypair list --os-auth-url={auth_url} " \
+                      "--os-project-name={project_id} --os-username={username} " \
+                      "--os-password={password} -f=json".format(
+                **self.credential)
+            # print (command)
+            r = Shell.execute(command, shell=True)
+            entries = eval(r)
+            if not raw:
+                r = self.update_dict(entries, kind="key")
+            return r
+
+        except:
+            return None
+
+
         # conn.key_manager.secrets()
 
-        return self.get_list(self.cloudman.key_manager.secrets(), kind="key",
-                             raw=raw)
+        #return self.get_list(self.cloudman.key_manager.secrets(),
+        #                     kind="key",
+        #                     raw=raw)
 
     def key_upload(self, key):
         """
@@ -344,13 +366,12 @@ class Provider(ComputeNodeABC):
 
     def get_list(self, d, kind=None, raw=False, **kwargs):
         """
-        Lists the images on the cloud
+        Lists the dict d on the cloud
         :param raw: If raw is set to True the lib cloud object is returned
                     otherwise a dict is returened.
         :return: dict or libcloud object
         """
         if self.cloudman:
-
             entries = []
             for entry in d:
                 entries.append(dict(entry))
@@ -358,7 +379,6 @@ class Provider(ComputeNodeABC):
                 return entries
             else:
                 return self.update_dict(entries, kind=kind)
-
         return None
 
     def images(self, raw=False, **kwargs):
@@ -387,7 +407,8 @@ class Provider(ComputeNodeABC):
                     otherwise a dict is returened.
         :return: dict or libcloud object
         """
-        return self.get_list(self.cloudman.compute.flavors(), kind="flavor",
+        return self.get_list(self.cloudman.compute.flavors(),
+                             kind="flavor",
                              raw=raw)
 
     def flavor(self, name=None):

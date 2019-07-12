@@ -96,8 +96,6 @@ class Provider(ComputeNodeABC):
         self.spec = conf["cloud"][name]
         self.cloud = name
 
-
-
         self.default = self.spec["default"]
         self.cloudtype = self.spec["cm"]["kind"]
 
@@ -106,8 +104,6 @@ class Provider(ComputeNodeABC):
         if self.cred["OS_PASSWORD"] == 'TBD':
             Console.error("The password TBD is not allowed")
         credential = self._get_credentials(self.cred)
-
-
 
         connection = openstack.connect(**credential)
         self.cloudman = connection.compute

@@ -112,21 +112,20 @@ secrules = \
 banner("secgroups")
 pprint (secgroups)
 
-banner("secrules")
-pprint (secrules)
-
-banner("secrule")
-rule = secrules[0]
-pprint (rule)
-
 
 banner("secgroup")
 pprint (secgroups[0])
 
 
+banner("secrules")
+pprint (secrules)
+
+banner("secrule")
+rule = secrules[0] # use this for our test
+pprint (rule)
+
 
 rules = SecgroupRule()
-
 
 data = {}
 for attribute in ['name','protocol','ip_range', 'ports']:

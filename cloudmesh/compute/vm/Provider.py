@@ -21,7 +21,8 @@ from cloudmesh.common.Printer import Printer
 
 class Provider(ComputeNodeABC):
 
-    def __init__(self, name=None,
+    def __init__(self,
+                 name=None,
                  configuration="~/.cloudmesh/cloudmesh4.yaml"):
         # noinspection PyPep8
         try:
@@ -37,7 +38,9 @@ class Provider(ComputeNodeABC):
 
         if self.kind in ["openstack"]:
             provider = OpenStackCloudProvider
-        elif self.kind in ["aws", "google"]:
+        elif self.kind in ["aws"]:
+            provider = LibCloudProvider
+        elif self.kind in ["google"]:
             provider = LibCloudProvider
         elif self.kind in ["vagrant", "virtualbox"]:
             provider = VirtualboxCloudProvider
@@ -237,10 +240,11 @@ class Provider(ComputeNodeABC):
         raise NotImplementedError
 
     def Print(self, output, kind, data):
-        order = self.p.output[kind]['order']  # not pretty
-        header = self.p.output[kind]['header']  # not pretty
-
         if output == "table":
+
+            order = self.p.output[kind]['order']  # not pretty
+            header = self.p.output[kind]['header']  # not pretty
+
             print(Printer.flatwrite(data,
                                     sort_keys=["name"],
                                     order=order,

@@ -7,7 +7,7 @@ from cloudmesh.management.configuration.config import Config
 from cloudmesh.shell.command import PluginCommand
 from cloudmesh.shell.command import command, map_parameters
 from cloudmesh.common.variables import Variables
-from cloudmesh.compute.libcloud.Provider import Provider
+from cloudmesh.compute.vm.Provider import Provider
 from cloudmesh.common.debug import VERBOSE
 from cloudmesh.key.api.key import Key
 
@@ -27,7 +27,7 @@ class KeyCommand(PluginCommand):
              key list --cloud=CLOUDS [--output=OUTPUT]
              key list --source=ssh [--dir=DIR] [--output=OUTPUT]
              key list --source=git [--output=OUTPUT] [--username=USERNAME]
-             key list [NAMES] [--output=OUTPUT]
+             key list [--output=OUTPUT]
              key load --filename=FILENAME [--output=OUTPUT]
              key add [NAME] [--source=FILENAME]
              key add [NAME] [--source=git]
@@ -172,11 +172,14 @@ class KeyCommand(PluginCommand):
                        'output',
                        'source',
                        'dir',
-                       'output')
+                       'output',
+                       'source')
+
+        VERBOSE(arguments)
 
         invalid_names = ['tbd', 'none', "", 'id_rsa']
 
-        if arguments.list and arguments.source == "git":
+        if arguments["list"] and arguments.source == "git":
             # this is much simpler
             config = Config()
             username = config["cloudmesh.profile.github"]
@@ -193,7 +196,7 @@ class KeyCommand(PluginCommand):
 
             return ""
 
-        elif arguments.list and arguments.source == "ssh":
+        elif arguments["list"] and arguments.source == "ssh":
             # this is much simpler
 
 
@@ -209,8 +212,11 @@ class KeyCommand(PluginCommand):
             )
             return ""
 
-        elif arguments.list and arguments.cloud:
+        elif arguments["list"] and arguments.cloud:
 
+            raise NotImplementedError
+
+            """
             clouds = Parameter.expand(arguments.cloud)
             print(clouds)
 
@@ -218,20 +224,17 @@ class KeyCommand(PluginCommand):
                 variables = Variables()
                 cloudname = variables['cloud']
                 clouds = [cloudname]
-            cloudkey = []
+            keys = []
+
             for cloud in clouds:
-                print(cloud)
-                provider = Provider(clouds)
-                cloudkey.append(provider.keys())
+                print(f"cloud {cloud}")
+                provider = Provider(name=cloud)
+                print(provider)
+                keys = provider.keys()
 
-            print(Printer.write(
-                [cloudkey],
-                sort_keys=["name"],
-                order=["name", "type", "fingerprint", "comment"],
-                header=["Name", "Type", "Fingerprint", "Comment"],
-                output=arguments.output)
-            )
+                provider.Print(arguments.output, "key", keys)
 
+            """
             return ""
 
         elif arguments.list and arguments.source == "db":

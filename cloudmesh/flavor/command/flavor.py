@@ -1,5 +1,4 @@
 from cloudmesh.common.debug import VERBOSE
-from cloudmesh.common.Printer import Printer
 from cloudmesh.compute.vm.Provider import Provider
 from cloudmesh.management.configuration.arguments import Arguments
 from cloudmesh.mongo.CmDatabase import CmDatabase
@@ -32,7 +31,7 @@ class FlavorCommand(PluginCommand):
                 This lists out the flavors present for a cloud
 
             Examples:
-                cm flavor refresh
+                cm flavor list --refresh
                 cm flavor list
                 cm flavor list --output=csv
                 cm flavor list 58c9552c-8d93-42c0-9dea-5f48d90a3188 --refresh
@@ -54,7 +53,8 @@ class FlavorCommand(PluginCommand):
 
             names = []
 
-            clouds, names = Arguments.get_cloud_and_names("list", arguments,
+            clouds, names = Arguments.get_cloud_and_names("list",
+                                                          arguments,
                                                           variables)
 
             for cloud in clouds:
@@ -80,12 +80,9 @@ class FlavorCommand(PluginCommand):
                 for cloud in clouds:
                     print(f"List {cloud}")
                     p = Provider(cloud)
-                    kind = p.kind
 
-                    collection = "{cloud}-flavor".format(cloud=cloud,
-                                                         kind=p.kind)
                     db = CmDatabase()
-                    flavors = db.find(collection=collection)
+                    flavors = db.find(collection=f"{cloud}-flavor")
 
                     p.Print(arguments.output, "flavor", flavors)
 

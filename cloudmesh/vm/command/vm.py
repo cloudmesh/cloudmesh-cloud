@@ -254,7 +254,7 @@ class VmCommand(PluginCommand):
                     p = Provider(cloud)
                     kind = p.kind
 
-                    collection = "{cloud}-node".format(cloud=cloud,
+                    collection = "{cloud}-vm".format(cloud=cloud,
                                                        kind=p.kind)
                     db = CmDatabase()
                     images = db.find(collection=collection)
@@ -293,7 +293,7 @@ class VmCommand(PluginCommand):
             for cloud in clouds:
                 params = {}
                 # gets public ips from database
-                cursor = database.db[f'{cloud}-node']
+                cursor = database.db[f'{cloud}-vm']
                 for name in names:
                     for node in cursor.find({'name': name}):
                         ips.update(set(node['public_ips']))
@@ -335,7 +335,7 @@ class VmCommand(PluginCommand):
 
                 # gets public ips from database
                 public_ips = []
-                cursor = database.db['{cloud}-node']
+                cursor = database.db['{cloud}-vm']
                 for name in names:
                     for node in cursor.find({'name': name}):
                         public_ips.append(node['public_ips'])
@@ -355,7 +355,7 @@ class VmCommand(PluginCommand):
             for cloud in clouds:
                 provider = Provider(cloud)
                 status = []
-                cursor = database.db[f'{cloud}-node']
+                cursor = database.db[f'{cloud}-vm']
                 for name in names:
                     for node in cursor.find({'name': name}):
                         entry  = {
@@ -659,7 +659,7 @@ class VmCommand(PluginCommand):
                 provider = Provider(cloud)
 
                 name_ips = {}
-                cursor = database.db['{}-node'.format(cloud)]
+                cursor = database.db[f'{cloud}-vm']
                 for name in names:
                     for node in cursor.find({'name': name}):
                         name_ips[name] = node['public_ips']

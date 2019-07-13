@@ -18,6 +18,55 @@ from msrestazure.azure_exceptions import CloudError
 
 class Provider(ComputeNodeABC):
 
+
+    #
+    # TODO: This is a bug, you need to define the outout attributes for the
+    #  table printer. Print an entry with VERBOSE, after you get it from azure
+    #  so you can look at them
+
+    output = {
+
+        "vm": {
+            "sort_keys": ["cm.name"],
+            "order": ["cm.name",
+                      "cm.cloud",
+                      "state",
+                      "image",
+                      "public_ips",
+                      "private_ips",
+                      "cm.kind"],
+            "header": ["cm.name",
+                       "cm.cloud",
+                       "state",
+                       "image",
+                       "public_ips",
+                       "private_ips",
+                       "cm.kind"]
+        },
+        "image": {"sort_keys": ["cm.name",
+                                "extra.minDisk"],
+                  "order": ["cm.name",
+                            "extra.minDisk",
+                            "updated",
+                            "cm.driver"],
+                  "header": ["Name",
+                             "MinDisk",
+                             "Updated",
+                             "Driver"]},
+        "flavor": {"sort_keys": ["cm.name",
+                                 "vcpus",
+                                 "disk"],
+                   "order": ["cm.name",
+                             "vcpus",
+                             "ram",
+                             "disk"],
+                   "header": ["Name",
+                              "VCPUS",
+                              "RAM",
+                              "Disk"]}
+
+    }
+
     def __init__(self, name=None, configuration="~/.cloudmesh/cloudmesh4.yaml"):
         """
         Initializes the provider. The default parameters are read from the configutation
@@ -61,6 +110,10 @@ class Provider(ComputeNodeABC):
         self.compute_client  = ComputeManagementClient(credentials, SUBSCRIPTION_ID)
         self.network_client  = NetworkManagementClient(credentials, SUBSCRIPTION_ID)
 
+        # VMs abbreviation
+
+        self.vms = self.compute_client.virtual_machines
+
         # Azure Resource Group
         self.GROUP_NAME      = self.default["resource_group"]
 
@@ -89,7 +142,8 @@ class Provider(ComputeNodeABC):
         else:
             # Create or Update Resource group
             print('\nCreate Azure Virtual Machine Resource Group')
-            return self.resource_client.resource_groups.create_or_update(self.GROUP_NAME, {'location': self.LOCATION})
+            return self.resource_client.resource_groups.create_or_update(
+                self.GROUP_NAME, {'location': self.LOCATION})
 
     def create(self, name=None, image=None, size=None, timeout=360, **kwargs):
         """
@@ -98,15 +152,16 @@ class Provider(ComputeNodeABC):
         :param name: the name of the node
         :param image: the image used
         :param size: the size of the image
-        :param timeout: a timeout in seconds that is invoked in case the image does not boot.
-               The default is set to 3 minutes.
+        :param timeout: a timeout in seconds that is invoked in case the image
+                        does not boot. The default is set to 3 minutes.
         :param kwargs: additional arguments passed along at time of boot
         :return:
         """
 
         VM_PARAMETERS = self.create_vm_parameters()
 
-        async_vm_creation = self.compute_client.virtual_machines.create_or_update(self.GROUP_NAME, self.VM_NAME, VM_PARAMETERS)
+        async_vm_creation = self.vms.create_or_update(
+            self.GROUP_NAME, self.VM_NAME, VM_PARAMETERS)
         async_vm_creation.wait()
 
         # Creating a Managed Data Disk
@@ -124,7 +179,7 @@ class Provider(ComputeNodeABC):
         data_disk = async_disk_creation.result()
 
         # Get the virtual machine by name
-        virtual_machine = self.compute_client.virtual_machines.get(
+        virtual_machine = self.vms.get(
             self.GROUP_NAME,
             self.VM_NAME
         )
@@ -138,7 +193,7 @@ class Provider(ComputeNodeABC):
                 'id': data_disk.id
             }
         })
-        async_disk_attach = self.compute_client.virtual_machines.create_or_update(
+        async_disk_attach = self.vms.create_or_update(
             self.GROUP_NAME,
             virtual_machine.name,
             virtual_machine
@@ -260,7 +315,8 @@ class Provider(ComputeNodeABC):
         # Start the VM
         VERBOSE(" ".join('Starting Azure VM'))
         print('Starting Azure VM')
-        async_vm_start = self.compute_client.virtual_machines.start(groupName, vmName)
+        async_vm_start = self.vms.start(groupName,
+                                                                    vmName)
         async_vm_start.wait()
         return self.info(groupName, vmName)
         #return None
@@ -280,7 +336,8 @@ class Provider(ComputeNodeABC):
         # Restart the VM
         VERBOSE(" ".join('Restarting Azure VM'))
         print('Restarting Azure VM')
-        async_vm_restart = self.compute_client.virtual_machines.restart(groupName, vmName)
+        async_vm_restart = self.vms.restart(groupName,
+                                                                        vmName)
         async_vm_restart.wait()
         return self.info(groupName, vmName)
         #return None
@@ -300,7 +357,8 @@ class Provider(ComputeNodeABC):
         # Stop the VM
         VERBOSE(" ".join('Stopping Azure VM'))
         print('Stopping Azure VM')
-        async_vm_stop = self.compute_client.virtual_machines.power_off(groupName, vmName)
+        async_vm_stop = self.vms.power_off(groupName,
+                                                                       vmName)
         async_vm_stop.wait()
         return self.info(groupName, vmName)
         #return None
@@ -318,17 +376,17 @@ class Provider(ComputeNodeABC):
         if vmName is None:
             vmName = self.VM_NAME
 
-        node = self.compute_client.virtual_machines.get(groupName, vmName)
+        node = self.vms.get(groupName, vmName)
 
-        return self.update_dict(node.as_dict(), kind="node")
+        return self.update_dict(node.as_dict(), kind="vm")
 
     def list(self):
         """
         List all Azure Virtual Machines from my Account
         :return: dict or libcloud object
         """
-        nodes = self.compute_client.virtual_machines.list_all()
-        return self.update_dict(nodes, kind="node")
+        nodes = self.vms.list_all()
+        return self.update_dict(nodes, kind="vm")
 
 
     # TODO Implement Suspend Method
@@ -368,7 +426,7 @@ class Provider(ComputeNodeABC):
         # Delete VM
         VERBOSE(" ".join('Deleteing Azure Virtual Machine'))
         print('Deleteing Azure Virtual Machine')
-        async_vm_delete = self.compute_client.virtual_machines.delete(groupName, vmName)
+        async_vm_delete = self.vms.delete(groupName, vmName)
         async_vm_delete.wait()
 
         # Delete Resource Group
@@ -467,7 +525,7 @@ class Provider(ComputeNodeABC):
                 "driver": self.cloudtype,
                 "cloud": self.cloud
             }
-            if kind == 'node':
+            if kind == 'vm':
                 entry["cm"]["updated"] = str(datetime.utcnow())
                 entry["cm"]["name"] = entry["name"]
                 entry["cm"]["type"] = entry["type"] #Check feasibility of the following items
@@ -485,6 +543,11 @@ class Provider(ComputeNodeABC):
                     entry["cm"]["name"] = entry["name"]
                 else:
                     pass
+
+            # TODO: this is likely a bug in your code as this is speccific to
+            #  LibCloud. You probable want to delete this.
+            #  but make sure to test out what is in the dict.
+            #  you can do this with VERBOSE(entry)
 
             if "extra" in entry:
                 del entry["extra"]

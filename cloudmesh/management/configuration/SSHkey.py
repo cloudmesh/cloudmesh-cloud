@@ -12,8 +12,20 @@ from cloudmesh.management.configuration.config import Config
 # noinspection PyBroadException
 class SSHkey(dict):
 
-    def __init__(self):
+    def __init__(self, name=None):
         self.load()
+        if name is not None:
+            self['name'] = name
+            self['cm']['name'] = name
+
+    @staticmethod
+    def _update_dict(name, d):
+        d["cm"] = {
+            "kind": "key",
+            "cloud": "local",
+            "name": name
+        }
+        return d
 
     def load(self):
         self["profile"] = Config()["cloudmesh"]["profile"]
@@ -31,6 +43,11 @@ class SSHkey(dict):
 
         self['comment'] = self['comment']
         self['source'] = 'ssh'
+        self['location'] = {
+            'public': self['path'],
+            'private': self['path'].replace(".pub", "")
+        }
+        self = self._update_dict(self['name'], self)
 
     def set_permissions(self, path):
         """
@@ -73,16 +90,16 @@ class SSHkey(dict):
                 'fingerprint': SSHkey._fingerprint(key),
                 'name': name,
                 'comment': name,
-                'cm_id': name,
                 'source': 'git',
                 'kind': 'key'
             }
 
             thekey["type"], thekey["key"], thekey["comment"] = SSHkey._parse(
                 key)
-
             if thekey["comment"] is None:
                 thekey["comment"] = name
+            thekey = self._update_dict(name, thekey)
+
             d.append(thekey)
         return d
 

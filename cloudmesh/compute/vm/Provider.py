@@ -7,15 +7,23 @@ from cloudmesh.compute.azure.AzProvider import Provider as AzAzureProvider
 from cloudmesh.compute.azure.PyAzure import Provider as PyAzureProvider
 from cloudmesh.compute.docker.Provider import Provider as DockerProvider
 from cloudmesh.compute.libcloud.Provider import Provider as LibCloudProvider
+from cloudmesh.compute.openstack.Provider import Provider as \
+    OpenStackCloudProvider
 from cloudmesh.compute.virtualbox.Provider import \
     Provider as VirtualboxCloudProvider
 from cloudmesh.management.configuration.config import Config
 from cloudmesh.mongo.DataBaseDecorator import DatabaseUpdate
-
+from cloudmesh.common.debug import VERBOSE
+from cloudmesh.common.dotdict import dotdict
+from cloudmesh.mongo.CmDatabase import CmDatabase
+from cloudmesh.common.variables import Variables
+from pprint import pprint
+from cloudmesh.common.Printer import Printer
 
 class Provider(ComputeNodeABC):
 
-    def __init__(self, name=None,
+    def __init__(self,
+                 name=None,
                  configuration="~/.cloudmesh/cloudmesh4.yaml"):
         # noinspection PyPep8
         try:
@@ -29,7 +37,11 @@ class Provider(ComputeNodeABC):
 
         provider = None
 
-        if self.kind in ["openstack", "aws", "google"]:
+        if self.kind in ["openstack"]:
+            provider = OpenStackCloudProvider
+        elif self.kind in ["aws"]:
+            provider = LibCloudProvider
+        elif self.kind in ["google"]:
             provider = LibCloudProvider
         elif self.kind in ["vagrant", "virtualbox"]:
             provider = VirtualboxCloudProvider
@@ -55,23 +67,19 @@ class Provider(ComputeNodeABC):
         else:
             return Parameter.expand(names)
 
-    def loop(self, names, func, option='iter', processors=3):
+    def loop(self, names, func, **kwargs):
         """
         :param option: if option is 'pool', use pool. if option is 'iter', use iteration
         """
         names = self.expand(names)
         r = []
-        if option == 'pool':
-            # BUG: objc_initializeAfterForkError ###
-            with Pool(processors) as p:
-                r = p.map(func, names)
-        elif option == 'iter':
-            for name in names:
-                vm = func(name)
-                # vm.append(r)
-                r.append(vm)
-        else:
-            print("looping option not supported")
+        for name in names:
+            VERBOSE(name)
+            VERBOSE(func)
+            vm = func(name, kwargs)
+            VERBOSE(vm)
+            r.append(vm)
+            VERBOSE(r)
         return r
 
     @DatabaseUpdate()
@@ -86,6 +94,10 @@ class Provider(ComputeNodeABC):
     def flavor(self):
         return self.p.flavors()
 
+    @DatabaseUpdate()
+    def flavors(self):
+        return self.p.flavors()
+
     def add_collection(self, d, *args):
         if d is None:
             return None
@@ -98,16 +110,82 @@ class Provider(ComputeNodeABC):
     def images(self):
         return self.p.images()
 
-    # name
-    # cloud
-    # kind
-    @DatabaseUpdate()
-    def flavors(self):
-        return self.p.flavors()
+
 
     @DatabaseUpdate()
-    def start(self, names=None, **kwargs):
-        return self.loop(names, self.p.start, **kwargs)
+    def start(self, names=None, cloud=None, **kwargs):
+
+        #
+        # this is used to resume a vm, after it was stoped
+        #
+        raise NotImplementedError
+
+
+    @DatabaseUpdate()
+    def create2(self, names=None, cloud=None, **kwargs):
+
+
+        arguments = dotdict(kwargs)
+        vms = self.expand(names)
+
+        #
+        # Step 0, find the cloud
+        #
+        variables = Variables()
+        if cloud is None:
+            arguments.cloud = cloud = variables['cloud']
+
+        # Step 1. iterate through the names to see if they already exist in
+        # the DB and fail if one of them already exists
+
+        database = CmDatabase()
+        defaults = Config()[f"cloudmesh.cloud.{cloud}.default"]
+        pprint (defaults)
+        duplicates = []
+        for vm in vms:
+            duplicates += database.find(collection=f'{cloud}-node', name=vm)
+
+        if len(duplicates) > 0:
+            print(Printer.flatwrite(duplicates,
+                                    order=['name', 'cm.cloud', 'state',
+                                           'image',
+                                           'size',
+                                           'public_ips', 'cm.created'],
+                                    header=['Name', 'Cloud', 'State', 'Image',
+                                            'Size',
+                                           'Public ips', 'created'],
+                                    output='table'))
+            raise Exception("these vms already exists")
+            return None
+
+        # Step 2. identify the image and flavor from kwargs and if they do
+        # not exist read them for that cloud from the yaml file
+
+        arguments.image = self.find_attribute('image', [variables, defaults])
+        pprint(arguments.image)
+        if 'image' is None:
+            raise ValueError("image not specifeied")
+
+        arguments.flavor = self.find_attribute('flavor', [variables, defaults])
+        pprint(arguments.flavor)
+        if 'flavor' is None:
+            raise ValueError("image not specifeied")
+
+        # Step 3: use the create command to create the vms
+
+        pprint(arguments)
+
+        created = self.loop(names, self.p.create, **arguments)
+
+        pprint(created)
+        return created
+
+    def find_attribute (self, name, dicts):
+        for d in dicts:
+            if name in d:
+                return d[name]
+        return None
+
 
     @DatabaseUpdate()
     def stop(self, names=None, **kwargs):
@@ -144,6 +222,9 @@ class Provider(ComputeNodeABC):
     def key_upload(self, key):
         self.p.key_upload(key)
 
+    def key_delete(self, key):
+        self.p.key_delete(key)
+
     @DatabaseUpdate()
     def destroy(self, names=None, **kwargs):
         # this should later check and remove destroyed nodes, not implemented
@@ -163,3 +244,18 @@ class Provider(ComputeNodeABC):
     @DatabaseUpdate()
     def suspend(self, names=None):
         raise NotImplementedError
+
+    def Print(self, output, kind, data):
+        if output == "table":
+
+            order = self.p.output[kind]['order']  # not pretty
+            header = self.p.output[kind]['header']  # not pretty
+
+            print(Printer.flatwrite(data,
+                                    sort_keys=["name"],
+                                    order=order,
+                                    header=header,
+                                    output=output)
+                  )
+        else:
+            print(Printer.write(data, output=output))

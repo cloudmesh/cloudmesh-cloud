@@ -28,4 +28,7 @@ connexion[swagger-ui]
 yamllint
 azure
 munch
-
+selenium
+pandas
+yamllint
+openstacksdk

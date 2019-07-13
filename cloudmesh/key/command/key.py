@@ -1,14 +1,15 @@
-from pprint import pprint
-
 from cloudmesh.common.Printer import Printer
+from cloudmesh.common.console import Console
 from cloudmesh.common.parameter import Parameter
-from cloudmesh.key.api.manager import Manager
+from cloudmesh.common.variables import Variables
+from cloudmesh.compute.vm.Provider import Provider
+from cloudmesh.key.api.key import Key
 from cloudmesh.management.configuration.SSHkey import SSHkey
+from cloudmesh.management.configuration.arguments import Arguments
 from cloudmesh.management.configuration.config import Config
+from cloudmesh.mongo.CmDatabase import CmDatabase
 from cloudmesh.shell.command import PluginCommand
 from cloudmesh.shell.command import command, map_parameters
-from cloudmesh.common.variables import Variables
-from cloudmesh.compute.libcloud.Provider import Provider
 
 
 class KeyCommand(PluginCommand):
@@ -27,18 +28,15 @@ class KeyCommand(PluginCommand):
              key list --cloud=CLOUDS [--output=OUTPUT]
              key list --source=ssh [--dir=DIR] [--output=OUTPUT]
              key list --source=git [--output=OUTPUT] [--username=USERNAME]
-             key list [NAMES] [--output=OUTPUT]
-             key load --filename=FILENAME [--output=OUTPUT]
+             key list [--output=OUTPUT]
+             key add NAME --filename=FILENAME [--output=OUTPUT]
              key add [NAME] [--source=FILENAME]
              key add [NAME] [--source=git]
              key add [NAME] [--source=ssh]
-             key get NAME [--output=OUTPUT]
-             key default --select
-             key delete (NAMES | --select | --all) [--dryrun]
-             key delete NAMES --cloud=CLOUDS [--dryrun]
+             key delete NAMES [--cloud=CLOUDS] [--dryrun]
              key upload [NAMES] [--cloud=CLOUDS] [--dryrun]
              key upload [NAMES] [VMS] [--dryrun]
-             key group upload [--group=GROUPNAMES] [--cloud=CLOUDS] [--dryrun]
+             key group upload [NAMES] [--group=GROUPNAMES] [--cloud=CLOUDS] [--dryrun]
              key group add [--group=GROUPNAMES] [--cloud=CLOUDS] [--dryrun]
              key group add --file=FILENAME
              key group delete [--group=GROUPNAMES] [NAMES] [--dryrun]
@@ -59,7 +57,7 @@ class KeyCommand(PluginCommand):
            Options:
               --dir=DIR                     the directory with keys [default: ~/.ssh]
               --output=OUTPUT               the format of the output [default: table]
-              --source=SOURCE               the source for the keys [default: cm]
+              --source=SOURCE               the source for the keys
               --username=USERNAME           the source for the keys [default: none]
               --name=KEYNAME                The name of a key
 
@@ -72,23 +70,13 @@ class KeyCommand(PluginCommand):
                Manages public keys is an essential component of accessing
                virtual machine sin the cloud. There are a number of sources
                where you can find public keys. This includes teh ~/.ssh
-               directory and for example github. To list these keys the
-               following list functions are provided.
+               directory and for example github.
 
-                key list --source=git  [--username=USERNAME]
-                    lists all keys in git for the specified user. If the
-                    name is not specified it is read from cloudmesh4.yaml
-                key list --source=ssh  [--dir=DIR] [--output=OUTPUT]
-                    lists all keys in the directory. If the directory is not
-                    specified the default will be ~/.ssh
-                key list NAMES
-                    lists all keys in the named virtual machines.
-
-               The keys will be uploaded into cloudmesh with the add command
-               under the given name. If the name is not specified the name
+               Keys will be uploaded into cloudmesh database with the add
+               command under the given NAME. If the name is not specified the name
                cloudmesh.profile.user is assumed.
 
-                key add --ssh
+                key add NAME  --source=ssh
                     adds the default key in ~/.ssh/id_rsa.pub
                 key add NAME  --source=FILENAME
                     adds the key specified by the filename with the given name
@@ -96,27 +84,39 @@ class KeyCommand(PluginCommand):
                     adds a named github key from a user with the given github
                     username.
 
-                Once the keys are uploaded to github, they can be listed
+               Once the keys are uploaded to github, they can be listed
+               To list these keys the following list functions are provided.
 
-                key list [NAME] [--output=OUTPUT]
+                key list --source=git  [--username=USERNAME]
+                    lists all keys in git for the specified user. If the
+                    name is not specified it is read from cloudmesh4.yaml
+                key list --source=ssh  [--dir=DIR] [--output=OUTPUT]
+                    lists all keys in the directory. If the directory is not
+                    specified the default will be ~/.ssh
+
+                key list NAMES
+                    lists all keys in the named virtual machines.
+
+
+                List command can use the [--output=OUTPUT] option
+
                     list the keys loaded to cloudmesh in the given format:
                     json, yaml, table. table is default. The NAME can be
                     specified and if omitted the name cloudmesh.profile.user
                     is assumed.
 
-                key get NAME
-                    Retrieves the key indicated by the NAME parameter from
-                    cloudmesh and prints its details.
-                key default --select
-                    Select the default key interactively
+                To get keys from the cloudmesh database the folloing commands
+                are available:
+
                 key delete NAMES
-                    deletes the keys. This may also have an impact on groups
+                    deletes the Named keys. This may also have an impact on groups
                 key rename NAME NEW
-                    renames the key from NAME to NEW.
+                    renames the key from NAME to NEW in the cloudmesh database.
 
                Group management of keys is an important concept in cloudmesh,
-               allowing multiple users to be added to virtual machines.
-               The keys must be uploaded to cloudmesh with a name so they can
+               allowing multiple users to be added to virtual machines while
+               managing the keys associated with them.
+               The keys must be uploaded to cloudmesh database with a name so they can
                be used in a group. The --dryrun option executes the command
                without uploading the information to the clouds. If no groupname
                is specified the groupname default is assumed. If no cloudnames
@@ -160,30 +160,33 @@ class KeyCommand(PluginCommand):
                 to the grouplist of the key
         """
 
+        def print_keys(keys):
+            print(Printer.write(
+                keys,
+                sort_keys=["name"],
+                order=["name", "type", "fingerprint", "comment"],
+                header=["Name", "Type", "Fingerprint", "Comment"],
+                output=arguments.output)
+            )
+
         map_parameters(arguments,
                        'cloud',
                        'output',
                        'source',
-                       'dir')
+                       'dir',
+                       'output',
+                       'source',
+                       'dryrun')
 
-        pprint(arguments)
-
-        invalid_names = ['tbd', 'none', "", 'id_rsa']
-        m = Manager()
+        variables = Variables()
 
         if arguments.list and arguments.source == "git":
-            # this is much simpler
+
             config = Config()
             username = config["cloudmesh.profile.github"]
-            print("Username:", username)
             keys = SSHkey().get_from_git(username)
-            pprint(keys)
-            print(Printer.flatwrite(
-                keys,
-                sort_keys=["name"],
-                order=["id", "name", "fingerprint", "source"],
-                header=["Id", "Name", "Fingerprint", "Source"])
-            )
+
+            print_keys(keys)
 
             return ""
 
@@ -191,46 +194,153 @@ class KeyCommand(PluginCommand):
             # this is much simpler
 
             sshkey = SSHkey()
-            print(Printer.flatwrite(
-                [sshkey],
-                sort_keys=["name"],
-                order=["name", "type", "fingerprint", "comment"],
-                header=["Name", "Type", "Fingerprint", "Comment"])
-            )
+
+            print_keys([sshkey])
+
             return ""
 
         elif arguments.list and arguments.cloud:
 
             clouds = Parameter.expand(arguments.cloud)
-            print(clouds)
 
             if len(clouds) == 0:
                 variables = Variables()
                 cloudname = variables['cloud']
                 clouds = [cloudname]
-            cloudkey = []
+            keys = []
+
             for cloud in clouds:
-                print(cloud)
-                provider = Provider(clouds)
-                cloudkey.append(provider.keys())
+                print(f"cloud {cloud}")
+                provider = Provider(name=cloud)
+                print(provider)
+                keys = provider.keys()
 
-            print(Printer.flatwrite(
-                [cloudkey],
-                sort_keys=["name"],
-                order=["name", "type", "fingerprint", "comment"],
-                header=["Name", "Type", "Fingerprint", "Comment"])
-            )
+                provider.Print(arguments.output, "key", keys)
 
             return ""
 
-        elif arguments.list and arguments.source == "db":
+        elif arguments.list:
 
-            if arguments.NAMES:
-                names = Parameter.expand(arguments.NAMES)
+            cloud = "local"
+            db = CmDatabase()
+            keys = db.find(collection=f"{cloud}-key")
 
-                print("find the keys of the following vms", names)
-                print("the keys will be read from mongo")
+            print_keys(keys)
 
             return ""
+
+
+        elif arguments.add:
+
+            """
+             key add [NAME] [--source=FILENAME] # NOT IMPLEMENTED YET
+             key add [NAME] [--source=git]
+             key add [NAME] [--source=ssh]
+             """
+            key = Key()
+
+            if arguments["--source"] == "ssh":
+                name = arguments.NAME or "ssh"
+                key.add(name, "ssh")
+            elif arguments["--source"] == "git":
+                name = arguments.NAME or "git"
+                key.add("git", "git")
+            else:
+                raise NotImplementedError
+
+        elif arguments.upload:
+
+            """
+            key upload [NAMES] [--cloud=CLOUDS] [--dryrun]
+            key upload [NAMES] [VMS] [--dryrun]
+            """
+
+            names = Parameter.expand(arguments.NAMES)
+
+            #
+            # Step 1. keys = find keys to upload
+            #
+
+            cloud = "local"
+            db = CmDatabase()
+            db_keys = db.find(collection=f"{cloud}-key")
+
+            keys = []
+            for key in db_keys:
+                if key["name"] in names:
+                    keys.append(key)
+
+            if len(keys) == 0:
+                Console.error("No keys with the names found in cloudmesh. \n"
+                              "       Use the command 'key add' to add the key.")
+
+            #
+            # Step 2. iterate over the clouds to upload
+            #
+
+            clouds, names = Arguments.get_cloud_and_names("list",
+                                                          arguments,
+                                                          variables)
+
+            for cloud in clouds:
+                print(f"cloud {cloud}")
+                provider = Provider(name=cloud)
+                for key in db_keys:
+                    name = key['name']
+                    if name in names:
+                        if 'location' not in key:
+                            Console.error(f"key '{name}' does not have a "
+                                          f"pysical location")
+                        else:
+                            try:
+                                r = provider.key_upload(key)
+                                Console.ok(f"upload key '{name} sucessful'. ")
+                            except ValueError as e:
+                                Console.error(f"key '{name} already exists in {cloud}.")
+
+
+            return ""
+
+
+        elif arguments.delete and arguments.cloud and arguments.NAMES:
+
+            # key delete NAMES --cloud=CLOUDS [--dryrun]
+            names = Parameter.expand(arguments.NAMES)
+            clouds = Parameter.expand(arguments.cloud)
+
+            for cloud in clouds:
+                provider = Provider(name=cloud)
+                for name in names:
+                    if arguments.dryrun:
+                        Console.ok(f"Dryrun: delete {name} in {cloud}")
+                    else:
+                        images = provider.key_delete(name)
+
+            return ""
+
+        elif arguments.delete and arguments.NAMES:
+            # key delete NAMES [--dryrun]
+
+            names = Parameter.expand(arguments.NAMES)
+
+            cloud = "local"
+            db = CmDatabase()
+            db_keys = db.find(collection=f"{cloud}-key")
+
+            error = []
+            for key in db_keys:
+                name = key['name']
+                if name in names:
+                    if arguments.dryrun:
+                        Console.ok(f"Dryrun: delete {name}")
+                    else:
+                        db.delete(collection="local-key",
+                                  name=name)
+                        Console.ok(f"delete {name}")
+            return ""
+
+        elif arguments.group:
+
+            raise NotImplementedError
 
         return ""

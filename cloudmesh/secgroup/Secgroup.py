@@ -63,12 +63,15 @@ class Secgroup(object):
         self.db = CmDatabase()
 
 
-    def find(self, type=None, name=None):
+    def find(self, name=None):
 
         cloud = "local"
         db = CmDatabase()
-        query = {'cm.type':"group",
-                 'cm.name': name}
+        if name is None:
+            query = {'cm.type': "group"}
+        else:
+            query = {'cm.type':"group",
+                     'cm.name': name}
         entries = db.find(collection=f"{cloud}-secgroup",
                           **query)
         return entries
@@ -95,7 +98,7 @@ class Secgroup(object):
         else:
             raise ValueError("rules have wrong type")
 
-        entry = self.find(type="group", name=name)[0]
+        entry = self.find(name=name)[0]
 
         if rules is not None:
 
@@ -107,29 +110,46 @@ class Secgroup(object):
 
         return self.update_dict_list([entry])
 
-    def delete(self, group=None):
+    @DatabaseUpdate()
+    def delete(self, name=None, rules=None):
         """
         deletes the groups
         :param group:
         :return:
         """
-        groups = Parameter.expand(group)
-        for group in groups:
-            # delete the group in the db
-            raise NotImplementedError
 
-    def list(self, group=None):
-        found = []
-        if group is None:
-            # find all groups in the db
-            found = []
-            raise NotImplementedError
+        delete_rules = rules
+        if type(rules) == str:
+            delete_rules = Parameter.expand(rules)
+        elif type(rules) == list:
+            pass
         else:
-            groups = Parameter.expand(group)
+            raise ValueError("rules have wrong type")
+        delete_rules = set(delete_rules)
+
+        entry = self.find(name=name)[0]
+
+        if rules is not None:
+            old = set(entry['rules'])
+            old -= delete_rules
+            entry['rules'] = list(old)
+
+        return entry
+
+
+
+    def list(self, name=None):
+        found = []
+        if name is None:
+            # find all groups in the db
+            found =  self.find()[0]
+        else:
             # find only the grous specified in the db
+            groups = Parameter.expand(name)
             find = []
-            raise NotImplementedError
-        found = self.update_dict_list(entries)
+            for group in groups:
+                entry = self.find(name=name)[0]
+                found.append(entry)
         return found
 
     def update_dict_list(self, entries):

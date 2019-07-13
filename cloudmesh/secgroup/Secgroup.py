@@ -2,13 +2,106 @@ from cloudmesh.common.parameter import Parameter
 from cloudmesh.mongo.CmDatabase import CmDatabase
 from cloudmesh.mongo.DataBaseDecorator import DatabaseUpdate
 
+
 #
 # use CmDatabase for interacting with the db, you will find also a simple find
 # function there.
 #
 
-class SecgroupDatabase():
+class SecgroupExamples:
 
+    @staticmethod
+    def group(name):
+        return dict(
+            {
+                "kind": "secgroup",
+                "name": name,
+                "cloud": "local",
+                "type": "group"
+            }
+        )
+
+    @staticmethod
+    def rule(name):
+        return dict(
+            {
+                "kind": "secgroup",
+                "name": name,
+                "cloud": "local",
+                "type": "rule"
+            }
+        )
+
+    secgroups = {
+
+        "default": {
+            "cm": group("default"),
+            "name": "default",
+            "description": "Default security group",
+            "rules": [
+                "default"
+            ]
+        },
+        "flask": {
+            "cm": group("flask"),
+            "Name": "flask",
+            "Description": "Flask security group",
+            "rules": [
+                "ssh", "icmp", "ssl", "flask", "webserver"
+            ]
+        }
+    }
+
+    secrules = {
+        "ssh": {
+            "cm": group("ssh"),
+            "name": "ssh",
+            "protocol": "tcp",
+            "ip_range": "0.0.0.0/0",
+            "ports": "22:22",
+        },
+        "icmp": {
+            "cm": group("icmp"),
+            "name": "icmp",
+            "protocol": "icmp",
+            "ip_range": "0.0.0.0/0",
+            "ports": "",
+        },
+        "flask": {
+            "cm": group("flask"),
+            "name": "flask",
+            "protocol": "tcp",
+            "ip_range": "0.0.0.0/0",
+            "ports": "8000:8000",
+        },
+        "http": {
+            "cm": group("http"),
+            "name": "http",
+            "protocol": "tcp",
+            "ip_range": "0.0.0.0/0",
+            "ports": "80:80",
+        },
+        "ssl": {
+            "cm": group("ssl"),
+            "name": "ssl",
+            "protocol": "tcp",
+            "ip_range": "0.0.0.0/0",
+            "ports": "443:443",
+        }
+    }
+
+    @staticmethod
+    def load():
+        for entry in SecgroupExamples.secgroups:
+            raise NotImplementedError
+
+        for entry in SecgroupExamples.secrules:
+            raise NotImplementedError
+
+
+class SecgroupDatabase:
+
+    # noinspection PyShadowingBuiltins
     def __init__(self, type=None):
         self.type = type
         self.db = CmDatabase()
@@ -39,19 +132,22 @@ class SecgroupDatabase():
                                  **query)
         return entries
 
+    # noinspection PyBroadException
     def list(self, name=None):
         found = []
         if name is None:
             # find all groups in the db
             found = self.find()
         else:
-            # find only the grous specified in the db
+            # find only the groups specified in the db
             groups = Parameter.expand(name)
+            # noinspection PyUnusedLocal
             for group in groups:
+                # noinspection PyUnusedLocal
                 try:
                     entry = self.find(name=name)[0]
                     found.append(entry)
-                except:
+                except Exception as e:
                     pass
 
         return found
@@ -91,16 +187,19 @@ class Secgroup(SecgroupDatabase):
     def __init__(self):
         super().__init__(type="group")
 
+    # noinspection PyBroadException
     @DatabaseUpdate()
     def add(self,
             name=None,
             rules=None,
             description=None):
         """
-        adds a rule to a given group. If the group does not exist, it will be created.
+        adds a rule to a given group. If the group does not exist, it will be
+        created.
 
-        :param group:
-        :param rule:
+        :param name:
+        :param rules:
+        :param description:
         :return:
         """
 
@@ -112,9 +211,10 @@ class Secgroup(SecgroupDatabase):
         else:
             raise ValueError("rules have wrong type")
 
+        # noinspection PyUnusedLocal
         try:
             entry = self.find(name=name)[0]
-        except:
+        except Exception as e:
             entry = {
                 'description': None,
                 'rules': [],
@@ -134,7 +234,8 @@ class Secgroup(SecgroupDatabase):
     def delete(self, name=None, rules=None):
         """
         deletes the groups
-        :param group:
+        :param name:
+        :param rules:
         :return:
         """
 

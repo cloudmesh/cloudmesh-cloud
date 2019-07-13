@@ -1,6 +1,7 @@
 from cloudmesh.shell.command import PluginCommand
 from cloudmesh.shell.command import command
-
+from cloudmesh.secgroup.Secgroup import Secgroup
+from pprint import pprint
 
 class SecgroupCommand(PluginCommand):
 
@@ -13,12 +14,13 @@ class SecgroupCommand(PluginCommand):
 
             Usage:
                 secgroup list [--output=OUTPUT]
-                secgroup list --cloud=CLOUD [--output=OUTPUT]
+                secgroup list  --cloud=CLOUD [--output=OUTPUT]
                 secgroup list GROUP [--output=OUTPUT]
                 secgroup add GROUP RULE FROMPORT TOPORT PROTOCOL CIDR
                 secgroup delete GROUP [--cloud=CLOUD]
                 secgroup delete GROUP RULE
                 secgroup upload [GROUP] [--cloud=CLOUD]
+
             Options:
                 --output=OUTPUT Specify output format, in one of the following:
                                 table, csv, json, yaml, dict. The default value
@@ -81,12 +83,26 @@ class SecgroupCommand(PluginCommand):
 
         print(arguments)
 
+
+        """
+        secgroup add GROUP RULE FROMPORT TOPORT PROTOCOL CIDR
+        """
         # m = Manager()
 
-        # if arguments.FILE:
-        #    print("option a")
-        #    m.list(arguments.FILE)
+        if arguments.add:
+            secgroup = Secgroup()
+            secgroup.add(
+                arguments.GROUP,
+                arguments.RULE,
+                arguments.FROMPORT,
+                arguments.TOPORT,
+                arguments.PROTOCOL,
+                arguments.CIDR,
+            )
 
-        # elif arguments.list:
-        #    print("option b")
-        #    m.list("just calling list without parameter")
+        elif arguments.list:
+            secgroup = Secgroup()
+            group = secgroup.list(arguments.GROUP)
+
+            pprint (group)
+

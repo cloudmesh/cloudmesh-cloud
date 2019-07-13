@@ -41,10 +41,12 @@ class ImageCommand(PluginCommand):
 
         variables = Variables()
 
+
         if arguments.list and arguments["--query"]:
             names = []
 
-            clouds, names = Arguments.get_cloud_and_names("list", arguments,
+            clouds, names = Arguments.get_cloud_and_names("list",
+                                                          arguments,
                                                           variables)
             cloud = clouds[0]
             query = arguments["--query"]
@@ -56,22 +58,20 @@ class ImageCommand(PluginCommand):
             # images = provider.images(query=query)
             #
 
-            order = provider.p.output['image']['order']  # not pretty
-            header = provider.p.output['image']['header']  # not pretty
 
-            print(Printer.flatwrite(images,
-                                    sort_keys=["name"],
-                                    order=order,
-                                    header=header,
-                                    output=arguments.output)
-                  )
+            return NotImplementedError
+
+            provider.Print(arguments.output, images)
+
+
             return ""
 
         if arguments.list and arguments.refresh:
 
             names = []
 
-            clouds, names = Arguments.get_cloud_and_names("list", arguments,
+            clouds, names = Arguments.get_cloud_and_names("list",
+                                                          arguments,
                                                           variables)
 
             for cloud in clouds:
@@ -79,46 +79,34 @@ class ImageCommand(PluginCommand):
                 provider = Provider(name=cloud)
                 images = provider.images()
 
-                order = provider.p.output['image']['order']  # not pretty
-                header = provider.p.output['image']['header']  # not pretty
+                provider.Print(arguments.output, "image", images)
 
-                print(Printer.flatwrite(images,
-                                        sort_keys=["name"],
-                                        order=order,
-                                        header=header,
-                                        output=arguments.output)
-                      )
             return ""
 
         elif arguments.list:
 
             names = []
 
-            clouds, names = Arguments.get_cloud_and_names("list", arguments,
+            clouds, names = Arguments.get_cloud_and_names("list",
+                                                          arguments,
                                                           variables)
 
             print(clouds, names)
+            print("find images")
             try:
 
                 for cloud in clouds:
                     print(f"List {cloud}")
-                    p = Provider(cloud)
-                    kind = p.kind
+                    p = Provider(name=cloud)
 
-                    collection = "{cloud}-image".format(cloud=cloud,
-                                                        kind=p.kind)
                     db = CmDatabase()
-                    vms = db.find(collection=collection)
+                    images = db.find(collection=f"{cloud}-image")
 
-                    order = p.p.output['image']['order']  # not pretty
-                    header = p.p.output['image']['header']  # not pretty
+                    print (images)
+                    print(p)
 
-                    print(Printer.flatwrite(vms,
-                                            sort_keys=["name"],
-                                            order=order,
-                                            header=header,
-                                            output=arguments.output)
-                          )
+                    p.Print(arguments.output, "image", images)
+
 
             except Exception as e:
 

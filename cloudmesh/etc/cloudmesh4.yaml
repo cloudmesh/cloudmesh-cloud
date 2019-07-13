@@ -1,12 +1,4 @@
 cloudmesh:
-  source:
-    location: ~/Desktop/github/cloudmesh
-    packages:
-      cloudmesh-common: https://github.com/cloudmesh/cloudmesh-common
-      cloudmesh-cmd5: https://github.com/cloudmesh/cloudmesh-cmd5
-      cloudmesh-openapi: https://github.com/cloudmesh/cloudmesh-openapi
-      cloudmesh-sys: https://github.com/cloudmesh/cloudmesh-sys
-      cloudmesh-cm4: https://github.com/cloudmesh/cloudmesh-cloud
   profile:
     firstname: TBD
     lastname: TBD
@@ -17,14 +9,18 @@ cloudmesh:
   default:
     group: cloudmesh
     experiment: base
-    cloud: azure
+    cloud: chameleon
     cluster: clustera
+    trace: true
+    debug: true
+    timer: false
   storage:
     storage_a:
       cm:
+        active: False
         heading: Aws Boto
         host: aws.com
-        label: Aws
+        label: aws_boto
         kind: awsboto
         version: TBD
         service: storage
@@ -34,9 +30,10 @@ cloudmesh:
         name: TBD
     storage_b:
       cm:
+        active: False
         heading: Aws Boto
         host: aws.com
-        label: Aws
+        label: aws_libcloud
         kind: awslibcloud
         version: TBD
         service: storage
@@ -46,9 +43,10 @@ cloudmesh:
         name: TBD
     box:
       cm:
+        active: False
         heading: Box
         host: box.com
-        label: Box
+        label: box
         kind: box
         version: TBD
         service: storage
@@ -58,9 +56,10 @@ cloudmesh:
         config_path: TBD
     aws-myhome:
       cm:
+        active: False
         heading: homedir
         host: aws.com
-        label: dome-dir
+        label: home-dir
         kind: aws-s3
         version: TBD
         service: storage
@@ -71,9 +70,10 @@ cloudmesh:
         bucket: home
     gdrive:
       cm:
+        active: False
         heading: GDrive
         host: dgrive.google.com
-        label: GDrive
+        label: gdrive
         kind: gdrive
         version: TBD
         service: storage
@@ -81,7 +81,7 @@ cloudmesh:
         directory: TBD
       credentials:
         client_id: TBD
-        prokect_id: TBD
+        project_id: TBD
         auth_uri: "https://accounts.google.com/o/oauth2/auth"
         token_uri: TBD
         client_secret: TBD
@@ -94,7 +94,7 @@ cloudmesh:
         active: False
         heading: AWS
         host: azure.mocrosoft.com
-        label: Azure
+        label: azure_blob
         kind: azureblob
         version: TBD
         service: storage
@@ -116,7 +116,7 @@ cloudmesh:
         active: True
         heading: Docker
         host: localhost
-        label: Docker
+        label: docker
         kind: docker
         version: 18.09.2
         service: compute
@@ -130,7 +130,7 @@ cloudmesh:
         active: False
         heading: AWS
         host: azure.mocrosoft.com
-        label: Azure
+        label: azure_arm
         kind: azure_arm
         version: TBD
         service: storage
@@ -182,7 +182,7 @@ cloudmesh:
         active: False
         heading: AWS
         host: azure.mocrosoft.com
-        label: Azure
+        label: azure_az
         kind: azure
         version: TBD
         service: compute
@@ -195,6 +195,25 @@ cloudmesh:
       credentials:
         resourcegroup: "test"
         location: "eastus"
+    awsboto:
+      cm:
+        active: False
+        heading: AWS
+        host: aws.amazon.com
+        label: awsboto
+        kind: awsboto
+        version: TBD
+        service: compute
+      default:
+        image: 'ami-0f65671a86f061fcd'
+        size: 't2.micro'
+      credentials:
+        region: 'us-west-2'
+        EC2_SECURITY_GROUP: 'group1'
+        EC2_ACCESS_ID: TBD
+        EC2_SECRET_KEY: TBD
+        EC2_PRIVATE_KEY_FILE_PATH: '~/.cloudmesh/aws_cert.pem'
+        EC2_PRIVATE_KEY_FILE_NAME: 'aws_cert'
     aws:
       cm:
         active: False
@@ -254,7 +273,7 @@ cloudmesh:
         OS_KEY_PATH: ~/.ssh/id_rsa.pub
       default:
         flavor: m1.small
-        image: CC-Ubuntu16.04
+        image: CC-Ubuntu18.04
         username: cc
     jetstream:
       cm:

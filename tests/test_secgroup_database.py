@@ -7,6 +7,7 @@ from pprint import pprint
 from cloudmesh.secgroup.Secgroup import Secgroup, SecgroupRule
 from cloudmesh.common.util import banner
 from cloudmesh.common.debug import VERBOSE
+from cloudmesh.common.util import HEADING
 
 secgroups = \
     [
@@ -102,7 +103,6 @@ secrules = \
         }
     ]
 
-
 banner("secrule")
 rule = secrules[0] # use this for our test
 pprint (rule)
@@ -121,6 +121,7 @@ def example(source, attributes):
     return data
 
 def test_upload_rule():
+    HEADING(color="HEADER")
 
     data = example(rule, ['name', 'protocol', 'ip_range', 'ports'])
 
@@ -132,6 +133,7 @@ def test_upload_rule():
 
 
 def test_upload_group():
+    HEADING(color="HEADER")
 
     data = example(group, ['name','description','rules'])
 
@@ -141,7 +143,27 @@ def test_upload_group():
     assert found['name'] == group['name']
 
 
+def test_clear():
+    HEADING(color="HEADER")
+
+    groups.clear()
+    rules.clear()
+
+    r = rules.list()
+    g = groups.list()
+
+    assert len(r) == 0
+    assert len(g) == 0
+
+def populate():
+    HEADING(color="HEADER")
+
+    test_upload_group()
+    test_upload_rule()
+
 def test_add_group():
+    HEADING(color="HEADER")
+
     data = example(group, ['name', 'description', 'rules'])
     name = group['name']
 
@@ -151,33 +173,35 @@ def test_add_group():
     found = groups.list(name=name)[0]
     assert type(found) == dict
     VERBOSE(found, label="add rule gregor")
-    pprint(found)
     assert "gregor" in found["rules"]
 
 def test_delete_group():
+    HEADING(color="HEADER")
+
     data = example(group, ['name', 'description', 'rules'])
     name = group['name']
 
     groups.delete(name=name, rules="gregor")
     found = groups.list(name=name)[0]
-    VERBOSE(found, label="remove rule gregor")
+    VERBOSE(found, label=f"delete rule gregor from {name}")
 
     assert "gregor" not in found["rules"]
 
-def test_delete_group():
+def test_remove_rule():
+    name = rule['name']
+    rules.remove(name=name)
+    found = rules.list()
+
+    VERBOSE(found, label=f"remove rule {name}")
+
+    assert len(found) == 0
+
+
+def test_remove_group():
     name = group['name']
     groups.remove(name=name)
     found = groups.list()
 
-    VERBOSE(found, label=f"remove group {name}")
-
-    assert len(found) == 0
-
-def test_delete_rule():
-    name = rule['name']
-    groups.remove(name=name)
-    found = groups.list()
-
-    VERBOSE(found, label=f"remove group {name}")
+    VERBOSE(found, label=f"remove rule {name}")
 
     assert len(found) == 0

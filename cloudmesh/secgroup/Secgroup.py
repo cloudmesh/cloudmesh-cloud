@@ -24,7 +24,7 @@ class SecgroupExamples:
             "flask": {
                 "description": "Flask security group",
                 "rules": [
-                    "ssh", "icmp", "ssl", "flask", "webserver"
+                    "ssh", "icmp", "ssl", "flask", "webserver", "default"
                 ]
             }
         }
@@ -188,6 +188,42 @@ class SecgroupRule(SecgroupDatabase):
 
 class Secgroup(SecgroupDatabase):
 
+    output = {
+        "all": {
+            "sort_keys": ["group", "rule"],
+            "order": ["group",
+                      "rule",
+                      "protocol",
+                      "ports",
+                      "ip_range"],
+            "header": ["Group",
+                       "Rule",
+                       "Protocol",
+                       "Ports",
+                       "IP Range"]
+        },
+        "rule": {
+            "sort_keys": ["name"],
+            "order": ["name",
+                      "protocol",
+                      "ports",
+                      "ip_range"],
+            "header": ["Name",
+                       "Protocol",
+                       "Ports",
+                       "IP Range"]
+        },
+        "group": {
+            "sort_keys": ["name"],
+            "order": ["name",
+                      "rules",
+                      "description"],
+            "header": ["Name",
+                       "Rules",
+                       "Description"]
+        }
+
+    }
     def __init__(self):
         super().__init__(kind="secgroup")
 

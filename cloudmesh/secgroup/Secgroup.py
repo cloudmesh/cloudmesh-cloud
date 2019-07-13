@@ -1,7 +1,8 @@
 from cloudmesh.common.parameter import Parameter
 from cloudmesh.mongo.CmDatabase import CmDatabase
 from cloudmesh.mongo.DataBaseDecorator import DatabaseUpdate
-
+from cloudmesh.common.debug import VERBOSE
+from pprint import pprint
 
 #
 # use CmDatabase for interacting with the db, you will find also a simple find
@@ -10,125 +11,128 @@ from cloudmesh.mongo.DataBaseDecorator import DatabaseUpdate
 
 class SecgroupExamples:
 
-    @staticmethod
-    def group(name):
-        return dict(
-            {
-                "kind": "secgroup",
-                "name": name,
-                "cloud": "local",
-                "type": "group"
+    def __init__(self):
+
+        self.secgroups = {
+
+            "default": {
+                "description": "Default security group",
+                "rules": [
+                    "default"
+                ]
+            },
+            "flask": {
+                "description": "Flask security group",
+                "rules": [
+                    "ssh", "icmp", "ssl", "flask", "webserver"
+                ]
             }
-        )
+        }
 
-    @staticmethod
-    def rule(name):
-        return dict(
-            {
-                "kind": "secgroup",
-                "name": name,
-                "cloud": "local",
-                "type": "rule"
+        self.secrules = {
+            "ssh": {
+                "protocol": "tcp",
+                "ip_range": "0.0.0.0/0",
+                "ports": "22:22",
+            },
+            "icmp": {
+                "protocol": "icmp",
+                "ip_range": "0.0.0.0/0",
+                "ports": "",
+            },
+            "flask": {
+                "protocol": "tcp",
+                "ip_range": "0.0.0.0/0",
+                "ports": "8000:8000",
+            },
+            "http": {
+                "protocol": "tcp",
+                "ip_range": "0.0.0.0/0",
+                "ports": "80:80",
+            },
+            "ssl": {
+                "protocol": "tcp",
+                "ip_range": "0.0.0.0/0",
+                "ports": "443:443",
+            },
+            "default": {
+                "protocol": "tcp",
+                "ip_range": "0.0.0.0/0",
+                "ports": "8080:8080",
             }
-        )
-
-    secgroups = {
-
-        "default": {
-            "cm": group("default"),
-            "name": "default",
-            "description": "Default security group",
-            "rules": [
-                "default"
-            ]
-        },
-        "flask": {
-            "cm": group("flask"),
-            "Name": "flask",
-            "Description": "Flask security group",
-            "rules": [
-                "ssh", "icmp", "ssl", "flask", "webserver"
-            ]
         }
-    }
 
-    secrules = {
-        "ssh": {
-            "cm": group("ssh"),
-            "name": "ssh",
-            "protocol": "tcp",
-            "ip_range": "0.0.0.0/0",
-            "ports": "22:22",
-        },
-        "icmp": {
-            "cm": group("icmp"),
-            "name": "icmp",
-            "protocol": "icmp",
-            "ip_range": "0.0.0.0/0",
-            "ports": "",
-        },
-        "flask": {
-            "cm": group("flask"),
-            "name": "flask",
-            "protocol": "tcp",
-            "ip_range": "0.0.0.0/0",
-            "ports": "8000:8000",
-        },
-        "http": {
-            "cm": group("http"),
-            "name": "http",
-            "protocol": "tcp",
-            "ip_range": "0.0.0.0/0",
-            "ports": "80:80",
-        },
-        "ssl": {
-            "cm": group("ssl"),
-            "name": "ssl",
-            "protocol": "tcp",
-            "ip_range": "0.0.0.0/0",
-            "ports": "443:443",
-        }
-    }
+    def rule(self, name, cm=False):
+        data = dict(self.secrules[name])
+        data['name'] = name
+        if cm:
+            data['cm'] = {
+                "kind": "secrule",
+                "name": str(name),
+                "cloud": "local",
+            }
+        return data
 
-    @staticmethod
-    def load():
-        for entry in SecgroupExamples.secgroups:
-            raise NotImplementedError
+    def group(self, name, cm=False):
+        data = dict(self.secgroups[name])
+        data['name'] = name
+        if cm:
+            data['cm'] = {
+                "kind": "secgroup",
+                "name": str(name),
+                "cloud": "local",
+            }
+        return data
 
-        for entry in SecgroupExamples.secrules:
-            raise NotImplementedError
+    @DatabaseUpdate()
+    def load(self, cm=False):
+        groups = Secgroup()
+        rules = SecgroupRule()
 
+        data = []
+
+        print()
+        for name in self.secgroups:
+            entry = self.group(name, cm=cm)
+            data.append(groups.update_dict_list([entry])[0])
+
+        for name in self.secrules:
+            entry = self.rule(name, cm=cm)
+            data.append(rules.update_dict_list([entry])[0])
+
+        return data
 
 class SecgroupDatabase:
 
     # noinspection PyShadowingBuiltins
-    def __init__(self, type=None):
-        self.type = type
+    def __init__(self, kind=None):
+        self.kind = kind
         self.db = CmDatabase()
         self.cloud = "local"
+        self.collection = f"{self.cloud}-{kind}"
 
     def clear(self):
-        self.remove()
+        self.db.collection(self.collection).delete_many({})
 
     def find(self, name=None):
 
         if name is None:
-            query = {'cm.type': self.type}
+            query = {'cm.kind': self.kind}
         else:
-            query = {'cm.type': self.type,
+            query = {'cm.kind': self.kind,
                      'cm.name': name}
-        entries = self.db.find(collection=f"{self.cloud}-secgroup",
+        entries = self.db.find(collection=self.collection,
                                **query)
         return entries
 
     def remove(self, name=None):
 
         if name is None:
-            query = {'cm.type': self.type}
+            query = {'cm.kind': self.kind}
         else:
-            query = {'cm.type': self.type,
+            query = {'cm.kind': self.kind,
                      'cm.name': name}
-        entries = self.db.delete(collection=f"{self.cloud}-secgroup",
+        entries = self.db.delete(collection=self.collection,
                                  **query)
         return entries
 
@@ -155,18 +159,18 @@ class SecgroupDatabase:
     def update_dict_list(self, entries):
         for entry in entries:
             entry['cm'] = {
-                "kind": "secgroup",
+                "kind": self.kind,
                 "name": entry['name'],
-                "cloud": self.cloud,
-                "type": self.type
+                "cloud": self.cloud
             }
+            entry['name'] = entry["name"]
         return entries
 
 
 class SecgroupRule(SecgroupDatabase):
 
     def __init__(self):
-        super().__init__(type="rule")
+        super().__init__(kind="secrule")
 
     @DatabaseUpdate()
     def add(self, name=None, protocol=None, ports=None, ip_range=None):
@@ -185,7 +189,7 @@ class SecgroupRule(SecgroupDatabase):
 class Secgroup(SecgroupDatabase):
 
     def __init__(self):
-        super().__init__(type="group")
+        super().__init__(kind="secgroup")
 
     # noinspection PyBroadException
     @DatabaseUpdate()

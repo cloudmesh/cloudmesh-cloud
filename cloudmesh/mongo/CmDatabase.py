@@ -182,11 +182,14 @@ class CmDatabase(object):
         return records
     """
 
-    # check TODO BUG see previous
+    # ok
     def find(self, collection="cloudmesh", **kwargs):
         col = self.db[collection]
 
         entries = col.find(kwargs, {"_id": 0})
+
+        # print ("KKKKK", kwargs)
+        # print ("HHHH", entries.count())
 
         records = []
         for entry in entries:
@@ -210,7 +213,7 @@ class CmDatabase(object):
     # check
     def update(self, entries):
 
-        VERBOSE(entries)
+        # VERBOSE(entries)
         result = []
         for entry in entries:
 
@@ -321,10 +324,10 @@ class CmDatabase(object):
                 col.update_one({'name': entry[name]}, {"$set": entry},
                                upsert=True)
 
-    # check
+    # ok
     def delete(self, collection="cloudmesh", **kwargs):
         col = self.db[collection]
-        col.delete_one(kwargs)
+        r = col.delete_many(kwargs)
 
     # check
     def command(self, command):

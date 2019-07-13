@@ -4,144 +4,25 @@
 ###############################################################
 
 from pprint import pprint
-from cloudmesh.secgroup.Secgroup import Secgroup, SecgroupRule
+from cloudmesh.secgroup.Secgroup import Secgroup
+from cloudmesh.secgroup.Secgroup import SecgroupRule
+from cloudmesh.secgroup.Secgroup import SecgroupExamples
 from cloudmesh.common.util import banner
 from cloudmesh.common.debug import VERBOSE
 from cloudmesh.common.util import HEADING
 
-secgroups = \
-    [
-        {
-            "cm": {
-                "kind": "secgroup",
-                "name": "default",
-                "cloud": "local",
-                "type": "group"
-            },
-            "name": "default",
-            "description": "Default security group",
-            "rules": [
-                "default"
-            ]
-        },
-        {
-            "cm": {
-                "kind": "secgroup",
-                "name": "flask",
-                "cloud": "local",
-                "type": "group"
-            },
-            "Name": "flask",
-            "Description": "Couchdb security group",
-            "rules": [
-                "ssh", "icmp", "ssl", "flask", "webserver"
-            ]
-        },
-    ]
 
-secrules = \
-    [
-        {
-            "cm": {
-                "kind": "secgroup",
-                "name": "ssh",
-                "cloud": "local",
-                "type": "rule"
-            },
-            "name": "ssh",
-            "protocol": "tcp",
-            "ip_range": "0.0.0.0/0",
-            "ports": "22:22",
-        },
-        {
-            "cm": {
-                "kind": "secgroup",
-                "name": "icmp",
-                "cloud": "local",
-                "type": "rule"
-            },
-            "name": "icmp",
-            "protocol": "icmp",
-            "ip_range": "0.0.0.0/0",
-            "ports": "",
-        },
-        {
-            "cm": {
-                "kind": "secgroup",
-                "name": "flask",
-                "cloud": "local",
-                "type": "rule"
-            },
-            "name": "flask",
-            "protocol": "tcp",
-            "ip_range": "0.0.0.0/0",
-            "ports": "5000:5000",
-        },
-        {
-            "cm": {
-                "kind": "secgroup",
-                "name": "webserver",
-                "cloud": "local",
-                "type": "rule"
-            },
-            "name": "webserver",
-            "protocol": "tcp",
-            "ip_range": "0.0.0.0/0",
-            "ports": "80:80",
-        },
-        {
-            "cm": {
-                "kind": "secgroup",
-                "name": "ssl",
-                "cloud": "local",
-                "type": "rule"
-            },
-            "name": "ssl",
-            "protocol": "tcp",
-            "ip_range": "0.0.0.0/0",
-            "ports": "443:443",
-        }
-    ]
+examples = SecgroupExamples()
+examples.load()
 
-banner("secrule")
-rule = secrules[0] # use this for our test
-pprint (rule)
+secgroups = examples.secgroups
+secrules = examples.secrules
 
-banner("secgroup")
-group = secgroups[0]
-pprint(group)
 
 rules = SecgroupRule()
 groups = Secgroup()
 
-def example(source, attributes):
-    data = {}
-    for attribute in attributes:
-        data[attribute] = source[attribute]
-    return data
-
-def test_upload_rule():
-    HEADING(color="HEADER")
-
-    data = example(rule, ['name', 'protocol', 'ip_range', 'ports'])
-
-    banner("upload")
-    rules.add(**data)
-    found = rules.list()[0]
-    pprint(found)
-    assert found['name'] == rule['name']
-
-
-def test_upload_group():
-    HEADING(color="HEADER")
-
-    data = example(group, ['name','description','rules'])
-
-    groups.add(**data)
-    found = groups.list()[0]
-    pprint(found)
-    assert found['name'] == group['name']
-
+print()
 
 def test_clear():
     HEADING(color="HEADER")
@@ -152,56 +33,115 @@ def test_clear():
     r = rules.list()
     g = groups.list()
 
+    #print("R", r)
+    #print("G", r)
+
     assert len(r) == 0
     assert len(g) == 0
 
-def populate():
+def test_upload_groups():
     HEADING(color="HEADER")
 
-    test_upload_group()
-    test_upload_rule()
+    names = secgroups.keys()
 
-def test_add_group():
+    for name in names:
+        print("add group:", name)
+        data = examples.group(name)
+        groups.add(**data)
+
+    found = groups.list()
+    print(len(found))
+    assert len(found) == len (names)
+    for entry in found:
+        assert entry['name'] in names
+
+def test_upload_rules():
     HEADING(color="HEADER")
 
-    data = example(group, ['name', 'description', 'rules'])
-    name = group['name']
+    names = secrules.keys()
 
-    groups.add(**data)
+    # pprint(secrules)
+    for name in names:
+        print ("add rule:", name)
+        data = examples.rule(name)
+        rules.add(**data)
+
+    found = rules.list()
+    print(len(found))
+    assert len(found) == len(names)
+    for entry in found:
+        assert entry['name'] in names
+
+
+def test_add_rule_to_group():
+    HEADING(color="HEADER")
+
+    original = groups.list()
+    name = original[0]["name"]
+
     groups.add(name=name, rules="gregor")
 
     found = groups.list(name=name)[0]
     assert type(found) == dict
-    VERBOSE(found, label="add rule gregor")
     assert "gregor" in found["rules"]
 
-def test_delete_group():
+    found = groups.list()
+    assert len(found) == len(original)
+
+def test_delete_rule_from_group():
     HEADING(color="HEADER")
 
-    data = example(group, ['name', 'description', 'rules'])
-    name = group['name']
+    original = groups.list()
+    name = original[0]["name"]
 
     groups.delete(name=name, rules="gregor")
     found = groups.list(name=name)[0]
-    VERBOSE(found, label=f"delete rule gregor from {name}")
 
     assert "gregor" not in found["rules"]
 
-def test_remove_rule():
-    name = rule['name']
-    rules.remove(name=name)
-    found = rules.list()
-
-    VERBOSE(found, label=f"remove rule {name}")
-
-    assert len(found) == 0
-
+    found = groups.list()
+    assert len(found) == len(original)
 
 def test_remove_group():
-    name = group['name']
+
+    name = list(examples.secgroups.keys())[0]
+
+    original = groups.list()
+
     groups.remove(name=name)
+    updated = groups.list()
+
+    print (len(original), "->",  len(updated))
+
+    assert len(updated) == len(original) - 1
+
+
+def test_remove_rule():
+    old = rules.list()
+    name = old[0]["name"]
+
+    rules.remove(name=name)
+
+    found = rules.list()
+
+    # VERBOSE(found, label=f"remove rule {name}")
+
+    print(len(old), "->", len(found))
+
+    assert len(found) == len(old) - 1
+
+    assert len(found) == len(secrules) - 1
+
+
+def test_load_defaults():
+
+    examples = SecgroupExamples()
+    examples.load()
+
     found = groups.list()
+    assert len(found) == len(examples.secgroups)
 
-    VERBOSE(found, label=f"remove rule {name}")
+    found = rules.list()
+    assert len(found) == len(examples.secrules)
 
-    assert len(found) == 0
+

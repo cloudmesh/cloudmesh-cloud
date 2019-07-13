@@ -103,56 +103,81 @@ secrules = \
     ]
 
 
-
-banner("secrules")
-pprint (secrules)
-
 banner("secrule")
 rule = secrules[0] # use this for our test
 pprint (rule)
-
-
-rules = SecgroupRule()
-
-data = {}
-for attribute in ['name','protocol','ip_range', 'ports']:
-    data[attribute] = rule[attribute]
-
-VERBOSE(data)
-pprint (data)
-
-banner("upload")
-rules.add(**data)
-
-banner("secgroups")
-pprint (secgroups)
-
 
 banner("secgroup")
 group = secgroups[0]
 pprint(group)
 
+rules = SecgroupRule()
+groups = Secgroup()
 
-data = {}
-for attribute in ['name','description','rules']:
-    data[attribute] = group[attribute]
-pprint(data)
+def example(source, attributes):
+    data = {}
+    for attribute in attributes:
+        data[attribute] = source[attribute]
+    return data
 
-group = Secgroup()
-name=data['name']
+def test_upload_rule():
+
+    data = example(rule, ['name', 'protocol', 'ip_range', 'ports'])
+
+    banner("upload")
+    rules.add(**data)
+    found = rules.list()[0]
+    pprint(found)
+    assert found['name'] == rule['name']
+
+
+def test_upload_group():
+
+    data = example(group, ['name','description','rules'])
+
+    groups.add(**data)
+    found = groups.list()[0]
+    pprint(found)
+    assert found['name'] == group['name']
+
 
 def test_add_group():
-    group.add(**data)
-    group.add(name=name, rules="gregor")
+    data = example(group, ['name', 'description', 'rules'])
+    name = group['name']
 
-    found = group.list(name=name)[0]
-    VERBOSE(found, label="add gregor")
+    groups.add(**data)
+    groups.add(name=name, rules="gregor")
+
+    found = groups.list(name=name)[0]
+    assert type(found) == dict
+    VERBOSE(found, label="add rule gregor")
+    pprint(found)
     assert "gregor" in found["rules"]
 
 def test_delete_group():
-    group.delete(name=name, rules="gregor")
-    found = group.list(name=name)[0]
-    VERBOSE(found, label="remove gregor")
+    data = example(group, ['name', 'description', 'rules'])
+    name = group['name']
+
+    groups.delete(name=name, rules="gregor")
+    found = groups.list(name=name)[0]
+    VERBOSE(found, label="remove rule gregor")
 
     assert "gregor" not in found["rules"]
 
+def test_delete_group():
+    name = group['name']
+    groups.remove(name=name)
+    found = groups.list()
+
+    VERBOSE(found, label=f"remove group {name}")
+
+    assert len(found) == 0
+
+def test_delete_rule():
+    name = rule['name']
+    groups.remove(name=name)
+    found = groups.list()
+
+    VERBOSE(found, label=f"remove group {name}")
+
+    assert len(found) == 0

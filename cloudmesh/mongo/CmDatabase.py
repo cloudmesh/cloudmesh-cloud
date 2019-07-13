@@ -322,7 +322,7 @@ class CmDatabase(object):
                                upsert=True)
 
     # check
-    def delete(self, collection="cloudmesh", **kwargs, ):
+    def delete(self, collection="cloudmesh", **kwargs):
         col = self.db[collection]
         col.delete_one(kwargs)
 

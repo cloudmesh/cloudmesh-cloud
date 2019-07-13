@@ -1,8 +1,7 @@
 from cloudmesh.common.parameter import Parameter
-from cloudmesh.mongo.DataBaseDecorator import DatabaseUpdate
-from cloudmesh.common.debug import VERBOSE
 from cloudmesh.mongo.CmDatabase import CmDatabase
-from cloudmesh.common.variables import Variables
+from cloudmesh.mongo.DataBaseDecorator import DatabaseUpdate
+
 #
 # use CmDatabase for interacting with the db, you will find also a simple find
 # function there.
@@ -15,6 +14,9 @@ class SecgroupDatabase():
         self.db = CmDatabase()
         self.cloud = "local"
 
+    def clear(self):
+        self.remove()
+
     def find(self, name=None):
 
         if name is None:
@@ -23,7 +25,7 @@ class SecgroupDatabase():
             query = {'cm.type': self.type,
                      'cm.name': name}
         entries = self.db.find(collection=f"{self.cloud}-secgroup",
-                          **query)
+                               **query)
         return entries
 
     def remove(self, name=None):
@@ -34,14 +36,14 @@ class SecgroupDatabase():
             query = {'cm.type': self.type,
                      'cm.name': name}
         entries = self.db.delete(collection=f"{self.cloud}-secgroup",
-                          **query)
+                                 **query)
         return entries
 
     def list(self, name=None):
         found = []
         if name is None:
             # find all groups in the db
-            found =  self.find()
+            found = self.find()
         else:
             # find only the grous specified in the db
             groups = Parameter.expand(name)
@@ -64,6 +66,7 @@ class SecgroupDatabase():
             }
         return entries
 
+
 class SecgroupRule(SecgroupDatabase):
 
     def __init__(self):
@@ -77,11 +80,11 @@ class SecgroupRule(SecgroupDatabase):
             "ports": ports,
             "ip_range": ip_range,
         }
-        VERBOSE(entry)
         return self.update_dict_list([entry])
 
     def delete(self, name=None):
         self.remove(name=name)
+
 
 class Secgroup(SecgroupDatabase):
 
@@ -119,9 +122,8 @@ class Secgroup(SecgroupDatabase):
             }
 
         if rules is not None:
-
             old = list(entry['rules'])
-            entry['rules'] = list(set( new_rules + old ) )
+            entry['rules'] = list(set(new_rules + old))
 
         if description is not None:
             entry["description"] = description
@@ -153,4 +155,3 @@ class Secgroup(SecgroupDatabase):
             entry['rules'] = list(old)
 
         return entry
-

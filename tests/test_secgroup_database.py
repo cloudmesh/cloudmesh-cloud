@@ -1,14 +1,7 @@
-#
-# python cloudmesh/secgroup/secgroup-example.py
-#
-# Draft
-#
-
-#
-# NOTE: the name is duplicated in the db, but we do not care as there are
-# only a few secgroups. Its easier to program when the name is in the info
-# filed and the cm dict.
-#
+###############################################################
+# pytest -v --capture=no tests/test_secgroup_database.py
+# pytest -v  tests/test_secgroup_database.py
+###############################################################
 
 from pprint import pprint
 from cloudmesh.secgroup.Secgroup import Secgroup, SecgroupRule
@@ -143,11 +136,23 @@ pprint(group)
 data = {}
 for attribute in ['name','description','rules']:
     data[attribute] = group[attribute]
-
-
 pprint(data)
 
 group = Secgroup()
+name=data['name']
 
-group.add(**data)
-group.add(name=data['name'], rules="gregor")
+def test_add_group():
+    group.add(**data)
+    group.add(name=name, rules="gregor")
+
+    found = group.list(name=name)[0]
+    VERBOSE(found, label="add gregor")
+    assert "gregor" in found["rules"]
+
+def test_delete_group():
+    group.delete(name=name, rules="gregor")
+    found = group.list(name=name)[0]
+    VERBOSE(found, label="remove gregor")
+
+    assert "gregor" not in found["rules"]
+

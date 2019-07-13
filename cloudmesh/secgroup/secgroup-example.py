@@ -27,7 +27,7 @@ secgroups = \
             "name": "default",
             "description": "Default security group",
             "rules": [
-                "ssh", "icmp", "ssl"
+                "default"
             ]
         },
         {
@@ -109,12 +109,6 @@ secrules = \
         }
     ]
 
-banner("secgroups")
-pprint (secgroups)
-
-
-banner("secgroup")
-pprint (secgroups[0])
 
 
 banner("secrules")
@@ -137,3 +131,23 @@ pprint (data)
 banner("upload")
 rules.add(**data)
 
+banner("secgroups")
+pprint (secgroups)
+
+
+banner("secgroup")
+group = secgroups[0]
+pprint(group)
+
+
+data = {}
+for attribute in ['name','description','rules']:
+    data[attribute] = group[attribute]
+
+
+pprint(data)
+
+group = Secgroup()
+
+group.add(**data)
+group.add(name=data['name'], rules="gregor")

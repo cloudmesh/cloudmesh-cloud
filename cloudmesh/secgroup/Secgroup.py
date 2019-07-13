@@ -63,13 +63,22 @@ class Secgroup(object):
         self.db = CmDatabase()
 
 
-    def find(self, **kwargs):
+    def find(self, type=None, name=None):
+
         cloud = "local"
-        entries = self.db.find(collection=f"{cloud}-image", **kwargs)
+        db = CmDatabase()
+        query = {'cm.type':"group",
+                 'cm.name': name}
+        entries = db.find(collection=f"{cloud}-secgroup",
+                          **query)
         return entries
 
+
     @DatabaseUpdate()
-    def add(self, group=None, rule=None):
+    def add(self,
+            name=None,
+            rules=None,
+            description=None):
         """
         adds a rule to a given group. If the group does not exist, it will be created.
 
@@ -77,11 +86,26 @@ class Secgroup(object):
         :param rule:
         :return:
         """
-        # not sure how to do the query yet
-        entry = self.find({"cm.type":"group"}) # find the entry in the db
 
-        # update it
-        return self.update_dict_list(entry)
+        new_rules = rules
+        if type(rules) == str:
+            new_rules = Parameter.expand(rules)
+        elif type(rules) == list:
+            pass
+        else:
+            raise ValueError("rules have wrong type")
+
+        entry = self.find(type="group", name=name)[0]
+
+        if rules is not None:
+
+            old = list(entry['rules'])
+            entry['rules'] = list(set( new_rules + old ) )
+
+        if description is not None:
+            entry["description"] = description
+
+        return self.update_dict_list([entry])
 
     def delete(self, group=None):
         """

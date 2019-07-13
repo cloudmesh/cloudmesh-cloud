@@ -18,7 +18,6 @@ from msrestazure.azure_exceptions import CloudError
 
 class Provider(ComputeNodeABC):
 
-
     #
     # TODO: This is a bug, you need to define the outout attributes for the
     #  table printer. Print an entry with VERBOSE, after you get it from azure
@@ -113,6 +112,7 @@ class Provider(ComputeNodeABC):
         # VMs abbreviation
 
         self.vms = self.compute_client.virtual_machines
+        self.images = self.compute_client.virtual_machine_images
 
         # Azure Resource Group
         self.GROUP_NAME      = self.default["resource_group"]
@@ -315,8 +315,7 @@ class Provider(ComputeNodeABC):
         # Start the VM
         VERBOSE(" ".join('Starting Azure VM'))
         print('Starting Azure VM')
-        async_vm_start = self.vms.start(groupName,
-                                                                    vmName)
+        async_vm_start = self.vms.start(groupName, vmName)
         async_vm_start.wait()
         return self.info(groupName, vmName)
         #return None
@@ -336,8 +335,7 @@ class Provider(ComputeNodeABC):
         # Restart the VM
         VERBOSE(" ".join('Restarting Azure VM'))
         print('Restarting Azure VM')
-        async_vm_restart = self.vms.restart(groupName,
-                                                                        vmName)
+        async_vm_restart = self.vms.restart(groupName, vmName)
         async_vm_restart.wait()
         return self.info(groupName, vmName)
         #return None
@@ -357,8 +355,7 @@ class Provider(ComputeNodeABC):
         # Stop the VM
         VERBOSE(" ".join('Stopping Azure VM'))
         print('Stopping Azure VM')
-        async_vm_stop = self.vms.power_off(groupName,
-                                                                       vmName)
+        async_vm_stop = self.vms.power_off(groupName, vmName)
         async_vm_stop.wait()
         return self.info(groupName, vmName)
         #return None
@@ -444,25 +441,25 @@ class Provider(ComputeNodeABC):
 
         image_list = list()
 
-        result_list_pub = self.compute_client.virtual_machine_images.list_publishers(
+        result_list_pub = self.images.list_publishers(
             region,
         )
 
         for publisher in result_list_pub:
-            result_list_offers = self.compute_client.virtual_machine_images.list_offers(
+            result_list_offers = self.images.list_offers(
                 region,
                 publisher.name,
             )
 
             for offer in result_list_offers:
-                result_list_skus = self.compute_client.virtual_machine_images.list_skus(
+                result_list_skus = self.images.list_skus(
                     region,
                     publisher.name,
                     offer.name,
                 )
 
                 for sku in result_list_skus:
-                    result_list = self.compute_client.virtual_machine_images.list(
+                    result_list = self.images.list(
                         region,
                         publisher.name,
                         offer.name,
@@ -470,7 +467,7 @@ class Provider(ComputeNodeABC):
                     )
 
                     for version in result_list:
-                        result_get = self.compute_client.virtual_machine_images.get(
+                        result_get = self.images.get(
                             region,
                             publisher.name,
                             offer.name,
@@ -478,12 +475,13 @@ class Provider(ComputeNodeABC):
                             version.name,
                         )
 
-                        print('PUBLISHER: {0}, OFFER: {1}, SKU: {2}, VERSION: {3}'.format(
+                        msg = 'PUBLISHER: {0}, OFFER: {1}, SKU: {2}, VERSION: {3}'.format(
                             publisher.name,
                             offer.name,
                             sku.name,
                             version.name,
-                        ))
+                        )
+                        VERBOSE(msg)
                         image_list.append(result_get)
 
         return image_list

@@ -8,10 +8,66 @@ from cloudmesh.common.variables import Variables
 # function there.
 #
 
-class SecgroupRule(object):
+class SecgroupDatabase():
+
+    def __init__(self, type=None):
+        self.type = type
+        self.db = CmDatabase()
+        self.cloud = "local"
+
+    def find(self, name=None):
+
+        if name is None:
+            query = {'cm.type': self.type}
+        else:
+            query = {'cm.type': self.type,
+                     'cm.name': name}
+        entries = self.db.find(collection=f"{self.cloud}-secgroup",
+                          **query)
+        return entries
+
+    def remove(self, name=None):
+
+        if name is None:
+            query = {'cm.type': self.type}
+        else:
+            query = {'cm.type': self.type,
+                     'cm.name': name}
+        entries = self.db.delete(collection=f"{self.cloud}-secgroup",
+                          **query)
+        return entries
+
+    def list(self, name=None):
+        found = []
+        if name is None:
+            # find all groups in the db
+            found =  self.find()
+        else:
+            # find only the grous specified in the db
+            groups = Parameter.expand(name)
+            for group in groups:
+                try:
+                    entry = self.find(name=name)[0]
+                    found.append(entry)
+                except:
+                    pass
+
+        return found
+
+    def update_dict_list(self, entries):
+        for entry in entries:
+            entry['cm'] = {
+                "kind": "secgroup",
+                "name": entry['name'],
+                "cloud": self.cloud,
+                "type": self.type
+            }
+        return entries
+
+class SecgroupRule(SecgroupDatabase):
 
     def __init__(self):
-        self.db = CmDatabase()
+        super().__init__(type="rule")
 
     @DatabaseUpdate()
     def add(self, name=None, protocol=None, ports=None, ip_range=None):
@@ -25,57 +81,12 @@ class SecgroupRule(object):
         return self.update_dict_list([entry])
 
     def delete(self, name=None):
-        rules = Parameter.expand(name)
-        # delete the rules
-        for rule in rules:
-            # delete the rule in the db
-            raise NotImplementedError
+        self.remove(name=name)
 
-        raise NotImplementedError
-
-    def list(self, name=None):
-        found = []
-        if name is None:
-            # find all rules in the db
-            found = []
-            raise NotImplementedError
-        else:
-            rules = Parameter.expand(name)
-            # find only the rules specified in the db
-            find = []
-            raise NotImplementedError
-        found = self.update_dict_list(entries)
-        return found
-
-    def update_dict_list(self, entries):
-        for entry in entries:
-            entry['cm'] = {
-                "kind": "secgroup",
-                "name": entry['name'],
-                "cloud": "local",
-                "type": "rule"
-            }
-        return entries
-
-class Secgroup(object):
+class Secgroup(SecgroupDatabase):
 
     def __init__(self):
-        self.db = CmDatabase()
-
-
-    def find(self, name=None):
-
-        cloud = "local"
-        db = CmDatabase()
-        if name is None:
-            query = {'cm.type': "group"}
-        else:
-            query = {'cm.type':"group",
-                     'cm.name': name}
-        entries = db.find(collection=f"{cloud}-secgroup",
-                          **query)
-        return entries
-
+        super().__init__(type="group")
 
     @DatabaseUpdate()
     def add(self,
@@ -98,7 +109,14 @@ class Secgroup(object):
         else:
             raise ValueError("rules have wrong type")
 
-        entry = self.find(name=name)[0]
+        try:
+            entry = self.find(name=name)[0]
+        except:
+            entry = {
+                'description': None,
+                'rules': [],
+                'name': name
+            }
 
         if rules is not None:
 
@@ -136,28 +154,3 @@ class Secgroup(object):
 
         return entry
 
-
-
-    def list(self, name=None):
-        found = []
-        if name is None:
-            # find all groups in the db
-            found =  self.find()[0]
-        else:
-            # find only the grous specified in the db
-            groups = Parameter.expand(name)
-            find = []
-            for group in groups:
-                entry = self.find(name=name)[0]
-                found.append(entry)
-        return found
-
-    def update_dict_list(self, entries):
-        for entry in entries:
-            entry['cm'] = {
-                "kind": "secgroup",
-                "name": entry['name'],
-                "cloud": "local",
-                "type": "group"
-            }
-        return entries

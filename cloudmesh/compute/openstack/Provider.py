@@ -7,9 +7,10 @@ from cloudmesh.abstractclass.ComputeNodeABC import ComputeNodeABC
 from cloudmesh.common.Shell import Shell
 from cloudmesh.common.console import Console
 from cloudmesh.common.debug import VERBOSE
+from cloudmesh.common.util import banner
 from cloudmesh.common.util import path_expand
 from cloudmesh.management.configuration.config import Config
-from cloudmesh.common.util import banner
+
 
 class Provider(ComputeNodeABC):
     output = {
@@ -70,12 +71,36 @@ class Provider(ComputeNodeABC):
             "sort_keys": ["name"],
             "order": ["name",
                       "type",
+                      "format",
                       "fingerprint",
                       "comment"],
             "header": ["Name",
                        "Type",
+                       "Format",
                        "Fingerprint",
                        "Comment"]
+        },
+        "secgroup": {
+            "sort_keys": ["name"],
+            "order": ["name",
+                      "tags",
+                      "direction",
+                      "ethertype",
+                      "port_range_max",
+                      "port_range_min",
+                      "protocol",
+                      "remote_ip_prefix",
+                      "remote_group_id"
+                      ],
+            "header": ["Name",
+                       "Tags",
+                       "Direction",
+                       "Ethertype",
+                       "Port range max",
+                       "Port range min",
+                       "Protocol",
+                       "Range",
+                       "Remote group id"]
         }
     }
 
@@ -149,8 +174,12 @@ class Provider(ComputeNodeABC):
         for entry in _elements:
 
             if kind == 'key':
-                entry['name'] = entry['Name']
-                entry['fingerprint'] = entry['Fingerprint']
+                try:
+                    entry['comment'] = entry['public_key'].split(" ",2)[2]
+                except:
+                    entry['comment'] = ""
+                entry['format'] = \
+                    entry['public_key'].split(" ", 1)[0].replace("ssh-","")
 
             entry["cm"] = {
                 "kind": kind,
@@ -178,54 +207,29 @@ class Provider(ComputeNodeABC):
             d.append(entry)
         return d
 
-    def find(self, elements, name=None, raw=False):
+    def find(self, elements, name=None):
         """
         finds an element in elements with the specified name
         :param elements: The elements
         :param name: The name to be found
-        :param: If raw is True, elements is a libcloud object.
-                Otherwise elements is a dict
-        :param raw: if raw is used the return from the driver is used and not a cleaned dict, not implemented
         :return:
         """
         for element in elements:
-            # pprint (element)
-            if (raw and element.name) or element["cm"]["name"] == name:
+            if  element["name"] == name or element["cm"]["name"] == name:
                 return element
         return None
 
-    def keys(self, raw=False):
+    def keys(self):
         """
         Lists the keys on the cloud
-        :param raw: If raw is set to True the lib cloud object is returned
-                    otherwise a dict is returened.
+
         :return: dict or libcloud object
 
         """
 
-        # needs to be replaced with api calls
-        try:
-            command = "openstack keypair list "\
-                      "--os-auth-url={auth_url} " \
-                      "--os-project-name={project_id} " \
-                      "--os-username={username} " \
-                      "--os-password={password} -f=json".format(
-                **self.credential)
-            # print (command)
-            r = Shell.execute(command, shell=True)
-            entries = eval(r)
-            if not raw:
-                r = self.update_dict(entries, kind="key")
-            return r
+        return self.get_list(self.cloudman.list_keypairs(),
+                             kind="key")
 
-        except:
-            return None
-
-        # conn.key_manager.secrets()
-
-        # return self.get_list(self.cloudman.key_manager.secrets(),
-        #                     kind="key",
-        #                     raw=raw)
 
     def key_upload(self, key):
         """
@@ -237,90 +241,34 @@ class Provider(ComputeNodeABC):
         name = key["name"]
         cloud = self.cloud
         Console.msg(f"upload the key: {name} -> {cloud}")
-
-        data = dict(key['location'])
-        data['name'] = key['name']
-        data['credential'] = " --os-auth-url={auth_url} " \
-                             "--os-project-name={project_id} --os-username={username} " \
-                             "--os-password={password} ".format(
-            **self.credential)
-
-        command = "openstack keypair create {credential} " \
-                  "--public-key={public} {name}; exit 0".format(**data)
-
-        r = subprocess.check_output(command,
-                                    stderr=subprocess.STDOUT,
-                                    shell=True)
-        if "already exists" in str(r):
+        try:
+            r = self.cloudman.create_keypair(name,key['string'])
+        except openstack.exceptions.ConflictException:
             raise ValueError(f"key already exists: {name}")
-        # r = Shell.execute(command, traceflag=False, shell=True)
+
         return r
 
     def key_delete(self, name):
         """
-        uploads the key specified in the yaml configuration to the cloud
-        :param key:
+        deletes the key with the given name
+        :param name: The anme of the key
         :return:
         """
 
         cloud = self.cloud
         Console.msg(f"delete the key: {name} -> {cloud}")
+        r = self.cloudman.delete_keypair(name)
 
-        credential = " --os-auth-url={auth_url} " \
-                     "--os-project-name={project_id} --os-username={username} " \
-                     "--os-password={password} ".format(**self.credential)
+        return r
 
-        command = f"openstack keypair delete {credential} {name} "
 
-        try:
-            r = Shell.execute(command, traceflag=False, shell=True)
-            return r
-        except:
-            return None
+    def list_secgroups(self, group=""):
 
-    def list_secgroups(self, group="", raw=False):
+        return self.get_list(
+            self.cloudman.network.security_groups(),
+            kind="secgroup")
 
-        # needs to be replaced with api calls
-        try:
-            command = "openstack security group list " \
-                      "--os-auth-url={auth_url} " \
-                      "--os-project-name={project_id} " \
-                      "--os-username={username} " \
-                      "--os-password={password} " \
-                      "-f=json; exit 0".format(**self.credential)
-            r = subprocess.check_output(command,
-                                        stderr=subprocess.STDOUT,
-                                        shell=True)
-
-            try:
-                result = eval(r)
-                entries = []
-                for entry in result:
-                    converted = {
-                        "description": entry["Description"],
-                        "name": entry["Name"],
-                        "project": entry["Project"],
-                        "tags": entry["Tags"],
-                        "cm": {
-                            "kind": "secgroup",
-                            "cloud": "chameleon",
-                            "name": entry["Name"]
-                        },
-                        "rules": "",
-                    }
-                    entries.append(converted)
-                return entries
-            except:
-                print(r)
-            # pprint(entries)
-            # if not raw:
-            #
-            return None
-
-        except:
-            return None
-
-    def list_secgroup_rules(self, secgroup='default', raw=False):
+    def list_secgroup_rules(self, secgroup='default'):
 
         # needs to be replaced with api calls
         try:
@@ -343,37 +291,35 @@ class Provider(ComputeNodeABC):
                     r = r.replace('   ', " ")
                     r = r.replace('  ', " ")
                     r = r.replace('null', 'None')
-                    print ("BBB", r)
+                    print("BBB", r)
                     result = eval(r)
                 except:
                     result = "wrong"
-                print ("RRR", result)
+                print("RRR", result)
                 entries = []
                 for entry in result:
                     pprint(entry)
                     converted = {
-                         "name"   : entry["ID"],
-                         "id"   : entry["ID"],
-                         "protocol"   : entry["IP Protocol"],
-                         "ip_ramge"   : entry["IP Range"],
-                         "ports"   : entry["Port Range"],
-                         "direction"   : entry["Direction"],
-                         "ethertype"   : entry["Ethertype"],
-                         "remote"   : entry["Remote Security Group"],
-                         "group"   : entry["Security Group"],
-                         "cm": {
+                        "name": entry["ID"],
+                        "id": entry["ID"],
+                        "protocol": entry["IP Protocol"],
+                        "ip_ramge": entry["IP Range"],
+                        "ports": entry["Port Range"],
+                        "direction": entry["Direction"],
+                        "ethertype": entry["Ethertype"],
+                        "remote": entry["Remote Security Group"],
+                        "group": entry["Security Group"],
+                        "cm": {
                             "kind": "secgroup",
                             "cloud": "chameleon",
                             "name": entry["ID"]
-                         },
+                        },
                     }
                     entries.append(converted)
                 return entries
             except:
                 print(r)
-            # pprint(entries)
-            # if not raw:
-            #
+
             return None
 
         except:
@@ -389,7 +335,7 @@ class Provider(ComputeNodeABC):
     def remove_secgroup(self, secgroupname):
         raise NotImplementedError
         if self.cloudman:
-            secgroups = self.list_secgroups(raw=True)
+            secgroups = self.list_secgroups()
             thegroups = []
             for secgroup in secgroups:
                 if secgroup.name == secgroupname:
@@ -409,7 +355,7 @@ class Provider(ComputeNodeABC):
         pprint(oldrules)
         pprint(newrules)
         if self.cloudman:
-            secgroups = self.list_secgroups(raw=True)
+            secgroups = self.list_secgroups()
             for secgroup in secgroups:
                 # for multiple secgroups with the same name,
                 # add the rules to all the groups
@@ -433,15 +379,14 @@ class Provider(ComputeNodeABC):
         pprint(oldrules)
         pprint(rules)
         if self.cloudman:
-            secgroups = self.list_secgroups(raw=True)
+            secgroups = self.list_secgroups()
             for secgroup in secgroups:
                 # for multiple secgroups with the same name,
                 # remove the rules from all the groups
                 if secgroup.name == secgroupname:
                     # supporting multiple rules at once
                     # get all rules, in obj format
-                    rulesobj = self.list_secgroup_rules(secgroup=secgroupname,
-                                                        raw=True)
+                    rulesobj = self.list_secgroup_rules(secgroup=secgroupname)
                     for rule in rules:
                         for ruleobj in rulesobj:
                             if (ruleobj.ip_protocol == rule["ip_protocol"] and
@@ -451,33 +396,29 @@ class Provider(ComputeNodeABC):
                                 self.cloudman.ex_delete_security_group_rule(
                                     ruleobj)
 
-    def get_list(self, d, kind=None, raw=False, **kwargs):
+    def get_list(self, d, kind=None, debug=False, **kwargs):
         """
         Lists the dict d on the cloud
-        :param raw: If raw is set to True the lib cloud object is returned
-                    otherwise a dict is returned.
         :return: dict or libcloud object
         """
+
         if self.cloudman:
             entries = []
             for entry in d:
                 entries.append(dict(entry))
-            if raw:
-                return entries
-            else:
-                return self.update_dict(entries, kind=kind)
+            if debug:
+                pprint(entries)
+
+            return self.update_dict(entries, kind=kind)
         return None
 
-    def images(self, raw=False, **kwargs):
+    def images(self, **kwargs):
         """
         Lists the images on the cloud
-        :param raw: If raw is set to True the lib cloud object is returned
-                    otherwise a dict is returned.
         :return: dict or libcloud object
         """
         return self.get_list(self.cloudman.compute.images(),
-                             kind="image",
-                             raw=raw)
+                             kind="image")
 
     def image(self, name=None, **kwargs):
         """
@@ -485,18 +426,16 @@ class Provider(ComputeNodeABC):
         :param name: The name of the image
         :return: the dict of the image
         """
-        return self.find(self.images(raw=False, **kwargs), name=name)
+        return self.find(self.images(**kwargs), name=name)
 
-    def flavors(self, raw=False):
+    def flavors(self):
         """
         Lists the flavors on the cloud
-        :param raw: If raw is set to True the lib cloud object is returned
-                    otherwise a dict is returned.
+
         :return: dict or libcloud object
         """
         return self.get_list(self.cloudman.compute.flavors(),
-                             kind="flavor",
-                             raw=raw)
+                             kind="flavor")
 
     def flavor(self, name=None):
         """
@@ -519,7 +458,7 @@ class Provider(ComputeNodeABC):
             # names = Parameter.expand(names)
             res = []
 
-            nodes = self.list(raw=True)
+            nodes = self.list()
             for node in nodes:
                 if node.name in names:
                     fname(node)
@@ -577,7 +516,7 @@ class Provider(ComputeNodeABC):
         #
         # BUG THIS CODE DOES NOT WORK
         #
-        nodes = self.list(raw=True)
+        nodes = self.list()
         for node in nodes:
             if node.name == name:
                 r = self.cloudman.ex_stop_node(self._get_node(node.name),
@@ -606,16 +545,14 @@ class Provider(ComputeNodeABC):
         # the following does not return the dict
         return self.apply(self.cloudman.ex_start_node, name)
 
-    def list(self, raw=False):
+    def list(self):
         """
         Lists the vms on the cloud
-        :param raw: If raw is set to True the lib cloud object is returned
-                    otherwise a dict is returned.
+
         :return: dict or libcloud object
         """
         return self.get_list(self.cloudman.compute.servers(),
-                             kind="vm",
-                             raw=raw)
+                             kind="vm")
 
     def destroy(self, names=None):
         """
@@ -625,7 +562,7 @@ class Provider(ComputeNodeABC):
         """
         # names = Parameter.expand(names)
         raise NotImplementedError
-        nodes = self.list(raw=True)
+        nodes = self.list()
         for node in nodes:
             if node.name in names:
                 self.cloudman.destroy_node(node)
@@ -669,13 +606,13 @@ class Provider(ComputeNodeABC):
 
         raise NotImplementedError
 
-        images = self.images(raw=True)
+        images = self.images()
         for _image in images:
             if _image.name == image:
                 image_use = _image
                 break
 
-        flavors = self.flavors(raw=True)
+        flavors = self.flavors()
         for _flavor in flavors:
             if _flavor.name == size:
                 flavor_use = _flavor
@@ -685,7 +622,7 @@ class Provider(ComputeNodeABC):
             secgroupsobj = []
             #
             # this gives existing secgroups in obj form
-            secgroups = self.list_secgroups(raw=True)
+            secgroups = self.list_secgroups()
             for secgroup in kwargs["ex_security_groups"]:
                 for _secgroup in secgroups:
                     if _secgroup.name == secgroup:
@@ -746,7 +683,7 @@ class Provider(ComputeNodeABC):
     def ssh(self, name=None, command=None):
         raise NotImplementedError
         key = self.key_path.replace(".pub", "")
-        nodes = self.list(raw=True)
+        nodes = self.list()
         for node in nodes:
             if node.name == name:
                 self.testnode = node

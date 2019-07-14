@@ -1,15 +1,15 @@
-from cloudmesh.shell.command import PluginCommand
-from cloudmesh.shell.command import command
-from cloudmesh.shell.command import map_parameters
-from cloudmesh.secgroup.Secgroup import Secgroup, SecgroupRule
 from pprint import pprint
+
 from cloudmesh.common.Printer import Printer
-from cloudmesh.common.console import Console
-from cloudmesh.common.debug import VERBOSE
-from cloudmesh.secgroup.Secgroup import SecgroupExamples
 from cloudmesh.common.parameter import Parameter
 from cloudmesh.common.variables import Variables
 from cloudmesh.compute.vm.Provider import Provider
+from cloudmesh.secgroup.Secgroup import Secgroup, SecgroupRule
+from cloudmesh.secgroup.Secgroup import SecgroupExamples
+from cloudmesh.shell.command import PluginCommand
+from cloudmesh.shell.command import command
+from cloudmesh.shell.command import map_parameters
+
 
 class SecCommand(PluginCommand):
 
@@ -108,11 +108,16 @@ class SecCommand(PluginCommand):
         groups = Secgroup()
 
         def Print(kind, list):
+            if kind == "group":
+                output = ""
+            else:
+                output = groups.output
+
             print(Printer.write(list,
-                            sort_keys=groups.output[kind]['sort_keys'],
-                            order=groups.output[kind]['order'],
-                            header=groups.output[kind]['header'],
-                            output=arguments.output))
+                                sort_keys=output[kind]['sort_keys'],
+                                order=output[kind]['order'],
+                                header=output[kind]['header'],
+                                output=arguments.output))
 
         def list_all():
             data = []
@@ -147,7 +152,16 @@ class SecCommand(PluginCommand):
                 provider = Provider(name=cloud)
                 cloud_groups = provider.list_secgroups()
 
-            Print("group", cloud_groups)
+                # Print("group", cloud_groups)
+
+                if arguments.output == 'table':
+                    result = []
+                    for group in cloud_groups:
+                        for rule in group['security_group_rules']:
+                            rule['name'] = group['name']
+                            result.append(rule)
+                    cloud_groups = result
+                provider.Print(arguments.output, "secgroup", cloud_groups)
 
             return ""
 
@@ -198,7 +212,7 @@ class SecCommand(PluginCommand):
             secgroup = Secgroup()
             group = secgroup.list(arguments.GROUP)
 
-            pprint (group)
+            pprint(group)
 
 
         elif arguments.list:
@@ -207,14 +221,13 @@ class SecCommand(PluginCommand):
 
         elif arguments.load:
 
-              examples = SecgroupExamples()
-              examples.load()
-              list_all()
+            examples = SecgroupExamples()
+            examples.load()
+            list_all()
 
         elif arguments.clear:
 
             groups.clear()
             rules.clear()
-
 
         return ""

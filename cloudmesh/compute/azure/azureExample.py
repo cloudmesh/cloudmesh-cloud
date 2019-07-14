@@ -12,6 +12,9 @@ from libcloud.compute.types import Provider
 
 
 cls = get_driver(Provider.AZURE_ARM)
+#
+# TODO: This needs to read from yaml with the Config()
+#
 driver = cls(tenant_id='...',
              subscription_id='...',
              key='...',

@@ -10,9 +10,12 @@ from cloudmesh.common.debug import VERBOSE
 from cloudmesh.common.util import banner
 from cloudmesh.common.util import path_expand
 from cloudmesh.management.configuration.config import Config
+from cloudmesh.provider import ComputeProviderPlugin
 
+class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
-class Provider(ComputeNodeABC):
+    kind = "openstack"
+
     output = {
 
         "vm": {
@@ -106,21 +109,27 @@ class Provider(ComputeNodeABC):
 
     @staticmethod
     def _get_credentials(config):
+        """
+        Internal function to create a dict for the openstacksdk credentials.
+
+        :param config: The credentials from the cloudmesh yaml file
+        :return: the dict for the openstacksdk
+        """
+
         d = {'version': '2', 'username': config['OS_USERNAME'],
              'password': config['OS_PASSWORD'],
-             'auth_url': config['OS_AUTH_URL'].replace("/tokens", ""),
+             'auth_url': config['OS_AUTH_URL'],
              'project_id': config['OS_TENANT_NAME'],
              'region_name': config['OS_REGION_NAME'],
              'tenant_id': config['OS_TENANT_ID']}
-        # while libcloud uses token, here we do not use it in auth_url
         # d['project_domain_name'] = config['OS_PROJECT_NAME']
         return d
 
     def __init__(self, name=None, configuration="~/.cloudmesh/cloudmesh4.yaml"):
         """
         Initializes the provider. The default parameters are read from the
-        configuration
-        file that is defined in yaml format.
+        configurationfile that is defined in yaml format.
+
         :param name: The name of the provider as defined in the yaml file
         :param configuration: The location of the yaml configuration file
         """
@@ -158,12 +167,20 @@ class Provider(ComputeNodeABC):
 
     def update_dict(self, elements, kind=None):
         """
-        Libcloud returns an object or list of objects With the dict method
-        this object is converted to a dict. Typically this method is used internally.
-        :param elements: the elements
-        :param kind: Kind is image, flavor, or node
-        :return:
+        THis function adds a cloudmesh cm dict to each dict in the list
+        elements.
+        Libcloud
+        returns an object or list of objects With the dict method
+        this object is converted to a dict. Typically this method is used
+        internally.
+
+        :param elements: the list of original dicts. If elements is a single
+                         dict a list with a single element is returned.
+        :param kind: for some kinds special attributes are added. This includes
+                     key, vm, image, flavor.
+        :return: The list with the modified dicts
         """
+
         if elements is None:
             return None
         elif type(elements) == list:
@@ -209,11 +226,13 @@ class Provider(ComputeNodeABC):
 
     def find(self, elements, name=None):
         """
-        finds an element in elements with the specified name
+        Finds an element in elements with the specified name.
+
         :param elements: The elements
         :param name: The name to be found
         :return:
         """
+
         for element in elements:
             if  element["name"] == name or element["cm"]["name"] == name:
                 return element
@@ -224,9 +243,7 @@ class Provider(ComputeNodeABC):
         Lists the keys on the cloud
 
         :return: dict or libcloud object
-
         """
-
         return self.get_list(self.cloudman.list_keypairs(),
                              kind="key")
 
@@ -261,8 +278,10 @@ class Provider(ComputeNodeABC):
 
         return r
 
+    def list_secgroups(self, secgroup=None):
 
-    def list_secgroups(self, group=""):
+        # TODO: implement group as Parameter
+        #  retuns all groups at this time
 
         return self.get_list(
             self.cloudman.network.security_groups(),
@@ -270,84 +289,25 @@ class Provider(ComputeNodeABC):
 
     def list_secgroup_rules(self, secgroup='default'):
 
-        # needs to be replaced with api calls
-        try:
-            command = "openstack security group rule list " \
-                      "--os-auth-url={auth_url} " \
-                      "--os-project-name={project_id} " \
-                      "--os-username={username} " \
-                      "--os-password={password} " \
-                      "--long " \
-                      "-f=json; exit 0".format(**self.credential)
-            r = subprocess.check_output(command,
-                                        stderr=subprocess.STDOUT,
-                                        shell=True)
+        # TODO: implement group as Parameter
+        #  retuns all groups at this time
 
-            try:
-                banner("AAA")
-                try:
-                    r = r.decode('ascii')
-                    r = r.replace('\n', '')
-                    r = r.replace('   ', " ")
-                    r = r.replace('  ', " ")
-                    r = r.replace('null', 'None')
-                    print("BBB", r)
-                    result = eval(r)
-                except:
-                    result = "wrong"
-                print("RRR", result)
-                entries = []
-                for entry in result:
-                    pprint(entry)
-                    converted = {
-                        "name": entry["ID"],
-                        "id": entry["ID"],
-                        "protocol": entry["IP Protocol"],
-                        "ip_ramge": entry["IP Range"],
-                        "ports": entry["Port Range"],
-                        "direction": entry["Direction"],
-                        "ethertype": entry["Ethertype"],
-                        "remote": entry["Remote Security Group"],
-                        "group": entry["Security Group"],
-                        "cm": {
-                            "kind": "secgroup",
-                            "cloud": "chameleon",
-                            "name": entry["ID"]
-                        },
-                    }
-                    entries.append(converted)
-                return entries
-            except:
-                print(r)
+        return self.list_secgroups()
 
-            return None
-
-        except:
-            return None
-
-    def add_secgroup(self, secgroupname, description=""):
-        raise NotImplementedError
+    def add_secgroup(self, name, description=None):
+        """
+        Adds the
+        :param name:
+        :param description:
+        :return:
+        """
         if self.cloudman:
-            return self.cloudman.ex_create_security_group(secgroupname,
-                                                          description=description)
-        return None
+            self.cloudman.create_security_group(name,
+                                                description)
 
-    def remove_secgroup(self, secgroupname):
-        raise NotImplementedError
+    def remove_secgroup(self, name):
         if self.cloudman:
-            secgroups = self.list_secgroups()
-            thegroups = []
-            for secgroup in secgroups:
-                if secgroup.name == secgroupname:
-                    thegroups.append(secgroup)
-            # pprint (secgroups)
-            # pprint (thegroups)
-            if thegroups:
-                for thegroup in thegroups:
-                    self.cloudman.ex_delete_security_group(thegroup)
-            else:
-                return False
-        return False
+            self.cloudman.delete_security_group(name)
 
     def add_rules_to_secgroup(self, secgroupname, newrules):
         raise NotImplementedError
@@ -432,7 +392,7 @@ class Provider(ComputeNodeABC):
         """
         Lists the flavors on the cloud
 
-        :return: dict or libcloud object
+        :return: dict of flavors
         """
         return self.get_list(self.cloudman.compute.flavors(),
                              kind="flavor")
@@ -549,7 +509,7 @@ class Provider(ComputeNodeABC):
         """
         Lists the vms on the cloud
 
-        :return: dict or libcloud object
+        :return: dict of vms
         """
         return self.get_list(self.cloudman.compute.servers(),
                              kind="vm")

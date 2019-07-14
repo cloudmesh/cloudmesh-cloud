@@ -25,6 +25,8 @@ is vagrant up to date
 
 class Provider(ComputeNodeABC):
 
+    kind = "virtualbox"
+
     def run_command(self, command):
         process = subprocess.Popen(shlex.split(command), stdout=subprocess.PIPE)
         while True:

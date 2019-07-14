@@ -32,7 +32,7 @@ class Provider(ComputeNodeABC):
 
         providers = ProviderList()
 
-        if self.kind in ['openstack', 'pyazure', 'docker']:
+        if self.kind in ['openstack', 'pyazure', 'docker', "awsboto"]:
             provider = providers[self.kind]
         elif self.kind in ["aws", "google"]:
             from cloudmesh.compute.libcloud.Provider import \
@@ -42,7 +42,7 @@ class Provider(ComputeNodeABC):
             from cloudmesh.compute.virtualbox.Provider import \
                 Provider as VirtualboxCloudProvider
             provider = VirtualboxCloudProvider
-        elif self.kind in ["azure"]:
+        elif self.kind in ["azureaz"]:
             from cloudmesh.compute.azure.AzProvider import \
                 Provider as AzAzureProvider
             provider = AzAzureProvider

@@ -6,9 +6,10 @@ from libcloud.compute.types import Provider
 #
 # IT SETS A VERY DANGEROUS EXAMPLE OF HOW NOT TO DOD IT.
 #
+
+
 ACCESS_ID = 'your access id'
 SECRET_KEY = 'your secret key'
-
 IMAGE_ID = 'ami-c8052d8d'
 SIZE_ID = 't1.micro'
 

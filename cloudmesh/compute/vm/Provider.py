@@ -8,17 +8,15 @@ from cloudmesh.common.dotdict import dotdict
 from cloudmesh.common.parameter import Parameter
 from cloudmesh.common.variables import Variables
 from cloudmesh.compute.azure.AzProvider import Provider as AzAzureProvider
-from cloudmesh.compute.azure.PyAzure import Provider as PyAzureProvider
+# from cloudmesh.compute.azure.PyAzure import Provider as PyAzureProvider
 from cloudmesh.compute.docker.Provider import Provider as DockerProvider
 from cloudmesh.compute.libcloud.Provider import Provider as LibCloudProvider
-from cloudmesh.compute.openstack.Provider import Provider as \
-    OpenStackCloudProvider
 from cloudmesh.compute.virtualbox.Provider import \
     Provider as VirtualboxCloudProvider
 from cloudmesh.management.configuration.config import Config
 from cloudmesh.mongo.CmDatabase import CmDatabase
 from cloudmesh.mongo.DataBaseDecorator import DatabaseUpdate
-
+from cloudmesh.provider import Provider as ProviderList
 
 class Provider(ComputeNodeABC):
 
@@ -38,8 +36,10 @@ class Provider(ComputeNodeABC):
 
         provider = None
 
-        if self.kind in ["openstack"]:
-            provider = OpenStackCloudProvider
+        providers = ProviderList()
+
+        if self.kind in ['openstack', 'pyazure']:
+            provider = providers[self.kind]
         elif self.kind in ["aws"]:
             provider = LibCloudProvider
         elif self.kind in ["google"]:
@@ -50,8 +50,8 @@ class Provider(ComputeNodeABC):
             provider = DockerProvider
         elif self.kind in ["azure"]:
             provider = AzAzureProvider
-        elif self.kind in ["pyazure"]:
-            provider = PyAzureProvider
+        # elif self.kind in ["pyazure"]:
+        #    provider = PyAzureProvider
 
         if provider is None:
             Console.error(f"provider {name} not supported")

@@ -36,6 +36,8 @@ class Provider(ComputeNodeABC):
 
     """
 
+    kind = "azure_az"
+
     """
     # THIS NEED STO BE DEFINED ONCE WE SEE THE OUTPUT
     

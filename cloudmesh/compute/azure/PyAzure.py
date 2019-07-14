@@ -23,6 +23,8 @@ class Provider(ComputeNodeABC):
     #  table printer. Print an entry with VERBOSE, after you get it from azure
     #  so you can look at them
 
+    kind = "pyazure"
+
     output = {
 
         "vm": {

@@ -7,6 +7,8 @@ from cloudmesh.common.debug import VERBOSE
 
 class Provider(ComputeNodeABC):
 
+    kind = "aws_boto"
+
     def __init__(self, name=None, configuration="~/.cloudmesh/.cloudmesh4.yaml"):
         super().__init__(name=name, configuration=configuration)
 

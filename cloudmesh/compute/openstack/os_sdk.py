@@ -49,9 +49,10 @@ pprint(config)
 
 cloud = openstack.connect(**config)
 
+pprint(dir(cloud))
 
 
-if True:
+if False:
 
     command = "openstack security group list --os-auth-url={auth_url} " \
         "--os-project-name={project_id} --os-username={username} "\

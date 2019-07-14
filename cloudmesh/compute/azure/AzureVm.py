@@ -13,6 +13,8 @@ from libcloud.compute.types import Provider as LibCloudProvider
 
 class AzureProvider(object):
 
+    kind = "azure_libcloud_a"
+
     def __init__(self, cloud):
         """
         Initialize the provider for the yaml file

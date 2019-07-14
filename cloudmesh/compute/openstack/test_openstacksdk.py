@@ -1,5 +1,5 @@
 #
-# python cloudmesh/compute/openstack/os_sdk.py
+# python cloudmesh/compute/openstack/test_openstacksdk.py
 #
 
 from cloudmesh.management.configuration.config import Config

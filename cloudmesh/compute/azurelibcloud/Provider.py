@@ -13,7 +13,7 @@ from libcloud.compute.types import Provider as LibCloudProvider
 
 class AzureProvider(object):
 
-    kind = "azure_libcloud_a"
+    kind = "azurelibcloud"
 
     def __init__(self, cloud):
         """

@@ -113,3 +113,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
     #  to make things easier
     #  start with a prg in this dir similar to ../openstack/os_sdk.py, call it
     #  aws_boto.py, make sure to use Config()
+
+
+    def __init__(self, name=None, configuration="~/.cloudmesh/.cloudmesh4.yaml"):
+        super().__init__(name=name, configuration=configuration)

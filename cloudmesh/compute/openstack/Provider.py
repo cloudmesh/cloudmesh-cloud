@@ -134,6 +134,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         :param configuration: The location of the yaml configuration file
         """
 
+        self.testnode = node
         conf = Config(configuration)["cloudmesh"]
         super().__init__(name, conf)
 
@@ -646,7 +647,6 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         nodes = self.list()
         for node in nodes:
             if node.name == name:
-                self.testnode = node
                 break
         pubip = self.testnode.public_ips[0]
         location = self.user + '@' + pubip

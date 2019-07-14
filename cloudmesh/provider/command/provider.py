@@ -13,6 +13,8 @@ from cloudmesh.shell.command import command, map_parameters
 from pprint import pprint
 from cloudmesh.common.util import banner
 from cloudmesh.provider import ComputeProviderPlugin
+import sys, inspect
+from cloudmesh.provider import Provider as ProviderList
 
 class ProviderCommand(PluginCommand):
 
@@ -48,7 +50,7 @@ class ProviderCommand(PluginCommand):
 
         if arguments.list:
 
-            banner("Compute Providers")
+            banner("Loaded Compute Providers")
 
             providers = ComputeProviderPlugin.__subclasses__()
 
@@ -56,7 +58,17 @@ class ProviderCommand(PluginCommand):
                 print (provider.kind)
                 pprint(provider)
 
+            banner("Available Compute Providers")
 
+            providers = ProviderList()
+
+            for name in ["openstack",
+                         "pyazure"]:
+                try:
+                    provider = providers[name]
+                    print (name)
+                except Exception as e:
+                    print (e)
         elif arguments.delete:
             raise NotImplementedError
 

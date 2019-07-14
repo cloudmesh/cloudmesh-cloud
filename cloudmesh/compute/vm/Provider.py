@@ -8,7 +8,6 @@ from cloudmesh.common.dotdict import dotdict
 from cloudmesh.common.parameter import Parameter
 from cloudmesh.common.variables import Variables
 from cloudmesh.compute.azure.AzProvider import Provider as AzAzureProvider
-# from cloudmesh.compute.azure.PyAzure import Provider as PyAzureProvider
 from cloudmesh.compute.docker.Provider import Provider as DockerProvider
 from cloudmesh.compute.libcloud.Provider import Provider as LibCloudProvider
 from cloudmesh.compute.virtualbox.Provider import \
@@ -50,8 +49,6 @@ class Provider(ComputeNodeABC):
             provider = DockerProvider
         elif self.kind in ["azure"]:
             provider = AzAzureProvider
-        # elif self.kind in ["pyazure"]:
-        #    provider = PyAzureProvider
 
         if provider is None:
             Console.error(f"provider {name} not supported")

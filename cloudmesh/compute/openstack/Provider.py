@@ -9,7 +9,7 @@ from cloudmesh.common.console import Console
 from cloudmesh.common.debug import VERBOSE
 from cloudmesh.common.util import path_expand
 from cloudmesh.management.configuration.config import Config
-
+from cloudmesh.common.util import banner
 
 class Provider(ComputeNodeABC):
     output = {
@@ -322,36 +322,62 @@ class Provider(ComputeNodeABC):
 
     def list_secgroup_rules(self, secgroup='default', raw=False):
 
-        if self.cloudman:
-            secgroups = self.list_secgroups(raw=raw)
-            thegroup = None
-            if raw:
-                # Theoretically it's possible to have secgroups with the same name,
-                # in this case, we list rules for the first one only.
-                # In reality this don't seem like a good practice so we assume
-                # this situation MOST LIKELY does not occur.
-                for _secgroup in secgroups:
-                    if _secgroup.name == secgroup:
-                        thegroup = _secgroup
-                        break
-            else:
-                # this already returns only one entry
-                thegroup = self.find(secgroups, name=secgroup)
+        # needs to be replaced with api calls
+        try:
+            command = "openstack security group rule list " \
+                      "--os-auth-url={auth_url} " \
+                      "--os-project-name={project_id} " \
+                      "--os-username={username} " \
+                      "--os-password={password} " \
+                      "--long " \
+                      "-f=json; exit 0".format(**self.credential)
+            r = subprocess.check_output(command,
+                                        stderr=subprocess.STDOUT,
+                                        shell=True)
 
-            rules = []
-            if raw:
-                # dealing with object
-                for rule in thegroup.rules:
-                    rules.append(rule)
-            else:
-                # dealing with dict
-                for rule in thegroup["rules"]:
-                    # self.p.dict() converted the object into a list of dict,
-                    # even if there is only one object
-                    rule = self.update_dict(rule)[0]
-                    rules.append(rule)
-            return rules
-        return None
+            try:
+                banner("AAA")
+                try:
+                    r = r.decode('ascii')
+                    r = r.replace('\n', '')
+                    r = r.replace('   ', " ")
+                    r = r.replace('  ', " ")
+                    r = r.replace('null', 'None')
+                    print ("BBB", r)
+                    result = eval(r)
+                except:
+                    result = "wrong"
+                print ("RRR", result)
+                entries = []
+                for entry in result:
+                    pprint(entry)
+                    converted = {
+                         "name"   : entry["ID"],
+                         "id"   : entry["ID"],
+                         "protocol"   : entry["IP Protocol"],
+                         "ip_ramge"   : entry["IP Range"],
+                         "ports"   : entry["Port Range"],
+                         "direction"   : entry["Direction"],
+                         "ethertype"   : entry["Ethertype"],
+                         "remote"   : entry["Remote Security Group"],
+                         "group"   : entry["Security Group"],
+                         "cm": {
+                            "kind": "secgroup",
+                            "cloud": "chameleon",
+                            "name": entry["ID"]
+                         },
+                    }
+                    entries.append(converted)
+                return entries
+            except:
+                print(r)
+            # pprint(entries)
+            # if not raw:
+            #
+            return None
+
+        except:
+            return None
 
     def add_secgroup(self, secgroupname, description=""):
         raise NotImplementedError

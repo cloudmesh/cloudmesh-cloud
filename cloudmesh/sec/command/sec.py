@@ -21,6 +21,7 @@ class SecCommand(PluginCommand):
         ::
 
             Usage:
+                sec rule list --cloud=CLOUDS [--output=OUTPUT]
                 sec rule list --name=RULES [--output=OUTPUT]
                 sec rule list [--output=OUTPUT]
                 sec rule add RULE FROMPORT TOPORT PROTOCOL CIDR
@@ -149,6 +150,26 @@ class SecCommand(PluginCommand):
             Print("group", cloud_groups)
 
             return ""
+
+        elif arguments.rule and arguments.list and arguments.cloud:
+
+            clouds = Parameter.expand(arguments.cloud)
+
+            if len(clouds) == 0:
+                variables = Variables()
+                cloudname = variables['cloud']
+                clouds = [cloudname]
+            keys = []
+
+            for cloud in clouds:
+                print(f"cloud {cloud}")
+                provider = Provider(name=cloud)
+                cloud_rules = provider.list_secgroups_rules()
+
+            Print("rule", cloud_rules)
+
+            return ""
+
         elif arguments.group and arguments.list:
             found = groups.list()
             for entry in found:

@@ -1,19 +1,15 @@
 import subprocess
 from datetime import datetime
-from pathlib import Path
 from pprint import pprint
 
 import openstack
 from cloudmesh.abstractclass.ComputeNodeABC import ComputeNodeABC
+from cloudmesh.common.Shell import Shell
 from cloudmesh.common.console import Console
 from cloudmesh.common.debug import VERBOSE
 from cloudmesh.common.util import path_expand
 from cloudmesh.management.configuration.config import Config
-from cloudmesh.common.Shell import Shell
-from subprocess import Popen, PIPE, STDOUT
 
-
-from cloudmesh.management.configuration.SSHkey import SSHkey
 
 class Provider(ComputeNodeABC):
     output = {
@@ -85,21 +81,20 @@ class Provider(ComputeNodeABC):
 
     @staticmethod
     def _get_credentials(config):
-        d = {}
-        d['version'] = '2'
-        d['username'] = config['OS_USERNAME']
-        d['password'] = config['OS_PASSWORD']
+        d = {'version': '2', 'username': config['OS_USERNAME'],
+             'password': config['OS_PASSWORD'],
+             'auth_url': config['OS_AUTH_URL'].replace("/tokens", ""),
+             'project_id': config['OS_TENANT_NAME'],
+             'region_name': config['OS_REGION_NAME'],
+             'tenant_id': config['OS_TENANT_ID']}
         # while libcloud uses token, here we do not use it in auth_url
-        d['auth_url'] = config['OS_AUTH_URL'].replace("/tokens", "")
-        d['project_id'] = config['OS_TENANT_NAME']
-        d['region_name'] = config['OS_REGION_NAME']
         # d['project_domain_name'] = config['OS_PROJECT_NAME']
-        d['tenant_id'] = config['OS_TENANT_ID']
         return d
 
     def __init__(self, name=None, configuration="~/.cloudmesh/cloudmesh4.yaml"):
         """
-        Initializes the provider. The default parameters are read from the configutation
+        Initializes the provider. The default parameters are read from the
+        configuration
         file that is defined in yaml format.
         :param name: The name of the provider as defined in the yaml file
         :param configuration: The location of the yaml configuration file
@@ -177,7 +172,7 @@ class Provider(ComputeNodeABC):
             elif kind == 'image':
                 entry['cm']['created'] = str(datetime.utcnow())
                 entry['cm']['updated'] = str(datetime.utcnow())
-            #elif kind == 'secgroup':
+            # elif kind == 'secgroup':
             #    pass
 
             d.append(entry)
@@ -202,16 +197,18 @@ class Provider(ComputeNodeABC):
     def keys(self, raw=False):
         """
         Lists the keys on the cloud
-        :param raw: If raw is set to True the lib cloud object is returened
+        :param raw: If raw is set to True the lib cloud object is returned
                     otherwise a dict is returened.
         :return: dict or libcloud object
 
         """
 
-        # needs to be replacedd with api calls
+        # needs to be replaced with api calls
         try:
-            command = "openstack keypair list --os-auth-url={auth_url} " \
-                      "--os-project-name={project_id} --os-username={username} " \
+            command = "openstack keypair list "\
+                      "--os-auth-url={auth_url} " \
+                      "--os-project-name={project_id} " \
+                      "--os-username={username} " \
                       "--os-password={password} -f=json".format(
                 **self.credential)
             # print (command)
@@ -224,10 +221,9 @@ class Provider(ComputeNodeABC):
         except:
             return None
 
-
         # conn.key_manager.secrets()
 
-        #return self.get_list(self.cloudman.key_manager.secrets(),
+        # return self.get_list(self.cloudman.key_manager.secrets(),
         #                     kind="key",
         #                     raw=raw)
 
@@ -240,23 +236,24 @@ class Provider(ComputeNodeABC):
 
         name = key["name"]
         cloud = self.cloud
-        Console.msg (f"upload the key: {name} -> {cloud}")
+        Console.msg(f"upload the key: {name} -> {cloud}")
 
         data = dict(key['location'])
         data['name'] = key['name']
         data['credential'] = " --os-auth-url={auth_url} " \
-                      "--os-project-name={project_id} --os-username={username} " \
-                      "--os-password={password} ".format(**self.credential)
+                             "--os-project-name={project_id} --os-username={username} " \
+                             "--os-password={password} ".format(
+            **self.credential)
 
         command = "openstack keypair create {credential} " \
                   "--public-key={public} {name}; exit 0".format(**data)
 
         r = subprocess.check_output(command,
-                stderr = subprocess.STDOUT,
-                shell = True)
+                                    stderr=subprocess.STDOUT,
+                                    shell=True)
         if "already exists" in str(r):
             raise ValueError(f"key already exists: {name}")
-        #r = Shell.execute(command, traceflag=False, shell=True)
+        # r = Shell.execute(command, traceflag=False, shell=True)
         return r
 
     def key_delete(self, name):
@@ -267,11 +264,11 @@ class Provider(ComputeNodeABC):
         """
 
         cloud = self.cloud
-        Console.msg (f"delete the key: {name} -> {cloud}")
+        Console.msg(f"delete the key: {name} -> {cloud}")
 
-        credential= " --os-auth-url={auth_url} " \
-                      "--os-project-name={project_id} --os-username={username} " \
-                      "--os-password={password} ".format(**self.credential)
+        credential = " --os-auth-url={auth_url} " \
+                     "--os-project-name={project_id} --os-username={username} " \
+                     "--os-password={password} ".format(**self.credential)
 
         command = f"openstack keypair delete {credential} {name} "
 
@@ -281,18 +278,50 @@ class Provider(ComputeNodeABC):
         except:
             return None
 
+    def list_secgroups(self, group="", raw=False):
 
-    def list_secgroups(self, raw=False):
-        raise NotImplementedError
-        if self.cloudman:
-            secgroups = self.cloudman.ex_list_security_groups()
-            if not raw:
-                secgroups = self.update_dict(secgroups, kind="secgroup")
-            return secgroups
-        return None
+        # needs to be replaced with api calls
+        try:
+            command = "openstack security group list " \
+                      "--os-auth-url={auth_url} " \
+                      "--os-project-name={project_id} " \
+                      "--os-username={username} " \
+                      "--os-password={password} " \
+                      "-f=json; exit 0".format(**self.credential)
+            r = subprocess.check_output(command,
+                                        stderr=subprocess.STDOUT,
+                                        shell=True)
+
+            try:
+                result = eval(r)
+                entries = []
+                for entry in result:
+                    converted = {
+                        "description": entry["Description"],
+                        "name": entry["Name"],
+                        "project": entry["Project"],
+                        "tags": entry["Tags"],
+                        "cm": {
+                            "kind": "secgroup",
+                            "cloud": "chameleon",
+                            "name": entry["Name"]
+                        },
+                        "rules": "",
+                    }
+                    entries.append(converted)
+                return entries
+            except:
+                print(r)
+            # pprint(entries)
+            # if not raw:
+            #
+            return None
+
+        except:
+            return None
 
     def list_secgroup_rules(self, secgroup='default', raw=False):
-        raise NotImplementedError
+
         if self.cloudman:
             secgroups = self.list_secgroups(raw=raw)
             thegroup = None
@@ -400,7 +429,7 @@ class Provider(ComputeNodeABC):
         """
         Lists the dict d on the cloud
         :param raw: If raw is set to True the lib cloud object is returned
-                    otherwise a dict is returened.
+                    otherwise a dict is returned.
         :return: dict or libcloud object
         """
         if self.cloudman:
@@ -417,7 +446,7 @@ class Provider(ComputeNodeABC):
         """
         Lists the images on the cloud
         :param raw: If raw is set to True the lib cloud object is returned
-                    otherwise a dict is returened.
+                    otherwise a dict is returned.
         :return: dict or libcloud object
         """
         return self.get_list(self.cloudman.compute.images(),
@@ -436,7 +465,7 @@ class Provider(ComputeNodeABC):
         """
         Lists the flavors on the cloud
         :param raw: If raw is set to True the lib cloud object is returned
-                    otherwise a dict is returened.
+                    otherwise a dict is returned.
         :return: dict or libcloud object
         """
         return self.get_list(self.cloudman.compute.flavors(),
@@ -555,7 +584,7 @@ class Provider(ComputeNodeABC):
         """
         Lists the vms on the cloud
         :param raw: If raw is set to True the lib cloud object is returned
-                    otherwise a dict is returened.
+                    otherwise a dict is returned.
         :return: dict or libcloud object
         """
         return self.get_list(self.cloudman.compute.servers(),

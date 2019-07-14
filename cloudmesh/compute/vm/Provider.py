@@ -7,11 +7,6 @@ from cloudmesh.common.debug import VERBOSE
 from cloudmesh.common.dotdict import dotdict
 from cloudmesh.common.parameter import Parameter
 from cloudmesh.common.variables import Variables
-from cloudmesh.compute.azure.AzProvider import Provider as AzAzureProvider
-from cloudmesh.compute.docker.Provider import Provider as DockerProvider
-from cloudmesh.compute.libcloud.Provider import Provider as LibCloudProvider
-from cloudmesh.compute.virtualbox.Provider import \
-    Provider as VirtualboxCloudProvider
 from cloudmesh.management.configuration.config import Config
 from cloudmesh.mongo.CmDatabase import CmDatabase
 from cloudmesh.mongo.DataBaseDecorator import DatabaseUpdate
@@ -37,17 +32,19 @@ class Provider(ComputeNodeABC):
 
         providers = ProviderList()
 
-        if self.kind in ['openstack', 'pyazure']:
+        if self.kind in ['openstack', 'pyazure', 'docker']:
             provider = providers[self.kind]
-        elif self.kind in ["aws"]:
-            provider = LibCloudProvider
-        elif self.kind in ["google"]:
+        elif self.kind in ["aws", "google"]:
+            from cloudmesh.compute.libcloud.Provider import \
+                Provider as LibCloudProvider
             provider = LibCloudProvider
         elif self.kind in ["vagrant", "virtualbox"]:
+            from cloudmesh.compute.virtualbox.Provider import \
+                Provider as VirtualboxCloudProvider
             provider = VirtualboxCloudProvider
-        elif self.kind in ["docker"]:
-            provider = DockerProvider
         elif self.kind in ["azure"]:
+            from cloudmesh.compute.azure.AzProvider import \
+                Provider as AzAzureProvider
             provider = AzAzureProvider
 
         if provider is None:

@@ -10,7 +10,7 @@ from cloudmesh.management.configuration.config import Config
 from cloudmesh.mongo.CmDatabase import CmDatabase
 from cloudmesh.shell.command import PluginCommand
 from cloudmesh.shell.command import command, map_parameters
-
+from pprint import pprint
 
 class KeyCommand(PluginCommand):
 
@@ -212,7 +212,6 @@ class KeyCommand(PluginCommand):
             for cloud in clouds:
                 print(f"cloud {cloud}")
                 provider = Provider(name=cloud)
-                print(provider)
                 keys = provider.keys()
 
                 provider.Print(arguments.output, "key", keys)
@@ -288,15 +287,11 @@ class KeyCommand(PluginCommand):
                 for key in db_keys:
                     name = key['name']
                     if name in names:
-                        if 'location' not in key:
-                            Console.error(f"key '{name}' does not have a "
-                                          f"pysical location")
-                        else:
-                            try:
-                                r = provider.key_upload(key)
-                                Console.ok(f"upload key '{name} sucessful'. ")
-                            except ValueError as e:
-                                Console.error(f"key '{name} already exists in {cloud}.")
+                        try:
+                            r = provider.key_upload(key)
+                            Console.ok(f"upload key '{name} sucessful'. ")
+                        except ValueError as e:
+                            Console.error(f"key '{name} already exists in {cloud}.")
 
 
             return ""

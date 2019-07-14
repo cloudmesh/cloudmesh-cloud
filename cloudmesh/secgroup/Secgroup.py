@@ -163,7 +163,6 @@ class SecgroupDatabase:
                 "name": entry['name'],
                 "cloud": self.cloud
             }
-            entry['name'] = entry["name"]
         return entries
 
 

@@ -1,8 +1,12 @@
-from multiprocessing import Pool
+from pprint import pprint
 
 from cloudmesh.abstractclass.ComputeNodeABC import ComputeNodeABC
+from cloudmesh.common.Printer import Printer
 from cloudmesh.common.console import Console
+from cloudmesh.common.debug import VERBOSE
+from cloudmesh.common.dotdict import dotdict
 from cloudmesh.common.parameter import Parameter
+from cloudmesh.common.variables import Variables
 from cloudmesh.compute.azure.AzProvider import Provider as AzAzureProvider
 from cloudmesh.compute.azure.PyAzure import Provider as PyAzureProvider
 from cloudmesh.compute.docker.Provider import Provider as DockerProvider
@@ -12,13 +16,9 @@ from cloudmesh.compute.openstack.Provider import Provider as \
 from cloudmesh.compute.virtualbox.Provider import \
     Provider as VirtualboxCloudProvider
 from cloudmesh.management.configuration.config import Config
-from cloudmesh.mongo.DataBaseDecorator import DatabaseUpdate
-from cloudmesh.common.debug import VERBOSE
-from cloudmesh.common.dotdict import dotdict
 from cloudmesh.mongo.CmDatabase import CmDatabase
-from cloudmesh.common.variables import Variables
-from pprint import pprint
-from cloudmesh.common.Printer import Printer
+from cloudmesh.mongo.DataBaseDecorator import DatabaseUpdate
+
 
 class Provider(ComputeNodeABC):
 
@@ -29,7 +29,8 @@ class Provider(ComputeNodeABC):
         try:
             super().__init__(name, configuration)
             self.kind = Config(configuration)[f"cloudmesh.cloud.{name}.cm.kind"]
-            self.credentials = Config(configuration)[f"cloudmesh.cloud.{name}.credentials"]
+            self.credentials = Config(configuration)[
+                f"cloudmesh.cloud.{name}.credentials"]
             self.name = name
         except:
             Console.error(f"provider {name} not found in {configuration}")
@@ -68,9 +69,6 @@ class Provider(ComputeNodeABC):
             return Parameter.expand(names)
 
     def loop(self, names, func, **kwargs):
-        """
-        :param option: if option is 'pool', use pool. if option is 'iter', use iteration
-        """
         names = self.expand(names)
         r = []
         for name in names:
@@ -110,20 +108,16 @@ class Provider(ComputeNodeABC):
     def images(self):
         return self.p.images()
 
-
-
     @DatabaseUpdate()
     def start(self, names=None, cloud=None, **kwargs):
 
         #
-        # this is used to resume a vm, after it was stoped
+        # this is used to resume a vm, after it was stopped
         #
         raise NotImplementedError
 
-
     @DatabaseUpdate()
     def create2(self, names=None, cloud=None, **kwargs):
-
 
         arguments = dotdict(kwargs)
         vms = self.expand(names)
@@ -140,7 +134,7 @@ class Provider(ComputeNodeABC):
 
         database = CmDatabase()
         defaults = Config()[f"cloudmesh.cloud.{cloud}.default"]
-        pprint (defaults)
+        pprint(defaults)
         duplicates = []
         for vm in vms:
             duplicates += database.find(collection=f'{cloud}-node', name=vm)
@@ -153,7 +147,7 @@ class Provider(ComputeNodeABC):
                                            'public_ips', 'cm.created'],
                                     header=['Name', 'Cloud', 'State', 'Image',
                                             'Size',
-                                           'Public ips', 'created'],
+                                            'Public ips', 'created'],
                                     output='table'))
             raise Exception("these vms already exists")
             return None
@@ -164,12 +158,12 @@ class Provider(ComputeNodeABC):
         arguments.image = self.find_attribute('image', [variables, defaults])
         pprint(arguments.image)
         if 'image' is None:
-            raise ValueError("image not specifeied")
+            raise ValueError("image not specified")
 
         arguments.flavor = self.find_attribute('flavor', [variables, defaults])
         pprint(arguments.flavor)
         if 'flavor' is None:
-            raise ValueError("image not specifeied")
+            raise ValueError("image not specified")
 
         # Step 3: use the create command to create the vms
 
@@ -180,12 +174,11 @@ class Provider(ComputeNodeABC):
         pprint(created)
         return created
 
-    def find_attribute (self, name, dicts):
+    def find_attribute(self, name, dicts):
         for d in dicts:
             if name in d:
                 return d[name]
         return None
-
 
     @DatabaseUpdate()
     def stop(self, names=None, **kwargs):
@@ -245,6 +238,7 @@ class Provider(ComputeNodeABC):
     def suspend(self, names=None):
         raise NotImplementedError
 
+    # noinspection PyPep8Naming
     def Print(self, output, kind, data):
         if output == "table":
 
@@ -259,3 +253,9 @@ class Provider(ComputeNodeABC):
                   )
         else:
             print(Printer.write(data, output=output))
+
+    def list_secgroups(self):
+        return self.p.list_secgroups()
+
+    def list_secgroups_rules(self):
+        return self.p.list_secgroup_rules()

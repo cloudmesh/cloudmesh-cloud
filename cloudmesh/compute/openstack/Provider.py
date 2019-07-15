@@ -501,8 +501,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
         :return: dict of vms
         """
-        return self.get_list(self.cloudman.compute.servers(),
-                             kind="vm")
+        return self.get_list(self.cloudman.compute.servers(), kind="vm")
 
     def destroy(self, name=None):
         """
@@ -510,16 +509,12 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         :param names: the name of the node
         :return: the dict of the node
         """
-        print ("aaa", name)
-        server = self.info(self, name=None)
-
-        print ("ccc", server)
-
-
+        server = self.info(name=name)
         r = self.cloudman.delete_server(name)
-
-        # bug status should change to destroyed
-        return r
+        server['status'] = 'deleted'
+        servers = [server]
+        x = self.get_list(servers, kind="vm")
+        return x
 
     def reboot(self, name=None):
         """
@@ -570,12 +565,12 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                 flavor_use = _flavor
                 break
         """
-        print("Create Server:")
-
-        print (image)
         size = kwargs['flavor']
 
-        print (size)
+        print("Create Server:")
+        print ("    Name: ", name)
+        print ("    Image:", image)
+        print ("    Size: ", size)
 
 
 

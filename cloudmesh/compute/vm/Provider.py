@@ -65,19 +65,27 @@ class Provider(ComputeNodeABC):
     def loop_n(self, func, **kwargs):
 
         try:
-            names = kwargs['name']
+            names = Parameter.expand(kwargs['name'])
         except:
             ValueError("The name parameter is missing")
 
-        print ()
-
         r = []
-        VERBOSE(names)
-        VERBOSE(func)
         for name in names:
-            vm = func(**kwargs)
-            r.append(vm)
-        VERBOSE(r)
+            parameters = dict(kwargs)
+            parameters['name']= name
+            vm = func(**parameters)
+            if type(vm) == list:
+                r = r + vm
+            elif type(vm) == dict:
+                r.append(vm)
+            else:
+                raise NotImplementedError
+        return r
+
+    @DatabaseUpdate()
+    def destroy(self, name=None):
+        parameter = {'name': name}
+        r = self.loop_n(self.p.destroy, **parameter)
         return r
 
     def loop(self, names, func, **kwargs):
@@ -188,6 +196,11 @@ class Provider(ComputeNodeABC):
                 return d[name]
         return None
 
+    def find_clouds(self, names=None):
+        names = self.expand(names)
+        # not yet implemented
+
+
     @DatabaseUpdate()
     def stop(self, names=None, **kwargs):
         return self.loop(names, self.p.stop, **kwargs)
@@ -234,11 +247,6 @@ class Provider(ComputeNodeABC):
         }
         return parameters
 
-    @DatabaseUpdate()
-    def destroy(self, name=None):
-        parameters = self.name_parameter(name)
-        r = self.loop_n(self.p.destroy, **parameters)
-        return r
 
     def ssh(self, name, command):
         self.p.ssh(name=name, command=command)

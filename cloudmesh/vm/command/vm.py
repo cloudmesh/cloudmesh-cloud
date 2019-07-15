@@ -264,6 +264,7 @@ class VmCommand(PluginCommand):
 
 
         elif arguments.ping:
+            raise NotImplementedError
 
             """
             vm ping [NAMES] [--cloud=CLOUDS] [--count=N]
@@ -350,11 +351,12 @@ class VmCommand(PluginCommand):
                 provider = Provider(cloud)
                 status = []
                 cursor = database.db[f'{cloud}-vm']
+                print (cloud)
                 for name in names:
                     for node in cursor.find({'name': name}):
                         entry  = {
                             "name": name,
-                            "status": node['state']
+                            "status": node['status']
                         }
                         status.append(entry)
 
@@ -549,10 +551,7 @@ class VmCommand(PluginCommand):
             #if key:
             #    params['ex_keyname'] = key
 
-            if names is None:
-                n = Name()
-                n.incr()
-                parameters.names = str(n)
+
 
             if arguments['--dryrun']:
                 Console.ok(f"Dryrun stop: "
@@ -573,7 +572,12 @@ class VmCommand(PluginCommand):
                     count = int(arguments.n)
 
                 for i in range(0,count):
+                    if names is None:
+                        n = Name()
+                        n.incr()
+                        parameters.names = str(n)
                     vms = provider.create(**parameters)
+                    variables['vm'] = str(n)
 
                 # provider.Print(arguments.output, "vm", vms)
 
@@ -587,6 +591,8 @@ class VmCommand(PluginCommand):
             print("info for the vm")
 
             cloud, names = Arguments.get_cloud_and_names("info", arguments, variables)
+
+            raise NotImplementedError
 
         elif arguments.rename:
 

@@ -151,7 +151,7 @@ class ComputeNodeABC(metaclass=ABCMeta):
         """
         raise NotImplementedError
 
-    def flavors(self):
+    def flavors(self, **kwargs):
         """
         Lists the flavors on the cloud
 

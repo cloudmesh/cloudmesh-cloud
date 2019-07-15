@@ -242,13 +242,13 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         """
         Lists the keys on the cloud
 
-        :return: dict or libcloud object
+        :return: dict
         """
         return self.get_list(self.cloudman.list_keypairs(),
                              kind="key")
 
 
-    def key_upload(self, key):
+    def key_upload(self, key=None):
         """
         uploads the key specified in the yaml configuration to the cloud
         :param key:
@@ -265,7 +265,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
         return r
 
-    def key_delete(self, name):
+    def key_delete(self, name=None):
         """
         deletes the key with the given name
         :param name: The anme of the key
@@ -278,34 +278,49 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
         return r
 
-    def list_secgroups(self, secgroup=None):
+    def list_secgroups(self, name=None):
+        """
+        List the named security group
 
-        # TODO: implement group as Parameter
-        #  retuns all groups at this time
+        :param name: The name of the group, if None all will be returned
+        :return:
+        """
+        if name is None:
+            return self.get_list(
+                self.cloudman.network.security_groups(),
+                kind="secgroup")
+        else:
+            raise NotImplementedError
 
-        return self.get_list(
-            self.cloudman.network.security_groups(),
-            kind="secgroup")
+    def list_secgroup_rules(self, name='default'):
+        """
+        List the named security group
 
-    def list_secgroup_rules(self, secgroup='default'):
+        :param name: The name of the group, if None all will be returned
+        :return:
+        """
+        return self.list_secgroups(name=name)
 
-        # TODO: implement group as Parameter
-        #  retuns all groups at this time
-
-        return self.list_secgroups()
-
-    def add_secgroup(self, name, description=None):
+    def add_secgroup(self, name=None, description=None):
         """
         Adds the
-        :param name:
-        :param description:
+        :param name: Name of the group
+        :param description: The desciption
         :return:
         """
         if self.cloudman:
+            if description is None:
+                description = name
             self.cloudman.create_security_group(name,
                                                 description)
 
-    def remove_secgroup(self, name):
+    def remove_secgroup(self, name=None):
+        """
+        Delete the names security group
+
+        :param name: The name
+        :return:
+        """
         if self.cloudman:
             self.cloudman.delete_security_group(name)
 
@@ -380,7 +395,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         return self.get_list(self.cloudman.compute.images(),
                              kind="image")
 
-    def image(self, name=None, **kwargs):
+    def image(self, name=None):
         """
         Gets the image with a given nmae
         :param name: The name of the image
@@ -405,28 +420,6 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         """
         return self.find(self.flavors(), name=name)
 
-    def apply(self, fname, names):
-        """
-        apply a function to a given list of nodes
-
-        :param fname: Name of the function to be applied to the given nodes
-        :param names: A list of node names
-        :return:  A list of dict representing the nodes
-        """
-        raise NotImplementedError
-        if self.cloudman:
-            # names = Parameter.expand(names)
-            res = []
-
-            nodes = self.list()
-            for node in nodes:
-                if node.name in names:
-                    fname(node)
-                    res.append(self.info(node.name))
-            return res
-        else:
-            return None
-
     def start(self, name=None):
         """
         Start a server with the given names
@@ -435,7 +428,6 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         :return:  A list of dict representing the nodes
         """
         r = self.cloudman.suspend_server(name)
-        #return self.apply(self.cloudman.ex_start_node, names)
 
     def stop(self, name=None):
         """
@@ -445,7 +437,6 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         :return:  A list of dict representing the nodes
         """
         r = self.cloudman.suspend_server(name)
-        # return self.apply(self.cloudman.ex_stop_node, names)
         return None
 
     def info(self, name=None):
@@ -455,8 +446,8 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         :param name: The name of teh virtual machine
         :return: The dict representing the node including updated status
         """
-        self.cloudman.get_server(name)
-        #return self.find(self.list(), name=name)
+        data = self.cloudman.get_server(name)
+        return data
 
     def suspend(self, name=None):
         """
@@ -503,8 +494,6 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         :return: the dict of the node
         """
         raise NotImplementedError
-        # the following does not return the dict
-        return self.apply(self.cloudman.ex_start_node, name)
 
     def list(self):
         """
@@ -521,11 +510,18 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         :param names: the name of the node
         :return: the dict of the node
         """
-        r = self.cloudman.delet_server(name)
-        # bug status should change to destroyed
-        return None
+        print ("aaa", name)
+        server = self.info(self, name=None)
 
-    def reboot(self, names=None):
+        print ("ccc", server)
+
+
+        r = self.cloudman.delete_server(name)
+
+        # bug status should change to destroyed
+        return r
+
+    def reboot(self, name=None):
         """
         Reboot a list of nodes with the given names
 
@@ -533,7 +529,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         :return:  A list of dict representing the nodes
         """
         raise NotImplementedError
-        return self.apply(self.cloudman.reboot_node, names)
+        return self.cloudman.reboot_node(name)
 
     def create(self,
                name=None,
@@ -643,18 +639,18 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
     def attach_publicIP(self, node, ip):
         raise NotImplementedError
-        return self.cloudman.ex_attach_floating_ip_to_node(node, ip)
+        # return self.cloudman.ex_attach_floating_ip_to_node(node, ip)
 
     def detach_publicIP(self, node, ip):
         raise NotImplementedError
-        self.cloudman.ex_detach_floating_ip_from_node(node, ip)
-        return self.cloudman.ex_delete_floating_ip(ip)
+        #self.cloudman.ex_detach_floating_ip_from_node(node, ip)
+        #return self.cloudman.ex_delete_floating_ip(ip)
 
     def rename(self, name=None, destination=None):
         """
         rename a node. NOT YET IMPLEMENTED.
 
-        :param destination:
+        :param destinat
         :param name: the current name
         :return: the dict with the new name
         """

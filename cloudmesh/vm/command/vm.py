@@ -418,19 +418,15 @@ class VmCommand(PluginCommand):
                 params = {}
                 provider = Provider(cloud)
 
-                processors = arguments['--processors']
-
-                if arguments['--parallel']:
-                    params['option'] = 'pool'
-                    if processors:
-                        params['processors'] = int(processors[0])
-                else:
-                    params['option'] = 'iter'
-
                 if arguments['--dryrun']:
-                    print("stop nodes {}\noption - {}\nprocessors - {}".format(names, params['option'], processors))
+                    Console.ok (f"Dryrun stop: "
+                                f"        {cloud}\n"
+                                f"        {names}"
+                                f"        {provider}")
                 else:
-                    vms = provider.stop(names, **params)
+                    for name in names:
+                        vms = provider.stop(name)
+
                     order = provider.p.output['vm']['order']
                     header = provider.p.output['vm']['header']
                     print(Printer.flatwrite(vms, order=order, header=header, output='table'))
@@ -446,20 +442,15 @@ class VmCommand(PluginCommand):
                 params = {}
                 provider = Provider(cloud)
 
-                processors = arguments['--processors']
-
-                if arguments['--parallel']:
-                    params['option'] = 'pool'
-                    if processors:
-                        params['processors'] = int(processors[0])
-                else:
-                    params['option'] = 'iter'
-
                 if arguments['--dryrun']:
-                    print(
-                        "terminate nodes {}\noption - {}\nprocessors - {}".format(names, params['option'], processors))
+                    Console.ok (f"Dryrun terminate: "
+                                f"        {cloud}\n"
+                                f"        {names}"
+                                f"        {provider}")
                 else:
-                    vms = provider.destroy(names, **params)
+                    for name in names:
+                        vms = provider.destroy(name)
+
                     order = provider.p.output['vm']['order']
                     header = provider.p.output['vm']['header']
                     print(Printer.flatwrite(vms, order=order, header=header, output='table'))
@@ -475,19 +466,19 @@ class VmCommand(PluginCommand):
                 params = {}
                 provider = Provider(cloud)
 
-                processors = arguments['--processors']
-
-                if arguments['--parallel']:
-                    params['option'] = 'pool'
-                    if processors:
-                        params['processors'] = int(processors[0])
-                else:
-                    params['option'] = 'iter'
-
                 if arguments['--dryrun']:
-                    print("delete nodes {}\noption - {}\nprocessors - {}".format(names, params['option'], processors))
+                    Console.ok(f"Dryrun delete: "
+                               f"        {cloud}\n"
+                               f"        {names}"
+                               f"        {provider}")
+
                 else:
-                    vms = provider.destroy(names, **params)
+
+                    for name in names:
+                        vms = provider.destroy(names)
+
+
+
                     order = provider.p.output['vm']['order']
                     header = provider.p.output['vm']['header']
                     print(Printer.flatwrite(vms, order=order, header=header, output='table'))
@@ -576,10 +567,12 @@ class VmCommand(PluginCommand):
                 parameters.names = str(n)
 
             if arguments['--dryrun']:
+                Console.ok(f"Dryrun stop: "
+                           f"        {cloud}\n"
+                           f"        {names}"
+                           f"        {provider}",
+                           f"        {parameters}")
 
-                parameters.cloud = cloud
-                print("Parameters:")
-                pprint(parameters)
 
 
 

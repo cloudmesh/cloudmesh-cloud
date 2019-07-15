@@ -427,26 +427,26 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         else:
             return None
 
-    def start(self, names=None):
+    def start(self, name=None):
         """
-        Start a list of nodes with the given names
+        Start a server with the given names
 
         :param names: A list of node names
         :return:  A list of dict representing the nodes
         """
-        VERBOSE(names)
-        raise NotImplementedError
-        return self.apply(self.cloudman.ex_start_node, names)
+        r = self.cloudman.suspend_server(name)
+        #return self.apply(self.cloudman.ex_start_node, names)
 
-    def stop(self, names=None):
+    def stop(self, name=None):
         """
         Stop a list of nodes with the given names
 
         :param names: A list of node names
         :return:  A list of dict representing the nodes
         """
-        raise NotImplementedError
-        return self.apply(self.cloudman.ex_stop_node, names)
+        r = self.cloudman.suspend_server(name)
+        # return self.apply(self.cloudman.ex_stop_node, names)
+        return None
 
     def info(self, name=None):
         """
@@ -455,8 +455,8 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         :param name: The name of teh virtual machine
         :return: The dict representing the node including updated status
         """
-        raise NotImplementedError
-        return self.find(self.list(), name=name)
+        self.cloudman.get_server(name)
+        #return self.find(self.list(), name=name)
 
     def suspend(self, name=None):
         """
@@ -467,7 +467,8 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         :param name: the name of the node
         :return: The dict representing the node
         """
-        raise NotImplementedError
+        # UNTESTED
+        r = self.cloudman.suspend_server(name)
         return None
 
         """
@@ -514,18 +515,13 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         return self.get_list(self.cloudman.compute.servers(),
                              kind="vm")
 
-    def destroy(self, names=None):
+    def destroy(self, name=None):
         """
         Destroys the node
         :param names: the name of the node
         :return: the dict of the node
         """
-        # names = Parameter.expand(names)
-        raise NotImplementedError
-        nodes = self.list()
-        for node in nodes:
-            if node.name in names:
-                self.cloudman.destroy_node(node)
+        r = self.cloudman.delet_server(name)
         # bug status should change to destroyed
         return None
 
@@ -546,6 +542,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                location=None,
                timeout=360,
                key=None,
+               secgroup=None,
                **kwargs):
         """
         creates a named node
@@ -564,8 +561,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         # keyname = Config()["cloudmesh"]["profile"]["user"]
         # ex_keyname has to be the registered keypair name in cloud
 
-        raise NotImplementedError
-
+        """
         images = self.images()
         for _image in images:
             if _image.name == image:
@@ -577,24 +573,50 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
             if _flavor.name == size:
                 flavor_use = _flavor
                 break
+        """
+        print("Create Server:")
 
-        if "ex_security_groups" in kwargs:
-            secgroupsobj = []
-            #
-            # this gives existing secgroups in obj form
-            secgroups = self.list_secgroups()
-            for secgroup in kwargs["ex_security_groups"]:
-                for _secgroup in secgroups:
-                    if _secgroup.name == secgroup:
-                        secgroupsobj.append(_secgroup)
-            # now secgroup name is converted to object which
-            # is required by the libcloud api call
-            kwargs["ex_security_groups"] = secgroupsobj
+        print (image)
+        size = kwargs['flavor']
 
-        raise NotImplementedError
+        print (size)
 
-        # return self.update_dict(node, kind="vm")[0]
-        return None
+
+
+        #_image = self.cloudman.compute.find_image(image)
+        #_flavor = self.cloudman.compute.find_flavor(size)
+        # network = self.cloudman.network.find_network(NETWORK_NAME)
+        # keypair = create_keypair(self.cloudman)
+
+
+
+
+        try:
+            server = self.cloudman.create_server(name,
+                                            flavor=size,
+                                            image=image)
+
+
+            #server = self.cloudman.compute.create_server(
+            #    name=name,
+            #    image_id=_image.id,
+            #    flavor_id=_flavor.id
+            #    # networks=[{"uuid": network.id}],
+            #    # key_name=keypair.name
+            #)
+
+            # server = self.cloudman.compute.wait_for_server(server)
+
+            # print("ssh -i {key} root@{ip}".format(
+            #    key=PRIVATE_KEYPAIR_FILE,
+            #    ip=server.access_ipv4))
+
+            # self.cloudman.add_security_group(security_group=secgroup)
+        except Exception as e:
+            print (e)
+            raise NotImplementedError
+
+        return self.update_dict(server, kind="vm")[0]
 
     def get_publicIP(self):
         # pools = self.cloudman.ex_list_floating_ip_pools()

@@ -18,6 +18,8 @@ from cloudmesh.common.Shell import Shell
 from cloudmesh.common.parameter import Parameter
 from cloudmesh.common.dotdict import dotdict
 from cloudmesh.management.configuration.config import Config
+from cloudmesh.management.configuration.name import Name
+
 
 class VmCommand(PluginCommand):
 
@@ -58,7 +60,7 @@ class VmCommand(PluginCommand):
                         [--image=IMAGE]
                         [--flavor=FLAVOR]
                         [--public]
-                        [--secgroup=SECGROUPS]
+                        [--secgroup=SECGROUP]
                         [--key=KEY]
                         [--dryrun]
                 vm run [--name=VMNAMES] [--username=USERNAME] [--dryrun] COMMAND
@@ -500,13 +502,15 @@ class VmCommand(PluginCommand):
                         [--image=IMAGE]
                         [--flavor=FLAVOR]
                         [--public]
-                        [--secgroup=SECGROUPs]
+                        [--secgroup=SECGROUP]
                         [--key=KEY]
                         [--dryrun]
             """
             # for name in names:
             #    node = p.create(name=name, size=flavor, image=image)
 
+
+            VERBOSE(arguments)
             parameters = dotdict()
 
             names = Parameter.expand(arguments.name)
@@ -515,11 +519,14 @@ class VmCommand(PluginCommand):
                                    variables.dict())
             defaults = Config()[f"cloudmesh.cloud.{cloud}.default"]
 
-            # print ("CCC", defaults)
-            # print("CCC", "cloud" in arguments)
-            # print ("CCC", cloud)
-            # print("CCC", variables.dict())
 
+            # print ("CCC Defaults", defaults)
+            # print("CCC Cloud in arguments", "cloud" in arguments)
+            # print ("CCC Cloud", cloud)
+            # print("CCC Variables", variables.dict())
+
+            parameters = dotdict()
+            parameters.names = arguments.name
             parameters.image = Parameter.find("image",
                                    arguments,
                                    variables.dict(),
@@ -528,11 +535,28 @@ class VmCommand(PluginCommand):
                                     arguments,
                                     variables.dict(),
                                     defaults)
+            parameters.key = Parameter.find("key",
+                                               arguments,
+                                               variables.dict(),
+                                               defaults)
+            provider = Provider(name=cloud)
+            if parameters.key is None:
+                keys = provider.keys()
+                if keys is None:
+                    Console.error("Could not find a key in the database")
+                    return ""
 
+                elif len(keys) == 1:
+                    parameters.keys = keys[0]
+                else:
+                    Console.error("Found multiple keys, please specify one "
+                                  "when booting")
+                    return ""
 
-            parameters.public = None
-            parameters.key = None
-            parameters.secgroup = None
+            # parameters.public = None
+            # if
+            parameters.secgroup = arguments.secgroup or "default"
+
 
             #public = arguments['--public']
             #if public:
@@ -546,25 +570,32 @@ class VmCommand(PluginCommand):
             #if key:
             #    params['ex_keyname'] = key
 
+            if names is None:
+                n = Name()
+                n.incr()
+                parameters.names = str(n)
+
             if arguments['--dryrun']:
 
-                print(f"cloud : {cloud}")
-                print(f"nodes : {names}")
+                parameters.cloud = cloud
                 print("Parameters:")
                 pprint(parameters)
 
 
-            else:
-                provider = Provider(cloud)
-                vms = provider.create(names=names, **parameters)
 
-                order = provider.p.output['vm']['order']
-                header = provider.p.output['vm']['header']
-                print(Printer.flatwrite(vms,
-                                        sort_keys=["cm.name"],
-                                        order=order,
-                                        header=header,
-                                        output=arguments.output))
+            else:
+
+
+                pprint (parameters)
+                vms = provider.create(**parameters)
+
+                #order = provider.p.output['vm']['order']
+                #header = provider.p.output['vm']['header']
+                #print(Printer.flatwrite(vms,
+                #                        sort_keys=["cm.name"],
+                #                        order=order,
+                #                        header=header,
+                #                        output=arguments.output))
 
 
         elif arguments.info:

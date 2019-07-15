@@ -586,21 +586,10 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         print ("    Image:", image)
         print ("    Size: ", size)
 
-
-
-        #_image = self.cloudman.compute.find_image(image)
-        #_flavor = self.cloudman.compute.find_flavor(size)
-        # network = self.cloudman.network.find_network(NETWORK_NAME)
-        # keypair = create_keypair(self.cloudman)
-
-
-
-
         try:
             server = self.cloudman.create_server(name,
                                             flavor=size,
                                             image=image)
-
 
             #server = self.cloudman.compute.create_server(
             #    name=name,
@@ -610,13 +599,14 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
             #    # key_name=keypair.name
             #)
 
+            # self.cloudman.add_security_group(security_group=secgroup)
+
             # server = self.cloudman.compute.wait_for_server(server)
 
             # print("ssh -i {key} root@{ip}".format(
             #    key=PRIVATE_KEYPAIR_FILE,
             #    ip=server.access_ipv4))
 
-            # self.cloudman.add_security_group(security_group=secgroup)
         except Exception as e:
             print (e)
             raise NotImplementedError

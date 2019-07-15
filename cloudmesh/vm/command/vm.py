@@ -45,22 +45,14 @@ class VmCommand(PluginCommand):
                         [--cloud=CLOUDS]
                         [--output=OUTPUT]
                         [--refresh]
-                vm boot [--name=VMNAMES]
+                vm boot [--n=COUNT]
+                        [--name=VMNAMES]
                         [--cloud=CLOUD]
                         [--username=USERNAME]
                         [--image=IMAGE]
                         [--flavor=FLAVOR]
                         [--public]
                         [--secgroup=SECGROUPs]
-                        [--key=KEY]
-                        [--dryrun]
-                vm boot [--n=COUNT]
-                        [--cloud=CLOUD]
-                        [--username=USERNAME]
-                        [--image=IMAGE]
-                        [--flavor=FLAVOR]
-                        [--public]
-                        [--secgroup=SECGROUP]
                         [--key=KEY]
                         [--dryrun]
                 vm run [--name=VMNAMES] [--username=USERNAME] [--dryrun] COMMAND
@@ -259,9 +251,9 @@ class VmCommand(PluginCommand):
                     collection = "{cloud}-vm".format(cloud=cloud,
                                                        kind=p.kind)
                     db = CmDatabase()
-                    images = db.find(collection=collection)
+                    vms = db.find(collection=collection)
 
-                    p.Print(arguments.output, "vm", images)
+                    p.Print(arguments.output, "vm", vms)
 
 
             except Exception as e:
@@ -398,12 +390,7 @@ class VmCommand(PluginCommand):
                 else:
                     vms = provider.start(names=name, cloud=cloud)
 
-                    order = provider.p.output['vm']['order']
-                    header = provider.p.output['vm']['header']
-                    print(Printer.flatwrite(vms,
-                                            order=order,
-                                            header=header,
-                                            output='table'))
+                    provider.Print(arguments.output, "vm", vms)
 
             return ""
 
@@ -418,22 +405,17 @@ class VmCommand(PluginCommand):
                 params = {}
                 provider = Provider(cloud)
 
-                processors = arguments['--processors']
-
-                if arguments['--parallel']:
-                    params['option'] = 'pool'
-                    if processors:
-                        params['processors'] = int(processors[0])
-                else:
-                    params['option'] = 'iter'
-
                 if arguments['--dryrun']:
-                    print("stop nodes {}\noption - {}\nprocessors - {}".format(names, params['option'], processors))
+                    Console.ok (f"Dryrun stop: "
+                                f"        {cloud}\n"
+                                f"        {names}"
+                                f"        {provider}")
                 else:
-                    vms = provider.stop(names, **params)
-                    order = provider.p.output['vm']['order']
-                    header = provider.p.output['vm']['header']
-                    print(Printer.flatwrite(vms, order=order, header=header, output='table'))
+                    for name in names:
+                        vms = provider.stop(name)
+
+                    provider.Print(arguments.output, "vm", vms)
+
 
         elif arguments.terminate:
             if arguments.NAMES:
@@ -446,57 +428,54 @@ class VmCommand(PluginCommand):
                 params = {}
                 provider = Provider(cloud)
 
-                processors = arguments['--processors']
-
-                if arguments['--parallel']:
-                    params['option'] = 'pool'
-                    if processors:
-                        params['processors'] = int(processors[0])
-                else:
-                    params['option'] = 'iter'
-
                 if arguments['--dryrun']:
-                    print(
-                        "terminate nodes {}\noption - {}\nprocessors - {}".format(names, params['option'], processors))
+                    Console.ok (f"Dryrun terminate: "
+                                f"        {cloud}\n"
+                                f"        {names}"
+                                f"        {provider}")
                 else:
-                    vms = provider.destroy(names, **params)
-                    order = provider.p.output['vm']['order']
-                    header = provider.p.output['vm']['header']
-                    print(Printer.flatwrite(vms, order=order, header=header, output='table'))
+                    for name in names:
+                        vms = provider.destroy(name)
+
+                    provider.Print(arguments.output, "vm", vms)
+
 
         elif arguments.delete:
+
             if arguments.NAMES:
                 variables['vm'] = arguments.NAMES
             if arguments['--cloud']:
                 variables['cloud'] = arguments['--cloud']
             clouds, names = Arguments.get_cloud_and_names("stop", arguments, variables)
 
+            if names is not None:
+                pass
+            elif clouds is not None:
+                for cloud in clouds:
+                    provider = Provider(cloud)
+                    vms = provider.list()
+                    for vm in vms:
+                        r = provider.destroy(name=vm)
+                return ""
+            else:
+                return ""
+
             for cloud in clouds:
-                params = {}
                 provider = Provider(cloud)
+                vms = provider.list()
+                for vm in vms:
+                    name = vm["cm"]["name"]
+                    if  name in names:
+                        r = provider.destroy(name=name)
 
-                processors = arguments['--processors']
 
-                if arguments['--parallel']:
-                    params['option'] = 'pool'
-                    if processors:
-                        params['processors'] = int(processors[0])
-                else:
-                    params['option'] = 'iter'
-
-                if arguments['--dryrun']:
-                    print("delete nodes {}\noption - {}\nprocessors - {}".format(names, params['option'], processors))
-                else:
-                    vms = provider.destroy(names, **params)
-                    order = provider.p.output['vm']['order']
-                    header = provider.p.output['vm']['header']
-                    print(Printer.flatwrite(vms, order=order, header=header, output='table'))
 
         # TODO: username, secgroup
         elif arguments.boot:
 
             """
-                vm boot [--name=VMNAMES]
+                vm boot 
+                        [--name=VMNAMES]
                         [--cloud=CLOUD]
                         [--username=USERNAME]
                         [--image=IMAGE]
@@ -576,26 +555,28 @@ class VmCommand(PluginCommand):
                 parameters.names = str(n)
 
             if arguments['--dryrun']:
+                Console.ok(f"Dryrun stop: "
+                           f"        {cloud}\n"
+                           f"        {names}"
+                           f"        {provider}",
+                           f"        {parameters}")
 
-                parameters.cloud = cloud
-                print("Parameters:")
-                pprint(parameters)
 
 
 
             else:
 
-
                 pprint (parameters)
-                vms = provider.create(**parameters)
+                if not arguments.n:
+                    count = 1
+                else:
+                    count = int(arguments.n)
 
-                #order = provider.p.output['vm']['order']
-                #header = provider.p.output['vm']['header']
-                #print(Printer.flatwrite(vms,
-                #                        sort_keys=["cm.name"],
-                #                        order=order,
-                #                        header=header,
-                #                        output=arguments.output))
+                for i in range(0,count):
+                    vms = provider.create(**parameters)
+
+                # provider.Print(arguments.output, "vm", vms)
+
 
 
         elif arguments.info:

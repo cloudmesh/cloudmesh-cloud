@@ -32,9 +32,9 @@ class Provider(ComputeNodeABC):
 
         providers = ProviderList()
 
-        if self.kind in ['openstack', 'pyazure', 'docker', "awsboto"]:
+        if self.kind in ['openstack', 'pyazure', 'docker', "aws"]:
             provider = providers[self.kind]
-        elif self.kind in ["aws", "google"]:
+        elif self.kind in ["awslibcloud", "google"]:
             from cloudmesh.compute.libcloud.Provider import \
                 Provider as LibCloudProvider
             provider = LibCloudProvider
@@ -62,16 +62,38 @@ class Provider(ComputeNodeABC):
         else:
             return Parameter.expand(names)
 
+    def loop_n(self, func, **kwargs):
+
+        try:
+            names = Parameter.expand(kwargs['name'])
+        except:
+            ValueError("The name parameter is missing")
+
+        r = []
+        for name in names:
+            parameters = dict(kwargs)
+            parameters['name']= name
+            vm = func(**parameters)
+            if type(vm) == list:
+                r = r + vm
+            elif type(vm) == dict:
+                r.append(vm)
+            else:
+                raise NotImplementedError
+        return r
+
+    @DatabaseUpdate()
+    def destroy(self, name=None):
+        parameter = {'name': name}
+        r = self.loop_n(self.p.destroy, **parameter)
+        return r
+
     def loop(self, names, func, **kwargs):
         names = self.expand(names)
         r = []
         for name in names:
-            VERBOSE(name)
-            VERBOSE(func)
             vm = func(name, kwargs)
-            VERBOSE(vm)
             r.append(vm)
-            VERBOSE(r)
         return r
 
     @DatabaseUpdate()
@@ -174,6 +196,11 @@ class Provider(ComputeNodeABC):
                 return d[name]
         return None
 
+    def find_clouds(self, names=None):
+        names = self.expand(names)
+        # not yet implemented
+
+
     @DatabaseUpdate()
     def stop(self, names=None, **kwargs):
         return self.loop(names, self.p.stop, **kwargs)
@@ -212,10 +239,14 @@ class Provider(ComputeNodeABC):
     def key_delete(self, key):
         self.p.key_delete(key)
 
-    @DatabaseUpdate()
-    def destroy(self, names=None, **kwargs):
-        # this should later check and remove destroyed nodes, not implemented
-        return self.loop(names, self.p.destroy, **kwargs)
+    def name_parameter(self, name):
+        if name is None:
+            ValueError("Names is None")
+        parameters = {
+            'name': name
+        }
+        return parameters
+
 
     def ssh(self, name, command):
         self.p.ssh(name=name, command=command)

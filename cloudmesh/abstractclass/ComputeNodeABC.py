@@ -1,5 +1,4 @@
 from abc import ABCMeta, abstractmethod
-
 from cloudmesh.management.configuration.config import Config
 
 
@@ -13,49 +12,6 @@ class ComputeNodeABC(metaclass=ABCMeta):
         self.credentials = config["cloud"][cloud]["credentials"]
         self.group = config["default"]["group"]
         self.experiment = config["default"]["experiment"]
-
-    '''
-    def map_default(self, r):
-        """
-        Adds common properties to libcloud results.
-        Transforms result from its original strongly typed
-        form to `dict`.
-
-        Child providers should still implement their own
-        result mapper as well for cloud specific redaction.
-
-        :param r:
-        :return: a result as dict
-        """
-        if not isinstance(r, dict):
-            r = r.__dict__
-
-        r["cloud"] = self.cloud
-        r["modified"] = str(datetime.utcnow())
-        return r
-
-    def map_vm_create(self, c):
-        """
-        Includes `group` and `experiment` fields in
-        the result. Separate from `_map_default` because
-        these fields should only be set when something is
-        created and are unique to VM objects.
-        """
-        c = self.map_default(c)
-        c["group"] = self.group
-        c["experiment"] = self.experiment
-        c["created_at"] = str(datetime.utcnow())
-        c["state"] = "creating"
-        return c
-
-    def print_config(self):
-        print("cm:")
-        pprint(self.cm)
-        print("default:")
-        pprint(self.default)
-        print("Credentials:")
-        pprint(self.credentials)
-    '''
 
     @abstractmethod
     def start(self, name=None):
@@ -100,7 +56,7 @@ class ComputeNodeABC(metaclass=ABCMeta):
     @abstractmethod
     def list(self):
         """
-        list all nodes id
+        list all vms
 
         :return: an array of dicts representing the nodes
         """
@@ -154,3 +110,76 @@ class ComputeNodeABC(metaclass=ABCMeta):
         """
         # if destination is None, increase the name counter and use the new name
         raise NotImplementedError
+
+    def keys(self):
+        """
+        Lists the keys on the cloud
+
+        :return: dict
+        """
+        raise NotImplementedError
+
+    def key_upload(self, key=None):
+        """
+        uploads the key specified in the yaml configuration to the cloud
+        :param key:
+        :return:
+        """
+        raise NotImplementedError
+
+    def key_delete(self, name=None):
+        """
+        deletes the key with the given name
+        :param name: The anme of the key
+        :return:
+        """
+        raise NotImplementedError
+
+
+    def images(self, **kwargs):
+        """
+        Lists the images on the cloud
+        :return: dict
+        """
+        raise NotImplementedError
+
+    def image(self, name=None):
+        """
+        Gets the image with a given nmae
+        :param name: The name of the image
+        :return: the dict of the image
+        """
+        raise NotImplementedError
+
+    def flavors(self, **kwargs):
+        """
+        Lists the flavors on the cloud
+
+        :return: dict of flavors
+        """
+        raise NotImplementedError
+
+    def flavor(self, name=None):
+        """
+        Gest the flavor with a given name
+        :param name: The name of the flavor
+        :return: The dict of the flavor
+        """
+        raise NotImplementedError
+
+    def reboot(self, name=None):
+        """
+        Reboot a list of nodes with the given names
+
+        :param names: A list of node names
+        :return:  A list of dict representing the nodes
+        """
+        raise NotImplementedError
+
+    def attach_publicip(self, name=None):
+        """
+        adds a public ip to the named vm
+
+        :param name: Name of the vm
+        :return:
+        """

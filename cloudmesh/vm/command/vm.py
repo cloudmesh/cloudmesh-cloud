@@ -354,13 +354,9 @@ class VmCommand(PluginCommand):
                 print (cloud)
                 for name in names:
                     for node in cursor.find({'name': name}):
-                        entry  = {
-                            "name": name,
-                            "status": node['status']
-                        }
-                        status.append(entry)
+                        status.append(node)
 
-                p.Print(arguments.output, "status", status)
+                provider.Print(arguments.output, "status", status)
                 return ""
 
 

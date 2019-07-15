@@ -12,7 +12,7 @@ from cloudmesh.management.configuration.config import Config
 
 class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
-    kind = "awsboto"
+    kind = "aws"
 
     # TODO: change to what you see in boto dicts the next values are from
     #  openstack which you must change

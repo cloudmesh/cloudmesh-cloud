@@ -106,6 +106,7 @@ class Provider(ComputeNodeABC):
 
             self.driver = get_driver(
                 Provider.ProviderMapper[self.cloudtype])
+            self.kind = self.cloudtype
 
             if self.cloudtype == 'openstack':
 
@@ -129,14 +130,14 @@ class Provider(ComputeNodeABC):
                     region=cred['AZURE_REGION']
                 )
 
-            elif self.cloudtype == 'aws':
+            elif self.cloudtype == 'awslibcloud':
 
                 self.cloudman = self.driver(
                     cred["EC2_ACCESS_ID"],
                     cred["EC2_SECRET_KEY"],
                     region=cred["EC2_REGION"])
 
-            if self.cloudtype == 'google':
+            if self.cloudtype == 'googlelibcloud':
                 self.cloudman = self.driver(
                     cred["client_email"],
                     cred["path_to_json_file"],  # should be placed in .cloudmesh

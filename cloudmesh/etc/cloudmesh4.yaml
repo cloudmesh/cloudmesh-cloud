@@ -130,6 +130,29 @@ cloudmesh:
         active: False
         heading: AWS
         host: azure.mocrosoft.com
+        label: azure
+        kind: azure
+        version: TBD
+        service: storage
+      default:
+        image: 'Canonical:UbuntuServer:16.04-LTS:latest'
+        size: 'Basic_A0'
+        resource_group: 'cloudmesh'
+        storage_account: 'cmdrive'
+        network: 'cmnetwork'
+        subnet: 'cmsubnet'
+        blob_container: 'vhds'
+      credentials:
+        AZURE_TENANT_ID: 'xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
+        AZURE_SUBSCRIPTION_ID: 'xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
+        AZURE_APPLICATION_ID: 'xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
+        AZURE_SECRET_KEY: TBD
+        AZURE_REGION: 'northcentralus'
+    azurearm:
+      cm:
+        active: False
+        heading: AWS
+        host: azure.mocrosoft.com
         label: azure_arm
         kind: azure_arm
         version: TBD
@@ -177,13 +200,13 @@ cloudmesh:
         AZURE_APPLICATION_ID: 'xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
         AZURE_SECRET_KEY: TBD
         AZURE_REGION: 'eastus'               
-    az:
+    azureaz:
       cm:
         active: False
         heading: AWS
         host: azure.mocrosoft.com
-        label: azure_az
-        kind: azure
+        label: azureaz
+        kind: azureaz
         version: TBD
         service: compute
       default:
@@ -195,13 +218,13 @@ cloudmesh:
       credentials:
         resourcegroup: "test"
         location: "eastus"
-    awsboto:
+    awslibcloud:
       cm:
         active: False
         heading: AWS
         host: aws.amazon.com
-        label: awsboto
-        kind: awsboto
+        label: aws
+        kind: awslibcloud
         version: TBD
         service: compute
       default:
@@ -221,25 +244,6 @@ cloudmesh:
         host: aws.amazon.com
         label: aws
         kind: aws
-        version: TBD
-        service: compute
-      default:
-        image: 'ami-0f65671a86f061fcd'
-        size: 't2.micro'
-      credentials:
-        region: 'us-west-2'
-        EC2_SECURITY_GROUP: 'group1'
-        EC2_ACCESS_ID: TBD
-        EC2_SECRET_KEY: TBD
-        EC2_PRIVATE_KEY_FILE_PATH: '~/.cloudmesh/aws_cert.pem'
-        EC2_PRIVATE_KEY_FILE_NAME: 'aws_cert'
-    awsboto:
-      cm:
-        active: False
-        heading: AWS
-        host: aws.amazon.com
-        label: aws
-        kind: awsboto
         version: TBD
         service: compute
       default:

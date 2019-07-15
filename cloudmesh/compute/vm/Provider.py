@@ -32,9 +32,9 @@ class Provider(ComputeNodeABC):
 
         providers = ProviderList()
 
-        if self.kind in ['openstack', 'pyazure', 'docker', "awsboto"]:
+        if self.kind in ['openstack', 'pyazure', 'docker', "aws"]:
             provider = providers[self.kind]
-        elif self.kind in ["aws", "google"]:
+        elif self.kind in ["awslibcloud", "google"]:
             from cloudmesh.compute.libcloud.Provider import \
                 Provider as LibCloudProvider
             provider = LibCloudProvider
@@ -62,16 +62,30 @@ class Provider(ComputeNodeABC):
         else:
             return Parameter.expand(names)
 
+    def loop_n(self, func, **kwargs):
+
+        try:
+            names = kwargs['name']
+        except:
+            ValueError("The name parameter is missing")
+
+        print ()
+
+        r = []
+        VERBOSE(names)
+        VERBOSE(func)
+        for name in names:
+            vm = func(**kwargs)
+            r.append(vm)
+        VERBOSE(r)
+        return r
+
     def loop(self, names, func, **kwargs):
         names = self.expand(names)
         r = []
         for name in names:
-            VERBOSE(name)
-            VERBOSE(func)
             vm = func(name, kwargs)
-            VERBOSE(vm)
             r.append(vm)
-            VERBOSE(r)
         return r
 
     @DatabaseUpdate()
@@ -212,10 +226,19 @@ class Provider(ComputeNodeABC):
     def key_delete(self, key):
         self.p.key_delete(key)
 
+    def name_parameter(self, name):
+        if name is None:
+            ValueError("Names is None")
+        parameters = {
+            'name': name
+        }
+        return parameters
+
     @DatabaseUpdate()
-    def destroy(self, names=None, **kwargs):
-        # this should later check and remove destroyed nodes, not implemented
-        return self.loop(names, self.p.destroy, **kwargs)
+    def destroy(self, name=None):
+        parameters = self.name_parameter(name)
+        r = self.loop_n(self.p.destroy, **parameters)
+        return r
 
     def ssh(self, name, command):
         self.p.ssh(name=name, command=command)

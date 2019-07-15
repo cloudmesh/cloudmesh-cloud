@@ -360,13 +360,7 @@ class VmCommand(PluginCommand):
                         }
                         status.append(entry)
 
-                print(Printer.write(
-                    status,
-                    sort_keys=["name"],
-                    order=["name", "status"],
-                    header=["Name", "Status"],
-                    output=arguments.output)
-                )
+                p.Print(arguments.output, "status", status)
                 return ""
 
 

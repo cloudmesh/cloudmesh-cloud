@@ -55,8 +55,8 @@ Which will return
 """
 import os
 from pprint import pprint
-
-import yaml
+from cloudmesh.common.debug import VERBOSE
+import oyaml as yaml
 
 from cloudmesh.common.dotdict import dotdict
 from cloudmesh.common.util import path_expand
@@ -64,44 +64,76 @@ from cloudmesh.common.util import path_expand
 
 class Name(dotdict):
 
-    def __init__(self, order=None, **kwargs):
+    def __init__(self, schema=None, **kwargs):
         """
         Defines a name tag that sets the format of the name to the specified schema
         :param schema:
         """
-        if order is None:
-            order = ["experiment", "group", "user", "kind", "counter"]
-        if "path" not in kwargs:
-            self.__dict__['path'] = path_expand("~/.cloudmesh/name.yaml")
-        prefix = os.path.dirname(self.__dict__['path'])
-        if not os.path.exists(prefix):
-            os.makedirs(prefix)
 
-        if os.path.exists(self.path):
-            with open(self.path, 'rb') as dbfile:
-                v = yaml.safe_load(dbfile) or dict()
-            for name in v:
-                self.__dict__[name] = v[name]
 
-        self.__dict__['order'] = order
-        self.__dict__['schema'] = "{" + "}-{".join(order) + "}"
-        for name in kwargs:
-            self.__dict__[name] = kwargs[name]
-        # self.data = kwargs
+        #
+        # init dict with schema, path, kwars
+        #
 
-    def flush(self):
-        string = yaml.dump(self.__dict__, default_flow_style=False)
-        bits = bytes(string, encoding='utf-8')
-        with open(self.path, 'wb') as dbfile:
-            dbfile.write(bits)
 
-    def incr(self):
-        self.__dict__["counter"] += 1
+        if schema is None  and len(kwargs) == 0:
+            path = path_expand("~/.cloudmesh/name.yaml")
+            data = self.load(path)
+            self.assign(data)
+
+        else:
+
+            self.assign(kwargs)
+
+            if schema is not None:
+                self.__dict__['schema'] = schema
+
+            if "path" not in kwargs:
+                self.__dict__['path'] = path_expand("~/.cloudmesh/name.yaml")
+
+        if "counter" not in self.__dict__:
+            self.reset()
+        else:
+            self.__dict__["counter"] = int(self.__dict__["counter"])
+
         self.flush()
 
-    def reset(self):
-        self.__dict__["counter"] = 1
-        self.flush()
+
+    def assign(self, data):
+        for entry in data:
+            self.__dict__[entry] = data[entry]
+
+    def load(self, path):
+
+        data = {"wrong": "True"}
+        if os.path.exists(path):
+            with open(path, 'rb') as dbfile:
+                data = yaml.safe_load(dbfile) or dict()
+        else:
+            prefix = os.path.dirname(path)
+            if not os.path.exists(prefix):
+                os.makedirs(prefix)
+
+            data = {
+                'counter': 1,
+                'path': path,
+                'kind': "vm",
+                'schema': "{experiment}-{group}-{user}-{kind}-{counter}",
+                'experiment': 'exp',
+                'group': 'group',
+                'user': 'user'
+            }
+            self.flush(data)
+        return data
+
+    def flush(self, data=None):
+
+        if data is None:
+            data = self.__dict__
+
+        with open(data['path'], 'w') as yaml_file:
+            yaml.dump(data, yaml_file, default_flow_style=False)
+
 
     def __str__(self):
         return str(self.__dict__["schema"].format(**self.__dict__))
@@ -109,23 +141,14 @@ class Name(dotdict):
     def dict(self):
         return self.__dict__
 
-    def id(self, **kwargs):
-        d = self.__dict__
-        pprint(d)
-        for e in kwargs:
-            d[e] = kwargs[e]
-        pprint(d)
 
-        return str(self.__dict__["schema"].format(**d))
+    def reset(self):
+        self.__dict__["counter"] = 1
+        self.flush()
 
-# Make a unit test
+    def incr(self):
+        self.__dict__["counter"] += 1
+        self.flush()
 
-# %% usage/test
-# a={'experiment':'a',
-#    'group':'b',
-#    'user':'gregor',
-#    'counter':0}
-# name=Name(a)
-#
-# print(name.get(a))
-# print(name.get())
+
+

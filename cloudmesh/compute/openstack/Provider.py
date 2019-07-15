@@ -17,7 +17,19 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
     kind = "openstack"
 
     output = {
-
+        "status": {
+            "sort_keys": ["cm.name"],
+            "order": ["cm.name",
+                      "cm.cloud",
+                      "vm_state",
+                      "status",
+                      "task_state"],
+            "header": ["Name",
+                       "Cloud",
+                       "State",
+                       "Status",
+                       "Task"]
+        },
         "vm": {
             "sort_keys": ["cm.name"],
             "order": ["cm.name",

@@ -17,20 +17,34 @@ from cloudmesh.management.configuration.name import Name
 from cloudmesh.common.variables import Variables
 from cloudmesh.common.debug import VERBOSE
 import pytest
+from cloudmesh.common.StopWatch import StopWatch
+from cloudmesh.common.util import banner
+from cloudmesh.common.Shell import Shell
 
 
 @pytest.mark.incremental
 class TestName:
 
+    def run(self, label, command, encoding=None, service=None):
+        if service is None:
+            service = self.cloud
+        _label = str(label)
+        print (_label, command)
+        StopWatch.start(f"{service} {_label}")
+        result = Shell.run(command, encoding)
+        StopWatch.stop(f"{service} {_label}")
+        return result
+
     def setup(self):
         banner("setup", c="-")
         self.user = Config()["cloudmesh"]["profile"]["user"]
         self.clouduser = 'cc'
+
+        user = self.user
+        kind = "vm"
+
         self.name_generator = Name(
-            experiment="exp",
-            group="grp",
-            user=self.user,
-            kind="vm",
+            schema=f"{user}-vm",
             counter=1)
 
         self.name = str(self.name_generator)
@@ -40,7 +54,7 @@ class TestName:
 
         variables = Variables()
         # this gives the current default cloud
-        cloud = variables['cloud']
+        self.cloud = variables['cloud']
 
         # specify the cloud name to make sure this test
         # is done for the openstack cloud
@@ -54,7 +68,31 @@ class TestName:
                              "ip_range": "129.79.0.0/16"}
         self.testnode = None
 
-    def test_list_keys(self):
+
+    def test_add_key_from_cli(self):
+        HEADING()
+
+        result = self.run("db add key", f"cms key add {self.user} "
+        f"--source=ssh", service="local")
+        result = self.run("db list ", f"cms key list",service="local")
+
+        VERBOSE(result)
+
+        assert self.user in result
+
+
+    def test_upload_key_from_cli(self):
+        HEADING()
+
+        result = Shell.run("cms key upload", f"cms key upload {self.user}")
+        result = Shell.run("cms list", f"cms key upload {self.user}")
+
+
+        "cms key list --cloud=chameleon"
+        VERBOSE(result)
+
+
+    def test_list_variables(self):
         HEADING()
         print(256 * "@")
         pprint(self.p.user)
@@ -291,6 +329,10 @@ class TestName:
 
         self.test_14_destroy()
         self.test_list_vm()
+
+    def test_results(self):
+        banner(f"Benchmark results for {self.cloud}")
+        StopWatch.benchmark()
 
 
 class other:

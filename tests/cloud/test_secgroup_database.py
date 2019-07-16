@@ -1,6 +1,6 @@
 ###############################################################
-# pytest -v --capture=no tests/0_basic/test_secgroup_database.py
-# pytest -v  tests/0_basic/test_secgroup_database.py
+# pytest -v --capture=no tests/cloud/test_secgroup_database.py
+# pytest -v  tests/cloud/test_secgroup_database.py
 ###############################################################
 
 from pprint import pprint

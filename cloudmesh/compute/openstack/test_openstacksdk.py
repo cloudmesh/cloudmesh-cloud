@@ -8,7 +8,7 @@ import openstack
 from cloudmesh.common.util import banner
 from cloudmesh.common.Shell import Shell
 import os
-
+from cloudmesh.compute.vm.Provider import Provider
 """
 see : https://docs.openstack.org/openstacksdk/latest/user/guides/compute.html
 """
@@ -49,8 +49,24 @@ pprint(config)
 
 cloud = openstack.connect(**config)
 
-pprint(dir(cloud))
+#pprint(dir(cloud))
 
+#pprint (cloud.list_floating_ips())
+
+#print (cloud.available_floating_ip())
+
+#print (cloud.create_floating_ip())
+
+ip ='129.114.33.15'
+
+#print (cloud.delete_floating_ip(ip))
+
+provider = Provider(name="chameleon")
+# pprint (cloud.list_floating_ips())
+
+r = provider.delete_public_ip(ip)
+
+print(r)
 
 if False:
 

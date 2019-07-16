@@ -183,3 +183,34 @@ class ComputeNodeABC(metaclass=ABCMeta):
         :param name: Name of the vm
         :return:
         """
+        raise NotImplementedError
+
+    def delete_public_ip(self, ip=None):
+        """
+        Deletes the ip address
+
+        :param ip: the ip addess, if None than all will be deleted
+        :return:
+        """
+        raise NotImplementedError
+
+    def list_public_ips(self, available=False):
+        """
+        Lists the public ip addresses.
+        :param available: if True only those that are not allocated will be
+                          retunred.
+        :return:
+        """
+        raise NotImplementedError
+
+    def create_public_ip(self):
+        """
+        Creates a new public IP address to use
+        :return: The ip address information
+        """
+
+    def find_available_public_ip(self):
+        """
+        Returns a single public available ip address.
+        :return: The ip
+        """

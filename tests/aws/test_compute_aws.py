@@ -1,7 +1,7 @@
 ###############################################################
-# pytest -v --capture=no tests/test_compute_openstack.py
-# pytest -v  tests/test_compute_openstack.py
-# pytest -v --capture=no  tests/test_compute_openstack.py:Test_compute_openstack.<METHIDNAME>
+# pytest -v --capture=no tests/aws/test_compute_aws.py
+# pytest -v  tests/aws/test_compute_aws.py
+# pytest -v --capture=no  tests/aws/test_compute_awas.py:Test_compute_aws.<METHIDNAME>
 ###############################################################
 import subprocess
 import time
@@ -14,8 +14,6 @@ from cloudmesh.compute.libcloud.Provider import Provider
 from cloudmesh.management.configuration.SSHkey import SSHkey
 from cloudmesh.management.configuration.config import Config
 from cloudmesh.management.configuration.name import Name
-from cloudmesh.common.variables import Variables
-from cloudmesh.common.debug import VERBOSE
 import pytest
 
 
@@ -38,14 +36,7 @@ class TestName:
 
         self.new_name = str(self.name_generator)
 
-        variables = Variables()
-        # this gives the current default cloud
-        cloud = variables['cloud']
-
-        # specify the cloud name to make sure this test
-        # is done for the openstack cloud
-        #
-        self.p = Provider(name="chameleon")
+        self.p = Provider(name="aws")
 
         self.secgroupname = "CM4TestSecGroup"
         self.secgrouprule = {"ip_protocol": "tcp",
@@ -56,7 +47,6 @@ class TestName:
 
     def test_list_keys(self):
         HEADING()
-        print(256 * "@")
         pprint(self.p.user)
         pprint(self.p.cloudtype)
         pprint(self.p.spec)
@@ -80,40 +70,55 @@ class TestName:
 
         self.p.key_upload(key)
 
-        self.test_list_keys()
-
-    def test_list_images(self):
-        HEADING()
-        images = self.p.images()
-
-        VERBOSE(images)
-
-        print(Printer.flatwrite(images,
-                                sort_keys=["name", "extra.minDisk"],
-                                order=["name", "extra.minDisk", "updated",
-                                       "driver"],
-                                header=["Name", "MinDisk", "Updated", "Driver"])
-              )
+        self.test_01_list_keys()
 
     def test_list_flavors(self):
         HEADING()
         flavors = self.p.flavors()
-        # pprint (flavors)
-
-        VERBOSE(flavors)
+        pprint(flavors)
 
         print(Printer.flatwrite(flavors,
-                                sort_keys=["name", "vcpus", "disk"],
-                                order=["name", "vcpus", "ram", "disk"],
-                                header=["Name", "VCPUS", "RAM", "Disk"])
+                                sort_keys=[
+                                    "name", "extra.vcpu", "extra.memory", "price"],
+                                order=["name", "extra.vcpu", "extra.memory",
+                                       "extra.clockSpeed", "price"],
+                                header=["Name", "VCPUS", "RAM", "Speed",
+                                        "Price"])
               )
+
+        """
+            {'bandwidth': None,
+             'cloud': 'aws',
+             'created': '2019-02-22 19:27:54.965053',
+             'disk': 0,
+             'driver': 'aws',
+             'extra': {'clockSpeed': 'Up to 3.0 GHz',
+                       'currentGeneration': 'Yes',
+                       'ecu': 'Variable',
+                       'instanceFamily': 'General purpose',
+                       'instanceType': 't2.xlarge',
+                       'memory': '16 GiB',
+                       'networkPerformance': 'Moderate',
+                       'normalizationSizeFactor': '8',
+                       'physicalProcessor': 'Intel Xeon Family',
+                       'processorArchitecture': '64-bit',
+                       'processorFeatures': 'Intel AVX; Intel Turbo',
+                       'servicecode': 'AmazonEC2',
+                       'servicename': 'Amazon Elastic Compute Cloud',
+                       'storage': 'EBS only',
+                       'vcpu': '4'},
+             'id': 't2.xlarge',
+             'kind': 'flavor',
+             'name': 't2.xlarge',
+             'price': 0.188,
+             'ram': 16384,
+             'updated': '2019-02-22 19:27:54.965053'},
+        """
 
     def test_list_vm(self):
         HEADING()
         vms = self.p.list()
-        # pprint (vms)
-
-        VERBOSE(vms)
+        pprint(vms)
 
         print(Printer.flatwrite(vms,
                                 sort_keys=["name"],
@@ -141,37 +146,30 @@ class TestName:
         for secgroup in secgroups:
             print(secgroup["name"])
             rules = self.p.list_secgroup_rules(secgroup["name"])
+
             print(Printer.write(rules,
-                                sort_keys=[
-                                    "ip_protocol", "from_port", "to_port",
-                                    "ip_range"],
-                                order=["ip_protocol", "from_port", "to_port",
-                                       "ip_range"],
-                                header=["ip_protocol", "from_port", "to_port",
-                                        "ip_range"])
+                                sort_keys=["ip_protocol", "from_port", "to_port", "ip_range"],
+                                order=["ip_protocol", "from_port", "to_port", "ip_range"],
+                                header=["ip_protocol", "from_port", "to_port", "ip_range"])
                   )
 
     def test_secgroups_add(self):
-        HEADING()
         self.p.add_secgroup(self.secgroupname)
-        self.test_list_secgroups()
+        self.test_05_list_secgroups()
 
     def test_secgroup_rules_add(self):
-        HEADING()
         rules = [self.secgrouprule]
         self.p.add_rules_to_secgroup(self.secgroupname, rules)
-        self.test_list_secgroups()
+        self.test_05_list_secgroups()
 
     def test_secgroup_rules_remove(self):
-        HEADING()
         rules = [self.secgrouprule]
         self.p.remove_rules_from_secgroup(self.secgroupname, rules)
-        self.test_list_secgroups()
+        self.test_05_list_secgroups()
 
     def test_secgroups_remove(self):
-        HEADING()
         self.p.remove_secgroup(self.secgroupname)
-        self.test_list_secgroups()
+        self.test_05_list_secgroups()
 
     def test_create(self):
         HEADING()
@@ -197,7 +195,7 @@ class TestName:
 
         assert node is not None
 
-    def test_publicIP_attach(self):
+    def test_publicip_attach(self):
         HEADING()
         pubip = self.p.get_publicIP()
         pprint(pubip)
@@ -210,10 +208,9 @@ class TestName:
             print("attaching public IP...")
             self.p.attach_publicIP(self.testnode, pubip)
             time.sleep(5)
-        self.test_list_vm()
+        self.test_04_list_vm()
 
-    def test_publicIP_detach(self):
-        HEADING()
+    def test_publicip_detach(self):
         print("detaching and removing public IP...")
         time.sleep(5)
         nodes = self.p.list(raw=True)
@@ -225,20 +222,20 @@ class TestName:
         pubip = self.p.cloudman.ex_get_floating_ip(ipaddr)
         self.p.detach_publicIP(self.testnode, pubip)
         time.sleep(5)
-        self.test_list_vm()
+        self.test_04_list_vm()
 
-    # def test_printer(self):
+    # def test_11_printer(self):
     #    HEADING()
     #    nodes = self.p.list()
 
     #    print(Printer.write(nodes, order=["name", "image", "size"]))
 
-    # def test_start(self):
+    # def test_01_start(self):
     #    HEADING()
     #    self.p.start(name=self.name)
 
-    # def test_list_vm(self):
-    #    self.test_list_vm()
+    # def test_12_list_vm(self):
+    #    self.test_04_list_vm()
 
     def test_info(self):
         HEADING()
@@ -251,17 +248,18 @@ class TestName:
         node = self.p.find(nodes, name=self.name)
 
         pprint(node)
-        self.test_list_vm()
 
         assert node["extra"]["task_state"] == "deleting"
 
+    def test_list_vm(self):
+        self.test_04_list_vm()
+
     def test_vm_login(self):
-        HEADING()
-        self.test_list_vm()
-        self.test_create()
+        self.test_04_list_vm()
+        self.test_10_create()
         # use the self.testnode for this test
         time.sleep(30)
-        self.test_publicIP_attach()
+        self.test_11_publicIP_attach()
         time.sleep(5)
         nodes = self.p.list(raw=True)
         for node in nodes:
@@ -272,13 +270,12 @@ class TestName:
         # pprint (self.testnode.public_ips)
         pubip = self.testnode.public_ips[0]
 
-        command = "cat /etc/*release*"
+        COMMAND = "cat /etc/*release*"
 
-        ssh = subprocess.Popen(
-            ["ssh", "%s@%s" % (self.clouduser, pubip), command],
-            shell=False,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE)
+        ssh = subprocess.Popen(["ssh", "%s@%s" % (self.clouduser, pubip), COMMAND],
+                               shell=False,
+                               stdout=subprocess.PIPE,
+                               stderr=subprocess.PIPE)
         result = ssh.stdout.readlines()
         if result == []:
             error = ssh.stderr.readlines()
@@ -290,7 +287,57 @@ class TestName:
                 print(line.strip("\n"))
 
         self.test_14_destroy()
-        self.test_list_vm()
+        self.test_04_list_vm()
+
+
+class takestoolong:
+
+    def test_list_images(self):
+        HEADING()
+        images = self.p.images()
+        pprint(images[:10])
+
+        print(Printer.flatwrite(images[:10],
+                                sort_keys=["id", "name"],
+                                order=["name", "id", 'architecture',
+                                       'hypervisor'],
+                                header=["Name", "id", 'architecture',
+                                        'hypervisor'])
+              )
+
+        """
+         {'cloud': 'aws',
+          'driver': 'aws',
+          'extra': {'architecture': 'x86_64',
+                    'billing_products': [],
+                    'block_device_mapping': [{'device_name': '/dev/sda1',
+                                              'ebs': {'delete': 'true',
+                                                      'iops': None,
+                                                      'snapshot_id': 'snap-0286f41a178e9566b',
+                                                      'volume_id': None,
+                                                      'volume_size': 8,
+                                                      'volume_type': 'gp2'},
+                                              'virtual_name': None}],
+                    'description': None,
+                    'ena_support': None,
+                    'hypervisor': 'xen',
+                    'image_location': 'amazon/aws-elasticbeanstalk-amzn-2017.09.1.x86_64-golang-pv-201801050757',
+                    'image_type': 'machine',
+                    'is_public': 'true',
+                    'kernel_id': 'aki-5c21674b',
+                    'owner_alias': 'amazon',
+                    'owner_id': '102837901569',
+                    'platform': None,
+                    'ramdisk_id': None,
+                    'root_device_type': 'ebs',
+                    'sriov_net_support': None,
+                    'state': 'available',
+                    'tags': {},
+                    'virtualization_type': 'paravirtual'},
+          'id': 'ami-3b560641',
+          'kind': 'image',
+          'name': 'aws-elasticbeanstalk-amzn-2017.09.1.x86_64-golang-pv-201801050757'},
+        """
 
 
 class other:
@@ -300,14 +347,14 @@ class other:
 
         self.p.rename(source=self.name, destination=self.new_name)
 
-    # def test_stop(self):
+    # def test_01_stop(self):
     #    HEADING()
     #    self.stop(name=self.name)
 
-    # def test_suspend(self):
+    # def test_01_suspend(self):
     #    HEADING()
     #    self.p.suspend(name=self.name)
 
-    # def test_resume(self):
+    # def test_01_resume(self):
     #    HEADING()
     #    self.p.resume(name=self.name)

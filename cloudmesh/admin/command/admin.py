@@ -8,11 +8,11 @@ from cloudmesh.management.configuration.operatingsystem import OperatingSystem
 # from cloudmesh.admin.api.manager import Manager
 from cloudmesh.mongo.MongoDBController import MongoDBController
 from cloudmesh.mongo.MongoDBController import MongoInstaller
-from cloudmesh.shell.command import PluginCommand
+from cloudmesh.shell.command import PluginCommand, map_parameters
 from cloudmesh.shell.command import command
 from cloudmesh.common.Shell import Shell
 from cloudmesh.common.util import path_expand
-
+from cloudmesh.common.debug import VERBOSE
 
 class AdminCommand(PluginCommand):
     # noinspection PyPep8
@@ -47,7 +47,7 @@ class AdminCommand(PluginCommand):
             admin mongo load FILENAME
             admin mongo security
             admin mongo password PASSWORD
-            admin mongo list
+            admin mongo list [COLLECTION] [--output=OUTPUT]
             admin rest status
             admin rest start
             admin rest stop
@@ -99,6 +99,8 @@ class AdminCommand(PluginCommand):
               This can be very useful in case you are filing an issue or bug.
         """
 
+        map_parameters(arguments, "output")
+        arguments.output = arguments.output or "table"
         # arguments.PATH = arguments['--download'] or None
         result = None
 
@@ -182,14 +184,33 @@ class AdminCommand(PluginCommand):
 
             elif arguments.list:
 
+                VERBOSE(arguments)
                 mongo = MongoDBController()
-                r = mongo.list()
 
-                if len(r) > 0:
-                    print(Printer.dict(r, order=["name", "sizeOnDisk", "empty"]))
-                    Console.ok("ok")
+                if arguments.COLLECTION:
+                    r = mongo.list(name=arguments.COLLECTION)
+                    VERBOSE (r)
+                    if len(r) > 0:
+                        Console.ok("ok")
+                    else:
+                        Console.ok("is your MongoDB server running")
+
                 else:
-                    Console.ok("is your MongoDB server running")
+                    r = mongo.list()
+
+                    if len(r) > 0:
+                        if arguments.output == 'table':
+                            print(Printer.dict(r, order=["name",
+                                                     "sizeOnDisk",
+                                                     "empty",
+                                                     "collections"],
+                                           output=arguments.output),
+                              )
+                        else:
+                            print(Printer.write(r, output=arguments.output))
+                        Console.ok("ok")
+                    else:
+                        Console.ok("is your MongoDB server running")
 
         elif arguments.yaml and arguments.cat:
 

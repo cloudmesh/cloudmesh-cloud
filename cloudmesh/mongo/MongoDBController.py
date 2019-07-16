@@ -208,7 +208,18 @@ class MongoDBController(object):
 
         data = {}
         for db in client.list_databases():
-            data[db['name']] = db
+            name = db['name']
+            data[name] = db
+            names = client[name].collection_names()
+            data[name]['collections'] = names
+
+            #data[name]['collections'] = {}
+            #collections = data[name]['collections']
+            #collections = names
+            #for collection_name in names:
+            #    entry = {'name': collection_name}
+            #    collections[collection_name] = entry
+
         return data
 
     def __str__(self):
@@ -300,17 +311,16 @@ class MongoDBController(object):
         add admin account into the MongoDB admin database
         """
 
-        if platform.lower() == 'win32':
-            script = """
-            mongo --eval "db.getSiblingDB('admin').createUser({{user:'{MONGO_USERNAME}',pwd:'{MONGO_PASSWORD}',roles:[{{role:'root',db:'admin'}}]}})"
-            """.format(**self.data)
-            print(script)
-        else:
-            script = """mongo --eval 'db.getSiblingDB("admin").createUser({{user:"{MONGO_USERNAME}",pwd:"{MONGO_PASSWORD}",roles:[{{role:"root",db:"admin"}}]}})'""".format(
-                **self.data)
+        script = """mongo --eval 'db.getSiblingDB("admin").createUser({{user:"{MONGO_USERNAME}",pwd:"{MONGO_PASSWORD}",roles:[{{role:"root",db:"admin"}}]}})'""".format(**self.data)
 
         result = Script.run(script)
-        print(result)
+        if "Successfully added user" in result:
+            Console.ok("Administrative user created.")
+        else:
+            Console.error("Problem creating the administrative user. Check "
+                          "the yaml file and make sure the password and "
+                          "username are not TBD.")
+        # print(result)
 
     def dump(self, filename):
         """

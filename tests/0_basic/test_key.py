@@ -1,7 +1,7 @@
 ###############################################################
-# pytest -v --capture=no tests/test_key.py
-# pytest -v  tests/test_key.py
-# pytest -v --capture=no  tests/test_key.py:Test_key.<METHIDNAME>
+# pytest -v --capture=no tests/0_basic/test_key.py
+# pytest -v  tests/0_basic/test_key.py
+# pytest -v --capture=no  tests/0_basic/test_key.py:Test_key.<METHIDNAME>
 ###############################################################
 from pprint import pprint
 from cloudmesh.common.Printer import Printer

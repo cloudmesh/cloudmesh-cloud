@@ -37,8 +37,6 @@ class ImageCommand(PluginCommand):
                        "cloud",
                        "output")
 
-        VERBOSE(arguments)
-
         variables = Variables()
 
 

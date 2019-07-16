@@ -94,3 +94,30 @@ class Test_cm_find:
         print (entries)
         assert len(entries) > 0
 
+    def test_cm_find_cloud_name_attributes(self):
+        HEADING()
+        print()
+
+        entries = cm.find(collection=f"{cloud}-vm",
+                          attributes=['cm.cloud', 'cm.name'])
+        print (entries)
+        assert len(entries) > 0
+
+    def test_cm_find_vm_collections(self):
+        HEADING()
+        collections = cm.collections()
+        print (collections)
+        assert len(collections) > 0
+
+        collections = cm.collections(regex=".*-vm")
+        print (collections)
+        assert len(collections) > 0
+
+    def test_cm_find_vm_collection_form_parameter(self):
+        HEADING()
+        collections = cm.collections(
+            name="a-vm,b-vm",
+            regex=".*-vm")
+        print (collections)
+        assert len(collections) == 2
+

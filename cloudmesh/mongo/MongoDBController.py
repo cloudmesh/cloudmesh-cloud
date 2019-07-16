@@ -208,7 +208,18 @@ class MongoDBController(object):
 
         data = {}
         for db in client.list_databases():
-            data[db['name']] = db
+            name = db['name']
+            data[name] = db
+            names = client[name].collection_names()
+            data[name]['collections'] = names
+
+            #data[name]['collections'] = {}
+            #collections = data[name]['collections']
+            #collections = names
+            #for collection_name in names:
+            #    entry = {'name': collection_name}
+            #    collections[collection_name] = entry
+
         return data
 
     def __str__(self):

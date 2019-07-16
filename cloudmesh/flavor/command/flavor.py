@@ -45,8 +45,6 @@ class FlavorCommand(PluginCommand):
                        "cloud",
                        "output")
 
-        VERBOSE(arguments)
-
         variables = Variables()
 
         if arguments.list and arguments.refresh:

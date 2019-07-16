@@ -1,9 +1,13 @@
+###############################################################
+# pytest -v --capture=no tests/1_security/test_encryption.py
+# pytest -v  tests/1_security/test_encryption.py
+# pytest -v --capture=no  tests/1_security/test_encryption.py:Test_name.<METHIDNAME>
+###############################################################
 """ run with
 
 pytest -v --capture=no tests/test_encryption.py
 
 """
-from __future__ import print_function
 
 import os
 import shutil

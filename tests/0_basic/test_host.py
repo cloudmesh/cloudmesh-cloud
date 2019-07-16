@@ -1,7 +1,7 @@
 ###############################################################
-# pytest -v --capture=no  tests/test_host.py:Test_host.test_ping
-# pytest -v --capture=no  tests/test_host.py
-# pytest -v tests/test_host.py
+# pytest -v --capture=no  tests/0_basic/test_host.py:Test_host.test_ping
+# pytest -v --capture=no  tests/0_basic/test_host.py
+# pytest -v tests/0_basic/test_host.py
 ###############################################################
 from cloudmesh.common3.host import Host
 from cloudmesh.common.util import HEADING

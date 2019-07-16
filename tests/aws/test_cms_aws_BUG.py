@@ -1,7 +1,7 @@
 ###############################################################
-# pytest -v --capture=no tests/test_aws_fail.py
-# pytest -v  tests/test_aws_fail.py
-# pytest -v --capture=no -v --nocapture tests/test_aws_fail.py:Test_aws.<METHIDNAME>
+# pytest -v --capture=no tests/aws/test_aws_BUG.py
+# pytest -v  tests/aws/test_aws_BUG.py
+# pytest -v --capture=no -v --nocapture tests/aws/test_aws_BUG.py:Test_aws.<METHIDNAME>
 ###############################################################
 from cloudmesh.management.configuration.config import Config
 from cloudmesh.common.util import HEADING

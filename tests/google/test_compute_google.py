@@ -1,6 +1,6 @@
 #################################################################
-# pytest -v --capture=no
-# pytest -v --capture=no tests/test_compute_google.py
+# pytest -v --capture=no tests/google
+# pytest -v --capture=no tests/google/test_compute_google.py
 #################################################################
 
 from pprint import pprint

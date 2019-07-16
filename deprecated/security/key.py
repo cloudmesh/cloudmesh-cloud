@@ -1,6 +1,3 @@
-from __future__ import print_function
-
-
 #
 # TODO THIS IS CODE FROM THE PREVIOUS CLOUDMESH, WE NEEED TO CLEAN AND POSSIBLY SIMPLIFY
 #

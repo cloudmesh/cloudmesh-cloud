@@ -14,7 +14,6 @@ cm = CmDatabase()
 variables = Variables()
 
 assert variables['cloud'] is not None
-
 cloud = variables['cloud']
 
 @pytest.mark.incremental

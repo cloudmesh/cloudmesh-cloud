@@ -1,7 +1,7 @@
 ###############################################################
-# pytest -v --capture=no benchmark/test_cms.py
-# pytest -v  benchmark/test_cms.py
-# pytest -v --capture=no benchmark/test_cms.py:Test_cms.<METHIDNAME>
+# pytest -v --capture=no tests/benchmark/test_cms.py
+# pytest -v  tests/benchmark/test_cms.py
+# pytest -v --capture=no tests/benchmark/test_cms.py:Test_cms.<METHIDNAME>
 ###############################################################
 
 import pytest

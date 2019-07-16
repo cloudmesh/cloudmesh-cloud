@@ -1,7 +1,7 @@
 ###############################################################
-# pytest -v --capture=no tests/0_basic/test_mongo.py
-# pytest -v  tests/0_basic/test_mongo.py
-# pytest -v --capture=no  tests/0_basic/test_mongo.py:Test_mongo.<METHIDNAME>
+# pytest -v --capture=no tests/1_basic/test_mongo.py
+# pytest -v  tests/1_basic/test_mongo.py
+# pytest -v --capture=no  tests/1_basic/test_mongo.py:Test_mongo.<METHIDNAME>
 ###############################################################
 
 import shutil

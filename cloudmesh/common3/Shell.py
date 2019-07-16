@@ -6,9 +6,21 @@ import sys
 
 from cloudmesh.common.Shell import Shell as Shell2
 from cloudmesh.common.console import Console
-
+import subprocess
 
 class Shell(Shell2):
+
+    @classmethod
+    def run(cls, command, encoding='utf-8'):
+        cmd = f"{command}; exit 0"
+        r = subprocess.check_output(command,
+                                    stderr=subprocess.STDOUT,
+                                    shell=True)
+        if encoding is None or  encoding == 'utf-8':
+            return str(r, 'utf-8')
+        else:
+            return r
+
 
     @classmethod
     def check_python(cls):
@@ -50,42 +62,3 @@ class Shell(Shell2):
             Console.error("             pip install -U pip\n")
 
 
-def main():
-    shell = Shell()
-
-    print(shell.terminal_type())
-
-    r = shell.execute('pwd')  # copy line replace
-    print(r)
-
-    # shell.list()
-
-    # print json.dumps(shell.command, indent=4)
-
-    # test some commands without args
-    """
-    for cmd in ['whoami', 'pwd']:
-        r = shell._execute(cmd)
-        print ("---------------------")
-        print ("Command: {:}".format(cmd))
-        print ("{:}".format(r))
-        print ("---------------------")
-    """
-    r = shell.execute('ls', ["-l", "-a"])
-    print(r)
-
-    r = shell.execute('ls', "-l -a")
-    print(r)
-
-    r = shell.ls("-aux")
-    print(r)
-
-    r = shell.ls("-a", "-u", "-x")
-    print(r)
-
-    r = shell.pwd()
-    print(r)
-
-
-if __name__ == "__main__":
-    main()

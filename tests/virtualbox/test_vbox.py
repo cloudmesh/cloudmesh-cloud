@@ -1,7 +1,7 @@
 ###############################################################
-# pytest -v --capture=no tests/test_vbox.py
-# pytest -v  tests/test_vbox.py
-# pytest -v --capture=no  tests/test_vbox.py:Test_vbox.<METHIDNAME>
+# pytest -v --capture=no tests/virtualbox/test_vbox.py
+# pytest -v  tests/virtualbox/test_vbox.py
+# pytest -v --capture=no  tests/virtualbox/test_vbox.py:Test_vbox.<METHIDNAME>
 ###############################################################
 # from cloud.vm.Vm import Vm
 # from cloud.mongo.mongoDB import MongoDB

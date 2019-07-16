@@ -1,6 +1,6 @@
 #################################################################
-# pytest -v --pature=no
-# pytest -v --capture=no tests/test_compute_AzProvider.py
+# pytest -v --pature=no tests/azure
+# pytest -v --capture=no tests/azure/test_compute_AzProvider.py
 #################################################################
 
 import pytest

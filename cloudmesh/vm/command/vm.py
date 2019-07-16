@@ -264,6 +264,7 @@ class VmCommand(PluginCommand):
 
 
         elif arguments.ping:
+            raise NotImplementedError
 
             """
             vm ping [NAMES] [--cloud=CLOUDS] [--count=N]
@@ -350,25 +351,17 @@ class VmCommand(PluginCommand):
                 provider = Provider(cloud)
                 status = []
                 cursor = database.db[f'{cloud}-vm']
+                print (cloud)
                 for name in names:
                     for node in cursor.find({'name': name}):
-                        entry  = {
-                            "name": name,
-                            "status": node['state']
-                        }
-                        status.append(entry)
+                        status.append(node)
 
-                print(Printer.write(
-                    status,
-                    sort_keys=["name"],
-                    order=["name", "status"],
-                    header=["Name", "Status"],
-                    output=arguments.output)
-                )
+                provider.Print(arguments.output, "status", status)
                 return ""
 
 
         elif arguments.start:
+            # TODO: not tested
             if arguments.NAMES:
                 names = variables['vm'] = arguments.NAMES
 
@@ -395,6 +388,8 @@ class VmCommand(PluginCommand):
             return ""
 
         elif arguments.stop:
+            # TODO: not tested
+
             if arguments.NAMES:
                 variables['vm'] = arguments.NAMES
             if arguments['--cloud']:
@@ -418,6 +413,8 @@ class VmCommand(PluginCommand):
 
 
         elif arguments.terminate:
+            # TODO: not tested
+
             if arguments.NAMES:
                 variables['vm'] = arguments.NAMES
             if arguments['--cloud']:
@@ -472,6 +469,7 @@ class VmCommand(PluginCommand):
 
         # TODO: username, secgroup
         elif arguments.boot:
+            # not everything works
 
             """
                 vm boot 
@@ -549,10 +547,7 @@ class VmCommand(PluginCommand):
             #if key:
             #    params['ex_keyname'] = key
 
-            if names is None:
-                n = Name()
-                n.incr()
-                parameters.names = str(n)
+
 
             if arguments['--dryrun']:
                 Console.ok(f"Dryrun stop: "
@@ -573,14 +568,18 @@ class VmCommand(PluginCommand):
                     count = int(arguments.n)
 
                 for i in range(0,count):
+                    if names is None:
+                        n = Name()
+                        n.incr()
+                        parameters.names = str(n)
                     vms = provider.create(**parameters)
+                    variables['vm'] = str(n)
 
                 # provider.Print(arguments.output, "vm", vms)
 
 
 
         elif arguments.info:
-
             """
             vm info [--cloud=CLOUD] [--output=OUTPUT]
             """
@@ -588,8 +587,11 @@ class VmCommand(PluginCommand):
 
             cloud, names = Arguments.get_cloud_and_names("info", arguments, variables)
 
-        elif arguments.rename:
+            raise NotImplementedError
 
+        elif arguments.rename:
+            raise NotImplementedError
+            # Not tested
             print("rename the vm")
 
             v = Variables()
@@ -629,6 +631,7 @@ class VmCommand(PluginCommand):
                 Console.error("Problem renameing instances", traceflag=True)
 
         elif arguments["ip"] and arguments["show"]:
+            raise NotImplementedError
 
             print("show the ips")
             """
@@ -641,12 +644,15 @@ class VmCommand(PluginCommand):
             """
 
         elif arguments["ip"] and arguments["assign"]:
+            raise NotImplementedError
             """
             vm ip assign [NAMES] [--cloud=CLOUD]
             """
             print("assign the public ip")
 
         elif arguments["ip"] and arguments["inventory"]:
+            raise NotImplementedError
+
 
             """
             vm ip inventory [NAMES]
@@ -655,10 +661,12 @@ class VmCommand(PluginCommand):
             print("list ips that could be assigned")
 
         elif arguments.default:
+            raise NotImplementedError
 
             print("sets defaults for the vm")
 
         elif arguments.run:
+            raise NotImplementedError
             """
             vm run [--name=NAMES] [--username=USERNAME] [--dryrun] COMMAND
 
@@ -682,6 +690,7 @@ class VmCommand(PluginCommand):
                     provider.ssh(name_ips, username=username, command=command)
 
         elif arguments.script:
+            raise NotImplementedError
             clouds, names = Arguments.get_cloud_and_names("run", arguments, variables)
             username = arguments['--username']
             script = arguments.SCRIPT
@@ -701,6 +710,7 @@ class VmCommand(PluginCommand):
                     provider.ssh(name_ips, username=username, script=script)
 
         elif arguments.username:
+            raise NotImplementedError
 
             """
             vm username USERNAME [NAMES] [--cloud=CLOUD]
@@ -708,12 +718,14 @@ class VmCommand(PluginCommand):
             print("sets the username for the vm")
 
         elif arguments.resize:
+            raise NotImplementedError
             """
             vm resize [NAMES] [--size=SIZE]
             """
             pass
 
         elif arguments.ssh:
+            raise NotImplementedError
 
             """
             vm ssh [NAMES] [--username=USER]
@@ -736,6 +748,7 @@ class VmCommand(PluginCommand):
                         p.ssh(name=name, command=command)
 
         elif arguments.console:
+            raise NotImplementedError
             # vm console [NAME] [--force]
 
             names = Arguments.get_names(arguments, variables)
@@ -746,6 +759,7 @@ class VmCommand(PluginCommand):
             return
 
         elif arguments.wait:
+            raise NotImplementedError
             """
             vm wait [--cloud=CLOUD] [--interval=SECONDS]
             """

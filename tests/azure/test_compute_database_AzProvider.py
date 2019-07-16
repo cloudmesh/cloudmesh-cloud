@@ -1,6 +1,6 @@
 #################################################################
-# pytest -v --pature=no
-# pytest -v --capture=no tests/test_compute_database_AzProvider.py
+# pytest -v --pature=no test/azure
+# pytest -v --capture=no tests/azure/test_compute_database_AzProvider.py
 #################################################################
 
 import subprocess

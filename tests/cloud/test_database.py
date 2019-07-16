@@ -23,7 +23,7 @@ class TestMongo:
     def setup(self):
         self.database = CmDatabase()
 
-        user = Config()["cloudmesh"]["profile"]["user"]
+        user = Config()["cloudmesh.profile.user"]
 
         self.name_generator = Name(
             schema=f"{user}-vm",

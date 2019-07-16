@@ -284,3 +284,18 @@ class Provider(ComputeNodeABC):
 
     def list_secgroups_rules(self):
         return self.p.list_secgroup_rules()
+
+    def delete_public_ip(self, ip):
+        return self.p.delete_public_ip(ip)
+
+    def list_public_ips(self, free=False):
+        return self.p.list_public_ips(free=free)
+
+    def delete_public_ip(self, ip):
+        return self.p.delete_public_ip(ip)
+
+    def create_public_ip(self):
+        return self.p.create_public_ip(self)
+
+    def find_available_public_ip(self):
+        return self.p.find_available_public_ip(self)

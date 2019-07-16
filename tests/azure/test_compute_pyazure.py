@@ -26,7 +26,7 @@ class Test_compute:
 
     def setup(self):
         banner("setup", c="-")
-        self.user = Config()["cloudmesh"]["profile"]["user"]
+        self.user = Config()["cloudmesh.profile.user"]
         self.name_generator = Name(
             schema=f"{self.user}-vm",
             counter=1)

@@ -1,4 +1,5 @@
 from os.path import isfile
+
 from cloudmesh.data.api.data import Data
 
 
@@ -23,7 +24,8 @@ class TestDataLocal:
     def test_local_01_add(self):
         self._data.add("local", f"cloud/test/data/files/{self.test_file_name}")
 
-        storage_ref_ok = isfile(f"cloud/test/data/storage/{self.test_file_name}")
+        storage_ref_ok = isfile(
+            f"cloud/test/data/storage/{self.test_file_name}")
         assert storage_ref_ok is True
 
         # TODO: This check should be moved out of here to a db provider test.

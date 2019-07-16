@@ -3,19 +3,16 @@
 # pytest -v --capture=no tests/test_compute.py
 # pytest -v --capture=no tests/test_compute_pyazure.py:Test_compute.<METHIDNAME>
 ###############################################################
-import os
-from pprint import pprint
 
-from cloudmesh.compute.azure.PyAzure import Provider
-from cloudmesh.common.util import HEADING
-from cloudmesh.management.configuration.config import Config
-from cloudmesh.management.configuration.name import Name
-from cloudmesh.common.variables import Variables
-from cloudmesh.common.debug import VERBOSE
-from cloudmesh.common.parameter import Parameter
 import pytest
 from cloudmesh.common.StopWatch import StopWatch
+from cloudmesh.common.debug import VERBOSE
+from cloudmesh.common.util import HEADING
 from cloudmesh.common.util import banner
+from cloudmesh.compute.azure.PyAzure import Provider
+from cloudmesh.management.configuration.config import Config
+from cloudmesh.management.configuration.name import Name
+
 
 #
 # cms set debug=True
@@ -28,7 +25,6 @@ from cloudmesh.common.util import banner
 class Test_compute:
 
     def setup(self):
-
         banner("setup", c="-")
         self.user = Config()["cloudmesh"]["profile"]["user"]
         self.name_generator = Name(
@@ -117,6 +113,6 @@ class Test_compute:
         StopWatch.stop("Delete VM Finished")
 
         assert destroy_vm is None
-    
+
     # TODO test_resume
     # TODO test_suspend

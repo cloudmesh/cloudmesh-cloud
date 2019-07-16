@@ -3,12 +3,13 @@
 # pytest -v  tests/1_basic/test_name.py
 # pytest -v --capture=no  tests/1_basic/test_name.py:Test_name.<METHIDNAME>
 ###############################################################
-from pprint import pprint
-from cloudmesh.common.util import HEADING
-from cloudmesh.management.configuration.name import Name
-import pytest
 import os
+from pprint import pprint
+
+import pytest
 from cloudmesh.common.util import path_expand
+from cloudmesh.management.configuration.name import Name
+
 # nosetest -v --nopature
 # nosetests  tests/test_name.py
 
@@ -30,11 +31,12 @@ except:
 
 n = None
 
+
 @pytest.mark.incremental
 class TestName:
 
     def test_define(self):
-        n=Name()
+        n = Name()
         assert dict(data) == n.dict()
 
     def test_define_new(self):
@@ -51,7 +53,6 @@ class TestName:
                              'path': '/Users/grey/.cloudmesh/name.yaml',
                              'schema': '{user}-{kind}-{counter}',
                              'user': 'gregor'})
-
 
     def test_name_reset(self):
         n = Name()
@@ -74,7 +75,7 @@ class TestName:
                              'user': 'gregor'})
 
     def test_name_incr(self):
-        n=Name()
+        n = Name()
         n.incr()
         print(n)
         assert str(n) == "gregor-vm-2"

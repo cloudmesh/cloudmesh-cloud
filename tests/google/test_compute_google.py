@@ -3,24 +3,14 @@
 # pytest -v --capture=no tests/google/test_compute_google.py
 #################################################################
 
-from pprint import pprint
-import time
-import subprocess
-import sys
+import pytest
+from cloudmesh.common.Printer import Printer
 from cloudmesh.common.util import HEADING
+from cloudmesh.common.util import banner
+from cloudmesh.common.util import path_expand
 from cloudmesh.compute.libcloud.Provider import Provider as GCloudProvider
 from cloudmesh.management.configuration.config import Config
-from cloudmesh.common.Printer import Printer
-from cloudmesh.common.FlatDict import FlatDict, flatten
-from cloudmesh.management.configuration.SSHkey import SSHkey
 from cloudmesh.management.configuration.name import Name
-from cloudmesh.mongo.CmDatabase import CmDatabase
-from cloudmesh.common.util import banner
-from Crypto.PublicKey import RSA
-from pathlib import Path
-from cloudmesh.common.util import path_expand
-
-import pytest
 
 
 @pytest.mark.incremental
@@ -170,7 +160,6 @@ class TestName:
         self.p.start(names=self.name)
         self.test_list_vm()
 
-
     def test_destroy(self):
         HEADING()
         try:
@@ -184,12 +173,11 @@ class TestName:
 
         assert node is None
 
-
     def test_vm_login(self):
         HEADING()
         self.test_list_vm()
         self.test_create()
-        self.p.ssh(name=self.name, command = "cat /etc/*release*")
+        self.p.ssh(name=self.name, command="cat /etc/*release*")
         try:
             self.p.stop(names=self.name)
             self.test_list_vm()

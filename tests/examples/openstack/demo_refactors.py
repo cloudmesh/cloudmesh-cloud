@@ -5,9 +5,10 @@ Created on Tue Nov 15 2018
 @author: Rui
 """
 
-from deprecated.draft.openstack import OpenstackCM, OpenstackRefactor
-from time import sleep
 import datetime
+from time import sleep
+
+from deprecated.draft.openstack import OpenstackCM, OpenstackRefactor
 
 
 # testcode
@@ -37,7 +38,8 @@ def main():
 
     while d.info(node_id)['state'] == 'pending':
         sleep(3)
-    print("At time " + str(datetime.datetime.now()) + " the state is " + d.info(node_id)['state'])
+    print("At time " + str(datetime.datetime.now()) + " the state is " +
+          d.info(node_id)['state'])
 
     # resize test - checked
     # *** chameleon requires extra confirmation for resizing request

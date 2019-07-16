@@ -4,6 +4,7 @@
 # pytest -v  tests/test_data_azure.py
 ###############################################################
 from os.path import isfile
+
 from cloudmesh.data.api.data import Data
 
 
@@ -26,7 +27,8 @@ class TestDataAzure:
         # TODO: this needs to be configured in cloudmesh4.yaml with Config()
 
     def test_azure_01_add(self):
-        cloud_file = self._data.add("azure", f"cloud/test/data/files/{self.test_file_name}")
+        cloud_file = self._data.add("azure",
+                                    f"cloud/test/data/files/{self.test_file_name}")
         assert len(cloud_file.url) > 0
 
     def test_azure_02_ls(self):

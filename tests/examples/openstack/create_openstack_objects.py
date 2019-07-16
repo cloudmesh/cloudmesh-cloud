@@ -5,8 +5,9 @@ Created on Tue Nov 16 2018
 @author: Rui
 """
 
-from deprecated.draft.openstack import OpenstackCM, OpenstackRefactor
 import pprint as pp
+
+from deprecated.draft.openstack import OpenstackCM, OpenstackRefactor
 
 
 # testcode

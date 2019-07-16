@@ -3,7 +3,6 @@
 # pytest -v  tests/test_compute_database.py
 # pytest -v --capture=no tests/test_compute_database.py:Test_compute_database.<METHIDNAME>
 ###############################################################
-from cloudmesh.management.configuration.name import Name
 import subprocess
 import time
 from pprint import pprint
@@ -13,10 +12,11 @@ from cloudmesh.common.Printer import Printer
 from cloudmesh.common.parameter import Parameter
 from cloudmesh.common.util import HEADING
 from cloudmesh.common.util import banner
+from cloudmesh.common.variables import Variables
 from cloudmesh.compute.vm.Provider import Provider
 from cloudmesh.management.configuration.SSHkey import SSHkey
 from cloudmesh.management.configuration.config import Config
-from cloudmesh.common.variables import Variables
+from cloudmesh.management.configuration.name import Name
 
 
 @pytest.mark.incremental
@@ -235,7 +235,6 @@ class Test_Compute_Database:
 
         assert node["extra"]["task_state"] == "deleting"
 
-
     def test_19_vm_login(self):
         self.test_list_vm()
         self.test_create()
@@ -291,4 +290,3 @@ class other:
     # def test_resume(self):
     #    HEADING()
     #    self.p.resume(name=self.name)
-

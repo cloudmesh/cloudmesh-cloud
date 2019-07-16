@@ -7,6 +7,7 @@ import subprocess
 import time
 from pprint import pprint
 
+import pytest
 from cloudmesh.common.Printer import Printer
 from cloudmesh.common.util import HEADING
 from cloudmesh.common.util import banner
@@ -14,7 +15,6 @@ from cloudmesh.compute.libcloud.Provider import Provider
 from cloudmesh.management.configuration.SSHkey import SSHkey
 from cloudmesh.management.configuration.config import Config
 from cloudmesh.management.configuration.name import Name
-import pytest
 
 
 @pytest.mark.incremental
@@ -198,8 +198,8 @@ class TestName:
                 break
 
         assert node is not None
-    # '''
 
+    # '''
 
     def test_list_keys(self):
         HEADING()
@@ -221,7 +221,6 @@ class TestName:
         self.p.key_upload(key)
 
         self.test_list_keys()
-
 
     def test_list_secgroups(self):
         HEADING()

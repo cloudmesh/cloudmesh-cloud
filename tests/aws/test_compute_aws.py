@@ -7,6 +7,7 @@ import subprocess
 import time
 from pprint import pprint
 
+import pytest
 from cloudmesh.common.Printer import Printer
 from cloudmesh.common.util import HEADING
 from cloudmesh.common.util import banner
@@ -14,7 +15,6 @@ from cloudmesh.compute.libcloud.Provider import Provider
 from cloudmesh.management.configuration.SSHkey import SSHkey
 from cloudmesh.management.configuration.config import Config
 from cloudmesh.management.configuration.name import Name
-import pytest
 
 
 @pytest.mark.incremental
@@ -79,7 +79,8 @@ class TestName:
 
         print(Printer.flatwrite(flavors,
                                 sort_keys=[
-                                    "name", "extra.vcpu", "extra.memory", "price"],
+                                    "name", "extra.vcpu", "extra.memory",
+                                    "price"],
                                 order=["name", "extra.vcpu", "extra.memory",
                                        "extra.clockSpeed", "price"],
                                 header=["Name", "VCPUS", "RAM", "Speed",
@@ -148,9 +149,12 @@ class TestName:
             rules = self.p.list_secgroup_rules(secgroup["name"])
 
             print(Printer.write(rules,
-                                sort_keys=["ip_protocol", "from_port", "to_port", "ip_range"],
-                                order=["ip_protocol", "from_port", "to_port", "ip_range"],
-                                header=["ip_protocol", "from_port", "to_port", "ip_range"])
+                                sort_keys=["ip_protocol", "from_port",
+                                           "to_port", "ip_range"],
+                                order=["ip_protocol", "from_port", "to_port",
+                                       "ip_range"],
+                                header=["ip_protocol", "from_port", "to_port",
+                                        "ip_range"])
                   )
 
     def test_secgroups_add(self):
@@ -272,10 +276,11 @@ class TestName:
 
         COMMAND = "cat /etc/*release*"
 
-        ssh = subprocess.Popen(["ssh", "%s@%s" % (self.clouduser, pubip), COMMAND],
-                               shell=False,
-                               stdout=subprocess.PIPE,
-                               stderr=subprocess.PIPE)
+        ssh = subprocess.Popen(
+            ["ssh", "%s@%s" % (self.clouduser, pubip), COMMAND],
+            shell=False,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE)
         result = ssh.stdout.readlines()
         if result == []:
             error = ssh.stderr.readlines()

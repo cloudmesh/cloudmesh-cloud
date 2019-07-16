@@ -3,10 +3,11 @@
 # pytest -v --capture=no  tests/1_basic/test_host.py
 # pytest -v tests/1_basic/test_host.py
 ###############################################################
-from cloudmesh.common3.host import Host
-from cloudmesh.common.util import HEADING
-import pytest
 import os
+
+import pytest
+from cloudmesh.common.util import HEADING
+from cloudmesh.common3.host import Host
 
 
 @pytest.mark.incremental
@@ -17,11 +18,11 @@ class Test_host:
 
     def test_ping(self):
         HEADING()
-        result = Host.ping(hosts=['google.com', 'youtube.com', 'com'], count=3, processors=3)
+        result = Host.ping(hosts=['google.com', 'youtube.com', 'com'], count=3,
+                           processors=3)
         assert {'google.com': 0} in result
         assert {'youtube.com': 0} in result
         assert {'com': 0} not in result
-
 
     def test_check(self):
         """
@@ -32,5 +33,6 @@ class Test_host:
         key = '~/.ssh/authorized_keys/id_rsa.pub'
         username = os.environ['USER']
         hosts = ['127.0.0.1']
-        result = Host.check(key=key, username=username, hosts=hosts, processors=3)
+        result = Host.check(key=key, username=username, hosts=hosts,
+                            processors=3)
         assert {'0': 0} not in result

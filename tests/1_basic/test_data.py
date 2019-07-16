@@ -3,14 +3,14 @@
 # pytest -v  tests/1_basic/test_data.py
 # pytest -v --capture=no  tests/1_basic/test_data.py:Test_data.<METHIDNAME>
 ###############################################################
-from cloudmesh.common.util import HEADING
 from pprint import pprint
 
+import pytest
 from cloudmesh.common.util import HEADING
 from cloudmesh.common.util import path_expand
 from cloudmesh.mongo.DataBaseDecorator import DatabaseUpdate
-import pytest
-
+from pathlib import Path
+import os
 
 # nosetest -v --nopature
 # nosetests  tests/test_data.py
@@ -38,7 +38,7 @@ class test_data:
                 "path": file,
                 "size": st.st_size,
                 "acess": str(st.st_atime),
-            # needs to be same format as we  use in vms
+                # needs to be same format as we  use in vms
                 "modified": None,  # needs to be same format as we  use in vms
                 "created": None,  # needs to be same format as we  use in vms
                 "owner": userinfo.pw_name,

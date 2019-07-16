@@ -112,8 +112,8 @@ class TestName:
         print(key.__dict__)
 
         self.p.key_upload(key)
-
         self.test_list_keys()
+
 
     def test_list_images(self):
         HEADING()

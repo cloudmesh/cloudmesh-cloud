@@ -36,7 +36,7 @@ class TestName:
 
     def setup(self):
         banner("setup", c="-")
-        self.user = Config()["cloudmesh"]["profile"]["user"]
+        self.user = Config()["cloudmesh.profile.user"]
         self.clouduser = 'cc'
 
         user = self.user

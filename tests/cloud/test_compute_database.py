@@ -24,11 +24,10 @@ class Test_Compute_Database:
 
     def setup(self):
         print()
-        user = self.user = Config()["cloudmesh"]["profile"]["user"]
-        user = Config()["cloudmesh"]["profile"]["user"]
+        self.user = Config()["cloudmesh.profile.user"]
 
         self.name_generator = Name(
-            schema=f"{user}-vm",
+            schema=f"{self.user}-vm",
             counter=1)
 
         self.name = str(self.name_generator)

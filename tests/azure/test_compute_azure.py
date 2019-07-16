@@ -22,7 +22,7 @@ class TestName:
 
     def setup(self):
         banner("setup", c="-")
-        self.user = Config()["cloudmesh"]["profile"]["user"]
+        self.user = Config()["cloudmesh.profile.user"]
         self.clouduser = 'azureuser'
         self.name_generator = Name(
             schema=f"{self.user}-vm",

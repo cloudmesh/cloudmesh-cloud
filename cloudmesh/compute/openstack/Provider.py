@@ -548,6 +548,8 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                timeout=360,
                key=None,
                secgroup=None,
+               ip=None,
+               public=True,
                **kwargs):
         """
         creates a named node
@@ -567,6 +569,8 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         # ex_keyname has to be the registered keypair name in cloud
 
         """
+        https://docs.openstack.org/openstacksdk/latest/user/connection.html#openstack.connection.Connection.create_server
+
         images = self.images()
         for _image in images:
             if _image.name == image:
@@ -582,22 +586,35 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         size = kwargs['flavor']
 
         print("Create Server:")
-        print ("    Name: ", name)
-        print ("    Image:", image)
-        print ("    Size: ", size)
+        print ("    Name:  ", name)
+        print ("    Image: ", image)
+        print ("    Size:  ", size)
+        print ("    IP:    ", ip)
+        print ("    Public:", public)
+
+
+        if not ip and public:
+            entry = self.find_available_public_ip()
+            ip = entry['floating_ip_address']
+            pprint(entry)
+
+        elif ip is not None:
+            entry = self.list_public_ips(ip=ip, available=True)
+            if len(entry) == 0:
+                print("ip not available")
+            return None
+
+
+        banner("IP")
+        print(ip)
 
         try:
             server = self.cloudman.create_server(name,
                                             flavor=size,
                                             image=image)
+            self.cloudman.wait_for_server(server)
+            self.cloudman.add_ips_to_server(server, ips=ip)
 
-            #server = self.cloudman.compute.create_server(
-            #    name=name,
-            #    image_id=_image.id,
-            #    flavor_id=_flavor.id
-            #    # networks=[{"uuid": network.id}],
-            #    # key_name=keypair.name
-            #)
 
             # self.cloudman.add_security_group(security_group=secgroup)
 
@@ -614,15 +631,21 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         return self.update_dict(server, kind="vm")[0]
 
     #ok
-    def list_public_ips(self, available=False):
+    def list_public_ips(self,
+                        ip=None,
+                        available=False):
 
-        ips = self.cloudman.list_floating_ips()
-        if available:
-            found = []
-            for entry in found:
-                if entry['fixed_ip_address'] is not None:
-                    found.append(entry)
-            ips = found
+        if ip is not None:
+            ips = self.cloudman.list_floating_ips({'floating_ip_address':
+                                                       ip})
+        else:
+            ips = self.cloudman.list_floating_ips()
+            if available:
+                found = []
+                for entry in found:
+                    if entry['fixed_ip_address'] is not None:
+                        found.append(entry)
+                ips = found
 
         return ips
 
@@ -663,7 +686,6 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         :param name: the current name
         :return: the dict with the new name
         """
-        # if destination is None, increase the name counter and use the new name
         raise NotImplementedError
         return None
 

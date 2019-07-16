@@ -4,8 +4,6 @@
 # pytest -v  tests/test_aws.py
 ###############################################################
 
-from __future__ import print_function
-
 import time
 
 import pytest

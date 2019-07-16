@@ -580,7 +580,6 @@ class VmCommand(PluginCommand):
 
 
         elif arguments.info:
-
             """
             vm info [--cloud=CLOUD] [--output=OUTPUT]
             """
@@ -591,6 +590,7 @@ class VmCommand(PluginCommand):
             raise NotImplementedError
 
         elif arguments.rename:
+            raise NotImplementedError
             # Not tested
             print("rename the vm")
 

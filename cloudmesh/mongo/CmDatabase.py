@@ -6,7 +6,7 @@ from cloudmesh.common.parameter import Parameter
 from cloudmesh.management.configuration.config import Config
 from pymongo import MongoClient
 from cloudmesh.common.debug import VERBOSE
-
+import re
 #
 # cm:
 #   id:
@@ -78,12 +78,31 @@ class CmDatabase(object):
         self.client.close()
 
     # ok
-    def collections(self):
+    def collections(self, name=None, regex=None):
         """
         the names of all collections
+
+        :param name: if set, only look at these collections instead of all
+                     colections
+        :param regex: a regular expression on the names of the collections
         :return: list of names of all collections
+
+        Example:
+            collections = cm.collections(regex=".*-vm")
         """
-        return self.db.collection_names()
+        names = None
+        if name:
+            if type(name) == list:
+                names = name
+            else:
+                names = Parameter.expand(name)
+        else:
+            names = self.db.collection_names()
+        if regex:
+            r = re.compile(regex)
+            _names = list(filter(r.match, names))
+            names = _names
+        return names
 
     # ok
     # noinspection PyPep8
@@ -182,11 +201,132 @@ class CmDatabase(object):
         return records
     """
 
+
     # ok
-    def find(self, collection="cloudmesh", **kwargs):
+    def names(self, collection=None, cloud=None, kind=None, regex=None):
+        """
+        finds all names in the specified collections. The parameters,
+        collection, cloud, and kind can all be Parameters that get expanded
+        to lists. All names from all collections are merged into the result.
+
+        With kwargs a search query on the names could be added.
+
+        Example:
+            cm = CmDatabase()
+            for kind in ['vm', "image", "flavor"]:
+                names = cm.names(cloud="chameleon", kind=kind)
+            print (names)
+
+            names = cm.names(cloud="chameleon,azure", kind="vm")
+            names = cm.names(collection="chameleon-image", regex="^CC-")
+            names = cm.names(collection="chameleon-image", regex=".*Ubuntu.*")
+
+        :param collection: The collections
+        :param cloud: The clouds
+        :param kind: The kinds
+        :param regex: A query applied to name
+        :return:
+        """
+
+        collections = Parameter.expand(collection)
+        clouds = Parameter.expand(cloud)
+        kinds = Parameter.expand(kind)
+        result = []
+
+        def add(collection):
+            col = self.db[collection]
+            if not regex:
+                entries = col.find({}, {"name": 1, "_id": 0})
+            else:
+                entries = col.find(
+                    {"name": {'$regex': regex}},
+                    {"name": 1, "_id": 0})
+            for entry in entries:
+                result.append(entry['name'])
+
+        if kinds and clouds:
+            for _kind in kinds:
+                for _cloud in clouds:
+                    _collection = f"{_cloud}-{_kind}"
+                    add(_collection)
+
+        if collections:
+            for _collection in collections:
+                add(_collection)
+
+        return result
+
+
+    def find(self, collection=None, cloud=None, kind=None,
+             query=None, attributes=None):
+        """
+        finds all names in the specified collections. The parameters,
+        collection, cloud, and kind can all be Parameters that get expanded
+        to lists. All names from all collections are merged into the result.
+
+        With kwargs a search query on the names could be added.
+
+        Example:
+            cm = CmDatabase()
+            for kind in ['vm', "image", "flavor"]:
+                entries = cm.find(cloud="chameleon", kind=kind)
+            print (entries)
+
+
+            entries = cm.find(cloud="chameleon,azure", kind="vm")
+            query = {"name": {'$regex': ".*Ubuntu.*"}}
+            entries = cm.find(collection="chameleon-image", query=query)
+
+        :param collection: The collections
+        :param cloud: The clouds
+        :param kind: The kinds
+        :param query: A query applied to name
+        :return:
+        """
+
+        collections = Parameter.expand(collection)
+        clouds = Parameter.expand(cloud)
+        kinds = Parameter.expand(kind)
+        result = []
+
+        if not query:
+            query = {}
+
+        _attributes = {"_id": 0}
+
+        if attributes:
+           for a in attributes:
+                _attributes[a] = 1
+
+        print (_attributes)
+
+        def add(collection):
+            col = self.db[collection]
+            entries = col.find(
+                query,
+                _attributes)
+            for entry in entries:
+                result.append(entry)
+
+        if kinds and clouds:
+            for _kind in kinds:
+                for _cloud in clouds:
+                    _collection = f"{_cloud}-{_kind}"
+                    add(_collection)
+
+        if collections:
+            for _collection in collections:
+                add(_collection)
+        return result
+
+    # ok
+    def find_ok(self, collection="cloudmesh", **kwargs):
         col = self.db[collection]
 
-        entries = col.find(kwargs, {"_id": 0})
+        if len(kwargs) == 0:
+            entries = col.find({}, {"_id": 0})
+        else:
+            entries = col.find(kwargs, {"_id": 0})
 
         # print ("KKKKK", kwargs)
         # print ("HHHH", entries.count())
@@ -196,19 +336,6 @@ class CmDatabase(object):
             records.append(entry)
         return records
 
-    # check
-    def find_by_id(self, cmid, collection="cloudmesh"):
-
-        entry = self.find(collection=collection, cmid=cmid)
-
-        return entry
-
-    # check
-    def find_by_counter(self, cmcounter, collection="cloudmesh"):
-
-        entry = self.find(collection=collection, cmcounter=cmcounter)
-
-        return entry
 
     # check
     def update(self, entries):
@@ -329,7 +456,7 @@ class CmDatabase(object):
         col = self.db[collection]
         r = col.delete_many(kwargs)
 
-    # check
+    # ok
     def command(self, command):
         """
         issue command string via the mongoDB console

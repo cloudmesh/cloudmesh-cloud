@@ -1,6 +1,7 @@
-from deprecated.draft.openstack import OpenstackCM
-from time import sleep
 import datetime
+from time import sleep
+
+from deprecated.draft.openstack import OpenstackCM
 
 
 # testcode
@@ -24,34 +25,39 @@ def main():
 
     while d.info(node_id)['state'] == 'pending':
         sleep(3)
-    print("At time " + str(datetime.datetime.now()) + " the state is " + d.info(node_id)['state'])
+    print("At time " + str(datetime.datetime.now()) + " the state is " +
+          d.info(node_id)['state'])
 
     # suspend
     print("call d.suspend() function")
     d.suspend(node_id)
     while d.info(node_id)['state'] == 'running':
         sleep(3)
-    print("At time " + str(datetime.datetime.now()) + " the state is " + d.info(node_id)['state'])
+    print("At time " + str(datetime.datetime.now()) + " the state is " +
+          d.info(node_id)['state'])
 
     # resume
     print("call d.resume() function")
     d.resume(node_id)
     while d.info(node_id)['state'] == 'stopped':
         sleep(3)
-    print("At time " + str(datetime.datetime.now()) + " the state is " + d.info(node_id)['state'])
+    print("At time " + str(datetime.datetime.now()) + " the state is " +
+          d.info(node_id)['state'])
 
     # stop
     print("call d.stop() function")
     d.stop(node_id)
     while d.info(node_id)['state'] == 'running':
         sleep(3)
-    print("At time " + str(datetime.datetime.now()) + " the state is " + d.info(node_id)['state'])
+    print("At time " + str(datetime.datetime.now()) + " the state is " +
+          d.info(node_id)['state'])
 
     # restart
     print("call d.restart() function")
     d.start(node_id)
     sleep(10)
-    print("At time " + str(datetime.datetime.now()) + " the state is " + d.info(node_id)['state'])
+    print("At time " + str(datetime.datetime.now()) + " the state is " +
+          d.info(node_id)['state'])
 
     # destroy
     print("call d.destroy() function")

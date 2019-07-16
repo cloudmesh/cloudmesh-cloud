@@ -5,10 +5,11 @@ Created on Tue Nov 17 00:12:19 2018
 @author: Rui
 """
 
-from deprecated.draft.vm.api.Vm import Vm
-from deprecated.draft.vm import VmRefactor
-from time import sleep
 import datetime
+from time import sleep
+
+from deprecated.draft.vm import VmRefactor
+from deprecated.draft.vm.api.Vm import Vm
 
 
 def openstack_test1():
@@ -31,7 +32,9 @@ def openstack_test1():
     name = node.name
     while vm.info(name).state == 'pending':
         sleep(3)
-    print("At time " + str(datetime.datetime.now()) + " the state is " + vm.info(name).state)
+    print(
+        "At time " + str(datetime.datetime.now()) + " the state is " + vm.info(
+            name).state)
     print(node)
     print("Node:" + node_id + " has been set up")
 

@@ -3,13 +3,13 @@
 # pytest -v  tests/aws/test_aws_BUG.py
 # pytest -v --capture=no -v --nocapture tests/aws/test_aws_BUG.py:Test_aws.<METHIDNAME>
 ###############################################################
-from cloudmesh.management.configuration.config import Config
-from cloudmesh.common.util import HEADING
-
-from cloudmesh.common.Shell import Shell
-from cloudmesh.common.debug import VERBOSE
 import pytest
+from cloudmesh.common.Shell import Shell
 from cloudmesh.common.StopWatch import StopWatch
+from cloudmesh.common.debug import VERBOSE
+from cloudmesh.common.util import HEADING
+from cloudmesh.management.configuration.config import Config
+
 
 @pytest.mark.incremental
 class Test_aws:
@@ -23,7 +23,8 @@ class Test_aws:
         HEADING("this test will fail, press Ctrl-C to skip")
 
         StopWatch.start("cms vm stop")
-        result = Shell.execute("cms vm stop test_boot_02 --parallel --processors=3", shell=True)
+        result = Shell.execute(
+            "cms vm stop test_boot_02 --parallel --processors=3", shell=True)
         StopWatch.stop("cms vm stop")
 
         VERBOSE(result)
@@ -34,7 +35,8 @@ class Test_aws:
         HEADING("this test will fail, press Ctrl-C to skip")
 
         StopWatch.start("cms vm start")
-        result = Shell.execute("cms vm start test_boot_02 --parallel --processors=3", shell=True)
+        result = Shell.execute(
+            "cms vm start test_boot_02 --parallel --processors=3", shell=True)
         StopWatch.stop("cms vm start")
 
         VERBOSE(result)
@@ -45,7 +47,9 @@ class Test_aws:
         HEADING("this test will fail, press Ctrl-C to skip")
 
         StopWatch.start("cms vm terminate")
-        result = Shell.execute("cms vm terminate test_boot_01 --parallel --processors=3", shell=True)
+        result = Shell.execute(
+            "cms vm terminate test_boot_01 --parallel --processors=3",
+            shell=True)
         StopWatch.stop("cms vm terminate")
 
         VERBOSE(result)
@@ -56,7 +60,8 @@ class Test_aws:
         HEADING("this test will fail, press Ctrl-C to skip")
 
         StopWatch.start("cms vm delete")
-        result = Shell.execute("cms aws vm test_boot_02 --parallel --processors=3", shell=True)
+        result = Shell.execute(
+            "cms aws vm test_boot_02 --parallel --processors=3", shell=True)
         StopWatch.stop("cms vm delete")
 
         VERBOSE(result)

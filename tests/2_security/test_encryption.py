@@ -9,17 +9,20 @@ pytest -v --capture=no tests/test_encryption.py
 
 """
 
+import datetime
 import os
 import shutil
-import  time
-from cloudmesh.management.configuration.config import Config
-from cloudmesh.common.ConfigDict import ConfigDict
-#from cloudmesh.management.configuration.security.config import Config
+import time
 
-from cloudmesh.management.configuration.security.encryption import EncryptFile
-from cloudmesh.common.util import path_expand
 import pytest
-import datetime
+from cloudmesh.common.ConfigDict import ConfigDict
+from cloudmesh.common.util import path_expand
+from cloudmesh.management.configuration.config import Config
+from cloudmesh.management.configuration.security.encryption import EncryptFile
+
+
+# from cloudmesh.management.configuration.security.config import Config
+
 
 # noinspection PyMethodMayBeStatic,PyMethodMayBeStatic,PyMethodMayBeStatic,PyPep8Naming,PyBroadException,PyBroadException
 
@@ -28,8 +31,8 @@ class Test_configdict:
 
     def setup_class(self):
 
-        self.mkdirer(self)
-        self.copy_file(self)
+        self.mkdirer()
+        self.copy_file()
         self.e = EncryptFile('~/.cloudmesh/tmp/cloudmesh4.yaml',
                              '~/.cloudmesh/tmp/cloudmesh4.yaml.enc', '')
 
@@ -45,7 +48,7 @@ class Test_configdict:
     def copy_file(self):
 
         source = path_expand('~/.cloudmesh/cloudmesh4.yaml')
-        target =path_expand('~/.cloudmesh/tmp')
+        target = path_expand('~/.cloudmesh/tmp')
         shutil.copy(source, target)
 
     def test_getRandonPassword(self):
@@ -59,17 +62,20 @@ class Test_configdict:
             f.close()
         else:
             password = None
-        assert  len(password) > 20
+        assert len(password) > 20
 
     def test_encrypt(self):
         self.e.encrypt()
-        exists = os.path.isfile(path_expand('~/.cloudmesh/tmp/cloudmesh4.yaml.enc'))
+        exists = os.path.isfile(
+            path_expand('~/.cloudmesh/tmp/cloudmesh4.yaml.enc'))
         assert exists
-        enc_size = os.path.getsize(path_expand('~/.cloudmesh/tmp/cloudmesh4.yaml.enc'))
-        enc_size = enc_size *10000/ float(1024 * 1024)
+        enc_size = os.path.getsize(
+            path_expand('~/.cloudmesh/tmp/cloudmesh4.yaml.enc'))
+        enc_size = enc_size * 10000 / float(1024 * 1024)
         print(enc_size)
-        orginal_size= os.path.getsize(path_expand('~/.cloudmesh/tmp/cloudmesh4.yaml'))
-        orginal_size = orginal_size *10000/ float(1024 * 1024)
+        orginal_size = os.path.getsize(
+            path_expand('~/.cloudmesh/tmp/cloudmesh4.yaml'))
+        orginal_size = orginal_size * 10000 / float(1024 * 1024)
         print(orginal_size)
         assert abs(enc_size - orginal_size) < 10
 
@@ -80,11 +86,12 @@ class Test_configdict:
         times = os.path.getmtime(path_expand('~/.cloudmesh/key.bin.enc'))
         timestamp = time.localtime(times)
         fileCreatTime = time.strftime('%Y-%m-%d %H:%M:%S', timestamp)
-        print (fileCreatTime)
-        currenttime= time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+        print(fileCreatTime)
+        currenttime = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
         print(currenttime)
 
-        startTime = datetime.datetime.strptime(fileCreatTime, "%Y-%m-%d %H:%M:%S")
+        startTime = datetime.datetime.strptime(fileCreatTime,
+                                               "%Y-%m-%d %H:%M:%S")
         endTime = datetime.datetime.strptime(currenttime, "%Y-%m-%d %H:%M:%S")
         assert (endTime - startTime).seconds < 4
 
@@ -95,22 +102,26 @@ class Test_configdict:
         times = os.path.getmtime(path_expand('~/.cloudmesh/key.bin.enc.plain'))
         timestamp = time.localtime(times)
         fileCreatTime = time.strftime('%Y-%m-%d %H:%M:%S', timestamp)
-        print (fileCreatTime)
-        currenttime= time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+        print(fileCreatTime)
+        currenttime = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
         print(currenttime)
-        startTime = datetime.datetime.strptime(fileCreatTime, "%Y-%m-%d %H:%M:%S")
+        startTime = datetime.datetime.strptime(fileCreatTime,
+                                               "%Y-%m-%d %H:%M:%S")
         endTime = datetime.datetime.strptime(currenttime, "%Y-%m-%d %H:%M:%S")
         assert (endTime - startTime).seconds < 4
 
     def test_decrypt(self):
         self.e.decrypt()
-        exists = os.path.isfile(path_expand('~/.cloudmesh/tmp/cloudmesh4.yaml.enc.plain'))
+        exists = os.path.isfile(
+            path_expand('~/.cloudmesh/tmp/cloudmesh4.yaml.enc.plain'))
         assert exists
-        dec_size = os.path.getsize(path_expand('~/.cloudmesh/tmp/cloudmesh4.yaml.enc.plain'))
-        dec_size = dec_size *10000/ float(1024 * 1024)
+        dec_size = os.path.getsize(
+            path_expand('~/.cloudmesh/tmp/cloudmesh4.yaml.enc.plain'))
+        dec_size = dec_size * 10000 / float(1024 * 1024)
         print(dec_size)
-        orginal_size= os.path.getsize(path_expand('~/.cloudmesh/tmp/cloudmesh4.yaml'))
-        orginal_size = orginal_size *10000/ float(1024 * 1024)
+        orginal_size = os.path.getsize(
+            path_expand('~/.cloudmesh/tmp/cloudmesh4.yaml'))
+        orginal_size = orginal_size * 10000 / float(1024 * 1024)
         print(orginal_size)
         assert abs(dec_size - orginal_size) < 2
 
@@ -139,29 +150,30 @@ class Test_configdict:
         assert True
 
     def test_set(self):
-       filename = path_expand( "~/.cloudmesh/tmp/cloudmesh4.yaml")
-       key = "cloudmesh.profile.firstname"
-       value = "Gregor"
-       self.e.set(filename,key,value)
-       times = os.path.getmtime(path_expand("~/.cloudmesh/tmp/cloudmesh4.yaml"))
-       timestamp = time.localtime(times)
-       fileUpdateTime = time.strftime('%Y-%m-%d %H:%M:%S', timestamp)
-       print(fileUpdateTime)
-       currenttime = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
-       print(currenttime)
-       startTime = datetime.datetime.strptime(fileUpdateTime, "%Y-%m-%d %H:%M:%S")
-       endTime = datetime.datetime.strptime(currenttime, "%Y-%m-%d %H:%M:%S")
-       assert (endTime - startTime).seconds < 4
+        filename = path_expand("~/.cloudmesh/tmp/cloudmesh4.yaml")
+        key = "cloudmesh.profile.firstname"
+        value = "Gregor"
+        self.e.set(filename, key, value)
+        times = os.path.getmtime(
+            path_expand("~/.cloudmesh/tmp/cloudmesh4.yaml"))
+        timestamp = time.localtime(times)
+        fileUpdateTime = time.strftime('%Y-%m-%d %H:%M:%S', timestamp)
+        print(fileUpdateTime)
+        currenttime = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+        print(currenttime)
+        startTime = datetime.datetime.strptime(fileUpdateTime,
+                                               "%Y-%m-%d %H:%M:%S")
+        endTime = datetime.datetime.strptime(currenttime, "%Y-%m-%d %H:%M:%S")
+        assert (endTime - startTime).seconds < 4
 
     def test__config(self):
 
-        #test original yaml file
+        # test original yaml file
 
-        configDict = ConfigDict( path_expand("~/.cloudmesh/cloudmesh4.yaml"))
+        configDict = ConfigDict(path_expand("~/.cloudmesh/cloudmesh4.yaml"))
         assert configDict.__getitem__("meta.version")
 
-
-        #test tmp_yaml file
+        # test tmp_yaml file
         configDict = ConfigDict(path_expand("~/.cloudmesh/tmp/cloudmesh4.yaml"))
         assert configDict.__getitem__("meta.version")
 
@@ -181,7 +193,3 @@ class Test_configdict:
 
     def delete_folder(self):
         self.e.delete_folder()
-
-
-
-

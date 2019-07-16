@@ -8,6 +8,7 @@ import time
 from pathlib import Path
 from pprint import pprint
 
+import pytest
 from cloudmesh.common.Printer import Printer
 from cloudmesh.common.util import HEADING
 from cloudmesh.common.util import banner
@@ -15,7 +16,6 @@ from cloudmesh.common.util import path_expand
 from cloudmesh.compute.virtualbox.Provider import Provider
 from cloudmesh.management.configuration.config import Config
 from cloudmesh.management.configuration.name import Name
-import pytest
 
 
 @pytest.mark.incremental

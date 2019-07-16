@@ -7,19 +7,18 @@ import subprocess
 import time
 from pprint import pprint
 
+import pytest
 from cloudmesh.common.Printer import Printer
+from cloudmesh.common.Shell import Shell
+from cloudmesh.common.StopWatch import StopWatch
+from cloudmesh.common.debug import VERBOSE
 from cloudmesh.common.util import HEADING
 from cloudmesh.common.util import banner
+from cloudmesh.common.variables import Variables
 from cloudmesh.compute.libcloud.Provider import Provider
 from cloudmesh.management.configuration.SSHkey import SSHkey
 from cloudmesh.management.configuration.config import Config
 from cloudmesh.management.configuration.name import Name
-from cloudmesh.common.variables import Variables
-from cloudmesh.common.debug import VERBOSE
-import pytest
-from cloudmesh.common.StopWatch import StopWatch
-from cloudmesh.common.util import banner
-from cloudmesh.common.Shell import Shell
 
 
 @pytest.mark.incremental
@@ -29,7 +28,7 @@ class TestName:
         if service is None:
             service = self.cloud
         _label = str(label)
-        print (_label, command)
+        print(_label, command)
         StopWatch.start(f"{service} {_label}")
         result = Shell.run(command, encoding)
         StopWatch.stop(f"{service} {_label}")
@@ -68,18 +67,16 @@ class TestName:
                              "ip_range": "129.79.0.0/16"}
         self.testnode = None
 
-
     def test_add_key_from_cli(self):
         HEADING()
 
         result = self.run("db add key", f"cms key add {self.user} "
         f"--source=ssh", service="local")
-        result = self.run("db list ", f"cms key list",service="local")
+        result = self.run("db list ", f"cms key list", service="local")
 
         VERBOSE(result)
 
         assert self.user in result
-
 
     def test_upload_key_from_cli(self):
         HEADING()
@@ -87,10 +84,8 @@ class TestName:
         result = Shell.run("cms key upload", f"cms key upload {self.user}")
         result = Shell.run("cms list", f"cms key upload {self.user}")
 
-
         "cms key list --cloud=chameleon"
         VERBOSE(result)
-
 
     def test_list_variables(self):
         HEADING()

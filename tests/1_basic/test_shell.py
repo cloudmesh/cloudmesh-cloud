@@ -3,12 +3,7 @@
 # pytest -v  tests/1_basic/test_shell.py
 # pytest -v --capture=no  tests/1_basic/test_shell.py:Test_name.<METHIDNAME>
 ###############################################################
-from pprint import pprint
-from cloudmesh.common.util import HEADING
-from cloudmesh.management.configuration.name import Name
 import pytest
-import os
-from cloudmesh.common.util import path_expand
 from cloudmesh.common3.Shell import Shell
 
 
@@ -16,7 +11,6 @@ from cloudmesh.common3.Shell import Shell
 class TestName:
 
     def test_shell(self):
-
         shell = Shell()
 
         print(shell.terminal_type())
@@ -51,4 +45,3 @@ class TestName:
 
         r = shell.pwd()
         print(r)
-

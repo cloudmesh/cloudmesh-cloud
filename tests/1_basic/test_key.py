@@ -4,11 +4,12 @@
 # pytest -v --capture=no  tests/1_basic/test_key.py:Test_key.<METHIDNAME>
 ###############################################################
 from pprint import pprint
+
+import pytest
 from cloudmesh.common.Printer import Printer
 from cloudmesh.common.util import HEADING
 from cloudmesh.management.configuration.SSHkey import SSHkey
 from cloudmesh.management.configuration.config import Config
-import pytest
 
 
 @pytest.mark.incremental

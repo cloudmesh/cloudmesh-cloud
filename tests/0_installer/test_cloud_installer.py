@@ -49,14 +49,8 @@ class Test_cloud_installer:
         print(result)
         assert "quit" in result
 
-    def test_cms_info(self):
+    def test_cms_info_common(self):
         cmd = "cms info"
-        result = run(cmd)
-        print(result)
-        assert "cloudmesh.common" in result
-
-    def test_cms_version(self):
-        cmd = "cms version"
         result = run(cmd)
         print(result)
         assert "cloudmesh.common" in result
@@ -67,7 +61,7 @@ class Test_cloud_installer:
         print(result)
         assert os.path.isdir("tmp/cloudmesh-cloud/cloudmesh_cloud.egg-info")
 
-    def test_cms_info(self):
+    def test_cms_info_cloud(self):
         cmd = "cms info"
         result = run(cmd)
         print(result)

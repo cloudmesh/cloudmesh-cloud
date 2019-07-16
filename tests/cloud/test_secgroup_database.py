@@ -3,14 +3,10 @@
 # pytest -v  tests/cloud/test_secgroup_database.py
 ###############################################################
 
-from pprint import pprint
-from cloudmesh.secgroup.Secgroup import Secgroup
-from cloudmesh.secgroup.Secgroup import SecgroupRule
-from cloudmesh.secgroup.Secgroup import SecgroupExamples
-from cloudmesh.common.util import banner
-from cloudmesh.common.debug import VERBOSE
 from cloudmesh.common.util import HEADING
-
+from cloudmesh.secgroup.Secgroup import Secgroup
+from cloudmesh.secgroup.Secgroup import SecgroupExamples
+from cloudmesh.secgroup.Secgroup import SecgroupRule
 
 examples = SecgroupExamples()
 examples.load()
@@ -18,11 +14,11 @@ examples.load()
 secgroups = examples.secgroups
 secrules = examples.secrules
 
-
 rules = SecgroupRule()
 groups = Secgroup()
 
 print()
+
 
 def test_clear():
     HEADING(color="HEADER")
@@ -33,11 +29,12 @@ def test_clear():
     r = rules.list()
     g = groups.list()
 
-    #print("R", r)
-    #print("G", r)
+    # print("R", r)
+    # print("G", r)
 
     assert len(r) == 0
     assert len(g) == 0
+
 
 def test_upload_groups():
     HEADING(color="HEADER")
@@ -51,9 +48,10 @@ def test_upload_groups():
 
     found = groups.list()
     print(len(found))
-    assert len(found) == len (names)
+    assert len(found) == len(names)
     for entry in found:
         assert entry['name'] in names
+
 
 def test_upload_rules():
     HEADING(color="HEADER")
@@ -62,7 +60,7 @@ def test_upload_rules():
 
     # pprint(secrules)
     for name in names:
-        print ("add rule:", name)
+        print("add rule:", name)
         data = examples.rule(name)
         rules.add(**data)
 
@@ -88,6 +86,7 @@ def test_add_rule_to_group():
     found = groups.list()
     assert len(found) == len(original)
 
+
 def test_delete_rule_from_group():
     HEADING(color="HEADER")
 
@@ -103,8 +102,8 @@ def test_delete_rule_from_group():
     assert len(found) == len(original)
     assert len(found) == len(original)
 
-def test_remove_group():
 
+def test_remove_group():
     name = list(examples.secgroups.keys())[0]
 
     original = groups.list()
@@ -112,7 +111,7 @@ def test_remove_group():
     groups.remove(name=name)
     updated = groups.list()
 
-    print (len(original), "->",  len(updated))
+    print(len(original), "->", len(updated))
 
     assert len(updated) == len(original) - 1
 
@@ -135,7 +134,6 @@ def test_remove_rule():
 
 
 def test_load_defaults():
-
     examples = SecgroupExamples()
     examples.load()
 
@@ -144,5 +142,3 @@ def test_load_defaults():
 
     found = rules.list()
     assert len(found) == len(examples.secrules)
-
-

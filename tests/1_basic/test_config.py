@@ -3,17 +3,16 @@
 # pytest -v  tests/1_basic/test_config.py
 # pytest -v --capture=no  tests/1_basic/test_config.py:Test_config.<METHIDNAME>
 ###############################################################
-from cloudmesh.management.configuration.config import Config
-from cloudmesh.common.util import HEADING
-from pprint import pprint
-import textwrap
-import oyaml as yaml
-import munch
-import re
-import pytest
 import os
+import textwrap
 from pathlib import Path
+from pprint import pprint
+
+import oyaml as yaml
+import pytest
+from cloudmesh.common.util import HEADING
 from cloudmesh.common.util import path_expand
+from cloudmesh.management.configuration.config import Config
 
 
 @pytest.mark.incremental
@@ -80,7 +79,7 @@ class TestConfig:
 
     def test_set(self):
         self.config["cloudmesh.test.nested"] = "Gregor"
-        print (self.config["cloudmesh.test.nested"])
+        print(self.config["cloudmesh.test.nested"])
         assert self.config["cloudmesh.test.nested"] == "Gregor"
 
     ''' THIS TEST DOE FAIL

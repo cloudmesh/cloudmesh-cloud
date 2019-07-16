@@ -4,14 +4,9 @@
 # pytest -v --capture=no  tests/1_basic/test_mongo.py:Test_mongo.<METHIDNAME>
 ###############################################################
 
-import shutil
-
-import os
 import pytest
-from cloudmesh.mongo.DataBaseDecorator import DatabaseUpdate
-
 from cloudmesh.mongo.CmDatabase import CmDatabase
-from pprint import pprint
+from cloudmesh.mongo.DataBaseDecorator import DatabaseUpdate
 
 
 @pytest.mark.incremental

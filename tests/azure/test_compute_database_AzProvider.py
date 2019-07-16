@@ -3,20 +3,10 @@
 # pytest -v --capture=no tests/azure/test_compute_database_AzProvider.py
 #################################################################
 
-import subprocess
-import time
-from pprint import pprint
-
-from cloudmesh.common.Printer import Printer
-from cloudmesh.common.util import HEADING
-from cloudmesh.common.util import banner
-from cloudmesh.compute.libcloud.Provider import Provider
-from cloudmesh.management.configuration.SSHkey import SSHkey
-from cloudmesh.management.configuration.config import Config
-from cloudmesh.management.configuration.name import Name
-from cloudmesh.compute.vm.Provider import Provider
-
 import pytest
+from cloudmesh.common.util import HEADING
+from cloudmesh.compute.libcloud.Provider import Provider
+from cloudmesh.compute.vm.Provider import Provider
 
 
 @pytest.mark.incremental

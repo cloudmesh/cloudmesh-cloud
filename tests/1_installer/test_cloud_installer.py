@@ -1,10 +1,8 @@
 ###############################################################
-# pip install .; pytest -v --capture=no  tests/test_cloud_installer.py:Test_cloud_installer.test_001
-# pytest -v --capture=no tests/test_cloud_installerr.py
-# pytest -v  tests/test_cloud_installer.py
+# pip install .; pytest -v --capture=no tests/1_installer/test_cloud_installer.py:Test_cloud_installer.test_001
+# pytest -v --capture=no tests/1_installer/test_cloud_installerr.py
+# pytest -v  tests/1_installer/test_cloud_installer.py
 ###############################################################
-
-from __future__ import print_function
 
 import os
 import shutil

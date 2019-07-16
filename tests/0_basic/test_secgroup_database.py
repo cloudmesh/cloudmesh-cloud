@@ -1,6 +1,6 @@
 ###############################################################
-# pytest -v --capture=no tests/test_secgroup_database.py
-# pytest -v  tests/test_secgroup_database.py
+# pytest -v --capture=no tests/0_basic/test_secgroup_database.py
+# pytest -v  tests/0_basic/test_secgroup_database.py
 ###############################################################
 
 from pprint import pprint
@@ -100,6 +100,7 @@ def test_delete_rule_from_group():
     assert "gregor" not in found["rules"]
 
     found = groups.list()
+    assert len(found) == len(original)
     assert len(found) == len(original)
 
 def test_remove_group():

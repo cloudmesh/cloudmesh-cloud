@@ -1,7 +1,7 @@
 ###############################################################
-# pytest -v --capture=no tests/test_config.py
-# pytest -v  tests/test_config.py
-# pytest -v --capture=no  tests/test_config.py:Test_config.<METHIDNAME>
+# pytest -v --capture=no tests/0_basic/test_config.py
+# pytest -v  tests/0_basic/test_config.py
+# pytest -v --capture=no  tests/0_basic/test_config.py:Test_config.<METHIDNAME>
 ###############################################################
 from cloudmesh.management.configuration.config import Config
 from cloudmesh.common.util import HEADING

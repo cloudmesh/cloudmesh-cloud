@@ -5,12 +5,10 @@
 # https://portal.azure.com/#blade/Microsoft_Azure_Billing/BillingMenuBlade/Subscriptions
 #
 ###############################################################
-# pip install .; pytest -v --capture=no  tests/test_aws.py:Test_aws.test_001
-# pytest -v --capture=no tests/test_aws.py
-# pytest -v  tests/test_aws.py
+# pip install .; pytest -v --capture=no  tests/azure/test_cloud_azure:Test_aws.test_001
+# pytest -v --capture=no tests/azure/test_cloud_azure
+# pytest -v  tests/azure/test_cloud_azure
 ###############################################################
-
-from __future__ import print_function
 
 import time
 

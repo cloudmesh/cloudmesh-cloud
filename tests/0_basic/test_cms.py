@@ -1,7 +1,7 @@
 ###############################################################
-# pytest -v --capture=no tests/test_cms.py
-# pytest -v  tests/test_cms.py
-# pytest -v --capture=no  tests/test_cms.py:Test_cms.<METHIDNAME>
+# pytest -v --capture=no tests/0_basic/test_cms.py
+# pytest -v  tests/0_basic/test_cms.py
+# pytest -v --capture=no  tests/0_basic/test_cms.py:Test_cms.<METHIDNAME>
 ###############################################################
 import pytest
 from cloudmesh.common.debug import VERBOSE
@@ -31,6 +31,7 @@ class TestConfig:
 
         assert "['sample1', 'sample2', 'sample3', 'sample18']" in result
 
+    """
     def test_storage(self):
         HEADING()
 
@@ -39,3 +40,4 @@ class TestConfig:
         VERBOSE(result)
 
         assert "storage put SOURCE DESTINATION --recursive" in result
+    """

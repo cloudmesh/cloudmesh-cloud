@@ -1,18 +1,21 @@
 ###############################################################
-# pytest -v --capture=no tests/test_compute_virtualbox.py
-# pytest -v  tests/test_compute_virtualbox.py
-# pytest -v --capture=no  tests/test_compute_virtualbox.py:Test_compute_virtualbox.<METHIDNAME>
+# pytest -v --capture=no tests/docker/test_compute_docker.py
+# pytest -v  tests/docker/test_compute_docker.py
+# pytest -v --capture=no  tests/docker/test_compute_docker.py:Test_compute_docker.<METHIDNAME>
 ###############################################################
 import subprocess
 import time
 from pathlib import Path
 from pprint import pprint
 
+import docker
+
 from cloudmesh.common.Printer import Printer
+from cloudmesh.common.Shell import Shell
 from cloudmesh.common.util import HEADING
 from cloudmesh.common.util import banner
 from cloudmesh.common.util import path_expand
-from cloudmesh.compute.virtualbox.Provider import Provider
+from cloudmesh.compute.docker.Provider import Provider
 from cloudmesh.management.configuration.config import Config
 from cloudmesh.management.configuration.name import Name
 import pytest
@@ -20,19 +23,8 @@ import pytest
 
 @pytest.mark.incremental
 class TestName:
-    image_test = False
-    vbox = '6.0.4'
-    image_name = "generic/ubuntu1810"
-    size = 1024
-    cloud = "vagrant"
-
-    def print_images(self):
-        images = self.p.images()
-        print(Printer.flatwrite(
-            images,
-            sort_keys=["name"],
-            order=["name", "provider", "version"],
-            header=["Name", "Provider", "Version"]))
+    os = "ubuntu"
+    version = "18.04"
 
     def next_name(self):
         self.name_generator.incr()
@@ -41,7 +33,9 @@ class TestName:
 
     def setup(self):
         banner("setup", c="-")
-        self.user = Config()["cloudmesh.profile.user"]
+        self.config = Config()
+        self.user = self.config["cloudmesh.profile.user"]
+        self.config = self.config["cloudmesh.cloud.docker"]
         self.name_generator = Name(
             experiment="exp",
             group="grp",
@@ -52,15 +46,76 @@ class TestName:
         self.name = str(self.name_generator)
         self.name_generator.incr()
         self.new_name = str(self.name_generator)
-        self.p = Provider(name=self.cloud)
+        self.p = Provider(name="docker")
+
+    def test_config(self):
+        HEADING()
+        pprint(self.config)
 
     def test_version(self):
         HEADING()
-        r = self.p.version()
-        pprint(r)
-        assert self.vbox_version == r["virtualbox"]["extension"]["version"]
-        assert self.vbox_version == r["virtualbox"]["version"]
+        version = self.p.version()
+        pprint(version)
 
+        assert "18.09.2" == version["docker"]["version"]
+        assert 6247962 <= int(version["docker"]["build"])
+        assert "18.09.2" == version.docker.version
+        assert 6247962 <= int(version.docker.build)
+
+    '''
+    def test_terminal(self):
+        HEADING()
+        t1 = Shell.terminal()
+        t2 = Shell.terminal(command="pwd")
+    '''
+
+    def test_images(self):
+        HEADING
+        images = self.p.images()
+        pprint(images)
+        """
+        order = self.p.output['image']['order']  # not pretty
+        header = self.p.output['image']['header']  # not pretty
+
+        print(Printer.flatwrite(images,
+                                sort_keys=["Os"],
+                                order=order,
+                                header=header,
+                                output="table"))
+        """
+
+
+class d:
+
+    def test_containers(self):
+        HEADING()
+        client = docker.from_env()
+
+        containers = client.containers.list()
+        pprint(containers)
+        """
+        order = self.p.output['vm']['order']  # not pretty
+        header = self.p.output['vm']['header']  # not pretty
+
+        print(Printer.flatwrite(containers,
+                                sort_keys=["Os"],
+                                order=order,
+                                header=header,
+                                output="table"))
+        """
+
+
+class ooo:
+
+    def test_images(self):
+        HEADING()
+        client = docker.from_env()
+        r = client.containers.run("cloudmesh/book", "echo hello world")
+        pprint(r)
+
+
+# noinspection PyPep8,PyPep8
+class other:
     def test_list_os(self):
         HEADING()
         ostypes = self.p.list_os()
@@ -187,24 +242,20 @@ class other:
                   )
 
     def test_secgroups_add(self):
-        HEADING()
         self.p.add_secgroup(self.secgroupname)
         self.test_list_secgroups()
 
     def test_secgroup_rules_add(self):
-        HEADING()
         rules = [self.secgrouprule]
         self.p.add_rules_to_secgroup(self.secgroupname, rules)
         self.test_list_secgroups()
 
     def test_secgroup_rules_remove(self):
-        HEADING()
         rules = [self.secgrouprule]
         self.p.remove_rules_from_secgroup(self.secgroupname, rules)
         self.test_list_secgroups()
 
     def test_secgroups_remove(self):
-        HEADING()
         self.p.remove_secgroup(self.secgroupname)
         self.test_list_secgroups()
 
@@ -224,7 +275,6 @@ class other:
         self.test_list_vm()
 
     def test_publicIP_detach(self):
-        HEADING()
         print("detaching and removing public IP...")
         time.sleep(5)
         nodes = self.p.list(raw=True)
@@ -261,12 +311,10 @@ class other:
 
         assert node["extra"]["task_state"] == "deleting"
 
-    def test_15_list_vm(self):
-        HEADING()
+    def test_list_vm(self):
         self.test_list_vm()
 
-    def test_16_vm_login(self):
-        HEADING()
+    def test_vm_login(self):
         self.test_list_vm()
         self.test_create()
         # use the self.testnode for this test

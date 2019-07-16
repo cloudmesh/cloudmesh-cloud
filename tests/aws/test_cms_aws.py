@@ -1,7 +1,7 @@
 ###############################################################
-# pytest -v --capture=no tests/test_cms_aws.py
-# pytest -v  tests/test_cms_aws.py
-# pytest -v --capture=no -v --nocapture tests/test_cms_aws.py:Test_cms_aws.<METHIDNAME>
+# pytest -v --capture=no tests/aws/test_cms_aws.py
+# pytest -v  tests/aws/test_cms_aws.py
+# pytest -v --capture=no -v --nocapture  tests/aws/test_cms_aws.py:Test_cms_aws.<METHIDNAME>
 ###############################################################
 from cloudmesh.management.configuration.config import Config
 from cloudmesh.common.util import HEADING
@@ -198,6 +198,11 @@ class Test_cms_aws:
         HEADING()
 
         StopWatch.start("cms vm script dryrun")
+        #
+        # TODO: location is a bug as we can not assum test is run in .
+        # alos the sh command has been removed and should be created in this
+        # test
+        #
         result = Shell.execute("cms vm script --name=test_boot_01 --username=ubuntu ./test_cms_aws.sh --dryrun", shell=True)
         StopWatch.stop("cms vm script dryrun")
 

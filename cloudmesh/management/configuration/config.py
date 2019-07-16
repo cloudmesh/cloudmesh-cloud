@@ -27,6 +27,7 @@ class Active(object):
     def __init__(self, config_path='~/.cloudmesh/cloudmesh4.yaml'):
         self.config = Config(config_path=config_path)
 
+
     def clouds(self):
         names = []
         entries = self.config["cloudmesh"]["cloud"]
@@ -122,6 +123,10 @@ class Config(object):
         self.__dict__ = self.__shared_state
         if "data" not in self.__dict__:
             self.load(config_path=config_path)
+            try:
+                self.user = self["cloudmesh.profile.user"]
+            except:
+                pass
 
     def load(self, config_path='~/.cloudmesh/cloudmesh4.yaml'):
         """

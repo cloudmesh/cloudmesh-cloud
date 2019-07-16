@@ -613,37 +613,47 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
         return self.update_dict(server, kind="vm")[0]
 
-    def get_publicIP(self):
-        # pools = self.cloudman.ex_list_floating_ip_pools()
-        # ex_get_floating_ip(ip)
-        # ex_create_floating_ip(ip_pool=pools[0])
-        #
-        """
-                    ex_attach_floating_ip_to_node(node, ip)
-                    ex_detach_floating_ip_from_node(node, ip)
-                    ex_delete_floating_ip(ip)
-        """
-        raise NotImplementedError
-        ip = None
-        ips = self.cloudman.ex_list_floating_ips()
-        if ips:
-            ip = ips[0]
-        else:
-            pools = self.cloudman.ex_list_floating_ip_pools()
-            # pprint (pools)
-            # ex_get_floating_ip(ip)
-            ip = self.cloudman.ex_create_floating_ip(ip_pool=pools[0].name)
+    #ok
+    def list_public_ips(self, available=False):
 
-        return ip
+        ips = self.cloudman.list_floating_ips()
+        if available:
+            found = []
+            for entry in found:
+                if entry['fixed_ip_address'] is not None:
+                    found.append(entry)
+            ips = found
 
+        return ips
+
+    #ok
+    def delete_public_ip(self, ip=None):
+        try:
+            if ip is None:
+                ips = self.cloudman.list_floating_ips(available=True)
+            else:
+                ips = self.cloudman.list_floating_ips({'floating_ip_address' :
+                                                       ip})
+            for _ip in ips:
+                r = self.cloudman.delete_floating_ip(_ip['id'])
+        except:
+            pass
+
+    #ok
+    def create_public_ip(self):
+        return self.cloudman.create_floating_ip()
+
+    #ok
+    def find_available_public_ip(self):
+        return self.cloudman.available_floating_ip()
+
+    #broken
     def attach_publicIP(self, node, ip):
         raise NotImplementedError
-        # return self.cloudman.ex_attach_floating_ip_to_node(node, ip)
 
+    #broken
     def detach_publicIP(self, node, ip):
         raise NotImplementedError
-        #self.cloudman.ex_detach_floating_ip_from_node(node, ip)
-        #return self.cloudman.ex_delete_floating_ip(ip)
 
     def rename(self, name=None, destination=None):
         """

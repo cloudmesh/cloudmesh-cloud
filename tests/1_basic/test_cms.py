@@ -1,7 +1,7 @@
 ###############################################################
-# pytest -v --capture=no tests/0_basic/test_cms.py
-# pytest -v  tests/0_basic/test_cms.py
-# pytest -v --capture=no  tests/0_basic/test_cms.py:Test_cms.<METHIDNAME>
+# pytest -v --capture=no tests/1_basic/test_cms.py
+# pytest -v  tests/1_basic/test_cms.py
+# pytest -v --capture=no  tests/1_basic/test_cms.py:Test_cms.<METHIDNAME>
 ###############################################################
 import pytest
 from cloudmesh.common.debug import VERBOSE

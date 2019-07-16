@@ -28,5 +28,5 @@ install:
 
 
 script:
-  - pytest -v --capture=no tests/0_basic/test_cloud_installer.py
-  - pytest -v --capture=no tests/0_basic/test_host.py
+  - pytest -v --capture=no tests/0_installer/test_cloud_installer.py
+  - pytest -v --capture=no tests/1_basic/test_host.py

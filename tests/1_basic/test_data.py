@@ -1,7 +1,7 @@
 ###############################################################
-# pytest -v --capture=no tests/0_basic/test_data.py
-# pytest -v  tests/0_basic/test_data.py
-# pytest -v --capture=no  tests/0_basic/test_data.py:Test_data.<METHIDNAME>
+# pytest -v --capture=no tests/1_basic/test_data.py
+# pytest -v  tests/1_basic/test_data.py
+# pytest -v --capture=no  tests/1_basic/test_data.py:Test_data.<METHIDNAME>
 ###############################################################
 from cloudmesh.common.util import HEADING
 from pprint import pprint

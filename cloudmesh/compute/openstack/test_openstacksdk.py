@@ -49,7 +49,7 @@ pprint(config)
 
 cloud = openstack.connect(**config)
 
-#pprint(dir(cloud))
+pprint(dir(cloud))
 
 #pprint (cloud.list_floating_ips())
 
@@ -57,16 +57,29 @@ cloud = openstack.connect(**config)
 
 #print (cloud.create_floating_ip())
 
-ip ='129.114.33.15'
+#ip ='129.114.33.15'
 
 #print (cloud.delete_floating_ip(ip))
 
-provider = Provider(name="chameleon")
-# pprint (cloud.list_floating_ips())
+#provider = Provider(name="chameleon")
+#pprint (cloud.list_floating_ips())
 
-r = provider.delete_public_ip(ip)
+#r = provider.delete_public_ip(ip)
 
-print(r)
+#print(r)
+
+server = cloud.get_server("gregor-vm-3")
+ip = cloud.available_floating_ip()
+
+banner("SERVER")
+pprint (server)
+banner("IP")
+pprint(ip)
+pprint(cloud.add_ips_to_server(server,ips=ip['floating_ip_address']))
+
+#pprint(cloud.add_ip_list(server,ips=[ip]))
+
+
 
 if False:
 

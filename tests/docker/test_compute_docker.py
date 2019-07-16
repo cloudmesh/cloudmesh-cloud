@@ -35,10 +35,7 @@ class TestName:
         self.user = self.config["cloudmesh.profile.user"]
         self.config = self.config["cloudmesh.cloud.docker"]
         self.name_generator = Name(
-            experiment="exp",
-            group="grp",
-            user=self.user,
-            kind="vm",
+            schema=f"{self.user}-vm",
             counter=1)
 
         self.name = str(self.name_generator)

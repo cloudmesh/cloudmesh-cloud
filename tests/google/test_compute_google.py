@@ -26,10 +26,7 @@ class TestName:
 
         self.clouduser = 'cc'
         self.name_generator = Name(
-            experiment="exp",
-            group="grp",
-            user="user",
-            kind="vm",
+            schema=f"{self.user}-vm",
             counter=1)
 
         self.name = str(self.name_generator)

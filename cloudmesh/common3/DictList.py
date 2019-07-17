@@ -37,7 +37,7 @@ if __name__ == "__main__":
     print (d['vm1'])
     # {'name': 'vm1', 'status': 'on', 'x': 0}
     #
-    print (d.list()
+    print (d.list())
     # [{'name': 'vm1', 'status': 'on', 'x': 0},
     #  {'name': 'vm2', 'status': 'on', 'x': 1},
     #  {'name': 'vm3', 'status': 'on', 'x': 2},

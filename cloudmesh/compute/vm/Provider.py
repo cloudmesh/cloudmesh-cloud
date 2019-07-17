@@ -285,6 +285,15 @@ class Provider(ComputeNodeABC):
     def list_secgroups_rules(self):
         return self.p.list_secgroup_rules()
 
+    def remove_secgroup(self, name=None):
+        return self.p.remove_secgroup(name=name)
+
+    def add_secgroup(self, name=None):
+        return self.p.add_secgroup(name=name)
+
+    def upoload_secgroup(self, name=None):
+        return self.p.upload_secgroup(name=name)
+
     def delete_public_ip(self, ip):
         return self.p.delete_public_ip(ip)
 

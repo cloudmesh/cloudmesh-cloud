@@ -11,6 +11,10 @@ from cloudmesh.common.util import banner
 from cloudmesh.common.util import path_expand
 from cloudmesh.management.configuration.config import Config
 from cloudmesh.provider import ComputeProviderPlugin
+from cloudmesh.common.Printer import Printer
+from cloudmesh.mongo.CmDatabase import CmDatabase
+from cloudmesh.secgroup.Secgroup import Secgroup, SecgroupRule
+from cloudmesh.secgroup.Secgroup import SecgroupExamples
 
 class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
@@ -97,7 +101,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                        "Fingerprint",
                        "Comment"]
         },
-        "secgroup": {
+        "secrule": {
             "sort_keys": ["name"],
             "order": ["name",
                       "tags",
@@ -119,7 +123,45 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                        "Range",
                        "Remote group id"]
         },
+        "secgroup": {
+            "sort_keys": ["name"],
+            "order": ["name",
+                      "tags",
+                      "description",
+                      "rules"
+                      ],
+            "header": ["Name",
+                       "Tags",
+                       "Description",
+                       "Rules"]
+        },
     }
+
+
+    def Print(self, output, kind, data):
+
+        if output == "table":
+            if kind == "secrule":
+
+                result = []
+                for group in data:
+                    for rule in group['security_group_rules']:
+                        rule['name'] = group['name']
+                        result.append(rule)
+                data = result
+
+
+            order = self.output[kind]['order']  # not pretty
+            header = self.output[kind]['header']  # not pretty
+
+            print(Printer.flatwrite(data,
+                                    sort_keys=["name"],
+                                    order=order,
+                                    header=header,
+                                    output=output)
+                  )
+        else:
+            print(Printer.write(data, output=output))
 
     @staticmethod
     def _get_credentials(config):
@@ -299,12 +341,18 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         :param name: The name of the group, if None all will be returned
         :return:
         """
-        if name is None:
-            return self.get_list(
-                self.cloudman.network.security_groups(),
+        groups =  self.cloudman.network.security_groups()
+
+        if name is not None:
+            for entry in groups:
+
+                if entry['name'] == name:
+                    groups = [entry]
+                    break
+
+        return self.get_list(
+                groups,
                 kind="secgroup")
-        else:
-            raise NotImplementedError
 
     def list_secgroup_rules(self, name='default'):
         """
@@ -327,6 +375,41 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                 description = name
             self.cloudman.create_security_group(name,
                                                 description)
+        else:
+            raise ValueError("cloud not initialized")
+
+    def add_secgroup_rule(self,
+                          name=None, #group name
+                          port=None,
+                          protocol=None,
+                          ip_range=None):
+        """
+        Adds the
+        :param name: Name of the group
+        :param description: The desciption
+        :return:
+        """
+        if self.cloudman:
+            try:
+                portmin, portmax = port.split(":")
+            except:
+                portmin = None
+                portmax= None
+
+            self.cloudman.create_security_group_rule(
+                name,
+                port_range_min=portmin,
+                port_range_max=portmax,
+                protocol=protocol,
+                remote_ip_prefix=ip_range,
+                remote_group_id=None,
+                direction='ingress',
+                ethertype='IPv4',
+                project_id=None)
+
+        else:
+            raise ValueError("cloud not initialized")
+
 
     def remove_secgroup(self, name=None):
         """
@@ -337,6 +420,43 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         """
         if self.cloudman:
             self.cloudman.delete_security_group(name)
+            g = self.list_secgroups(name=name)
+            return len(g) == 0
+        else:
+            raise ValueError("cloud not initialized")
+
+    def upload_secgroup(self, name=None):
+
+        cgroups = self.list_secgroups(name)
+        if len(cgroups) >0:
+            raise ValueError("group already exists")
+
+        groups = Secgroup().list()
+        rules = SecgroupRule().list()
+
+        pprint (rules)
+        data = {}
+        for rule in rules:
+            data[rule['name']] = rule
+
+        pprint (groups)
+
+        for group in groups:
+            if group['name'] == name:
+                break
+        print("upload group:", name)
+        self.add_secgroup(name=name, description=group['description'])
+        for r in group['rules']:
+            found = data[r]
+            print ("    ", "rule:", found['name'])
+            self.add_secgroup_rule(
+                              name=name,
+                              port=found["ports"],
+                              protocol=found["protocol"],
+                              ip_range=found["ip_range"])
+
+
+
 
     def add_rules_to_secgroup(self, secgroupname, newrules):
         raise NotImplementedError

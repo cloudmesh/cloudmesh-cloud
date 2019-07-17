@@ -15,11 +15,26 @@ from cloudmesh.common.debug import VERBOSE
 from cloudmesh.common.util import HEADING
 from cloudmesh.common.util import banner
 from cloudmesh.common.variables import Variables
-from cloudmesh.compute.libcloud.Provider import Provider
+from cloudmesh.compute.openstack.Provider import Provider
 from cloudmesh.management.configuration.SSHkey import SSHkey
 from cloudmesh.management.configuration.config import Config
 from cloudmesh.management.configuration.name import Name
 from cloudmesh.common3.Shell import Shell
+
+
+user = Config()["cloudmesh.profile.user"]
+variables = Variables()
+cloud = variables.parameter('cloud')
+
+if cloud != "chameloen":
+    raise ValueError("cloud is not chameleon")
+
+def run(label, command):
+    result = Shell.run_timed(label, command, service=cloud)
+    print(result)
+    return result
+
+name_generator = Name(schema=f"{user}-vm", counter=1)
 
 @pytest.mark.incremental
 class TestName:
@@ -27,29 +42,16 @@ class TestName:
 
     def setup(self):
         banner("setup", c="-")
-        self.user = Config()["cloudmesh.profile.user"]
+
         self.clouduser = 'cc'
-
-        user = self.user
-        kind = "vm"
-
-        self.name_generator = Name(
-            schema=f"{user}-vm",
-            counter=1)
-
         self.name = str(self.name_generator)
         self.name_generator.incr()
-
         self.new_name = str(self.name_generator)
-
-        variables = Variables()
-        # this gives the current default cloud
-        self.cloud = variables['cloud']
 
         # specify the cloud name to make sure this test
         # is done for the openstack cloud
         #
-        self.p = Provider(name="chameleon")
+        self.p = Provider(name=cloud)
 
         self.secgroupname = "CM4TestSecGroup"
         self.secgrouprule = {"ip_protocol": "tcp",
@@ -61,20 +63,20 @@ class TestName:
     def test_add_key_from_cli(self):
         HEADING()
 
-        result = self.run_timed("db add key", f"cms key add {self.user} "
+        result = run("db add key", f"cms key add {user} "
         f"--source=ssh", service="local")
-        result = self.run("db list ", f"cms key list", service="local")
+        result = run("db list ", f"cms key list", service="local")
 
         VERBOSE(result)
 
-        assert self.user in result
+        assert user in result
 
     def test_upload_key_from_cli(self):
         HEADING()
 
         result = Shell.run_timed("cms key upload",
-                                 f"cms key upload {self.user}")
-        result = Shell.run_timed("cms list", f"cms key upload {self.user}")
+                                 f"cms key upload {user}")
+        result = Shell.run_timed("cms list", f"cms key upload {user}")
 
         "cms key list --cloud=chameleon"
         VERBOSE(result)
@@ -207,7 +209,7 @@ class TestName:
                       size=size,
                       # username as the keypair name based on
                       # the key implementation logic
-                      ex_keyname=self.user,
+                      ex_keyname=user,
                       ex_security_groups=['default'])
         time.sleep(5)
         nodes = self.p.list()
@@ -318,7 +320,7 @@ class TestName:
         self.test_list_vm()
 
     def test_results(self):
-        banner(f"Benchmark results for {self.cloud}")
+        banner(f"Benchmark results for {cloud}")
         StopWatch.benchmark()
 
 

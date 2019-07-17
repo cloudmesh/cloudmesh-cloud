@@ -3,13 +3,14 @@ from pprint import pprint
 from cloudmesh.common.Printer import Printer
 from cloudmesh.common.parameter import Parameter
 from cloudmesh.common.variables import Variables
-from cloudmesh.compute.vm.Provider import Provider
+
 from cloudmesh.secgroup.Secgroup import Secgroup, SecgroupRule
 from cloudmesh.secgroup.Secgroup import SecgroupExamples
 from cloudmesh.shell.command import PluginCommand
 from cloudmesh.shell.command import command
 from cloudmesh.shell.command import map_parameters
-
+from cloudmesh.common.debug import VERBOSE
+from cloudmesh.compute.vm.Provider import Provider
 
 class SecCommand(PluginCommand):
 
@@ -154,15 +155,23 @@ class SecCommand(PluginCommand):
                         pass
             Print("all", data)
 
+        VERBOSE(arguments)
 
-        if arguments.group and arguments.delete:
+        if arguments.load and arguments.group and arguments.cloud:
+
+            provider = Provider(name=arguments.cloud)
+            provider.upoload_secgroup(name=arguments.GROUP)
+
+            return ""
+        elif arguments.group and arguments.delete:
 
             if arguments.cloud:
                 clouds = Parameter.expand(arguments.cloud)
                 for cloud in clouds:
                     print(f"cloud {cloud}")
                     provider = Provider(name=cloud)
-                    raise NotImplementedError
+                    r = provider.remove_secgroup(name=arguments.GROUP)
+
             else:
                 groups.remove(arguments.GROUP)
 
@@ -192,7 +201,7 @@ class SecCommand(PluginCommand):
                             rule['name'] = group['name']
                             result.append(rule)
                     cloud_groups = result
-                provider.Print(arguments.output, "secgroup", cloud_groups)
+                provider.Print(arguments.output, "secrule", cloud_groups)
 
             return ""
 
@@ -249,7 +258,9 @@ class SecCommand(PluginCommand):
 
             return ""
 
-        elif arguments.load:
+
+
+        elif arguments.load and not arguments.group:
 
             examples = SecgroupExamples()
             examples.load()

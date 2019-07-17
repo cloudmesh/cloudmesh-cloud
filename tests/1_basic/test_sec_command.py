@@ -121,8 +121,6 @@ class TestSecCLI:
             name = entry['name']
             assert name in result
 
-
-
     def test_benchmark(self):
         StopWatch.benchmark()
 

@@ -9,7 +9,7 @@ from cloudmesh.common.StopWatch import StopWatch
 from cloudmesh.common.debug import VERBOSE
 from cloudmesh.common.util import HEADING
 from cloudmesh.common.util import banner
-from cloudmesh.compute.azure.PyAzure import Provider
+from cloudmesh.compute.azure.Provider import Provider
 from cloudmesh.management.configuration.config import Config
 from cloudmesh.management.configuration.name import Name
 

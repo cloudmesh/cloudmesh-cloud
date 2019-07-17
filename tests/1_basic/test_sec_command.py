@@ -1,8 +1,22 @@
 ###############################################################
 # pytest -v --capture=no tests/1_basic/test_sec_command.py
 # pytest -v  tests/1_basic/test_sec_command.py
-# pytest -v --capture=no  tests/1_basic/test_sec_command.py:Test_database.<METHIDNAME>
 ###############################################################
+#
+# The following commands are tested on the local database
+#
+# cms sec clear
+# cms sec load
+# cms rule add
+# cms sec rule delete deleteme
+# cms sec group add deleteme empty empty
+# cms sec group delete deleteme
+# cms sec rule list
+# cms sec list
+# cms sec group list
+#
+###############################################################
+
 
 import pytest
 from cloudmesh.common.StopWatch import StopWatch

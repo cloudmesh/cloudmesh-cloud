@@ -107,32 +107,29 @@ class SecgroupDatabase:
     # noinspection PyShadowingBuiltins
     def __init__(self, kind=None):
         self.kind = kind
-        self.db = CmDatabase()
+        self.cm = CmDatabase()
         self.cloud = "local"
         self.collection = f"{self.cloud}-{kind}"
 
     def clear(self):
-        self.db.collection(self.collection).delete_many({})
+        self.cm.collection(self.collection).delete_many({})
 
     def find(self, name=None):
 
         if name is None:
-            query = {'cm.kind': self.kind}
+            query = {}
         else:
-            query = {'cm.kind': self.kind,
-                     'cm.name': name}
-        entries = self.db.find(collection=self.collection,
-                               **query)
+            query = {'cm.name': name}
+        entries = self.cm.find(collection=self.collection,query=query)
         return entries
 
     def remove(self, name=None):
 
         if name is None:
-            query = {'cm.kind': self.kind}
+            query = {}
         else:
-            query = {'cm.kind': self.kind,
-                     'cm.name': name}
-        entries = self.db.delete(collection=self.collection,
+            query = {'cm.name': name}
+        entries = self.cm.delete(collection=self.collection,
                                  **query)
         return entries
 
@@ -201,7 +198,7 @@ class Secgroup(SecgroupDatabase):
                        "Ports",
                        "IP Range"]
         },
-        "rule": {
+        "secrule": {
             "sort_keys": ["name"],
             "order": ["name",
                       "protocol",
@@ -212,7 +209,7 @@ class Secgroup(SecgroupDatabase):
                        "Ports",
                        "IP Range"]
         },
-        "group": {
+        "secgroup": {
             "sort_keys": ["name"],
             "order": ["name",
                       "rules",

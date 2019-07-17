@@ -257,8 +257,12 @@ class CmDatabase(object):
         return result
 
 
-    def find(self, collection=None, cloud=None, kind=None,
-             query=None, attributes=None):
+    def find(self,
+             collection=None,
+             cloud=None,
+             kind=None,
+             query=None,
+             attributes=None):
         """
         finds all names in the specified collections. The parameters,
         collection, cloud, and kind can all be Parameters that get expanded
@@ -298,10 +302,9 @@ class CmDatabase(object):
            for a in attributes:
                 _attributes[a] = 1
 
-        print (_attributes)
-
         def add(collection):
             col = self.db[collection]
+
             entries = col.find(
                 query,
                 _attributes)
@@ -454,7 +457,9 @@ class CmDatabase(object):
     # ok
     def delete(self, collection="cloudmesh", **kwargs):
         col = self.db[collection]
+        # f = col.find(kwargs)
         r = col.delete_many(kwargs)
+        return r.deleted_count
 
     # ok
     def command(self, command):

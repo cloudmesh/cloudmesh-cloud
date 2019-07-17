@@ -208,6 +208,14 @@ class SecCommand(PluginCommand):
                 arguments.CIDR,
             )
 
+        elif arguments.group and arguments.add:
+            group = Secgroup()
+            group.add(
+                arguments.GROUP,
+                arguments.RULES,
+                arguments.DESCRIPTION
+            )
+
         elif arguments.group and arguments.list:
             secgroup = Secgroup()
             group = secgroup.list(arguments.GROUP)

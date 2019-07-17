@@ -1,17 +1,16 @@
-from pprint import pprint
+###############################################################
+# pytest -v --capture=no tests/1_basic/test_sec_command.py
+# pytest -v  tests/1_basic/test_sec_command.py
+# pytest -v --capture=no  tests/1_basic/test_sec_command.py:Test_database.<METHIDNAME>
+###############################################################
 
 import pytest
-from cloudmesh.common.Printer import Printer
+from cloudmesh.common.StopWatch import StopWatch
 from cloudmesh.common.util import HEADING
-from cloudmesh.management.configuration.name import Name
-from cloudmesh.mongo.CmDatabase import CmDatabase
-from cloudmesh.management.configuration.config import Config
 from cloudmesh.common3.Shell import Shell
 from cloudmesh.secgroup.Secgroup import Secgroup
 from cloudmesh.secgroup.Secgroup import SecgroupExamples
 from cloudmesh.secgroup.Secgroup import SecgroupRule
-from cloudmesh.common.StopWatch import StopWatch
-from cloudmesh.common.debug import VERBOSE
 
 rules = SecgroupRule()
 groups = Secgroup()
@@ -25,7 +24,6 @@ def run(label, command):
 
 @pytest.mark.incremental
 class TestSecCLI:
-
 
     def test_clear(self):
         HEADING(color="HEADER")
@@ -54,7 +52,8 @@ class TestSecCLI:
     def test_rule_add(self):
         HEADING()
 
-        result = run("rule add", f"cms sec rule add deleteme FROMPORT TOPORT PROTOCOL CIDR")
+        result = run("rule add",
+                     f"cms sec rule add deleteme FROMPORT TOPORT PROTOCOL CIDR")
         entry = rules.list(name="deleteme")
 
         assert len(entry) > 0
@@ -85,7 +84,6 @@ class TestSecCLI:
 
         assert len(entry) == 0
 
-
     def test_rule_list(self):
         HEADING()
 
@@ -106,7 +104,6 @@ class TestSecCLI:
         result = run("list", "cms sec list")
         g = groups.list()
 
-
         for entry in g:
             name = entry['name']
             assert name in result
@@ -123,4 +120,3 @@ class TestSecCLI:
 
     def test_benchmark(self):
         StopWatch.benchmark()
-

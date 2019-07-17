@@ -118,7 +118,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                        "Protocol",
                        "Range",
                        "Remote group id"]
-        }
+        },
     }
 
     @staticmethod

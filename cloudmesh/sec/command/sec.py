@@ -21,13 +21,10 @@ class SecCommand(PluginCommand):
         ::
 
             Usage:
-                sec rule list --cloud=CLOUDS [--output=OUTPUT]
-                sec rule list --name=RULES [--output=OUTPUT]
-                sec rule list [--output=OUTPUT]
+                sec rule list [--cloud=CLOUDS] [--output=OUTPUT]
                 sec rule add RULE FROMPORT TOPORT PROTOCOL CIDR
-                sec rule delete GROUP [--cloud=CLOUD]
-                sec group list --cloud=CLOUDS [--output=OUTPUT]
-                sec group list [--name=GROUPS] [--output=OUTPUT]
+                sec rule delete RULE [--cloud=CLOUD]
+                sec group list [--cloud=CLOUDS] [--output=OUTPUT]
                 sec group add GROUP RULES DESCRIPTION
                 sec group delete GROUP [--cloud=CLOUD]
                 sec group load [GROUP] [--cloud=CLOUD]
@@ -53,14 +50,26 @@ class SecCommand(PluginCommand):
                               129.79.0.0/16
 
             Examples:
-                sec group list
-                sec group list --cloud=kilo
-                sec group add my_new_group webapp 8080 8080 tcp 0.0.0.0/0
-                seg group delete my_group my_rule
-                sec group delete my_unused_group --cloud=kilo
-                sec group upload --cloud=kilo
+                # sec load
+                # sec group list
+                # sec group add my_new_group webapp 8080 8080 tcp 0.0.0.0/0
+
+
+            Bugs:
+                # sec group list --cloud=chameleon
+                # seg group delete my_group my_rule
+                # sec group delete my_unused_group --cloud=kilo
+                # sec group upload --cloud=kilo
+
+
 
             Description:
+
+                sec load
+                    loads some defalut security groups and rules in the database
+
+                sec clear
+                    deletes all security groups and rules in the database
 
                 THIS IS OUTDATED
 
@@ -137,7 +146,20 @@ class SecCommand(PluginCommand):
                         pass
             Print("all", data)
 
-        if arguments.group and arguments.list and arguments.cloud:
+
+        if arguments.group and arguments.delete:
+
+            if arguments.cloud:
+                clouds = Parameter.expand(arguments.cloud)
+                for cloud in clouds:
+                    print(f"cloud {cloud}")
+                    provider = Provider(name=cloud)
+                    raise NotImplementedError
+            else:
+                groups.remove(arguments.GROUP)
+
+        elif (arguments.group or arguments.rule) and  arguments.list and \
+            arguments.cloud:
 
             clouds = Parameter.expand(arguments.cloud)
 
@@ -165,37 +187,22 @@ class SecCommand(PluginCommand):
 
             return ""
 
-        elif arguments.rule and arguments.list and arguments.cloud:
-
-            clouds = Parameter.expand(arguments.cloud)
-
-            if len(clouds) == 0:
-                variables = Variables()
-                cloudname = variables['cloud']
-                clouds = [cloudname]
-            keys = []
-
-            for cloud in clouds:
-                print(f"cloud {cloud}")
-                provider = Provider(name=cloud)
-                cloud_rules = provider.list_secgroups_rules()
-
-            Print("rule", cloud_rules)
-
-            return ""
-
         elif arguments.group and arguments.list:
             found = groups.list()
             for entry in found:
                 group_rules = entry['rules']
                 if type(group_rules) == list:
                     entry['rules'] = ', '.join(group_rules)
-            Print("group", found)
+
+            Print("secgroup", found)
+
+            return ""
 
         elif arguments.rule and arguments.list:
             found = rules.list()
-            Print("rule", found)
+            Print("secrule", found)
 
+            return ""
 
         elif arguments.rule and arguments.add:
             rules = SecgroupRule()
@@ -207,6 +214,8 @@ class SecCommand(PluginCommand):
                 ip_range=arguments.CIDR
             )
 
+            return ""
+
         elif arguments.group and arguments.add:
             group = Secgroup()
             group.add(
@@ -215,16 +224,21 @@ class SecCommand(PluginCommand):
                 description=arguments.DESCRIPTION
             )
 
+            return ""
+
         elif arguments.group and arguments.list:
             secgroup = Secgroup()
             group = secgroup.list(arguments.GROUP)
 
             pprint(group)
 
+            return ""
 
         elif arguments.list:
 
             list_all()
+
+            return ""
 
         elif arguments.load:
 
@@ -232,9 +246,13 @@ class SecCommand(PluginCommand):
             examples.load()
             list_all()
 
+            return ""
+
         elif arguments.clear:
 
             groups.clear()
             rules.clear()
+
+            return ""
 
         return ""

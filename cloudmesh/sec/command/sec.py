@@ -199,21 +199,20 @@ class SecCommand(PluginCommand):
 
         elif arguments.rule and arguments.add:
             rules = SecgroupRule()
+            #  name=None, protocol=None, ports=None, ip_range=None
             rules.add(
-                arguments.GROUP,
-                arguments.RULE,
-                arguments.FROMPORT,
-                arguments.TOPORT,
-                arguments.PROTOCOL,
-                arguments.CIDR,
+                name=arguments.RULE,
+                ports=f"{arguments.FROMPORT}" + ":" +f"{arguments.TOPORT}",
+                protocol=arguments.PROTOCOL,
+                ip_range=arguments.CIDR
             )
 
         elif arguments.group and arguments.add:
             group = Secgroup()
             group.add(
-                arguments.GROUP,
-                arguments.RULES,
-                arguments.DESCRIPTION
+                name=arguments.GROUP,
+                rules=arguments.RULES,
+                description=arguments.DESCRIPTION
             )
 
         elif arguments.group and arguments.list:

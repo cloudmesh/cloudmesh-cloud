@@ -539,7 +539,7 @@ class Provider(ComputeNodeABC):
                 entry['cm']['updated']  = str(datetime.utcnow())
                 entry["cm"]["name"]     = entry["name"]
             elif kind == 'secgroup':
-                if self.cloudtype == 'pyazure':
+                if self.cloudtype == 'azure':
                     entry["cm"]["name"] = entry["name"]
                 else:
                     pass

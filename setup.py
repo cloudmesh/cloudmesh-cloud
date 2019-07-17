@@ -75,7 +75,6 @@ azure
 docker
 munch
 selenium
-pandas
 yamllint
 openstacksdk
 """.split("\n")

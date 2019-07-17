@@ -29,6 +29,5 @@ yamllint
 azure
 munch
 selenium
-pandas
 yamllint
 openstacksdk

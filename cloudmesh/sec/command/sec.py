@@ -65,47 +65,55 @@ class SecCommand(PluginCommand):
 
             Description:
 
-                sec load
-                    loads some defalut security groups and rules in the database
 
-                sec clear
-                    deletes all security groups and rules in the database
+               Database commands:
 
-                THIS IS OUTDATED
+                   sec clear
+                       removes all rules and groups from the database
 
-                security_group command provides list/add/delete
-                security_groups for a tenant of a cloud, as well as
-                list/add/delete of rules for a security group from a
-                specified cloud and tenant.
-                Security groups are first assembled in a local database.
-                Once they are defined they can be added to the clouds.
-                sec group list [--output=OUTPUT]
-                    lists all security groups and rules in the database
-                sec group list GROUP [--output=OUTPUT]
-                    lists a given security group and its rules defined
-                    locally in the database
-                sec group list --cloud=CLOUD [--output=OUTPUT]
-                    lists the security groups and rules on the specified clouds.
-                sec group add GROUP RULE FROMPORT TOPORT PROTOCOL CIDR
-                    adds a security rule with the given group and the details
-                    of the security rules
-                sec group delete GROUP [--cloud=CLOUD]
-                    Deletes a security group from the local database. To make
-                    the change on the remote cloud, using the 'upload' command
-                    afterwards.
-                    If the --cloud parameter is specified, the change would be
-                    made directly on the specified cloud
-                sec group delete GROUP RULE
-                    deletes the given rule from the group. To make this change
-                    on the remote cloud, using 'upload' command.
-                sec group upload [GROUP] [--cloud=CLOUD...]
-                    uploads a given group to the given cloud. If the cloud is
-                    not specified the default cloud is used.
-                    If the parameter for cloud is "all" the rules and groups
-                    will be uploaded to all active clouds.
-                    This will synchronize the changes (add/delete on security
-                    groups, rules) made locally to the remote cloud(s).
-                    groups, rules) made locally to the remote cloud(s).
+                   sec load
+                        loads some defalut security groups and rules in the
+                        database
+
+                    sec clear
+                        deletes all security groups and rules in the database
+
+                    sec rule list  [--output=OUTPUT]
+                        lists all security groups and rules in the database
+
+                    sec rule add RULE FROMPORT TOPORT PROTOCOL CIDR
+                        adds a security rule with the given group and the details
+                        of the security rules
+
+                    sec group add GROUP RULES DESCRIPTION
+                        adds a security group with the given group and the
+                        details of the security groups
+
+                    sec rule delete RULE
+                        deletes the rule form the database
+
+                    sec group delete GROUP
+                        deletes the group form the database
+
+
+                Cloud commands:
+
+                    sec rule list --cloud=CLOUDS [--output=OUTPUT]
+                        lists all security rules in the specified cloud
+
+                    sec group list --cloud=CLOUDS [--output=OUTPUT]
+                        lists all security groups in the specified cloud
+
+                    sec rule delete RULE --cloud=CLOUD
+                        deletes the rule form the cloud
+
+                    sec group delete GROUP [--cloud=CLOUD]
+                        deletes the group from the cloud
+
+                    sec load GROUP --cloud=CLOUD
+                        uploads the group to the cloud with all its rules
+
+
         """
 
         map_parameters(arguments,
@@ -157,6 +165,7 @@ class SecCommand(PluginCommand):
                     raise NotImplementedError
             else:
                 groups.remove(arguments.GROUP)
+
 
         elif (arguments.group or arguments.rule) and  arguments.list and \
             arguments.cloud:

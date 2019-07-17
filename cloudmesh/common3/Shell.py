@@ -7,11 +7,12 @@ import sys
 from cloudmesh.common.Shell import Shell as Shell2
 from cloudmesh.common.console import Console
 import subprocess
+from cloudmesh.common.StopWatch import StopWatch
 
 class Shell(Shell2):
 
-    @classmethod
-    def run(cls, command, encoding='utf-8'):
+    @staticmethod
+    def run(command, encoding='utf-8'):
         cmd = f"{command}; exit 0"
         r = subprocess.check_output(command,
                                     stderr=subprocess.STDOUT,
@@ -21,6 +22,14 @@ class Shell(Shell2):
         else:
             return r
 
+    @staticmethod
+    def run_timed(label, command, encoding=None, service=None):
+        _label = str(label)
+        print(_label, command)
+        StopWatch.start(f"{service} {_label}")
+        result = Shell.run(command, encoding)
+        StopWatch.stop(f"{service} {_label}")
+        return str(result)
 
     @classmethod
     def check_python(cls):

@@ -19,20 +19,11 @@ from cloudmesh.compute.libcloud.Provider import Provider
 from cloudmesh.management.configuration.SSHkey import SSHkey
 from cloudmesh.management.configuration.config import Config
 from cloudmesh.management.configuration.name import Name
-
+from cloudmesh.common3.Shell import Shell
 
 @pytest.mark.incremental
 class TestName:
 
-    def run(self, label, command, encoding=None, service=None):
-        if service is None:
-            service = self.cloud
-        _label = str(label)
-        print(_label, command)
-        StopWatch.start(f"{service} {_label}")
-        result = Shell.run(command, encoding)
-        StopWatch.stop(f"{service} {_label}")
-        return result
 
     def setup(self):
         banner("setup", c="-")
@@ -70,7 +61,7 @@ class TestName:
     def test_add_key_from_cli(self):
         HEADING()
 
-        result = self.run("db add key", f"cms key add {self.user} "
+        result = self.run_timed("db add key", f"cms key add {self.user} "
         f"--source=ssh", service="local")
         result = self.run("db list ", f"cms key list", service="local")
 
@@ -81,8 +72,9 @@ class TestName:
     def test_upload_key_from_cli(self):
         HEADING()
 
-        result = Shell.run("cms key upload", f"cms key upload {self.user}")
-        result = Shell.run("cms list", f"cms key upload {self.user}")
+        result = Shell.run_timed("cms key upload",
+                                 f"cms key upload {self.user}")
+        result = Shell.run_timed("cms list", f"cms key upload {self.user}")
 
         "cms key list --cloud=chameleon"
         VERBOSE(result)

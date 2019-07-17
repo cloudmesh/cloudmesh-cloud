@@ -18,20 +18,35 @@
 ###############################################################
 
 
+#
+# this test is wron as we only want to test the cloud, we need to make sure
+# the local is loaded
+#
+# the local test is in 1_basic
+#
+
 import pytest
 from cloudmesh.common.StopWatch import StopWatch
+from cloudmesh.common.parameter import Parameter
 from cloudmesh.common.util import HEADING
+from cloudmesh.common.variables import Variables
 from cloudmesh.common3.Shell import Shell
 from cloudmesh.secgroup.Secgroup import Secgroup
 from cloudmesh.secgroup.Secgroup import SecgroupExamples
 from cloudmesh.secgroup.Secgroup import SecgroupRule
 
+
+
+variables = Variables()
+cloud = variables.parameter('cloud')
+
 rules = SecgroupRule()
 groups = Secgroup()
 
 
+
 def run(label, command):
-    result = Shell.run_timed(label, command, service="local")
+    result = Shell.run_timed(label, command, service=cloud)
     print(result)
     return result
 
@@ -39,39 +54,44 @@ def run(label, command):
 @pytest.mark.incremental
 class TestSecCLI:
 
-    def test_clear(self):
-        HEADING(color="HEADER")
+    def test_init(self):
 
-        run("clear", "cms sec clear")
-
-        r = rules.list()
-        g = groups.list()
-
-        assert len(r) == 0
-        assert len(g) == 0
-
-    def test_load(self):
-        run("load", "cms sec load")
-
-        r = rules.list()
-        g = groups.list()
-
-        assert len(r) > 0
-        assert len(g) > 0
+        r = rules.clear()
+        g = groups.clear()
 
         examples = SecgroupExamples()
-        assert len(g) == len(examples.secgroups)
-        assert len(r) == len(examples.secrules)
+        examples.load()
 
-    def test_rule_add(self):
+        assert len(examples.secgroups) > 0
+        assert len(examples.secrules) > 0
+
+
+        result = run("rule add",
+                     f"cms sec rule add deleteme 101 101 tcp 10.0.0.0/0")
+
+        result = run("group add",
+                     f"cms sec group add wrong nothing wrong")
+
+    def test_add_group(self):
+        result = run("group add",
+                     f"cms sec group load wrong --cloud={cloud}")
+
+
+class a:
+
+    def test_rule_load_to_cloud(self):
         HEADING()
 
         result = run("rule add",
-                     f"cms sec rule add deleteme FROMPORT TOPORT PROTOCOL CIDR")
-        entry = rules.list(name="deleteme")
+                     f"cms sec group load deleteme --cloud={cloud}")
 
-        assert len(entry) > 0
-        assert entry[0]["name"] == "deleteme"
+class o:
+
+#        Pro
+#        entry = rules.list(name="deleteme")
+#        assert len(entry) > 0
+#        assert entry[0]["name"] == "deleteme"
+
 
     def test_rule_delete(self):
         HEADING()

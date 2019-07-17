@@ -24,7 +24,7 @@ class SecgroupExamples:
             "flask": {
                 "description": "Flask security group",
                 "rules": [
-                    "ssh", "icmp", "ssl", "flask", "webserver", "default"
+                    "ssh", "icmp", "ssl", "flask", "default"
                 ]
             }
         }

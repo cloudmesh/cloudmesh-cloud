@@ -7,6 +7,7 @@ import os
 
 import pytest
 from cloudmesh.common.util import HEADING
+from cloudmesh.common3.Benchmark import Benchmark
 from cloudmesh.common3.host import Host
 
 
@@ -18,8 +19,10 @@ class Test_host:
 
     def test_ping(self):
         HEADING()
+        Benchmark.Start()
         result = Host.ping(hosts=['google.com', 'youtube.com', 'com'], count=3,
                            processors=3)
+        Benchmark.Stop()
         assert {'google.com': 0} in result
         assert {'youtube.com': 0} in result
         assert {'com': 0} not in result
@@ -33,6 +36,11 @@ class Test_host:
         key = '~/.ssh/authorized_keys/id_rsa.pub'
         username = os.environ['USER']
         hosts = ['127.0.0.1']
+        Benchmark.Start()
         result = Host.check(key=key, username=username, hosts=hosts,
                             processors=3)
+        Benchmark.Stop()
         assert {'0': 0} not in result
+
+    def test_benchmark(self):
+        Benchmark.print()

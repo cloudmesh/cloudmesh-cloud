@@ -135,9 +135,10 @@ patch: clean
 	# $(call banner, "install")
 	# sleep 10
 	# pip install --index-url https://test.pypi.org/simple/ cloudmesh-$(package) -U
-	make
-	git commit -m "update ocumentation" docs
-	git push
+
+	#make
+	#git commit -m "update documentation" docs
+	#git push
 
 minor: clean
 	$(call banner, "minor")

@@ -27,7 +27,6 @@
 
 import pytest
 from cloudmesh.common.StopWatch import StopWatch
-from cloudmesh.common.parameter import Parameter
 from cloudmesh.common.util import HEADING
 from cloudmesh.common.variables import Variables
 from cloudmesh.common3.Shell import Shell
@@ -35,14 +34,11 @@ from cloudmesh.secgroup.Secgroup import Secgroup
 from cloudmesh.secgroup.Secgroup import SecgroupExamples
 from cloudmesh.secgroup.Secgroup import SecgroupRule
 
-
-
 variables = Variables()
 cloud = variables.parameter('cloud')
 
 rules = SecgroupRule()
 groups = Secgroup()
-
 
 
 def run(label, command):
@@ -55,7 +51,6 @@ def run(label, command):
 class TestSecCLI:
 
     def test_init(self):
-
         r = rules.clear()
         g = groups.clear()
 
@@ -64,7 +59,6 @@ class TestSecCLI:
 
         assert len(examples.secgroups) > 0
         assert len(examples.secrules) > 0
-
 
         result = run("rule add",
                      f"cms sec rule add deleteme 101 101 tcp 10.0.0.0/0")
@@ -85,13 +79,13 @@ class a:
         result = run("rule add",
                      f"cms sec group load deleteme --cloud={cloud}")
 
+
 class o:
 
-#        Pro
-#        entry = rules.list(name="deleteme")
-#        assert len(entry) > 0
-#        assert entry[0]["name"] == "deleteme"
-
+    #        Pro
+    #        entry = rules.list(name="deleteme")
+    #        assert len(entry) > 0
+    #        assert entry[0]["name"] == "deleteme"
 
     def test_rule_delete(self):
         HEADING()

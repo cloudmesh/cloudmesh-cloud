@@ -12,13 +12,12 @@ import oyaml as yaml
 import pytest
 from cloudmesh.common.util import HEADING
 from cloudmesh.common.util import path_expand
-from cloudmesh.management.configuration.config import Config
 from cloudmesh.common3.Benchmark import Benchmark
+from cloudmesh.management.configuration.config import Config
 
 
 @pytest.mark.incremental
 class TestConfig:
-
 
     def test_config(self):
         Benchmark.Start()

@@ -5,10 +5,10 @@
 ###############################################################
 import os
 from pprint import pprint
-from cloudmesh.common3.Benchmark import Benchmark
 
 import pytest
 from cloudmesh.common.util import path_expand
+from cloudmesh.common3.Benchmark import Benchmark
 from cloudmesh.management.configuration.name import Name
 
 path = path_expand("~/.cloudmesh/name.yaml")

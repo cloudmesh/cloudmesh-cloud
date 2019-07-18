@@ -15,12 +15,11 @@ from cloudmesh.common.debug import VERBOSE
 from cloudmesh.common.util import HEADING
 from cloudmesh.common.util import banner
 from cloudmesh.common.variables import Variables
+from cloudmesh.common3.Shell import Shell
 from cloudmesh.compute.openstack.Provider import Provider
 from cloudmesh.management.configuration.SSHkey import SSHkey
 from cloudmesh.management.configuration.config import Config
 from cloudmesh.management.configuration.name import Name
-from cloudmesh.common3.Shell import Shell
-
 
 user = Config()["cloudmesh.profile.user"]
 variables = Variables()
@@ -29,16 +28,18 @@ cloud = variables.parameter('cloud')
 if cloud != "chameloen":
     raise ValueError("cloud is not chameleon")
 
+
 def run(label, command):
     result = Shell.run_timed(label, command, service=cloud)
     print(result)
     return result
 
+
 name_generator = Name(schema=f"{user}-vm", counter=1)
+
 
 @pytest.mark.incremental
 class TestName:
-
 
     def setup(self):
         banner("setup", c="-")
@@ -107,7 +108,6 @@ class TestName:
 
         self.p.key_upload(key)
         self.test_list_keys()
-
 
     def test_list_images(self):
         HEADING()

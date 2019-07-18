@@ -7,15 +7,14 @@ import time
 
 import pytest
 from cloudmesh.common.Shell import Shell
-from cloudmesh.common.StopWatch import StopWatch
 from cloudmesh.common.debug import VERBOSE
 from cloudmesh.common.util import HEADING
-from cloudmesh.common.util import banner
+from cloudmesh.common3.Benchmark import Benchmark
 from cloudmesh.management.configuration.config import Config
 
 
 @pytest.mark.incremental
-class Test_cms_aws:
+class TestCmsAWS:
 
     def setup(self):
         conf = Config("~/.cloudmesh/cloudmesh4.yaml")["cloudmesh"]
@@ -25,11 +24,11 @@ class Test_cms_aws:
     def test_01_boot(self):
         HEADING()
 
-        StopWatch.start("cms vm boot dryrun")
+        Benchmark.Start()
         result = Shell.execute(
             "cms vm boot --name=test_boot_01 --cloud=aws --username=root --image=ubuntu/images/hvm-ssd/ubuntu-xenial-16.04-amd64-server-20190212  --flavor=t2.micro --public --key={} --dryrun".format(
                 self.key), shell=True)
-        StopWatch.stop("cms vm boot dryrun")
+        Benchmark.Stop()
 
         VERBOSE(result)
 
@@ -43,11 +42,11 @@ class Test_cms_aws:
     def test_02_boot(self):
         HEADING()
 
-        StopWatch.start("cms vm boot dryrun")
+        Benchmark.Start()
         result = Shell.execute(
             "cms vm boot --n=2 --cloud=aws --username=root --image=ubuntu/images/hvm-ssd/ubuntu-xenial-16.04-amd64-server-20190212  --flavor=t2.micro --public --key={} --dryrun".format(
                 self.key), shell=True)
-        StopWatch.stop("cms vm boot dryrun")
+        Benchmark.Stop()
 
         VERBOSE(result)
 
@@ -61,11 +60,11 @@ class Test_cms_aws:
     def test_03_boot(self):
         HEADING()
 
-        StopWatch.start("cms vm boot")
+        Benchmark.Start()
         result = Shell.execute(
             "cms vm boot --name=test_boot_01,test_boot_02 --cloud=aws --username=root --image=ubuntu/images/hvm-ssd/ubuntu-xenial-16.04-amd64-server-20190212  --flavor=t2.micro --public --key={}".format(
                 self.key), shell=True)
-        StopWatch.stop("cms vm boot")
+        Benchmark.Stop()
 
         VERBOSE(result)
 
@@ -80,11 +79,11 @@ class Test_cms_aws:
     def test_04_boot(self):
         HEADING()
 
-        StopWatch.start("cms vm boot")
+        Benchmark.Start()
         result = Shell.execute(
             "cms vm boot --n=2 --cloud=aws --username=root --image=ubuntu/images/hvm-ssd/ubuntu-xenial-16.04-amd64-server-20190212  --flavor=t2.micro --public --key={}".format(
                 self.key), shell=True)
-        StopWatch.stop("cms vm boot")
+        Benchmark.Stop()
 
         VERBOSE(result)
 
@@ -99,13 +98,13 @@ class Test_cms_aws:
     def test_list(self):
         HEADING()
 
-        StopWatch.start("cms vm list")
+        Benchmark.Start()
         r1 = Shell.execute(
             "cms vm list test_boot_01 --cloud=aws --output=table --refresh",
             shell=True)
         r2 = Shell.execute(
             "cms vm list test_boot_01 --cloud=aws --output=table", shell=True)
-        StopWatch.stop("cms vm list")
+        Benchmark.Stop()
 
         assert r1 == r2
 
@@ -118,10 +117,10 @@ class Test_cms_aws:
                                          shell=True):
             time.sleep(1)
 
-        StopWatch.start("cms vm status")
+        Benchmark.Start()
         result = Shell.execute("cms vm status test_boot_01 --cloud=aws",
                                shell=True)
-        StopWatch.stop("cms vm status")
+        Benchmark.Stop()
 
         VERBOSE(result)
 
@@ -130,10 +129,10 @@ class Test_cms_aws:
     def test_01_stop(self):
         HEADING()
 
-        StopWatch.start("cms vm stop dryrun")
+        Benchmark.Start()
         result = Shell.execute("cms vm stop test_boot_02 --cloud=aws --dryrun",
                                shell=True)
-        StopWatch.stop("cms vm stop dryrun")
+        Benchmark.Stop()
 
         VERBOSE(result)
 
@@ -144,11 +143,11 @@ class Test_cms_aws:
     def test_02_stop(self):
         HEADING()
 
-        StopWatch.start("cms vm stop dryrun")
+        Benchmark.Start()
         result = Shell.execute(
             "cms vm stop test_boot_02 --cloud=aws --parallel --processors=3 --dryrun",
             shell=True)
-        StopWatch.stop("cms vm stop dryrun")
+        Benchmark.Stop()
 
         VERBOSE(result)
 
@@ -159,10 +158,10 @@ class Test_cms_aws:
     def test_03_stop(self):
         HEADING()
 
-        StopWatch.start("cms vm stop")
+        Benchmark.Start()
         result = Shell.execute("cms vm stop test_boot_02 --cloud=aws",
                                shell=True)
-        StopWatch.stop("cms vm stop")
+        Benchmark.Stop()
 
         VERBOSE(result)
 
@@ -171,11 +170,11 @@ class Test_cms_aws:
     def test_ping(self):
         HEADING()
 
-        StopWatch.start("cms vm ping")
+        Benchmark.Start()
         result = Shell.execute(
             "cms vm ping test_boot_01 --cloud=aws --count=3 --processors=3",
             shell=True)
-        StopWatch.stop("cms vm ping")
+        Benchmark.Stop()
 
         VERBOSE(result)
 
@@ -185,11 +184,11 @@ class Test_cms_aws:
     def test_check(self):
         HEADING()
 
-        StopWatch.start("cms vm check")
+        Benchmark.Start()
         result = Shell.execute(
             "cms vm check test_boot_01 --cloud=aws --username=ubuntu --processors=3",
             shell=True)
-        StopWatch.stop("cms vm check")
+        Benchmark.Stop()
 
         VERBOSE(result)
 
@@ -198,11 +197,11 @@ class Test_cms_aws:
     def test_01_run(self):
         HEADING()
 
-        StopWatch.start("cms vm run dryrun")
+        Benchmark.Start()
         result = Shell.execute(
             "cms vm run --name=test_boot_01 --username=ubuntu --dryrun uname",
             shell=True)
-        StopWatch.stop("cms vm run dryrun")
+        Benchmark.Stop()
 
         VERBOSE(result)
 
@@ -211,9 +210,9 @@ class Test_cms_aws:
     # def test_02_run(self):
     #     HEADING()
     #
-    #     StopWatch.start("cms vm run dryrun")
+    #     Benchmark.Start()
     #     result = Shell.execute("cms vm run --name=test_boot_01 --username=ubuntu uname", shell=True)
-    #     StopWatch.stop("cms vm run dryrun")
+    #     Benchmark.Stop()
     #
     #     VERBOSE(result)
     #
@@ -222,7 +221,7 @@ class Test_cms_aws:
     def test_01_script(self):
         HEADING()
 
-        StopWatch.start("cms vm script dryrun")
+        Benchmark.Start()
         #
         # TODO: location is a bug as we can not assum test is run in .
         # alos the sh command has been removed and should be created in this
@@ -231,7 +230,7 @@ class Test_cms_aws:
         result = Shell.execute(
             "cms vm script --name=test_boot_01 --username=ubuntu ./test_cms_aws.sh --dryrun",
             shell=True)
-        StopWatch.stop("cms vm script dryrun")
+        Benchmark.Stop()
 
         VERBOSE(result)
 
@@ -240,9 +239,9 @@ class Test_cms_aws:
     # def test_02_script(self):
     #     HEADING()
     #
-    #     StopWatch.start("cms vm script dryrun")
+    #     Benchmark.Start()
     #     result = Shell.execute("cms vm script --name=test_boot_01 --username=ubuntu ./test_cms_aws.sh", shell=True)
-    #     StopWatch.stop("cms vm script dryrun")
+    #     Benchmark.Stop()
     #
     #     VERBOSE(result)
     #
@@ -251,10 +250,10 @@ class Test_cms_aws:
     def test_01_start(self):
         HEADING()
 
-        StopWatch.start("cms vm start dryrun")
+        Benchmark.Start()
         result = Shell.execute("cms vm start test_boot_02 --cloud=aws --dryrun",
                                shell=True)
-        StopWatch.stop("cms vm start dryrun")
+        Benchmark.Stop()
 
         VERBOSE(result)
 
@@ -265,11 +264,11 @@ class Test_cms_aws:
     def test_02_start(self):
         HEADING()
 
-        StopWatch.start("cms vm start dryrun")
+        Benchmark.Start()
         result = Shell.execute(
             "cms vm start test_boot_02 --parallel --processors=3 --dryrun",
             shell=True)
-        StopWatch.stop("cms vm start dryrun")
+        Benchmark.Stop()
 
         VERBOSE(result)
 
@@ -280,9 +279,9 @@ class Test_cms_aws:
     def test_03_start(self):
         HEADING()
 
-        StopWatch.start("cms vm start")
+        Benchmark.Start()
         result = Shell.execute("cms vm start test_boot_02", shell=True)
-        StopWatch.stop("cms vm start")
+        Benchmark.Stop()
 
         VERBOSE(result)
 
@@ -291,10 +290,10 @@ class Test_cms_aws:
     def test_01_terminate(self):
         HEADING()
 
-        StopWatch.start("cms vm delete dryrun")
+        Benchmark.Start()
         result = Shell.execute("cms vm delete test_boot_01 --dryrun",
                                shell=True)
-        StopWatch.stop("cms vm delete dryrun")
+        Benchmark.Stop()
 
         VERBOSE(result)
 
@@ -305,11 +304,11 @@ class Test_cms_aws:
     def test_02_terminate(self):
         HEADING()
 
-        StopWatch.start("cms vm terminate dryrun")
+        Benchmark.Start()
         result = Shell.execute(
             "cms vm terminate test_boot_01 --parallel --processors=3 --dryrun",
             shell=True)
-        StopWatch.stop("cms vm terminate dryrun")
+        Benchmark.Stop()
 
         VERBOSE(result)
 
@@ -324,9 +323,9 @@ class Test_cms_aws:
                                          shell=True):
             time.sleep(1)
 
-        StopWatch.start("cms vm terminate")
+        Benchmark.Start()
         result = Shell.execute("cms vm terminate test_boot_01", shell=True)
-        StopWatch.stop("cms vm terminate")
+        Benchmark.Stop()
 
         VERBOSE(result)
 
@@ -335,10 +334,10 @@ class Test_cms_aws:
     def test_01_delete(self):
         HEADING()
 
-        StopWatch.start("cms vm delete dryrun")
+        Benchmark.Start()
         result = Shell.execute("cms vm delete test_boot_02 --dryrun",
                                shell=True)
-        StopWatch.stop("cms vm delete dryrun")
+        Benchmark.Stop()
 
         VERBOSE(result)
 
@@ -349,11 +348,11 @@ class Test_cms_aws:
     def test_02_delete(self):
         HEADING()
 
-        StopWatch.start("cms vm delete dryrun")
+        Benchmark.Start()
         result = Shell.execute(
             "cms vm delete test_boot_02 --parallel --processors=3 --dryrun",
             shell=True)
-        StopWatch.stop("cms vm delete dryrun")
+        Benchmark.Stop()
 
         VERBOSE(result)
 
@@ -368,14 +367,13 @@ class Test_cms_aws:
                                          shell=True):
             time.sleep(1)
 
-        StopWatch.start("cms vm delete")
+        Benchmark.Start()
         result = Shell.execute("cms vm delete test_boot_02", shell=True)
-        StopWatch.stop("cms vm delete")
+        Benchmark.Stop()
 
         VERBOSE(result)
 
         assert "test_boot_02" in result
 
-    def test_results(self):
-        banner(f"Benchmark results for AWS")
-        StopWatch.benchmark()
+    def test_benchmark(self):
+        Benchmark.print()

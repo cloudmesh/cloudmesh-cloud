@@ -36,7 +36,7 @@ class Test_cloud_installer:
 
     def test_clone_cloud(self):
         cmd = "cd tmp; cloudmesh-installer git clone cloud"
-        rBenchmark.Start()
+        Benchmark.Start()
         result = run(cmd)
         Benchmark.Stop()
         print(result)

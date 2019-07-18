@@ -10,7 +10,7 @@ import shutil
 import pytest
 from cloudmesh_installer.install.test import run
 from cloudmesh.common.StopWatch import StopWatch
-import cloudmesh.common3.method
+from cloudmesh.common3.Benchmark import Benchmark
 
 @pytest.mark.incremental
 class Test_cloud_installer:
@@ -28,37 +28,49 @@ class Test_cloud_installer:
 
     def test_info(self):
         cmd = "cloudmesh-installer info"
+        Benchmark.Start()
         result = run(cmd)
+        Benchmark.Stop()
         print(result)
         assert "Package" in str(result)
 
     def test_clone_cloud(self):
         cmd = "cd tmp; cloudmesh-installer git clone cloud"
+        rBenchmark.Start()
         result = run(cmd)
+        Benchmark.Stop()
         print(result)
         assert os.path.isdir("tmp/cloudmesh-cmd5")
 
     def test_install_cms(self):
         cmd = "cd tmp; cloudmesh-installer install cms -e"
+        Benchmark.Start()
         result = run(cmd)
+        Benchmark.Stop()
         print(result)
         assert os.path.isdir("tmp/cloudmesh-cmd5/cloudmesh_cmd5.egg-info")
 
     def test_cms_help(self):
         cmd = "cms help"
+        Benchmark.Start()
         result = run(cmd)
+        Benchmark.Stop()
         print(result)
         assert "quit" in result
 
     def test_cms_info_common(self):
         cmd = "cms info"
+        Benchmark.Start()
         result = run(cmd)
+        Benchmark.Stop()
         print(result)
         assert "cloudmesh.common" in result
 
     def test_install_cloud(self):
         cmd = "cd tmp; cloudmesh-installer install cloud -e"
+        rBenchmark.Start()
         result = run(cmd)
+        Benchmark.Stop()
         print(result)
         assert os.path.isdir("tmp/cloudmesh-cloud/cloudmesh_cloud.egg-info")
 
@@ -70,22 +82,31 @@ class Test_cloud_installer:
 
     def test_cms_vm(self):
         cmd = "cms help"
+        Benchmark.Start()
         result = run(cmd)
+        Benchmark.Stop()
         print(result)
         assert "vm" in result
 
     def test_cms_info(self):
         cmd = "cms info"
+        Benchmark.Start()
         result = run(cmd)
+        Benchmark.Stop()
         print(result)
         assert "cloudmesh.common" in result
 
     def test_cms_version(self):
         cmd = "cms version"
+        Benchmark.Start()
         result = run(cmd)
+        Benchmark.Stop()
         print(result)
         assert "cloudmesh.common" in result
 
+
+    def test_benchmark(self):
+        Benchmark.print()
 
 class other:
     def test_delete_dir(self):

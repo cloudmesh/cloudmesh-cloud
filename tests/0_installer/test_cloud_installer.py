@@ -68,7 +68,7 @@ class Test_cloud_installer:
 
     def test_install_cloud(self):
         cmd = "cd tmp; cloudmesh-installer install cloud -e"
-        rBenchmark.Start()
+        Benchmark.Start()
         result = run(cmd)
         Benchmark.Stop()
         print(result)

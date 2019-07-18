@@ -10,6 +10,6 @@
 * Benchmarks have been added to tests/1_local
 * A DictList was introduced
 * A new Shell run was developed 
-* Generl code ceanup, while removing lots of broken code
+* General code cleanup, while removing lots of broken code
 * A new mechanism to manage security groups in the Local database
 

@@ -1,6 +1,6 @@
 ###############################################################
-# pytest -v --capture=no tests/1_basic/test_sec_command.py
-# pytest -v  tests/1_basic/test_sec_command.py
+# pytest -v --capture=no tests/1_local/test_sec_command.py
+# pytest -v  tests/1_local/test_sec_command.py
 ###############################################################
 #
 # The following commands are tested on the local database
@@ -22,7 +22,7 @@
 # this test is wron as we only want to test the cloud, we need to make sure
 # the local is loaded
 #
-# the local test is in 1_basic
+# the local test is in 1_local
 #
 
 import pytest

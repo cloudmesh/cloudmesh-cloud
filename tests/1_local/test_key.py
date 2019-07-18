@@ -1,7 +1,7 @@
 ###############################################################
-# pytest -v --capture=no tests/1_basic/test_key.py
-# pytest -v  tests/1_basic/test_key.py
-# pytest -v --capture=no  tests/1_basic/test_key.py:Test_key.<METHIDNAME>
+# pytest -v --capture=no tests/1_local/test_key.py
+# pytest -v  tests/1_local/test_key.py
+# pytest -v --capture=no  tests/1_local/test_key.py:Test_key.<METHIDNAME>
 ###############################################################
 from pprint import pprint
 

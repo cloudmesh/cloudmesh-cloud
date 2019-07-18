@@ -1,7 +1,7 @@
 ###############################################################
-# pytest -v --capture=no tests/1_basic/test_name.py
-# pytest -v  tests/1_basic/test_name.py
-# pytest -v --capture=no  tests/1_basic/test_name.py:Test_name.<METHIDNAME>
+# pytest -v --capture=no tests/1_local/test_name.py
+# pytest -v  tests/1_local/test_name.py
+# pytest -v --capture=no  tests/1_local/test_name.py:Test_name.<METHIDNAME>
 ###############################################################
 import os
 from pprint import pprint

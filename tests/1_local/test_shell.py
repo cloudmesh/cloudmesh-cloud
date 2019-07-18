@@ -1,7 +1,7 @@
 ###############################################################
-# pytest -v --capture=no tests/1_basic/test_shell.py
-# pytest -v  tests/1_basic/test_shell.py
-# pytest -v --capture=no  tests/1_basic/test_shell.py:Test_name.<METHIDNAME>
+# pytest -v --capture=no tests/1_local/test_shell.py
+# pytest -v  tests/1_local/test_shell.py
+# pytest -v --capture=no  tests/1_local/test_shell.py:Test_name.<METHIDNAME>
 ###############################################################
 import pytest
 from cloudmesh.common3.Benchmark import Benchmark

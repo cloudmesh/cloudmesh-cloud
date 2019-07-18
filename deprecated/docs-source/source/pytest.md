@@ -2,7 +2,7 @@
 
 Pytest is a utility to unit test python code. 
 
-We use nosetests and not `__main__` to test all functionality so they can me
+We use pytests and not `__main__` to test all functionality so they can me
 automatically run and reports can be generated. A project that does not have a
 sufficient number of tests to make sure the module works can not be accepted.
 
@@ -56,7 +56,8 @@ A function includes one or multiple asserts that check if a particular test
 succeeds and reports this to nose to expose the information if a tess succeds or
 fails, when running it
 
-Note that all nosetest functions start with a `HEADING()` in the body which conveniently
+Note that all pytest functions start with a `HEADING()` in the body which 
+conveniently
 prints a banner with the function name and thus helps in debugging in case of
 errors.
 
@@ -78,7 +79,7 @@ with the command
 
 Make sure that you place this comment in your tests.
 
-The following is our simple nosetests for key. THe file is stored at 
+The following is our simple pytests for key. The file is stored at 
 `tests/test_key.py`
 
 First, we import the needed classes and methods we like to test. 
@@ -146,7 +147,7 @@ Ran 2 tests in 0.457s
 OK
 ```
 
-The output with  `nosetests -v tests/test_key.py`
+The output with  `pytest -v tests/test_key.py`
 
 results in 
 

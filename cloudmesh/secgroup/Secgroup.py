@@ -18,13 +18,13 @@ class SecgroupExamples:
             "default": {
                 "description": "Default security group",
                 "rules": [
-                    "default"
+                    "ssh", "icmp"
                 ]
             },
             "flask": {
                 "description": "Flask security group",
                 "rules": [
-                    "ssh", "icmp", "ssl", "flask", "default"
+                    "ssh", "icmp", "https", "flask"
                 ]
             }
         }
@@ -50,16 +50,11 @@ class SecgroupExamples:
                 "ip_range": "0.0.0.0/0",
                 "ports": "80:80",
             },
-            "ssl": {
+            "https": {
                 "protocol": "tcp",
                 "ip_range": "0.0.0.0/0",
                 "ports": "443:443",
             },
-            "default": {
-                "protocol": "tcp",
-                "ip_range": "0.0.0.0/0",
-                "ports": "8080:8080",
-            }
         }
 
     def rule(self, name, cm=False):

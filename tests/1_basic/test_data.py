@@ -6,23 +6,24 @@
 from pprint import pprint
 
 import pytest
-from cloudmesh.common.util import HEADING
+from cloudmesh.common.util import HEADING, banner
 from cloudmesh.common.util import path_expand
 from cloudmesh.mongo.DataBaseDecorator import DatabaseUpdate
 from pathlib import Path
 import os
 import pwd
 import grp
+from cloudmesh.common3.Benchmark import Benchmark
+
+banner("START")
 
 @pytest.mark.incremental
-class test_data:
+class TestDatabaseUpdate:
 
-    def setup(self):
-        pass
-
-    def test_01_stat(self):
+    def test_DatabaseUpdate(self):
         HEADING()
 
+        print ("AAA")
         file = str(Path(path_expand("~/.cloudmesh/cloudmesh4.yaml")))
 
         @DatabaseUpdate()
@@ -55,8 +56,14 @@ class test_data:
             }
             return d
 
+        Benchmark.Start()
         i = info(file)
+        Benchmark.Stop()
 
         pprint(i)
 
         assert i['path'] == '/Users/grey/.cloudmesh/cloudmesh4.yaml'
+
+
+    def test_benchmark(self):
+        Benchmark.print()

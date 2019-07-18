@@ -429,13 +429,15 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
     def upload_secgroup(self, name=None):
 
         cgroups = self.list_secgroups(name)
-        if len(cgroups) >0:
-            raise ValueError("group already exists")
+        group_exists = False
+        if len(cgroups) > 0:
+            print("Warning group already exists")
+            group_exists = True
 
         groups = Secgroup().list()
         rules = SecgroupRule().list()
 
-        pprint (rules)
+        #pprint (rules)
         data = {}
         for rule in rules:
             data[rule['name']] = rule
@@ -446,19 +448,29 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
             if group['name'] == name:
                 break
         print("upload group:", name)
-        self.add_secgroup(name=name, description=group['description'])
-        for r in group['rules']:
-            found = data[r]
-            print ("    ", "rule:", found['name'])
-            self.add_secgroup_rule(
-                              name=name,
-                              port=found["ports"],
-                              protocol=found["protocol"],
-                              ip_range=found["ip_range"])
 
+        if not group_exists:
+            self.add_secgroup(name=name, description=group['description'])
 
+            for r in group['rules']:
+                found = data[r]
+                print ("    ", "rule:", found['name'])
+                self.add_secgroup_rule(
+                                  name=name,
+                                  port=found["ports"],
+                                  protocol=found["protocol"],
+                                  ip_range=found["ip_range"])
 
-    # not tested
+        else:
+
+            for r in group['rules']:
+                found = data[r]
+                print ("    ", "rule:", found['name'])
+                self.add_rules_to_secgroup(
+                                           name=name,
+                                           rules=[found['name']])
+
+    # ok
     def add_rules_to_secgroup(self, name=None, rules=None):
         if name is None and rules is None:
             raise ValueError("name or rules are None")
@@ -475,15 +487,17 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         except:
             raise ValueError("group does not exist")
 
+
         for rule in rules:
             try:
                 found = rules_details[rule]
+                self.add_secgroup_rule(name=name,
+                                       port=found["ports"],
+                                       protocol=found["protocol"],
+                                       ip_range=found["ip_range"])
             except:
                 ValueError("rule can not be found")
-            self.add_secgroup_rule(name=name,
-                              port=found["ports"],
-                              protocol=found["protocol"],
-                              ip_range=found["ip_range"])
+
 
     # not tested
     def remove_rules_from_secgroup(self, name=None, rules=None):
@@ -693,7 +707,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                image=None,
                size=None,
                location=None,
-               timeout=360,
+               timeout=180,
                key=None,
                secgroup=None,
                ip=None,
@@ -739,6 +753,10 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         print ("    Size:  ", size)
         print ("    IP:    ", ip)
         print ("    Public:", public)
+        print ("    Key:", key)
+        print ("    location:", location)
+        print ("    timeout:", timeout)
+        print ("    secgroup:", secgroup)
 
 
         if not ip and public:
@@ -758,8 +776,13 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
         try:
             server = self.cloudman.create_server(name,
-                                            flavor=size,
-                                            image=image)
+                                                 flavor=size,
+                                                 image=image,
+                                                 key_name=key,
+                                                 security_groups=[secgroup],
+                                                 timeout=timeout,
+                                                 #wait=True
+                                                 )
             self.cloudman.wait_for_server(server)
             self.cloudman.add_ips_to_server(server, ips=ip)
 

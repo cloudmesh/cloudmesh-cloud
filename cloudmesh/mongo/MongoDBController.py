@@ -464,7 +464,7 @@ class MongoDBController(object):
 
 """
 
-# TODO: develop a nosetest for this
+# TODO: develop a pytest for this
 
 connection = pymongo.Connection(host = "127.0.0.1", port = 27017)
 db = connection["test_db"]

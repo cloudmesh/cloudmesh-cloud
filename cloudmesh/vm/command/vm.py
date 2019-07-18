@@ -504,31 +504,21 @@ class VmCommand(PluginCommand):
 
             parameters = dotdict()
             parameters.names = arguments.name
-            parameters.image = Parameter.find("image",
+            for attribute in ["image", "flavor", "key", "secgroup"]:
+                parameters[attribute] = Parameter.find(attribute,
                                    arguments,
                                    variables.dict(),
                                    defaults)
-            parameters.flavor = Parameter.find("flavor",
-                                    arguments,
-                                    variables.dict(),
-                                    defaults)
-            parameters.key = Parameter.find("key",
-                                               arguments,
-                                               variables.dict(),
-                                               defaults)
-            provider = Provider(name=cloud)
-            if parameters.key is None:
-                keys = provider.keys()
-                if keys is None:
-                    Console.error("Could not find a key in the database")
-                    return ""
 
-                elif len(keys) == 1:
-                    parameters.keys = keys[0]
-                else:
-                    Console.error("Found multiple keys, please specify one "
-                                  "when booting")
-                    return ""
+            provider = Provider(name=cloud)
+
+
+            pprint (parameters)
+            #if parameters.key is None:
+            #   key =  parameters.key or variables['key']
+            #   if variables['key'] == "":
+            #       key = None
+
 
             # parameters.public = None
             # if

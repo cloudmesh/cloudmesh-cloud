@@ -1,7 +1,7 @@
 """
 authorized key management.
 """
-# TODO: needs nosetests
+# TODO: needs pytest
 import io
 import itertools
 import os.path

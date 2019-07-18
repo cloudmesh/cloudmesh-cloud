@@ -138,6 +138,7 @@ class SecCommand(PluginCommand):
                                 output=arguments.output))
 
         def list_all():
+
             data = []
 
             group_entries = groups.list()
@@ -254,7 +255,8 @@ class SecCommand(PluginCommand):
 
         elif arguments.list:
 
-            list_all()
+            found = rules.list()
+            Print("secrule", found)
 
             return ""
 

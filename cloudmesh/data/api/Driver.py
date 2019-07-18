@@ -62,7 +62,7 @@ class Driver(object):
 
 
 #
-# TODO: this must be done as nosetest. we do not use main here
+# TODO: this must be done as pytest. we do not use main here
 #
 
 if __name__ == '__main__':

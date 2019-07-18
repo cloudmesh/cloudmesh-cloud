@@ -9,7 +9,8 @@ import shutil
 
 import pytest
 from cloudmesh_installer.install.test import run
-
+from cloudmesh.common.StopWatch import StopWatch
+import cloudmesh.common3.method
 
 @pytest.mark.incremental
 class Test_cloud_installer:

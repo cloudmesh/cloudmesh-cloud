@@ -13,32 +13,41 @@ import pytest
 from cloudmesh.common.util import HEADING
 from cloudmesh.common.util import path_expand
 from cloudmesh.management.configuration.config import Config
+from cloudmesh.common3.Benchmark import Benchmark
 
 
 @pytest.mark.incremental
 class TestConfig:
 
-    def setup(self):
-        self.config = Config()
 
     def test_config(self):
+        Benchmark.Start()
+        config = Config()
+        Benchmark.Stop()
+
+    def test_dict(self):
         HEADING()
+        config = Config()
+        Benchmark.Start()
+        result = config.dict()
+        Benchmark.Stop()
+        pprint(result)
+        print(config)
+        print(type(config.data))
 
-        pprint(self.config.dict())
-
-        print(self.config)
-        print(type(self.config.data))
-
-        assert self.config is not None
+        assert config is not None
 
     def test_config_subscriptable(self):
         HEADING()
-        data = self.config["cloudmesh"]["data"]["mongo"]
+        config = Config()
+        Benchmark.Start()
+        data = config["cloudmesh"]["data"]["mongo"]
+        Benchmark.Stop()
         assert data is not None
 
     def test_dictreplace(self):
         HEADING()
-
+        config = Config()
         spec = textwrap.dedent("""
         cloudmesh:
           profile:
@@ -56,9 +65,9 @@ class TestConfig:
         # spec = spec.replace("}", "}}")
 
         # print(spec)
-
-        result = self.config.spec_replace(spec)
-
+        Benchmark.Start()
+        result = config.spec_replace(spec)
+        Benchmark.Stop()
         print(result)
         data = yaml.load(result, Loader=yaml.SafeLoader)
         pprint(data)
@@ -68,23 +77,29 @@ class TestConfig:
 
     def test_configreplace(self):
         HEADING()
-        self.config = Config()
-        pprint(self.config["cloudmesh"]["profile"])
+        config = Config()
+        pprint(config["cloudmesh"]["profile"])
 
     def test_if_yaml_file_exists(self):
-        self.config = Config()
-        self.config.create()
+        config = Config()
+        config.create()
         filename = path_expand("~/.cloudmesh/cloudmesh4.yaml")
         assert os.path.isfile(Path(filename))
 
     def test_set(self):
-        self.config["cloudmesh.test.nested"] = "Gregor"
-        print(self.config["cloudmesh.test.nested"])
-        assert self.config["cloudmesh.test.nested"] == "Gregor"
+        Benchmark.Start()
+        config = Config()
+        config["cloudmesh.test.nested"] = "Gregor"
+        Benchmark.Stop()
+        print(config["cloudmesh.test.nested"])
+        assert config["cloudmesh.test.nested"] == "Gregor"
 
     ''' THIS TEST DOE FAIL
     def test_del(self):
-        del self.config["cloudmesh.test.nested"]
+        del config["cloudmesh.test.nested"]
 
-        assert self.config["cloudmesh.test.nested"] != "Gregor"
+        assert config["cloudmesh.test.nested"] != "Gregor"
     '''
+
+    def test_benchmark(self):
+        Benchmark.print()

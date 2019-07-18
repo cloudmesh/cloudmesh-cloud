@@ -11,9 +11,8 @@ from cloudmesh.common.util import path_expand
 from cloudmesh.mongo.DataBaseDecorator import DatabaseUpdate
 from pathlib import Path
 import os
-
-# nosetest -v --nopature
-# nosetests  tests/test_data.py
+import pwd
+import grp
 
 @pytest.mark.incremental
 class test_data:

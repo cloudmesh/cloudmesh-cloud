@@ -1,7 +1,6 @@
 ###############################################################
 # pytest -v --capture=no tests/1_basic/test_data.py
 # pytest -v  tests/1_basic/test_data.py
-# pytest -v --capture=no  tests/1_basic/test_data.py:Test_data.<METHIDNAME>
 ###############################################################
 import grp
 import os
@@ -14,8 +13,7 @@ from cloudmesh.common.util import HEADING, banner
 from cloudmesh.common.util import path_expand
 from cloudmesh.common3.Benchmark import Benchmark
 from cloudmesh.mongo.DataBaseDecorator import DatabaseUpdate
-
-banner("START")
+from cloudmesh.mongo.CmDatabase import CmDatabase
 
 
 @pytest.mark.incremental
@@ -24,18 +22,21 @@ class TestDatabaseUpdate:
     def test_DatabaseUpdate(self):
         HEADING()
 
-        print("AAA")
         file = str(Path(path_expand("~/.cloudmesh/cloudmesh4.yaml")))
+        cloud="debug"
 
         @DatabaseUpdate()
-        def info(file):
+        def info(cloud, file):
             st = os.stat(file)
             userinfo = pwd.getpwuid(os.stat(file).st_uid)
 
             d = {
-                "kind": "file",
-                "cloud": "local",
-                "name": "{cloud}:{file}".format(cloud="local", file=file),
+                "cm": {
+                    "kind": "file",
+                    "cloud": cloud,
+                    "name": f"{cloud}:{file}",
+                },
+                "name": f"{cloud}:{file}",
                 "path": file,
                 "size": st.st_size,
                 "acess": str(st.st_atime),
@@ -58,12 +59,18 @@ class TestDatabaseUpdate:
             return d
 
         Benchmark.Start()
-        i = info(file)
+        i = info(cloud, file)
         Benchmark.Stop()
 
         pprint(i)
 
-        assert i['path'] == '/Users/grey/.cloudmesh/cloudmesh4.yaml'
+        assert i[0]['path'] == '/Users/grey/.cloudmesh/cloudmesh4.yaml'
+
+    def test_remove_collection(self):
+        cm = CmDatabase()
+        Benchmark.Start()
+        collection = cm.clear(collection="debug-file")
+        Benchmark.Stop()
 
     def test_benchmark(self):
         Benchmark.print()

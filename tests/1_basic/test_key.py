@@ -10,29 +10,35 @@ from cloudmesh.common.Printer import Printer
 from cloudmesh.common.util import HEADING
 from cloudmesh.management.configuration.SSHkey import SSHkey
 from cloudmesh.management.configuration.config import Config
-
+from cloudmesh.common3.Benchmark import Benchmark
 
 @pytest.mark.incremental
 class TestName:
 
-    def setup(self):
-        self.sshkey = SSHkey()
-
     def test_key(self):
         HEADING()
-        pprint(self.sshkey)
-        print(self.sshkey)
-        print(type(self.sshkey))
-        pprint(self.sshkey.__dict__)
 
-        assert self.sshkey.__dict__ is not None
+        Benchmark.Start()
+        key = SSHkey()
+        Benchmark.Stop()
+
+        pprint(key)
+        print(key)
+        print(type(key))
+        pprint(key.__dict__)
+
+        assert key.__dict__ is not None
 
     def test_git(self):
         HEADING()
         config = Config()
         username = config["cloudmesh.profile.github"]
         print("Username:", username)
-        keys = self.sshkey.get_from_git(username)
+
+        key = SSHkey()
+        Benchmark.Start()
+        keys = key.get_from_git(username)
+        Benchmark.Stop()
         pprint(keys)
         print(Printer.flatwrite(keys,
                                 sort_keys=["name"],
@@ -41,3 +47,6 @@ class TestName:
               )
 
         assert len(keys) > 0
+
+    def test_benchmark(self):
+        Benchmark.print()

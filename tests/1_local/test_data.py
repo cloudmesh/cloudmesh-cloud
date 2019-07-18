@@ -1,6 +1,6 @@
 ###############################################################
-# pytest -v --capture=no tests/1_basic/test_data.py
-# pytest -v  tests/1_basic/test_data.py
+# pytest -v --capture=no tests/1_local/test_data.py
+# pytest -v  tests/1_local/test_data.py
 ###############################################################
 import grp
 import os

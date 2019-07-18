@@ -1,7 +1,7 @@
 ###############################################################
-# pytest -v --capture=no  tests/1_basic/test_host.py:Test_host.test_ping
-# pytest -v --capture=no  tests/1_basic/test_host.py
-# pytest -v tests/1_basic/test_host.py
+# pytest -v --capture=no  tests/1_local/test_host.py:Test_host.test_ping
+# pytest -v --capture=no  tests/1_local/test_host.py
+# pytest -v tests/1_local/test_host.py
 ###############################################################
 import os
 

@@ -1,6 +1,6 @@
 ###############################################################
-# pytest -v --capture=no tests/1_basic/test_sec_command.py
-# pytest -v  tests/1_basic/test_sec_command.py
+# pytest -v --capture=no tests/1_local/test_sec_command.py
+# pytest -v  tests/1_local/test_sec_command.py
 ###############################################################
 #
 # The following commands are tested on the local database

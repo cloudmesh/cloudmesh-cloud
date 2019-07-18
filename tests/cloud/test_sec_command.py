@@ -26,9 +26,9 @@
 #
 
 import pytest
-from cloudmesh.common.StopWatch import StopWatch
 from cloudmesh.common.util import HEADING
 from cloudmesh.common.variables import Variables
+from cloudmesh.common3.Benchmark import Benchmark
 from cloudmesh.common3.Shell import Shell
 from cloudmesh.secgroup.Secgroup import Secgroup
 from cloudmesh.secgroup.Secgroup import SecgroupExamples
@@ -75,9 +75,10 @@ class a:
 
     def test_rule_load_to_cloud(self):
         HEADING()
-
+        Benchmark.Start()
         result = run("rule add",
                      f"cms sec group load deleteme --cloud={cloud}")
+        Benchmark.Stop()
 
 
 class o:
@@ -89,8 +90,9 @@ class o:
 
     def test_rule_delete(self):
         HEADING()
-
+        Benchmark.Start()
         result = run("rule delete", f"cms sec rule delete deleteme")
+        Benchmark.Stop()
         entry = rules.list(name="deleteme")
 
         assert len(entry) == 0
@@ -98,7 +100,9 @@ class o:
     def test_group_add(self):
         HEADING()
 
+        Benchmark.Start()
         result = run("group add", f"cms sec group add deleteme empty empty")
+        Benchmark.Stop()
         entry = groups.list(name="deleteme")
 
         assert len(entry) > 0
@@ -106,8 +110,9 @@ class o:
 
     def test_group_delete(self):
         HEADING()
-
+        Benchmark.Start()
         result = run("group delete", f"cms sec group delete deleteme")
+        Benchmark.Stop()
         entry = groups.list(name="deleteme")
 
         assert len(entry) == 0
@@ -115,7 +120,9 @@ class o:
     def test_rule_list(self):
         HEADING()
 
+        Benchmark.Start()
         result = run("rule list", "cms sec rule list")
+        Benchmark.stop()
         r = rules.list()
         g = groups.list()
 
@@ -129,7 +136,9 @@ class o:
     def test_list(self):
         HEADING()
 
+        Benchmark.Start()
         result = run("list", "cms sec list")
+        Benchmark.Stop()
         g = groups.list()
 
         for entry in g:
@@ -138,8 +147,9 @@ class o:
 
     def test_group_list(self):
         HEADING()
-
+        Benchmark.Start()
         result = run("list", "cms sec group list")
+        Benchmark.Stop()
         g = groups.list()
 
         for entry in g:
@@ -147,4 +157,4 @@ class o:
             assert name in result
 
     def test_benchmark(self):
-        StopWatch.benchmark()
+        Benchmark.print()

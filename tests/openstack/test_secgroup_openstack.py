@@ -16,6 +16,7 @@ from cloudmesh.management.configuration.name import Name
 from cloudmesh.secgroup.Secgroup import Secgroup
 from cloudmesh.secgroup.Secgroup import SecgroupExamples
 from cloudmesh.secgroup.Secgroup import SecgroupRule
+from cloudmesh.common3.Benchmark import Benchmark
 
 user = Config()["cloudmesh.profile.user"]
 variables = Variables()
@@ -52,7 +53,10 @@ class TestName:
 
         r = rules.clear()
         g = groups.clear()
+
+        Benchmark.Start()
         examples.load()
+        Benchmark.Stop()
 
         r = rules.list()
         g = groups.list()
@@ -62,30 +66,53 @@ class TestName:
 
     def test_list_variables(self):
         HEADING()
+        Benchmark.Start()
         print(user)
         print(cloud)
+        Benchmark.Stop()
 
     def test_list_secgroups_rules(self):
         HEADING()
+        Benchmark.Start()
         groups = provider.list_secgroups()
+        Benchmark.Stop()
         provider.Print('json', "secgroup", groups)
+
+    def test_secgroups_delete(self):
+        HEADING()
+        name = "flask"
+        Benchmark.Start()
+        r = provider.remove_secgroup(name=name)
+        Benchmark.Stop()
+        assert r
+        g = provider.list_secgroups()
+        for e in g:
+            print(e['name'])
+        provider.Print('table', "secrule", g)
 
     def test_secgroups_add(self):
         HEADING()
         name = "flask"
+        Benchmark.Start()
         provider.add_secgroup(name=name)
+        Benchmark.Stop()
         g = provider.list_secgroups(name=name)
         provider.Print('json', "secgroup", g)
 
         assert len(g) == 1
         assert g[0]['name'] == name
 
-    def test_secgroups_delete(self):
+    def test_secgroups_delete_again(self):
         HEADING()
         name = "flask"
+        Benchmark.Start()
         r = provider.remove_secgroup(name=name)
+        Benchmark.Stop()
         assert r
         g = provider.list_secgroups()
         for e in g:
             print(e['name'])
         provider.Print('table', "secrule", g)
+
+    def test_benchmark(self):
+        Benchmark.print()

@@ -6,9 +6,9 @@
 
 import pytest
 from cloudmesh.common.Shell import Shell
-from cloudmesh.common.StopWatch import StopWatch
 from cloudmesh.common.debug import VERBOSE
 from cloudmesh.common.util import HEADING
+from cloudmesh.common3.Benchmark import Benchmark
 
 
 @pytest.mark.incremental
@@ -17,9 +17,9 @@ class TestConfig:
     def test_help(self):
         HEADING()
 
-        StopWatch.start("cms help")
+        Benchmark.Start()
         result = Shell.execute("cms help", shell=True)
-        StopWatch.stop("cms help")
+        Benchmark.Stop()
 
         VERBOSE(result)
 
@@ -29,9 +29,9 @@ class TestConfig:
     def test_vm(self):
         HEADING()
 
-        StopWatch.start("cms help vm")
+        Benchmark.Start()
         result = Shell.execute("cms help vm", shell=True)
-        StopWatch.stop("cms help vm")
+        Benchmark.Stop()
 
         VERBOSE(result)
 
@@ -40,15 +40,13 @@ class TestConfig:
     def test_storage(self):
         HEADING()
 
-        StopWatch.start("cms help vm")
+        Benchmark.Start()
         result = Shell.execute("cms help vm", shell=True)
-        StopWatch.stop("cms help vm")
+        Benchmark.Stop()
 
         VERBOSE(result)
 
         assert "vm" in result
 
-    def test_results(self):
-        HEADING()
-
-        StopWatch.benchmark()
+    def test_benchmark(self):
+        Benchmark.print()

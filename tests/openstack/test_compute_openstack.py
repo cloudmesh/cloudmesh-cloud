@@ -1,16 +1,18 @@
+#
+# This test is all broken as its only for libcloud and not openstacksdk
+#
 ###############################################################
 # pytest -v --capture=no tests/openstack/openstacktest_compute_openstack.py
 # pytest -v  tests/openstack/openstacktest_compute_openstack.py
-# pytest -v --capture=no  tests/openstack/openstacktest_compute_openstack.py:Test_compute_openstack.<METHIDNAME>
-###############################################################
+##############################################################
 import subprocess
 import time
 from pprint import pprint
 
+from cloudmesh.common3.Benchmark import Benchmark
 import pytest
 from cloudmesh.common.Printer import Printer
 from cloudmesh.common.Shell import Shell
-from cloudmesh.common.StopWatch import StopWatch
 from cloudmesh.common.debug import VERBOSE
 from cloudmesh.common.util import HEADING
 from cloudmesh.common.util import banner
@@ -37,6 +39,8 @@ def run(label, command):
 
 name_generator = Name(schema=f"{user}-vm", counter=1)
 
+
+raise NotImplementedError
 
 @pytest.mark.incremental
 class TestName:
@@ -66,8 +70,9 @@ class TestName:
 
         result = run("db add key", f"cms key add {user} "
         f"--source=ssh", service="local")
+        Benchmark.Start()
         result = run("db list ", f"cms key list", service="local")
-
+        Benchmark.Stop()
         VERBOSE(result)
 
         assert user in result
@@ -75,8 +80,10 @@ class TestName:
     def test_upload_key_from_cli(self):
         HEADING()
 
+        Benchmark.Start()
         result = Shell.run_timed("cms key upload",
                                  f"cms key upload {user}")
+        Benchmark.Stop()
         result = Shell.run_timed("cms list", f"cms key upload {user}")
 
         "cms key list --cloud=chameleon"
@@ -91,7 +98,9 @@ class TestName:
 
     def test_list_keys(self):
         HEADING()
+        Benchmark.Start()
         self.keys = self.p.keys()
+        Benchmark.Stop()
         # pprint(self.keys)
 
         print(Printer.flatwrite(self.keys,
@@ -106,12 +115,17 @@ class TestName:
         key = SSHkey()
         print(key.__dict__)
 
+        Benchmark.Start()
         self.p.key_upload(key)
+        Benchmark.Stop()
+
         self.test_list_keys()
 
     def test_list_images(self):
         HEADING()
+        Benchmark.Start()
         images = self.p.images()
+        Benchmark.Stop()
 
         VERBOSE(images)
 
@@ -124,7 +138,10 @@ class TestName:
 
     def test_list_flavors(self):
         HEADING()
+        Benchmark.Start()
         flavors = self.p.flavors()
+        Benchmark.Stop()
+
         # pprint (flavors)
 
         VERBOSE(flavors)
@@ -137,7 +154,10 @@ class TestName:
 
     def test_list_vm(self):
         HEADING()
+        Benchmark.Start()
         vms = self.p.list()
+        Benchmark.Stop()
+
         # pprint (vms)
 
         VERBOSE(vms)
@@ -164,7 +184,10 @@ class TestName:
 
     def test_list_secgroups(self):
         HEADING()
+        Benchmark.Start()
         secgroups = self.p.list_secgroups()
+        Benchmark.Stop()
+
         for secgroup in secgroups:
             print(secgroup["name"])
             rules = self.p.list_secgroup_rules(secgroup["name"])
@@ -180,30 +203,43 @@ class TestName:
 
     def test_secgroups_add(self):
         HEADING()
+        Benchmark.Start()
         self.p.add_secgroup(self.secgroupname)
+        Benchmark.Stop()
+
         self.test_list_secgroups()
 
     def test_secgroup_rules_add(self):
         HEADING()
         rules = [self.secgrouprule]
+        Benchmark.Start()
         self.p.add_rules_to_secgroup(self.secgroupname, rules)
+        Benchmark.Stop()
+
         self.test_list_secgroups()
 
     def test_secgroup_rules_remove(self):
         HEADING()
         rules = [self.secgrouprule]
+        Benchmark.Start()
         self.p.remove_rules_from_secgroup(self.secgroupname, rules)
+        Benchmark.Stop()
+
         self.test_list_secgroups()
 
     def test_secgroups_remove(self):
         HEADING()
+        Benchmark.Start()
         self.p.remove_secgroup(self.secgroupname)
+        Benchmark.Stop()
+
         self.test_list_secgroups()
 
     def test_create(self):
         HEADING()
         image = "CC-Ubuntu16.04"
         size = "m1.medium"
+        Benchmark.Start()
         self.p.create(name=self.name,
                       image=image,
                       size=size,
@@ -211,6 +247,8 @@ class TestName:
                       # the key implementation logic
                       ex_keyname=user,
                       ex_security_groups=['default'])
+        Benchmark.Stop()
+
         time.sleep(5)
         nodes = self.p.list()
         node = self.p.find(nodes, name=self.name)
@@ -224,6 +262,7 @@ class TestName:
 
         assert node is not None
 
+    # BENCHMARK MISSING
     def test_publicIP_attach(self):
         HEADING()
         pubip = self.p.get_publicIP()
@@ -239,6 +278,7 @@ class TestName:
             time.sleep(5)
         self.test_list_vm()
 
+    # BENCHMARK MISSING
     def test_publicIP_detach(self):
         HEADING()
         print("detaching and removing public IP...")
@@ -269,11 +309,17 @@ class TestName:
 
     def test_info(self):
         HEADING()
+        Benchmark.Start()
         self.p.info(name=self.name)
+        Benchmark.Stop()
+
 
     def test_destroy(self):
         HEADING()
+        Benchmark.Start()
         self.p.destroy(names=self.name)
+        Benchmark.Stop()
+
         nodes = self.p.list()
         node = self.p.find(nodes, name=self.name)
 
@@ -281,6 +327,7 @@ class TestName:
         self.test_list_vm()
 
         assert node["extra"]["task_state"] == "deleting"
+
 
     def test_vm_login(self):
         HEADING()
@@ -301,12 +348,16 @@ class TestName:
 
         command = "cat /etc/*release*"
 
+        Benchmark.Start()
+
         ssh = subprocess.Popen(
             ["ssh", "%s@%s" % (self.clouduser, pubip), command],
             shell=False,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE)
         result = ssh.stdout.readlines()
+        Benchmark.stop()
+
         if result == []:
             error = ssh.stderr.readlines()
             print("ERROR: %s" % error)
@@ -319,17 +370,17 @@ class TestName:
         self.test_14_destroy()
         self.test_list_vm()
 
-    def test_results(self):
-        banner(f"Benchmark results for {cloud}")
-        StopWatch.benchmark()
 
+    def test_benchmark(self):
+        Benchmark.print()
 
 class other:
 
     def test_rename(self):
         HEADING()
-
+        Benchmark.Start()
         self.p.rename(source=self.name, destination=self.new_name)
+        Benchmark.Stop()
 
     # def test_stop(self):
     #    HEADING()

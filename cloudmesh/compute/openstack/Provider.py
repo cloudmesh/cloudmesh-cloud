@@ -15,6 +15,7 @@ from cloudmesh.common.Printer import Printer
 from cloudmesh.mongo.CmDatabase import CmDatabase
 from cloudmesh.secgroup.Secgroup import Secgroup, SecgroupRule
 from cloudmesh.secgroup.Secgroup import SecgroupExamples
+from cloudmesh.common3.DictList import DictList
 
 class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
@@ -457,53 +458,80 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
 
 
+    # not tested
+    def add_rules_to_secgroup(self, name=None, rules=None):
+        if name is None and rules is None:
+            raise ValueError("name or rules are None")
 
-    def add_rules_to_secgroup(self, secgroupname, newrules):
-        raise NotImplementedError
-        oldrules = self.list_secgroup_rules(secgroupname)
-        pprint(oldrules)
-        pprint(newrules)
-        if self.cloudman:
-            secgroups = self.list_secgroups()
-            for secgroup in secgroups:
-                # for multiple secgroups with the same name,
-                # add the rules to all the groups
-                if secgroup.name == secgroupname:
-                    # supporting multiple rules at once
-                    for rule in newrules:
-                        self.cloudman.ex_create_security_group_rule(secgroup,
-                                                                    rule[
-                                                                        "ip_protocol"],
-                                                                    rule[
-                                                                        "from_port"],
-                                                                    rule[
-                                                                        "to_port"],
-                                                                    cidr=rule[
-                                                                        "ip_range"]
-                                                                    )
+        cgroups = self.list_secgroups(name)
+        if len(cgroups) == 0:
+            raise ValueError("group does not exist")
 
-    def remove_rules_from_secgroup(self, secgroupname, rules):
-        raise NotImplementedError
-        oldrules = self.list_secgroup_rules(secgroupname)
-        pprint(oldrules)
-        pprint(rules)
-        if self.cloudman:
-            secgroups = self.list_secgroups()
-            for secgroup in secgroups:
-                # for multiple secgroups with the same name,
-                # remove the rules from all the groups
-                if secgroup.name == secgroupname:
-                    # supporting multiple rules at once
-                    # get all rules, in obj format
-                    rulesobj = self.list_secgroup_rules(secgroup=secgroupname)
-                    for rule in rules:
-                        for ruleobj in rulesobj:
-                            if (ruleobj.ip_protocol == rule["ip_protocol"] and
-                                ruleobj.from_port == rule["from_port"] and
-                                ruleobj.to_port == rule["to_port"] and
-                                ruleobj.ip_range == rule["ip_range"]):
-                                self.cloudman.ex_delete_security_group_rule(
-                                    ruleobj)
+        groups = DictList(Secgroup().list())
+        rules_details = DictList(SecgroupRule().list())
+
+        try:
+            group = groups[name]
+        except:
+            raise ValueError("group does not exist")
+
+        for rule in rules:
+            try:
+                found = rules_details[rule]
+            except:
+                ValueError("rule can not be found")
+            self.add_secgroup_rule(name=name,
+                              port=found["ports"],
+                              protocol=found["protocol"],
+                              ip_range=found["ip_range"])
+
+    # not tested
+    def remove_rules_from_secgroup(self, name=None, rules=None):
+
+        if name is None and rules is None:
+            raise ValueError("name or rules are None")
+
+        cgroups = self.list_secgroups(name)
+        if len(cgroups) == 0:
+            raise ValueError("group does not exist")
+
+        groups = DictList(Secgroup().list())
+        rules_details = DictList(SecgroupRule().list())
+
+        try:
+            group = groups[name]
+        except:
+            raise ValueError("group does not exist")
+
+        for rule in rules:
+            try:
+                found = rules_details[rule]
+                try:
+                    pmin, pmax = rules['ports'].split(":")
+                except:
+                    pmin = None
+                    pmax = None
+
+            except:
+                ValueError("rule can not be found")
+
+            for r in cgroups['security_group_rules']:
+
+                test = \
+                    r["port_range_max"] == pmin and \
+                    r["port_range_min"] == pmax and \
+                    r["protocol"] == found["protocol"] and \
+                    r["remote_ip_prefix"] == found["ports"]
+                    #r["direction"] == "egress" \
+                    #r["ethertype"] == "IPv6" \
+                    #r["id"] == "1234e4e3-ba72-4e33-9844-..." \
+                    # r["remote_group_id"]] == null \
+                    #r["tenant_id"]] == "CH-12345"
+
+                if test:
+                    id = r["security_group_id"]
+                    self.cloudman.delete_security_group_rule(id)
+
 
     def get_list(self, d, kind=None, debug=False, **kwargs):
         """

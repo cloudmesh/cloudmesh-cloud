@@ -1,14 +1,13 @@
 ###############################################################
 # pytest -v --capture=no tests/test_compute_pyazure.py
-# pytest -v --capture=no tests/test_compute.py
-# pytest -v --capture=no tests/test_compute_pyazure.py:Test_compute.<METHIDNAME>
+# pytest  tests/test_compute_pyazure.py
 ###############################################################
 
 import pytest
-from cloudmesh.common.StopWatch import StopWatch
 from cloudmesh.common.debug import VERBOSE
 from cloudmesh.common.util import HEADING
 from cloudmesh.common.util import banner
+from cloudmesh.common3.Benchmark import Benchmark
 from cloudmesh.compute.azure.Provider import Provider
 from cloudmesh.management.configuration.config import Config
 from cloudmesh.management.configuration.name import Name
@@ -22,7 +21,7 @@ from cloudmesh.management.configuration.name import Name
 #
 
 @pytest.mark.incremental
-class Test_compute:
+class TestAzure:
 
     def setup(self):
         banner("setup", c="-")
@@ -41,75 +40,78 @@ class Test_compute:
 
     def test_resource_group(self):
         HEADING()
-        StopWatch.start("Retrieve Resource Group Started")
+        Benchmark.Start()
         test_resource_group = self.p.get_resource_group()
         VERBOSE(" ".join('RESOURCE GROUP ID: ' + test_resource_group.id))
-        StopWatch.stop("Retrieve Resource Group Finished")
+        Benchmark.Stop()
 
         assert test_resource_group is not None
 
     def test_list_images(self):
         HEADING()
 
-        StopWatch.start("List Images Started")
+        Benchmark.Start()
         test_images = self.p.list_images()
-        StopWatch.stop("List Images Finished")
+        Benchmark.Stop()
 
         assert test_images is not None
 
     def test_create_vm(self):
         HEADING()
 
-        StopWatch.start("Create VM Started")
+        Benchmark.Start()
         test_vm = self.p.create()
-        StopWatch.stop("Create VM Finished")
+        Benchmark.Stop()
 
         assert test_vm is None
 
     def test_start(self):
         HEADING()
 
-        StopWatch.start("Start VM Started")
+        Benchmark.Start()
         start_vm = self.p.start()
-        StopWatch.stop("Start VM Finished")
+        Benchmark.Stop()
 
         assert start_vm is not None
 
     def test_info(self):
         HEADING()
 
-        StopWatch.start("List VM info Started")
+        Benchmark.Start()
         list_vm = self.p.info(None, None)
-        StopWatch.stop("List VM Info Finished")
+        Benchmark.Stop()
 
         assert list_vm is not None
 
     def test_restart(self):
         HEADING()
 
-        StopWatch.start("Restart VM Started")
+        Benchmark.Start()
         restart_vm = self.p.restart()
-        StopWatch.stop("Restart VM Finished")
+        Benchmark.Stop()
 
         assert restart_vm is not None
 
     def test_stop(self):
         HEADING()
 
-        StopWatch.start("Stop VM Started")
+        Benchmark.Start()
         stop_vm = self.p.stop()
-        StopWatch.stop("Stop VM Finished")
+        Benchmark.Stop()
 
         assert stop_vm is not None
 
     def test_delete(self):
         HEADING()
 
-        StopWatch.start("Delete VM Started")
+        Benchmark.Start()
         destroy_vm = self.p.destroy()
-        StopWatch.stop("Delete VM Finished")
+        Benchmark.Stop()
 
         assert destroy_vm is None
 
     # TODO test_resume
     # TODO test_suspend
+
+    def test_benchmark(self):
+        Benchmark.print()

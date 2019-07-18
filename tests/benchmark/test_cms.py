@@ -5,9 +5,9 @@
 ###############################################################
 
 import pytest
-from cloudmesh.common.debug import VERBOSE
 from cloudmesh.common.Shell import Shell
 from cloudmesh.common.StopWatch import StopWatch
+from cloudmesh.common.debug import VERBOSE
 from cloudmesh.common.util import HEADING
 
 

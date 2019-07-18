@@ -8,9 +8,9 @@ import os
 import shutil
 
 import pytest
-from cloudmesh_installer.install.test import run
-from cloudmesh.common.StopWatch import StopWatch
 from cloudmesh.common3.Benchmark import Benchmark
+from cloudmesh_installer.install.test import run
+
 
 @pytest.mark.incremental
 class Test_cloud_installer:
@@ -104,9 +104,9 @@ class Test_cloud_installer:
         print(result)
         assert "cloudmesh.common" in result
 
-
     def test_benchmark(self):
         Benchmark.print()
+
 
 class other:
     def test_delete_dir(self):

@@ -9,6 +9,7 @@ from cloudmesh.common.debug import VERBOSE
 from cloudmesh.common.util import HEADING
 from cloudmesh.common3.Benchmark import Benchmark
 
+
 @pytest.mark.incremental
 class TestConfig:
 
@@ -32,7 +33,6 @@ class TestConfig:
 
         assert "['sample1', 'sample2', 'sample3', 'sample18']" in result
 
-
     def test_help_again(self):
         HEADING()
 
@@ -44,7 +44,6 @@ class TestConfig:
         assert "quit" in result
         assert "clear" in result
 
-
     """
     def test_storage(self):
         HEADING()
@@ -55,7 +54,6 @@ class TestConfig:
 
         assert "storage put SOURCE DESTINATION --recursive" in result
     """
-
 
     def test_benchmark(self):
         Benchmark.print()

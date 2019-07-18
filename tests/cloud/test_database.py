@@ -10,9 +10,10 @@ from pprint import pprint
 import pytest
 from cloudmesh.common.Printer import Printer
 from cloudmesh.common.util import HEADING
+from cloudmesh.management.configuration.config import Config
 from cloudmesh.management.configuration.name import Name
 from cloudmesh.mongo.CmDatabase import CmDatabase
-from cloudmesh.management.configuration.config import Config
+
 
 # from cloudmesh.mongo import MongoDBController
 

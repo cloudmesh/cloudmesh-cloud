@@ -3,19 +3,20 @@
 # pytest -v  tests/1_basic/test_data.py
 # pytest -v --capture=no  tests/1_basic/test_data.py:Test_data.<METHIDNAME>
 ###############################################################
+import grp
+import os
+import pwd
+from pathlib import Path
 from pprint import pprint
 
 import pytest
 from cloudmesh.common.util import HEADING, banner
 from cloudmesh.common.util import path_expand
-from cloudmesh.mongo.DataBaseDecorator import DatabaseUpdate
-from pathlib import Path
-import os
-import pwd
-import grp
 from cloudmesh.common3.Benchmark import Benchmark
+from cloudmesh.mongo.DataBaseDecorator import DatabaseUpdate
 
 banner("START")
+
 
 @pytest.mark.incremental
 class TestDatabaseUpdate:
@@ -23,7 +24,7 @@ class TestDatabaseUpdate:
     def test_DatabaseUpdate(self):
         HEADING()
 
-        print ("AAA")
+        print("AAA")
         file = str(Path(path_expand("~/.cloudmesh/cloudmesh4.yaml")))
 
         @DatabaseUpdate()
@@ -63,7 +64,6 @@ class TestDatabaseUpdate:
         pprint(i)
 
         assert i['path'] == '/Users/grey/.cloudmesh/cloudmesh4.yaml'
-
 
     def test_benchmark(self):
         Benchmark.print()

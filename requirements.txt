@@ -33,3 +33,4 @@ yamllint
 openstacksdk
 pandas
 tabulate
+beautifulsoup4

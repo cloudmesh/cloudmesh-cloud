@@ -127,27 +127,33 @@ cloudmesh:
         key: "~/.ssh/id_rsa"
     azure:
       cm:
-        active: False
-        heading: AWS
-        host: azure.mocrosoft.com
-        label: azure
+        active: True
+        heading: Azure
+        host: azure.microsoft.com
+        label: Azure
         kind: azure
-        version: TBD
-        service: storage
+        version: 'latest'
+        service: compute
       default:
-        image: 'Canonical:UbuntuServer:16.04-LTS:latest'
+        image: 'Canonical:UbuntuServer:16.04.0-LTS:latest'
         size: 'Basic_A0'
         resource_group: 'cloudmesh'
         storage_account: 'cmdrive'
         network: 'cmnetwork'
         subnet: 'cmsubnet'
         blob_container: 'vhds'
+        AZURE_VM_IP_CONFIG: 'cloudmesh-ip-config'
+        AZURE_VM_NIC: 'cloudmesh-nic'
+        AZURE_VM_DISK_NAME: 'cloudmesh-os-disk'
+        AZURE_VM_USER: TBD
+        AZURE_VM_PASSWORD: TBD
+        AZURE_VM_NAME: 'cloudmeshVM'
       credentials:
         AZURE_TENANT_ID: 'xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
         AZURE_SUBSCRIPTION_ID: 'xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
         AZURE_APPLICATION_ID: 'xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
         AZURE_SECRET_KEY: TBD
-        AZURE_REGION: 'northcentralus'
+        AZURE_REGION: 'eastus'
     azurearm:
       cm:
         active: False
@@ -171,35 +177,6 @@ cloudmesh:
         AZURE_APPLICATION_ID: 'xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
         AZURE_SECRET_KEY: TBD
         AZURE_REGION: 'northcentralus'
-    pyazure:
-      cm:
-        active: True
-        heading: Azure
-        host: azure.microsoft.com
-        label: Azure
-        kind: pyazure
-        version: 'latest'
-        service: compute
-      default:
-        image: 'Canonical:UbuntuServer:16.04.0-LTS:latest'
-        size: 'Basic_A0'
-        resource_group: 'cloudmesh'
-        storage_account: 'cmdrive'
-        network: 'cmnetwork' 
-        subnet: 'cmsubnet'
-        blob_container: 'vhds'
-        AZURE_VM_IP_CONFIG: 'cloudmesh-ip-config'
-        AZURE_VM_NIC: 'cloudmesh-nic'
-        AZURE_VM_DISK_NAME: 'cloudmesh-os-disk'
-        AZURE_VM_USER: TBD
-        AZURE_VM_PASSWORD: TBD
-        AZURE_VM_NAME: 'cloudmeshVM'
-      credentials:
-        AZURE_TENANT_ID: 'xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
-        AZURE_SUBSCRIPTION_ID: 'xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
-        AZURE_APPLICATION_ID: 'xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
-        AZURE_SECRET_KEY: TBD
-        AZURE_REGION: 'eastus'               
     azureaz:
       cm:
         active: False

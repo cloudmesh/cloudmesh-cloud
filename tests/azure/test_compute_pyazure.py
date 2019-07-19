@@ -17,7 +17,7 @@ from cloudmesh.management.configuration.name import Name
 # cms set debug=True
 # cms set verbose=True
 # cms set timer=True
-# cms set cloud=pyazure
+# cms set cloud=azure
 #
 
 @pytest.mark.incremental
@@ -34,7 +34,7 @@ class TestAzure:
         self.name_generator.incr()
 
         self.new_name = str(self.name_generator)
-        self.p = Provider(name="pyazure")
+        self.p = Provider(name="azure")
 
         print()
 

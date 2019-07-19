@@ -90,8 +90,8 @@ class Provider(ComputeNodeABC):
 
         VERBOSE(cred, verbose=10)
 
-        if self.cloudtype != 'pyazure':
-            Console.error("This class is meant for pyazure cloud")
+        if self.cloudtype != 'azure':
+            Console.error("This class is meant for azure cloud")
 
         # ServicePrincipalCredentials related Variables to configure in cloudmesh4.yaml file
         # AZURE_APPLICATION_ID = '<Application ID from Azure Active Directory App Registration Process>'

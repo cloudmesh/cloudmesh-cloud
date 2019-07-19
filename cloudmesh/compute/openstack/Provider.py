@@ -16,6 +16,7 @@ from cloudmesh.mongo.CmDatabase import CmDatabase
 from cloudmesh.secgroup.Secgroup import Secgroup, SecgroupRule
 from cloudmesh.secgroup.Secgroup import SecgroupExamples
 from cloudmesh.common3.DictList import DictList
+import os
 
 class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
@@ -860,34 +861,57 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         raise NotImplementedError
         return None
 
-    def ssh(self, name=None, command=None):
-        raise NotImplementedError
-        key = self.key_path.replace(".pub", "")
-        nodes = self.list()
-        for node in nodes:
-            if node.name == name:
-                break
+    def ssh(self, vm=None, command=None):
         #
-        # bug testnode is not defined
+        # TODO: fix user name issue, shoudl be stored in db
         #
-        pubip = self.testnode.public_ips[0]
-        location = self.user + '@' + pubip
-        cmd = ['ssh',
-               "-o", "StrictHostKeyChecking=no",
-               "-o", "UserKnownHostsFile=/dev/null",
-               '-i', key, location, command]
-        VERBOSE(" ".join(cmd))
+        ips = vm['addresses']
+        first = list(ips.keys())[0]
 
-        ssh = subprocess.Popen(cmd,
-                               shell=False,
-                               stdout=subprocess.PIPE,
-                               stderr=subprocess.PIPE)
-        result = ssh.stdout.readlines()
-        if result == []:
-            error = ssh.stderr.readlines()
-            print("ERROR: %s" % error)
+        addresses = ips[first]
+
+        for address in addresses:
+            if address['OS-EXT-IPS:type'] == 'floating':
+                ip = address['addr']
+                break
+
+        key_name = vm['key_name']
+
+        cm = CmDatabase()
+        key = cm.find_name(name=key_name, kind="key")[0]['location']['private']
+
+
+        user = "cc"  # needs to be set on creation.
+
+
+
+        if command == None:
+            command = ""
+
+        if user is None:
+            location =  ip
         else:
-            print("RESULT:")
-            for line in result:
-                line = line.decode("utf-8")
-                print(line.strip("\n"))
+            location = user + '@' + ip
+        cmd = "ssh " \
+                "-o StrictHostKeyChecking=no " \
+                "-o UserKnownHostsFile=/dev/null " \
+               f"-i {key} {location} {command}"
+        cmd = cmd.strip()
+        # VERBOSE(cmd)
+
+        if command == "":
+            os.system(cmd)
+        else:
+            ssh = subprocess.Popen(cmd,
+                                   shell=True,
+                                   stdout=subprocess.PIPE,
+                                   stderr=subprocess.PIPE)
+            result = ssh.stdout.read().decode("utf-8")
+            if result == []:
+                error = ssh.stderr.readlines()
+                print("ERROR: %s" % error)
+            else:
+                return result
+
+
+

@@ -1,6 +1,10 @@
-from cloudmesh.shell.command import PluginCommand
+from cloudmesh.common.parameter import Parameter
+from cloudmesh.common.variables import Variables
+from cloudmesh.shell.command import PluginCommand, map_parameters
 from cloudmesh.shell.command import command
-
+from cloudmesh.mongo.CmDatabase import CmDatabase
+from cloudmesh.compute.vm.Provider import Provider
+import os
 
 class SshCommand(PluginCommand):
 
@@ -12,13 +16,10 @@ class SshCommand(PluginCommand):
         ::
 
             Usage:
-                ssh table
-                ssh list [--output=OUTPUT]
-                ssh cat
-                ssh register NAME PARAMETERS
-                ssh ARGUMENTS
-                    conducts a ssh login on a machine while using a set of
-                    registered machines specified in ~/.ssh/config
+                ssh config list [--output=OUTPUT]
+                ssh config add NAME IP [USER] [KEY]
+                ssh config delete NAME
+                ssh [--name=VMs] [--user=USERs] [COMMAND]
 
             Arguments:
               NAME        Name or ip of the machine to log in
@@ -30,43 +31,118 @@ class SshCommand(PluginCommand):
                           information will be written in /.ssh/config
 
             Options:
-               -v       verbose mode
+               -v                verbose mode
                --output=OUTPUT   the format in which this list is given
-                                 formats includes table, json, yaml, dict
-                                 [default: table]
-               --user=USER       overwrites the username that is
+                                 formats includes cat, table, json, yaml,
+                                 dict. If cat is used, it is just printed as
+                                 is. [default: table]
+               --user=USERs      overwrites the username that is
                                  specified in ~/.ssh/config
-               --key=KEY         The keyname as defined in the key list
-                                 or a location that contains a public key
+               --name=CMs        the names of the VMS to execute the
+                                 command on
 
             Description:
-                ssh list
+                ssh config list
                     lists the hostsnames  that are present in the
                     ~/.ssh/config file
-                ssh cat
-                    prints the ~/.ssh/config file
-                ssh table
-                    prints contents of the ~/.ssh/config file in table format
-                ssh register NAME PARAMETERS
+
+                ssh config add NAME IP [USER] [KEY]
                     registers a host i ~/.ssh/config file
                     Parameters are attribute=value pairs
                     Note: Note yet implemented
-                ssh ARGUMENTS
-                    executes the ssh command with the given arguments
-                    Example:
-                        ssh myhost
-                            conducts an ssh login to myhost if it is defined in
-                            ~/.ssh/config file
+
+                ssh [--name=VMs] [--user=USERs] [COMMAND]
+                    executes the command on the named hosts. If user is
+                    specified and is greater than 1, it must be specified for
+                    each vm. If only one username is specified it is used for
+                    all vms. However, as the user is typically specified in the
+                    cloudmesh database, you probably do not have to specify
+                    it as it is automatically found.
+
+            Examples:
+
+
+                 ssh config add blue 192.168.1.245 blue
+
+                     Adds the folloewing to the !/.ssh/congig file
+
+                     Host blue
+                          HostName 192.168.1.245
+                          User blue
+                          IdentityFile ~/.ssh/id_rsa.pub
+
+
+
         """
 
-        print(arguments)
+        map_parameters(arguments,
+                       "name",
+                       "user",
+                       "output")
 
-        # m = Manager()
+        if arguments.config and arguments.list:
+            # ssh config list [--output=OUTPUT]"
 
-        # if arguments.FILE:
-        #    print("option a")
-        #    m.list(arguments.FILE)
+            raise NotImplementedError
 
-        # elif arguments.list:
-        #    print("option b")
-        #    m.list("just calling list without parameter")
+        elif arguments.config and arguments.add:
+            # ssh config add NAME IP [USER] [KEY]
+
+            variables = Variables()
+
+            user = Parameter.find("user",
+                                  arguments,
+                                  variables.dict())
+
+            key = Parameter.find("key",
+                                 arguments,
+                                 variables.dict())
+
+            name = arguments.NAME
+
+            ip = arguments.IP
+
+            print(user, key, name, ip)
+
+            raise NotImplementedError
+
+        elif arguments.config and arguments.delete:
+            # ssh config delete NAME
+
+            raise NotImplementedError
+
+        else:
+            # ssh [--name=VMs] [--user=USERs] [COMMAND]"
+
+            names = Parameter.expand(arguments.name)
+            users = Parameter.expand(arguments.users)
+            command = arguments.COMMAND
+
+            if arguments.command is None and len(names) > 1:
+                raise ValueError("For interactive shells the number of vms "
+                                 "must be 1")
+            elif arguments.command is None and len(names) == 1:
+                cm = CmDatabase()
+                vm = cm.find_name(names[0], kind="vm")[0]
+
+                cloud = vm['cm']['cloud']
+
+                provider = Provider(name=cloud)
+                result = provider.ssh(vm=vm, command=command)
+                print(result)
+                return ""
+
+            if len(names) > 1 and len(users) == 1:
+                users = [users] * len(names)
+
+            if len(names) > 1 and len(users) > 1 and len(names) != len(users):
+                raise ValueError("vms and users have different length")
+
+
+            for name in names:
+                cm = CmDatabase()
+                vm = cm.find_name(name, kind="vm")
+                cloud = vm['cm']['cloud']
+                provider = Provider(name=cloud)
+                result = provider.ssh(vm=vm, command=command)
+                print (result)

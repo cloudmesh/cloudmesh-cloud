@@ -8,6 +8,7 @@ from cloudmesh.common.Shell import Shell as Shell2
 from cloudmesh.common.console import Console
 import subprocess
 from cloudmesh.common.StopWatch import StopWatch
+from cloudmesh.common.debug import VERBOSE
 
 class Shell(Shell2):
 
@@ -70,4 +71,31 @@ class Shell(Shell2):
             Console.error("         We recommend you update your pip  with \n")
             Console.error("             pip install -U pip\n")
 
+    @staticmethod
+    def ssh(name=None, user=None, key=None, command=None):
 
+        location = ""
+
+        if user is None:
+            location = pubip
+        else:
+            location = user + '@' + pubip
+        cmd = ['ssh',
+               "-o", "StrictHostKeyChecking=no",
+               "-o", "UserKnownHostsFile=/dev/null",
+               '-i', key, location, command]
+        VERBOSE(" ".join(cmd))
+
+        ssh = subprocess.Popen(cmd,
+                               shell=False,
+                               stdout=subprocess.PIPE,
+                               stderr=subprocess.PIPE)
+        result = ssh.stdout.readlines()
+        if result == []:
+            error = ssh.stderr.readlines()
+            print("ERROR: %s" % error)
+        else:
+            print("RESULT:")
+            for line in result:
+                line = line.decode("utf-8")
+                print(line.strip("\n"))

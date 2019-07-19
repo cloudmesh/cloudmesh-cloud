@@ -17,6 +17,7 @@ from cloudmesh.secgroup.Secgroup import Secgroup, SecgroupRule
 from cloudmesh.secgroup.Secgroup import SecgroupExamples
 from cloudmesh.common3.DictList import DictList
 import os
+from cloudmesh.common.variables import Variables
 
 class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
@@ -443,7 +444,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         for rule in rules:
             data[rule['name']] = rule
 
-        pprint (groups)
+        # pprint (groups)
 
         for group in groups:
             if group['name'] == name:
@@ -712,6 +713,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                key=None,
                secgroup=None,
                ip=None,
+               user=None,
                public=True,
                **kwargs):
         """
@@ -734,31 +736,21 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         """
         https://docs.openstack.org/openstacksdk/latest/user/connection.html#openstack.connection.Connection.create_server
 
-        images = self.images()
-        for _image in images:
-            if _image.name == image:
-                image_use = _image
-                break
-
-        flavors = self.flavors()
-        for _flavor in flavors:
-            if _flavor.name == size:
-                flavor_use = _flavor
-                break
         """
         size = kwargs['flavor']
 
-        print("Create Server:")
-        print ("    Name:  ", name)
-        print ("    Image: ", image)
-        print ("    Size:  ", size)
-        print ("    IP:    ", ip)
-        print ("    Public:", public)
-        print ("    Key:", key)
-        print ("    location:", location)
-        print ("    timeout:", timeout)
-        print ("    secgroup:", secgroup)
+        # Guess user name
 
+        if user is None:
+            image_name = image.lower()
+            if image_name.startswith("cc-"):
+                user = "cc"
+            if "centos" in image_name:
+                user = "centos"
+            elif "ubuntu" in image_name:
+                user = "ubuntu"
+
+        # get IP
 
         if not ip and public:
             entry = self.find_available_public_ip()
@@ -771,9 +763,19 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                 print("ip not available")
             return None
 
+        banner("Create Server")
+        print("    Name:    ", name)
+        print("    IP:      ", ip)
+        print("    Image:   ", image)
+        print("    Size:    ", size)
+        print("    Public:  ", public)
+        print("    Key:     ", key)
+        print("    location:", location)
+        print("    timeout: ", timeout)
+        print("    secgroup:", secgroup)
 
-        banner("IP")
-        print(ip)
+
+
 
         try:
             server = self.cloudman.create_server(name,
@@ -784,9 +786,11 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                                                  timeout=timeout,
                                                  #wait=True
                                                  )
+            server['user'] = user
             self.cloudman.wait_for_server(server)
             self.cloudman.add_ips_to_server(server, ips=ip)
-
+            variables = Variables()
+            variables['vm'] = name
 
             # self.cloudman.add_security_group(security_group=secgroup)
 
@@ -882,7 +886,6 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
 
         user = "cc"  # needs to be set on creation.
-
 
 
         if command == None:

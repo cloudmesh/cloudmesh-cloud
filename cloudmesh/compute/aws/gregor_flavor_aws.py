@@ -1,15 +1,10 @@
-import  requests
-from cloudmesh.common.util import writefile, readfile
-from cloudmesh.common3.Shell import Shell
 from pprint import pprint
-from cloudmesh.common3.Benchmark import Benchmark
-from textwrap import dedent
-from bs4 import BeautifulSoup
-from cloudmesh.common.util import banner
+
 import pandas as pd
-from collections import OrderedDict
-from datetime import date
+import requests
+from bs4 import BeautifulSoup
 from cloudmesh.common.parameter import Parameter
+from cloudmesh.common.util import banner
 from tabulate import tabulate
 
 
@@ -20,7 +15,7 @@ class AwsImages(dict):
         self.__dict__ = self.extract_tables(self.html)
 
     def fetch(self):
-        url='https://aws.amazon.com/ec2/instance-types/'
+        url = 'https://aws.amazon.com/ec2/instance-types/'
         r = requests.get(url)
         return r.content.decode("utf-8")
 
@@ -45,26 +40,25 @@ class AwsImages(dict):
             for match in soup.findAll(tag):
                 match.replaceWithChildren()
 
-
         tables = soup.findAll("table")
 
         all = {}
         for table in tables:
-             if table.findParent("table") is None:
-                 print()
-                 content = str(table)
-                 #pretty = BeautifulSoup(content).prettify()
-                 #print(pretty)
-                 # print (content)
+            if table.findParent("table") is None:
+                print()
+                content = str(table)
+                # pretty = BeautifulSoup(content).prettify()
+                # print(pretty)
+                # print (content)
 
-                 output = []
-                 table_rows = table.find_all('tr')
-                 for tr in table_rows:
-                     td = tr.find_all('td')
-                     row = [i.text.strip() for i in td]
-                     output.append(row)
-                 kind = output[1][0].split(".",1)[0]
-                 all[kind] = output
+                output = []
+                table_rows = table.find_all('tr')
+                for tr in table_rows:
+                    td = tr.find_all('td')
+                    row = [i.text.strip() for i in td]
+                    output.append(row)
+                kind = output[1][0].split(".", 1)[0]
+                all[kind] = output
 
         return all
 
@@ -76,7 +70,7 @@ class AwsImages(dict):
 
         for kind in kinds:
             banner(f"Table {kind}")
-            pprint (self.__dict__[kind])
+            pprint(self.__dict__[kind])
 
     def pprint(self, key=None):
         if key == None:
@@ -135,7 +129,6 @@ class AwsImages(dict):
                 raise NotImplementedError
             # this is not fully implemented
 
-
         # Step 1. merge the table with keys
 
         # to be implemented
@@ -153,19 +146,26 @@ class AwsImages(dict):
             return df
         else:
             return tabulate(df,
-                       headers='keys',
-                       tablefmt=output,
-                       showindex="never")
+                            headers='keys',
+                            tablefmt=output,
+                            showindex="never")
 
 
 if __name__ == "__main__":
-    images = AwsImages()
-    images.print()
-    images.pprint()
-    keys = images.keys()
-    print ("Keys", keys)
-    print ("Image")
-    print ("III", images["a1"])
+    from cloudmesh.common.StopWatch import StopWatch
 
-    print(images.table("a1"))
+    StopWatch.start("convert aws image table")
+    images = AwsImages()
+    # images.print()
+    # images.pprint()
+    # keys = images.keys()
+    # print ("Keys", keys)
+    # print ("Image")
+    # print ("III", images["a1"])
+
+    output = images.table("a1")
+    StopWatch.stop("convert aws image table")
+    print(output)
     print(images.table("a1", output="grid"))
+
+    StopWatch.benchmark()

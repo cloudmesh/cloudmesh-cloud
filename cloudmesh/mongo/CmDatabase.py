@@ -147,7 +147,7 @@ class CmDatabase(object):
 
     # ok
     # noinspection PyPep8
-    def find_name(self, name):
+    def find_name(self, name, kind=None):
         """
         This function returns the entry with the given name from all collections
         in mongodb. The name must be unique accross all collections
@@ -156,11 +156,17 @@ class CmDatabase(object):
         :return:
         """
         entries = []
-        collections = self.collections()
+        if kind is None:
+            collections = self.collections()
+        else:
+            collections = self.collections(regex=f".*-{kind}")
         for collection in collections:
             try:
                 col = self.db[collection]
-                cursor = col.find({"cm.name": name})
+                if kind is None:
+                    cursor = col.find({"cm.name": name})
+                else:
+                    cursor = col.find({"cm.name": name, "cm.kind": kind})
                 for entry in cursor:
                     entries.append(entry)
             except:
@@ -244,6 +250,10 @@ class CmDatabase(object):
             for entry in entries:
                 result.append(entry['name'])
 
+        #
+        # if collection is none but kind is not none find all collections
+        # matching THIS IS NOT YET IMPLEMENTED
+        #
         if kinds and clouds:
             for _kind in kinds:
                 for _cloud in clouds:

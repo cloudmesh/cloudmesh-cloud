@@ -248,11 +248,6 @@ class Provider(ComputeNodeABC):
         return parameters
 
 
-    def ssh(self, name, command):
-        self.p.ssh(name=name, command=command)
-        # for name, ips in name_ips.items():
-        # self.p.ssh(name=name, ips=ips, **kwargs)
-
     def login(self):
         if self.kind != "azure":
             raise NotImplementedError
@@ -308,3 +303,9 @@ class Provider(ComputeNodeABC):
 
     def find_available_public_ip(self):
         return self.p.find_available_public_ip(self)
+
+    from cloudmesh.mongo.CmDatabase import CmDatabase
+
+
+    def ssh(self, vm=None, command=None):
+        return self.p.ssh(vm=vm, command=command)

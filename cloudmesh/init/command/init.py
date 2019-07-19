@@ -9,6 +9,7 @@ from cloudmesh.shell.command import command
 from cloudmesh.mongo.MongoDBController import MongoDBController
 import shutil
 from cloudmesh.common.util import path_expand
+from cloudmesh.management.configuration.config import Config
 
 class InitCommand(PluginCommand):
 
@@ -40,16 +41,27 @@ class InitCommand(PluginCommand):
         except:
             Console.error(f"deleting {location}")
 
+        user = Config()["cloudmesh.profile.user"]
+        secgroup = "flask"
+
         print("MongoDB create")
         os.system("cms admin mongo create")
         os.system("cms admin mongo start")
+        os.system(f"cms sec load")
+        os.system(f"cms key add {user} --source=ssh")
+
 
         if arguments.CLOUD is not None:
             cloud = arguments.CLOUD
+            os.system(f"cms key upload {user} --cloud={cloud}")
             os.system(f"cms set cloud={cloud}")
             os.system(f"cms flavor list --refresh")
             os.system(f"cms image list --refresh")
             os.system(f"cms vm list --refresh")
             os.system(f"cms set list")
+            os.system(f"cms sec group load {secgroup} --cloud={cloud}")
+            os.system(f"cms set secgroup={secgroup}")
+
+
 
 

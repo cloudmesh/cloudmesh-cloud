@@ -265,7 +265,17 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         :param name: the name of the node
         :return: the dict of the node
         """
-        raise NotImplementedError
+        instances = self.get_instance_id(self.ec2_resource, name)
+
+        for each_instance in instances:
+            try:
+                self.ec2_client.terminate_instances(InstanceIds=[each_instance.instance_id])
+            except ClientError:
+                print("Currently instance cant be terminated...Please try again")
+            print("Terminating Instance..Please wait...")
+            waiter = self.ec2_client.get_waiter('instance_terminated')
+            waiter.wait(Filters=[{'Name': 'instance-id', 'Values': [each_instance.instance_id]}])
+            print(f"Instance having Tag:{name} and Instance-Id:{each_instance.instance_id} terminated")
 
     def create(self, name=None, image=None, size=None, timeout=360, **kwargs):
         """
@@ -455,4 +465,4 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
 if __name__ == "__main__":
     provider = Provider(name='awsboto')
-    provider.create("Webserver2")
+    provider.start("Webserver")

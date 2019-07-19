@@ -79,6 +79,7 @@ yamllint
 openstacksdk
 pandas
 tabulate
+beautifulsoup4
 """.split("\n")
 
 

@@ -5,6 +5,7 @@ from pprint import pprint
 from cloudmesh.common3.Benchmark import Benchmark
 from textwrap import dedent
 from bs4 import BeautifulSoup
+from cloudmesh.common.util import banner
 
 def fetch():
     url='https://aws.amazon.com/ec2/instance-types/'
@@ -36,7 +37,10 @@ tables = soup.findAll("table")
 
 for table in tables:
      if table.findParent("table") is None:
+         print()
+         banner("Table")
          content = str(table)
          #pretty = BeautifulSoup(content).prettify()
          #print(pretty)
          print (content)
+

@@ -98,7 +98,7 @@ class SshCommand(PluginCommand):
                                  arguments,
                                  variables.dict())
 
-            name = arguments.NAME
+            name = arguments.NAME or variables['vm']
 
             ip = arguments.IP
 
@@ -114,9 +114,17 @@ class SshCommand(PluginCommand):
         else:
             # ssh [--name=VMs] [--user=USERs] [COMMAND]"
 
-            names = Parameter.expand(arguments.name)
+            variables = Variables()
+
+            if arguments.name is None:
+                name = arguments.NAME or variables['vm']
+                names = [name]
+            else:
+                names = Parameter.expand(arguments.name)
             users = Parameter.expand(arguments.users)
             command = arguments.COMMAND
+
+
 
             if arguments.command is None and len(names) > 1:
                 raise ValueError("For interactive shells the number of vms "

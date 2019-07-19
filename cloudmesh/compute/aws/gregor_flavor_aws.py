@@ -65,6 +65,7 @@ for kind in all:
     banner(f"Table {kind}")
     pprint (all[kind])
 
+banner('pprint')
 pprint(all)
 
 

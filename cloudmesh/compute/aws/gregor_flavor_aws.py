@@ -4,6 +4,7 @@ from cloudmesh.common3.Shell import Shell
 from pprint import pprint
 from cloudmesh.common3.Benchmark import Benchmark
 from textwrap import dedent
+from bs4 import BeautifulSoup
 
 def fetch():
     url='https://aws.amazon.com/ec2/instance-types/'
@@ -32,6 +33,7 @@ def clean(content):
     content = content.replace('</span>', "")
     content = content.replace('</b>', "")
     content = content.replace('<b>', "")
+    content = content.replace('<br/>', "") # this seems not to work
     content = content.split("\n")
 
     #print (content)
@@ -69,5 +71,17 @@ content = read()
 tables = clean(content)
 
 pprint (tables)
+
+for t in tables:
+    if "<th" in t:
+        soup = BeautifulSoup(t)
+
+        table = soup.find('table')
+
+        headers = [header.text for header in table.find_all('th')]
+        results = [{headers[i]: cell for i, cell in enumerate(row.find_all('td'))}
+                   for row in table.find_all('tr')]
+
+        print (results)
 
 Benchmark.print()

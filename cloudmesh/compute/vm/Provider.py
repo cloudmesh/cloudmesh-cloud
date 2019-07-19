@@ -32,7 +32,7 @@ class Provider(ComputeNodeABC):
 
         providers = ProviderList()
 
-        if self.kind in ['openstack', 'pyazure', 'docker', "aws"]:
+        if self.kind in ['openstack', 'azure', 'docker', "aws"]:
             provider = providers[self.kind]
         elif self.kind in ["awslibcloud", "google"]:
             from cloudmesh.compute.libcloud.Provider import \

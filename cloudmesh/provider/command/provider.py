@@ -63,7 +63,7 @@ class ProviderCommand(PluginCommand):
             providers = ProviderList()
 
             for name in ["openstack",
-                         "pyazure"]:
+                         "azure"]:
                 try:
                     provider = providers[name]
                     print (name)

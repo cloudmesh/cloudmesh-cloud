@@ -77,6 +77,8 @@ munch
 selenium
 yamllint
 openstacksdk
+pandas
+tabulate
 """.split("\n")
 
 

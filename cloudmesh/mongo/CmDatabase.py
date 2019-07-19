@@ -350,7 +350,7 @@ class CmDatabase(object):
         return records
 
 
-    # check
+    # check bug when in the db velues are that are not in the ne obeject
     def update(self, entries):
 
         # VERBOSE(entries)

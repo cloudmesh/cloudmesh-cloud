@@ -487,7 +487,7 @@ class VmCommand(PluginCommand):
             #    node = p.create(name=name, size=flavor, image=image)
 
 
-            VERBOSE(arguments)
+            # VERBOSE(arguments)
             parameters = dotdict()
 
             names = Parameter.expand(arguments.name)
@@ -496,11 +496,6 @@ class VmCommand(PluginCommand):
                                    variables.dict())
             defaults = Config()[f"cloudmesh.cloud.{cloud}.default"]
 
-
-            # print ("CCC Defaults", defaults)
-            # print("CCC Cloud in arguments", "cloud" in arguments)
-            # print ("CCC Cloud", cloud)
-            # print("CCC Variables", variables.dict())
 
             parameters = dotdict()
             parameters.names = arguments.name
@@ -513,7 +508,7 @@ class VmCommand(PluginCommand):
             provider = Provider(name=cloud)
 
 
-            pprint (parameters)
+            #pprint (parameters)
             #if parameters.key is None:
             #   key =  parameters.key or variables['key']
             #   if variables['key'] == "":
@@ -551,7 +546,7 @@ class VmCommand(PluginCommand):
 
             else:
 
-                pprint (parameters)
+                #pprint (parameters)
                 if not arguments.n:
                     count = 1
                 else:

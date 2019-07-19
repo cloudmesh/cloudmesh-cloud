@@ -1,10 +1,10 @@
 from cloudmesh.common.parameter import Parameter
 from cloudmesh.common.variables import Variables
+from cloudmesh.compute.vm.Provider import Provider
+from cloudmesh.mongo.CmDatabase import CmDatabase
 from cloudmesh.shell.command import PluginCommand, map_parameters
 from cloudmesh.shell.command import command
-from cloudmesh.mongo.CmDatabase import CmDatabase
-from cloudmesh.compute.vm.Provider import Provider
-import os
+
 
 class SshCommand(PluginCommand):
 
@@ -124,18 +124,25 @@ class SshCommand(PluginCommand):
             users = Parameter.expand(arguments.users)
             command = arguments.COMMAND
 
-
-
             if arguments.command is None and len(names) > 1:
                 raise ValueError("For interactive shells the number of vms "
                                  "must be 1")
             elif arguments.command is None and len(names) == 1:
+
+                # find the cloud
+
                 cm = CmDatabase()
                 vm = cm.find_name(names[0], kind="vm")[0]
-
                 cloud = vm['cm']['cloud']
 
+                # update the cloud
                 provider = Provider(name=cloud)
+
+                # update the vm
+                provider.list()
+                vm = cm.find_name(names[0], kind="vm")[0]
+
+                # run ssh
                 result = provider.ssh(vm=vm, command=command)
                 print(result)
                 return ""
@@ -146,11 +153,10 @@ class SshCommand(PluginCommand):
             if len(names) > 1 and len(users) > 1 and len(names) != len(users):
                 raise ValueError("vms and users have different length")
 
-
             for name in names:
                 cm = CmDatabase()
                 vm = cm.find_name(name, kind="vm")
                 cloud = vm['cm']['cloud']
                 provider = Provider(name=cloud)
                 result = provider.ssh(vm=vm, command=command)
-                print (result)
+                print(result)

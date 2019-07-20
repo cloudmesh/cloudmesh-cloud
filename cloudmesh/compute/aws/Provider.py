@@ -113,6 +113,78 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
     #  start with a prg in this dir similar to ../openstack/os_sdk.py, call it
     #  aws_boto.py, make sure to use Config()
 
+
+    def Print(self, output, kind, data):
+        raise NotImplementedError
+
+    def find(self, elements, name=None):
+        raise NotImplementedError
+
+
+    def list_secgroups(self, name=None):
+        raise NotImplementedError
+
+    def list_secgroup_rules(self, name='default'):
+        raise NotImplementedError
+
+    def add_secgroup(self, name=None, description=None):
+        raise  NotImplementedError
+
+    def add_secgroup_rule(self,
+                          name=None,  # group name
+                          port=None,
+                          protocol=None,
+                          ip_range=None):
+        raise NotImplementedError
+
+    def remove_secgroup(self, name=None):
+        raise NotImplementedError
+
+    def upload_secgroup(self, name=None):
+        raise NotImplementedError
+
+    def add_rules_to_secgroup(self, name=None, rules=None):
+        raise NotImplementedError
+
+    def remove_rules_from_secgroup(self, name=None, rules=None):
+        raise NotImplementedError
+
+
+    def set_server_metadata(self, name, m):
+        raise NotImplementedError
+
+    def get_server_metadata(self, name):
+        raise NotImplementedError
+
+    # these are availabele to be accociated
+    def list_public_ips(self,
+                        ip=None,
+                        available=False):
+        raise NotImplementedError
+
+    # release the ip
+    def delete_public_ip(self, ip=None):
+        raise NotImplementedError
+
+    def create_public_ip(self):
+        raise NotImplementedError
+
+    def find_available_public_ip(self):
+        raise NotImplementedError
+
+    def attach_publicIP(self, node, ip):
+        raise NotImplementedError
+
+    def detach_publicIP(self, node, ip):
+        raise NotImplementedError
+
+    # see the openstack example it will be almost the same as in openstack
+    # other than getting
+    # the ip and username
+    def ssh(self, vm=None, command=None):
+        raise NotImplementedError
+
+
     def __init__(self, name=None, configuration="~/.cloudmesh/cloudmesh4.yaml"):
         """
         Initializes the provider. The default parameters are read from the

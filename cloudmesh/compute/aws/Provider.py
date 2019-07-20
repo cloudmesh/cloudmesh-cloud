@@ -257,7 +257,13 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         :param name: the name of the node
         :return: the dict of the node
         """
-        raise NotImplementedError
+        instances = self.get_instance_id(self.ec2_resource, name)
+
+        for each_instance in instances:
+            instance = self.ec2_resource.Instance(each_instance.instance_id)
+            instance.reboot()
+            print("Rebooting Instance..Please wait...")
+            print(f"Instance having Tag:{name} and Instance-Id:{each_instance.instance_id} rebooted")
 
     def destroy(self, name=None):
         """
@@ -295,21 +301,40 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         '''
         TO DO: CHECK IF THE TAG NAME EXISTS THEN ASK FOR DIFFERENT TAG NAME
         '''
-        new_ec2_instance = self.ec2_resource.create_instances(
-            ImageId=self.default["image"],
-            InstanceType=self.default["size"],
-            MaxCount=1,
-            MinCount=1,
-            TagSpecifications=[{'ResourceType': 'instance',
-                                'Tags': [
-                                    {
-                                        'Key': 'Name',
-                                        'Value': name
+        if kwargs.get('keyname') is None:
+            new_ec2_instance = self.ec2_resource.create_instances(
+                ImageId=self.default["image"],
+                InstanceType=self.default["size"],
+                MaxCount=1,
+                MinCount=1,
+                TagSpecifications=[{'ResourceType': 'instance',
+                                    'Tags': [
+                                        {
+                                            'Key': 'Name',
+                                            'Value': name
+                                        },
+                                    ]
                                     },
-                                ]
-                                },
-                               ]
-        )
+                                   ]
+            )
+        else:
+            new_ec2_instance = self.ec2_resource.create_instances(
+                ImageId=self.default["image"],
+                InstanceType=self.default["size"],
+                MaxCount=1,
+                MinCount=1,
+                KeyName=kwargs.get('keyname'),
+                TagSpecifications=[{'ResourceType': 'instance',
+                                    'Tags': [
+                                        {
+                                            'Key': 'Name',
+                                            'Value': name
+                                        },
+                                    ]
+                                    },
+                                   ]
+            )
+
         waiter = self.ec2_client.get_waiter('instance_exists')
 
         waiter.wait(Filters=[{'Name': 'instance-id', 'Values': [new_ec2_instance[0].instance_id]}],
@@ -330,7 +355,17 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         :return: the dict with the new name
         """
         # if destination is None, increase the name counter and use the new name
-        raise NotImplementedError
+        instances = self.get_instance_id(self.ec2_resource, name)
+        tag_response = None
+        for each_instance in instances:
+            tag_response = self.ec2_client.create_tags(
+                                                Resources=[each_instance.instance_id],
+                                                Tags=[{
+                                                    'Key': 'Name',
+                                                    'Value': destination
+                                                     }]
+                                                )
+        return tag_response
 
     def keys(self):
         """
@@ -338,7 +373,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
         :return: dict
         """
-        raise NotImplementedError
+        return self.ec2_client.describe_key_pairs()
 
     def key_upload(self, key=None):
         """
@@ -346,15 +381,15 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         :param key:
         :return:
         """
-        raise NotImplementedError
+        return self.ec2_client.create_key_pair(KeyName=key)
 
     def key_delete(self, name=None):
         """
         deletes the key with the given name
-        :param name: The anme of the key
+        :param name: The name of the key
         :return:
         """
-        raise NotImplementedError
+        return self.ec2_client.delete_key_pair(KeyName=name)
 
     def images(self, **kwargs):
         """
@@ -465,4 +500,3 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
 if __name__ == "__main__":
     provider = Provider(name='awsboto')
-    provider.start("Webserver")

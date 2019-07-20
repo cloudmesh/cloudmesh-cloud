@@ -6,7 +6,7 @@ from cloudmesh.common.console import Console
 from cloudmesh.management.script import Script
 
 
-class Manager(object):
+class Source(object):
 
     def __init__(self, config, protocol="ssh"):
 

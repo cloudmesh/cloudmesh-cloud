@@ -18,6 +18,7 @@ from cloudmesh.secgroup.Secgroup import SecgroupExamples
 from cloudmesh.common3.DictList import DictList
 import os
 from cloudmesh.common.variables import Variables
+from cloudmesh.image.Image import Image
 
 class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
@@ -742,13 +743,15 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         # Guess user name
 
         if user is None:
-            image_name = image.lower()
-            if image_name.startswith("cc-"):
-                user = "cc"
-            if "centos" in image_name:
-                user = "centos"
-            elif "ubuntu" in image_name:
-                user = "ubuntu"
+
+            user = Image.guess_username(image)
+            #image_name = image.lower()
+            #if image_name.startswith("cc-"):
+            #    user = "cc"
+            #if "centos" in image_name:
+            #    user = "centos"
+            #elif "ubuntu" in image_name:
+            #    user = "ubuntu"
 
         # get IP
 

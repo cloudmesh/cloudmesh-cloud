@@ -2,6 +2,7 @@
 
 import boto3
 from pprint import pprint
+import datetime
 from botocore.exceptions import ClientError
 
 from cloudmesh.provider import ComputeProviderPlugin
@@ -151,6 +152,18 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         self.ec2_resource = self.session.resource('ec2')
         self.ec2_client = self.ec2_resource.meta.client
 
+    @staticmethod
+    def get_instance_id(ec2_resource, name):
+
+        instances = ec2_resource.instances.filter(Filters=[
+            {'Name': 'tag:Name',
+             'Values': [name]
+             }
+        ]
+        )
+
+        return instances
+
     def start(self, name=None):
         """
         start a node
@@ -158,21 +171,17 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         :param name: the unique node name
         :return:  The dict representing the node
         """
-        if name is None:
-            print("Please provide instance id...")
-            return
-        self.instance_id = name
+        instances = self.get_instance_id(self.ec2_resource, name)
 
-        try:
-            self.ec2_client.start_instances(InstanceIds=[self.instance_id])
-        except ClientError:
-            print("Currently instance cant be started...Please try again")
-
-        waiter = self.ec2_client.get_waiter('instance_running')
-
-        waiter.wait(InstanceIds=self.instance_id)
-
-        print("Instance started...")
+        for each_instance in instances:
+            try:
+                self.ec2_client.start_instances(InstanceIds=[each_instance.instance_id])
+            except ClientError:
+                print("Currently instance cant be started...Please try again")
+            print("Starting Instance..Please wait...")
+            waiter = self.ec2_client.get_waiter('instance_running')
+            waiter.wait(Filters=[{'Name': 'instance-id', 'Values': [each_instance.instance_id]}])
+            print(f"Instance having Tag:{name} and Instance-Id:{each_instance.instance_id} started")
 
     def stop(self, name=None):
         """
@@ -185,32 +194,17 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         if name is None:
             print("Please provide instance id...")
             return
-        instance_id = name
-        if self.session is None:
-            self.session = boto3.Session(aws_access_key_id=self.access_id,
-                                         aws_secret_access_key=self.secret_key,
-                                         region_name=self.region)
-        if self.session is None:
-            print("Invalid credentials...")
-            return
-        ec2_resource = self.session.resource('ec2')
-        ec2_client = ec2_resource.meta.client
+        instances = self.get_instance_id(self.ec2_resource, name)
 
-        try:
-            ec2_client.stop_instances(InstanceIds=[instance_id])
-        except ClientError:
-            print("Currently instance cant be stopped...Please try again")
-
-        waiter = ec2_client.get_waiter('instance_running')
-
-        waiter.wait(InstanceIds=instance_id)
-
-        print("Instance stopped...")
-
-    def filter_info(self, **data):
-        self.output['vm']['order'][4] = data['Reservations'][0]['Instances'][0]['ImageId']
-        self.output['vm']['order'][3] = data['Reservations'][0]['Instances'][0]['Monitoring']['State']
-        self.output['vm']['order'][2] = data['Reservations'][0]['Instances'][0]['State']['Name']
+        for each_instance in instances:
+            try:
+                self.ec2_client.stop_instances(InstanceIds=[each_instance.instance_id])
+            except ClientError:
+                print("Currently instance cant be stopped...Please try again")
+            print("Stopping Instance..Please wait...")
+            waiter = self.ec2_client.get_waiter('instance_stopped')
+            waiter.wait(Filters=[{'Name': 'instance-id', 'Values': [each_instance.instance_id]}])
+            print(f"Instance having Tag:{name} and Instance-Id:{each_instance.instance_id} stopped")
 
     def info(self, name=None):
         """
@@ -222,30 +216,30 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         if name is None:
             print("Please provide node name...")
             return
-        if self.session is None:
-            self.session = boto3.Session(aws_access_key_id=self.access_id,
-                                         aws_secret_access_key=self.secret_key,
-                                         region_name=self.region)
-        if self.session is None:
-            print("Invalid credentials...")
-            return
-        ec2_client = self.session.resource('ec2').meta.client
 
-        instance_info = ec2_client.describe_instances(InstanceIds=[name])
-        pprint(instance_info)
+        instance_info = self.ec2_client.describe_instances(Filters=[
+            {'Name': 'tag:Name',
+             'Values': [name]
+             }
+        ])
+        return instance_info
 
-        self.filter_info(**instance_info)
+        # self.filter_info(**instance_info)
 
     def list(self):
         """
         list all nodes id
 
         :return: an array of dicts representing the nodes
+        'instance_tag': each_instance.tags[0]['Name']
         """
         instance_ids = []
         for each_instance in self.ec2_resource.instances.all():
-            instance_ids.append({each_instance.id: each_instance.id})
-        return self.update_dict(instance_ids, kind="vm")
+            instance_ids.append({'instance_id': each_instance.id,
+                                 'instance_tag': each_instance.tags[0]['Value']
+                                 })
+        return instance_ids
+        # return self.update_dict(instance_ids, kind="vm")
 
     def suspend(self, name=None):
         """
@@ -263,7 +257,13 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         :param name: the name of the node
         :return: the dict of the node
         """
-        raise NotImplementedError
+        instances = self.get_instance_id(self.ec2_resource, name)
+
+        for each_instance in instances:
+            instance = self.ec2_resource.Instance(each_instance.instance_id)
+            instance.reboot()
+            print("Rebooting Instance..Please wait...")
+            print(f"Instance having Tag:{name} and Instance-Id:{each_instance.instance_id} rebooted")
 
     def destroy(self, name=None):
         """
@@ -271,7 +271,17 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         :param name: the name of the node
         :return: the dict of the node
         """
-        raise NotImplementedError
+        instances = self.get_instance_id(self.ec2_resource, name)
+
+        for each_instance in instances:
+            try:
+                self.ec2_client.terminate_instances(InstanceIds=[each_instance.instance_id])
+            except ClientError:
+                print("Currently instance cant be terminated...Please try again")
+            print("Terminating Instance..Please wait...")
+            waiter = self.ec2_client.get_waiter('instance_terminated')
+            waiter.wait(Filters=[{'Name': 'instance-id', 'Values': [each_instance.instance_id]}])
+            print(f"Instance having Tag:{name} and Instance-Id:{each_instance.instance_id} terminated")
 
     def create(self, name=None, image=None, size=None, timeout=360, **kwargs):
         """
@@ -288,7 +298,53 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         """
         create one node
         """
-        raise NotImplementedError
+        '''
+        TO DO: CHECK IF THE TAG NAME EXISTS THEN ASK FOR DIFFERENT TAG NAME
+        '''
+        if kwargs.get('keyname') is None:
+            new_ec2_instance = self.ec2_resource.create_instances(
+                ImageId=self.default["image"],
+                InstanceType=self.default["size"],
+                MaxCount=1,
+                MinCount=1,
+                TagSpecifications=[{'ResourceType': 'instance',
+                                    'Tags': [
+                                        {
+                                            'Key': 'Name',
+                                            'Value': name
+                                        },
+                                    ]
+                                    },
+                                   ]
+            )
+        else:
+            new_ec2_instance = self.ec2_resource.create_instances(
+                ImageId=self.default["image"],
+                InstanceType=self.default["size"],
+                MaxCount=1,
+                MinCount=1,
+                KeyName=kwargs.get('keyname'),
+                TagSpecifications=[{'ResourceType': 'instance',
+                                    'Tags': [
+                                        {
+                                            'Key': 'Name',
+                                            'Value': name
+                                        },
+                                    ]
+                                    },
+                                   ]
+            )
+
+        waiter = self.ec2_client.get_waiter('instance_exists')
+
+        waiter.wait(Filters=[{'Name': 'instance-id', 'Values': [new_ec2_instance[0].instance_id]}],
+                    WaiterConfig={
+                        'Delay': 20,
+                        'MaxAttempts': timeout / 20
+                    }
+                    )
+        print("Instance created...")
+        return new_ec2_instance
 
     def rename(self, name=None, destination=None):
         """
@@ -299,7 +355,17 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         :return: the dict with the new name
         """
         # if destination is None, increase the name counter and use the new name
-        raise NotImplementedError
+        instances = self.get_instance_id(self.ec2_resource, name)
+        tag_response = None
+        for each_instance in instances:
+            tag_response = self.ec2_client.create_tags(
+                                                Resources=[each_instance.instance_id],
+                                                Tags=[{
+                                                    'Key': 'Name',
+                                                    'Value': destination
+                                                     }]
+                                                )
+        return tag_response
 
     def keys(self):
         """
@@ -307,7 +373,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
         :return: dict
         """
-        raise NotImplementedError
+        return self.ec2_client.describe_key_pairs()
 
     def key_upload(self, key=None):
         """
@@ -315,15 +381,15 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         :param key:
         :return:
         """
-        raise NotImplementedError
+        return self.ec2_client.create_key_pair(KeyName=key)
 
     def key_delete(self, name=None):
         """
         deletes the key with the given name
-        :param name: The anme of the key
+        :param name: The name of the key
         :return:
         """
-        raise NotImplementedError
+        return self.ec2_client.delete_key_pair(KeyName=name)
 
     def images(self, **kwargs):
         """
@@ -434,7 +500,3 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
 if __name__ == "__main__":
     provider = Provider(name='awsboto')
-    ids = provider.list()
-    print(ids)
-    # provider.info('i-05c351d7671f2b890')
-    # pprint(provider.output)

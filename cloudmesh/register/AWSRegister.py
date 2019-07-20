@@ -17,7 +17,7 @@ class AWSRegister(object):
     def __init__(self):
         pass
 
-    def register(self):
+    def register(self, cloud='aws'):
         if platform == "linux" or platform == "linux2":
             # check if chrome installed
 
@@ -49,9 +49,11 @@ class AWSRegister(object):
 
             creds = pandas.read_csv("{cm}/{filename}".format(cm=cloudmesh_folder,filename=credentials_file_name))
 
-            cloudmesh_conf['cloudmesh']['cloud']['aws']['credentials']['EC2_ACCESS_ID'] = \
+            credentials = cloudmesh_conf['cloudmesh.cloud.{cloud}.credentials']
+
+            credentials['EC2_ACCESS_ID'] = \
                 creds['Access key ID'][0]
-            cloudmesh_conf['cloudmesh']['cloud']['aws']['credentials']['EC2_SECRET_KEY'] = \
+            credentials['EC2_SECRET_KEY'] = \
                 creds['Secret access key'][0]
 
             with open("{cm}/cloudmesh4.yaml".format(cm=cloudmesh_folder), "w") as f:
@@ -85,8 +87,9 @@ class AWSRegister(object):
 
             creds = pandas.read_csv("{cm}/{filename}".format(cm=cloudmesh_folder,filename=credentials_file_name))
 
-            cloudmesh_conf['cloudmesh']['cloud']['aws']['credentials']['EC2_ACCESS_ID'] = creds['Access key ID'][0]
-            cloudmesh_conf['cloudmesh']['cloud']['aws']['credentials']['EC2_SECRET_KEY'] = creds['Secret access key'][0]
+            credentials = cloudmesh_conf['cloudmesh.cloud.{cloud}.credentials']
+            credentials['EC2_ACCESS_ID'] = creds['Access key ID'][0]
+            credentials['EC2_SECRET_KEY'] = creds['Secret access key'][0]
 
             with open("{cm}/cloudmesh4.yaml".format(cm=cloudmesh_folder), "w") as f:
                 yaml.dump(cloudmesh_conf, f)
@@ -118,8 +121,9 @@ class AWSRegister(object):
 
             creds = pandas.read_csv("{cm}/{filename}".format(cm=cloudmesh_folder,filename=credentials_file_name))
 
-            cloudmesh_conf['cloudmesh']['cloud']['aws']['credentials']['EC2_ACCESS_ID'] = creds['Access key ID'][0]
-            cloudmesh_conf['cloudmesh']['cloud']['aws']['credentials']['EC2_SECRET_KEY'] = creds['Secret access key'][0]
+            credentials = cloudmesh_conf['cloudmesh.cloud.{cloud}.credentials']
+            credentials['EC2_ACCESS_ID'] = creds['Access key ID'][0]
+            credentials['EC2_SECRET_KEY'] = creds['Secret access key'][0]
 
             with open("{cm}/cloudmesh4.yaml".format(cm=cloudmesh_folder), "w") as f:
                 yaml.dump(cloudmesh_conf, f)

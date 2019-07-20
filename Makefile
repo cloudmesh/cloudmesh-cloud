@@ -59,7 +59,7 @@ manual:
 	cms man --kind=rst version > docs-source/source/manual/version.rst
 	cms man --kind=rst open > docs-source/source/manual/open.rst
 	cms man --kind=rst vm > docs-source/source/manual/vm.rst
-	cms man --kind=rst network > docs-source/source/manual/network.rst
+	cms man --kind=rst ip > docs-source/source/manual/ip.rst
 	cms man --kind=rst key > docs-source/source/manual/key.rst
 	cms man --kind=rst secgroup > docs-source/source/manual/secgroup.rst
 	cms man --kind=rst image > docs-source/source/manual/image.rst

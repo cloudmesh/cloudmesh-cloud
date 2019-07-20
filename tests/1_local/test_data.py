@@ -83,7 +83,7 @@ class TestMongo:
         self.mongo = MongoDB()
 
     def test_01_MongoDBControler_Borg_test(self):
-        HEADING(myself())
+        HEADING()
 
         m1 = MongoDBController()
 
@@ -105,19 +105,19 @@ class TestMongo:
 """
 """
     def test_01_saveto(self):
-        HEADING(myself())
+        HEADING()
         d = r_dict()
         assert isinstance(d, dict)
         lst = r_list()
         assert isinstance(lst, list)
 
     def test_02_find(self):
-        HEADING(myself())
+        HEADING()
         doc = self.mongo.find_document("test", "name", "test-dict-1")
         assert doc is not None
 
     def test_03_delete(self):
-        HEADING(myself())
+        HEADING()
         old_doc = self.mongo.delete_document("test", "name", "test-dict-1")
         assert old_doc is not None
 

@@ -4,7 +4,6 @@
 # pytest -v --capture=no  tests/test_database.py:Test_database.<METHIDNAME>
 ###############################################################
 # from cloudmesh.mongo import DatabaseUpdate
-# from cloudmesh.management.debug import HEADING, myself
 from pprint import pprint
 
 import pytest

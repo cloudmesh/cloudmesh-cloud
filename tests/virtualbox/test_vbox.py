@@ -8,7 +8,7 @@
 import subprocess
 
 import pytest
-from cloudmesh.management.debug import HEADING, myself
+from cloudmesh.common.util import HEADING
 
 
 @pytest.mark.incremental
@@ -28,7 +28,7 @@ class Test_vagrant:
         assert "Vagrant Version" in result
 
     def test_image_add(self):
-        HEADING(myself())
+        HEADING()
         r = subprocess.check_output("cms vbox image add ubuntu/bionic64",
                                     shell=True).decode("utf-8")
 
@@ -37,7 +37,7 @@ class Test_vagrant:
         assert "ubuntu/bionic64" in r
 
     def test_image_list(self):
-        HEADING(myself())
+        HEADING()
         r = subprocess.check_output("cms vbox image list", shell=True).decode(
             "utf-8")
         self.rprint(r)
@@ -45,7 +45,7 @@ class Test_vagrant:
         assert "ubuntu/bionic64" in r
 
     def test_image_boot(self):
-        HEADING(myself())
+        HEADING()
         r = subprocess.check_output("cms vbox vm create test-bionic",
                                     shell=True).decode("utf-8")
         self.rprint(r)

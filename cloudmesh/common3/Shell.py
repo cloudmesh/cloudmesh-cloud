@@ -14,6 +14,12 @@ class Shell(Shell2):
 
     @staticmethod
     def run(command, encoding='utf-8'):
+        """
+        executes the command and returns the output as string
+        :param command:
+        :param encoding:
+        :return:
+        """
         cmd = f"{command}; exit 0"
         r = subprocess.check_output(command,
                                     stderr=subprocess.STDOUT,
@@ -25,6 +31,14 @@ class Shell(Shell2):
 
     @staticmethod
     def run_timed(label, command, encoding=None, service=None):
+        """
+        runs teh command and uses the StopWatch to time it
+        :param label: name of the StopWatch
+        :param command: the command to be executed
+        :param encoding: the encoding
+        :param service: a prefix to the stopwatch label
+        :return:
+        """
         _label = str(label)
         print(_label, command)
         StopWatch.start(f"{service} {_label}")
@@ -71,31 +85,3 @@ class Shell(Shell2):
             Console.error("         We recommend you update your pip  with \n")
             Console.error("             pip install -U pip\n")
 
-    @staticmethod
-    def ssh(name=None, user=None, key=None, command=None):
-
-        location = ""
-
-        if user is None:
-            location = pubip
-        else:
-            location = user + '@' + pubip
-        cmd = ['ssh',
-               "-o", "StrictHostKeyChecking=no",
-               "-o", "UserKnownHostsFile=/dev/null",
-               '-i', key, location, command]
-        VERBOSE(" ".join(cmd))
-
-        ssh = subprocess.Popen(cmd,
-                               shell=False,
-                               stdout=subprocess.PIPE,
-                               stderr=subprocess.PIPE)
-        result = ssh.stdout.readlines()
-        if result == []:
-            error = ssh.stderr.readlines()
-            print("ERROR: %s" % error)
-        else:
-            print("RESULT:")
-            for line in result:
-                line = line.decode("utf-8")
-                print(line.strip("\n"))

@@ -239,7 +239,7 @@ class Provider(ComputeNodeABC):
             StopWatch.start(f"create vm {name}")
 
             cm = {
-                        'kind': self.kind,
+                        'kind': "vm",
                         'name': name,
                         'group': group,
                         'cloud': self.cloudname(),

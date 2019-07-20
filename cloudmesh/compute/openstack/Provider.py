@@ -20,6 +20,7 @@ import os
 from cloudmesh.common.variables import Variables
 from cloudmesh.image.Image import Image
 from cloudmesh.common.parameter import Parameter
+from ast import literal_eval
 
 class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
@@ -690,7 +691,19 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
         :return: dict of vms
         """
-        return self.get_list(self.cloudman.compute.servers(), kind="vm")
+        servers =  self.get_list(self.cloudman.compute.servers(), kind="vm")
+
+        result = []
+        for server in servers:
+
+            if 'cm' in server['metadata']:
+                metadata = server['metadata']['cm']
+                cm = literal_eval(metadata)
+                if 'cm' in server:
+                    server['cm'].update(cm)
+            result.append(server)
+
+        return result
 
     def destroy(self, name=None):
         """

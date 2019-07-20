@@ -283,7 +283,20 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
             waiter.wait(Filters=[{'Name': 'instance-id', 'Values': [each_instance.instance_id]}])
             print(f"Instance having Tag:{name} and Instance-Id:{each_instance.instance_id} terminated")
 
-    def create(self, name=None, image=None, size=None, timeout=360, **kwargs):
+    #
+    # i made some changes in openstack create, compare what i did with what
+    # you did. Figure out how to pass metadata into the vm as we need the cm
+    # dict passed as metadata to the vm
+    # also all arguments must have the same name as in openstac/abccompute
+    # class. I do not think we used keyname, we used key_name=key,
+    #
+    def create(self,
+               name=None,
+               image=None,
+               size=None,
+               timeout=360,
+               key_name=None,
+               **kwargs):
         """
         creates a named node
 
@@ -301,21 +314,25 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         '''
         TO DO: CHECK IF THE TAG NAME EXISTS THEN ASK FOR DIFFERENT TAG NAME
         '''
+
+        tags = [{'ResourceType': 'instance',
+                              'Tags': [
+                                  {
+                                      'Key': 'Name',
+                                      'Value': name
+                                  },
+                              ]
+                              },
+                             ]
+
         if kwargs.get('keyname') is None:
             new_ec2_instance = self.ec2_resource.create_instances(
                 ImageId=self.default["image"],
                 InstanceType=self.default["size"],
                 MaxCount=1,
                 MinCount=1,
-                TagSpecifications=[{'ResourceType': 'instance',
-                                    'Tags': [
-                                        {
-                                            'Key': 'Name',
-                                            'Value': name
-                                        },
-                                    ]
-                                    },
-                                   ]
+                TagSpecifications=tags
+
             )
         else:
             new_ec2_instance = self.ec2_resource.create_instances(
@@ -324,15 +341,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                 MaxCount=1,
                 MinCount=1,
                 KeyName=kwargs.get('keyname'),
-                TagSpecifications=[{'ResourceType': 'instance',
-                                    'Tags': [
-                                        {
-                                            'Key': 'Name',
-                                            'Value': name
-                                        },
-                                    ]
-                                    },
-                                   ]
+                TagSpecifications=tags
             )
 
         waiter = self.ec2_client.get_waiter('instance_exists')
@@ -376,6 +385,11 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         return self.ec2_client.describe_key_pairs()
 
     def key_upload(self, key=None):
+        # The gey is stored in the database, we do not create a new keypair,
+        # we upload our local key to aws
+        # BUG name=None, wrong?
+        # ~/.ssh/id_rsa.pub
+
         """
         uploads the key specified in the yaml configuration to the cloud
         :param key:
@@ -423,6 +437,13 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         raise NotImplementedError
 
     def update_dict(self, elements, kind=None):
+        #
+        # please compare to openstack, i made some changes there
+        # THIS IS THE FUNCTION THAT INTEGRATES WITH CLOUDMESH
+        # THIS IS A KEY POINT WITHOUT THI S THE COMMANDS WILL NOT WORK
+        # EACH dict that you return in a method muat apply this update on the
+        # dicts. it adds the cm dict.
+        #
         """
         THis function adds a cloudmesh cm dict to each dict in the list
         elements.

@@ -107,6 +107,37 @@ class ComputeNodeABC(metaclass=ABCMeta):
         raise NotImplementedError
 
     @abstractmethod
+    def set_server_metadata(self, name, **metadata):
+        """
+        sets the metadata for the server
+
+        :param name: name of the fm
+        :param metadata: the metadata
+        :return:
+        """
+        raise NotImplementedError
+
+    @abstractmethod
+    def get_server_metadata(self, name):
+        """
+        gets the metadata for the server
+
+        :param name: name of the fm
+        :return:
+        """
+        raise NotImplementedError
+
+    @abstractmethod
+    def delete_server_metadata(self, name):
+        """
+        gets the metadata for the server
+
+        :param name: name of the fm
+        :return:
+        """
+        raise NotImplementedError
+
+    @abstractmethod
     def rename(self, name=None, destination=None):
         """
         rename a node

@@ -216,34 +216,95 @@ class Provider(ComputeNodeABC):
     def reboot(self, names=None):
         return self.loop(names, self.p.reboot)
 
-    @DatabaseUpdate()
-    def create(self, names=None, image=None, size=None, timeout=360,
-               group=None, **kwargs):
+    def create(self,
+               names=None,
+               image=None,
+               size=None,
+               timeout=360,
+               group=None,
+               metadata=None,
+               **kwargs):
+
+        def upload_meta(cm):
+            data = {'cm': str(cm)}
+            pprint (data)
+            self.set_server_metadata(name, **data)
+
+        cm = CmDatabase()
+
+
         names = self.expand(names)
         r = []
         for name in names:
             StopWatch.start(f"create vm {name}")
 
-            entry = self.p.create(
+            cm = {
+                        'kind': self.kind,
+                        'name': name,
+                        'group': group,
+                        'cloud': self.cloudname(),
+                        'status': 'booting'
+                  }
+            entry = {}
+            entry.update(cm)
+
+            result = self.cm.update(entry)
+
+            data = self.p.create(
                 name=name,
                 image=image,
                 size=size,
                 timeout=360,
                 group=group,
+                metadata=metadata,
                 **kwargs)
 
             StopWatch.stop(f"create vm {name}")
             t = format(StopWatch.get(f"create vm {name}"), '.2f')
-            entry['cm'] = \
-                {
-                    'creation_time': t,
-                    'kind': self.kind,
-                    'name': name,
-                    'group': group,
-                    'cloud': self.cloudname()
-                }
+            cm['creation_time'] = t
+
+            entry.update(data)
+            entry[metadata] = cm
+            if metadata:
+                entry.update(metadata)
+
+            cm['status'] = 'available'
+            upload_meta(cm)
+
+            result = self.cm.update(entry)
 
             r.append(entry)
+        return r
+
+    def set_server_metadata(self, name, **metadata):
+        """
+        sets the metadata for the server
+
+        :param name: name of the fm
+        :param metadata: the metadata
+        :return:
+        """
+        self.p.set_server_metadata(name, metadata)
+
+
+    def get_server_metadata(self, name):
+        """
+        gets the metadata for the server
+
+        :param name: name of the fm
+        :return:
+        """
+        r = self.p.get_server_metadata(name)
+        return r
+
+    def delete_server_metadata(self, name, key):
+        """
+        gets the metadata for the server
+
+        :param name: name of the fm
+        :return:
+        """
+        r = self.p.delete_server_metadata(name, key)
         return r
 
     def rename(self, source=None, destination=None):

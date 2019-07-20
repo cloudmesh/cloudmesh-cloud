@@ -57,6 +57,9 @@ class VmCommand(PluginCommand):
                         [--key=KEY]
                         [--dryrun]
                         [-v]
+                vm meta list [NAME]
+                vm meta set [NAME] KEY=VALUE...
+                vm meta delete [NAME] KEY...
                 vm run [--name=VMNAMES] [--username=USERNAME] [--dryrun] COMMAND
                 vm script [--name=NAMES] [--username=USERNAME] [--dryrun] SCRIPT
                 vm ip assign [NAMES]
@@ -222,11 +225,80 @@ class VmCommand(PluginCommand):
         database = CmDatabase()
 
 
-        if arguments.list and arguments.refresh:
+        if (arguments.meta and arguments.list):
+
+            name = arguments.NAME
+            if arguments.NAME is None:
+                name = variables['vm']
+                if name is None:
+                    Console.error("No vm specified")
+
+            cloud = "chameleon"
+            # cloud = Parameter.find(arguments, variables)
+            print(f"vm metadata for {name} on {cloud}")
+
+            provider = Provider(name=cloud)
+            r = provider.get_server_metadata(name)
+            print (r)
+
+        elif arguments.meta and arguments.set:
+
+            VERBOSE(arguments)
+            metadata = {}
+            pairs = arguments['KEY=VALUE']
+            for pair in pairs:
+                key, value = pair.split("=", 1)
+                metadata[key] = value
+
+            name = arguments.NAME
+            if arguments.NAME is None:
+                name=variables['vm']
+                if name is None:
+                    Console.error("No vm specified")
+
+            cloud = "chameleon"
+            #cloud = Parameter.find(arguments, variables)
+            print(f"cloud {cloud} {name}")
+
+            provider = Provider(name=cloud)
+            provider.set_server_metadata(name,  **metadata)
+            r = provider.get_server_metadata(name)
+
+            pprint (r)
+
+        elif arguments.meta and arguments.delete:
+
+            VERBOSE(arguments)
+            metadata = {}
+            keys = arguments['KEY']
+
+            name = arguments.NAME
+            if arguments.NAME is None:
+                name=variables['vm']
+                if name is None:
+                    Console.error("No vm specified")
+
+            cloud = "chameleon"
+            #cloud = Parameter.find(arguments, variables)
+            print(f"cloud {cloud} {name}")
+
+            provider = Provider(name=cloud)
+
+            for key in keys:
+                provider.delete_server_metadata(name, key)
+
+
+            r = provider.get_server_metadata(name)
+
+            pprint (r)
+
+
+        elif arguments.list and arguments.refresh:
 
             names = []
 
-            clouds, names = Arguments.get_cloud_and_names("list", arguments,
+            clouds, names = Arguments.get_cloud_and_names("list",
+                                                          arguments,
                                                           variables)
 
             for cloud in clouds:

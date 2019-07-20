@@ -715,6 +715,24 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         raise NotImplementedError
         return self.cloudman.reboot_node(name)
 
+    def set_server_metadata(self, name, m):
+        server = self.cloudman.get_server(name)
+        self.cloudman.set_server_metadata(server, m)
+
+    def get_server_metadata(self, name):
+        server = self.info(name=name)
+        m = self.cloudman.get_server_meta(server)
+        data = dict(m['server_vars']['metadata'])
+        return data
+
+    def delete_server_metadata(self, name, key):
+        server = self.info(name=name)
+        m = self.cloudman.delete_server_metadata(server, key)
+        m = self.cloudman.get_server_meta(server)
+        data = dict(m['server_vars']['metadata'])
+        return data
+
+
     def create(self,
                name=None,
                image=None,
@@ -727,6 +745,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                user=None,
                public=True,
                group=None,
+               metadata=None,
                **kwargs):
         """
         creates a named node
@@ -779,6 +798,9 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                 print("ip not available")
             return None
 
+        if type(group) == str:
+            groups = Parameter.expand(group)
+
         banner("Create Server")
         print("    Name:    ", name)
         print("    IP:      ", ip)
@@ -790,9 +812,8 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         print("    timeout: ", timeout)
         print("    secgroup:", secgroup)
         print("    group:   ", group)
+        print("    groups:  ", groups)
 
-        if type(group) == str:
-            groups = Parameter.expand(group)
         try:
             server = self.cloudman.create_server(name,
                                                  flavor=size,
@@ -808,6 +829,8 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
             self.cloudman.add_ips_to_server(server, ips=ip)
             variables = Variables()
             variables['vm'] = name
+            if metadata is not None:
+                self.cloudman.set_server_metadata(server, metadata)
 
             # self.cloudman.add_security_group(security_group=secgroup)
 

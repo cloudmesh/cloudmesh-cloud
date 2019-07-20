@@ -48,9 +48,6 @@ class AdminCommand(PluginCommand):
             admin mongo security
             admin mongo password PASSWORD
             admin mongo list [COLLECTION] [--output=OUTPUT]
-            admin rest status
-            admin rest start
-            admin rest stop
             admin status
             admin system info
             admin yaml cat
@@ -245,23 +242,6 @@ class AdminCommand(PluginCommand):
             print(70 * '-')
             print(" line:column  description")
             print()
-
-        elif arguments.rest:
-
-            if arguments.start:
-
-                print("Rest Service start")
-                raise NotImplementedError
-
-            elif arguments.stop:
-
-                print("Rest Service stop")
-                raise NotImplementedError
-
-            elif arguments.status:
-
-                print("Rest Service status")
-                raise NotImplementedError
 
         elif arguments.status:
 

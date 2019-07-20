@@ -1,8 +1,12 @@
 import os
 import sys
 
+import oyaml as yaml
+from cloudmesh.common.FlatDict import flatten
 from cloudmesh.common.Printer import Printer
+from cloudmesh.common.Shell import Shell
 from cloudmesh.common.console import Console
+from cloudmesh.common.util import banner
 from cloudmesh.common.util import path_expand
 from cloudmesh.management.configuration.config import Config
 from cloudmesh.security.encrypt import EncryptFile
@@ -32,6 +36,10 @@ class ConfigCommand(PluginCommand):
              config ssh verify
              config ssh check
              config ssh pem
+             config cloud verify NAME [KIND]
+             config cloud edit [NAME] [KIND]
+             config cloud list NAME [KIND]
+
 
            Arguments:
              SOURCE           the file to encrypted or decrypted.
@@ -96,6 +104,70 @@ class ConfigCommand(PluginCommand):
         # VERBOSE(arguments)
 
         e = EncryptFile(source, destination)
+
+        if arguments.cloud and arguments.edit and arguments.NAME is None:
+
+            path = path_expand("~/.cloudmesh/cloudmesh4.yaml")
+            print (path)
+            Shell.edit(path)
+            return ""
+
+
+        cloud = arguments.NAME
+        kind = arguments.KIND
+        if kind is None:
+            kind = "cloud"
+
+        configuration = Config()
+
+
+        if arguments.cloud and arguments.verify:
+            service = configuration[f"cloudmesh.{kind}.{cloud}"]
+
+            result = {"cloudmesh": {"cloud": {cloud: service}}}
+
+            action = "verify"
+            banner(f"{action} cloudmesh.{kind}.{cloud} in ~/.cloudmesh/cloudmesh4.yaml")
+
+            print (yaml.dump(result))
+
+            flat = flatten(service, sep=".")
+
+            for attribute in flat:
+                if "TBD" in str(flat[attribute]):
+                    Console.error(f"~/.cloudmesh4.yaml: Attribute cloudmesh.{cloud}.{attribute} contains TBD")
+
+        elif arguments.cloud and arguments.list:
+            service = configuration[f"cloudmesh.{kind}.{cloud}"]
+            result = {"cloudmesh": {"cloud": {cloud: service}}}
+
+            action = "verify"
+            banner(f"{action} cloudmesh.{kind}.{cloud} in ~/.cloudmesh/cloudmesh4.yaml")
+
+            print (yaml.dump(result))
+
+        elif arguments.cloud and arguments.edit:
+
+            #
+            # there is a duplicated code in config.py for this
+            #
+            action = "edit"
+            banner(f"{action} cloudmesh.{kind}.{cloud}.credentials in ~/.cloudmesh/cloudmesh4.yaml")
+
+            credentials = configuration[f"cloudmesh.{kind}.{cloud}.credentials"]
+
+            print (yaml.dump(credentials))
+
+            for attribute in credentials:
+                if "TBD" in credentials[str(attribute)]:
+                    value = credentials[attribute]
+                    result = input(f"Please enter {attribute}[{value}]: ")
+                    credentials[attribute] = result
+
+            #configuration[f"cloudmesh.{kind}.{cloud}.credentials"] = credentials
+
+            print(yaml.dump(configuration[f"cloudmesh.{kind}.{cloud}.credentials"] ))
+
 
         if arguments["edit"] and arguments["ATTRIBUTE"]:
 

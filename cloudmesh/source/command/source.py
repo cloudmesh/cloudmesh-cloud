@@ -2,7 +2,7 @@ from cloudmesh.common.Printer import Printer
 from cloudmesh.management.configuration.config import Config
 from cloudmesh.shell.command import PluginCommand
 from cloudmesh.shell.command import command, map_parameters
-from cloudmesh.source.api.manager import Manager
+from cloudmesh.source.Source import Source
 
 
 class SourceCommand(PluginCommand):
@@ -60,7 +60,7 @@ class SourceCommand(PluginCommand):
         map_parameters(arguments, "source", "protocol")
 
         config = Config()["cloudmesh.source"]
-        m = Manager(config, protocol=arguments.protocol)
+        m = Source(config, protocol=arguments.protocol)
 
         if arguments.list:
 

@@ -17,9 +17,8 @@ is vagrant up to date
 ==> vagrant: To upgrade visit: https://www.vagrantup.com/downloads.html
 """
 
-
 # noinspection PyUnusedLocal
-class VboxProvider:
+class Provider(object):
 
     def _check_version(self, r):
         """

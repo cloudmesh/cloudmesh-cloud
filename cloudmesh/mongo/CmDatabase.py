@@ -350,7 +350,7 @@ class CmDatabase(object):
         return records
 
 
-    # check bug when in the db velues are that are not in the ne obeject
+    # ok
     def update(self, entries):
 
         # VERBOSE(entries)
@@ -372,11 +372,13 @@ class CmDatabase(object):
 
                 if old_entry is not None:
 
-                    cm = old_entry['cm']
+                    cm  = dict(old_entry['cm'])
 
-                    entry['cm'].update(cm)
+                    cm.update(entry['cm'])
+                    cm['modified'] = str(datetime.utcnow())
+
                     # entry['cm']['created'] = cm['created']
-                    entry['cm']['modified'] = str(datetime.utcnow())
+                    entry['cm'] = cm
 
                     post = self.col.replace_one(
                         {
@@ -386,10 +388,12 @@ class CmDatabase(object):
                         },
                         entry,
                         upsert=True)
+
                 else:
                     entry['cm']['created'] = entry['cm']['modified'] = str(
                         datetime.utcnow())
                     self.col.insert_one(entry)
+
             except Exception as e:
                 Console.error("uploading document {entry}".format(
                     entry=str(entry)))

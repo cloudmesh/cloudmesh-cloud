@@ -1,3 +1,5 @@
+* suitable for student
+
 The DatabaseUpdate() overwrites the old entry instead it should combine the new
 into the old and than replace the old entry
 

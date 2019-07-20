@@ -1,3 +1,5 @@
+* gregor
+
 the loader has to be implemented.
 
 this allows dynamic loading of add on packages.

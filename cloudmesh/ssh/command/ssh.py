@@ -1,10 +1,15 @@
+import os
+
+from cloudmesh.common.Printer import Printer
 from cloudmesh.common.parameter import Parameter
+from cloudmesh.common.ssh.ssh_config import ssh_config
+from cloudmesh.common.util import path_expand
 from cloudmesh.common.variables import Variables
 from cloudmesh.compute.vm.Provider import Provider
 from cloudmesh.mongo.CmDatabase import CmDatabase
 from cloudmesh.shell.command import PluginCommand, map_parameters
 from cloudmesh.shell.command import command
-
+from cloudmesh.common.console import Console
 
 class SshCommand(PluginCommand):
 
@@ -19,6 +24,8 @@ class SshCommand(PluginCommand):
                 ssh config list [--output=OUTPUT]
                 ssh config add NAME IP [USER] [KEY]
                 ssh config delete NAME
+                ssh host delete NAME
+                ssh host add NAME
                 ssh [--name=VMs] [--user=USERs] [COMMAND]
 
             Arguments:
@@ -83,7 +90,11 @@ class SshCommand(PluginCommand):
         if arguments.config and arguments.list:
             # ssh config list [--output=OUTPUT]"
 
-            raise NotImplementedError
+            hosts = dict(ssh_config().hosts)
+
+            print(Printer.dict_table(hosts,
+                                     order=['host', 'HostName', 'User',
+                                            'IdentityFile']))
 
         elif arguments.config and arguments.add:
             # ssh config add NAME IP [USER] [KEY]
@@ -96,20 +107,45 @@ class SshCommand(PluginCommand):
 
             key = Parameter.find("key",
                                  arguments,
-                                 variables.dict())
+                                 variables.dict(),
+                                 {"key": "~/.ssh/id_rsa.pub"})
 
             name = arguments.NAME or variables['vm']
 
             ip = arguments.IP
 
-            print(user, key, name, ip)
 
-            raise NotImplementedError
+            hosts = ssh_config()
+
+            if name in hosts.hosts:
+                Console.error("Host already in ~/.ssh/config")
+                return ""
+
+            hosts.generate(
+                host=name,
+                hostname=ip,
+                identity=key,
+                user=user)
+
 
         elif arguments.config and arguments.delete:
             # ssh config delete NAME
 
             raise NotImplementedError
+
+        elif arguments.config and arguments.add:
+            # ssh host add NAME
+
+            location = path_expand("~/.ssh/known_hosts")
+            name = arguments.NAME
+            os.system("ssh-keygen -R {name}")
+            os.system(f"ssh-keyscan -H {name} >> {location}")
+
+        elif arguments.config and arguments.delete:
+            # ssh host delete NAME
+
+            name = arguments.NAME
+            os.system("ssh-keygen -R {name}")
 
         else:
             # ssh [--name=VMs] [--user=USERs] [COMMAND]"

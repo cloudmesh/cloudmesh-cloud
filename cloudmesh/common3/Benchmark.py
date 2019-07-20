@@ -13,20 +13,34 @@ class Benchmark(object):
 
     @staticmethod
     def name():
+        """
+        name of the calling method
+
+        :return: the name
+        """
         frame =  inspect.getouterframes(inspect.currentframe())
         method = frame[2][3]
         return method
 
     @staticmethod
     def Start():
+        """
+        starts a timer while using the name of the calling method
+        """
         StopWatch.start(Benchmark.name())
 
     @staticmethod
     def Stop():
+        """
+        stops a timer while using the name of the calling method
+        """
         StopWatch.stop(Benchmark.name())
 
     @staticmethod
     def print():
+        """
+        prints the benchmark information with all timers
+        """
         StopWatch.start("benchmark_start_stop")
         StopWatch.stop("benchmark_start_stop")
 

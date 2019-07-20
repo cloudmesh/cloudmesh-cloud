@@ -82,10 +82,17 @@ class ComputeNodeABC(metaclass=ABCMeta):
         raise NotImplementedError
 
     @abstractmethod
-    def create(self, name=None, image=None, size=None, timeout=360, **kwargs):
+    def create(self,
+               name=None,
+               image=None,
+               size=None,
+               timeout=360,
+               group=None,
+               **kwargs):
         """
         creates a named node
 
+        :param group: a list of groups the vm belongs to
         :param name: the name of the node
         :param image: the image used
         :param size: the size of the image

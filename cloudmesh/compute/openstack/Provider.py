@@ -19,6 +19,7 @@ from cloudmesh.common3.DictList import DictList
 import os
 from cloudmesh.common.variables import Variables
 from cloudmesh.image.Image import Image
+from cloudmesh.common.parameter import Parameter
 
 class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
@@ -250,7 +251,18 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         d = []
         for entry in _elements:
 
+            if "cm" not in entry:
+                entry['cm'] = {}
+
+            entry["cm"].update({
+                "kind": kind,
+                "driver": self.cloudtype,
+                "cloud": self.cloud,
+                "name": entry['name']
+            })
+
             if kind == 'key':
+
                 try:
                     entry['comment'] = entry['public_key'].split(" ",2)[2]
                 except:
@@ -258,24 +270,22 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                 entry['format'] = \
                     entry['public_key'].split(" ", 1)[0].replace("ssh-","")
 
-            entry["cm"] = {
-                "kind": kind,
-                "driver": self.cloudtype,
-                "cloud": self.cloud,
-                "name": entry['name']
-            }
-            if kind == 'vm':
+            elif kind == 'vm':
+
                 entry["cm"]["updated"] = str(datetime.utcnow())
                 if "created_at" in entry:
                     entry["cm"]["created"] = str(entry["created_at"])
                     # del entry["created_at"]
                 else:
                     entry["cm"]["created"] = entry["modified"]
+
             elif kind == 'flavor':
+
                 entry["cm"]["created"] = entry["updated"] = str(
                     datetime.utcnow())
 
             elif kind == 'image':
+
                 entry['cm']['created'] = str(datetime.utcnow())
                 entry['cm']['updated'] = str(datetime.utcnow())
             # elif kind == 'secgroup':
@@ -716,10 +726,13 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                ip=None,
                user=None,
                public=True,
+               group=None,
                **kwargs):
         """
         creates a named node
 
+
+        :param group: the list of groups the vm belongs to
         :param name: the name of the node
         :param image: the image used
         :param size: the size of the image
@@ -758,7 +771,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         if not ip and public:
             entry = self.find_available_public_ip()
             ip = entry['floating_ip_address']
-            pprint(entry)
+            # pprint(entry)
 
         elif ip is not None:
             entry = self.list_public_ips(ip=ip, available=True)
@@ -776,10 +789,10 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         print("    location:", location)
         print("    timeout: ", timeout)
         print("    secgroup:", secgroup)
+        print("    group:   ", group)
 
-
-
-
+        if type(group) == str:
+            groups = Parameter.expand(group)
         try:
             server = self.cloudman.create_server(name,
                                                  flavor=size,
@@ -787,6 +800,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                                                  key_name=key,
                                                  security_groups=[secgroup],
                                                  timeout=timeout,
+                                                 #tags=groups,
                                                  #wait=True
                                                  )
             server['user'] = user
@@ -805,7 +819,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
         except Exception as e:
             print (e)
-            raise NotImplementedError
+            raise RuntimeError
 
         return self.update_dict(server, kind="vm")[0]
 

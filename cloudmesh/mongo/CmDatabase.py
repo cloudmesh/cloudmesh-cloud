@@ -365,14 +365,17 @@ class CmDatabase(object):
             try:
                 self.col = self.db[entry['cm']['collection']]
 
-                data = self.col.find_one({"cm.kind": entry["cm"]["kind"],
+                old_entry = self.col.find_one({"cm.kind": entry["cm"]["kind"],
                                           "cm.cloud": entry["cm"]["cloud"],
                                           "cm.name": entry["cm"]["name"]
                                           })
 
-                if data is not None:
+                if old_entry is not None:
 
-                    entry['cm']['created'] = data["cm"]['created']
+                    cm = old_entry['cm']
+
+                    entry['cm'].update(cm)
+                    # entry['cm']['created'] = cm['created']
                     entry['cm']['modified'] = str(datetime.utcnow())
 
                     post = self.col.replace_one(

@@ -68,6 +68,93 @@ class Provider(ComputeNodeABC):
 
     }
 
+    def Print(self, output, kind, data):
+        raise NotImplementedError
+
+    def find(self, elements, name=None):
+        raise NotImplementedError
+
+    def keys(self):
+        raise NotImplementedError
+
+    def key_upload(self, key=None):
+        raise NotImplementedError
+
+    def key_delete(self, name=None):
+        raise NotImplementedError
+
+    def list_secgroups(self, name=None):
+        raise NotImplementedError
+
+    def list_secgroup_rules(self, name='default'):
+        raise NotImplementedError
+
+    def add_secgroup(self, name=None, description=None):
+        raise  NotImplementedError
+
+    def add_secgroup_rule(self,
+                          name=None,  # group name
+                          port=None,
+                          protocol=None,
+                          ip_range=None):
+        raise NotImplementedError
+
+    def remove_secgroup(self, name=None):
+        raise NotImplementedError
+
+    def upload_secgroup(self, name=None):
+        raise NotImplementedError
+
+    def add_rules_to_secgroup(self, name=None, rules=None):
+        raise NotImplementedError
+
+    def remove_rules_from_secgroup(self, name=None, rules=None):
+        raise NotImplementedError
+
+    def images(self, **kwargs):
+        raise NotImplementedError
+
+    def image(self, name=None):
+        raise NotImplementedError
+
+    def flavor(self, name=None):
+        raise NotImplementedError
+
+    def set_server_metadata(self, name, m):
+        raise NotImplementedError
+
+    def get_server_metadata(self, name):
+        raise NotImplementedError
+
+    # these are availabele to be accociated
+    def list_public_ips(self,
+                        ip=None,
+                        available=False):
+        raise NotImplementedError
+
+    # release the ip
+    def delete_public_ip(self, ip=None):
+        raise NotImplementedError
+
+    def create_public_ip(self):
+        raise NotImplementedError
+
+    def find_available_public_ip(self):
+        raise NotImplementedError
+
+    def attach_publicIP(self, node, ip):
+        raise NotImplementedError
+
+    def detach_publicIP(self, node, ip):
+        raise NotImplementedError
+
+    # see the openstack example it will be almost the same as in openstack
+    # other than getting
+    # the ip and username
+    def ssh(self, vm=None, command=None):
+        raise NotImplementedError
+
+
     def __init__(self, name=None, configuration="~/.cloudmesh/cloudmesh4.yaml"):
         """
         Initializes the provider. The default parameters are read from the configutation
@@ -147,7 +234,19 @@ class Provider(ComputeNodeABC):
             return self.resource_client.resource_groups.create_or_update(
                 self.GROUP_NAME, {'location': self.LOCATION})
 
-    def create(self, name=None, image=None, size=None, timeout=360, **kwargs):
+    def create(self, name=None,
+               image=None,
+               size=None,
+               location=None,
+               timeout=180,
+               key=None,
+               secgroup=None,
+               ip=None,
+               user=None,
+               public=True,
+               group=None,
+               metadata=None,
+               **kwargs):
         """
         creates a named node
 
@@ -322,6 +421,8 @@ class Provider(ComputeNodeABC):
         return self.info(groupName, vmName)
         #return None
 
+    # reboot? check if we need to use reboot or restart must be the same
+    # across all providers
     def restart(self, groupName=None, vmName=None):
         """
         restart a node
@@ -437,6 +538,7 @@ class Provider(ComputeNodeABC):
         # return self.info(groupName)
         return None
 
+    # rename to images(self) ?
     def list_images(self):
 
         region = self.LOCATION

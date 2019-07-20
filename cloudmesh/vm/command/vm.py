@@ -19,7 +19,7 @@ from cloudmesh.common.parameter import Parameter
 from cloudmesh.common.dotdict import dotdict
 from cloudmesh.management.configuration.config import Config
 from cloudmesh.management.configuration.name import Name
-
+from cloudmesh.common.util import banner
 
 class VmCommand(PluginCommand):
 
@@ -53,8 +53,10 @@ class VmCommand(PluginCommand):
                         [--flavor=FLAVOR]
                         [--public]
                         [--secgroup=SECGROUPs]
+                        [--group=GROUPs]
                         [--key=KEY]
                         [--dryrun]
+                        [-v]
                 vm run [--name=VMNAMES] [--username=USERNAME] [--dryrun] COMMAND
                 vm script [--name=NAMES] [--username=USERNAME] [--dryrun] SCRIPT
                 vm ip assign [NAMES]
@@ -93,6 +95,7 @@ class VmCommand(PluginCommand):
                 OLDNAMES       Old names of the VM while renaming.
 
             Options:
+                -v             verbose, prints the dict at the end
                 --output=OUTPUT   the output format [default: table]
                 -H --modify-knownhosts  Do not modify ~/.ssh/known_hosts file
                                       when ssh'ing into a machine
@@ -196,6 +199,7 @@ class VmCommand(PluginCommand):
                        'dryrun',
                        'flavor',
                        'force',
+                       'group'
                        'output',
                        'group',
                        'image',
@@ -481,6 +485,7 @@ class VmCommand(PluginCommand):
                         [--public]
                         [--secgroup=SECGROUP]
                         [--key=KEY]
+                        [--group=GROUP]
                         [--dryrun]
             """
             # for name in names:
@@ -495,10 +500,15 @@ class VmCommand(PluginCommand):
                                    arguments,
                                    variables.dict())
             defaults = Config()[f"cloudmesh.cloud.{cloud}.default"]
+            groups = Parameter.find("group",
+                                   arguments,
+                                   variables.dict(),
+                                    {"group": "default"})
 
 
             parameters = dotdict()
             parameters.names = arguments.name
+            parameters.group = groups
             for attribute in ["image", "flavor", "key", "secgroup"]:
                 parameters[attribute] = Parameter.find(attribute,
                                    arguments,
@@ -507,39 +517,18 @@ class VmCommand(PluginCommand):
 
             provider = Provider(name=cloud)
 
-
-            #pprint (parameters)
-            #if parameters.key is None:
-            #   key =  parameters.key or variables['key']
-            #   if variables['key'] == "":
-            #       key = None
-
-
-            # parameters.public = None
-            # if
             parameters.secgroup = arguments.secgroup or "default"
 
-
-            #public = arguments['--public']
-            #if public:
-            #    params['ex_assign_public_ip'] = public
-
-            #secgroup = Parameter.expand(arguments['--secgroup'])
-            #if secgroup:
-            #    params['ex_security_groups'] = secgroup
-
-            #key = arguments['--key']
-            #if key:
-            #    params['ex_keyname'] = key
-
-
+            # pprint(parameters)
 
             if arguments['--dryrun']:
-                Console.ok(f"Dryrun stop: "
-                           f"        {cloud}\n"
-                           f"        {names}"
-                           f"        {provider}",
-                           f"        {parameters}")
+                Console.ok(f"Dryrun stop: \n"
+                           f"        cloud={cloud}\n"
+                           f"        names={names}\n"
+                           f"        provide={provider}")
+                for attribute in parameters:
+                    value = parameters[attribute]
+                    Console.ok (f"        {attribute}={value}")
 
 
 
@@ -559,6 +548,9 @@ class VmCommand(PluginCommand):
                         parameters.names = str(n)
                     vms = provider.create(**parameters)
                     variables['vm'] = str(n)
+                    if arguments["-v"]:
+                        banner("Details")
+                        pprint(vms)
 
                 # provider.Print(arguments.output, "vm", vms)
 

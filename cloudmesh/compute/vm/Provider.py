@@ -2,8 +2,8 @@ from pprint import pprint
 
 from cloudmesh.abstractclass.ComputeNodeABC import ComputeNodeABC
 from cloudmesh.common.Printer import Printer
+from cloudmesh.common.StopWatch import StopWatch
 from cloudmesh.common.console import Console
-from cloudmesh.common.debug import VERBOSE
 from cloudmesh.common.dotdict import dotdict
 from cloudmesh.common.parameter import Parameter
 from cloudmesh.common.variables import Variables
@@ -11,6 +11,7 @@ from cloudmesh.management.configuration.config import Config
 from cloudmesh.mongo.CmDatabase import CmDatabase
 from cloudmesh.mongo.DataBaseDecorator import DatabaseUpdate
 from cloudmesh.provider import Provider as ProviderList
+
 
 class Provider(ComputeNodeABC):
 
@@ -72,7 +73,7 @@ class Provider(ComputeNodeABC):
         r = []
         for name in names:
             parameters = dict(kwargs)
-            parameters['name']= name
+            parameters['name'] = name
             vm = func(**parameters)
             if type(vm) == list:
                 r = r + vm
@@ -200,7 +201,6 @@ class Provider(ComputeNodeABC):
         names = self.expand(names)
         # not yet implemented
 
-
     @DatabaseUpdate()
     def stop(self, names=None, **kwargs):
         return self.loop(names, self.p.stop, **kwargs)
@@ -217,16 +217,32 @@ class Provider(ComputeNodeABC):
         return self.loop(names, self.p.reboot)
 
     @DatabaseUpdate()
-    def create(self, names=None, image=None, size=None, timeout=360, **kwargs):
+    def create(self, names=None, image=None, size=None, timeout=360,
+               group=None, **kwargs):
         names = self.expand(names)
         r = []
         for name in names:
+            StopWatch.start(f"create vm {name}")
+
             entry = self.p.create(
                 name=name,
                 image=image,
                 size=size,
                 timeout=360,
+                group=group,
                 **kwargs)
+
+            StopWatch.stop(f"create vm {name}")
+            t = format(StopWatch.get(f"create vm {name}"), '.2f')
+            entry['cm'] = \
+                {
+                    'creation_time': t,
+                    'kind': self.kind,
+                    'name': name,
+                    'group': group,
+                    'cloud': self.cloudname()
+                }
+
             r.append(entry)
         return r
 
@@ -246,7 +262,6 @@ class Provider(ComputeNodeABC):
             'name': name
         }
         return parameters
-
 
     def login(self):
         if self.kind != "azure":
@@ -303,9 +318,6 @@ class Provider(ComputeNodeABC):
 
     def find_available_public_ip(self):
         return self.p.find_available_public_ip(self)
-
-    from cloudmesh.mongo.CmDatabase import CmDatabase
-
 
     def ssh(self, vm=None, command=None):
         return self.p.ssh(vm=vm, command=command)

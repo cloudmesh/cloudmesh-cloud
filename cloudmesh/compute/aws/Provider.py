@@ -153,7 +153,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         self.ec2_client = self.ec2_resource.meta.client
 
     @staticmethod
-    def get_instance_id(ec2_resource, name):
+    def _get_instance_id(ec2_resource, name):
 
         instances = ec2_resource.instances.filter(Filters=[
             {'Name': 'tag:Name',
@@ -171,7 +171,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         :param name: the unique node name
         :return:  The dict representing the node
         """
-        instances = self.get_instance_id(self.ec2_resource, name)
+        instances = self._get_instance_id(self.ec2_resource, name)
 
         for each_instance in instances:
             try:
@@ -194,7 +194,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         if name is None:
             print("Please provide instance id...")
             return
-        instances = self.get_instance_id(self.ec2_resource, name)
+        instances = self._get_instance_id(self.ec2_resource, name)
 
         for each_instance in instances:
             try:
@@ -257,7 +257,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         :param name: the name of the node
         :return: the dict of the node
         """
-        instances = self.get_instance_id(self.ec2_resource, name)
+        instances = self._get_instance_id(self.ec2_resource, name)
 
         for each_instance in instances:
             instance = self.ec2_resource.Instance(each_instance.instance_id)
@@ -271,7 +271,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         :param name: the name of the node
         :return: the dict of the node
         """
-        instances = self.get_instance_id(self.ec2_resource, name)
+        instances = self._get_instance_id(self.ec2_resource, name)
 
         for each_instance in instances:
             try:
@@ -364,7 +364,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         :return: the dict with the new name
         """
         # if destination is None, increase the name counter and use the new name
-        instances = self.get_instance_id(self.ec2_resource, name)
+        instances = self._get_instance_id(self.ec2_resource, name)
         tag_response = None
         for each_instance in instances:
             tag_response = self.ec2_client.create_tags(

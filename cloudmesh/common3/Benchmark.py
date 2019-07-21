@@ -37,14 +37,14 @@ class Benchmark(object):
         StopWatch.stop(Benchmark.name())
 
     @staticmethod
-    def print():
+    def print(sysinfo=True):
         """
         prints the benchmark information with all timers
         """
         StopWatch.start("benchmark_start_stop")
         StopWatch.stop("benchmark_start_stop")
 
-        StopWatch.benchmark()
+        StopWatch.benchmark(sysinfo=sysinfo)
 
 
     @staticmethod

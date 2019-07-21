@@ -68,12 +68,31 @@ class Host(object):
         count = str(args['count'])
         count_flag = '-n' if platform == 'windows' else '-c'
         command = ['ping', count_flag, count, ip]
-        ret_code = subprocess.run(command, capture_output=False).returncode
-        if ret_code == 0:
-            Console.ok(f"{ip} ... ok")
-        else:
-            Console.error(f"{ip} ... error")
-        return {ip: ret_code}
+        result = subprocess.run(command, capture_output=True)
+
+
+        try:
+            timers = result.stdout\
+                .decode("utf-8")\
+                .split("round-trip min/avg/max/stddev =")[1]\
+                .replace('ms','').strip()\
+                .split("/")
+            data = {
+                "host": ip,
+                "success": result.returncode == 0,
+                "stdout": result.stdout,
+                "min": timers[0],
+                "avg": timers[1],
+                "max": timers[2],
+                "stddev": timers[3]
+            }
+        except:
+            data = {
+                "host": ip,
+                "success": result.returncode == 0,
+                "stdout": result.stdout,
+            }
+        return data
 
     @staticmethod
     def ping(hosts=None, count=1, processors=3):

@@ -1,12 +1,73 @@
+import os
 import subprocess
 from multiprocessing import Pool
 from sys import platform
 
 from cloudmesh.common.console import Console
 from cloudmesh.common.parameter import Parameter
+from cloudmesh.common.util import path_expand
 
 
 class Host(object):
+
+    @staticmethod
+    def _ssh(args):
+        """
+        check a vm
+
+        :param args: dict of {keypath, username, dest(ip or dns)}
+        :return: a dict representing the result, if returncode=0 ping is successfully
+        """
+        key = args['key']
+        host = args['host']
+        username = args['username']
+        command = args['command']
+
+        location = f"{username}@{host}"
+        command = ['ssh',
+                   "-o", "StrictHostKeyChecking=no",
+                   "-o", "UserKnownHostsFile=/dev/null",
+                   '-i', key, location, command]
+        result = subprocess.run(command, capture_output=True)
+        result.stdout = result.stdout.decode("utf-8")
+        result.success = result.returncode == 0
+        return result
+
+    @staticmethod
+    def ssh(hosts=None,
+            command=None,
+            username=None,
+            key="~/.ssh/id_rsa.pub",
+            processors=3):
+        #
+        # BUG: this code has a bug and does not deal with different usernames on the host to be checked.
+        #
+        """
+
+        :param hosts: a list of hosts to be checked
+        :param username: the usernames for the hosts
+        :param key: the key for logging in
+        :param processors: the number of parallel checks
+        :return: list of dicts representing the ping result
+        """
+
+        if type(hosts) != list:
+            hosts = Parameter.expand(hosts)
+
+        if username is None:
+            username = os.environ['USER']
+
+        key = path_expand(key)
+
+        # wrap ip and count into one list to be sent to Pool map
+        args = [{'command': command,
+                 'key': key,
+                 'username': username,
+                 'host': host} for host in hosts]
+
+        with Pool(processors) as p:
+            res = p.map(Host._ssh, args)
+        return res
 
     @staticmethod
     def _check(args):
@@ -14,7 +75,7 @@ class Host(object):
         check a vm
 
         :param args: dict of {keypath, username, dest(ip or dns)}
-        :return: a dict representing the result, if ret_code=0 ping is successfully
+        :return: a dict representing the result, if returncode=0 ping is successfully
         """
         key = args['key']
         host = args['host']
@@ -25,12 +86,13 @@ class Host(object):
                    "-o", "StrictHostKeyChecking=no",
                    "-o", "UserKnownHostsFile=/dev/null",
                    '-i', key, location, 'uname -a']
-        ret_code = subprocess.run(command, capture_output=False).returncode
-        if ret_code == 0:
+
+        returncode = subprocess.run(command, capture_output=False).returncode
+        if returncode == 0:
             Console.ok(f"{host}  ... ok")
         else:
             Console.error(f"{host}  ... could not login")
-        return {host: ret_code}
+        return {host: returncode}
 
     @staticmethod
     def check(hosts=None, username=None, key="~/.ssh/id_ras.pub", processors=3):
@@ -50,7 +112,8 @@ class Host(object):
             hosts = Parameter.expand(hosts)
 
         # wrap ip and count into one list to be sent to Pool map
-        args = [{'key': key, 'username': username, 'host': host} for host in hosts]
+        args = [{'key': key, 'username': username, 'host': host} for host in
+                hosts]
 
         with Pool(processors) as p:
             res = p.map(Host._check, args)
@@ -62,7 +125,7 @@ class Host(object):
             ping a vm
 
             :param args: dict of {ip address, count}
-            :return: a dict representing the result, if ret_code=0 ping is successfully
+            :return: a dict representing the result, if returncode=0 ping is successfully
             """
         ip = args['ip']
         count = str(args['count'])
@@ -70,12 +133,11 @@ class Host(object):
         command = ['ping', count_flag, count, ip]
         result = subprocess.run(command, capture_output=True)
 
-
         try:
-            timers = result.stdout\
-                .decode("utf-8")\
-                .split("round-trip min/avg/max/stddev =")[1]\
-                .replace('ms','').strip()\
+            timers = result.stdout \
+                .decode("utf-8") \
+                .split("round-trip min/avg/max/stddev =")[1] \
+                .replace('ms', '').strip() \
                 .split("/")
             data = {
                 "host": ip,

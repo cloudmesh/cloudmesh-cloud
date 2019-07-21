@@ -223,7 +223,7 @@ class AdminCommand(PluginCommand):
         elif arguments.status:
 
             config = Config()
-            data = config.data["cloudmesh"]["data"]["mongo"]
+            data = config.data["cloudmesh.data.mongo"]
             # self.expanduser()
 
             print("Rest Service status")

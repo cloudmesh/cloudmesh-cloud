@@ -1,6 +1,7 @@
 from cloudmesh.mongo.CmDatabase import CmDatabase
 from cloudmesh.mongo.DataBaseDecorator import DatabaseUpdate
 
+from cloudmesh.common.parameter import Parameter
 
 class Group(object):
     """
@@ -50,14 +51,16 @@ class Group(object):
     """
 
     def list(self, group=None):
+        groups = Parameter.expand(group)
         cm = CmDatabase()
         entries = []
-        try:
-            cursor = cm.find_group(group)
-            for entry in cursor:
-                entries.append(entry)
-        except Exception as e:
-            pass
+        for group in groups:
+            try:
+                cursor = cm.find_group(group)
+                for entry in cursor:
+                    entries.append(entry)
+            except Exception as e:
+                pass
         return entries
 
     @DatabaseUpdate()

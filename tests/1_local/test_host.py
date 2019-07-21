@@ -19,7 +19,7 @@ class Test_host:
 
     def test_ping(self):
         HEADING()
-        hosts = ['google.com', 'youtube.com', 'com']
+        hosts = ['google.com', 'youtube.com']
         Benchmark.Start()
         results = Host.ping(hosts=hosts,
                            count=3,
@@ -27,6 +27,18 @@ class Test_host:
         Benchmark.Stop()
         for result in results:
             assert result['success']
+
+    def test_ping_wrong(self):
+        HEADING()
+        hosts = ['com']
+        Benchmark.Start()
+        results = Host.ping(hosts=hosts,
+                           count=1,
+                           processors=1)
+        Benchmark.Stop()
+        for result in results:
+            assert not result['success']
+
 
     def test_check(self):
         """

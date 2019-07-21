@@ -13,11 +13,10 @@ from cloudmesh.common.Printer import Printer
 # from multiping import MultiPing
 
 hosts = ['127.0.0.1',
-         'www.goole.com',
+         'localhost',
          'www.indiana.edu',
          'www.pbs.org',
          'www.github.com',
-         'www.dw.com',
          'www.redhat.com',
          'www.openstack.org',
          'www.bbc.com',

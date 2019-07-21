@@ -1,9 +1,27 @@
 from cloudmesh.common.parameter import Parameter
 from cloudmesh.common.console import Console
 from cloudmesh.management.configuration.config import Active
-
+from cloudmesh.common.dotdict import dotdict
 
 class Arguments(object):
+
+    @staticmethod
+    def expand(arguments, *keys):
+        """
+        expands all entries in arguments identified by keys
+
+        :param arguments: list of arguments
+        :param keys: the keys that locate entries in arguments that are expanded
+        :return: the expanded arguments. it is now a dict of lists
+        """
+
+        for key in keys:
+            if key in arguments:
+                entry = arguments[key]
+                if entry:
+                    if type(entry) == str:
+                        entry = Parameter.expand(entry)
+        return arguments
 
     @staticmethod
     def get_cloud_and_names(label, arguments, variables):

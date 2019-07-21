@@ -69,33 +69,10 @@ class Host(object):
             res = p.map(Host._ssh, args)
         return res
 
-    @staticmethod
-    def _check(args):
-        """
-        check a vm
 
-        :param args: dict of {keypath, username, dest(ip or dns)}
-        :return: a dict representing the result, if returncode=0 ping is successfully
-        """
-        key = args['key']
-        host = args['host']
-        username = args['username']
-
-        location = f"{username}@{host}"
-        command = ['ssh',
-                   "-o", "StrictHostKeyChecking=no",
-                   "-o", "UserKnownHostsFile=/dev/null",
-                   '-i', key, location, 'uname -a']
-
-        returncode = subprocess.run(command, capture_output=False).returncode
-        if returncode == 0:
-            Console.ok(f"{host}  ... ok")
-        else:
-            Console.error(f"{host}  ... could not login")
-        return {host: returncode}
 
     @staticmethod
-    def check(hosts=None, username=None, key="~/.ssh/id_ras.pub", processors=3):
+    def check(hosts=None, username=None, key="~/.ssh/id_rsa.pub", processors=3):
         #
         # BUG: this code has a bug and does not deal with different usernames on the host to be checked.
         #
@@ -108,16 +85,13 @@ class Host(object):
         :return: list of dicts representing the ping result
         """
 
-        if type(hosts) != list:
-            hosts = Parameter.expand(hosts)
+        result = Host.ssh(hosts=None,
+                    command='hostname',
+                    username=None,
+                    key="~/.ssh/id_rsa.pub",
+                    processors=3)
 
-        # wrap ip and count into one list to be sent to Pool map
-        args = [{'key': key, 'username': username, 'host': host} for host in
-                hosts]
-
-        with Pool(processors) as p:
-            res = p.map(Host._check, args)
-        return res
+        return result
 
     @staticmethod
     def _ping(args):

@@ -45,25 +45,29 @@ class TestPing:
             }
 
             StopWatch.start(f"ping {host}")
-            r = Host._ping(location)
+            result = Host._ping(location)
             StopWatch.stop(f"ping {host}")
 
             StopWatch.stop("total _ping")
+
+
+            assert result['success']
 
     def test_ping_processor(self):
 
         print ()
         for processors in range(1,len(hosts)):
             print ("Processors:", processors)
-            r = self.ping(processors=processors)
-            print (Printer.write(r,
+            results = self.ping(processors=processors)
+            print (Printer.write(results,
                                  order=['host',
                                          'success',
                                          'max',
                                          'min',
                                          'stddev']
                                  ))
-
+            for result in results:
+                assert result['success']
 
     #
     # only works if you have root, so not suitable

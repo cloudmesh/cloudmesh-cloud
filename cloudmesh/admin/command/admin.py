@@ -211,37 +211,14 @@ class AdminCommand(PluginCommand):
 
         elif arguments.yaml and arguments.cat:
 
-            path = path_expand("~/.cloudmesh/cloudmesh4.yaml")
+            content = Config.cat()
+            print (content)
 
-            secrets = [
-                "AZURE_SUBSCRIPTION_ID",
-                "AZURE_TENANTID",
-                "EC2_ACCESS_ID",
-                "EC2_SECRET_KEY",
-                "OS_PASSWORD",
-                "MONGO_PASSWORD"
-            ]
-
-            with open(path) as f:
-                content = f.read().split("\n")
-
-            for line in content:
-                if "TBD" not in line:
-                    for attribute in secrets:
-                        if attribute + ":" in line:
-                            line = line.split(":")[0] + ": ********"
-                            break
-                print(line)
             return ""
 
         elif arguments.yaml and arguments.check:
 
-            path = path_expand("~/.cloudmesh/cloudmesh4.yaml")
-            print()
-            r = Shell.live('/Users/grey/.pyenv/shims/yamllint ' + path)
-            print(70 * '-')
-            print(" line:column  description")
-            print()
+            Config.check()
 
         elif arguments.status:
 

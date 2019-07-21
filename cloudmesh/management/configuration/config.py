@@ -1,24 +1,23 @@
+import re
+import shutil
+import sys
 from os import mkdir
 from os.path import isfile, join, dirname, realpath, exists
 from pathlib import Path
 from shutil import copyfile
+
+import munch
+import oyaml as yaml
+from cloudmesh.common.FlatDict import flatten
+from cloudmesh.common.Shell import Shell
+from cloudmesh.common.console import Console
+from cloudmesh.common.dotdict import dotdict
+from cloudmesh.common.util import backup_name
+from cloudmesh.common.util import banner
 # from cloudmesh.DEBUG import VERBOSE
 from cloudmesh.common.util import path_expand
-import munch
-import re
-import oyaml as yaml
-import sys
-import shutil
+from cloudmesh.common.variables import Variables
 
-from cloudmesh.common.util import backup_name
-from cloudmesh.common.dotdict import dotdict
-from cloudmesh.common.variables import Variables
-from cloudmesh.common.console import Console
-from pprint import pprint
-from cloudmesh.common.FlatDict import flatten
-import oyaml as yaml
-from cloudmesh.common.util import banner
-from cloudmesh.common.variables import Variables
 
 # see also https://github.com/cloudmesh/client/blob/master/cloudmesh_client/cloud/register.py
 
@@ -26,7 +25,6 @@ class Active(object):
 
     def __init__(self, config_path='~/.cloudmesh/cloudmesh4.yaml'):
         self.config = Config(config_path=config_path)
-
 
     def clouds(self):
         names = []
@@ -41,75 +39,6 @@ class Active(object):
 
 class Config(object):
     __shared_state = {}
-
-    def create(self, config_path='~/.cloudmesh/cloudmesh4.yaml'):
-        """
-        creates the cloudmesh4.yaml file in the specified location. The default is
-
-            ~/.cloudmesh/cloudmesh4.yaml
-
-        If the file does not exist, it is initialized with a default. You still
-        need to edit the file.
-
-        :param config_path:  The yaml file to create
-        :type config_path: string
-        """
-        self.config_path = Path(path_expand(config_path)).resolve()
-        self.config_folder = dirname(self.config_path)
-
-        if not exists(self.config_folder):
-            mkdir(self.config_folder)
-
-        if not isfile(self.config_path):
-            source = Path(join(dirname(realpath(__file__)),
-                               "../../etc/cloudmesh4.yaml"))
-
-            copyfile(source.resolve(), self.config_path)
-
-            # read defaults
-            self.__init__()
-
-            defaults = self["cloudmesh.default"]
-
-            #pprint(defaults)
-
-            d = Variables()
-            if defaults is not None:
-                print(f"# Set default from yaml file:")
-
-            for key in defaults:
-                value = defaults[key]
-                print (f"set {key}={value}")
-                d[key] = defaults[key]
-
-    @staticmethod
-    def check_for_tabs(filename, verbose=True):
-        """identifies if the file contains tabs and returns True if it
-        does. It also prints the location of the lines and columns. If
-        verbose is set to False, the location is not printed.
-
-        :param verbose: if true prints issues
-        :param filename: the filename
-        :type filename: str
-        :rtype: True if there are tabs in the file
-        """
-        filename = path_expand(filename)
-        file_contains_tabs = False
-
-        with open(filename, 'r') as f:
-            lines = f.read().split("\n")
-
-        line_no = 1
-        for line in lines:
-            if "\t" in line:
-                file_contains_tabs = True
-                location = [
-                    i for i in range(len(line)) if line.startswith('\t', i)]
-                if verbose:
-                    Console.error(f"Tab found in line {line_no} "
-                                  f"and column(s) {location}")
-            line_no += 1
-        return file_contains_tabs
 
     def __init__(self, config_path='~/.cloudmesh/cloudmesh4.yaml',
                  encrypted=False):
@@ -175,6 +104,110 @@ class Config(object):
         else:
             self.cloud = None
 
+    def create(self, config_path='~/.cloudmesh/cloudmesh4.yaml'):
+        """
+        creates the cloudmesh4.yaml file in the specified location. The default is
+
+            ~/.cloudmesh/cloudmesh4.yaml
+
+        If the file does not exist, it is initialized with a default. You still
+        need to edit the file.
+
+        :param config_path:  The yaml file to create
+        :type config_path: string
+        """
+        self.config_path = Path(path_expand(config_path)).resolve()
+        self.config_folder = dirname(self.config_path)
+
+        if not exists(self.config_folder):
+            mkdir(self.config_folder)
+
+        if not isfile(self.config_path):
+            source = Path(join(dirname(realpath(__file__)),
+                               "../../etc/cloudmesh4.yaml"))
+
+            copyfile(source.resolve(), self.config_path)
+
+            # read defaults
+            self.__init__()
+
+            defaults = self["cloudmesh.default"]
+
+            # pprint(defaults)
+
+            d = Variables()
+            if defaults is not None:
+                print(f"# Set default from yaml file:")
+
+            for key in defaults:
+                value = defaults[key]
+                print(f"set {key}={value}")
+                d[key] = defaults[key]
+
+    @staticmethod
+    def check(path="~/.cloudmesh/cloudmesh4.yaml"):
+
+        error = False
+        path = path_expand(path)
+
+        banner("Check for TAB Characters")
+
+        error = Config.check_for_tabs(path)
+
+        if not error:
+            Console.ok("No TABs found")
+
+        banner("yamllint")
+
+        try:
+            import yamllint
+
+            options = \
+                '-f colored ' \
+                '-d "{extends: relaxed, ""rules: {line-length: {max: 256}}}"'
+            r = Shell.live(f'yamllint {options} {path}')
+
+            if 'error' in r or 'warning' in r:
+                print(70 * '-')
+                print(" line:column  description")
+                print()
+            else:
+                Console.ok("No issues found")
+                print()
+        except:
+            Console.error("Could not execute yamllint. Please add with")
+            Console.error("pip install yamllint")
+
+
+    @staticmethod
+    def check_for_tabs(filename, verbose=True):
+        """identifies if the file contains tabs and returns True if it
+        does. It also prints the location of the lines and columns. If
+        verbose is set to False, the location is not printed.
+
+        :param verbose: if true prints issues
+        :param filename: the filename
+        :type filename: str
+        :rtype: True if there are tabs in the file
+        """
+        filename = path_expand(filename)
+        file_contains_tabs = False
+
+        with open(filename, 'r') as f:
+            lines = f.read().split("\n")
+
+        line_no = 1
+        for line in lines:
+            if "\t" in line:
+                file_contains_tabs = True
+                location = [
+                    i for i in range(len(line)) if line.startswith('\t', i)]
+                if verbose:
+                    Console.error(f"Tab found in line {line_no} "
+                                  f"and column(s) {location}")
+            line_no += 1
+        return file_contains_tabs
+
     def save(self, path="~/.cloudmesh/cloudmesh4.yaml", backup=True):
         """
         #
@@ -229,16 +262,17 @@ class Config(object):
 
         result = {"cloudmesh": {"cloud": {name: configuration}}}
 
-        banner(f"checking cloudmesh.{kind}.{name} in ~/.cloudmesh/cloudmesh4.yaml file")
+        banner(
+            f"checking cloudmesh.{kind}.{name} in ~/.cloudmesh/cloudmesh4.yaml file")
 
-        print (yaml.dump(result))
+        print(yaml.dump(result))
 
         flat = flatten(configuration, sep=".")
 
         for attribute in flat:
             if "TBD" in str(flat[attribute]):
-                Console.error(f"~/.cloudmesh4.yaml: Attribute cloudmesh.{name}.{attribute} contains TBD")
-
+                Console.error(
+                    f"~/.cloudmesh4.yaml: Attribute cloudmesh.{name}.{attribute} contains TBD")
 
     def set_debug_defaults(self):
         for name in ["trace", "debug"]:
@@ -250,6 +284,55 @@ class Config(object):
 
     def __str__(self):
         return yaml.dump(self.data, default_flow_style=False, indent=2)
+
+    @staticmethod
+    def cat(mask_secrets=True,
+            attributes=None,
+            path="~/.cloudmesh/cloudmesh4.yaml",
+            color=None):
+
+        colors = ['TBD', "xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"]
+        if color:
+            colors = colors + color
+
+        _path = path_expand("~/.cloudmesh/cloudmesh4.yaml")
+
+        secrets = [
+            "AZURE_SUBSCRIPTION_ID",
+            "AZURE_TENANTID",
+            "EC2_ACCESS_ID",
+            "EC2_SECRET_KEY",
+            "AZURE_SECRET_KEY"
+            "OS_PASSWORD",
+            "OS_PROJECT_ID"
+            "MONGO_PASSWORD",
+            "MONGO_USERNAME"
+        ]
+
+        if attributes:
+            secrets = secrets + attributes
+
+        with open(_path) as f:
+            content = f.read().split("\n")
+
+        lines = []
+        for line in content:
+            if "TBD" not in line:
+                if mask_secrets:
+                    for attribute in secrets:
+                        if attribute + ":" in line:
+                            line = line.split(":")[0] + \
+                                   Console.text(message=": '********'",
+                                                color='BLUE')
+                            break
+            for colorme in colors:
+                line = line.replace(colorme,
+                                    Console.text(color='RED', message=colorme))
+
+            lines.append(line)
+
+        lines = '\n'.join(lines)
+        return lines
 
     def get(self, key, default=None):
         """
@@ -268,7 +351,8 @@ class Config(object):
             return self.data.get(key, default)
         except KeyError:
             path = self.config_path
-            Console.error(f"The key '{key}' couold not be found in the yaml file '{path}'")
+            Console.error(
+                f"The key '{key}' couold not be found in the yaml file '{path}'")
             sys.exit(1)
         except Exception as e:
             print(e)
@@ -333,7 +417,8 @@ class Config(object):
         :param value: value to be set.
         """
         self.data['cloudmesh']['default']['cloud'] = value
-        print("Setting env parameter cloud to: " + self.data['cloudmesh']['default']['cloud'])
+        print("Setting env parameter cloud to: " +
+              self.data['cloudmesh']['default']['cloud'])
 
         yaml_file = self.data.copy()
         with open(self.config_path, "w") as stream:
@@ -361,7 +446,8 @@ class Config(object):
                 element = element[key]
         except KeyError:
             path = self.config_path
-            Console.error(f"The key '{item}' couold not be found in the yaml file '{path}'")
+            Console.error(
+                f"The key '{item}' couold not be found in the yaml file '{path}'")
             sys.exit(1)
         except Exception as e:
             print(e)
@@ -391,7 +477,8 @@ class Config(object):
             del element
         except KeyError:
             path = self.config_path
-            Console.error(f"The key '{item}' couold not be found in the yaml file '{path}'")
+            Console.error(
+                f"The key '{item}' couold not be found in the yaml file '{path}'")
             sys.exit(1)
         except Exception as e:
             print(e)
@@ -413,9 +500,9 @@ class Config(object):
 
             print(f"Editing the values for {attribute}")
 
-            print ("Current Values:")
+            print("Current Values:")
 
-            print (yaml.dump(values, indent=2))
+            print(yaml.dump(values, indent=2))
 
             for key in values:
 
@@ -426,5 +513,5 @@ class Config(object):
             config.save()
         except Exception as e:
             print(e)
-            Console.error(f"could not find the attribute '{attribute}' in the yaml file.")
-
+            Console.error(
+                f"could not find the attribute '{attribute}' in the yaml file.")

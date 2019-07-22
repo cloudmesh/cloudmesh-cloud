@@ -24,8 +24,8 @@ class IpCommand(PluginCommand):
                 ip list  [--cloud=CLOUD] [--output=OUTPUT]
                 ip create [--cloud=CLOUD]
                 ip delete [IP] [--cloud=CLOUD]
-                ip assign [NAME] [IP]
-                ip unasign [NAME] [IP]
+                ip attach [NAME] [IP]
+                ip detach [NAME] [IP]
 
 
             Options:
@@ -114,14 +114,11 @@ class IpCommand(PluginCommand):
 
             provider.Print(arguments.output, "ip", ips)
 
-        elif arguments.assign:
+        elif arguments.attach:
 
             name = Parameter.find("vm", arguments, variables)
-
             cm = CmDatabase()
             vm = cm.find_name(name, kind="vm")[0]
-
-            pprint (vm)
             cloud = vm["cm"]["cloud"]
 
 
@@ -130,24 +127,27 @@ class IpCommand(PluginCommand):
 
             ip = get_ip(arguments.IP)
             try:
-                ips = provider.assign_public_ip(name=vm, ip=ip)
-            except:
+                ips = provider.attach_public_ip(name=name, ip=ip)
+            except Exception as e:
+                print(e)
                 Console.error("Could not assign public ip.")
 
 
-        elif arguments.unassign:
+        elif arguments.detach:
             name = Parameter.find("vm", arguments, variables)
-
             cm = CmDatabase()
             vm = cm.find_name(name, kind="vm")[0]
-
-            pprint(vm)
             cloud = vm["cm"]["cloud"]
 
             print(f"cloud {cloud}")
             provider = Provider(name=cloud)
+            ip = provider.get_public_ip(name=name)
 
-            ip = get_ip(arguments.IP)
+            print (name, ip)
 
-            ips = provider.unassign_public_ip(name=vm, ip=ip)
-            ips = provider.list_public_ips()
+            try:
+                ips = provider.detach_public_ip(name=name, ip=ip)
+            except Exception as e:
+                print (e)
+                Console.error("can not detach ip")
+

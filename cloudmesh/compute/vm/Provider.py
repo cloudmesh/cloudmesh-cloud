@@ -381,5 +381,8 @@ class Provider(ComputeNodeABC):
     def attach_public_ip(self, name=None, ip=None):
         return self.p.attach_public_ip(name=name, ip=ip)
 
+    def get_public_ip(self, name=None):
+        return self.p.get_public_ip(name=name)
+
     def ssh(self, vm=None, command=None):
         return self.p.ssh(vm=vm, command=command)

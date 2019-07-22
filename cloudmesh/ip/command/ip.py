@@ -1,10 +1,13 @@
 from cloudmesh.shell.command import PluginCommand
 from cloudmesh.shell.command import command
+from cloudmesh.common.debug import VERBOSE
+
+
+# see https://github.com/cloudmesh/client/blob/master/cloudmesh_client/shell/plugins/NetworkCommand.py
 
 
 class IpCommand(PluginCommand):
 
-    # see https://github.com/cloudmesh/client/blob/master/cloudmesh_client/shell/plugins/NetworkCommand.py
 
     # noinspection PyUnusedLocal
     @command
@@ -22,7 +25,7 @@ class IpCommand(PluginCommand):
 
             Options:
                 -h                          help message
-                --cloud=CLOUD               Name of the IaaS cloud e.g. india_openstack_grizzly.
+                --cloud=CLOUD               Name of the cloud
 
             Arguments:
                 IP        IP Address
@@ -47,14 +50,4 @@ class IpCommand(PluginCommand):
 
         """
 
-        print(arguments)
-
-        # m = Manager()
-
-        # if arguments.FILE:
-        #    print("option a")
-        #    m.list(arguments.FILE)
-
-        # elif arguments.list:
-        #    print("option b")
-        #    m.list("just calling list without parameter")
+        V(arguments)

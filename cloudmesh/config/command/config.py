@@ -106,12 +106,10 @@ class ConfigCommand(PluginCommand):
         e = EncryptFile(source, destination)
 
         if arguments.cloud and arguments.edit and arguments.NAME is None:
-
             path = path_expand("~/.cloudmesh/cloudmesh4.yaml")
-            print (path)
+            print(path)
             Shell.edit(path)
             return ""
-
 
         cloud = arguments.NAME
         kind = arguments.KIND
@@ -120,31 +118,33 @@ class ConfigCommand(PluginCommand):
 
         configuration = Config()
 
-
         if arguments.cloud and arguments.verify:
             service = configuration[f"cloudmesh.{kind}.{cloud}"]
 
             result = {"cloudmesh": {"cloud": {cloud: service}}}
 
             action = "verify"
-            banner(f"{action} cloudmesh.{kind}.{cloud} in ~/.cloudmesh/cloudmesh4.yaml")
+            banner(
+                f"{action} cloudmesh.{kind}.{cloud} in ~/.cloudmesh/cloudmesh4.yaml")
 
-            print (yaml.dump(result))
+            print(yaml.dump(result))
 
             flat = flatten(service, sep=".")
 
             for attribute in flat:
                 if "TBD" in str(flat[attribute]):
-                    Console.error(f"~/.cloudmesh4.yaml: Attribute cloudmesh.{cloud}.{attribute} contains TBD")
+                    Console.error(
+                        f"~/.cloudmesh4.yaml: Attribute cloudmesh.{cloud}.{attribute} contains TBD")
 
         elif arguments.cloud and arguments.list:
             service = configuration[f"cloudmesh.{kind}.{cloud}"]
             result = {"cloudmesh": {"cloud": {cloud: service}}}
 
             action = "verify"
-            banner(f"{action} cloudmesh.{kind}.{cloud} in ~/.cloudmesh/cloudmesh4.yaml")
+            banner(
+                f"{action} cloudmesh.{kind}.{cloud} in ~/.cloudmesh/cloudmesh4.yaml")
 
-            print (yaml.dump(result))
+            print(yaml.dump(result))
 
         elif arguments.cloud and arguments.edit:
 
@@ -152,11 +152,12 @@ class ConfigCommand(PluginCommand):
             # there is a duplicated code in config.py for this
             #
             action = "edit"
-            banner(f"{action} cloudmesh.{kind}.{cloud}.credentials in ~/.cloudmesh/cloudmesh4.yaml")
+            banner(
+                f"{action} cloudmesh.{kind}.{cloud}.credentials in ~/.cloudmesh/cloudmesh4.yaml")
 
             credentials = configuration[f"cloudmesh.{kind}.{cloud}.credentials"]
 
-            print (yaml.dump(credentials))
+            print(yaml.dump(credentials))
 
             for attribute in credentials:
                 if "TBD" in credentials[str(attribute)]:
@@ -164,10 +165,10 @@ class ConfigCommand(PluginCommand):
                     result = input(f"Please enter {attribute}[{value}]: ")
                     credentials[attribute] = result
 
-            #configuration[f"cloudmesh.{kind}.{cloud}.credentials"] = credentials
+            # configuration[f"cloudmesh.{kind}.{cloud}.credentials"] = credentials
 
-            print(yaml.dump(configuration[f"cloudmesh.{kind}.{cloud}.credentials"] ))
-
+            print(yaml.dump(
+                configuration[f"cloudmesh.{kind}.{cloud}.credentials"]))
 
         if arguments["edit"] and arguments["ATTRIBUTE"]:
 
@@ -204,7 +205,8 @@ class ConfigCommand(PluginCommand):
                 sys.exit(1)
 
             if os.path.exists(destination):
-                Console.error(f"decrypted file {destination} does already exist")
+                Console.error(
+                    f"decrypted file {destination} does already exist")
                 sys.exit(1)
 
             e.decrypt(source)

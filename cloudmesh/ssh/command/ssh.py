@@ -1,6 +1,7 @@
 import os
 
 from cloudmesh.common.Printer import Printer
+from cloudmesh.common.console import Console
 from cloudmesh.common.parameter import Parameter
 from cloudmesh.common.ssh.ssh_config import ssh_config
 from cloudmesh.common.util import path_expand
@@ -9,11 +10,13 @@ from cloudmesh.compute.vm.Provider import Provider
 from cloudmesh.mongo.CmDatabase import CmDatabase
 from cloudmesh.shell.command import PluginCommand, map_parameters
 from cloudmesh.shell.command import command
-from cloudmesh.common.console import Console
+
+
+# see https://github.com/cloudmesh/client/blob/master/cloudmesh_client/shell/plugins/SecureShellCommand.py
+
 
 class SshCommand(PluginCommand):
 
-    # see https://github.com/cloudmesh/client/blob/master/cloudmesh_client/shell/plugins/SecureShellCommand.py
     # noinspection PyUnusedLocal
     @command
     def do_ssh(self, args, arguments):
@@ -50,7 +53,7 @@ class SshCommand(PluginCommand):
 
             Description:
                 ssh config list
-                    lists the hostsnames  that are present in the
+                    lists the hostsnames that are present in the
                     ~/.ssh/config file
 
                 ssh config add NAME IP [USER] [KEY]
@@ -71,7 +74,7 @@ class SshCommand(PluginCommand):
 
                  ssh config add blue 192.168.1.245 blue
 
-                     Adds the folloewing to the !/.ssh/congig file
+                     Adds the following to the !/.ssh/config file
 
                      Host blue
                           HostName 192.168.1.245
@@ -114,7 +117,6 @@ class SshCommand(PluginCommand):
 
             ip = arguments.IP
 
-
             hosts = ssh_config()
 
             if name in hosts.hosts:
@@ -126,7 +128,6 @@ class SshCommand(PluginCommand):
                 hostname=ip,
                 identity=key,
                 user=user)
-
 
         elif arguments.config and arguments.delete:
             # ssh config delete NAME

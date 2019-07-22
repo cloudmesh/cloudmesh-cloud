@@ -10,9 +10,7 @@ from cloudmesh.mongo.MongoDBController import MongoDBController
 from cloudmesh.mongo.MongoDBController import MongoInstaller
 from cloudmesh.shell.command import PluginCommand, map_parameters
 from cloudmesh.shell.command import command
-from cloudmesh.common.Shell import Shell
-from cloudmesh.common.util import path_expand
-from cloudmesh.common.debug import VERBOSE
+
 
 class AdminCommand(PluginCommand):
     # noinspection PyPep8
@@ -47,14 +45,15 @@ class AdminCommand(PluginCommand):
             admin mongo load FILENAME
             admin mongo security
             admin mongo password PASSWORD
-            admin mongo list [COLLECTION] [--output=OUTPUT]
+            admin mongo list [--output=OUTPUT]
             admin status
             admin system info
             admin yaml cat
             admin yaml check
 
-          The admin command performs some administrative functions, such as installing packages, software and services.
-          It also is used to start services and configure them.
+          The admin command performs some administrative functions, such as
+          installing packages, software and services. It also is used to
+          start services and configure them.
 
           Arguments:
             FILENAME  the filename for backups
@@ -125,7 +124,8 @@ class AdminCommand(PluginCommand):
                     for pid in state['output']:
                         entry = state['output'][pid]
                         data["pid"] = state['output'][pid]
-                        data["command"] = state['output'][pid]['command'].strip()
+                        data["command"] = state['output'][pid][
+                            'command'].strip()
 
                     print(Printer.dict(data, order=["pid", "command"]))
                     Console.ok(str(data.pid['pid']) + " " + state["message"])
@@ -181,38 +181,28 @@ class AdminCommand(PluginCommand):
 
             elif arguments.list:
 
-                VERBOSE(arguments)
                 mongo = MongoDBController()
 
-                if arguments.COLLECTION:
-                    r = mongo.list(name=arguments.COLLECTION)
-                    VERBOSE (r)
-                    if len(r) > 0:
-                        Console.ok("ok")
-                    else:
-                        Console.ok("is your MongoDB server running")
+                r = mongo.list()
 
-                else:
-                    r = mongo.list()
-
-                    if len(r) > 0:
-                        if arguments.output == 'table':
-                            print(Printer.dict(r, order=["name",
+                if len(r) > 0:
+                    if arguments.output == 'table':
+                        print(Printer.dict(r, order=["name",
                                                      "sizeOnDisk",
                                                      "empty",
                                                      "collections"],
                                            output=arguments.output),
                               )
-                        else:
-                            print(Printer.write(r, output=arguments.output))
-                        Console.ok("ok")
                     else:
-                        Console.ok("is your MongoDB server running")
+                        print(Printer.write(r, output=arguments.output))
+                    Console.ok("ok")
+                else:
+                    Console.ok("is your MongoDB server running")
 
         elif arguments.yaml and arguments.cat:
 
             content = Config.cat()
-            print (content)
+            print(content)
 
             return ""
 

@@ -1,11 +1,13 @@
 import os
 from pprint import pprint
+
+from cloudmesh.common.console import Console
 from cloudmesh.common.dotdict import dotdict
 from cloudmesh.common.util import path_expand
-from cloudmesh.common.console import Console
 from cloudmesh.management.script import Script
 
 
+# noinspection PyPep8
 class Source(object):
 
     def __init__(self, config, protocol="ssh"):

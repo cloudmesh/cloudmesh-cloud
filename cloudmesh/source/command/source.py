@@ -30,7 +30,8 @@ class SourceCommand(PluginCommand):
 
           Description:
 
-             you cen specify in your yaml file the location of where you manage your source code.
+             you cen specify in your yaml file the location of where you
+             manage your source code.
 
              cloudmesh:
                 source:
@@ -41,13 +42,14 @@ class SourceCommand(PluginCommand):
                   cm: ~/Desktop/github/cloudmesh-community
 
 
-            Once you have this included and cms cm is installe, you can than for
+            Once you have this included and cms cm is installed, you can than for
             example do an update from source with
 
                 cms source install
 
-            This has the advantage that all cms directories pull the new code from git
-            It assumes that you have installed the source previously with
+            This has the advantage that all cms directories pull the new code
+            from git. It assumes that you have installed the source
+            previously with
 
                 pip install -e .
 

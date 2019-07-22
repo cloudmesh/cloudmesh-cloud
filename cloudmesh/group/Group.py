@@ -45,6 +45,37 @@ class Group(object):
             entry['cm'].update(cm)
         return d
 
+    def delete_group(self, name=None):
+        raise NotImplementedError
+
+    def delete_member(self, name=None, member=None):
+        """
+        delete the member from the group
+
+        :param name: name of the group
+        :param member: name of the member
+        :return:
+        """
+        raise NotImplementedError
+
+    def copy_group(self, source, destination):
+        """
+        copies the group source to destination
+        :param source: name of the source
+        :param destination: name of teh desination
+        :return:
+        """
+        raise NotImplementedError
+
+    def merge(self, destination, *groups):
+        """
+        merge the memberst of the groups into the destination group
+        :param group_a:
+        :param groups:
+        :return:
+        """
+        raise NotImplementedError
+
     def members(self, name=None):
         r = self.list(name=name)
         members = r[0]['members']
@@ -70,6 +101,9 @@ class Group(object):
             result.append(entry)
         return result
 
+    #
+    # not tested when data is already in db
+    #
     @DatabaseUpdate()
     def add(self,
             name=None,
@@ -106,18 +140,3 @@ class Group(object):
         print(yaml.dump(entry))
 
         return [entry]
-
-    def delete(self, elements):
-        raise NotImplementedError
-
-    def merge(self, group_a, group_b, group_c):
-        raise NotImplementedError
-
-    def remove(self, group, elements):
-        raise NotImplementedError
-
-    def terminate(self, group, filter):
-        raise NotImplementedError
-
-    def status(self, group, filter):
-        raise NotImplementedError

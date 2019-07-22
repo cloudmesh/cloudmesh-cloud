@@ -53,6 +53,8 @@ class TestName:
         members = g.members(name="test")
         pprint(members)
 
+        print (Printer.write(members))
+
         for member in members:
             assert member['name'] in services
 

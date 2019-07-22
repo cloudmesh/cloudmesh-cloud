@@ -77,12 +77,12 @@ class FlavorCommand(PluginCommand):
 
                 for cloud in clouds:
                     print(f"List {cloud}")
-                    p = Provider(cloud)
+                    provider = Provider(cloud)
 
                     db = CmDatabase()
                     flavors = db.find(collection=f"{cloud}-flavor")
 
-                    p.Print(arguments.output, "flavor", flavors)
+                    provider.Print(arguments.output, "flavor", flavors)
 
 
             except Exception as e:

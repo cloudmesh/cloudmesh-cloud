@@ -1,8 +1,7 @@
 from cloudmesh.common.parameter import Parameter
 from cloudmesh.mongo.CmDatabase import CmDatabase
 from cloudmesh.mongo.DataBaseDecorator import DatabaseUpdate
-from cloudmesh.common.debug import VERBOSE
-from pprint import pprint
+
 
 #
 # use CmDatabase for interacting with the db, you will find also a simple find
@@ -97,6 +96,7 @@ class SecgroupExamples:
 
         return data
 
+
 class SecgroupDatabase:
 
     # noinspection PyShadowingBuiltins
@@ -115,7 +115,7 @@ class SecgroupDatabase:
             query = {}
         else:
             query = {'cm.name': name}
-        entries = self.cm.find(collection=self.collection,query=query)
+        entries = self.cm.find(collection=self.collection, query=query)
         return entries
 
     def remove(self, name=None):
@@ -178,7 +178,6 @@ class SecgroupRule(SecgroupDatabase):
 
 
 class Secgroup(SecgroupDatabase):
-
     output = {
         "all": {
             "sort_keys": ["group", "rule"],
@@ -215,6 +214,7 @@ class Secgroup(SecgroupDatabase):
         }
 
     }
+
     def __init__(self):
         super().__init__(kind="secgroup")
 

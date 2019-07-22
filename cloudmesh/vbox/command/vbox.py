@@ -1,13 +1,14 @@
 import os
 from pprint import pprint
 
+from cloudmesh.cloud import __version__
 from cloudmesh.common.Printer import Printer
 from cloudmesh.common.Shell import Shell
+from cloudmesh.common.debug import VERBOSE
 from cloudmesh.common.dotdict import dotdict
+from cloudmesh.compute.virtualbox.Provider import Provider
 from cloudmesh.shell.command import PluginCommand
 from cloudmesh.shell.command import command
-from cloudmesh.cloud import __version__
-from cloudmesh.compute.virtualbox.Provider import Provider
 
 
 # from cloud.mongo.MongoDBController import MongoDBController
@@ -66,7 +67,7 @@ def _LIST_PRINT(l, output, order=None):
 
 class VboxCommand(PluginCommand):
 
-    # noinspection PyUnusedLocal
+    # noinspection PyUnusedLocal,PyPep8
     @command
     def do_vbox(self, args, arguments):
         """
@@ -184,7 +185,7 @@ class VboxCommand(PluginCommand):
 
             d = defaults()
 
-            print("LLLL", d)
+            VERBOSE(d)
 
             arguments.memory = arguments["--memory"] or d.memory
             arguments.image = arguments["--image"] or d.image

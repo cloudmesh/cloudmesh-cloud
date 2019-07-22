@@ -1,28 +1,30 @@
 import os
 import textwrap
 import webbrowser
+from datetime import datetime
 from pprint import pprint
+
 from cloudmesh.common.Shell import Shell
+from cloudmesh.common.console import Console
 from cloudmesh.common.dotdict import dotdict
 # from cloudmesh.abstractclass import ComputeNodeManagerABC
 from cloudmesh.management.configuration.config import Config
-from cloudmesh.common.console import Console
 from cloudmesh.mongo import MongoDBController
-from datetime import datetime
 
 """
 is vagrant up to date
 
-==> vagrant: A new version of Vagrant is available: 2.2.4 (installed version: 2.2.2)!
+==> vagrant: A new version of Vagrant is available: 2.2.4 (installed version: 2.2.2)! 
 ==> vagrant: To upgrade visit: https://www.vagrantup.com/downloads.html
 """
+
 
 # noinspection PyUnusedLocal
 class Provider(object):
 
     def _check_version(self, r):
         """
-        checks if vargarnt version is up to date
+        checks if vargrant version is up to date
 
         :return:
         """
@@ -369,8 +371,8 @@ class Provider(object):
         :param name: the name of the node
         :param image: the image used
         :param size: the size of the image
-        :param timeout: a timeout in seconds that is invoked in case the image does not boot.
-               The default is set to 3 minutes.
+        :param timeout: a timeout in seconds that is invoked in case the
+                        image does  not boot. The default is set to 3 minutes.
         :param kwargs: additional arguments passed along at time of boot
         :return:
         """
@@ -379,7 +381,8 @@ class Provider(object):
         """
 
         #
-        # TODO BUG: if name contains not just letters and numbers and - return error, e. undersore not allowed
+        # TODO BUG: if name contains not just letters and numbers and -
+        #  return error, e. underscore not allowed
         #
 
         arg = self._get_specification(name=name, image=image, size=size,
@@ -412,6 +415,7 @@ class Provider(object):
     # Additional methods
     #
 
+    # noinspection PyPep8
     @classmethod
     def find_image(cls, keywords):
         """

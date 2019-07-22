@@ -13,5 +13,6 @@ class Printer(object):
             d,
             sort_keys=self.keys,
             order=self.order,
-            header=self.header
+            header=self.header,
+            format=format
         )

@@ -36,7 +36,7 @@ class TestName:
     def test_define(self):
         Benchmark.Start()
         n = Name()
-        Benchmark.Start()
+        Benchmark.Stop()
         assert dict(data) == n.dict()
 
     def test_define_new(self):

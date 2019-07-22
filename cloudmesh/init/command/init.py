@@ -74,8 +74,10 @@ class InitCommand(PluginCommand):
             os.system(f"cms set secgroup={secgroup}")
 
         if arguments.debug:
-            os.system(f"cms set list")
-            os.system(f"cms set list")
+            variables['debug'] = True
+            variables['timer'] = 'on'
+            variables['trace'] = True
+            variables['verbose'] = '10'
 
         print()
         print("Variables")

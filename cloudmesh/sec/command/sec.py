@@ -156,8 +156,6 @@ class SecCommand(PluginCommand):
                         pass
             Print("all", data)
 
-        VERBOSE(arguments)
-
         if arguments.load and arguments.group and arguments.cloud:
 
             provider = Provider(name=arguments.cloud)

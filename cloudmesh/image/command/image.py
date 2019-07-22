@@ -1,11 +1,10 @@
 from cloudmesh.common.debug import VERBOSE
-from cloudmesh.common.Printer import Printer
+from cloudmesh.common.variables import Variables
 from cloudmesh.compute.vm.Provider import Provider
 from cloudmesh.management.configuration.arguments import Arguments
 from cloudmesh.mongo.CmDatabase import CmDatabase
 from cloudmesh.shell.command import PluginCommand
 from cloudmesh.shell.command import command, map_parameters
-from cloudmesh.common.variables import Variables
 
 
 class ImageCommand(PluginCommand):
@@ -39,7 +38,6 @@ class ImageCommand(PluginCommand):
 
         variables = Variables()
 
-
         if arguments.list and arguments["--query"]:
             names = []
 
@@ -56,11 +54,9 @@ class ImageCommand(PluginCommand):
             # images = provider.images(query=query)
             #
 
-
             return NotImplementedError
 
             provider.Print(arguments.output, images)
-
 
             return ""
 
@@ -100,11 +96,10 @@ class ImageCommand(PluginCommand):
                     db = CmDatabase()
                     images = db.find(collection=f"{cloud}-image")
 
-                    print (images)
+                    print(images)
                     print(provider)
 
                     provider.Print(arguments.output, "image", images)
-
 
             except Exception as e:
 

@@ -17,7 +17,7 @@ from cloudmesh.common.util import banner
 # from cloudmesh.DEBUG import VERBOSE
 from cloudmesh.common.util import path_expand
 from cloudmesh.common.variables import Variables
-
+from cloudmesh.common.FlatDict import FlatDict
 
 # see also https://github.com/cloudmesh/client/blob/master/cloudmesh_client/cloud/register.py
 
@@ -483,6 +483,20 @@ class Config(object):
         except Exception as e:
             print(e)
             sys.exit(1)
+
+
+    def search(self, key, value):
+        """
+        search("cloudmesh.cloud.*.cm.active", True)
+        :param key:
+        :param value:
+        :return:
+        """
+        flat = FlatDict(self.data, sep=".")
+        result = flat.search(key, value)
+        return result
+
+
 
     def edit(self, attribute):
         """

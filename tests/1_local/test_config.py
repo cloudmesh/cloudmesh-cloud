@@ -10,6 +10,7 @@ from pprint import pprint
 
 import oyaml as yaml
 import pytest
+from cloudmesh.common.StopWatch import StopWatch
 from cloudmesh.common.util import HEADING
 from cloudmesh.common.util import path_expand
 from cloudmesh.common3.Benchmark import Benchmark
@@ -19,10 +20,42 @@ from cloudmesh.management.configuration.config import Config
 @pytest.mark.incremental
 class TestConfig:
 
+
+    def config_n_load(self, n):
+        config = [None] * n
+        StopWatch.start(f"test_config_load n={n}")
+        for i in range(1, n):
+            config[i] = Config()
+        StopWatch.stop(f"test_config_load n={n}")
+
     def test_config(self):
-        Benchmark.Start()
+        print ()
+        for n in range(1, 10):
+            self.config_n_load(n)
+            n_1 = StopWatch.get(f"test_config_load n=1")
+            n_n = StopWatch.get(f"test_config_load n={n}")
+            print (n, n_1 >= n_n, n_1, n_n, n_1 - n_n)
+
+        n_1 = StopWatch.get(f"test_config_load n=1")
+        n_n = StopWatch.get(f"test_config_load n=9")
+        assert (n_1 * 9 >= n_n)
+
+    def test_search(self):
         config = Config()
+
+        Benchmark.Start()
+        r = config.search("cloudmesh.cloud.*.cm.active", True)
         Benchmark.Stop()
+        pprint (r)
+
+
+
+    def test_benchmark(self):
+        Benchmark.print(sysinfo=False)
+
+
+
+class o:
 
     def test_dict(self):
         HEADING()

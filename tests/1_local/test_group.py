@@ -13,24 +13,30 @@ from cloudmesh.management.configuration.name import Name
 from cloudmesh.group.Group import Group
 from cloudmesh.common.parameter import Parameter
 from cloudmesh.common3.DictList import DictList
+from cloudmesh.common.util import HEADING
+from cloudmesh.common.Printer import Printer
+
+
 g = Group()
+services = Parameter.expand('vm-[1-3]')
 
 @pytest.mark.incremental
 class TestName:
 
 
     def test_list(self):
+        HEADING()
         Benchmark.Start()
         r = g.list(name='test')
         Benchmark.Stop()
 
     def test_add(self):
-        print()
+        HEADING()
         Benchmark.Start()
         r = g.add(name='test', services='vm-[1-3]', category='vm')
         Benchmark.Stop()
 
-        services = Parameter.expand('vm-[1-3]')
+
         pprint (r)
 
         r = g.list(name="test")
@@ -38,8 +44,17 @@ class TestName:
 
         members = r[0]['members']
         for member in members:
-            name = list(member.keys())[0]
-            assert name in services
+            assert member['name'] in services
+
+        assert len(members) == len(services)
+
+    def test_members(self):
+        HEADING()
+        members = g.members(name="test")
+        pprint(members)
+
+        for member in members:
+            assert member['name'] in services
 
         assert len(members) == len(services)
 

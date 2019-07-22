@@ -366,8 +366,8 @@ class Provider(ComputeNodeABC):
     def delete_public_ip(self, ip):
         return self.p.delete_public_ip(ip)
 
-    def list_public_ips(self, free=False):
-        return self.p.list_public_ips(free=free)
+    def list_public_ips(self, available=False):
+        return self.p.list_public_ips(available=available)
 
     def delete_public_ip(self, ip):
         return self.p.delete_public_ip(ip)

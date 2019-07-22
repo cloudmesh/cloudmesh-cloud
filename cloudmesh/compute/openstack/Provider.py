@@ -138,6 +138,10 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                        "Description",
                        "Rules"]
         },
+        "ip": {
+            "order": ["name", 'floating_ip_address', 'fixed_ip_address'],
+            "header": ["Name", 'Floating', 'Fixed']
+        },
     }
 
     # noinspection PyPep8Naming
@@ -248,8 +252,13 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         d = []
         for entry in _elements:
 
+
+
             if "cm" not in entry:
                 entry['cm'] = {}
+
+            if kind == 'ip':
+                entry['name'] = entry['floating_ip_address']
 
             entry["cm"].update({
                 "kind": kind,
@@ -257,6 +266,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                 "cloud": self.cloud,
                 "name": entry['name']
             })
+
 
             if kind == 'key':
 
@@ -864,7 +874,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                         found.append(entry)
                 ips = found
 
-        return ips
+        return self.update_dict(ips, kind="ip")
 
     # ok
     def delete_public_ip(self, ip=None):

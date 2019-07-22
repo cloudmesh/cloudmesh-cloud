@@ -1,5 +1,6 @@
 #
-# TODO THIS IS CODE FROM THE PREVIOUS CLOUDMESH, WE NEEED TO CLEAN AND POSSIBLY SIMPLIFY
+# TODO THIS IS CODE FROM THE PREVIOUS CLOUDMESH, WE
+#  NEED TO CLEAN AND POSSIBLY SIMPLIFY
 #
 
 # noinspection PyPep8Naming,PyPep8
@@ -9,6 +10,7 @@ class Key(ListResource):
     def info(cls, **kwargs):
         raise NotImplementedError()
 
+    # noinspection PyUnusedLocal
     def get_from_dir(cls, directory=None, store=True):
         """
         reads the key from ~/.ssh or a directory
@@ -17,7 +19,8 @@ class Key(ListResource):
         :return:
         """
         directory = directory or Config.path_expand("~/.ssh")
-        files = [file for file in os.listdir(expanduser(Config.path_expand(directory)))
+        files = [file for file in
+                 os.listdir(expanduser(Config.path_expand(directory)))
                  if file.lower().endswith(".pub")]
         d = []
         for file in files:
@@ -64,7 +67,6 @@ class Key(ListResource):
 
         for key in range(0, len(content)):
             value = content[key]
-            thekey = {}
 
             name = "{}_git_{}".format(username, key)
 
@@ -79,7 +81,8 @@ class Key(ListResource):
                 'kind': 'key'
             }
 
-            thekey["type"], thekey["key"], thekey["comment"] = SSHkey._parse(value)
+            thekey["type"], thekey["key"], thekey["comment"] = SSHkey._parse(
+                value)
 
             if thekey["comment"] is None:
                 thekey["comment"] = name
@@ -115,14 +118,14 @@ class Key(ListResource):
             return
         config_keys = config["cloudmesh"]["keys"]
         default = config_keys["default"]
-        keylist = config_keys["keylist"]
+        keys = config_keys["keylist"]
 
         uri = Config.path_expand(os.path.join("~", ".cloudmesh", filename))
 
         d = []
-        for key in list(keylist.keys()):
+        for key in list(keys.keys()):
             keyname = key
-            value = keylist[key]
+            value = keys[key]
             if os.path.isfile(Config.path_expand(value)):
                 path = Config.path_expand(value)
                 if store:
@@ -142,7 +145,8 @@ class Key(ListResource):
                     'kind': 'key'
                 }
 
-                thekey["type"], thekey["key"], thekey["comment"] = SSHkey._parse(value)
+                thekey["type"], thekey["key"], thekey[
+                    "comment"] = SSHkey._parse(value)
 
                 if thekey["comment"] is None:
                     thekey["comment"] = keyname
@@ -157,10 +161,11 @@ class Key(ListResource):
             return d
 
         """
-        take a look into original cloudmesh code, its possible to either specify a key or a filename
-        the original one is able to figure this out and do the rightthing. We may want to add this
-        logic to the SSHkey class, so we can initialize either via filename or key string.
-        It would than figure out the right thing
+        take a look into original cloudmesh code, its possible to either 
+        specify  a key or a filename the original one is able to figure this 
+        out and do the right thing. We may want to add this logic to the 
+        SSHkey class, so we can initialize either via filename or key string.
+        It would than figure out the right thing 
 
         cloudmesh:
           keys:
@@ -233,7 +238,8 @@ class Key(ListResource):
 
         key = cls.cm.find_image(kind="key", name=keyname, scope="first")
         if key is None:
-            Console.error("Key with the name {:} not found in database.".format(keyname))
+            Console.error(
+                "Key with the name {:} not found in database.".format(keyname))
             return
 
         try:
@@ -242,11 +248,15 @@ class Key(ListResource):
                 cloud_provider = CloudProvider(cloud).provider
                 cloud_provider.add_key_to_cloud(keyname, key["value"])
         except Exception as e:
-            Console.error("problem uploading key {} to cloud {}: {}".format(keyname, cloud, e.message), traceflag=False)
+            Console.error(
+                "problem uploading key {} to cloud {}: {}".format(keyname,
+                                                                  cloud,
+                                                                  e.message),
+                traceflag=False)
 
     @classmethod
     def list(cls, category=None, live=False, output="table"):
-        """this does not work only returns all ceys in the db"""
+        """this does not work only returns all keys in the db"""
         (order, header) = CloudProvider(category).get_attributes("key")
         d = cls.cm.find_image(kind="key", scope="all", output=output)
         return Printer.write(d,
@@ -286,7 +296,8 @@ class Key(ListResource):
         return p.stdout.read()
 
     @classmethod
-    def add_azure_key_to_db(cls, key_name, key_path, certificate_path, pfx_path):
+    def add_azure_key_to_db(cls, key_name, key_path, certificate_path,
+                            pfx_path):
         """
             Adds the public key to the existing database model and adds the certificate, key and
             fingerprint into the azure key database model.
@@ -365,7 +376,8 @@ class Key(ListResource):
         if name is None:
             return cls.cm.find_image(kind="key", output=output)
         else:
-            return cls.cm.find_image(kind="key", name=name, output=output, scope="first")
+            return cls.cm.find_image(kind="key", name=name, output=output,
+                                     scope="first")
 
     @classmethod
     def set_default(cls, name):

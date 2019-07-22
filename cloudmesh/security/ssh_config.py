@@ -5,12 +5,13 @@ import json
 import os
 from textwrap import dedent
 
-from cloudmesh.common.console import Console
 from cloudmesh.common.Shell import Shell
+from cloudmesh.common.console import Console
 
 
 #
-# THE CONFIG FILE NEEDS TO CHANGE WE WANT SSH OR HOST OR CLUSTER TO WORK WITH THIS
+# THE CONFIG FILE NEEDS TO CHANGE WE WANT SSH OR HOST OR
+# CLUSTER TO WORK WITH THIS
 #
 
 # noinspection PyPep8Naming
@@ -47,14 +48,16 @@ class ssh_config(object):
                     found_names.append(value)
         return found_names
 
-    # noinspection PyAttributeOutsideInit
+    # noinspection PyAttributeOutsideInit,PyShadowingNames
     def load(self):
         """list the hosts defined in the ssh config file"""
         with open(self.filename) as f:
             content = f.readlines()
-        content = [" ".join(x.split()).strip('\n').lstrip().split(' ', 1) for x in content]
+        content = [" ".join(x.split()).strip('\n').lstrip().split(' ', 1) for x
+                   in content]
 
-        # removes duplicated spaces, and splits in two fields, removes leading spaces
+        # removes duplicated spaces, and splits in two fields,
+        # removes leading spaces
         hosts = {}
         host = "NA"
         for line in content:
@@ -96,6 +99,7 @@ class ssh_config(object):
         """
         raise NotImplementedError()
 
+    # noinspection PyMethodMayBeStatic
     def login(self, name):
         """
         login to the host defines in .ssh/config by name
@@ -104,6 +108,7 @@ class ssh_config(object):
         """
         os.system("ssh {0}".format(name))
 
+    # noinspection PyMethodMayBeStatic,PyShadowingNames
     def execute(self, name, command):
         """
         execute the command on the named host
@@ -143,7 +148,8 @@ class ssh_config(object):
                  force=False,
                  verbose=False):
         """
-        adds a host to the config file with given parameters.  #TODO: make sure this is better documented
+        adds a host to the config file with given parameters.
+
         :param key: the key
         :param host: the host
         :param username: the username
@@ -157,7 +163,8 @@ class ssh_config(object):
             "username": username
         }
         if verbose and key in self.names():
-            Console.error("{key} already in ~/.ssh/config".format(**data), traceflag=False)
+            Console.error("{key} already in ~/.ssh/config".format(**data),
+                          traceflag=False)
             return ""
         else:
             entry = dedent("""

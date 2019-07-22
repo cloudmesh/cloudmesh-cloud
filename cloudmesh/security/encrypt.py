@@ -1,14 +1,15 @@
 import os
-from cloudmesh.common.util import path_expand
-from cloudmesh.common.dotdict import dotdict
-from cloudmesh.common.debug import VERBOSE
 import platform
 from getpass import getpass
-from cloudmesh.common.console import Console
+
 from cloudmesh.common.Shell import Shell
+from cloudmesh.common.console import Console
+from cloudmesh.common.debug import VERBOSE
+from cloudmesh.common.dotdict import dotdict
+from cloudmesh.common.util import path_expand
 
 
-# security import yourfile.pem -k ~/Library/Keychains/login.keychain
+# security import ~/.ssh/id_rsa_.pem -k ~/Library/Keychains/login.keychain
 
 # $ brew install openssl
 # $ brew link openssl --force
@@ -24,6 +25,7 @@ class EncryptFile(object):
 
     """
 
+    # noinspection PyShadowingNames
     def __init__(self, filename, secret):
         self.data = dotdict({
             'file': filename,
@@ -40,9 +42,12 @@ class EncryptFile(object):
         os.system(command)
         self.pem_create()
 
-    def check_key(self, filename):
+    # noinspection PyShadowingNames,PyShadowingNames
+    def check_key(self, filename=None):
+        if filename is None:
+            filename = self.data["key"]
         error = False
-        with open(self.data["key"]) as key:
+        with open(filename) as key:
             content = key.read()
 
         if "BEGIN RSA PRIVATE KEY" not in content:
@@ -58,16 +63,17 @@ class EncryptFile(object):
         else:
             return True
 
+    # noinspection PyMethodMayBeStatic
     def _execute(self, command):
         VERBOSE(command)
         os.system(command)
 
-    # noinspection PyPep8
+    # noinspection PyPep8,PyBroadException
     def check_passphrase(self):
         """
         this does not work with pem
 
-        cecks if the ssh key has a password
+        checks if the ssh key has a password
         :return:
         """
 
@@ -103,9 +109,11 @@ class EncryptFile(object):
         self._execute(command)
 
     def pem_create(self):
-        command = path_expand("openssl rsa -in {key} -pubout  > {pem}".format(**self.data))
+        command = path_expand(
+            "openssl rsa -in {key} -pubout  > {pem}".format(**self.data))
 
-        # command = path_expand("openssl rsa -in id_rsa -pubout  > {pem}".format(**self.data))
+        # command = path_expand("openssl rsa -in id_rsa -pubout  > {pem}"
+        # .format(**self.data))
         self._execute(command)
         command = "chmod go-rwx {key}.pem".format(**self.data)
         self._execute(command)
@@ -121,22 +129,25 @@ class EncryptFile(object):
         # encrypt the file into secret.txt
         print(self.data)
         command = path_expand(
-            "openssl rsautl -encrypt -pubin -inkey {key}.pem -in {file} -out {secret}".format(**self.data))
+            "openssl rsautl -encrypt -pubin "
+            "-inkey {key}.pem -in {file} -out {secret}".format(**self.data))
         self._execute(command)
 
+    # noinspection PyShadowingNames
     def decrypt(self, filename=None):
         if filename is not None:
             self.data['secret'] = filename
 
         command = path_expand(
-            "openssl rsautl -decrypt -inkey {key} -in {secret} -out {file}".format(
-                **self.data))
+            "openssl rsautl -decrypt "
+            "-inkey {key} -in {secret} -out {file}".format(**self.data))
         self._execute(command)
 
 
 if __name__ == "__main__":
 
     for filename in ['file.txt', 'secret.txt']:
+        # noinspection PyBroadException
         try:
             os.remove(filename)
         except Exception as e:

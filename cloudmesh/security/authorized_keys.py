@@ -6,10 +6,9 @@ import io
 import itertools
 import os.path
 
-from six import itervalues
-
 from cloudmesh.common.Shell import Subprocess
 from cloudmesh.common.util import tempdir
+from six import itervalues
 
 
 # TODO:  use our simple subprocess wrapper ?
@@ -44,10 +43,12 @@ class AuthorizedKeys(object):
     """
     Class to manage authorized keys.
     """
+
     def __init__(self):
         self._order = dict()
         self._keys = dict()
 
+    # noinspection PyShadowingNames,PyShadowingNames
     @classmethod
     def load(cls, path):
         """

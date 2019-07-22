@@ -17,20 +17,16 @@ class Group(object):
     Here is a simple example
 
     cm:
-      name: group
+      name: test
       cloud: local
       kind: group
     members:
-    - vm-1:
-        name: vm-1
-        kind: vm
-    - vm-2:
-        name: vm-2
-        kind: vm
-    - vm-3:
-        name: vm-3
-        kind: vm
-
+    - name: vm-1
+      kind: vm
+    - name: vm-2
+      kind: vm
+    - name: vm-3
+      kind: vm
 
     """
 
@@ -48,6 +44,11 @@ class Group(object):
         for entry in d:
             entry['cm'].update(cm)
         return d
+
+    def members(self, name=None):
+        r = self.list(name=name)
+        members = r[0]['members']
+        return members
 
     def list(self, name=None):
         cm = CmDatabase()
@@ -93,7 +94,7 @@ class Group(object):
 
         old = DictList(entry['members'])
 
-        entries = [{service: {'name': service, 'kind': category}} for
+        entries = [{'name': service, 'kind': category} for
                    service in services]
 
         for entry in old:

@@ -48,8 +48,6 @@ class AdminCommand(PluginCommand):
             admin mongo list [--output=OUTPUT]
             admin status
             admin system info
-            admin yaml cat
-            admin yaml check
 
           The admin command performs some administrative functions, such as
           installing packages, software and services. It also is used to
@@ -198,17 +196,6 @@ class AdminCommand(PluginCommand):
                     Console.ok("ok")
                 else:
                     Console.ok("is your MongoDB server running")
-
-        elif arguments.yaml and arguments.cat:
-
-            content = Config.cat()
-            print(content)
-
-            return ""
-
-        elif arguments.yaml and arguments.check:
-
-            Config.check()
 
         elif arguments.status:
 

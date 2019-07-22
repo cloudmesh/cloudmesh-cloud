@@ -137,6 +137,4 @@ class Group(object):
 
         entry['members'] = entries
 
-        print(yaml.dump(entry))
-
         return [entry]

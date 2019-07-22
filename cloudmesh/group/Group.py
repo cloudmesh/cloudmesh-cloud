@@ -1,7 +1,9 @@
+import oyaml as yaml
+from cloudmesh.common.parameter import Parameter
+from cloudmesh.common3.DictList import DictList
 from cloudmesh.mongo.CmDatabase import CmDatabase
 from cloudmesh.mongo.DataBaseDecorator import DatabaseUpdate
 
-from cloudmesh.common.parameter import Parameter
 
 class Group(object):
     """
@@ -12,72 +14,97 @@ class Group(object):
     An group entry must uniquely be able to identify the object that is part of
     the group.
 
-    Here a simple example
-
-    group:
-      cm:
-        kind: group
-        name: name of group
-        cloud: grou        # will be renamed in future to service
-      members:
-        name01:
-          cm:
-            kind: vm
-            name: node01
-            cloud: aws
-        name02:
-          cm:
-            kind: vm
-            name: node02
-            cloud: aws
-        storage:
-          cm:
-            kind: vm
-            name: data
-            cloud: box
-
-    elements to be added to the group are simple dicts of the form
+    Here is a simple example
 
     cm:
-        kind:
-        name:
-        cloud:
+      name: group
+      cloud: local
+      kind: group
+    members:
+    - vm-1:
+        name: vm-1
+        kind: vm
+    - vm-2:
+        name: vm-2
+        kind: vm
+    - vm-3:
+        name: vm-3
+        kind: vm
 
-    these can be used to identify the collection of the group member to retrive
-    mor detailed information as part of the list function.
-
-    A filter can be specified to reduce the results.
 
     """
 
-    def list(self, group=None):
-        groups = Parameter.expand(group)
+    def __init__(self):
+        self.kind = "group"
+        self.cloud = "local"
+        self.name = 'group'
+
+    def update_list(self, d):
+        cm = {
+            "name": self.name,
+            "cloud": self.cloud,
+            "kind": self.kind
+        }
+        for entry in d:
+            entry['cm'].update(cm)
+        return d
+
+    def list(self, name=None):
         cm = CmDatabase()
-        entries = []
-        for group in groups:
-            try:
-                cursor = cm.find_group(group)
-                for entry in cursor:
-                    entries.append(entry)
-            except Exception as e:
-                pass
-        return entries
+        result = []
+
+        if name:
+            col = cm.collection(name=f"{self.cloud}-{self.name}")
+            entries = col.find_one({"cm.kind": 'group',
+                                    "cm.cloud": 'local',
+                                    "cm.name": name
+                                    }, {"_id": 0})
+            return [entries]
+        else:
+            entries = cm.find(collection=f"{self.cloud}-{self.name}")
+
+            print("PPPP", entries)
+
+        for entry in entries:
+            result.append(entry)
+        return result
 
     @DatabaseUpdate()
-    def add(self, services=None, group=None):
+    def add(self,
+            name=None,
+            services=None,
+            category=None):
         # check if non and raise error
 
-        cm = CmDatabase()
-        entries = []
-        for service in services:
-            try:
-                entry = dict(cm.find_name(service)[0])
-                del entry["_id"]
-                entry["cm"]["group"] = group
-                entries.append(entry)
-            except Exception as e:
-                break
-        return entries
+        if type(services) == str:
+            services = Parameter.expand(services)
+
+        # cm = CmDatabase()
+
+        entry = {
+            'cm': {
+                "name": name,
+                "cloud": self.cloud,
+                "kind": self.kind
+            }
+        }
+
+        entry['members'] = []  # find in db
+
+        old = DictList(entry['members'])
+
+        entries = [{service: {'name': service, 'kind': category}} for
+                   service in services]
+
+        for entry in old:
+            if entry not in entries:
+                entries.append(old[entry])
+
+        entry['members'] = entries
+
+        print(yaml.dump(entry))
+
+        return [entry]
 
     def delete(self, elements):
         raise NotImplementedError

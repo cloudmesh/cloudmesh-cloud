@@ -1,14 +1,13 @@
 import inspect
-from cloudmesh.common.StopWatch import StopWatch
-from pprint import pprint
 import os
+from pprint import pprint
 
 import yaml
+from cloudmesh.common.StopWatch import StopWatch
 from cloudmesh.common.util import path_expand
-from pprint import pprint
-import os
 
 
+# noinspection PyPep8Naming
 class Benchmark(object):
 
     @staticmethod
@@ -18,7 +17,7 @@ class Benchmark(object):
 
         :return: the name
         """
-        frame =  inspect.getouterframes(inspect.currentframe())
+        frame = inspect.getouterframes(inspect.currentframe())
         method = frame[2][3]
         return method
 
@@ -46,7 +45,6 @@ class Benchmark(object):
 
         StopWatch.benchmark(sysinfo=sysinfo)
 
-
     @staticmethod
     def yaml(path, n):
         """
@@ -71,10 +69,12 @@ class Benchmark(object):
         with open(location, 'w') as yaml_file:
             yaml.dump(cm, yaml_file, default_flow_style=False)
 
+    # noinspection SpellCheckingInspection
     @staticmethod
     def file(path, n):
         """
-        create a file of given size in MB, the MB here is in bianry not SI units.
+        create a file of given size in MB, the MB here is in binary not SI
+        units.
         e.g. 1,048,576 Bytes
 
         Example: s = BenchmarkFiles.size("./sise.txt", 2)

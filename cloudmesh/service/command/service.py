@@ -1,19 +1,12 @@
-from cloudmesh.common.console import Console
+from cloudmesh.common.Printer import Printer
+from cloudmesh.management.configuration.config import Config
 from cloudmesh.shell.command import PluginCommand
 from cloudmesh.shell.command import command
-from cloudmesh.management.configuration.config import Config
-from pprint import pprint
-from cloudmesh.common.FlatDict import flatten
-import oyaml as yaml
-from cloudmesh.common.util import banner
-from cloudmesh.common.Shell import Shell
-from cloudmesh.common.util import path_expand
-from cloudmesh.common.Printer import Printer
 
 
 class ServiceCommand(PluginCommand):
 
-    # noinspection PyUnusedLocal
+    # noinspection PyUnusedLocal,PyBroadException
     @command
     def do_service(self, args, arguments):
         """
@@ -28,14 +21,13 @@ class ServiceCommand(PluginCommand):
 
         """
 
-
         service_list = []
 
-        all = Config()["cloudmesh"]
+        entries = Config()["cloudmesh"]
 
-        for kind in all:
+        for kind in entries:
             try:
-                services = all[kind]
+                services = entries[kind]
                 for name in services:
                     service = services[name]
                     if 'cm' in service:
@@ -44,5 +36,6 @@ class ServiceCommand(PluginCommand):
             except:
                 pass
         print(Printer.write(service_list,
-                            order=["label", "service", "active", "kind", "heading", "host", "version"]))
+                            order=["label", "service", "active", "kind",
+                                   "heading", "host", "version"]))
         return ""

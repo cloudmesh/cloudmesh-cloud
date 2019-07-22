@@ -1,7 +1,10 @@
 from cloudmesh.shell.command import PluginCommand
-from cloudmesh.shell.command import command
+from cloudmesh.shell.command import command, map_parameters
 from cloudmesh.common.debug import VERBOSE
-
+from cloudmesh.common.parameter import Parameter
+from cloudmesh.common.variables import Variables
+from cloudmesh.compute.vm.Provider import Provider
+from pprint import pprint
 
 # see https://github.com/cloudmesh/client/blob/master/cloudmesh_client/shell/plugins/NetworkCommand.py
 
@@ -20,16 +23,18 @@ class IpCommand(PluginCommand):
                 ip add floating [--cloud=CLOUD]
                 ip delete floating [IP] [--cloud=CLOUD]
                 ip add NAME [IP]
-                ip delete NAME
+                ip delete NAME [IP]
 
 
             Options:
                 -h                          help message
                 --cloud=CLOUD               Name of the cloud
+                --output=OUTPUT             The output format [default: table]
 
             Arguments:
                 IP        IP Address
                 NAME      Name of the service
+
 
             Description:
                 ip list floating [--cloud=CLOUD] [--output=OUTPUT]
@@ -50,4 +55,22 @@ class IpCommand(PluginCommand):
 
         """
 
-        V(arguments)
+        map_parameters(arguments,
+                       "cloud",
+                       "output")
+
+        variables = Variables()
+
+        if arguments.list and arguments.floating:
+
+            cloud = Parameter.find("cloud", arguments, variables)
+
+            names = []
+
+            print(f"cloud {cloud}")
+            provider = Provider(name=cloud)
+            ips = provider.list_public_ips()
+
+            pprint (ips)
+
+            provider.Print(arguments.output, "ip", ips)

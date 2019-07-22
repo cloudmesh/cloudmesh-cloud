@@ -1,13 +1,10 @@
 # python cloudmesh/compute/awsboto/test_boto.py
 
-
-import boto3
-import yaml
-import os
-import traceback
 import sys
+import traceback
 from pprint import pprint
 
+import boto3
 from cloudmesh.management.configuration.config import Config
 
 config = Config()
@@ -42,8 +39,10 @@ except:
     print("Access Key is not correct...Please try again..")
     sys.exit()
 if session:
-# ec2_instance, ec2_ids = list_ec2_instance_id(session)
-print(ec2_ids)
+    pass
+
+    # ec2_instance, ec2_ids = list_ec2_instance_id(session)
+    # print(ec2_ids)
 
 sys.exit()
 
@@ -79,7 +78,7 @@ def start_ec2_instance(session, instance_id):
         ec2.start_instances(InstanceIds=[instance_id])
         print("Instance starting..")
         ec2.wait_until_running()
-        print("Intance started")
+        print("Instance started")
     except Exception as ex:
         traceback.print_exc()
 
@@ -96,7 +95,7 @@ def stop_ec2_instance(session, instance_id):
     except:
         print("EC2 Instance stopping failed...Try again..")
 
-    instance_state = get_ec2_instance_status(ec2_instance)
+    # instance_state = get_ec2_instance_status(ec2_instance)
     print("currently instance state is {instance_state")
 
 # start_ec2_instance(session,ec2_ids[0])

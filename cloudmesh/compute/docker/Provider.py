@@ -3,20 +3,19 @@ import shlex
 import subprocess
 import sys
 import textwrap
+from datetime import datetime
 from pprint import pprint
 
 import docker
-from docker.version import version as pydocker_version
-
 from cloudmesh.abstractclass.ComputeNodeABC import ComputeNodeABC
 from cloudmesh.common.Shell import Shell
 from cloudmesh.common.console import Console
+from cloudmesh.common.debug import VERBOSE
 from cloudmesh.common.dotdict import dotdict
+from cloudmesh.common.util import path_expand
 # from cloudmesh.abstractclass import ComputeNodeManagerABC
 from cloudmesh.management.configuration.config import Config
-from cloudmesh.common.util import path_expand
-from cloudmesh.common.debug import VERBOSE
-from datetime import datetime
+from docker.version import version as pydocker_version
 
 """
 is vagrant up to date
@@ -27,7 +26,6 @@ is vagrant up to date
 
 
 class Provider(ComputeNodeABC):
-
     kind = "docker"
 
     def run_command(self, command):
@@ -52,7 +50,7 @@ class Provider(ComputeNodeABC):
              "cloud": ...,
              "driver" ...,
              }
-        :param entry: the entru
+        :param entry: the entry
         :type entry: dict
         :param kind: a string representing the kind
         :type kind: string
@@ -242,7 +240,7 @@ class Provider(ComputeNodeABC):
 
     def _check_version(self, r):
         """
-        checks if vargarnt version is up to date
+        checks if vagrant version is up to date
 
         :return:
         """
@@ -257,7 +255,8 @@ class Provider(ComputeNodeABC):
         :param name: the unique node name
         :return:  The dict representing the node
         """
-        command = f"docker run -v {directory}:/share -w /share --rm -it {name}:{version}  /bin/bash"
+        command = f"docker run -v {directory}:/share -w /share --rm " \
+            f"-it {name}:{version}  /bin/bash"
         os.system(command)
 
     def create(self, **kwargs):
@@ -333,7 +332,7 @@ class Provider(ComputeNodeABC):
 
     def dockerfile(self,
                    name=None,
-                   directroy="~/.cloudmesh/docker/",
+                   directory="~/.cloudmesh/docker/",
                    os="ubuntu",
                    version="18.04",
                    **kwargs):
@@ -421,8 +420,8 @@ class Provider(ComputeNodeABC):
         :param name: the name of the node
         :param image: the image used
         :param size: the size of the image
-        :param timeout: a timeout in seconds that is invoked in case the image does not boot.
-               The default is set to 3 minutes.
+        :param timeout: a timeout in seconds that is invoked in case the
+                        image does not boot. The default is set to 3 minutes.
         :param kwargs: additional arguments passed along at time of boot
         :return:
         """
@@ -431,7 +430,8 @@ class Provider(ComputeNodeABC):
         """
 
         #
-        # TODO BUG: if name contains not just letters and numbers and - return error, e. undersore not allowed
+        # TODO BUG: if name contains not just letters and numbers and -
+        #  return error, e. underscore not allowed
         #
 
         arg = self._get_specification(name=name,

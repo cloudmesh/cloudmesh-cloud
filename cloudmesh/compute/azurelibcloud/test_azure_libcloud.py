@@ -3,11 +3,10 @@ from libcloud.compute.base import NodeAuthSSHKey
 from libcloud.compute.providers import get_driver
 from libcloud.compute.types import Provider
 
-
 #
-# This example is wrong as it shuld use COnfig()
+# This example is wrong as it should use Config()
 #
-# IT SETS A VERY WRONG EXAMPLE OF HARDCODING CREDENTIALS
+# IT SETS A VERY WRONG EXAMPLE OF HARD CODING CREDENTIALS
 #
 
 
@@ -19,24 +18,24 @@ driver = cls(tenant_id='...',
              subscription_id='...',
              key='...',
              secret='...',
-             region='centralus',
+             region='eastus',
              )
 
 auth = NodeAuthSSHKey('ssh-rsa ...')
 
 banner('locations/regions')
-locs = driver.list_locations()
-print(locs)
+locations = driver.list_locations()
+print(locations)
 
 banner('resource groups')
-resgroups = driver.ex_list_resource_groups()
-print(resgroups)
+groups = driver.ex_list_resource_groups()
+print(groups)
 
 # resource group need to be created via azure portal
-resgroup = 'cmtest'
+group = 'cmtest'
 
 banner('public IPs')
-pubips = driver.ex_list_public_ips(resgroup)
+pubips = driver.ex_list_public_ips(group)
 print(pubips)
 
 banner('node sizes (list first 10)')
@@ -52,19 +51,19 @@ banner('image publishers')
 publishers = driver.ex_list_publishers()
 publishername = 'Canonical'
 publisherpath = ''
-for apub in publishers:
-    print(apub[1])
-    if apub[1] == publishername:
-        publisherpath = apub[0]
+for publisher in publishers:
+    print(publisher[1])
+    if publisher[1] == publishername:
+        publisherpath = publisher[0]
 
 banner('offers from a publisher - Canonical')
 offers = driver.ex_list_offers(publisherpath)
 offername = 'UbuntuServer'
 offerpath = ''
-for aoffer in offers:
-    print(aoffer[1])
-    if aoffer[1] == offername:
-        offerpath = aoffer[0]
+for offer in offers:
+    print(offer[1])
+    if offer[1] == offername:
+        offerpath = offer[0]
 
 banner('skus from an offer - UbuntuServer')
 skus = driver.ex_list_skus(offerpath)
@@ -100,27 +99,27 @@ nics = driver.ex_list_nics()
 print(nics)
 
 banner('security groups')
-secgroups = driver.ex_list_network_security_groups(resgroup)
+secgroups = driver.ex_list_network_security_groups(group)
 print(secgroups)
 
 banner('List public IPs')
-pubips = driver.ex_list_public_ips(resgroup)
+pubips = driver.ex_list_public_ips(group)
 print(pubips)
 
 banner('create a public IP')
 pubip = driver.ex_create_public_ip(name='pubip1',
-                                   resource_group=resgroup
+                                   resource_group=group
                                    )
 print(pubip)
 
 banner('List public IPs')
-pubips = driver.ex_list_public_ips(resgroup)
+pubips = driver.ex_list_public_ips(group)
 print(pubips)
 
 banner('nics')
 nic = driver.ex_create_network_interface(name='cminternal',
                                          subnet=subnets[0],
-                                         resource_group=resgroup,
+                                         resource_group=group,
                                          public_ip=pubip
                                          )
 nics = driver.ex_list_nics()
@@ -138,7 +137,7 @@ node = driver.create_node(name="fwpytest",
                           image=image,
                           auth=auth,
                           # the following three were created in azure portal
-                          ex_resource_group=resgroup,
+                          ex_resource_group=group,
                           # for storage account, use the default v2 setting
                           ex_storage_account='cmtestfw',
                           # under the storage account, blobs services, 

@@ -2,13 +2,12 @@
 # python cloudmesh/compute/openstack/test_openstacksdk.py
 #
 
-from cloudmesh.management.configuration.config import Config
 from pprint import pprint
+
 import openstack
 from cloudmesh.common.util import banner
-from cloudmesh.common.Shell import Shell
-import os
-from cloudmesh.compute.vm.Provider import Provider
+from cloudmesh.management.configuration.config import Config
+
 """
 see : https://docs.openstack.org/openstacksdk/latest/user/guides/compute.html
 """
@@ -28,6 +27,7 @@ cloudmesh4.yaml file
         OS_KEY_PATH: ~/.ssh/id_rsa.pub
 """
 
+
 def credentials():
     d = {}
 
@@ -36,12 +36,13 @@ def credentials():
     d['username'] = config['OS_USERNAME']
     d['password'] = config['OS_PASSWORD']
     # while libcloud uses token, here we do not use it in auth_url
-    d['auth_url'] = config['OS_AUTH_URL'].replace("/tokens","")
+    d['auth_url'] = config['OS_AUTH_URL'].replace("/tokens", "")
     d['project_id'] = config['OS_TENANT_NAME']
     d['region_name'] = config['OS_REGION_NAME']
     # d['project_domain_name'] = config['OS_PROJECT_NAME']
     d['tenant_id'] = config['OS_TENANT_ID']
     return d
+
 
 config = credentials()
 
@@ -51,41 +52,39 @@ cloud = openstack.connect(**config)
 
 pprint(dir(cloud))
 
-#pprint (cloud.list_floating_ips())
+# pprint (cloud.list_floating_ips())
 
-#print (cloud.available_floating_ip())
+# print (cloud.available_floating_ip())
 
-#print (cloud.create_floating_ip())
+# print (cloud.create_floating_ip())
 
-#ip ='129.114.33.15'
+# ip ='129.114.33.15'
 
-#print (cloud.delete_floating_ip(ip))
+# print (cloud.delete_floating_ip(ip))
 
-#provider = Provider(name="chameleon")
-#pprint (cloud.list_floating_ips())
+# provider = Provider(name="chameleon")
+# pprint (cloud.list_floating_ips())
 
-#r = provider.delete_public_ip(ip)
+# r = provider.delete_public_ip(ip)
 
-#print(r)
+# print(r)
 
 server = cloud.get_server("gregor-vm-3")
 ip = cloud.available_floating_ip()
 
 banner("SERVER")
-pprint (server)
+pprint(server)
 banner("IP")
 pprint(ip)
-pprint(cloud.add_ips_to_server(server,ips=ip['floating_ip_address']))
+pprint(cloud.add_ips_to_server(server, ips=ip['floating_ip_address']))
 
-#pprint(cloud.add_ip_list(server,ips=[ip]))
-
+# pprint(cloud.add_ip_list(server,ips=[ip]))
 
 
 if False:
-
     command = "openstack security group list --os-auth-url={auth_url} " \
-        "--os-project-name={project_id} --os-username={username} "\
-        "--os-password={password} -f=json".format(**config)
+              "--os-project-name={project_id} --os-username={username} " \
+              "--os-password={password} -f=json".format(**config)
     # print (command)
     os.system(command)
 
@@ -100,7 +99,7 @@ if False:
       },
       {
         "ID": "6ae7c84f-1449-4770-9ee1-2428d0ea2513",
-        "Name": "rrufael-703-couchdb",
+        "Name": "couchdb",
         "Description": "Couchdb security group",
         "Project": "CH-819337",
         "Tags": []
@@ -114,7 +113,7 @@ if False:
       },
       {
         "ID": "f881d18d-162a-4ccb-a313-b8854afaed65",
-        "Name": "rlambadi-514-api",
+        "Name": "api",
         "Description": "Security Group",
         "Project": "CH-819337",
         "Tags": []
@@ -124,8 +123,8 @@ if False:
     """
 
     command = "openstack security group rule list --os-auth-url={auth_url} " \
-        "--os-project-name={project_id} --os-username={username} "\
-        "--os-password={password} default -f=json".format(**config)
+              "--os-project-name={project_id} --os-username={username} " \
+              "--os-password={password} default -f=json".format(**config)
     # print (command)
     os.system(command)
 
@@ -183,7 +182,6 @@ if False:
     ]
     """
 
-
 if False:
     banner("Flavors")
     flavors = cloud.compute.flavors()
@@ -204,10 +202,7 @@ if False:
     for entry in servers:
         pprint(entry)
 
-
-
-
-if False: # does not work
+if False:  # does not work
     banner("Secrets")
 
     keys = cloud.key_manager.secrets()
@@ -215,16 +210,14 @@ if False: # does not work
         print(entry)
 
 if False:
-
     command = "openstack keypair list --os-auth-url={auth_url} " \
-        "--os-project-name={project_id} --os-username={username} "\
-        "--os-password={password} -f=json".format(**config)
+              "--os-project-name={project_id} --os-username={username} " \
+              "--os-password={password} -f=json".format(**config)
     # print (command)
     r = Shell.execute(command, shell=True)
     d = eval(r)
-    print (type(d))
-    print (d)
-
+    print(type(d))
+    print(d)
 
 """
 def list_secrets_query(conn):
@@ -235,4 +228,3 @@ def list_secrets_query(conn):
             expiration="gte:2020-01-01T00:00:00"):
         print(secret)
 """
-

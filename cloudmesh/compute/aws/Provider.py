@@ -1,13 +1,11 @@
-# python /Users/saurabhiu/github/cm/cloudmesh-cloud/cloudmesh/compute/aws/Provider.py
+import datetime
+from pprint import pprint
 
 import boto3
-from pprint import pprint
-import datetime
 from botocore.exceptions import ClientError
-
-from cloudmesh.provider import ComputeProviderPlugin
 from cloudmesh.abstractclass.ComputeNodeABC import ComputeNodeABC
 from cloudmesh.management.configuration.config import Config
+from cloudmesh.provider import ComputeProviderPlugin
 
 
 class Provider(ComputeNodeABC, ComputeProviderPlugin):
@@ -113,13 +111,12 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
     #  start with a prg in this dir similar to ../openstack/os_sdk.py, call it
     #  aws_boto.py, make sure to use Config()
 
-
+    # noinspection PyPep8Naming
     def Print(self, output, kind, data):
         raise NotImplementedError
 
     def find(self, elements, name=None):
         raise NotImplementedError
-
 
     def list_secgroups(self, name=None):
         raise NotImplementedError
@@ -128,7 +125,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         raise NotImplementedError
 
     def add_secgroup(self, name=None, description=None):
-        raise  NotImplementedError
+        raise NotImplementedError
 
     def add_secgroup_rule(self,
                           name=None,  # group name
@@ -149,14 +146,13 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
     def remove_rules_from_secgroup(self, name=None, rules=None):
         raise NotImplementedError
 
-
     def set_server_metadata(self, name, m):
         raise NotImplementedError
 
     def get_server_metadata(self, name):
         raise NotImplementedError
 
-    # these are availabele to be accociated
+    # these are available to be associated
     def list_public_ips(self,
                         ip=None,
                         available=False):
@@ -172,10 +168,10 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
     def find_available_public_ip(self):
         raise NotImplementedError
 
-    def attach_publicIP(self, node, ip):
+    def attach_public_ip(self, node, ip):
         raise NotImplementedError
 
-    def detach_publicIP(self, node, ip):
+    def detach_public_ip(self, node, ip):
         raise NotImplementedError
 
     # see the openstack example it will be almost the same as in openstack
@@ -184,11 +180,10 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
     def ssh(self, vm=None, command=None):
         raise NotImplementedError
 
-
     def __init__(self, name=None, configuration="~/.cloudmesh/cloudmesh4.yaml"):
         """
         Initializes the provider. The default parameters are read from the
-        configurationfile that is defined in yaml format.
+        configuration file that is defined in yaml format.
 
         :param name: The name of the provider as defined in the yaml file
         :param configuration: The location of the yaml configuration file
@@ -247,13 +242,17 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
         for each_instance in instances:
             try:
-                self.ec2_client.start_instances(InstanceIds=[each_instance.instance_id])
+                self.ec2_client.start_instances(
+                    InstanceIds=[each_instance.instance_id])
             except ClientError:
                 print("Currently instance cant be started...Please try again")
             print("Starting Instance..Please wait...")
             waiter = self.ec2_client.get_waiter('instance_running')
-            waiter.wait(Filters=[{'Name': 'instance-id', 'Values': [each_instance.instance_id]}])
-            print(f"Instance having Tag:{name} and Instance-Id:{each_instance.instance_id} started")
+            waiter.wait(Filters=[
+                {'Name': 'instance-id', 'Values': [each_instance.instance_id]}])
+            print(
+                f"Instance having Tag:{name} and "
+                f"Instance-Id:{each_instance.instance_id} started")
 
     def stop(self, name=None):
         """
@@ -270,13 +269,17 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
         for each_instance in instances:
             try:
-                self.ec2_client.stop_instances(InstanceIds=[each_instance.instance_id])
+                self.ec2_client.stop_instances(
+                    InstanceIds=[each_instance.instance_id])
             except ClientError:
                 print("Currently instance cant be stopped...Please try again")
             print("Stopping Instance..Please wait...")
             waiter = self.ec2_client.get_waiter('instance_stopped')
-            waiter.wait(Filters=[{'Name': 'instance-id', 'Values': [each_instance.instance_id]}])
-            print(f"Instance having Tag:{name} and Instance-Id:{each_instance.instance_id} stopped")
+            waiter.wait(Filters=[
+                {'Name': 'instance-id', 'Values': [each_instance.instance_id]}])
+            print(
+                f"Instance having Tag:{name} and "
+                "Instance-Id:{each_instance.instance_id} stopped")
 
     def info(self, name=None):
         """
@@ -335,7 +338,9 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
             instance = self.ec2_resource.Instance(each_instance.instance_id)
             instance.reboot()
             print("Rebooting Instance..Please wait...")
-            print(f"Instance having Tag:{name} and Instance-Id:{each_instance.instance_id} rebooted")
+            print(
+                f"Instance having Tag:{name} and "
+                "Instance-Id:{each_instance.instance_id} rebooted")
 
     def destroy(self, name=None):
         """
@@ -347,19 +352,24 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
         for each_instance in instances:
             try:
-                self.ec2_client.terminate_instances(InstanceIds=[each_instance.instance_id])
+                self.ec2_client.terminate_instances(
+                    InstanceIds=[each_instance.instance_id])
             except ClientError:
-                print("Currently instance cant be terminated...Please try again")
+                print(
+                    "Currently instance cant be terminated...Please try again")
             print("Terminating Instance..Please wait...")
             waiter = self.ec2_client.get_waiter('instance_terminated')
-            waiter.wait(Filters=[{'Name': 'instance-id', 'Values': [each_instance.instance_id]}])
-            print(f"Instance having Tag:{name} and Instance-Id:{each_instance.instance_id} terminated")
+            waiter.wait(Filters=[
+                {'Name': 'instance-id', 'Values': [each_instance.instance_id]}])
+            print(
+                f"Instance having Tag:{name} and "
+                f"Instance-Id:{each_instance.instance_id} terminated")
 
     #
     # i made some changes in openstack create, compare what i did with what
     # you did. Figure out how to pass metadata into the vm as we need the cm
     # dict passed as metadata to the vm
-    # also all arguments must have the same name as in openstac/abccompute
+    # also all arguments must have the same name as in openstack/abc compute
     # class. I do not think we used keyname, we used key_name=key,
     #
     def create(self,
@@ -375,8 +385,8 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         :param name: the name of the node
         :param image: the image used
         :param size: the size of the image
-        :param timeout: a timeout in seconds that is invoked in case the image does not boot.
-               The default is set to 3 minutes.
+        :param timeout: a timeout in seconds that is invoked in case the image
+                        does not boot. The default is set to 3 minutes.
         :param kwargs: additional arguments passed along at time of boot
         :return:
         """
@@ -388,14 +398,14 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         '''
 
         tags = [{'ResourceType': 'instance',
-                              'Tags': [
-                                  {
-                                      'Key': 'Name',
-                                      'Value': name
-                                  },
-                              ]
-                              },
-                             ]
+                 'Tags': [
+                     {
+                         'Key': 'Name',
+                         'Value': name
+                     },
+                 ]
+                 },
+                ]
 
         if kwargs.get('keyname') is None:
             new_ec2_instance = self.ec2_resource.create_instances(
@@ -418,7 +428,8 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
         waiter = self.ec2_client.get_waiter('instance_exists')
 
-        waiter.wait(Filters=[{'Name': 'instance-id', 'Values': [new_ec2_instance[0].instance_id]}],
+        waiter.wait(Filters=[{'Name': 'instance-id',
+                              'Values': [new_ec2_instance[0].instance_id]}],
                     WaiterConfig={
                         'Delay': 20,
                         'MaxAttempts': timeout / 20
@@ -440,12 +451,12 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         tag_response = None
         for each_instance in instances:
             tag_response = self.ec2_client.create_tags(
-                                                Resources=[each_instance.instance_id],
-                                                Tags=[{
-                                                    'Key': 'Name',
-                                                    'Value': destination
-                                                     }]
-                                                )
+                Resources=[each_instance.instance_id],
+                Tags=[{
+                    'Key': 'Name',
+                    'Value': destination
+                }]
+            )
         return tag_response
 
     def keys(self):
@@ -502,7 +513,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
     def flavor(self, name=None):
         """
-        Gest the flavor with a given name
+        Gets the flavor with a given name
         :param name: The name of the flavor
         :return: The dict of the flavor
         """
@@ -513,7 +524,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         # please compare to openstack, i made some changes there
         # THIS IS THE FUNCTION THAT INTEGRATES WITH CLOUDMESH
         # THIS IS A KEY POINT WITHOUT THI S THE COMMANDS WILL NOT WORK
-        # EACH dict that you return in a method muat apply this update on the
+        # EACH dict that you return in a method must apply this update on the
         # dicts. it adds the cm dict.
         #
         """

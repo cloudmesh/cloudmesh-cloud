@@ -369,14 +369,17 @@ class Provider(ComputeNodeABC):
     def list_public_ips(self, available=False):
         return self.p.list_public_ips(available=available)
 
-    def delete_public_ip(self, ip):
-        return self.p.delete_public_ip(ip)
-
     def create_public_ip(self):
-        return self.p.create_public_ip(self)
+        return self.p.create_public_ip()
 
     def find_available_public_ip(self):
-        return self.p.find_available_public_ip(self)
+        return self.p.find_available_public_ip()
+
+    def detach_public_ip(self, name=None, ip=None):
+        return self.p.detach_public_ip(name=name, ip=ip)
+
+    def attach_public_ip(self, name=None, ip=None):
+        return self.p.attach_public_ip(name=name, ip=ip)
 
     def ssh(self, vm=None, command=None):
         return self.p.ssh(vm=vm, command=command)

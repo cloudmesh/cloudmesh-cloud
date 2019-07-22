@@ -214,7 +214,16 @@ class ComputeNodeABC(metaclass=ABCMeta):
         """
         raise NotImplementedError
 
-    def attach_publicip(self, name=None):
+    def attach_public_ip(self, name=None, ip=None):
+        """
+        adds a public ip to the named vm
+
+        :param name: Name of the vm
+        :return:
+        """
+        raise NotImplementedError
+
+    def dettach_public_ip(self, name=None, ip=None):
         """
         adds a public ip to the named vm
 

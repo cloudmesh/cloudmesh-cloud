@@ -800,8 +800,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         # get IP
 
         if not ip and public:
-            entry = self.find_available_public_ip()
-            ip = entry['floating_ip_address']
+            ip = self.find_available_public_ip()
             # pprint(entry)
 
         elif ip is not None:
@@ -895,15 +894,18 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
     # ok
     def find_available_public_ip(self):
-        return self.cloudman.available_floating_ip()
+        entry = self.cloudman.available_floating_ip()
+        ip = entry['floating_ip_address']
+        return ip
 
-    # broken
-    def attach_public_ip(self, node, ip):
-        raise NotImplementedError
+    # check
+    def attach_public_ip(self, name=None, ip=None):
+        return self.cloudman.add_ip_list(name, [ip])
 
-    # broken
-    def detach_public_ip(self, node, ip):
-        raise NotImplementedError
+    #broken
+    def detach_public_ip(self, name=None, ip=None):
+        return self.cloudman.detach_ip_from_server(name, ip)
+
 
     def rename(self, name=None, destination=None):
         """

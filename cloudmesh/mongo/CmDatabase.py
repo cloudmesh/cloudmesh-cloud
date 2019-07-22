@@ -160,6 +160,7 @@ class CmDatabase(object):
             collections = self.collections()
         else:
             collections = self.collections(regex=f".*-{kind}")
+
         for collection in collections:
             try:
                 col = self.db[collection]

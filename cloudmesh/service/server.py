@@ -4,8 +4,8 @@ Main module of the server file
 
 # see the example in https://github.com/cloudmesh-community/nist/tree/master/examples/flask-connexion-swagger
 
-from flask import jsonify
 import connexion
+from flask import jsonify
 
 # Create the application instance
 

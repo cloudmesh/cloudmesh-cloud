@@ -2,9 +2,9 @@ from cloudmesh.shell.command import PluginCommand
 from cloudmesh.shell.command import command
 
 
-class WorkflowCommand(PluginCommand):
+# see https://github.com/cloudmesh/client/blob/master/cloudmesh_client/shell/plugins/WorkflowCommand.py
 
-    # see https://github.com/cloudmesh/client/blob/master/cloudmesh_client/shell/plugins/WorkflowCommand.py
+class WorkflowCommand(PluginCommand):
 
     # noinspection PyUnusedLocal
     @command
@@ -23,7 +23,8 @@ class WorkflowCommand(PluginCommand):
                 workflow run NAME
                 workflow service start
                 workflow service stop
-                This lists out the workflows present for a cloud
+
+            This lists out the workflows present for a cloud
 
             Options:
                --output=OUTPUT  the output format [default: table]

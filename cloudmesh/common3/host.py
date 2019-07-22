@@ -3,7 +3,6 @@ import subprocess
 from multiprocessing import Pool
 from sys import platform
 
-from cloudmesh.common.console import Console
 from cloudmesh.common.parameter import Parameter
 from cloudmesh.common.util import path_expand
 
@@ -15,8 +14,9 @@ class Host(object):
         """
         check a vm
 
-        :param args: dict of {keypath, username, dest(ip or dns)}
-        :return: a dict representing the result, if returncode=0 ping is successfully
+        :param args: dict of {key, username, host, command}
+        :return: a dict representing the result, if returncode=0 ping is
+                 successfully
         """
         key = args['key']
         host = args['host']
@@ -40,10 +40,12 @@ class Host(object):
             key="~/.ssh/id_rsa.pub",
             processors=3):
         #
-        # BUG: this code has a bug and does not deal with different usernames on the host to be checked.
+        # BUG: this code has a bug and does not deal with different
+        #  usernames on the host to be checked.
         #
         """
 
+        :param command: the command to be executed
         :param hosts: a list of hosts to be checked
         :param username: the usernames for the hosts
         :param key: the key for logging in
@@ -69,12 +71,14 @@ class Host(object):
             res = p.map(Host._ssh, args)
         return res
 
-
-
     @staticmethod
-    def check(hosts=None, username=None, key="~/.ssh/id_rsa.pub", processors=3):
+    def check(hosts=None,
+              username=None,
+              key="~/.ssh/id_rsa.pub",
+              processors=3):
         #
-        # BUG: this code has a bug and does not deal with different usernames on the host to be checked.
+        # BUG: this code has a bug and does not deal with different
+        #  usernames on the host to be checked.
         #
         """
 
@@ -85,21 +89,23 @@ class Host(object):
         :return: list of dicts representing the ping result
         """
 
-        result = Host.ssh(hosts=None,
-                    command='hostname',
-                    username=None,
-                    key="~/.ssh/id_rsa.pub",
-                    processors=3)
+        result = Host.ssh(hosts=hosts,
+                          command='hostname',
+                          username=username,
+                          key=key,
+                          processors=processors)
 
         return result
 
+    # noinspection PyBroadException
     @staticmethod
     def _ping(args):
         """
             ping a vm
 
             :param args: dict of {ip address, count}
-            :return: a dict representing the result, if returncode=0 ping is successfully
+            :return: a dict representing the result, if returncode=0 ping is
+                     successfully
             """
         ip = args['ip']
         count = str(args['count'])
@@ -135,7 +141,7 @@ class Host(object):
         """
         ping a list of given ip addresses
 
-        :param ips: a list of ip addresses
+        :param hosts: a list of ip addresses
         :param count: number of pings to run per ip
         :param processors: number of processors to Pool
         :return: list of dicts representing the ping result

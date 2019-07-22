@@ -95,15 +95,15 @@ class ImageCommand(PluginCommand):
 
                 for cloud in clouds:
                     print(f"List {cloud}")
-                    p = Provider(name=cloud)
+                    provider = Provider(name=cloud)
 
                     db = CmDatabase()
                     images = db.find(collection=f"{cloud}-image")
 
                     print (images)
-                    print(p)
+                    print(provider)
 
-                    p.Print(arguments.output, "image", images)
+                    provider.Print(arguments.output, "image", images)
 
 
             except Exception as e:

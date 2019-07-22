@@ -1,5 +1,6 @@
 import os
 import sys
+import shutil
 
 import oyaml as yaml
 from cloudmesh.common.FlatDict import flatten
@@ -11,7 +12,7 @@ from cloudmesh.common.util import path_expand
 from cloudmesh.management.configuration.config import Config
 from cloudmesh.security.encrypt import EncryptFile
 from cloudmesh.shell.command import PluginCommand
-from cloudmesh.shell.command import command
+from cloudmesh.shell.command import command, map_parameters
 
 
 class ConfigCommand(PluginCommand):
@@ -27,11 +28,13 @@ class ConfigCommand(PluginCommand):
 
            Usage:
              config  -h | --help
+             config cat [less]
+             config check
              config encrypt [SOURCE] [--keep]
              config decrypt [SOURCE]
              config edit [ATTRIBUTE]
              config set ATTRIBUTE=VALUE
-             config get ATTRIBUTE [--format=FORMAT]
+             config get ATTRIBUTE [--ouput=OUTPUT]
              config ssh keygen
              config ssh verify
              config ssh check
@@ -97,13 +100,12 @@ class ConfigCommand(PluginCommand):
         # d = Config()                #~/.cloudmesh/cloudmesh4.yaml
         # d = Config(encryted=True)   # ~/.cloudmesh/cloudmesh4.yaml.enc
 
+        map_parameters(arguments, "keep")
+
         source = arguments.SOURCE or path_expand("~/.cloudmesh/cloudmesh4.yaml")
         destination = source + ".enc"
 
-        arguments.keep = arguments["--keep"]
-        # VERBOSE(arguments)
 
-        e = EncryptFile(source, destination)
 
         if arguments.cloud and arguments.edit and arguments.NAME is None:
             path = path_expand("~/.cloudmesh/cloudmesh4.yaml")
@@ -117,6 +119,8 @@ class ConfigCommand(PluginCommand):
             kind = "cloud"
 
         configuration = Config()
+
+
 
         if arguments.cloud and arguments.verify:
             service = configuration[f"cloudmesh.{kind}.{cloud}"]
@@ -182,7 +186,35 @@ class ConfigCommand(PluginCommand):
 
             return ""
 
+
+        elif arguments.cat:
+
+            content = Config.cat()
+
+            import shutil
+            columns, rows = shutil.get_terminal_size(fallback=(80, 24))
+
+            lines = content.split("\n")
+
+            counter = 1
+            for line in lines:
+                if arguments.less:
+                    if  counter % (rows-2) == 0:
+                        x = input().split("\n")[0].strip()
+                        if x !='' and x in 'qQxX' :
+                            return ""
+                print (line)
+                counter += 1
+
+            return ""
+
+        elif arguments.check:
+
+            Config.check()
+
         elif arguments.encrypt:
+
+            e = EncryptFile(source, destination)
 
             e.encrypt()
             Console.ok(f"{source} --> {destination}")
@@ -209,6 +241,8 @@ class ConfigCommand(PluginCommand):
                     f"decrypted file {destination} does already exist")
                 sys.exit(1)
 
+            e = EncryptFile(source, destination)
+
             e.decrypt(source)
             Console.ok(f"{source} --> {source}")
 
@@ -216,9 +250,15 @@ class ConfigCommand(PluginCommand):
             return ""
 
         elif arguments.ssh and arguments.verify:
+
+            e = EncryptFile(source, destination)
+
             e.pem_verify()
 
         elif arguments.ssh and arguments.check:
+
+            e = EncryptFile(source, destination)
+
             key = "~/.ssh/id_rsa"
             r = e.check_key(key)
             if r:
@@ -227,6 +267,8 @@ class ConfigCommand(PluginCommand):
             # e.check_passphrase()
 
         elif arguments.ssh and arguments.pem:
+
+            e = EncryptFile(source, destination)
 
             r = e.pem_create()
 
@@ -258,6 +300,10 @@ class ConfigCommand(PluginCommand):
 
         elif arguments.ssh and arguments.keygen:
 
+            e = EncryptFile(source, destination)
+
             e.ssh_keygen()
+
+
 
         return ""

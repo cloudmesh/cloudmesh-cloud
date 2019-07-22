@@ -207,7 +207,7 @@ class other:
 
     def test_publicIP_attach(self):
         HEADING()
-        pubip = self.p.get_publicIP()
+        pubip = self.p.get_public_ip()
         pprint(pubip)
         nodes = self.p.list(raw=True)
         for node in nodes:
@@ -216,7 +216,7 @@ class other:
                 break
         if self.testnode:
             print("attaching public IP...")
-            self.p.attach_publicIP(self.testnode, pubip)
+            self.p.attach_public_ip(self.testnode, pubip)
             time.sleep(5)
         self.test_list_vm()
 

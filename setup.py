@@ -80,6 +80,7 @@ openstacksdk
 pandas
 tabulate
 beautifulsoup4
+boto3
 """.split("\n")
 
 

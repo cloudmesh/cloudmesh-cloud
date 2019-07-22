@@ -1,28 +1,30 @@
 class Image(object):
 
     @staticmethod
-    def guess_username(name, cloud=None):
+    def guess_username(image, cloud=None):
         """
-        gues the default usernamed based on the VM name and cloud
+        guess the default user name based on the VM name and cloud
 
-        :param name: the name of the image
+        :param image: the name of the image
         :param cloud: the name of the cloud
         :return: the proposed username
         """
-        name = name.lower()
-        if name.startswith("cc-") or cloud == 'chameleon':
+        username = "root"
+
+        image = image.lower()
+        if image.startswith("cc-") or cloud == 'chameleon':
             username = "cc"
-        elif any(x in name for x in ["ubuntu", "wily", "xenial"]):
+        elif any(x in image for x in ["ubuntu", "wily", "xenial"]):
             username = "ubuntu"
-        elif "centos" in name:
+        elif "centos" in image:
             username = "root"
-        elif "fedora" in name:
+        elif "fedora" in image:
             username = "root"
-        elif "rhel" in name:
+        elif "rhel" in image:
             username = "root"
-        elif "cirros" in name:
+        elif "cirros" in image:
             username = "root"
-        elif "coreos" in name:
+        elif "coreos" in image:
             username = "root"
 
         return username

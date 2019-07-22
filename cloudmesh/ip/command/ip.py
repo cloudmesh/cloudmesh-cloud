@@ -5,6 +5,8 @@ from cloudmesh.common.parameter import Parameter
 from cloudmesh.common.variables import Variables
 from cloudmesh.compute.vm.Provider import Provider
 from pprint import pprint
+from cloudmesh.common.console import Console
+from cloudmesh.mongo.CmDatabase import CmDatabase
 
 # see https://github.com/cloudmesh/client/blob/master/cloudmesh_client/shell/plugins/NetworkCommand.py
 
@@ -19,11 +21,11 @@ class IpCommand(PluginCommand):
         ::
 
             Usage:
-                ip list floating [--cloud=CLOUD] [--output=OUTPUT]
-                ip add floating [--cloud=CLOUD]
-                ip delete floating [IP] [--cloud=CLOUD]
-                ip add NAME [IP]
-                ip delete NAME [IP]
+                ip list  [--cloud=CLOUD] [--output=OUTPUT]
+                ip create [--cloud=CLOUD]
+                ip delete [IP] [--cloud=CLOUD]
+                ip assign [NAME] [IP]
+                ip unasign [NAME] [IP]
 
 
             Options:
@@ -55,22 +57,97 @@ class IpCommand(PluginCommand):
 
         """
 
+        def get_ip(ip):
+
+            if ip is None:
+                # find a free one
+                try:
+                    ip = provider.find_available_public_ip()
+                    return ip
+                except Exception as e:
+                    Console.error("No free floating ip found")
+                    return ""
+
         map_parameters(arguments,
                        "cloud",
                        "output")
+        arguments.vm = arguments.NAME
 
         variables = Variables()
 
-        if arguments.list and arguments.floating:
+        if arguments.list:
 
             cloud = Parameter.find("cloud", arguments, variables)
-
-            names = []
 
             print(f"cloud {cloud}")
             provider = Provider(name=cloud)
             ips = provider.list_public_ips()
 
-            pprint (ips)
+            provider.Print(arguments.output, "ip", ips)
+
+        elif arguments.create:
+
+            cloud = Parameter.find("cloud", arguments, variables)
+
+            print(f"cloud {cloud}")
+            provider = Provider(name=cloud)
+
+            ips = provider.create_public_ip()
+            ips = provider.list_public_ips()
 
             provider.Print(arguments.output, "ip", ips)
+
+
+        elif arguments.delete:
+
+            cloud = Parameter.find("cloud", arguments, variables)
+
+            print(f"cloud {cloud}")
+            provider = Provider(name=cloud)
+
+            ip = arguments.IP
+
+            ip = get_ip(arguments.IP)
+
+            ips = provider.delete_public_ip(ip)
+            ips = provider.list_public_ips()
+
+            provider.Print(arguments.output, "ip", ips)
+
+        elif arguments.assign:
+
+            name = Parameter.find("vm", arguments, variables)
+
+            cm = CmDatabase()
+            vm = cm.find_name(name, kind="vm")[0]
+
+            pprint (vm)
+            cloud = vm["cm"]["cloud"]
+
+
+            print(f"cloud {cloud}")
+            provider = Provider(name=cloud)
+
+            ip = get_ip(arguments.IP)
+            try:
+                ips = provider.assign_public_ip(name=vm, ip=ip)
+            except:
+                Console.error("Could not assign public ip.")
+
+
+        elif arguments.unassign:
+            name = Parameter.find("vm", arguments, variables)
+
+            cm = CmDatabase()
+            vm = cm.find_name(name, kind="vm")[0]
+
+            pprint(vm)
+            cloud = vm["cm"]["cloud"]
+
+            print(f"cloud {cloud}")
+            provider = Provider(name=cloud)
+
+            ip = get_ip(arguments.IP)
+
+            ips = provider.unassign_public_ip(name=vm, ip=ip)
+            ips = provider.list_public_ips()

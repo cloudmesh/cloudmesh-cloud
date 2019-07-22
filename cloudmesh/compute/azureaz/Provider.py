@@ -2,10 +2,10 @@ import json
 import webbrowser
 from pprint import pprint
 
-from cloudmesh.common.debug import VERBOSE
 from cloudmesh.abstractclass.ComputeNodeABC import ComputeNodeABC
 from cloudmesh.common.Shell import Shell
 from cloudmesh.common.StopWatch import StopWatch
+from cloudmesh.common.debug import VERBOSE
 from cloudmesh.common.util import path_expand
 from cloudmesh.management.configuration.config import Config
 
@@ -147,12 +147,13 @@ class Provider(ComputeNodeABC):
     def create_resource_group(self, name=None, location=None):
         if name is None or location is None:
             raise ValueError(
-                f"Reosurce can not be found, Name: {name}, Location: {location}")
+                f"Resource can not be found, "
+                "Name: {name}, Location: {location}")
         return self.az(f"az group create --name {name} --location {location}")
 
     def delete_resource_group(self, name=None):
         if name is None:
-            raise ValueError(f"Reosurce can not be found, Name: {name}")
+            raise ValueError(f"Resource can not be found, Name: {name}")
         r = self.az(f"az group delete --yes --name {name}")
         r = self.az(f"az group exists --name {name}")
         return r
@@ -294,7 +295,7 @@ class Provider(ComputeNodeABC):
         command = \
             "az vm list-sizes" \
                 f" --location {location}"
-        # THIS SHOUL RETURN A DICT
+        # THIS SHOULD RETURN A DICT
         return self.az_2(command)
 
     def connect_to_all(self):
@@ -332,13 +333,11 @@ class Provider(ComputeNodeABC):
 
     def resume(self, name=None):
         raise NotImplementedError
-        # THIS SHOUL RETURN A DICT
+        # THIS SHOULD RETURN A DICT
 
     def suspend(self, name=None):
         raise NotImplementedError
-        # THIS SHOUL RETURN A DICT
-
-
+        # THIS SHOULD RETURN A DICT
 
 
 if __name__ == "__main__":
@@ -374,7 +373,8 @@ if __name__ == "__main__":
     print(type(r))
     pprint(r)
     
-    # az vm get-instance-view --name vm3 --resource-group test1 --query instanceView.statuses[1]
+    # az vm get-instance-view --name vm3 --resource-group test1 \
+    #                         --query instanceView.statuses[1]
     
     r = p.status(
                     name=name)

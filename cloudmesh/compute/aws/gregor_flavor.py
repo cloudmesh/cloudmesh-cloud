@@ -1,14 +1,14 @@
+import re
 from pprint import pprint
 
 import pandas as pd
 import requests
 from bs4 import BeautifulSoup
-from cloudmesh.common.parameter import Parameter
 from cloudmesh.common.util import banner
 from tabulate import tabulate
-import re
 
-class AwsImages():
+
+class AwsImages(object):
 
     def __init__(self):
         self.html = self.fetch()
@@ -25,6 +25,7 @@ class AwsImages():
 
         soup = BeautifulSoup(html, features="lxml")
 
+        # noinspection PyPep8Naming
         REMOVE_ATTRIBUTES = ['style',
                              'height',
                              'width',
@@ -35,6 +36,7 @@ class AwsImages():
             for tag in soup.find_all(attrs={attribute: True}):
                 del tag[attribute]
 
+        # noinspection PyPep8Naming
         TAGS = ['b', 'i', 'u']
         for tag in TAGS:
             for match in soup.findAll(tag):
@@ -42,13 +44,12 @@ class AwsImages():
 
         table = soup.find("table")
 
-
         output = []
-
 
         table_rows = table.find_all('tr')
         for tr in table_rows:
             td = tr.find_all('td')
+            # noinspection PyPep8
             row = [re.sub('\s+', ' ', i.text).strip() for i in td]
             output.append(row)
 
@@ -61,7 +62,6 @@ class AwsImages():
     def pprint(self):
         banner(f"Table")
         pprint(self.data)
-
 
     def table(self, output="fancy_grid"):
         """

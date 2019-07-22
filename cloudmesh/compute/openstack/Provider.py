@@ -1,29 +1,26 @@
+import os
 import subprocess
+from ast import literal_eval
 from datetime import datetime
 from pprint import pprint
 
 import openstack
 from cloudmesh.abstractclass.ComputeNodeABC import ComputeNodeABC
-from cloudmesh.common.Shell import Shell
+from cloudmesh.common.Printer import Printer
 from cloudmesh.common.console import Console
-from cloudmesh.common.debug import VERBOSE
+from cloudmesh.common.parameter import Parameter
 from cloudmesh.common.util import banner
 from cloudmesh.common.util import path_expand
-from cloudmesh.management.configuration.config import Config
-from cloudmesh.provider import ComputeProviderPlugin
-from cloudmesh.common.Printer import Printer
-from cloudmesh.mongo.CmDatabase import CmDatabase
-from cloudmesh.secgroup.Secgroup import Secgroup, SecgroupRule
-from cloudmesh.secgroup.Secgroup import SecgroupExamples
-from cloudmesh.common3.DictList import DictList
-import os
 from cloudmesh.common.variables import Variables
+from cloudmesh.common3.DictList import DictList
 from cloudmesh.image.Image import Image
-from cloudmesh.common.parameter import Parameter
-from ast import literal_eval
+from cloudmesh.management.configuration.config import Config
+from cloudmesh.mongo.CmDatabase import CmDatabase
+from cloudmesh.provider import ComputeProviderPlugin
+from cloudmesh.secgroup.Secgroup import Secgroup, SecgroupRule
+
 
 class Provider(ComputeNodeABC, ComputeProviderPlugin):
-
     kind = "openstack"
 
     output = {
@@ -143,7 +140,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         },
     }
 
-
+    # noinspection PyPep8Naming
     def Print(self, output, kind, data):
 
         if output == "table":
@@ -155,7 +152,6 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                         rule['name'] = group['name']
                         result.append(rule)
                 data = result
-
 
             order = self.output[kind]['order']  # not pretty
             header = self.output[kind]['header']  # not pretty
@@ -190,7 +186,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
     def __init__(self, name=None, configuration="~/.cloudmesh/cloudmesh4.yaml"):
         """
         Initializes the provider. The default parameters are read from the
-        configurationfile that is defined in yaml format.
+        configuration file that is defined in yaml format.
 
         :param name: The name of the provider as defined in the yaml file
         :param configuration: The location of the yaml configuration file
@@ -225,7 +221,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
             self.key_val = f.read()
         except:
             raise ValueError("the public key location is not set in the "
-                             "provile of the yaml file.")
+                             "profile of the yaml file.")
 
     def update_dict(self, elements, kind=None):
         """
@@ -265,11 +261,11 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
             if kind == 'key':
 
                 try:
-                    entry['comment'] = entry['public_key'].split(" ",2)[2]
+                    entry['comment'] = entry['public_key'].split(" ", 2)[2]
                 except:
                     entry['comment'] = ""
                 entry['format'] = \
-                    entry['public_key'].split(" ", 1)[0].replace("ssh-","")
+                    entry['public_key'].split(" ", 1)[0].replace("ssh-", "")
 
             elif kind == 'vm':
 
@@ -305,7 +301,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         """
 
         for element in elements:
-            if  element["name"] == name or element["cm"]["name"] == name:
+            if element["name"] == name or element["cm"]["name"] == name:
                 return element
         return None
 
@@ -318,7 +314,6 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         return self.get_list(self.cloudman.list_keypairs(),
                              kind="key")
 
-
     def key_upload(self, key=None):
         """
         uploads the key specified in the yaml configuration to the cloud
@@ -330,7 +325,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         cloud = self.cloud
         Console.msg(f"upload the key: {name} -> {cloud}")
         try:
-            r = self.cloudman.create_keypair(name,key['string'])
+            r = self.cloudman.create_keypair(name, key['string'])
         except openstack.exceptions.ConflictException:
             raise ValueError(f"key already exists: {name}")
 
@@ -339,7 +334,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
     def key_delete(self, name=None):
         """
         deletes the key with the given name
-        :param name: The anme of the key
+        :param name: The name of the key
         :return:
         """
 
@@ -356,7 +351,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         :param name: The name of the group, if None all will be returned
         :return:
         """
-        groups =  self.cloudman.network.security_groups()
+        groups = self.cloudman.network.security_groups()
 
         if name is not None:
             for entry in groups:
@@ -366,8 +361,8 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                     break
 
         return self.get_list(
-                groups,
-                kind="secgroup")
+            groups,
+            kind="secgroup")
 
     def list_secgroup_rules(self, name='default'):
         """
@@ -382,7 +377,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         """
         Adds the
         :param name: Name of the group
-        :param description: The desciption
+        :param description: The description
         :return:
         """
         if self.cloudman:
@@ -394,14 +389,14 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
             raise ValueError("cloud not initialized")
 
     def add_secgroup_rule(self,
-                          name=None, #group name
+                          name=None,  # group name
                           port=None,
                           protocol=None,
                           ip_range=None):
         """
         Adds the
         :param name: Name of the group
-        :param description: The desciption
+        :param description: The description
         :return:
         """
         if self.cloudman:
@@ -409,7 +404,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                 portmin, portmax = port.split(":")
             except:
                 portmin = None
-                portmax= None
+                portmax = None
 
             self.cloudman.create_security_group_rule(
                 name,
@@ -424,7 +419,6 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
         else:
             raise ValueError("cloud not initialized")
-
 
     def remove_secgroup(self, name=None):
         """
@@ -451,7 +445,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         groups = Secgroup().list()
         rules = SecgroupRule().list()
 
-        #pprint (rules)
+        # pprint (rules)
         data = {}
         for rule in rules:
             data[rule['name']] = rule
@@ -468,21 +462,21 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
             for r in group['rules']:
                 found = data[r]
-                print ("    ", "rule:", found['name'])
+                print("    ", "rule:", found['name'])
                 self.add_secgroup_rule(
-                                  name=name,
-                                  port=found["ports"],
-                                  protocol=found["protocol"],
-                                  ip_range=found["ip_range"])
+                    name=name,
+                    port=found["ports"],
+                    protocol=found["protocol"],
+                    ip_range=found["ip_range"])
 
         else:
 
             for r in group['rules']:
                 found = data[r]
-                print ("    ", "rule:", found['name'])
+                print("    ", "rule:", found['name'])
                 self.add_rules_to_secgroup(
-                                           name=name,
-                                           rules=[found['name']])
+                    name=name,
+                    rules=[found['name']])
 
     # ok
     def add_rules_to_secgroup(self, name=None, rules=None):
@@ -501,7 +495,6 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         except:
             raise ValueError("group does not exist")
 
-
         for rule in rules:
             try:
                 found = rules_details[rule]
@@ -511,7 +504,6 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                                        ip_range=found["ip_range"])
             except:
                 ValueError("rule can not be found")
-
 
     # not tested
     def remove_rules_from_secgroup(self, name=None, rules=None):
@@ -539,8 +531,6 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                 except:
                     pmin = None
                     pmax = None
-
-
             except:
                 ValueError("rule can not be found")
 
@@ -551,16 +541,15 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                     r["port_range_min"] == pmax and \
                     r["protocol"] == found["protocol"] and \
                     r["remote_ip_prefix"] == found["ports"]
-                    #r["direction"] == "egress" \
-                    #r["ethertype"] == "IPv6" \
-                    #r["id"] == "1234e4e3-ba72-4e33-9844-..." \
-                    # r["remote_group_id"]] == null \
-                    #r["tenant_id"]] == "CH-12345"
+                # r["direction"] == "egress" \
+                # r["ethertype"] == "IPv6" \
+                # r["id"] == "1234e4e3-ba72-4e33-9844-..." \
+                # r["remote_group_id"]] == null \
+                # r["tenant_id"]] == "CH-12345"
 
                 if test:
                     id = r["security_group_id"]
                     self.cloudman.delete_security_group_rule(id)
-
 
     def get_list(self, d, kind=None, debug=False, **kwargs):
         """
@@ -605,7 +594,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
     def flavor(self, name=None):
         """
-        Gest the flavor with a given name
+        Gets the flavor with a given name
         :param name: The name of the flavor
         :return: The dict of the flavor
         """
@@ -692,7 +681,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
         :return: dict of vms
         """
-        servers =  self.get_list(self.cloudman.compute.servers(), kind="vm")
+        servers = self.get_list(self.cloudman.compute.servers(), kind="vm")
 
         result = []
         for server in servers:
@@ -746,7 +735,6 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         data = dict(m['server_vars']['metadata'])
         return data
 
-
     def create(self,
                name=None,
                image=None,
@@ -771,7 +759,8 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         :param size: the size of the image
         :param timeout: a timeout in seconds that is invoked in case the image
                         does not boot. The default is set to 3 minutes.
-        :param kwargs: additional arguments HEADING(c=".")ed along at time of boot
+        :param kwargs: additional arguments HEADING(c=".")ed along at time of
+                       boot
         :return:
         """
         image_use = None
@@ -789,14 +778,13 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         # Guess user name
 
         if user is None:
-
             user = Image.guess_username(image)
-            #image_name = image.lower()
-            #if image_name.startswith("cc-"):
+            # image_name = image.lower()
+            # if image_name.startswith("cc-"):
             #    user = "cc"
-            #if "centos" in image_name:
+            # if "centos" in image_name:
             #    user = "centos"
-            #elif "ubuntu" in image_name:
+            # elif "ubuntu" in image_name:
             #    user = "ubuntu"
 
         # get IP
@@ -835,8 +823,8 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                                                  key_name=key,
                                                  security_groups=[secgroup],
                                                  timeout=timeout,
-                                                 #tags=groups,
-                                                 #wait=True
+                                                 # tags=groups,
+                                                 # wait=True
                                                  )
             server['user'] = user
             self.cloudman.wait_for_server(server)
@@ -855,19 +843,18 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
             #    ip=server.access_ipv4))
 
         except Exception as e:
-            print (e)
+            print(e)
             raise RuntimeError
 
         return self.update_dict(server, kind="vm")[0]
 
-    #ok
+    # ok
     def list_public_ips(self,
                         ip=None,
                         available=False):
 
         if ip is not None:
-            ips = self.cloudman.list_floating_ips({'floating_ip_address':
-                                                       ip})
+            ips = self.cloudman.list_floating_ips({'floating_ip_address': ip})
         else:
             ips = self.cloudman.list_floating_ips()
             if available:
@@ -879,40 +866,40 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
         return ips
 
-    #ok
+    # ok
     def delete_public_ip(self, ip=None):
         try:
             if ip is None:
                 ips = self.cloudman.list_floating_ips(available=True)
             else:
-                ips = self.cloudman.list_floating_ips({'floating_ip_address' :
-                                                       ip})
+                ips = self.cloudman.list_floating_ips(
+                    {'floating_ip_address': ip})
             for _ip in ips:
                 r = self.cloudman.delete_floating_ip(_ip['id'])
         except:
             pass
 
-    #ok
+    # ok
     def create_public_ip(self):
         return self.cloudman.create_floating_ip()
 
-    #ok
+    # ok
     def find_available_public_ip(self):
         return self.cloudman.available_floating_ip()
 
-    #broken
-    def attach_publicIP(self, node, ip):
+    # broken
+    def attach_public_ip(self, node, ip):
         raise NotImplementedError
 
-    #broken
-    def detach_publicIP(self, node, ip):
+    # broken
+    def detach_public_ip(self, node, ip):
         raise NotImplementedError
 
     def rename(self, name=None, destination=None):
         """
         rename a node. NOT YET IMPLEMENTED.
 
-        :param destinat
+        :param destination
         :param name: the current name
         :return: the dict with the new name
         """
@@ -921,7 +908,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
     def ssh(self, vm=None, command=None):
         #
-        # TODO: fix user name issue, shoudl be stored in db
+        # TODO: fix user name issue, should be stored in db
         #
         ips = vm['addresses']
         first = list(ips.keys())[0]
@@ -938,21 +925,19 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         cm = CmDatabase()
         key = cm.find_name(name=key_name, kind="key")[0]['location']['private']
 
-
         user = "cc"  # needs to be set on creation.
 
-
-        if command == None:
+        if command is None:
             command = ""
 
         if user is None:
-            location =  ip
+            location = ip
         else:
             location = user + '@' + ip
         cmd = "ssh " \
-                "-o StrictHostKeyChecking=no " \
-                "-o UserKnownHostsFile=/dev/null " \
-               f"-i {key} {location} {command}"
+              "-o StrictHostKeyChecking=no " \
+              "-o UserKnownHostsFile=/dev/null " \
+            f"-i {key} {location} {command}"
         cmd = cmd.strip()
         # VERBOSE(cmd)
 
@@ -964,11 +949,8 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                                    stdout=subprocess.PIPE,
                                    stderr=subprocess.PIPE)
             result = ssh.stdout.read().decode("utf-8")
-            if result == []:
+            if not result:
                 error = ssh.stderr.readlines()
                 print("ERROR: %s" % error)
             else:
                 return result
-
-
-

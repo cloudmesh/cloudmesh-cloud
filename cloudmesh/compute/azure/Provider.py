@@ -1,25 +1,19 @@
-import traceback
-
-import json
 from datetime import datetime
-from cloudmesh.abstractclass.ComputeNodeABC import ComputeNodeABC
-from cloudmesh.management.configuration.config import Config
-from cloudmesh.common.debug import VERBOSE
-from cloudmesh.common.util import HEADING
-from cloudmesh.common.dotdict import dotdict
-from cloudmesh.common.console import Console
 
 from azure.common.credentials import ServicePrincipalCredentials
-from azure.mgmt.resource import ResourceManagementClient
-from azure.mgmt.network import NetworkManagementClient
 from azure.mgmt.compute import ComputeManagementClient
+from azure.mgmt.network import NetworkManagementClient
+from azure.mgmt.resource import ResourceManagementClient
+from cloudmesh.abstractclass.ComputeNodeABC import ComputeNodeABC
+from cloudmesh.common.console import Console
+from cloudmesh.common.debug import VERBOSE
+from cloudmesh.common.util import HEADING
+from cloudmesh.management.configuration.config import Config
 
-from msrestazure.azure_exceptions import CloudError
 
 class Provider(ComputeNodeABC):
-
     #
-    # TODO: This is a bug, you need to define the outout attributes for the
+    # TODO: This is a bug, you need to define the output attributes for the
     #  table printer. Print an entry with VERBOSE, after you get it from azure
     #  so you can look at them
 
@@ -68,6 +62,7 @@ class Provider(ComputeNodeABC):
 
     }
 
+    # noinspection PyPep8Naming
     def Print(self, output, kind, data):
         raise NotImplementedError
 
@@ -90,7 +85,7 @@ class Provider(ComputeNodeABC):
         raise NotImplementedError
 
     def add_secgroup(self, name=None, description=None):
-        raise  NotImplementedError
+        raise NotImplementedError
 
     def add_secgroup_rule(self,
                           name=None,  # group name
@@ -126,7 +121,7 @@ class Provider(ComputeNodeABC):
     def get_server_metadata(self, name):
         raise NotImplementedError
 
-    # these are availabele to be accociated
+    # these are available to be associated
     def list_public_ips(self,
                         ip=None,
                         available=False):
@@ -142,10 +137,10 @@ class Provider(ComputeNodeABC):
     def find_available_public_ip(self):
         raise NotImplementedError
 
-    def attach_publicIP(self, node, ip):
+    def attach_public_ip(self, node, ip):
         raise NotImplementedError
 
-    def detach_publicIP(self, node, ip):
+    def detach_public_ip(self, node, ip):
         raise NotImplementedError
 
     # see the openstack example it will be almost the same as in openstack
@@ -154,11 +149,12 @@ class Provider(ComputeNodeABC):
     def ssh(self, vm=None, command=None):
         raise NotImplementedError
 
-
+    # noinspection PyPep8Naming
     def __init__(self, name=None, configuration="~/.cloudmesh/cloudmesh4.yaml"):
         """
-        Initializes the provider. The default parameters are read from the configutation
-        file that is defined in yaml format.
+        Initializes the provider. The default parameters are read from the
+        configuration file that is defined in yaml format.
+
         :param name: The name of the provider as defined in the yaml file
         :param configuration: The location of the yaml configuration file
         """
@@ -180,23 +176,33 @@ class Provider(ComputeNodeABC):
         if self.cloudtype != 'azure':
             Console.error("This class is meant for azure cloud")
 
-        # ServicePrincipalCredentials related Variables to configure in cloudmesh4.yaml file
-        # AZURE_APPLICATION_ID = '<Application ID from Azure Active Directory App Registration Process>'
-        # AZURE_SECRET_KEY = '<Secret Key from Application configured in Azure>'
-        # AZURE_TENANT_ID = '<Directory ID from Azure Active Directory section>'
+        # ServicePrincipalCredentials related Variables to configure in
+        # cloudmesh4.yaml file
+
+        # AZURE_APPLICATION_ID = '<Application ID from Azure Active Directory
+        # App Registration Process>'
+
+        # AZURE_SECRET_KEY = '<Secret Key from Application configured in
+        # Azure>'
+
+        # AZURE_TENANT_ID = '<Directory ID from Azure Active Directory
+        # section>'
 
         credentials = ServicePrincipalCredentials(
-            client_id = cred['AZURE_APPLICATION_ID'],
-            secret = cred['AZURE_SECRET_KEY'],
-            tenant = cred['AZURE_TENANT_ID']
-            )
+            client_id=cred['AZURE_APPLICATION_ID'],
+            secret=cred['AZURE_SECRET_KEY'],
+            tenant=cred['AZURE_TENANT_ID']
+        )
 
-        SUBSCRIPTION_ID = cred['AZURE_SUBSCRIPTION_ID']
+        subscription = cred['AZURE_SUBSCRIPTION_ID']
 
         # Management Clients
-        self.resource_client = ResourceManagementClient(credentials, SUBSCRIPTION_ID)
-        self.compute_client  = ComputeManagementClient(credentials, SUBSCRIPTION_ID)
-        self.network_client  = NetworkManagementClient(credentials, SUBSCRIPTION_ID)
+        self.resource_client = ResourceManagementClient(
+            credentials, subscription)
+        self.compute_client = ComputeManagementClient(
+            credentials, subscription)
+        self.network_client = NetworkManagementClient(
+            credentials, subscription)
 
         # VMs abbreviation
 
@@ -204,29 +210,30 @@ class Provider(ComputeNodeABC):
         self.images = self.compute_client.virtual_machine_images
 
         # Azure Resource Group
-        self.GROUP_NAME      = self.default["resource_group"]
+        self.GROUP_NAME = self.default["resource_group"]
 
         # Azure Datacenter Region
-        self.LOCATION        = cred["AZURE_REGION"]
+        self.LOCATION = cred["AZURE_REGION"]
 
         # NetworkManagementClient related Variables
-        self.VNET_NAME       = self.default["network"]
-        self.SUBNET_NAME     = self.default["subnet"]
-        self.IP_CONFIG_NAME  = self.default["AZURE_VM_IP_CONFIG"]
-        self.NIC_NAME        = self.default["AZURE_VM_NIC"]
+        self.VNET_NAME = self.default["network"]
+        self.SUBNET_NAME = self.default["subnet"]
+        self.IP_CONFIG_NAME = self.default["AZURE_VM_IP_CONFIG"]
+        self.NIC_NAME = self.default["AZURE_VM_NIC"]
 
         # Azure VM Storage details
-        self.OS_DISK_NAME    = self.default["AZURE_VM_DISK_NAME"]
-        self.USERNAME        = self.default["AZURE_VM_USER"]
-        self.PASSWORD        = self.default["AZURE_VM_PASSWORD"]
-        self.VM_NAME         = self.default["AZURE_VM_NAME"]
+        self.OS_DISK_NAME = self.default["AZURE_VM_DISK_NAME"]
+        self.USERNAME = self.default["AZURE_VM_USER"]
+        self.PASSWORD = self.default["AZURE_VM_PASSWORD"]
+        self.VM_NAME = self.default["AZURE_VM_NAME"]
 
         # Create or Update Resource group
         self.get_resource_group()
 
     def get_resource_group(self):
 
-        if self.resource_client.resource_groups.check_existence(self.GROUP_NAME):
+        if self.resource_client.resource_groups.check_existence(
+            self.GROUP_NAME):
             return self.resource_client.resource_groups.get(self.GROUP_NAME)
         else:
             # Create or Update Resource group
@@ -259,10 +266,12 @@ class Provider(ComputeNodeABC):
         :return:
         """
 
-        VM_PARAMETERS = self.create_vm_parameters()
+        vm_parameters = self.create_vm_parameters()
 
         async_vm_creation = self.vms.create_or_update(
-            self.GROUP_NAME, self.VM_NAME, VM_PARAMETERS)
+            self.GROUP_NAME,
+            self.VM_NAME,
+            vm_parameters)
         async_vm_creation.wait()
 
         # Creating a Managed Data Disk
@@ -306,22 +315,18 @@ class Provider(ComputeNodeABC):
 
     def create_vm_parameters(self):
 
-        nic     = self.create_nic()
-        NIC_ID  = nic.id
+        nic = self.create_nic()
 
         # Parse Image from yaml file
-        image               = self.default["image"].split(":")
-        imgPublisher        = image[0]
-        imgOffer            = image[1]
-        imgSKU              = image[2]
-        imgVersion          = image[3]
+
+        publisher, offer, sku, version = self.default["image"].split(":")
 
         # Declare Virtual Machine Settings
 
         """
             Create the VM parameters structure.
         """
-        VM_PARAMETERS={
+        vm_parameters = {
             'location': self.LOCATION,
             'os_profile': {
                 'computer_name': self.VM_NAME,
@@ -333,20 +338,20 @@ class Provider(ComputeNodeABC):
             },
             'storage_profile': {
                 'image_reference': {
-                    'publisher': imgPublisher,
-                    'offer': imgOffer,
-                    'sku': imgSKU,
-                    'version': imgVersion
+                    'publisher': publisher,
+                    'offer': offer,
+                    'sku': sku,
+                    'version': version
                 },
             },
             'network_profile': {
                 'network_interfaces': [{
-                    'id': NIC_ID,
+                    'id': nic.id,
                 }]
             },
         }
 
-        return VM_PARAMETERS
+        return vm_parameters
 
     def create_nic(self):
         """
@@ -358,16 +363,17 @@ class Provider(ComputeNodeABC):
 
         # Create Virtual Network
         print('\nCreate Vnet')
-        async_vnet_creation = self.network_client.virtual_networks.create_or_update(
-            self.GROUP_NAME,
-            self.VNET_NAME,
-            {
-                'location': self.LOCATION,
-                'address_space': {
-                    'address_prefixes': ['10.0.0.0/16']
+        async_vnet_creation = \
+            self.network_client.virtual_networks.create_or_update(
+                self.GROUP_NAME,
+                self.VNET_NAME,
+                {
+                    'location': self.LOCATION,
+                    'address_space': {
+                        'address_prefixes': ['10.0.0.0/16']
+                    }
                 }
-            }
-        )
+            )
         async_vnet_creation.wait()
 
         # Create Subnet
@@ -382,101 +388,102 @@ class Provider(ComputeNodeABC):
 
         # Create NIC
         print('\nCreate NIC')
-        async_nic_creation = self.network_client.network_interfaces.create_or_update(
-            self.GROUP_NAME,
-            self.NIC_NAME,
-            {
-                'location': self.LOCATION,
-                'ip_configurations': [{
-                    'name': self.IP_CONFIG_NAME,
-                    'subnet': {
-                        'id': subnet_info.id
-                    }
-                }]
-            }
-        )
+        async_nic_creation = \
+            self.network_client.network_interfaces.create_or_update(
+                self.GROUP_NAME,
+                self.NIC_NAME,
+                {
+                    'location': self.LOCATION,
+                    'ip_configurations': [{
+                        'name': self.IP_CONFIG_NAME,
+                        'subnet': {
+                            'id': subnet_info.id
+                        }
+                    }]
+                }
+            )
 
         nic = async_nic_creation.result()
 
         return nic
 
-    def start(self, groupName=None, vmName=None):
+    def start(self, group=None, name=None):
         """
         start a node
 
-        :param groupName: the unique Resource Group name
-        :param vmName: the unique Virtual Machine name
+        :param group: the unique Resource Group name
+        :param name: the unique Virtual Machine name
         :return:  The dict representing the node
         """
-        if groupName is None:
-            groupName   = self.GROUP_NAME
-        if vmName is None:
-            vmName      = self.VM_NAME
+        if group is None:
+            group = self.GROUP_NAME
+        if name is None:
+            name = self.VM_NAME
 
         # Start the VM
         VERBOSE(" ".join('Starting Azure VM'))
         print('Starting Azure VM')
-        async_vm_start = self.vms.start(groupName, vmName)
+        async_vm_start = self.vms.start(group, name)
         async_vm_start.wait()
-        return self.info(groupName, vmName)
-        #return None
+        return self.info(group, name)
+        # return None
 
     # reboot? check if we need to use reboot or restart must be the same
     # across all providers
-    def restart(self, groupName=None, vmName=None):
+    def restart(self, group=None, name=None):
         """
         restart a node
 
         :param name:
         :return: The dict representing the node
         """
-        if groupName is None:
-            groupName = self.GROUP_NAME
-        if vmName is None:
-            vmName = self.VM_NAME
+        if group is None:
+            group = self.GROUP_NAME
+        if name is None:
+            name = self.VM_NAME
 
         # Restart the VM
         VERBOSE(" ".join('Restarting Azure VM'))
         print('Restarting Azure VM')
-        async_vm_restart = self.vms.restart(groupName, vmName)
+        async_vm_restart = self.vms.restart(group, name)
         async_vm_restart.wait()
-        return self.info(groupName, vmName)
-        #return None
+        return self.info(group, name)
+        # return None
 
-    def stop(self, groupName=None, vmName=None):
+    def stop(self, group=None, name=None):
         """
         stops the node with the given name
 
         :param name:
         :return: The dict representing the node including updated status
         """
-        if groupName is None:
-            groupName = self.GROUP_NAME
-        if vmName is None:
-            vmName = self.VM_NAME
+        if group is None:
+            group = self.GROUP_NAME
+        if name is None:
+            name = self.VM_NAME
 
         # Stop the VM
         VERBOSE(" ".join('Stopping Azure VM'))
         print('Stopping Azure VM')
-        async_vm_stop = self.vms.power_off(groupName, vmName)
+        async_vm_stop = self.vms.power_off(group, name)
         async_vm_stop.wait()
-        return self.info(groupName, vmName)
-        #return None
+        return self.info(group, name)
+        # return None
 
-    def info(self, groupName=None, vmName=None):
+    def info(self, group=None, name=None):
         """
         gets the information of a node with a given name
         List VM in resource group
         :param name:
         :return: The dict representing the node including updated status
         """
-        if groupName is None:
-            groupName = self.GROUP_NAME
+        if group is None:
+            group = self.GROUP_NAME
 
-        if vmName is None:
-            vmName = self.VM_NAME
+        if name is None:
+            name = self.VM_NAME
 
-        node = self.vms.get(groupName, vmName)
+        node = self.vms.get(group, name)
 
         return self.update_dict(node.as_dict(), kind="vm")
 
@@ -487,7 +494,6 @@ class Provider(ComputeNodeABC):
         """
         nodes = self.vms.list_all()
         return self.update_dict(nodes, kind="vm")
-
 
     # TODO Implement Suspend Method
     def suspend(self, name=None):
@@ -511,28 +517,28 @@ class Provider(ComputeNodeABC):
         raise NotImplementedError
         # must return dict
 
-
-    def destroy(self, groupName=None, vmName=None):
+    def destroy(self, group=None, name=None):
         """
         Destroys the node
         :param name: the name of the node
         :return: the dict of the node
         """
-        if groupName is None:
-            groupName = self.GROUP_NAME
-        if vmName is None:
-            vmName = self.VM_NAME
+        if group is None:
+            group = self.GROUP_NAME
+        if name is None:
+            name = self.VM_NAME
 
         # Delete VM
-        VERBOSE(" ".join('Deleteing Azure Virtual Machine'))
-        print('Deleteing Azure Virtual Machine')
-        async_vm_delete = self.vms.delete(groupName, vmName)
+        VERBOSE(" ".join('Deleting Azure Virtual Machine'))
+        print('Deleting Azure Virtual Machine')
+        async_vm_delete = self.vms.delete(group, name)
         async_vm_delete.wait()
 
         # Delete Resource Group
-        VERBOSE(" ".join('Deleteing Azure Resource Group'))
-        print('Deleteing Azure Resource Group')
-        async_group_delete = self.resource_client.resource_groups.delete(groupName)
+        VERBOSE(" ".join('Deleting Azure Resource Group'))
+        print('Deleting Azure Resource Group')
+        async_group_delete = self.resource_client.resource_groups.delete(
+            group)
         async_group_delete.wait()
 
         # return self.info(groupName)
@@ -608,7 +614,9 @@ class Provider(ComputeNodeABC):
     def update_dict(self, elements, kind=None):
         """
         Libcloud returns an object or list of objects With the dict method
-        this object is converted to a dict. Typically this method is used internally.
+        this object is converted to a dict. Typically this method is used
+        internally.
+
         :param elements: the elements
         :param kind: Kind is image, flavor, or node, secgroup and key
         :return:
@@ -630,23 +638,25 @@ class Provider(ComputeNodeABC):
             if kind == 'vm':
                 entry["cm"]["updated"] = str(datetime.utcnow())
                 entry["cm"]["name"] = entry["name"]
-                entry["cm"]["type"] = entry["type"] #Check feasibility of the following items
-                entry["cm"]["location"] = entry["location"] #Check feasibility of the following items
+                entry["cm"]["type"] = entry[
+                    "type"]  # Check feasibility of the following items
+                entry["cm"]["location"] = entry[
+                    "location"]  # Check feasibility of the following items
             elif kind == 'flavor':
-                entry["cm"]["created"]  = str(datetime.utcnow())
-                entry["cm"]["updated"]  = str(datetime.utcnow())
-                entry["cm"]["name"]     = entry["name"]
+                entry["cm"]["created"] = str(datetime.utcnow())
+                entry["cm"]["updated"] = str(datetime.utcnow())
+                entry["cm"]["name"] = entry["name"]
             elif kind == 'image':
-                entry['cm']['created']  = str(datetime.utcnow())
-                entry['cm']['updated']  = str(datetime.utcnow())
-                entry["cm"]["name"]     = entry["name"]
+                entry['cm']['created'] = str(datetime.utcnow())
+                entry['cm']['updated'] = str(datetime.utcnow())
+                entry["cm"]["name"] = entry["name"]
             elif kind == 'secgroup':
                 if self.cloudtype == 'azure':
                     entry["cm"]["name"] = entry["name"]
                 else:
                     pass
 
-            # TODO: this is likely a bug in your code as this is speccific to
+            # TODO: this is likely a bug in your code as this is specific to
             #  LibCloud. You probable want to delete this.
             #  but make sure to test out what is in the dict.
             #  you can do this with VERBOSE(entry)

@@ -24,7 +24,6 @@ is vagrant up to date
 
 
 class Provider(ComputeNodeABC):
-
     kind = "virtualbox"
 
     def run_command(self, command):
@@ -80,7 +79,8 @@ class Provider(ComputeNodeABC):
         self.cloudtype = self.spec["cm"]["kind"]
 
         if platform.system().lower() == "darwin":
-            self.vboxmanage = "/Applications/VirtualBox.app/Contents/MacOS/VBoxManage"
+            self.vboxmanage = \
+                "/Applications/VirtualBox.app/Contents/MacOS/VBoxManage"
         else:
             self.vboxmanage = "VBoxManage"
 
@@ -131,7 +131,8 @@ class Provider(ComputeNodeABC):
 
             if "A new version of Vagrant is available" in result:
                 Console.error(
-                    "Vagrant is outdated. Please doenload a new version of vagrant")
+                    "Vagrant is outdated. Please download a new version of "
+                    "vagrant")
                 raise NotImplementedError
         except:
             pass
@@ -232,7 +233,7 @@ class Provider(ComputeNodeABC):
 
     def _check_version(self, r):
         """
-        checks if vargarnt version is up to date
+        checks if vagrant version is up to date
 
         :return:
         """
@@ -285,7 +286,7 @@ class Provider(ComputeNodeABC):
         arg = dotdict(kwargs)
         arg.cwd = kwargs.get("cwd", None)
 
-        # get the dir based on anme
+        # get the dir based on name
 
         print("ARG")
         pprint(arg)
@@ -478,7 +479,8 @@ class Provider(ComputeNodeABC):
         arg.path = self.default["path"]
         arg.directory = os.path.expanduser("{path}/{name}".format(**arg))
 
-        result = Shell.execute("vbox", ["suspend", name], cwd=arg.directory, shell=True)
+        result = Shell.execute("vbox", ["suspend", name], cwd=arg.directory,
+                               shell=True)
         return result
 
     def resume(self, name=None):
@@ -645,8 +647,8 @@ class Provider(ComputeNodeABC):
         :param name: the name of the node
         :param image: the image used
         :param size: the size of the image
-        :param timeout: a timeout in seconds that is invoked in case the image does not boot.
-               The default is set to 3 minutes.
+        :param timeout: a timeout in seconds that is invoked in case the image
+                        does not boot. The default is set to 3 minutes.
         :param kwargs: additional arguments passed along at time of boot
         :return:
         """
@@ -655,7 +657,8 @@ class Provider(ComputeNodeABC):
         """
 
         #
-        # TODO BUG: if name contains not just letters and numbers and - return error, e. undersore not allowed
+        # TODO BUG: if name contains not just letters and numbers and -
+        #  return error, e. underscore not allowed
         #
 
         arg = self._get_specification(name=name,
@@ -689,12 +692,12 @@ class Provider(ComputeNodeABC):
 
         :param keywords: The keywords to narrow down the search
         """
-        d = {
-            'key': '+'.join(keywords),
-            'location': "https://app.vagrantup.com/boxes/search"
-        }
-        link = "{location}?utf8=%E2%9C%93&sort=downloads&provider=&q=\"{key}\"".format(
-            **d)
+
+        key = '+'.join(keywords)
+        location = "https://app.vagrantup.com/boxes/search"
+        link = \
+            f"{location}?utf8=%E2%9C%93&sort=downloads&provider=&q=\"{key}\""
+
         webbrowser.open(link, new=2, autoraise=True)
 
     def list(self, raw=True):

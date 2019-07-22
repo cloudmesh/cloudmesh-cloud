@@ -227,11 +227,10 @@ class Provider(ComputeNodeABC):
 
         def upload_meta(cm):
             data = {'cm': str(cm)}
-            pprint (data)
+            pprint(data)
             self.set_server_metadata(name, **data)
 
         cm = CmDatabase()
-
 
         names = self.expand(names)
         r = []
@@ -239,12 +238,12 @@ class Provider(ComputeNodeABC):
             StopWatch.start(f"create vm {name}")
 
             cm = {
-                        'kind': "vm",
-                        'name': name,
-                        'group': group,
-                        'cloud': self.cloudname(),
-                        'status': 'booting'
-                  }
+                'kind': "vm",
+                'name': name,
+                'group': group,
+                'cloud': self.cloudname(),
+                'status': 'booting'
+            }
             entry = {}
             entry.update(cm)
 
@@ -285,7 +284,6 @@ class Provider(ComputeNodeABC):
         :return:
         """
         self.p.set_server_metadata(name, metadata)
-
 
     def get_server_metadata(self, name):
         """
@@ -362,7 +360,7 @@ class Provider(ComputeNodeABC):
     def add_secgroup(self, name=None):
         return self.p.add_secgroup(name=name)
 
-    def upoload_secgroup(self, name=None):
+    def upload_secgroup(self, name=None):
         return self.p.upload_secgroup(name=name)
 
     def delete_public_ip(self, ip):

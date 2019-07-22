@@ -25,6 +25,7 @@ class AwsImages(dict):
 
         soup = BeautifulSoup(html, features="lxml")
 
+        # noinspection PyPep8Naming
         REMOVE_ATTRIBUTES = ['style',
                              'height',
                              'width',
@@ -35,6 +36,7 @@ class AwsImages(dict):
             for tag in soup.find_all(attrs={attribute: True}):
                 del tag[attribute]
 
+        # noinspection PyPep8Naming
         TAGS = ['b', 'i', 'u']
         for tag in TAGS:
             for match in soup.findAll(tag):
@@ -42,7 +44,7 @@ class AwsImages(dict):
 
         tables = soup.findAll("table")
 
-        all = {}
+        result = {}
         for table in tables:
             if table.findParent("table") is None:
                 print()
@@ -58,12 +60,12 @@ class AwsImages(dict):
                     row = [i.text.strip() for i in td]
                     output.append(row)
                 kind = output[1][0].split(".", 1)[0]
-                all[kind] = output
+                result[kind] = output
 
-        return all
+        return result
 
     def print(self, key=None):
-        if key == None:
+        if key is None:
             kinds = self.keys()
         else:
             keys = Parameter.expand(key)
@@ -73,7 +75,7 @@ class AwsImages(dict):
             pprint(self.__dict__[kind])
 
     def pprint(self, key=None):
-        if key == None:
+        if key is None:
             output = self.__dict__
             kind = "all"
         else:
@@ -120,7 +122,7 @@ class AwsImages(dict):
         :param output:
         :return:
         """
-        if key == None:
+        if key is None:
             kinds = self.keys()
             raise NotImplementedError
         else:

@@ -1,18 +1,22 @@
 import time
-from libcloud.compute.drivers.azure_arm import AzureNetwork, AzureSubnet, AzureIPAddress
-from libcloud.compute.base import NodeAuthSSHKey
+
 from cloudmesh.management.configuration.config import Config
+from libcloud.compute.base import NodeAuthSSHKey
+from libcloud.compute.drivers.azure_arm import AzureIPAddress
+from libcloud.compute.drivers.azure_arm import AzureNetwork
+from libcloud.compute.drivers.azure_arm import AzureSubnet
 from libcloud.compute.providers import get_driver
 from libcloud.compute.types import Provider as LibCloudProvider
 
 
 #
-# TODO: possibly replace get names, images, as teher may be many images matching,
-# we should assume they are in db with download, or could sheck if they do not exists so we load them.
+# TODO: possibly replace get names, images, as there may be many images
+#  matching,
+# we should assume they are in db with download, or could check if they do
+# not exists so we load them.
 #
 
 class AzureProvider(object):
-
     kind = "azurelibcloud"
 
     def __init__(self, cloud):
@@ -76,7 +80,8 @@ class AzureProvider(object):
 
         if size is None:
             #
-            # TODO: can this be done with get, e.g. get_size seems not to exist though
+            # TODO: can this be done with get, e.g. get_size seems not to
+            #  exist though
             #
             sizes = self.provider.list_sizes()
             size = [s for s in sizes if s.id == self.defaults["size"]][0]
@@ -114,14 +119,16 @@ class AzureProvider(object):
         """
         Get the volume named after a created node.
         """
-        volume = [v for v in self.provider.list_volumes() if v.name == volume_id]
+        volume = [v for v in self.provider.list_volumes() if
+                  v.name == volume_id]
         return volume[0] if volume else None
 
     def _get_network(self, network_name):
         """
         Return an instance of a network if it exists.
         """
-        net = [n for n in self.provider.ex_list_networks() if n.name == network_name]
+        net = [n for n in self.provider.ex_list_networks() if
+               n.name == network_name]
         return net[0] if net else None
 
     def _create_network(self, network_name):
@@ -134,7 +141,8 @@ class AzureProvider(object):
         time.sleep(2)
         subnet_name = "default"
         subnet_cidr = "10.0.0.0/16"
-        subnet = self._ex_create_subnet(name=subnet_name, cidr=subnet_cidr, network_name=network_name)
+        subnet = self._ex_create_subnet(name=subnet_name, cidr=subnet_cidr,
+                                        network_name=network_name)
         time.sleep(2)
         return network, subnet
 
@@ -177,7 +185,8 @@ class AzureProvider(object):
         subscription = self.provider.connection.subscription_id
         resource_group = self.resource_group
 
-        action = f"/subscriptions/{subscription}/resourceGroups/{resource_group}/providers/" \
+        action = f"/subscriptions/{subscription}/resourceGroups/" \
+            f"{resource_group}/providers/" \
             "Microsoft.Network/virtualNetworks/{name}"
 
         r = self.provider.connection.request(
@@ -202,7 +211,8 @@ class AzureProvider(object):
         subscription = self.provider.connection.subscription_id
         resource_group = self.resource_group
 
-        action = f"/subscriptions/{subscription}/resourceGroups/{resource_group}/providers/" \
+        action = f"/subscriptions/{subscription}/resourceGroups/" \
+            f"{resource_group}/providers/" \
             "Microsoft.Network/virtualNetworks/{name}"
 
         r = self.provider.connection.request(
@@ -226,8 +236,10 @@ class AzureProvider(object):
         subscription = self.provider.connection.subscription_id
         resource_group = self.resource_group
 
-        action = "/subscriptions/{subscription}/resourceGroups/{resource_group}/providers/" \
-                 "Microsoft.Network/virtualNetworks/{network_name}/subnets/{name}"
+        action = f"/subscriptions/{subscription}/resourceGroups/" \
+            f"{resource_group}/providers/" \
+            f"Microsoft.Network/virtualNetworks/" \
+            f"{network_name}/subnets/{name}"
 
         r = self.provider.connection.request(
             action,
@@ -250,8 +262,9 @@ class AzureProvider(object):
         subscription = self.provider.connection.subscription_id
         resource_group = self.resource_group
 
-        target = "/subscriptions/{subscription}/resourceGroups/{resource_gropu}/" \
-                 "providers/Microsoft.Network/publicIPAddresses/name"
+        target = f"/subscriptions/{subscription}/resourceGroups/" \
+            f"{resource_group}/" \
+            "providers/Microsoft.Network/publicIPAddresses/name"
 
         data = {
             "location": self.provider.default_location.id,
@@ -284,8 +297,9 @@ class AzureProvider(object):
         subscription = self.provider.connection.subscription_id
         resource_group = self.resource_group
 
-        action = "/subscriptions/{subscription}/resourceGroups/{resource_group}/providers/" \
-                 "Microsoft.Network/publicIPAddresses/{name}"
+        action = f"/subscriptions/{subscription}/resourceGroups/" \
+            f"{resource_group}/providers/" \
+            f"Microsoft.Network/publicIPAddresses/{name}"
 
         r = self.provider.connection.request(
             action,

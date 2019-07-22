@@ -1,10 +1,10 @@
 from cloudmesh.common.debug import VERBOSE
+from cloudmesh.common.variables import Variables
 from cloudmesh.compute.vm.Provider import Provider
 from cloudmesh.management.configuration.arguments import Arguments
 from cloudmesh.mongo.CmDatabase import CmDatabase
 from cloudmesh.shell.command import PluginCommand
 from cloudmesh.shell.command import command, map_parameters
-from cloudmesh.common.variables import Variables
 
 
 class FlavorCommand(PluginCommand):
@@ -36,7 +36,7 @@ class FlavorCommand(PluginCommand):
                 cm flavor list --output=csv
                 cm flavor list 58c9552c-8d93-42c0-9dea-5f48d90a3188 --refresh
 
-                please remember that a uuid or the falvor name can be used to
+                please remember that a uuid or the flavor name can be used to
                 identify a flavor.
         """
 
@@ -83,7 +83,6 @@ class FlavorCommand(PluginCommand):
                     flavors = db.find(collection=f"{cloud}-flavor")
 
                     provider.Print(arguments.output, "flavor", flavors)
-
 
             except Exception as e:
 

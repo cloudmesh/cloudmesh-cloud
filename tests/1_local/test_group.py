@@ -15,7 +15,7 @@ from cloudmesh.common.parameter import Parameter
 from cloudmesh.common3.DictList import DictList
 from cloudmesh.common.util import HEADING
 from cloudmesh.common.Printer import Printer
-
+import oyaml as yaml
 
 g = Group()
 services = Parameter.expand('vm-[1-3]')
@@ -41,6 +41,8 @@ class TestName:
 
         r = g.list(name="test")
         pprint (r)
+
+        print(yaml.dump(r))
 
         members = r[0]['members']
         for member in members:

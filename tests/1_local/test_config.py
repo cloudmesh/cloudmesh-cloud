@@ -48,15 +48,6 @@ class TestConfig:
         Benchmark.Stop()
         pprint (r)
 
-
-
-    def test_benchmark(self):
-        Benchmark.print(sysinfo=False)
-
-
-
-class o:
-
     def test_dict(self):
         HEADING()
         config = Config()
@@ -134,4 +125,4 @@ class o:
     '''
 
     def test_benchmark(self):
-        Benchmark.print()
+        Benchmark.print(sysinfo=False)

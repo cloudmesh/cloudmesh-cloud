@@ -66,13 +66,13 @@ class AwsImages(dict):
 
     def print(self, key=None):
         if key is None:
-            kinds = self.keys()
+            keys = self.keys()
         else:
             keys = Parameter.expand(key)
 
-        for kind in kinds:
-            banner(f"Table {kind}")
-            pprint(self.__dict__[kind])
+        for key in keys:
+            banner(f"Table {key}")
+            pprint(self.__dict__[key])
 
     def pprint(self, key=None):
         if key is None:

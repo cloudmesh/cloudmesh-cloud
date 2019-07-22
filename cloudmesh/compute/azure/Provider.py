@@ -232,13 +232,13 @@ class Provider(ComputeNodeABC):
 
     def get_resource_group(self):
 
-        if self.resource_client.resource_groups.check_existence(
-            self.GROUP_NAME):
-            return self.resource_client.resource_groups.get(self.GROUP_NAME)
+        groups = self.resource_client.resource_groups
+        if groups.check_existence( self.GROUP_NAME):
+            return groups.get(self.GROUP_NAME)
         else:
             # Create or Update Resource group
             print('\nCreate Azure Virtual Machine Resource Group')
-            return self.resource_client.resource_groups.create_or_update(
+            return groups.create_or_update(
                 self.GROUP_NAME, {'location': self.LOCATION})
 
     def create(self, name=None,

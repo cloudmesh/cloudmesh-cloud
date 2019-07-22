@@ -256,7 +256,7 @@ class TestName:
 
     def test_publicIP_attach(self):
         HEADING()
-        pubip = self.p.get_publicIP()
+        pubip = self.p.get_public_ip()
         pprint(pubip)
         nodes = self.p.list(raw=True)
         for node in nodes:

@@ -34,3 +34,4 @@ openstacksdk
 pandas
 tabulate
 beautifulsoup4
+boto3

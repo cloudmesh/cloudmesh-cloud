@@ -898,14 +898,33 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         ip = entry['floating_ip_address']
         return ip
 
-    # check
+    # ok
     def attach_public_ip(self, name=None, ip=None):
-        return self.cloudman.add_ip_list(name, [ip])
+        print("AAAA", name, ip)
+        server = self.cloudman.get_server(name)
+        return self.cloudman.add_ips_to_server(server, ips=ip)
 
-    #broken
+    # ok
     def detach_public_ip(self, name=None, ip=None):
-        return self.cloudman.detach_ip_from_server(name, ip)
+        server = self.cloudman.get_server(name)['id']
+        data = self.cloudman.list_floating_ips({'floating_ip_address': ip})[0]
+        ip_id = data['id']
+        return self.cloudman.detach_ip_from_server(server_id=server,
+                                                   floating_ip_id=ip_id)
 
+    # ok
+    def get_public_ip(self, name=None):
+        vm = self.info(name=name)
+        ip = None
+        ips = vm['addresses']
+        first = list(ips.keys())[0]
+        addresses = ips[first]
+
+        for address in addresses:
+            if address['OS-EXT-IPS:type'] == 'floating':
+                ip = address['addr']
+                break
+        return ip
 
     def rename(self, name=None, destination=None):
         """

@@ -255,9 +255,19 @@ class ComputeNodeABC(metaclass=ABCMeta):
         Creates a new public IP address to use
         :return: The ip address information
         """
+        raise NotImplementedError
 
     def find_available_public_ip(self):
         """
         Returns a single public available ip address.
         :return: The ip
         """
+        raise NotImplementedError
+
+    def get_public_ip(self, name=None):
+        """
+        returns the public ip
+        :param name: name of the server
+        :return:
+        """
+        raise NotImplementedError

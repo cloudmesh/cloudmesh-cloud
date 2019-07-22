@@ -900,7 +900,6 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
     # ok
     def attach_public_ip(self, name=None, ip=None):
-        print("AAAA", name, ip)
         server = self.cloudman.get_server(name)
         return self.cloudman.add_ips_to_server(server, ips=ip)
 

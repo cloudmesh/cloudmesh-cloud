@@ -1,5 +1,6 @@
 from datetime import datetime
-
+from pprint import pprint
+from ast import literal_eval
 from azure.common.credentials import ServicePrincipalCredentials
 from azure.mgmt.compute import ComputeManagementClient
 from azure.mgmt.network import NetworkManagementClient
@@ -12,11 +13,6 @@ from cloudmesh.management.configuration.config import Config
 
 
 class Provider(ComputeNodeABC):
-    #
-    # TODO: This is a bug, you need to define the output attributes for the
-    #  table printer. Print an entry with VERBOSE, after you get it from azure
-    #  so you can look at them
-
     kind = 'azure'
 
     output = {
@@ -106,12 +102,6 @@ class Provider(ComputeNodeABC):
         raise NotImplementedError
 
     def remove_rules_from_secgroup(self, name=None, rules=None):
-        raise NotImplementedError
-
-    def images(self, **kwargs):
-        raise NotImplementedError
-
-    def image(self, name=None):
         raise NotImplementedError
 
     def flavor(self, name=None):
@@ -210,9 +200,8 @@ class Provider(ComputeNodeABC):
             credentials, subscription)
 
         # VMs abbreviation
-
         self.vms = self.compute_client.virtual_machines
-        self.images = self.compute_client.virtual_machine_images
+        self.imgs = self.compute_client.virtual_machine_images
 
         # Azure Resource Group
         self.GROUP_NAME = self.default["resource_group"]
@@ -242,7 +231,7 @@ class Provider(ComputeNodeABC):
             return groups.get(self.GROUP_NAME)
         else:
             # Create or Update Resource group
-            print('\nCreate Azure Virtual Machine Resource Group')
+            VERBOSE(" ".join('Create Azure Virtual Machine Resource Group'))
             return groups.create_or_update(
                 self.GROUP_NAME, {'location': self.LOCATION})
 
@@ -315,8 +304,7 @@ class Provider(ComputeNodeABC):
         )
         async_disk_attach.wait()
 
-        return None
-        # must return dict
+        return self.info(self.GROUP_NAME, self.VM_NAME)
 
     def create_vm_parameters(self):
 
@@ -367,7 +355,7 @@ class Provider(ComputeNodeABC):
         self.get_resource_group()
 
         # Create Virtual Network
-        print('\nCreate Vnet')
+        VERBOSE(" ".join('Create Vnet'))
         async_vnet_creation = \
             self.network_client.virtual_networks.create_or_update(
                 self.GROUP_NAME,
@@ -382,7 +370,7 @@ class Provider(ComputeNodeABC):
         async_vnet_creation.wait()
 
         # Create Subnet
-        print('\nCreate Subnet')
+        VERBOSE(" ".join('Create Subnet'))
         async_subnet_creation = self.network_client.subnets.create_or_update(
             self.GROUP_NAME,
             self.VNET_NAME,
@@ -392,7 +380,7 @@ class Provider(ComputeNodeABC):
         subnet_info = async_subnet_creation.result()
 
         # Create NIC
-        print('\nCreate NIC')
+        VERBOSE(" ".join('Create NIC'))
         async_nic_creation = \
             self.network_client.network_interfaces.create_or_update(
                 self.GROUP_NAME,
@@ -427,19 +415,16 @@ class Provider(ComputeNodeABC):
 
         # Start the VM
         VERBOSE(" ".join('Starting Azure VM'))
-        print('Starting Azure VM')
         async_vm_start = self.vms.start(group, name)
         async_vm_start.wait()
         return self.info(group, name)
-        # return None
 
-    # reboot? check if we need to use reboot or restart must be the same
-    # across all providers
-    def restart(self, group=None, name=None):
+    def reboot(self, group=None, name=None):
         """
-        restart a node
+        restart/reboot a node
 
-        :param name:
+        :param group: the unique Resource Group name
+        :param name: the unique Virtual Machine name
         :return: The dict representing the node
         """
         if group is None:
@@ -449,17 +434,16 @@ class Provider(ComputeNodeABC):
 
         # Restart the VM
         VERBOSE(" ".join('Restarting Azure VM'))
-        print('Restarting Azure VM')
         async_vm_restart = self.vms.restart(group, name)
         async_vm_restart.wait()
         return self.info(group, name)
-        # return None
 
     def stop(self, group=None, name=None):
         """
         stops the node with the given name
 
-        :param name:
+        :param group: the unique Resource Group name
+        :param name: the unique Virtstioual Machine name
         :return: The dict representing the node including updated status
         """
         if group is None:
@@ -469,17 +453,46 @@ class Provider(ComputeNodeABC):
 
         # Stop the VM
         VERBOSE(" ".join('Stopping Azure VM'))
-        print('Stopping Azure VM')
         async_vm_stop = self.vms.power_off(group, name)
         async_vm_stop.wait()
         return self.info(group, name)
-        # return None
+
+    def resume(self, group=None, name=None):
+        """
+        resume the named node since Azure does not handle resume it uses start
+
+        :param group: the unique Resource Group name
+        :param name: the unique Virtual Machine name
+        :return: The dict representing the node including updated status
+        """
+        if group is None:
+            group = self.GROUP_NAME
+        if name is None:
+            name = self.VM_NAME
+
+        return self.start(group, name)
+
+    def suspend(self, group=None, name=None):
+        """
+        suspends the node with the given name since Azure does not handle suspend it uses stop
+
+        :param group: the unique Resource Group name
+        :param name: the unique Virtual Machine name
+        :return: The dict representing the node including updated status
+        """
+        if group is None:
+            group = self.GROUP_NAME
+        if name is None:
+            name = self.VM_NAME
+
+        return self.stop(group, name)
 
     def info(self, group=None, name=None):
         """
         gets the information of a node with a given name
         List VM in resource group
-        :param name:
+        :param group: the unique Resource Group name
+        :param name: the unique Virtual Machine name
         :return: The dict representing the node including updated status
         """
         if group is None:
@@ -490,37 +503,26 @@ class Provider(ComputeNodeABC):
 
         node = self.vms.get(group, name)
 
-        return self.update_dict(node.as_dict(), kind="vm")
+        return node
 
     def list(self):
         """
         List all Azure Virtual Machines from my Account
         :return: dict or libcloud object
         """
-        nodes = self.vms.list_all()
-        return self.update_dict(nodes, kind="vm")
+        servers = self.vms.list_all()
 
-    # TODO Implement Suspend Method
-    def suspend(self, name=None):
-        """
-        suspends the node with the given name
+        result = []
+        for server in servers:
 
-        :param name: the name of the node
-        :return: The dict representing the node
-        """
-        raise NotImplementedError
-        # must return dict
+            if 'cm' in server['metadata']:
+                metadata = server['metadata']['cm']
+                cm = literal_eval(metadata)
+                if 'cm' in server:
+                    server['cm'].update(cm)
+            result.append(server)
 
-    # TODO Implement Resume Method (is it the same as restart?)
-    def resume(self, name=None):
-        """
-        resume the named node
-
-        :param name: the name of the node
-        :return: the dict of the node
-        """
-        raise NotImplementedError
-        # must return dict
+        return result
 
     def destroy(self, group=None, name=None):
         """
@@ -535,13 +537,11 @@ class Provider(ComputeNodeABC):
 
         # Delete VM
         VERBOSE(" ".join('Deleting Azure Virtual Machine'))
-        print('Deleting Azure Virtual Machine')
         async_vm_delete = self.vms.delete(group, name)
         async_vm_delete.wait()
 
         # Delete Resource Group
         VERBOSE(" ".join('Deleting Azure Resource Group'))
-        print('Deleting Azure Resource Group')
         async_group_delete = self.resource_client.resource_groups.delete(
             group)
         async_group_delete.wait()
@@ -549,27 +549,29 @@ class Provider(ComputeNodeABC):
         # return self.info(groupName)
         return None
 
-    # rename to images(self) ?
-    def list_images(self):
-
+    def images(self, **kwargs):
+        """
+        Lists the images on the cloud
+        :return: dict or libcloud object
+        """
         region = self.LOCATION
 
         image_list = list()
 
-        result_list_pub = self.images.list_publishers(
+        result_list_pub = self.imgs.list_publishers(
             region,
         )
 
         for publisher in result_list_pub:
             try:
-                result_list_offers = self.images.list_offers(
+                result_list_offers = self.imgs.list_offers(
                     region,
                     publisher.name,
                 )
 
                 for offer in result_list_offers:
                     try:
-                        result_list_skus = self.images.list_skus(
+                        result_list_skus = self.imgs.list_skus(
                             region,
                             publisher.name,
                             offer.name,
@@ -577,7 +579,7 @@ class Provider(ComputeNodeABC):
 
                         for sku in result_list_skus:
                             try:
-                                result_list = self.images.list(
+                                result_list = self.imgs.list(
                                     region,
                                     publisher.name,
                                     offer.name,
@@ -586,7 +588,7 @@ class Provider(ComputeNodeABC):
 
                                 for version in result_list:
                                     try:
-                                        result_get = self.images.get(
+                                        result_get = self.imgs.get(
                                             region,
                                             publisher.name,
                                             offer.name,
@@ -614,7 +616,33 @@ class Provider(ComputeNodeABC):
             except:
                 print("Something failed in result_list_pub")
 
-        return image_list
+        return self.get_list(image_list, kind="image")
+
+    def image(self, name=None):
+        """
+        Gets the image with a given nmae
+        :param name: The name of the image
+        :return: the dict of the image
+        """
+        return self.find(self.images(**kwargs), name=name)
+
+    def get_list(self, d, kind=None, debug=False, **kwargs):
+        """
+        Lists the dict d on the cloud
+        :return: dict or libcloud object
+        """
+
+        if self.vms:
+            entries = []
+            for entry in d:
+                entries.append(dict(entry))
+            if debug:
+                pprint(entries)
+
+            return self.update_dict(entries, kind=kind)
+        return None
+
+
 
     # TODO Implement Rename Method
     def rename(self, name=None, destination=None):

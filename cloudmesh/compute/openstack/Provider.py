@@ -587,7 +587,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
     def image(self, name=None):
         """
-        Gets the image with a given nmae
+        Gets the image with a given name
         :param name: The name of the image
         :return: the dict of the image
         """

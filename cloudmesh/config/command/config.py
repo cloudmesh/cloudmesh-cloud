@@ -105,8 +105,6 @@ class ConfigCommand(PluginCommand):
         source = arguments.SOURCE or path_expand("~/.cloudmesh/cloudmesh4.yaml")
         destination = source + ".enc"
 
-
-
         if arguments.cloud and arguments.edit and arguments.NAME is None:
             path = path_expand("~/.cloudmesh/cloudmesh4.yaml")
             print(path)

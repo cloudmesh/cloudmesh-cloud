@@ -7,6 +7,7 @@ from pprint import pprint
 import openstack
 from cloudmesh.common.util import banner
 from cloudmesh.management.configuration.config import Config
+import os
 
 """
 see : https://docs.openstack.org/openstacksdk/latest/user/guides/compute.html
@@ -46,37 +47,46 @@ def credentials():
 
 config = credentials()
 
-pprint(config)
 
-cloud = openstack.connect(**config)
+command = "openstack --version --os-auth-url={auth_url} " \
+              "--os-project-name={project_id} --os-username={username} " \
+              "--os-password={password} -f=json".format(**config)
+    # print (command)
+os.system(command)
 
-pprint(dir(cloud))
+if False:
 
-# pprint (cloud.list_floating_ips())
+    pprint(config)
 
-# print (cloud.available_floating_ip())
+    cloud = openstack.connect(**config)
 
-# print (cloud.create_floating_ip())
+    pprint(dir(cloud))
 
-# ip ='129.114.33.15'
+    # pprint (cloud.list_floating_ips())
 
-# print (cloud.delete_floating_ip(ip))
+    # print (cloud.available_floating_ip())
 
-# provider = Provider(name="chameleon")
-# pprint (cloud.list_floating_ips())
+    # print (cloud.create_floating_ip())
 
-# r = provider.delete_public_ip(ip)
+    # ip ='129.114.33.15'
 
-# print(r)
+    # print (cloud.delete_floating_ip(ip))
 
-server = cloud.get_server("gregor-vm-3")
-ip = cloud.available_floating_ip()
+    # provider = Provider(name="chameleon")
+    # pprint (cloud.list_floating_ips())
 
-banner("SERVER")
-pprint(server)
-banner("IP")
-pprint(ip)
-pprint(cloud.add_ips_to_server(server, ips=ip['floating_ip_address']))
+    # r = provider.delete_public_ip(ip)
+
+    # print(r)
+
+    server = cloud.get_server("gregor-vm-3")
+    ip = cloud.available_floating_ip()
+
+    banner("SERVER")
+    pprint(server)
+    banner("IP")
+    pprint(ip)
+    pprint(cloud.add_ips_to_server(server, ips=ip['floating_ip_address']))
 
 # pprint(cloud.add_ip_list(server,ips=[ip]))
 

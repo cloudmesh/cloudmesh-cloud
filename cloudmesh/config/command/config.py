@@ -41,7 +41,7 @@ class ConfigCommand(PluginCommand):
              config ssh pem
              config cloud verify NAME [KIND]
              config cloud edit [NAME] [KIND]
-             config cloud list NAME [KIND]
+             config cloud list NAME [KIND] [--secrets]
 
 
            Arguments:
@@ -56,9 +56,9 @@ class ConfigCommand(PluginCommand):
                               of the character included
 
            Options:
-              --name=KEYNAME                The name of a key
-              --format=FORMAT     The output format [default: yaml]
-
+              --name=KEYNAME     The name of a key
+              --outpu=OUTPUT     The output format [default: yaml]
+              --secrets          Print the secrets. Use carefully.
 
            Description:
 
@@ -100,7 +100,7 @@ class ConfigCommand(PluginCommand):
         # d = Config()                #~/.cloudmesh/cloudmesh4.yaml
         # d = Config(encryted=True)   # ~/.cloudmesh/cloudmesh4.yaml.enc
 
-        map_parameters(arguments, "keep")
+        map_parameters(arguments, "keep", "secrets")
 
         source = arguments.SOURCE or path_expand("~/.cloudmesh/cloudmesh4.yaml")
         destination = source + ".enc"
@@ -144,11 +144,14 @@ class ConfigCommand(PluginCommand):
             service = configuration[f"cloudmesh.{kind}.{cloud}"]
             result = {"cloudmesh": {"cloud": {cloud: service}}}
 
-            action = "verify"
+            action = "list"
             banner(
                 f"{action} cloudmesh.{kind}.{cloud} in ~/.cloudmesh/cloudmesh4.yaml")
 
-            print(yaml.dump(result))
+            lines = yaml.dump(result).split("\n")
+            secrets = not arguments.secrets
+            result = Config.cat_lines(lines, mask_secrets=secrets)
+            print (result)
 
         elif arguments.cloud and arguments.edit:
 
@@ -174,7 +177,7 @@ class ConfigCommand(PluginCommand):
             print(yaml.dump(
                 configuration[f"cloudmesh.{kind}.{cloud}.credentials"]))
 
-        if arguments["edit"] and arguments["ATTRIBUTE"]:
+        elif arguments["edit"] and arguments["ATTRIBUTE"]:
 
             attribute = arguments.ATTRIBUTE
 
@@ -276,6 +279,7 @@ class ConfigCommand(PluginCommand):
 
             line = arguments["ATTRIBUTE=VALUE"]
             attribute, value = line.split("=", 1)
+
             if not attribute.startswith("cloudmesh."):
                 attribute = f"cloudmesh.{attribute}"
 

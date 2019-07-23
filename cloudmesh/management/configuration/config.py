@@ -285,35 +285,32 @@ class Config(object):
     def __str__(self):
         return yaml.dump(self.data, default_flow_style=False, indent=2)
 
+
     @staticmethod
-    def cat(mask_secrets=True,
-            attributes=None,
-            path="~/.cloudmesh/cloudmesh4.yaml",
-            color=None):
+    def cat_lines(content,
+        mask_secrets=True,
+        attributes=None,
+        color=None):
 
         colors = ['TBD', "xxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"]
         if color:
             colors = colors + color
-
-        _path = path_expand("~/.cloudmesh/cloudmesh4.yaml")
 
         secrets = [
             "AZURE_SUBSCRIPTION_ID",
             "AZURE_TENANTID",
             "EC2_ACCESS_ID",
             "EC2_SECRET_KEY",
-            "AZURE_SECRET_KEY"
+            "AZURE_SECRET_KEY",
             "OS_PASSWORD",
-            "OS_PROJECT_ID"
+            "OS_USERNAME",
+            "OS_PROJECT_ID",
             "MONGO_PASSWORD",
             "MONGO_USERNAME"
         ]
 
         if attributes:
             secrets = secrets + attributes
-
-        with open(_path) as f:
-            content = f.read().split("\n")
 
         lines = []
         for line in content:
@@ -333,6 +330,21 @@ class Config(object):
 
         lines = '\n'.join(lines)
         return lines
+
+    @staticmethod
+    def cat(mask_secrets=True,
+            attributes=None,
+            path="~/.cloudmesh/cloudmesh4.yaml",
+            color=None):
+
+        _path = path_expand("~/.cloudmesh/cloudmesh4.yaml")
+        with open(_path) as f:
+            content = f.read().split("\n")
+        return Config.cat_lines(content,
+                               mask_secrets=mask_secrets,
+                               attributes=None,color=None)
+
+
 
     def get(self, key, default=None):
         """

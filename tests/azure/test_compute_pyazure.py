@@ -1,6 +1,6 @@
 ###############################################################
-# pytest -v --capture=no tests/test_compute_pyazure.py
-# pytest  tests/test_compute_pyazure.py
+# pytest -v --capture=no tests/azure/test_compute_pyazure.py
+# pytest  tests/azure/test_compute_pyazure.py
 ###############################################################
 
 import pytest
@@ -51,7 +51,7 @@ class TestAzure:
         HEADING()
 
         Benchmark.Start()
-        test_images = self.p.list_images()
+        test_images = self.p.images()
         Benchmark.Stop()
 
         assert test_images is not None
@@ -63,7 +63,7 @@ class TestAzure:
         test_vm = self.p.create()
         Benchmark.Stop()
 
-        assert test_vm is None
+        assert test_vm is not None
 
     def test_start(self):
         HEADING()
@@ -94,14 +94,14 @@ class TestAzure:
 
         assert list_vm is not None
 
-    def test_restart(self):
+    def test_reboot(self):
         HEADING()
 
         Benchmark.Start()
-        restart_vm = self.p.restart()
+        reboot_vm = self.p.reboot()
         Benchmark.Stop()
 
-        assert restart_vm is not None
+        assert reboot_vm is not None
 
     def test_stop(self):
         HEADING()

@@ -20,46 +20,48 @@ class Provider(ComputeNodeABC):
     kind = 'azure'
 
     output = {
-
-        "vm": {
-            "sort_keys": ["cm.name"],
-            "order": ["cm.name",
-                      "cm.cloud",
-                      "state",
-                      "image",
-                      "public_ips",
-                      "private_ips",
-                      "cm.kind"],
-            "header": ["cm.name",
-                       "cm.cloud",
-                       "state",
-                       "image",
-                       "public_ips",
-                       "private_ips",
-                       "cm.kind"]
+        "id": [],
+        "name": [],
+        "type": [],
+        "location": [],
+        "hardware_profile": ["vm_size"],
+        "storage_profile": {
+            "image_reference": ["publisher",
+                                "offer",
+                                "sku",
+                                "version"]
         },
-        "image": {"sort_keys": ["cm.name",
-                                "extra.minDisk"],
-                  "order": ["cm.name",
-                            "extra.minDisk",
-                            "updated",
-                            "cm.driver"],
-                  "header": ["Name",
-                             "MinDisk",
-                             "Updated",
-                             "Driver"]},
-        "flavor": {"sort_keys": ["cm.name",
-                                 "vcpus",
-                                 "disk"],
-                   "order": ["cm.name",
-                             "vcpus",
-                             "ram",
-                             "disk"],
-                   "header": ["Name",
-                              "VCPUS",
-                              "RAM",
-                              "Disk"]}
-
+        "os_disk": {
+            "os_type": [],
+            "name": [],
+            "caching": [],
+            "create_option": [],
+            "disk_size_gb": [],
+            "managed_disk": ["id",
+                             "storage_account_type"]
+        },
+        "data_disks": {
+            "lun": [],
+            "name": [],
+            "caching": [],
+            "create_option": [],
+            "disk_size_gb": [],
+            "managed_disk": ["id",
+                             "storage_account_type"]
+        },
+        "os_profile": {
+            "computer_name": [],
+            "admin_username": [],
+            "linux_configuration": ["disable_password_authentication",
+                                    "provision_vm_agent"],
+            "secrets": [],
+            "allow_extension_operations": []
+        },
+        "network_profile": {
+            "network_interfaces": ["id"]
+        },
+        "provisioning_state": [],
+        "vm_id": []
     }
 
     # noinspection PyPep8Naming
@@ -119,6 +121,9 @@ class Provider(ComputeNodeABC):
         raise NotImplementedError
 
     def get_server_metadata(self, name):
+        raise NotImplementedError
+
+    def delete_server_metadata(self, name, key):
         raise NotImplementedError
 
     # these are available to be associated
@@ -556,43 +561,58 @@ class Provider(ComputeNodeABC):
         )
 
         for publisher in result_list_pub:
-            result_list_offers = self.images.list_offers(
-                region,
-                publisher.name,
-            )
-
-            for offer in result_list_offers:
-                result_list_skus = self.images.list_skus(
+            try:
+                result_list_offers = self.images.list_offers(
                     region,
                     publisher.name,
-                    offer.name,
                 )
 
-                for sku in result_list_skus:
-                    result_list = self.images.list(
-                        region,
-                        publisher.name,
-                        offer.name,
-                        sku.name,
-                    )
-
-                    for version in result_list:
-                        result_get = self.images.get(
+                for offer in result_list_offers:
+                    try:
+                        result_list_skus = self.images.list_skus(
                             region,
                             publisher.name,
                             offer.name,
-                            sku.name,
-                            version.name,
                         )
 
-                        msg = 'PUBLISHER: {0}, OFFER: {1}, SKU: {2}, VERSION: {3}'.format(
-                            publisher.name,
-                            offer.name,
-                            sku.name,
-                            version.name,
-                        )
-                        VERBOSE(msg)
-                        image_list.append(result_get)
+                        for sku in result_list_skus:
+                            try:
+                                result_list = self.images.list(
+                                    region,
+                                    publisher.name,
+                                    offer.name,
+                                    sku.name,
+                                )
+
+                                for version in result_list:
+                                    try:
+                                        result_get = self.images.get(
+                                            region,
+                                            publisher.name,
+                                            offer.name,
+                                            sku.name,
+                                            version.name,
+                                        )
+
+                                        msg = 'PUBLISHER: {0}, OFFER: {1}, SKU: {2}, VERSION: {3}'.format(
+                                            publisher.name,
+                                            offer.name,
+                                            sku.name,
+                                            version.name,
+                                        )
+                                        VERBOSE(msg)
+                                        image_list.append(result_get)
+                                    except:
+                                        print("Something failed in result_list")
+
+                            except:
+                                print("Something failed in result_list_skus")
+
+                    except:
+                        print("Something failed in result_list_offers")
+
+            except:
+                print("Something failed in result_list_pub")
 
         return image_list
 
@@ -656,17 +676,7 @@ class Provider(ComputeNodeABC):
                 else:
                     pass
 
-            # TODO: this is likely a bug in your code as this is specific to
-            #  LibCloud. You probable want to delete this.
-            #  but make sure to test out what is in the dict.
-            #  you can do this with VERBOSE(entry)
-
-            if "extra" in entry:
-                del entry["extra"]
-            if "_uuid" in entry:
-                del entry["_uuid"]
-            if "driver" in entry:
-                del entry["driver"]
-
             d.append(entry)
+            VERBOSE(d)
+
         return d

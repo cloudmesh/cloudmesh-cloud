@@ -78,7 +78,18 @@ class TestAzure:
         HEADING()
 
         Benchmark.Start()
-        list_vm = self.p.info(None, None)
+        info_vm = self.p.info(None, None)
+        Benchmark.Stop()
+
+        print(info_vm)
+
+        assert info_vm is not None
+
+    def test_list_vms(self):
+        HEADING()
+
+        Benchmark.Start()
+        list_vm = self.p.list()
         Benchmark.Stop()
 
         assert list_vm is not None

@@ -1,6 +1,7 @@
+from ast import literal_eval
 from datetime import datetime
 from pprint import pprint
-from ast import literal_eval
+
 from azure.common.credentials import ServicePrincipalCredentials
 from azure.mgmt.compute import ComputeManagementClient
 from azure.mgmt.network import NetworkManagementClient
@@ -16,51 +17,71 @@ class Provider(ComputeNodeABC):
     kind = 'azure'
 
     output = {
-        "id": [],
-        "name": [],
-        "type": [],
-        "location": [],
-        "hardware_profile": ["vm_size"],
-        "storage_profile": {
-            "image_reference": ["publisher",
-                                "offer",
-                                "sku",
-                                "version"]
-        },
-        "os_disk": {
-            "os_type": [],
-            "name": [],
-            "caching": [],
-            "create_option": [],
-            "disk_size_gb": [],
-            "managed_disk": ["id",
-                             "storage_account_type"]
-        },
-        "data_disks": {
-            "lun": [],
-            "name": [],
-            "caching": [],
-            "create_option": [],
-            "disk_size_gb": [],
-            "managed_disk": ["id",
-                             "storage_account_type"]
-        },
-        "os_profile": {
-            "computer_name": [],
-            "admin_username": [],
-            "linux_configuration": ["disable_password_authentication",
-                                    "provision_vm_agent"],
-            "secrets": [],
-            "allow_extension_operations": []
-        },
-        "network_profile": {
-            "network_interfaces": ["id"]
-        },
-        "provisioning_state": [],
-        "vm_id": []
+        "image": {
+            "sort_keys": ["cm.name",
+                          "extra.minDisk"],
+            "order": ["image.id",
+                      "image.name",
+                      "image.type",
+                      "image.location",
+                      "hardware_profile.vm_size",
+                      "image_reference.publisher",
+                      "image_reference.offer",
+                      "image_reference.sku",
+                      "image_reference.version"],
+            "header": ["Id",
+                       "Name",
+                       "TYpe",
+                    ]
+            },
+        "vm": {},
+        "flavor": {},
+        "status": {},
+        "key":{},
+        "secgroup": {},
+        "secrule": {},
     }
 
+        """      
+                         
+            "os_disk": {
+                "os_type": [],
+                "name": [],
+                "caching": [],
+                "create_option": [],
+                "disk_size_gb": [],
+                "managed_disk": ["id",
+                                 "storage_account_type"]
+            },
+            "data_disks": {
+                "lun": [],
+                "name": [],
+                "caching": [],
+                "create_option": [],
+                "disk_size_gb": [],
+                "managed_disk": ["id",
+                                 "storage_account_type"]
+            },
+            "os_profile": {
+                "computer_name": [],
+                "admin_username": [],
+                "linux_configuration": ["disable_password_authentication",
+                                        "provision_vm_agent"],
+                "secrets": [],
+                "allow_extension_operations": []
+            },
+            "network_profile": {
+                "network_interfaces": ["id"]
+            },
+            "provisioning_state": [],
+            "vm_id": []
+        
+            }
+            }
+        """
+
     # noinspection PyPep8Naming
+
     def Print(self, output, kind, data):
         raise NotImplementedError
 
@@ -225,9 +246,8 @@ class Provider(ComputeNodeABC):
         self.get_resource_group()
 
     def get_resource_group(self):
-
         groups = self.resource_client.resource_groups
-        if groups.check_existence( self.GROUP_NAME):
+        if groups.check_existence(self.GROUP_NAME):
             return groups.get(self.GROUP_NAME)
         else:
             # Create or Update Resource group
@@ -307,7 +327,6 @@ class Provider(ComputeNodeABC):
         return self.info(self.GROUP_NAME, self.VM_NAME)
 
     def create_vm_parameters(self):
-
         nic = self.create_nic()
 
         # Parse Image from yaml file
@@ -641,8 +660,6 @@ class Provider(ComputeNodeABC):
 
             return self.update_dict(entries, kind=kind)
         return None
-
-
 
     # TODO Implement Rename Method
     def rename(self, name=None, destination=None):

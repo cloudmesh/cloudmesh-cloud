@@ -159,7 +159,7 @@ class SecCommand(PluginCommand):
         if arguments.load and arguments.group and arguments.cloud:
 
             provider = Provider(name=arguments.cloud)
-            provider.upoload_secgroup(name=arguments.GROUP)
+            provider.upload_secgroup(name=arguments.GROUP)
 
             return ""
         elif arguments.group and arguments.delete:

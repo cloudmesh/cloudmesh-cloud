@@ -45,8 +45,8 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                       "status",
                       "task_state",
                       "image",
-                      "public_ips",
-                      "private_ips",
+                      "ip_public",
+                      "ip_private",
                       "project_id",
                       "launched_at",
                       "cm.kind"],
@@ -701,7 +701,11 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                 cm = literal_eval(metadata)
                 if 'cm' in server:
                     server['cm'].update(cm)
+            server['ip_public'] = self.get_public_ip(server=server)
+            server['ip_private'] = self.get_private_ip(server=server)
+
             result.append(server)
+
 
         return result
 
@@ -912,10 +916,13 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                                                    floating_ip_id=ip_id)
 
     # ok
-    def get_public_ip(self, name=None):
-        vm = self.info(name=name)
+    def get_public_ip(self,
+                      server=None,
+                      name=None):
+        if not server:
+            server = self.info(name=name)
         ip = None
-        ips = vm['addresses']
+        ips = server['addresses']
         first = list(ips.keys())[0]
         addresses = ips[first]
 
@@ -924,6 +931,24 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                 ip = address['addr']
                 break
         return ip
+
+    # ok
+    def get_private_ip(self,
+                       server=None,
+                       name=None):
+        if not server:
+            server = self.info(name=name)
+        ip = None
+        ips = server['addresses']
+        first = list(ips.keys())[0]
+        addresses = ips[first]
+
+        found = []
+        for address in addresses:
+            if address['OS-EXT-IPS:type'] == 'fixed':
+                ip = address['addr']
+                found.append(ip)
+        return found
 
     def rename(self, name=None, destination=None):
         """

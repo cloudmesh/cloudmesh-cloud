@@ -116,15 +116,20 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         raise NotImplementedError
 
     def find(self, elements, name=None):
+        # TODO: Vafa
         raise NotImplementedError
 
     def list_secgroups(self, name=None):
+        # TODO: Vafa
         raise NotImplementedError
 
     def list_secgroup_rules(self, name='default'):
+        # TODO: Vafa
         raise NotImplementedError
 
     def add_secgroup(self, name=None, description=None):
+        # TODO: Vafa
+
         raise NotImplementedError
 
     def add_secgroup_rule(self,
@@ -132,24 +137,32 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                           port=None,
                           protocol=None,
                           ip_range=None):
+        # TODO: Vafa
         raise NotImplementedError
 
     def remove_secgroup(self, name=None):
+        # TODO: Vafa
         raise NotImplementedError
 
     def upload_secgroup(self, name=None):
+        # TODO: Vafa
         raise NotImplementedError
 
     def add_rules_to_secgroup(self, name=None, rules=None):
+        # TODO: Vafa
+
         raise NotImplementedError
 
     def remove_rules_from_secgroup(self, name=None, rules=None):
+        # TODO: Vafa
         raise NotImplementedError
 
     def set_server_metadata(self, name, m):
+        # TODO: Vafa
         raise NotImplementedError
 
     def get_server_metadata(self, name):
+        # TODO: Sriman
         raise NotImplementedError
 
     # these are available to be associated
@@ -160,24 +173,31 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
     # release the ip
     def delete_public_ip(self, ip=None):
+        # TODO: Sriman
         raise NotImplementedError
 
     def create_public_ip(self):
+        # TODO: Sriman
         raise NotImplementedError
 
     def find_available_public_ip(self):
+        # TODO: Sriman
         raise NotImplementedError
 
     def attach_public_ip(self, node, ip):
+        # TODO: Sriman
         raise NotImplementedError
 
     def detach_public_ip(self, node, ip):
+        # TODO: Sriman
         raise NotImplementedError
 
     # see the openstack example it will be almost the same as in openstack
     # other than getting
     # the ip and username
     def ssh(self, vm=None, command=None):
+        # TODO: Vafa
+        # Host.ssh ....
         raise NotImplementedError
 
     def __init__(self, name=None, configuration="~/.cloudmesh/cloudmesh4.yaml"):
@@ -232,6 +252,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         return instances
 
     def start(self, name=None):
+        # TODO: Sriman
         """
         start a node
 
@@ -255,6 +276,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                 f"Instance-Id:{each_instance.instance_id} started")
 
     def stop(self, name=None):
+        # TODO: Sriman
         """
         stops the node with the given name
 
@@ -282,6 +304,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                 "Instance-Id:{each_instance.instance_id} stopped")
 
     def info(self, name=None):
+        # TODO: Sriman
         """
         gets the information of a node with a given name
 
@@ -302,6 +325,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         # self.filter_info(**instance_info)
 
     def list(self):
+        # TODO: Sriman
         """
         list all nodes id
 
@@ -317,6 +341,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         # return self.update_dict(instance_ids, kind="vm")
 
     def suspend(self, name=None):
+        # TODO: Sriman
         """
         suspends the node with the given name
 
@@ -326,6 +351,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         raise NotImplementedError
 
     def resume(self, name=None):
+        # TODO: Sriman
         """
         resume the named node
 
@@ -343,6 +369,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                 "Instance-Id:{each_instance.instance_id} rebooted")
 
     def destroy(self, name=None):
+        # TODO: Sriman
         """
         Destroys the node
         :param name: the name of the node
@@ -379,6 +406,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                timeout=360,
                key_name=None,
                **kwargs):
+        # TODO: Sriman
         """
         creates a named node
 
@@ -439,6 +467,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         return new_ec2_instance
 
     def rename(self, name=None, destination=None):
+        # TODO: Sriman
         """
         rename a node
 
@@ -460,6 +489,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         return tag_response
 
     def keys(self):
+        # TODO: Vafa
         """
         Lists the keys on the cloud
 
@@ -468,6 +498,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         return self.ec2_client.describe_key_pairs()
 
     def key_upload(self, key=None):
+        # TODO: Vafa
         # The gey is stored in the database, we do not create a new keypair,
         # we upload our local key to aws
         # BUG name=None, wrong?
@@ -481,6 +512,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         return self.ec2_client.create_key_pair(KeyName=key)
 
     def key_delete(self, name=None):
+        # TODO: Vafa
         """
         deletes the key with the given name
         :param name: The name of the key
@@ -489,6 +521,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         return self.ec2_client.delete_key_pair(KeyName=name)
 
     def images(self, **kwargs):
+        # TODO: Vafa
         """
         Lists the images on the cloud
         :return: dict
@@ -496,6 +529,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         raise NotImplementedError
 
     def image(self, name=None):
+        # TODO: Vafa
         """
         Gets the image with a given nmae
         :param name: The name of the image
@@ -504,6 +538,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         raise NotImplementedError
 
     def flavors(self, **kwargs):
+        # TODO: Alex
         """
         Lists the flavors on the cloud
 
@@ -512,6 +547,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         raise NotImplementedError
 
     def flavor(self, name=None):
+        # TODO: Alex
         """
         Gets the flavor with a given name
         :param name: The name of the flavor

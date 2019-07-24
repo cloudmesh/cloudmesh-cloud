@@ -44,7 +44,8 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                       "vm_state",
                       "status",
                       "task_state",
-                      "image",
+                      "metadata.image",
+                      "metadata.flavor",
                       "ip_public",
                       "ip_private",
                       "project_id",
@@ -56,6 +57,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                        "Status",
                        "Task",
                        "Image",
+                       "Flavor",
                        "Public IPs",
                        "Private IPs",
                        "Project ID",
@@ -844,8 +846,12 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
             self.cloudman.add_ips_to_server(server, ips=ip)
             variables = Variables()
             variables['vm'] = name
-            if metadata is not None:
-                self.cloudman.set_server_metadata(server, metadata)
+            if metadata is None:
+                metadata = {}
+
+            metadata['image'] = image
+            metadata['flavor'] = size
+            self.cloudman.set_server_metadata(server, metadata)
 
             # self.cloudman.add_security_group(security_group=secgroup)
 

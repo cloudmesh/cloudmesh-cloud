@@ -271,3 +271,49 @@ class ComputeNodeABC(metaclass=ABCMeta):
         :return:
         """
         raise NotImplementedError
+
+    def list_secgroups(self, name=None):
+        """
+        List the named security group
+
+        :param name: The name of the group, if None all will be returned
+        :return:
+        """
+
+    def list_secgroup_rules(self, name='default'):
+        """
+        List the named security group
+
+        :param name: The name of the group, if None all will be returned
+        :return:
+        """
+
+
+
+    def upload_secgroup(self, name=None):
+        raise NotImplementedError
+
+    def list_secgroup_rules(self, name='default'):
+        raise NotImplementedError
+
+    def add_secgroup(self, name=None, description=None):
+        raise NotImplementedError
+
+    def add_secgroup_rule(self,
+                          name=None,  # group name
+                          port=None,
+                          protocol=None,
+                          ip_range=None):
+        raise NotImplementedError
+
+    def remove_secgroup(self, name=None):
+        raise NotImplementedError
+
+    def upload_secgroup(self, name=None):
+        raise NotImplementedError
+
+    def add_rules_to_secgroup(self, name=None, rules=None):
+        raise NotImplementedError
+
+    def remove_rules_from_secgroup(self, name=None, rules=None):
+        raise NotImplementedError

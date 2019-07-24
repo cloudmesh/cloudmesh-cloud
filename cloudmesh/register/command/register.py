@@ -24,9 +24,9 @@ class RegisterCommand(PluginCommand):
               register chameleon [FILENAME] [--keep]
 
 
-          This command adds the registrarion information the th cloudmesh
+          This command adds the registration information the th cloudmesh
           yaml file. The permissions of theFILENAME will also be changed.
-          A y/n question will be asked if the files with the filename shoudl
+          A y/n question will be asked if the files with the filename should
           be deleted after integration
 
           Arguments:
@@ -39,7 +39,7 @@ class RegisterCommand(PluginCommand):
 
             AWS
 
-                AWS dependent on how you downloaded the creadentials will either
+                AWS dependent on how you downloaded the credentials will either
                 use the filename `credentials.csv` or `accessKey.csv`
 
                 Our command is smart provides some convenience functionality.

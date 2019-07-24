@@ -73,7 +73,7 @@ class SecCommand(PluginCommand):
                        removes all rules and groups from the database
 
                    sec load
-                        loads some defalut security groups and rules in the
+                        loads some default security groups and rules in the
                         database
 
                     sec clear

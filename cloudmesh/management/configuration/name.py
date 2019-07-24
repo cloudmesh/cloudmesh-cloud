@@ -72,7 +72,7 @@ class Name(dotdict):
 
 
         #
-        # init dict with schema, path, kwars
+        # init dict with schema, path, kwargs
         #
 
 

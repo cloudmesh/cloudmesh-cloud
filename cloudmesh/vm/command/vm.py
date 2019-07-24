@@ -188,7 +188,7 @@ class VmCommand(PluginCommand):
                 sample[1-3,18] => ['sample1', 'sample2', 'sample3', 'sample18']
 
             Quoting commands:
-                cm vm login gvonlasz-004 --command=\"uname -a\"
+                cm vm login gregor-004 --command=\"uname -a\"
 
             Limitations:
 
@@ -677,7 +677,7 @@ class VmCommand(PluginCommand):
                     Console.ok(msg)
             except Exception as e:
                 Error.traceback(e)
-                Console.error("Problem renameing instances", traceflag=True)
+                Console.error("Problem renaming instances", traceflag=True)
 
         elif arguments["ip"] and arguments["show"]:
             raise NotImplementedError

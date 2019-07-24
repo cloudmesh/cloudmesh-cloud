@@ -364,7 +364,7 @@ class Config(object):
         except KeyError:
             path = self.config_path
             Console.error(
-                f"The key '{key}' couold not be found in the yaml file '{path}'")
+                f"The key '{key}' could not be found in the yaml file '{path}'")
             sys.exit(1)
         except Exception as e:
             print(e)
@@ -375,7 +375,7 @@ class Config(object):
 
     def set(self, key, value):
         """
-        A helper function for setting the deafult cloud in the config without
+        A helper function for setting the default cloud in the config without
         a chain of `set()` calls.
 
         Usage:
@@ -407,7 +407,7 @@ class Config(object):
         except KeyError:
             path = self.config_path
             Console.error(
-                f"The key '{key}' couold not be found in the yaml file '{path}'")
+                f"The key '{key}' could not be found in the yaml file '{path}'")
             sys.exit(1)
         except Exception as e:
             print(e)
@@ -419,7 +419,7 @@ class Config(object):
 
     def set_cloud(self, key, value):
         """
-        A helper function for setting the deafult cloud in the config without
+        A helper function for setting the default cloud in the config without
         a chain of `set()` calls.
 
         Usage:
@@ -459,7 +459,7 @@ class Config(object):
         except KeyError:
             path = self.config_path
             Console.error(
-                f"The key '{item}' couold not be found in the yaml file '{path}'")
+                f"The key '{item}' could not be found in the yaml file '{path}'")
             sys.exit(1)
         except Exception as e:
             print(e)
@@ -490,7 +490,7 @@ class Config(object):
         except KeyError:
             path = self.config_path
             Console.error(
-                f"The key '{item}' couold not be found in the yaml file '{path}'")
+                f"The key '{item}' could not be found in the yaml file '{path}'")
             sys.exit(1)
         except Exception as e:
             print(e)
@@ -512,7 +512,7 @@ class Config(object):
 
     def edit(self, attribute):
         """
-        edits the dict specified by the attribute and filles out all TBD values.
+        edits the dict specified by the attribute and fills out all TBD values.
         :param attribute:
         :type attribute: string
         :return:

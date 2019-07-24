@@ -105,7 +105,7 @@ class KeyCommand(PluginCommand):
                     specified and if omitted the name cloudmesh.profile.user
                     is assumed.
 
-                To get keys from the cloudmesh database the folloing commands
+                To get keys from the cloudmesh database the following commands
                 are available:
 
                 key delete NAMES
@@ -118,8 +118,8 @@ class KeyCommand(PluginCommand):
                managing the keys associated with them.
                The keys must be uploaded to cloudmesh database with a name so they can
                be used in a group. The --dryrun option executes the command
-               without uploading the information to the clouds. If no groupname
-               is specified the groupname default is assumed. If no cloudnames
+               without uploading the information to the clouds. If no group name
+               is specified the group name default is assumed. If no cloudnames
                are specified, all active clouds are assumed. active clouds can be
                set in the cloudmesh4.yaml file.
 
@@ -289,7 +289,7 @@ class KeyCommand(PluginCommand):
                     if name in names:
                         try:
                             r = provider.key_upload(key)
-                            Console.ok(f"upload key '{name} sucessful'. ")
+                            Console.ok(f"upload key '{name} successful'. ")
                         except ValueError as e:
                             Console.error(f"key '{name} already exists in {cloud}.")
 

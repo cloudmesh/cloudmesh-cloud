@@ -30,7 +30,7 @@ class CmDatabase(object):
         """
 
         self.__dict__ = self.__shared_state
-        if "cnfig" not in self.__dict__:
+        if "config" not in self.__dict__:
 
             self.config = Config().data["cloudmesh"]
             self.mongo = self.config["data"]["mongo"]
@@ -83,7 +83,7 @@ class CmDatabase(object):
         the names of all collections
 
         :param name: if set, only look at these collections instead of all
-                     colections
+                     collections
         :param regex: a regular expression on the names of the collections
         :return: list of names of all collections
 
@@ -108,7 +108,7 @@ class CmDatabase(object):
     # noinspection PyPep8
     def name_count(self, name):
         """
-        counts the occurence of the name used in the collections
+        counts the occurrence of the name used in the collections
 
         :param name: the name
         :return:
@@ -127,7 +127,7 @@ class CmDatabase(object):
     def find_group(self, name):
         """
         This function returns the entry with the given name from all collections
-        in mongodb. The name must be unique accross all collections
+        in mongodb. The name must be unique across all collections
 
         :param name: the unique name of the entry
         :return:
@@ -150,7 +150,7 @@ class CmDatabase(object):
     def find_name(self, name, kind=None):
         """
         This function returns the entry with the given name from all collections
-        in mongodb. The name must be unique accross all collections
+        in mongodb. The name must be unique across all collections
 
         :param name: the unique name of the entry
         :return:
@@ -180,7 +180,7 @@ class CmDatabase(object):
     def find_names(self, names):
         """
         Assuming names specified as parameters, it returns the entries with
-        these anmes from all collections in mongodb. The names must be unique
+        these names from all collections in mongodb. The names must be unique
         across all collections.
 
         :param names: the unique names in parameter format
@@ -194,20 +194,6 @@ class CmDatabase(object):
                 if r is not None:
                     result.append(r[0])
         return result
-
-    """
-    # check
-    def find(self, query):
-        col = self.db[query["collection"]]
-
-        entries = col.find(query, {"_id": 0})
-
-        records = []
-        for entry in entries:
-            records.append(entry)
-        return records
-    """
-
 
     # ok
     def names(self, collection=None, cloud=None, kind=None, regex=None):
@@ -267,6 +253,18 @@ class CmDatabase(object):
 
         return result
 
+    """
+        # check
+        def find(self, query):
+            col = self.db[query["collection"]]
+
+            entries = col.find(query, {"_id": 0})
+
+            records = []
+            for entry in entries:
+                records.append(entry)
+            return records
+    """
 
     def find(self,
              collection=None,
@@ -281,7 +279,8 @@ class CmDatabase(object):
 
         With kwargs a search query on the names could be added.
 
-        Example:
+        Example::
+
             cm = CmDatabase()
             for kind in ['vm', "image", "flavor"]:
                 entries = cm.find(cloud="chameleon", kind=kind)

@@ -115,13 +115,13 @@ class KeyCommand(PluginCommand):
 
                Group management of keys is an important concept in cloudmesh,
                allowing multiple users to be added to virtual machines while
-               managing the keys associated with them.
-               The keys must be uploaded to cloudmesh database with a name so they can
-               be used in a group. The --dryrun option executes the command
-               without uploading the information to the clouds. If no group name
-               is specified the group name default is assumed. If no cloudnames
-               are specified, all active clouds are assumed. active clouds can be
-               set in the cloudmesh4.yaml file.
+               managing the keys associated with them. The keys must be uploaded
+               to cloudmesh database with a name so they can be used in a
+               group. The --dryrun option executes the command without
+               uploading the information to the clouds. If no group name is
+               specified the group name default is assumed. If no cloudnamesh
+               are specified, all active clouds are assumed. active clouds
+               can be set in the cloudmesh4.yaml file.
 
                 key group delete [GROUPNAMES] [NAMES] [--dryrun]
                     deletes the named keys from the named groups.

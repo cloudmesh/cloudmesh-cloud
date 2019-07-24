@@ -16,7 +16,7 @@ class DatabaseUpdate:
     In addition each entry in the collection has a name that must be unique in
     that collection.
 
-    In most examples it is pest to separate the updload from the actual return
+    In most examples it is pest to separate the upload from the actual return
     class. This way we essentially provide two functions one that provide the
     dict and another that is responsible for the upload to the database.
 
@@ -100,7 +100,7 @@ class DatabaseUpdate:
 
 class DatabaseAlter:
     """
-    The data base decorator utomatically replaces an entry in the database with
+    The data base decorator automatically replaces an entry in the database with
     the dictionary returned by a function.
 
     It is added to a MongoDB collection. The location is determined from the
@@ -113,7 +113,7 @@ class DatabaseAlter:
     In addition each entry in the collection has a name that must be unique in
     that collection.
 
-    In most examples it is pest to separate the updload from the actual return
+    In most examples it is pest to separate the upload from the actual return
     class. This way we essentially provide two functions one that provide the
     dict and another that is responsible for the upload to the database.
 

@@ -479,7 +479,7 @@ class Provider(ComputeNodeABC):
         stops the node with the given name
 
         :param group: the unique Resource Group name
-        :param name: the unique Virtstioual Machine name
+        :param name: the unique Virtual Machine name
         :return: The dict representing the node including updated status
         """
         if group is None:

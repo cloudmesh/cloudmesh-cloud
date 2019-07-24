@@ -86,7 +86,7 @@ class GenericConfig(object):
 
     def keys(self):
         """
-        Print keys of a subkey
+        Print the key names
         :return:
         """
         return self._conf_dict.keys()

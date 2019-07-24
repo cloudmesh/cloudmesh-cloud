@@ -193,8 +193,8 @@ class SSHkey(dict):
             return False
 
     def _keyname_sanitation(self, username, keyname):
-        keynamenew = "{username}_{keyname}".format(
+        _keyname = "{username}_{keyname}".format(
             username=username,
             keyname=keyname.replace('.', '_').replace('@', '_'))
-        return keynamenew
+        return _keyname
 

@@ -52,7 +52,7 @@ class Test_configdict:
         shutil.copy(source, target)
 
     def test_getRandonPassword(self):
-        self.e.getRandonPassword()
+        self.e.getRandomPassword()
         # use this for all
         exists = os.path.isfile(path_expand('~/.cloudmesh/key.bin'))
         assert exists

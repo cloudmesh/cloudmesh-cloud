@@ -85,18 +85,23 @@ class Provider(ComputeNodeABC):
     # noinspection PyPep8Naming
 
     def Print(self, output, kind, data):
+        # TODO: Moeen
         raise NotImplementedError
 
     def find(self, elements, name=None):
+        # TODO: Moeen
         raise NotImplementedError
 
     def keys(self):
+        # TODO: Moeen
         raise NotImplementedError
 
     def key_upload(self, key=None):
+        # TODO: Moeen
         raise NotImplementedError
 
     def key_delete(self, name=None):
+        # TODO: Moeen
         raise NotImplementedError
 
     def list_secgroups(self, name=None):
@@ -128,37 +133,47 @@ class Provider(ComputeNodeABC):
         raise NotImplementedError
 
     def flavor(self, name=None):
+        # TODO: Joaquin
         raise NotImplementedError
 
     def set_server_metadata(self, name, m):
+        # TODO: Joaquin
         raise NotImplementedError
 
     def get_server_metadata(self, name):
+        # TODO: Joaquin
         raise NotImplementedError
 
     def delete_server_metadata(self, name, key):
+        # TODO: Joaquin
         raise NotImplementedError
 
     # these are available to be associated
     def list_public_ips(self,
                         ip=None,
                         available=False):
+        # TODO: Moeen
         raise NotImplementedError
 
     # release the ip
     def delete_public_ip(self, ip=None):
+        # TODO: Moeen
         raise NotImplementedError
 
     def create_public_ip(self):
+        # TODO: Moeen
         raise NotImplementedError
 
     def find_available_public_ip(self):
+        # TODO: Moeen
         raise NotImplementedError
 
     def attach_public_ip(self, node, ip):
+        # TODO: Moeen
         raise NotImplementedError
 
     def detach_public_ip(self, node, ip):
+        # TODO: Moeen
         raise NotImplementedError
 
     # see the openstack example it will be almost the same as in openstack
@@ -665,6 +680,7 @@ class Provider(ComputeNodeABC):
 
     # TODO Implement Rename Method
     def rename(self, name=None, destination=None):
+        # TODO: Moeen
         """
         rename a node
 

@@ -16,6 +16,7 @@ from cloudmesh.management.configuration.config import Config
 class Provider(ComputeNodeABC):
     kind = 'azure'
 
+    """
     output = {
         "image": {
             "sort_keys": ["cm.name",
@@ -41,44 +42,45 @@ class Provider(ComputeNodeABC):
         "secgroup": {},
         "secrule": {},
     }
+    """
 
-        """      
-                         
-            "os_disk": {
-                "os_type": [],
-                "name": [],
-                "caching": [],
-                "create_option": [],
-                "disk_size_gb": [],
-                "managed_disk": ["id",
-                                 "storage_account_type"]
-            },
-            "data_disks": {
-                "lun": [],
-                "name": [],
-                "caching": [],
-                "create_option": [],
-                "disk_size_gb": [],
-                "managed_disk": ["id",
-                                 "storage_account_type"]
-            },
-            "os_profile": {
-                "computer_name": [],
-                "admin_username": [],
-                "linux_configuration": ["disable_password_authentication",
-                                        "provision_vm_agent"],
-                "secrets": [],
-                "allow_extension_operations": []
-            },
-            "network_profile": {
-                "network_interfaces": ["id"]
-            },
-            "provisioning_state": [],
-            "vm_id": []
-        
-            }
-            }
-        """
+    """      
+                     
+        "os_disk": {
+            "os_type": [],
+            "name": [],
+            "caching": [],
+            "create_option": [],
+            "disk_size_gb": [],
+            "managed_disk": ["id",
+                             "storage_account_type"]
+        },
+        "data_disks": {
+            "lun": [],
+            "name": [],
+            "caching": [],
+            "create_option": [],
+            "disk_size_gb": [],
+            "managed_disk": ["id",
+                             "storage_account_type"]
+        },
+        "os_profile": {
+            "computer_name": [],
+            "admin_username": [],
+            "linux_configuration": ["disable_password_authentication",
+                                    "provision_vm_agent"],
+            "secrets": [],
+            "allow_extension_operations": []
+        },
+        "network_profile": {
+            "network_interfaces": ["id"]
+        },
+        "provisioning_state": [],
+        "vm_id": []
+    
+        }
+        }
+    """
 
     # noinspection PyPep8Naming
 

@@ -10,9 +10,9 @@ beautifulsoup4==4.8.0
 boto3==1.9.193
 certifi==2019.6.16
 chardet==3.0.4
-cloudmesh-cmd5==4.1.6
-cloudmesh-common==4.1.15
-cloudmesh-sys==4.1.1
+cloudmesh-cmd5
+cloudmesh-common
+cloudmesh-sys
 colorama==0.4.1
 config==0.4.2
 connexion[swagger-ui]==2.3.0

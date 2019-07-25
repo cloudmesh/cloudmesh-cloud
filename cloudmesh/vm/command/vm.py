@@ -99,7 +99,7 @@ class VmCommand(PluginCommand):
 
             Options:
                 -v             verbose, prints the dict at the end
-                --output=OUTPUT   the output format [default: table]
+                --output=OUTPUT   the output format
                 -H --modify-knownhosts  Do not modify ~/.ssh/known_hosts file
                                       when ssh'ing into a machine
                 --username=USERNAME   the username to login into the vm. If not
@@ -224,6 +224,14 @@ class VmCommand(PluginCommand):
         variables = Variables()
         database = CmDatabase()
 
+        arguments.output = Parameter.find("output",
+                                          arguments,
+                                          variables,
+                                          "table")
+
+        arguments.refresh = Parameter.find_bool("refresh",
+                                                arguments,
+                                                variables)
 
         if (arguments.meta and arguments.list):
 
@@ -243,7 +251,6 @@ class VmCommand(PluginCommand):
 
         elif arguments.meta and arguments.set:
 
-            VERBOSE(arguments)
             metadata = {}
             pairs = arguments['KEY=VALUE']
             for pair in pairs:
@@ -268,7 +275,6 @@ class VmCommand(PluginCommand):
 
         elif arguments.meta and arguments.delete:
 
-            VERBOSE(arguments)
             metadata = {}
             keys = arguments['KEY']
 
@@ -316,7 +322,6 @@ class VmCommand(PluginCommand):
                                                           arguments,
                                                           variables)
 
-            print(clouds, names)
             try:
 
                 for cloud in clouds:

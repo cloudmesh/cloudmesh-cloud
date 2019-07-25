@@ -18,22 +18,16 @@ source:
 	cms help
 
 requirements:
+	# as pip-compile does not work with the latest pip, we use an older one
+	pip install 'pip<19.2'
 	pip-compile setup.py
+	# reset to the latest pip
+	pip install pip -U
 	fgrep -v "# via" requirements.txt > tmp.txt
 	mv tmp.txt requirements.txt
+	git commit -m "update requirements" requirements.txt
+	git push
 
-clean:
-	$(call banner, "CLEAN")
-	rm -rf dist
-	rm -rf *.zip
-	rm -rf *.egg-info
-	rm -rf *.eggs
-	rm -rf docs/build
-	rm -rf build
-	find . -type d -name __pycache__ -delete
-	find . -name '*.pyc' -delete
-	rm -rf .tox
-	rm -f *.whl
 
 
 manual:
@@ -111,11 +105,10 @@ clean:
 	rm -rf *.eggs
 	rm -rf docs/build
 	rm -rf build
-	find . -name '__pycache__' -delete
+	find . -type d -name __pycache__ -delete
 	find . -name '*.pyc' -delete
 	rm -rf .tox
 	rm -f *.whl
-
 
 ######################################################################
 # PYPI

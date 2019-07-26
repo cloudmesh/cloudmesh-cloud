@@ -403,9 +403,17 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                name=None,
                image=None,
                size=None,
+               location=None,
                timeout=360,
-               key_name=None,
+               key=None,
+               secgroup=None,
+               ip=None,
+               user=None,
+               public=None,
+               group=None,
+               metadata=None,
                **kwargs):
+
         # TODO: Sriman
         """
         creates a named node
@@ -435,7 +443,17 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                  },
                 ]
 
-        if kwargs.get('keyname') is None:
+        ec2_reservations = self.info(name)['Reservations']
+
+        for reservation in ec2_reservations:
+            reservation_instances = list(
+                filter(lambda instance: instance['State']['Name'] != 'terminated', reservation['Instances']))
+
+        if reservation_instances:
+            print("Tag name already exists, Please use different tag name.")
+            return
+
+        if key is None:
             new_ec2_instance = self.ec2_resource.create_instances(
                 ImageId=self.default["image"],
                 InstanceType=self.default["size"],
@@ -464,7 +482,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                     }
                     )
         print("Instance created...")
-        return new_ec2_instance
+        return self.update_dict(new_ec2_instance, kind="vm")
 
     def rename(self, name=None, destination=None):
         # TODO: Sriman
@@ -519,6 +537,15 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         :return:
         """
         return self.ec2_client.delete_key_pair(KeyName=name)
+
+    def delete_server_metadata(self, name):
+        """
+        gets the metadata for the server
+
+        :param name: name of the fm
+        :return:
+        """
+        raise NotImplementedError
 
     def images(self, **kwargs):
         # TODO: Vafa
@@ -640,3 +667,4 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
 if __name__ == "__main__":
     provider = Provider(name='awsboto')
+    provider.create(name='webserver')

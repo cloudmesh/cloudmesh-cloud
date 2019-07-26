@@ -12,16 +12,31 @@ The way we can ancode a `cm` dict is with
 
 ```
 import boto3
+from cloudmesh.common.FlatDict import FlatDict
 ec2 = boto3.resource('ec2') 
 cm = {
     "name": "gregor",
     "kind": "example",
     "cloud": "aws"
 } 
-    for tag in cm
+    for tag in FlatDict(cm):
         ec2.Tag('resource_id', tag, cm[tag])
 ```
-`
+
+This will result in the tags
+
+```
+[
+'cm.name': 'gregor',
+"cm.kind": "example",
+"cm.cloud": "aws"
+]
+```
+
+It will be easy to create a cm dict from a flattened cm list. Write a
+method for it
+
+
 ## Image
 
 ```

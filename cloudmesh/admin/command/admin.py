@@ -107,6 +107,7 @@ class AdminCommand(PluginCommand):
                 installer = MongoInstaller()
 
                 sudo = not arguments.nosudo
+                print ("SUDO")
                 r = installer.install(sudo=sudo)
                 return r
 

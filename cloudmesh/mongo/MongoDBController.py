@@ -75,6 +75,7 @@ class MongoInstaller(object):
 
     # noinspection PyUnusedLocal
     def linux(self, sudo=True):
+        print ("PPP", sudo)
         # TODO UNTESTED
         """
         install MongoDB in Linux system (Ubuntu)

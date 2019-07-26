@@ -65,7 +65,7 @@ class MongoInstaller(object):
             self.data["MONGO_CODE"] = self.data["MONGO_DOWNLOAD"][platform]
 
             if platform.lower() == 'linux':
-                self.linux()
+                self.linux(sudo=sudo)
             elif platform.lower() == 'darwin':
                 self.darwin()
             elif platform.lower() == 'win32':  # Replaced windows with win32

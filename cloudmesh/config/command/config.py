@@ -100,7 +100,7 @@ class ConfigCommand(PluginCommand):
         # d = Config()                #~/.cloudmesh/cloudmesh4.yaml
         # d = Config(encryted=True)   # ~/.cloudmesh/cloudmesh4.yaml.enc
 
-        map_parameters(arguments, "keep", "secrets")
+        map_parameters(arguments, "keep", "secrets", "output")
 
         source = arguments.SOURCE or path_expand("~/.cloudmesh/cloudmesh4.yaml")
         destination = source + ".enc"
@@ -294,9 +294,8 @@ class ConfigCommand(PluginCommand):
             config = Config()
             value = config[attribute]
 
-            output = arguments["--format"]
             if type(value) == dict:
-                print(Printer.write(value, output=output))
+                print(Printer.write(value, output=arguments.output))
             else:
                 print(f"{attribute}={value}")
 

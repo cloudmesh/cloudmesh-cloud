@@ -466,8 +466,8 @@ class Config(object):
         except Exception as e:
             print(e)
             sys.exit(1)
-        if element.lower() in ['true', 'false']:
-            element = element.lower() == 'true'
+        #if element.lower() in ['true', 'false']:
+        #    element = element.lower() == 'true'
         return element
 
     def __delitem__(self, item):

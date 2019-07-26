@@ -38,7 +38,7 @@ class MongoInstaller(object):
     def __str__(self):
         return yaml.dump(self.data, default_flow_style=False, indent=2)
 
-    def install(self):
+    def install(self, sudo=True):
         """
         check where the MongoDB is installed in mongo location.
         if MongoDB is not installed, python help install it
@@ -74,13 +74,17 @@ class MongoInstaller(object):
                 print("platform not found", platform)
 
     # noinspection PyUnusedLocal
-    def linux(self):
+    def linux(self, sudo=True):
         # TODO UNTESTED
         """
         install MongoDB in Linux system (Ubuntu)
         """
-        script = """
-        sudo apt-get --yes install libcurl4 openssl
+        if sudo:
+            sudo_command = "sudo"
+        else:
+            sudo_command = ""
+        script = f"{sudo_command} " + """
+        apt-get --yes install libcurl4 openssl
         mkdir -p {MONGO_PATH}
         mkdir -p {MONGO_HOME}
         mkdir -p {MONGO_LOG}

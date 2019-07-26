@@ -13,10 +13,10 @@
 Please note that several packages are available which are pointed to in the
 installation documentation.
 
-|  | Links |
-|---------------|-------|
-| Documentation | <https://cloudmesh.github.io/cloudmesh-manual> |
-| Code | <https://github.com/cloudmesh/cloudmesh-cloud> |
+|                          | Links                                              |
+|--------------------------|----------------------------------------------------|
+| Documentation            | <https://cloudmesh.github.io/cloudmesh-manual>     |
+| Code                     | <https://github.com/cloudmesh/cloudmesh-cloud>     |
 | Instalation Instructions | <https://github.com/cloudmesh/cloudmesh-installer> |
 
 An dynamically extensible CMD based command shell. For en extensive

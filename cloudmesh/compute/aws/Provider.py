@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime
 from pprint import pprint
 
 import boto3
@@ -6,6 +6,8 @@ from botocore.exceptions import ClientError
 from cloudmesh.abstractclass.ComputeNodeABC import ComputeNodeABC
 from cloudmesh.management.configuration.config import Config
 from cloudmesh.provider import ComputeProviderPlugin
+from cloudmesh.common.console import Console
+from cloudmesh.common.debug import VERBOSE
 
 
 class Provider(ComputeNodeABC, ComputeProviderPlugin):
@@ -158,11 +160,29 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         raise NotImplementedError
 
     def set_server_metadata(self, name, m):
-        # TODO: Vafa
+        """
+
+        :param name: virtual machine name
+        :param m: cm dict
+        :return:
+        """
+        tags = []
+        for key in m:
+            tag = {'ResourceType': 'instance',
+                 'Tags': [
+                     {
+                         'Key': f'cm.{key}',
+                         'Value': m[key]
+                     },
+                 ]
+                 }
+            tags.append(tag)
+        #Todo: upload this tags in virtual machines
+
         raise NotImplementedError
 
     def get_server_metadata(self, name):
-        # TODO: Sriman
+        # TODO: Saurabh
         raise NotImplementedError
 
     # these are available to be associated
@@ -444,13 +464,17 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                 ]
 
         ec2_reservations = self.info(name)['Reservations']
-
+        VERBOSE(ec2_reservations)
+        reservation_instances = None
         for reservation in ec2_reservations:
             reservation_instances = list(
                 filter(lambda instance: instance['State']['Name'] != 'terminated', reservation['Instances']))
 
-        if reservation_instances:
-            print("Tag name already exists, Please use different tag name.")
+        if reservation_instances is None:
+            Console.error("Reservation instance is None")
+
+        elif reservation_instances:
+            Console.error("Tag name already exists, Please use different tag name.")
             return
 
         if key is None:
@@ -471,18 +495,24 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                 KeyName=kwargs.get('keyname'),
                 TagSpecifications=tags
             )
-
+        new_ec2_instance = new_ec2_instance[0]
+        data = self.info(name=name)
+        print("BBB",data,type(data))
+        data['name'] = name
         waiter = self.ec2_client.get_waiter('instance_exists')
 
         waiter.wait(Filters=[{'Name': 'instance-id',
-                              'Values': [new_ec2_instance[0].instance_id]}],
+                              'Values': [new_ec2_instance.instance_id]}],
                     WaiterConfig={
                         'Delay': 20,
                         'MaxAttempts': timeout / 20
                     }
                     )
         print("Instance created...")
-        return self.update_dict(new_ec2_instance, kind="vm")
+        output = self.update_dict(data, kind="vm")[0]
+        print(output)
+        VERBOSE(output)
+        return output
 
     def rename(self, name=None, destination=None):
         # TODO: Sriman
@@ -611,6 +641,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
             _elements = elements
         else:
             _elements = [elements]
+
         d = []
         for entry in _elements:
 
@@ -628,13 +659,16 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                 "cloud": self.cloud,
                 "name": entry['name']
             }
+            VERBOSE(entry)
             if kind == 'vm':
+                print("LLL")
                 entry["cm"]["updated"] = str(datetime.utcnow())
                 if "created_at" in entry:
                     entry["cm"]["created"] = str(entry["created_at"])
                     # del entry["created_at"]
                 else:
-                    entry["cm"]["created"] = entry["modified"]
+                    entry["cm"]["created"] = entry["cm"]["updated"]
+                print("MMM")
             elif kind == 'flavor':
                 entry["cm"]["created"] = entry["updated"] = str(
                     datetime.utcnow())
@@ -646,6 +680,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
             #    pass
 
             d.append(entry)
+            print("YYY")
         return d
 
     def get_list(self, d, kind=None, debug=False, **kwargs):
@@ -666,5 +701,5 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
 
 if __name__ == "__main__":
-    provider = Provider(name='awsboto')
+    provider = Provider(name='aws')
     provider.create(name='webserver')

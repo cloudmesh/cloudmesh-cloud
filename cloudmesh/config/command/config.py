@@ -13,7 +13,7 @@ from cloudmesh.management.configuration.config import Config
 from cloudmesh.security.encrypt import EncryptFile
 from cloudmesh.shell.command import PluginCommand
 from cloudmesh.shell.command import command, map_parameters
-
+from cloudmesh.common.util import path_expand
 
 class ConfigCommand(PluginCommand):
 
@@ -209,7 +209,7 @@ class ConfigCommand(PluginCommand):
 
             return ""
 
-        elif arguments.check:
+        elif arguments.check and not arguments.ssh:
 
             Config.check()
 
@@ -260,7 +260,7 @@ class ConfigCommand(PluginCommand):
 
             e = EncryptFile(source, destination)
 
-            key = "~/.ssh/id_rsa"
+            key = path_expand("~/.ssh/id_rsa")
             r = e.check_key(key)
             if r:
                 Console.ok(f"Key {key} is valid")

@@ -23,7 +23,7 @@ class FlavorCommand(PluginCommand):
 
             Options:
                --output=OUTPUT  the output format [default: table]
-               --cloud=CLOUD    the cloud name
+               --cloud=CLOUD    the ycloud name
                --refresh        refreshes the data before displaying it
 
             Description:

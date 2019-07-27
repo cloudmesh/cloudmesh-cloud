@@ -5,7 +5,7 @@ from cloudmesh.management.configuration.arguments import Arguments
 from cloudmesh.mongo.CmDatabase import CmDatabase
 from cloudmesh.shell.command import PluginCommand
 from cloudmesh.shell.command import command, map_parameters
-
+from cloudmesh.common.parameter import Parameter
 
 class FlavorCommand(PluginCommand):
 
@@ -46,6 +46,15 @@ class FlavorCommand(PluginCommand):
                        "output")
 
         variables = Variables()
+
+        arguments.output = Parameter.find("output",
+                                          arguments,
+                                          variables,
+                                          "table")
+
+        arguments.refresh = Parameter.find_bool("refresh",
+                                                arguments,
+                                                variables)
 
         if arguments.list and arguments.refresh:
 

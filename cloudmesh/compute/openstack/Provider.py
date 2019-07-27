@@ -18,7 +18,7 @@ from cloudmesh.management.configuration.config import Config
 from cloudmesh.mongo.CmDatabase import CmDatabase
 from cloudmesh.provider import ComputeProviderPlugin
 from cloudmesh.secgroup.Secgroup import Secgroup, SecgroupRule
-
+from cloudmesh.common.debug import VERBOSE
 
 class Provider(ComputeNodeABC, ComputeProviderPlugin):
     kind = "openstack"
@@ -734,9 +734,17 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         raise NotImplementedError
         return self.cloudman.reboot_node(name)
 
-    def set_server_metadata(self, name, m):
+    def set_server_metadata(self, name, cm):
+        """
+        Sets the server metadata from the cm dict
+
+        :param name: The name of the vm
+        :param cm: The cm dict
+        :return:
+        """
+        data = {'cm': str(cm)}
         server = self.cloudman.get_server(name)
-        self.cloudman.set_server_metadata(server, m)
+        self.cloudman.set_server_metadata(server, data)
 
     def get_server_metadata(self, name):
         server = self.info(name=name)

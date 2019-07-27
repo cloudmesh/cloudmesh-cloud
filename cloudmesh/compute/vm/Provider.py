@@ -12,7 +12,6 @@ from cloudmesh.mongo.CmDatabase import CmDatabase
 from cloudmesh.mongo.DataBaseDecorator import DatabaseUpdate
 from cloudmesh.provider import Provider as ProviderList
 
-
 class Provider(ComputeNodeABC):
 
     def __init__(self,
@@ -225,10 +224,7 @@ class Provider(ComputeNodeABC):
                metadata=None,
                **kwargs):
 
-        def upload_meta(cm):
-            data = {'cm': str(cm)}
-            pprint(data)
-            self.set_server_metadata(name, **data)
+
 
         cm = CmDatabase()
 
@@ -268,7 +264,7 @@ class Provider(ComputeNodeABC):
                 entry.update(metadata)
 
             cm['status'] = 'available'
-            upload_meta(cm)
+            self.p.set_server_metadata(name, cm)
 
             result = self.cm.update(entry)
 

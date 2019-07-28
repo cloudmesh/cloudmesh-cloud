@@ -122,17 +122,47 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         raise NotImplementedError
 
     def list_secgroups(self, name=None):
-        # TODO: Vafa
-        raise NotImplementedError
+        try:
+            if name is None:
+                response = self.ec2_client.describe_security_groups()
+            else:
+                response = self.ec2_client.describe_security_groups(GroupNames=[name])
+        except ClientError as e:
+            print(e)
+        VERBOSE(response)
+        return response
 
     def list_secgroup_rules(self, name='default'):
-        # TODO: Vafa
+
         raise NotImplementedError
+
+    @staticmethod
+    def _is_group_name_valid(name=None):
+        not_valid = True
+        if len(name) == 255:
+            not_valid = False
+        if name[0:3] == "sg-":
+            not_valid = False
+        return not_valid
 
     def add_secgroup(self, name=None, description=None):
-        # TODO: Vafa
 
-        raise NotImplementedError
+        response = self.ec2_client.describe_vpcs()
+        vpc_id = response.get('Vpcs', [{}])[0].get('VpcId', '')
+        if description is None:
+            description = f'security group crated at {str(datetime.utcnow())} by {self.user}'
+        if self._is_group_name_valid(name):
+            try:
+                response = self.ec2_client.create_security_group(GroupName=name,
+                                                                 Description=description,
+                                                                 VpcId=vpc_id)
+                security_group_id = response['GroupId']
+                print(f'Security Group Created {security_group_id} in vpc{vpc_id}')
+
+            except ClientError as e:
+                print(e)
+
+
 
     def add_secgroup_rule(self,
                           name=None,  # group name
@@ -166,20 +196,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         :param m: cm dict
         :return:
         """
-        tags = []
-        for key in m:
-            tag = {'ResourceType': 'instance',
-                 'Tags': [
-                     {
-                         'Key': f'cm.{key}',
-                         'Value': m[key]
-                     },
-                 ]
-                 }
-            tags.append(tag)
-        #Todo: upload this tags in virtual machines
-
-        raise NotImplementedError
+        pass
 
     def get_server_metadata(self, name):
         # TODO: Saurabh
@@ -342,8 +359,6 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         ])
         return instance_info
 
-        # self.filter_info(**instance_info)
-
     def list(self):
         # TODO: Sriman
         """
@@ -450,7 +465,6 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         create one node
         """
         '''
-        TO DO: CHECK IF THE TAG NAME EXISTS THEN ASK FOR DIFFERENT TAG NAME
         '''
 
         tags = [{'ResourceType': 'instance',
@@ -462,43 +476,30 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                  ]
                  },
                 ]
+        # Validate if there is any VM with same tag name and state other than Terminated.
+        # If there is any VM, throw error
 
         ec2_reservations = self.info(name)['Reservations']
-        VERBOSE(ec2_reservations)
-        reservation_instances = None
-        for reservation in ec2_reservations:
-            reservation_instances = list(
-                filter(lambda instance: instance['State']['Name'] != 'terminated', reservation['Instances']))
 
-        if reservation_instances is None:
-            Console.error("Reservation instance is None")
+        if ec2_reservations:
+            reservation_instances = None
+            for reservation in ec2_reservations:
+                reservation_instances = list(
+                    filter(lambda instance: instance['State']['Name'] != 'terminated', reservation['Instances']))
 
-        elif reservation_instances:
-            Console.error("Tag name already exists, Please use different tag name.")
-            return
+            if reservation_instances:
+                Console.error("Tag name already exists, Please use different tag name.")
+                return
 
-        if key is None:
-            new_ec2_instance = self.ec2_resource.create_instances(
-                ImageId=self.default["image"],
-                InstanceType=self.default["size"],
-                MaxCount=1,
-                MinCount=1,
-                TagSpecifications=tags
-
-            )
-        else:
-            new_ec2_instance = self.ec2_resource.create_instances(
-                ImageId=self.default["image"],
-                InstanceType=self.default["size"],
-                MaxCount=1,
-                MinCount=1,
-                KeyName=kwargs.get('keyname'),
-                TagSpecifications=tags
-            )
+        new_ec2_instance = self.ec2_resource.create_instances(
+            ImageId=self.default["image"],
+            InstanceType=self.default["size"],
+            MaxCount=1,
+            MinCount=1,
+            SecurityGroups=[secgroup],
+            TagSpecifications=tags
+        )
         new_ec2_instance = new_ec2_instance[0]
-        data = self.info(name=name)
-        print("BBB",data,type(data))
-        data['name'] = name
         waiter = self.ec2_client.get_waiter('instance_exists')
 
         waiter.wait(Filters=[{'Name': 'instance-id',
@@ -509,9 +510,9 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                     }
                     )
         print("Instance created...")
+        data = self.info(name=name)
+        data['name'] = name
         output = self.update_dict(data, kind="vm")[0]
-        print(output)
-        VERBOSE(output)
         return output
 
     def rename(self, name=None, destination=None):
@@ -659,16 +660,13 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                 "cloud": self.cloud,
                 "name": entry['name']
             }
-            VERBOSE(entry)
             if kind == 'vm':
-                print("LLL")
                 entry["cm"]["updated"] = str(datetime.utcnow())
                 if "created_at" in entry:
                     entry["cm"]["created"] = str(entry["created_at"])
                     # del entry["created_at"]
                 else:
                     entry["cm"]["created"] = entry["cm"]["updated"]
-                print("MMM")
             elif kind == 'flavor':
                 entry["cm"]["created"] = entry["updated"] = str(
                     datetime.utcnow())
@@ -676,30 +674,11 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
             elif kind == 'image':
                 entry['cm']['created'] = str(datetime.utcnow())
                 entry['cm']['updated'] = str(datetime.utcnow())
-            # elif kind == 'secgroup':
-            #    pass
 
             d.append(entry)
-            print("YYY")
         return d
-
-    def get_list(self, d, kind=None, debug=False, **kwargs):
-        """
-        Lists the dict d on the cloud
-        :return: dict or libcloud object
-        """
-
-        if self.cloudman:
-            entries = []
-            for entry in d:
-                entries.append(dict(entry))
-            if debug:
-                pprint(entries)
-
-            return self.update_dict(entries, kind=kind)
-        return None
 
 
 if __name__ == "__main__":
     provider = Provider(name='aws')
-    provider.create(name='webserver')
+    provider.list_secgroups()

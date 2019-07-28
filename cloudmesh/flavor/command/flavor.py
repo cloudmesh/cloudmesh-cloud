@@ -69,7 +69,7 @@ class FlavorCommand(PluginCommand):
                 provider = Provider(name=cloud)
                 flavors = provider.flavors()
 
-                provider.Print(arguments.output, "flavor", flavors)
+                provider.Print(flavors, output=arguments.output, kind="flavor")
 
             return ""
 
@@ -91,7 +91,7 @@ class FlavorCommand(PluginCommand):
                     db = CmDatabase()
                     flavors = db.find(collection=f"{cloud}-flavor")
 
-                    provider.Print(arguments.output, "flavor", flavors)
+                    provider.Print(flavors, output=arguments.output, kind="flavor")
 
             except Exception as e:
 

@@ -200,7 +200,9 @@ class SecCommand(PluginCommand):
                             rule['name'] = group['name']
                             result.append(rule)
                     cloud_groups = result
-                provider.Print(arguments.output, "secrule", cloud_groups)
+                provider.Print(cloud_groups,
+                               output=arguments.output,
+                               kind="secrule", )
 
             return ""
 

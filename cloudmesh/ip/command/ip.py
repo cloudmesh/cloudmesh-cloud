@@ -83,7 +83,7 @@ class IpCommand(PluginCommand):
             provider = Provider(name=cloud)
             ips = provider.list_public_ips()
 
-            provider.Print(arguments.output, "ip", ips)
+            provider.Print(ips, output=arguments.output, kind="ip")
 
         elif arguments.create:
 
@@ -95,7 +95,7 @@ class IpCommand(PluginCommand):
             ips = provider.create_public_ip()
             ips = provider.list_public_ips()
 
-            provider.Print(arguments.output, "ip", ips)
+            provider.Print(ips, output=arguments.output, kind="ip")
 
 
         elif arguments.delete:
@@ -112,7 +112,7 @@ class IpCommand(PluginCommand):
             ips = provider.delete_public_ip(ip)
             ips = provider.list_public_ips()
 
-            provider.Print(arguments.output, "ip", ips)
+            provider.Print(ips, output=arguments.output, kind="ip")
 
         elif arguments.attach:
 

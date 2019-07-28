@@ -214,7 +214,7 @@ class KeyCommand(PluginCommand):
                 provider = Provider(name=cloud)
                 keys = provider.keys()
 
-                provider.Print(arguments.output, "key", keys)
+                provider.Print(keys, output=arguments.output, kind="key")
 
             return ""
 

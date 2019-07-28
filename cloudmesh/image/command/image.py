@@ -81,7 +81,7 @@ class ImageCommand(PluginCommand):
                 provider = Provider(name=cloud)
                 images = provider.images()
 
-                provider.Print(arguments.output, "image", images)
+                provider.Print(images, output=arguments.output, kind="image")
 
             return ""
 
@@ -107,7 +107,8 @@ class ImageCommand(PluginCommand):
                     print(images)
                     print(provider)
 
-                    provider.Print(arguments.output, "image", images)
+                    provider.Print(images, output=arguments.output,
+                                   kind="image")
 
             except Exception as e:
 

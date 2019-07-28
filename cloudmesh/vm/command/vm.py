@@ -312,7 +312,7 @@ class VmCommand(PluginCommand):
                 provider = Provider(name=cloud)
                 vms = provider.list()
 
-                provider.Print(arguments.output, "vm", vms)
+                provider.Print(vms, output=arguments.output, kind="vm")
 
         elif arguments.list:
 
@@ -334,8 +334,7 @@ class VmCommand(PluginCommand):
                     db = CmDatabase()
                     vms = db.find(collection=collection)
 
-                    p.Print(arguments.output, "vm", vms)
-
+                    p.Print(vms, output=arguments.output, kind="vm")
 
             except Exception as e:
 
@@ -437,7 +436,7 @@ class VmCommand(PluginCommand):
                     for node in cursor.find({'name': name}):
                         status.append(node)
 
-                provider.Print(arguments.output, "status", status)
+                provider.Print(status, output=arguments.output, kind="status")
                 return ""
 
 
@@ -464,7 +463,7 @@ class VmCommand(PluginCommand):
                 else:
                     vms = provider.start(names=name, cloud=cloud)
 
-                    provider.Print(arguments.output, "vm", vms)
+                    provider.Print(vms, output=arguments.output, kind="vm")
 
             return ""
 
@@ -490,7 +489,7 @@ class VmCommand(PluginCommand):
                     for name in names:
                         vms = provider.stop(name)
 
-                    provider.Print(arguments.output, "vm", vms)
+                    provider.Print(vms, output=arguments.output, kind="vm")
 
 
         elif arguments.terminate:
@@ -515,7 +514,7 @@ class VmCommand(PluginCommand):
                     for name in names:
                         vms = provider.destroy(name)
 
-                    provider.Print(arguments.output, "vm", vms)
+                    provider.Print(vms, output=arguments.output, kind="vm")
 
 
         elif arguments.delete:

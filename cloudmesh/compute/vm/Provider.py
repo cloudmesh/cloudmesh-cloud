@@ -329,7 +329,10 @@ class Provider(ComputeNodeABC):
         raise NotImplementedError
 
     # noinspection PyPep8Naming
-    def Print(self, output, kind, data):
+    def Print(self, data, output='table', kind=None):
+        if kind is None and len(data) > 0:
+            kind = data[0]["cm"]["kind"]
+
         if output == "table":
 
             order = self.p.output[kind]['order']  # not pretty

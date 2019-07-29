@@ -8,6 +8,7 @@ from cloudmesh.management.configuration.config import Config
 from cloudmesh.provider import ComputeProviderPlugin
 from cloudmesh.common.console import Console
 from cloudmesh.common.debug import VERBOSE
+from cloudmesh.common3.DictList import DictList
 
 
 class Provider(ComputeNodeABC, ComputeProviderPlugin):
@@ -134,7 +135,9 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
     def list_secgroup_rules(self, name='default'):
 
-        raise NotImplementedError
+        sec_group_desc = self.list_secgroups(name)
+        sec_group_rule = sec_group_desc['IpPermissions']
+        return sec_group_rule
 
     @staticmethod
     def _is_group_name_valid(name=None):
@@ -162,19 +165,36 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
             except ClientError as e:
                 print(e)
 
-
-
     def add_secgroup_rule(self,
                           name=None,  # group name
                           port=None,
                           protocol=None,
                           ip_range=None):
-        # TODO: Vafa
-        raise NotImplementedError
+        try:
+            portmin, portmax = port.split(":")
+        except ValueError:
+            portmin = None
+            portmax = None
+
+        try:
+            data = self.ec2_client.authorize_security_group_ingress(
+                        GroupName=name,
+                        IpPermissions=[
+                            {'IpProtocol': protocol,
+                             'FromPort': portmin,
+                             'ToPort': portmax,
+                             'IpRanges': [{'CidrIp': ip_range}]},
+                            ])
+            print(f'Ingress Successfully Set as {data}')
+        except ClientError as e:
+            print(e)
 
     def remove_secgroup(self, name=None):
-        # TODO: Vafa
-        raise NotImplementedError
+        try:
+            response = self.ec2_client.delete_security_group(GroupName=name)
+            VERBOSE(response)
+        except ClientError as e:
+            print(e)
 
     def upload_secgroup(self, name=None):
         # TODO: Vafa
@@ -186,8 +206,36 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         raise NotImplementedError
 
     def remove_rules_from_secgroup(self, name=None, rules=None):
-        # TODO: Vafa
-        raise NotImplementedError
+
+        if name is None and rules is None:
+            raise ValueError("name or rules are None")
+
+        sec_group = self.list_secgroups(name)
+        if len(sec_group) == 0:
+            raise ValueError("group does not exist")
+        sec_group_rules = DictList(self.list_secgroup_rules(name))
+        VERBOSE(sec_group_rules)
+
+        '''
+            To do match rules with each sec_group_rules and if found remove it as below
+            Values below like protocol, portmin etc. are just default as of now
+        '''
+
+        try:
+            data = self.ec2_client.revoke_security_group_ingress(
+                        GroupName=name,
+                        IpPermissions=[
+                            {'IpProtocol': 'protocol',
+                             'FromPort': 'portmin',
+                             'ToPort': 'portmax',
+                             'IpRanges': [{'CidrIp': 'ip_range'}]},
+                            ])
+            print(f'Ingress Successfully Set as {data}')
+        except ClientError as e:
+            print(e)
+
+
+
 
     def set_server_metadata(self, name, m):
         """
@@ -681,4 +729,4 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
 if __name__ == "__main__":
     provider = Provider(name='aws')
-    provider.list_secgroups()
+    provider.remove_secgroup(name='saurabh')

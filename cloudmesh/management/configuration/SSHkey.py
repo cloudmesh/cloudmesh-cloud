@@ -6,7 +6,7 @@ from cloudmesh.common.util import path_expand
 from pathlib import Path
 import requests
 
-from cloudmesh.management.configuration.config import Config
+from cloudmesh.configuration.Config import Config
 
 
 # noinspection PyBroadException

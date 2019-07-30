@@ -9,7 +9,7 @@ from cloudmesh.common.Shell import Shell
 from cloudmesh.common.console import Console
 from cloudmesh.common.util import banner
 from cloudmesh.common.util import path_expand
-from cloudmesh.management.configuration.config import Config
+from cloudmesh.configuration.Config import Config
 from cloudmesh.security.encrypt import EncryptFile
 from cloudmesh.shell.command import PluginCommand
 from cloudmesh.shell.command import command, map_parameters
@@ -87,8 +87,8 @@ class ConfigCommand(PluginCommand):
 
                 ssh-add
 
-                cms config encrypt ~/.cloudmesh/cloudmesh4.yaml
-                cms config decrypt ~/.cloudmesh/cloudmesh4.yaml
+                cms config encrypt ~/.cloudmesh/cloudmesh.yaml
+                cms config decrypt ~/.cloudmesh/cloudmesh.yaml
 
 
                 config set ATTRIBUTE=VALUE
@@ -97,16 +97,16 @@ class ConfigCommand(PluginCommand):
 
 
         """
-        # d = Config()                #~/.cloudmesh/cloudmesh4.yaml
-        # d = Config(encryted=True)   # ~/.cloudmesh/cloudmesh4.yaml.enc
+        # d = Config()                #~/.cloudmesh/cloudmesh.yaml
+        # d = Config(encryted=True)   # ~/.cloudmesh/cloudmesh.yaml.enc
 
         map_parameters(arguments, "keep", "secrets", "output")
 
-        source = arguments.SOURCE or path_expand("~/.cloudmesh/cloudmesh4.yaml")
+        source = arguments.SOURCE or path_expand("~/.cloudmesh/cloudmesh.yaml")
         destination = source + ".enc"
 
         if arguments.cloud and arguments.edit and arguments.NAME is None:
-            path = path_expand("~/.cloudmesh/cloudmesh4.yaml")
+            path = path_expand("~/.cloudmesh/cloudmesh.yaml")
             print(path)
             Shell.edit(path)
             return ""
@@ -127,7 +127,7 @@ class ConfigCommand(PluginCommand):
 
             action = "verify"
             banner(
-                f"{action} cloudmesh.{kind}.{cloud} in ~/.cloudmesh/cloudmesh4.yaml")
+                f"{action} cloudmesh.{kind}.{cloud} in ~/.cloudmesh/cloudmesh.yaml")
 
             print(yaml.dump(result))
 
@@ -136,7 +136,7 @@ class ConfigCommand(PluginCommand):
             for attribute in flat:
                 if "TBD" in str(flat[attribute]):
                     Console.error(
-                        f"~/.cloudmesh4.yaml: Attribute cloudmesh.{cloud}.{attribute} contains TBD")
+                        f"~/.cloudmesh.yaml: Attribute cloudmesh.{cloud}.{attribute} contains TBD")
 
         elif arguments.cloud and arguments.list:
             service = configuration[f"cloudmesh.{kind}.{cloud}"]
@@ -144,7 +144,7 @@ class ConfigCommand(PluginCommand):
 
             action = "list"
             banner(
-                f"{action} cloudmesh.{kind}.{cloud} in ~/.cloudmesh/cloudmesh4.yaml")
+                f"{action} cloudmesh.{kind}.{cloud} in ~/.cloudmesh/cloudmesh.yaml")
 
             lines = yaml.dump(result).split("\n")
             secrets = not arguments.secrets
@@ -158,7 +158,7 @@ class ConfigCommand(PluginCommand):
             #
             action = "edit"
             banner(
-                f"{action} cloudmesh.{kind}.{cloud}.credentials in ~/.cloudmesh/cloudmesh4.yaml")
+                f"{action} cloudmesh.{kind}.{cloud}.credentials in ~/.cloudmesh/cloudmesh.yaml")
 
             credentials = configuration[f"cloudmesh.{kind}.{cloud}.credentials"]
 

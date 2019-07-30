@@ -27,7 +27,7 @@ pip install .
 - Add the MongoDB information in the configuration file
 
 ```bash
-vi ~/.cloudmesh/cloudmesh4.yaml
+vi ~/.cloudmesh/cloudmesh.yaml
 ```
 
 - Run the REST API

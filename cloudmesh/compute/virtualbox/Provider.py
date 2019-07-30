@@ -13,7 +13,7 @@ from cloudmesh.common.console import Console
 from cloudmesh.common.dotdict import dotdict
 from cloudmesh.common.util import path_expand
 # from cloudmesh.abstractclass import ComputeNodeManagerABC
-from cloudmesh.management.configuration.config import Config
+from cloudmesh.configuration.Config import Config
 
 """
 is vagrant up to date
@@ -69,7 +69,7 @@ class Provider(ComputeNodeABC):
     }
 
     def __init__(self, name=None,
-                 configuration="~/.cloudmesh/.cloudmesh4.yaml"):
+                 configuration="~/.cloudmesh/.cloudmesh.yaml"):
         self.config = Config()
         conf = Config(configuration)["cloudmesh"]
         self.user = conf["profile"]

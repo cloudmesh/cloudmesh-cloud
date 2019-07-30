@@ -1,6 +1,6 @@
 import time
 
-from cloudmesh.management.configuration.config import Config
+from cloudmesh.configuration.Config import Config
 from libcloud.compute.base import NodeAuthSSHKey
 from libcloud.compute.drivers.azure_arm import AzureIPAddress
 from libcloud.compute.drivers.azure_arm import AzureNetwork

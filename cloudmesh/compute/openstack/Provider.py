@@ -14,7 +14,7 @@ from cloudmesh.common.util import path_expand
 from cloudmesh.common.variables import Variables
 from cloudmesh.common3.DictList import DictList
 from cloudmesh.image.Image import Image
-from cloudmesh.management.configuration.config import Config
+from cloudmesh.configuration.Config import Config
 from cloudmesh.mongo.CmDatabase import CmDatabase
 from cloudmesh.provider import ComputeProviderPlugin
 from cloudmesh.secgroup.Secgroup import Secgroup, SecgroupRule
@@ -190,7 +190,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         # d['project_domain_name'] = config['OS_PROJECT_NAME']
         return d
 
-    def __init__(self, name=None, configuration="~/.cloudmesh/cloudmesh4.yaml"):
+    def __init__(self, name=None, configuration="~/.cloudmesh/cloudmesh.yaml"):
         """
         Initializes the provider. The default parameters are read from the
         configuration file that is defined in yaml format.

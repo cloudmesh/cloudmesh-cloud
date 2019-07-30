@@ -3,7 +3,7 @@ from datetime import datetime
 import boto3
 from botocore.exceptions import ClientError
 from cloudmesh.abstractclass.ComputeNodeABC import ComputeNodeABC
-from cloudmesh.management.configuration.config import Config
+from cloudmesh.configuration.Config import Config
 from cloudmesh.provider import ComputeProviderPlugin
 from cloudmesh.common.console import Console
 from cloudmesh.common.debug import VERBOSE
@@ -344,7 +344,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         # Host.ssh ....
         raise NotImplementedError
 
-    def __init__(self, name=None, configuration="~/.cloudmesh/cloudmesh4.yaml"):
+    def __init__(self, name=None, configuration="~/.cloudmesh/cloudmesh.yaml"):
         """
         Initializes the provider. The default parameters are read from the
         configuration file that is defined in yaml format.

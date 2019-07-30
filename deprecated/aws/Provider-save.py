@@ -4,13 +4,15 @@ from datetime import datetime
 from pathlib import Path
 from pprint import pprint
 
+from cloudmesh.common.debug import VERBOSE
 from cloudmesh.abstractclass.ComputeNodeABC import ComputeNodeABC
 from cloudmesh.common.console import Console
-from cloudmesh.common.debug import VERBOSE
 from cloudmesh.common.util import HEADING
 from cloudmesh.common.util import path_expand
-from cloudmesh.configuration.Config import Config
+from cloudmesh.config.Config import Config
 from libcloud.compute.base import NodeAuthSSHKey
+from libcloud.compute.base import NodeImage
+from libcloud.compute.base import NodeSize
 from libcloud.compute.providers import get_driver
 from libcloud.compute.types import Provider as LibcloudProvider
 
@@ -30,8 +32,8 @@ class Provider(ComputeNodeABC):
     """
     this may be buggy as the fields could be differentbased on the provider
     TODO: fix output base on provider
-    so we may need to do 
-    
+    so we may need to do
+
     output = {"aws": {"vm": ....,,
                       "image": ....,,
                       "flavor": ....,,
@@ -85,9 +87,8 @@ class Provider(ComputeNodeABC):
 
     def __init__(self, name=None, configuration="~/.cloudmesh/cloudmesh.yaml"):
         """
-        Initializes the provider. The default parameters are read from the
-        configuration file that is defined in yaml format.
-
+        Initializes the provider. The default parameters are read from the configutation
+        file that is defined in yaml format.
         :param name: The name of the provider as defined in the yaml file
         :param configuration: The location of the yaml configuration file
         """
@@ -107,21 +108,19 @@ class Provider(ComputeNodeABC):
 
             self.driver = get_driver(
                 Provider.ProviderMapper[self.cloudtype])
-            self.kind = self.cloudtype
 
             if self.cloudtype == 'openstack':
 
                 if cred["OS_PASSWORD"] == 'TBD':
                     Console.error("The password TBD is not allowed")
 
-                self.cloudman = self.driver(
-                    cred["OS_USERNAME"],
-                    cred["OS_PASSWORD"],
-                    ex_force_auth_url=cred[
-                        'OS_AUTH_URL'],
-                    ex_force_auth_version='2.0_password',
-                    ex_tenant_name=cred[
-                        'OS_TENANT_NAME'])
+                self.cloudman = self.driver(cred["OS_USERNAME"],
+                                            cred["OS_PASSWORD"],
+                                            ex_force_auth_url=cred[
+                                                'OS_AUTH_URL'],
+                                            ex_force_auth_version='2.0_password',
+                                            ex_tenant_name=cred[
+                                                'OS_TENANT_NAME'])
             elif self.cloudtype == 'azure_arm':
 
                 self.cloudman = self.driver(
@@ -132,14 +131,14 @@ class Provider(ComputeNodeABC):
                     region=cred['AZURE_REGION']
                 )
 
-            elif self.cloudtype == 'awslibcloud':
+            elif self.cloudtype == 'aws':
 
                 self.cloudman = self.driver(
                     cred["EC2_ACCESS_ID"],
                     cred["EC2_SECRET_KEY"],
                     region=cred["EC2_REGION"])
 
-            if self.cloudtype == 'googlelibcloud':
+            if self.cloudtype == 'google':
                 self.cloudman = self.driver(
                     cred["client_email"],
                     cred["path_to_json_file"],  # should be placed in .cloudmesh
@@ -152,17 +151,14 @@ class Provider(ComputeNodeABC):
         # self.default_size = deft["size"]
         # self.default.location = cred["datacenter"]
         self.public_key_path = conf["profile"]["publickey"]
-        self.key_path = path_expand(
-            Config()["cloudmesh"]["profile"]["publickey"])
+        self.key_path = path_expand(Config()["cloudmesh"]["profile"]["publickey"])
         f = open(self.key_path, 'r')
         self.key_val = f.read()
 
     def update_dict(self, elements, kind=None):
         """
         Libcloud returns an object or list of objects With the dict method
-        this object is converted to a dict. Typically this method is used
-        internally.
-
+        this object is converted to a dict. Typically this method is used internally.
         :param elements: the elements
         :param kind: Kind is image, flavor, or node
         :return:
@@ -191,6 +187,9 @@ class Provider(ComputeNodeABC):
                     # del entry["created_at"]
                 else:
                     entry["cm"]["created"] = entry["modified"]
+
+                # if self.cloudtype in ['aws']:
+                #     del entry['tzinfo']
             elif kind == 'flavor':
                 entry["cm"]["created"] = entry["updated"] = str(
                     datetime.utcnow())
@@ -226,20 +225,18 @@ class Provider(ComputeNodeABC):
         :param name: The name to be found
         :param: If raw is True, elements is a libcloud object.
                 Otherwise elements is a dict
-        :param raw: if raw is used the return from the driver is used and not
-                    a cleaned dict, not implemented
+        :param raw: if raw is used the return from the driver is used and not a cleaned dict, not implemented
         :return:
         """
         for element in elements:
-            # pprint (element)
-            if (raw and element.name) or element["cm"]["name"] == name:
+            if (raw and element.name == name) or (not raw and element["cm"]["name"] == name):
                 return element
         return None
 
     def keys(self, raw=False):
         """
         Lists the keys on the cloud
-        :param raw: If raw is set to True the lib cloud object is returned
+        :param raw: If raw is set to True the lib cloud object is returened
                     otherwise a dict is returened.
         :return: dict or libcloud object
         """
@@ -286,8 +283,7 @@ class Provider(ComputeNodeABC):
             secgroups = self.list_secgroups(raw=raw)
             thegroup = None
             if raw:
-                # Theoretically it's possible to have secgroups with the same
-                # name,
+                # Theoretically it's possible to have secgroups with the same name,
                 # in this case, we list rules for the first one only.
                 # In reality this don't seem like a good practice so we assume
                 # this situation MOST LIKELY does not occur.
@@ -316,9 +312,8 @@ class Provider(ComputeNodeABC):
 
     def add_secgroup(self, secgroupname, description=""):
         if self.cloudman:
-            return self.cloudman.ex_create_security_group(
-                secgroupname,
-                description=description)
+            return self.cloudman.ex_create_security_group(secgroupname,
+                                                          description=description)
         return None
 
     def remove_secgroup(self, secgroupname):
@@ -349,13 +344,16 @@ class Provider(ComputeNodeABC):
                 if secgroup.name == secgroupname:
                     # supporting multiple rules at once
                     for rule in newrules:
-                        self.cloudman.ex_create_security_group_rule(
-                            secgroup,
-                            rule["ip_protocol"],
-                            rule["from_port"],
-                            rule["to_port"],
-                            cidr=rule["ip_range"]
-                        )
+                        self.cloudman.ex_create_security_group_rule(secgroup,
+                                                                    rule[
+                                                                        "ip_protocol"],
+                                                                    rule[
+                                                                        "from_port"],
+                                                                    rule[
+                                                                        "to_port"],
+                                                                    cidr=rule[
+                                                                        "ip_range"]
+                                                                    )
 
     def remove_rules_from_secgroup(self, secgroupname, rules):
         oldrules = self.list_secgroup_rules(secgroupname)
@@ -441,52 +439,33 @@ class Provider(ComputeNodeABC):
 
     def flavor(self, name=None):
         """
-        Gets the flavor with a given name
+        Gest the flavor with a given name
         :param name: The name of the flavor
         :return: The dict of the flavor
         """
         return self.find(self.flavors(), name=name)
 
-    def apply(self, fname, names):
+    def start(self, name=None):
         """
-        apply a function to a given list of nodes
+        Start a node
 
-        :param fname: Name of the function to be applied to the given nodes
-        :param names: A list of node names
-        :return:  A list of dict representing the nodes
+        :param name: node name
+        :return: A dict representing the node
         """
-        if self.cloudman:
-            # names = Parameter.expand(names)
-            res = []
+        node = self.find(self.list(raw=True), name=name, raw=True)
+        self.cloudman.ex_start_node(node)
+        return self.update_dict(node, kind='node')[0]
 
-            nodes = self.list(raw=True)
-            for node in nodes:
-                if node.name in names:
-                    fname(node)
-                    res.append(self.info(node.name))
-            return res
-        else:
-            return None
-
-    def start(self, names=None):
+    def stop(self, name=None):
         """
-        Start a list of nodes with the given names
+        Stop a node
 
-        :param names: A list of node names
-        :return:  A list of dict representing the nodes
+        :param name: node name
+        :return: A dict representing the node
         """
-        VERBOSE(names)
-        return self.apply(self.cloudman.ex_start_node, names)
-
-    def stop(self, names=None):
-        """
-        Stop a list of nodes with the given names
-
-        :param names: A list of node names
-        :return:  A list of dict representing the nodes
-        """
-
-        return self.apply(self.cloudman.ex_stop_node, names)
+        node = self.find(self.list(raw=True), name=name, raw=True)
+        self.cloudman.ex_stop_node(node)
+        return self.update_dict(node, kind='node')[0]
 
     def info(self, name=None):
         """
@@ -529,7 +508,7 @@ class Provider(ComputeNodeABC):
         # should return the updated names dict, e.g. status and so on
         # the above specification is for one name
         #
-        
+
         return None
         """
 
@@ -540,9 +519,9 @@ class Provider(ComputeNodeABC):
         :param name: the name of the node
         :return: the dict of the node
         """
-
-        # the following does not return the dict
-        return self.apply(self.cloudman.ex_start_node, name)
+        node = self.find(self.list(raw=True), name=name, raw=True)
+        self.cloudman.ex_start_node(node)
+        return self.update_dict(node, kind='node')[0]
 
     def list(self, raw=False):
         """
@@ -571,32 +550,29 @@ class Provider(ComputeNodeABC):
                 return self.update_dict(entries, kind="node")
         return None
 
-    def destroy(self, names=None):
+    def destroy(self, name=None):
         """
-        Destroys the node
-        :param names: the name of the node
-        :return: the dict of the node
-        """
-        # names = Parameter.expand(names)
+        Destroy a node
 
-        nodes = self.list(raw=True)
-        for node in nodes:
-            if node.name in names:
-                self.cloudman.destroy_node(node)
-        # bug status should change to destroyed
-        return None
+        :param name: node name
+        :return: A dict representing the node
+        """
+        node = self.find(self.list(raw=True), name=name, raw=True)
+        self.cloudman.destroy_node(node)
+        return self.update_dict(node, kind='node')[0]
 
     def reboot(self, names=None):
         """
-        Reboot a list of nodes with the given names
+        Reboot a node
 
-        :param names: A list of node names
-        :return:  A list of dict representing the nodes
+        :param name: node name
+        :return: A dict representing the node
         """
-        return self.apply(self.cloudman.reboot_node, names)
+        node = self.find(self.list(raw=True), name=name, raw=True)
+        self.cloudman.reboot_node(node)
+        return self.update_dict(node, kind='node')[0]
 
-    def create(self, name=None, image=None, size=None, location=None,
-               timeout=360, **kwargs):
+    def create(self, name=None, image=None, size=None, location=None, timeout=360, **kwargs):
         """
         creates a named node
 
@@ -605,29 +581,36 @@ class Provider(ComputeNodeABC):
         :param size: the size of the image
         :param timeout: a timeout in seconds that is invoked in case the image
                         does not boot. The default is set to 3 minutes.
-        :param kwargs: additional arguments HEADING(c=".")ed along at time of
-                       boot
+        :param kwargs: additional arguments HEADING(c=".")ed along at time of boot
         :return:
         """
+        if image is None:
+            image = self.spec["default"]['flavor']
+        if size is None:
+            size = self.spec["default"]['size']
+
+        database = CmDatabase()
         image_use = None
         flavor_use = None
-        # keyname = Config()["cloudmesh"]["profile"]["user"]
-        # ex_keyname has to be the registered keypair name in cloud
 
         if self.cloudtype in ["openstack", "aws", "google"]:
-            images = self.images(raw=True)
-            for _image in images:
-                if _image.name == image:
-                    image_use = _image
-                    break
+            image_dict = database.find(collection='{}-image'.format(self.cloudtype), name=image)[0]
+
+            image_use = NodeImage(id=image_dict['id'],
+                                  name=image_dict['name'],
+                                  driver=self.driver)
         elif self.cloudtype == 'azure_arm':
             image_use = self.cloudman.get_image(image)
 
-        flavors = self.flavors(raw=True)
-        for _flavor in flavors:
-            if _flavor.name == size:
-                flavor_use = _flavor
-                break
+        flavor_dict = database.find(collection='{}-flavor'.format(self.cloudtype), name=size)[0]
+        flavor_use = NodeSize(id=flavor_dict['id'],
+                              name=flavor_dict['name'],
+                              ram=flavor_dict['ram'],
+                              disk=flavor_dict['disk'],
+                              bandwidth=flavor_dict['bandwidth'],
+                              price=flavor_dict['price'],
+                              driver=self.driver)
+
         if self.cloudtype == "openstack":
 
             if "ex_security_groups" in kwargs:
@@ -644,8 +627,7 @@ class Provider(ComputeNodeABC):
                 kwargs["ex_security_groups"] = secgroupsobj
 
         if self.cloudtype in ["openstack", "aws"]:
-            node = self.cloudman.create_node(name=name, image=image_use,
-                                             size=flavor_use, **kwargs)
+            node = self.cloudman.create_node(name=name, image=image_use, size=flavor_use, **kwargs)
         elif self.cloudtype == 'azure_arm':
             auth = None
             if "sshpubkey" in kwargs:
@@ -675,34 +657,30 @@ class Provider(ComputeNodeABC):
                 resource_group=kwargs["resource_group"],
                 public_ip=pubip
             )
-            node = self.cloudman.create_node(
-                name=name,
-                image=image_use,
-                size=flavor_use,
-                auth=auth,
-                # the following three were created in azure portal
-                ex_resource_group=kwargs["resource_group"],
-                # for storage account, use the default v2 setting
-                ex_storage_account=kwargs["storage_account"],
-                # under the storage account, blobs services,
-                # create 'vhds' container
-                ex_blob_container=kwargs["blob_container"],
-                ex_nic=nic_use
-            )
+            node = self.cloudman.create_node(name=name,
+                                             image=image_use,
+                                             size=flavor_use,
+                                             auth=auth,
+                                             # the following three were created in azure portal
+                                             ex_resource_group=kwargs["resource_group"],
+                                             # for storage account, use the default v2 setting
+                                             ex_storage_account=kwargs["storage_account"],
+                                             # under the storage account, blobs services,
+                                             # create 'vhds' container
+                                             ex_blob_container=kwargs["blob_container"],
+                                             ex_nic=nic_use
+                                             )
         elif self.cloudtype == 'google':
             location_use = self.spec["credentials"]["datacenter"]
-            metadata = {"items": [
-                {"value": self.user + ":" + self.key_val, "key": "ssh-keys"}]}
-            node = self.cloudman.create_node(name=name, image=image_use,
-                                             size=flavor_use,
-                                             location=location_use,
+            metadata = {"items": [{"value": self.user + ":" + self.key_val, "key": "ssh-keys"}]}
+            node = self.cloudman.create_node(name=name, image=image_use, size=flavor_use, location=location_use,
                                              ex_metadata=metadata, **kwargs)
         else:
             sys.exit("this cloud is not yet supported")
 
-        return self.update_dict(node, kind="node")[0]
+        return self.update_dict(node, kind='node')[0]
 
-    def get_public_ip(self):
+    def get_publicIP(self):
         # pools = self.cloudman.ex_list_floating_ip_pools()
         # ex_get_floating_ip(ip)
         # ex_create_floating_ip(ip_pool=pools[0])
@@ -724,10 +702,10 @@ class Provider(ComputeNodeABC):
                 ip = self.cloudman.ex_create_floating_ip(ip_pool=pools[0].name)
         return ip
 
-    def attach_public_ip(self, node, ip):
+    def attach_publicIP(self, node, ip):
         return self.cloudman.ex_attach_floating_ip_to_node(node, ip)
 
-    def detach_public_ip(self, node, ip):
+    def detach_publicIP(self, node, ip):
         self.cloudman.ex_detach_floating_ip_from_node(node, ip)
         return self.cloudman.ex_delete_floating_ip(ip)
 
@@ -743,51 +721,38 @@ class Provider(ComputeNodeABC):
         HEADING(c=".")
         return None
 
-    def ssh(self, name=None, command=None):
-        key = self.key_path.replace(".pub", "")
-        nodes = self.list(raw=True)
-        for node in nodes:
-            if node.name == name:
-                self.testnode = node
-                break
-        pubip = self.testnode.public_ips[0]
-        location = self.user + '@' + pubip
-        cmd = ['ssh',
-               "-o", "StrictHostKeyChecking=no",
-               "-o", "UserKnownHostsFile=/dev/null",
-               '-i', key, location, command]
-        VERBOSE(" ".join(cmd))
+    # def ssh(self, name=None, command=None):
+    #     nodes = self.list(raw=True)
+    #     for node in nodes:
+    #         if node.name == name:
+    #             self.testnode = node
+    #             break
+    #     pubip = self.testnode.public_ips[0]
+    #     ssh = subprocess.Popen(
+    #         ["ssh", "%s" % (pubip), "%s" % (command)],
+    #         shell=False,
+    #         stdout=subprocess.PIPE,
+    #         stderr=subprocess.PIPE)
+    #     result = ssh.stdout.readlines()
+    #     if result == []:
+    #         error = ssh.stderr.readlines()
+    #         print("ERROR: %s" % error)
+    #     else:
+    #         print("RESULT:")
+    #         for line in result:
+    #             line = line.decode("utf-8")
+    #             print(line.strip("\n"))
 
-        ssh = subprocess.Popen(cmd,
-                               shell=False,
-                               stdout=subprocess.PIPE,
-                               stderr=subprocess.PIPE)
-        result = ssh.stdout.readlines()
-        if not result:
-            error = ssh.stderr.readlines()
-            print("ERROR: %s" % error)
-        else:
-            print("RESULT:")
-            for line in result:
-                line = line.decode("utf-8")
-                print(line.strip("\n"))
-
-    """
-    THIS CODE IS BUUGY AS IT OVERWRITES ALL PROVIDERS, THE CODE ABOVE SEEMS TO 
-    WORK
-    def ssh(self, name, ips, username=None, key=None, quiet=None, command=None, 
-            script=None, modify_knownhosts=None):
-        if key == None:
-            key = self.spec['credentials']['EC2_PRIVATE_KEY_FILE_PATH'] + 
-             self.spec['credentials']['EC2_PRIVATE_KEY_FILE_NAME']
+    def ssh(self, name, ips, username=None, key=None, quiet=None, command=None, script=None, modify_knownhosts=None):
+        if key is None:
+            key = self.spec['credentials']['EC2_PRIVATE_KEY_FILE_PATH'] + self.spec['credentials'][
+                'EC2_PRIVATE_KEY_FILE_NAME']
         for ip in ips:
             location = username + '@' + ip
-            if command != None:
+            if command is not None:
                 ssh_command = ['ssh', '-i', key, location, command]
                 subprocess.run(ssh_command)
-            elif script != None:
-                BUG, doesn't work#
-                ssh_command = ['ssh', '-i', key, location, 
-                               'bash', '-s', '<', script]
+            elif script is not None:
+                # BUG, doesn't work#
+                ssh_command = ['ssh', '-i', key, location, 'bash', '-s', '<', script]
                 subprocess.call(ssh_command, shell=True)
-    """

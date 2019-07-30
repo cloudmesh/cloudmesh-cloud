@@ -11,7 +11,7 @@ from cloudmesh.common.util import HEADING
 from cloudmesh.common.variables import Variables
 from cloudmesh.common3.Shell import Shell
 from cloudmesh.compute.openstack.Provider import Provider
-from cloudmesh.management.configuration.config import Config
+from cloudmesh.config.Config import Config
 from cloudmesh.management.configuration.name import Name
 from cloudmesh.secgroup.Secgroup import Secgroup
 from cloudmesh.secgroup.Secgroup import SecgroupExamples

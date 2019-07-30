@@ -15,7 +15,7 @@ from cloudmesh.common.util import HEADING
 from cloudmesh.common.util import banner
 from cloudmesh.common.util import path_expand
 from cloudmesh.compute.docker.Provider import Provider
-from cloudmesh.management.configuration.config import Config
+from cloudmesh.config.Config import Config
 from cloudmesh.management.configuration.name import Name
 
 

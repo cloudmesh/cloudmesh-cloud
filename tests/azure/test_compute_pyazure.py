@@ -9,7 +9,7 @@ from cloudmesh.common.util import HEADING
 from cloudmesh.common.util import banner
 from cloudmesh.common3.Benchmark import Benchmark
 from cloudmesh.compute.azure.Provider import Provider
-from cloudmesh.management.configuration.config import Config
+from cloudmesh.config.Config import Config
 from cloudmesh.management.configuration.name import Name
 
 

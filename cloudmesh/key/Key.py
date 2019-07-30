@@ -10,7 +10,7 @@ from cloudmesh.management.configuration.SSHkey import SSHkey
 from cloudmesh.mongo.DataBaseDecorator import DatabaseUpdate
 from cloudmesh.common.debug import VERBOSE
 from pprint import pprint
-from cloudmesh.management.configuration.config import Config
+from cloudmesh.configuration.Config import Config
 
 # noinspection PyPep8Naming
 class Key(object):

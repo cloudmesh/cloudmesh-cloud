@@ -3,7 +3,7 @@ import textwrap
 from cloudmesh.common.Printer import Printer
 from cloudmesh.common.console import Console
 from cloudmesh.common.dotdict import dotdict
-from cloudmesh.management.configuration.config import Config
+from cloudmesh.configuration.Config import Config
 from cloudmesh.management.configuration.operatingsystem import OperatingSystem
 # from cloudmesh.admin.api.manager import Manager
 from cloudmesh.mongo.MongoDBController import MongoDBController
@@ -65,7 +65,7 @@ class AdminCommand(PluginCommand):
 
               MongoDB is managed through a number of commands.
 
-              The configuration is read from ~/.cloudmesh/cloudmesh4.yaml
+              The configuration is read from ~/.cloudmesh/cloudmesh.yaml
 
               First, you need to create a MongoDB database with
 

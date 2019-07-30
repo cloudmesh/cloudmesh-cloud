@@ -10,7 +10,7 @@ from cloudmesh.common.Printer import Printer
 from cloudmesh.common.util import HEADING
 from cloudmesh.common3.Benchmark import Benchmark
 from cloudmesh.management.configuration.SSHkey import SSHkey
-from cloudmesh.management.configuration.config import Config
+from cloudmesh.config.Config import Config
 
 
 @pytest.mark.incremental

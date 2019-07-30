@@ -17,7 +17,7 @@ import time
 import pytest
 from cloudmesh.common.ConfigDict import ConfigDict
 from cloudmesh.common.util import path_expand
-from cloudmesh.management.configuration.config import Config
+from cloudmesh.config.Config import Config
 from cloudmesh.management.configuration.security.encryption import EncryptFile
 
 
@@ -33,8 +33,8 @@ class Test_configdict:
 
         self.mkdirer()
         self.copy_file()
-        self.e = EncryptFile('~/.cloudmesh/tmp/cloudmesh4.yaml',
-                             '~/.cloudmesh/tmp/cloudmesh4.yaml.enc', '')
+        self.e = EncryptFile('~/.cloudmesh/tmp/cloudmesh.yaml',
+                             '~/.cloudmesh/tmp/cloudmesh.yaml.enc', '')
 
     def mkdirer(self):
         #
@@ -47,7 +47,7 @@ class Test_configdict:
 
     def copy_file(self):
 
-        source = path_expand('~/.cloudmesh/cloudmesh4.yaml')
+        source = path_expand('~/.cloudmesh/cloudmesh.yaml')
         target = path_expand('~/.cloudmesh/tmp')
         shutil.copy(source, target)
 
@@ -67,14 +67,14 @@ class Test_configdict:
     def test_encrypt(self):
         self.e.encrypt()
         exists = os.path.isfile(
-            path_expand('~/.cloudmesh/tmp/cloudmesh4.yaml.enc'))
+            path_expand('~/.cloudmesh/tmp/cloudmesh.yaml.enc'))
         assert exists
         enc_size = os.path.getsize(
-            path_expand('~/.cloudmesh/tmp/cloudmesh4.yaml.enc'))
+            path_expand('~/.cloudmesh/tmp/cloudmesh.yaml.enc'))
         enc_size = enc_size * 10000 / float(1024 * 1024)
         print(enc_size)
         orginal_size = os.path.getsize(
-            path_expand('~/.cloudmesh/tmp/cloudmesh4.yaml'))
+            path_expand('~/.cloudmesh/tmp/cloudmesh.yaml'))
         orginal_size = orginal_size * 10000 / float(1024 * 1024)
         print(orginal_size)
         assert abs(enc_size - orginal_size) < 10
@@ -113,14 +113,14 @@ class Test_configdict:
     def test_decrypt(self):
         self.e.decrypt()
         exists = os.path.isfile(
-            path_expand('~/.cloudmesh/tmp/cloudmesh4.yaml.enc.plain'))
+            path_expand('~/.cloudmesh/tmp/cloudmesh.yaml.enc.plain'))
         assert exists
         dec_size = os.path.getsize(
-            path_expand('~/.cloudmesh/tmp/cloudmesh4.yaml.enc.plain'))
+            path_expand('~/.cloudmesh/tmp/cloudmesh.yaml.enc.plain'))
         dec_size = dec_size * 10000 / float(1024 * 1024)
         print(dec_size)
         orginal_size = os.path.getsize(
-            path_expand('~/.cloudmesh/tmp/cloudmesh4.yaml'))
+            path_expand('~/.cloudmesh/tmp/cloudmesh.yaml'))
         orginal_size = orginal_size * 10000 / float(1024 * 1024)
         print(orginal_size)
         assert abs(dec_size - orginal_size) < 2
@@ -150,12 +150,12 @@ class Test_configdict:
         assert True
 
     def test_set(self):
-        filename = path_expand("~/.cloudmesh/tmp/cloudmesh4.yaml")
+        filename = path_expand("~/.cloudmesh/tmp/cloudmesh.yaml")
         key = "cloudmesh.profile.firstname"
         value = "Gregor"
         self.e.set(filename, key, value)
         times = os.path.getmtime(
-            path_expand("~/.cloudmesh/tmp/cloudmesh4.yaml"))
+            path_expand("~/.cloudmesh/tmp/cloudmesh.yaml"))
         timestamp = time.localtime(times)
         fileUpdateTime = time.strftime('%Y-%m-%d %H:%M:%S', timestamp)
         print(fileUpdateTime)
@@ -170,21 +170,21 @@ class Test_configdict:
 
         # test original yaml file
 
-        configDict = ConfigDict(path_expand("~/.cloudmesh/cloudmesh4.yaml"))
+        configDict = ConfigDict(path_expand("~/.cloudmesh/cloudmesh.yaml"))
         assert configDict.__getitem__("meta.version")
 
         # test tmp_yaml file
-        configDict = ConfigDict(path_expand("~/.cloudmesh/tmp/cloudmesh4.yaml"))
+        configDict = ConfigDict(path_expand("~/.cloudmesh/tmp/cloudmesh.yaml"))
         assert configDict.__getitem__("meta.version")
 
         # test enc_yaml file
 
         with pytest.raises(UnicodeDecodeError) as e:
-            con = Config(path_expand("~/.cloudmesh/tmp/cloudmesh4.yaml.enc"))
+            con = Config(path_expand("~/.cloudmesh/tmp/cloudmesh.yaml.enc"))
             assert con
 
         # test dec_yaml file
-        config = Config(config_path="~/.cloudmesh/cloudmesh4.yaml.enc")
+        config = Config(config_path="~/.cloudmesh/cloudmesh.yaml.enc")
         assert configDict.__getitem__("meta.version")
 
     def test_edit(self):

@@ -13,7 +13,7 @@ from cloudmesh.common.util import HEADING
 from cloudmesh.common.util import banner
 from cloudmesh.compute.libcloud.Provider import Provider
 from cloudmesh.management.configuration.SSHkey import SSHkey
-from cloudmesh.config.Config import Config
+from 'cloudmesh-configuration'.Config import Config
 from cloudmesh.management.configuration.name import Name
 
 

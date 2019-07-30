@@ -150,7 +150,7 @@ class Provider(ComputeNodeABC):
 
         database = CmDatabase()
         defaults = Config()[f"cloudmesh.cloud.{cloud}.default"]
-        pprint(defaults)
+        # pprint(defaults)
         duplicates = []
         for vm in vms:
             duplicates += database.find(collection=f'{cloud}-node', name=vm)

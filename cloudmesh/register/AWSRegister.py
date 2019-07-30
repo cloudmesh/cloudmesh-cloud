@@ -1,4 +1,3 @@
-from time import sleep
 import random
 import getpass
 from time import sleep
@@ -8,8 +7,7 @@ from selenium.common.exceptions import WebDriverException
 from sys import platform
 import os
 import subprocess
-import yaml
-from pathlib import Path, PurePath, PurePosixPath, PureWindowsPath
+from pathlib import Path
 import pandas
 from cloudmesh.configuration.Config import Config
 
@@ -20,7 +18,7 @@ class AWSRegister(object):
         self.config = Config()
         self.credentials = self.config[f'cloudmesh.cloud.{cloud}.credentials']
 
-    def set_credentials(creds):
+    def set_credentials(self, creds):
         self.credentials['EC2_ACCESS_ID'] = creds['Access key ID'][0]
         self.credentials['EC2_SECRET_KEY'] = creds['Secret access key'][0]
         self.config.save()
@@ -31,6 +29,7 @@ class AWSRegister(object):
 
             chrome_ver1 = subprocess.getoutput('google-chrome-stable --version')
             chrome_ver2 = subprocess.getoutput('google-chrome --version')
+
             if 'not found' in chrome_ver1.lower() or 'not found' in chrome_ver2.lower():
                 Console.error("google chrome is not installed")
                 return
@@ -110,7 +109,7 @@ class AWSRegister(object):
                               "https://sites.google.com/a/chromium.org/chromedriver/downloads \n"
                               "2) Copy the `chromedriver` to path, for instance you can add "
                               "it to the followtin path: "
-                              ""\n\t %USERPROFILE%\AppData\Local\Microsoft\WindowsApps")
+                              "\n\t %USERPROFILE%\AppData\Local\Microsoft\WindowsApps")
                 return
             credentials_file_name = self.create_user()
 

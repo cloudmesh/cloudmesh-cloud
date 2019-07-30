@@ -10,7 +10,7 @@ from cloudmesh.common.Shell import Shell
 from cloudmesh.common.debug import VERBOSE
 from cloudmesh.common.util import HEADING
 from cloudmesh.common3.Benchmark import Benchmark
-from cloudmesh.config.Config import Config
+from 'cloudmesh-configuration'.Config import Config
 
 
 @pytest.mark.incremental

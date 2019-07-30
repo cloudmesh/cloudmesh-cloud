@@ -9,7 +9,7 @@ from cloudmesh.common.util import HEADING
 from cloudmesh.common.util import banner
 from cloudmesh.common.util import path_expand
 from cloudmesh.compute.libcloud.Provider import Provider as GCloudProvider
-from cloudmesh.config.Config import Config
+from 'cloudmesh-configuration'.Config import Config
 from cloudmesh.management.configuration.name import Name
 
 

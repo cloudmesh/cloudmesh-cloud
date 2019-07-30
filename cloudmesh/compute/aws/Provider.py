@@ -1,5 +1,4 @@
 from datetime import datetime
-from pprint import pprint
 
 import boto3
 from botocore.exceptions import ClientError
@@ -178,13 +177,13 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
         try:
             data = self.ec2_client.authorize_security_group_ingress(
-                        GroupName=name,
-                        IpPermissions=[
-                            {'IpProtocol': protocol,
-                             'FromPort': portmin,
-                             'ToPort': portmax,
-                             'IpRanges': [{'CidrIp': ip_range}]},
-                            ])
+                GroupName=name,
+                IpPermissions=[
+                    {'IpProtocol': protocol,
+                     'FromPort': portmin,
+                     'ToPort': portmax,
+                     'IpRanges': [{'CidrIp': ip_range}]},
+                ])
             print(f'Ingress Successfully Set as {data}')
         except ClientError as e:
             print(e)
@@ -223,19 +222,16 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
         try:
             data = self.ec2_client.revoke_security_group_ingress(
-                        GroupName=name,
-                        IpPermissions=[
-                            {'IpProtocol': 'protocol',
-                             'FromPort': 'portmin',
-                             'ToPort': 'portmax',
-                             'IpRanges': [{'CidrIp': 'ip_range'}]},
-                            ])
+                GroupName=name,
+                IpPermissions=[
+                    {'IpProtocol': 'protocol',
+                     'FromPort': 'portmin',
+                     'ToPort': 'portmax',
+                     'IpRanges': [{'CidrIp': 'ip_range'}]},
+                ])
             print(f'Ingress Successfully Set as {data}')
         except ClientError as e:
             print(e)
-
-
-
 
     def set_server_metadata(self, name, m):
         """
@@ -262,12 +258,18 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         raise NotImplementedError
 
     def create_public_ip(self):
-        # TODO: Sriman
-        raise NotImplementedError
+        try:
+            response = self.ec2_client.allocate_address(
+                Domain='vpc'
+            )
+        except ClientError as e:
+            print(e)
+        return response
 
     def find_available_public_ip(self):
-        # TODO: Sriman
-        raise NotImplementedError
+        addresses = self.ec2_client.describe_addresses()
+        public_ips = [address['PublicIp'] for address in addresses.get('Addresses')]
+        return public_ips
 
     def attach_public_ip(self, node, ip):
         # TODO: Sriman

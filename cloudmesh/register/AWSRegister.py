@@ -20,6 +20,10 @@ class AWSRegister(object):
         self.config = Config()
         self.credentials = self.config[f'cloudmesh.cloud.{cloud}.credentials']
 
+    def set_credentials(creds):
+        self.credentials['EC2_ACCESS_ID'] = creds['Access key ID'][0]
+        self.credentials['EC2_SECRET_KEY'] = creds['Secret access key'][0]
+        self.config.save()
 
     def register(self, cloud='aws'):
         if platform == "linux" or platform == "linux2":
@@ -55,8 +59,7 @@ class AWSRegister(object):
             creds = pandas.read_csv("{cm}/{filename}".format(cm=cloudmesh_folder,filename=credentials_file_name))
 
 
-            self.credentials['EC2_ACCESS_ID'] = creds['Access key ID'][0]
-            self.credentials['EC2_SECRET_KEY'] = creds['Secret access key'][0]
+            self.set_credentials(creds)
 
             self.config.save()
 
@@ -89,10 +92,7 @@ class AWSRegister(object):
 
             creds = pandas.read_csv("{cm}/{filename}".format(cm=cloudmesh_folder,filename=credentials_file_name))
 
-            self.credentials['EC2_ACCESS_ID'] = creds['Access key ID'][0]
-            self.credentials['EC2_SECRET_KEY'] = creds['Secret access key'][0]
-
-            self.config.save()
+            self.set_credentials(creds)
 
             Console.info("AWS 'Access Key ID' and 'Secret Access Key' in the cloudmesh.yaml updated")
 
@@ -108,22 +108,22 @@ class AWSRegister(object):
                 Console.error("Chrome geckodriver not installed. Follow these steps for installation: \n"
                               "1) Download the driver from the following link: \n\t "
                               "https://sites.google.com/a/chromium.org/chromedriver/downloads \n"
-                              "2) Copy the `chromedriver` to path, for instance you can add it to the followtin path: \n\t %USERPROFILE%\AppData\Local\Microsoft\WindowsApps")
+                              "2) Copy the `chromedriver` to path, for instance you can add "
+                              "it to the followtin path: "
+                              ""\n\t %USERPROFILE%\AppData\Local\Microsoft\WindowsApps")
                 return
             credentials_file_name = self.create_user()
+
             credentials_csv_path = Path.home().joinpath('Downloads').joinpath(credentials_file_name).resolve()
             cloudmesh_folder = Path.home().joinpath('.cloudmesh').resolve()
             os.rename(credentials_csv_path, cloudmesh_folder.joinpath(credentials_file_name).resolve())
+
             Console.info(f"{credentials_file_name} moved to ~/.cloudmesh folder")
-            Console.info(f"{credentials_file_name} moved to ~/.cloudmesh folder")
+
 
             creds = pandas.read_csv("{cm}/{filename}".format(cm=cloudmesh_folder,filename=credentials_file_name))
 
-            credentials = self.config[f'cloudmesh.cloud.{cloud}.credentials']
-            credentials['EC2_ACCESS_ID'] = creds['Access key ID'][0]
-            credentials['EC2_SECRET_KEY'] = creds['Secret access key'][0]
-
-            self.config.save()
+            self.set_credentials(creds)
 
             Console.info("AWS 'Access Key ID' and 'Secret Access Key' in the cloudmesh.yaml updated")
 

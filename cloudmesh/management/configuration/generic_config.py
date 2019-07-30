@@ -11,7 +11,7 @@ class GenericConfig(object):
         Initialize the Config class.
 
         :param config_path: A local file path to a yaml config
-            with a root element `cloudmesh`. Default: `~/.cloudmesh/cloudmesh4.yaml`
+            with a root element `cloudmesh`. Default: `~/.cloudmesh/cloudmesh.yaml`
         """
         self._conf_dict = {}
         self.config_path = expanduser(config_path)
@@ -86,7 +86,7 @@ class GenericConfig(object):
 
     def keys(self):
         """
-        Print keys of a subkey
+        Print the key names
         :return:
         """
         return self._conf_dict.keys()

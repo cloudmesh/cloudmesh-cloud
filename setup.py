@@ -45,6 +45,7 @@ this_platform = platform.system().lower()
 
 requiers = """
 cloudmesh-common
+cloudmesh-config
 cloudmesh-cmd5
 cloudmesh-sys
 apache-libcloud
@@ -104,7 +105,7 @@ setup(
     description=DESCRIPTION,
     long_description=long_description,
     long_description_content_type="text/markdown",
-    version="4.1.3",
+    version="4.1.4",
     license="Apache 2.0",
     url=URL,
     packages=find_packages(exclude=("tests",

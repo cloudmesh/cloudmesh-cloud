@@ -21,13 +21,13 @@ import os
 from libcloud.compute.providers import get_driver
 from libcloud.compute.types import Provider
 
-from cloudmesh.management.configuration.config import Config
+from cloudmesh.configuration.Config import Config
 from cloudmesh.common.variables import Variables
 
 
 class Driver(object):
 
-    def __init__(self, name="~/.cloudmesh/cloudmesh4.yaml"):
+    def __init__(self, name="~/.cloudmesh/cloudmesh.yaml"):
         name = os.path.expanduser(name)
         self.config = Config(name=name)
 

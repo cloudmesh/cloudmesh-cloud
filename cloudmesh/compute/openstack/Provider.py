@@ -14,10 +14,11 @@ from cloudmesh.common.util import path_expand
 from cloudmesh.common.variables import Variables
 from cloudmesh.common3.DictList import DictList
 from cloudmesh.image.Image import Image
-from cloudmesh.management.configuration.config import Config
+from cloudmesh.configuration.Config import Config
 from cloudmesh.mongo.CmDatabase import CmDatabase
 from cloudmesh.provider import ComputeProviderPlugin
 from cloudmesh.secgroup.Secgroup import Secgroup, SecgroupRule
+from cloudmesh.common.debug import VERBOSE
 
 
 class Provider(ComputeNodeABC, ComputeProviderPlugin):
@@ -44,9 +45,10 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                       "vm_state",
                       "status",
                       "task_state",
-                      "image",
-                      "public_ips",
-                      "private_ips",
+                      "metadata.image",
+                      "metadata.flavor",
+                      "ip_public",
+                      "ip_private",
                       "project_id",
                       "launched_at",
                       "cm.kind"],
@@ -56,6 +58,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                        "Status",
                        "Task",
                        "Image",
+                       "Flavor",
                        "Public IPs",
                        "Private IPs",
                        "Project ID",
@@ -187,7 +190,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         # d['project_domain_name'] = config['OS_PROJECT_NAME']
         return d
 
-    def __init__(self, name=None, configuration="~/.cloudmesh/cloudmesh4.yaml"):
+    def __init__(self, name=None, configuration="~/.cloudmesh/cloudmesh.yaml"):
         """
         Initializes the provider. The default parameters are read from the
         configuration file that is defined in yaml format.
@@ -252,8 +255,6 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         d = []
         for entry in _elements:
 
-
-
             if "cm" not in entry:
                 entry['cm'] = {}
 
@@ -266,7 +267,6 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                 "cloud": self.cloud,
                 "name": entry['name']
             })
-
 
             if kind == 'key':
 
@@ -336,7 +336,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         Console.msg(f"upload the key: {name} -> {cloud}")
         try:
             r = self.cloudman.create_keypair(name, key['string'])
-        except: # openstack.exceptions.ConflictException:
+        except:  # openstack.exceptions.ConflictException:
             raise ValueError(f"key already exists: {name}")
 
         return r
@@ -571,8 +571,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
             entries = []
             for entry in d:
                 entries.append(dict(entry))
-            if debug:
-                pprint(entries)
+            # VERBOSE(entries)
 
             return self.update_dict(entries, kind=kind)
         return None
@@ -701,6 +700,9 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                 cm = literal_eval(metadata)
                 if 'cm' in server:
                     server['cm'].update(cm)
+            server['ip_public'] = self.get_public_ip(server=server)
+            server['ip_private'] = self.get_private_ip(server=server)
+
             result.append(server)
 
         return result
@@ -728,9 +730,17 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         raise NotImplementedError
         return self.cloudman.reboot_node(name)
 
-    def set_server_metadata(self, name, m):
+    def set_server_metadata(self, name, cm):
+        """
+        Sets the server metadata from the cm dict
+
+        :param name: The name of the vm
+        :param cm: The cm dict
+        :return:
+        """
+        data = {'cm': str(cm)}
         server = self.cloudman.get_server(name)
-        self.cloudman.set_server_metadata(server, m)
+        self.cloudman.set_server_metadata(server, data)
 
     def get_server_metadata(self, name):
         server = self.info(name=name)
@@ -840,8 +850,12 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
             self.cloudman.add_ips_to_server(server, ips=ip)
             variables = Variables()
             variables['vm'] = name
-            if metadata is not None:
-                self.cloudman.set_server_metadata(server, metadata)
+            if metadata is None:
+                metadata = {}
+
+            metadata['image'] = image
+            metadata['flavor'] = size
+            self.cloudman.set_server_metadata(server, metadata)
 
             # self.cloudman.add_security_group(security_group=secgroup)
 
@@ -912,10 +926,13 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                                                    floating_ip_id=ip_id)
 
     # ok
-    def get_public_ip(self, name=None):
-        vm = self.info(name=name)
+    def get_public_ip(self,
+                      server=None,
+                      name=None):
+        if not server:
+            server = self.info(name=name)
         ip = None
-        ips = vm['addresses']
+        ips = server['addresses']
         first = list(ips.keys())[0]
         addresses = ips[first]
 
@@ -924,6 +941,24 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                 ip = address['addr']
                 break
         return ip
+
+    # ok
+    def get_private_ip(self,
+                       server=None,
+                       name=None):
+        if not server:
+            server = self.info(name=name)
+        ip = None
+        ips = server['addresses']
+        first = list(ips.keys())[0]
+        addresses = ips[first]
+
+        found = []
+        for address in addresses:
+            if address['OS-EXT-IPS:type'] == 'fixed':
+                ip = address['addr']
+                found.append(ip)
+        return found
 
     def rename(self, name=None, destination=None):
         """

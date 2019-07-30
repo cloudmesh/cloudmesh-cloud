@@ -93,7 +93,7 @@ $ cms source install
 ```
 
 assuming you use ssh as the protocoll to interface with git.
-Please make sure your cloudmesh4.yaml file contains the location where 
+Please make sure your cloudmesh.yaml file contains the location where 
 you like to install cloudmesh in. An example is
 
 ```
@@ -110,7 +110,7 @@ cloudmesh:
 
 ## Installation of mongod
 
-First, you will need to install a `cloudmesh4.yaml` file, if you have
+First, you will need to install a `cloudmesh.yaml` file, if you have
 not done this before. The easieast way to do so is with the command
 
 ```bash
@@ -119,7 +119,7 @@ $ cms help
  
 Now you will need to edit the file
 
-`~/.cloudmesh/cloudmesh4.yaml`
+`~/.cloudmesh/cloudmesh.yaml`
 
 and change the password of the mongo entry to something you like,
  e.g. change the TBD to a real strong password

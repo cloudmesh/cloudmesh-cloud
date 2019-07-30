@@ -72,7 +72,7 @@ You may choose other virtualization provider. In this case, please setup virtual
 only interact with the virtual machines defined in the `Vagrantfile`.
 
 To utilized Ehvagrant with Cloudmesh, `Vagrantfile` should be stored
-at`VAGRANTFILE_PATH`. The default `VAGRNATFILE_PATH` when you use Ehvagrant with Cloudmesh will be `~/.cloudmesh/vagrant_workspace/Vagrantfile`.  You should set this value to the `~/.cloudmesh/cloudmesh4.yaml`. 
+at`VAGRANTFILE_PATH`. The default `VAGRNATFILE_PATH` when you use Ehvagrant with Cloudmesh will be `~/.cloudmesh/vagrant_workspace/Vagrantfile`.  You should set this value to the `~/.cloudmesh/cloudmesh.yaml`. 
 
 Ehvagrant will try to locate `Vagrantfile` every time it invokes. If
 it can't find it, Ehvagrant will generate a default `Vagrantfile` at

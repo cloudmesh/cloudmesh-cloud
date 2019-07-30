@@ -2,9 +2,9 @@
 
 cpy the file
 
-* <https://github.com/cloudmesh/cloudmesh-cloud/blob/master/cloudmesh/etc/cloudmesh4.yaml>
+* <https://github.com/cloudmesh/cloudmesh-cloud/blob/master/cloudmesh/etc/cloudmesh.yaml>
 
-to `~/.cloudmesh/cloudmesh4.yaml`
+to `~/.cloudmesh/cloudmesh.yaml`
 
 ```bash
 $ put hed the code for thsi wit h git and so on wget or curl
@@ -30,9 +30,9 @@ will be replaced with the value from within the yaml file.
 
 For example. ;et us assume the yaml file contains:
 
-from cloudmesh.management.configuration.config import Config
+from cloudmesh.config.Config import Config
 
-cloudmesh4.yaml:
+cloudmesh.yaml:
 
 ```python
 script =
@@ -66,6 +66,6 @@ cloudmesh:
       current: /home/gregor/github/cm
 ```
 
-end converted to a dict. The data in the cloudmesh4.yaml file stays unchanegd.
+end converted to a dict. The data in the cloudmesh.yaml file stays unchanegd.
 
 

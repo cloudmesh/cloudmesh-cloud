@@ -6,7 +6,7 @@ from pprint import pprint
 
 import openstack
 from cloudmesh.common.util import banner
-from cloudmesh.management.configuration.config import Config
+from cloudmesh.configuration.Config import Config
 import os
 
 """
@@ -14,7 +14,7 @@ see : https://docs.openstack.org/openstacksdk/latest/user/guides/compute.html
 """
 
 """
-cloudmesh4.yaml file
+cloudmesh.yaml file
         OS_AUTH_URL: https://openstack.tacc.chameleoncloud.org:5000/v2.0/tokens
         OS_USERNAME: TBD
         OS_PASSWORD: TBD

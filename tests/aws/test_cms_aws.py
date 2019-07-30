@@ -10,14 +10,14 @@ from cloudmesh.common.Shell import Shell
 from cloudmesh.common.debug import VERBOSE
 from cloudmesh.common.util import HEADING
 from cloudmesh.common3.Benchmark import Benchmark
-from cloudmesh.management.configuration.config import Config
+from cloudmesh.config.Config import Config
 
 
 @pytest.mark.incremental
 class TestCmsAWS:
 
     def setup(self):
-        conf = Config("~/.cloudmesh/cloudmesh4.yaml")["cloudmesh"]
+        conf = Config("~/.cloudmesh/cloudmesh.yaml")["cloudmesh"]
         cred = conf["cloud"]['aws']["credentials"]
         self.key = (cred['EC2_PRIVATE_KEY_FILE_NAME']).split('.')[0]
 

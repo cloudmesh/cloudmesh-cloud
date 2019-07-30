@@ -10,7 +10,7 @@ from cloudmesh.abstractclass.ComputeNodeABC import ComputeNodeABC
 from cloudmesh.common.console import Console
 from cloudmesh.common.debug import VERBOSE
 from cloudmesh.common.util import HEADING
-from cloudmesh.management.configuration.config import Config
+from cloudmesh.configuration.Config import Config
 
 
 class Provider(ComputeNodeABC):
@@ -260,7 +260,7 @@ class Provider(ComputeNodeABC):
         raise NotImplementedError
 
     # noinspection PyPep8Naming
-    def __init__(self, name=None, configuration="~/.cloudmesh/cloudmesh4.yaml"):
+    def __init__(self, name=None, configuration="~/.cloudmesh/cloudmesh.yaml"):
         """
         Initializes the provider. The default parameters are read from the
         configuration file that is defined in yaml format.
@@ -287,7 +287,7 @@ class Provider(ComputeNodeABC):
             Console.error("This class is meant for azure cloud")
 
         # ServicePrincipalCredentials related Variables to configure in
-        # cloudmesh4.yaml file
+        # cloudmesh.yaml file
 
         # AZURE_APPLICATION_ID = '<Application ID from Azure Active Directory
         # App Registration Process>'
@@ -570,7 +570,7 @@ class Provider(ComputeNodeABC):
         stops the node with the given name
 
         :param group: the unique Resource Group name
-        :param name: the unique Virtstioual Machine name
+        :param name: the unique Virtual Machine name
         :return: The dict representing the node including updated status
         """
         if group is None:

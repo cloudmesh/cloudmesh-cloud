@@ -6,7 +6,7 @@ from cloudmesh.compute.vm.Provider import Provider
 from cloudmesh.key.Key import Key
 from cloudmesh.management.configuration.SSHkey import SSHkey
 from cloudmesh.management.configuration.arguments import Arguments
-from cloudmesh.management.configuration.config import Config
+from cloudmesh.configuration.Config import Config
 from cloudmesh.mongo.CmDatabase import CmDatabase
 from cloudmesh.shell.command import PluginCommand
 from cloudmesh.shell.command import command, map_parameters
@@ -64,7 +64,7 @@ class KeyCommand(PluginCommand):
 
            Description:
 
-               Please note that some values are read from the cloudmesh4.yaml
+               Please note that some values are read from the cloudmesh.yaml
                file. One such value is cloudmesh.profile.user
 
                Manages public keys is an essential component of accessing
@@ -89,7 +89,7 @@ class KeyCommand(PluginCommand):
 
                 key list --source=git  [--username=USERNAME]
                     lists all keys in git for the specified user. If the
-                    name is not specified it is read from cloudmesh4.yaml
+                    name is not specified it is read from cloudmesh.yaml
                 key list --source=ssh  [--dir=DIR] [--output=OUTPUT]
                     lists all keys in the directory. If the directory is not
                     specified the default will be ~/.ssh
@@ -105,7 +105,7 @@ class KeyCommand(PluginCommand):
                     specified and if omitted the name cloudmesh.profile.user
                     is assumed.
 
-                To get keys from the cloudmesh database the folloing commands
+                To get keys from the cloudmesh database the following commands
                 are available:
 
                 key delete NAMES
@@ -115,13 +115,13 @@ class KeyCommand(PluginCommand):
 
                Group management of keys is an important concept in cloudmesh,
                allowing multiple users to be added to virtual machines while
-               managing the keys associated with them.
-               The keys must be uploaded to cloudmesh database with a name so they can
-               be used in a group. The --dryrun option executes the command
-               without uploading the information to the clouds. If no groupname
-               is specified the groupname default is assumed. If no cloudnames
-               are specified, all active clouds are assumed. active clouds can be
-               set in the cloudmesh4.yaml file.
+               managing the keys associated with them. The keys must be uploaded
+               to cloudmesh database with a name so they can be used in a
+               group. The --dryrun option executes the command without
+               uploading the information to the clouds. If no group name is
+               specified the group name default is assumed. If no cloudnamesh
+               are specified, all active clouds are assumed. active clouds
+               can be set in the cloudmesh.yaml file.
 
                 key group delete [GROUPNAMES] [NAMES] [--dryrun]
                     deletes the named keys from the named groups.
@@ -214,7 +214,7 @@ class KeyCommand(PluginCommand):
                 provider = Provider(name=cloud)
                 keys = provider.keys()
 
-                provider.Print(arguments.output, "key", keys)
+                provider.Print(keys, output=arguments.output, kind="key")
 
             return ""
 
@@ -289,7 +289,7 @@ class KeyCommand(PluginCommand):
                     if name in names:
                         try:
                             r = provider.key_upload(key)
-                            Console.ok(f"upload key '{name} sucessful'. ")
+                            Console.ok(f"upload key '{name} successful'. ")
                         except ValueError as e:
                             Console.error(f"key '{name} already exists in {cloud}.")
 

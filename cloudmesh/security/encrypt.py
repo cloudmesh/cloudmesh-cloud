@@ -33,7 +33,6 @@ class EncryptFile(object):
             'pem': path_expand('~/.ssh/id_rsa.pem'),
             'key': path_expand('~/.ssh/id_rsa')
         })
-        VERBOSE(self.data)
         if not os.path.exists(self.data["pem"]):
             self.pem_create()
 
@@ -65,7 +64,6 @@ class EncryptFile(object):
 
     # noinspection PyMethodMayBeStatic
     def _execute(self, command):
-        VERBOSE(command)
         os.system(command)
 
     # noinspection PyPep8,PyBroadException

@@ -32,6 +32,10 @@ class Shell(Shell2):
             return r
 
     @staticmethod
+    def cms(command, encoding='utf-8'):
+        return Shell.run("cms " + command, encoding=encoding)
+
+    @staticmethod
     def run_timed(label, command, encoding=None, service=None):
         """
         runs teh command and uses the StopWatch to time it

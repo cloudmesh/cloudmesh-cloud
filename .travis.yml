@@ -23,10 +23,9 @@ install:
   - pwd
   - python --version
   - mkdir -p ~/.cloudmesh
-  - wget -P ~/.cloudmesh https://raw.githubusercontent.com/cloudmesh/cloudmesh-common/master/cloudmesh/etc/cloudmesh.yaml
-  - wget -P ~/.cloudmesh https://raw.githubusercontent.com/cloudmesh/cloudmesh-cloud/master/cloudmesh/etc/cloudmesh4.yaml
+  - wget -P ~/.cloudmesh https://raw.githubusercontent.com/cloudmesh/cloudmesh-config/master/cloudmesh/configuration/etc/cloudmesh.yaml
 
 
 script:
   - pytest -v --capture=no tests/0_installer/test_cloud_installer.py
-  - pytest -v --capture=no tests/1_local/test_ping.py
+#  - pytest -v --capture=no tests/1_local/test_ping.py

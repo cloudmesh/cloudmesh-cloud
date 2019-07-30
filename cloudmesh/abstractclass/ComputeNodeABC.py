@@ -1,5 +1,5 @@
 from abc import ABCMeta, abstractmethod
-from cloudmesh.management.configuration.config import Config
+from cloudmesh.configuration.Config import Config
 
 
 # noinspection PyUnusedLocal
@@ -168,7 +168,7 @@ class ComputeNodeABC(metaclass=ABCMeta):
     def key_delete(self, name=None):
         """
         deletes the key with the given name
-        :param name: The anme of the key
+        :param name: The name of the key
         :return:
         """
         raise NotImplementedError
@@ -199,7 +199,7 @@ class ComputeNodeABC(metaclass=ABCMeta):
 
     def flavor(self, name=None):
         """
-        Gest the flavor with a given name
+        Gets the flavor with a given name
         :param name: The name of the flavor
         :return: The dict of the flavor
         """
@@ -223,7 +223,7 @@ class ComputeNodeABC(metaclass=ABCMeta):
         """
         raise NotImplementedError
 
-    def dettach_public_ip(self, name=None, ip=None):
+    def detach_public_ip(self, name=None, ip=None):
         """
         adds a public ip to the named vm
 
@@ -236,7 +236,7 @@ class ComputeNodeABC(metaclass=ABCMeta):
         """
         Deletes the ip address
 
-        :param ip: the ip addess, if None than all will be deleted
+        :param ip: the ip address, if None than all will be deleted
         :return:
         """
         raise NotImplementedError
@@ -244,8 +244,10 @@ class ComputeNodeABC(metaclass=ABCMeta):
     def list_public_ips(self, available=False):
         """
         Lists the public ip addresses.
+
         :param available: if True only those that are not allocated will be
-                          retunred.
+            returned.
+
         :return:
         """
         raise NotImplementedError
@@ -253,6 +255,7 @@ class ComputeNodeABC(metaclass=ABCMeta):
     def create_public_ip(self):
         """
         Creates a new public IP address to use
+
         :return: The ip address information
         """
         raise NotImplementedError
@@ -260,6 +263,7 @@ class ComputeNodeABC(metaclass=ABCMeta):
     def find_available_public_ip(self):
         """
         Returns a single public available ip address.
+
         :return: The ip
         """
         raise NotImplementedError
@@ -267,7 +271,53 @@ class ComputeNodeABC(metaclass=ABCMeta):
     def get_public_ip(self, name=None):
         """
         returns the public ip
+
         :param name: name of the server
         :return:
         """
+        raise NotImplementedError
+
+    def list_secgroups(self, name=None):
+        """
+        List the named security group
+
+        :param name: The name of the group, if None all will be returned
+        :return:
+        """
+
+    def list_secgroup_rules(self, name='default'):
+        """
+        List the named security group
+
+        :param name: The name of the group, if None all will be returned
+        :return:
+        """
+        raise NotImplementedError
+
+    def upload_secgroup(self, name=None):
+        raise NotImplementedError
+
+    def list_secgroup_rules(self, name='default'):
+        raise NotImplementedError
+
+    def add_secgroup(self, name=None, description=None):
+        raise NotImplementedError
+
+    def add_secgroup_rule(self,
+                          name=None,  # group name
+                          port=None,
+                          protocol=None,
+                          ip_range=None):
+        raise NotImplementedError
+
+    def remove_secgroup(self, name=None):
+        raise NotImplementedError
+
+    def upload_secgroup(self, name=None):
+        raise NotImplementedError
+
+    def add_rules_to_secgroup(self, name=None, rules=None):
+        raise NotImplementedError
+
+    def remove_rules_from_secgroup(self, name=None, rules=None):
         raise NotImplementedError

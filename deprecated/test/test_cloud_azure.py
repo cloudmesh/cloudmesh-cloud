@@ -1,6 +1,6 @@
 import time
 from deprecated.draft.vm.api.Vm import Vm
-from cloudmesh.management.configuration.config import Config
+from cloudmesh.config.Config import Config
 
 
 class TestCloudAzure:

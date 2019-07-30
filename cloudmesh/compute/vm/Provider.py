@@ -7,17 +7,16 @@ from cloudmesh.common.console import Console
 from cloudmesh.common.dotdict import dotdict
 from cloudmesh.common.parameter import Parameter
 from cloudmesh.common.variables import Variables
-from cloudmesh.management.configuration.config import Config
+from cloudmesh.configuration.Config import Config
 from cloudmesh.mongo.CmDatabase import CmDatabase
 from cloudmesh.mongo.DataBaseDecorator import DatabaseUpdate
 from cloudmesh.provider import Provider as ProviderList
-
 
 class Provider(ComputeNodeABC):
 
     def __init__(self,
                  name=None,
-                 configuration="~/.cloudmesh/cloudmesh4.yaml"):
+                 configuration="~/.cloudmesh/cloudmesh.yaml"):
         # noinspection PyPep8
         try:
             super().__init__(name, configuration)
@@ -225,10 +224,7 @@ class Provider(ComputeNodeABC):
                metadata=None,
                **kwargs):
 
-        def upload_meta(cm):
-            data = {'cm': str(cm)}
-            pprint(data)
-            self.set_server_metadata(name, **data)
+
 
         cm = CmDatabase()
 
@@ -268,7 +264,7 @@ class Provider(ComputeNodeABC):
                 entry.update(metadata)
 
             cm['status'] = 'available'
-            upload_meta(cm)
+            self.p.set_server_metadata(name, cm)
 
             result = self.cm.update(entry)
 
@@ -333,7 +329,10 @@ class Provider(ComputeNodeABC):
         raise NotImplementedError
 
     # noinspection PyPep8Naming
-    def Print(self, output, kind, data):
+    def Print(self, data, output='table', kind=None):
+        if kind is None and len(data) > 0:
+            kind = data[0]["cm"]["kind"]
+
         if output == "table":
 
             order = self.p.output[kind]['order']  # not pretty

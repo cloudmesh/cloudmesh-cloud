@@ -6,7 +6,7 @@ from botocore.exceptions import ClientError
 
 from cloudmesh.provider import ComputeProviderPlugin
 from cloudmesh.abstractclass.ComputeNodeABC import ComputeNodeABC
-from cloudmesh.management.configuration.config import Config
+from cloudmesh.config.Config import Config
 
 
 class Provider(ComputeNodeABC, ComputeProviderPlugin):
@@ -112,7 +112,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
     #  start with a prg in this dir similar to ../openstack/os_sdk.py, call it
     #  aws_boto.py, make sure to use Config()
 
-    def __init__(self, name=None, configuration="~/.cloudmesh/cloudmesh4.yaml"):
+    def __init__(self, name=None, configuration="~/.cloudmesh/cloudmesh.yaml"):
         """
         Initializes the provider. The default parameters are read from the
         configurationfile that is defined in yaml format.

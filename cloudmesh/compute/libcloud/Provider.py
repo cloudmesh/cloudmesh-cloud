@@ -9,7 +9,7 @@ from cloudmesh.common.console import Console
 from cloudmesh.common.debug import VERBOSE
 from cloudmesh.common.util import HEADING
 from cloudmesh.common.util import path_expand
-from cloudmesh.management.configuration.config import Config
+from cloudmesh.configuration.Config import Config
 from libcloud.compute.base import NodeAuthSSHKey
 from libcloud.compute.providers import get_driver
 from libcloud.compute.types import Provider as LibcloudProvider
@@ -83,7 +83,7 @@ class Provider(ComputeNodeABC):
 
     }
 
-    def __init__(self, name=None, configuration="~/.cloudmesh/cloudmesh4.yaml"):
+    def __init__(self, name=None, configuration="~/.cloudmesh/cloudmesh.yaml"):
         """
         Initializes the provider. The default parameters are read from the
         configuration file that is defined in yaml format.

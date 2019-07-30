@@ -1,4 +1,4 @@
-from cloudmesh.management.configuration.config import Config
+from cloudmesh.config.Config import Config
 
 
 class RestConfig(object):

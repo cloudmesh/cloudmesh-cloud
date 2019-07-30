@@ -14,7 +14,7 @@ from cloudmesh.common.debug import VERBOSE
 from cloudmesh.common.dotdict import dotdict
 from cloudmesh.common.util import path_expand
 # from cloudmesh.abstractclass import ComputeNodeManagerABC
-from cloudmesh.management.configuration.config import Config
+from cloudmesh.configuration.Config import Config
 from docker.version import version as pydocker_version
 
 """
@@ -121,7 +121,7 @@ class Provider(ComputeNodeABC):
     }
 
     def __init__(self, name=None,
-                 configuration="~/.cloudmesh/.cloudmesh4.yaml"):
+                 configuration="~/.cloudmesh/.cloudmesh.yaml"):
         VERBOSE(f"Init Docker {name}")
         self.config = Config()
         conf = Config(configuration)["cloudmesh"]

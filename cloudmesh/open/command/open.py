@@ -53,7 +53,7 @@ class OpenCommand(PluginCommand):
 
                 open account aws [NAME]
                     opens the aws users web page, if the NAME is users or is
-                    ommitted, it goes to the page that allows you to create a user
+                    omitted, it goes to the page that allows you to create a user
 
         """
 

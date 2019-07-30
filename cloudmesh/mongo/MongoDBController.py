@@ -9,7 +9,7 @@ from pymongo import MongoClient
 from cloudmesh.common.Shell import Shell, Brew
 from cloudmesh.common.console import Console
 from cloudmesh.common.dotdict import dotdict
-from cloudmesh.management.configuration.config import Config
+from cloudmesh.configuration.Config import Config
 from cloudmesh.management.script import Script, SystemPath
 from cloudmesh.management.script import find_process
 
@@ -38,7 +38,7 @@ class MongoInstaller(object):
     def __str__(self):
         return yaml.dump(self.data, default_flow_style=False, indent=2)
 
-    def install(self):
+    def install(self, sudo=True):
         """
         check where the MongoDB is installed in mongo location.
         if MongoDB is not installed, python help install it
@@ -65,7 +65,7 @@ class MongoInstaller(object):
             self.data["MONGO_CODE"] = self.data["MONGO_DOWNLOAD"][platform]
 
             if platform.lower() == 'linux':
-                self.linux()
+                self.linux(sudo=sudo)
             elif platform.lower() == 'darwin':
                 self.darwin()
             elif platform.lower() == 'win32':  # Replaced windows with win32
@@ -74,17 +74,22 @@ class MongoInstaller(object):
                 print("platform not found", platform)
 
     # noinspection PyUnusedLocal
-    def linux(self):
+    def linux(self, sudo=True):
+        print ("PPP", sudo)
         # TODO UNTESTED
         """
         install MongoDB in Linux system (Ubuntu)
         """
-        script = """
-        sudo apt-get --yes install libcurl4 openssl
+        if sudo:
+            sudo_command = "sudo"
+        else:
+            sudo_command = ""
+        script = f"{sudo_command} " + """
+        apt-get --yes install libcurl4 openssl
         mkdir -p {MONGO_PATH}
         mkdir -p {MONGO_HOME}
         mkdir -p {MONGO_LOG}
-        wget -O /tmp/mongodb.tgz {MONGO_CODE}
+        wget -q -O /tmp/mongodb.tgz {MONGO_CODE}
         tar -zxvf /tmp/mongodb.tgz -C {LOCAL}/mongo --strip 1
         echo \"export PATH={MONGO_HOME}/bin:$PATH\" >> ~/.bashrc
             """.format(**self.data)

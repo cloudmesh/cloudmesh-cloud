@@ -19,7 +19,7 @@ class TestDataLocal:
         self._data = Data()
         self._data.config("cloud/configuration/cloudmesh.yaml")
 
-        # TODO: this needs to be configured in cloudmesh4.yaml with Config()
+        # TODO: this needs to be configured in cloudmesh.yaml with Config()
 
     def test_local_01_add(self):
         self._data.add("local", f"cloud/test/data/files/{self.test_file_name}")

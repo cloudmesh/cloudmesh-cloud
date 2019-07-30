@@ -66,7 +66,7 @@ class EncryptFile(object):
             "openssl rsa -in {certificate} -out {pem} -outform PEM -pubout".format(**self.data))
         self._execute(command)
 
-    def getRandonPassword(self):
+    def getRandomPassword(self):
         """
         Generate the random password file
         :return:
@@ -206,7 +206,8 @@ if __name__ == "__main__":
     with open("file.txt", "w") as f:
         f.write("Big Data is here.")
     '''
-    e = EncryptFile('/Users/xiaoyue/Desktop/test.yaml', '/Users/xiaoyue/Desktop/test.yaml.enc', '')
+    e = EncryptFile('/Users/albert/Desktop/test.yaml',
+                    '/Users/albert/Desktop/test.yaml.enc', '')
     e.decrypt()
 
     '''

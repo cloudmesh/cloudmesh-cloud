@@ -20,6 +20,7 @@ from cloudmesh.provider import ComputeProviderPlugin
 from cloudmesh.secgroup.Secgroup import Secgroup, SecgroupRule
 from cloudmesh.common.debug import VERBOSE
 
+
 class Provider(ComputeNodeABC, ComputeProviderPlugin):
     kind = "openstack"
 
@@ -254,8 +255,6 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         d = []
         for entry in _elements:
 
-
-
             if "cm" not in entry:
                 entry['cm'] = {}
 
@@ -268,7 +267,6 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                 "cloud": self.cloud,
                 "name": entry['name']
             })
-
 
             if kind == 'key':
 
@@ -338,7 +336,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         Console.msg(f"upload the key: {name} -> {cloud}")
         try:
             r = self.cloudman.create_keypair(name, key['string'])
-        except: # openstack.exceptions.ConflictException:
+        except:  # openstack.exceptions.ConflictException:
             raise ValueError(f"key already exists: {name}")
 
         return r
@@ -707,7 +705,6 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
             server['ip_private'] = self.get_private_ip(server=server)
 
             result.append(server)
-
 
         return result
 

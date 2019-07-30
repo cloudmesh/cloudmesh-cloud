@@ -5,6 +5,6 @@ class Provider(LibCloudProvider):
     kind = "awslibcloud"
 
     def __init__(self, name=None,
-                 configuration="~/.cloudmesh/.cloudmesh4.yaml"):
+                 configuration="~/.cloudmesh/.cloudmesh.yaml"):
         super().__init__(name=name, configuration=configuration)
         self.p = LibCloudProvider(name=name, configuration=configuration)

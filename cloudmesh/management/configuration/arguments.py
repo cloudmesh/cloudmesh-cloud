@@ -1,6 +1,6 @@
 from cloudmesh.common.parameter import Parameter
 from cloudmesh.common.console import Console
-from cloudmesh.management.configuration.config import Active
+from cloudmesh.configuration.Config import Active
 from cloudmesh.common.dotdict import dotdict
 
 class Arguments(object):

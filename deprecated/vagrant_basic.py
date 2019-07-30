@@ -8,7 +8,7 @@ import re
 import subprocess
 import time
 
-from cloudmesh.management.configuration.config import Config
+from cloudmesh.config.Config import Config
 
 #
 # TODO: BUG: this is managed laregly with the vm command and not vbox, so what we need to do is make sure that if

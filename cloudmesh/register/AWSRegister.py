@@ -44,7 +44,7 @@ class AWSRegister(object):
             os.rename(credentials_csv_path, cloudmesh_folder.joinpath(credentials_file_name).resolve())
             Console.info("{filename} moved to ~/.cloudmesh folder".format(filename=credentials_file_name))
 
-            with open("{cm}/cloudmesh4.yaml".format(cm=cloudmesh_folder)) as f:
+            with open("{cm}/cloudmesh.yaml".format(cm=cloudmesh_folder)) as f:
                 cloudmesh_conf = yaml.load(f, Loader=yaml.FullLoader)
 
             creds = pandas.read_csv("{cm}/{filename}".format(cm=cloudmesh_folder,filename=credentials_file_name))
@@ -56,10 +56,10 @@ class AWSRegister(object):
             credentials['EC2_SECRET_KEY'] = \
                 creds['Secret access key'][0]
 
-            with open("{cm}/cloudmesh4.yaml".format(cm=cloudmesh_folder), "w") as f:
+            with open("{cm}/cloudmesh.yaml".format(cm=cloudmesh_folder), "w") as f:
                 yaml.dump(cloudmesh_conf, f)
 
-            Console.info("AWS 'Access Key ID' and 'Secret Access Key' in the cloudmesh4.yaml updated")
+            Console.info("AWS 'Access Key ID' and 'Secret Access Key' in the cloudmesh.yaml updated")
 
         elif platform == "darwin":
             chrome = Path("/Applications/Google Chrome.app/Contents/MacOS/Google Chrome")
@@ -82,7 +82,7 @@ class AWSRegister(object):
             os.rename(credentials_csv_path, cloudmesh_folder.joinpath(credentials_file_name).resolve())
             Console.info("{filename} moved to ~/.cloudmesh folder".format(filename=credentials_file_name))
 
-            with open("{cm}/cloudmesh4.yaml".format(cm=cloudmesh_folder)) as f:
+            with open("{cm}/cloudmesh.yaml".format(cm=cloudmesh_folder)) as f:
                 cloudmesh_conf = yaml.load(f, Loader=yaml.FullLoader)
 
             creds = pandas.read_csv("{cm}/{filename}".format(cm=cloudmesh_folder,filename=credentials_file_name))
@@ -91,10 +91,10 @@ class AWSRegister(object):
             credentials['EC2_ACCESS_ID'] = creds['Access key ID'][0]
             credentials['EC2_SECRET_KEY'] = creds['Secret access key'][0]
 
-            with open("{cm}/cloudmesh4.yaml".format(cm=cloudmesh_folder), "w") as f:
+            with open("{cm}/cloudmesh.yaml".format(cm=cloudmesh_folder), "w") as f:
                 yaml.dump(cloudmesh_conf, f)
 
-            Console.info("AWS 'Access Key ID' and 'Secret Access Key' in the cloudmesh4.yaml updated")
+            Console.info("AWS 'Access Key ID' and 'Secret Access Key' in the cloudmesh.yaml updated")
 
 
         elif platform == "win32":
@@ -116,7 +116,7 @@ class AWSRegister(object):
             os.rename(credentials_csv_path, cloudmesh_folder.joinpath(credentials_file_name).resolve())
             Console.info("{filename} moved to ~/.cloudmesh folder".format(filename=credentials_file_name))
 
-            with open("{cm}/cloudmesh4.yaml".format(cm=cloudmesh_folder)) as f:
+            with open("{cm}/cloudmesh.yaml".format(cm=cloudmesh_folder)) as f:
                 cloudmesh_conf = yaml.load(f, Loader=yaml.FullLoader)
 
             creds = pandas.read_csv("{cm}/{filename}".format(cm=cloudmesh_folder,filename=credentials_file_name))
@@ -125,10 +125,10 @@ class AWSRegister(object):
             credentials['EC2_ACCESS_ID'] = creds['Access key ID'][0]
             credentials['EC2_SECRET_KEY'] = creds['Secret access key'][0]
 
-            with open("{cm}/cloudmesh4.yaml".format(cm=cloudmesh_folder), "w") as f:
+            with open("{cm}/cloudmesh.yaml".format(cm=cloudmesh_folder), "w") as f:
                 yaml.dump(cloudmesh_conf, f)
 
-            Console.info("AWS 'Access Key ID' and 'Secret Access Key' in the cloudmesh4.yaml updated")
+            Console.info("AWS 'Access Key ID' and 'Secret Access Key' in the cloudmesh.yaml updated")
 
     def slow_typer(self,element, text):
         for character in text:

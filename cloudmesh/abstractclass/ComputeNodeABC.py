@@ -1,5 +1,5 @@
 from abc import ABCMeta, abstractmethod
-from cloudmesh.management.configuration.config import Config
+from cloudmesh.configuration.Config import Config
 
 
 # noinspection PyUnusedLocal

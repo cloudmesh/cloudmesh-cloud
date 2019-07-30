@@ -5,7 +5,7 @@ import traceback
 from pprint import pprint
 
 import boto3
-from cloudmesh.management.configuration.config import Config
+from cloudmesh.configuration.Config import Config
 
 config = Config()
 # pprint(config.data)

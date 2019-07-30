@@ -32,7 +32,7 @@ $ cms admin mongo stop
 ```
 
 The database will be started on the information as specified in
-`~/.cloudmesh/cloudmesh4.yaml`
+`~/.cloudmesh/cloudmesh.yaml`
 
 An example is
 

@@ -7,7 +7,7 @@ import subprocess
 import time
 from multiprocessing import Pool, Manager
 
-from cloudmesh.management.configuration.config import Config
+from cloudmesh.configuration.Config import Config
 from cloudmesh.management.configuration.generic_config import GenericConfig
 
 

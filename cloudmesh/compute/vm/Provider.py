@@ -7,7 +7,7 @@ from cloudmesh.common.console import Console
 from cloudmesh.common.dotdict import dotdict
 from cloudmesh.common.parameter import Parameter
 from cloudmesh.common.variables import Variables
-from cloudmesh.management.configuration.config import Config
+from cloudmesh.configuration.Config import Config
 from cloudmesh.mongo.CmDatabase import CmDatabase
 from cloudmesh.mongo.DataBaseDecorator import DatabaseUpdate
 from cloudmesh.provider import Provider as ProviderList
@@ -16,7 +16,7 @@ class Provider(ComputeNodeABC):
 
     def __init__(self,
                  name=None,
-                 configuration="~/.cloudmesh/cloudmesh4.yaml"):
+                 configuration="~/.cloudmesh/cloudmesh.yaml"):
         # noinspection PyPep8
         try:
             super().__init__(name, configuration)

@@ -42,7 +42,7 @@ refactor functions to support their management tasks.
 ## General Interface
 
 ```bash
-$ cms set cloud=<cloudname as defined in the ~/.cloudmesh/cloudmesh4.yaml>
+$ cms set cloud=<cloudname as defined in the ~/.cloudmesh/cloudmesh.yaml>
 $ cms vm start
 $ cms vm list
 
@@ -112,7 +112,7 @@ Before users use the **cms** platform to access **EC2**, they have to finish the
    region where you want to start you instance.
 
 When you finish all above things, you should update information into
-the block 'aws' of **cloudmesh4.yaml** file in **ETC** folder
+the block 'aws' of **cloudmesh.yaml** file in **ETC** folder
 
 **EC2** provides On-Demand Pricing cloud services based on different
 CPU, Memory and Storage selections. Please visit this

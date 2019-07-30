@@ -20,7 +20,7 @@ from docopt import docopt
 from cloudmesh.data.api.db import LocalDBProvider
 from cloudmesh.data.api.storage import LocalStorageProvider
 from cloudmesh.data.api.storage import AzureStorageProvider
-from cloudmesh.management.configuration.config import Config
+from cloudmesh.configuration.Config import Config
 
 
 class Data(object):
@@ -30,9 +30,9 @@ class Data(object):
         self._conf = {}
         self._providers = {}
 
-    def config(self, config_path='~/.cloudmesh/cloudmesh4.yaml'):
+    def config(self, config_path='~/.cloudmesh/cloudmesh.yaml'):
         """
-        Use `cloudmesh4.yaml` file to configure.
+        Use `cloudmesh.yaml` file to configure.
         """
         self._conf = Config(config_path).get("data")
 

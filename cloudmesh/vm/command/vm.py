@@ -17,7 +17,7 @@ from cloudmesh.common.variables import Variables
 from cloudmesh.common.Shell import Shell
 from cloudmesh.common.parameter import Parameter
 from cloudmesh.common.dotdict import dotdict
-from cloudmesh.management.configuration.config import Config
+from cloudmesh.configuration.Config import Config
 from cloudmesh.management.configuration.name import Name
 from cloudmesh.common.util import banner
 

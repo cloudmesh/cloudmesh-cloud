@@ -185,7 +185,7 @@ class ssh_config(object):
 
 
 if __name__ == "__main__":
-    from cloudmesh.common.ConfigDict import ConfigDict
+    from cloudmesh.configuration.Config import Config
 
     hosts = ssh_config()
 

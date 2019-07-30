@@ -3,7 +3,7 @@ from datetime import datetime
 
 from cloudmesh.common.console import Console
 from cloudmesh.common.parameter import Parameter
-from cloudmesh.management.configuration.config import Config
+from cloudmesh.configuration.Config import Config
 from pymongo import MongoClient
 from cloudmesh.common.debug import VERBOSE
 import re

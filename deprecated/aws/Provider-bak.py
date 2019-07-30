@@ -6,7 +6,7 @@ from botocore.exceptions import ClientError
 
 from cloudmesh.provider import ComputeProviderPlugin
 from cloudmesh.abstractclass.ComputeNodeABC import ComputeNodeABC
-from cloudmesh.config.Config import Config
+from 'cloudmesh-configuration'.Config import Config
 
 
 class Provider(ComputeNodeABC, ComputeProviderPlugin):

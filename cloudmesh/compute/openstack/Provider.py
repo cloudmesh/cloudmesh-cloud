@@ -571,8 +571,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
             entries = []
             for entry in d:
                 entries.append(dict(entry))
-            if debug:
-                pprint(entries)
+            # VERBOSE(entries)
 
             return self.update_dict(entries, kind=kind)
         return None

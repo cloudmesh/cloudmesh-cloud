@@ -18,6 +18,88 @@ class Provider(ComputeNodeABC):
 
     """
     output = {
+        "status": {
+            "sort_keys": ["cm.name"],
+            "order": ["cm.name",
+                      "cm.cloud",
+                      "vm_state",
+                      "status",
+                      "task_state"],
+            "header": ["Name",
+                       "Cloud",
+                       "State",
+                       "Status",
+                       "Task"]
+        },
+        "vm": {
+            "sort_keys": ["cm.name"],
+            "order": ["cm.name",
+                      "cm.cloud",
+                      "id",
+                      "type",
+                      "location",
+                      "hardware_profile.vm_size",
+                      "storage_profile.image_reference.image_reference",
+                      "storage_profile.image_reference.offer",
+                      "storage_profile.image_reference.sku",
+                      "storage_profile.image_reference.version",
+                      "storage_profile.os_disk.os_type",
+                      "storage_profile.os_disk.name",
+                      "storage_profile.os_disk.caching",
+                      "storage_profile.os_disk.create_option",
+                      "storage_profile.os_disk.disk_size_gb",
+                      "storage_profile.os_disk.managed_disk.id",
+                      "storage_profile.os_disk.managed_disk.storage_account_type",
+                      "storage_profile.data_disks.lun",
+                      "storage_profile.data_disks.name",
+                      "storage_profile.data_disks.caching",
+                      "storage_profile.data_disks.create_option",
+                      "storage_profile.data_disks.disk_size_gb",
+                      "storage_profile.data_disks.managed_disk.id",
+                      "storage_profile.data_disks.managed_disk.storage_account_type",
+                      "os_profile.computer_name",
+                      "os_profile.admin_username",
+                      "os_profile.linux_configuration.disable_password_authentication",
+                      "os_profile.linux_configuration.provision_vm_agent",
+                      "os_profile.allow_extension_operations",
+                      "network_profile.network_interfaces.id",
+                      "provisioning_state",
+                      "vm_id",
+                      "cm.kind"],
+            "header": ["Name",
+                       "Cloud",
+                       "Id",
+                       "Type",
+                       "Location",
+                       "VM_Size",
+                       "Image Reference",
+                       "Image Offer",
+                       "Image Sku",
+                       "Image Version",
+                       "Image OS Type",
+                       "Image OS Disk Name",
+                       "Image OS Disk Caching",
+                       "Image OS Disk Create Option",
+                       "Image OS Disk Size",
+                       "Image OS Disk ID",
+                       "Image OS Disk Storage Type",
+                       "Image Data Disk Lun",
+                       "Image Data Disk Name",
+                       "Image Data Disk Caching",
+                       "Image Data Disk Create Option",
+                       "Image Data Disk Size",
+                       "Image Data Disk Id",
+                       "Image Data Disk Storage Type",
+                       "Image Os Profile Computer Name",
+                       "Image Os Profile Admin Username",
+                       "Image Linux Conf Disable Password",
+                       "Image Linux Conf Provision VM Agent",
+                       "Image Os Profile Allow Extension Operations",
+                       "Network Interfaces ID",
+                       "Provisioning State",
+                       "VM ID",
+                       "Kind"]
+        },
         "image": {
             "sort_keys": ["cm.name",
                           "extra.minDisk"],
@@ -35,8 +117,22 @@ class Provider(ComputeNodeABC):
                        "TYpe",
                     ]
             },
-        "vm": {},
-        "flavor": {},
+        "flavor": {
+            "sort_keys": ["name",
+                          "number_of_cores",
+                          "os_disk_size_in_mb"],
+            "order": ["name",
+                      "number_of_cores",
+                      "os_disk_size_in_mb",
+                      "resource_disk_size_in_mb",
+                      "memory_in_mb",
+                      "max_data_disk_count"],
+            "header": ["Name",
+                       "NumberOfCores",
+                       "OS_Disk_Size",
+                       "Resource_Disk_Size",
+                       "Memory",
+                       "Max_Data_Disk"]},
         "status": {},
         "key":{},
         "secgroup": {},
@@ -44,7 +140,7 @@ class Provider(ComputeNodeABC):
     }
     """
 
-    """      
+    """   
                      
         "os_disk": {
             "os_type": [],
@@ -88,10 +184,6 @@ class Provider(ComputeNodeABC):
         # TODO: Moeen
         raise NotImplementedError
 
-    def find(self, elements, name=None):
-        # TODO: Moeen
-        raise NotImplementedError
-
     def keys(self):
         # TODO: Moeen
         raise NotImplementedError
@@ -132,21 +224,6 @@ class Provider(ComputeNodeABC):
     def remove_rules_from_secgroup(self, name=None, rules=None):
         raise NotImplementedError
 
-    def flavor(self, name=None):
-        # TODO: Joaquin
-        raise NotImplementedError
-
-    def set_server_metadata(self, name, m):
-        # TODO: Joaquin
-        raise NotImplementedError
-
-    def get_server_metadata(self, name):
-        # TODO: Joaquin
-        raise NotImplementedError
-
-    def delete_server_metadata(self, name, key):
-        # TODO: Joaquin
-        raise NotImplementedError
 
     # these are available to be associated
     def list_public_ips(self,
@@ -271,6 +348,20 @@ class Provider(ComputeNodeABC):
             VERBOSE(" ".join('Create Azure Virtual Machine Resource Group'))
             return groups.create_or_update(
                 self.GROUP_NAME, {'location': self.LOCATION})
+
+
+    def set_server_metadata(self, name, m):
+        # TODO: Joaquin
+        raise NotImplementedError
+
+    def get_server_metadata(self, name):
+        # TODO: Joaquin
+        server = self.vms.instance_view(self.GROUP_NAME,self.VM_NAME)
+        return server
+
+    def delete_server_metadata(self, name, key):
+        # TODO: Joaquin
+        raise NotImplementedError
 
     def create(self, name=None,
                image=None,
@@ -654,6 +745,52 @@ class Provider(ComputeNodeABC):
 
         return self.get_list(image_list, kind="image")
 
+
+    def flavors(self):
+        # TODO: Joaquin
+        """
+        Lists the flavors on the cloud
+
+        :return: dict of flavors
+        dict example:
+        {
+          'additional_properties': {},
+          'name': 'Standard_D12_v2_Promo',
+          'number_of_cores': 4,
+          'os_disk_size_in_mb': 1047552,
+          'resource_disk_size_in_mb': 204800,
+          'memory_in_mb': 28672,
+          'max_data_disk_count': 16
+        }
+        """
+        vm_sizes_list = self.compute_client.virtual_machine_sizes.list(location=self.LOCATION)
+
+
+        return self.get_list(vm_sizes_list, kind="flavor")
+
+    def flavor(self, name=None):
+        # TODO: Joaquin
+        """
+        Gets the flavor with a given name
+        :param name: The name of the flavor
+        :return: The dict of the flavor
+        """
+        return self.find(self.flavors(), name=name)
+
+    def find(self, elements, name=None):
+        """
+        Finds an element in elements with the specified name.
+
+        :param elements: The elements
+        :param name: The name to be found
+        :return:
+        """
+
+        for element in elements:
+            if element["name"] == name or element["cm"]["name"] == name:
+                return element
+        return None
+
     def image(self, name=None):
         """
         Gets the image with a given nmae
@@ -667,16 +804,18 @@ class Provider(ComputeNodeABC):
         Lists the dict d on the cloud
         :return: dict or libcloud object
         """
-
         if self.vms:
             entries = []
             for entry in d:
-                entries.append(dict(entry))
+                print(entry)
+                entries.append(entry)
             if debug:
                 pprint(entries)
 
+            print(entries)
             return self.update_dict(entries, kind=kind)
         return None
+
 
     # TODO Implement Rename Method
     def rename(self, name=None, destination=None):
@@ -708,16 +847,26 @@ class Provider(ComputeNodeABC):
             return None
         elif type(elements) == list:
             _elements = elements
+            print(elements)
         else:
             _elements = [elements]
         d = []
-        for element in _elements:
-            entry = element
-            entry["cm"] = {
+
+        for entry in _elements:
+
+            if "cm" not in entry:
+                entry['cm'] = {}
+
+            if kind == 'ip':
+                entry['name'] = entry['floating_ip_address']
+
+            entry["cm"].update({
                 "kind": kind,
                 "driver": self.cloudtype,
-                "cloud": self.cloud
-            }
+                "cloud": self.cloud,
+                "name": entry['name']
+            })
+
             if kind == 'vm':
                 entry["cm"]["updated"] = str(datetime.utcnow())
                 entry["cm"]["name"] = entry["name"]
@@ -727,8 +876,13 @@ class Provider(ComputeNodeABC):
                     "location"]  # Check feasibility of the following items
             elif kind == 'flavor':
                 entry["cm"]["created"] = str(datetime.utcnow())
-                entry["cm"]["updated"] = str(datetime.utcnow())
                 entry["cm"]["name"] = entry["name"]
+                entry["cm"]["number_of_cores"] = entry["number_of_cores"]
+                entry["cm"]["os_disk_size_in_mb"] = entry["os_disk_size_in_mb"]
+                entry["cm"]["resource_disk_size_in_mb"] = entry["resource_disk_size_in_mb"]
+                entry["cm"]["memory_in_mb"] = entry["memory_in_mb"]
+                entry["cm"]["max_data_disk_count"] = entry["max_data_disk_count"]
+                entry["cm"]["updated"] = str(datetime.utcnow())
             elif kind == 'image':
                 entry['cm']['created'] = str(datetime.utcnow())
                 entry['cm']['updated'] = str(datetime.utcnow())

@@ -56,6 +56,15 @@ class TestAzure:
 
         assert test_images is not None
 
+    def test_list_flavors(self):
+        HEADING()
+
+        Benchmark.Start()
+        test_flavors = self.p.flavors()
+        Benchmark.Stop()
+
+        assert test_flavors is None
+
     def test_create_vm(self):
         HEADING()
 
@@ -64,6 +73,15 @@ class TestAzure:
         Benchmark.Stop()
 
         assert test_vm is not None
+
+    def test_server_metadata(self):
+        HEADING()
+
+        Benchmark.Start()
+        test_server_metadata = self.p.get_server_metadata(self)
+        Benchmark.Stop()
+
+        assert test_server_metadata is not None
 
     def test_start(self):
         HEADING()

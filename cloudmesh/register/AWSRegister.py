@@ -15,7 +15,7 @@ from cloudmesh.configuration.Config import Config
 
 class AWSRegister(object):
 
-    def __init__(self):
+    def __init__(self, cloud='aws'):
 
         self.config = Config()
         self.credentials = self.config[f'cloudmesh.cloud.{cloud}.credentials']
@@ -77,17 +77,20 @@ class AWSRegister(object):
                               "3) Set the permission using:\n\t"
                               "'chmod +x /usr/local/bin/chromedriver'")
                 return
+
             credentials_file_name = self.create_user()
             credentials_csv_path = Path.home().joinpath('Downloads').joinpath(credentials_file_name).resolve()
+            # check if the DOwanloaded file exists
+            # Path("~/.cloudmesh/{credentials_file_name}).resolve()
+
             cloudmesh_folder = Path.home().joinpath('.cloudmesh').resolve()
             os.rename(credentials_csv_path, cloudmesh_folder.joinpath(credentials_file_name).resolve())
-            Console.info("{filename} moved to ~/.cloudmesh folder".format(filename=credentials_file_name))
+            Console.info(f"{credentials_file_name} moved to ~/.cloudmesh folder")
 
             creds = pandas.read_csv("{cm}/{filename}".format(cm=cloudmesh_folder,filename=credentials_file_name))
 
-            credentials = self.config[f'cloudmesh.cloud.{cloud}.credentials']
-            credentials['EC2_ACCESS_ID'] = creds['Access key ID'][0]
-            credentials['EC2_SECRET_KEY'] = creds['Secret access key'][0]
+            self.credentials['EC2_ACCESS_ID'] = creds['Access key ID'][0]
+            self.credentials['EC2_SECRET_KEY'] = creds['Secret access key'][0]
 
             self.config.save()
 
@@ -111,8 +114,8 @@ class AWSRegister(object):
             credentials_csv_path = Path.home().joinpath('Downloads').joinpath(credentials_file_name).resolve()
             cloudmesh_folder = Path.home().joinpath('.cloudmesh').resolve()
             os.rename(credentials_csv_path, cloudmesh_folder.joinpath(credentials_file_name).resolve())
-            Console.info("{filename} moved to ~/.cloudmesh folder".format(filename=credentials_file_name))
-
+            Console.info(f"{credentials_file_name} moved to ~/.cloudmesh folder")
+            Console.info(f"{credentials_file_name} moved to ~/.cloudmesh folder")
 
             creds = pandas.read_csv("{cm}/{filename}".format(cm=cloudmesh_folder,filename=credentials_file_name))
 

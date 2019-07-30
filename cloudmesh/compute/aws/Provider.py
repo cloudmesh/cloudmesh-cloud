@@ -250,12 +250,26 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
     def list_public_ips(self,
                         ip=None,
                         available=False):
-        raise NotImplementedError
+
+        addresses = self.ec2_client.describe_addresses()
+        ip_list = [address.get('PublicIp') for address in addresses.get('Addresses')
+                   if 'AssociationId' not in address]
+        VERBOSE(ip_list)
 
     # release the ip
     def delete_public_ip(self, ip=None):
-        # TODO: Sriman
-        raise NotImplementedError
+
+        ip_description = self._get_allocation_ids(self.ec2_client, ip)
+        if not ip_description:
+            return
+        try:
+            response = self.ec2_client.release_address(
+                AllocationId=ip_description.get('AllocationId'),
+            )
+        except ClientError as e:
+            print(e)
+        VERBOSE(f'Public IP {ip} deleted')
+        return response
 
     def create_public_ip(self):
         try:
@@ -264,20 +278,63 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
             )
         except ClientError as e:
             print(e)
+
         return response
 
     def find_available_public_ip(self):
         addresses = self.ec2_client.describe_addresses()
         public_ips = [address['PublicIp'] for address in addresses.get('Addresses')]
+        VERBOSE(public_ips)
         return public_ips
 
+    @staticmethod
+    def _get_allocation_ids(client, ip):
+
+        try:
+            addresses = client.describe_addresses(PublicIps=[ip])
+            ip_description = addresses.get('Addresses')[0]
+            return ip_description
+        except ClientError as e:
+            print(e)
+
     def attach_public_ip(self, node, ip):
-        # TODO: Sriman
-        raise NotImplementedError
+
+        instances = self._get_instance_id(self.ec2_resource, node)
+        instance_id = []
+        for each_instance in instances:
+            instance_id.append(each_instance.instance_id)
+        if not instance_id:
+            raise ValueError("Invalid instance name provided...")
+        if ip not in self.find_available_public_ip():
+            raise ValueError("IP address is not in pool")
+
+        try:
+            response = self.ec2_client.associate_address(
+                AllocationId=self._get_allocation_ids(self.ec2_client, ip).get('AllocationId'),
+                InstanceId=instance_id[0],
+                AllowReassociation=True,
+            )
+        except ClientError as e:
+            print(e)
+        return response
 
     def detach_public_ip(self, node, ip):
-        # TODO: Sriman
-        raise NotImplementedError
+
+        instances = self._get_instance_id(self.ec2_resource, node)
+        instance_id = []
+        for each_instance in instances:
+            instance_id.append(each_instance.instance_id)
+        if not instance_id:
+            raise ValueError("Invalid instance name provided...")
+        if ip not in self.find_available_public_ip():
+            raise ValueError("IP address is not in pool")
+        try:
+            response = self.ec2_client.disassociate_address(
+                AssociationId=self._get_allocation_ids(self.ec2_client,ip).get('AssociationId'),
+            )
+        except ClientError as e:
+            print(e)
+        print(response)
 
     # see the openstack example it will be almost the same as in openstack
     # other than getting
@@ -541,6 +598,8 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                 Console.error("Tag name already exists, Please use different tag name.")
                 return
 
+        if secgroup is None:
+            secgroup = 'default'
         new_ec2_instance = self.ec2_resource.create_instances(
             ImageId=self.default["image"],
             InstanceType=self.default["size"],
@@ -731,4 +790,4 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
 if __name__ == "__main__":
     provider = Provider(name='aws')
-    provider.remove_secgroup(name='saurabh')
+    provider.detach_public_ip('saurabh','18.205.193.161')

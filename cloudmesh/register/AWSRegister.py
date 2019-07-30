@@ -11,11 +11,15 @@ import subprocess
 import yaml
 from pathlib import Path, PurePath, PurePosixPath, PureWindowsPath
 import pandas
+from cloudmesh.configuration.Config import Config
 
 class AWSRegister(object):
 
     def __init__(self):
-        pass
+
+        self.config = Config()
+        self.credentials = self.config[f'cloudmesh.cloud.{cloud}.credentials']
+
 
     def register(self, cloud='aws'):
         if platform == "linux" or platform == "linux2":
@@ -38,26 +42,23 @@ class AWSRegister(object):
                               "3) Set the permission using:\n\t"
                               "'sudo chmod +x /usr/bin/chromedriver'")
                 return
+
             credentials_file_name = self.create_user()
+
             credentials_csv_path = Path.home().joinpath('Downloads').joinpath(credentials_file_name).resolve()
             cloudmesh_folder = Path.home().joinpath('.cloudmesh').resolve()
+
+
             os.rename(credentials_csv_path, cloudmesh_folder.joinpath(credentials_file_name).resolve())
             Console.info("{filename} moved to ~/.cloudmesh folder".format(filename=credentials_file_name))
 
-            with open("{cm}/cloudmesh.yaml".format(cm=cloudmesh_folder)) as f:
-                cloudmesh_conf = yaml.load(f, Loader=yaml.FullLoader)
-
             creds = pandas.read_csv("{cm}/{filename}".format(cm=cloudmesh_folder,filename=credentials_file_name))
 
-            credentials = cloudmesh_conf['cloudmesh.cloud.{cloud}.credentials']
 
-            credentials['EC2_ACCESS_ID'] = \
-                creds['Access key ID'][0]
-            credentials['EC2_SECRET_KEY'] = \
-                creds['Secret access key'][0]
+            self.credentials['EC2_ACCESS_ID'] = creds['Access key ID'][0]
+            self.credentials['EC2_SECRET_KEY'] = creds['Secret access key'][0]
 
-            with open("{cm}/cloudmesh.yaml".format(cm=cloudmesh_folder), "w") as f:
-                yaml.dump(cloudmesh_conf, f)
+            self.config.save()
 
             Console.info("AWS 'Access Key ID' and 'Secret Access Key' in the cloudmesh.yaml updated")
 
@@ -82,17 +83,13 @@ class AWSRegister(object):
             os.rename(credentials_csv_path, cloudmesh_folder.joinpath(credentials_file_name).resolve())
             Console.info("{filename} moved to ~/.cloudmesh folder".format(filename=credentials_file_name))
 
-            with open("{cm}/cloudmesh.yaml".format(cm=cloudmesh_folder)) as f:
-                cloudmesh_conf = yaml.load(f, Loader=yaml.FullLoader)
-
             creds = pandas.read_csv("{cm}/{filename}".format(cm=cloudmesh_folder,filename=credentials_file_name))
 
-            credentials = cloudmesh_conf['cloudmesh.cloud.{cloud}.credentials']
+            credentials = self.config[f'cloudmesh.cloud.{cloud}.credentials']
             credentials['EC2_ACCESS_ID'] = creds['Access key ID'][0]
             credentials['EC2_SECRET_KEY'] = creds['Secret access key'][0]
 
-            with open("{cm}/cloudmesh.yaml".format(cm=cloudmesh_folder), "w") as f:
-                yaml.dump(cloudmesh_conf, f)
+            self.config.save()
 
             Console.info("AWS 'Access Key ID' and 'Secret Access Key' in the cloudmesh.yaml updated")
 
@@ -116,17 +113,14 @@ class AWSRegister(object):
             os.rename(credentials_csv_path, cloudmesh_folder.joinpath(credentials_file_name).resolve())
             Console.info("{filename} moved to ~/.cloudmesh folder".format(filename=credentials_file_name))
 
-            with open("{cm}/cloudmesh.yaml".format(cm=cloudmesh_folder)) as f:
-                cloudmesh_conf = yaml.load(f, Loader=yaml.FullLoader)
 
             creds = pandas.read_csv("{cm}/{filename}".format(cm=cloudmesh_folder,filename=credentials_file_name))
 
-            credentials = cloudmesh_conf['cloudmesh.cloud.{cloud}.credentials']
+            credentials = self.config[f'cloudmesh.cloud.{cloud}.credentials']
             credentials['EC2_ACCESS_ID'] = creds['Access key ID'][0]
             credentials['EC2_SECRET_KEY'] = creds['Secret access key'][0]
 
-            with open("{cm}/cloudmesh.yaml".format(cm=cloudmesh_folder), "w") as f:
-                yaml.dump(cloudmesh_conf, f)
+            self.config.save()
 
             Console.info("AWS 'Access Key ID' and 'Secret Access Key' in the cloudmesh.yaml updated")
 

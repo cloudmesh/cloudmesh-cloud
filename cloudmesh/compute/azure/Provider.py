@@ -197,12 +197,15 @@ class Provider(ComputeNodeABC):
         raise NotImplementedError
 
     def list_secgroups(self, name=None):
+        # TODO: needs to be done by someone
         raise NotImplementedError
 
     def list_secgroup_rules(self, name='default'):
+        # TODO: needs to be done by someone
         raise NotImplementedError
 
     def add_secgroup(self, name=None, description=None):
+        # TODO: needs to be done by someone
         raise NotImplementedError
 
     def add_secgroup_rule(self,
@@ -351,6 +354,8 @@ class Provider(ComputeNodeABC):
 
 
     def set_server_metadata(self, name, m):
+        # see https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-using-tags
+        # https://github.com/Azure-Samples/virtual-machines-python-manage/blob/master/example.py
         # TODO: Joaquin
         raise NotImplementedError
 

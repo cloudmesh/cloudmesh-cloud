@@ -17,7 +17,7 @@ import time
 import pytest
 from cloudmesh.common.ConfigDict import ConfigDict
 from cloudmesh.common.util import path_expand
-from cloudmesh.config.Config import Config
+from cloudmesh.configuration.Config import Config
 from cloudmesh.management.configuration.security.encryption import EncryptFile
 
 

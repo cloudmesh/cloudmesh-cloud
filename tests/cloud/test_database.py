@@ -9,7 +9,7 @@ from pprint import pprint
 import pytest
 from cloudmesh.common.Printer import Printer
 from cloudmesh.common.util import HEADING
-from cloudmesh.config.Config import Config
+from cloudmesh.configuration.Config import Config
 from cloudmesh.management.configuration.name import Name
 from cloudmesh.mongo.CmDatabase import CmDatabase
 
@@ -44,9 +44,7 @@ class TestMongo:
         r = self.database.name_count("CC-CentOS7")
         pprint(r)
 
-
-class t:
-    def test_status(self):
+    def test_clear(self):
         HEADING()
 
         # print(self.name)

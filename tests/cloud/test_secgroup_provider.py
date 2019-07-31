@@ -1,7 +1,6 @@
 ###############################################################
-# pytest -v --capture=no tests/openstack/openstacktest_compute_openstack.py
-# pytest -v  tests/openstack/openstacktest_compute_openstack.py
-# pytest -v --capture=no  tests/openstack/openstacktest_compute_openstack.py:Test_compute_openstack.<METHIDNAME>
+# pytest -v --capture=no tests/cloud/test_secgroup_prvider.py
+# pytest -v  tests/cloud/test_secgroup_prvider.py
 ###############################################################
 
 # TODO: start this with cloud init, e.g, empty mongodb
@@ -51,7 +50,7 @@ examples = SecgroupExamples()
 
 
 @pytest.mark.incremental
-class TestName:
+class Test_secgroup_provider:
 
     def test_load(self):
         HEADING(color="HEADER")

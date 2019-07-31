@@ -16,6 +16,7 @@ from cloudmesh.management.configuration.SSHkey import SSHkey
 from cloudmesh.configuration.Config import Config
 from cloudmesh.management.configuration.name import Name
 
+CLOUD= "aws"
 
 @pytest.mark.incremental
 class TestName:
@@ -33,7 +34,7 @@ class TestName:
 
         self.new_name = str(self.name_generator)
 
-        self.p = Provider(name="aws")
+        self.p = Provider(name=CLOUD)
 
         self.secgroupname = "CM4TestSecGroup"
         self.secgrouprule = {"ip_protocol": "tcp",

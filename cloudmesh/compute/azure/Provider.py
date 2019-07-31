@@ -134,9 +134,9 @@ class Provider(ComputeNodeABC):
                        "Memory",
                        "Max_Data_Disk"]},
         "status": {},
-        "key":{},
-        "secgroup": {},
-        "secrule": {},
+        "key":{}, # Moeen
+        "secgroup": {}, # Moeen
+        "secrule": {}, # Moeen
     }
     """
 
@@ -216,15 +216,19 @@ class Provider(ComputeNodeABC):
         raise NotImplementedError
 
     def remove_secgroup(self, name=None):
+        # TODO: needs to be done by someone
         raise NotImplementedError
 
     def upload_secgroup(self, name=None):
+        # TODO: needs to be done by someone
         raise NotImplementedError
 
     def add_rules_to_secgroup(self, name=None, rules=None):
+        # TODO: needs to be done by someone
         raise NotImplementedError
 
     def remove_rules_from_secgroup(self, name=None, rules=None):
+        # TODO: needs to be done by someone
         raise NotImplementedError
 
 
@@ -357,6 +361,7 @@ class Provider(ComputeNodeABC):
         # see https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-using-tags
         # https://github.com/Azure-Samples/virtual-machines-python-manage/blob/master/example.py
         # TODO: Joaquin
+        # tags = FlatDict(cm)
         raise NotImplementedError
 
     def get_server_metadata(self, name):

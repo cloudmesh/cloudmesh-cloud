@@ -14,7 +14,7 @@ import time
 
 import pytest
 from cloudmesh.common.util import HEADING
-from cloudmesh.config.Config import Config
+from cloudmesh.configuration.Config import Config
 #
 # TODO: THIS IS A BUG, the deprecated api shoudl not be used
 #

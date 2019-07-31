@@ -15,9 +15,9 @@ from cloudmesh.common.util import banner
 from cloudmesh.common.variables import Variables
 from cloudmesh.compute.vm.Provider import Provider
 from cloudmesh.management.configuration.SSHkey import SSHkey
-from cloudmesh.config.Config import Config
+from cloudmesh.configuration.Config import Config
 from cloudmesh.management.configuration.name import Name
-
+from cloudmesh.common3.Benchmark import Benchmark
 
 @pytest.mark.incremental
 class Test_Compute_Database:
@@ -273,8 +273,9 @@ class other:
 
     def test_rename(self):
         HEADING()
-
+        Benchmark.Start()
         self.p.rename(source=self.name, destination=self.new_name)
+        Benchmark.Stop()
 
     # def test_stop(self):
     #    HEADING()

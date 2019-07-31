@@ -1,6 +1,6 @@
 # Flavor 
 
-# IMage
+# Image
 
 # VM
 

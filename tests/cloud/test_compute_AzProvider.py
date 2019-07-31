@@ -5,15 +5,17 @@
 
 import pytest
 from cloudmesh.common.util import HEADING
-from cloudmesh.compute.azure.AzProvider import Provider
+from cloudmesh.compute.vm.Provider import Provider
 from cloudmesh.compute.libcloud.Provider import Provider
 
+
+CLOUD = "azazure"
 
 @pytest.mark.incremental
 class Testazure(object):
 
     def setup(self):
-        self.p = Provider()
+        self.p = Provider(name=CLOUD)
         self.name = "testvm1"
         self.group = "test"
         self.location = "eastus"

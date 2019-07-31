@@ -34,3 +34,10 @@ List of tests and their status:
 
 * `test_cm_vm_provider.py`, test an individual cloud vm provider, status not completed
 
+
+TODO:
+
+* tere are a number of specific tests t=still in this directory. 
+  These teste need to be merged into the general tests so there is no 
+  duplication. After the functionality is in another test, the test from 
+  that provider can be deleted. THis way we know which tests are not covered.

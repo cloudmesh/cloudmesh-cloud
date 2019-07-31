@@ -44,10 +44,10 @@ this_platform = platform.system().lower()
 #    os.system(command)
 
 requiers = """
-cloudmesh-common
 cloudmesh-configuration
 cloudmesh-cmd5
 cloudmesh-sys
+cloudmesh-inventory
 apache-libcloud
 certifi
 chardet
@@ -65,7 +65,6 @@ termcolor
 urllib3
 Flask-PyMongo
 flask
-six
 recommonmark
 dateparser
 humanize

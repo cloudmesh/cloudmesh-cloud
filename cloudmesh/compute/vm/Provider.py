@@ -50,7 +50,7 @@ class Provider(ComputeNodeABC):
         #    from cloudmesh.compute.azure.AzProvider import \
         #        Provider as AzAzureProvider
         #    provider = AzAzureProvider
-        
+
         if provider is None:
             Console.error(f"provider {name} not supported")
             raise ValueError(f"provider {name} not supported")
@@ -334,6 +334,9 @@ class Provider(ComputeNodeABC):
 
     # noinspection PyPep8Naming
     def Print(self, data, output='table', kind=None):
+
+        print ("AAA")
+        pprint (data)
         if kind is None and len(data) > 0:
             kind = data[0]["cm"]["kind"]
 

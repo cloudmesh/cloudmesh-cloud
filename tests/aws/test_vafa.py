@@ -15,12 +15,13 @@ from cloudmesh.management.configuration.name import Name
 # TODO: THIS IS A BUG, the deprecated api shoudl not be used
 #
 
+CLOUD="aws"
 
 @pytest.mark.incremental
 class Test_Vafa:
     def test_aws_aws_list(self):
         HEADING()
-        provider = Provider(name='aws')
+        provider = Provider(name=CLOUD)
         print(provider.list())
 
 
@@ -29,7 +30,7 @@ class Test_Vafa:
         name = Name()
         name.incr()
         vm_name = str(name)
-        provider = Provider(name='aws')
+        provider = Provider(name=CLOUD)
         vm = provider.create(name = vm_name, image = "ami-0c929bde1796e1484", size="t2.micro")
         print(vm)
         print(provider.list())

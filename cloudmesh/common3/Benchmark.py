@@ -43,14 +43,14 @@ class Benchmark(object):
         StopWatch.stop(Benchmark.name())
 
     @staticmethod
-    def print(sysinfo=True, csv=True):
+    def print(sysinfo=True, csv=True, tag=None):
         """
         prints the benchmark information with all timers
         """
         StopWatch.start("benchmark_start_stop")
         StopWatch.stop("benchmark_start_stop")
 
-        StopWatch.benchmark(sysinfo=sysinfo, csv=csv)
+        StopWatch.benchmark(sysinfo=sysinfo, csv=csv, tag=tag)
 
     @staticmethod
     def yaml(path, n):

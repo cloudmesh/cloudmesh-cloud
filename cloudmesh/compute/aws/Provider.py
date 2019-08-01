@@ -482,7 +482,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                                  'status': each_instance.state['Name'],
                                  'created' : each_instance.launch_time.strftime("%m/%d/%Y, %H:%M:%S"),
                                  'updated' : each_instance.launch_time.strftime("%m/%d/%Y, %H:%M:%S"),
-                                 'name': each_instance.tags[0]['Value'],
+                                 'name': each_instance.tags[0]['Value'] if each_instance.tags else '',
                                 'instance_id': each_instance.id,
                                 'image': each_instance.image_id,
                                 'public_ips' : each_instance.public_ip_address,
@@ -804,5 +804,5 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
 if __name__ == "__main__":
     provider = Provider(name='aws')
-    provider.create(name="sriman_test1")
+    # provider.create(name="sriman_test1")
     print(provider.list())

@@ -20,8 +20,12 @@ from cloudmesh.common.variables import Variables
 from cloudmesh.common3.Shell import Shell
 from cloudmesh.compute.openstack.Provider import Provider
 from cloudmesh.management.configuration.SSHkey import SSHkey
-from cloudmesh.config.Config import Config
+from cloudmesh.configuration.Config import Config
 from cloudmesh.management.configuration.name import Name
+
+# NEEDS TO BE MERGED INTO test_compute_database.py
+
+Benchmark.debug()
 
 user = Config()["cloudmesh.profile.user"]
 variables = Variables()

@@ -7,6 +7,8 @@ import pytest
 from cloudmesh.common3.Benchmark import Benchmark
 from cloudmesh.common3.Shell import Shell
 
+Benchmark.debug()
+
 shell = Shell()
 
 

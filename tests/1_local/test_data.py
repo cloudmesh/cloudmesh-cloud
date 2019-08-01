@@ -15,6 +15,8 @@ from cloudmesh.common3.Benchmark import Benchmark
 from cloudmesh.mongo.CmDatabase import CmDatabase
 from cloudmesh.mongo.DataBaseDecorator import DatabaseUpdate
 
+Benchmark.debug()
+
 
 @pytest.mark.incremental
 class TestDatabaseUpdate:

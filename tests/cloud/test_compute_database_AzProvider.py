@@ -7,6 +7,9 @@ import pytest
 from cloudmesh.common.util import HEADING
 from cloudmesh.compute.libcloud.Provider import Provider
 from cloudmesh.compute.vm.Provider import Provider
+from cloudmesh.common3.Benchmark import Benchmark
+
+Benchmark.debug()
 
 
 @pytest.mark.incremental

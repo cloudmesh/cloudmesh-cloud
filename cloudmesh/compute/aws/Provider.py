@@ -8,6 +8,8 @@ from cloudmesh.provider import ComputeProviderPlugin
 from cloudmesh.common.console import Console
 from cloudmesh.common.debug import VERBOSE
 from cloudmesh.common3.DictList import DictList
+from cloudmesh.management.configuration.name import Name
+from cloudmesh.common.util import banner
 
 
 class Provider(ComputeNodeABC, ComputeProviderPlugin):
@@ -240,7 +242,9 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         :param m: cm dict
         :return:
         """
-        pass
+        data = {'cm': str(m)}
+        tag = self.ec2_resource.Tag('metadata', 'cm', data)
+        VERBOSE(tag)
 
     def get_server_metadata(self, name):
         # TODO: Saurabh
@@ -254,7 +258,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         addresses = self.ec2_client.describe_addresses()
         ip_list = [address.get('PublicIp') for address in addresses.get('Addresses')
                    if 'AssociationId' not in address]
-        VERBOSE(ip_list)
+        return ip_list[0]
 
     # release the ip
     def delete_public_ip(self, ip=None):
@@ -330,7 +334,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
             raise ValueError("IP address is not in pool")
         try:
             response = self.ec2_client.disassociate_address(
-                AssociationId=self._get_allocation_ids(self.ec2_client,ip).get('AssociationId'),
+                AssociationId=self._get_allocation_ids(self.ec2_client, ip).get('AssociationId'),
             )
         except ClientError as e:
             print(e)
@@ -571,18 +575,25 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         """
         create one node
         """
-        '''
-        '''
+        if not ip and public:
+            ip = self.find_available_public_ip()
+        elif ip is not None:
+            entry = self.list_public_ips(ip=ip, available=True)
+            if len(entry) == 0:
+                print("ip not available")
+            return None
+        banner("Create Server")
+        print("    Name:    ", name)
+        print("    IP:      ", ip)
+        print("    Image:   ", image)
+        print("    Size:    ", size)
+        print("    Public:  ", public)
+        print("    Key:     ", key)
+        print("    location:", location)
+        print("    timeout: ", timeout)
+        print("    secgroup:", secgroup)
+        print("    group:   ", group)
 
-        tags = [{'ResourceType': 'instance',
-                 'Tags': [
-                     {
-                         'Key': 'Name',
-                         'Value': name
-                     },
-                 ]
-                 },
-                ]
         # Validate if there is any VM with same tag name and state other than Terminated.
         # If there is any VM, throw error
 
@@ -601,12 +612,17 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         if secgroup is None:
             secgroup = 'default'
         new_ec2_instance = self.ec2_resource.create_instances(
-            ImageId=self.default["image"],
-            InstanceType=self.default["size"],
+            ImageId=image,
+            InstanceType=size,
             MaxCount=1,
             MinCount=1,
             SecurityGroups=[secgroup],
-            TagSpecifications=tags
+            TagSpecifications=[{'ResourceType': 'instance',
+                                'Tags': [
+                                    {
+                                        'Key': 'cm.name',
+                                        'Value': name
+                                    }, ]}]
         )
         new_ec2_instance = new_ec2_instance[0]
         waiter = self.ec2_client.get_waiter('instance_exists')
@@ -619,6 +635,16 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                     }
                     )
         print("Instance created...")
+        # if IP provided, Attach it to new instance
+        if ip:
+            self.attach_public_ip(name, ip)
+        if metadata is None:
+            metadata = {}
+        metadata['cm.image'] = image
+        metadata['cm.flavor'] = size
+        metadata['cm.user'] = self.user
+        metadata['cm.kind'] = "vm"
+        self.set_server_metadata(name, metadata)
         data = self.info(name=name)
         data['name'] = name
         output = self.update_dict(data, kind="vm")[0]
@@ -790,4 +816,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
 if __name__ == "__main__":
     provider = Provider(name='aws')
-    provider.detach_public_ip('saurabh','18.205.193.161')
+    # name=Name()
+    # name.incr()
+    # provider.create(name.get())
+    provider.create('swaroop')

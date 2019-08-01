@@ -30,7 +30,7 @@ will be replaced with the value from within the yaml file.
 
 For example. ;et us assume the yaml file contains:
 
-from cloudmesh.config.Config import Config
+from cloudmesh.configuration.Config import Config
 
 cloudmesh.yaml:
 

@@ -32,20 +32,24 @@ class Provider(ComputeNodeABC):
 
         providers = ProviderList()
 
-        if self.kind in ['openstack', 'azure', 'docker', "aws"]:
+        if self.kind in ['openstack', 'azure',
+                         'docker',
+                         "aws",
+                         "azureaz",
+                         "virtualbox"]:
             provider = providers[self.kind]
         elif self.kind in ["awslibcloud", "google"]:
             from cloudmesh.compute.libcloud.Provider import \
                 Provider as LibCloudProvider
             provider = LibCloudProvider
-        elif self.kind in ["vagrant", "virtualbox"]:
-            from cloudmesh.compute.virtualbox.Provider import \
-                Provider as VirtualboxCloudProvider
-            provider = VirtualboxCloudProvider
-        elif self.kind in ["azureaz"]:
-            from cloudmesh.compute.azure.AzProvider import \
-                Provider as AzAzureProvider
-            provider = AzAzureProvider
+        # elif self.kind in ["vagrant", "virtualbox"]:
+        #    from cloudmesh.compute.virtualbox.Provider import \
+        #        Provider as VirtualboxCloudProvider
+        #    provider = VirtualboxCloudProvider
+        # elif self.kind in ["azureaz"]:
+        #    from cloudmesh.compute.azure.AzProvider import \
+        #        Provider as AzAzureProvider
+        #    provider = AzAzureProvider
 
         if provider is None:
             Console.error(f"provider {name} not supported")
@@ -330,6 +334,9 @@ class Provider(ComputeNodeABC):
 
     # noinspection PyPep8Naming
     def Print(self, data, output='table', kind=None):
+
+        print ("AAA")
+        pprint (data)
         if kind is None and len(data) > 0:
             kind = data[0]["cm"]["kind"]
 

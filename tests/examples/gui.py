@@ -7,8 +7,6 @@ config = Config()
 
 clouds = list(config["cloudmesh.cloud"].keys())
 
-pprint (clouds)
-
 sg.SetOptions(text_justification='right')
 
 layout = [
@@ -24,7 +22,6 @@ for cloud in clouds:
 
 layout.append([sg.Text('_'  * 100, size=(65, 1))])
 
-
 layout.append([sg.Submit(), sg.Cancel()])
 
 window = sg.Window('Cloudmesh Configuration', layout, font=("Helvetica", 12))
@@ -37,7 +34,7 @@ for i in range(0,len(clouds)):
     cloud = clouds[i]
     if values[i]:
         selected.append(cloud)
-        Console.ok("Activate Cloud {cloud}")
+        Console.ok(f"Activate Cloud {cloud}")
 
 for cloud in clouds:
     active = False

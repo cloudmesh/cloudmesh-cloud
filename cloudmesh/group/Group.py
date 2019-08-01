@@ -7,14 +7,10 @@ from cloudmesh.mongo.DataBaseDecorator import DatabaseUpdate
 
 class Group(object):
     """
-    group elements are dicts that point to information in the cloudmesh database.
-    group membership is identified by an element being registered into a group.
-    An element can be part of multiple groups.
+    Groups are used to store the names of services that are part of the
+    group. Members are identified by their name and the kind (such as vm).
 
-    An group entry must uniquely be able to identify the object that is part of
-    the group.
-
-    Here is a simple example
+    The data of a group is managed via a dict. Here is a simple example
 
     cm:
       name: test
@@ -62,14 +58,14 @@ class Group(object):
         """
         copies the group source to destination
         :param source: name of the source
-        :param destination: name of teh desination
+        :param destination: name of the destination
         :return:
         """
         raise NotImplementedError
 
     def merge(self, destination, *groups):
         """
-        merge the memberst of the groups into the destination group
+        merge the members of the groups into the destination group
         :param group_a:
         :param groups:
         :return:
@@ -94,8 +90,6 @@ class Group(object):
             return [entries]
         else:
             entries = cm.find(collection=f"{self.cloud}-{self.name}")
-
-            print("PPPP", entries)
 
         for entry in entries:
             result.append(entry)

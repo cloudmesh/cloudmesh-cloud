@@ -17,18 +17,17 @@ source:
 	pip install -e . -U
 	cms help
 
-clean:
-	$(call banner, "CLEAN")
-	rm -rf dist
-	rm -rf *.zip
-	rm -rf *.egg-info
-	rm -rf *.eggs
-	rm -rf docs/build
-	rm -rf build
-	find . -type d -name __pycache__ -delete
-	find . -name '*.pyc' -delete
-	rm -rf .tox
-	rm -f *.whl
+requirements:
+	echo "cloudmesh-cmd5" > tmp.txt
+	echo "cloudmesh-sys" >> tmp.txt
+	echo "cloudmesh-inventory" >> tmp.txt
+	echo "cloudmesh-configuration" >> tmp.txt
+	pip-compile setup.py
+	fgrep -v "# via" requirements.txt | fgrep -v "cloudmesh" >> tmp.txt
+	mv tmp.txt requirements.txt
+	git commit -m "update requirements" requirements.txt
+	git push
+
 
 
 manual:
@@ -106,11 +105,10 @@ clean:
 	rm -rf *.eggs
 	rm -rf docs/build
 	rm -rf build
-	find . -name '__pycache__' -delete
+	find . -type d -name __pycache__ -delete
 	find . -name '*.pyc' -delete
 	rm -rf .tox
 	rm -f *.whl
-
 
 ######################################################################
 # PYPI
@@ -124,7 +122,7 @@ dist:
 	python setup.py sdist bdist_wheel
 	twine check dist/*
 
-patch: clean
+patch: clean requirements
 	$(call banner, "bbuild")
 	bump2version --no-tag --allow-dirty patch
 	python setup.py sdist bdist_wheel
@@ -183,3 +181,5 @@ log:
 	gitchangelog | fgrep -v ":dev:" | fgrep -v ":new:" > ChangeLog
 	git commit -m "chg: dev: Update ChangeLog" ChangeLog
 	git push
+
+

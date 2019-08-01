@@ -44,9 +44,10 @@ this_platform = platform.system().lower()
 #    os.system(command)
 
 requiers = """
-cloudmesh-common
+cloudmesh-configuration
 cloudmesh-cmd5
 cloudmesh-sys
+cloudmesh-inventory
 apache-libcloud
 certifi
 chardet
@@ -64,7 +65,6 @@ termcolor
 urllib3
 Flask-PyMongo
 flask
-six
 recommonmark
 dateparser
 humanize
@@ -104,7 +104,7 @@ setup(
     description=DESCRIPTION,
     long_description=long_description,
     long_description_content_type="text/markdown",
-    version="4.1.2",
+    version="4.1.4",
     license="Apache 2.0",
     url=URL,
     packages=find_packages(exclude=("tests",

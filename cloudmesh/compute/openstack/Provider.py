@@ -14,10 +14,11 @@ from cloudmesh.common.util import path_expand
 from cloudmesh.common.variables import Variables
 from cloudmesh.common3.DictList import DictList
 from cloudmesh.image.Image import Image
-from cloudmesh.management.configuration.config import Config
+from cloudmesh.configuration.Config import Config
 from cloudmesh.mongo.CmDatabase import CmDatabase
 from cloudmesh.provider import ComputeProviderPlugin
 from cloudmesh.secgroup.Secgroup import Secgroup, SecgroupRule
+from cloudmesh.common.debug import VERBOSE
 
 
 class Provider(ComputeNodeABC, ComputeProviderPlugin):
@@ -44,9 +45,10 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                       "vm_state",
                       "status",
                       "task_state",
-                      "image",
-                      "public_ips",
-                      "private_ips",
+                      "metadata.image",
+                      "metadata.flavor",
+                      "ip_public",
+                      "ip_private",
                       "project_id",
                       "launched_at",
                       "cm.kind"],
@@ -56,6 +58,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                        "Status",
                        "Task",
                        "Image",
+                       "Flavor",
                        "Public IPs",
                        "Private IPs",
                        "Project ID",
@@ -138,10 +141,14 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                        "Description",
                        "Rules"]
         },
+        "ip": {
+            "order": ["name", 'floating_ip_address', 'fixed_ip_address'],
+            "header": ["Name", 'Floating', 'Fixed']
+        },
     }
 
     # noinspection PyPep8Naming
-    def Print(self, output, kind, data):
+    def Print(self, data, output=None, kind=None):
 
         if output == "table":
             if kind == "secrule":
@@ -183,7 +190,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         # d['project_domain_name'] = config['OS_PROJECT_NAME']
         return d
 
-    def __init__(self, name=None, configuration="~/.cloudmesh/cloudmesh4.yaml"):
+    def __init__(self, name=None, configuration="~/.cloudmesh/cloudmesh.yaml"):
         """
         Initializes the provider. The default parameters are read from the
         configuration file that is defined in yaml format.
@@ -250,6 +257,9 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
             if "cm" not in entry:
                 entry['cm'] = {}
+
+            if kind == 'ip':
+                entry['name'] = entry['floating_ip_address']
 
             entry["cm"].update({
                 "kind": kind,
@@ -325,8 +335,8 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         cloud = self.cloud
         Console.msg(f"upload the key: {name} -> {cloud}")
         try:
-            r = self.cloudman.create_keypair(name, key['string'])
-        except: # openstack.exceptions.ConflictException:
+            r = self.cloudman.create_keypair(name, key['public_key'])
+        except:  # openstack.exceptions.ConflictException:
             raise ValueError(f"key already exists: {name}")
 
         return r
@@ -561,8 +571,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
             entries = []
             for entry in d:
                 entries.append(dict(entry))
-            if debug:
-                pprint(entries)
+            # VERBOSE(entries)
 
             return self.update_dict(entries, kind=kind)
         return None
@@ -577,7 +586,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
     def image(self, name=None):
         """
-        Gets the image with a given nmae
+        Gets the image with a given name
         :param name: The name of the image
         :return: the dict of the image
         """
@@ -691,6 +700,9 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                 cm = literal_eval(metadata)
                 if 'cm' in server:
                     server['cm'].update(cm)
+            server['ip_public'] = self.get_public_ip(server=server)
+            server['ip_private'] = self.get_private_ip(server=server)
+
             result.append(server)
 
         return result
@@ -718,9 +730,17 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         raise NotImplementedError
         return self.cloudman.reboot_node(name)
 
-    def set_server_metadata(self, name, m):
+    def set_server_metadata(self, name, cm):
+        """
+        Sets the server metadata from the cm dict
+
+        :param name: The name of the vm
+        :param cm: The cm dict
+        :return:
+        """
+        data = {'cm': str(cm)}
         server = self.cloudman.get_server(name)
-        self.cloudman.set_server_metadata(server, m)
+        self.cloudman.set_server_metadata(server, data)
 
     def get_server_metadata(self, name):
         server = self.info(name=name)
@@ -790,8 +810,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         # get IP
 
         if not ip and public:
-            entry = self.find_available_public_ip()
-            ip = entry['floating_ip_address']
+            ip = self.find_available_public_ip()
             # pprint(entry)
 
         elif ip is not None:
@@ -831,8 +850,12 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
             self.cloudman.add_ips_to_server(server, ips=ip)
             variables = Variables()
             variables['vm'] = name
-            if metadata is not None:
-                self.cloudman.set_server_metadata(server, metadata)
+            if metadata is None:
+                metadata = {}
+
+            metadata['image'] = image
+            metadata['flavor'] = size
+            self.cloudman.set_server_metadata(server, metadata)
 
             # self.cloudman.add_security_group(security_group=secgroup)
 
@@ -864,7 +887,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                         found.append(entry)
                 ips = found
 
-        return ips
+        return self.update_dict(ips, kind="ip")
 
     # ok
     def delete_public_ip(self, ip=None):
@@ -885,15 +908,57 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
     # ok
     def find_available_public_ip(self):
-        return self.cloudman.available_floating_ip()
+        entry = self.cloudman.available_floating_ip()
+        ip = entry['floating_ip_address']
+        return ip
 
-    # broken
-    def attach_public_ip(self, node, ip):
-        raise NotImplementedError
+    # ok
+    def attach_public_ip(self, name=None, ip=None):
+        server = self.cloudman.get_server(name)
+        return self.cloudman.add_ips_to_server(server, ips=ip)
 
-    # broken
-    def detach_public_ip(self, node, ip):
-        raise NotImplementedError
+    # ok
+    def detach_public_ip(self, name=None, ip=None):
+        server = self.cloudman.get_server(name)['id']
+        data = self.cloudman.list_floating_ips({'floating_ip_address': ip})[0]
+        ip_id = data['id']
+        return self.cloudman.detach_ip_from_server(server_id=server,
+                                                   floating_ip_id=ip_id)
+
+    # ok
+    def get_public_ip(self,
+                      server=None,
+                      name=None):
+        if not server:
+            server = self.info(name=name)
+        ip = None
+        ips = server['addresses']
+        first = list(ips.keys())[0]
+        addresses = ips[first]
+
+        for address in addresses:
+            if address['OS-EXT-IPS:type'] == 'floating':
+                ip = address['addr']
+                break
+        return ip
+
+    # ok
+    def get_private_ip(self,
+                       server=None,
+                       name=None):
+        if not server:
+            server = self.info(name=name)
+        ip = None
+        ips = server['addresses']
+        first = list(ips.keys())[0]
+        addresses = ips[first]
+
+        found = []
+        for address in addresses:
+            if address['OS-EXT-IPS:type'] == 'fixed':
+                ip = address['addr']
+                found.append(ip)
+        return found
 
     def rename(self, name=None, destination=None):
         """

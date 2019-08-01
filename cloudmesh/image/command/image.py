@@ -5,7 +5,7 @@ from cloudmesh.management.configuration.arguments import Arguments
 from cloudmesh.mongo.CmDatabase import CmDatabase
 from cloudmesh.shell.command import PluginCommand
 from cloudmesh.shell.command import command, map_parameters
-
+from cloudmesh.common.parameter import Parameter
 
 class ImageCommand(PluginCommand):
 
@@ -38,6 +38,14 @@ class ImageCommand(PluginCommand):
 
         variables = Variables()
 
+        arguments.output = Parameter.find("output",
+                                          arguments,
+                                          variables,
+                                          "table")
+
+        arguments.refresh = Parameter.find_bool("refresh",
+                                                arguments,
+                                                variables)
         if arguments.list and arguments["--query"]:
             names = []
 
@@ -73,7 +81,7 @@ class ImageCommand(PluginCommand):
                 provider = Provider(name=cloud)
                 images = provider.images()
 
-                provider.Print(arguments.output, "image", images)
+                provider.Print(images, output=arguments.output, kind="image")
 
             return ""
 
@@ -99,7 +107,8 @@ class ImageCommand(PluginCommand):
                     print(images)
                     print(provider)
 
-                    provider.Print(arguments.output, "image", images)
+                    provider.Print(images, output=arguments.output,
+                                   kind="image")
 
             except Exception as e:
 

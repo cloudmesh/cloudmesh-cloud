@@ -1,4 +1,6 @@
+from ast import literal_eval
 from datetime import datetime
+from pprint import pprint
 
 from azure.common.credentials import ServicePrincipalCredentials
 from azure.mgmt.compute import ComputeManagementClient
@@ -8,83 +10,202 @@ from cloudmesh.abstractclass.ComputeNodeABC import ComputeNodeABC
 from cloudmesh.common.console import Console
 from cloudmesh.common.debug import VERBOSE
 from cloudmesh.common.util import HEADING
-from cloudmesh.management.configuration.config import Config
+from cloudmesh.configuration.Config import Config
 
 
 class Provider(ComputeNodeABC):
-    #
-    # TODO: This is a bug, you need to define the output attributes for the
-    #  table printer. Print an entry with VERBOSE, after you get it from azure
-    #  so you can look at them
-
     kind = 'azure'
 
+    """
     output = {
-
+        "status": {
+            "sort_keys": ["cm.name"],
+            "order": ["cm.name",
+                      "cm.cloud",
+                      "vm_state",
+                      "status",
+                      "task_state"],
+            "header": ["Name",
+                       "Cloud",
+                       "State",
+                       "Status",
+                       "Task"]
+        },
         "vm": {
             "sort_keys": ["cm.name"],
             "order": ["cm.name",
                       "cm.cloud",
-                      "state",
-                      "image",
-                      "public_ips",
-                      "private_ips",
+                      "id",
+                      "type",
+                      "location",
+                      "hardware_profile.vm_size",
+                      "storage_profile.image_reference.image_reference",
+                      "storage_profile.image_reference.offer",
+                      "storage_profile.image_reference.sku",
+                      "storage_profile.image_reference.version",
+                      "storage_profile.os_disk.os_type",
+                      "storage_profile.os_disk.name",
+                      "storage_profile.os_disk.caching",
+                      "storage_profile.os_disk.create_option",
+                      "storage_profile.os_disk.disk_size_gb",
+                      "storage_profile.os_disk.managed_disk.id",
+                      "storage_profile.os_disk.managed_disk.storage_account_type",
+                      "storage_profile.data_disks.lun",
+                      "storage_profile.data_disks.name",
+                      "storage_profile.data_disks.caching",
+                      "storage_profile.data_disks.create_option",
+                      "storage_profile.data_disks.disk_size_gb",
+                      "storage_profile.data_disks.managed_disk.id",
+                      "storage_profile.data_disks.managed_disk.storage_account_type",
+                      "os_profile.computer_name",
+                      "os_profile.admin_username",
+                      "os_profile.linux_configuration.disable_password_authentication",
+                      "os_profile.linux_configuration.provision_vm_agent",
+                      "os_profile.allow_extension_operations",
+                      "network_profile.network_interfaces.id",
+                      "provisioning_state",
+                      "vm_id",
                       "cm.kind"],
-            "header": ["cm.name",
-                       "cm.cloud",
-                       "state",
-                       "image",
-                       "public_ips",
-                       "private_ips",
-                       "cm.kind"]
+            "header": ["Name",
+                       "Cloud",
+                       "Id",
+                       "Type",
+                       "Location",
+                       "VM_Size",
+                       "Image Reference",
+                       "Image Offer",
+                       "Image Sku",
+                       "Image Version",
+                       "Image OS Type",
+                       "Image OS Disk Name",
+                       "Image OS Disk Caching",
+                       "Image OS Disk Create Option",
+                       "Image OS Disk Size",
+                       "Image OS Disk ID",
+                       "Image OS Disk Storage Type",
+                       "Image Data Disk Lun",
+                       "Image Data Disk Name",
+                       "Image Data Disk Caching",
+                       "Image Data Disk Create Option",
+                       "Image Data Disk Size",
+                       "Image Data Disk Id",
+                       "Image Data Disk Storage Type",
+                       "Image Os Profile Computer Name",
+                       "Image Os Profile Admin Username",
+                       "Image Linux Conf Disable Password",
+                       "Image Linux Conf Provision VM Agent",
+                       "Image Os Profile Allow Extension Operations",
+                       "Network Interfaces ID",
+                       "Provisioning State",
+                       "VM ID",
+                       "Kind"]
         },
-        "image": {"sort_keys": ["cm.name",
-                                "extra.minDisk"],
-                  "order": ["cm.name",
-                            "extra.minDisk",
-                            "updated",
-                            "cm.driver"],
-                  "header": ["Name",
-                             "MinDisk",
-                             "Updated",
-                             "Driver"]},
-        "flavor": {"sort_keys": ["cm.name",
-                                 "vcpus",
-                                 "disk"],
-                   "order": ["cm.name",
-                             "vcpus",
-                             "ram",
-                             "disk"],
-                   "header": ["Name",
-                              "VCPUS",
-                              "RAM",
-                              "Disk"]}
-
+        "image": {
+            "sort_keys": ["cm.name",
+                          "extra.minDisk"],
+            "order": ["image.id",
+                      "image.name",
+                      "image.type",
+                      "image.location",
+                      "hardware_profile.vm_size",
+                      "image_reference.publisher",
+                      "image_reference.offer",
+                      "image_reference.sku",
+                      "image_reference.version"],
+            "header": ["Id",
+                       "Name",
+                       "TYpe",
+                    ]
+            },
+        "flavor": {
+            "sort_keys": ["name",
+                          "number_of_cores",
+                          "os_disk_size_in_mb"],
+            "order": ["name",
+                      "number_of_cores",
+                      "os_disk_size_in_mb",
+                      "resource_disk_size_in_mb",
+                      "memory_in_mb",
+                      "max_data_disk_count"],
+            "header": ["Name",
+                       "NumberOfCores",
+                       "OS_Disk_Size",
+                       "Resource_Disk_Size",
+                       "Memory",
+                       "Max_Data_Disk"]},
+        "status": {},
+        "key":{}, # Moeen
+        "secgroup": {}, # Moeen
+        "secrule": {}, # Moeen
     }
+    """
+
+    """   
+                     
+        "os_disk": {
+            "os_type": [],
+            "name": [],
+            "caching": [],
+            "create_option": [],
+            "disk_size_gb": [],
+            "managed_disk": ["id",
+                             "storage_account_type"]
+        },
+        "data_disks": {
+            "lun": [],
+            "name": [],
+            "caching": [],
+            "create_option": [],
+            "disk_size_gb": [],
+            "managed_disk": ["id",
+                             "storage_account_type"]
+        },
+        "os_profile": {
+            "computer_name": [],
+            "admin_username": [],
+            "linux_configuration": ["disable_password_authentication",
+                                    "provision_vm_agent"],
+            "secrets": [],
+            "allow_extension_operations": []
+        },
+        "network_profile": {
+            "network_interfaces": ["id"]
+        },
+        "provisioning_state": [],
+        "vm_id": []
+    
+        }
+        }
+    """
 
     # noinspection PyPep8Naming
-    def Print(self, output, kind, data):
-        raise NotImplementedError
 
-    def find(self, elements, name=None):
+    def Print(self, output, kind, data):
+        # TODO: Moeen
         raise NotImplementedError
 
     def keys(self):
+        # TODO: Moeen
         raise NotImplementedError
 
     def key_upload(self, key=None):
+        # TODO: Moeen
         raise NotImplementedError
 
     def key_delete(self, name=None):
+        # TODO: Moeen
         raise NotImplementedError
 
     def list_secgroups(self, name=None):
+        # TODO: needs to be done by someone
         raise NotImplementedError
 
     def list_secgroup_rules(self, name='default'):
+        # TODO: needs to be done by someone
         raise NotImplementedError
 
     def add_secgroup(self, name=None, description=None):
+        # TODO: needs to be done by someone
         raise NotImplementedError
 
     def add_secgroup_rule(self,
@@ -95,52 +216,48 @@ class Provider(ComputeNodeABC):
         raise NotImplementedError
 
     def remove_secgroup(self, name=None):
+        # TODO: needs to be done by someone
         raise NotImplementedError
 
     def upload_secgroup(self, name=None):
+        # TODO: needs to be done by someone
         raise NotImplementedError
 
     def add_rules_to_secgroup(self, name=None, rules=None):
+        # TODO: needs to be done by someone
         raise NotImplementedError
 
     def remove_rules_from_secgroup(self, name=None, rules=None):
+        # TODO: needs to be done by someone
         raise NotImplementedError
 
-    def images(self, **kwargs):
-        raise NotImplementedError
-
-    def image(self, name=None):
-        raise NotImplementedError
-
-    def flavor(self, name=None):
-        raise NotImplementedError
-
-    def set_server_metadata(self, name, m):
-        raise NotImplementedError
-
-    def get_server_metadata(self, name):
-        raise NotImplementedError
 
     # these are available to be associated
     def list_public_ips(self,
                         ip=None,
                         available=False):
+        # TODO: Moeen
         raise NotImplementedError
 
     # release the ip
     def delete_public_ip(self, ip=None):
+        # TODO: Moeen
         raise NotImplementedError
 
     def create_public_ip(self):
+        # TODO: Moeen
         raise NotImplementedError
 
     def find_available_public_ip(self):
+        # TODO: Moeen
         raise NotImplementedError
 
     def attach_public_ip(self, node, ip):
+        # TODO: Moeen
         raise NotImplementedError
 
     def detach_public_ip(self, node, ip):
+        # TODO: Moeen
         raise NotImplementedError
 
     # see the openstack example it will be almost the same as in openstack
@@ -150,7 +267,7 @@ class Provider(ComputeNodeABC):
         raise NotImplementedError
 
     # noinspection PyPep8Naming
-    def __init__(self, name=None, configuration="~/.cloudmesh/cloudmesh4.yaml"):
+    def __init__(self, name=None, configuration="~/.cloudmesh/cloudmesh.yaml"):
         """
         Initializes the provider. The default parameters are read from the
         configuration file that is defined in yaml format.
@@ -177,7 +294,7 @@ class Provider(ComputeNodeABC):
             Console.error("This class is meant for azure cloud")
 
         # ServicePrincipalCredentials related Variables to configure in
-        # cloudmesh4.yaml file
+        # cloudmesh.yaml file
 
         # AZURE_APPLICATION_ID = '<Application ID from Azure Active Directory
         # App Registration Process>'
@@ -205,9 +322,8 @@ class Provider(ComputeNodeABC):
             credentials, subscription)
 
         # VMs abbreviation
-
         self.vms = self.compute_client.virtual_machines
-        self.images = self.compute_client.virtual_machine_images
+        self.imgs = self.compute_client.virtual_machine_images
 
         # Azure Resource Group
         self.GROUP_NAME = self.default["resource_group"]
@@ -231,15 +347,31 @@ class Provider(ComputeNodeABC):
         self.get_resource_group()
 
     def get_resource_group(self):
-
         groups = self.resource_client.resource_groups
-        if groups.check_existence( self.GROUP_NAME):
+        if groups.check_existence(self.GROUP_NAME):
             return groups.get(self.GROUP_NAME)
         else:
             # Create or Update Resource group
-            print('\nCreate Azure Virtual Machine Resource Group')
+            VERBOSE(" ".join('Create Azure Virtual Machine Resource Group'))
             return groups.create_or_update(
                 self.GROUP_NAME, {'location': self.LOCATION})
+
+
+    def set_server_metadata(self, name, m):
+        # see https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-using-tags
+        # https://github.com/Azure-Samples/virtual-machines-python-manage/blob/master/example.py
+        # TODO: Joaquin
+        # tags = FlatDict(cm)
+        raise NotImplementedError
+
+    def get_server_metadata(self, name):
+        # TODO: Joaquin
+        server = self.vms.instance_view(self.GROUP_NAME,self.VM_NAME)
+        return server
+
+    def delete_server_metadata(self, name, key):
+        # TODO: Joaquin
+        raise NotImplementedError
 
     def create(self, name=None,
                image=None,
@@ -310,11 +442,9 @@ class Provider(ComputeNodeABC):
         )
         async_disk_attach.wait()
 
-        return None
-        # must return dict
+        return self.info(self.GROUP_NAME, self.VM_NAME)
 
     def create_vm_parameters(self):
-
         nic = self.create_nic()
 
         # Parse Image from yaml file
@@ -362,7 +492,7 @@ class Provider(ComputeNodeABC):
         self.get_resource_group()
 
         # Create Virtual Network
-        print('\nCreate Vnet')
+        VERBOSE(" ".join('Create Vnet'))
         async_vnet_creation = \
             self.network_client.virtual_networks.create_or_update(
                 self.GROUP_NAME,
@@ -377,7 +507,7 @@ class Provider(ComputeNodeABC):
         async_vnet_creation.wait()
 
         # Create Subnet
-        print('\nCreate Subnet')
+        VERBOSE(" ".join('Create Subnet'))
         async_subnet_creation = self.network_client.subnets.create_or_update(
             self.GROUP_NAME,
             self.VNET_NAME,
@@ -387,7 +517,7 @@ class Provider(ComputeNodeABC):
         subnet_info = async_subnet_creation.result()
 
         # Create NIC
-        print('\nCreate NIC')
+        VERBOSE(" ".join('Create NIC'))
         async_nic_creation = \
             self.network_client.network_interfaces.create_or_update(
                 self.GROUP_NAME,
@@ -422,19 +552,16 @@ class Provider(ComputeNodeABC):
 
         # Start the VM
         VERBOSE(" ".join('Starting Azure VM'))
-        print('Starting Azure VM')
         async_vm_start = self.vms.start(group, name)
         async_vm_start.wait()
         return self.info(group, name)
-        # return None
 
-    # reboot? check if we need to use reboot or restart must be the same
-    # across all providers
-    def restart(self, group=None, name=None):
+    def reboot(self, group=None, name=None):
         """
-        restart a node
+        restart/reboot a node
 
-        :param name:
+        :param group: the unique Resource Group name
+        :param name: the unique Virtual Machine name
         :return: The dict representing the node
         """
         if group is None:
@@ -444,17 +571,16 @@ class Provider(ComputeNodeABC):
 
         # Restart the VM
         VERBOSE(" ".join('Restarting Azure VM'))
-        print('Restarting Azure VM')
         async_vm_restart = self.vms.restart(group, name)
         async_vm_restart.wait()
         return self.info(group, name)
-        # return None
 
     def stop(self, group=None, name=None):
         """
         stops the node with the given name
 
-        :param name:
+        :param group: the unique Resource Group name
+        :param name: the unique Virtual Machine name
         :return: The dict representing the node including updated status
         """
         if group is None:
@@ -464,17 +590,46 @@ class Provider(ComputeNodeABC):
 
         # Stop the VM
         VERBOSE(" ".join('Stopping Azure VM'))
-        print('Stopping Azure VM')
         async_vm_stop = self.vms.power_off(group, name)
         async_vm_stop.wait()
         return self.info(group, name)
-        # return None
+
+    def resume(self, group=None, name=None):
+        """
+        resume the named node since Azure does not handle resume it uses start
+
+        :param group: the unique Resource Group name
+        :param name: the unique Virtual Machine name
+        :return: The dict representing the node including updated status
+        """
+        if group is None:
+            group = self.GROUP_NAME
+        if name is None:
+            name = self.VM_NAME
+
+        return self.start(group, name)
+
+    def suspend(self, group=None, name=None):
+        """
+        suspends the node with the given name since Azure does not handle suspend it uses stop
+
+        :param group: the unique Resource Group name
+        :param name: the unique Virtual Machine name
+        :return: The dict representing the node including updated status
+        """
+        if group is None:
+            group = self.GROUP_NAME
+        if name is None:
+            name = self.VM_NAME
+
+        return self.stop(group, name)
 
     def info(self, group=None, name=None):
         """
         gets the information of a node with a given name
         List VM in resource group
-        :param name:
+        :param group: the unique Resource Group name
+        :param name: the unique Virtual Machine name
         :return: The dict representing the node including updated status
         """
         if group is None:
@@ -485,37 +640,26 @@ class Provider(ComputeNodeABC):
 
         node = self.vms.get(group, name)
 
-        return self.update_dict(node.as_dict(), kind="vm")
+        return node
 
     def list(self):
         """
         List all Azure Virtual Machines from my Account
         :return: dict or libcloud object
         """
-        nodes = self.vms.list_all()
-        return self.update_dict(nodes, kind="vm")
+        servers = self.vms.list_all()
 
-    # TODO Implement Suspend Method
-    def suspend(self, name=None):
-        """
-        suspends the node with the given name
+        result = []
+        for server in servers:
 
-        :param name: the name of the node
-        :return: The dict representing the node
-        """
-        raise NotImplementedError
-        # must return dict
+            if 'cm' in server['metadata']:
+                metadata = server['metadata']['cm']
+                cm = literal_eval(metadata)
+                if 'cm' in server:
+                    server['cm'].update(cm)
+            result.append(server)
 
-    # TODO Implement Resume Method (is it the same as restart?)
-    def resume(self, name=None):
-        """
-        resume the named node
-
-        :param name: the name of the node
-        :return: the dict of the node
-        """
-        raise NotImplementedError
-        # must return dict
+        return result
 
     def destroy(self, group=None, name=None):
         """
@@ -530,13 +674,11 @@ class Provider(ComputeNodeABC):
 
         # Delete VM
         VERBOSE(" ".join('Deleting Azure Virtual Machine'))
-        print('Deleting Azure Virtual Machine')
         async_vm_delete = self.vms.delete(group, name)
         async_vm_delete.wait()
 
         # Delete Resource Group
         VERBOSE(" ".join('Deleting Azure Resource Group'))
-        print('Deleting Azure Resource Group')
         async_group_delete = self.resource_client.resource_groups.delete(
             group)
         async_group_delete.wait()
@@ -544,60 +686,150 @@ class Provider(ComputeNodeABC):
         # return self.info(groupName)
         return None
 
-    # rename to images(self) ?
-    def list_images(self):
-
+    def images(self, **kwargs):
+        """
+        Lists the images on the cloud
+        :return: dict or libcloud object
+        """
         region = self.LOCATION
 
         image_list = list()
 
-        result_list_pub = self.images.list_publishers(
+        result_list_pub = self.imgs.list_publishers(
             region,
         )
 
         for publisher in result_list_pub:
-            result_list_offers = self.images.list_offers(
-                region,
-                publisher.name,
-            )
-
-            for offer in result_list_offers:
-                result_list_skus = self.images.list_skus(
+            try:
+                result_list_offers = self.imgs.list_offers(
                     region,
                     publisher.name,
-                    offer.name,
                 )
 
-                for sku in result_list_skus:
-                    result_list = self.images.list(
-                        region,
-                        publisher.name,
-                        offer.name,
-                        sku.name,
-                    )
-
-                    for version in result_list:
-                        result_get = self.images.get(
+                for offer in result_list_offers:
+                    try:
+                        result_list_skus = self.imgs.list_skus(
                             region,
                             publisher.name,
                             offer.name,
-                            sku.name,
-                            version.name,
                         )
 
-                        msg = 'PUBLISHER: {0}, OFFER: {1}, SKU: {2}, VERSION: {3}'.format(
-                            publisher.name,
-                            offer.name,
-                            sku.name,
-                            version.name,
-                        )
-                        VERBOSE(msg)
-                        image_list.append(result_get)
+                        for sku in result_list_skus:
+                            try:
+                                result_list = self.imgs.list(
+                                    region,
+                                    publisher.name,
+                                    offer.name,
+                                    sku.name,
+                                )
 
-        return image_list
+                                for version in result_list:
+                                    try:
+                                        result_get = self.imgs.get(
+                                            region,
+                                            publisher.name,
+                                            offer.name,
+                                            sku.name,
+                                            version.name,
+                                        )
+
+                                        msg = 'PUBLISHER: {0}, OFFER: {1}, SKU: {2}, VERSION: {3}'.format(
+                                            publisher.name,
+                                            offer.name,
+                                            sku.name,
+                                            version.name,
+                                        )
+                                        VERBOSE(msg)
+                                        image_list.append(result_get)
+                                    except:
+                                        print("Something failed in result_list")
+
+                            except:
+                                print("Something failed in result_list_skus")
+
+                    except:
+                        print("Something failed in result_list_offers")
+
+            except:
+                print("Something failed in result_list_pub")
+
+        return self.get_list(image_list, kind="image")
+
+
+    def flavors(self):
+        # TODO: Joaquin
+        """
+        Lists the flavors on the cloud
+
+        :return: dict of flavors
+        dict example:
+        {
+          'additional_properties': {},
+          'name': 'Standard_D12_v2_Promo',
+          'number_of_cores': 4,
+          'os_disk_size_in_mb': 1047552,
+          'resource_disk_size_in_mb': 204800,
+          'memory_in_mb': 28672,
+          'max_data_disk_count': 16
+        }
+        """
+        vm_sizes_list = self.compute_client.virtual_machine_sizes.list(location=self.LOCATION)
+
+
+        return self.get_list(vm_sizes_list, kind="flavor")
+
+    def flavor(self, name=None):
+        # TODO: Joaquin
+        """
+        Gets the flavor with a given name
+        :param name: The name of the flavor
+        :return: The dict of the flavor
+        """
+        return self.find(self.flavors(), name=name)
+
+    def find(self, elements, name=None):
+        """
+        Finds an element in elements with the specified name.
+
+        :param elements: The elements
+        :param name: The name to be found
+        :return:
+        """
+
+        for element in elements:
+            if element["name"] == name or element["cm"]["name"] == name:
+                return element
+        return None
+
+    def image(self, name=None):
+        """
+        Gets the image with a given nmae
+        :param name: The name of the image
+        :return: the dict of the image
+        """
+        return self.find(self.images(**kwargs), name=name)
+
+    def get_list(self, d, kind=None, debug=False, **kwargs):
+        """
+        Lists the dict d on the cloud
+        :return: dict or libcloud object
+        """
+        if self.vms:
+            entries = []
+            for entry in d:
+                print(entry)
+                entries.append(entry)
+            if debug:
+                pprint(entries)
+
+            print(entries)
+            return self.update_dict(entries, kind=kind)
+        return None
+
 
     # TODO Implement Rename Method
     def rename(self, name=None, destination=None):
+        # TODO: Moeen
         """
         rename a node
 
@@ -625,16 +857,26 @@ class Provider(ComputeNodeABC):
             return None
         elif type(elements) == list:
             _elements = elements
+            print(elements)
         else:
             _elements = [elements]
         d = []
-        for element in _elements:
-            entry = element
-            entry["cm"] = {
+
+        for entry in _elements:
+
+            if "cm" not in entry:
+                entry['cm'] = {}
+
+            if kind == 'ip':
+                entry['name'] = entry['floating_ip_address']
+
+            entry["cm"].update({
                 "kind": kind,
                 "driver": self.cloudtype,
-                "cloud": self.cloud
-            }
+                "cloud": self.cloud,
+                "name": entry['name']
+            })
+
             if kind == 'vm':
                 entry["cm"]["updated"] = str(datetime.utcnow())
                 entry["cm"]["name"] = entry["name"]
@@ -644,8 +886,13 @@ class Provider(ComputeNodeABC):
                     "location"]  # Check feasibility of the following items
             elif kind == 'flavor':
                 entry["cm"]["created"] = str(datetime.utcnow())
-                entry["cm"]["updated"] = str(datetime.utcnow())
                 entry["cm"]["name"] = entry["name"]
+                entry["cm"]["number_of_cores"] = entry["number_of_cores"]
+                entry["cm"]["os_disk_size_in_mb"] = entry["os_disk_size_in_mb"]
+                entry["cm"]["resource_disk_size_in_mb"] = entry["resource_disk_size_in_mb"]
+                entry["cm"]["memory_in_mb"] = entry["memory_in_mb"]
+                entry["cm"]["max_data_disk_count"] = entry["max_data_disk_count"]
+                entry["cm"]["updated"] = str(datetime.utcnow())
             elif kind == 'image':
                 entry['cm']['created'] = str(datetime.utcnow())
                 entry['cm']['updated'] = str(datetime.utcnow())
@@ -656,17 +903,7 @@ class Provider(ComputeNodeABC):
                 else:
                     pass
 
-            # TODO: this is likely a bug in your code as this is specific to
-            #  LibCloud. You probable want to delete this.
-            #  but make sure to test out what is in the dict.
-            #  you can do this with VERBOSE(entry)
-
-            if "extra" in entry:
-                del entry["extra"]
-            if "_uuid" in entry:
-                del entry["_uuid"]
-            if "driver" in entry:
-                del entry["driver"]
-
             d.append(entry)
+            VERBOSE(d)
+
         return d

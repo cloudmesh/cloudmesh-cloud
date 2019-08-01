@@ -5,7 +5,7 @@ from cloudmesh.management.configuration.arguments import Arguments
 from cloudmesh.mongo.CmDatabase import CmDatabase
 from cloudmesh.shell.command import PluginCommand
 from cloudmesh.shell.command import command, map_parameters
-
+from cloudmesh.common.parameter import Parameter
 
 class FlavorCommand(PluginCommand):
 
@@ -23,7 +23,7 @@ class FlavorCommand(PluginCommand):
 
             Options:
                --output=OUTPUT  the output format [default: table]
-               --cloud=CLOUD    the cloud name
+               --cloud=CLOUD    the ycloud name
                --refresh        refreshes the data before displaying it
 
             Description:
@@ -47,6 +47,15 @@ class FlavorCommand(PluginCommand):
 
         variables = Variables()
 
+        arguments.output = Parameter.find("output",
+                                          arguments,
+                                          variables,
+                                          "table")
+
+        arguments.refresh = Parameter.find_bool("refresh",
+                                                arguments,
+                                                variables)
+
         if arguments.list and arguments.refresh:
 
             names = []
@@ -60,7 +69,7 @@ class FlavorCommand(PluginCommand):
                 provider = Provider(name=cloud)
                 flavors = provider.flavors()
 
-                provider.Print(arguments.output, "flavor", flavors)
+                provider.Print(flavors, output=arguments.output, kind="flavor")
 
             return ""
 
@@ -82,7 +91,7 @@ class FlavorCommand(PluginCommand):
                     db = CmDatabase()
                     flavors = db.find(collection=f"{cloud}-flavor")
 
-                    provider.Print(arguments.output, "flavor", flavors)
+                    provider.Print(flavors, output=arguments.output, kind="flavor")
 
             except Exception as e:
 

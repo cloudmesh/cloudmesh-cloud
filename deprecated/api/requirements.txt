@@ -1,3 +1,0 @@
-connexion[swagger-ui]
-flask
-spec-synthase

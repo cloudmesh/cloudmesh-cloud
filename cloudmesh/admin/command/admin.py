@@ -3,7 +3,7 @@ import textwrap
 from cloudmesh.common.Printer import Printer
 from cloudmesh.common.console import Console
 from cloudmesh.common.dotdict import dotdict
-from cloudmesh.management.configuration.config import Config
+from cloudmesh.configuration.Config import Config
 from cloudmesh.management.configuration.operatingsystem import OperatingSystem
 # from cloudmesh.admin.api.manager import Manager
 from cloudmesh.mongo.MongoDBController import MongoDBController
@@ -34,7 +34,7 @@ class AdminCommand(PluginCommand):
         ::
 
           Usage:
-            admin mongo install [--brew] [--download=PATH]
+            admin mongo install [--brew] [--download=PATH] [--nosudo]
             admin mongo create
             admin mongo status
             admin mongo stats
@@ -48,8 +48,6 @@ class AdminCommand(PluginCommand):
             admin mongo list [--output=OUTPUT]
             admin status
             admin system info
-            admin yaml cat
-            admin yaml check
 
           The admin command performs some administrative functions, such as
           installing packages, software and services. It also is used to
@@ -67,7 +65,7 @@ class AdminCommand(PluginCommand):
 
               MongoDB is managed through a number of commands.
 
-              The configuration is read from ~/.cloudmesh/cloudmesh4.yaml
+              The configuration is read from ~/.cloudmesh/cloudmesh.yaml
 
               First, you need to create a MongoDB database with
 
@@ -95,7 +93,7 @@ class AdminCommand(PluginCommand):
               This can be very useful in case you are filing an issue or bug.
         """
 
-        map_parameters(arguments, "output")
+        map_parameters(arguments, "output", "nosudo")
         arguments.output = arguments.output or "table"
         # arguments.PATH = arguments['--download'] or None
         result = None
@@ -107,7 +105,10 @@ class AdminCommand(PluginCommand):
                 print("MongoDB install")
                 print(79 * "=")
                 installer = MongoInstaller()
-                r = installer.install()
+
+                sudo = not arguments.nosudo
+                print ("SUDO")
+                r = installer.install(sudo=sudo)
                 return r
 
             elif arguments.status:
@@ -198,17 +199,6 @@ class AdminCommand(PluginCommand):
                     Console.ok("ok")
                 else:
                     Console.ok("is your MongoDB server running")
-
-        elif arguments.yaml and arguments.cat:
-
-            content = Config.cat()
-            print(content)
-
-            return ""
-
-        elif arguments.yaml and arguments.check:
-
-            Config.check()
 
         elif arguments.status:
 

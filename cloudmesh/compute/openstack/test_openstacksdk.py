@@ -6,14 +6,15 @@ from pprint import pprint
 
 import openstack
 from cloudmesh.common.util import banner
-from cloudmesh.management.configuration.config import Config
+from cloudmesh.configuration.Config import Config
+import os
 
 """
 see : https://docs.openstack.org/openstacksdk/latest/user/guides/compute.html
 """
 
 """
-cloudmesh4.yaml file
+cloudmesh.yaml file
         OS_AUTH_URL: https://openstack.tacc.chameleoncloud.org:5000/v2.0/tokens
         OS_USERNAME: TBD
         OS_PASSWORD: TBD
@@ -46,37 +47,55 @@ def credentials():
 
 config = credentials()
 
-pprint(config)
+
+command = "openstack --version --os-auth-url={auth_url} " \
+              "--os-project-name={project_id} --os-username={username} " \
+              "--os-password={password} -f=json".format(**config)
+    # print (command)
+os.system(command)
+
 
 cloud = openstack.connect(**config)
 
-pprint(dir(cloud))
+pprint (dir(cloud))
 
-# pprint (cloud.list_floating_ips())
+print (cloud.compute.version)
 
-# print (cloud.available_floating_ip())
+pprint(cloud.list_services())
 
-# print (cloud.create_floating_ip())
+if False:
 
-# ip ='129.114.33.15'
+    pprint(config)
 
-# print (cloud.delete_floating_ip(ip))
+    cloud = openstack.connect(**config)
 
-# provider = Provider(name="chameleon")
-# pprint (cloud.list_floating_ips())
+    pprint(dir(cloud))
 
-# r = provider.delete_public_ip(ip)
+    # pprint (cloud.list_floating_ips())
 
-# print(r)
+    # print (cloud.available_floating_ip())
 
-server = cloud.get_server("gregor-vm-3")
-ip = cloud.available_floating_ip()
+    # print (cloud.create_floating_ip())
 
-banner("SERVER")
-pprint(server)
-banner("IP")
-pprint(ip)
-pprint(cloud.add_ips_to_server(server, ips=ip['floating_ip_address']))
+    # ip ='129.114.33.15'
+
+    # print (cloud.delete_floating_ip(ip))
+
+    # provider = Provider(name="chameleon")
+    # pprint (cloud.list_floating_ips())
+
+    # r = provider.delete_public_ip(ip)
+
+    # print(r)
+
+    server = cloud.get_server("gregor-vm-3")
+    ip = cloud.available_floating_ip()
+
+    banner("SERVER")
+    pprint(server)
+    banner("IP")
+    pprint(ip)
+    pprint(cloud.add_ips_to_server(server, ips=ip['floating_ip_address']))
 
 # pprint(cloud.add_ip_list(server,ips=[ip]))
 

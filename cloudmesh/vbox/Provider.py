@@ -8,7 +8,7 @@ from cloudmesh.common.Shell import Shell
 from cloudmesh.common.console import Console
 from cloudmesh.common.dotdict import dotdict
 # from cloudmesh.abstractclass import ComputeNodeManagerABC
-from cloudmesh.management.configuration.config import Config
+from cloudmesh.configuration.Config import Config
 from cloudmesh.mongo import MongoDBController
 
 """

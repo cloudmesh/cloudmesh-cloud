@@ -5,7 +5,7 @@ from cloudmesh.common.StopWatch import StopWatch
 from cloudmesh.common.console import Console
 from cloudmesh.common.util import path_expand
 from cloudmesh.common.variables import Variables
-from cloudmesh.management.configuration.config import Config
+from cloudmesh.configuration.Config import Config
 from cloudmesh.mongo.MongoDBController import MongoDBController
 from cloudmesh.shell.command import PluginCommand
 from cloudmesh.shell.command import command, map_parameters
@@ -25,7 +25,7 @@ class InitCommand(PluginCommand):
             Description:
 
                 Initializes cloudmesh while using data from
-                ~/.cloudmesh/cloudmesh4.yaml.
+                ~/.cloudmesh/cloudmesh.yaml.
 
                 If no cloud is specified a number of local collections are
                 created. If a cloud is specified it also uploads the

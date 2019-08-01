@@ -1,6 +1,6 @@
 from pymongo import MongoClient
 import urllib.parse
-from cloudmesh.management.configuration.config import Config
+from 'cloudmesh-configuration'.Config import Config
 
 
 class MongoDB(object):

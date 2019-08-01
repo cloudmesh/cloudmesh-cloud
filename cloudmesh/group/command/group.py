@@ -50,7 +50,7 @@ class GroupCommand(PluginCommand):
                 performed on these groups including termination of services that
                 are registered with the group.
 
-                A defualt grup can be set with the command
+                A default group can be set with the command
 
                   cms set group=GROUPNAME
 
@@ -94,7 +94,7 @@ class GroupCommand(PluginCommand):
 
             # "group add NAMES [--type=TYPE] [--group=GROUPNAME]"
             #
-            # tod doe not yet serch for type = kind
+            # tod doe not yet search for type = kind
             #
             names = Parameter.expand(arguments.NAMES)
             group = arguments["--group"] or "default"

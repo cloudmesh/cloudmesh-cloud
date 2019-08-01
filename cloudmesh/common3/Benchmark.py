@@ -5,10 +5,17 @@ from pprint import pprint
 import yaml
 from cloudmesh.common.StopWatch import StopWatch
 from cloudmesh.common.util import path_expand
-
+from cloudmesh.common.variables import Variables
 
 # noinspection PyPep8Naming
 class Benchmark(object):
+
+    @staticmethod
+    def debug():
+        variables = Variables()
+        variables["trace"] = True
+        variables["debug"] = True
+        variables["verbose"] = 10
 
     @staticmethod
     def name():
@@ -36,14 +43,14 @@ class Benchmark(object):
         StopWatch.stop(Benchmark.name())
 
     @staticmethod
-    def print(sysinfo=True):
+    def print(sysinfo=True, csv=True, tag=None):
         """
         prints the benchmark information with all timers
         """
         StopWatch.start("benchmark_start_stop")
         StopWatch.stop("benchmark_start_stop")
 
-        StopWatch.benchmark(sysinfo=sysinfo)
+        StopWatch.benchmark(sysinfo=sysinfo, csv=csv, tag=tag)
 
     @staticmethod
     def yaml(path, n):

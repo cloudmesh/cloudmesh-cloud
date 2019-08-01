@@ -14,8 +14,9 @@ from cloudmesh.common.StopWatch import StopWatch
 from cloudmesh.common.util import HEADING
 from cloudmesh.common.util import path_expand
 from cloudmesh.common3.Benchmark import Benchmark
-from cloudmesh.management.configuration.config import Config
+from cloudmesh.configuration.Config import Config
 
+Benchmark.debug()
 
 @pytest.mark.incremental
 class TestConfig:
@@ -106,7 +107,7 @@ class TestConfig:
     def test_if_yaml_file_exists(self):
         config = Config()
         config.create()
-        filename = path_expand("~/.cloudmesh/cloudmesh4.yaml")
+        filename = path_expand("~/.cloudmesh/cloudmesh.yaml")
         assert os.path.isfile(Path(filename))
 
     def test_set(self):

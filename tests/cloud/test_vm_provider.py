@@ -15,6 +15,7 @@ from cloudmesh.compute.openstack.Provider import Provider
 from cloudmesh.configuration.Config import Config
 from cloudmesh.management.configuration.name import Name
 
+Benchmark.debug()
 
 user = Config()["cloudmesh.profile.user"]
 variables = Variables()

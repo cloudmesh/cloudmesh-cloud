@@ -25,6 +25,8 @@ from cloudmesh.management.configuration.name import Name
 
 # NEEDS TO BE MERGED INTO test_compute_database.py
 
+Benchmark.debug()
+
 user = Config()["cloudmesh.profile.user"]
 variables = Variables()
 cloud = variables.parameter('cloud')

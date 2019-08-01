@@ -16,6 +16,7 @@ from cloudmesh.common.util import path_expand
 from cloudmesh.common3.Benchmark import Benchmark
 from cloudmesh.configuration.Config import Config
 
+Benchmark.debug()
 
 @pytest.mark.incremental
 class TestConfig:

@@ -15,11 +15,12 @@ import shutil
 import time
 
 import pytest
-from cloudmesh.common.ConfigDict import ConfigDict
 from cloudmesh.common.util import path_expand
 from cloudmesh.configuration.Config import Config
 from cloudmesh.management.configuration.security.encryption import EncryptFile
+from cloudmesh.common3.Benchmark import Benchmark
 
+Benchmark.debug()
 
 # from cloudmesh.management.configuration.security.config import Config
 
@@ -170,11 +171,11 @@ class Test_configdict:
 
         # test original yaml file
 
-        configDict = ConfigDict(path_expand("~/.cloudmesh/cloudmesh.yaml"))
+        configDict = Config(path_expand("~/.cloudmesh/cloudmesh.yaml"))
         assert configDict.__getitem__("meta.version")
 
         # test tmp_yaml file
-        configDict = ConfigDict(path_expand("~/.cloudmesh/tmp/cloudmesh.yaml"))
+        configDict = Config(path_expand("~/.cloudmesh/tmp/cloudmesh.yaml"))
         assert configDict.__getitem__("meta.version")
 
         # test enc_yaml file

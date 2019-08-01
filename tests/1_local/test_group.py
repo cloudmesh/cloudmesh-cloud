@@ -17,6 +17,8 @@ from cloudmesh.common.util import HEADING
 from cloudmesh.common.Printer import Printer
 import oyaml as yaml
 
+Benchmark.debug()
+
 g = Group()
 services = Parameter.expand('vm-[1-3]')
 

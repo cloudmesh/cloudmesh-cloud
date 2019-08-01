@@ -34,6 +34,8 @@ from cloudmesh.secgroup.Secgroup import Secgroup
 from cloudmesh.secgroup.Secgroup import SecgroupExamples
 from cloudmesh.secgroup.Secgroup import SecgroupRule
 
+Benchmark.debug()
+
 variables = Variables()
 cloud = variables.parameter('cloud')
 

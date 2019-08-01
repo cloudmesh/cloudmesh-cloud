@@ -12,6 +12,9 @@ from cloudmesh.common.util import HEADING
 from cloudmesh.common3.Benchmark import Benchmark
 from cloudmesh.configuration.Config import Config
 
+
+Benchmark.debug()
+
 IMAGE="ubuntu/images/hvm-ssd/ubuntu-xenial-16.04-amd64-server-20190212"
 CLOUD="aws"
 

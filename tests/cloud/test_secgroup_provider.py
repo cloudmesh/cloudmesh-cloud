@@ -21,6 +21,8 @@ from cloudmesh.secgroup.Secgroup import SecgroupRule
 from cloudmesh.common3.Benchmark import Benchmark
 from pprint import pprint
 
+Benchmark.debug()
+
 user = Config()["cloudmesh.profile.user"]
 variables = Variables()
 VERBOSE(variables.dict())

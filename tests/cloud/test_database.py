@@ -12,9 +12,9 @@ from cloudmesh.common.util import HEADING
 from cloudmesh.configuration.Config import Config
 from cloudmesh.management.configuration.name import Name
 from cloudmesh.mongo.CmDatabase import CmDatabase
+from cloudmesh.common3.Benchmark import Benchmark
 
-
-# from cloudmesh.mongo import MongoDBController
+Benchmark.debug()
 
 
 @pytest.mark.incremental

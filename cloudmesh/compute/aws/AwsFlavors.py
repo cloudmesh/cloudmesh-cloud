@@ -1,173 +1,74 @@
-from pprint import pprint
+from cloudmesh.management.configuration.config import Config
+import contextlib
+import urllib.request
+import json
 
-import pandas as pd
-import requests
-from bs4 import BeautifulSoup
-from cloudmesh.common.parameter import Parameter
-from cloudmesh.common.util import banner
-from tabulate import tabulate
-
-
-class AwsImages(dict):
+class AWSflavor(flavor):
 
     def __init__(self):
-        self.html = self.fetch()
-        self.__dict__ = self.extract_tables(self.html)
+        pass
 
-    def fetch(self):
-        url = 'https://aws.amazon.com/ec2/instance-types/'
-        r = requests.get(url)
-        return r.content.decode("utf-8")
+    def get(self):
+        output = []
+        for key in self.__dict__:
+            output.append(self.__dict__.get(key))
+        return output
 
-    def extract_tables(self, html):
-        html = html.replace("<th", "<td")
-        html = html.replace("vCPU*", "vCPU")
+    def update(self, dict = {}):
+        # Note that dict is overwritten, and will be ignored
+        offer_file = self.fetch_offer_file()
+        dict = self.parse_offer_file(offer_file)
+        self.__dict__ = dict
 
-        soup = BeautifulSoup(html, features="lxml")
+    @staticmethod
+    def fetch_json_file(url):
+        with urllib.request.urlopen(url) as req:
+            data = json.loads(req.read().decode())
+            return data
 
-        # noinspection PyPep8Naming
-        REMOVE_ATTRIBUTES = ['style',
-                             'height',
-                             'width',
-                             'border',
-                             'cellpadding',
-                             'cellspacing']
-        for attribute in REMOVE_ATTRIBUTES:
-            for tag in soup.find_all(attrs={attribute: True}):
-                del tag[attribute]
+    def fetch_offer_file(
+            self, 
+            url = None,
+            region = "us-east-1"
+    ):
+        if url is None:
+            offer_index_url = "https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/index.json"
+            offer_index = self.fetch_json_file(offer_index_url)
+            offer_file_api_url = "https://pricing.us-east-1.amazonaws.com"
+            # offer_file_path = offer_index['offers']['AmazonEC2']['currentVersionUrl']
+            region_file_path = offer_index['offers']['AmazonEC2']['currentRegionIndexUrl']
+            regions_url = offer_file_api_url + region_file_path
+            regions_file = self.fetch_json_file(regions_url)
+            offer_file_path = regions_file["regions"][region]["currentVersionUrl"]
+            url = offer_file_api_url + offer_file_path
+        offer_file = self.fetch_json_file(url)
+        return offer_file
 
-        # noinspection PyPep8Naming
-        TAGS = ['b', 'i', 'u']
-        for tag in TAGS:
-            for match in soup.findAll(tag):
-                match.replaceWithChildren()
-
-        tables = soup.findAll("table")
-
-        result = {}
-        for table in tables:
-            if table.findParent("table") is None:
-                print()
-                content = str(table)
-                # pretty = BeautifulSoup(content).prettify()
-                # print(pretty)
-                # print (content)
-
-                output = []
-                table_rows = table.find_all('tr')
-                for tr in table_rows:
-                    td = tr.find_all('td')
-                    row = [i.text.strip() for i in td]
-                    output.append(row)
-                kind = output[1][0].split(".", 1)[0]
-                result[kind] = output
-
-        return result
-
-    def print(self, key=None):
-        if key is None:
-            keys = self.keys()
-        else:
-            keys = Parameter.expand(key)
-
-        for key in keys:
-            banner(f"Table {key}")
-            pprint(self.__dict__[key])
-
-    def pprint(self, key=None):
-        if key is None:
-            output = self.__dict__
-            kind = "all"
-        else:
-            keys = Parameter.expand(key)
-            output = {}
-            for kind in keys:
-                output[kind] = self.__dict__[kind]
-
-        banner(f"Table {kind}")
-        pprint(output)
-
-    def keys(self):
-        return list(self.__dict__.keys())
-
-    def __getitem__(self, item):
-        return self.__dict__.__getitem__(item)
-
-    def table(self, key, output="fancy_grid"):
-        """
-        Available formats:
-
-            "df"
-            "plain"
-            "simple"
-            "github"
-            "grid"
-            "fancy_grid"
-            "pipe"
-            "orgtbl"
-            "jira"
-            "presto"
-            "psql"
-            "rst"
-            "mediawiki"
-            "moinmoin"
-            "youtrack"
-            "html"
-            "latex"
-            "latex_raw"
-            "latex_booktabs"
-            "textile"
-
-        :param key:
-        :param output:
-        :return:
-        """
-        if key is None:
-            kinds = self.keys()
-            raise NotImplementedError
-        else:
-            keys = Parameter.expand(key)
-            if len(keys) > 1:
-                raise NotImplementedError
-            # this is not fully implemented
-
-        # Step 1. merge the table with keys
-
-        # to be implemented
-
-        # Step 2. print the resulting table
-
-        #
-        # For now we just print one table to demo
-        # principal
-
-        table = self.__dict__[key]
-        pprint(table)
-        df = pd.DataFrame.from_records(table[1:], columns=table[0])
-        if output == 'df':
-            return df
-        else:
-            return tabulate(df,
-                            headers='keys',
-                            tablefmt=output,
-                            showindex="never")
+    def parse_offer_file(self, offer_file):
+        publication_date = offer_file['publicationDate']
+        flavor_info = {}
+        for sku in list(offer_file['terms']['OnDemand'].keys()):
+            for offer_term in list(offer_file['terms']['OnDemand'][sku].keys()):
+                for rate_code in list(offer_file['terms']['OnDemand'][sku][offer_term]['priceDimensions'].keys()):
+                    flavor = {
+                        'vcpu': offer_file['products'][sku]['attributes'].get('vcpu'),
+                        'memory': offer_file['products'][sku]['attributes'].get('memory'),
+                        'storage': offer_file['products'][sku]['attributes'].get('storage'),
+                        'clock_speed': offer_file['products'][sku]['attributes'].get('clockSpeed'),
+                        'instance_type': offer_file['products'][sku]['attributes'].get('InstanceType'),
+                        'price':float(offer_file["terms"]["OnDemand"][sku][offer_term]['priceDimensions'][rate_code]['pricePerUnit']['USD']),
+                        'additional_info': [
+                            offer_file['products'][sku],
+                            offer_file["terms"]["OnDemand"][sku][offer_term]
+                        ]
+                    }
+                    flavor_info[rate_code] = flavor
+        return flavor_info
 
 
 if __name__ == "__main__":
-    from cloudmesh.common.StopWatch import StopWatch
-
-    StopWatch.start("convert aws image table")
-    images = AwsImages()
-    # images.print()
-    # images.pprint()
-    # keys = images.keys()
-    # print ("Keys", keys)
-    # print ("Image")
-    # print ("III", images["a1"])
-
-    output = images.table("a1")
-    StopWatch.stop("convert aws image table")
-    print(output)
-    print(images.table("a1", output="grid"))
-
-    StopWatch.benchmark()
+    flavors = AWSflavor()
+    flavors.update()
+    print(flavors.get())
+    from cloudmesh.common.Shell import Shell
+    r = Shell.execute('cms flavor list --refresh')

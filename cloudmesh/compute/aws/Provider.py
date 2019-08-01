@@ -476,11 +476,20 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         """
         instance_ids = []
         for each_instance in self.ec2_resource.instances.all():
-            instance_ids.append({'instance_id': each_instance.id,
-                                 'instance_tag': each_instance.tags[0]['Value']
+
+            instance_ids.append({
+                                 'kind' : 'aws',
+                                 'status': each_instance.state['Name'],
+                                 'created' : each_instance.launch_time.strftime("%m/%d/%Y, %H:%M:%S"),
+                                 'updated' : each_instance.launch_time.strftime("%m/%d/%Y, %H:%M:%S"),
+                                 'name': each_instance.tags[0]['Value'],
+                                'instance_id': each_instance.id,
+                                'image': each_instance.image_id,
+                                'public_ips' : each_instance.public_ip_address,
+                                'private_ips': each_instance.private_ip_address
                                  })
-        return instance_ids
-        # return self.update_dict(instance_ids, kind="vm")
+        #return instance_ids
+        return self.update_dict(instance_ids, kind="vm")
 
     def suspend(self, name=None):
         # TODO: Sriman
@@ -601,8 +610,8 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         if secgroup is None:
             secgroup = 'default'
         new_ec2_instance = self.ec2_resource.create_instances(
-            ImageId=self.default["image"],
-            InstanceType=self.default["size"],
+            ImageId=image if image else self.default['image'],
+            InstanceType=size if size else self.default['size'],
             MaxCount=1,
             MinCount=1,
             SecurityGroups=[secgroup],
@@ -622,6 +631,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         data = self.info(name=name)
         data['name'] = name
         output = self.update_dict(data, kind="vm")[0]
+        VERBOSE(output)
         return output
 
     def rename(self, name=None, destination=None):
@@ -767,10 +777,14 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                 "kind": kind,
                 "driver": self.cloudtype,
                 "cloud": self.cloud,
-                "name": entry['name']
+                "name": entry['name'],
+                "updated": entry['updated'],
+                "Image": entry['image'],
+                "Public IPs": entry['public_ips'],
+                "Private IPs": entry['private_ips']
+
             }
             if kind == 'vm':
-                entry["cm"]["updated"] = str(datetime.utcnow())
                 if "created_at" in entry:
                     entry["cm"]["created"] = str(entry["created_at"])
                     # del entry["created_at"]
@@ -790,4 +804,5 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
 if __name__ == "__main__":
     provider = Provider(name='aws')
-    provider.detach_public_ip('saurabh','18.205.193.161')
+    provider.create(name="sriman_test1")
+    print(provider.list())

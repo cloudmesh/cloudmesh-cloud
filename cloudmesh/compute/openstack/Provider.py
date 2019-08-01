@@ -148,7 +148,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
     }
 
     # noinspection PyPep8Naming
-    def Print(self, output, kind, data):
+    def Print(self, data, output=None, kind=None):
 
         if output == "table":
             if kind == "secrule":

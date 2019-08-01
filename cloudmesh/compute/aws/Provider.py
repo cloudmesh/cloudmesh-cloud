@@ -586,8 +586,16 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         tags = [{'ResourceType': 'instance',
                  'Tags': [
                      {
-                         'Key': 'Name',
+                         'Key': 'cm.name',
                          'Value': name
+                     },
+                     {
+                         'Key': 'cm.kind',
+                         'Value': 'vm'
+                     },
+                     {
+                         'Key': 'cm.cloud',
+                         'Value': self.cloud
                      },
                  ]
                  },

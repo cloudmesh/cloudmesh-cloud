@@ -77,4 +77,4 @@ class Test_key:
         pass
 
     def test_benchmark(self):
-        Benchmark.print(sysinfo=False, csv=False)
+        Benchmark.print(sysinfo=False, csv=False, tag=cloud)

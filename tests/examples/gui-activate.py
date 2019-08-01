@@ -1,4 +1,4 @@
-import PySimpleGUI as sg
+import PySimpleGUI as gui
 from cloudmesh.configuration.Config import Config
 from pprint import pprint
 from cloudmesh.common.console import Console
@@ -7,24 +7,32 @@ config = Config()
 
 clouds = list(config["cloudmesh.cloud"].keys())
 
-sg.SetOptions(text_justification='right')
+gui.SetOptions(text_justification='right')
 
 layout = [
-    [sg.Text('Cloudmesh Cloud Activation', font=('Helvetica', 16))],
-    [sg.Text('Compute Services')]]
+    [gui.Text('Cloudmesh Cloud Activation', font=('Helvetica', 16))],
+    [gui.Text('Compute Services')]]
 
-layout.append([sg.Text('_'  * 100, size=(65, 1))])
+layout.append([gui.Text('_'  * 100, size=(65, 1))])
 
 for cloud in clouds:
+    tbd = "TBD" in str(config[f"cloudmesh.cloud.{cloud}.credentials"])
     active = config[f"cloudmesh.cloud.{cloud}.cm.active"]
-    choice = [sg.Checkbox(cloud, default=active)]
+    if tbd:
+        color='red'
+    else:
+        color="green"
+
+    choice = [gui.Checkbox(cloud,
+                          text_color=color,
+                          default=active)]
     layout.append(choice)
 
-layout.append([sg.Text('_'  * 100, size=(65, 1))])
+layout.append([gui.Text('_'  * 100, size=(65, 1))])
 
-layout.append([sg.Submit(), sg.Cancel()])
+layout.append([gui.Submit(), gui.Cancel()])
 
-window = sg.Window('Cloudmesh Configuration', layout, font=("Helvetica", 12))
+window = gui.Window('Cloudmesh Configuration', layout, font=("Helvetica", 12))
 
 event, values = window.Read()
 

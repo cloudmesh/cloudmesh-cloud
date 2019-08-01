@@ -41,7 +41,7 @@ class TestCloudAws:
         assert isinstance(results, list)
 
     def test__info(self):
-        HEADIG()
+        HEADING()
         info = self.provider.info(self.test_node_name)
         assert info is not None
 

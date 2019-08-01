@@ -1,5 +1,6 @@
 import os
 import sys
+import shutil
 
 import oyaml as yaml
 from cloudmesh.common.FlatDict import flatten
@@ -8,11 +9,11 @@ from cloudmesh.common.Shell import Shell
 from cloudmesh.common.console import Console
 from cloudmesh.common.util import banner
 from cloudmesh.common.util import path_expand
-from cloudmesh.management.configuration.config import Config
+from cloudmesh.configuration.Config import Config
 from cloudmesh.security.encrypt import EncryptFile
 from cloudmesh.shell.command import PluginCommand
-from cloudmesh.shell.command import command
-
+from cloudmesh.shell.command import command, map_parameters
+from cloudmesh.common.util import path_expand
 
 class ConfigCommand(PluginCommand):
 
@@ -27,18 +28,20 @@ class ConfigCommand(PluginCommand):
 
            Usage:
              config  -h | --help
+             config cat [less]
+             config check
              config encrypt [SOURCE] [--keep]
              config decrypt [SOURCE]
              config edit [ATTRIBUTE]
              config set ATTRIBUTE=VALUE
-             config get ATTRIBUTE [--format=FORMAT]
+             config get ATTRIBUTE [--output=OUTPUT]
              config ssh keygen
              config ssh verify
              config ssh check
              config ssh pem
              config cloud verify NAME [KIND]
              config cloud edit [NAME] [KIND]
-             config cloud list NAME [KIND]
+             config cloud list NAME [KIND] [--secrets]
 
 
            Arguments:
@@ -53,9 +56,9 @@ class ConfigCommand(PluginCommand):
                               of the character included
 
            Options:
-              --name=KEYNAME                The name of a key
-              --format=FORMAT     The output format [default: yaml]
-
+              --name=KEYNAME     The name of a key
+              --output=OUTPUT    The output format [default: yaml]
+              --secrets          Print the secrets. Use carefully.
 
            Description:
 
@@ -84,8 +87,8 @@ class ConfigCommand(PluginCommand):
 
                 ssh-add
 
-                cms config encrypt ~/.cloudmesh/cloudmesh4.yaml
-                cms config decrypt ~/.cloudmesh/cloudmesh4.yaml
+                cms config encrypt ~/.cloudmesh/cloudmesh.yaml
+                cms config decrypt ~/.cloudmesh/cloudmesh.yaml
 
 
                 config set ATTRIBUTE=VALUE
@@ -94,19 +97,16 @@ class ConfigCommand(PluginCommand):
 
 
         """
-        # d = Config()                #~/.cloudmesh/cloudmesh4.yaml
-        # d = Config(encryted=True)   # ~/.cloudmesh/cloudmesh4.yaml.enc
+        # d = Config()                #~/.cloudmesh/cloudmesh.yaml
+        # d = Config(encryted=True)   # ~/.cloudmesh/cloudmesh.yaml.enc
 
-        source = arguments.SOURCE or path_expand("~/.cloudmesh/cloudmesh4.yaml")
+        map_parameters(arguments, "keep", "secrets", "output")
+
+        source = arguments.SOURCE or path_expand("~/.cloudmesh/cloudmesh.yaml")
         destination = source + ".enc"
 
-        arguments.keep = arguments["--keep"]
-        # VERBOSE(arguments)
-
-        e = EncryptFile(source, destination)
-
         if arguments.cloud and arguments.edit and arguments.NAME is None:
-            path = path_expand("~/.cloudmesh/cloudmesh4.yaml")
+            path = path_expand("~/.cloudmesh/cloudmesh.yaml")
             print(path)
             Shell.edit(path)
             return ""
@@ -118,6 +118,8 @@ class ConfigCommand(PluginCommand):
 
         configuration = Config()
 
+
+
         if arguments.cloud and arguments.verify:
             service = configuration[f"cloudmesh.{kind}.{cloud}"]
 
@@ -125,7 +127,7 @@ class ConfigCommand(PluginCommand):
 
             action = "verify"
             banner(
-                f"{action} cloudmesh.{kind}.{cloud} in ~/.cloudmesh/cloudmesh4.yaml")
+                f"{action} cloudmesh.{kind}.{cloud} in ~/.cloudmesh/cloudmesh.yaml")
 
             print(yaml.dump(result))
 
@@ -134,17 +136,20 @@ class ConfigCommand(PluginCommand):
             for attribute in flat:
                 if "TBD" in str(flat[attribute]):
                     Console.error(
-                        f"~/.cloudmesh4.yaml: Attribute cloudmesh.{cloud}.{attribute} contains TBD")
+                        f"~/.cloudmesh.yaml: Attribute cloudmesh.{cloud}.{attribute} contains TBD")
 
         elif arguments.cloud and arguments.list:
             service = configuration[f"cloudmesh.{kind}.{cloud}"]
             result = {"cloudmesh": {"cloud": {cloud: service}}}
 
-            action = "verify"
+            action = "list"
             banner(
-                f"{action} cloudmesh.{kind}.{cloud} in ~/.cloudmesh/cloudmesh4.yaml")
+                f"{action} cloudmesh.{kind}.{cloud} in ~/.cloudmesh/cloudmesh.yaml")
 
-            print(yaml.dump(result))
+            lines = yaml.dump(result).split("\n")
+            secrets = not arguments.secrets
+            result = Config.cat_lines(lines, mask_secrets=secrets)
+            print (result)
 
         elif arguments.cloud and arguments.edit:
 
@@ -153,7 +158,7 @@ class ConfigCommand(PluginCommand):
             #
             action = "edit"
             banner(
-                f"{action} cloudmesh.{kind}.{cloud}.credentials in ~/.cloudmesh/cloudmesh4.yaml")
+                f"{action} cloudmesh.{kind}.{cloud}.credentials in ~/.cloudmesh/cloudmesh.yaml")
 
             credentials = configuration[f"cloudmesh.{kind}.{cloud}.credentials"]
 
@@ -170,7 +175,7 @@ class ConfigCommand(PluginCommand):
             print(yaml.dump(
                 configuration[f"cloudmesh.{kind}.{cloud}.credentials"]))
 
-        if arguments["edit"] and arguments["ATTRIBUTE"]:
+        elif arguments["edit"] and arguments["ATTRIBUTE"]:
 
             attribute = arguments.ATTRIBUTE
 
@@ -182,7 +187,35 @@ class ConfigCommand(PluginCommand):
 
             return ""
 
+
+        elif arguments.cat:
+
+            content = Config.cat()
+
+            import shutil
+            columns, rows = shutil.get_terminal_size(fallback=(80, 24))
+
+            lines = content.split("\n")
+
+            counter = 1
+            for line in lines:
+                if arguments.less:
+                    if  counter % (rows-2) == 0:
+                        x = input().split("\n")[0].strip()
+                        if x !='' and x in 'qQxX' :
+                            return ""
+                print (line)
+                counter += 1
+
+            return ""
+
+        elif arguments.check and not arguments.ssh:
+
+            Config.check()
+
         elif arguments.encrypt:
+
+            e = EncryptFile(source, destination)
 
             e.encrypt()
             Console.ok(f"{source} --> {destination}")
@@ -209,6 +242,8 @@ class ConfigCommand(PluginCommand):
                     f"decrypted file {destination} does already exist")
                 sys.exit(1)
 
+            e = EncryptFile(source, destination)
+
             e.decrypt(source)
             Console.ok(f"{source} --> {source}")
 
@@ -216,10 +251,16 @@ class ConfigCommand(PluginCommand):
             return ""
 
         elif arguments.ssh and arguments.verify:
+
+            e = EncryptFile(source, destination)
+
             e.pem_verify()
 
         elif arguments.ssh and arguments.check:
-            key = "~/.ssh/id_rsa"
+
+            e = EncryptFile(source, destination)
+
+            key = path_expand("~/.ssh/id_rsa")
             r = e.check_key(key)
             if r:
                 Console.ok(f"Key {key} is valid")
@@ -228,12 +269,15 @@ class ConfigCommand(PluginCommand):
 
         elif arguments.ssh and arguments.pem:
 
+            e = EncryptFile(source, destination)
+
             r = e.pem_create()
 
         elif arguments.set:
 
             line = arguments["ATTRIBUTE=VALUE"]
             attribute, value = line.split("=", 1)
+
             if not attribute.startswith("cloudmesh."):
                 attribute = f"cloudmesh.{attribute}"
 
@@ -250,14 +294,17 @@ class ConfigCommand(PluginCommand):
             config = Config()
             value = config[attribute]
 
-            output = arguments["--format"]
             if type(value) == dict:
-                print(Printer.write(value, output=output))
+                print(Printer.write(value, output=arguments.output))
             else:
                 print(f"{attribute}={value}")
 
         elif arguments.ssh and arguments.keygen:
 
+            e = EncryptFile(source, destination)
+
             e.ssh_keygen()
+
+
 
         return ""

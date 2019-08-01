@@ -17,7 +17,7 @@ from cloudmesh.common.variables import Variables
 from cloudmesh.common.Shell import Shell
 from cloudmesh.common.parameter import Parameter
 from cloudmesh.common.dotdict import dotdict
-from cloudmesh.management.configuration.config import Config
+from cloudmesh.configuration.Config import Config
 from cloudmesh.management.configuration.name import Name
 from cloudmesh.common.util import banner
 
@@ -99,7 +99,7 @@ class VmCommand(PluginCommand):
 
             Options:
                 -v             verbose, prints the dict at the end
-                --output=OUTPUT   the output format [default: table]
+                --output=OUTPUT   the output format
                 -H --modify-knownhosts  Do not modify ~/.ssh/known_hosts file
                                       when ssh'ing into a machine
                 --username=USERNAME   the username to login into the vm. If not
@@ -188,7 +188,7 @@ class VmCommand(PluginCommand):
                 sample[1-3,18] => ['sample1', 'sample2', 'sample3', 'sample18']
 
             Quoting commands:
-                cm vm login gvonlasz-004 --command=\"uname -a\"
+                cm vm login gregor-004 --command=\"uname -a\"
 
             Limitations:
 
@@ -224,6 +224,14 @@ class VmCommand(PluginCommand):
         variables = Variables()
         database = CmDatabase()
 
+        arguments.output = Parameter.find("output",
+                                          arguments,
+                                          variables,
+                                          "table")
+
+        arguments.refresh = Parameter.find_bool("refresh",
+                                                arguments,
+                                                variables)
 
         if (arguments.meta and arguments.list):
 
@@ -243,7 +251,6 @@ class VmCommand(PluginCommand):
 
         elif arguments.meta and arguments.set:
 
-            VERBOSE(arguments)
             metadata = {}
             pairs = arguments['KEY=VALUE']
             for pair in pairs:
@@ -268,7 +275,6 @@ class VmCommand(PluginCommand):
 
         elif arguments.meta and arguments.delete:
 
-            VERBOSE(arguments)
             metadata = {}
             keys = arguments['KEY']
 
@@ -306,7 +312,7 @@ class VmCommand(PluginCommand):
                 provider = Provider(name=cloud)
                 vms = provider.list()
 
-                provider.Print(arguments.output, "vm", vms)
+                provider.Print(vms, output=arguments.output, kind="vm")
 
         elif arguments.list:
 
@@ -316,7 +322,6 @@ class VmCommand(PluginCommand):
                                                           arguments,
                                                           variables)
 
-            print(clouds, names)
             try:
 
                 for cloud in clouds:
@@ -329,8 +334,7 @@ class VmCommand(PluginCommand):
                     db = CmDatabase()
                     vms = db.find(collection=collection)
 
-                    p.Print(arguments.output, "vm", vms)
-
+                    p.Print(vms, output=arguments.output, kind="vm")
 
             except Exception as e:
 
@@ -432,7 +436,7 @@ class VmCommand(PluginCommand):
                     for node in cursor.find({'name': name}):
                         status.append(node)
 
-                provider.Print(arguments.output, "status", status)
+                provider.Print(status, output=arguments.output, kind="status")
                 return ""
 
 
@@ -459,7 +463,7 @@ class VmCommand(PluginCommand):
                 else:
                     vms = provider.start(names=name, cloud=cloud)
 
-                    provider.Print(arguments.output, "vm", vms)
+                    provider.Print(vms, output=arguments.output, kind="vm")
 
             return ""
 
@@ -485,7 +489,7 @@ class VmCommand(PluginCommand):
                     for name in names:
                         vms = provider.stop(name)
 
-                    provider.Print(arguments.output, "vm", vms)
+                    provider.Print(vms, output=arguments.output, kind="vm")
 
 
         elif arguments.terminate:
@@ -510,7 +514,7 @@ class VmCommand(PluginCommand):
                     for name in names:
                         vms = provider.destroy(name)
 
-                    provider.Print(arguments.output, "vm", vms)
+                    provider.Print(vms, output=arguments.output, kind="vm")
 
 
         elif arguments.delete:
@@ -677,7 +681,7 @@ class VmCommand(PluginCommand):
                     Console.ok(msg)
             except Exception as e:
                 Error.traceback(e)
-                Console.error("Problem renameing instances", traceflag=True)
+                Console.error("Problem renaming instances", traceflag=True)
 
         elif arguments["ip"] and arguments["show"]:
             raise NotImplementedError

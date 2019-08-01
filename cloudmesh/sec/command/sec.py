@@ -73,7 +73,7 @@ class SecCommand(PluginCommand):
                        removes all rules and groups from the database
 
                    sec load
-                        loads some defalut security groups and rules in the
+                        loads some default security groups and rules in the
                         database
 
                     sec clear
@@ -159,7 +159,7 @@ class SecCommand(PluginCommand):
         if arguments.load and arguments.group and arguments.cloud:
 
             provider = Provider(name=arguments.cloud)
-            provider.upoload_secgroup(name=arguments.GROUP)
+            provider.upload_secgroup(name=arguments.GROUP)
 
             return ""
         elif arguments.group and arguments.delete:
@@ -200,7 +200,9 @@ class SecCommand(PluginCommand):
                             rule['name'] = group['name']
                             result.append(rule)
                     cloud_groups = result
-                provider.Print(arguments.output, "secrule", cloud_groups)
+                provider.Print(cloud_groups,
+                               output=arguments.output,
+                               kind="secrule", )
 
             return ""
 

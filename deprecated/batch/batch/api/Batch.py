@@ -5,7 +5,7 @@ import ntpath
 import time
 from pathlib import Path
 from pprint import pprint
-from cloudmesh.management.configuration.config import Config
+from cloudmesh.configuration.Config import Config
 from cloudmesh.management.configuration.generic_config import GenericConfig
 from cloudmesh.common.util import path_expand
 from cloudmesh.mongo.DataBaseDecorator import DatabaseUpdate

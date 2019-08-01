@@ -15,6 +15,8 @@ from cloudmesh.common3.Benchmark import Benchmark
 from cloudmesh.mongo.CmDatabase import CmDatabase
 from cloudmesh.mongo.DataBaseDecorator import DatabaseUpdate
 
+Benchmark.debug()
+
 
 @pytest.mark.incremental
 class TestDatabaseUpdate:
@@ -22,7 +24,7 @@ class TestDatabaseUpdate:
     def test_DatabaseUpdate(self):
         HEADING()
 
-        file = str(Path(path_expand("~/.cloudmesh/cloudmesh4.yaml")))
+        file = str(Path(path_expand("~/.cloudmesh/cloudmesh.yaml")))
         cloud = "debug"
 
         @DatabaseUpdate()
@@ -64,7 +66,7 @@ class TestDatabaseUpdate:
 
         pprint(i)
 
-        assert i[0]['path'] == '/Users/grey/.cloudmesh/cloudmesh4.yaml'
+        assert i[0]['path'] == '/Users/grey/.cloudmesh/cloudmesh.yaml'
 
     def test_remove_collection(self):
         cm = CmDatabase()

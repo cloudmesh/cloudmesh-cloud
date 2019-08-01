@@ -8,65 +8,66 @@ import time
 
 import pytest
 from cloudmesh.common.util import HEADING
-from cloudmesh.management.configuration.config import Config
-#
-# TODO: THIS IS A BUG, the deprecated api shoudl not be used
-#
-from deprecated.draft.vm.api.Vm import Vm
+from cloudmesh.configuration.Config import Config
+from cloudmesh.compute.vm.Provider import Provider
+from cloudmesh.common3.Benchmark import Benchmark
 
+Benchmark.debug()
+
+CLOUD="aws"
 
 @pytest.mark.incremental
 class TestCloudAws:
 
     def setup(self):
         self.config = Config()
-        self.aws = Vm("aws")
+        self.provider = Provider(name="aws")
         self.test_node_name = 'test1'
         self.test_node_id = ''
 
     def _wait_and_get_state(self, name, how_long=15):
         time.sleep(how_long)
-        node = self.aws.provider.driver._get_node(name)
+        node = self.provider.provider.driver._get_node(name)
         return node.state if node else None
 
-    def test_aws_010_create(self):
+    def test_create(self):
         HEADING()
-        vm = self.aws.create(self.test_node_name)
+        vm = self.provider.create(self.test_node_name)
         assert vm is not None
 
-    def test_aws_020_nodes(self):
+    def test_list(self):
         HEADING()
-        results = self.aws.nodes()
+        results = self.provider.list()
         assert isinstance(results, list)
 
-    def test_aws_025_info(self):
+    def test__info(self):
         HEADING()
-        info = self.aws.info(self.test_node_name)
+        info = self.provider.info(self.test_node_name)
         assert info is not None
 
-    def test_aws_030_suspend(self):
+    def test_suspend(self):
         HEADING()
-        self.aws.suspend(name=self.test_node_name)
+        self.provider.suspend(name=self.test_node_name)
         # state = self._wait_and_get_state(self.test_node_name)
         # assert state == 'paused'
 
-    def test_aws_050_stop(self):
+    def test_stop(self):
         HEADING()
-        self.aws.stop(name=self.test_node_name)
+        self.provider.stop(name=self.test_node_name)
         state = self._wait_and_get_state(self.test_node_name, 30)
         assert state == 'deallocating' or state == 'stopped'
 
-    def test_aws_060_start(self):
+    def test_start(self):
         HEADING()
-        self.aws.start(name=self.test_node_name)
+        self.provider.start(name=self.test_node_name)
         state = self._wait_and_get_state(self.test_node_name, 30)
         assert state == 'running'
 
-    def test_aws_070_destroy(self):
+    def test_destroy(self):
         HEADING()
-        self.aws.destroy(name=self.test_node_name)
+        self.provider.destroy(name=self.test_node_name)
 
-    def test_aws_100_list_sizes(self):
+    def test_list_sizes(self):
         HEADING()
-        vols = self.aws.provider.list_sizes()
+        vols = self.provider.provider.list_sizes()
         assert vols is not None

@@ -1,4 +1,4 @@
-from cloudmesh.management.configuration.config import Config
+from 'cloudmesh-configuration'.Config import Config
 from cloudmesh.mongo import MongoDB
 from bson.objectid import ObjectId
 import subprocess

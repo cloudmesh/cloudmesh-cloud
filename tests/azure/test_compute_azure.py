@@ -13,9 +13,13 @@ from cloudmesh.common.util import HEADING
 from cloudmesh.common.util import banner
 from cloudmesh.compute.libcloud.Provider import Provider
 from cloudmesh.management.configuration.SSHkey import SSHkey
-from cloudmesh.management.configuration.config import Config
+from cloudmesh.configuration.Config import Config
 from cloudmesh.management.configuration.name import Name
+from cloudmesh.common3.Benchmark import Benchmark
 
+Benchmark.debug()
+
+CLOUD="azure"
 
 @pytest.mark.incremental
 class TestName:
@@ -33,7 +37,7 @@ class TestName:
 
         self.new_name = str(self.name_generator)
 
-        self.p = Provider(name="azure")
+        self.p = Provider(name=CLOUD)
 
         self.secgroupname = "CM4TestSecGroup"
         self.secgrouprule = {"ip_protocol": "tcp",
@@ -89,6 +93,10 @@ class TestName:
         vms = self.p.list()
         # pprint(vms)
 
+        # TODO: bug th eprint function is not implemented
+        # print (self.p.Print(vms, kind="vm"))
+
+
         # '''
         print(Printer.flatwrite(vms,
                                 sort_keys=["name"],
@@ -129,6 +137,8 @@ class TestName:
                                 order=["name", "id", 'version'],
                                 header=["Name", "id", 'Version'])
               )
+        # TODO: bug th eprint function is not implemented
+        # print (self.p.Print(images, kind="image"))
 
         """
         {'cloud': 'azure',

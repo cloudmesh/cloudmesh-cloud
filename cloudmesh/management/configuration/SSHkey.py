@@ -6,7 +6,7 @@ from cloudmesh.common.util import path_expand
 from pathlib import Path
 import requests
 
-from cloudmesh.management.configuration.config import Config
+from cloudmesh.configuration.Config import Config
 
 
 # noinspection PyBroadException
@@ -193,8 +193,8 @@ class SSHkey(dict):
             return False
 
     def _keyname_sanitation(self, username, keyname):
-        keynamenew = "{username}_{keyname}".format(
+        _keyname = "{username}_{keyname}".format(
             username=username,
             keyname=keyname.replace('.', '_').replace('@', '_'))
-        return keynamenew
+        return _keyname
 

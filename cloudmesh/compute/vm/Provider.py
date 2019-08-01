@@ -7,17 +7,16 @@ from cloudmesh.common.console import Console
 from cloudmesh.common.dotdict import dotdict
 from cloudmesh.common.parameter import Parameter
 from cloudmesh.common.variables import Variables
-from cloudmesh.management.configuration.config import Config
+from cloudmesh.configuration.Config import Config
 from cloudmesh.mongo.CmDatabase import CmDatabase
 from cloudmesh.mongo.DataBaseDecorator import DatabaseUpdate
 from cloudmesh.provider import Provider as ProviderList
-
 
 class Provider(ComputeNodeABC):
 
     def __init__(self,
                  name=None,
-                 configuration="~/.cloudmesh/cloudmesh4.yaml"):
+                 configuration="~/.cloudmesh/cloudmesh.yaml"):
         # noinspection PyPep8
         try:
             super().__init__(name, configuration)
@@ -33,20 +32,24 @@ class Provider(ComputeNodeABC):
 
         providers = ProviderList()
 
-        if self.kind in ['openstack', 'azure', 'docker', "aws"]:
+        if self.kind in ['openstack', 'azure',
+                         'docker',
+                         "aws",
+                         "azureaz",
+                         "virtualbox"]:
             provider = providers[self.kind]
         elif self.kind in ["awslibcloud", "google"]:
             from cloudmesh.compute.libcloud.Provider import \
                 Provider as LibCloudProvider
             provider = LibCloudProvider
-        elif self.kind in ["vagrant", "virtualbox"]:
-            from cloudmesh.compute.virtualbox.Provider import \
-                Provider as VirtualboxCloudProvider
-            provider = VirtualboxCloudProvider
-        elif self.kind in ["azureaz"]:
-            from cloudmesh.compute.azure.AzProvider import \
-                Provider as AzAzureProvider
-            provider = AzAzureProvider
+        # elif self.kind in ["vagrant", "virtualbox"]:
+        #    from cloudmesh.compute.virtualbox.Provider import \
+        #        Provider as VirtualboxCloudProvider
+        #    provider = VirtualboxCloudProvider
+        # elif self.kind in ["azureaz"]:
+        #    from cloudmesh.compute.azure.AzProvider import \
+        #        Provider as AzAzureProvider
+        #    provider = AzAzureProvider
 
         if provider is None:
             Console.error(f"provider {name} not supported")
@@ -151,7 +154,7 @@ class Provider(ComputeNodeABC):
 
         database = CmDatabase()
         defaults = Config()[f"cloudmesh.cloud.{cloud}.default"]
-        pprint(defaults)
+        # pprint(defaults)
         duplicates = []
         for vm in vms:
             duplicates += database.find(collection=f'{cloud}-node', name=vm)
@@ -225,10 +228,7 @@ class Provider(ComputeNodeABC):
                metadata=None,
                **kwargs):
 
-        def upload_meta(cm):
-            data = {'cm': str(cm)}
-            pprint(data)
-            self.set_server_metadata(name, **data)
+
 
         cm = CmDatabase()
 
@@ -268,7 +268,7 @@ class Provider(ComputeNodeABC):
                 entry.update(metadata)
 
             cm['status'] = 'available'
-            upload_meta(cm)
+            self.p.set_server_metadata(name, cm)
 
             result = self.cm.update(entry)
 
@@ -333,7 +333,13 @@ class Provider(ComputeNodeABC):
         raise NotImplementedError
 
     # noinspection PyPep8Naming
-    def Print(self, output, kind, data):
+    def Print(self, data, output='table', kind=None):
+
+        print ("AAA")
+        pprint (data)
+        if kind is None and len(data) > 0:
+            kind = data[0]["cm"]["kind"]
+
         if output == "table":
 
             order = self.p.output[kind]['order']  # not pretty
@@ -366,17 +372,23 @@ class Provider(ComputeNodeABC):
     def delete_public_ip(self, ip):
         return self.p.delete_public_ip(ip)
 
-    def list_public_ips(self, free=False):
-        return self.p.list_public_ips(free=free)
-
-    def delete_public_ip(self, ip):
-        return self.p.delete_public_ip(ip)
+    def list_public_ips(self, available=False):
+        return self.p.list_public_ips(available=available)
 
     def create_public_ip(self):
-        return self.p.create_public_ip(self)
+        return self.p.create_public_ip()
 
     def find_available_public_ip(self):
-        return self.p.find_available_public_ip(self)
+        return self.p.find_available_public_ip()
+
+    def detach_public_ip(self, name=None, ip=None):
+        return self.p.detach_public_ip(name=name, ip=ip)
+
+    def attach_public_ip(self, name=None, ip=None):
+        return self.p.attach_public_ip(name=name, ip=ip)
+
+    def get_public_ip(self, name=None):
+        return self.p.get_public_ip(name=name)
 
     def ssh(self, vm=None, command=None):
         return self.p.ssh(vm=vm, command=command)

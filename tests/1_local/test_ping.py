@@ -8,6 +8,9 @@ import pytest
 from cloudmesh.common.StopWatch import StopWatch
 from cloudmesh.common3.host import Host
 from cloudmesh.common.Printer import Printer
+from cloudmesh.common3.Benchmark import Benchmark
+
+Benchmark.debug()
 
 # multiping only works if you have root, so we can not use it
 # from multiping import MultiPing

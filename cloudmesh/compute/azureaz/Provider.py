@@ -7,7 +7,7 @@ from cloudmesh.common.Shell import Shell
 from cloudmesh.common.StopWatch import StopWatch
 from cloudmesh.common.debug import VERBOSE
 from cloudmesh.common.util import path_expand
-from cloudmesh.management.configuration.config import Config
+from cloudmesh.configuration.Config import Config
 
 
 def timer(func):
@@ -85,7 +85,7 @@ class Provider(ComputeNodeABC):
     }
     """
 
-    def __init__(self, name=None, configuration="~/.cloudmesh/cloudmesh4.yaml"):
+    def __init__(self, name=None, configuration="~/.cloudmesh/cloudmesh.yaml"):
         configuration = path_expand(configuration)
         conf = Config(name, configuration)["cloudmesh"]
 

@@ -1,24 +1,25 @@
 ###############################################################
-# pytest -v --capture=no tests/test_compute_pyazure.py
-# pytest  tests/test_compute_pyazure.py
+# pytest -v --capture=no tests/azure/test_compute_pyazure.py
+# pytest  tests/azure/test_compute_pyazure.py
 ###############################################################
+
+CLOUD="azure"
 
 import pytest
 from cloudmesh.common.debug import VERBOSE
 from cloudmesh.common.util import HEADING
 from cloudmesh.common.util import banner
 from cloudmesh.common3.Benchmark import Benchmark
-from cloudmesh.compute.azure.Provider import Provider
-from cloudmesh.management.configuration.config import Config
+
+from cloudmesh.configuration.Config import Config
 from cloudmesh.management.configuration.name import Name
 
 
-#
-# cms set debug=True
-# cms set verbose=True
-# cms set timer=True
-# cms set cloud=azure
-#
+if CLOUD == "azure":
+    from cloudmesh.compute.azure.Provider import Provider
+
+
+Benchmark.debug()
 
 @pytest.mark.incremental
 class TestAzure:
@@ -34,7 +35,7 @@ class TestAzure:
         self.name_generator.incr()
 
         self.new_name = str(self.name_generator)
-        self.p = Provider(name="azure")
+        self.p = Provider(name=CLOUD)
 
         print()
 
@@ -51,10 +52,19 @@ class TestAzure:
         HEADING()
 
         Benchmark.Start()
-        test_images = self.p.list_images()
+        test_images = self.p.images()
         Benchmark.Stop()
 
         assert test_images is not None
+
+    def test_list_flavors(self):
+        HEADING()
+
+        Benchmark.Start()
+        test_flavors = self.p.flavors()
+        Benchmark.Stop()
+
+        assert test_flavors is None
 
     def test_create_vm(self):
         HEADING()
@@ -63,7 +73,16 @@ class TestAzure:
         test_vm = self.p.create()
         Benchmark.Stop()
 
-        assert test_vm is None
+        assert test_vm is not None
+
+    def test_server_metadata(self):
+        HEADING()
+
+        Benchmark.Start()
+        test_server_metadata = self.p.get_server_metadata(self)
+        Benchmark.Stop()
+
+        assert test_server_metadata is not None
 
     def test_start(self):
         HEADING()
@@ -78,19 +97,30 @@ class TestAzure:
         HEADING()
 
         Benchmark.Start()
-        list_vm = self.p.info(None, None)
+        info_vm = self.p.info(None, None)
+        Benchmark.Stop()
+
+        print(info_vm)
+
+        assert info_vm is not None
+
+    def test_list_vms(self):
+        HEADING()
+
+        Benchmark.Start()
+        list_vm = self.p.list()
         Benchmark.Stop()
 
         assert list_vm is not None
 
-    def test_restart(self):
+    def test_reboot(self):
         HEADING()
 
         Benchmark.Start()
-        restart_vm = self.p.restart()
+        reboot_vm = self.p.reboot()
         Benchmark.Stop()
 
-        assert restart_vm is not None
+        assert reboot_vm is not None
 
     def test_stop(self):
         HEADING()

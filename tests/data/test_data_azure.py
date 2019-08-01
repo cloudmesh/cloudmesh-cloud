@@ -6,7 +6,9 @@
 from os.path import isfile
 
 from cloudmesh.data.api.data import Data
+from cloudmesh.common3.Benchmark import Benchmark
 
+Benchmark.debug()
 
 # TODO: The directories and files for the test should be created on the fly.
 # for example if a 1mb data file is needed it needs to be created if it does
@@ -24,7 +26,7 @@ class TestDataAzure:
         self._data = Data()
         self._data.config()
 
-        # TODO: this needs to be configured in cloudmesh4.yaml with Config()
+        # TODO: this needs to be configured in cloudmesh.yaml with Config()
 
     def test_azure_01_add(self):
         cloud_file = self._data.add("azure",

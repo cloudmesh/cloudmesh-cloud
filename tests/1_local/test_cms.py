@@ -8,6 +8,7 @@ from cloudmesh.common.Shell import Shell
 from cloudmesh.common.debug import VERBOSE
 from cloudmesh.common.util import HEADING
 from cloudmesh.common3.Benchmark import Benchmark
+Benchmark.debug()
 
 
 @pytest.mark.incremental

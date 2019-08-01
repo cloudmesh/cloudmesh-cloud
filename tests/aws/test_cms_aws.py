@@ -10,15 +10,20 @@ from cloudmesh.common.Shell import Shell
 from cloudmesh.common.debug import VERBOSE
 from cloudmesh.common.util import HEADING
 from cloudmesh.common3.Benchmark import Benchmark
-from 'cloudmesh-configuration'.Config import Config
+from cloudmesh.configuration.Config import Config
 
+
+Benchmark.debug()
+
+IMAGE="ubuntu/images/hvm-ssd/ubuntu-xenial-16.04-amd64-server-20190212"
+CLOUD="aws"
 
 @pytest.mark.incremental
 class TestCmsAWS:
 
     def setup(self):
         conf = Config("~/.cloudmesh/cloudmesh.yaml")["cloudmesh"]
-        cred = conf["cloud"]['aws']["credentials"]
+        cred = conf["cloud"][CLOUD]["credentials"]
         self.key = (cred['EC2_PRIVATE_KEY_FILE_NAME']).split('.')[0]
 
     def test_01_boot(self):
@@ -26,14 +31,16 @@ class TestCmsAWS:
 
         Benchmark.Start()
         result = Shell.execute(
-            "cms vm boot --name=test_boot_01 --cloud=aws --username=root --image=ubuntu/images/hvm-ssd/ubuntu-xenial-16.04-amd64-server-20190212  --flavor=t2.micro --public --key={} --dryrun".format(
-                self.key), shell=True)
+            f"cms vm boot --name=test_boot_01 --cloud={CLOUD} --username=root"
+            f" --image={IMAGE}"
+            f" --flavor=t2.micro"
+            f" --public --key={self.key} --dryrun", shell=True)
         Benchmark.Stop()
 
         VERBOSE(result)
 
         assert "create nodes ['test_boot_01']" in result
-        assert "image - ubuntu/images/hvm-ssd/ubuntu-xenial-16.04-amd64-server-20190212" in result
+        assert f"image - {IMAGE}" in result
         assert "flavor - t2.micro" in result
         assert "assign public ip - True" in result
         assert "security groups - None" in result
@@ -44,26 +51,31 @@ class TestCmsAWS:
 
         Benchmark.Start()
         result = Shell.execute(
-            "cms vm boot --n=2 --cloud=aws --username=root --image=ubuntu/images/hvm-ssd/ubuntu-xenial-16.04-amd64-server-20190212  --flavor=t2.micro --public --key={} --dryrun".format(
-                self.key), shell=True)
+            f"cms vm boot --n=2 --cloud={CLOUD} --username=root"
+            f" --image={IMAGE}"
+            f" --flavor=t2.micro --public --key={self.key} --dryrun",
+            shell=True)
         Benchmark.Stop()
 
         VERBOSE(result)
 
         assert "create nodes" in result
-        assert "image - ubuntu/images/hvm-ssd/ubuntu-xenial-16.04-amd64-server-20190212" in result
+        assert f"image - {IMAGE}" in result
         assert "flavor - t2.micro" in result
         assert "assign public ip - True" in result
         assert "security groups - None" in result
-        assert "keypair name - " + self.key in result
+        assert f"keypair name - {self.key}" in result
 
     def test_03_boot(self):
         HEADING()
 
         Benchmark.Start()
         result = Shell.execute(
-            "cms vm boot --name=test_boot_01,test_boot_02 --cloud=aws --username=root --image=ubuntu/images/hvm-ssd/ubuntu-xenial-16.04-amd64-server-20190212  --flavor=t2.micro --public --key={}".format(
-                self.key), shell=True)
+            f"cms vm boot --name=test_boot_01,test_boot_02 --cloud={CLOUD}"
+            f" --username=root"
+            f" --image={IMAGE}"
+            f" --flavor=t2.micro --public --key={self.key}",
+            shell=True)
         Benchmark.Stop()
 
         VERBOSE(result)
@@ -81,8 +93,10 @@ class TestCmsAWS:
 
         Benchmark.Start()
         result = Shell.execute(
-            "cms vm boot --n=2 --cloud=aws --username=root --image=ubuntu/images/hvm-ssd/ubuntu-xenial-16.04-amd64-server-20190212  --flavor=t2.micro --public --key={}".format(
-                self.key), shell=True)
+            f"cms vm boot --n=2 --cloud={CLOUD} --username=root "
+            f" --image={IMAGE}"
+            f" --flavor=t2.micro --public --key={self.key}",
+            shell=True)
         Benchmark.Stop()
 
         VERBOSE(result)
@@ -100,10 +114,10 @@ class TestCmsAWS:
 
         Benchmark.Start()
         r1 = Shell.execute(
-            "cms vm list test_boot_01 --cloud=aws --output=table --refresh",
+            f"cms vm list test_boot_01 --cloud={CLOUD} --output=table --refresh",
             shell=True)
         r2 = Shell.execute(
-            "cms vm list test_boot_01 --cloud=aws --output=table", shell=True)
+            f"cms vm list test_boot_01 --cloud={CLOUD} --output=table", shell=True)
         Benchmark.Stop()
 
         assert r1 == r2
@@ -118,7 +132,7 @@ class TestCmsAWS:
             time.sleep(1)
 
         Benchmark.Start()
-        result = Shell.execute("cms vm status test_boot_01 --cloud=aws",
+        result = Shell.execute(f"cms vm status test_boot_01 --cloud={CLOUD}",
                                shell=True)
         Benchmark.Stop()
 
@@ -130,7 +144,7 @@ class TestCmsAWS:
         HEADING()
 
         Benchmark.Start()
-        result = Shell.execute("cms vm stop test_boot_02 --cloud=aws --dryrun",
+        result = Shell.execute(f"cms vm stop test_boot_02 --cloud={CLOUD} --dryrun",
                                shell=True)
         Benchmark.Stop()
 
@@ -145,7 +159,7 @@ class TestCmsAWS:
 
         Benchmark.Start()
         result = Shell.execute(
-            "cms vm stop test_boot_02 --cloud=aws --parallel --processors=3 --dryrun",
+            f"cms vm stop test_boot_02 --cloud={CLOUD} --parallel --processors=3 --dryrun",
             shell=True)
         Benchmark.Stop()
 
@@ -159,7 +173,7 @@ class TestCmsAWS:
         HEADING()
 
         Benchmark.Start()
-        result = Shell.execute("cms vm stop test_boot_02 --cloud=aws",
+        result = Shell.execute(f"cms vm stop test_boot_02 --cloud={CLOUD}",
                                shell=True)
         Benchmark.Stop()
 
@@ -172,7 +186,7 @@ class TestCmsAWS:
 
         Benchmark.Start()
         result = Shell.execute(
-            "cms vm ping test_boot_01 --cloud=aws --count=3 --processors=3",
+            f"cms vm ping test_boot_01 --cloud={CLOUD} --count=3 --processors=3",
             shell=True)
         Benchmark.Stop()
 
@@ -186,7 +200,7 @@ class TestCmsAWS:
 
         Benchmark.Start()
         result = Shell.execute(
-            "cms vm check test_boot_01 --cloud=aws --username=ubuntu --processors=3",
+            f"cms vm check test_boot_01 --cloud={CLOUD} --username=ubuntu --processors=3",
             shell=True)
         Benchmark.Stop()
 
@@ -251,7 +265,7 @@ class TestCmsAWS:
         HEADING()
 
         Benchmark.Start()
-        result = Shell.execute("cms vm start test_boot_02 --cloud=aws --dryrun",
+        result = Shell.execute(f"cms vm start test_boot_02 --cloud={CLOUD} --dryrun",
                                shell=True)
         Benchmark.Stop()
 

@@ -13,35 +13,41 @@ from cloudmesh.configuration.Config import Config
 from cloudmesh.management.configuration.name import Name
 from cloudmesh.mongo.CmDatabase import CmDatabase
 from cloudmesh.common3.Benchmark import Benchmark
+from cloudmesh.mongo.DataBaseDecorator import DatabaseUpdate
 
 Benchmark.debug()
+
+database = CmDatabase()
+
+user = Config()["cloudmesh.profile.user"]
+
+name_generator = Name(
+    schema=f"{user}-vm",
+    counter=1)
+
+
+
+#
+# we need to set a cm = { kind, cloud, name } to use teh new DatabaseUpdate()
+#
 
 
 @pytest.mark.incremental
 class TestMongo:
 
-    def setup(self):
-        self.database = CmDatabase()
-
-        user = Config()["cloudmesh.profile.user"]
-
-        self.name_generator = Name(
-            schema=f"{user}-vm",
-            counter=1)
-
     def test_find_in_collection(self):
         HEADING()
-        r = self.database.find_name("CC-CentOS7")
+        r = database.find_name("CC-CentOS7")
         pprint(r)
 
     def test_find_in_collections(self):
         HEADING()
-        r = self.database.find_names("CC-CentOS7,CC-CentOS7-1811")
+        r = database.find_names("CC-CentOS7,CC-CentOS7-1811")
         pprint(r)
 
     def test_find_in_collection(self):
         HEADING()
-        r = self.database.name_count("CC-CentOS7")
+        r = database.name_count("CC-CentOS7")
         pprint(r)
 
     def test_clear(self):
@@ -51,16 +57,16 @@ class TestMongo:
         # print(self.name.counter)
         # print(self.name.id(counter=100))
 
-        self.database.clear()
+        database.clear()
 
-        r = self.database.find()
+        r = database.find()
         pprint(r)
 
         assert len(r) == 0
 
     def test_status(self):
         HEADING()
-        r = self.database.status()
+        r = database.status()
         # pprint(r)
         assert "Connection refused" not in r
 
@@ -82,9 +88,9 @@ class TestMongo:
             entry["cmid"] = str(self.name)
             entry["cmcounter"] = self.name.counter
             self.name.incr()
-        self.database.update(entries)
+        database.update(entries)
 
-        r = self.database.find()
+        r = database.find()
 
         pprint(r)
         assert len(r) == 2
@@ -92,7 +98,7 @@ class TestMongo:
     def test_update2(self):
         HEADING()
 
-        r = self.database.find(name="Gregor")
+        r = database.find(name="Gregor")
         pprint(r)
 
         assert r[0]['name'] == "Gregor"
@@ -106,30 +112,30 @@ class TestMongo:
             counter = entry["cmcounter"]
             print("Counter:", counter)
             entry["cmid"] = self.name.id(counter=counter)
-        self.database.update(entries, replace=False)
-        r = self.database.find()
+        database.update(entries, replace=False)
+        r = database.find()
         pprint(r)
 
     def test_update4(self):
         HEADING()
-        r = self.database.find(name="gregor")
+        r = database.find(name="gregor")
         pprint(r)
         assert r[0]["name"] == "gregor"
 
     def test_find_by_counter(self):
         HEADING()
-        r = self.database.find_by_counter(1)
+        r = database.find_by_counter(1)
         pprint(r)
         assert r[0]["name"] == "gregor"
 
-        r = self.database.find_by_counter(2)
+        r = database.find_by_counter(2)
         pprint(r)
         assert r[0]["name"] == "laszewski"
 
     def test_decorator_update(self):
         HEADING()
 
-        @DatabaseUpdate(collection="cloudmesh")
+        @DatabaseUpdate()
         def entry():
             name = Name()
             print(name)
@@ -141,10 +147,11 @@ class TestMongo:
 
         a = entry()
 
-        r = self.database.find_by_counter(3)
+        r = database.find_by_counter(3)
 
         pprint(r)
 
+    """
     def test_decorator_add(self):
         HEADING()
 
@@ -155,21 +162,22 @@ class TestMongo:
 
         a = entry()
 
-        r = self.database.find()
+        r = database.find()
 
         pprint(r)
 
         assert len(r) == 4
+    """
 
     def test_overwrite(self):
         HEADING()
-        r = self.database.find(name="gregor")[0]
+        r = database.find(name="gregor")[0]
         pprint(r)
         r["color"] = "red"
 
-        self.database.update([r], replace=True)
+        database.update([r], replace=True)
 
-        r = self.database.find(color="red")
+        r = database.find(color="red")
 
         pprint(r)
 
@@ -194,9 +202,9 @@ class TestMongo:
             "name": "gregor",
             "phone": "android"
         }]
-        self.database.update(entries, replace=True)
+        database.update(entries, replace=True)
 
-        r = self.database.find()
+        r = database.find()
 
         pprint(r)
 

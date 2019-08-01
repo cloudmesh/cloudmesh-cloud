@@ -509,7 +509,9 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
         :return: dict of flavors
         """
-        raise NotImplementedError
+        flavors = AWSflavor()
+        flavors.update()
+        return flavors.get()
 
     def flavor(self, name=None):
         """
@@ -517,7 +519,12 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         :param name: The name of the flavor
         :return: The dict of the flavor
         """
-        raise NotImplementedError
+        flavors = AWSflavor()
+        flavors.update()
+        for flavor in flavors.get():
+            if flavor['name'] == name:
+                return [flavor]
+        return []
 
     def update_dict(self, elements, kind=None):
         #

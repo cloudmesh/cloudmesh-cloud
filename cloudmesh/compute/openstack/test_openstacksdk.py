@@ -54,6 +54,15 @@ command = "openstack --version --os-auth-url={auth_url} " \
     # print (command)
 os.system(command)
 
+
+cloud = openstack.connect(**config)
+
+pprint (dir(cloud))
+
+print (cloud.compute.version)
+
+pprint(cloud.list_services())
+
 if False:
 
     pprint(config)

@@ -335,7 +335,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         cloud = self.cloud
         Console.msg(f"upload the key: {name} -> {cloud}")
         try:
-            r = self.cloudman.create_keypair(name, key['string'])
+            r = self.cloudman.create_keypair(name, key['public_key'])
         except:  # openstack.exceptions.ConflictException:
             raise ValueError(f"key already exists: {name}")
 

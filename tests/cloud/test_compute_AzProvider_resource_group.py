@@ -5,9 +5,9 @@
 
 import pytest
 from cloudmesh.common.util import HEADING
+from cloudmesh.common3.Benchmark import Benchmark
 from cloudmesh.compute.libcloud.Provider import Provider
 from cloudmesh.compute.vm.Provider import Provider
-from cloudmesh.common3.Benchmark import Benchmark
 
 Benchmark.debug()
 
@@ -54,27 +54,22 @@ class Testazure(object):
 
     def test_connect_vm(self):
         HEADING()
-        r = self.p.connect(
-            name=self.vm_name,
-            user='ubuntu')
+        r = self.p.connect(name=self.vm_name, user='ubuntu')
         assert r['status'] == 0
 
     def test_stop_vm(self):
         HEADING()
-        r = self.p.stop(
-            name=self.vm_name)
+        r = self.p.stop(name=self.vm_name)
         # time.sleep(100)
         assert r['status'] == 0
 
     def test_start_vm(self):
         HEADING()
-        r = self.p.start(
-            name=self.vm_name)
+        r = self.p.start(name=self.vm_name)
         # time.sleep(100)
         assert r['status'] == 0
 
     def test_delete_vm(self):
         HEADING()
-        r = self.p.delete(
-            name=self.vm_name)
+        r = self.p.delete(name=self.vm_name)
         assert r['status'] == 0

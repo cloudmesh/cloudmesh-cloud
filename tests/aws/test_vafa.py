@@ -11,6 +11,10 @@ from cloudmesh.common.util import HEADING
 from cloudmesh.configuration.Config import Config
 from cloudmesh.compute.aws.Provider import Provider
 from cloudmesh.management.configuration.name import Name
+from cloudmesh.common3.Benchmark import Benchmark
+
+Benchmark.debug()
+
 #
 # TODO: THIS IS A BUG, the deprecated api shoudl not be used
 #

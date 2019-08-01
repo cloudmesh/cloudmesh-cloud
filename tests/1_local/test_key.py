@@ -12,6 +12,7 @@ from cloudmesh.common3.Benchmark import Benchmark
 from cloudmesh.management.configuration.SSHkey import SSHkey
 from cloudmesh.configuration.Config import Config
 
+Benchmark.debug()
 
 @pytest.mark.incremental
 class TestName:

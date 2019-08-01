@@ -3,23 +3,23 @@
 # pytest  tests/azure/test_compute_pyazure.py
 ###############################################################
 
+CLOUD="azure"
+
 import pytest
 from cloudmesh.common.debug import VERBOSE
 from cloudmesh.common.util import HEADING
 from cloudmesh.common.util import banner
 from cloudmesh.common3.Benchmark import Benchmark
-from cloudmesh.compute.azure.Provider import Provider
+
 from cloudmesh.configuration.Config import Config
 from cloudmesh.management.configuration.name import Name
 
-Benchmark.debug()
 
-#
-# cms set debug=True
-# cms set verbose=True
-# cms set timer=True
-# cms set cloud=azure
-#
+if CLOUD == "azure":
+    from cloudmesh.compute.azure.Provider import Provider
+
+
+Benchmark.debug()
 
 @pytest.mark.incremental
 class TestAzure:
@@ -35,7 +35,7 @@ class TestAzure:
         self.name_generator.incr()
 
         self.new_name = str(self.name_generator)
-        self.p = Provider(name="azure")
+        self.p = Provider(name=CLOUD)
 
         print()
 

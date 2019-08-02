@@ -1,6 +1,9 @@
 from cloudmesh.configuration.Config import Config
 import contextlib
 import urllib.request
+
+# please use requests
+
 import json
 
 """
@@ -43,7 +46,7 @@ I do not yet understand why flavor is restricted and we do not just use what the
 
 """
 
-class AWSflavor(object):
+class AwsFlavor(object):
 
     def __init__(self):
         pass
@@ -107,8 +110,8 @@ class AWSflavor(object):
 
 
 if __name__ == "__main__":
-    flavors = AWSflavor()
+    flavors = AwsFlavor()
     flavors.update()
     print(flavors.get())
-    from cloudmesh.common.Shell import Shell
-    r = Shell.execute('cms flavor list --refresh')
+    #from cloudmesh.common.Shell import Shell
+    #r = Shell.execute('cms flavor list --refresh')

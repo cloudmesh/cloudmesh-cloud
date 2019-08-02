@@ -10,7 +10,7 @@ from cloudmesh.common.debug import VERBOSE
 from cloudmesh.common3.DictList import DictList
 from cloudmesh.management.configuration.name import Name
 from cloudmesh.common.util import banner
-
+from cloudmesh.compute.aws.AwsFlavors import AwsFlavor
 
 class Provider(ComputeNodeABC, ComputeProviderPlugin):
     kind = "aws"
@@ -760,7 +760,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
         :return: dict of flavors
         """
-        flavors = AWSflavor()
+        flavors = AwsFlavor()
         flavors.update()
         return flavors.get()
 
@@ -771,7 +771,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         :param name: The name of the flavor
         :return: The dict of the flavor
         """
-        flavors = AWSflavor()
+        flavors = AwsFlavor()
         flavors.update()
         for flavor in flavors.get():
             if flavor['name'] == name:

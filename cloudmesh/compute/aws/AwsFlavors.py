@@ -119,6 +119,9 @@ class AwsFlavor(object):
 
         flavors = {}
 
+        #
+        # locate metadata
+        #
         metadata = {}
         for key in ["formatVersion",
                     "disclaimer",
@@ -127,6 +130,9 @@ class AwsFlavor(object):
                     "publicationDate"]:
             metadata[key] = offer[key]
 
+        #
+        # Find Products
+        #
         for key in offer["products"].keys():
             product = offer["products"][key]
 
@@ -145,6 +151,9 @@ class AwsFlavor(object):
 
         bar = Bar('Processing', max=len(offer))
 
+        #
+        # Manage terms for prices
+        #
         terms = offer['terms']['OnDemand']
 
         for term, value in terms.items():

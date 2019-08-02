@@ -9,19 +9,18 @@ from pprint import pprint
 
 import pytest
 from cloudmesh.common.Printer import Printer
-from cloudmesh.common.parameter import Parameter
+from cloudmesh.common.Shell import Shell
+from cloudmesh.common.debug import VERBOSE
 from cloudmesh.common.util import HEADING
 from cloudmesh.common.util import banner
 from cloudmesh.common.variables import Variables
-from cloudmesh.compute.vm.Provider import Provider
-from cloudmesh.management.configuration.SSHkey import SSHkey
-from cloudmesh.configuration.Config import Config
-from cloudmesh.management.configuration.name import Name
 from cloudmesh.common3.Benchmark import Benchmark
-from cloudmesh.common.Shell import Shell
+from cloudmesh.compute.vm.Provider import Provider
+from cloudmesh.configuration.Config import Config
+from cloudmesh.management.configuration.SSHkey import SSHkey
+from cloudmesh.management.configuration.name import Name
 
 Benchmark.debug()
-
 
 user = Config()["cloudmesh.profile.user"]
 variables = Variables()
@@ -30,8 +29,7 @@ cloud = variables.parameter('cloud')
 if cloud != "chameloen":
     raise ValueError("cloud is not chameleon")
 
-
-
+provider = Provider(name=cloud)
 
 name_generator = Name(schema=f"{user}-vm", counter=1)
 
@@ -40,6 +38,7 @@ def run(label, command):
     result = Shell.run_timed(label, command, service=cloud)
     print(result)
     return result
+
 
 #
 # leverage cms init ...
@@ -50,22 +49,11 @@ class Test_Compute_Database:
 
     def setup(self):
         print()
-        self.user = Config()["cloudmesh.profile.user"]
-
-        self.name_generator = Name(
-            schema=f"{self.user}-vm",
-            counter=1)
 
         self.name = str(self.name_generator)
         self.name_generator.incr()
 
         self.new_name = str(self.name_generator)
-
-        variables = Variables()
-        clouds = Parameter.expand(variables['cloud'])
-        cloud = clouds[0]
-
-        self.provider = Provider(name=cloud)
 
         self.secgroupname = "CM4TestSecGroup"
         self.secgrouprule = {"ip_protocol": "tcp",
@@ -80,19 +68,19 @@ class Test_Compute_Database:
 
     def test_list_flavors(self):
         HEADING()
-        flavors = self.provider.flavors()
+        flavors = provider.flavors()
 
     def test_list_images(self):
         HEADING()
-        images = self.provider.images()
+        images = provider.images()
 
     def test_list_nodes(self):
         HEADING()
-        nodes = self.provider.list()
+        nodes = provider.list()
 
     def test_list_keys(self):
         HEADING()
-        self.keys = self.provider.keys()
+        self.keys = provider.keys()
 
     # pprint(self.keys)
 
@@ -108,16 +96,15 @@ class Test_Compute_Database:
         key = SSHkey()
         print(key.__dict__)
 
-        self.provider.key_upload(key)
+        provider.key_upload(key)
 
         self.test_list_keys()
-
 
     def test_add_key_from_cli(self):
         HEADING()
 
         result = run("db add key", f"cms key add {user} "
-        f"--source=ssh", service="local")
+                                   f"--source=ssh", service="local")
         Benchmark.Start()
         result = run("db list ", f"cms key list", service="local")
         Benchmark.Stop()
@@ -140,14 +127,14 @@ class Test_Compute_Database:
     def test_list_variables(self):
         HEADING()
         print(256 * "@")
-        pprint(self.provider.user)
-        pprint(self.provider.cloudtype)
-        pprint(self.provider.spec)
+        pprint(provider.user)
+        pprint(provider.cloudtype)
+        pprint(provider.spec)
 
     def test_list_keys(self):
         HEADING()
         Benchmark.Start()
-        self.keys = self.provider.keys()
+        self.keys = provider.keys()
         Benchmark.Stop()
         # pprint(self.keys)
 
@@ -157,28 +144,24 @@ class Test_Compute_Database:
                                 header=["Name", "Fingerprint"])
               )
 
-
-
-
     def test_list_images(self):
         HEADING()
-        images = self.provider.images()
+        images = provider.images()
 
-        print(self.provider.Print(images, kind="image"))
+        print(provider.Print(images, kind="image"))
 
     def test_list_vm(self):
         HEADING()
-        vms = self.provider.list()
+        vms = provider.list()
         # pprint (vms)
-        print(self.provider.Print(vms, kind="image"))
-
+        print(provider.Print(vms, kind="image"))
 
     def test_list_secgroups(self):
         HEADING()
-        secgroups = self.provider.list_secgroups()
+        secgroups = provider.list_secgroups()
         for secgroup in secgroups:
             print(secgroup["name"])
-            rules = self.provider.list_secgroup_rules(secgroup["name"])
+            rules = provider.list_secgroup_rules(secgroup["name"])
             print(Printer.write(rules,
                                 sort_keys=["ip_protocol", "from_port",
                                            "to_port", "ip_range"],
@@ -191,7 +174,7 @@ class Test_Compute_Database:
     def test_secgroups_add(self):
         HEADING()
         Benchmark.Start()
-        self.provider.add_secgroup(self.secgroupname)
+        provider.add_secgroup(self.secgroupname)
         Benchmark.Stop()
 
         self.test_list_secgroups()
@@ -200,7 +183,7 @@ class Test_Compute_Database:
         HEADING()
         rules = [self.secgrouprule]
         Benchmark.Start()
-        self.provider.add_rules_to_secgroup(self.secgroupname, rules)
+        provider.add_rules_to_secgroup(self.secgroupname, rules)
         Benchmark.Stop()
 
         self.test_list_secgroups()
@@ -209,7 +192,7 @@ class Test_Compute_Database:
         HEADING()
         rules = [self.secgrouprule]
         Benchmark.Start()
-        self.provider.remove_rules_from_secgroup(self.secgroupname, rules)
+        provider.remove_rules_from_secgroup(self.secgroupname, rules)
         Benchmark.Stop()
 
         self.test_list_secgroups()
@@ -217,7 +200,7 @@ class Test_Compute_Database:
     def test_secgroups_remove(self):
         HEADING()
         Benchmark.Start()
-        self.provider.remove_secgroup(self.secgroupname)
+        provider.remove_secgroup(self.secgroupname)
         Benchmark.Stop()
 
         self.test_list_secgroups()
@@ -228,20 +211,20 @@ class Test_Compute_Database:
         image = "CC-Ubuntu16.04"
         size = "m1.medium"
         Benchmark.Start()
-        self.provider.create(name=self.name,
-                      image=image,
-                      size=size,
-                      # username as the keypair name based on
-                      # the key implementation logic
-                      ex_keyname=self.user,
-                      ex_security_groups=['default'])
+        provider.create(name=self.name,
+                        image=image,
+                        size=size,
+                        # username as the keypair name based on
+                        # the key implementation logic
+                        ex_keyname=self.user,
+                        ex_security_groups=['default'])
         Benchmark.Stop()
         time.sleep(5)
-        nodes = self.provider.list()
-        node = self.provider.find(nodes, name=self.name)
+        nodes = provider.list()
+        node = provider.find(nodes, name=self.name)
         pprint(node)
 
-        nodes = self.provider.list(raw=True)
+        nodes = provider.list(raw=True)
         for node in nodes:
             if node.name == self.name:
                 self.testnode = node
@@ -251,9 +234,9 @@ class Test_Compute_Database:
 
     def test_publicIP_attach(self):
         HEADING()
-        pubip = self.provider.get_publicIP()
+        pubip = provider.get_publicIP()
         pprint(pubip)
-        nodes = self.provider.list(raw=True)
+        nodes = provider.list(raw=True)
         for node in nodes:
             if node.name == self.name:
                 self.testnode = node
@@ -261,11 +244,10 @@ class Test_Compute_Database:
         if self.testnode:
             print("attaching public IP...")
             Benchmark.Start()
-            self.provider.attach_publicIP(self.testnode, pubip)
+            provider.attach_publicIP(self.testnode, pubip)
             Benchmark.Stop()
             time.sleep(5)
         self.test_list_vm()
-
 
     # THIS IS FRO LIBCLOUD AND NEED TO JUST BE UPDATEDE FOR GENERAL PROVIDER
     # THIS IS A BUG
@@ -273,7 +255,7 @@ class Test_Compute_Database:
         HEADING()
         print("detaching and removing public IP...")
         time.sleep(5)
-        nodes = self.provider.list(raw=True)
+        nodes = provider.list(raw=True)
         for node in nodes:
             if node.name == self.name:
                 self.testnode = node
@@ -281,21 +263,21 @@ class Test_Compute_Database:
         ipaddr = self.testnode.public_ips[0]
         # THIS IS A BUG
         Benchmark.Start()
-        pubip = self.provider.cloudman.ex_get_floating_ip(ipaddr)
-        self.provider.detach_publicIP(self.testnode, pubip)
+        pubip = provider.cloudman.ex_get_floating_ip(ipaddr)
+        provider.detach_publicIP(self.testnode, pubip)
         Benchmark.Stop()
         time.sleep(5)
         self.test_list_vm()
 
     # def test_printer(self):
     #    HEADING()
-    #    nodes = self.provider.list()
+    #    nodes = provider.list()
 
     #    print(Printer.write(nodes, order=["name", "image", "size"]))
 
     # def test_01_start(self):
     #    HEADING()
-    #    self.provider.start(name=self.name)
+    #    provider.start(name=self.name)
 
     # def test_12_list_vm(self):
     #    self.test_list_vm()
@@ -303,17 +285,17 @@ class Test_Compute_Database:
     def test_info(self):
         HEADING()
         Benchmark.Start()
-        self.provider.info(name=self.name)
+        provider.info(name=self.name)
         Benchmark.Stop()
 
     def test_destroy(self):
         HEADING()
         Benchmark.Start()
-        self.provider.destroy(names=self.name)
+        provider.destroy(names=self.name)
         Benchmark.Stop()
 
-        nodes = self.provider.list()
-        node = self.provider.find(nodes, name=self.name)
+        nodes = provider.list()
+        node = provider.find(nodes, name=self.name)
 
         pprint(node)
         self.test_list_vm()
@@ -331,7 +313,7 @@ class Test_Compute_Database:
         time.sleep(30)
         self.test_publicIP_attach()
         time.sleep(5)
-        nodes = self.provider.list(raw=True)
+        nodes = provider.list(raw=True)
         for node in nodes:
             if node.name == self.name:
                 self.testnode = node
@@ -363,12 +345,13 @@ class Test_Compute_Database:
         self.test_destroy()
         self.test_list_vm()
 
+
 class other:
 
     def test_rename(self):
         HEADING()
         Benchmark.Start()
-        self.provider.rename(source=self.name, destination=self.new_name)
+        provider.rename(source=self.name, destination=self.new_name)
         Benchmark.Stop()
 
     # def test_stop(self):
@@ -377,10 +360,8 @@ class other:
 
     # def test_suspend(self):
     #    HEADING()
-    #    self.provider.suspend(name=self.name)
+    #    provider.suspend(name=self.name)
 
     # def test_resume(self):
     #    HEADING()
-    #    self.provider.resume(name=self.name)
-
-
+    #    provider.resume(name=self.name)

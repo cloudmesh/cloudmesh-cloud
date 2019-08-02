@@ -115,7 +115,7 @@ class AwsFlavor(object):
 
     def list(self, offer):
 
-        bar = Bar('Processing', max=len(offer))
+        bar = Bar('Processing Flavor Products', max=len(offer["products"]))
 
         flavors = {}
 
@@ -149,7 +149,7 @@ class AwsFlavor(object):
 
         bar.finish()
 
-        bar = Bar('Processing', max=len(offer))
+        bar = Bar('Processing Flavor Prices', max=len(offer["products"]))
 
         #
         # Manage terms for prices

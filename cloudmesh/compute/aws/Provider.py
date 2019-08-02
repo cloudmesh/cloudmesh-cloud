@@ -11,6 +11,7 @@ from cloudmesh.common3.DictList import DictList
 from cloudmesh.management.configuration.name import Name
 from cloudmesh.common.util import banner
 from cloudmesh.compute.aws.AwsFlavors import AwsFlavor
+from pprint import pprint
 
 class Provider(ComputeNodeABC, ComputeProviderPlugin):
     kind = "aws"
@@ -761,8 +762,9 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         :return: dict of flavors
         """
         flavors = AwsFlavor()
-        flavors.update()
-        return flavors.get()
+        data = flavors.fetch()
+        result = flavors.list(data)
+        return self.update_dict(result, kind="flavor")
 
     def flavor(self, name=None):
         # TODO: Alex
@@ -787,7 +789,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         # dicts. it adds the cm dict.
         #
         """
-        THis function adds a cloudmesh cm dict to each dict in the list
+        This function adds a cloudmesh cm dict to each dict in the list
         elements.
         Libcloud
         returns an object or list of objects With the dict method
@@ -824,13 +826,16 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                 "driver": self.cloudtype,
                 "cloud": self.cloud,
                 "name": entry['name'],
-                "updated": entry['updated'],
-                "Image": entry['image'],
-                "Public IPs": entry['public_ips'],
-                "Private IPs": entry['private_ips']
-
+                "updated": str(datetime.utcnow()),
             }
             if kind == 'vm':
+
+                # This is clearly wrong
+
+                # "Image": entry['image'],
+                # "Public IPs": entry['public_ips'],
+                # "Private IPs": entry['private_ips']
+
                 if "created_at" in entry:
                     entry["cm"]["created"] = str(entry["created_at"])
                     # del entry["created_at"]
@@ -845,6 +850,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                 entry['cm']['updated'] = str(datetime.utcnow())
 
             d.append(entry)
+            pprint (entry)
         return d
 
 

@@ -1,23 +1,21 @@
 ###############################################################
-# pytest -v --capture=no tests/test_01_key/test_key.py
-# pytest -v  tests/test_01_key/test_key.py
+# pytest -v --capture=no tests/cloud/test_01_key.py
+# pytest -v  tests/cloud/test_01_key.py
 ###############################################################
 from pprint import pprint
 
 import pytest
-from cloudmesh.common.Printer import Printer
 from cloudmesh.common.util import HEADING
+from cloudmesh.common.variables import Variables
 from cloudmesh.common3.Benchmark import Benchmark
-from cloudmesh.management.configuration.SSHkey import SSHkey
+from cloudmesh.compute.vm.Provider import Provider
 from cloudmesh.configuration.Config import Config
 from cloudmesh.key.Key import Key
 from cloudmesh.mongo.CmDatabase import CmDatabase
-from cloudmesh.common.variables import Variables
-from cloudmesh.compute.vm.Provider import Provider
 
 Benchmark.debug()
 
-KEY='test-key'
+KEY = 'test-key'
 
 user = Config()["cloudmesh.profile.user"]
 variables = Variables()
@@ -32,8 +30,17 @@ if cloud is None:
 cm = CmDatabase()
 provider = Provider(name=cloud)
 
+
 @pytest.mark.incremental
-class Test_key:
+class Test_Key:
+
+    def test_cleanup(self):
+        HEADING()
+        cm.clear(collection=f"local-key")
+        try:
+            r = provider.key_delete(KEY)
+        except:
+            pass
 
     def test_upload_key_to_database(self):
         HEADING()
@@ -45,14 +52,8 @@ class Test_key:
         key = cm.find_name(KEY, "key")[0]
         key['name'] == KEY
 
-    def test_prepare(self):
-        try:
-            r = provider.key_delete(KEY)
-        except Exception as e:
-            print(e)
-        print (r)
-
     def test_upload_key_to_cloud(self):
+        HEADING()
         key = cm.find_name(KEY, "key")[0]
         pprint(key)
         Benchmark.Start()
@@ -61,6 +62,7 @@ class Test_key:
         # print ("PPP", r)
 
     def test_list_key_from_cloud(self):
+        HEADING()
         Benchmark.Start()
         keys = provider.keys()
         Benchmark.Stop()
@@ -72,16 +74,17 @@ class Test_key:
         assert found
 
     def test_delete_key_from_cloud(self):
+        HEADING()
         try:
             Benchmark.Start()
             r = provider.key_delete(KEY)
             Benchmark.Stop()
         except Exception as e:
             print(e)
-        print (r)
+        print(r)
 
-
-    def test_get__key_from_cloud(self):
+    def test_get_key_from_cloud(self):
+        HEADING()
         pass
 
     def test_benchmark(self):

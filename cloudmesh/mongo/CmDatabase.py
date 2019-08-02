@@ -398,7 +398,7 @@ class CmDatabase(object):
                     self.col.insert_one(entry)
 
             except Exception as e:
-                Console.error("uploading document {entry}".format(
+                Console.error("uploading document\n{entry}\n-------\n\n".format(
                     entry=str(entry)))
                 pass
             result.append(entry)

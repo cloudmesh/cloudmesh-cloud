@@ -149,7 +149,9 @@ class AwsFlavor(object):
 
         bar.finish()
 
+
         bar = Bar('Processing Flavor Prices', max=len(offer["products"]))
+
 
         #
         # Manage terms for prices
@@ -170,7 +172,7 @@ class AwsFlavor(object):
                 print(entry)
                 raise ValueError("name and sku are different")
 
-            flavors[name]['prices'] = entry
+            # flavors[name]['prices'] = entry
 
             #
             # first price

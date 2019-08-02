@@ -3,6 +3,46 @@ import contextlib
 import urllib.request
 import json
 
+"""
+I do not yet understand why flavor is restricted and we do not just use what the dict under product returns
+
+ I see for example. Are all of them returned, or just some selected values?
+ 
+ {
+    "WR4JPHDYW77XS7MC" : {
+      "sku" : "WR4JPHDYW77XS7MC",
+      "productFamily" : "Compute Instance",
+      "attributes" : {
+        "servicecode" : "AmazonEC2",
+        "location" : "South America (Sao Paulo)",
+        "locationType" : "AWS Region",
+        "instanceType" : "c3.8xlarge",
+        "currentGeneration" : "No",
+        "instanceFamily" : "Compute optimized",
+        "vcpu" : "32",
+        "physicalProcessor" : "Intel Xeon E5-2680 v2 (Ivy Bridge)",
+        "clockSpeed" : "2.8 GHz",
+        "memory" : "60 GiB",
+        "storage" : "2 x 320 SSD",
+        "networkPerformance" : "10 Gigabit",
+        "processorArchitecture" : "64-bit",
+        "tenancy" : "Dedicated",
+        "operatingSystem" : "SUSE",
+        "licenseModel" : "No License required",
+        "usagetype" : "SAE1-UnusedDed:c3.8xlarge",
+        "operation" : "RunInstances:000g",
+        "capacitystatus" : "UnusedCapacityReservation",
+        "ecu" : "108",
+        "enhancedNetworkingSupported" : "Yes",
+        "instancesku" : "FKFNCVGF8F4VBXQ4",
+        "normalizationSizeFactor" : "64",
+        "preInstalledSw" : "NA",
+        "processorFeatures" : "Intel AVX; Intel Turbo",
+        "servicename" : "Amazon Elastic Compute Cloud"
+      }
+
+"""
+
 class AWSflavor(object):
 
     def __init__(self):

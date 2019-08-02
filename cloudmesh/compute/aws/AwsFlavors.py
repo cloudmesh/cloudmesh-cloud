@@ -109,7 +109,6 @@ class AwsFlavor(object):
             "publicationDate"]:
             metadata[key] = offer[key]
 
-        print (metadata)
 
         for key in offer["products"].keys():
             product = offer["products"][key]
@@ -120,12 +119,13 @@ class AwsFlavor(object):
             #    product['name'] = key
 
             product['name'] = key
-
-            print(product['sku'], product['name'])
+            product.update(metadata)
 
             flavors.append(product)
 
         return flavors
+
+
 
     def parse_offer_file_old(self, offer_file):
         publication_date = offer_file['publicationDate']

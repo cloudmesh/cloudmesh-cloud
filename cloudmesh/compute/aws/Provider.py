@@ -856,7 +856,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                 entry['cm']['updated'] = str(datetime.utcnow())
 
             d.append(entry)
-            pprint (entry)
+
         return d
 
 

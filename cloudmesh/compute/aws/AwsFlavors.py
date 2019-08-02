@@ -1,10 +1,7 @@
-from cloudmesh.configuration.Config import Config
-import contextlib
+import json
 import urllib.request
 
 # please use requests
-
-import json
 
 """
 I do not yet understand why flavor is restricted and we do not just use what the dict under product returns
@@ -46,6 +43,7 @@ I do not yet understand why flavor is restricted and we do not just use what the
 
 """
 
+
 class AwsFlavor(object):
 
     def __init__(self):
@@ -57,7 +55,7 @@ class AwsFlavor(object):
             output.append(self.__dict__.get(key))
         return output
 
-    def update(self, dict = {}):
+    def update(self, dict={}):
         # Note that dict is overwritten, and will be ignored
         offer_file = self.fetch_offer_file()
         dict = self.parse_offer_file(offer_file)
@@ -69,17 +67,17 @@ class AwsFlavor(object):
             data = json.loads(req.read().decode())
             return data
 
-    def fetch_offer_file(
-            self, 
-            url = None,
-            region = "us-east-1"
-    ):
+    def fetch_offer_file(self,
+                         url=None,
+                         region="us-east-1",
+                         offer='AmazonEC2'
+                         ):
         if url is None:
             offer_index_url = f"https://pricing.{region}.amazonaws.com/offers/v1.0/aws/index.json"
             offer_index = self.fetch_json_file(offer_index_url)
             offer_file_api_url = f"https://pricing.{region}.amazonaws.com"
             # offer_file_path = offer_index['offers']['AmazonEC2']['currentVersionUrl']
-            region_file_path = offer_index['offers']['AmazonEC2']['currentRegionIndexUrl']
+            region_file_path = offer_index['offers'][offer]['currentRegionIndexUrl']
             regions_url = offer_file_api_url + region_file_path
             regions_file = self.fetch_json_file(regions_url)
             offer_file_path = regions_file["regions"][region]["currentVersionUrl"]
@@ -93,13 +91,16 @@ class AwsFlavor(object):
         for sku in list(offer_file['terms']['OnDemand'].keys()):
             for offer_term in list(offer_file['terms']['OnDemand'][sku].keys()):
                 for rate_code in list(offer_file['terms']['OnDemand'][sku][offer_term]['priceDimensions'].keys()):
+
+                    attributes = offer_file['products'][sku]['attributes']
                     flavor = {
-                        'vcpu': offer_file['products'][sku]['attributes'].get('vcpu'),
-                        'memory': offer_file['products'][sku]['attributes'].get('memory'),
-                        'storage': offer_file['products'][sku]['attributes'].get('storage'),
-                        'clock_speed': offer_file['products'][sku]['attributes'].get('clockSpeed'),
-                        'instance_type': offer_file['products'][sku]['attributes'].get('InstanceType'),
-                        'price':float(offer_file["terms"]["OnDemand"][sku][offer_term]['priceDimensions'][rate_code]['pricePerUnit']['USD']),
+                        'vcpu': attributes.get('vcpu'),
+                        'memory': attributes.get('memory'),
+                        'storage': attributes.get('storage'),
+                        'clock_speed': attributes.get('clockSpeed'),
+                        'instance_type': attributes.get('InstanceType'),
+                        'price': float(offer_file["terms"]["OnDemand"][sku][offer_term]['priceDimensions'][rate_code][
+                                           'pricePerUnit']['USD']),
                         'additional_info': [
                             offer_file['products'][sku],
                             offer_file["terms"]["OnDemand"][sku][offer_term]
@@ -113,5 +114,5 @@ if __name__ == "__main__":
     flavors = AwsFlavor()
     flavors.update()
     print(flavors.get())
-    #from cloudmesh.common.Shell import Shell
-    #r = Shell.execute('cms flavor list --refresh')
+    # from cloudmesh.common.Shell import Shell
+    # r = Shell.execute('cms flavor list --refresh')

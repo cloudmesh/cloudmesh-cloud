@@ -621,9 +621,12 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
         if secgroup is None:
             secgroup = 'default'
+        #
+        # BUG: the tags seem incomplete
+        #
         new_ec2_instance = self.ec2_resource.create_instances(
-            ImageId=image if image else self.default['image'],
-            InstanceType=size if size else self.default['size'],
+            ImageId=image,
+            InstanceType=size,
             MaxCount=1,
             MinCount=1,
             SecurityGroups=[secgroup],

@@ -45,11 +45,9 @@ class Test_key:
         key = cm.find_name(KEY, "key")[0]
         key['name'] == KEY
 
-    def test_delete_keyfrom_cloud(self):
+    def test_prepare(self):
         try:
-            Benchmark.Start()
             r = provider.key_delete(KEY)
-            Benchmark.Stop()
         except Exception as e:
             print(e)
         print (r)
@@ -72,6 +70,16 @@ class Test_key:
                 found = True
                 break
         assert found
+
+    def test_delete_key_from_cloud(self):
+        try:
+            Benchmark.Start()
+            r = provider.key_delete(KEY)
+            Benchmark.Stop()
+        except Exception as e:
+            print(e)
+        print (r)
+
 
     def test_get__key_from_cloud(self):
         pass

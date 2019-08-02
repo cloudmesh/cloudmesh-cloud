@@ -480,11 +480,21 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         """
         instance_ids = []
         for each_instance in self.ec2_resource.instances.all():
-            instance_ids.append({'instance_id': each_instance.id,
-                                 'instance_tag': each_instance.tags[0]['Value']
+
+            instance_ids.append({
+                                 'kind' : 'aws',
+                                 'status': each_instance.state['Name'],
+                                 'created' : each_instance.launch_time.strftime("%m/%d/%Y, %H:%M:%S") if each_instance.launch_time else '',
+                                 'updated' : each_instance.launch_time.strftime("%m/%d/%Y, %H:%M:%S") if each_instance.launch_time else '',
+                                 'name': each_instance.tags[0]['Value'] if each_instance.tags else '',
+                                 'instance_id': each_instance.id,
+                                  'instance_tag': each_instance.tags[0]['Value'] if each_instance.tags else '',
+                                 'image': each_instance.image_id,
+                                 'public_ips' : each_instance.public_ip_address,
+                                 'private_ips': each_instance.private_ip_address
                                  })
-        return instance_ids
-        # return self.update_dict(instance_ids, kind="vm")
+        #return instance_ids
+        return self.update_dict(instance_ids, kind="vm")
 
     def suspend(self, name=None):
         # TODO: Sriman
@@ -612,8 +622,8 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         if secgroup is None:
             secgroup = 'default'
         new_ec2_instance = self.ec2_resource.create_instances(
-            ImageId=image,
-            InstanceType=size,
+            ImageId=image if image else self.default['image'],
+            InstanceType=size if size else self.default['size'],
             MaxCount=1,
             MinCount=1,
             SecurityGroups=[secgroup],
@@ -647,6 +657,16 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         self.set_server_metadata(name, metadata)
         data = self.info(name=name)
         data['name'] = name
+        data['kind'] = 'aws',
+        data['status'] = new_ec2_instance.state['Name'],
+        data['created'] = new_ec2_instance.launch_time.strftime("%m/%d/%Y, %H:%M:%S") if new_ec2_instance.launch_time else '',
+        data['updated'] = new_ec2_instance.launch_time.strftime("%m/%d/%Y, %H:%M:%S") if new_ec2_instance.launch_time else '',
+        data['name'] = new_ec2_instance.tags[0]['Value'] if new_ec2_instance.tags else '',
+        data['instance_id'] = new_ec2_instance.id,
+        data['image'] = new_ec2_instance.image_id,
+        data['public_ips'] = new_ec2_instance.public_ip_address,
+        data['private_ips'] = new_ec2_instance.private_ip_address
+
         output = self.update_dict(data, kind="vm")[0]
         return output
 
@@ -793,10 +813,14 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                 "kind": kind,
                 "driver": self.cloudtype,
                 "cloud": self.cloud,
-                "name": entry['name']
+                "name": entry['name'],
+                "updated": entry['updated'],
+                "Image": entry['image'],
+                "Public IPs": entry['public_ips'],
+                "Private IPs": entry['private_ips']
+
             }
             if kind == 'vm':
-                entry["cm"]["updated"] = str(datetime.utcnow())
                 if "created_at" in entry:
                     entry["cm"]["created"] = str(entry["created_at"])
                     # del entry["created_at"]
@@ -819,4 +843,5 @@ if __name__ == "__main__":
     # name=Name()
     # name.incr()
     # provider.create(name.get())
-    provider.create('swaroop')
+    provider.create(name='sriman123')
+    print(provider.list())

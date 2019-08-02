@@ -360,17 +360,36 @@ class Provider(ComputeNodeABC):
     def set_server_metadata(self, name, m):
         # see https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-using-tags
         # https://github.com/Azure-Samples/virtual-machines-python-manage/blob/master/example.py
-        # TODO: Joaquin
+        # TODO: Joaquin WORKING NOW I JUST NEED TO UPDATE TAGS
         # tags = FlatDict(cm)
-        raise NotImplementedError
+        async_vm_key_updates = self.vms.create_or_update(
+            self.GROUP_NAME,
+            self.VM_NAME,
+            {
+                'location': self.LOCATION,
+                'tags': {
+                    'tag 1': 'JAE',
+                    'tag 2': 'EGGLETON'
+                }
+            })
+        async_vm_key_updates.wait()
+
+        return async_vm_key_updates
 
     def get_server_metadata(self, name):
         # TODO: Joaquin
-        server = self.vms.instance_view(self.GROUP_NAME,self.VM_NAME)
-        return server
+        server = self.vms.get(self.GROUP_NAME,self.VM_NAME)
+
+        tags_dict = server
+
+        return tags_dict.tags
 
     def delete_server_metadata(self, name, key):
         # TODO: Joaquin
+
+
+
+
         raise NotImplementedError
 
     def create(self, name=None,

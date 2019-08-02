@@ -1,4 +1,4 @@
-from cloudmesh.management.configuration.config import Config
+from cloudmesh.configuration.Config import Config
 import contextlib
 import urllib.request
 import json
@@ -32,9 +32,9 @@ class AWSflavor(flavor):
             region = "us-east-1"
     ):
         if url is None:
-            offer_index_url = "https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/index.json"
+            offer_index_url = f"https://pricing.{region}.amazonaws.com/offers/v1.0/aws/index.json"
             offer_index = self.fetch_json_file(offer_index_url)
-            offer_file_api_url = "https://pricing.us-east-1.amazonaws.com"
+            offer_file_api_url = f"https://pricing.{region}.amazonaws.com"
             # offer_file_path = offer_index['offers']['AmazonEC2']['currentVersionUrl']
             region_file_path = offer_index['offers']['AmazonEC2']['currentRegionIndexUrl']
             regions_url = offer_file_api_url + region_file_path

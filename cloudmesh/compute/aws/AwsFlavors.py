@@ -3,7 +3,7 @@ import contextlib
 import urllib.request
 import json
 
-class AWSflavor(flavor):
+class AWSflavor(object):
 
     def __init__(self):
         pass

@@ -61,17 +61,23 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                        "Driver"]
         },
         "flavor": {
-            "sort_keys": ["cm.name",
-                          "vcpus",
-                          "disk"],
+            "sort_keys": ["cm.name"],
             "order": ["cm.name",
-                      "vcpus",
-                      "ram",
-                      "disk"],
-            "header": ["Name",
+                      "attributes.instanceType",
+                      "attributes.instanceFamily",
+                      "attributes.vcpu",
+                      "attributes.memory",
+                      "attributes.storage",
+                      "attributes.physicalProcessor",
+                      "attributes.etworkPerformance"],
+            "header": ["ID",
+                       "Name",
+                       "Family",
                        "VCPUS",
                        "RAM",
-                       "Disk"]
+                       "Disk",
+                       "Processor",
+                       "Network"]
         },
         "key": {
             "sort_keys": ["name"],

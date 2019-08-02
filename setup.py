@@ -81,6 +81,7 @@ pandas
 tabulate
 beautifulsoup4
 boto3
+progress
 """.split("\n")
 
 

@@ -75,14 +75,23 @@ class TestAzure:
 
         assert test_vm is not None
 
-    def test_server_metadata(self):
+    def test_set_server_metadata(self):
         HEADING()
 
         Benchmark.Start()
-        test_server_metadata = self.p.get_server_metadata(self)
+        test_set_metadata = self.p.set_server_metadata(self,m=None)
         Benchmark.Stop()
 
-        assert test_server_metadata is not None
+        assert test_set_metadata is not None
+
+    def test_get_server_metadata(self):
+        HEADING()
+
+        Benchmark.Start()
+        test_get_metadata = self.p.get_server_metadata(self)
+        Benchmark.Stop()
+
+        assert test_get_metadata is not None
 
     def test_start(self):
         HEADING()
@@ -122,6 +131,24 @@ class TestAzure:
 
         assert reboot_vm is not None
 
+    def test_suspend(self):
+        HEADING()
+
+        Benchmark.Start()
+        suspend_vm = self.p.suspend()
+        Benchmark.Stop()
+
+        assert suspend_vm is not None
+
+    def test_resume(self):
+        HEADING()
+
+        Benchmark.Start()
+        resume_vm = self.p.resume()
+        Benchmark.Stop()
+
+        assert resume_vm is not None
+
     def test_stop(self):
         HEADING()
 
@@ -139,9 +166,6 @@ class TestAzure:
         Benchmark.Stop()
 
         assert destroy_vm is None
-
-    # TODO test_resume
-    # TODO test_suspend
 
     def test_benchmark(self):
         Benchmark.print()

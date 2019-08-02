@@ -53,17 +53,19 @@ class AwsFlavor(object):
     def __init__(self):
         pass
 
+    """
     def get(self):
         output = []
         for key in self.__dict__:
             output.append(self.__dict__.get(key))
         return output
-
-    def update(self, dict={}):
-        # Note that dict is overwritten, and will be ignored
+    
+    def update(self):
         offer_file = self.fetch_offer_file()
-        dict = self.parse_offer_file(offer_file)
-        self.__dict__ = dict
+        d = self.parse_offer_file(offer_file)
+        return d
+    """
+
 
     @staticmethod
     def fetch_json_file(url):
@@ -75,7 +77,7 @@ class AwsFlavor(object):
         #    data = json.loads(req.read().decode())
         #    return data
 
-    def fetch_offer_file(self,
+    def fetch(self,
                          url=None,
                          region="us-east-1",
                          offer='AmazonEC2'
@@ -92,16 +94,45 @@ class AwsFlavor(object):
             offer_file_path = regions_file["regions"][region]["currentVersionUrl"]
             url = offer_file_api_url + offer_file_path
 
-        offer_file = self.fetch_json_file(url)
-        return offer_file
+        offer_data = self.fetch_json_file(url)
+        return offer_data
 
-    def parse_offer_file(self, offer_file):
+    def list(self, offer):
+
+        flavors = []
+
+        metadata = {}
+        for key in ["formatVersion",
+            "disclaimer",
+            "offerCode",
+            "version",
+            "publicationDate"]:
+            metadata[key] = offer[key]
+
+        print (metadata)
+
+        for key in offer["products"].keys():
+            product = offer["products"][key]
+
+            #try:
+            #    product['name'] = product['attributes']['instanceType']
+            #except:
+            #    product['name'] = key
+
+            product['name'] = key
+
+            print(product['sku'], product['name'])
+
+            flavors.append(product)
+
+        return flavors
+
+    def parse_offer_file_old(self, offer_file):
         publication_date = offer_file['publicationDate']
         flavor_info = {}
         for sku in list(offer_file['terms']['OnDemand'].keys()):
             for offer_term in list(offer_file['terms']['OnDemand'][sku].keys()):
                 for rate_code in list(offer_file['terms']['OnDemand'][sku][offer_term]['priceDimensions'].keys()):
-
                     attributes = offer_file['products'][sku]['attributes']
                     flavor = {
                         'vcpu': attributes.get('vcpu'),

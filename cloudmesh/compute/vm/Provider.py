@@ -335,8 +335,6 @@ class Provider(ComputeNodeABC):
     # noinspection PyPep8Naming
     def Print(self, data, output='table', kind=None):
 
-        print ("AAA")
-        pprint (data)
         if kind is None and len(data) > 0:
             kind = data[0]["cm"]["kind"]
 

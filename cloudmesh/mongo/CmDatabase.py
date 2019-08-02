@@ -6,6 +6,8 @@ from cloudmesh.common.parameter import Parameter
 from cloudmesh.configuration.Config import Config
 from pymongo import MongoClient
 from cloudmesh.common.debug import VERBOSE
+from progress.bar import Bar
+
 import re
 #
 # cm:
@@ -353,10 +355,11 @@ class CmDatabase(object):
     # ok
     def update(self, entries):
 
+        bar = Bar('Cloudmesh Database Update', max=len(entries))
         # VERBOSE(entries)
         result = []
         for entry in entries:
-
+            bar.next()
             if 'cm' not in entry:
                 raise ValueError("The cm attribute is not in the entry")
             entry['cm']['collection'] = "{cloud}-{kind}".format(**entry["cm"])
@@ -399,6 +402,8 @@ class CmDatabase(object):
                     entry=str(entry)))
                 pass
             result.append(entry)
+
+        bar.finish()
 
         return result
 

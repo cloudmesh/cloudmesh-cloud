@@ -1,9 +1,6 @@
-import json
-import urllib.request
-import sys
 import requests
-from pprint import pprint
 from cloudmesh.common.console import Console
+from progress.bar import Bar
 
 # please use requests
 
@@ -45,6 +42,27 @@ I do not yet understand why flavor is restricted and we do not just use what the
         "servicename" : "Amazon Elastic Compute Cloud"
       }
 
+price is something like
+
+"price" : {
+        "offerTermCode" : "JRTCKXETXF",
+        "sku" : "DBCQPZ6Z853WRE98",
+        "effectiveDate" : "2019-07-01T00:00:00Z",
+        "priceDimensions" : {
+            "DBCQPZ6Z853WRE98.JRTCKXETXF.6YS6EN2CT7" : {
+                "rateCode" : "DBCQPZ6Z853WRE98.JRTCKXETXF.6YS6EN2CT7",
+                "description" : "$3.586 per Unused Reservation RHEL r5d.12xlarge Instance Hour",
+                "beginRange" : "0",
+                "endRange" : "Inf",
+                "unit" : "Hrs",
+                "pricePerUnit" : {
+                    "USD" : "3.5860000000"
+                },
+                "appliesTo" : []
+            }
+        },
+        "termAttributes" : {}
+    },
 """
 
 
@@ -66,24 +84,22 @@ class AwsFlavor(object):
         return d
     """
 
-
     @staticmethod
     def fetch_json_file(url):
         Console.msg(f"fetch: {url}")
         r = requests.get(url)
         return r.json()
 
-        #with urllib.request.urlopen(url) as req:
+        # with urllib.request.urlopen(url) as req:
         #    data = json.loads(req.read().decode())
         #    return data
 
     def fetch(self,
-                         url=None,
-                         region="us-east-1",
-                         offer='AmazonEC2'
-                         ):
+              url=None,
+              region="us-east-1",
+              offer='AmazonEC2'
+              ):
         if url is None:
-
             offer_index_url = f"https://pricing.{region}.amazonaws.com/offers/v1.0/aws/index.json"
             offer_index = self.fetch_json_file(offer_index_url)
             offer_file_api_url = f"https://pricing.{region}.amazonaws.com"
@@ -99,61 +115,65 @@ class AwsFlavor(object):
 
     def list(self, offer):
 
-        flavors = []
+        bar = Bar('Processing', max=len(offer))
+
+        flavors = {}
 
         metadata = {}
         for key in ["formatVersion",
-            "disclaimer",
-            "offerCode",
-            "version",
-            "publicationDate"]:
+                    "disclaimer",
+                    "offerCode",
+                    "version",
+                    "publicationDate"]:
             metadata[key] = offer[key]
-
 
         for key in offer["products"].keys():
             product = offer["products"][key]
 
-            #try:
+            # try:
             #    product['name'] = product['attributes']['instanceType']
-            #except:
+            # except:
             #    product['name'] = key
 
             product['name'] = key
             product.update(metadata)
 
-            flavors.append(product)
+            flavors[key] = product
+            bar.next()
 
-        return flavors
+        bar.finish()
+
+        bar = Bar('Processing', max=len(offer))
+
+        terms = offer['terms']['OnDemand']
+
+        for term, value in terms.items():
+            bar.next()
+
+            if len(value.keys()) != 1:
+                print(value)
+                raise ValueError("too many terms")
+            _key = list(value.keys())[0]
+            entry = value[_key]
+
+            name = entry['sku']
+            if term != entry['sku']:
+                print(entry)
+                raise ValueError("name and sku are different")
+
+            flavors[name]['prices'] = entry
+
+            #
+            # first price
+            #
+
+            prices = entry['priceDimensions']
+            price_key = list(prices.keys())[0]
+            price = prices[price_key]
+            flavors[name]['price'] = price
+
+        bar.finish()
+
+        return [v for v in flavors.values()]
 
 
-
-    def parse_offer_file_old(self, offer_file):
-        publication_date = offer_file['publicationDate']
-        flavor_info = {}
-        for sku in list(offer_file['terms']['OnDemand'].keys()):
-            for offer_term in list(offer_file['terms']['OnDemand'][sku].keys()):
-                for rate_code in list(offer_file['terms']['OnDemand'][sku][offer_term]['priceDimensions'].keys()):
-                    attributes = offer_file['products'][sku]['attributes']
-                    flavor = {
-                        'vcpu': attributes.get('vcpu'),
-                        'memory': attributes.get('memory'),
-                        'storage': attributes.get('storage'),
-                        'clock_speed': attributes.get('clockSpeed'),
-                        'instance_type': attributes.get('InstanceType'),
-                        'price': float(offer_file["terms"]["OnDemand"][sku][offer_term]['priceDimensions'][rate_code][
-                                           'pricePerUnit']['USD']),
-                        'additional_info': [
-                            offer_file['products'][sku],
-                            offer_file["terms"]["OnDemand"][sku][offer_term]
-                        ]
-                    }
-                    flavor_info[rate_code] = flavor
-        return flavor_info
-
-
-if __name__ == "__main__":
-    flavors = AwsFlavor()
-    flavors.update()
-    pprint(flavors.get())
-    # from cloudmesh.common.Shell import Shell
-    # r = Shell.execute('cms flavor list --refresh')

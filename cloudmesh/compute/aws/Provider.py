@@ -3,15 +3,14 @@ from datetime import datetime
 import boto3
 from botocore.exceptions import ClientError
 from cloudmesh.abstractclass.ComputeNodeABC import ComputeNodeABC
-from cloudmesh.configuration.Config import Config
-from cloudmesh.provider import ComputeProviderPlugin
 from cloudmesh.common.console import Console
 from cloudmesh.common.debug import VERBOSE
-from cloudmesh.common3.DictList import DictList
-from cloudmesh.management.configuration.name import Name
 from cloudmesh.common.util import banner
+from cloudmesh.common3.DictList import DictList
 from cloudmesh.compute.aws.AwsFlavors import AwsFlavor
-from pprint import pprint
+from cloudmesh.configuration.Config import Config
+from cloudmesh.provider import ComputeProviderPlugin
+
 
 class Provider(ComputeNodeABC, ComputeProviderPlugin):
     kind = "aws"
@@ -64,14 +63,16 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
             "sort_keys": ["cm.name"],
             "order": ["cm.name",
                       "attributes.instanceType",
+                      "price.pricePerUnit.USD",
                       "attributes.instanceFamily",
                       "attributes.vcpu",
                       "attributes.memory",
                       "attributes.storage",
                       "attributes.physicalProcessor",
-                      "attributes.etworkPerformance"],
+                      "attributes.networkPerformance"],
             "header": ["ID",
                        "Name",
+                       "Price",
                        "Family",
                        "VCPUS",
                        "RAM",
@@ -487,20 +488,21 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         """
         instance_ids = []
         for each_instance in self.ec2_resource.instances.all():
-
             instance_ids.append({
-                                 'kind' : 'aws',
-                                 'status': each_instance.state['Name'],
-                                 'created' : each_instance.launch_time.strftime("%m/%d/%Y, %H:%M:%S") if each_instance.launch_time else '',
-                                 'updated' : each_instance.launch_time.strftime("%m/%d/%Y, %H:%M:%S") if each_instance.launch_time else '',
-                                 'name': each_instance.tags[0]['Value'] if each_instance.tags else '',
-                                 'instance_id': each_instance.id,
-                                  'instance_tag': each_instance.tags[0]['Value'] if each_instance.tags else '',
-                                 'image': each_instance.image_id,
-                                 'public_ips' : each_instance.public_ip_address,
-                                 'private_ips': each_instance.private_ip_address
-                                 })
-        #return instance_ids
+                'kind': 'aws',
+                'status': each_instance.state['Name'],
+                'created': each_instance.launch_time.strftime(
+                    "%m/%d/%Y, %H:%M:%S") if each_instance.launch_time else '',
+                'updated': each_instance.launch_time.strftime(
+                    "%m/%d/%Y, %H:%M:%S") if each_instance.launch_time else '',
+                'name': each_instance.tags[0]['Value'] if each_instance.tags else '',
+                'instance_id': each_instance.id,
+                'instance_tag': each_instance.tags[0]['Value'] if each_instance.tags else '',
+                'image': each_instance.image_id,
+                'public_ips': each_instance.public_ip_address,
+                'private_ips': each_instance.private_ip_address
+            })
+        # return instance_ids
         return self.update_dict(instance_ids, kind="vm")
 
     def suspend(self, name=None):
@@ -669,8 +671,10 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         data['name'] = name
         data['kind'] = 'aws',
         data['status'] = new_ec2_instance.state['Name'],
-        data['created'] = new_ec2_instance.launch_time.strftime("%m/%d/%Y, %H:%M:%S") if new_ec2_instance.launch_time else '',
-        data['updated'] = new_ec2_instance.launch_time.strftime("%m/%d/%Y, %H:%M:%S") if new_ec2_instance.launch_time else '',
+        data['created'] = new_ec2_instance.launch_time.strftime(
+            "%m/%d/%Y, %H:%M:%S") if new_ec2_instance.launch_time else '',
+        data['updated'] = new_ec2_instance.launch_time.strftime(
+            "%m/%d/%Y, %H:%M:%S") if new_ec2_instance.launch_time else '',
         data['name'] = new_ec2_instance.tags[0]['Value'] if new_ec2_instance.tags else '',
         data['instance_id'] = new_ec2_instance.id,
         data['image'] = new_ec2_instance.image_id,

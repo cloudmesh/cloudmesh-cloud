@@ -1,6 +1,6 @@
 ###############################################################
-# pytest -v --capture=no tests/cloud/test_02_flavor.py
-# pytest -v  tests/cloud/test_02_flavor.py
+# pytest -v --capture=no tests/cloud/test_03_image.py
+# pytest -v  tests/cloud/test_03_image.py
 ###############################################################
 
 import os
@@ -32,7 +32,7 @@ provider = Provider(name=cloud)
 
 
 @pytest.mark.incremental
-class Test_Flavor:
+class Test_Image:
 
     def test_empty_database(self):
         HEADING()
@@ -40,34 +40,34 @@ class Test_Flavor:
         cm.clear(collection=f"{cloud}-falvor")
         Benchmark.Stop()
 
-    def test_provider_flavor(self):
+    def test_provider_image(self):
         HEADING()
         local = Key()
         Benchmark.Start()
-        r = provider.flavors()
+        r = provider.images()
         Benchmark.Stop()
 
-    def test_provider_flavor_update(self):
+    def test_provider_image_update(self):
         HEADING()
         local = Key()
         Benchmark.Start()
-        r = provider.flavors()
+        r = provider.images()
         Benchmark.Stop()
 
         cm.clear(collection=f"{cloud}-falvor")
 
-    def test_cms_flavor_refresh(self):
+    def test_cms_image_refresh(self):
         HEADING()
         local = Key()
         Benchmark.Start()
-        os.system(f"cms flavor list --cloud={cloud} --refresh")
+        os.system(f"cms image list --cloud={cloud} --refresh")
         Benchmark.Stop()
 
-    def test_cms_flavor(self):
+    def test_cms_image(self):
         HEADING()
         local = Key()
         Benchmark.Start()
-        os.system(f"cms flavor list")
+        os.system(f"cms image list")
         Benchmark.Stop()
 
     def test_benchmark(self):

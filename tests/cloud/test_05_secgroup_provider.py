@@ -1,6 +1,6 @@
 ###############################################################
-# pytest -v --capture=no tests/cloud/test_secgroup_prvider.py
-# pytest -v  tests/cloud/test_secgroup_prvider.py
+# pytest -v --capture=no tests/cloud/test_05_secgroup_prvider.py
+# pytest -v  tests/cloud/test_05_secgroup_prvider.py
 ###############################################################
 
 # TODO: start this with cloud init, e.g, empty mongodb

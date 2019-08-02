@@ -756,7 +756,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         raise NotImplementedError
 
     def image(self, name=None):
-        # TODO: Vafa
+        # TODO: Alex
         """
         Gets the image with a given nmae
         :param name: The name of the image

@@ -267,6 +267,13 @@ class MongoDBController(object):
             self.set_auth()
             self.stop()
 
+    def import_collection(self,  security=True):
+        auth = ""
+        if security:
+            auth = "--auth"
+        command = "mongoimport {auth} --bind_ip {MONGO_HOST} --dbpath {MONGO_PATH} --logpath {MONGO_LOG}/mongod.log" \
+             " --fork".format(**self.data, auth=auth)
+
     def start(self, security=True):
         """
         start the MongoDB server

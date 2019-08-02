@@ -1,5 +1,9 @@
 import json
 import urllib.request
+import sys
+import requests
+from pprint import pprint
+from cloudmesh.common.console import Console
 
 # please use requests
 
@@ -63,9 +67,13 @@ class AwsFlavor(object):
 
     @staticmethod
     def fetch_json_file(url):
-        with urllib.request.urlopen(url) as req:
-            data = json.loads(req.read().decode())
-            return data
+        Console.msg(f"fetch: {url}")
+        r = requests.get(url)
+        return r.json()
+
+        #with urllib.request.urlopen(url) as req:
+        #    data = json.loads(req.read().decode())
+        #    return data
 
     def fetch_offer_file(self,
                          url=None,
@@ -73,6 +81,7 @@ class AwsFlavor(object):
                          offer='AmazonEC2'
                          ):
         if url is None:
+
             offer_index_url = f"https://pricing.{region}.amazonaws.com/offers/v1.0/aws/index.json"
             offer_index = self.fetch_json_file(offer_index_url)
             offer_file_api_url = f"https://pricing.{region}.amazonaws.com"
@@ -82,6 +91,7 @@ class AwsFlavor(object):
             regions_file = self.fetch_json_file(regions_url)
             offer_file_path = regions_file["regions"][region]["currentVersionUrl"]
             url = offer_file_api_url + offer_file_path
+
         offer_file = self.fetch_json_file(url)
         return offer_file
 
@@ -113,6 +123,6 @@ class AwsFlavor(object):
 if __name__ == "__main__":
     flavors = AwsFlavor()
     flavors.update()
-    print(flavors.get())
+    pprint(flavors.get())
     # from cloudmesh.common.Shell import Shell
     # r = Shell.execute('cms flavor list --refresh')

@@ -374,23 +374,35 @@ class Provider(ComputeNodeABC):
             })
         async_vm_key_updates.wait()
 
-        return async_vm_key_updates
+        return async_vm_key_updates.tags
 
     def get_server_metadata(self, name):
         # TODO: Joaquin
-        server = self.vms.get(self.GROUP_NAME,self.VM_NAME)
-
-        tags_dict = server
+        tags_dict = self.vms.get(self.GROUP_NAME,self.VM_NAME)
 
         return tags_dict.tags
 
     def delete_server_metadata(self, name, key):
         # TODO: Joaquin
 
+        server = self.vms.get(self.GROUP_NAME,self.VM_NAME)
 
+        tags_dict = server.tags
 
+        if key is not None:
+            try:
+                tags_dict.pop(key)
+            except KeyError:
+                print("Key " +key+ " not found")
 
-        raise NotImplementedError
+        async_vm_tag_updates = self.vms.update(self.GROUP_NAME,self.VM_NAME,
+                                 {
+                                     'tags': tags_dict
+                                 })
+        async_vm_tag_updates.wait()
+
+        return async_vm_tag_updates.result().tags
+
 
     def create(self, name=None,
                image=None,
@@ -717,61 +729,63 @@ class Provider(ComputeNodeABC):
         result_list_pub = self.imgs.list_publishers(
             region,
         )
+        i = 0
 
         for publisher in result_list_pub:
-            try:
-                result_list_offers = self.imgs.list_offers(
-                    region,
-                    publisher.name,
-                )
+            if(i<1):
+                try:
+                    result_list_offers = self.imgs.list_offers(
+                        region,
+                        publisher.name,
+                    )
 
-                for offer in result_list_offers:
-                    try:
-                        result_list_skus = self.imgs.list_skus(
-                            region,
-                            publisher.name,
-                            offer.name,
-                        )
+                    for offer in result_list_offers:
+                        try:
+                            result_list_skus = self.imgs.list_skus(
+                                region,
+                                publisher.name,
+                                offer.name,
+                            )
 
-                        for sku in result_list_skus:
-                            try:
-                                result_list = self.imgs.list(
-                                    region,
-                                    publisher.name,
-                                    offer.name,
-                                    sku.name,
-                                )
+                            for sku in result_list_skus:
+                                try:
+                                    result_list = self.imgs.list(
+                                        region,
+                                        publisher.name,
+                                        offer.name,
+                                        sku.name,
+                                    )
 
-                                for version in result_list:
-                                    try:
-                                        result_get = self.imgs.get(
-                                            region,
-                                            publisher.name,
-                                            offer.name,
-                                            sku.name,
-                                            version.name,
-                                        )
+                                    for version in result_list:
+                                        try:
+                                            result_get = self.imgs.get(
+                                                region,
+                                                publisher.name,
+                                                offer.name,
+                                                sku.name,
+                                                version.name,
+                                            )
 
-                                        msg = 'PUBLISHER: {0}, OFFER: {1}, SKU: {2}, VERSION: {3}'.format(
-                                            publisher.name,
-                                            offer.name,
-                                            sku.name,
-                                            version.name,
-                                        )
-                                        VERBOSE(msg)
-                                        image_list.append(result_get)
-                                    except:
-                                        print("Something failed in result_list")
+                                            msg = 'PUBLISHER: {0}, OFFER: {1}, SKU: {2}, VERSION: {3}'.format(
+                                                publisher.name,
+                                                offer.name,
+                                                sku.name,
+                                                version.name,
+                                            )
+                                            VERBOSE(msg)
+                                            image_list.append(result_get)
+                                        except:
+                                            print("Something failed in result_list")
 
-                            except:
-                                print("Something failed in result_list_skus")
+                                except:
+                                    print("Something failed in result_list_skus")
 
-                    except:
-                        print("Something failed in result_list_offers")
+                        except:
+                            print("Something failed in result_list_offers")
 
-            except:
-                print("Something failed in result_list_pub")
-
+                except:
+                    print("Something failed in result_list_pub")
+            i=i+1
         return self.get_list(image_list, kind="image")
 
 
@@ -781,19 +795,8 @@ class Provider(ComputeNodeABC):
         Lists the flavors on the cloud
 
         :return: dict of flavors
-        dict example:
-        {
-          'additional_properties': {},
-          'name': 'Standard_D12_v2_Promo',
-          'number_of_cores': 4,
-          'os_disk_size_in_mb': 1047552,
-          'resource_disk_size_in_mb': 204800,
-          'memory_in_mb': 28672,
-          'max_data_disk_count': 16
-        }
         """
         vm_sizes_list = self.compute_client.virtual_machine_sizes.list(location=self.LOCATION)
-
 
         return self.get_list(vm_sizes_list, kind="flavor")
 
@@ -836,12 +839,10 @@ class Provider(ComputeNodeABC):
         if self.vms:
             entries = []
             for entry in d:
-                print(entry)
-                entries.append(entry)
+                entries.append(entry.as_dict())
             if debug:
                 pprint(entries)
 
-            print(entries)
             return self.update_dict(entries, kind=kind)
         return None
 
@@ -872,19 +873,20 @@ class Provider(ComputeNodeABC):
         :param kind: Kind is image, flavor, or node, secgroup and key
         :return:
         """
+
         if elements is None:
             return None
         elif type(elements) == list:
             _elements = elements
-            print(elements)
         else:
             _elements = [elements]
         d = []
 
         for entry in _elements:
+            print(entry)
 
             if "cm" not in entry:
-                entry['cm'] = {}
+               entry['cm'] = {}
 
             if kind == 'ip':
                 entry['name'] = entry['floating_ip_address']

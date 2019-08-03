@@ -353,14 +353,23 @@ class CmDatabase(object):
 
 
     # ok
-    def update(self, entries):
+    def update(self, _entries, progress=True):
 
-        bar = Bar('Cloudmesh Database Update', max=len(entries))
-        # VERBOSE(entries)
+        if type(_entries) == dict:
+            entries = [_entries]
+        else:
+            entries = _entries
+
+        if progress:
+            bar = Bar('Cloudmesh Database Update', max=len(entries))
+
         result = []
         for entry in entries:
-            bar.next()
+            if progress:
+                bar.next()
             if 'cm' not in entry:
+                print("UPDATE ERROR")
+                VERBOSE(entry)
                 raise ValueError("The cm attribute is not in the entry")
             entry['cm']['collection'] = "{cloud}-{kind}".format(**entry["cm"])
 
@@ -403,7 +412,8 @@ class CmDatabase(object):
                 pass
             result.append(entry)
 
-        bar.finish()
+        if progress:
+            bar.finish()
 
         return result
 

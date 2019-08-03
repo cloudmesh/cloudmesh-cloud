@@ -1,6 +1,6 @@
 ###############################################################
-# pytest -v --capture=no tests/cloud/test_secgroup_prvider.py
-# pytest -v  tests/cloud/test_secgroup_prvider.py
+# pytest -v --capture=no tests/cloud/test_provider_vm06_vm_provider.py
+# pytest -v  tests/cloud/test_provider_vm06_vm_provider.py
 ###############################################################
 
 # TODO: start this with cloud init, e.g, empty mongodb
@@ -11,7 +11,7 @@ from cloudmesh.common.debug import VERBOSE
 from cloudmesh.common.util import HEADING
 from cloudmesh.common.variables import Variables
 from cloudmesh.common3.Benchmark import Benchmark
-from cloudmesh.compute.openstack.Provider import Provider
+from cloudmesh.compute.vm.Provider import Provider
 from cloudmesh.configuration.Config import Config
 from cloudmesh.management.configuration.name import Name
 
@@ -30,70 +30,77 @@ if cloud is None:
     raise ValueError("cloud is not not set")
 
 
-name_generator = Name(schema=f"test-{user}-vm", counter=1)
+name_generator = Name(schema=f"test-{user}-vm-""{counter}", counter=1)
+name_generator.incr()
+name = str(name_generator)
 
 provider = Provider(name=cloud)
 
 
+def Print(data):
+    print(provider.Print(data=data, output='table', kind='vm'))
+
+current_vms = 0
 
 @pytest.mark.incremental
-class Test_provider:
+class Test_provider_vm:
 
-    def test_list(self):
+    def test_provider_vmprovider_vm_list(self):
         HEADING()
         Benchmark.Start()
         data = provider.list()
+        current_vms = len(data)
         Benchmark.Stop()
-        print(data)
+        Print(data)
 
-    def test_create(self):
+
+    def test_provider_vm_create(self):
         HEADING()
         Benchmark.Start()
         data = provider.create()
         Benchmark.Stop()
         print(data)
-        self.name = data['name']
 
-    def test_stop(self):
+    def test_provider_vm_stop(self):
         HEADING()
         Benchmark.Start()
-        data = provider.stop(name=self.name)
+        data = provider.stop(name=name)
         Benchmark.Stop()
         print(data)
 
         # check the status of the vm if it is stopped
 
-    def test_start(self):
+    def test_provider_vm_start(self):
         HEADING()
         Benchmark.Start()
-        data = provider.start(name=self.name)
+        data = provider.start(name=name)
         Benchmark.Stop()
         print(data)
 
         # check the status of the vm if it is started
 
-    def test_status(self):
+    def test_provider_vm_status(self):
         HEADING()
         Benchmark.Start()
-        data = provider.status(name=self.name)
+        data = provider.status(name=name)
         Benchmark.Stop()
         print(data)
 
-    def test_info(self):
+    def test_provider_vm_info(self):
         HEADING()
         Benchmark.Start()
-        data = provider.info(name=self.name)
+        data = provider.info(name=name)
         Benchmark.Stop()
         print(data)
 
-    # do uther tests befor terminationg, keys, metadata, ....
+    # do other tests before terminationg, keys, metadata, ....
 
-    def test_terminate(self):
+    def test_provider_vm_terminate(self):
         HEADING()
         Benchmark.Start()
-        data = provider.terminate(name=self.name)
+        data = provider.terminate(name=name)
         Benchmark.Stop()
         print(data)
 
     def test_benchmark(self):
-        Benchmark.print()
+        Benchmark.print(sysinfo=False, csv=False, tag=cloud)

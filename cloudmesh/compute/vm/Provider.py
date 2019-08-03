@@ -11,6 +11,8 @@ from cloudmesh.configuration.Config import Config
 from cloudmesh.mongo.CmDatabase import CmDatabase
 from cloudmesh.mongo.DataBaseDecorator import DatabaseUpdate
 from cloudmesh.provider import Provider as ProviderList
+from cloudmesh.common.debug import VERBOSE
+from cloudmesh.management.configuration.name import Name
 
 class Provider(ComputeNodeABC):
 
@@ -137,10 +139,15 @@ class Provider(ComputeNodeABC):
         raise NotImplementedError
 
     @DatabaseUpdate()
-    def create2(self, names=None, cloud=None, **kwargs):
+    def create(self, names=None, cloud=None, **kwargs):
 
         arguments = dotdict(kwargs)
-        vms = self.expand(names)
+        if names is None:
+            name_generator = Name()
+            name_generator.incr()
+            vms = [str(name_generator)]
+        else:
+            vms = self.expand(names)
 
         #
         # Step 0, find the cloud
@@ -154,20 +161,17 @@ class Provider(ComputeNodeABC):
 
         database = CmDatabase()
         defaults = Config()[f"cloudmesh.cloud.{cloud}.default"]
-        # pprint(defaults)
+        pprint(defaults)
         duplicates = []
         for vm in vms:
-            duplicates += database.find(collection=f'{cloud}-node', name=vm)
+            query = {"name": vm}
+            duplicates += database.find(collection=f'{cloud}-node', query=query)
+
 
         if len(duplicates) > 0:
             print(Printer.flatwrite(duplicates,
-                                    order=['name', 'cm.cloud', 'state',
-                                           'image',
-                                           'size',
-                                           'public_ips', 'cm.created'],
-                                    header=['Name', 'Cloud', 'State', 'Image',
-                                            'Size',
-                                            'Public ips', 'created'],
+                                    order=['cm.name', 'cm.cloud'],
+                                    header=['Name', 'Cloud'],
                                     output='table'))
             raise Exception("these vms already exists")
             return None
@@ -176,22 +180,25 @@ class Provider(ComputeNodeABC):
         # not exist read them for that cloud from the yaml file
 
         arguments.image = self.find_attribute('image', [variables, defaults])
-        pprint(arguments.image)
-        if 'image' is None:
+
+        if arguments.image is None:
             raise ValueError("image not specified")
 
-        arguments.flavor = self.find_attribute('flavor', [variables, defaults])
-        pprint(arguments.flavor)
-        if 'flavor' is None:
-            raise ValueError("image not specified")
+        arguments.group = self.find_attribute('group', [variables, defaults])
+
+        if arguments.group is None:
+            arguments.group="default"
+
+        arguments.size = self.find_attribute('size', [variables, defaults])
+
+        if arguments.size is None and 'size' is None:
+            raise ValueError("size not specified")
 
         # Step 3: use the create command to create the vms
 
-        pprint(arguments)
+        #created = self.loop(vms, self.p.create, **arguments)
+        created = self.loop(vms, self._create, **arguments)
 
-        created = self.loop(names, self.p.create, **arguments)
-
-        pprint(created)
         return created
 
     def find_attribute(self, name, dicts):
@@ -219,61 +226,62 @@ class Provider(ComputeNodeABC):
     def reboot(self, names=None):
         return self.loop(names, self.p.reboot)
 
-    def create(self,
-               names=None,
-               image=None,
-               size=None,
-               timeout=360,
-               group=None,
-               metadata=None,
-               **kwargs):
+    def _create(self, name, arguments):
 
+        arguments = dotdict(arguments)
 
+        database = CmDatabase()
 
-        cm = CmDatabase()
-
-        names = self.expand(names)
         r = []
-        for name in names:
-            StopWatch.start(f"create vm {name}")
 
-            cm = {
-                'kind': "vm",
-                'name': name,
-                'group': group,
-                'cloud': self.cloudname(),
-                'status': 'booting'
-            }
-            entry = {}
-            entry.update(cm)
+        StopWatch.start(f"create vm {name}")
 
-            result = self.cm.update(entry)
+        cm = {
+            'kind': "vm",
+            'name': name,
+            'group': arguments.group,
+            'cloud': self.cloudname(),
+            'status': 'booting'
+        }
+        entry = {}
+        entry.update(cm=cm, name=name)
 
+        result = database.update(entry, progress=False)[0]
+
+
+        dryrun = False
+        if "dryrun" in arguments:
+            dryrun = arguments.dryrun
+            data = {"dryrun": True}
+        else:
             data = self.p.create(
                 name=name,
-                image=image,
-                size=size,
                 timeout=360,
-                group=group,
-                metadata=metadata,
-                **kwargs)
+                **arguments)
 
-            StopWatch.stop(f"create vm {name}")
-            t = format(StopWatch.get(f"create vm {name}"), '.2f')
-            cm['creation_time'] = t
+        entry.update(data)
 
-            entry.update(data)
-            entry[metadata] = cm
-            if metadata:
-                entry.update(metadata)
+        StopWatch.stop(f"create vm {name}")
+        t = format(StopWatch.get(f"create vm {name}"), '.2f')
+        cm['creation_time'] = t
 
-            cm['status'] = 'available'
-            self.p.set_server_metadata(name, cm)
+        entry.update({'cm': cm})
 
-            result = self.cm.update(entry)
 
-            r.append(entry)
-        return r
+        if arguments.metadata:
+            entry.update({"metadata": arguments.metadata})
+        else:
+            entry.update({"metadata": str( {"cm": cm,
+                                       "image": arguments.image,
+                                       "size": arguments.size})})
+
+
+        cm['status'] = 'available'
+        self.p.set_server_metadata(name, cm)
+
+        result = database.update(entry, progress=False)[0]
+
+        return result
 
     def set_server_metadata(self, name, **metadata):
         """

@@ -30,6 +30,8 @@ from cloudmesh.common.util import HEADING
 from cloudmesh.common.variables import Variables
 from cloudmesh.common3.Benchmark import Benchmark
 from cloudmesh.common3.Shell import Shell
+from cloudmesh.compute.vm.Provider import Provider
+from cloudmesh.mongo.CmDatabase import CmDatabase
 from cloudmesh.secgroup.Secgroup import Secgroup
 from cloudmesh.secgroup.Secgroup import SecgroupExamples
 from cloudmesh.secgroup.Secgroup import SecgroupRule
@@ -42,9 +44,12 @@ cloud = variables.parameter('cloud')
 rules = SecgroupRule()
 groups = Secgroup()
 
+cm = CmDatabase()
+provider = Provider(name=cloud)
 
-def run(label, command):
-    result = Shell.run_timed(label, command, service=cloud)
+
+def run(command):
+    result = Shell.run(command)
     print(result)
     return result
 
@@ -52,7 +57,33 @@ def run(label, command):
 @pytest.mark.incremental
 class TestSecCLI:
 
-    def test_init(self):
+    def test_sec_clear(self):
+
+        cm.clear(collection=f"local-secgroup")
+        cm.clear(collection=f"local-secrule")
+
+    def test_group_add(self):
+        HEADING()
+
+        Benchmark.Start()
+        result = run(f"cms sec group add deleteme empty empty")
+        Benchmark.Stop()
+        entry = groups.list(name="deleteme")
+
+        assert len(entry) > 0
+        assert entry[0]["name"] == "deleteme"
+
+    def test_group_delete(self):
+        HEADING()
+        Benchmark.Start()
+        result = run(f"cms sec group delete deleteme")
+        Benchmark.Stop()
+        entry = groups.list(name="deleteme")
+
+        assert len(entry) == 0
+
+    def test_sec_init(self):
+        HEADING()
         r = rules.clear()
         g = groups.clear()
 
@@ -62,15 +93,68 @@ class TestSecCLI:
         assert len(examples.secgroups) > 0
         assert len(examples.secrules) > 0
 
-        result = run("rule add",
-                     f"cms sec rule add deleteme 101 101 tcp 10.0.0.0/0")
+        result = run(
+            f"cms sec rule add deleteme 101 101 tcp 10.0.0.0/0")
 
-        result = run("group add",
-                     f"cms sec group add wrong nothing wrong")
+        try:
+            result = run(
+                f"cms sec group add wrong nothing wrong")
+            assert False
+        except:
+            assert True
 
-    def test_add_group(self):
-        result = run("group add",
-                     f"cms sec group load wrong --cloud={cloud}")
+    def test_sec_add_group_wrong(self):
+        HEADING()
+        try:
+            result = run(f"cms sec group load wrong --cloud={cloud}")
+            assert False
+        except:
+            assert True
+
+    def test_cms_init(self):
+        HEADING()
+        try:
+            result = run(f"cms init")
+            assert False
+        except:
+            assert True
+
+    def test_sec_list(self):
+        HEADING()
+
+        Benchmark.Start()
+        result = run("cms sec list")
+        Benchmark.Stop()
+        g = groups.list()
+
+        for entry in g:
+            name = entry['name']
+            if name != 'default':
+                assert name in result
+
+    def test_sec_group_list_local(self):
+        HEADING()
+        Benchmark.Start()
+        result = run("cms sec group list")
+        Benchmark.Stop()
+        g = groups.list()
+
+        for entry in g:
+            name = entry['name']
+            assert name in result
+
+    def test_sec_group_list_cloud(self):
+        HEADING()
+        Benchmark.Start()
+        result = run(f"cms sec group list --cloud={cloud}")
+        Benchmark.Stop()
+        g = groups.list()
+
+        assert '443' in result
+        assert '80' in result
+
+    def test_benchmark(self):
+        Benchmark.print(sysinfo=False, csv=False, tag=cloud)
 
 
 class a:
@@ -78,8 +162,7 @@ class a:
     def test_rule_load_to_cloud(self):
         HEADING()
         Benchmark.Start()
-        result = run("rule add",
-                     f"cms sec group load deleteme --cloud={cloud}")
+        result = run(f"cms sec group load deleteme --cloud={cloud}")
         Benchmark.Stop()
 
 
@@ -93,29 +176,9 @@ class o:
     def test_rule_delete(self):
         HEADING()
         Benchmark.Start()
-        result = run("rule delete", f"cms sec rule delete deleteme")
+        result = run(f"cms sec rule delete deleteme")
         Benchmark.Stop()
         entry = rules.list(name="deleteme")
-
-        assert len(entry) == 0
-
-    def test_group_add(self):
-        HEADING()
-
-        Benchmark.Start()
-        result = run("group add", f"cms sec group add deleteme empty empty")
-        Benchmark.Stop()
-        entry = groups.list(name="deleteme")
-
-        assert len(entry) > 0
-        assert entry[0]["name"] == "deleteme"
-
-    def test_group_delete(self):
-        HEADING()
-        Benchmark.Start()
-        result = run("group delete", f"cms sec group delete deleteme")
-        Benchmark.Stop()
-        entry = groups.list(name="deleteme")
 
         assert len(entry) == 0
 
@@ -123,7 +186,7 @@ class o:
         HEADING()
 
         Benchmark.Start()
-        result = run("rule list", "cms sec rule list")
+        result = run("cms sec rule list")
         Benchmark.stop()
         r = rules.list()
         g = groups.list()
@@ -134,29 +197,3 @@ class o:
         for entry in g:
             name = entry['name']
             assert name in result
-
-    def test_list(self):
-        HEADING()
-
-        Benchmark.Start()
-        result = run("list", "cms sec list")
-        Benchmark.Stop()
-        g = groups.list()
-
-        for entry in g:
-            name = entry['name']
-            assert name in result
-
-    def test_group_list(self):
-        HEADING()
-        Benchmark.Start()
-        result = run("list", "cms sec group list")
-        Benchmark.Stop()
-        g = groups.list()
-
-        for entry in g:
-            name = entry['name']
-            assert name in result
-
-    def test_benchmark(self):
-        Benchmark.print()

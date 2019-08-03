@@ -356,8 +356,6 @@ class Provider(ComputeNodeABC):
             else:
                 humanize = None
 
-            print ("HH", humanize)
-
             print(Printer.flatwrite(data,
                                     sort_keys=["name"],
                                     order=order,

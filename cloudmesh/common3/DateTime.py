@@ -6,8 +6,7 @@ import time
 
 class DateTime(object):
 
-    timezone = TIME.timezone
-
+    timezone = time.tzname[0]
 
     @staticmethod
     def now():
@@ -21,7 +20,7 @@ class DateTime(object):
 
     @staticmethod
     def words(time):
-        return TIME.datetime.strftime(time, "%a %w %b %Y, %H:%M:%S")
+        return TIME.datetime.strftime(time, "%a %w %b %Y, %H:%M:%S " + DateTime.timezone)
 
     @staticmethod
     def datetime(time):
@@ -69,6 +68,7 @@ if __name__ == "__main__":
     print("UTC", DateTime.utc(start))
     print("NATURAL", DateTime.natural(start))
     print("WORDS", DateTime.words(start))
+    print("TIMEZONE", DateTime.timezone)
 
     """
     START 2019-08-03 16:21:12.154296

@@ -11,3 +11,26 @@
   'max_data_disk_count': 16
 }
 ```
+
+# Image
+
+```
+python
+{
+  'id': '/Subscriptions/aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa/Providers/Microsoft.Compute/Locations/eastus/Publishers/128technology/ArtifactTypes/VMImage/Offers/128t_networking_platform/Skus/128t_networking_platform/Versions/1.0.0',
+  'name': '1.0.0',
+  'location': 'eastus',
+  'plan': {
+    'publisher': '128technology',
+    'name': '128t_networking_platform',
+    'product': '128t_networking_platform'
+  },
+  'os_disk_image': {
+    'operating_system': 'Linux'
+  },
+  'data_disk_images': [],
+  'automatic_os_upgrade_properties': {
+    'automatic_os_upgrade_supported': False
+  }
+}
+```

@@ -122,4 +122,5 @@ class Test_secgroup_provider:
         provider.Print(g, output='table', kind="secrule")
 
     def test_benchmark(self):
-        Benchmark.print()
+        Benchmark.print(sysinfo=False, csv=False, tag=cloud)
+

@@ -793,7 +793,8 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         https://docs.openstack.org/openstacksdk/latest/user/connection.html#openstack.connection.Connection.create_server
 
         """
-        size = kwargs['flavor']
+        if 'flavor' in kwargs and size is None:
+            size = kwargs['flavor']
 
         # Guess user name
 
@@ -821,6 +822,8 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
         if type(group) == str:
             groups = Parameter.expand(group)
+
+
 
         banner("Create Server")
         print("    Name:    ", name)

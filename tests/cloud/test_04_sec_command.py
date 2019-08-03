@@ -93,12 +93,10 @@ class TestSecCLI:
         assert len(examples.secgroups) > 0
         assert len(examples.secrules) > 0
 
-        result = run(
-            f"cms sec rule add deleteme 101 101 tcp 10.0.0.0/0")
+        result = run(f"cms sec rule add deleteme 101 101 tcp 10.0.0.0/0")
 
         try:
-            result = run(
-                f"cms sec group add wrong nothing wrong")
+            result = run(f"cms sec group add wrong nothing wrong")
             assert False
         except:
             assert True
@@ -113,11 +111,9 @@ class TestSecCLI:
 
     def test_cms_init(self):
         HEADING()
-        try:
-            result = run(f"cms init")
-            assert False
-        except:
-            assert True
+        Benchmark.Start()
+        result = run(f"cms init")
+        Benchmark.Stop()
 
     def test_sec_list(self):
         HEADING()
@@ -165,8 +161,6 @@ class a:
         result = run(f"cms sec group load deleteme --cloud={cloud}")
         Benchmark.Stop()
 
-
-class o:
 
     #        Pro
     #        entry = rules.list(name="deleteme")

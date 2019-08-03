@@ -357,24 +357,29 @@ class Provider(ComputeNodeABC):
                 self.GROUP_NAME, {'location': self.LOCATION})
 
 
-    def set_server_metadata(self, name, m):
+    def set_server_metadata(self, name=None, cm=None):
         # see https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-using-tags
         # https://github.com/Azure-Samples/virtual-machines-python-manage/blob/master/example.py
-        # TODO: Joaquin WORKING NOW I JUST NEED TO UPDATE TAGS
+        # TODO: Joaquin
         # tags = FlatDict(cm)
+
+        data = {}
+        if cm is not None:
+            data = {'cm': str(cm)}
+
+        if name is None:
+            name = self.VM_NAME
+
         async_vm_key_updates = self.vms.create_or_update(
             self.GROUP_NAME,
-            self.VM_NAME,
+            name,
             {
                 'location': self.LOCATION,
-                'tags': {
-                    'tag 1': 'JAE',
-                    'tag 2': 'EGGLETON'
-                }
+                'tags': data
             })
         async_vm_key_updates.wait()
 
-        return async_vm_key_updates.tags
+        return async_vm_key_updates.result().tags
 
     def get_server_metadata(self, name):
         # TODO: Joaquin
@@ -385,9 +390,7 @@ class Provider(ComputeNodeABC):
     def delete_server_metadata(self, name, key):
         # TODO: Joaquin
 
-        server = self.vms.get(self.GROUP_NAME,self.VM_NAME)
-
-        tags_dict = server.tags
+        tags_dict = self.get_server_metadata(self)
 
         if key is not None:
             try:
@@ -402,7 +405,6 @@ class Provider(ComputeNodeABC):
         async_vm_tag_updates.wait()
 
         return async_vm_tag_updates.result().tags
-
 
     def create(self, name=None,
                image=None,
@@ -732,60 +734,60 @@ class Provider(ComputeNodeABC):
         i = 0
 
         for publisher in result_list_pub:
-            if(i<1):
-                try:
-                    result_list_offers = self.imgs.list_offers(
-                        region,
-                        publisher.name,
-                    )
+            #if(i<1):
+            try:
+                result_list_offers = self.imgs.list_offers(
+                    region,
+                    publisher.name,
+                )
 
-                    for offer in result_list_offers:
-                        try:
-                            result_list_skus = self.imgs.list_skus(
-                                region,
-                                publisher.name,
-                                offer.name,
-                            )
+                for offer in result_list_offers:
+                    try:
+                        result_list_skus = self.imgs.list_skus(
+                            region,
+                            publisher.name,
+                            offer.name,
+                        )
 
-                            for sku in result_list_skus:
-                                try:
-                                    result_list = self.imgs.list(
-                                        region,
-                                        publisher.name,
-                                        offer.name,
-                                        sku.name,
-                                    )
+                        for sku in result_list_skus:
+                            try:
+                                result_list = self.imgs.list(
+                                    region,
+                                    publisher.name,
+                                    offer.name,
+                                    sku.name,
+                                )
 
-                                    for version in result_list:
-                                        try:
-                                            result_get = self.imgs.get(
-                                                region,
-                                                publisher.name,
-                                                offer.name,
-                                                sku.name,
-                                                version.name,
-                                            )
+                                for version in result_list:
+                                    try:
+                                        result_get = self.imgs.get(
+                                            region,
+                                            publisher.name,
+                                            offer.name,
+                                            sku.name,
+                                            version.name,
+                                        )
 
-                                            msg = 'PUBLISHER: {0}, OFFER: {1}, SKU: {2}, VERSION: {3}'.format(
-                                                publisher.name,
-                                                offer.name,
-                                                sku.name,
-                                                version.name,
-                                            )
-                                            VERBOSE(msg)
-                                            image_list.append(result_get)
-                                        except:
-                                            print("Something failed in result_list")
+                                        msg = 'PUBLISHER: {0}, OFFER: {1}, SKU: {2}, VERSION: {3}'.format(
+                                            publisher.name,
+                                            offer.name,
+                                            sku.name,
+                                            version.name,
+                                        )
+                                        VERBOSE(msg)
+                                        image_list.append(result_get)
+                                    except:
+                                        print("Something failed in result_list")
 
-                                except:
-                                    print("Something failed in result_list_skus")
+                            except:
+                                print("Something failed in result_list_skus")
 
-                        except:
-                            print("Something failed in result_list_offers")
+                    except:
+                        print("Something failed in result_list_offers")
 
-                except:
-                    print("Something failed in result_list_pub")
-            i=i+1
+            except:
+                print("Something failed in result_list_pub")
+#            i=i+1
         return self.get_list(image_list, kind="image")
 
 

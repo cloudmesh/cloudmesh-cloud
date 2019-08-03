@@ -45,6 +45,7 @@ class Test_Key:
     def test_upload_key_to_database(self):
         HEADING()
         local = Key()
+        pprint (local)
         Benchmark.Start()
         local.add("test-key", "ssh")
         Benchmark.Stop()

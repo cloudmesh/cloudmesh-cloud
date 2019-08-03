@@ -32,13 +32,13 @@ class SSHkey(dict):
         self["path"] = path_expand(self["profile"]["publickey"])
 
         self["uri"] = 'file://{path}'.format(path=self["path"])
-        self['string'] = open(Path(self["path"]), "r").read().rstrip()
+        self['public_key'] = open(Path(self["path"]), "r").read().rstrip()
 
         (self['type'],
          self['key'],
-         self['comment']) = SSHkey._parse(self['string'])
+         self['comment']) = SSHkey._parse(self['public_key'])
 
-        self['fingerprint'] = SSHkey._fingerprint(self['string'])
+        self['fingerprint'] = SSHkey._fingerprint(self['public_key'])
         self["name"] = basename(self["path"]).replace(".pub", "").replace("id_", "")
 
         self['comment'] = self['comment']
@@ -86,7 +86,7 @@ class SSHkey(dict):
             thekey = {
                 'id': id,
                 'uri': uri,
-                'string': key,
+                'public_key': key,
                 'fingerprint': SSHkey._fingerprint(key),
                 'name': name,
                 'comment': name,
@@ -104,7 +104,7 @@ class SSHkey(dict):
         return d
 
     def __str__(self):
-        return self['string']
+        return self['public_key']
 
     @property
     def fingerprint(self):
@@ -175,7 +175,7 @@ class SSHkey(dict):
                 keystring = open(key, "r").read()
             except Exception as e:
                 return False
-        elif keytype.lower() == "string":
+        elif keytype.lower() == "public_key":
             keystring = key
 
         try:

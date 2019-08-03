@@ -36,8 +36,6 @@ class TestAzure:
         self.new_name = str(self.name_generator)
         self.p = Provider(name="azure")
 
-        print()
-
     def test_resource_group(self):
         HEADING()
         Benchmark.Start()
@@ -77,8 +75,10 @@ class TestAzure:
     def test_set_server_metadata(self):
         HEADING()
 
+        tags = 'This is my cloudmesh metadata Tag'
+
         Benchmark.Start()
-        test_set_metadata = self.p.set_server_metadata(self,m=None)
+        test_set_metadata = self.p.set_server_metadata(name=None,cm=tags)
         Benchmark.Stop()
 
         assert test_set_metadata is not None
@@ -96,7 +96,7 @@ class TestAzure:
         HEADING()
 
         Benchmark.Start()
-        test_delete_metadata = self.p.delete_server_metadata(None, 'tag 1')
+        test_delete_metadata = self.p.delete_server_metadata(None, 'cm')
         Benchmark.Stop()
 
         assert test_delete_metadata is not None
@@ -116,8 +116,6 @@ class TestAzure:
         Benchmark.Start()
         info_vm = self.p.info(None, None)
         Benchmark.Stop()
-
-        print(info_vm)
 
         assert info_vm is not None
 

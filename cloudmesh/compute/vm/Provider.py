@@ -8,11 +8,11 @@ from cloudmesh.common.dotdict import dotdict
 from cloudmesh.common.parameter import Parameter
 from cloudmesh.common.variables import Variables
 from cloudmesh.configuration.Config import Config
+from cloudmesh.management.configuration.name import Name
 from cloudmesh.mongo.CmDatabase import CmDatabase
 from cloudmesh.mongo.DataBaseDecorator import DatabaseUpdate
 from cloudmesh.provider import Provider as ProviderList
-from cloudmesh.common.debug import VERBOSE
-from cloudmesh.management.configuration.name import Name
+
 
 class Provider(ComputeNodeABC):
 
@@ -161,12 +161,11 @@ class Provider(ComputeNodeABC):
 
         database = CmDatabase()
         defaults = Config()[f"cloudmesh.cloud.{cloud}.default"]
-        pprint(defaults)
+
         duplicates = []
         for vm in vms:
             query = {"name": vm}
             duplicates += database.find(collection=f'{cloud}-node', query=query)
-
 
         if len(duplicates) > 0:
             print(Printer.flatwrite(duplicates,
@@ -187,7 +186,7 @@ class Provider(ComputeNodeABC):
         arguments.group = self.find_attribute('group', [variables, defaults])
 
         if arguments.group is None:
-            arguments.group="default"
+            arguments.group = "default"
 
         arguments.size = self.find_attribute('size', [variables, defaults])
 
@@ -196,7 +195,7 @@ class Provider(ComputeNodeABC):
 
         # Step 3: use the create command to create the vms
 
-        #created = self.loop(vms, self.p.create, **arguments)
+        # created = self.loop(vms, self.p.create, **arguments)
         created = self.loop(vms, self._create, **arguments)
 
         return created
@@ -248,7 +247,6 @@ class Provider(ComputeNodeABC):
 
         result = database.update(entry, progress=False)[0]
 
-
         dryrun = False
         if "dryrun" in arguments:
             dryrun = arguments.dryrun
@@ -267,14 +265,12 @@ class Provider(ComputeNodeABC):
 
         entry.update({'cm': cm})
 
-
         if arguments.metadata:
             entry.update({"metadata": arguments.metadata})
         else:
-            entry.update({"metadata": str( {"cm": cm,
-                                       "image": arguments.image,
-                                       "size": arguments.size})})
-
+            entry.update({"metadata": str({"cm": cm,
+                                           "image": arguments.image,
+                                           "size": arguments.size})})
 
         cm['status'] = 'available'
         self.p.set_server_metadata(name, cm)

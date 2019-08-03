@@ -2,7 +2,6 @@ import os
 import subprocess
 from ast import literal_eval
 from datetime import datetime
-from pprint import pprint
 
 import openstack
 from cloudmesh.abstractclass.ComputeNodeABC import ComputeNodeABC
@@ -13,12 +12,11 @@ from cloudmesh.common.util import banner
 from cloudmesh.common.util import path_expand
 from cloudmesh.common.variables import Variables
 from cloudmesh.common3.DictList import DictList
-from cloudmesh.image.Image import Image
 from cloudmesh.configuration.Config import Config
+from cloudmesh.image.Image import Image
 from cloudmesh.mongo.CmDatabase import CmDatabase
 from cloudmesh.provider import ComputeProviderPlugin
 from cloudmesh.secgroup.Secgroup import Secgroup, SecgroupRule
-from cloudmesh.common.debug import VERBOSE
 
 
 class Provider(ComputeNodeABC, ComputeProviderPlugin):
@@ -826,8 +824,6 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         if type(group) == str:
             groups = Parameter.expand(group)
 
-
-
         banner("Create Server")
         print("    Name:    ", name)
         print("    IP:      ", ip)
@@ -840,6 +836,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         print("    secgroup:", secgroup)
         print("    group:   ", group)
         print("    groups:  ", groups)
+        print()
 
         try:
             server = self.cloudman.create_server(name,
@@ -1008,7 +1005,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         cmd = "ssh " \
               "-o StrictHostKeyChecking=no " \
               "-o UserKnownHostsFile=/dev/null " \
-            f"-i {key} {location} {command}"
+              f"-i {key} {location} {command}"
         cmd = cmd.strip()
         # VERBOSE(cmd)
 

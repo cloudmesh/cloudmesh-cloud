@@ -572,6 +572,7 @@ class VmCommand(PluginCommand):
             parameters = dotdict()
 
             names = Parameter.expand(arguments.name)
+
             cloud = Parameter.find("cloud",
                                    arguments,
                                    variables.dict())
@@ -583,6 +584,7 @@ class VmCommand(PluginCommand):
 
 
             parameters = dotdict()
+
             parameters.names = arguments.name
             parameters.group = groups
             for attribute in ["image", "flavor", "key", "secgroup"]:
@@ -622,6 +624,9 @@ class VmCommand(PluginCommand):
                         n = Name()
                         n.incr()
                         parameters.names = str(n)
+
+                    # parameters.progress = len(parameters.names) < 2
+
                     vms = provider.create(**parameters)
                     variables['vm'] = str(n)
                     if arguments["-v"]:

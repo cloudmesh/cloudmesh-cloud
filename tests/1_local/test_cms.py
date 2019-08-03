@@ -45,16 +45,6 @@ class TestConfig:
         assert "quit" in result
         assert "clear" in result
 
-    """
-    def test_storage(self):
-        HEADING()
-
-        result = Shell.execute("cms help storage", shell=True)
-
-        VERBOSE(result)
-
-        assert "storage put SOURCE DESTINATION --recursive" in result
-    """
 
     def test_benchmark(self):
         Benchmark.print()

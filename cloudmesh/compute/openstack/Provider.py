@@ -63,7 +63,8 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                        "Private IPs",
                        "Project ID",
                        "Started at",
-                       "Kind"]
+                       "Kind"],
+            "humanize": ["launched_at"]
         },
         "image": {
             "sort_keys": ["cm.name",
@@ -162,12 +163,14 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
             order = self.output[kind]['order']  # not pretty
             header = self.output[kind]['header']  # not pretty
+            humanize = self.output[kind]['humanize']  # not pretty
 
             print(Printer.flatwrite(data,
                                     sort_keys=["name"],
                                     order=order,
                                     header=header,
-                                    output=output)
+                                    output=output,
+                                    humanize=humanize)
                   )
         else:
             print(Printer.write(data, output=output))

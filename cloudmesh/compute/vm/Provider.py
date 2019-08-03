@@ -351,11 +351,19 @@ class Provider(ComputeNodeABC):
             order = self.p.output[kind]['order']  # not pretty
             header = self.p.output[kind]['header']  # not pretty
 
+            if 'humanize' in self.p.output[kind]:
+                humanize = self.p.output[kind]['humanize']
+            else:
+                humanize = None
+
+            print ("HH", humanize)
+
             print(Printer.flatwrite(data,
                                     sort_keys=["name"],
                                     order=order,
                                     header=header,
-                                    output=output)
+                                    output=output,
+                                    humanize=humanize)
                   )
         else:
             print(Printer.write(data, output=output))

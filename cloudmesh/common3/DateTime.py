@@ -15,7 +15,13 @@ class DateTime(object):
 
     @staticmethod
     def natural(time):
+        if type(time) == TIME.datetime:
+            time = str(time)
         return parser.parse(time)
+
+    @staticmethod
+    def words(time):
+        return TIME.datetime.strftime(time, "%a %w %b %Y, %H:%M:%S")
 
     @staticmethod
     def datetime(time):
@@ -61,3 +67,15 @@ if __name__ == "__main__":
     print("HUMANIZE STOP", DateTime.humanize(stop - start))
     print ("LOCAL", DateTime.local(start))
     print("UTC", DateTime.utc(start))
+    print("NATURAL", DateTime.natural(start))
+    print("WORDS", DateTime.words(start))
+
+    """
+    START 2019-08-03 16:21:12.154296
+    STOP 2019-08-03 16:21:13.154303
+    HUMANIZE STOP a second ago
+    LOCAL 2019-08-03 16:21:12.154296
+    UTC 2019-08-03 12:21:12.154296-04:00
+    NATURAL 2019-08-03 16:21:12.154296
+    WORDS Sat 6 Aug 2019, 16:21:12
+    """

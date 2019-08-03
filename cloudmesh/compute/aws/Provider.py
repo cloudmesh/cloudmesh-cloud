@@ -727,7 +727,17 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         :param key:
         :return:
         """
-        return self.ec2_client.create_key_pair(KeyName=key)
+        key_name = key["name"]
+        cloud = self.cloud
+        Console.msg(f"uploading the key: {key_name} -> {cloud}")
+        try:
+            r = self.ec2_client.import_key_pair(KeyName=key_name,PublicKeyMaterial=key['public_key'])
+            return r
+        except ClientError as e:
+            # Console.error("Key already exists")
+            VERBOSE(e)
+            raise ValueError # this is raised because key.py catches valueerror
+
 
     def key_delete(self, name=None):
         # TODO: Vafa
@@ -736,7 +746,10 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         :param name: The name of the key
         :return:
         """
-        return self.ec2_client.delete_key_pair(KeyName=name)
+        cloud = self.cloud
+        Console.msg(f"deleting the key: {name} -> {cloud}")
+        r = self.ec2_client.delete_key_pair(KeyName=name)
+        return r
 
     def delete_server_metadata(self, name):
         """

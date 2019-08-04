@@ -360,7 +360,7 @@ class Provider(ComputeNodeABC):
     def set_server_metadata(self, name=None, cm=None):
         # see https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-using-tags
         # https://github.com/Azure-Samples/virtual-machines-python-manage/blob/master/example.py
-        # TODO: Joaquin
+        # TODO: Joaquin -> Completed
         # tags = FlatDict(cm)
 
         data = {}
@@ -382,13 +382,13 @@ class Provider(ComputeNodeABC):
         return async_vm_key_updates.result().tags
 
     def get_server_metadata(self, name):
-        # TODO: Joaquin
+        # TODO: Joaquin -> Completed
         tags_dict = self.vms.get(self.GROUP_NAME,self.VM_NAME)
 
         return tags_dict.tags
 
     def delete_server_metadata(self, name, key):
-        # TODO: Joaquin
+        # TODO: Joaquin -> Completed
 
         tags_dict = self.get_server_metadata(self)
 
@@ -655,7 +655,7 @@ class Provider(ComputeNodeABC):
         if name is None:
             name = self.VM_NAME
 
-        return self.stop(group, name)
+        return self.power_off(group, name)
 
     def info(self, group=None, name=None):
         """
@@ -682,17 +682,7 @@ class Provider(ComputeNodeABC):
         """
         servers = self.vms.list_all()
 
-        result = []
-        for server in servers:
-
-            if 'cm' in server['metadata']:
-                metadata = server['metadata']['cm']
-                cm = literal_eval(metadata)
-                if 'cm' in server:
-                    server['cm'].update(cm)
-            result.append(server)
-
-        return result
+        return self.get_list(servers, kind="vm")
 
     def destroy(self, group=None, name=None):
         """
@@ -792,7 +782,7 @@ class Provider(ComputeNodeABC):
 
 
     def flavors(self):
-        # TODO: Joaquin
+        # TODO: Joaquin -> Completed
         """
         Lists the flavors on the cloud
 
@@ -803,7 +793,7 @@ class Provider(ComputeNodeABC):
         return self.get_list(vm_sizes_list, kind="flavor")
 
     def flavor(self, name=None):
-        # TODO: Joaquin
+        # TODO: Joaquin -> Completed
         """
         Gets the flavor with a given name
         :param name: The name of the flavor
@@ -848,8 +838,6 @@ class Provider(ComputeNodeABC):
             return self.update_dict(entries, kind=kind)
         return None
 
-
-    # TODO Implement Rename Method
     def rename(self, name=None, destination=None):
         # TODO: Moeen
         """
@@ -885,7 +873,6 @@ class Provider(ComputeNodeABC):
         d = []
 
         for entry in _elements:
-            print(entry)
 
             if "cm" not in entry:
                entry['cm'] = {}

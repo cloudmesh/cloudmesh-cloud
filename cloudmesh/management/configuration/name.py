@@ -70,7 +70,6 @@ class Name(dotdict):
         :param schema:
         """
 
-
         #
         # init dict with schema, path, kwargs
         #
@@ -83,13 +82,16 @@ class Name(dotdict):
 
         else:
 
+
             self.assign(kwargs)
+            if "path" not in kwargs:
+                path= self.__dict__['path'] = path_expand("~/.cloudmesh/name.yaml")
+                data = self.load(path)
+                self.assign(data)
 
             if schema is not None:
                 self.__dict__['schema'] = schema
 
-            if "path" not in kwargs:
-                self.__dict__['path'] = path_expand("~/.cloudmesh/name.yaml")
 
         if "counter" not in self.__dict__:
             self.reset()
@@ -97,6 +99,14 @@ class Name(dotdict):
             self.__dict__["counter"] = int(self.__dict__["counter"])
 
         self.flush()
+
+    @property
+    def schema(self):
+        return self.__dict__['schema']
+
+
+    def set(self, schema):
+        self.__dict__['schema'] = schema
 
 
     def assign(self, data):

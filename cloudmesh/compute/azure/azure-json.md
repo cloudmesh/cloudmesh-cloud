@@ -1,4 +1,5 @@
 # Flavor 
+
 ```
 {
   'additional_properties': {},
@@ -12,6 +13,7 @@
 ```
 
 # Image
+
 ```
 python
 {
@@ -34,6 +36,7 @@ python
 ```
 
 # Virtual Machine
+
 ```
 python
 [{
@@ -102,4 +105,22 @@ python
     'location': 'eastus'
   }
 }]
+```
+
+# Key
+
+```
+TBD
+```
+
+# Secgroup & Secrule
+
+```
+TBD
+```
+
+# Resource Group
+
+```
+TBD
 ```

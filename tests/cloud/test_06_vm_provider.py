@@ -15,6 +15,7 @@ from cloudmesh.compute.vm.Provider import Provider
 from cloudmesh.configuration.Config import Config
 from cloudmesh.management.configuration.name import Name
 
+import sys
 
 Benchmark.debug()
 
@@ -30,8 +31,10 @@ if cloud is None:
     raise ValueError("cloud is not not set")
 
 
-name_generator = Name(schema=f"test-{user}-vm-""{counter}", counter=1)
-name_generator.incr()
+name_generator = Name()
+name_generator.set(f"test-{user}-vm-" + "{counter}")
+
+
 name = str(name_generator)
 
 provider = Provider(name=cloud)
@@ -56,51 +59,66 @@ class Test_provider_vm:
 
     def test_provider_vm_create(self):
         HEADING()
+        name_generator.incr()
         Benchmark.Start()
         data = provider.create()
         Benchmark.Stop()
         print(data)
-
-    def test_provider_vm_stop(self):
-        HEADING()
-        Benchmark.Start()
-        data = provider.stop(name=name)
-        Benchmark.Stop()
-        print(data)
-
-        # check the status of the vm if it is stopped
-
-    def test_provider_vm_start(self):
-        HEADING()
-        Benchmark.Start()
-        data = provider.start(name=name)
-        Benchmark.Stop()
-        print(data)
-
-        # check the status of the vm if it is started
-
-    def test_provider_vm_status(self):
-        HEADING()
-        Benchmark.Start()
-        data = provider.status(name=name)
-        Benchmark.Stop()
-        print(data)
+        name = str(Name())
+        status = provider.status(name=name)[0]
+        assert status["cm.status"] == 'ACTIVE'
 
     def test_provider_vm_info(self):
         HEADING()
         Benchmark.Start()
-        data = provider.info(name=name)
+        data = provider.info(name=name)[0]
         Benchmark.Stop()
         print(data)
+        assert data["cm"]["status"] == 'ACTIVE'
+
+
+    def test_vm_status(self):
+        HEADING()
+        name = str(Name())
+        Benchmark.Start()
+        status = provider.status(name=name)[0]
+        Benchmark.Stop()
+        print(status)
+
+
+    def test_provider_vm_stop(self):
+        HEADING()
+        name = str(Name())
+        print ("STOP:", name)
+        Benchmark.Start()
+        data = provider.stop(name=name)
+        Benchmark.Stop()
+        print(data)
+        status = provider.status(name=name)[0]
+        assert status["cm.status"] == 'SHUTOFF'
+
+    def test_provider_vm_start(self):
+        HEADING()
+        name = str(Name())
+        Benchmark.Start()
+        data = provider.start(name=name)
+        Benchmark.Stop()
+        VERBOSE(data)
+        status = provider.status(name=name)[0]
+        assert status["cm.status"] == 'ACTIVE'
+
 
     # do other tests before terminationg, keys, metadata, ....
 
     def test_provider_vm_terminate(self):
         HEADING()
+        name = str(Name())
         Benchmark.Start()
-        data = provider.terminate(name=name)
+        data = provider.destroy(name=name)
         Benchmark.Stop()
         print(data)
+        data = provider.info(name=name)
+        assert len(data) == 0
 
     def test_benchmark(self):
         Benchmark.print(sysinfo=False, csv=False, tag=cloud)

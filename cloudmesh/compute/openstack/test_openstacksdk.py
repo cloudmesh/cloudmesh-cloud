@@ -8,6 +8,8 @@ import openstack
 from cloudmesh.common.util import banner
 from cloudmesh.configuration.Config import Config
 import os
+from cloudmesh.management.configuration.name import Name
+from cloudmesh.common.debug import VERBOSE
 
 """
 see : https://docs.openstack.org/openstacksdk/latest/user/guides/compute.html
@@ -61,7 +63,33 @@ pprint (dir(cloud))
 
 print (cloud.compute.version)
 
-pprint(cloud.list_services())
+# not authorized
+# pprint(cloud.list_services())
+# pprint(cloud.list_users())
+# for bare metal, not in region One
+# pprint(cloud.list_machines())
+
+# not supported
+# pprint(cloud.list_zones())
+# pprint(cloud.list_nics())
+# pprint (cloud.list_hypervisors())
+# pprint(cloud.telemetry())
+
+
+pprint(cloud.list_routers())
+pprint(cloud.list_subnets())
+
+name = str(Name())
+
+
+pprint(cloud.get_compute_limits())
+
+VERBOSE(name)
+
+# not authorized
+# pprint(cloud.get_compute_quotas(name))
+# pprint(cloud.get_compute_usage(name))
+
 
 if False:
 

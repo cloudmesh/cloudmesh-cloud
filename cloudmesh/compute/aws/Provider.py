@@ -767,7 +767,11 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         Lists the images on the cloud
         :return: dict
         """
-        raise NotImplementedError
+        Console.msg(f"Getting the list of images for {self.cloud} cloud, this might take a few minutes ...")
+        images = self.ec2_client.describe_images()
+        Console.ok(f"Images list for {self.cloud} cloud retrieved successfully")
+        data = self.update_dict(images['Images'], kind="image")
+        return data
 
     def image(self, name=None):
         # TODO: Alex
@@ -841,7 +845,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                     entry['comment'] = entry['public_key'].split(" ", 2)[2]
                 except:
                     entry['comment'] = "N/A"
-                entry['name'] = entry['KeyName']
+                entry['name'] = entry.pop(['KeyName'])
                 entry['fingerprint'] = entry['KeyFingerprint']
                 entry['type'] = 'N/A'
                 entry['format'] = 'N/A'
@@ -849,6 +853,12 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                 # amaozn doesn ot return the public_key, hence commenting
                 # entry['format'] = \
                 #     entry['public_key'].split(" ", 1)[0].replace("ssh-", "")
+            elif kind == 'image':
+                try:
+                    entry['name'] = entry.pop('Name')
+                except KeyError:
+                    entry['name'] = 'N/A'
+                    continue
 
             entry["cm"] = {
                 "kind": kind,

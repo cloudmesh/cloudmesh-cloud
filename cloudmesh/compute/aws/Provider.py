@@ -713,7 +713,9 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
         :return: dict
         """
-        return self.ec2_client.describe_key_pairs()
+        keys = self.ec2_client.describe_key_pairs()
+        data = self.update_dict(keys['KeyPairs'], kind="key")
+        return data
 
     def key_upload(self, key=None):
         # TODO: Vafa
@@ -732,12 +734,11 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         Console.msg(f"uploading the key: {key_name} -> {cloud}")
         try:
             r = self.ec2_client.import_key_pair(KeyName=key_name,PublicKeyMaterial=key['public_key'])
-            return r
         except ClientError as e:
             # Console.error("Key already exists")
             VERBOSE(e)
             raise ValueError # this is raised because key.py catches valueerror
-
+        return r
 
     def key_delete(self, name=None):
         # TODO: Vafa
@@ -825,7 +826,6 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                      key, vm, image, flavor.
         :return: The list with the modified dicts
         """
-
         if elements is None:
             return None
         elif type(elements) == list:
@@ -840,9 +840,15 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                 try:
                     entry['comment'] = entry['public_key'].split(" ", 2)[2]
                 except:
-                    entry['comment'] = ""
-                entry['format'] = \
-                    entry['public_key'].split(" ", 1)[0].replace("ssh-", "")
+                    entry['comment'] = "N/A"
+                entry['name'] = entry['KeyName']
+                entry['fingerprint'] = entry['KeyFingerprint']
+                entry['type'] = 'N/A'
+                entry['format'] = 'N/A'
+
+                # amaozn doesn ot return the public_key, hence commenting
+                # entry['format'] = \
+                #     entry['public_key'].split(" ", 1)[0].replace("ssh-", "")
 
             entry["cm"] = {
                 "kind": kind,

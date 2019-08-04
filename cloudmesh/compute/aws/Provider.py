@@ -138,7 +138,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
             else:
                 response = self.ec2_client.describe_security_groups(GroupNames=[name])
         except ClientError as e:
-            print(e)
+            Console.error(e)
         VERBOSE(response)
         return response
 
@@ -169,10 +169,10 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                                                                  Description=description,
                                                                  VpcId=vpc_id)
                 security_group_id = response['GroupId']
-                print(f'Security Group Created {security_group_id} in vpc{vpc_id}')
+                Console.ok(f'Security Group Created {security_group_id} in vpc{vpc_id}')
 
             except ClientError as e:
-                print(e)
+                Console.error(e)
 
     def add_secgroup_rule(self,
                           name=None,  # group name
@@ -194,16 +194,16 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                      'ToPort': portmax,
                      'IpRanges': [{'CidrIp': ip_range}]},
                 ])
-            print(f'Ingress Successfully Set as {data}')
+            Console.ok(f'Ingress Successfully Set as {data}')
         except ClientError as e:
-            print(e)
+            Console.error(e)
 
     def remove_secgroup(self, name=None):
         try:
             response = self.ec2_client.delete_security_group(GroupName=name)
             VERBOSE(response)
         except ClientError as e:
-            print(e)
+            Console.error(e)
 
     def upload_secgroup(self, name=None):
         # TODO: Vafa
@@ -239,9 +239,9 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                      'ToPort': 'portmax',
                      'IpRanges': [{'CidrIp': 'ip_range'}]},
                 ])
-            print(f'Ingress Successfully Set as {data}')
+            Console.ok(f'Ingress Successfully Set as {data}')
         except ClientError as e:
-            print(e)
+            Console.error(e)
 
     def set_server_metadata(self, name, m):
         """
@@ -279,7 +279,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                 AllocationId=ip_description.get('AllocationId'),
             )
         except ClientError as e:
-            print(e)
+            Console.error(e)
         VERBOSE(f'Public IP {ip} deleted')
         return response
 
@@ -289,7 +289,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                 Domain='vpc'
             )
         except ClientError as e:
-            print(e)
+            Console.error(e)
 
         return response
 
@@ -307,7 +307,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
             ip_description = addresses.get('Addresses')[0]
             return ip_description
         except ClientError as e:
-            print(e)
+            Console.error(e)
 
     def attach_public_ip(self, node, ip):
 
@@ -327,7 +327,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                 AllowReassociation=True,
             )
         except ClientError as e:
-            print(e)
+            Console.error(e)
         return response
 
     def detach_public_ip(self, node, ip):
@@ -345,8 +345,8 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                 AssociationId=self._get_allocation_ids(self.ec2_client, ip).get('AssociationId'),
             )
         except ClientError as e:
-            print(e)
-        print(response)
+            Console.error(e)
+        Console.msg(response)
 
     # see the openstack example it will be almost the same as in openstack
     # other than getting
@@ -390,7 +390,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                                          aws_secret_access_key=self.secret_key,
                                          region_name=self.region)
         if self.session is None:
-            print("Invalid credentials...")
+            Console.error("Invalid credentials...")
             return
         self.ec2_resource = self.session.resource('ec2')
         self.ec2_client = self.ec2_resource.meta.client
@@ -422,12 +422,12 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                 self.ec2_client.start_instances(
                     InstanceIds=[each_instance.instance_id])
             except ClientError:
-                print("Currently instance cant be started...Please try again")
-            print("Starting Instance..Please wait...")
+                Console.error("Currently instance cant be started...Please try again")
+            Console.msg("Starting Instance..Please wait...")
             waiter = self.ec2_client.get_waiter('instance_running')
             waiter.wait(Filters=[
                 {'Name': 'instance-id', 'Values': [each_instance.instance_id]}])
-            print(
+            Console.ok(
                 f"Instance having Tag:{name} and "
                 f"Instance-Id:{each_instance.instance_id} started")
 
@@ -441,7 +441,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         """
 
         if name is None:
-            print("Please provide instance id...")
+            Console.error("Please provide instance id...")
             return
         instances = self._get_instance_id(self.ec2_resource, name)
 
@@ -450,12 +450,12 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                 self.ec2_client.stop_instances(
                     InstanceIds=[each_instance.instance_id])
             except ClientError:
-                print("Currently instance cant be stopped...Please try again")
-            print("Stopping Instance..Please wait...")
+                Console.error("Currently instance cant be stopped...Please try again")
+            Console.msg("Stopping Instance..Please wait...")
             waiter = self.ec2_client.get_waiter('instance_stopped')
             waiter.wait(Filters=[
                 {'Name': 'instance-id', 'Values': [each_instance.instance_id]}])
-            print(
+            Console.ok(
                 f"Instance having Tag:{name} and "
                 "Instance-Id:{each_instance.instance_id} stopped")
 
@@ -468,7 +468,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         :return: The dict representing the node including updated status
         """
         if name is None:
-            print("Please provide node name...")
+            Console.error("Please provide node name...")
             return
 
         instance_info = self.ec2_client.describe_instances(Filters=[
@@ -528,8 +528,8 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         for each_instance in instances:
             instance = self.ec2_resource.Instance(each_instance.instance_id)
             instance.reboot()
-            print("Rebooting Instance..Please wait...")
-            print(
+            Console.msg("Rebooting Instance..Please wait...")
+            Console.ok(
                 f"Instance having Tag:{name} and "
                 "Instance-Id:{each_instance.instance_id} rebooted")
 
@@ -547,13 +547,13 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                 self.ec2_client.terminate_instances(
                     InstanceIds=[each_instance.instance_id])
             except ClientError:
-                print(
+                Console.error(
                     "Currently instance cant be terminated...Please try again")
-            print("Terminating Instance..Please wait...")
+            Console.msg("Terminating Instance..Please wait...")
             waiter = self.ec2_client.get_waiter('instance_terminated')
             waiter.wait(Filters=[
                 {'Name': 'instance-id', 'Values': [each_instance.instance_id]}])
-            print(
+            Console.ok(
                 f"Instance having Tag:{name} and "
                 f"Instance-Id:{each_instance.instance_id} terminated")
 
@@ -599,19 +599,19 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         elif ip is not None:
             entry = self.list_public_ips(ip=ip, available=True)
             if len(entry) == 0:
-                print("ip not available")
+                Console.error("ip not available")
             return None
         banner("Create Server")
-        print("    Name:    ", name)
-        print("    IP:      ", ip)
-        print("    Image:   ", image)
-        print("    Size:    ", size)
-        print("    Public:  ", public)
-        print("    Key:     ", key)
-        print("    location:", location)
-        print("    timeout: ", timeout)
-        print("    secgroup:", secgroup)
-        print("    group:   ", group)
+        Console.msg(f"    Name:    {name}")
+        Console.msg(f"    IP:      {ip}")
+        Console.msg(f"    Image:   {image}")
+        Console.msg(f"    Size:    {size}")
+        Console.msg(f"    Public:  {public}")
+        Console.msg(f"    Key:     {key}")
+        Console.msg(f"    location:{location}")
+        Console.msg(f"    timeout: {timeout}")
+        Console.msg(f"    secgroup:{secgroup}")
+        Console.msg(f"    group:   {group}")
 
         # Validate if there is any VM with same tag name and state other than Terminated.
         # If there is any VM, throw error
@@ -656,7 +656,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                         'MaxAttempts': timeout / 20
                     }
                     )
-        print("Instance created...")
+        Console.ok("Instance created...")
         # if IP provided, Attach it to new instance
         if ip:
             self.attach_public_ip(name, ip)
@@ -767,6 +767,9 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         Lists the images on the cloud
         :return: dict
         """
+        #TODO use mongoimport here to make is faster
+        # use something like cm = CmDatabase(); cm.import(collection="aws-image", d)
+        # cm.load(collection="aws-image", path)
         Console.msg(f"Getting the list of images for {self.cloud} cloud, this might take a few minutes ...")
         images = self.ec2_client.describe_images()
         Console.ok(f"Images list for {self.cloud} cloud retrieved successfully")

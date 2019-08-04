@@ -1,5 +1,4 @@
 # Flavor 
-
 ```
 {
   'additional_properties': {},
@@ -13,7 +12,6 @@
 ```
 
 # Image
-
 ```
 python
 {
@@ -32,5 +30,36 @@ python
   'automatic_os_upgrade_properties': {
     'automatic_os_upgrade_supported': False
   }
+}
+```
+
+# Virtual Machine
+```
+python
+{
+  'additional_properties': {},
+  'id': '/subscriptions/aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa/resourceGroups/cloudmesh/providers/Microsoft.Compute/virtualMachines/cloudmeshVM',
+  'name': 'cloudmeshVM',
+  'type': 'Microsoft.Compute/virtualMachines',
+  'location': 'eastus',
+  'tags': {
+    'tag 1': 'python',
+    'tag 2': 'JAE'
+  },
+  'plan': None,
+  'hardware_profile': < azure.mgmt.compute.v2019_03_01.models.hardware_profile_py3.HardwareProfile object at 0x1166e12e8 > ,
+  'storage_profile': < azure.mgmt.compute.v2019_03_01.models.storage_profile_py3.StorageProfile object at 0x1166e11d0 > ,
+  'additional_capabilities': None,
+  'os_profile': < azure.mgmt.compute.v2019_03_01.models.os_profile_py3.OSProfile object at 0x1166e1128 > ,
+  'network_profile': < azure.mgmt.compute.v2019_03_01.models.network_profile_py3.NetworkProfile object at 0x1166e1278 > ,
+  'diagnostics_profile': None,
+  'availability_set': None,
+  'provisioning_state': 'Succeeded',
+  'instance_view': None,
+  'license_type': None,
+  'vm_id': '33333333-3333-3333-3333-444444444444',
+  'resources': None,
+  'identity': None,
+  'zones': None
 }
 ```

@@ -61,6 +61,9 @@ class Arguments(object):
             "--name") or variables["vm"]
         # TODO: bug this only works for vm, but not images and so on
         if names is None:
+            # this is a temporary patch for "image list --cloud=XX --refresh" so not to print the error
+            if (arguments.cloud and arguments.refresh and arguments.list):
+                return None
             Console.error("you need to specify a vm")
             return None
         else:

@@ -1,7 +1,6 @@
 import os
 import subprocess
 from ast import literal_eval
-from datetime import datetime
 
 import openstack
 from cloudmesh.abstractclass.ComputeNodeABC import ComputeNodeABC
@@ -17,7 +16,7 @@ from cloudmesh.image.Image import Image
 from cloudmesh.mongo.CmDatabase import CmDatabase
 from cloudmesh.provider import ComputeProviderPlugin
 from cloudmesh.secgroup.Secgroup import Secgroup, SecgroupRule
-
+from cloudmesh.common3.DateTime import DateTime
 
 class Provider(ComputeNodeABC, ComputeProviderPlugin):
     kind = "openstack"
@@ -280,7 +279,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
             elif kind == 'vm':
 
-                entry["cm"]["updated"] = str(datetime.utcnow())
+                entry["cm"]["updated"] = str(DateTime.now())
                 if "created_at" in entry:
                     entry["cm"]["created"] = str(entry["created_at"])
                     # del entry["created_at"]
@@ -290,12 +289,13 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
             elif kind == 'flavor':
 
                 entry["cm"]["created"] = entry["updated"] = str(
-                    datetime.utcnow())
+                    DateTime.now())
 
             elif kind == 'image':
 
-                entry['cm']['created'] = str(datetime.utcnow())
-                entry['cm']['updated'] = str(datetime.utcnow())
+                entry["cm"]["created"] = entry["updated"] = str(
+                    DateTime.now())
+
             # elif kind == 'secgroup':
             #    pass
 

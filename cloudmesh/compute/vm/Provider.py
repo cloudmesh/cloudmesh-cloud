@@ -12,7 +12,7 @@ from cloudmesh.management.configuration.name import Name
 from cloudmesh.mongo.CmDatabase import CmDatabase
 from cloudmesh.mongo.DataBaseDecorator import DatabaseUpdate
 from cloudmesh.provider import Provider as ProviderList
-
+from cloudmesh.common.debug import VERBOSE
 
 class Provider(ComputeNodeABC):
 
@@ -90,8 +90,16 @@ class Provider(ComputeNodeABC):
 
     @DatabaseUpdate()
     def destroy(self, name=None):
-        parameter = {'name': name}
-        r = self.loop_n(self.p.destroy, **parameter)
+        # bug should determine provider from name
+        r = self.loop_name(name, self.p.destroy)
+        return r
+
+    def loop_name(self, names, func):
+        names = self.expand(names)
+        r = []
+        for name in names:
+            vm = func(name=name)
+            r = r + vm
         return r
 
     def loop(self, names, func, **kwargs):
@@ -130,13 +138,6 @@ class Provider(ComputeNodeABC):
     def images(self):
         return self.p.images()
 
-    @DatabaseUpdate()
-    def start(self, names=None, cloud=None, **kwargs):
-
-        #
-        # this is used to resume a vm, after it was stopped
-        #
-        raise NotImplementedError
 
     @DatabaseUpdate()
     def create(self, names=None, cloud=None, **kwargs):
@@ -207,22 +208,46 @@ class Provider(ComputeNodeABC):
         return None
 
     def find_clouds(self, names=None):
+        # BUG: needs to work on name and not provider
         names = self.expand(names)
         # not yet implemented
 
     @DatabaseUpdate()
-    def stop(self, names=None, **kwargs):
-        return self.loop(names, self.p.stop, **kwargs)
+    def stop(self, name=None, **kwargs):
+        # BUG: needs to work on name and not provider
+        return self.loop_name(name, self.p.stop)
 
-    def info(self, name=None):
-        return self.p.info(name=name)
 
     @DatabaseUpdate()
-    def resume(self, names=None):
-        return self.loop(names, self.p.resume)
+    def start(self, name=None, **kwargs):
+        # BUG: needs to work on name and not provider
+        return self.loop_name(name, self.p.start)
+
+    # @DatabaseUpdate()
+    def info(self, name=None):
+        # BUG: needs to work on name and not provider
+        return self.loop_name(name, self.p.info)
+
+    @DatabaseUpdate()
+    def resume(self, name=None):
+        # BUG: needs to work on name and not provider
+        return self.loop(name, self.p.resume)
+
+    def status(self, name=None):
+        r = self.info(name=name)
+        VERBOSE(r)
+
+        status = []
+        for entry in r:
+            state = {'name': entry['name'],
+                     'status:': entry['status'],
+                     'cm.status': entry['cm']['status']}
+            status.append(state)
+        return status
 
     @DatabaseUpdate()
     def reboot(self, names=None):
+        # BUG: needs to work on name and not provider
         return self.loop(names, self.p.reboot)
 
     def _create(self, name, arguments):

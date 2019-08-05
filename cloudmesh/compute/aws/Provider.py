@@ -1,6 +1,11 @@
 from datetime import datetime
 
+import os
+import subprocess
+import time
+
 import boto3
+from cloudmesh.common.Printer import Printer
 from botocore.exceptions import ClientError
 from cloudmesh.abstractclass.ComputeNodeABC import ComputeNodeABC
 from cloudmesh.common.console import Console
@@ -10,7 +15,8 @@ from cloudmesh.common3.DictList import DictList
 from cloudmesh.compute.aws.AwsFlavors import AwsFlavor
 from cloudmesh.configuration.Config import Config
 from cloudmesh.provider import ComputeProviderPlugin
-
+from cloudmesh.mongo.CmDatabase import CmDatabase
+from cloudmesh.secgroup.Secgroup import Secgroup, SecgroupRule
 
 class Provider(ComputeNodeABC, ComputeProviderPlugin):
     kind = "aws"
@@ -128,8 +134,10 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         raise NotImplementedError
 
     def find(self, elements, name=None):
-        # TODO: Vafa
-        raise NotImplementedError
+        for element in elements:
+            if element["name"] == name or element["cm"]["name"] == name:
+                return element
+        return None
 
     def list_secgroups(self, name=None):
         try:
@@ -353,8 +361,80 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
     # the ip and username
     def ssh(self, vm=None, command=None):
         # TODO: Vafa
-        # Host.ssh ....
-        raise NotImplementedError
+
+        def key_selector(keys):
+            '''
+            This is a helper method for ssh key selection
+            :param keys:
+            :return:
+            '''
+            tmp_keys = keys[:]
+            # indices = range(1,len(tmp_keys)+1)
+            for key_idx, key in enumerate(keys):
+                key['idx'] = key_idx + 1;
+            print(Printer.flatwrite(tmp_keys,
+                                    sort_keys=["idx"],
+                                    order=['idx', 'KeyName', 'KeyFingerprint'],
+                                    header=['Index', 'Key Name', "Key Fingerprint"],
+                                    output="table",
+                                    humanize=None)
+                  )
+            # Console.msg("Please select one of the AWS key indices from the table above: ")
+            picked = 0
+            while picked < 1 or picked > len(keys):
+                try:
+                    picked = int(input("Please select one of the AWS key indices from the table above: "))
+                except ValueError:
+                    pass
+            return keys[picked - 1]
+
+        cm = CmDatabase()
+        ip = vm['public_ips']
+        try:
+            key_name = vm['key_name']
+            key = cm.find_name(name=key_name, kind="key")[0]['location']['private']
+        except KeyError:
+            aws_keys = cm.find(kind='key', cloud='aws')
+            if len(aws_keys) == 0 :
+                Console.error(f"Could not find a key for the AWS instance '{vm['name']}'")
+                Console.error(f"Use `cms help key` to learn how to add and upload a key for AWS")
+                return
+            aws_key = key_selector(aws_keys)
+            for sshkey in cm.find_all_name(name=aws_key['KeyName'], kind="key"):
+                if "location" in sshkey.keys():
+                    key = sshkey['location']['private']
+                    break
+        user = "ec2-user"  # needs to be set on creation.
+
+        if command is None:
+            command = ""
+
+        if user is None:
+            location = ip
+        else:
+            location = user + '@' + ip
+        cmd = "ssh " \
+              "-o StrictHostKeyChecking=no " \
+              "-o UserKnownHostsFile=/dev/null " \
+              f"-i {key} {location} {command}"
+        cmd = cmd.strip()
+        print(cmd)
+        # VERBOSE(cmd)
+
+        if command == "":
+            os.system(cmd)
+        else:
+            ssh = subprocess.Popen(cmd,
+                                   shell=True,
+                                   stdout=subprocess.PIPE,
+                                   stderr=subprocess.PIPE)
+            result = ssh.stdout.read().decode("utf-8")
+            if not result:
+                error = ssh.stderr.readlines()
+                print("ERROR: %s" % error)
+            else:
+                return result
+
 
     def __init__(self, name=None, configuration="~/.cloudmesh/cloudmesh.yaml"):
         """
@@ -381,6 +461,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
         self.access_id = credentials['EC2_ACCESS_ID']
         self.secret_key = credentials['EC2_SECRET_KEY']
+        self.account_id = self._get_account_id()
         self.region = credentials['region']
         self.session = None
 
@@ -601,6 +682,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
             if len(entry) == 0:
                 Console.error("ip not available")
             return None
+
         banner("Create Server")
         Console.msg(f"    Name:    {name}")
         Console.msg(f"    IP:      {ip}")
@@ -760,6 +842,15 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         :return:
         """
         raise NotImplementedError
+
+    def _get_account_id(self):
+        '''
+        retrieves the acount id which is used to find the images of the current account
+        :return:
+        '''
+        client = boto3.client("sts", aws_access_key_id=self.access_id, aws_secret_access_key=self.secret_key)
+        return client.get_caller_identity()["Account"]
+
 
     def images(self, **kwargs):
         # TODO: Vafa

@@ -1,0 +1,304 @@
++-----------------------------------+--------+---------------------+-----------+-----------+------+--------+-------------+-------------+
+| timer                             | time   | start               | tag       | node      | user | system | mac_version | win_version |
++-----------------------------------+--------+---------------------+-----------+-----------+------+--------+-------------+-------------+
+| start benchmark-gregor-vm-95      | 24.794 | 2019-08-05 17:13:00 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| create vm benchmark-gregor-vm-96  | 23.517 | 2019-08-05 17:13:00 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| terminate benchmark-gregor-vm-96  | 4.029  | 2019-08-05 17:13:27 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| start benchmark-gregor-vm-96      | 23.572 | 2019-08-05 17:13:41 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| create vm benchmark-gregor-vm-97  | 22.345 | 2019-08-05 17:13:41 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| terminate benchmark-gregor-vm-97  | 2.399  | 2019-08-05 17:14:06 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| start benchmark-gregor-vm-97      | 22.912 | 2019-08-05 17:14:18 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| create vm benchmark-gregor-vm-98  | 21.627 | 2019-08-05 17:14:18 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| terminate benchmark-gregor-vm-98  | 2.121  | 2019-08-05 17:14:43 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| start benchmark-gregor-vm-98      | 22.624 | 2019-08-05 17:14:55 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| create vm benchmark-gregor-vm-99  | 20.76  | 2019-08-05 17:14:55 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| terminate benchmark-gregor-vm-99  | 2.139  | 2019-08-05 17:15:20 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| start benchmark-gregor-vm-99      | 21.993 | 2019-08-05 17:15:32 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| create vm benchmark-gregor-vm-100 | 20.456 | 2019-08-05 17:15:32 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| terminate benchmark-gregor-vm-100 | 3.964  | 2019-08-05 17:15:55 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| start benchmark-gregor-vm-100     | 21.671 | 2019-08-05 17:16:09 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| create vm benchmark-gregor-vm-101 | 20.41  | 2019-08-05 17:16:09 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| terminate benchmark-gregor-vm-101 | 2.102  | 2019-08-05 17:16:33 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| start benchmark-gregor-vm-101     | 23.665 | 2019-08-05 17:16:45 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| create vm benchmark-gregor-vm-102 | 22.448 | 2019-08-05 17:16:45 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| terminate benchmark-gregor-vm-102 | 2.125  | 2019-08-05 17:17:10 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| start benchmark-gregor-vm-102     | 22.064 | 2019-08-05 17:17:23 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| create vm benchmark-gregor-vm-103 | 20.799 | 2019-08-05 17:17:23 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| terminate benchmark-gregor-vm-103 | 2.408  | 2019-08-05 17:17:46 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| start benchmark-gregor-vm-103     | 24.883 | 2019-08-05 17:17:59 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| create vm benchmark-gregor-vm-104 | 23.334 | 2019-08-05 17:17:59 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| terminate benchmark-gregor-vm-104 | 2.324  | 2019-08-05 17:18:26 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| start benchmark-gregor-vm-104     | 23.843 | 2019-08-05 17:18:38 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| create vm benchmark-gregor-vm-105 | 22.642 | 2019-08-05 17:18:38 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| terminate benchmark-gregor-vm-105 | 3.985  | 2019-08-05 17:19:04 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| start benchmark-gregor-vm-105     | 19.664 | 2019-08-05 17:19:18 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| create vm benchmark-gregor-vm-106 | 18.449 | 2019-08-05 17:19:18 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| terminate benchmark-gregor-vm-106 | 2.667  | 2019-08-05 17:19:39 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| start benchmark-gregor-vm-106     | 18.789 | 2019-08-05 17:19:52 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| create vm benchmark-gregor-vm-107 | 17.603 | 2019-08-05 17:19:52 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| terminate benchmark-gregor-vm-107 | 2.11   | 2019-08-05 17:20:12 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| start benchmark-gregor-vm-107     | 23.381 | 2019-08-05 17:20:24 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| create vm benchmark-gregor-vm-108 | 21.77  | 2019-08-05 17:20:24 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| terminate benchmark-gregor-vm-108 | 2.989  | 2019-08-05 17:20:49 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| start benchmark-gregor-vm-108     | 19.102 | 2019-08-05 17:21:03 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| create vm benchmark-gregor-vm-109 | 17.911 | 2019-08-05 17:21:03 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| terminate benchmark-gregor-vm-109 | 2.085  | 2019-08-05 17:21:23 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| start benchmark-gregor-vm-109     | 19.311 | 2019-08-05 17:21:35 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| create vm benchmark-gregor-vm-110 | 17.642 | 2019-08-05 17:21:35 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| terminate benchmark-gregor-vm-110 | 2.334  | 2019-08-05 17:21:56 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| start benchmark-gregor-vm-110     | 22.168 | 2019-08-05 17:22:09 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| create vm benchmark-gregor-vm-111 | 20.945 | 2019-08-05 17:22:09 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| terminate benchmark-gregor-vm-111 | 2.123  | 2019-08-05 17:22:33 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| start benchmark-gregor-vm-111     | 19.276 | 2019-08-05 17:22:45 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| create vm benchmark-gregor-vm-112 | 18.006 | 2019-08-05 17:22:45 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| terminate benchmark-gregor-vm-112 | 2.247  | 2019-08-05 17:23:06 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| start benchmark-gregor-vm-112     | 20.798 | 2019-08-05 17:23:18 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| create vm benchmark-gregor-vm-113 | 19.571 | 2019-08-05 17:23:18 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| terminate benchmark-gregor-vm-113 | 2.175  | 2019-08-05 17:23:41 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| start benchmark-gregor-vm-113     | 22.884 | 2019-08-05 17:23:53 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| create vm benchmark-gregor-vm-114 | 21.265 | 2019-08-05 17:23:53 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| terminate benchmark-gregor-vm-114 | 2.115  | 2019-08-05 17:24:18 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| start benchmark-gregor-vm-114     | 21.183 | 2019-08-05 17:24:30 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| create vm benchmark-gregor-vm-115 | 19.963 | 2019-08-05 17:24:30 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| terminate benchmark-gregor-vm-115 | 2.117  | 2019-08-05 17:24:53 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| start benchmark-gregor-vm-115     | 19.132 | 2019-08-05 17:25:05 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| create vm benchmark-gregor-vm-116 | 17.926 | 2019-08-05 17:25:05 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| terminate benchmark-gregor-vm-116 | 3.466  | 2019-08-05 17:25:26 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| start benchmark-gregor-vm-116     | 19.345 | 2019-08-05 17:25:39 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| create vm benchmark-gregor-vm-117 | 18.135 | 2019-08-05 17:25:39 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| terminate benchmark-gregor-vm-117 | 2.08   | 2019-08-05 17:26:01 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| start benchmark-gregor-vm-117     | 20.958 | 2019-08-05 17:26:13 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| create vm benchmark-gregor-vm-118 | 19.777 | 2019-08-05 17:26:13 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| terminate benchmark-gregor-vm-118 | 2.054  | 2019-08-05 17:26:36 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| start benchmark-gregor-vm-118     | 21.229 | 2019-08-05 17:26:48 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| create vm benchmark-gregor-vm-119 | 19.837 | 2019-08-05 17:26:48 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| terminate benchmark-gregor-vm-119 | 2.085  | 2019-08-05 17:27:11 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| start benchmark-gregor-vm-119     | 19.401 | 2019-08-05 17:27:23 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| create vm benchmark-gregor-vm-120 | 18.173 | 2019-08-05 17:27:23 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| terminate benchmark-gregor-vm-120 | 2.046  | 2019-08-05 17:27:44 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| start benchmark-gregor-vm-120     | 19.059 | 2019-08-05 17:27:56 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| create vm benchmark-gregor-vm-121 | 17.823 | 2019-08-05 17:27:56 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| terminate benchmark-gregor-vm-121 | 2.527  | 2019-08-05 17:28:17 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| start benchmark-gregor-vm-121     | 22.272 | 2019-08-05 17:28:30 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| create vm benchmark-gregor-vm-122 | 20.37  | 2019-08-05 17:28:30 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| terminate benchmark-gregor-vm-122 | 2.15   | 2019-08-05 17:28:54 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| start benchmark-gregor-vm-122     | 20.674 | 2019-08-05 17:29:06 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| create vm benchmark-gregor-vm-123 | 19.035 | 2019-08-05 17:29:06 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| terminate benchmark-gregor-vm-123 | 2.252  | 2019-08-05 17:29:29 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| start benchmark-gregor-vm-123     | 20.256 | 2019-08-05 17:29:41 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| create vm benchmark-gregor-vm-124 | 19.084 | 2019-08-05 17:29:41 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| terminate benchmark-gregor-vm-124 | 2.072  | 2019-08-05 17:30:03 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| start benchmark-gregor-vm-124     | 19.636 | 2019-08-05 17:30:15 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| create vm benchmark-gregor-vm-125 | 18.424 | 2019-08-05 17:30:15 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| terminate benchmark-gregor-vm-125 | 3.584  | 2019-08-05 17:30:37 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| start benchmark-gregor-vm-125     | 32.059 | 2019-08-05 17:30:50 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| create vm benchmark-gregor-vm-126 | 30.82  | 2019-08-05 17:30:50 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| terminate benchmark-gregor-vm-126 | 3.194  | 2019-08-05 17:31:24 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| start benchmark-gregor-vm-126     | 19.797 | 2019-08-05 17:31:37 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| create vm benchmark-gregor-vm-127 | 18.229 | 2019-08-05 17:31:37 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| terminate benchmark-gregor-vm-127 | 2.142  | 2019-08-05 17:31:59 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| start benchmark-gregor-vm-127     | 22.053 | 2019-08-05 17:32:11 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| create vm benchmark-gregor-vm-128 | 20.812 | 2019-08-05 17:32:11 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| terminate benchmark-gregor-vm-128 | 2.804  | 2019-08-05 17:32:35 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| start benchmark-gregor-vm-128     | 20.084 | 2019-08-05 17:32:48 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| create vm benchmark-gregor-vm-129 | 18.521 | 2019-08-05 17:32:48 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| terminate benchmark-gregor-vm-129 | 2.112  | 2019-08-05 17:33:09 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| start benchmark-gregor-vm-129     | 19.227 | 2019-08-05 17:33:22 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| create vm benchmark-gregor-vm-130 | 18.039 | 2019-08-05 17:33:22 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| terminate benchmark-gregor-vm-130 | 2.73   | 2019-08-05 17:33:43 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| start benchmark-gregor-vm-130     | 20.729 | 2019-08-05 17:33:55 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| create vm benchmark-gregor-vm-131 | 19.191 | 2019-08-05 17:33:55 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| terminate benchmark-gregor-vm-131 | 3.044  | 2019-08-05 17:34:18 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| start benchmark-gregor-vm-131     | 20.08  | 2019-08-05 17:34:31 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| create vm benchmark-gregor-vm-132 | 18.892 | 2019-08-05 17:34:31 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| terminate benchmark-gregor-vm-132 | 3.748  | 2019-08-05 17:34:53 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| start benchmark-gregor-vm-132     | 22.315 | 2019-08-05 17:35:07 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| create vm benchmark-gregor-vm-133 | 21.074 | 2019-08-05 17:35:07 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| terminate benchmark-gregor-vm-133 | 2.12   | 2019-08-05 17:35:31 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| start benchmark-gregor-vm-133     | 21.555 | 2019-08-05 17:35:43 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| create vm benchmark-gregor-vm-134 | 19.277 | 2019-08-05 17:35:43 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| terminate benchmark-gregor-vm-134 | 2.092  | 2019-08-05 17:36:07 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| start benchmark-gregor-vm-134     | 20.001 | 2019-08-05 17:36:19 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| create vm benchmark-gregor-vm-135 | 18.771 | 2019-08-05 17:36:19 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| terminate benchmark-gregor-vm-135 | 2.072  | 2019-08-05 17:36:40 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| start benchmark-gregor-vm-135     | 20.035 | 2019-08-05 17:36:53 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| create vm benchmark-gregor-vm-136 | 17.645 | 2019-08-05 17:36:53 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| terminate benchmark-gregor-vm-136 | 2.363  | 2019-08-05 17:37:14 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| start benchmark-gregor-vm-136     | 19.053 | 2019-08-05 17:37:27 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| create vm benchmark-gregor-vm-137 | 17.49  | 2019-08-05 17:37:27 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| terminate benchmark-gregor-vm-137 | 2.105  | 2019-08-05 17:37:48 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| start benchmark-gregor-vm-137     | 21.023 | 2019-08-05 17:38:00 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| create vm benchmark-gregor-vm-138 | 19.375 | 2019-08-05 17:38:00 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| terminate benchmark-gregor-vm-138 | 2.054  | 2019-08-05 17:38:23 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| start benchmark-gregor-vm-138     | 20.09  | 2019-08-05 17:38:35 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| create vm benchmark-gregor-vm-139 | 18.866 | 2019-08-05 17:38:35 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| terminate benchmark-gregor-vm-139 | 2.129  | 2019-08-05 17:38:56 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| start benchmark-gregor-vm-139     | 21.468 | 2019-08-05 17:39:08 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| create vm benchmark-gregor-vm-140 | 20.132 | 2019-08-05 17:39:08 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| terminate benchmark-gregor-vm-140 | 2.127  | 2019-08-05 17:39:32 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| start benchmark-gregor-vm-140     | 20.488 | 2019-08-05 17:39:45 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| create vm benchmark-gregor-vm-141 | 19.109 | 2019-08-05 17:39:45 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| terminate benchmark-gregor-vm-141 | 2.529  | 2019-08-05 17:40:07 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| start benchmark-gregor-vm-141     | 23.037 | 2019-08-05 17:40:19 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| create vm benchmark-gregor-vm-142 | 21.818 | 2019-08-05 17:40:19 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| terminate benchmark-gregor-vm-142 | 2.072  | 2019-08-05 17:40:44 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| start benchmark-gregor-vm-142     | 23.838 | 2019-08-05 17:40:56 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| create vm benchmark-gregor-vm-143 | 21.828 | 2019-08-05 17:40:56 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| terminate benchmark-gregor-vm-143 | 2.092  | 2019-08-05 17:41:22 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| start benchmark-gregor-vm-143     | 21.031 | 2019-08-05 17:41:34 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| create vm benchmark-gregor-vm-144 | 19.839 | 2019-08-05 17:41:34 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| terminate benchmark-gregor-vm-144 | 2.135  | 2019-08-05 17:41:57 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| start benchmark-gregor-vm-144     | 20.225 | 2019-08-05 17:42:09 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| create vm benchmark-gregor-vm-145 | 19.01  | 2019-08-05 17:42:09 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| terminate benchmark-gregor-vm-145 | 2.094  | 2019-08-05 17:42:31 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| start benchmark-gregor-vm-145     | 23.507 | 2019-08-05 17:42:43 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| create vm benchmark-gregor-vm-146 | 22.339 | 2019-08-05 17:42:43 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| terminate benchmark-gregor-vm-146 | 2.478  | 2019-08-05 17:43:08 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| start benchmark-gregor-vm-146     | 21.659 | 2019-08-05 17:43:21 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| create vm benchmark-gregor-vm-147 | 20.419 | 2019-08-05 17:43:21 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| terminate benchmark-gregor-vm-147 | 2.097  | 2019-08-05 17:43:44 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| start benchmark-gregor-vm-147     | 22.162 | 2019-08-05 17:43:56 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| create vm benchmark-gregor-vm-148 | 20.916 | 2019-08-05 17:43:56 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| terminate benchmark-gregor-vm-148 | 3.06   | 2019-08-05 17:44:20 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| start benchmark-gregor-vm-148     | 21.328 | 2019-08-05 17:44:33 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| create vm benchmark-gregor-vm-149 | 20.125 | 2019-08-05 17:44:33 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| terminate benchmark-gregor-vm-149 | 3.653  | 2019-08-05 17:44:56 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| start benchmark-gregor-vm-149     | 19.358 | 2019-08-05 17:45:10 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| create vm benchmark-gregor-vm-150 | 18.005 | 2019-08-05 17:45:10 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| terminate benchmark-gregor-vm-150 | 2.099  | 2019-08-05 17:45:31 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| start benchmark-gregor-vm-150     | 21.451 | 2019-08-05 17:45:43 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| create vm benchmark-gregor-vm-151 | 19.914 | 2019-08-05 17:45:43 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| terminate benchmark-gregor-vm-151 | 2.032  | 2019-08-05 17:46:06 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| start benchmark-gregor-vm-151     | 19.894 | 2019-08-05 17:46:19 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| create vm benchmark-gregor-vm-152 | 18.719 | 2019-08-05 17:46:19 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| terminate benchmark-gregor-vm-152 | 2.217  | 2019-08-05 17:46:40 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| start benchmark-gregor-vm-152     | 21.928 | 2019-08-05 17:46:52 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| create vm benchmark-gregor-vm-153 | 20.678 | 2019-08-05 17:46:52 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| terminate benchmark-gregor-vm-153 | 2.289  | 2019-08-05 17:47:16 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| start benchmark-gregor-vm-153     | 21.953 | 2019-08-05 17:47:28 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| create vm benchmark-gregor-vm-154 | 20.759 | 2019-08-05 17:47:28 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| terminate benchmark-gregor-vm-154 | 2.129  | 2019-08-05 17:47:52 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| start benchmark-gregor-vm-154     | 20.723 | 2019-08-05 17:48:04 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| create vm benchmark-gregor-vm-155 | 19.477 | 2019-08-05 17:48:04 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| terminate benchmark-gregor-vm-155 | 2.077  | 2019-08-05 17:48:27 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| start benchmark-gregor-vm-155     | 22.314 | 2019-08-05 17:48:39 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| create vm benchmark-gregor-vm-156 | 20.943 | 2019-08-05 17:48:39 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| terminate benchmark-gregor-vm-156 | 2.052  | 2019-08-05 17:49:03 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| start benchmark-gregor-vm-156     | 25.792 | 2019-08-05 17:49:15 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| create vm benchmark-gregor-vm-157 | 24.505 | 2019-08-05 17:49:15 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| terminate benchmark-gregor-vm-157 | 2.758  | 2019-08-05 17:49:42 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| start benchmark-gregor-vm-157     | 20.17  | 2019-08-05 17:49:55 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| create vm benchmark-gregor-vm-158 | 18.956 | 2019-08-05 17:49:55 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| terminate benchmark-gregor-vm-158 | 4.447  | 2019-08-05 17:50:17 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| start benchmark-gregor-vm-158     | 20.139 | 2019-08-05 17:50:32 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| create vm benchmark-gregor-vm-159 | 18.899 | 2019-08-05 17:50:32 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| terminate benchmark-gregor-vm-159 | 4.343  | 2019-08-05 17:50:54 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| start benchmark-gregor-vm-159     | 20.076 | 2019-08-05 17:51:08 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| create vm benchmark-gregor-vm-160 | 18.862 | 2019-08-05 17:51:08 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| terminate benchmark-gregor-vm-160 | 3.132  | 2019-08-05 17:51:30 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| start benchmark-gregor-vm-160     | 20.163 | 2019-08-05 17:51:43 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| create vm benchmark-gregor-vm-161 | 18.615 | 2019-08-05 17:51:43 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| terminate benchmark-gregor-vm-161 | 2.052  | 2019-08-05 17:52:05 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| start benchmark-gregor-vm-161     | 19.448 | 2019-08-05 17:52:17 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| create vm benchmark-gregor-vm-162 | 18.244 | 2019-08-05 17:52:17 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| terminate benchmark-gregor-vm-162 | 4.147  | 2019-08-05 17:52:38 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| start benchmark-gregor-vm-162     | 19.252 | 2019-08-05 17:52:53 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| create vm benchmark-gregor-vm-163 | 18.029 | 2019-08-05 17:52:53 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| terminate benchmark-gregor-vm-163 | 2.026  | 2019-08-05 17:53:13 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| start benchmark-gregor-vm-163     | 19.198 | 2019-08-05 17:53:26 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| create vm benchmark-gregor-vm-164 | 17.907 | 2019-08-05 17:53:26 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| terminate benchmark-gregor-vm-164 | 3.376  | 2019-08-05 17:53:46 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| start benchmark-gregor-vm-164     | 19.178 | 2019-08-05 17:54:00 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| create vm benchmark-gregor-vm-165 | 17.948 | 2019-08-05 17:54:00 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| terminate benchmark-gregor-vm-165 | 2.521  | 2019-08-05 17:54:21 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| start benchmark-gregor-vm-165     | 19.909 | 2019-08-05 17:54:33 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| create vm benchmark-gregor-vm-166 | 18.664 | 2019-08-05 17:54:33 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| terminate benchmark-gregor-vm-166 | 2.05   | 2019-08-05 17:54:55 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| start benchmark-gregor-vm-166     | 22.375 | 2019-08-05 17:55:07 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| create vm benchmark-gregor-vm-167 | 20.022 | 2019-08-05 17:55:07 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| terminate benchmark-gregor-vm-167 | 2.546  | 2019-08-05 17:55:31 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| start benchmark-gregor-vm-167     | 19.898 | 2019-08-05 17:55:44 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| create vm benchmark-gregor-vm-168 | 18.509 | 2019-08-05 17:55:44 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| terminate benchmark-gregor-vm-168 | 2.176  | 2019-08-05 17:56:05 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| start benchmark-gregor-vm-168     | 19.116 | 2019-08-05 17:56:18 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| create vm benchmark-gregor-vm-169 | 17.613 | 2019-08-05 17:56:18 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| terminate benchmark-gregor-vm-169 | 4.39   | 2019-08-05 17:56:38 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| start benchmark-gregor-vm-169     | 20.108 | 2019-08-05 17:56:53 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| create vm benchmark-gregor-vm-170 | 18.828 | 2019-08-05 17:56:53 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| terminate benchmark-gregor-vm-170 | 4.394  | 2019-08-05 17:57:15 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| start benchmark-gregor-vm-170     | 20.022 | 2019-08-05 17:57:29 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| create vm benchmark-gregor-vm-171 | 18.821 | 2019-08-05 17:57:29 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| terminate benchmark-gregor-vm-171 | 3.14   | 2019-08-05 17:57:51 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| start benchmark-gregor-vm-171     | 18.931 | 2019-08-05 17:58:04 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| create vm benchmark-gregor-vm-172 | 17.708 | 2019-08-05 17:58:04 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| terminate benchmark-gregor-vm-172 | 4.909  | 2019-08-05 17:58:25 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| start benchmark-gregor-vm-172     | 19.538 | 2019-08-05 17:58:40 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| create vm benchmark-gregor-vm-173 | 18.024 | 2019-08-05 17:58:40 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| terminate benchmark-gregor-vm-173 | 2.804  | 2019-08-05 17:59:01 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| start benchmark-gregor-vm-173     | 19.039 | 2019-08-05 17:59:14 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| create vm benchmark-gregor-vm-174 | 17.81  | 2019-08-05 17:59:14 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| terminate benchmark-gregor-vm-174 | 4.203  | 2019-08-05 17:59:35 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| start benchmark-gregor-vm-174     | 20.322 | 2019-08-05 17:59:49 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| create vm benchmark-gregor-vm-175 | 18.431 | 2019-08-05 17:59:49 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| terminate benchmark-gregor-vm-175 | 2.094  | 2019-08-05 18:00:11 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| start benchmark-gregor-vm-175     | 20.203 | 2019-08-05 18:00:23 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| create vm benchmark-gregor-vm-176 | 18.963 | 2019-08-05 18:00:23 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| terminate benchmark-gregor-vm-176 | 2.775  | 2019-08-05 18:00:45 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| start benchmark-gregor-vm-176     | 20.166 | 2019-08-05 18:00:58 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| create vm benchmark-gregor-vm-177 | 18.807 | 2019-08-05 18:00:58 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| terminate benchmark-gregor-vm-177 | 2.51   | 2019-08-05 18:01:20 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| start benchmark-gregor-vm-177     | 23.133 | 2019-08-05 18:01:33 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| create vm benchmark-gregor-vm-178 | 21.115 | 2019-08-05 18:01:33 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| terminate benchmark-gregor-vm-178 | 2.121  | 2019-08-05 18:01:58 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| start benchmark-gregor-vm-178     | 19.65  | 2019-08-05 18:02:10 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| create vm benchmark-gregor-vm-179 | 18.349 | 2019-08-05 18:02:10 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| terminate benchmark-gregor-vm-179 | 2.865  | 2019-08-05 18:02:31 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| start benchmark-gregor-vm-179     | 20.266 | 2019-08-05 18:02:44 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| create vm benchmark-gregor-vm-180 | 19.059 | 2019-08-05 18:02:44 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| terminate benchmark-gregor-vm-180 | 2.737  | 2019-08-05 18:03:06 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| start benchmark-gregor-vm-180     | 19.361 | 2019-08-05 18:03:19 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| create vm benchmark-gregor-vm-181 | 18.004 | 2019-08-05 18:03:19 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| terminate benchmark-gregor-vm-181 | 2.053  | 2019-08-05 18:03:40 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| start benchmark-gregor-vm-181     | 21.54  | 2019-08-05 18:03:52 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| create vm benchmark-gregor-vm-182 | 20.362 | 2019-08-05 18:03:52 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| terminate benchmark-gregor-vm-182 | 2.072  | 2019-08-05 18:04:15 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| start benchmark-gregor-vm-182     | 23.138 | 2019-08-05 18:04:27 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| create vm benchmark-gregor-vm-183 | 21.895 | 2019-08-05 18:04:27 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| terminate benchmark-gregor-vm-183 | 3.327  | 2019-08-05 18:04:52 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| start benchmark-gregor-vm-183     | 22.582 | 2019-08-05 18:05:05 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| create vm benchmark-gregor-vm-184 | 21.239 | 2019-08-05 18:05:05 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| terminate benchmark-gregor-vm-184 | 2.604  | 2019-08-05 18:05:30 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| start benchmark-gregor-vm-184     | 24.441 | 2019-08-05 18:05:42 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| create vm benchmark-gregor-vm-185 | 22.8   | 2019-08-05 18:05:42 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| terminate benchmark-gregor-vm-185 | 2.061  | 2019-08-05 18:06:09 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| start benchmark-gregor-vm-185     | 21.211 | 2019-08-05 18:06:21 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| create vm benchmark-gregor-vm-186 | 19.577 | 2019-08-05 18:06:21 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| terminate benchmark-gregor-vm-186 | 2.326  | 2019-08-05 18:06:44 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| start benchmark-gregor-vm-186     | 19.544 | 2019-08-05 18:06:56 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| create vm benchmark-gregor-vm-187 | 17.975 | 2019-08-05 18:06:56 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| terminate benchmark-gregor-vm-187 | 2.045  | 2019-08-05 18:07:18 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| start benchmark-gregor-vm-187     | 20.792 | 2019-08-05 18:07:30 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| create vm benchmark-gregor-vm-188 | 18.818 | 2019-08-05 18:07:30 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| terminate benchmark-gregor-vm-188 | 2.111  | 2019-08-05 18:07:52 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| start benchmark-gregor-vm-188     | 22.183 | 2019-08-05 18:08:04 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| create vm benchmark-gregor-vm-189 | 19.712 | 2019-08-05 18:08:04 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| terminate benchmark-gregor-vm-189 | 2.132  | 2019-08-05 18:08:28 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| start benchmark-gregor-vm-189     | 19.918 | 2019-08-05 18:08:40 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| create vm benchmark-gregor-vm-190 | 18.684 | 2019-08-05 18:08:40 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| terminate benchmark-gregor-vm-190 | 2.054  | 2019-08-05 18:09:02 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| start benchmark-gregor-vm-190     | 20.69  | 2019-08-05 18:09:14 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| create vm benchmark-gregor-vm-191 | 19.432 | 2019-08-05 18:09:14 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| terminate benchmark-gregor-vm-191 | 2.089  | 2019-08-05 18:09:36 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| start benchmark-gregor-vm-191     | 20.631 | 2019-08-05 18:09:49 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| create vm benchmark-gregor-vm-192 | 18.626 | 2019-08-05 18:09:49 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| terminate benchmark-gregor-vm-192 | 2.007  | 2019-08-05 18:10:11 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| start benchmark-gregor-vm-192     | 22.984 | 2019-08-05 18:10:23 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| create vm benchmark-gregor-vm-193 | 21.751 | 2019-08-05 18:10:23 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| terminate benchmark-gregor-vm-193 | 2.063  | 2019-08-05 18:10:48 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| start benchmark-gregor-vm-193     | 22.191 | 2019-08-05 18:11:00 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| create vm benchmark-gregor-vm-194 | 20.98  | 2019-08-05 18:11:00 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| terminate benchmark-gregor-vm-194 | 2.492  | 2019-08-05 18:11:24 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| start benchmark-gregor-vm-194     | 21.283 | 2019-08-05 18:11:36 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| create vm benchmark-gregor-vm-195 | 18.814 | 2019-08-05 18:11:36 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
+| terminate benchmark-gregor-vm-195 | 2.217  | 2019-08-05 18:11:59 | chameleon | ('greg',) | greg | Darwin | 10.14.5     |             |
++-----------------------------------+--------+---------------------+-----------+-----------+------+--------+-------------+-------------+

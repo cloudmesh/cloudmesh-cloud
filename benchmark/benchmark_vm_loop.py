@@ -87,8 +87,8 @@ def test_benchmark():
 for i in range(0,repeat):
     provider_vm_create()
     provider_vm_terminate()
-    time.sleep(10)
-
     test_benchmark()
+    
+    time.sleep(10)
 
 test_benchmark()

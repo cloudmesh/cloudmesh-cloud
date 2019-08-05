@@ -17,9 +17,31 @@ from cloudmesh.mongo.CmDatabase import CmDatabase
 from cloudmesh.provider import ComputeProviderPlugin
 from cloudmesh.secgroup.Secgroup import Secgroup, SecgroupRule
 from cloudmesh.common3.DateTime import DateTime
+from cloudmesh.common.debug import VERBOSE
 
 class Provider(ComputeNodeABC, ComputeProviderPlugin):
     kind = "openstack"
+
+    vm_state = [
+        'ACTIVE',
+        'BUILDING',
+        'DELETED',
+        'ERROR',
+        'HARD_REBOOT',
+        'PASSWORD',
+        'PAUSED',
+        'REBOOT',
+        'REBUILD',
+        'RESCUED',
+        'RESIZED',
+        'REVERT_RESIZE',
+        'SHUTOFF',
+        'SOFT_DELETED',
+        'STOPPED',
+        'SUSPENDED',
+        'UNKNOWN',
+        'VERIFY_RESIZE'
+    ]
 
     output = {
         "status": {
@@ -265,7 +287,8 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                 "kind": kind,
                 "driver": self.cloudtype,
                 "cloud": self.cloud,
-                "name": entry['name']
+                "name": entry['name'],
+                "status": entry['status']
             })
 
             if kind == 'key':
@@ -617,7 +640,9 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         :param names: A list of node names
         :return:  A list of dict representing the nodes
         """
-        r = self.cloudman.suspend_server(name)
+        server = self.cloudman.get_server(name)['id']
+        r = self.cloudman.compute.start_server(server)
+        return r
 
     def stop(self, name=None):
         """
@@ -626,8 +651,33 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         :param names: A list of node names
         :return:  A list of dict representing the nodes
         """
-        r = self.cloudman.suspend_server(name)
-        return None
+        server = self.cloudman.get_server(name)['id']
+        r = dict(self.cloudman.compute.stop_server(server))
+        return r
+
+    def pause(self, name=None):
+        """
+        Start a server with the given names
+
+        :param names: A list of node names
+        :return:  A list of dict representing the nodes
+        """
+        server = self.cloudman.get_server(name)['id']
+        r = self.cloudman.compute.pause_server(server)
+
+        return r
+
+    def unpause(self, name=None):
+        """
+        Stop a list of nodes with the given names
+
+        :param names: A list of node names
+        :return:  A list of dict representing the nodes
+        """
+        server = self.cloudman.get_server(name)['id']
+        r = self.cloudman.compute.unpause_server(server)
+
+        return r
 
     def info(self, name=None):
         """
@@ -636,8 +686,16 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         :param name: The name of teh virtual machine
         :return: The dict representing the node including updated status
         """
-        data = self.cloudman.get_server(name)
-        return data
+        data = [self.cloudman.get_server(name)]
+        #VERBOSE (data)
+        r = self.update_dict(data, kind="vm")
+        #VERBOSE(r)
+        return r
+
+    def status(self, name=None):
+
+        r = self.cloudman.list_servers(filters={'name': name})[0]
+        return r['status']
 
     def suspend(self, name=None):
         """
@@ -649,8 +707,10 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         :return: The dict representing the node
         """
         # UNTESTED
-        r = self.cloudman.suspend_server(name)
-        return None
+        server = self.cloudman.get_server(name)['id']
+        r = self.cloudman.compute.suspend_server(server)
+
+        return r
 
         """
         raise NotImplementedError
@@ -683,7 +743,10 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         :param name: the name of the node
         :return: the dict of the node
         """
-        raise NotImplementedError
+        server = self.cloudman.get_server(name)['id']
+        r = self.cloudman.compute.resume_server(server)
+
+        return r
 
     def list(self):
         """
@@ -714,12 +777,11 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         :param names: the name of the node
         :return: the dict of the node
         """
-        server = self.info(name=name)
+        server = self.info(name=name)[0]
         r = self.cloudman.delete_server(name)
-        server['status'] = 'deleted'
-        servers = [server]
-        x = self.get_list(servers, kind="vm")
-        return x
+        server['status'] = 'DELETED'
+        servers = self.update_dict([server], kind='vm')
+        return servers
 
     def reboot(self, name=None):
         """
@@ -728,8 +790,10 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         :param names: A list of node names
         :return:  A list of dict representing the nodes
         """
-        raise NotImplementedError
-        return self.cloudman.reboot_node(name)
+        server = self.cloudman.get_server(name)['id']
+        r = self.cloudman.compute.reboot_server(server)
+
+        return r
 
     def set_server_metadata(self, name, cm):
         """
@@ -761,7 +825,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                image=None,
                size=None,
                location=None,
-               timeout=180,
+               timeout=360,
                key=None,
                secgroup=None,
                ip=None,

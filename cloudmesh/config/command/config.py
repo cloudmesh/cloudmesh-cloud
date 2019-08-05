@@ -35,6 +35,7 @@ class ConfigCommand(PluginCommand):
              config edit [ATTRIBUTE]
              config set ATTRIBUTE=VALUE
              config get ATTRIBUTE [--output=OUTPUT]
+             config value ATTRIBUTE
              config ssh keygen
              config ssh verify
              config ssh check
@@ -285,6 +286,24 @@ class ConfigCommand(PluginCommand):
             config[attribute] = value
             config.save()
 
+        elif arguments.value:
+
+            attribute = arguments.ATTRIBUTE
+            if not attribute.startswith("cloudmesh."):
+                attribute = f"cloudmesh.{attribute}"
+
+            config = Config()
+            try:
+                value = config[attribute]
+                if type(value) == dict:
+                    raise Console.error("the variable is a dict")
+                else:
+                    print(f"{value}")
+
+            except Exception as e:
+                print (e)
+                return ""
+
         elif arguments.get:
 
             attribute = arguments.ATTRIBUTE
@@ -292,12 +311,17 @@ class ConfigCommand(PluginCommand):
                 attribute = f"cloudmesh.{attribute}"
 
             config = Config()
-            value = config[attribute]
+            try:
+                value = config[attribute]
+                if type(value) == dict:
+                    print(Printer.write(value, output=arguments.output))
+                else:
+                    print(f"{attribute}={value}")
 
-            if type(value) == dict:
-                print(Printer.write(value, output=arguments.output))
-            else:
-                print(f"{attribute}={value}")
+            except Exception as e:
+                print (e)
+                return ""
+
 
         elif arguments.ssh and arguments.keygen:
 

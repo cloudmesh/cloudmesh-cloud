@@ -178,6 +178,34 @@ class CmDatabase(object):
                 return entries
         return entries
 
+    def find_all_by_name(self, name, kind=None):
+        """
+        This function returns the entry with the given name from all collections
+        in mongodb. The name must be unique across all collections
+
+        :param name: the unique name of the entry
+        :return:
+        """
+        entries = []
+        if kind is None:
+            collections = self.collections()
+        else:
+            collections = self.collections(regex=f".*-{kind}")
+
+        for collection in collections:
+            try:
+                col = self.db[collection]
+                if kind is None:
+                    cursor = col.find({"cm.name": name})
+                else:
+                    cursor = col.find({"cm.name": name, "cm.kind": kind})
+                for entry in cursor:
+                    entries.append(entry)
+            except:
+                pass
+        return entries
+
+
     # ok
     def find_names(self, names):
         """

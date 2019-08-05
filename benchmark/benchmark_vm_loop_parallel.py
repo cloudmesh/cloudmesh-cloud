@@ -72,7 +72,7 @@ def provider_vm_create(name):
     try:
         StopWatch.start(f"start {name}")
         parameters = {'name': name}
-        data = provider.create(**parameters)
+        data = provider.create(names=name)
         StopWatch.stop(f"start {name}")
 
     except Exception as e:
@@ -104,7 +104,7 @@ def test_benchmark():
 pool = Pool()
 
 p = {}
-names = generate_names(20)
+names = generate_names(batch)
 results = pool.map(create_terrminate, names)
 pool.close()
 pool.join()

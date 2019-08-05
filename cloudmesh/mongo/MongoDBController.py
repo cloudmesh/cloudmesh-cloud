@@ -41,8 +41,10 @@ class MongoInstaller(object):
     def docker(self):
         username = self.data["MONGO_USERNAME"]
         password = self.data["MONGO_PASSWORD"]
+        port = self.data["MONGO_PORT"]
+        host = self.data["MONGO_HOST"]
         script = \
-            f"docker run -d -p 127.0.0.1:27017:27017" \
+            f"docker run -d -p {host}:{port}:{port}" \
 	        f" --name cloudmesh-mongo" \
 	        f" -e MONGO_INITDB_ROOT_USERNAME={username}" \
 	        f" -e MONGO_INITDB_ROOT_PASSWORD={password}" \

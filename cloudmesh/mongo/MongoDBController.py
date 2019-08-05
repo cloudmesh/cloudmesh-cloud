@@ -12,7 +12,7 @@ from cloudmesh.common.dotdict import dotdict
 from cloudmesh.configuration.Config import Config
 from cloudmesh.management.script import Script, SystemPath
 from cloudmesh.management.script import find_process
-
+from cloudmesh.common3.Shell import Shell as Shell3
 
 # noinspection PyUnusedLocal
 class MongoInstaller(object):
@@ -37,6 +37,21 @@ class MongoInstaller(object):
 
     def __str__(self):
         return yaml.dump(self.data, default_flow_style=False, indent=2)
+
+    def docker(self):
+        username = self.data["MONGO_USERNAME"]
+        password = self.data["MONGO_PASSWORD"]
+        port = self.data["MONGO_PORT"]
+        host = self.data["MONGO_HOST"]
+        script = \
+            f"docker run -d -p {host}:{port}:{port}" \
+	        f" --name cloudmesh-mongo" \
+	        f" -e MONGO_INITDB_ROOT_USERNAME={username}" \
+	        f" -e MONGO_INITDB_ROOT_PASSWORD={password}" \
+            f" mongo"
+
+        installer = Script.run(script)
+        print (installer)
 
     def install(self, sudo=True):
         """
@@ -75,7 +90,7 @@ class MongoInstaller(object):
 
     # noinspection PyUnusedLocal
     def linux(self, sudo=True):
-        print ("PPP", sudo)
+
         # TODO UNTESTED
         """
         install MongoDB in Linux system (Ubuntu)

@@ -59,36 +59,60 @@ os.system(command)
 
 cloud = openstack.connect(**config)
 
-pprint (dir(cloud))
+name= "test-gregor-vm-3"
 
-print (cloud.compute.version)
+def status():
 
-# not authorized
-# pprint(cloud.list_services())
-# pprint(cloud.list_users())
-# for bare metal, not in region One
-# pprint(cloud.list_machines())
+    r = cloud.list_servers(filters={'name':name})[0]
+    return r['status']
 
-# not supported
-# pprint(cloud.list_zones())
-# pprint(cloud.list_nics())
-# pprint (cloud.list_hypervisors())
-# pprint(cloud.telemetry())
+print(status())
+server = cloud.get_server(name)['id']
+cloud.compute.suspend_server(server)
+
+print(status())
 
 
-pprint(cloud.list_routers())
-pprint(cloud.list_subnets())
+#cloud.resume_server()
 
-name = str(Name())
+if False:
+    pprint (dir(cloud))
 
 
-pprint(cloud.get_compute_limits())
+if False:
+    print (cloud.compute.version)
 
-VERBOSE(name)
+    # not authorized
+    # pprint(cloud.list_services())
+    # pprint(cloud.list_users())
+    # for bare metal, not in region One
+    # pprint(cloud.list_machines())
 
-# not authorized
-# pprint(cloud.get_compute_quotas(name))
-# pprint(cloud.get_compute_usage(name))
+    # not supported
+    # pprint(cloud.list_zones())
+    # pprint(cloud.list_nics())
+    # pprint (cloud.list_hypervisors())
+    # pprint(cloud.telemetry())
+
+
+    pprint(cloud.list_routers())
+    pprint(cloud.list_subnets())
+
+    name = str(Name())
+
+
+    pprint(cloud.get_compute_limits())
+
+    VERBOSE(name)
+
+    # not authorized
+    # pprint(cloud.get_compute_quotas(name))
+    # pprint(cloud.get_compute_usage(name))
+
+    # not found
+    # pprint(cloud.meter)
+    # pprint(cloud.placement)
+
 
 
 if False:

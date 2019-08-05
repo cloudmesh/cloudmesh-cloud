@@ -400,11 +400,11 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                 Console.error(f"Use `cms help key` to learn how to add and upload a key for AWS")
                 return
             aws_key = key_selector(aws_keys)
-            for sshkey in cm.find_all_name(name=aws_key['KeyName'], kind="key"):
+            for sshkey in cm.find_all_by_name(name=aws_key['KeyName'], kind="key"):
                 if "location" in sshkey.keys():
                     key = sshkey['location']['private']
                     break
-        user = "ec2-user"  # needs to be set on creation.
+        user = "ubuntu"  # needs to be set on creation.
 
         if command is None:
             command = ""

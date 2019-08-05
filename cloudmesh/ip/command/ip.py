@@ -22,7 +22,7 @@ class IpCommand(PluginCommand):
 
             Usage:
                 ip list  [--cloud=CLOUD] [--output=OUTPUT]
-                ip create [--cloud=CLOUD]
+                ip create [N] [--cloud=CLOUD]
                 ip delete [IP] [--cloud=CLOUD]
                 ip attach [NAME] [IP]
                 ip detach [NAME] [IP]
@@ -34,6 +34,7 @@ class IpCommand(PluginCommand):
                 --output=OUTPUT             The output format [default: table]
 
             Arguments:
+                N         Number of IPS to create
                 IP        IP Address
                 NAME      Name of the service
 
@@ -89,10 +90,13 @@ class IpCommand(PluginCommand):
 
             cloud = Parameter.find("cloud", arguments, variables)
 
+            n = arguments.N or 1
+
             print(f"cloud {cloud}")
             provider = Provider(name=cloud)
 
-            ips = provider.create_public_ip()
+            for i in range(0,int(n)):
+                ips = provider.create_public_ip()
             ips = provider.list_public_ips()
 
             provider.Print(ips, output=arguments.output, kind="ip")

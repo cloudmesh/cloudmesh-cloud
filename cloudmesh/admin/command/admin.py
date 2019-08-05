@@ -34,7 +34,7 @@ class AdminCommand(PluginCommand):
         ::
 
           Usage:
-            admin mongo install [--brew] [--download=PATH] [--nosudo]
+            admin mongo install [--brew] [--download=PATH] [--nosudo] [--docker]
             admin mongo create
             admin mongo status
             admin mongo stats
@@ -93,14 +93,21 @@ class AdminCommand(PluginCommand):
               This can be very useful in case you are filing an issue or bug.
         """
 
-        map_parameters(arguments, "output", "nosudo")
+        map_parameters(arguments, "output", "nosudo", "docker")
         arguments.output = arguments.output or "table"
         # arguments.PATH = arguments['--download'] or None
         result = None
 
         if arguments.mongo:
 
-            if arguments.install:
+            if arguments.install and arguments.docker:
+
+                installer = MongoInstaller()
+                r = installer.docker()
+                return r
+
+            elif arguments.install:
+
 
                 print("MongoDB install")
                 print(79 * "=")

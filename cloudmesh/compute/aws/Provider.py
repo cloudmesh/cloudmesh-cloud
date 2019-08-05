@@ -721,6 +721,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
             MaxCount=1,
             MinCount=1,
             SecurityGroups=[secgroup],
+            KeyName=key,
             TagSpecifications=[{'ResourceType': 'instance',
                                 'Tags': [
                                     {
@@ -760,7 +761,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         data['name'] = new_ec2_instance.tags[0]['Value'] if new_ec2_instance.tags else '',
         data['instance_id'] = new_ec2_instance.id,
         data['image'] = new_ec2_instance.image_id,
-        Console.msg("Waiting for the Public IP address ...")
+        Console.msg("Waiting for the Public IP address assignment ...")
         while True:
             try:
                 public_ip = \

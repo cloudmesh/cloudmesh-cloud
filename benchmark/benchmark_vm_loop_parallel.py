@@ -112,3 +112,14 @@ print (results)
 
 
 test_benchmark()
+
+
+"""
+TODO:
+/Users/gergor/ENV3/lib/python3.7/site-packages/pymongo/topology.py:150: UserWarning: MongoClient opened before fork. Create MongoClient only after forking. See PyMongo's documentation for details: http://api.mongodb.org/python/current/faq.html#is-pymongo-fork-safe
+  "MongoClient opened before fork. Create MongoClient only "
+/Users/gergor/ENV3/lib/python3.7/site-packages/pymongo/topology.py:150: UserWarning: MongoClient opened before fork. Create MongoClient only after forking. See PyMongo's documentation for details: http://api.mongodb.org/python/current/faq.html#is-pymongo-fork-safe
+  "MongoClient opened before fork. Create MongoClient only "
+/Users/gergor/ENV3/lib/python3.7/site-packages/pymongo/topology.py:150: UserWarning: MongoClient opened before fork. Create MongoClient only after forking. See PyMongo's documentation for details: http://api.mongodb.org/python/current/faq.html#is-pymongo-fork-safe
+  "MongoClient opened before fork. Create MongoClient only "
+"""

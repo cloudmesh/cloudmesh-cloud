@@ -760,8 +760,20 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         data['name'] = new_ec2_instance.tags[0]['Value'] if new_ec2_instance.tags else '',
         data['instance_id'] = new_ec2_instance.id,
         data['image'] = new_ec2_instance.image_id,
-        data['public_ips'] = new_ec2_instance.public_ip_address,
+        Console.msg("Waiting for the Public IP address ...")
+        while True:
+            try:
+                public_ip = \
+                self.ec2_client.describe_instances(InstanceIds=[new_ec2_instance.id])['Reservations'][0]['Instances'][
+                    0]['PublicIpAddress'],
+                break
+            except KeyError:
+                time.sleep(0.5)
+        data['public_ips'] = public_ip[0]
         data['private_ips'] = new_ec2_instance.private_ip_address
+
+        Console.msg(f"    Public IP:   {data['public_ips']}")
+        Console.msg(f"    Private IP:  {data['private_ips']}")
 
         output = self.update_dict(data, kind="vm")[0]
         return output

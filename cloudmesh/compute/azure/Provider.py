@@ -197,7 +197,7 @@ class Provider(ComputeNodeABC):
         raise NotImplementedError
 
     def list_secgroups(self, name=None):
-        # TODO: needs to be done by someone
+        # TODO: Joaquin
         raise NotImplementedError
 
     def list_secgroup_rules(self, name='default'):

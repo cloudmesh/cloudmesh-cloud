@@ -17,7 +17,7 @@ from cloudmesh.management.configuration.name import Name
 from cloudmesh.common.console import Console
 from cloudmesh.common.StopWatch import StopWatch
 import time
-
+from multiprocessing import Pool
 
 Benchmark.debug()
 
@@ -50,45 +50,65 @@ current_vms = 0
 
 repeat = 100
 
+batch=3
 
-def provider_vm_create():
+def generate_names(n):
+
+    names = []
+    for i in range(0,n):
+        name_generator.incr()
+        names.append(str(name_generator))
+    return names
+
+
+def list():
+    Print()
+    data = provider.list() # update the db
+
+
+def provider_vm_create(name):
     HEADING()
-
-    name_generator.incr()
-    name = str(Name())
 
     try:
         StopWatch.start(f"start {name}")
-        data = provider.create()
+        parameters = {'name': name}
+        data = provider.create(**parameters)
         StopWatch.stop(f"start {name}")
 
     except Exception as e:
         Console.error(f"could not create VM {name}")
         print (e)
-    Print()
-    data = provider.list() # update the db
 
-def provider_vm_terminate():
+def provider_vm_terminate(name):
     HEADING()
-    name = str(Name())
     try:
         StopWatch.start(f"terminate {name}")
-        data = provider.destroy(name=name)
+        parameters = {'name': name}
+
+        data = provider.destroy(**parameters)
         StopWatch.stop(f"terminate {name}")
 
     except Exception as e:
         Console.error(f"could not terminate VM {name}")
         print (e)
 
+def create_terrminate(name):
+    provider_vm_create(name)
+    provider_vm_terminate(name)
+    return name
+
 def test_benchmark():
     StopWatch.benchmark(sysinfo=False, csv=False, tag=cloud)
 
 
-for i in range(0,repeat):
-    provider_vm_create()
-    provider_vm_terminate()
-    test_benchmark()
+pool = Pool()
 
-    time.sleep(10)
+p = {}
+names = generate_names(20)
+results = pool.map(create_terrminate, names)
+pool.close()
+pool.join()
+print (results)
+
 
 test_benchmark()

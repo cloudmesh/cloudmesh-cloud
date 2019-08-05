@@ -635,9 +635,9 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
     def start(self, name=None):
         """
-        Start a server with the given names
+        Start a server with the given name
 
-        :param names: A list of node names
+        :param name: A list of node name
         :return:  A list of dict representing the nodes
         """
         server = self.cloudman.get_server(name)['id']
@@ -646,9 +646,9 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
     def stop(self, name=None):
         """
-        Stop a list of nodes with the given names
+        Stop a list of nodes with the given name
 
-        :param names: A list of node names
+        :param name: A list of node name
         :return:  A list of dict representing the nodes
         """
         server = self.cloudman.get_server(name)['id']
@@ -657,9 +657,9 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
     def pause(self, name=None):
         """
-        Start a server with the given names
+        Start a server with the given name
 
-        :param names: A list of node names
+        :param name: A list of node name
         :return:  A list of dict representing the nodes
         """
         server = self.cloudman.get_server(name)['id']
@@ -669,9 +669,9 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
     def unpause(self, name=None):
         """
-        Stop a list of nodes with the given names
+        Stop a list of nodes with the given name
 
-        :param names: A list of node names
+        :param name: A list of node name
         :return:  A list of dict representing the nodes
         """
         server = self.cloudman.get_server(name)['id']
@@ -774,7 +774,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
     def destroy(self, name=None):
         """
         Destroys the node
-        :param names: the name of the node
+        :param name: the name of the node
         :return: the dict of the node
         """
         server = self.info(name=name)[0]
@@ -785,9 +785,9 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
     def reboot(self, name=None):
         """
-        Reboot a list of nodes with the given names
+        Reboot a list of nodes with the given name
 
-        :param names: A list of node names
+        :param name: A list of node name
         :return:  A list of dict representing the nodes
         """
         server = self.cloudman.get_server(name)['id']

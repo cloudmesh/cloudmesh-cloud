@@ -140,15 +140,15 @@ class Provider(ComputeNodeABC):
 
 
     @DatabaseUpdate()
-    def create(self, name=None, cloud=None, **kwargs):
+    def create(self, names=None, cloud=None, **kwargs):
 
         arguments = dotdict(kwargs)
-        if name is None:
+        if names is None:
             name_generator = Name()
             name_generator.incr()
             vms = [str(name_generator)]
         else:
-            vms = self.expand(name)
+            vms = self.expand(names)
 
         #
         # Step 0, find the cloud
@@ -207,11 +207,10 @@ class Provider(ComputeNodeABC):
                 return d[name]
         return None
 
-    def find_clouds(self, name=None):
+    def find_clouds(self, names=None):
         # BUG: needs to work on name and not provider
-        names = self.expand(name)
+        names = self.expand(names)
         # not yet implemented
-        raise NotImplementedError
 
     @DatabaseUpdate()
     def stop(self, name=None, **kwargs):
@@ -247,9 +246,9 @@ class Provider(ComputeNodeABC):
         return status
 
     @DatabaseUpdate()
-    def reboot(self, name=None):
+    def reboot(self, names=None):
         # BUG: needs to work on name and not provider
-        return self.loop(name, self.p.reboot)
+        return self.loop(names, self.p.reboot)
 
     def _create(self, name, arguments):
 
@@ -359,7 +358,7 @@ class Provider(ComputeNodeABC):
             self.p.login()
 
     @DatabaseUpdate()
-    def suspend(self, name=None):
+    def suspend(self, names=None):
         raise NotImplementedError
 
     # noinspection PyPep8Naming

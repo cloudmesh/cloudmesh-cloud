@@ -687,9 +687,9 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         :return: The dict representing the node including updated status
         """
         data = [self.cloudman.get_server(name)]
-        VERBOSE (data)
+        #VERBOSE (data)
         r = self.update_dict(data, kind="vm")
-        VERBOSE(r)
+        #VERBOSE(r)
         return r
 
     def status(self, name=None):
@@ -777,12 +777,11 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         :param names: the name of the node
         :return: the dict of the node
         """
-        server = self.info(name=name)
+        server = self.info(name=name)[0]
         r = self.cloudman.delete_server(name)
-        server['status'] = 'deleted'
-        servers = [server]
-        x = self.get_list(servers, kind="vm")
-        return x
+        server['status'] = 'DELETED'
+        servers = self.update_dict([server], kind='vm')
+        return servers
 
     def reboot(self, name=None):
         """
@@ -826,7 +825,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                image=None,
                size=None,
                location=None,
-               timeout=180,
+               timeout=360,
                key=None,
                secgroup=None,
                ip=None,

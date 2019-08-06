@@ -116,7 +116,22 @@ TBD
 # Secgroup & Secrule
 
 ```
-TBD
+python
+{
+  'additional_properties': {},
+  'id': '/subscriptions/aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa/resourceGroups/cloudmesh/providers/Microsoft.Network/networkSecurityGroups/Cloudmesh',
+  'name': 'Cloudmesh',
+  'type': 'Microsoft.Network/networkSecurityGroups',
+  'location': 'eastus',
+  'tags': None,
+  'security_rules': [ < azure.mgmt.network.v2018_12_01.models.security_rule_py3.SecurityRule object at 0x11776c1d0 > ],
+  'default_security_rules': [ < azure.mgmt.network.v2018_12_01.models.security_rule_py3.SecurityRule object at 0x11776cdd8 > , < azure.mgmt.network.v2018_12_01.models.security_rule_py3.SecurityRule object at 0x11776c2b0 > , < azure.mgmt.network.v2018_12_01.models.security_rule_py3.SecurityRule object at 0x11776c208 > , < azure.mgmt.network.v2018_12_01.models.security_rule_py3.SecurityRule object at 0x11776c0f0 > , < azure.mgmt.network.v2018_12_01.models.security_rule_py3.SecurityRule object at 0x11776c358 > , < azure.mgmt.network.v2018_12_01.models.security_rule_py3.SecurityRule object at 0x11776c240 > ],
+  'network_interfaces': None,
+  'subnets': None,
+  'resource_guid': 'de0f392b-6798-4beb-98e3-b3ec797aff5e',
+  'provisioning_state': 'Succeeded',
+  'etag': 'W/"e0769973-41d5-479c-9c4b-c1fb0f388f0c"'
+}
 ```
 
 # Resource Group

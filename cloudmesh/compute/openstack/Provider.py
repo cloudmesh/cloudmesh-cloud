@@ -949,8 +949,8 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
             ips = self.cloudman.list_floating_ips()
             if available:
                 found = []
-                for entry in found:
-                    if entry['fixed_ip_address'] is not None:
+                for entry in ips:
+                    if entry['fixed_ip_address'] is None:
                         found.append(entry)
                 ips = found
 

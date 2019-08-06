@@ -18,8 +18,7 @@ from cloudmesh.common.console import Console
 from cloudmesh.common.StopWatch import StopWatch
 import time
 from multiprocessing import Pool
-import sys
-from pprint import pprint
+from cloudmesh.common.Shell import Shell
 
 Benchmark.debug()
 
@@ -62,31 +61,21 @@ def generate_names(n):
         names.append(str(name_generator))
     return names
 
-def generate_ips(n):
-    ips = provider.list_public_ips(available=True)
-    if len(ips) < n:
-        raise ValueError("Not enough free ips")
-    found = []
-    for ip in ips[0:n]:
-        found.append(ip['floating_ip_address'])
-    return found
-
 
 def list():
     Print()
     data = provider.list() # update the db
 
 
-def provider_vm_create(name, ip):
+def provider_vm_create(name):
     HEADING()
 
     try:
         StopWatch.start(f"start {name}")
-
-        print ("start", name, ip)
-
-        data = provider.create(names=name, ip=ip)
+        parameters = {'name': name}
+        data = Shell.execute(f"cms vm boot --name={name}", shell=True)
         StopWatch.stop(f"start {name}")
+        print (data)
 
     except Exception as e:
         Console.error(f"could not create VM {name}")
@@ -96,19 +85,18 @@ def provider_vm_terminate(name):
     HEADING()
     try:
         StopWatch.start(f"terminate {name}")
-        print ("terminate", name)
-        data = provider.destroy(name)
+        parameters = {'name': name}
+        data = Shell.execute(f"cms vm delete {name}", shell=True)
         StopWatch.stop(f"terminate {name}")
+        print(data)
 
     except Exception as e:
         Console.error(f"could not terminate VM {name}")
         print (e)
 
-def create_terrminate(parameters):
-    name = parameters['name']
-    ip = parameters['ip']
-    print ("CCC", name, ip)
-    provider_vm_create(name, ip)
+def create_terrminate(name):
+    provider_vm_create(name)
+    time.sleep(5)
     provider_vm_terminate(name)
     return name
 
@@ -120,21 +108,7 @@ pool = Pool()
 
 p = {}
 names = generate_names(batch)
-ips = generate_ips(batch)
-
-print (names)
-print (ips)
-
-parameter = []
-for i in range(0,batch):
-    parameter.append(
-        {
-            'name': names[i],
-            'ip': ips[i]
-        }
-    )
-
-results = pool.map(create_terrminate, parameter)
+results = pool.map(create_terrminate, names)
 pool.close()
 pool.join()
 print (results)

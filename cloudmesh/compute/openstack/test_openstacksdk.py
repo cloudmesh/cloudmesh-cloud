@@ -10,6 +10,7 @@ from cloudmesh.configuration.Config import Config
 import os
 from cloudmesh.management.configuration.name import Name
 from cloudmesh.common.debug import VERBOSE
+import sys
 
 """
 see : https://docs.openstack.org/openstacksdk/latest/user/guides/compute.html
@@ -48,6 +49,33 @@ def credentials():
 
 
 config = credentials()
+cloud = openstack.connect(**config)
+
+if True:
+    # not authorized
+    project = config['project_id']
+    pprint(cloud.get_compute_usage(project))
+    pprint(cloud.get_compute_quotas(project))
+
+
+
+
+
+if True:
+    command = "openstack usage show --os-auth-url={auth_url} " \
+                  "--os-project-name={project_id} --os-username={username} " \
+                  "--os-password={password} -f=json".format(**config)
+        # print (command)
+    os.system(command)
+
+if True:
+    command = "openstack quota show --os-auth-url={auth_url} " \
+                  "--os-project-name={project_id} --os-username={username} " \
+                  "--os-password={password} -f=json".format(**config)
+        # print (command)
+    os.system(command)
+
+sys.exit()
 
 
 command = "openstack --version --os-auth-url={auth_url} " \
@@ -56,24 +84,40 @@ command = "openstack --version --os-auth-url={auth_url} " \
     # print (command)
 os.system(command)
 
+if False:
 
-cloud = openstack.connect(**config)
+    command = "openstack hypervisor stats show --os-auth-url={auth_url} " \
+                  "--os-project-name={project_id} --os-username={username} " \
+                  "--os-password={password} -f=json".format(**config)
+        # print (command)
+    os.system(command)
 
-name= "test-gregor-vm-3"
+    command = "nova --os-auth-url={auth_url} " \
+                  "--os-project-name={project_id} --os-username={username} " \
+                  "--os-password={password} hypervisor-stats ".format(**config)
+        # print (command)
+    os.system(command)
 
-def status():
 
-    r = cloud.list_servers(filters={'name':name})[0]
-    return r['status']
 
-print(status())
-server = cloud.get_server(name)['id']
-cloud.compute.suspend_server(server)
 
-print(status())
+if False:
+    name= "test-gregor-vm-3"
+
+    def status():
+
+        r = cloud.list_servers(filters={'name':name})[0]
+        return r['status']
+
+    print(status())
+    server = cloud.get_server(name)['id']
+    cloud.compute.suspend_server(server)
+
+    print(status())
 
 
 #cloud.resume_server()
+
 
 if False:
     pprint (dir(cloud))
@@ -105,9 +149,7 @@ if False:
 
     VERBOSE(name)
 
-    # not authorized
-    # pprint(cloud.get_compute_quotas(name))
-    # pprint(cloud.get_compute_usage(name))
+
 
     # not found
     # pprint(cloud.meter)

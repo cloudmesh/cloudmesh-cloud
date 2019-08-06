@@ -92,7 +92,7 @@ class DatabaseUpdate:
                 return []
 
             result = self.database.update(current)
-
+            self.database.close_client()
             return result
 
         return wrapper
@@ -186,7 +186,7 @@ class DatabaseAlter:
                 current = [current]
 
             result = self.database.alter(current)
-
+            self.database.close_client()
             return result
 
         return wrapper

@@ -931,9 +931,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                                                  )
             server['user'] = user
             r = self.cloudman.wait_for_server(server)
-            VERBOSE(r)
             #s = self.cloudman.add_ips_to_server(server, ips=ip)
-            # VERBOSE(s)
             variables = Variables()
             variables['vm'] = name
             if metadata is None:

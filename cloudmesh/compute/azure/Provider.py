@@ -6,6 +6,9 @@ from azure.common.credentials import ServicePrincipalCredentials
 from azure.mgmt.compute import ComputeManagementClient
 from azure.mgmt.network import NetworkManagementClient
 from azure.mgmt.resource import ResourceManagementClient
+from azure.mgmt.network.v2018_12_01.models import NetworkSecurityGroup
+from azure.mgmt.network.v2017_03_01.models import SecurityRule
+import azure.mgmt.network.models
 from cloudmesh.abstractclass.ComputeNodeABC import ComputeNodeABC
 from cloudmesh.common.console import Console
 from cloudmesh.common.debug import VERBOSE
@@ -196,27 +199,19 @@ class Provider(ComputeNodeABC):
         # TODO: Moeen
         raise NotImplementedError
 
-    def list_secgroups(self, name=None):
-        # TODO: Joaquin
-        raise NotImplementedError
-
-    def list_secgroup_rules(self, name='default'):
-        # TODO: needs to be done by someone
-        raise NotImplementedError
-
-    def add_secgroup(self, name=None, description=None):
-        # TODO: needs to be done by someone
-        raise NotImplementedError
 
     def add_secgroup_rule(self,
                           name=None,  # group name
                           port=None,
                           protocol=None,
                           ip_range=None):
+#       self.network_client.security_rules.create_or_update()
         raise NotImplementedError
 
     def remove_secgroup(self, name=None):
         # TODO: needs to be done by someone
+#       self.network_client.network_security_groups.delete()
+
         raise NotImplementedError
 
     def upload_secgroup(self, name=None):
@@ -229,6 +224,7 @@ class Provider(ComputeNodeABC):
 
     def remove_rules_from_secgroup(self, name=None, rules=None):
         # TODO: needs to be done by someone
+#       self.network_client.security_rules.delete()
         raise NotImplementedError
 
 
@@ -406,6 +402,55 @@ class Provider(ComputeNodeABC):
 
         return async_vm_tag_updates.result().tags
 
+    def list_secgroups(self, name=None):
+        # TODO: Joaquin
+
+        sec_groups = self.network_client.network_security_groups.list_all(self)
+
+        #        self.network_client.security_rules.get()
+        #        self.network_client.network_security_groups.get()
+
+        return sec_groups #self.get_list(sec_groups, kind="secgroup")
+
+    def add_secgroup(self, name=None, description=None):
+        # TODO: Joaquin
+
+        network_security_group_name = name
+
+        parameters = NetworkSecurityGroup(
+            location= self.LOCATION,
+            security_rules=[
+                SecurityRule(
+                    name='resournce_name_security_rule',
+                    access=azure.mgmt.network.models.SecurityRuleAccess.allow,
+                    description=description,
+                    destination_address_prefix='*',
+                    destination_port_range='3389',
+                    direction=azure.mgmt.network.models.SecurityRuleDirection.inbound,
+                    priority=500,
+                    protocol=azure.mgmt.network.models.SecurityRuleProtocol.tcp,
+                    source_address_prefix='*',
+                    source_port_range='*',
+                ),
+            ],
+        )
+
+        result_add_security_group = self.network_client.network_security_groups.create_or_update(
+            self.GROUP_NAME,
+            network_security_group_name,
+            parameters,
+        )
+        result_add_security_group.wait()
+
+        return result_add_security_group.result()
+
+    def list_secgroup_rules(self, name='default'):
+        # TODO: Joaquin
+        secgroup_rules = self.network_client.security_rules.list(self.GROUP_NAME,name)
+
+        return secgroup_rules #self.get_list(secgroup_rules, kind="secgroup")
+
+
     def create(self, name=None,
                image=None,
                size=None,
@@ -548,6 +593,7 @@ class Provider(ComputeNodeABC):
             {'address_prefix': '10.0.0.0/24'}
         )
         subnet_info = async_subnet_creation.result()
+
 
         # Create NIC
         VERBOSE(" ".join('Create NIC'))

@@ -41,7 +41,7 @@ class TestAzure:
         HEADING()
         Benchmark.Start()
         test_resource_group = self.p.get_resource_group()
-        VERBOSE('RESOURCE GROUP: ' + str(test_resource_group))
+        VERBOSE(test_resource_group, label='RESOURCE GROUP')
         Benchmark.Stop()
 
         assert test_resource_group is not None
@@ -52,6 +52,7 @@ class TestAzure:
         Benchmark.Start()
         test_images = self.p.images()
         Benchmark.Stop()
+        VERBOSE(test_images, label='Azure List of Images')
 
         assert test_images is not None
 
@@ -61,6 +62,7 @@ class TestAzure:
         Benchmark.Start()
         test_flavors = self.p.flavors()
         Benchmark.Stop()
+        VERBOSE(test_flavors, label='Azure List of Flavors')
 
         assert test_flavors is not None
 
@@ -70,7 +72,7 @@ class TestAzure:
         Benchmark.Start()
         test_vm = self.p.create()
         Benchmark.Stop()
-        VERBOSE('Virtual Machine Created: ' + str(test_vm))
+        VERBOSE(test_vm, label='Virtual Machine Created')
 
         assert test_vm is not None
 
@@ -82,7 +84,7 @@ class TestAzure:
         Benchmark.Start()
         test_set_metadata = self.p.set_server_metadata(name=None,cm=tags)
         Benchmark.Stop()
-        VERBOSE('Added Metadata to Virtual Machine Created:' +  str(test_set_metadata))
+        VERBOSE(test_set_metadata, label='Added Metadata to Virtual Machine Created')
 
         assert test_set_metadata is not None
 
@@ -92,7 +94,7 @@ class TestAzure:
         Benchmark.Start()
         test_get_metadata = self.p.get_server_metadata(self)
         Benchmark.Stop()
-        VERBOSE('Get Metadata from Virtual Machine: ' + str(test_get_metadata))
+        VERBOSE(test_get_metadata, label='Get Metadata from Virtual Machine')
 
         assert test_get_metadata is not None
 
@@ -102,9 +104,39 @@ class TestAzure:
         Benchmark.Start()
         test_delete_metadata = self.p.delete_server_metadata(None, 'cm')
         Benchmark.Stop()
-        VERBOSE('Metadata from Virtual Machine after deleting: ' + str(test_delete_metadata))
+        VERBOSE(test_delete_metadata, label='Metadata from Virtual Machine after deleting tag')
 
         assert test_delete_metadata is not None
+
+    def test_list_security_groups(self):
+        HEADING()
+
+        Benchmark.Start()
+        test_list_sec_groups = self.p.list_secgroups()
+        Benchmark.Stop()
+        VERBOSE(test_list_sec_groups, label='List Security Groups')
+
+        assert test_list_sec_groups is not None
+
+    def test_add_security_group(self):
+        HEADING()
+
+        Benchmark.Start()
+        test_add_sec_group = self.p.add_secgroup('Cloudmesh', 'Allow RDP port 3389')
+        Benchmark.Stop()
+        VERBOSE(test_add_sec_group, label='Add Security Group')
+
+        assert test_add_sec_group is not None
+
+    def test_list_security_group_rules(self):
+        HEADING()
+
+        Benchmark.Start()
+        test_list_secgroup_rules = self.p.list_secgroup_rules()
+        Benchmark.Stop()
+        VERBOSE(test_list_secgroup_rules, label='List Security Group Rules')
+
+        assert test_list_secgroup_rules is not None
 
     def test_start(self):
         HEADING()
@@ -112,7 +144,7 @@ class TestAzure:
         Benchmark.Start()
         start_vm = self.p.start()
         Benchmark.Stop()
-        VERBOSE('Starting Virtual Machine: ' + str(start_vm))
+        VERBOSE(start_vm, label='Starting Virtual Machine')
 
         assert start_vm is not None
 
@@ -122,7 +154,7 @@ class TestAzure:
         Benchmark.Start()
         info_vm = self.p.info(None, None)
         Benchmark.Stop()
-        VERBOSE('Get Virtual Machine Info: ' + str(info_vm))
+        VERBOSE(info_vm, label='Get Virtual Machine Info')
 
         assert info_vm is not None
 
@@ -132,7 +164,7 @@ class TestAzure:
         Benchmark.Start()
         list_vm = self.p.list()
         Benchmark.Stop()
-        VERBOSE('List Virtual Machines: ' + str(list_vm))
+        VERBOSE(list_vm, label='List Virtual Machines')
 
         assert list_vm is not None
 
@@ -142,7 +174,7 @@ class TestAzure:
         Benchmark.Start()
         reboot_vm = self.p.reboot()
         Benchmark.Stop()
-        VERBOSE('Rebooting Virtual Machine: ' + str(reboot_vm))
+        VERBOSE(reboot_vm, label='Rebooting Virtual Machine')
 
         assert reboot_vm is not None
 
@@ -152,7 +184,7 @@ class TestAzure:
         Benchmark.Start()
         suspend_vm = self.p.suspend()
         Benchmark.Stop()
-        VERBOSE('Suspend Virtual Machine: ' + str(suspend_vm))
+        VERBOSE(suspend_vm, label='Suspend Virtual Machine')
 
         assert suspend_vm is not None
 
@@ -162,7 +194,7 @@ class TestAzure:
         Benchmark.Start()
         resume_vm = self.p.resume()
         Benchmark.Stop()
-        VERBOSE('Resume Virtual Machine: ' + str(resume_vm))
+        VERBOSE(resume_vm, label='Resume Virtual Machine')
 
         assert resume_vm is not None
 
@@ -172,17 +204,17 @@ class TestAzure:
         Benchmark.Start()
         stop_vm = self.p.stop()
         Benchmark.Stop()
-        VERBOSE('Stop Virtual Machine: ' + str(stop_vm))
+        VERBOSE(stop_vm, label='Stop Virtual Machine')
 
         assert stop_vm is not None
 
-    def test_delete(self):
+    def test_destroy(self):
         HEADING()
 
         Benchmark.Start()
         destroy_vm = self.p.destroy()
         Benchmark.Stop()
-        VERBOSE('Delete Virtual Machine: ' + str(destroy_vm))
+        VERBOSE(destroy_vm, label='Destroy Virtual Machine')
 
         assert destroy_vm is None
 

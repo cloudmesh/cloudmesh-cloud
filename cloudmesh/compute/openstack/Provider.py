@@ -287,8 +287,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                 "kind": kind,
                 "driver": self.cloudtype,
                 "cloud": self.cloud,
-                "name": entry['name'],
-                "status": entry['status']
+                "name": entry['name']
             })
 
             if kind == 'key':
@@ -306,6 +305,8 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                 if "created_at" in entry:
                     entry["cm"]["created"] = str(entry["created_at"])
                     # del entry["created_at"]
+                    if 'status' in entry:
+                        entry["cm"]["status"] = str(entry["status"])
                 else:
                     entry["cm"]["created"] = entry["modified"]
 

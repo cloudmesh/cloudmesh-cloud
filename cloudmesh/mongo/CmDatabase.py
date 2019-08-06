@@ -49,10 +49,10 @@ class CmDatabase(object):
             else:
                 self.port = int(port)
 
-            self.client = None
-            self.db = None
+        self.client = None
+        self.db = None
 
-            self.connect()
+        self.connect()
 
     # ok
     def connect(self):

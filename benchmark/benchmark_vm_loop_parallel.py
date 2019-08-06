@@ -21,6 +21,10 @@ from multiprocessing import Pool
 import sys
 from pprint import pprint
 
+
+batch=3
+
+
 Benchmark.debug()
 
 user = Config()["cloudmesh.profile.user"]
@@ -52,8 +56,6 @@ current_vms = 0
 
 repeat = 100
 
-batch=3
-
 def generate_names(n):
 
     names = []
@@ -81,15 +83,18 @@ def provider_vm_create(name, ip):
     HEADING()
 
     try:
-        StopWatch.start(f"start {name}")
-
         print ("start", name, ip)
 
-        data = provider.create(names=name, ip=ip)
+        StopWatch.start(f"start {name}")
+        parameter = {
+            'name':name,
+            'ip': ip
+        }
+        data = provider.create(**parameter)
         StopWatch.stop(f"start {name}")
 
     except Exception as e:
-        Console.error(f"could not create VM {name}")
+        Console.error(f"could not create VM {name}", traceflag=True)
         print (e)
 
 def provider_vm_terminate(name):
@@ -101,14 +106,14 @@ def provider_vm_terminate(name):
         StopWatch.stop(f"terminate {name}")
 
     except Exception as e:
-        Console.error(f"could not terminate VM {name}")
+        Console.error(f"could not terminate VM {name}", traceflag=True)
         print (e)
 
 def create_terrminate(parameters):
     name = parameters['name']
     ip = parameters['ip']
-    print ("CCC", name, ip)
     provider_vm_create(name, ip)
+    time.sleep(3)
     provider_vm_terminate(name)
     return name
 
@@ -137,18 +142,8 @@ for i in range(0,batch):
 results = pool.map(create_terrminate, parameter)
 pool.close()
 pool.join()
-print (results)
+# print (results)
 
 
 test_benchmark()
 
-
-"""
-TODO:
-/Users/gergor/ENV3/lib/python3.7/site-packages/pymongo/topology.py:150: UserWarning: MongoClient opened before fork. Create MongoClient only after forking. See PyMongo's documentation for details: http://api.mongodb.org/python/current/faq.html#is-pymongo-fork-safe
-  "MongoClient opened before fork. Create MongoClient only "
-/Users/gergor/ENV3/lib/python3.7/site-packages/pymongo/topology.py:150: UserWarning: MongoClient opened before fork. Create MongoClient only after forking. See PyMongo's documentation for details: http://api.mongodb.org/python/current/faq.html#is-pymongo-fork-safe
-  "MongoClient opened before fork. Create MongoClient only "
-/Users/gergor/ENV3/lib/python3.7/site-packages/pymongo/topology.py:150: UserWarning: MongoClient opened before fork. Create MongoClient only after forking. See PyMongo's documentation for details: http://api.mongodb.org/python/current/faq.html#is-pymongo-fork-safe
-  "MongoClient opened before fork. Create MongoClient only "
-"""

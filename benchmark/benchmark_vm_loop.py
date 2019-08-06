@@ -63,7 +63,7 @@ def provider_vm_create():
         StopWatch.stop(f"start {name}")
 
     except Exception as e:
-        Console.error(f"could not create VM {name}")
+        Console.error(f"could not create VM {name}", traceflag=True)
         print (e)
     Print()
     data = provider.list() # update the db

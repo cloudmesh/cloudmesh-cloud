@@ -78,7 +78,7 @@ def provider_vm_create(name):
         print (data)
 
     except Exception as e:
-        Console.error(f"could not create VM {name}")
+        Console.error(f"could not create VM {name}", traceflag=True)
         print (e)
 
 def provider_vm_terminate(name):

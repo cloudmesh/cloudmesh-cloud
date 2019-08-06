@@ -283,7 +283,6 @@ class Provider(ComputeNodeABC):
 
     def status(self, name=None):
         r = self.info(name=name)
-        VERBOSE(r)
 
         status = []
         for entry in r:

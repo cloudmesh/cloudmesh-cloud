@@ -13,6 +13,7 @@ from cloudmesh.mongo.CmDatabase import CmDatabase
 from cloudmesh.mongo.DataBaseDecorator import DatabaseUpdate
 from cloudmesh.provider import Provider as ProviderList
 from cloudmesh.common.debug import VERBOSE
+from cloudmesh.mongo.CmDatabase import CmDatabase
 
 class Provider(ComputeNodeABC):
 
@@ -68,25 +69,6 @@ class Provider(ComputeNodeABC):
         else:
             return Parameter.expand(names)
 
-    def loop_n(self, func, **kwargs):
-
-        try:
-            names = Parameter.expand(kwargs['name'])
-        except:
-            ValueError("The name parameter is missing")
-
-        r = []
-        for name in names:
-            parameters = dict(kwargs)
-            parameters['name'] = name
-            vm = func(**parameters)
-            if type(vm) == list:
-                r = r + vm
-            elif type(vm) == dict:
-                r.append(vm)
-            else:
-                raise NotImplementedError
-        return r
 
     @DatabaseUpdate()
     def destroy(self, name=None):
@@ -102,13 +84,22 @@ class Provider(ComputeNodeABC):
             r = r + vm
         return r
 
-    def loop(self, names, func, **kwargs):
-        names = self.expand(names)
+    def loop(self, func, **kwargs):
+        names = self.expand(kwargs['name'])
+
         r = []
         for name in names:
-            vm = func(name, kwargs)
-            r.append(vm)
+            parameters = dict(kwargs)
+            parameters['name'] = name
+            vm = func(**parameters)
+            if type(vm) == list:
+                r = r + vm
+            elif type(vm) == dict:
+                r.append(vm)
+            else:
+                raise NotImplementedError
         return r
+
 
     @DatabaseUpdate()
     def keys(self):
@@ -140,15 +131,18 @@ class Provider(ComputeNodeABC):
 
 
     @DatabaseUpdate()
-    def create(self, names=None, cloud=None, **kwargs):
+    def create(self, **kwargs):
 
         arguments = dotdict(kwargs)
-        if names is None:
+        name = arguments.name
+        cloud = arguments.cloud
+
+        if name is None:
             name_generator = Name()
             name_generator.incr()
             vms = [str(name_generator)]
         else:
-            vms = self.expand(names)
+            vms = self.expand(name)
 
         #
         # Step 0, find the cloud
@@ -167,6 +161,7 @@ class Provider(ComputeNodeABC):
         for vm in vms:
             query = {"name": vm}
             duplicates += database.find(collection=f'{cloud}-node', query=query)
+        database.close_client()
 
         if len(duplicates) > 0:
             print(Printer.flatwrite(duplicates,
@@ -197,9 +192,63 @@ class Provider(ComputeNodeABC):
         # Step 3: use the create command to create the vms
 
         # created = self.loop(vms, self.p.create, **arguments)
-        created = self.loop(vms, self._create, **arguments)
+        arguments['name'] = vms
+
+        created = self.loop(self._create, **arguments)
 
         return created
+
+
+    def _create(self, **arguments):
+
+        arguments = dotdict(arguments)
+
+        r = []
+
+        StopWatch.start(f"create vm {arguments.name}")
+
+        cm = {
+            'kind': "vm",
+            'name': arguments.name,
+            'group': arguments.group,
+            'cloud': self.cloudname(),
+            'status': 'booting'
+        }
+        entry = {}
+        entry.update(cm=cm, name=arguments.name)
+
+        result = CmDatabase.UPDATE(entry, progress=False)[0]
+
+        data = {}
+        dryrun = False
+        if "dryrun" in arguments:
+            dryrun = arguments.dryrun
+            data = {"dryrun": True}
+        else:
+            arguments.timeout = 360
+            data = self.p.create(**arguments)
+
+        entry.update(data)
+
+        StopWatch.stop(f"create vm {arguments.name}")
+        t = format(StopWatch.get(f"create vm {arguments.name}"), '.2f')
+        cm['creation_time'] = t
+
+        entry.update({'cm': cm})
+
+        if arguments.metadata:
+            entry.update({"metadata": arguments.metadata})
+        else:
+            entry.update({"metadata": str({"cm": cm,
+                                           "image": arguments.image,
+                                           "size": arguments.size})})
+
+        cm['status'] = 'available'
+        self.p.set_server_metadata(arguments.name, cm)
+
+        result = CmDatabase.UPDATE(entry, progress=False)[0]
+
+        return result
 
     def find_attribute(self, name, dicts):
         for d in dicts:
@@ -207,16 +256,15 @@ class Provider(ComputeNodeABC):
                 return d[name]
         return None
 
-    def find_clouds(self, names=None):
+    def find_clouds(self, name=None):
         # BUG: needs to work on name and not provider
-        names = self.expand(names)
+        names = self.expand(name)
         # not yet implemented
 
     @DatabaseUpdate()
     def stop(self, name=None, **kwargs):
         # BUG: needs to work on name and not provider
         return self.loop_name(name, self.p.stop)
-
 
     @DatabaseUpdate()
     def start(self, name=None, **kwargs):
@@ -246,63 +294,9 @@ class Provider(ComputeNodeABC):
         return status
 
     @DatabaseUpdate()
-    def reboot(self, names=None):
+    def reboot(self, name=None):
         # BUG: needs to work on name and not provider
-        return self.loop(names, self.p.reboot)
-
-    def _create(self, name, arguments):
-
-        arguments = dotdict(arguments)
-
-        database = CmDatabase()
-
-        r = []
-
-        StopWatch.start(f"create vm {name}")
-
-        cm = {
-            'kind': "vm",
-            'name': name,
-            'group': arguments.group,
-            'cloud': self.cloudname(),
-            'status': 'booting'
-        }
-        entry = {}
-        entry.update(cm=cm, name=name)
-
-        result = database.update(entry, progress=False)[0]
-
-        dryrun = False
-        if "dryrun" in arguments:
-            dryrun = arguments.dryrun
-            data = {"dryrun": True}
-        else:
-            data = self.p.create(
-                name=name,
-                timeout=360,
-                **arguments)
-
-        entry.update(data)
-
-        StopWatch.stop(f"create vm {name}")
-        t = format(StopWatch.get(f"create vm {name}"), '.2f')
-        cm['creation_time'] = t
-
-        entry.update({'cm': cm})
-
-        if arguments.metadata:
-            entry.update({"metadata": arguments.metadata})
-        else:
-            entry.update({"metadata": str({"cm": cm,
-                                           "image": arguments.image,
-                                           "size": arguments.size})})
-
-        cm['status'] = 'available'
-        self.p.set_server_metadata(name, cm)
-
-        result = database.update(entry, progress=False)[0]
-
-        return result
+        return self.loop(name, self.p.reboot)
 
     def set_server_metadata(self, name, **metadata):
         """
@@ -358,7 +352,7 @@ class Provider(ComputeNodeABC):
             self.p.login()
 
     @DatabaseUpdate()
-    def suspend(self, names=None):
+    def suspend(self, name=None):
         raise NotImplementedError
 
     # noinspection PyPep8Naming

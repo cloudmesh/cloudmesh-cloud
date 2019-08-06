@@ -139,7 +139,6 @@ class TestMongo:
         def entry():
             name = Name()
             print(name)
-            print("OOOO", str(name), name.counter)
             d = {"cmid": str(name), "cmcounter": name.counter, "name": "albert"}
             name.incr()
             pprint(d)

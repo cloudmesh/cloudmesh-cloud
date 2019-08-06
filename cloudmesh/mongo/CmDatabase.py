@@ -380,6 +380,13 @@ class CmDatabase(object):
         return records
 
 
+    @staticmethod
+    def UPDATE(_entries, progress=True):
+        cm = CmDatabase()
+        r = cm.update(_entries, progress)
+        cm.close_client()
+        return r
+
     # ok
     def update(self, _entries, progress=True):
 

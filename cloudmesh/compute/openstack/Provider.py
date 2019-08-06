@@ -687,10 +687,23 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         :param name: The name of teh virtual machine
         :return: The dict representing the node including updated status
         """
-        data = [self.cloudman.get_server(name)]
-        #VERBOSE (data)
+        data = self.cloudman.list_servers(filters={'name': name})
+
+        """
+        vms = self.list()
+        print ("VMS", vms)
+        data = None
+        for entry in vms:
+            print ("FFF", entry['name'])
+            if entry['name'] == name:
+                data = entry
+                break
+        """
+
+        if data is None:
+            raise ValueError(f"vm not found {name}")
+
         r = self.update_dict(data, kind="vm")
-        #VERBOSE(r)
         return r
 
     def status(self, name=None):
@@ -781,6 +794,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         server = self.info(name=name)[0]
         r = self.cloudman.delete_server(name)
         server['status'] = 'DELETED'
+
         servers = self.update_dict([server], kind='vm')
         return servers
 
@@ -834,6 +848,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                public=True,
                group=None,
                metadata=None,
+               cloud=None,
                **kwargs):
         """
         creates a named node
@@ -859,6 +874,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         https://docs.openstack.org/openstacksdk/latest/user/connection.html#openstack.connection.Connection.create_server
 
         """
+
         if 'flavor' in kwargs and size is None:
             size = kwargs['flavor']
 
@@ -884,7 +900,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
             entry = self.list_public_ips(ip=ip, available=True)
             if len(entry) == 0:
                 print("ip not available")
-            return None
+                raise ValueError(f"The ip can not be assigned {ip}")
 
         if type(group) == str:
             groups = Parameter.expand(group)
@@ -909,13 +925,15 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                                                  image=image,
                                                  key_name=key,
                                                  security_groups=[secgroup],
-                                                 timeout=timeout,
+                                                 timeout=timeout
                                                  # tags=groups,
                                                  # wait=True
                                                  )
             server['user'] = user
-            self.cloudman.wait_for_server(server)
-            self.cloudman.add_ips_to_server(server, ips=ip)
+            r = self.cloudman.wait_for_server(server)
+            VERBOSE(r)
+            #s = self.cloudman.add_ips_to_server(server, ips=ip)
+            # VERBOSE(s)
             variables = Variables()
             variables['vm'] = name
             if metadata is None:
@@ -934,6 +952,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
             #    ip=server.access_ipv4))
 
         except Exception as e:
+            Console.error("Problem starting vm", traceflag=True)
             print(e)
             raise RuntimeError
 
@@ -1057,6 +1076,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
         cm = CmDatabase()
         key = cm.find_name(name=key_name, kind="key")[0]['location']['private']
+        cm.close_client()
 
         user = "cc"  # needs to be set on creation.
 

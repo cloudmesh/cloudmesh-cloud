@@ -26,5 +26,6 @@ class Image(object):
             username = "root"
         elif "coreos" in image:
             username = "root"
-
+        else:
+            username = "root"
         return username

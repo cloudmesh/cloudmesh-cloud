@@ -122,11 +122,34 @@ class TestAzure:
         HEADING()
 
         Benchmark.Start()
-        test_add_sec_group = self.p.add_secgroup('Cloudmesh', 'Allow RDP port 3389')
+        test_add_sec_group = self.p.add_secgroup('cloudmesh', 'Allow RDP port 3389')
         Benchmark.Stop()
         VERBOSE(test_add_sec_group, label='Add Security Group')
 
         assert test_add_sec_group is not None
+
+    def test_add_security_rule(self):
+        HEADING()
+
+        Benchmark.Start()
+        test_add_sec_rule = self.p.add_secgroup_rule(name='resource_name_security_rule',port=None,protocol=None, ip_range='3389:3390')
+        Benchmark.Stop()
+        VERBOSE(test_add_sec_rule, label='Add Security Rule')
+
+        assert test_add_sec_rule is not None
+
+
+    def test_remove_security_rule(self):
+        HEADING()
+
+        Benchmark.Start()
+        test_remove_sec_rule = self.p.remove_rules_from_secgroup(name='resource_name_security_rule')
+        Benchmark.Stop()
+        VERBOSE(test_remove_sec_rule, label='Remove Security Rule')
+
+        assert test_remove_sec_rule is not None
+
+
 
     def test_list_security_group_rules(self):
         HEADING()

@@ -199,21 +199,6 @@ class Provider(ComputeNodeABC):
         # TODO: Moeen
         raise NotImplementedError
 
-
-    def add_secgroup_rule(self,
-                          name=None,  # group name
-                          port=None,
-                          protocol=None,
-                          ip_range=None):
-#       self.network_client.security_rules.create_or_update()
-        raise NotImplementedError
-
-    def remove_secgroup(self, name=None):
-        # TODO: needs to be done by someone
-#       self.network_client.network_security_groups.delete()
-
-        raise NotImplementedError
-
     def upload_secgroup(self, name=None):
         # TODO: needs to be done by someone
         raise NotImplementedError
@@ -450,6 +435,20 @@ class Provider(ComputeNodeABC):
 
         return secgroup_rules #self.get_list(secgroup_rules, kind="secgroup")
 
+    def add_secgroup_rule(self,
+                          name=None,  # group name
+                          port=None,
+                          protocol=None,
+                          ip_range=None):
+        # TODO: Joaquin
+#       self.network_client.security_rules.create_or_update()
+        raise NotImplementedError
+
+    def remove_secgroup(self, name=None):
+        # TODO: Joaquin
+#       self.network_client.network_security_groups.delete()
+
+        raise NotImplementedError
 
     def create(self, name=None,
                image=None,

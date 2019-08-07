@@ -720,7 +720,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                                 "cannot be assigned after creation. Use the default keyname 'id_rsa'? [yes/no]  ")
             if user_input_key.lower() in ['no', 'n']:
                 Console.error("VM boot cancelled")
-                return
+                return {}
             else:
                 key = 'id_rsa'
 

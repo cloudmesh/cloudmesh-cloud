@@ -712,6 +712,18 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
         if secgroup is None:
             secgroup = 'default'
+
+        if key is None:
+            user_input_key = ''
+            while user_input_key.lower() not in ['yes', 'no', 'y','n']:
+                user_input_key = input("SSH key name has not passed as a parameter for creating this VM. Not that the key "
+                                "cannot be assigned after creation. Use the default keyname 'id_rsa'? [yes/no]  ")
+            if user_input_key.lower() in ['no', 'n']:
+                Console.error("VM boot cancelled")
+                return
+            else:
+                key = 'id_rsa'
+
         #
         # BUG: the tags seem incomplete
         #
@@ -761,6 +773,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         data['name'] = new_ec2_instance.tags[0]['Value'] if new_ec2_instance.tags else '',
         data['instance_id'] = new_ec2_instance.id,
         data['image'] = new_ec2_instance.image_id,
+        data['key'] = key,
         Console.msg("Waiting for the Public IP address assignment ...")
         while True:
             try:

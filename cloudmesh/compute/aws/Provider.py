@@ -808,8 +808,8 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
         :return: dict
         """
-        keys = self.ec2_client.describe_key_pairs()
-        data = self.update_dict(keys['KeyPairs'], kind="key")
+        keys = self.ec2_client.describe_key_pairs()['KeyPairs']
+        data = self.update_dict(keys, kind="key")
         return data
 
     def key_upload(self, key=None):
@@ -948,11 +948,17 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         for entry in _elements:
 
             if kind == 'key':
-                try:
-                    entry['comment'] = entry['public_key'].split(" ", 2)[2]
-                except:
-                    entry['comment'] = "N/A"
-                entry['name'] = entry.pop(['KeyName'])
+                # ----------------------------------------------------------------------
+                # keys
+                # ----------------------------------------------------------------------
+                # 812:keys ./Provider.py
+                # ----------------------------------------------------------------------
+                # [{'KeyFingerprint': '0c:3d:86:a8:2d:73:ec:09:54:45:cf:00:a0:d0:09:1e:a2:3a:a5:29',
+                #   'KeyName': 'aws_vm1'},
+                #  {'KeyFingerprint': 'ad:5c:50:a8:9c:6e:8d:7f:db:50:ac:48:40:01:61:b0',
+                #   'KeyName': 'spullak@iu.edu'}]
+                entry['comment'] = "N/A"
+                entry['name'] = entry['KeyName']
                 entry['fingerprint'] = entry['KeyFingerprint']
                 entry['type'] = 'N/A'
                 entry['format'] = 'N/A'
@@ -1005,5 +1011,6 @@ if __name__ == "__main__":
     # name=Name()
     # name.incr()
     # provider.create(name.get())
-    provider.create(name='sriman123')
-    print(provider.list())
+    # provider.create(name='sriman123')
+    # print(provider.list())
+    provider.keys()

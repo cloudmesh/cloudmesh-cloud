@@ -207,10 +207,6 @@ class Provider(ComputeNodeABC):
         # TODO: needs to be done by someone
         raise NotImplementedError
 
-    def remove_rules_from_secgroup(self, name=None, rules=None):
-        # TODO: needs to be done by someone
-#       self.network_client.security_rules.delete()
-        raise NotImplementedError
 
 
     # these are available to be associated
@@ -403,21 +399,7 @@ class Provider(ComputeNodeABC):
         network_security_group_name = name
 
         parameters = NetworkSecurityGroup(
-            location= self.LOCATION,
-            security_rules=[
-                SecurityRule(
-                    name='resournce_name_security_rule',
-                    access=azure.mgmt.network.models.SecurityRuleAccess.allow,
-                    description=description,
-                    destination_address_prefix='*',
-                    destination_port_range='3389',
-                    direction=azure.mgmt.network.models.SecurityRuleDirection.inbound,
-                    priority=500,
-                    protocol=azure.mgmt.network.models.SecurityRuleProtocol.tcp,
-                    source_address_prefix='*',
-                    source_port_range='*',
-                ),
-            ],
+            location= self.LOCATION
         )
 
         result_add_security_group = self.network_client.network_security_groups.create_or_update(
@@ -441,14 +423,57 @@ class Provider(ComputeNodeABC):
                           protocol=None,
                           ip_range=None):
         # TODO: Joaquin
-#       self.network_client.security_rules.create_or_update()
-        raise NotImplementedError
+        '''
+        'protocol': {'required': True},
+        'access': {'required': True},
+        'direction': {'required': True},
+        '''
+
+        network_sec_group_name = 'cloudmesh'
+
+        if self.network_client:
+            try:
+                portmin, portmax = port.split(":")
+            except:
+                portmin = None
+                portmax = None
+
+            parameters = SecurityRule(
+                access=azure.mgmt.network.models.SecurityRuleAccess.allow,
+                priority=500,
+                destination_address_prefix='*',
+                destination_port_range= '*',
+                direction=azure.mgmt.network.models.SecurityRuleDirection.inbound,
+                protocol=azure.mgmt.network.models.SecurityRuleProtocol.tcp,
+                source_address_prefix='*',
+                source_port_range='*'
+            )
+
+        else:
+            raise ValueError("cloud not initialized")
+
+        add_rule = self.network_client.security_rules.create_or_update(self.GROUP_NAME, network_sec_group_name, name ,parameters)
+
+        return add_rule
+
+    def remove_rules_from_secgroup(self, name=None, rules=None):
+        # TODO: needs to be done by someone
+        network_sec_group_name = 'cloudmesh'
+
+        remove_rule = self.network_client.security_rules.delete(self.GROUP_NAME, network_sec_group_name, name )
+
+        return remove_rule
 
     def remove_secgroup(self, name=None):
         # TODO: Joaquin
-#       self.network_client.network_security_groups.delete()
 
-        raise NotImplementedError
+        network_sec_group_name = 'cloudmesh'
+      #  remove_rule
+
+        remove_rule = self.network_client.network_security_groups.delete(self.GROUP_NAME, network_sec_group_name, name )
+
+        return remove_rule
+
 
     def create(self, name=None,
                image=None,

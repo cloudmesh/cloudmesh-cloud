@@ -81,7 +81,14 @@ class Provider(ComputeNodeABC):
         r = []
         for name in names:
             vm = func(name=name)
-            r = r + vm
+            if type(vm) == list:
+                r = r + vm
+            elif type(vm) == dict:
+                r.append(vm)
+            elif vm is None:
+                pass
+            else:
+                raise NotImplementedError
         return r
 
     def loop(self, func, **kwargs):
@@ -96,6 +103,8 @@ class Provider(ComputeNodeABC):
                 r = r + vm
             elif type(vm) == dict:
                 r.append(vm)
+            elif vm is None:
+                pass
             else:
                 raise NotImplementedError
         return r

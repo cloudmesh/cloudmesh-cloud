@@ -907,6 +907,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
         banner("Create Server")
         print("    Name:    ", name)
+        print("    User:    ", user)
         print("    IP:      ", ip)
         print("    Image:   ", image)
         print("    Size:    ", size)
@@ -1060,6 +1061,11 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         #
         # TODO: fix user name issue, should be stored in db
         #
+
+        #
+        # use the key in teh definition of the vm .....
+        #
+
         ips = vm['addresses']
         first = list(ips.keys())[0]
 
@@ -1077,6 +1083,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         cm.close_client()
 
         user = "cc"  # needs to be set on creation.
+        # user = guess_username(imagename)
 
         if command is None:
             command = ""

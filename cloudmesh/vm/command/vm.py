@@ -20,6 +20,7 @@ from cloudmesh.common.dotdict import dotdict
 from cloudmesh.configuration.Config import Config
 from cloudmesh.management.configuration.name import Name
 from cloudmesh.common.util import banner
+from cloudmesh.image.Image import Image
 
 class VmCommand(PluginCommand):
 
@@ -587,11 +588,14 @@ class VmCommand(PluginCommand):
 
             parameters.names = arguments.name
             parameters.group = groups
-            for attribute in ["image", "flavor", "key", "secgroup"]:
+            for attribute in ["image", "username", "flavor", "key", "secgroup"]:
                 parameters[attribute] = Parameter.find(attribute,
                                    arguments,
                                    variables.dict(),
                                    defaults)
+
+            if arguments.username is None:
+                parameters.user = Image.guess_username(parameters.image)
 
             provider = Provider(name=cloud)
 

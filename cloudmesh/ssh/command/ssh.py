@@ -162,10 +162,10 @@ class SshCommand(PluginCommand):
             users = Parameter.expand(arguments.users)
             command = arguments.COMMAND
 
-            if arguments.command is None and len(names) > 1:
+            if command is None and len(names) > 1:
                 raise ValueError("For interactive shells the number of vms "
                                  "must be 1")
-            elif arguments.command is None and len(names) == 1:
+            elif command is None and len(names) == 1:
 
                 # find the cloud
 
@@ -193,7 +193,13 @@ class SshCommand(PluginCommand):
 
             for name in names:
                 cm = CmDatabase()
-                vm = cm.find_name(name, kind="vm")
+                try:
+                    vm = cm.find_name(name, kind="vm")[0]
+                except IndexError:
+                    Console.error("VM not found, make sure the vm exists in the list below: ")
+                    os.system('cms vm list')
+                    return
+
                 cloud = vm['cm']['cloud']
                 provider = Provider(name=cloud)
                 result = provider.ssh(vm=vm, command=command)

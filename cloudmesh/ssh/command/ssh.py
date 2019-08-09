@@ -153,6 +153,7 @@ class SshCommand(PluginCommand):
 
             variables = Variables()
 
+
             if arguments.name is None:
                 name = arguments.NAME or variables['vm']
                 names = [name]

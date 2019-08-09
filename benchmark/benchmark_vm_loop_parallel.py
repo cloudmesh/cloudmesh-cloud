@@ -22,8 +22,8 @@ import sys
 from pprint import pprint
 
 
-batch=3
-
+batch=10
+sleep = 60
 
 Benchmark.debug()
 
@@ -113,7 +113,7 @@ def create_terrminate(parameters):
     name = parameters['name']
     ip = parameters['ip']
     provider_vm_create(name, ip)
-    time.sleep(3)
+    time.sleep(sleep)
     provider_vm_terminate(name)
     return name
 
@@ -129,6 +129,8 @@ ips = generate_ips(batch)
 
 print (names)
 print (ips)
+
+
 
 parameter = []
 for i in range(0,batch):

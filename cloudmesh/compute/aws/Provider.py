@@ -140,6 +140,12 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         return None
 
     def list_secgroups(self, name=None):
+        """
+        List the named security groups
+
+        :param name: Name of the security group
+        :return: List of dict
+        """
         try:
             if name is None:
                 response = self.ec2_client.describe_security_groups()
@@ -714,15 +720,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
             secgroup = 'default'
 
         if key is None:
-            user_input_key = ''
-            while user_input_key.lower() not in ['yes', 'no', 'y','n']:
-                user_input_key = input("SSH key name has not passed as a parameter for creating this VM. Not that the key "
-                                "cannot be assigned after creation. Use the default keyname 'id_rsa'? [yes/no]  ")
-            if user_input_key.lower() in ['no', 'n']:
-                Console.error("VM boot cancelled")
-                return {}
-            else:
-                key = 'id_rsa'
+            raise ValueError("Key must be set. Use cms set key=<key name>")
 
         #
         # BUG: the tags seem incomplete

@@ -3,7 +3,7 @@ import subprocess
 import urllib.parse
 from sys import platform
 import psutil
-import win32com.shell.shell as shell
+
 
 import yaml
 from pymongo import MongoClient
@@ -304,6 +304,7 @@ class MongoDBController(object):
         if platform.lower() == 'win32':
             try:
                 if self.is_installed_as_win_service() and not self.win_service_is_running():
+                    import win32com.shell.shell as shell
                     script = "net start mongodb"
                     shell.ShellExecuteEx(lpVerb='runas', lpFile='cmd.exe', lpParameters='/c ' + script)
                     Console.msg("MongoDB Service should be started successfully given the permission")
@@ -341,6 +342,7 @@ class MongoDBController(object):
         # TODO: there  could be more mongos running, be more specific
         if "win" in platform.lower():
             if self.is_installed_as_win_service():
+                import win32com.shell.shell as shell
                 script = "net stop mongodb"
                 shell.ShellExecuteEx(lpVerb='runas', lpFile='cmd.exe', lpParameters='/c '+script)
                 result = 'MongoDB should be stopped given the permission'

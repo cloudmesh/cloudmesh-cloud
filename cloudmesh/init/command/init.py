@@ -1,5 +1,6 @@
 import os.path
 import shutil
+from sys import platform
 
 from cloudmesh.common.StopWatch import StopWatch
 from cloudmesh.common.console import Console
@@ -50,7 +51,7 @@ class InitCommand(PluginCommand):
             print("MongoDB delete")
             shutil.rmtree(location)
         except:
-            Console.error(f"deleting {location}")
+            Console.error(f"Could not delete {location}")
 
         user = Config()["cloudmesh.profile.user"]
         secgroup = "flask"

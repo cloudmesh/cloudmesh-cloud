@@ -3,6 +3,9 @@ from datetime import datetime
 import os
 import subprocess
 import time
+from sys import platform
+if 'win' in platform.lower():
+    import ctypes
 
 import boto3
 from cloudmesh.common.Printer import Printer
@@ -430,10 +433,17 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         if command == "":
             os.system(cmd)
         else:
-            ssh = subprocess.Popen(cmd,
-                                   shell=True,
-                                   stdout=subprocess.PIPE,
-                                   stderr=subprocess.PIPE)
+            if 'win' in platform.lower():
+                with disable_file_system_redirection():
+                    ssh = subprocess.Popen(cmd,
+                                           shell=True,
+                                           stdout=subprocess.PIPE,
+                                           stderr=subprocess.PIPE)
+            else:
+                ssh = subprocess.Popen(cmd,
+                                       shell=True,
+                                       stdout=subprocess.PIPE,
+                                       stderr=subprocess.PIPE)
             result = ssh.stdout.read().decode("utf-8")
             if not result:
                 error = ssh.stderr.readlines()
@@ -1016,6 +1026,16 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
         return d
 
+
+class disable_file_system_redirection:
+    _disable = ctypes.windll.kernel32.Wow64DisableWow64FsRedirection
+    _revert = ctypes.windll.kernel32.Wow64RevertWow64FsRedirection
+    def __enter__(self):
+        self.old_value = ctypes.c_long()
+        self.success = self._disable(ctypes.byref(self.old_value))
+    def __exit__(self, type, value, traceback):
+        if self.success:
+            self._revert(self.old_value)
 
 if __name__ == "__main__":
     provider = Provider(name='aws')

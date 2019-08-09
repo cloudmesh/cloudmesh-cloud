@@ -2,6 +2,8 @@ import os
 import subprocess
 import urllib.parse
 from sys import platform
+import psutil
+import win32com.shell.shell as shell
 
 import yaml
 from pymongo import MongoClient
@@ -277,6 +279,8 @@ class MongoDBController(object):
 
         if platform.lower() == 'win32':
             self.start(security=False)
+            self.set_auth()
+            self.stop()
         else:
             self.start(security=False)
             self.set_auth()
@@ -299,13 +303,19 @@ class MongoDBController(object):
 
         if platform.lower() == 'win32':
             try:
-                command = "-scriptblock { " + "mongod {auth} --bind_ip {MONGO_HOST} --dbpath {MONGO_PATH} --logpath {MONGO_LOG}/mongod.log".format(
-                    **self.data, auth=auth) + " }"
-                script = """
-                powershell -noexit start-job {command}
-                """.format(**self.data, command=command)
-                Script.run(script)
-                result = "child process started successfully. Program existing now"
+                if self.is_installed_as_win_service() and not self.win_service_is_running():
+                    script = "net start mongodb"
+                    shell.ShellExecuteEx(lpVerb='runas', lpFile='cmd.exe', lpParameters='/c ' + script)
+                    Console.msg("MongoDB Service should be started successfully given the permission")
+                    return
+                else:
+                    command = "-scriptblock { " + "mongod {auth} --bind_ip {MONGO_HOST} --dbpath {MONGO_PATH} --logpath {MONGO_LOG}/mongod.log".format(
+                        **self.data, auth=auth) + " }"
+                    script = """
+                    powershell -noexit start-job {command}
+                    """.format(**self.data, command=command)
+                    Script.run(script)
+                    result = "child process started successfully. Program existing now"
             except Exception as e:
                 result = "Mongo in windows could not be started." + str(e)
         else:
@@ -329,18 +339,35 @@ class MongoDBController(object):
         linux and darwin have different way to shutdown the server, the common way is kill
         """
         # TODO: there  could be more mongos running, be more specific
-        script = 'kill -2 `pgrep mongo`'
-        result = Script.run(script)
+        if "win" in platform.lower():
+            if self.is_installed_as_win_service():
+                script = "net stop mongodb"
+                shell.ShellExecuteEx(lpVerb='runas', lpFile='cmd.exe', lpParameters='/c '+script)
+                result = 'MongoDB should be stopped given the permission'
+            else:
+                script = 'mongo admin --eval "db.shutdownServer()"'
+                result = Script.run(script)
+        else:
+            script = 'kill -2 `pgrep mongo`'
+            result = Script.run(script)
         print(result)
 
     def set_auth(self):
         """
         add admin account into the MongoDB admin database
         """
+        if 'win' in platform.lower(): # don't remove this otherwise init won't work in windows, eval should start with double quote in windows
+            script = """mongo --eval "db.getSiblingDB('admin').createUser({{user:'{MONGO_USERNAME}',pwd:'{MONGO_PASSWORD}',roles:[{{role:'root',db:'admin'}}]}})" """.format(
+                **self.data)
+            try:
+                result = Script.run(script)
+            except subprocess.CalledProcessError:
+                Console.error("admin user exists")
+                return
 
-        script = """mongo --eval 'db.getSiblingDB("admin").createUser({{user:"{MONGO_USERNAME}",pwd:"{MONGO_PASSWORD}",roles:[{{role:"root",db:"admin"}}]}})'""".format(**self.data)
-
-        result = Script.run(script)
+        else:
+            script = """mongo --eval 'db.getSiblingDB("admin").createUser({{user:"{MONGO_USERNAME}",pwd:"{MONGO_PASSWORD}",roles:[{{role:"root",db:"admin"}}]}})'""".format(**self.data)
+            result = Script.run(script)
         if "Successfully added user" in result:
             Console.ok("Administrative user created.")
         else:
@@ -488,6 +515,24 @@ class MongoDBController(object):
 
         return output
 
+    def is_installed_as_win_service(self):
+        '''
+        returns True if mongodb is installed as a windows service
+        :return:
+        '''
+        win_services = list(psutil.win_service_iter())
+        mongo_service = [service for service in win_services if 'mongo' in service.display_name().lower()]
+        is_service = len(mongo_service) > 0
+        return is_service
+
+    def win_service_is_running(self):
+        '''
+        returns True if mongodb is installed as a windows service
+        :return:
+        '''
+        win_services = list(psutil.win_service_iter())
+        mongo_service = [service for service in win_services if 'mongo' in service.display_name().lower()][0]
+        return mongo_service.status() == 'running'
 
 """
 

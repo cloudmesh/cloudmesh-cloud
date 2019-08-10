@@ -4,8 +4,7 @@ import json
 import os
 from sys import platform
 import subprocess
-if 'win' in platform.lower():
-    import ctypes
+import ctypes
 import shutil
 
 from cloudmesh.common.console import Console

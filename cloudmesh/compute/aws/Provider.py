@@ -4,8 +4,7 @@ import os
 import subprocess
 import time
 from sys import platform
-if 'win' in platform.lower():
-    import ctypes
+import ctypes
 
 import boto3
 from cloudmesh.common.Printer import Printer
@@ -895,9 +894,6 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         Lists the images on the cloud
         :return: dict
         """
-        #TODO use mongoimport here to make is faster
-        # use something like cm = CmDatabase(); cm.import(collection="aws-image", d)
-        # cm.load(collection="aws-image", path)
         Console.msg(f"Getting the list of images for {self.cloud} cloud, this might take a few minutes ...")
         images = self.ec2_client.describe_images()
         Console.ok(f"Images list for {self.cloud} cloud retrieved successfully")
@@ -906,6 +902,12 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
     @DatabaseImportAsJson()
     def get_images_and_import(self,data):
+        '''
+        this is a helper function for images() to allow the images to be passed and saved to the database with
+        databaseimportasjson() decorator instead of the regular databaseupdate() decorator.
+        :param data:
+        :return:
+        '''
         return {'db': 'cloudmesh', 'collection': 'aws-image', 'data':data}
 
 

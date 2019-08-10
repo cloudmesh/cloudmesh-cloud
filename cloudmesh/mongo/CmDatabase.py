@@ -1,5 +1,12 @@
 import urllib.parse
 from datetime import datetime
+import json
+import os
+from sys import platform
+import subprocess
+if 'win' in platform.lower():
+    import ctypes
+import shutil
 
 from cloudmesh.common.console import Console
 from cloudmesh.common.parameter import Parameter
@@ -7,6 +14,9 @@ from cloudmesh.configuration.Config import Config
 from pymongo import MongoClient
 from cloudmesh.common.debug import VERBOSE
 from progress.bar import Bar
+from cloudmesh.common.util import path_expand
+
+
 
 import re
 #
@@ -561,3 +571,45 @@ class CmDatabase(object):
 
         col = self.db[collection]
         col.drop()
+
+    def importAsFile(self, data, collection, db ):
+        tmp_folder = path_expand('~/.cloudmesh/tmp')
+        if not os.path.exists(tmp_folder):
+            os.makedirs(tmp_folder)
+        tmp_file = path_expand('~/.cloudmesh/tmp/tmp_import_file.json')
+        Console.msg("Saving the data to file ")
+        with open(tmp_file, 'w') as f:
+            for dat in data:
+                f.write(json.dumps(dat) + '\n')
+
+        if collection in self.collections():
+            self.clear(collection=collection)
+            Console.msg(f"Collection {collection} dropped to be rewritten")
+        cmd = f'mongoimport --db {db} --collection {collection} ^ --authenticationDatabase admin --username {self.username} --password {self.password} ^ --drop --file {tmp_file}'
+
+        Console.msg("Importing the saved data to database")
+        if 'win' in platform.lower():
+            with disable_file_system_redirection():
+                ssh = subprocess.Popen(cmd,
+                                       shell=True,
+                                       stdout=subprocess.PIPE,
+                                       stderr=subprocess.PIPE)
+        else:
+            ssh = subprocess.Popen(cmd,
+                                   shell=True,
+                                   stdout=subprocess.PIPE,
+                                   stderr=subprocess.PIPE)
+        result = ssh.stdout.read().decode("utf-8")
+        print(result)
+
+
+
+class disable_file_system_redirection:
+    _disable = ctypes.windll.kernel32.Wow64DisableWow64FsRedirection
+    _revert = ctypes.windll.kernel32.Wow64RevertWow64FsRedirection
+    def __enter__(self):
+        self.old_value = ctypes.c_long()
+        self.success = self._disable(ctypes.byref(self.old_value))
+    def __exit__(self, type, value, traceback):
+        if self.success:
+            self._revert(self.old_value)

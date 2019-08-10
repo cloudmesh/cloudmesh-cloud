@@ -21,6 +21,7 @@ from cloudmesh.mongo.DataBaseDecorator import DatabaseImportAsJson
 from cloudmesh.mongo.CmDatabase import CmDatabase
 from cloudmesh.secgroup.Secgroup import Secgroup, SecgroupRule
 from cloudmesh.common.util import path_expand
+from cloudmesh.common3.Benchmark import Benchmark
 import json
 
 class Provider(ComputeNodeABC, ComputeProviderPlugin):
@@ -908,8 +909,9 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         Console.msg(f"Getting the list of images for {self.cloud} cloud, this might take a few minutes ...")
         images = self.ec2_client.describe_images()
         Console.ok(f"Images list for {self.cloud} cloud retrieved successfully")
-        self.get_images_and_import(images['Images'])
-        return
+        data = self.update_dict(images['Images'], kind="image")
+        self.get_images_and_import(data)
+
 
     @DatabaseImportAsJson()
     def get_images_and_import(self,data):

@@ -97,6 +97,41 @@ class DatabaseUpdate:
 
         return wrapper
 
+class DatabaseImportAsJson:
+    """
+    Updating the database using MongoImport.
+
+    expects a dictionary with the following format:
+
+    { 'db': Name of the database (cloudmesh by default),
+      'collection': Name of the collection to be saved in the db,
+      'data' : DATA}
+
+    The data should be an array of dict.
+    """
+
+    # noinspection PyUnusedLocal
+    def __init__(self, **kwargs):
+        self.database = CmDatabase()
+
+    def __call__(self, f):
+        def wrapper(*args, **kwargs):
+            current = f(*args, **kwargs)
+            if type(current) == dict:
+                db = current['db'] if current['db'] is not None else 'cloudmesh'
+                collection = current['collection']
+                data = current['data']
+
+            if current is None or type (current) != dict:
+                return []
+
+            result = self.database.importAsFile(data,collection,db)
+            self.database.close_client()
+            return result
+
+        return wrapper
+
+
 
 class DatabaseAlter:
     """

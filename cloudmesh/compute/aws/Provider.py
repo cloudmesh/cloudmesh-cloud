@@ -18,8 +18,11 @@ from cloudmesh.common3.DictList import DictList
 from cloudmesh.compute.aws.AwsFlavors import AwsFlavor
 from cloudmesh.configuration.Config import Config
 from cloudmesh.provider import ComputeProviderPlugin
+from cloudmesh.mongo.DataBaseDecorator import DatabaseImportAsJson
 from cloudmesh.mongo.CmDatabase import CmDatabase
 from cloudmesh.secgroup.Secgroup import Secgroup, SecgroupRule
+from cloudmesh.common.util import path_expand
+import json
 
 class Provider(ComputeNodeABC, ComputeProviderPlugin):
     kind = "aws"
@@ -461,11 +464,11 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         :param configuration: The location of the yaml configuration file
         """
 
-        conf = Config(configuration)["cloudmesh"]
-        super().__init__(name, conf)
+        self.conf = Config(configuration)["cloudmesh"]
+        super().__init__(name, self.conf)
 
         self.user = Config()["cloudmesh"]["profile"]["user"]
-        self.spec = conf["cloud"][name]
+        self.spec = self.conf["cloud"][name]
         self.cloud = name
 
         self.default = self.spec["default"]
@@ -898,8 +901,13 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         Console.msg(f"Getting the list of images for {self.cloud} cloud, this might take a few minutes ...")
         images = self.ec2_client.describe_images()
         Console.ok(f"Images list for {self.cloud} cloud retrieved successfully")
-        data = self.update_dict(images['Images'], kind="image")
-        return data
+        self.get_images_and_import(images['Images'])
+        return
+
+    @DatabaseImportAsJson()
+    def get_images_and_import(self,data):
+        return {'db': 'cloudmesh', 'collection': 'aws-image', 'data':data}
+
 
     def image(self, name=None):
         # TODO: Alex

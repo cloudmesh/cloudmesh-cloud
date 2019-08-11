@@ -1,6 +1,6 @@
 ###############################################################
-# pytest -v --capture=no tests/cloud/test_provider_vm06_vm_provider.py
-# pytest -v  tests/cloud/test_provider_vm06_vm_provider.py
+# pytest -v --capture=no tests/cloud/test_06_vm_provider.py
+# pytest -v  tests/cloud/test_06_vm_provider.py
 ###############################################################
 
 # TODO: start this with cloud init, e.g, empty mongodb

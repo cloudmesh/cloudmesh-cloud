@@ -6,6 +6,7 @@ from sys import platform
 import subprocess
 import ctypes
 import shutil
+import re
 
 from cloudmesh.common.console import Console
 from cloudmesh.common.parameter import Parameter
@@ -14,11 +15,9 @@ from pymongo import MongoClient
 from cloudmesh.common.debug import VERBOSE
 from progress.bar import Bar
 from cloudmesh.common.util import path_expand
+from cloudmesh.mongo.MongoDBController import MongoDBController
 
 
-
-import re
-#
 # cm:
 #   id:
 #   user:
@@ -39,6 +38,9 @@ class CmDatabase(object):
         :param password: the password
         :param port: the port
         """
+        if not MongoDBController().service_is_running():
+            Console.error('MongoDB service is not running ...')
+            return
 
         self.__dict__ = self.__shared_state
         if "config" not in self.__dict__:
@@ -587,7 +589,7 @@ class CmDatabase(object):
         cmd = f'mongoimport --db {db} --collection {collection} ^ --authenticationDatabase admin --username {self.username} --password {self.password} ^ --drop --file {tmp_file}'
 
         Console.msg("Importing the saved data to database")
-        if 'win' in platform.lower():
+        if platform.lower() =='win32':
             class disable_file_system_redirection:
                 _disable = ctypes.windll.kernel32.Wow64DisableWow64FsRedirection
                 _revert = ctypes.windll.kernel32.Wow64RevertWow64FsRedirection

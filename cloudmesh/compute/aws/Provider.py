@@ -446,7 +446,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         if command == "":
             os.system(cmd)
         else:
-            if 'win' in platform.lower():
+            if platform.lower() == 'win32':
                 class disable_file_system_redirection:
                     _disable = ctypes.windll.kernel32.Wow64DisableWow64FsRedirection
                     _revert = ctypes.windll.kernel32.Wow64RevertWow64FsRedirection

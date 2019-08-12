@@ -340,7 +340,7 @@ class MongoDBController(object):
         linux and darwin have different way to shutdown the server, the common way is kill
         """
         # TODO: there  could be more mongos running, be more specific
-        if "win" in platform.lower():
+        if platform.lower() == 'win32':
             if self.is_installed_as_win_service():
                 import win32com.shell.shell as shell
                 script = "net stop mongodb"
@@ -358,7 +358,7 @@ class MongoDBController(object):
         """
         add admin account into the MongoDB admin database
         """
-        if 'win' in platform.lower(): # don't remove this otherwise init won't work in windows, eval should start with double quote in windows
+        if platform.lower() == 'win32': # don't remove this otherwise init won't work in windows, eval should start with double quote in windows
             script = """mongo --eval "db.getSiblingDB('admin').createUser({{user:'{MONGO_USERNAME}',pwd:'{MONGO_PASSWORD}',roles:[{{role:'root',db:'admin'}}]}})" """.format(
                 **self.data)
             try:
@@ -522,19 +522,73 @@ class MongoDBController(object):
         returns True if mongodb is installed as a windows service
         :return:
         '''
-        win_services = list(psutil.win_service_iter())
-        mongo_service = [service for service in win_services if 'mongo' in service.display_name().lower()]
-        is_service = len(mongo_service) > 0
-        return is_service
+        if platform == 'win32':
+            win_services = list(psutil.win_service_iter())
+            mongo_service = [service for service in win_services if 'mongo' in service.display_name().lower()]
+            is_service = len(mongo_service) > 0
+            return is_service
+        else:
+            Console.error(f'Windows platform function called instead of {platform}')
+            return False
+
 
     def win_service_is_running(self):
         '''
-        returns True if mongodb is installed as a windows service
+        returns True if mongodb running
         :return:
         '''
-        win_services = list(psutil.win_service_iter())
-        mongo_service = [service for service in win_services if 'mongo' in service.display_name().lower()][0]
-        return mongo_service.status() == 'running'
+        if platform == 'win32':
+            win_services = list(psutil.win_service_iter())
+            mongo_service = [service for service in win_services if 'mongo' in service.display_name().lower()][0]
+            return mongo_service.status() == 'running'
+        else:
+            Console.error(f'Windows platform function called instead of {platform}')
+            return False
+
+    def linux_process_is_running(self):
+        '''
+        returns True if mongod is running
+        :return:
+        '''
+        if platform == 'linux':
+            try:
+                subprocess.check_output("pgrep mongo", encoding='UTF-8', shell=True)
+                return True
+            except subprocess.CalledProcessError as e:
+                return False
+        else:
+            Console.error(f'Linux platform function called instead of {platform}')
+            return False
+
+    def mac_process_is_running(self):
+        '''
+        returns True if mongod is running
+        :return:
+        '''
+        if platform == 'darwin':
+            try:
+                subprocess.check_output("pgrep mongo", encoding='UTF-8', shell=True)
+                return True
+            except subprocess.CalledProcessError as e:
+                return False
+        else:
+            Console.error(f'Darwin platform function called instead of {platform}')
+            return False
+
+    def service_is_running(self):
+        '''
+        checks if mongo service is running
+        :return:
+        '''
+        if platform.lower() == 'linux':
+            return self.linux_process_is_running()
+        elif platform.lower() == 'darwin':
+            return self.mac_process_is_running()
+        elif platform.lower() == 'win32':  # Replaced windows with win32
+            return self.win_service_is_running()
+        else:
+            Console.error(f"platform {platform} not found")
+
 
 """
 

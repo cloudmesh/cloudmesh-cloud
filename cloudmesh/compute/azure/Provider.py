@@ -6,8 +6,9 @@ from azure.common.credentials import ServicePrincipalCredentials
 from azure.mgmt.compute import ComputeManagementClient
 from azure.mgmt.network import NetworkManagementClient
 from azure.mgmt.resource import ResourceManagementClient
-from azure.mgmt.network.v2018_12_01.models import NetworkSecurityGroup
-from azure.mgmt.network.v2017_03_01.models import SecurityRule
+from azure.mgmt.network.v2018_12_01.models import NetworkSecurityGroup, SecurityRule
+from cloudmesh.common3.DictList import DictList
+from cloudmesh.common.Printer import Printer
 import azure.mgmt.network.models
 from cloudmesh.abstractclass.ComputeNodeABC import ComputeNodeABC
 from cloudmesh.common.console import Console
@@ -19,7 +20,28 @@ from cloudmesh.configuration.Config import Config
 class Provider(ComputeNodeABC):
     kind = 'azure'
 
-    """
+    vm_state = [
+        'ACTIVE',
+        'BUILDING',
+        'DELETED',
+        'ERROR',
+        'HARD_REBOOT',
+        'PASSWORD',
+        'PAUSED',
+        'REBOOT',
+        'REBUILD',
+        'RESCUED',
+        'RESIZED',
+        'REVERT_RESIZE',
+        'SHUTOFF',
+        'SOFT_DELETED',
+        'STOPPED',
+        'SUSPENDED',
+        'UNKNOWN',
+        'VERIFY_RESIZE'
+    ]
+
+
     output = {
         "status": {
             "sort_keys": ["cm.name"],
@@ -105,19 +127,19 @@ class Provider(ComputeNodeABC):
         },
         "image": {
             "sort_keys": ["cm.name",
-                          "extra.minDisk"],
-            "order": ["image.id",
-                      "image.name",
-                      "image.type",
-                      "image.location",
-                      "hardware_profile.vm_size",
-                      "image_reference.publisher",
-                      "image_reference.offer",
-                      "image_reference.sku",
-                      "image_reference.version"],
-            "header": ["Id",
-                       "Name",
-                       "TYpe",
+                          "plan.publisher"],
+            "order": ["cm.name",
+                      "location",
+                      "plan.publisher",
+                      "plan.name",
+                      "plan.product",
+                      "operating_system"],
+            "header": ["Name",
+                       "Location",
+                       "Publisher",
+                       "Plan Name",
+                       "Product",
+                       "Operating System",
                     ]
             },
         "flavor": {
@@ -141,51 +163,39 @@ class Provider(ComputeNodeABC):
         "secgroup": {}, # Moeen
         "secrule": {}, # Moeen
     }
-    """
 
-    """   
-                     
-        "os_disk": {
-            "os_type": [],
-            "name": [],
-            "caching": [],
-            "create_option": [],
-            "disk_size_gb": [],
-            "managed_disk": ["id",
-                             "storage_account_type"]
-        },
-        "data_disks": {
-            "lun": [],
-            "name": [],
-            "caching": [],
-            "create_option": [],
-            "disk_size_gb": [],
-            "managed_disk": ["id",
-                             "storage_account_type"]
-        },
-        "os_profile": {
-            "computer_name": [],
-            "admin_username": [],
-            "linux_configuration": ["disable_password_authentication",
-                                    "provision_vm_agent"],
-            "secrets": [],
-            "allow_extension_operations": []
-        },
-        "network_profile": {
-            "network_interfaces": ["id"]
-        },
-        "provisioning_state": [],
-        "vm_id": []
-    
-        }
-        }
-    """
+    def Print(self, data, output=None, kind=None):
+        # TODO: Joaquin
+
+        if output == "table":
+            if kind == "secrule":
+
+                result = []
+                for group in data:
+                    for rule in group['security_group_rules']:
+                        rule['name'] = group['name']
+                        result.append(rule)
+                data = result
+
+            order = self.output[kind]['order']  # not pretty
+            header = self.output[kind]['header']  # not pretty
+            humanize = self.output[kind]['humanize']  # not pretty
+
+            print(Printer.flatwrite(data,
+                                    sort_keys=["name"],
+                                    order=order,
+                                    header=header,
+                                    output=output,
+                                    humanize=humanize)
+                  )
+        else:
+            print(Printer.write(data, output=output))
 
     # noinspection PyPep8Naming
 
-    def Print(self, output, kind, data):
+#    def Print(self, output, kind, data):
         # TODO: Moeen
-        raise NotImplementedError
+#        raise NotImplementedError
 
     def keys(self):
         # TODO: Moeen
@@ -198,15 +208,6 @@ class Provider(ComputeNodeABC):
     def key_delete(self, name=None):
         # TODO: Moeen
         raise NotImplementedError
-
-    def upload_secgroup(self, name=None):
-        # TODO: needs to be done by someone
-        raise NotImplementedError
-
-    def add_rules_to_secgroup(self, name=None, rules=None):
-        # TODO: needs to be done by someone
-        raise NotImplementedError
-
 
 
     # these are available to be associated
@@ -329,10 +330,9 @@ class Provider(ComputeNodeABC):
             return groups.get(self.GROUP_NAME)
         else:
             # Create or Update Resource group
-            VERBOSE(" ".join('Create Azure Virtual Machine Resource Group'))
+            VERBOSE(" ".join('Create Azure Resource Group'))
             return groups.create_or_update(
                 self.GROUP_NAME, {'location': self.LOCATION})
-
 
     def set_server_metadata(self, name=None, cm=None):
         # see https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-using-tags
@@ -385,37 +385,68 @@ class Provider(ComputeNodeABC):
 
     def list_secgroups(self, name=None):
         # TODO: Joaquin
+        """
+        List the security group by name
 
-        sec_groups = self.network_client.network_security_groups.list_all(self)
+        :param name: The name of the group, if None all will be returned
+        :return:
+        """
 
-        #        self.network_client.security_rules.get()
-        #        self.network_client.network_security_groups.get()
+        groups = self.network_client.network_security_groups.list_all(self)
 
-        return sec_groups #self.get_list(sec_groups, kind="secgroup")
+        if name is not None:
+            for entry in groups:
 
-    def add_secgroup(self, name=None, description=None):
-        # TODO: Joaquin
+                if entry['name'] == name:
+                    groups = [entry]
+                    break
 
-        network_security_group_name = name
-
-        parameters = NetworkSecurityGroup(
-            location= self.LOCATION
-        )
-
-        result_add_security_group = self.network_client.network_security_groups.create_or_update(
-            self.GROUP_NAME,
-            network_security_group_name,
-            parameters,
-        )
-        result_add_security_group.wait()
-
-        return result_add_security_group.result()
+        return self.get_list(
+            groups,
+            kind="secgroup")
 
     def list_secgroup_rules(self, name='default'):
         # TODO: Joaquin
-        secgroup_rules = self.network_client.security_rules.list(self.GROUP_NAME,name)
+        """
+        List the security group rules by for provided Network Security Group
 
-        return secgroup_rules #self.get_list(secgroup_rules, kind="secgroup")
+        :param name: The name of the group
+        :return:
+        """
+
+        secgroup_rules = self.network_client.security_rules.list(self.GROUP_NAME,name)
+        # Double check to see if there is value of returning the rules from one Network Security Group or
+        # return the full list of security gruops
+
+        return secgroup_rules
+
+    def add_secgroup(self, name=None, description=None):
+        # TODO: Joaquin
+        """
+        Adds the
+        :param name: Name of the group
+        :param description: The description
+        :return:
+        """
+        if self.network_client:
+            if description is None:
+                description = name
+
+            parameters = NetworkSecurityGroup(
+                location=self.LOCATION
+            )
+
+            result_add_security_group = self.network_client.network_security_groups.create_or_update(
+                self.GROUP_NAME,
+                name,
+                parameters,
+            )
+            result_add_security_group.wait()
+
+        else:
+            raise ValueError("cloud not initialized")
+
+        return result_add_security_group.result()
 
     def add_secgroup_rule(self,
                           name=None,  # group name
@@ -423,11 +454,6 @@ class Provider(ComputeNodeABC):
                           protocol=None,
                           ip_range=None):
         # TODO: Joaquin
-        '''
-        'protocol': {'required': True},
-        'access': {'required': True},
-        'direction': {'required': True},
-        '''
 
         network_sec_group_name = 'cloudmesh'
 
@@ -456,24 +482,98 @@ class Provider(ComputeNodeABC):
 
         return add_rule
 
-    def remove_rules_from_secgroup(self, name=None, rules=None):
-        # TODO: needs to be done by someone
-        network_sec_group_name = 'cloudmesh'
-
-        remove_rule = self.network_client.security_rules.delete(self.GROUP_NAME, network_sec_group_name, name )
-
-        return remove_rule
-
     def remove_secgroup(self, name=None):
         # TODO: Joaquin
+        """
+        Delete the names security group
 
-        network_sec_group_name = 'cloudmesh'
-      #  remove_rule
+        :param name: The name of the Security Group to be deleted
+        :return:
+        """
+        if self.network_client:
+            self.network_client.network_security_groups.delete(self.GROUP_NAME, name)
+        else:
+            raise ValueError("cloud not initialized")
 
-        remove_rule = self.network_client.network_security_groups.delete(self.GROUP_NAME, network_sec_group_name, name )
+    def upload_secgroup(self, name=None):
+        # TODO: Joaquin
+
+        cgroups = self.list_secgroups(name)
+        group_exists = False
+        if len(cgroups) > 0:
+            print("Warning group already exists")
+            group_exists = True
+
+        groups  = NetworkSecurityGroup().list()
+        rules   = SecurityRule().list()
+
+        # pprint (rules)
+        data = {}
+        for rule in rules:
+            data[rule['name']] = rule
+
+        # pprint (groups)
+
+        for group in groups:
+            if group['name'] == name:
+                break
+        print("upload group:", name)
+
+        if not group_exists:
+            self.add_secgroup(name=name, description=group['description'])
+
+            for r in group['rules']:
+                found = data[r]
+                print("    ", "rule:", found['name'])
+                self.add_secgroup_rule(
+                    name=name,
+                    port=found["ports"],
+                    protocol=found["protocol"],
+                    ip_range=found["ip_range"])
+
+        else:
+
+            for r in group['rules']:
+                found = data[r]
+                print("    ", "rule:", found['name'])
+                self.add_rules_to_secgroup(
+                    name=name,
+                    rules=[found['name']])
+
+    def add_rules_to_secgroup(self, name=None, rules=None):
+        # TODO: Joaquin
+
+        if name is None and rules is None:
+            raise ValueError("name or rules are None")
+
+        cgroups = self.list_secgroups(name)
+        if len(cgroups) == 0:
+            raise ValueError("group does not exist")
+
+        groups = DictList(NetworkSecurityGroup().list())
+        rules_details = DictList(SecurityRule().list())
+
+        try:
+            group = groups[name]
+        except:
+            raise ValueError("group does not exist")
+
+        for rule in rules:
+            try:
+                found = rules_details[rule]
+                self.add_secgroup_rule(name=name,
+                                       port=found["ports"],
+                                       protocol=found["protocol"],
+                                       ip_range=found["ip_range"])
+            except:
+                ValueError("rule can not be found")
+
+    def remove_rules_from_secgroup(self, name=None, rules=None):
+        # TODO: Joaquin
+
+        remove_rule = self.network_client.security_rules.delete(self.GROUP_NAME, name, rules )
 
         return remove_rule
-
 
     def create(self, name=None,
                image=None,

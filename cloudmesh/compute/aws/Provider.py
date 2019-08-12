@@ -415,7 +415,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         try:
             key_name = vm['key_name']
             key = cm.find_name(name=key_name, kind="key")[0]['location']['private']
-        except KeyError:
+        except (KeyError, IndexError):
             aws_keys = cm.find(kind='key', cloud='aws')
             if len(aws_keys) == 0 :
                 Console.error(f"Could not find a key for the AWS instance '{vm['name']}'")
@@ -444,7 +444,22 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         # VERBOSE(cmd)
 
         if command == "":
-            os.system(cmd)
+            if platform.lower() == 'win32':
+                class disable_file_system_redirection:
+                    _disable = ctypes.windll.kernel32.Wow64DisableWow64FsRedirection
+                    _revert = ctypes.windll.kernel32.Wow64RevertWow64FsRedirection
+
+                    def __enter__(self):
+                        self.old_value = ctypes.c_long()
+                        self.success = self._disable(ctypes.byref(self.old_value))
+
+                    def __exit__(self, type, value, traceback):
+                        if self.success:
+                            self._revert(self.old_value)
+                with disable_file_system_redirection():
+                    os.system(cmd)
+            else:
+                os.system(cmd)
         else:
             if platform.lower() == 'win32':
                 class disable_file_system_redirection:

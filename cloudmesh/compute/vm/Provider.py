@@ -148,7 +148,7 @@ class Provider(ComputeNodeABC):
 
         if name is None:
             name_generator = Name()
-            name_generator.incr()
+            # name_generator.incr() # this is already called in the vm.py not needed to be called here.
             vms = [str(name_generator)]
         else:
             vms = self.expand(name)

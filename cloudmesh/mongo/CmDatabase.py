@@ -38,10 +38,6 @@ class CmDatabase(object):
         :param password: the password
         :param port: the port
         """
-        if not MongoDBController().service_is_running():
-            Console.error('MongoDB service is not running ...')
-            return
-
         self.__dict__ = self.__shared_state
         if "config" not in self.__dict__:
 
@@ -63,6 +59,7 @@ class CmDatabase(object):
         self.client = None
         self.db = None
 
+        MongoDBController().start_if_not_running()
         self.connect()
 
     # ok

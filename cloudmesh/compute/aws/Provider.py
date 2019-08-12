@@ -129,12 +129,6 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         }
     }
 
-    # TODO: look at the openstack provider and ComputeNodeABC to see which
-    #  methods you must have. In openstack i created some convenience classes
-    #  to make things easier
-    #  start with a prg in this dir similar to ../openstack/os_sdk.py, call it
-    #  aws_boto.py, make sure to use Config()
-
     # noinspection PyPep8Naming
     def Print(self, output, kind, data):
         raise NotImplementedError
@@ -164,6 +158,11 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
     def list_secgroup_rules(self, name='default'):
 
+        """
+        List the named security group
+        :param name: The name of the group, if None all will be returned
+        :return:
+        """
         sec_group_desc = self.list_secgroups(name)
         sec_group_rule = sec_group_desc['IpPermissions']
         return sec_group_rule
@@ -178,6 +177,13 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         return not_valid
 
     def add_secgroup(self, name=None, description=None):
+
+        """
+
+        :param name: Adds security group
+        :param description:
+        :return:
+        """
 
         response = self.ec2_client.describe_vpcs()
         vpc_id = response.get('Vpcs', [{}])[0].get('VpcId', '')
@@ -275,7 +281,11 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         VERBOSE(tag)
 
     def get_server_metadata(self, name):
-        # TODO: Saurabh
+        """
+        Describes the metadata tag of EC2 resource
+        :param name: Virtual machine name
+        :return: Dictionary with Metadata information
+        """
         raise NotImplementedError
 
     # these are available to be associated
@@ -464,7 +474,6 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                 print("ERROR: %s" % error)
             else:
                 return result
-
 
     def __init__(self, name=None, configuration="~/.cloudmesh/cloudmesh.yaml"):
         """

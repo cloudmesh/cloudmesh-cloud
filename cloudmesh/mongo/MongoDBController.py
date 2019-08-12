@@ -303,12 +303,16 @@ class MongoDBController(object):
 
         if platform.lower() == 'win32':
             try:
-                if self.is_installed_as_win_service() and not self.win_service_is_running():
-                    import win32com.shell.shell as shell
-                    script = "net start mongodb"
-                    shell.ShellExecuteEx(lpVerb='runas', lpFile='cmd.exe', lpParameters='/c ' + script)
-                    Console.msg("MongoDB Service should be started successfully given the permission")
-                    return
+                if self.is_installed_as_win_service():
+                    if not self.win_service_is_running():
+                        import win32com.shell.shell as shell
+                        script = "net start mongodb"
+                        shell.ShellExecuteEx(lpVerb='runas', lpFile='cmd.exe', lpParameters='/c ' + script)
+                        Console.msg("MongoDB Service should be started successfully given the permission")
+                        return
+                    else:
+                        Console.ok("Windows MongoDB service is already running")
+                        return
                 else:
                     command = "-scriptblock { " + "mongod {auth} --bind_ip {MONGO_HOST} --dbpath {MONGO_PATH} --logpath {MONGO_LOG}/mongod.log".format(
                         **self.data, auth=auth) + " }"
@@ -575,17 +579,20 @@ class MongoDBController(object):
             Console.error(f'Darwin platform function called instead of {platform}')
             return False
 
-    def service_is_running(self):
+    def start_if_not_running(self):
         '''
         checks if mongo service is running
         :return:
         '''
         if platform.lower() == 'linux':
-            return self.linux_process_is_running()
+            if not self.linux_process_is_running():
+                self.start()
         elif platform.lower() == 'darwin':
-            return self.mac_process_is_running()
+            if not self.mac_process_is_running():
+                self.start()
         elif platform.lower() == 'win32':  # Replaced windows with win32
-            return self.win_service_is_running()
+            if not self.win_service_is_running():
+                self.start()
         else:
             Console.error(f"platform {platform} not found")
 

@@ -122,7 +122,7 @@ class TestAzure:
         HEADING()
 
         Benchmark.Start()
-        test_add_sec_group = self.p.add_secgroup('cloudmesh', 'Allow RDP port 3389')
+        test_add_sec_group = self.p.add_secgroup('cloudmesh_jae', description=None)
         Benchmark.Stop()
         VERBOSE(test_add_sec_group, label='Add Security Group')
 
@@ -138,28 +138,55 @@ class TestAzure:
 
         assert test_add_sec_rule is not None
 
+    def test_list_security_group_rules(self):
+        HEADING()
+
+        Benchmark.Start()
+        test_list_secgroup_rules = self.p.list_secgroup_rules(name='cloudmesh_jae')
+        Benchmark.Stop()
+        VERBOSE(test_list_secgroup_rules, label='List Security Group Rules')
+
+        assert test_list_secgroup_rules is not None
 
     def test_remove_security_rule(self):
         HEADING()
 
         Benchmark.Start()
-        test_remove_sec_rule = self.p.remove_rules_from_secgroup(name='resource_name_security_rule')
+        test_remove_sec_rule = self.p.remove_rules_from_secgroup(name='cloudmesh_jae', rules='resource_name_security_rule')
         Benchmark.Stop()
         VERBOSE(test_remove_sec_rule, label='Remove Security Rule')
 
         assert test_remove_sec_rule is not None
 
-
-
-    def test_list_security_group_rules(self):
+    def test_remove_security_group(self):
         HEADING()
 
         Benchmark.Start()
-        test_list_secgroup_rules = self.p.list_secgroup_rules()
+        test_remove_sec_group = self.p.remove_secgroup(name='cloudmesh_jae')
         Benchmark.Stop()
-        VERBOSE(test_list_secgroup_rules, label='List Security Group Rules')
+        VERBOSE(test_remove_sec_group, label='Remove Security Rule')
 
-        assert test_list_secgroup_rules is not None
+        assert test_remove_sec_group is None
+
+    def test_upload_security_group(self):
+        HEADING()
+
+        Benchmark.Start()
+        test_upload_secgroup = self.p.upload_secgroup(name='cloudmesh_upload')
+        Benchmark.Stop()
+        VERBOSE(test_upload_secgroup, label='Upload Security Group')
+
+        assert test_upload_secgroup is None
+
+    def test_add_rules_to_security_group(self):
+        HEADING()
+
+        Benchmark.Start()
+        test_add_rules_to_secgroup = self.p.add_rules_to_secgroup(name='cloudmesh_upload', rules='resource_name_security_rule_upload')
+        Benchmark.Stop()
+        VERBOSE(test_add_rules_to_secgroup, label='Add Rules to Security Group')
+
+        assert test_add_rules_to_secgroup is None
 
     def test_start(self):
         HEADING()

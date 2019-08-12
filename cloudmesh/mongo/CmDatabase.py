@@ -59,7 +59,6 @@ class CmDatabase(object):
         self.client = None
         self.db = None
 
-        MongoDBController().start_if_not_running()
         self.connect()
 
     # ok
@@ -78,6 +77,7 @@ class CmDatabase(object):
         :param name: the collection name
         :return: teh collection
         """
+        MongoDBController().start_if_not_running()
         return self.db[name]
 
     # ok
@@ -100,6 +100,7 @@ class CmDatabase(object):
         Example:
             collections = cm.collections(regex=".*-vm")
         """
+        MongoDBController().start_if_not_running()
         names = None
         if name:
             if type(name) == list:
@@ -123,6 +124,7 @@ class CmDatabase(object):
         :param name: the name
         :return:
         """
+        MongoDBController().start_if_not_running()
         count = 0
         collections = self.collections()
         for collection in collections:
@@ -142,6 +144,7 @@ class CmDatabase(object):
         :param name: the unique name of the entry
         :return:
         """
+        MongoDBController().start_if_not_running()
         entries = []
         collections = self.collections()
         for collection in collections:
@@ -165,6 +168,7 @@ class CmDatabase(object):
         :param name: the unique name of the entry
         :return:
         """
+        MongoDBController().start_if_not_running()
         entries = []
         if kind is None:
             collections = self.collections()
@@ -194,6 +198,7 @@ class CmDatabase(object):
         :param name: the unique name of the entry
         :return:
         """
+        MongoDBController().start_if_not_running()
         entries = []
         if kind is None:
             collections = self.collections()
@@ -224,6 +229,7 @@ class CmDatabase(object):
         :param names: the unique names in parameter format
         :return:
         """
+        MongoDBController().start_if_not_running()
         result = []
         entries = Parameter.expand(names)
         if len(entries) > 0:
@@ -258,7 +264,7 @@ class CmDatabase(object):
         :param regex: A query applied to name
         :return:
         """
-
+        MongoDBController().start_if_not_running()
         collections = Parameter.expand(collection)
         clouds = Parameter.expand(cloud)
         kinds = Parameter.expand(kind)
@@ -335,7 +341,7 @@ class CmDatabase(object):
         :param query: A query applied to name
         :return:
         """
-
+        MongoDBController().start_if_not_running()
         collections = Parameter.expand(collection)
         clouds = Parameter.expand(cloud)
         kinds = Parameter.expand(kind)
@@ -372,6 +378,7 @@ class CmDatabase(object):
 
     # ok
     def find_ok(self, collection="cloudmesh", **kwargs):
+        MongoDBController().start_if_not_running()
         col = self.db[collection]
 
         if len(kwargs) == 0:
@@ -397,7 +404,7 @@ class CmDatabase(object):
 
     # ok
     def update(self, _entries, progress=True):
-
+        MongoDBController().start_if_not_running()
         if type(_entries) == dict:
             entries = [_entries]
         else:
@@ -461,6 +468,7 @@ class CmDatabase(object):
         return result
 
     def alter(self, entries):
+        MongoDBController().start_if_not_running()
         # for entry in entries:
         for entry in entries:
             try:
@@ -479,6 +487,7 @@ class CmDatabase(object):
         :param entries:
         :return:
         '''
+        MongoDBController().start_if_not_running()
         exist_status = []
         if type(entries) is dict:
             entries = [entries]
@@ -490,6 +499,7 @@ class CmDatabase(object):
 
     # check
     def insert(self, d, collection="cloudmesh"):
+        MongoDBController().start_if_not_running()
         col = self.db[collection]
         col.insert_one(d)
 
@@ -531,6 +541,7 @@ class CmDatabase(object):
 
     # ok
     def delete(self, collection="cloudmesh", **kwargs):
+        MongoDBController().start_if_not_running()
         col = self.db[collection]
         # f = col.find(kwargs)
         r = col.delete_many(kwargs)
@@ -566,11 +577,12 @@ class CmDatabase(object):
         drops the collection
         :return:
         """
-
+        MongoDBController().start_if_not_running()
         col = self.db[collection]
         col.drop()
 
     def importAsFile(self, data, collection, db ):
+        MongoDBController().start_if_not_running()
         tmp_folder = path_expand('~/.cloudmesh/tmp')
         if not os.path.exists(tmp_folder):
             os.makedirs(tmp_folder)

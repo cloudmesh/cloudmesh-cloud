@@ -579,6 +579,20 @@ class MongoDBController(object):
             Console.error(f'Darwin platform function called instead of {platform}')
             return False
 
+    def service_is_running(self):
+        '''
+        checks if mongo service is running
+        :return:
+        '''
+        if platform.lower() == 'linux':
+            return self.linux_process_is_running()
+        elif platform.lower() == 'darwin':
+            return self.mac_process_is_running()
+        elif platform.lower() == 'win32':  # Replaced windows with win32
+            return self.win_service_is_running()
+        else:
+            Console.error(f"platform {platform} not found")
+
     def start_if_not_running(self):
         '''
         checks if mongo service is running
@@ -595,6 +609,7 @@ class MongoDBController(object):
                 self.start()
         else:
             Console.error(f"platform {platform} not found")
+
 
 
 """

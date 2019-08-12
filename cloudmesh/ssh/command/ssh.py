@@ -24,6 +24,7 @@ class SshCommand(PluginCommand):
         ::
 
             Usage:
+                ssh
                 ssh config list [--output=OUTPUT]
                 ssh config add NAME IP [USER] [KEY]
                 ssh config delete NAME
@@ -148,7 +149,7 @@ class SshCommand(PluginCommand):
             name = arguments.NAME
             os.system("ssh-keygen -R {name}")
 
-        else:
+        elif arguments.name and arguments.COMMAND:
             # ssh [--name=VMs] [--user=USERs] [COMMAND]"
 
             variables = Variables()
@@ -204,3 +205,12 @@ class SshCommand(PluginCommand):
                 provider = Provider(name=cloud)
                 result = provider.ssh(vm=vm, command=command)
                 print(result)
+        else: # ssh with no argument
+            last_vm = Variables()['vm']
+            cm = CmDatabase()
+            vm = cm.find_name(last_vm, kind="vm")[0]
+            cloud = vm['cm']['cloud']
+            provider = Provider(name=cloud)
+            provider.ssh(vm=vm)
+
+

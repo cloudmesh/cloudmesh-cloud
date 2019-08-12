@@ -455,7 +455,7 @@ class Provider(ComputeNodeABC):
                           ip_range=None):
         # TODO: Joaquin
 
-        network_sec_group_name = 'cloudmesh'
+        network_sec_group_name = 'cloudmesh_jae'
 
         if self.network_client:
             try:

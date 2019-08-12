@@ -23,3 +23,6 @@ class StopCommand(PluginCommand):
         print("MongoDB stop")
         if MongoDBController().service_is_running():
             MongoDBController().stop()
+        else:
+            Console.ok("MongoDB service is already stopped")
+

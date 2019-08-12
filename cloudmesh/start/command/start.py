@@ -1,7 +1,7 @@
 from cloudmesh.mongo.MongoDBController import MongoDBController
 from cloudmesh.shell.command import PluginCommand
 from cloudmesh.shell.command import command
-
+from cloudmesh.common.console import Console
 
 class StartCommand(PluginCommand):
 
@@ -21,4 +21,7 @@ class StartCommand(PluginCommand):
         """
 
         print("MongoDB start")
-        MongoDBController().start(security=True)
+        if not MongoDBController().service_is_running():
+            MongoDBController().start(security=True)
+        else:
+            Console.ok("MongoDB service is already running")

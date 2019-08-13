@@ -11,13 +11,14 @@ from cloudmesh.common3.DictList import DictList
 from cloudmesh.common.Printer import Printer
 import azure.mgmt.network.models
 from cloudmesh.abstractclass.ComputeNodeABC import ComputeNodeABC
+from cloudmesh.provider import ComputeProviderPlugin
 from cloudmesh.common.console import Console
 from cloudmesh.common.debug import VERBOSE
 from cloudmesh.common.util import HEADING
 from cloudmesh.configuration.Config import Config
 
 
-class Provider(ComputeNodeABC):
+class Provider(ComputeNodeABC, ComputeProviderPlugin):
     kind = 'azure'
 
     vm_state = [

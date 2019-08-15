@@ -61,8 +61,12 @@ class VmCommand(PluginCommand):
                 vm meta list [NAME]
                 vm meta set [NAME] KEY=VALUE...
                 vm meta delete [NAME] KEY...
-                vm run [--name=VMNAMES] [--username=USERNAME] [--dryrun] COMMAND
-                vm script [--name=NAMES] [--username=USERNAME] [--dryrun] SCRIPT
+                vm script [--name=NAMES]
+                          [--username=USERNAME]
+                          [--key=KEY]
+                          [--dryrun]
+                          [--dir=DESTINATION]
+                          SCRIPT
                 vm ip assign [NAMES]
                           [--cloud=CLOUD]
                 vm ip show [NAMES]
@@ -71,12 +75,14 @@ class VmCommand(PluginCommand):
                            [--output=OUTPUT]
                            [--refresh]
                 vm ip inventory [NAMES]
-                vm ssh [NAMES] [--username=USER]
-                         [--quiet]
-                         [--ip=IP]
-                         [--key=KEY]
-                         [--command=COMMAND]
-                         [--modify-knownhosts]
+                vm ssh [NAMES]
+                       [--username=USER]
+                       [--quiet]
+                       [--ip=IP]
+                       [--key=KEY]
+                       [--command=COMMAND]
+                vm put SOURCE DESTINATION [NAMES]
+                vm get SOURCE DESTINATION [NAMES]
                 vm rename [OLDNAMES] [NEWNAMES] [--force] [--dryrun]
                 vm wait [--cloud=CLOUD] [--interval=SECONDS]
                 vm info [--cloud=CLOUD]
@@ -185,6 +191,36 @@ class VmCommand(PluginCommand):
                 cms vm ssh --command=\"uname -a\"
 
                       executes the uname command on the last booted vm
+
+                vm script [--name=NAMES]
+                          [--username=USERNAME]
+                          [--key=KEY]
+                          [--dryrun]
+                          [--dir=DESTINATION]
+                          [--shell=SHELL]
+                          SCRIPT
+
+                   The script command copies a shell script to the specified vms
+                   into the DESTINATION directory and than execute it. With
+                   SHELL you can set the shell for executing the command,
+                   this coudl even be a python interpreter. Examples for
+                   SHELL are /bin/sh, /usr/bin/env python
+
+                vm put SOURCE DESTINATION [NAMES]
+
+                    puts the file defined by SOURCE into the DESINATION folder
+                    on the specified machines. If the file exists it is
+                    overwritten, so be careful.
+
+                vm get SOURCE DESTINATION [NAMES]
+
+                    gets  the file defined by SOURCE into the DESINATION folder
+                    on the specified machines. The SOURCE is on the remote
+                    machine. If one machine is specified, the SOURCE is the same
+                    name as on the remote machine. If multiple machines are
+                    specified, the name of the machine will be a prefix to the
+                    filename. If the filenames exists, they will be overwritten,
+                    so be careful.
 
             Tip:
                 give the VM name, but in a hostlist style, which is very
@@ -731,30 +767,6 @@ class VmCommand(PluginCommand):
 
             print("sets defaults for the vm")
 
-        elif arguments.run:
-            raise NotImplementedError
-            """
-            vm run [--name=NAMES] [--username=USERNAME] [--dryrun] COMMAND
-
-            """
-            clouds, names = Arguments.get_cloud_and_names("run", arguments, variables)
-            username = arguments['--username']
-            command = arguments.COMMAND
-
-            for cloud in clouds:
-                provider = Provider(cloud)
-
-                name_ips = {}
-                cursor = database.db[f'{cloud}-vm']
-                for name in names:
-                    for node in cursor.find({'name': name}):
-                        name_ips[name] = node['public_ips']
-
-                if arguments['--dryrun']:
-                    print("run command {} on vms: {}".format(command, names))
-                else:
-                    provider.ssh(name_ips, username=username, command=command)
-
         elif arguments.script:
             raise NotImplementedError
             clouds, names = Arguments.get_cloud_and_names("run", arguments, variables)
@@ -798,7 +810,6 @@ class VmCommand(PluginCommand):
                  [--ip=IP]
                  [--key=KEY]
                  [--command=COMMAND]
-                 [--modify-knownhosts]
             """
 
             # VERBOSE(arguments)

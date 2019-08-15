@@ -182,6 +182,10 @@ class VmCommand(PluginCommand):
                      these clouds are ignored. If the name is set in the variables
                      this name is used.
 
+                cms vm ssh --command=\"uname -a\"
+
+                      executes the uname command on the last booted vm
+
             Tip:
                 give the VM name, but in a hostlist style, which is very
                 convenient when you need a range of VMs e.g. sample[1-3]
@@ -787,7 +791,6 @@ class VmCommand(PluginCommand):
             pass
 
         elif arguments.ssh:
-            raise NotImplementedError
 
             """
             vm ssh [NAMES] [--username=USER]
@@ -797,17 +800,44 @@ class VmCommand(PluginCommand):
                  [--command=COMMAND]
                  [--modify-knownhosts]
             """
-            # print("ssh  the vm")
-            print("ssh  into the vm and execute command")
 
-            clouds, names, command = Arguments.get_commands("ssh", arguments, variables)
-            if clouds is None or names is None or command is None:
+            # VERBOSE(arguments)
+            clouds, names, command = Arguments.get_commands("ssh",
+                                                            arguments,
+                                                            variables)
+
+            # print (clouds)
+            # print(names)
+            # print (command)
+
+            if arguments.command is None and len(names) > 1:
+                Console.error("Interactive shell can only be done on one vm")
+                return ""
+            elif arguments.command is None and len(names) == 1:
+                name = names[0]
+                cloud = clouds[0]
+                cm = CmDatabase()
+                vm = cm.find_name(name, "vm")[0]
+                # VERBOSE(vm)
+                cloud = vm["cm"]["cloud"]
+                provider = Provider(name=cloud)
+                provider.ssh(vm=vm)
                 return ""
             else:
-                for cloud in clouds:
-                    p = Provider(cloud)
-                    for name in names:
-                        p.ssh(name=name, command=command)
+                # command on all vms
+
+                if clouds is None or names is None or command is None:
+                    return ""
+                else:
+                    for cloud in clouds:
+                        p = Provider(cloud)
+                        for name in names:
+                            cm = CmDatabase()
+                            vm = cm.find_name(name, "vm")[0]
+
+                            r = p.ssh(vm=vm, command=command)
+                            print(r)
+            return ""
 
         elif arguments.console:
             raise NotImplementedError

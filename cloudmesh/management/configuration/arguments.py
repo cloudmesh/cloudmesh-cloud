@@ -97,11 +97,11 @@ class Arguments(object):
     @staticmethod
     def get_command(arguments, variables):
         command = arguments["command"] or arguments["--command"]
-        if command is None:
-            Console.error("you need to specify a command")
-            return None
-        else:
-            return command
+        # if command is None:
+        #    Console.error("you need to specify a command")
+        #   return None
+        # else:
+        return command
 
     @staticmethod
     def get_commands(label, arguments, variables):

@@ -18,6 +18,7 @@ from cloudmesh.provider import ComputeProviderPlugin
 from cloudmesh.secgroup.Secgroup import Secgroup, SecgroupRule
 from cloudmesh.common3.DateTime import DateTime
 from cloudmesh.common.debug import VERBOSE
+from cloudmesh.image.Image import Image
 
 class Provider(ComputeNodeABC, ComputeProviderPlugin):
     kind = "openstack"
@@ -940,6 +941,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
             metadata['image'] = image
             metadata['flavor'] = size
+
             self.cloudman.set_server_metadata(server, metadata)
 
             # self.cloudman.add_security_group(security_group=secgroup)
@@ -1062,28 +1064,16 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         # TODO: fix user name issue, should be stored in db
         #
 
-        #
-        # use the key in teh definition of the vm .....
-        #
+        # VERBOSE(vm)
 
-        ips = vm['addresses']
-        first = list(ips.keys())[0]
-
-        addresses = ips[first]
-
-        for address in addresses:
-            if address['OS-EXT-IPS:type'] == 'floating':
-                ip = address['addr']
-                break
-
+        ip = vm['ip_public']
         key_name = vm['key_name']
+        image = vm['metadata']['image']
+        user = Image.guess_username(image)
 
         cm = CmDatabase()
         key = cm.find_name(name=key_name, kind="key")[0]['location']['private']
         cm.close_client()
-
-        user = "cc"  # needs to be set on creation.
-        # user = guess_username(imagename)
 
         if command is None:
             command = ""

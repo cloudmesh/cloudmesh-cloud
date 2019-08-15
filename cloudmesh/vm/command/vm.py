@@ -828,7 +828,11 @@ class VmCommand(PluginCommand):
                 name = names[0]
                 cloud = clouds[0]
                 cm = CmDatabase()
-                vm = cm.find_name(name, "vm")[0]
+                try:
+                    vm = cm.find_name(name, "vm")[0]
+                except IndexError:
+                    Console.error(f"could not find vm {name}")
+                    return ""
                 # VERBOSE(vm)
                 cloud = vm["cm"]["cloud"]
                 provider = Provider(name=cloud)
@@ -844,8 +848,11 @@ class VmCommand(PluginCommand):
                         p = Provider(cloud)
                         for name in names:
                             cm = CmDatabase()
-                            vm = cm.find_name(name, "vm")[0]
-
+                            try:
+                                vm = cm.find_name(name, "vm")[0]
+                            except IndexError:
+                                Console.error(f"could not find vm {name}")
+                                continue
                             r = p.ssh(vm=vm, command=command)
                             print(r)
             return ""

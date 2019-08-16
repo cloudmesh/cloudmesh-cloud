@@ -19,10 +19,12 @@ from cloudmesh.configuration.Config import Config
 from cloudmesh.provider import ComputeProviderPlugin
 from cloudmesh.mongo.DataBaseDecorator import DatabaseImportAsJson
 from cloudmesh.mongo.CmDatabase import CmDatabase
+from cloudmesh.common3.Shell import Shell
 from cloudmesh.secgroup.Secgroup import Secgroup, SecgroupRule
 from cloudmesh.common.util import path_expand
 from cloudmesh.common3.Benchmark import Benchmark
 import json
+from cloudmesh.management.configuration.name import Name
 
 class Provider(ComputeNodeABC, ComputeProviderPlugin):
     kind = "aws"
@@ -269,16 +271,40 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         except ClientError as e:
             Console.error(e)
 
-    def set_server_metadata(self, name, m):
+    def set_server_metadata(self, name, data):
         """
-
         :param name: virtual machine name
         :param m: cm dict
         :return:
         """
-        data = {'cm': str(m)}
-        tag = self.ec2_resource.Tag('metadata', 'cm', data)
-        VERBOSE(tag)
+        #  {'cm': {'flavor': 't2.micro',
+        #         'image': 'ami-0f65671a86f061fcd',
+        #         'kind': 'vm',
+        #         'name': 'test-vafandal-vm-128',
+        #         'status': 'BOOTING',
+        #         'user': 'vafandal'}}
+
+        # data = {'cm': str(m)}
+        # metadata = [ {'Key': 'cm.image', 'Value': image},
+        #              {'Key': 'cm.name' , 'Value':name} ,
+        #              {'Key': 'cm.flavor' , 'Value':size } ,
+        #              {'Key': 'cm.user', 'Value':self.user} ,
+        #              {'Key': 'cm.kind', 'Value':  "vm"} ,
+        #              {'Key': 'cm.status', 'Value': "BOOTING"}
+        #              ]
+        id = self.info(name=name)['InstanceId']
+        cm = self.get_server_metadata(name=name)
+        cm.update(data)
+        metadata = []
+        for key,value in cm['cm'].items():
+            metadata.append({'Key': f'cm.{key}' , 'Value': value})
+        response = self.ec2_client.create_tags(
+            Resources=[
+                id,
+            ],
+            Tags=metadata
+        )
+        return response
 
     def get_server_metadata(self, name):
         """
@@ -286,7 +312,31 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         :param name: Virtual machine name
         :return: Dictionary with Metadata information
         """
-        raise NotImplementedError
+
+        #   'Tags': [{'Key': 'cm.image', 'Value': 'ami-0f65671a86f061fcd'},
+        #            {'Key': 'cm.kind', 'Value': 'vm'},
+        #            {'Key': 'cm.user', 'Value': 'vafandal'},
+        #            {'Key': 'cm.flavor', 'Value': 't2.micro'},
+        #            {'Key': 'cm.status', 'Value': 'BOOTING'},
+        #            {'Key': 'cm.name', 'Value': 'test-vafandal-vm-118'}],
+
+        if name is None:
+            Console.error("Please provide node name...")
+            return
+
+        instance_info = self.ec2_client.describe_instances(
+            Filters=[
+                {'Name': 'tag:cm.name', 'Values': [name]}
+            ]
+        )
+        data =instance_info['Reservations'][0]['Instances'][0]
+        metadata = {'cm':{}}
+        for dat in data['Tags']:
+            key = dat['Key'].split('cm.')[1]
+            value = dat['Value']
+            metadata['cm'][key] = value
+        return metadata
+
 
     # these are available to be associated
     def list_public_ips(self,
@@ -460,6 +510,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                     os.system(cmd)
             else:
                 os.system(cmd)
+
         else:
             if platform.lower() == 'win32':
                 class disable_file_system_redirection:
@@ -534,12 +585,12 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
     def _get_instance_id(ec2_resource, name):
 
         instances = ec2_resource.instances.filter(Filters=[
-            {'Name': 'tag:Name',
+            {'Name': 'cm.name',
              'Values': [name]
              }
         ]
         )
-
+        print(instances)
         return instances
 
     def start(self, name=None):
@@ -606,12 +657,17 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
             Console.error("Please provide node name...")
             return
 
-        instance_info = self.ec2_client.describe_instances(Filters=[
-            {'Name': 'tag:Name',
-             'Values': [name]
-             }
-        ])
-        return instance_info
+        instance_info = self.ec2_client.describe_instances(
+            Filters=[
+                    {'Name': 'tag:cm.name','Values':[name]}
+            ]
+        )
+        data =instance_info['Reservations'][0]['Instances'][0]
+        # TODO: this needs to be fixed :
+        data['name'] = name
+        data['status'] = data['State']['Name']
+        data.update(self.get_server_metadata(name))
+        return data
 
     def list(self):
         # TODO: Sriman
@@ -752,17 +808,17 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         # Validate if there is any VM with same tag name and state other than Terminated.
         # If there is any VM, throw error
 
-        ec2_reservations = self.info(name)['Reservations']
-
-        if ec2_reservations:
-            reservation_instances = None
-            for reservation in ec2_reservations:
-                reservation_instances = list(
-                    filter(lambda instance: instance['State']['Name'] != 'terminated', reservation['Instances']))
-
-            if reservation_instances:
-                Console.error("Tag name already exists, Please use different tag name.")
-                return
+        # ec2_reservations = self.info(name)['Reservations']
+        #
+        # if ec2_reservations:
+        #     reservation_instances = None
+        #     for reservation in ec2_reservations:
+        #         reservation_instances = list(
+        #             filter(lambda instance: instance['State']['Name'] != 'terminated', reservation['Instances']))
+        #
+        #     if reservation_instances:
+        #         Console.error("Tag name already exists, Please use different tag name.")
+        #         return
 
         if secgroup is None:
             secgroup = 'default'
@@ -773,6 +829,16 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         #
         # BUG: the tags seem incomplete
         #
+        if metadata is None:
+            metadata = []
+        metadata = [ {'Key': 'cm.image', 'Value': image},
+                     {'Key': 'cm.name' , 'Value':name} ,
+                     {'Key': 'cm.flavor' , 'Value':size } ,
+                     {'Key': 'cm.user', 'Value':self.user} ,
+                     {'Key': 'cm.kind', 'Value':  "vm"} ,
+                     {'Key': 'cm.status', 'Value': "BOOTING"}
+                     ]
+        # VERBOSE(metadata)
         new_ec2_instance = self.ec2_resource.create_instances(
             ImageId=image,
             InstanceType=size,
@@ -781,12 +847,9 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
             SecurityGroups=[secgroup],
             KeyName=key,
             TagSpecifications=[{'ResourceType': 'instance',
-                                'Tags': [
-                                    {
-                                        'Key': 'cm.name',
-                                        'Value': name
-                                    }, ]}]
+                                'Tags': metadata }]
         )
+        # VERBOSE(new_ec2_instance)
         new_ec2_instance = new_ec2_instance[0]
         waiter = self.ec2_client.get_waiter('instance_exists')
 
@@ -797,20 +860,19 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                         'MaxAttempts': timeout / 20
                     }
                     )
+        print()
         Console.ok("Instance created...")
+        print()
         # if IP provided, Attach it to new instance
         if ip:
             self.attach_public_ip(name, ip)
-        if metadata is None:
-            metadata = {}
-        metadata['cm.image'] = image
-        metadata['cm.flavor'] = size
-        metadata['cm.user'] = self.user
-        metadata['cm.kind'] = "vm"
-        self.set_server_metadata(name, metadata)
+        # x = self.ec2_client.describe_instances(InstanceIds=[new_ec2_instance.instance_id])
+        # VERBOSE(x)
         data = self.info(name=name)
+
+        # VERBOSE(data)
         data['name'] = name
-        data['kind'] = 'aws',
+        data['kind'] = 'aws'
         data['status'] = new_ec2_instance.state['Name'],
         data['created'] = new_ec2_instance.launch_time.strftime(
             "%m/%d/%Y, %H:%M:%S") if new_ec2_instance.launch_time else '',
@@ -824,8 +886,8 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         while True:
             try:
                 public_ip = \
-                self.ec2_client.describe_instances(InstanceIds=[new_ec2_instance.id])['Reservations'][0]['Instances'][
-                    0]['PublicIpAddress'],
+                self.ec2_client.describe_instances(InstanceIds=[new_ec2_instance.id])['Reservations'][0]['Instances']\
+                [0]['PublicIpAddress'],
                 break
             except KeyError:
                 time.sleep(0.5)
@@ -1078,9 +1140,11 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
 if __name__ == "__main__":
     provider = Provider(name='aws')
-    # name=Name()
-    # name.incr()
-    # provider.create(name.get())
+    name = Name()
+    name.incr()
+    name = str(name)
+
+    provider.create(name=name, key="id_rsa",image="ami-0f65671a86f061fcd",size='t2.micro')
     # provider.create(name='sriman123')
     # print(provider.list())
-    provider.keys()
+    # provider.info("test-vafandal-vm-73")

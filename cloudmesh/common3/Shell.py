@@ -6,6 +6,8 @@ For many activities in cloudmesh this is sufficient.
 """
 import subprocess
 import sys
+from sys import platform
+import ctypes
 
 from cloudmesh.common.Shell import Shell as Shell2
 from cloudmesh.common.StopWatch import StopWatch
@@ -30,6 +32,49 @@ class Shell(Shell2):
             return str(r, 'utf-8')
         else:
             return r
+
+    @staticmethod
+    def run2(command, encoding='utf-8'):
+        """
+        executes the command and returns the output as string
+        :param command:
+        :param encoding:
+        :return:
+        """
+        if platform.lower() =='win32':
+            class disable_file_system_redirection:
+                _disable = ctypes.windll.kernel32.Wow64DisableWow64FsRedirection
+                _revert = ctypes.windll.kernel32.Wow64RevertWow64FsRedirection
+
+                def __enter__(self):
+                    self.old_value = ctypes.c_long()
+                    self.success = self._disable(ctypes.byref(self.old_value))
+
+                def __exit__(self, type, value, traceback):
+                    if self.success:
+                        self._revert(self.old_value)
+            with disable_file_system_redirection():
+                command = f"{command}"
+                r = subprocess.check_output(command,
+                                            stderr=subprocess.STDOUT,
+                                            shell=True)
+                if encoding is None or encoding == 'utf-8':
+                    return str(r, 'utf-8')
+                else:
+                    return r
+        elif platform.lower() == 'linux' or platform.lower() == 'darwin':
+            command = f"{command}"
+            r = subprocess.check_output(command,
+                                        stderr=subprocess.STDOUT,
+                                        shell=True)
+            if encoding is None or encoding == 'utf-8':
+                return str(r, 'utf-8')
+            else:
+                return r
+
+    @staticmethod
+    def run_os_system(command, encoding='utf-8'):
+        return NotImplementedError
 
     @staticmethod
     def cms(command, encoding='utf-8'):

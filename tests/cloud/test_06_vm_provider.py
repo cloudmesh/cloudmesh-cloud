@@ -23,6 +23,8 @@ user = Config()["cloudmesh.profile.user"]
 variables = Variables()
 VERBOSE(variables.dict())
 
+key = variables['key']
+
 cloud = variables.parameter('cloud')
 
 print(f"Test run for {cloud}")
@@ -61,12 +63,15 @@ class Test_provider_vm:
         HEADING()
         name_generator.incr()
         Benchmark.Start()
-        data = provider.create()
+        data = provider.create(key=key)
         Benchmark.Stop()
-        print(data)
+        # print(data)
+        VERBOSE(data)
         name = str(Name())
         status = provider.status(name=name)[0]
-        assert status["cm.status"] == 'ACTIVE'
+        assert status["cm.status"] in ['ACTIVE', 'BOOTING'] # TODO: get metadata needs to be implemented
+
+class a:
 
     def test_provider_vm_info(self):
         HEADING()

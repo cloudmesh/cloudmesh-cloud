@@ -16,7 +16,7 @@ from cloudmesh.common.debug import VERBOSE
 from progress.bar import Bar
 from cloudmesh.common.util import path_expand
 from cloudmesh.mongo.MongoDBController import MongoDBController
-
+from cloudmesh.common3.Shell import Shell
 
 # cm:
 #   id:
@@ -582,46 +582,50 @@ class CmDatabase(object):
         col.drop()
 
     def importAsFile(self, data, collection, db ):
-        MongoDBController().start_if_not_running()
-        tmp_folder = path_expand('~/.cloudmesh/tmp')
-        if not os.path.exists(tmp_folder):
-            os.makedirs(tmp_folder)
-        tmp_file = path_expand('~/.cloudmesh/tmp/tmp_import_file.json')
-        Console.msg("Saving the data to file ")
-        with open(tmp_file, 'w') as f:
-            for dat in data:
-                f.write(json.dumps(dat) + '\n')
-
         if collection in self.collections():
             self.clear(collection=collection)
             Console.msg(f"Collection {collection} dropped to be rewritten")
-        cmd = f'mongoimport --db {db} --collection {collection} ^ --authenticationDatabase admin --username {self.username} --password {self.password} ^ --drop --file {tmp_file}'
-
-        Console.msg("Importing the saved data to database")
-        if platform.lower() =='win32':
-            class disable_file_system_redirection:
-                _disable = ctypes.windll.kernel32.Wow64DisableWow64FsRedirection
-                _revert = ctypes.windll.kernel32.Wow64RevertWow64FsRedirection
-
-                def __enter__(self):
-                    self.old_value = ctypes.c_long()
-                    self.success = self._disable(ctypes.byref(self.old_value))
-
-                def __exit__(self, type, value, traceback):
-                    if self.success:
-                        self._revert(self.old_value)
-            with disable_file_system_redirection():
-                ssh = subprocess.Popen(cmd,
-                                       shell=True,
-                                       stdout=subprocess.PIPE,
-                                       stderr=subprocess.PIPE)
-        else:
-            ssh = subprocess.Popen(cmd,
-                                   shell=True,
-                                   stdout=subprocess.PIPE,
-                                   stderr=subprocess.PIPE)
-        result = ssh.stdout.read().decode("utf-8")
-        print(result)
+        MongoDBController().importAsFile(data, collection, db)
+        # MongoDBController().start_if_not_running()
+        # tmp_folder = path_expand('~/.cloudmesh/tmp')
+        # if not os.path.exists(tmp_folder):
+        #     os.makedirs(tmp_folder)
+        # tmp_file = path_expand('~/.cloudmesh/tmp/tmp_import_file.json')
+        # Console.msg("Saving the data to file ")
+        # with open(tmp_file, 'w') as f:
+        #     for dat in data:
+        #         f.write(json.dumps(dat) + '\n')
+        #
+        # if collection in self.collections():
+        #     self.clear(collection=collection)
+        #     Console.msg(f"Collection {collection} dropped to be rewritten")
+        # cmd = f'mongoimport --db {db} --collection {collection} ^ --authenticationDatabase admin --username {self.username} --password {self.password} ^ --drop --file {tmp_file}'
+        #
+        # Console.msg("Importing the saved data to database")
+        # if platform.lower() =='win32':
+        #     class disable_file_system_redirection:
+        #         _disable = ctypes.windll.kernel32.Wow64DisableWow64FsRedirection
+        #         _revert = ctypes.windll.kernel32.Wow64RevertWow64FsRedirection
+        #
+        #         def __enter__(self):
+        #             self.old_value = ctypes.c_long()
+        #             self.success = self._disable(ctypes.byref(self.old_value))
+        #
+        #         def __exit__(self, type, value, traceback):
+        #             if self.success:
+        #                 self._revert(self.old_value)
+        #     with disable_file_system_redirection():
+        #         ssh = subprocess.Popen(cmd,
+        #                                shell=True,
+        #                                stdout=subprocess.PIPE,
+        #                                stderr=subprocess.PIPE)
+        # else:
+        #     ssh = subprocess.Popen(cmd,
+        #                            shell=True,
+        #                            stdout=subprocess.PIPE,
+        #                            stderr=subprocess.PIPE)
+        # result = ssh.stdout.read().decode("utf-8")
+        # print(result)
 
 
 

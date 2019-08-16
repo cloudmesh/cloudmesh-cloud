@@ -1,20 +1,25 @@
+import ctypes
+import json
 import os
 import subprocess
 import urllib.parse
+import urllib.parse
+import urllib.parse
 from sys import platform
+
 import psutil
-
-
 import yaml
-from pymongo import MongoClient
-
 from cloudmesh.common.Shell import Shell, Brew
 from cloudmesh.common.console import Console
 from cloudmesh.common.dotdict import dotdict
+from cloudmesh.common.util import path_expand
+from cloudmesh.common3.Shell import Shell
 from cloudmesh.configuration.Config import Config
 from cloudmesh.management.script import Script, SystemPath
 from cloudmesh.management.script import find_process
-from cloudmesh.common3.Shell import Shell as Shell3
+# from cloudmesh.mongo.MongoDBController import MongoDBController
+from pymongo import MongoClient
+
 
 # noinspection PyUnusedLocal
 class MongoInstaller(object):
@@ -301,7 +306,8 @@ class MongoDBController(object):
         if security:
             auth = "--auth"
 
-        if platform.lower() == 'win32':
+        if platform.lower()\
+            == 'win32':
             try:
                 if self.is_installed_as_win_service():
                     if not self.win_service_is_running():
@@ -610,6 +616,31 @@ class MongoDBController(object):
         else:
             Console.error(f"platform {platform} not found")
 
+    def importAsFile(self, data, collection, db ):
+        self.start_if_not_running()
+        tmp_folder = path_expand('~/.cloudmesh/tmp')
+        if not os.path.exists(tmp_folder):
+            os.makedirs(tmp_folder)
+        tmp_file = path_expand('~/.cloudmesh/tmp/tmp_import_file.json')
+        Console.msg("Saving the data to file ")
+        with open(tmp_file, 'w') as f:
+            for dat in data:
+                f.write(json.dumps(dat) + '\n')
+
+        username = self.config["cloudmesh.data.mongo.MONGO_USERNAME"]
+        password = self.config ["cloudmesh.data.mongo.MONGO_PASSWORD"]
+
+        cmd = f'mongoimport --db {db}' \
+              f' --collection {collection} ^'\
+              f' --authenticationDatabase admin '\
+              f' --username {username}'\
+              f' --password {password} ^'\
+              f' --drop' \
+              f' --file {tmp_file}'
+
+        Console.msg("Importing the saved data to database")
+        result = Shell.run2(cmd)
+        print(result)
 
 
 """

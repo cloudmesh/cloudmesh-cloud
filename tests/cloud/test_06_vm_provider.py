@@ -71,36 +71,25 @@ class Test_provider_vm:
         status = provider.status(name=name)[0]
         assert status["cm.status"] in ['ACTIVE', 'BOOTING'] # TODO: get metadata needs to be implemented
 
-class a:
-
     def test_provider_vm_info(self):
         HEADING()
         Benchmark.Start()
-        data = provider.info(name=name)[0]
+        data = provider.info(name='name')[0]
         Benchmark.Stop()
         print(data)
-        assert data["cm"]["status"] == 'ACTIVE'
-
+        assert data["cm"]["status"] in ['ACTIVE', 'BOOTING']
 
     def test_vm_status(self):
         HEADING()
         name = str(Name())
         Benchmark.Start()
-        status = provider.status(name=name)[0]
+        data = provider.status(name=name)[0]
         Benchmark.Stop()
-        print(status)
+        print(data , type(data))
+        assert data["cm.status"] in ['ACTIVE', 'BOOTING']
 
+class a:
 
-    def test_provider_vm_stop(self):
-        HEADING()
-        name = str(Name())
-        print ("STOP:", name)
-        Benchmark.Start()
-        data = provider.stop(name=name)
-        Benchmark.Stop()
-        print(data)
-        status = provider.status(name=name)[0]
-        assert status["cm.status"] == 'SHUTOFF'
 
     def test_provider_vm_start(self):
         HEADING()

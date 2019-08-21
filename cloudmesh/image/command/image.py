@@ -103,13 +103,20 @@ class ImageCommand(PluginCommand):
                     provider = Provider(name=cloud)
 
                     db = CmDatabase()
-                    images = db.find(collection=f"{cloud}-image")
 
-                    print(images)
-                    print(provider)
 
-                    provider.Print(images, output=arguments.output,
+                    # print(images)
+                    # print(provider)
+                    if len(names) == 0 :
+                        images = db.find(collection=f"{cloud}-image")
+                        provider.Print(images, output=arguments.output,
                                    kind="image")
+                    else:
+                        images = []
+                        for name in names:
+                            images += db.find_name(name,kind='image')
+                        provider.Print(images, output=arguments.output,
+                                       kind="image")
 
             except Exception as e:
 

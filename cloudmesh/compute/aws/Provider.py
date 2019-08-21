@@ -699,7 +699,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         return self.update_dict(instance_ids, kind="vm")
 
     def suspend(self, name=None):
-        # TODO: Sriman
+        # TODO: Vafa
         """
         suspends the node with the given name
 
@@ -1014,13 +1014,14 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
 
     def image(self, name=None):
-        # TODO: Alex
+        # TODO: Vafa
         """
         Gets the image with a given nmae
         :param name: The name of the image
         :return: the dict of the image
         """
-        raise NotImplementedError
+        cm = CmDatabase()
+        return cm.find_name(name, kind='image')
 
     def flavors(self, **kwargs):
         # TODO: Alex

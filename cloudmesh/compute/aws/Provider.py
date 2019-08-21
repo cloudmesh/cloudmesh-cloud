@@ -306,6 +306,33 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         )
         return response
 
+    def get_server_metadata_tags(self, name):
+        """
+        Describes the metadata tag of EC2 resource
+        :param name: Virtual machine name
+        :return: Dictionary with Metadata information
+        """
+
+        #   'Tags': [{'Key': 'cm.image', 'Value': 'ami-0f65671a86f061fcd'},
+        #            {'Key': 'cm.kind', 'Value': 'vm'},
+        #            {'Key': 'cm.user', 'Value': 'vafandal'},
+        #            {'Key': 'cm.flavor', 'Value': 't2.micro'},
+        #            {'Key': 'cm.status', 'Value': 'BOOTING'},
+        #            {'Key': 'cm.name', 'Value': 'test-vafandal-vm-118'}],
+
+        if name is None:
+            Console.error("Please provide node name...")
+            return
+
+        instance_info = self.ec2_client.describe_instances(
+            Filters=[
+                {'Name': 'tag:cm.name', 'Values': [name]}
+            ]
+        )
+        data =instance_info['Reservations'][0]['Instances'][0]
+        return data['Tags']
+
+
     def get_server_metadata(self, name):
         """
         Describes the metadata tag of EC2 resource
@@ -586,7 +613,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
     def _get_instance_id(ec2_resource, name):
 
         instances = ec2_resource.instances.filter(Filters=[
-            {'Name': 'cm.name',
+            {'Name': 'tag:cm.name',
              'Values': [name]
              }
         ]
@@ -663,11 +690,13 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                     {'Name': 'tag:cm.name','Values':[name]}
             ]
         )
-        data =instance_info['Reservations'][0]['Instances'][0]
-        # TODO: this needs to be fixed :
-        data['name'] = name
-        data['status'] = data['State']['Name']
-        data.update(self.get_server_metadata(name))
+        data={}
+        if (len(instance_info['Reservations']) > 0 ) :
+            data =instance_info['Reservations'][0]['Instances'][0]
+            # TODO: this needs to be fixed :
+            data['name'] = name
+            data['status'] = data['State']['Name']
+            data.update(self.get_server_metadata(name))
         return data
 
     def list(self):
@@ -736,8 +765,10 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
         for each_instance in instances:
             try:
+                # self.ec2_resource.create_tags(Resources = [each_instance.instance_id],
+                #                               Tags=[{'Key': 'cm.status', 'Value': "Terminated"}])
                 self.ec2_client.terminate_instances(
-                    InstanceIds=[each_instance.instance_id])
+                    InstanceIds=[each_instance.instance_id], )
             except ClientError:
                 Console.error(
                     "Currently instance cant be terminated...Please try again")
@@ -976,7 +1007,22 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         :param name: name of the fm
         :return:
         """
-        raise NotImplementedError
+
+        if name is None:
+            Console.error("Please provide node name...")
+            return
+
+        instances = self._get_instance_id(self.ec2_resource, name)
+        metadata = self.get_server_metadata_tags(name =name)
+        response = None
+        for each_instance in instances:
+            try:
+                response = self.ec2_client.delete_tags(Resources = [each_instance.instance_id],
+                                              Tags=metadata)
+            except ClientError:
+                Console.error(
+                    "Currently metadata cant not be deleted...Please try again")
+        return response
 
     def _get_account_id(self):
         '''
@@ -1142,10 +1188,11 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 if __name__ == "__main__":
     provider = Provider(name='aws')
     name = Name()
-    name.incr()
+    # name.incr()
     name = str(name)
 
-    provider.create(name=name, key="id_rsa",image="ami-0f65671a86f061fcd",size='t2.micro')
+    # provider.create(name=name, key="id_rsa",image="ami-0f65671a86f061fcd",size='t2.micro')
     # provider.create(name='sriman123')
     # print(provider.list())
     # provider.info("test-vafandal-vm-73")
+    # provider.delete_server_metadata(name=' test-spullak@iu.edu-vm-50')

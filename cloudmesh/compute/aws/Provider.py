@@ -234,11 +234,11 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
             Console.error(e)
 
     def upload_secgroup(self, name=None):
-        # TODO: Vafa
+        # TODO: Saurab
         raise NotImplementedError
 
     def add_rules_to_secgroup(self, name=None, rules=None):
-        # TODO: Vafa
+        # TODO: Saurab
 
         raise NotImplementedError
 

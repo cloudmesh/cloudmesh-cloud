@@ -332,9 +332,10 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         data =instance_info['Reservations'][0]['Instances'][0]
         metadata = {'cm':{}}
         for dat in data['Tags']:
-            key = dat['Key'].split('cm.')[1]
-            value = dat['Value']
-            metadata['cm'][key] = value
+            if 'cm.' in dat['Key']:
+                key = dat['Key'].split('cm.')[1]
+                value = dat['Value']
+                metadata['cm'][key] = value
         return metadata
 
 
@@ -837,7 +838,8 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                      {'Key': 'cm.flavor' , 'Value':size } ,
                      {'Key': 'cm.user', 'Value':self.user} ,
                      {'Key': 'cm.kind', 'Value':  "vm"} ,
-                     {'Key': 'cm.status', 'Value': "BOOTING"}
+                     {'Key': 'cm.status', 'Value': "BOOTING"},
+                     {'Key': 'Name', 'Value': name}
                      ]
         # VERBOSE(metadata)
         new_ec2_instance = self.ec2_resource.create_instances(

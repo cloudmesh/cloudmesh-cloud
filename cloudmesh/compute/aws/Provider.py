@@ -234,11 +234,11 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
             Console.error(e)
 
     def upload_secgroup(self, name=None):
-        # TODO: Vafa
+        # TODO: Saurab
         raise NotImplementedError
 
     def add_rules_to_secgroup(self, name=None, rules=None):
-        # TODO: Vafa
+        # TODO: Saurab
 
         raise NotImplementedError
 
@@ -359,9 +359,10 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         data =instance_info['Reservations'][0]['Instances'][0]
         metadata = {'cm':{}}
         for dat in data['Tags']:
-            key = dat['Key'].split('cm.')[1]
-            value = dat['Value']
-            metadata['cm'][key] = value
+            if 'cm.' in dat['Key']:
+                key = dat['Key'].split('cm.')[1]
+                value = dat['Value']
+                metadata['cm'][key] = value
         return metadata
 
 
@@ -727,7 +728,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         return self.update_dict(instance_ids, kind="vm")
 
     def suspend(self, name=None):
-        # TODO: Sriman
+        # TODO: Vafa
         """
         suspends the node with the given name
 
@@ -868,7 +869,8 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                      {'Key': 'cm.flavor' , 'Value':size } ,
                      {'Key': 'cm.user', 'Value':self.user} ,
                      {'Key': 'cm.kind', 'Value':  "vm"} ,
-                     {'Key': 'cm.status', 'Value': "BOOTING"}
+                     {'Key': 'cm.status', 'Value': "BOOTING"},
+                     {'Key': 'Name', 'Value': name}
                      ]
         # VERBOSE(metadata)
         new_ec2_instance = self.ec2_resource.create_instances(
@@ -1058,13 +1060,14 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
 
     def image(self, name=None):
-        # TODO: Alex
+        # TODO: Vafa
         """
         Gets the image with a given nmae
         :param name: The name of the image
         :return: the dict of the image
         """
-        raise NotImplementedError
+        cm = CmDatabase()
+        return cm.find_name(name, kind='image')
 
     def flavors(self, **kwargs):
         # TODO: Alex

@@ -436,7 +436,8 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
         def key_selector(keys):
             '''
-            This is a helper method for ssh key selection
+           This is a helper method for ssh key selection
+           THIS IS JUST A SAFETY MEASURE, PLEASE DON'T MIND IT
             :param keys:
             :return:
             '''
@@ -463,7 +464,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         cm = CmDatabase()
         ip = vm['public_ips']
         try:
-            key_name = vm['key_name']
+            key_name = vm['KeyName']
             key = cm.find_name(name=key_name, kind="key")[0]['location']['private']
         except (KeyError, IndexError):
             aws_keys = cm.find(kind='key', cloud='aws')

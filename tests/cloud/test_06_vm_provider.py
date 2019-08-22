@@ -69,12 +69,12 @@ class Test_provider_vm:
         VERBOSE(data)
         name = str(Name())
         status = provider.status(name=name)[0]
-        assert status["cm.status"] in ['ACTIVE', 'BOOTING'] # TODO: get metadata needs to be implemented
+        assert status["cm.status"] in ['ACTIVE', 'BOOTING']
 
     def test_provider_vm_info(self):
         HEADING()
         Benchmark.Start()
-        data = provider.info(name='name')[0]
+        data = provider.info(name=name)[0]
         Benchmark.Stop()
         print(data)
         assert data["cm"]["status"] in ['ACTIVE', 'BOOTING']
@@ -85,10 +85,8 @@ class Test_provider_vm:
         Benchmark.Start()
         data = provider.status(name=name)[0]
         Benchmark.Stop()
-        print(data , type(data))
         assert data["cm.status"] in ['ACTIVE', 'BOOTING']
 
-class a:
 
 
     def test_provider_vm_start(self):
@@ -99,8 +97,17 @@ class a:
         Benchmark.Stop()
         VERBOSE(data)
         status = provider.status(name=name)[0]
-        assert status["cm.status"] == 'ACTIVE'
+        assert status["cm.status"] in ['ACTIVE', 'BOOTING']
 
+    def test_provider_vm_stop(self):
+        HEADING()
+        name = str(Name())
+        Benchmark.Start()
+        data = provider.stop(name=name)
+        Benchmark.Stop()
+        VERBOSE(data)
+        status = provider.status(name=name)[0]
+        assert status["cm.status"] in ['ACTIVE', 'BOOTING', 'STOPPED']
 
     # do other tests before terminationg, keys, metadata, ....
 
@@ -112,7 +119,12 @@ class a:
         Benchmark.Stop()
         print(data)
         data = provider.info(name=name)
-        assert len(data) == 0
+        #below cm.status check required as in aws it takes a while to clear list from you account after terminating vm
+        assert len(data) == 0 or ( data[0]["cm"]["status"] in ['BOOTING','TERMINATED'] if data and data[0].get('cm',None) is not None else True)
+
+
+
+class a:
 
     def test_benchmark(self):
         Benchmark.print(sysinfo=False, csv=False, tag=cloud)

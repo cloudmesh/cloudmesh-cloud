@@ -145,7 +145,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         """
         List the named security groups
 
-        :param name: Name of the security group
+        :param name: Name of the security group. If not provided, returns all security group
         :return: List of dict
         """
         try:
@@ -155,8 +155,8 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                 response = self.ec2_client.describe_security_groups(GroupNames=[name])
         except ClientError as e:
             Console.error(e)
-        VERBOSE(response)
-        return response
+
+        return response['SecurityGroups']
 
     def list_secgroup_rules(self, name='default'):
 
@@ -238,9 +238,18 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         raise NotImplementedError
 
     def add_rules_to_secgroup(self, name=None, rules=None):
-        # TODO: Saurab
 
-        raise NotImplementedError
+        if name is None and rules is None:
+            raise ValueError("name or rules are None")
+
+        sec_group = self.list_secgroups(name)
+
+        if len(sec_group) == 0:
+            raise ValueError("group does not exist")
+
+
+
+
 
     def remove_rules_from_secgroup(self, name=None, rules=None):
 
@@ -1186,16 +1195,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         return d
 
 
-
-
 if __name__ == "__main__":
     provider = Provider(name='aws')
-    name = Name()
-    # name.incr()
-    name = str(name)
-
-    # provider.create(name=name, key="id_rsa",image="ami-0f65671a86f061fcd",size='t2.micro')
-    # provider.create(name='sriman123')
-    # print(provider.list())
-    # provider.info("test-vafandal-vm-73")
-    # provider.delete_server_metadata(name=' test-spullak@iu.edu-vm-50')
+#    provider.add_secgroup(name='saurabh_sec',description='Testing sec group creation')
+    provider.list_secgroups()

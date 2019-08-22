@@ -4,25 +4,25 @@ from cloudmesh.shell.command import command
 
 # see https://github.com/cloudmesh/client/blob/master/cloudmesh_client/shell/plugins/WorkflowCommand.py
 
-class WorkflowCommand(PluginCommand):
+class Workflow_draftCommand(PluginCommand):
 
     # noinspection PyUnusedLocal
     @command
-    def do_workflow(self, args, arguments):
+    def do_workflow_draft(self, args, arguments):
         """
         ::
 
             Usage:
-                workflow refresh [--cloud=CLOUD] [-v]
-                workflow list [ID] [NAME] [--cloud=CLOUD] [--output=OUTPUT] [--refresh] [-v]
-                workflow add NAME LOCATION
-                workflow delete ID
-                workflow status [NAMES]
-                workflow show ID
-                workflow save NAME WORKFLOWSTR
-                workflow run NAME
-                workflow service start
-                workflow service stop
+                workflow_draft refresh [--cloud=CLOUD] [-v]
+                workflow_draft list [ID] [NAME] [--cloud=CLOUD] [--output=OUTPUT] [--refresh] [-v]
+                workflow_draft add NAME LOCATION
+                workflow_draft delete ID
+                workflow_draft status [NAMES]
+                workflow_draft show ID
+                workflow_draft save NAME WORKFLOWSTR
+                workflow_draft run NAME
+                workflow_draft service start
+                workflow_draft service stop
 
             This lists out the workflows present for a cloud
 

@@ -655,7 +655,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                 f"Instance having Tag:{name} and "
                 f"Instance-Id:{each_instance.instance_id} started")
 
-    def stop(self, name=None):
+    def stop(self, name=None, hibernate = False):
         # TODO: Sriman
         """
         stops the node with the given name
@@ -672,7 +672,9 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         for each_instance in instances:
             try:
                 self.ec2_client.stop_instances(
-                    InstanceIds=[each_instance.instance_id])
+                    InstanceIds=[each_instance.instance_id], Hibernate = hibernate)
+
+                self.add_server_metadata(name=name, tags= [{'Key': 'cm.status', 'Value': "STOPPED"}])
             except ClientError:
                 Console.error("Currently instance cant be stopped...Please try again")
             Console.msg("Stopping Instance..Please wait...")
@@ -737,14 +739,14 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         return self.update_dict(instance_ids, kind="vm")
 
     def suspend(self, name=None):
-        # TODO: Vafa
+        # TODO: Sriman
         """
         suspends the node with the given name
 
         :param name: the name of the node
         :return: The dict representing the node
         """
-        raise NotImplementedError
+        return self.stop(name=name, hibernate=True)
 
     def resume(self, name=None):
         # TODO: Sriman
@@ -779,6 +781,8 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                 #                               Tags=[{'Key': 'cm.status', 'Value': "Terminated"}])
                 self.ec2_client.terminate_instances(
                     InstanceIds=[each_instance.instance_id], )
+
+                self.add_server_metadata(name=name, tags= [{'Key': 'cm.status', 'Value': "TERMINATED"}])
             except ClientError:
                 Console.error(
                     "Currently instance cant be terminated...Please try again")
@@ -1011,11 +1015,12 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         r = self.ec2_client.delete_key_pair(KeyName=name)
         return r
 
-    def delete_server_metadata(self, name):
+    def add_server_metadata(self, name, tags):
         """
-        gets the metadata for the server
+        Add or Update tag to metadata
 
         :param name: name of the fm
+        :param tags: tags to be added to vm metadata
         :return:
         """
 
@@ -1024,12 +1029,38 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
             return
 
         instances = self._get_instance_id(self.ec2_resource, name)
-        metadata = self.get_server_metadata_tags(name =name)
+        response = None
+        for each_instance in instances:
+            try:
+                response = self.ec2_client.create_tags(Resources = [each_instance.instance_id],
+                                              Tags=tags)
+            except ClientError:
+                Console.error(
+                    "Currently metadata cant not be added or updated...Please try again")
+        return response
+
+    def delete_server_metadata(self, name, tags = None):
+        """
+        gets the metadata for the server
+
+        :param name: name of the vm
+        :param tags: tags to be deleted from vm metadata
+        :return:
+        """
+
+        if name is None:
+            Console.error("Please provide node name...")
+            return
+
+        instances = self._get_instance_id(self.ec2_resource, name)
+
+        if tags is None:
+            tags = self.get_server_metadata_tags(name =name)
         response = None
         for each_instance in instances:
             try:
                 response = self.ec2_client.delete_tags(Resources = [each_instance.instance_id],
-                                              Tags=metadata)
+                                              Tags=tags)
             except ClientError:
                 Console.error(
                     "Currently metadata cant not be deleted...Please try again")

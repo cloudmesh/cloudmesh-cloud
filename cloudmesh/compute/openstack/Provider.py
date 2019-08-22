@@ -779,9 +779,14 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                 cm = literal_eval(metadata)
                 if 'cm' in server:
                     server['cm'].update(cm)
-            server['ip_public'] = self.get_public_ip(server=server)
-            server['ip_private'] = self.get_private_ip(server=server)
-
+            try:
+                server['ip_public'] = self.get_public_ip(server=server)
+            except:
+                pass
+            try:
+                server['ip_private'] = self.get_private_ip(server=server)
+            except:
+                pass
             result.append(server)
 
         return result
@@ -933,7 +938,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                                                  )
             server['user'] = user
             r = self.cloudman.wait_for_server(server)
-            #s = self.cloudman.add_ips_to_server(server, ips=ip)
+            s = self.cloudman.add_ips_to_server(server, ips=ip)
             variables = Variables()
             variables['vm'] = name
             if metadata is None:
@@ -944,7 +949,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
             self.cloudman.set_server_metadata(server, metadata)
 
-            # self.cloudman.add_security_group(security_group=secgroup)
+            self.cloudman.add_security_group(security_group=secgroup)
 
             # server = self.cloudman.compute.wait_for_server(server)
 

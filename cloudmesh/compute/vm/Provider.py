@@ -205,6 +205,8 @@ class Provider(ComputeNodeABC):
 
         created = self.loop(self._create, **arguments)
 
+        VERBOSE(created)
+
         return created
 
 

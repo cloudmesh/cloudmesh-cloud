@@ -1,4 +1,4 @@
-__version__ = "4.1.4"
+__version__ = "4.1.5"
 
 from cloudmesh.common.debug import VERBOSE
 from cloudmesh.configuration.Config import Config

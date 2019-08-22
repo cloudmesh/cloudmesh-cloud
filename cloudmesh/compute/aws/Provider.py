@@ -145,7 +145,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         """
         List the named security groups
 
-        :param name: Name of the security group
+        :param name: Name of the security group. If not provided, returns all security group
         :return: List of dict
         """
         try:
@@ -155,8 +155,8 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                 response = self.ec2_client.describe_security_groups(GroupNames=[name])
         except ClientError as e:
             Console.error(e)
-        VERBOSE(response)
-        return response
+
+        return response['SecurityGroups']
 
     def list_secgroup_rules(self, name='default'):
 
@@ -234,13 +234,22 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
             Console.error(e)
 
     def upload_secgroup(self, name=None):
-        # TODO: Vafa
+        # TODO: Saurab
         raise NotImplementedError
 
     def add_rules_to_secgroup(self, name=None, rules=None):
-        # TODO: Vafa
 
-        raise NotImplementedError
+        if name is None and rules is None:
+            raise ValueError("name or rules are None")
+
+        sec_group = self.list_secgroups(name)
+
+        if len(sec_group) == 0:
+            raise ValueError("group does not exist")
+
+
+
+
 
     def remove_rules_from_secgroup(self, name=None, rules=None):
 
@@ -305,6 +314,33 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
             Tags=metadata
         )
         return response
+
+    def get_server_metadata_tags(self, name):
+        """
+        Describes the metadata tag of EC2 resource
+        :param name: Virtual machine name
+        :return: Dictionary with Metadata information
+        """
+
+        #   'Tags': [{'Key': 'cm.image', 'Value': 'ami-0f65671a86f061fcd'},
+        #            {'Key': 'cm.kind', 'Value': 'vm'},
+        #            {'Key': 'cm.user', 'Value': 'vafandal'},
+        #            {'Key': 'cm.flavor', 'Value': 't2.micro'},
+        #            {'Key': 'cm.status', 'Value': 'BOOTING'},
+        #            {'Key': 'cm.name', 'Value': 'test-vafandal-vm-118'}],
+
+        if name is None:
+            Console.error("Please provide node name...")
+            return
+
+        instance_info = self.ec2_client.describe_instances(
+            Filters=[
+                {'Name': 'tag:cm.name', 'Values': [name]}
+            ]
+        )
+        data =instance_info['Reservations'][0]['Instances'][0]
+        return data['Tags']
+
 
     def get_server_metadata(self, name):
         """
@@ -587,7 +623,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
     def _get_instance_id(ec2_resource, name):
 
         instances = ec2_resource.instances.filter(Filters=[
-            {'Name': 'cm.name',
+            {'Name': 'tag:cm.name',
              'Values': [name]
              }
         ]
@@ -619,7 +655,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                 f"Instance having Tag:{name} and "
                 f"Instance-Id:{each_instance.instance_id} started")
 
-    def stop(self, name=None):
+    def stop(self, name=None, hibernate = False):
         # TODO: Sriman
         """
         stops the node with the given name
@@ -636,7 +672,9 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         for each_instance in instances:
             try:
                 self.ec2_client.stop_instances(
-                    InstanceIds=[each_instance.instance_id])
+                    InstanceIds=[each_instance.instance_id], Hibernate = hibernate)
+
+                self.add_server_metadata(name=name, tags= [{'Key': 'cm.status', 'Value': "STOPPED"}])
             except ClientError:
                 Console.error("Currently instance cant be stopped...Please try again")
             Console.msg("Stopping Instance..Please wait...")
@@ -664,11 +702,13 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                     {'Name': 'tag:cm.name','Values':[name]}
             ]
         )
-        data =instance_info['Reservations'][0]['Instances'][0]
-        # TODO: this needs to be fixed :
-        data['name'] = name
-        data['status'] = data['State']['Name']
-        data.update(self.get_server_metadata(name))
+        data={}
+        if (len(instance_info['Reservations']) > 0 ) :
+            data =instance_info['Reservations'][0]['Instances'][0]
+            # TODO: this needs to be fixed :
+            data['name'] = name
+            data['status'] = data['State']['Name']
+            data.update(self.get_server_metadata(name))
         return data
 
     def list(self):
@@ -706,7 +746,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         :param name: the name of the node
         :return: The dict representing the node
         """
-        raise NotImplementedError
+        return self.stop(name=name, hibernate=True)
 
     def resume(self, name=None):
         # TODO: Sriman
@@ -737,8 +777,12 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
         for each_instance in instances:
             try:
+                # self.ec2_resource.create_tags(Resources = [each_instance.instance_id],
+                #                               Tags=[{'Key': 'cm.status', 'Value': "Terminated"}])
                 self.ec2_client.terminate_instances(
-                    InstanceIds=[each_instance.instance_id])
+                    InstanceIds=[each_instance.instance_id], )
+
+                self.add_server_metadata(name=name, tags= [{'Key': 'cm.status', 'Value': "TERMINATED"}])
             except ClientError:
                 Console.error(
                     "Currently instance cant be terminated...Please try again")
@@ -971,14 +1015,56 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         r = self.ec2_client.delete_key_pair(KeyName=name)
         return r
 
-    def delete_server_metadata(self, name):
+    def add_server_metadata(self, name, tags):
+        """
+        Add or Update tag to metadata
+
+        :param name: name of the fm
+        :param tags: tags to be added to vm metadata
+        :return:
+        """
+
+        if name is None:
+            Console.error("Please provide node name...")
+            return
+
+        instances = self._get_instance_id(self.ec2_resource, name)
+        response = None
+        for each_instance in instances:
+            try:
+                response = self.ec2_client.create_tags(Resources = [each_instance.instance_id],
+                                              Tags=tags)
+            except ClientError:
+                Console.error(
+                    "Currently metadata cant not be added or updated...Please try again")
+        return response
+
+    def delete_server_metadata(self, name, tags = None):
         """
         gets the metadata for the server
 
-        :param name: name of the fm
+        :param name: name of the vm
+        :param tags: tags to be deleted from vm metadata
         :return:
         """
-        raise NotImplementedError
+
+        if name is None:
+            Console.error("Please provide node name...")
+            return
+
+        instances = self._get_instance_id(self.ec2_resource, name)
+
+        if tags is None:
+            tags = self.get_server_metadata_tags(name =name)
+        response = None
+        for each_instance in instances:
+            try:
+                response = self.ec2_client.delete_tags(Resources = [each_instance.instance_id],
+                                              Tags=tags)
+            except ClientError:
+                Console.error(
+                    "Currently metadata cant not be deleted...Please try again")
+        return response
 
     def _get_account_id(self):
         '''
@@ -1014,13 +1100,14 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
 
     def image(self, name=None):
-        # TODO: Alex
+        # TODO: Vafa
         """
         Gets the image with a given nmae
         :param name: The name of the image
         :return: the dict of the image
         """
-        raise NotImplementedError
+        cm = CmDatabase()
+        return cm.find_name(name, kind='image')
 
     def flavors(self, **kwargs):
         # TODO: Alex
@@ -1139,15 +1226,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         return d
 
 
-
-
 if __name__ == "__main__":
     provider = Provider(name='aws')
-    name = Name()
-    name.incr()
-    name = str(name)
-
-    provider.create(name=name, key="id_rsa",image="ami-0f65671a86f061fcd",size='t2.micro')
-    # provider.create(name='sriman123')
-    # print(provider.list())
-    # provider.info("test-vafandal-vm-73")
+#    provider.add_secgroup(name='saurabh_sec',description='Testing sec group creation')
+    provider.list_secgroups()

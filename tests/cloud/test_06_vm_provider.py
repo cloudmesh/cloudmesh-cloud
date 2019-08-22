@@ -99,6 +99,15 @@ class Test_provider_vm:
         status = provider.status(name=name)[0]
         assert status["cm.status"] in ['ACTIVE', 'BOOTING']
 
+    def test_provider_vm_stop(self):
+        HEADING()
+        name = str(Name())
+        Benchmark.Start()
+        data = provider.stop(name=name)
+        Benchmark.Stop()
+        VERBOSE(data)
+        status = provider.status(name=name)[0]
+        assert status["cm.status"] in ['ACTIVE', 'BOOTING', 'STOPPED']
 
     # do other tests before terminationg, keys, metadata, ....
 
@@ -111,7 +120,7 @@ class Test_provider_vm:
         print(data)
         data = provider.info(name=name)
         #below cm.status check required as in aws it takes a while to clear list from you account after terminating vm
-        assert len(data) == 0 or ( data[0]["cm"]["status"] in ['BOOTING'] if data and data[0].get('cm',None) is not None else True)
+        assert len(data) == 0 or ( data[0]["cm"]["status"] in ['BOOTING','TERMINATED'] if data and data[0].get('cm',None) is not None else True)
 
 
 

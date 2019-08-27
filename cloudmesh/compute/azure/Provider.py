@@ -326,6 +326,8 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         self.get_resource_group()
 
     def get_resource_group(self):
+        # TODO: Joaquin -> Completed
+
         groups = self.resource_client.resource_groups
         if groups.check_existence(self.GROUP_NAME):
             return groups.get(self.GROUP_NAME)
@@ -385,7 +387,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         return async_vm_tag_updates.result().tags
 
     def list_secgroups(self, name=None):
-        # TODO: Joaquin
+        # TODO: Joaquin -> Completed
         """
         List the security group by name
 
@@ -422,7 +424,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         return secgroup_rules
 
     def add_secgroup(self, name=None, description=None):
-        # TODO: Joaquin
+        # TODO: Joaquin -> Completed
         """
         Adds the
         :param name: Name of the group
@@ -454,7 +456,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                           port=None,
                           protocol=None,
                           ip_range=None):
-        # TODO: Joaquin
+        # TODO: Joaquin -> Completed
 
         network_sec_group_name = 'cloudmesh_jae'
 
@@ -484,7 +486,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         return add_rule
 
     def remove_secgroup(self, name=None):
-        # TODO: Joaquin
+        # TODO: Joaquin -> Completed
         """
         Delete the names security group
 
@@ -497,7 +499,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
             raise ValueError("cloud not initialized")
 
     def upload_secgroup(self, name=None):
-        # TODO: Joaquin
+        # TODO: Joaquin -> Completed
 
         cgroups = self.list_secgroups(name)
         group_exists = False
@@ -542,7 +544,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                     rules=[found['name']])
 
     def add_rules_to_secgroup(self, name=None, rules=None):
-        # TODO: Joaquin
+        # TODO: Joaquin -> Completed
 
         if name is None and rules is None:
             raise ValueError("name or rules are None")
@@ -570,7 +572,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                 ValueError("rule can not be found")
 
     def remove_rules_from_secgroup(self, name=None, rules=None):
-        # TODO: Joaquin
+        # TODO: Joaquin -> Completed
 
         remove_rule = self.network_client.security_rules.delete(self.GROUP_NAME, name, rules )
 
@@ -589,6 +591,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                group=None,
                metadata=None,
                **kwargs):
+        # TODO: Joaquin -> Completed
         """
         creates a named node
 
@@ -603,15 +606,20 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
         vm_parameters = self.create_vm_parameters()
 
+        if group is None:
+            group = self.GROUP_NAME
+        if name is None:
+            name = self.VM_NAME
+
         async_vm_creation = self.vms.create_or_update(
-            self.GROUP_NAME,
-            self.VM_NAME,
+            group,
+            name,
             vm_parameters)
         async_vm_creation.wait()
 
         # Creating a Managed Data Disk
         async_disk_creation = self.compute_client.disks.create_or_update(
-            self.GROUP_NAME,
+            group,
             'cloudmesh-datadisk1',
             {
                 'location': self.LOCATION,
@@ -625,8 +633,8 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
         # Get the virtual machine by name
         virtual_machine = self.vms.get(
-            self.GROUP_NAME,
-            self.VM_NAME
+            group,
+            name
         )
 
         # Attaching Data Disk to a Virtual Machine
@@ -639,15 +647,16 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
             }
         })
         async_disk_attach = self.vms.create_or_update(
-            self.GROUP_NAME,
-            virtual_machine.name,
+            group,
+            name,
             virtual_machine
         )
         async_disk_attach.wait()
 
-        return self.info(self.GROUP_NAME, self.VM_NAME)
+        return self.info(group, name, 'ACTIVE')
 
     def create_vm_parameters(self):
+        # TODO: Joaquin -> Completed
         nic = self.create_nic()
 
         # Parse Image from yaml file
@@ -687,6 +696,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         return vm_parameters
 
     def create_nic(self):
+        # TODO: Joaquin -> Completed
         """
             Create a Network Interface for a Virtual Machine
         :return:
@@ -742,6 +752,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         return nic
 
     def start(self, group=None, name=None):
+        # TODO: Joaquin -> Completed
         """
         start a node
 
@@ -758,9 +769,10 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         VERBOSE(" ".join('Starting Azure VM'))
         async_vm_start = self.vms.start(group, name)
         async_vm_start.wait()
-        return self.info(group, name)
+        return self.info(group, name, 'ACTIVE')
 
     def reboot(self, group=None, name=None):
+        # TODO: Joaquin -> Completed
         """
         restart/reboot a node
 
@@ -777,9 +789,11 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         VERBOSE(" ".join('Restarting Azure VM'))
         async_vm_restart = self.vms.restart(group, name)
         async_vm_restart.wait()
-        return self.info(group, name)
+
+        return self.info(group, name, 'REBOOT')
 
     def stop(self, group=None, name=None):
+        # TODO: Joaquin -> Completed
         """
         stops the node with the given name
 
@@ -796,9 +810,10 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         VERBOSE(" ".join('Stopping Azure VM'))
         async_vm_stop = self.vms.power_off(group, name)
         async_vm_stop.wait()
-        return self.info(group, name)
+        return self.info(group, name, 'SHUTOFF')
 
     def resume(self, group=None, name=None):
+        # TODO: Joaquin -> Completed
         """
         resume the named node since Azure does not handle resume it uses start
 
@@ -814,6 +829,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         return self.start(group, name)
 
     def suspend(self, group=None, name=None):
+        # TODO: Joaquin -> Completed
         """
         suspends the node with the given name since Azure does not handle suspend it uses stop
 
@@ -828,7 +844,8 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
         return self.power_off(group, name)
 
-    def info(self, group=None, name=None):
+    def info(self, group=None, name=None, status=None):
+        # TODO: Joaquin -> Completed
         """
         gets the information of a node with a given name
         List VM in resource group
@@ -844,9 +861,20 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
         node = self.vms.get(group, name)
 
-        return node
+        nodedict = node.as_dict()
+        nodedict['status'] = status
+
+        return self.update_dict(nodedict, kind='vm')
+
+    def status(self, name=None):
+        # TODO: Joaquin -> Completed
+        r = self.cloudman.list_servers(filters={'name': name})[0]
+        return r['status']
+
+
 
     def list(self):
+        # TODO: Joaquin -> Completed
         """
         List all Azure Virtual Machines from my Account
         :return: dict or libcloud object
@@ -856,6 +884,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         return self.get_list(servers, kind="vm")
 
     def destroy(self, group=None, name=None):
+        # TODO: Joaquin -> Completed
         """
         Destroys the node
         :param name: the name of the node
@@ -868,8 +897,8 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
         # Delete VM
         VERBOSE(" ".join('Deleting Azure Virtual Machine'))
-        async_vm_delete = self.vms.delete(group, name)
-        async_vm_delete.wait()
+        server = self.vms.delete(group, name)
+        server.wait()
 
         # Delete Resource Group
         VERBOSE(" ".join('Deleting Azure Resource Group'))
@@ -877,10 +906,14 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
             group)
         async_group_delete.wait()
 
-        # return self.info(groupName)
-        return None
+        server['status'] = 'DELETED'
+
+        servers = self.update_dict([server], kind='vm')
+
+        return servers
 
     def images(self, **kwargs):
+        # TODO: Joaquin -> Completed
         """
         Lists the images on the cloud
         :return: dict or libcloud object
@@ -895,60 +928,60 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         i = 0
 
         for publisher in result_list_pub:
-            #if(i<1):
-            try:
-                result_list_offers = self.imgs.list_offers(
-                    region,
-                    publisher.name,
-                )
+            if(i<5):
+                try:
+                    result_list_offers = self.imgs.list_offers(
+                        region,
+                        publisher.name,
+                    )
 
-                for offer in result_list_offers:
-                    try:
-                        result_list_skus = self.imgs.list_skus(
-                            region,
-                            publisher.name,
-                            offer.name,
-                        )
+                    for offer in result_list_offers:
+                        try:
+                            result_list_skus = self.imgs.list_skus(
+                                region,
+                                publisher.name,
+                                offer.name,
+                            )
 
-                        for sku in result_list_skus:
-                            try:
-                                result_list = self.imgs.list(
-                                    region,
-                                    publisher.name,
-                                    offer.name,
-                                    sku.name,
-                                )
+                            for sku in result_list_skus:
+                                try:
+                                    result_list = self.imgs.list(
+                                        region,
+                                        publisher.name,
+                                        offer.name,
+                                        sku.name,
+                                    )
 
-                                for version in result_list:
-                                    try:
-                                        result_get = self.imgs.get(
-                                            region,
-                                            publisher.name,
-                                            offer.name,
-                                            sku.name,
-                                            version.name,
-                                        )
+                                    for version in result_list:
+                                        try:
+                                            result_get = self.imgs.get(
+                                                region,
+                                                publisher.name,
+                                                offer.name,
+                                                sku.name,
+                                                version.name,
+                                            )
 
-                                        msg = 'PUBLISHER: {0}, OFFER: {1}, SKU: {2}, VERSION: {3}'.format(
-                                            publisher.name,
-                                            offer.name,
-                                            sku.name,
-                                            version.name,
-                                        )
-                                        VERBOSE(msg)
-                                        image_list.append(result_get)
-                                    except:
-                                        print("Something failed in result_list")
+                                            msg = 'PUBLISHER: {0}, OFFER: {1}, SKU: {2}, VERSION: {3}'.format(
+                                                publisher.name,
+                                                offer.name,
+                                                sku.name,
+                                                version.name,
+                                            )
+                                            VERBOSE(msg)
+                                            image_list.append(result_get)
+                                        except:
+                                            print("Something failed in result_list")
 
-                            except:
-                                print("Something failed in result_list_skus")
+                                except:
+                                    print("Something failed in result_list_skus")
 
-                    except:
-                        print("Something failed in result_list_offers")
+                        except:
+                            print("Something failed in result_list_offers")
 
-            except:
-                print("Something failed in result_list_pub")
-#            i=i+1
+                except:
+                    print("Something failed in result_list_pub")
+            i=i+1
         return self.get_list(image_list, kind="image")
 
 
@@ -987,6 +1020,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         return None
 
     def image(self, name=None):
+        # TODO: Joaquin -> Completed
         """
         Gets the image with a given nmae
         :param name: The name of the image
@@ -995,6 +1029,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         return self.find(self.images(**kwargs), name=name)
 
     def get_list(self, d, kind=None, debug=False, **kwargs):
+        # TODO: Joaquin -> Completed
         """
         Lists the dict d on the cloud
         :return: dict or libcloud object
@@ -1025,6 +1060,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         return None
 
     def update_dict(self, elements, kind=None):
+        # TODO: Joaquin -> Completed
         """
         Libcloud returns an object or list of objects With the dict method
         this object is converted to a dict. Typically this method is used
@@ -1065,6 +1101,9 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                     "type"]  # Check feasibility of the following items
                 entry["cm"]["location"] = entry[
                     "location"]  # Check feasibility of the following items
+                if 'status' in entry:
+                    entry["cm"]["status"] = str(entry["status"])
+
             elif kind == 'flavor':
                 entry["cm"]["created"] = str(datetime.utcnow())
                 entry["cm"]["name"] = entry["name"]

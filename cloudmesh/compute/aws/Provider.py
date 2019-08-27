@@ -34,44 +34,42 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
     output = {
 
-        "vm": {
+        "vm": { # updted for aws
             "sort_keys": ["cm.name"],
             "order": ["cm.name",
                       "cm.cloud",
-                      "vm_state",
+                      "instance_id",
                       "status",
                       "image",
                       "public_ips",
                       "private_ips",
-                      "project_id",
-                      "launched_at",
+                      "created",
                       "cm.kind"],
             "header": ["Name",
                        "Cloud",
-                       "State",
+                       "Instance ID",
                        "Status",
                        "Image",
                        "Public IPs",
                        "Private IPs",
-                       "Project ID",
                        "Started at",
                        "Kind"]
         },
-        "image": {
+        "image": { # updated for aws
             "sort_keys": ["cm.name",
-                          "extra.minDisk"],
+                          "State"],
             "order": ["cm.name",
-                      "size",
-                      "min_disk",
-                      "min_ram",
-                      "status",
-                      "cm.driver"],
+                      "Architecture",
+                      "ImageId",
+                      "State",
+                      "Hypervisor",
+                      "VirtualizationType"],
             "header": ["Name",
-                       "Size (Bytes)",
-                       "MinDisk (GB)",
-                       "MinRam (MB)",
-                       "Status",
-                       "Driver"]
+                       "Architecture",
+                       "ID",
+                       "State",
+                       "Hypervisor",
+                       "VirtualizationType"]
         },
         "flavor": {
             "sort_keys": ["cm.name"],

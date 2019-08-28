@@ -131,7 +131,30 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
     # noinspection PyPep8Naming
     def Print(self, output, kind, data):
-        raise NotImplementedError
+
+        if output == "table":
+            if kind == "secrule":
+
+                result = []
+                for group in data:
+                    for rule in group['security_group_rules']:
+                        rule['name'] = group['name']
+                        result.append(rule)
+                data = result
+
+            order = self.output[kind]['order']
+            header = self.output[kind]['header']
+            humanize = self.output[kind]['humanize']
+
+            print(Printer.flatwrite(data,
+                                    sort_keys=["name"],
+                                    order=order,
+                                    header=header,
+                                    output=output,
+                                    humanize=humanize)
+                  )
+        else:
+            print(Printer.write(data, output=output))
 
     def find(self, elements, name=None):
         for element in elements:
@@ -156,15 +179,17 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
         return response['SecurityGroups']
 
-    def list_secgroup_rules(self, name='default'):
+    def list_secgroup_rules(self, name=None):
 
         """
         List the named security group
         :param name: The name of the group, if None all will be returned
-        :return:
+        :return: returns list of dict
         """
+        if name is None:
+            name = 'default'
         sec_group_desc = self.list_secgroups(name)
-        sec_group_rule = sec_group_desc['IpPermissions']
+        sec_group_rule = sec_group_desc[0]['IpPermissionsEgress']
         return sec_group_rule
 
     @staticmethod
@@ -232,8 +257,50 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
             Console.error(e)
 
     def upload_secgroup(self, name=None):
-        # TODO: Saurab
-        raise NotImplementedError
+
+        if name is None:
+            raise ValueError("name is None")
+        group_exists = False
+        sec_group = self.list_secgroups(name)
+
+        if len(sec_group) == 0:
+            print("Warning group already exists")
+            group_exists = True
+        groups = Secgroup().list()
+        rules = SecgroupRule().list()
+
+        # pprint (rules)
+        data = {}
+        for rule in rules:
+            data[rule['name']] = rule
+
+        # pprint (groups)
+
+        for group in groups:
+            if group['name'] == name:
+                break
+        print("upload group:", name)
+
+        if not group_exists:
+            self.add_secgroup(name=name, description=group['description'])
+
+            for r in group['rules']:
+                found = data[r]
+                print("    ", "rule:", found['name'])
+                self.add_secgroup_rule(
+                    name=name,
+                    port=found["ports"],
+                    protocol=found["protocol"],
+                    ip_range=found["ip_range"])
+
+        else:
+
+            for r in group['rules']:
+                found = data[r]
+                print("    ", "rule:", found['name'])
+                self.add_rules_to_secgroup(
+                    name=name,
+                    rules=[found['name']])
 
     def add_rules_to_secgroup(self, name=None, rules=None):
 
@@ -245,9 +312,23 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         if len(sec_group) == 0:
             raise ValueError("group does not exist")
 
+        groups = DictList(Secgroup().list())
+        rules_details = DictList(SecgroupRule().list())
 
+        try:
+            group = groups[name]
+        except:
+            raise ValueError("group does not exist")
 
-
+        for rule in rules:
+            try:
+                found = rules_details[rule]
+                self.add_secgroup_rule(name=name,
+                                       port=found['ports'],
+                                       protocol=found['protocol'],
+                                       ip_range=found['ip_range'])
+            except ClientError as e:
+                Console.error(e)
 
     def remove_rules_from_secgroup(self, name=None, rules=None):
 
@@ -1226,5 +1307,5 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
 if __name__ == "__main__":
     provider = Provider(name='aws')
-#    provider.add_secgroup(name='saurabh_sec',description='Testing sec group creation')
-    provider.list_secgroups()
+    provider.add_secgroup()
+    # VERBOSE(provider.list_secgroup_rules())

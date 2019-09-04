@@ -1,6 +1,5 @@
 from cloudmesh.mongo.CmDatabase import CmDatabase
 
-
 class DatabaseUpdate:
     """
     The data base decorator automatically replaces an entry in the database with

@@ -13,6 +13,7 @@ from cloudmesh.mongo.CmDatabase import CmDatabase
 from cloudmesh.mongo.DataBaseDecorator import DatabaseUpdate
 from cloudmesh.provider import Provider as ProviderList
 from cloudmesh.common.debug import VERBOSE
+
 from cloudmesh.mongo.CmDatabase import CmDatabase
 
 class Provider(ComputeNodeABC):
@@ -68,7 +69,6 @@ class Provider(ComputeNodeABC):
             return names
         else:
             return Parameter.expand(names)
-
 
     @DatabaseUpdate()
     def destroy(self, name=None):

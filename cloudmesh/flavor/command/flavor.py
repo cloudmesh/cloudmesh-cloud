@@ -7,6 +7,7 @@ from cloudmesh.shell.command import PluginCommand
 from cloudmesh.shell.command import command, map_parameters
 from cloudmesh.common.parameter import Parameter
 
+
 class FlavorCommand(PluginCommand):
 
     # see https://github.com/cloudmesh/client/blob/master/cloudmesh_client/shell/plugins/FlavorCommand.py

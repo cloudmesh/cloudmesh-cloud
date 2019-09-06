@@ -1069,8 +1069,8 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
         """
         uploads the key specified in the yaml configuration to the cloud
-        :param key:
-        :return:
+        :param key
+        :return: the dict of the key
         """
         key_name = key["name"]
         cloud = self.cloud
@@ -1087,8 +1087,9 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         # TODO: Vafa
         """
         deletes the key with the given name
+
         :param name: The name of the key
-        :return:
+        :return: the dict of the key
         """
         cloud = self.cloud
         Console.msg(f"deleting the key: {name} -> {cloud}")
@@ -1101,7 +1102,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
         :param name: name of the fm
         :param tags: tags to be added to vm metadata
-        :return:
+        :return: the dict of the metadata
         """
 
         if name is None:
@@ -1125,7 +1126,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
         :param name: name of the vm
         :param tags: tags to be deleted from vm metadata
-        :return:
+        :return: the dict of the metadata
         """
 
         if name is None:
@@ -1159,7 +1160,8 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         # TODO: Vafa
         """
         Lists the images on the cloud
-        :return: dict
+
+        :return: the dict of the images
         """
         Console.msg(f"Getting the list of images for {self.cloud} cloud, this might take a few minutes ...")
         images = self.ec2_client.describe_images()
@@ -1183,6 +1185,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         # TODO: Vafa
         """
         Gets the image with a given nmae
+
         :param name: The name of the image
         :return: the dict of the image
         """

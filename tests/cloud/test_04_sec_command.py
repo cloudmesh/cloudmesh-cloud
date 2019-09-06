@@ -26,6 +26,7 @@
 #
 
 import pytest
+from sys import platform
 from cloudmesh.common.util import HEADING
 from cloudmesh.common.variables import Variables
 from cloudmesh.common3.Benchmark import Benchmark
@@ -49,7 +50,11 @@ provider = Provider(name=cloud)
 
 
 def run(command):
-    result = Shell.run(command)
+    if platform == 'win32':
+        result = Shell.run2(command)
+    else:
+        result = Shell.run(command)
+
     print(result)
     return result
 
@@ -120,7 +125,7 @@ class TestSecCLI:
         Benchmark.Start()
         result = run("cms sec list")
         Benchmark.Stop()
-        g = groups.list()
+        g = rules.list()
 
         for entry in g:
             name = entry['name']

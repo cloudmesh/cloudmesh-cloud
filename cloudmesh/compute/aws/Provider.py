@@ -231,19 +231,21 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                           port=None,
                           protocol=None,
                           ip_range=None):
+
+
         try:
             portmin, portmax = port.split(":")
         except ValueError:
-            portmin = None
-            portmax = None
+            portmin = -1
+            portmax = -1
 
         try:
             data = self.ec2_client.authorize_security_group_ingress(
                 GroupName=name,
                 IpPermissions=[
                     {'IpProtocol': protocol,
-                     'FromPort': portmin,
-                     'ToPort': portmax,
+                     'FromPort': int(portmin),
+                     'ToPort': int(portmax),
                      'IpRanges': [{'CidrIp': ip_range}]},
                 ])
             Console.ok(f'Ingress Successfully Set as {data}')
@@ -264,18 +266,18 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         group_exists = False
         sec_group = self.list_secgroups(name)
 
-        if len(sec_group) == 0:
+        if len(sec_group) > 0:
             print("Warning group already exists")
             group_exists = True
         groups = Secgroup().list()
         rules = SecgroupRule().list()
 
-        # pprint (rules)
+        VERBOSE(rules)
         data = {}
         for rule in rules:
             data[rule['name']] = rule
 
-        # pprint (groups)
+        VERBOSE(groups)
 
         for group in groups:
             if group['name'] == name:
@@ -301,7 +303,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                 print("    ", "rule:", found['name'])
                 self.add_rules_to_secgroup(
                     name=name,
-                    rules=[found['name']])
+                    rules=[found])
 
     def add_rules_to_secgroup(self, name=None, rules=None):
 
@@ -313,21 +315,12 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         if len(sec_group) == 0:
             raise ValueError("group does not exist")
 
-        groups = DictList(Secgroup().list())
-        rules_details = DictList(SecgroupRule().list())
-
-        try:
-            group = groups[name]
-        except:
-            raise ValueError("group does not exist")
-
         for rule in rules:
             try:
-                found = rules_details[rule]
                 self.add_secgroup_rule(name=name,
-                                       port=found['ports'],
-                                       protocol=found['protocol'],
-                                       ip_range=found['ip_range'])
+                                       port=rule['ports'],
+                                       protocol=rule['protocol'],
+                                       ip_range=rule['ip_range'])
             except ClientError as e:
                 Console.error(e)
 
@@ -1311,6 +1304,4 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
 if __name__ == "__main__":
     provider = Provider(name='aws')
-    g = provider.list_secgroup_rules()
-    provider.Print('json', "secgroup", g)
-    # VERBOSE(provider.list_secgroup_rules())
+    g = provider.upload_secgroup("Saurabh_Sec_Group")

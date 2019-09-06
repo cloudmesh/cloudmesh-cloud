@@ -101,6 +101,15 @@ class Test_secgroup_provider:
         groups = provider.list_secgroups()
         provider.Print(output='json', kind="secgroup", data=groups)
 
+    def test_upload_secgroup(self):
+        HEADING()
+        name = "Saurabh_Sec_Group"
+        Benchmark.Start()
+        provider.upload_secgroup(name=name)
+        Benchmark.Stop()
+        groups = provider.list_secgroups()
+        provider.Print(output='json', kind="secgroup", data=groups)
+
     def test_secgroups_delete(self):
         HEADING()
         name = "Saurabh_Sec_Group"

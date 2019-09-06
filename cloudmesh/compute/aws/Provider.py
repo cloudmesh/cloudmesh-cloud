@@ -176,9 +176,9 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
             else:
                 response = self.ec2_client.describe_security_groups(GroupNames=[name])
         except ClientError as e:
-            Console.error(e)
-
-        return response['SecurityGroups']
+            Console.info("Security group doesn't exist")
+        if response:
+            return response['SecurityGroups']
 
     def list_secgroup_rules(self, name=None):
 
@@ -265,6 +265,9 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
             raise ValueError("name is None")
         group_exists = False
         sec_group = self.list_secgroups(name)
+
+        if sec_group is None:
+            return
 
         if len(sec_group) > 0:
             print("Warning group already exists")
@@ -1304,4 +1307,4 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
 if __name__ == "__main__":
     provider = Provider(name='aws')
-    g = provider.upload_secgroup("Saurabh_Sec_Group")
+    g = provider.upload_secgroup("Wrong")

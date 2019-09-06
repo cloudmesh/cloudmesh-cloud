@@ -69,7 +69,6 @@ class TestSecCLI:
         result = run(f"cms sec group add deleteme empty empty")
         Benchmark.Stop()
         entry = groups.list(name="deleteme")
-
         assert len(entry) > 0
         assert entry[0]["name"] == "deleteme"
 

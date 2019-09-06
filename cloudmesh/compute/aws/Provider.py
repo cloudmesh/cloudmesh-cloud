@@ -224,7 +224,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                 Console.ok(f'Security Group Created {security_group_id} in vpc{vpc_id}')
 
             except ClientError as e:
-                Console.error(e)
+                Console.info("Security group can't be added")
 
     def add_secgroup_rule(self,
                           name=None,  # group name
@@ -250,14 +250,14 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                 ])
             Console.ok(f'Ingress Successfully Set as {data}')
         except ClientError as e:
-            Console.error(e)
+            Console.info("Rule couldn't be added to security group")
 
     def remove_secgroup(self, name=None):
         try:
             response = self.ec2_client.delete_security_group(GroupName=name)
             VERBOSE(response)
         except ClientError as e:
-            Console.error(e)
+            Console.info("Security group couldn't be removed as it doesn't exist")
 
     def upload_secgroup(self, name=None):
 

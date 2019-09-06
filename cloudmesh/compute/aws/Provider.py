@@ -169,6 +169,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         :param name: Name of the security group. If not provided, returns all security group
         :return: List of dict
         """
+        response = {}
         try:
             if name is None:
                 response = self.ec2_client.describe_security_groups()
@@ -1307,5 +1308,6 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
 if __name__ == "__main__":
     provider = Provider(name='aws')
-    provider.add_secgroup()
+    g = provider.list_secgroup_rules()
+    provider.Print('json', "secgroup", g)
     # VERBOSE(provider.list_secgroup_rules())

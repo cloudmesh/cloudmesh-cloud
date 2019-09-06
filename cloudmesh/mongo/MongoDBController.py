@@ -156,7 +156,7 @@ class MongoInstaller(object):
         mkdir {MONGO_PATH}
         mkdir {MONGO_HOME}
         mkdir {MONGO_LOG}
-        msiexec.exe /l*v {MONGO_LOG}\mdbinstall.log  /qb /i {MONGO_CODE} INSTALLLOCATION={MONGO_PATH} ADDLOCAL="all"
+        msiexec.exe /l*v {MONGO_LOG}/mdbinstall.log  /qb /i {MONGO_CODE} INSTALLLOCATION={MONGO_PATH} ADDLOCAL="all"
         """.format(**self.data)
         installer = Script.run(script)
 
@@ -631,10 +631,10 @@ class MongoDBController(object):
         password = self.config ["cloudmesh.data.mongo.MONGO_PASSWORD"]
 
         cmd = f'mongoimport --db {db}' \
-              f' --collection {collection} ^'\
+              f' --collection {collection} '\
               f' --authenticationDatabase admin '\
               f' --username {username}'\
-              f' --password {password} ^'\
+              f' --password {password} '\
               f' --drop' \
               f' --file {tmp_file}'
 

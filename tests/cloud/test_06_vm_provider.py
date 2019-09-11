@@ -87,8 +87,6 @@ class Test_provider_vm:
         Benchmark.Stop()
         assert data["cm.status"] in ['ACTIVE', 'BOOTING']
 
-
-
     def test_provider_vm_start(self):
         HEADING()
         name = str(Name())

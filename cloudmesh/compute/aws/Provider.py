@@ -169,15 +169,16 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         :param name: Name of the security group. If not provided, returns all security group
         :return: List of dict
         """
+        response = {}
         try:
             if name is None:
                 response = self.ec2_client.describe_security_groups()
             else:
                 response = self.ec2_client.describe_security_groups(GroupNames=[name])
         except ClientError as e:
-            Console.error(e)
-
-        return response['SecurityGroups']
+            Console.info("Security group doesn't exist")
+        if response:
+            return response['SecurityGroups']
 
     def list_secgroup_rules(self, name=None):
 
@@ -223,38 +224,40 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                 Console.ok(f'Security Group Created {security_group_id} in vpc{vpc_id}')
 
             except ClientError as e:
-                Console.error(e)
+                Console.info("Security group can't be added")
 
     def add_secgroup_rule(self,
                           name=None,  # group name
                           port=None,
                           protocol=None,
                           ip_range=None):
+
+
         try:
             portmin, portmax = port.split(":")
         except ValueError:
-            portmin = None
-            portmax = None
+            portmin = -1
+            portmax = -1
 
         try:
             data = self.ec2_client.authorize_security_group_ingress(
                 GroupName=name,
                 IpPermissions=[
                     {'IpProtocol': protocol,
-                     'FromPort': portmin,
-                     'ToPort': portmax,
+                     'FromPort': int(portmin),
+                     'ToPort': int(portmax),
                      'IpRanges': [{'CidrIp': ip_range}]},
                 ])
             Console.ok(f'Ingress Successfully Set as {data}')
         except ClientError as e:
-            Console.error(e)
+            Console.info("Rule couldn't be added to security group")
 
     def remove_secgroup(self, name=None):
         try:
             response = self.ec2_client.delete_security_group(GroupName=name)
             VERBOSE(response)
         except ClientError as e:
-            Console.error(e)
+            Console.info("Security group couldn't be removed as it doesn't exist")
 
     def upload_secgroup(self, name=None):
 
@@ -263,18 +266,21 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         group_exists = False
         sec_group = self.list_secgroups(name)
 
-        if len(sec_group) == 0:
+        if sec_group is None:
+            return
+
+        if len(sec_group) > 0:
             print("Warning group already exists")
             group_exists = True
         groups = Secgroup().list()
         rules = SecgroupRule().list()
 
-        # pprint (rules)
+        VERBOSE(rules)
         data = {}
         for rule in rules:
             data[rule['name']] = rule
 
-        # pprint (groups)
+        VERBOSE(groups)
 
         for group in groups:
             if group['name'] == name:
@@ -300,7 +306,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                 print("    ", "rule:", found['name'])
                 self.add_rules_to_secgroup(
                     name=name,
-                    rules=[found['name']])
+                    rules=[found])
 
     def add_rules_to_secgroup(self, name=None, rules=None):
 
@@ -312,21 +318,12 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         if len(sec_group) == 0:
             raise ValueError("group does not exist")
 
-        groups = DictList(Secgroup().list())
-        rules_details = DictList(SecgroupRule().list())
-
-        try:
-            group = groups[name]
-        except:
-            raise ValueError("group does not exist")
-
         for rule in rules:
             try:
-                found = rules_details[rule]
                 self.add_secgroup_rule(name=name,
-                                       port=found['ports'],
-                                       protocol=found['protocol'],
-                                       ip_range=found['ip_range'])
+                                       port=rule['ports'],
+                                       protocol=rule['protocol'],
+                                       ip_range=rule['ip_range'])
             except ClientError as e:
                 Console.error(e)
 
@@ -1068,9 +1065,8 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
         """
         uploads the key specified in the yaml configuration to the cloud
-
-        :param key:
-        :return:
+        :param key
+        :return: the dict of the key
         """
         key_name = key["name"]
         cloud = self.cloud
@@ -1087,8 +1083,9 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         # TODO: Vafa
         """
         deletes the key with the given name
+
         :param name: The name of the key
-        :return:
+        :return: the dict of the key
         """
         cloud = self.cloud
         Console.msg(f"deleting the key: {name} -> {cloud}")
@@ -1101,7 +1098,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
         :param name: name of the fm
         :param tags: tags to be added to vm metadata
-        :return:
+        :return: the dict of the metadata
         """
 
         if name is None:
@@ -1125,7 +1122,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
         :param name: name of the vm
         :param tags: tags to be deleted from vm metadata
-        :return:
+        :return: the dict of the metadata
         """
 
         if name is None:
@@ -1159,7 +1156,8 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         # TODO: Vafa
         """
         Lists the images on the cloud
-        :return: dict
+
+        :return: the dict of the images
         """
         Console.msg(f"Getting the list of images for {self.cloud} cloud, this might take a few minutes ...")
         images = self.ec2_client.describe_images()
@@ -1183,6 +1181,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         # TODO: Vafa
         """
         Gets the image with a given nmae
+
         :param name: The name of the image
         :return: the dict of the image
         """
@@ -1308,5 +1307,4 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
 if __name__ == "__main__":
     provider = Provider(name='aws')
-    provider.add_secgroup()
-    # VERBOSE(provider.list_secgroup_rules())
+    g = provider.upload_secgroup("Wrong")

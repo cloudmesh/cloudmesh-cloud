@@ -419,8 +419,12 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         if self.cloudman:
             if description is None:
                 description = name
-            self.cloudman.create_security_group(name,
-                                                description)
+            try:
+                self.cloudman.create_security_group(name,
+                                                    description)
+            except:
+                Console.warning(f"secgroup {name} already exists in cloud. "
+                                f"skipping.")
         else:
             raise ValueError("cloud not initialized")
 
@@ -949,7 +953,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
             self.cloudman.set_server_metadata(server, metadata)
 
-            self.cloudman.add_security_group(security_group=secgroup)
+            self.add_secgroup(name=secgroup)
 
             # server = self.cloudman.compute.wait_for_server(server)
 

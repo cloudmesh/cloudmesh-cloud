@@ -51,7 +51,7 @@ def credentials():
 config = credentials()
 cloud = openstack.connect(**config)
 
-if True:
+if False:
     # not authorized
     project = config['project_id']
     pprint(cloud.get_compute_usage(project))
@@ -61,28 +61,27 @@ if True:
 
 
 
-if True:
+if False:
     command = "openstack usage show --os-auth-url={auth_url} " \
                   "--os-project-name={project_id} --os-username={username} " \
                   "--os-password={password} -f=json".format(**config)
         # print (command)
     os.system(command)
 
-if True:
+if False:
     command = "openstack quota show --os-auth-url={auth_url} " \
                   "--os-project-name={project_id} --os-username={username} " \
                   "--os-password={password} -f=json".format(**config)
         # print (command)
     os.system(command)
 
-sys.exit()
 
-
-command = "openstack --version --os-auth-url={auth_url} " \
-              "--os-project-name={project_id} --os-username={username} " \
-              "--os-password={password} -f=json".format(**config)
-    # print (command)
-os.system(command)
+if False:
+    command = "openstack --version --os-auth-url={auth_url} " \
+                  "--os-project-name={project_id} --os-username={username} " \
+                  "--os-password={password} -f=json".format(**config)
+        # print (command)
+    os.system(command)
 
 if False:
 
@@ -119,7 +118,7 @@ if False:
 #cloud.resume_server()
 
 
-if False:
+if True:
     pprint (dir(cloud))
 
 

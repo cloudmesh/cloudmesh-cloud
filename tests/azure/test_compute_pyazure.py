@@ -18,6 +18,8 @@ from cloudmesh.management.configuration.name import Name
 if CLOUD == "azure":
     from cloudmesh.compute.azure.Provider import Provider
 
+# is this the same test as in cloud 06 ?, we need to make the test much more
+# similar
 
 Benchmark.debug()
 
@@ -121,6 +123,8 @@ class TestAzure:
     def test_add_security_group(self):
         HEADING()
 
+        # BUG: this seems wrong: cloudmesh_jae
+
         Benchmark.Start()
         test_add_sec_group = self.p.add_secgroup('cloudmesh_jae', description=None)
         Benchmark.Stop()
@@ -141,6 +145,8 @@ class TestAzure:
     def test_list_security_group_rules(self):
         HEADING()
 
+        # BUG: this seems wrong: cloudmesh_jae
+
         Benchmark.Start()
         test_list_secgroup_rules = self.p.list_secgroup_rules(name='cloudmesh_jae')
         Benchmark.Stop()
@@ -150,6 +156,8 @@ class TestAzure:
 
     def test_remove_security_rule(self):
         HEADING()
+
+        # BUG: this seems wrong: cloudmesh_jae
 
         Benchmark.Start()
         test_remove_sec_rule = self.p.remove_rules_from_secgroup(name='cloudmesh_jae', rules='resource_name_security_rule')
@@ -161,6 +169,8 @@ class TestAzure:
     def test_remove_security_group(self):
         HEADING()
 
+        # BUG: this seems wrong: cloudmesh_jae
+
         Benchmark.Start()
         test_remove_sec_group = self.p.remove_secgroup(name='cloudmesh_jae')
         Benchmark.Stop()
@@ -171,6 +181,8 @@ class TestAzure:
     def test_upload_security_group(self):
         HEADING()
 
+        # BUG: this seems wrong: cloudmesh_upload
+
         Benchmark.Start()
         test_upload_secgroup = self.p.upload_secgroup(name='cloudmesh_upload')
         Benchmark.Stop()
@@ -180,6 +192,8 @@ class TestAzure:
 
     def test_add_rules_to_security_group(self):
         HEADING()
+
+        # BUG: this seems wrong: cloudmesh_upload
 
         Benchmark.Start()
         test_add_rules_to_secgroup = self.p.add_rules_to_secgroup(name='cloudmesh_upload', rules='resource_name_security_rule_upload')

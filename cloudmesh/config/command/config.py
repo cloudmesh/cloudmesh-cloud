@@ -295,15 +295,11 @@ class ConfigCommand(PluginCommand):
             cloud, field = attribute.split(".",1)
 
             if cloud in clouds:
-                print ("F", field, cloud, clouds)
                 attribute = f"cloudmesh.cloud.{cloud}.credentials.{field}"
-                print ("A", attribute)
 
             elif not attribute.startswith("cloudmesh."):
                 attribute = f"cloudmesh.{attribute}"
 
-
-            print ("X", attribute, value)
             config[attribute] = value
             config.save()
 

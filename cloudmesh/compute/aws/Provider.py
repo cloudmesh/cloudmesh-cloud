@@ -1068,6 +1068,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
         """
         uploads the key specified in the yaml configuration to the cloud
+
         :param key:
         :return:
         """

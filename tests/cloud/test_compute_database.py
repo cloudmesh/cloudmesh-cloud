@@ -47,7 +47,7 @@ def run(label, command):
 @pytest.mark.incremental
 class Test_Compute_Database:
 
-    def setup(self):
+    def test_setup(self):
         print()
 
         self.name = str(self.name_generator)

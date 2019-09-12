@@ -120,7 +120,8 @@ class TestSecCLI:
         Benchmark.Start()
         result = run("cms sec list")
         Benchmark.Stop()
-        g = groups.list()
+        # g = groups.list()
+        g = rules.list()
 
         for entry in g:
             name = entry['name']

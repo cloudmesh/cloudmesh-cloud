@@ -395,6 +395,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         """
         Describes the metadata tag of EC2 resource
         :param name: Virtual machine name
+
         :return: Dictionary with Metadata information
         """
 
@@ -422,6 +423,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         """
         Describes the metadata tag of EC2 resource
         :param name: Virtual machine name
+
         :return: Dictionary with Metadata information
         """
 
@@ -712,7 +714,8 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         """
         start a node
 
-        :param name: the unique node name
+        :param name: the unique instance name
+
         :return:  The dict representing the node
         """
         instances = self._get_instance_id(self.ec2_resource, name)
@@ -736,7 +739,9 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         """
         stops the node with the given name
 
-        :param name:
+        :param name: the instance name
+        :param hibernate: stop or hibernate
+
         :return: The dict representing the node including updated status
         """
 
@@ -766,7 +771,8 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         """
         gets the information of a node with a given name
 
-        :param name:
+        :param name: the  node name
+
         :return: The dict representing the node including updated status
         """
         if name is None:
@@ -820,6 +826,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         suspends the node with the given name
 
         :param name: the name of the node
+
         :return: The dict representing the node
         """
         return self.stop(name=name, hibernate=True)
@@ -830,6 +837,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         resume the named node
 
         :param name: the name of the node
+
         :return: the dict of the node
         """
         instances = self._get_instance_id(self.ec2_resource, name)
@@ -847,6 +855,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         """
         Destroys the node
         :param name: the name of the node
+
         :return: the dict of the node
         """
         instances = self._get_instance_id(self.ec2_resource, name)
@@ -902,7 +911,8 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         :param timeout: a timeout in seconds that is invoked in case the image
                         does not boot. The default is set to 3 minutes.
         :param kwargs: additional arguments passed along at time of boot
-        :return:
+
+        :return: the list with the modified dicts
         """
         """
         create one node
@@ -1028,8 +1038,9 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         """
         rename a node
 
-        :param destination:
+        :param destination: the destination name
         :param name: the current name
+
         :return: the dict with the new name
         """
         # if destination is None, increase the name counter and use the new name
@@ -1085,6 +1096,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         deletes the key with the given name
 
         :param name: The name of the key
+
         :return: the dict of the key
         """
         cloud = self.cloud
@@ -1098,6 +1110,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
         :param name: name of the fm
         :param tags: tags to be added to vm metadata
+
         :return: the dict of the metadata
         """
 
@@ -1122,6 +1135,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
         :param name: name of the vm
         :param tags: tags to be deleted from vm metadata
+
         :return: the dict of the metadata
         """
 
@@ -1183,6 +1197,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         Gets the image with a given nmae
 
         :param name: The name of the image
+
         :return: the dict of the image
         """
         cm = CmDatabase()

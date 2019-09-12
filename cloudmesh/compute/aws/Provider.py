@@ -184,6 +184,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
         """
         List the named security group
+
         :param name: The name of the group, if None all will be returned
         :return: returns list of dict
         """
@@ -205,10 +206,13 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
     def add_secgroup(self, name=None, description=None):
 
         """
+        Adds named security group
 
         :param name: Adds security group
-        :param description:
-        :return:
+        :param description: name = name of the security group to be added/created
+                            description: Description of the security group. If its none then default description
+                                         is added with user name and time of creation
+        :return: None
         """
 
         response = self.ec2_client.describe_vpcs()
@@ -231,7 +235,15 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                           port=None,
                           protocol=None,
                           ip_range=None):
+        """
+        Add rule to named security group
 
+        :param name: Name of the security group to which rfule needs to be added
+        :param port: The start and end port range for the TCP and UDP protocols
+        :param protocol:
+        :param ip_range:
+        :return:
+        """
 
         try:
             portmin, portmax = port.split(":")

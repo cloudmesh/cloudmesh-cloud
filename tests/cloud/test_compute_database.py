@@ -134,49 +134,6 @@ class Test_Compute_Database:
 
 
 
-    def test_create(self):
-        HEADING()
-        # BUG NEEDE TO BE READ from COnfig()
-        image = "CC-Ubuntu16.04"
-        size = "m1.medium"
-        Benchmark.Start()
-        provider.create(name=self.name,
-                        image=image,
-                        size=size,
-                        # username as the keypair name based on
-                        # the key implementation logic
-                        ex_keyname=self.user,
-                        ex_security_groups=['default'])
-        Benchmark.Stop()
-        time.sleep(5)
-        nodes = provider.list()
-        node = provider.find(nodes, name=self.name)
-        pprint(node)
-
-        nodes = provider.list(raw=True)
-        for node in nodes:
-            if node.name == self.name:
-                self.testnode = node
-                break
-
-        assert node is not None
-
-    def test_publicIP_attach(self):
-        HEADING()
-        pubip = provider.get_publicIP()
-        pprint(pubip)
-        nodes = provider.list(raw=True)
-        for node in nodes:
-            if node.name == self.name:
-                self.testnode = node
-                break
-        if self.testnode:
-            print("attaching public IP...")
-            Benchmark.Start()
-            provider.attach_publicIP(self.testnode, pubip)
-            Benchmark.Stop()
-            time.sleep(5)
-        self.test_list_vm()
 
     def test_vm_login(self):
         HEADING()
@@ -198,6 +155,9 @@ class Test_Compute_Database:
         COMMAND = "cat /etc/*release*"
 
         Benchmark.Start()
+        #
+        # BUG this should be using cloudmesh common or cloudmesh common3
+        #
         ssh = subprocess.Popen(
             ["ssh", "%s@%s" % (self.clouduser, pubip), COMMAND],
             shell=False,

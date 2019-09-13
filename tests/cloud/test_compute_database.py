@@ -66,18 +66,6 @@ class Test_Compute_Database:
     def test_banner(self):
         banner("START", color="RED")
 
-    def test_list_flavors(self):
-        HEADING()
-        flavors = provider.flavors()
-
-    def test_list_images(self):
-        HEADING()
-        images = provider.images()
-
-    def test_list_nodes(self):
-        HEADING()
-        nodes = provider.list()
-
     def test_list_keys(self):
         HEADING()
         self.keys = provider.keys()
@@ -144,166 +132,8 @@ class Test_Compute_Database:
                                 header=["Name", "Fingerprint"])
               )
 
-    def test_list_images(self):
-        HEADING()
-        images = provider.images()
 
-        print(provider.Print(images, kind="image"))
 
-    def test_list_vm(self):
-        HEADING()
-        vms = provider.list()
-        # pprint (vms)
-        print(provider.Print(vms, kind="image"))
-
-    def test_list_secgroups(self):
-        HEADING()
-        secgroups = provider.list_secgroups()
-        for secgroup in secgroups:
-            print(secgroup["name"])
-            rules = provider.list_secgroup_rules(secgroup["name"])
-            print(Printer.write(rules,
-                                sort_keys=["ip_protocol", "from_port",
-                                           "to_port", "ip_range"],
-                                order=["ip_protocol", "from_port", "to_port",
-                                       "ip_range"],
-                                header=["ip_protocol", "from_port", "to_port",
-                                        "ip_range"])
-                  )
-
-    def test_secgroups_add(self):
-        HEADING()
-        Benchmark.Start()
-        provider.add_secgroup(self.secgroupname)
-        Benchmark.Stop()
-
-        self.test_list_secgroups()
-
-    def test_secgroup_rules_add(self):
-        HEADING()
-        rules = [self.secgrouprule]
-        Benchmark.Start()
-        provider.add_rules_to_secgroup(self.secgroupname, rules)
-        Benchmark.Stop()
-
-        self.test_list_secgroups()
-
-    def test_secgroup_rules_remove(self):
-        HEADING()
-        rules = [self.secgrouprule]
-        Benchmark.Start()
-        provider.remove_rules_from_secgroup(self.secgroupname, rules)
-        Benchmark.Stop()
-
-        self.test_list_secgroups()
-
-    def test_secgroups_remove(self):
-        HEADING()
-        Benchmark.Start()
-        provider.remove_secgroup(self.secgroupname)
-        Benchmark.Stop()
-
-        self.test_list_secgroups()
-
-    def test_create(self):
-        HEADING()
-        # BUG NEEDE TO BE READ from COnfig()
-        image = "CC-Ubuntu16.04"
-        size = "m1.medium"
-        Benchmark.Start()
-        provider.create(name=self.name,
-                        image=image,
-                        size=size,
-                        # username as the keypair name based on
-                        # the key implementation logic
-                        ex_keyname=self.user,
-                        ex_security_groups=['default'])
-        Benchmark.Stop()
-        time.sleep(5)
-        nodes = provider.list()
-        node = provider.find(nodes, name=self.name)
-        pprint(node)
-
-        nodes = provider.list(raw=True)
-        for node in nodes:
-            if node.name == self.name:
-                self.testnode = node
-                break
-
-        assert node is not None
-
-    def test_publicIP_attach(self):
-        HEADING()
-        pubip = provider.get_publicIP()
-        pprint(pubip)
-        nodes = provider.list(raw=True)
-        for node in nodes:
-            if node.name == self.name:
-                self.testnode = node
-                break
-        if self.testnode:
-            print("attaching public IP...")
-            Benchmark.Start()
-            provider.attach_publicIP(self.testnode, pubip)
-            Benchmark.Stop()
-            time.sleep(5)
-        self.test_list_vm()
-
-    # THIS IS FRO LIBCLOUD AND NEED TO JUST BE UPDATEDE FOR GENERAL PROVIDER
-    # THIS IS A BUG
-    def test_publicIP_detach(self):
-        HEADING()
-        print("detaching and removing public IP...")
-        time.sleep(5)
-        nodes = provider.list(raw=True)
-        for node in nodes:
-            if node.name == self.name:
-                self.testnode = node
-                break
-        ipaddr = self.testnode.public_ips[0]
-        # THIS IS A BUG
-        Benchmark.Start()
-        pubip = provider.cloudman.ex_get_floating_ip(ipaddr)
-        provider.detach_publicIP(self.testnode, pubip)
-        Benchmark.Stop()
-        time.sleep(5)
-        self.test_list_vm()
-
-    # def test_printer(self):
-    #    HEADING()
-    #    nodes = provider.list()
-
-    #    print(Printer.write(nodes, order=["name", "image", "size"]))
-
-    # def test_01_start(self):
-    #    HEADING()
-    #    provider.start(name=self.name)
-
-    # def test_12_list_vm(self):
-    #    self.test_list_vm()
-
-    def test_info(self):
-        HEADING()
-        Benchmark.Start()
-        provider.info(name=self.name)
-        Benchmark.Stop()
-
-    def test_destroy(self):
-        HEADING()
-        Benchmark.Start()
-        provider.destroy(names=self.name)
-        Benchmark.Stop()
-
-        nodes = provider.list()
-        node = provider.find(nodes, name=self.name)
-
-        pprint(node)
-        self.test_list_vm()
-
-        #
-        # BUG this seems dependent on cloud we want to use cm.status
-        #
-        assert node["extra"]["task_state"] == "deleting"
 
     def test_vm_login(self):
         HEADING()
@@ -325,6 +155,9 @@ class Test_Compute_Database:
         COMMAND = "cat /etc/*release*"
 
         Benchmark.Start()
+        #
+        # BUG this should be using cloudmesh common or cloudmesh common3
+        #
         ssh = subprocess.Popen(
             ["ssh", "%s@%s" % (self.clouduser, pubip), COMMAND],
             shell=False,
@@ -345,23 +178,9 @@ class Test_Compute_Database:
         self.test_destroy()
         self.test_list_vm()
 
-
-class other:
-
     def test_rename(self):
         HEADING()
         Benchmark.Start()
         provider.rename(source=self.name, destination=self.new_name)
         Benchmark.Stop()
 
-    # def test_stop(self):
-    #    HEADING()
-    #    self.stop(name=self.name)
-
-    # def test_suspend(self):
-    #    HEADING()
-    #    provider.suspend(name=self.name)
-
-    # def test_resume(self):
-    #    HEADING()
-    #    provider.resume(name=self.name)

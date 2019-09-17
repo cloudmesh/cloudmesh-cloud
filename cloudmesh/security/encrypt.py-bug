@@ -8,6 +8,7 @@ from cloudmesh.common.debug import VERBOSE
 from cloudmesh.common.dotdict import dotdict
 from cloudmesh.common.util import path_expand
 
+#BUG: TODO: usage of path_expand is compleyely wrong
 
 # security import ~/.ssh/id_rsa_.pem -k ~/Library/Keychains/login.keychain
 

@@ -174,12 +174,10 @@ class SecCommand(PluginCommand):
             else:
                 groups.remove(arguments.GROUP)
 
-
         elif (arguments.group or arguments.rule) and  arguments.list and \
             arguments.cloud:
 
             clouds = Parameter.expand(arguments.cloud)
-
             if len(clouds) == 0:
                 variables = Variables()
                 cloudname = variables['cloud']
@@ -191,24 +189,30 @@ class SecCommand(PluginCommand):
                 provider = Provider(name=cloud)
                 cloud_groups = provider.list_secgroups()
 
-                # Print("group", cloud_groups)
-
                 if arguments.output == 'table':
                     result = []
                     for group in cloud_groups:
-                        for rule in group['security_group_rules']:
-                            rule['name'] = group['name']
-                            result.append(rule)
-                    cloud_groups = result
-                provider.Print(cloud_groups,
+                        if cloud == "aws":
+                            for rule in group['IpPermissions']:
+                                rule['name'] = group['GroupName']
+                                rule['direction'] = "Inbound"
+                                if rule['UserIdGroupPairs']:
+                                    rule['groupId'] = rule['UserIdGroupPairs'][0]['GroupId']
+                                if rule['IpRanges']:
+                                    rule['ipRange'] = rule['IpRanges'][0]['CidrIp']
+
+                                result.append(rule)
+                        else:
+                            for rule in group['security_group_rules']:
+                                rule['name'] = group['name']
+                                result.append(rule)
+                        cloud_groups = result
+                provider.p.Print(cloud_groups,
                                output=arguments.output,
                                kind="secrule", )
 
             return ""
 
-        elif arguments.group and arguments.list and arguments.cloud:
-            pprint(arguments)
-            print("aaaaa", arguments.cloud)
         elif arguments.group and arguments.list:
             found = groups.list()
             for entry in found:
@@ -219,16 +223,6 @@ class SecCommand(PluginCommand):
             Print("secgroup", found)
 
             return ""
-
-        # elif arguments.group and arguments.list:
-        #     print("bbbbbb")
-        #     secgroup = Secgroup()
-        #     group = secgroup.list(arguments.GROUP)
-        #     # groups = provider.list_secgroups()
-        #
-        #     pprint(group)
-        #
-        #     return ""
 
         elif arguments.rule and arguments.list:
             found = rules.list()

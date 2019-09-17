@@ -96,6 +96,16 @@ class ConfigCommand(PluginCommand):
 
                     config set profile.name=Gregor
 
+                In case the ATTRIBUTE is the name of a cloud defined under
+                cloudmesh.cloud, the value will be written into the credentials
+                attributes for that cloud this way you can safe a lot of
+                typing. An example is
+
+                    cms config set aws.AWS_TEST=Gregor
+
+                which would write the AWS_TEST attribute in the credentials
+                of the cloud aws. This can naturally be used to set for
+                example username and password.
 
         """
         # d = Config()                #~/.cloudmesh/cloudmesh.yaml
@@ -276,23 +286,31 @@ class ConfigCommand(PluginCommand):
 
         elif arguments.set:
 
+            config = Config()
+            clouds = config["cloudmesh.cloud"].keys()
+
             line = arguments["ATTRIBUTE=VALUE"]
             attribute, value = line.split("=", 1)
 
-            if not attribute.startswith("cloudmesh."):
+            cloud, field = attribute.split(".",1)
+
+            if cloud in clouds:
+                attribute = f"cloudmesh.cloud.{cloud}.credentials.{field}"
+
+            elif not attribute.startswith("cloudmesh."):
                 attribute = f"cloudmesh.{attribute}"
 
-            config = Config()
             config[attribute] = value
             config.save()
 
         elif arguments.value:
 
+            config = Config()
+
             attribute = arguments.ATTRIBUTE
             if not attribute.startswith("cloudmesh."):
                 attribute = f"cloudmesh.{attribute}"
 
-            config = Config()
             try:
                 value = config[attribute]
                 if type(value) == dict:

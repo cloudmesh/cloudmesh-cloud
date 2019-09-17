@@ -5,12 +5,13 @@ from sys import platform
 from cloudmesh.common.StopWatch import StopWatch
 from cloudmesh.common.console import Console
 from cloudmesh.common.util import path_expand
+from cloudmesh.common.util import yn_choice
 from cloudmesh.common.variables import Variables
 from cloudmesh.configuration.Config import Config
 from cloudmesh.mongo.MongoDBController import MongoDBController
 from cloudmesh.shell.command import PluginCommand
 from cloudmesh.shell.command import command, map_parameters
-
+from pathlib import Path
 
 class InitCommand(PluginCommand):
 
@@ -22,6 +23,7 @@ class InitCommand(PluginCommand):
 
             Usage:
                 init [CLOUD] [--debug]
+                init yaml
 
             Description:
 
@@ -35,58 +37,70 @@ class InitCommand(PluginCommand):
 
         """
 
-        StopWatch.start("cms init")
-        map_parameters(arguments, 'debug')
+        if arguments.CLOUD == "yaml":
 
-        variables = Variables()
+            config = Config()
 
-        try:
-            print("MongoDB stop")
-            MongoDBController().stop()
-        except:
-            Console.ok("MongoDB is not running. ok")
+            location = path_expand("~/.cloudmesh/cloudmesh.yaml")
+            path = Path(location)
+            if path.is_file():
+                print()
+                if yn_choice("The file ~/.cloudmesh/cloudmesh.yaml exists, do you wnat to overwrite it", default='n'):
+                    config.fetch()
+                    print()
+                    Console.ok("File cloudmesh.yaml downloaded from Github")
+                else:
+                    print()
+                    Console.warning("Download canceled")
+                print()
 
-        location = path_expand('~/.cloudmesh/mongodb')
-        try:
-            print("MongoDB delete")
-            shutil.rmtree(location)
-        except:
-            Console.error(f"Could not delete {location}")
+        else:
+            variables = Variables()
 
-        user = Config()["cloudmesh.profile.user"]
-        secgroup = "flask"
+            try:
+                print("MongoDB stop")
+                MongoDBController().stop()
+            except:
+                Console.ok("MongoDB is not running. ok")
 
-        print("MongoDB create")
-        os.system("cms admin mongo create")
-        os.system("cms admin mongo start")
-        os.system(f"cms sec load")
-        os.system(f"cms key add {user} --source=ssh")
+            location = path_expand('~/.cloudmesh/mongodb')
+            try:
+                print("MongoDB delete")
+                shutil.rmtree(location)
+            except:
+                Console.error(f"Could not delete {location}")
 
-        if arguments.CLOUD is not None:
-            cloud = arguments.CLOUD
+            user = Config()["cloudmesh.profile.user"]
+            secgroup = "flask"
 
-            variables['cloud'] = cloud
+            print("MongoDB create")
+            os.system("cms admin mongo create")
+            os.system("cms admin mongo start")
+            os.system(f"cms sec load")
+            os.system(f"cms key add {user} --source=ssh")
 
-            os.system(f"cms key upload {user} --cloud={cloud}")
-            os.system(f"cms flavor list --refresh")
-            os.system(f"cms image list --refresh")
-            os.system(f"cms vm list --refresh")
-            os.system(f"cms sec group load {secgroup} --cloud={cloud}")
-            os.system(f"cms set secgroup={secgroup}")
+            if arguments.CLOUD is not None:
+                cloud = arguments.CLOUD
 
-        if arguments.debug:
-            variables['debug'] = True
-            variables['timer'] = 'on'
-            variables['trace'] = True
-            variables['verbose'] = '10'
+                variables['cloud'] = cloud
 
-        print()
-        print("Variables")
-        print()
-        for name in variables:
-            value = variables[name]
-            print(f"    {name}={value}")
+                os.system(f"cms key upload {user} --cloud={cloud}")
+                os.system(f"cms flavor list --refresh")
+                os.system(f"cms image list --refresh")
+                os.system(f"cms vm list --refresh")
+                os.system(f"cms sec group load {secgroup} --cloud={cloud}")
+                os.system(f"cms set secgroup={secgroup}")
 
-        StopWatch.stop("cms init")
+            if arguments.debug:
+                variables['debug'] = True
+                variables['timer'] = 'on'
+                variables['trace'] = True
+                variables['verbose'] = '10'
 
-        StopWatch.benchmark(sysinfo=False)
+            print()
+            print("Variables")
+            print()
+            for name in variables:
+                value = variables[name]
+                print(f"    {name}={value}")
+

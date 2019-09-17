@@ -256,9 +256,25 @@ class KeyCommand(PluginCommand):
 
             names = Parameter.expand(arguments.NAMES)
 
+            # this may have a bug if NAMES is ommitted
+
+            #
+            # Step 0. Set keyname to variable
+            #
+
+            if len(names) == 1:
+                name = names[0]
+                variables = Variables()
+                if "key" in variables:
+                    old = variables["key"]
+                    if old != name:
+                        Console.msg(f"Changing defualt key from {old} to {name}")
+                        variables["key"] = name
+
             #
             # Step 1. keys = find keys to upload
             #
+
 
             cloud = "local"
             db = CmDatabase()
@@ -270,7 +286,7 @@ class KeyCommand(PluginCommand):
                     keys.append(key)
 
             if len(keys) == 0:
-                Console.error("No keys with the names found in cloudmesh. \n"
+                Console.error(f"No keys with the names {names} found in cloudmesh. \n"
                               "       Use the command 'key add' to add the key.")
 
             #

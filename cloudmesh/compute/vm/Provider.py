@@ -430,4 +430,5 @@ class Provider(ComputeNodeABC):
         return self.p.get_public_ip(name=name)
 
     def ssh(self, vm=None, command=None):
+        # VERBOSE(vm)
         return self.p.ssh(vm=vm, command=command)

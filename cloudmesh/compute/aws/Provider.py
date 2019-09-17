@@ -784,7 +784,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                 "Instance-Id:{each_instance.instance_id} stopped")
 
     def info(self, name=None):
-        # TODO: Sriman
+
         """
         gets the information of a node with a given name
 
@@ -811,7 +811,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         return data
 
     def list(self):
-        # TODO: Sriman
+
         """
         list all nodes id
 
@@ -838,7 +838,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         return self.update_dict(instance_ids, kind="vm")
 
     def suspend(self, name=None):
-        # TODO: Sriman
+
         """
         suspends the node with the given name
 
@@ -849,7 +849,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         return self.stop(name=name, hibernate=True)
 
     def resume(self, name=None):
-        # TODO: Sriman
+
         """
         resume the named node
 
@@ -868,7 +868,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                 "Instance-Id:{each_instance.instance_id} rebooted")
 
     def destroy(self, name=None):
-        # TODO: Sriman
+
         """
         Destroys the node
         :param name: the name of the node
@@ -896,13 +896,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                 f"Instance having Tag:{name} and "
                 f"Instance-Id:{each_instance.instance_id} terminated")
 
-    #
-    # i made some changes in openstack create, compare what i did with what
-    # you did. Figure out how to pass metadata into the vm as we need the cm
-    # dict passed as metadata to the vm
-    # also all arguments must have the same name as in openstack/abc compute
-    # class. I do not think we used keyname, we used key_name=key,
-    #
+
     def create(self,
                name=None,
                image=None,
@@ -918,7 +912,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                metadata=None,
                **kwargs):
 
-        # TODO: Sriman
+
         """
         creates a named node
 
@@ -1051,7 +1045,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         return output
 
     def rename(self, name=None, destination=None):
-        # TODO: Sriman
+
         """
         rename a node
 
@@ -1074,7 +1068,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         return tag_response
 
     def keys(self):
-        # TODO: Vafa
+
         """
         Lists the keys on the cloud
 
@@ -1085,7 +1079,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         return data
 
     def key_upload(self, key=None):
-        # TODO: Vafa
+
         # The gey is stored in the database, we do not create a new keypair,
         # we upload our local key to aws
         # BUG name=None, wrong?
@@ -1108,7 +1102,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         return r
 
     def key_delete(self, name=None):
-        # TODO: Vafa
+
         """
         deletes the key with the given name
 
@@ -1184,7 +1178,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
 
     def images(self, **kwargs):
-        # TODO: Vafa
+
         """
         Lists the images on the cloud
 
@@ -1209,7 +1203,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
 
     def image(self, name=None):
-        # TODO: Vafa
+
         """
         Gets the image with a given nmae
 
@@ -1221,7 +1215,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         return cm.find_name(name, kind='image')
 
     def flavors(self, **kwargs):
-        # TODO: Alex
+
         """
         Lists the flavors on the cloud
 
@@ -1233,7 +1227,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         return self.update_dict(result, kind="flavor")
 
     def flavor(self, name=None):
-        # TODO: Alex
+
         """
         Gets the flavor with a given name
         :param name: The name of the flavor
@@ -1247,13 +1241,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         return []
 
     def update_dict(self, elements, kind=None):
-        #
-        # please compare to openstack, i made some changes there
-        # THIS IS THE FUNCTION THAT INTEGRATES WITH CLOUDMESH
-        # THIS IS A KEY POINT WITHOUT THI S THE COMMANDS WILL NOT WORK
-        # EACH dict that you return in a method must apply this update on the
-        # dicts. it adds the cm dict.
-        #
+
         """
         This function adds a cloudmesh cm dict to each dict in the list
         elements.
@@ -1279,15 +1267,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         for entry in _elements:
 
             if kind == 'key':
-                # ----------------------------------------------------------------------
-                # keys
-                # ----------------------------------------------------------------------
-                # 812:keys ./Provider.py
-                # ----------------------------------------------------------------------
-                # [{'KeyFingerprint': '0c:3d:86:a8:2d:73:ec:09:54:45:cf:00:a0:d0:09:1e:a2:3a:a5:29',
-                #   'KeyName': 'aws_vm1'},
-                #  {'KeyFingerprint': 'ad:5c:50:a8:9c:6e:8d:7f:db:50:ac:48:40:01:61:b0',
-                #   'KeyName': 'spullak@iu.edu'}]
+
                 entry['comment'] = "N/A"
                 entry['name'] = entry['KeyName']
                 entry['fingerprint'] = entry['KeyFingerprint']

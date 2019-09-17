@@ -8,16 +8,28 @@ from cloudmesh.common.util import HEADING
 from cloudmesh.common3.Benchmark import Benchmark
 from cloudmesh.compute.libcloud.Provider import Provider
 from cloudmesh.compute.vm.Provider import Provider
+from cloudmesh.management.configuration.name import Name
+from cloudmesh.configuration.Config import Config
 
 Benchmark.debug()
 
+
+CLOUD = "azazure"
+
+
+user = Config()["cloudmesh.profile.user"]
+
+name_generator = Name()
+name_generator.set(f"test-{user}-vm-" + "{counter}")
+
+VM = str(name_generator)
 
 @pytest.mark.incremental
 class Testazure(object):
 
     def setup(self):
         self.p = Provider(name="az")
-        self.vm_name = "testvm2"
+        self.vm_name = VM
         self.group = self.p.credentials["resourcegroup"]
         self.location = self.p.credentials["location"]
 
@@ -44,7 +56,7 @@ class Testazure(object):
     def test_list_vm(self):
         HEADING()
         r = self.p.list()
-        assert r[0]["name"] == "testvm1"
+        assert r[0]["name"] == VM
 
     def test_ssh_vm(self):
         HEADING()

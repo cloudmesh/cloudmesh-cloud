@@ -26,8 +26,8 @@ user = Config()["cloudmesh.profile.user"]
 variables = Variables()
 cloud = variables.parameter('cloud')
 
-if cloud != "chameloen":
-    raise ValueError("cloud is not chameleon")
+# if cloud != "chameloen":
+#     raise ValueError("cloud is not chameleon")
 
 provider = Provider(name=cloud)
 
@@ -47,7 +47,7 @@ def run(label, command):
 @pytest.mark.incremental
 class Test_Compute_Database:
 
-    def setup(self):
+    def test_setup(self):
         print()
 
         self.name = str(self.name_generator)

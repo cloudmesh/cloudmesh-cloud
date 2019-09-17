@@ -87,8 +87,6 @@ class Test_provider_vm:
         Benchmark.Stop()
         assert data["cm.status"] in ['ACTIVE', 'BOOTING']
 
-
-
     def test_provider_vm_start(self):
         HEADING()
         name = str(Name())
@@ -123,8 +121,5 @@ class Test_provider_vm:
         assert len(data) == 0 or ( data[0]["cm"]["status"] in ['BOOTING','TERMINATED'] if data and data[0].get('cm',None) is not None else True)
 
 
-
-class a:
-
     def test_benchmark(self):
-        Benchmark.print(sysinfo=False, csv=False, tag=cloud)
+        Benchmark.print(sysinfo=False, csv=True, tag=cloud)

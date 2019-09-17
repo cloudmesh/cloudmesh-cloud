@@ -206,6 +206,9 @@ class SecCommand(PluginCommand):
 
             return ""
 
+        elif arguments.group and arguments.list and arguments.cloud:
+            pprint(arguments)
+            print("aaaaa", arguments.cloud)
         elif arguments.group and arguments.list:
             found = groups.list()
             for entry in found:
@@ -216,6 +219,16 @@ class SecCommand(PluginCommand):
             Print("secgroup", found)
 
             return ""
+
+        # elif arguments.group and arguments.list:
+        #     print("bbbbbb")
+        #     secgroup = Secgroup()
+        #     group = secgroup.list(arguments.GROUP)
+        #     # groups = provider.list_secgroups()
+        #
+        #     pprint(group)
+        #
+        #     return ""
 
         elif arguments.rule and arguments.list:
             found = rules.list()
@@ -245,13 +258,6 @@ class SecCommand(PluginCommand):
 
             return ""
 
-        elif arguments.group and arguments.list:
-            secgroup = Secgroup()
-            group = secgroup.list(arguments.GROUP)
-
-            pprint(group)
-
-            return ""
 
         elif arguments.list:
 

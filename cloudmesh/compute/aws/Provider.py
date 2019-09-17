@@ -1209,7 +1209,6 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         return cm.find_name(name, kind='image')
 
     def flavors(self, **kwargs):
-        # TODO: Alex
         """
         Lists the flavors on the cloud
 
@@ -1217,11 +1216,9 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         """
         flavors = AwsFlavor()
         data = flavors.fetch()
-        result = flavors.list(data)
         return self.update_dict(result, kind="flavor")
 
     def flavor(self, name=None):
-        # TODO: Alex
         """
         Gets the flavor with a given name
         :param name: The name of the flavor

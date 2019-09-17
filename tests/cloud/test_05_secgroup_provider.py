@@ -103,7 +103,7 @@ class Test_secgroup_provider:
 
     def test_upload_secgroup(self):
         HEADING()
-        name = "Saurabh_Sec_Group"
+        name = "Saurabh_Sec_Group2"
         Benchmark.Start()
         provider.upload_secgroup(name=name)
         Benchmark.Stop()
@@ -112,7 +112,7 @@ class Test_secgroup_provider:
 
     def test_secgroups_delete(self):
         HEADING()
-        name = "Saurabh_Sec_Group"
+        name = "Saurabh_Sec_Group2"
         Benchmark.Start()
         provider.remove_secgroup(name=name)
         Benchmark.Stop()
@@ -122,10 +122,9 @@ class Test_secgroup_provider:
         provider.Print(output='json', kind="secgroup", data= groups)
 
 
-
     def test_secgroups_delete_again(self):
         HEADING()
-        name = "Saurabh_Sec_Group"
+        name = "Saurabh_Sec_Group2"
         Benchmark.Start()
         provider.remove_secgroup(name=name)
         Benchmark.Stop()

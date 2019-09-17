@@ -41,8 +41,10 @@ class Provider(ComputeNodeABC):
                          "aws",
                          "azureaz",
                          "virtualbox"]:
+
             provider = providers[self.kind]
         elif self.kind in ["awslibcloud", "google"]:
+
             from cloudmesh.compute.libcloud.Provider import \
                 Provider as LibCloudProvider
             provider = LibCloudProvider

@@ -33,7 +33,7 @@ class Test_cm_find:
         HEADING()
         for kind in ['vm', "image", "flavor"]:
             entries = cm.find(cloud=f"{cloud}", kind=kind)
-        pprint(entries)
+        # pprint(entries)
         assert len(entries) > 0
 
     def test_cm_loop(self):
@@ -46,13 +46,13 @@ class Test_cm_find:
     def test_cm_image_name_cloud(self):
         HEADING()
         names = cm.names(cloud=cloud, kind="image")
-        pprint(names)
+        # pprint(names)
         assert len(names) > 0
 
     def test_cm_image_name_collection(self):
         HEADING()
         names = cm.names(collection=f"{cloud}-image")
-        pprint(names)
+        # pprint(names)
 
     def test_names_regexp(self):
         HEADING()

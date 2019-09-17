@@ -592,7 +592,12 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         ip = vm['public_ips']
         try:
             key_name = vm['KeyName']
-            key = cm.find_name(name=key_name, kind="key")[0]['location']['private']
+            keys = cm.find_all_by_name(name=key_name, kind="key")
+            for k in keys:
+                if 'location' in k.keys():
+                    key = k['location']['private']
+                    break
+
         except (KeyError, IndexError):
             aws_keys = cm.find(kind='key', cloud='aws')
             if len(aws_keys) == 0 :

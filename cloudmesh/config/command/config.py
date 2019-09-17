@@ -324,11 +324,25 @@ class ConfigCommand(PluginCommand):
 
         elif arguments.get:
 
-            attribute = arguments.ATTRIBUTE
-            if not attribute.startswith("cloudmesh."):
-                attribute = f"cloudmesh.{attribute}"
+            print ()
 
             config = Config()
+            clouds = config["cloudmesh.cloud"].keys()
+
+            attribute = arguments.ATTRIBUTE
+
+            try:
+                cloud, field = attribute.split(".",1)
+                field = f".{field}"
+            except:
+                cloud = attribute
+                field = ""
+
+            if cloud in clouds:
+                attribute = f"cloudmesh.cloud.{cloud}{field}"
+            elif not attribute.startswith("cloudmesh."):
+                attribute = f"cloudmesh.{attribute}"
+
             try:
                 value = config[attribute]
                 if type(value) == dict:

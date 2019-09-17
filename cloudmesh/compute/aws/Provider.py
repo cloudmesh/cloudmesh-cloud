@@ -455,7 +455,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                 {'Name': 'tag:cm.name', 'Values': [name]}
             ]
         )
-        data =instance_info['Reservations'][0]['Instances'][0]
+        data = instance_info['Reservations'][0]['Instances'][0]
         metadata = {'cm':{}}
         for dat in data['Tags']:
             if 'cm.' in dat['Key']:
@@ -464,8 +464,6 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                 metadata['cm'][key] = value
         return metadata
 
-
-    # these are available to be associated
     def list_public_ips(self,
                         ip=None,
                         available=False):
@@ -555,11 +553,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
             Console.error(e)
         Console.msg(response)
 
-    # see the openstack example it will be almost the same as in openstack
-    # other than getting
-    # the ip and username
     def ssh(self, vm=None, command=None):
-        # TODO: Vafa
 
         def key_selector(keys):
             '''
@@ -727,7 +721,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         return instances
 
     def start(self, name=None):
-        # TODO: Sriman
+
         """
         start a node
 
@@ -752,7 +746,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                 f"Instance-Id:{each_instance.instance_id} started")
 
     def stop(self, name=None, hibernate = False):
-        # TODO: Sriman
+
         """
         stops the node with the given name
 
@@ -895,7 +889,6 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
             Console.ok(
                 f"Instance having Tag:{name} and "
                 f"Instance-Id:{each_instance.instance_id} terminated")
-
 
     def create(self,
                name=None,

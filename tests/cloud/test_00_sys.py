@@ -37,4 +37,4 @@ class Test_Sys:
 
 
     def test_benchmark(self):
-        Benchmark.print(sysinfo=True, csv=False, tag=cloud)
+        Benchmark.print(sysinfo=True, csv=True, tag=cloud)

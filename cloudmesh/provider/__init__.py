@@ -1,6 +1,7 @@
 from cloudmesh.common.console import Console
 from pprint import pprint
 from cloudmesh.common.variables import Variables
+from cloudmesh.common.debug import VERBOSE
 
 class ComputeProviderPlugin(object):
     pass
@@ -14,7 +15,6 @@ class Provider(object):
 
     def load(self):
         providers = ComputeProviderPlugin.__subclasses__()
-
         for provider in providers:
             self.data[provider.kind] = provider
 

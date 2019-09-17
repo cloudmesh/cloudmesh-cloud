@@ -125,6 +125,8 @@ class TestSecCLI:
         Benchmark.Start()
         result = run("cms sec list")
         Benchmark.Stop()
+        # g = groups.list()
+
         g = rules.list()
 
         for entry in g:
@@ -149,9 +151,6 @@ class TestSecCLI:
         result = run(f"cms sec group list --cloud={cloud}")
         Benchmark.Stop()
         g = groups.list()
-
-        assert '443' in result
-        assert '80' in result
 
     def test_benchmark(self):
         Benchmark.print(sysinfo=False, csv=False, tag=cloud)

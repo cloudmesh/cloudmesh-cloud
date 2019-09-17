@@ -27,6 +27,7 @@ import json
 from cloudmesh.management.configuration.name import Name
 
 class Provider(ComputeNodeABC, ComputeProviderPlugin):
+
     kind = "aws"
 
     # TODO: change to what you see in boto dicts the next values are from
@@ -105,17 +106,37 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                        "Fingerprint",
                        "Comment"]
         },
+        "secrule": {
+            "sort_keys": ["name"],
+            "order": ["name",
+                      "direction",
+                      "ethertype",
+                      "ToPort",
+                      "FromPort",
+                      "IpProtocol",
+                      "ipRange",
+                      "groupId"
+                      ],
+            "header": ["Name",
+                       "Direction",
+                       "Ethertype",
+                       "Port range max",
+                       "Port range min",
+                       "Protocol",
+                       "Range",
+                       "Remote group id"]
+        },
         "secgroup": {
             "sort_keys": ["name"],
             "order": ["name",
                       "tags",
                       "direction",
                       "ethertype",
-                      "port_range_max",
-                      "port_range_min",
-                      "protocol",
-                      "remote_ip_prefix",
-                      "remote_group_id"
+                      "ToPort",
+                      "FromPort",
+                      "IpProtocol",
+                      "IpRanges",
+                      "UserIdGroupPairs"
                       ],
             "header": ["Name",
                        "Tags",
@@ -130,28 +151,18 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
     }
 
     # noinspection PyPep8Naming
-    def Print(self, output, kind, data):
+    def Print(self, data, output, kind):
 
         if output == "table":
-            if kind == "secrule":
-
-                result = []
-                for group in data:
-                    for rule in group['security_group_rules']:
-                        rule['name'] = group['name']
-                        result.append(rule)
-                data = result
 
             order = self.output[kind]['order']
             header = self.output[kind]['header']
-            humanize = self.output[kind]['humanize']
 
             print(Printer.flatwrite(data,
                                     sort_keys=["name"],
                                     order=order,
                                     header=header,
-                                    output=output,
-                                    humanize=humanize)
+                                    output=output,)
                   )
         else:
             print(Printer.write(data, output=output))
@@ -184,6 +195,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
         """
         List the named security group
+
         :param name: The name of the group, if None all will be returned
         :return: returns list of dict
         """
@@ -205,10 +217,13 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
     def add_secgroup(self, name=None, description=None):
 
         """
+        Adds named security group
 
         :param name: Adds security group
-        :param description:
-        :return:
+        :param description: name = name of the security group to be added/created
+                            description: Description of the security group. If its none then default description
+                                         is added with user name and time of creation
+        :return: None
         """
 
         response = self.ec2_client.describe_vpcs()
@@ -231,7 +246,15 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                           port=None,
                           protocol=None,
                           ip_range=None):
+        """
+        Add rule to named security group
 
+        :param name: Name of the security group to which rfule needs to be added
+        :param port: The start and end port range for the TCP and UDP protocols
+        :param protocol:
+        :param ip_range:
+        :return:
+        """
 
         try:
             portmin, portmax = port.split(":")
@@ -443,7 +466,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                 {'Name': 'tag:cm.name', 'Values': [name]}
             ]
         )
-        data =instance_info['Reservations'][0]['Instances'][0]
+        data = instance_info['Reservations'][0]['Instances'][0]
         metadata = {'cm':{}}
         for dat in data['Tags']:
             if 'cm.' in dat['Key']:
@@ -452,8 +475,6 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                 metadata['cm'][key] = value
         return metadata
 
-
-    # these are available to be associated
     def list_public_ips(self,
                         ip=None,
                         available=False):
@@ -543,11 +564,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
             Console.error(e)
         Console.msg(response)
 
-    # see the openstack example it will be almost the same as in openstack
-    # other than getting
-    # the ip and username
     def ssh(self, vm=None, command=None):
-        # TODO: Vafa
 
         def key_selector(keys):
             '''
@@ -715,7 +732,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         return instances
 
     def start(self, name=None):
-        # TODO: Sriman
+
         """
         start a node
 
@@ -740,7 +757,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                 f"Instance-Id:{each_instance.instance_id} started")
 
     def stop(self, name=None, hibernate = False):
-        # TODO: Sriman
+
         """
         stops the node with the given name
 
@@ -772,7 +789,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                 "Instance-Id:{each_instance.instance_id} stopped")
 
     def info(self, name=None):
-        # TODO: Sriman
+
         """
         gets the information of a node with a given name
 
@@ -799,7 +816,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         return data
 
     def list(self):
-        # TODO: Sriman
+
         """
         list all nodes id
 
@@ -826,7 +843,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         return self.update_dict(instance_ids, kind="vm")
 
     def suspend(self, name=None):
-        # TODO: Sriman
+
         """
         suspends the node with the given name
 
@@ -837,7 +854,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         return self.stop(name=name, hibernate=True)
 
     def resume(self, name=None):
-        # TODO: Sriman
+
         """
         resume the named node
 
@@ -856,7 +873,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                 "Instance-Id:{each_instance.instance_id} rebooted")
 
     def destroy(self, name=None):
-        # TODO: Sriman
+
         """
         Destroys the node
         :param name: the name of the node
@@ -884,13 +901,6 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                 f"Instance having Tag:{name} and "
                 f"Instance-Id:{each_instance.instance_id} terminated")
 
-    #
-    # i made some changes in openstack create, compare what i did with what
-    # you did. Figure out how to pass metadata into the vm as we need the cm
-    # dict passed as metadata to the vm
-    # also all arguments must have the same name as in openstack/abc compute
-    # class. I do not think we used keyname, we used key_name=key,
-    #
     def create(self,
                name=None,
                image=None,
@@ -906,7 +916,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                metadata=None,
                **kwargs):
 
-        # TODO: Sriman
+
         """
         creates a named node
 
@@ -1039,7 +1049,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         return output
 
     def rename(self, name=None, destination=None):
-        # TODO: Sriman
+
         """
         rename a node
 
@@ -1062,7 +1072,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         return tag_response
 
     def keys(self):
-        # TODO: Vafa
+
         """
         Lists the keys on the cloud
 
@@ -1073,7 +1083,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         return data
 
     def key_upload(self, key=None):
-        # TODO: Vafa
+
         # The gey is stored in the database, we do not create a new keypair,
         # we upload our local key to aws
         # BUG name=None, wrong?
@@ -1096,7 +1106,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         return r
 
     def key_delete(self, name=None):
-        # TODO: Vafa
+
         """
         deletes the key with the given name
 
@@ -1172,7 +1182,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
 
     def images(self, **kwargs):
-        # TODO: Vafa
+
         """
         Lists the images on the cloud
 
@@ -1197,7 +1207,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
 
     def image(self, name=None):
-        # TODO: Vafa
+
         """
         Gets the image with a given nmae
 
@@ -1209,7 +1219,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         return cm.find_name(name, kind='image')
 
     def flavors(self, **kwargs):
-        # TODO: Alex
+
         """
         Lists the flavors on the cloud
 
@@ -1221,7 +1231,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         return self.update_dict(result, kind="flavor")
 
     def flavor(self, name=None):
-        # TODO: Alex
+
         """
         Gets the flavor with a given name
         :param name: The name of the flavor
@@ -1235,13 +1245,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         return []
 
     def update_dict(self, elements, kind=None):
-        #
-        # please compare to openstack, i made some changes there
-        # THIS IS THE FUNCTION THAT INTEGRATES WITH CLOUDMESH
-        # THIS IS A KEY POINT WITHOUT THI S THE COMMANDS WILL NOT WORK
-        # EACH dict that you return in a method must apply this update on the
-        # dicts. it adds the cm dict.
-        #
+
         """
         This function adds a cloudmesh cm dict to each dict in the list
         elements.
@@ -1267,15 +1271,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         for entry in _elements:
 
             if kind == 'key':
-                # ----------------------------------------------------------------------
-                # keys
-                # ----------------------------------------------------------------------
-                # 812:keys ./Provider.py
-                # ----------------------------------------------------------------------
-                # [{'KeyFingerprint': '0c:3d:86:a8:2d:73:ec:09:54:45:cf:00:a0:d0:09:1e:a2:3a:a5:29',
-                #   'KeyName': 'aws_vm1'},
-                #  {'KeyFingerprint': 'ad:5c:50:a8:9c:6e:8d:7f:db:50:ac:48:40:01:61:b0',
-                #   'KeyName': 'spullak@iu.edu'}]
+
                 entry['comment'] = "N/A"
                 entry['name'] = entry['KeyName']
                 entry['fingerprint'] = entry['KeyFingerprint']
@@ -1326,5 +1322,6 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
 
 if __name__ == "__main__":
+
     provider = Provider(name='aws')
-    g = provider.upload_secgroup("Wrong")
+

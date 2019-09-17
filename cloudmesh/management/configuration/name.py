@@ -60,7 +60,7 @@ import oyaml as yaml
 
 from cloudmesh.common.dotdict import dotdict
 from cloudmesh.common.util import path_expand
-
+from cloudmesh.configuration.Config import Config
 
 class Name(dotdict):
 
@@ -124,15 +124,24 @@ class Name(dotdict):
             if not os.path.exists(prefix):
                 os.makedirs(prefix)
 
+            # data = {
+            #     'counter': 1,
+            #     'path': path,
+            #     'kind': "vm",
+            #     'schema': "{experiment}-{group}-{user}-{kind}-{counter}",
+            #     'experiment': 'exp',
+            #     'group': 'group',
+            #     'user': 'user'
+            # }
+            config = Config()
+            user = config["cloudmesh.profile.user"]
             data = {
                 'counter': 1,
                 'path': path,
-                'kind': "vm",
-                'schema': "{experiment}-{group}-{user}-{kind}-{counter}",
-                'experiment': 'exp',
-                'group': 'group',
-                'user': 'user'
+                'schema': "{user}-vm-{counter}",
+                'user': user
             }
+
             self.flush(data)
         return data
 
@@ -160,5 +169,5 @@ class Name(dotdict):
         self.__dict__["counter"] += 1
         self.flush()
 
-
+name = Name()
 

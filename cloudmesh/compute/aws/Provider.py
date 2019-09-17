@@ -27,6 +27,7 @@ import json
 from cloudmesh.management.configuration.name import Name
 
 class Provider(ComputeNodeABC, ComputeProviderPlugin):
+
     kind = "aws"
 
     # TODO: change to what you see in boto dicts the next values are from
@@ -105,17 +106,37 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                        "Fingerprint",
                        "Comment"]
         },
+        "secrule": {
+            "sort_keys": ["name"],
+            "order": ["name",
+                      "direction",
+                      "ethertype",
+                      "ToPort",
+                      "FromPort",
+                      "IpProtocol",
+                      "ipRange",
+                      "groupId"
+                      ],
+            "header": ["Name",
+                       "Direction",
+                       "Ethertype",
+                       "Port range max",
+                       "Port range min",
+                       "Protocol",
+                       "Range",
+                       "Remote group id"]
+        },
         "secgroup": {
             "sort_keys": ["name"],
             "order": ["name",
                       "tags",
                       "direction",
                       "ethertype",
-                      "port_range_max",
-                      "port_range_min",
-                      "protocol",
-                      "remote_ip_prefix",
-                      "remote_group_id"
+                      "ToPort",
+                      "FromPort",
+                      "IpProtocol",
+                      "IpRanges",
+                      "UserIdGroupPairs"
                       ],
             "header": ["Name",
                        "Tags",
@@ -130,28 +151,18 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
     }
 
     # noinspection PyPep8Naming
-    def Print(self, output, kind, data):
+    def Print(self, data, output, kind):
 
         if output == "table":
-            if kind == "secrule":
-
-                result = []
-                for group in data:
-                    for rule in group['security_group_rules']:
-                        rule['name'] = group['name']
-                        result.append(rule)
-                data = result
 
             order = self.output[kind]['order']
             header = self.output[kind]['header']
-            humanize = self.output[kind]['humanize']
 
             print(Printer.flatwrite(data,
                                     sort_keys=["name"],
                                     order=order,
                                     header=header,
-                                    output=output,
-                                    humanize=humanize)
+                                    output=output,)
                   )
         else:
             print(Printer.write(data, output=output))
@@ -1311,5 +1322,6 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
 
 if __name__ == "__main__":
+
     provider = Provider(name='aws')
-    g = provider.upload_secgroup("Wrong")
+

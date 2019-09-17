@@ -14,7 +14,7 @@ from cloudmesh.common3.Benchmark import Benchmark
 from cloudmesh.compute.vm.Provider import Provider
 from cloudmesh.configuration.Config import Config
 from cloudmesh.management.configuration.name import Name
-
+from cloudmesh.mongo.CmDatabase import CmDatabase
 import sys
 
 Benchmark.debug()
@@ -77,7 +77,7 @@ class Test_provider_vm:
         data = provider.info(name=name)[0]
         Benchmark.Stop()
         print(data)
-        assert data["cm"]["status"] in ['ACTIVE', 'BOOTING']
+        assert data["cm"]["status"] in ['ACTIVE', 'BOOTING', 'TERMINATED', 'STOPPED']
 
     def test_vm_status(self):
         HEADING()
@@ -96,6 +96,16 @@ class Test_provider_vm:
         VERBOSE(data)
         status = provider.status(name=name)[0]
         assert status["cm.status"] in ['ACTIVE', 'BOOTING']
+
+    def test_provider_vm_ssh(self):
+        HEADING()
+        name = str(Name())
+        Benchmark.Start()
+        cm = CmDatabase()
+        vm = cm.find_name(name, kind="vm")[0]
+        data = provider.ssh(vm=vm, command='ls')
+        Benchmark.Stop()
+        VERBOSE(data)
 
     def test_provider_vm_stop(self):
         HEADING()
@@ -119,7 +129,6 @@ class Test_provider_vm:
         data = provider.info(name=name)
         #below cm.status check required as in aws it takes a while to clear list from you account after terminating vm
         assert len(data) == 0 or ( data[0]["cm"]["status"] in ['BOOTING','TERMINATED'] if data and data[0].get('cm',None) is not None else True)
-
 
     def test_benchmark(self):
         Benchmark.print(sysinfo=False, csv=True, tag=cloud)

@@ -149,7 +149,7 @@ class SshCommand(PluginCommand):
             name = arguments.NAME
             os.system("ssh-keygen -R {name}")
 
-        elif arguments.name and arguments.COMMAND:
+        elif (arguments.name and arguments.COMMAND) or arguments.COMMAND:
             # ssh [--name=VMs] [--user=USERs] [COMMAND]"
 
             variables = Variables()

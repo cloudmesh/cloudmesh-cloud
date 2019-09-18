@@ -34,20 +34,20 @@ provider = Provider(name=cloud)
 @pytest.mark.incremental
 class Test_Key:
 
-    def test_cleanup(self):
-        HEADING()
-        cm.clear(collection=f"local-key")
-        try:
-            r = provider.key_delete(KEY)
-        except:
-            pass
+    # def test_cleanup(self):
+    #     HEADING()
+    #     cm.clear(collection=f"local-key")
+    #     try:
+    #         r = provider.key_delete(KEY)
+    #     except:
+    #         pass
 
     def test_upload_key_to_database(self):
         HEADING()
         local = Key()
         pprint (local)
         Benchmark.Start()
-        local.add("test-key", "ssh")
+        local.add(KEY, "ssh")
         Benchmark.Stop()
 
         key = cm.find_name(KEY, "key")[0]
@@ -55,7 +55,14 @@ class Test_Key:
 
     def test_upload_key_to_cloud(self):
         HEADING()
-        key = cm.find_name(KEY, "key")[0]
+        if cloud == 'aws':
+            all_keys = cm.find_all_by_name(KEY, "key")
+            for k in all_keys:
+                if 'public_key' in k.keys():
+                    key =  k
+                    break
+        else:
+            key = cm.find_name(KEY, "key")[0]
         pprint(key)
         Benchmark.Start()
         r = provider.key_upload(key)

@@ -88,35 +88,27 @@ class ImageCommand(PluginCommand):
 
         elif arguments.list:
 
-            names = []
-
             clouds, names = Arguments.get_cloud_and_names("list",
                                                           arguments,
                                                           variables)
 
-            print(clouds, names)
+            print(clouds)
             print("find images")
+
             try:
 
                 for cloud in clouds:
-                    print(f"List {cloud}")
+                    print(f"List {cloud} images")
                     provider = Provider(name=cloud)
 
                     db = CmDatabase()
 
 
-                    # print(images)
-                    # print(provider)
-                    if len(names) == 0 :
-                        images = db.find(collection=f"{cloud}-image")
-                        provider.Print(images, output=arguments.output,
+                    images = db.find(collection=f"{cloud}-image")
+
+                    provider.Print(images,
+                                   output=arguments.output,
                                    kind="image")
-                    else:
-                        images = []
-                        for name in names:
-                            images += db.find_name(name,kind='image')
-                        provider.Print(images, output=arguments.output,
-                                       kind="image")
 
             except Exception as e:
 

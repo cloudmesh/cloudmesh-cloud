@@ -4,6 +4,7 @@
 ###############################################################
 from pprint import pprint
 
+import os
 import pytest
 from cloudmesh.common.util import HEADING
 from cloudmesh.common.variables import Variables
@@ -82,6 +83,11 @@ class Test_Clean_Remote:
             print(e)
             assert False
 
+    def test_cms_init(self):
+        HEADING()
+        Benchmark.Start()
+        result = os.system(f"cms init")
+        Benchmark.Stop()
 
     def test_benchmark(self):
         Benchmark.print(sysinfo=False, csv=False, tag=cloud)

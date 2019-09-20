@@ -60,7 +60,8 @@ class InitCommand(PluginCommand):
             config = Config()
             try:
                 print("MongoDB stop")
-                MongoDBController().stop()
+                # MongoDBController().stop()
+                os.system("cms admin mongo stop")
             except:
                 Console.ok("MongoDB is not running. ok")
             machine = platform.lower()

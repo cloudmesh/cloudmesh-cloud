@@ -303,8 +303,11 @@ class MongoDBController(object):
             Console.info("Stopping the service ... ")
             self.stop()
         else:
+            Console.info("Starting mongo without authentication ... ")
             self.start(security=False)
+            Console.info("Creating admin user ... ")
             self.set_auth()
+            Console.info("Stopping the service ... ")
             self.stop()
 
     def import_collection(self,  security=True):
@@ -321,19 +324,17 @@ class MongoDBController(object):
         auth = ""
         if security:
             auth = "--auth"
-
+        mongo_host = self.data['MONGO_HOST']
         if platform.lower() == 'win32':
             try:
-                mongo_host = self.data['MONGO_HOST']
-                script =  f"mongod {auth} --bind_ip {mongo_host} --dbpath {self.mongo_path} --logpath {self.mongo_log}\mongod.log".format(auth=auth)
+                script =  f"mongod {auth} --bind_ip {mongo_host} --dbpath {self.mongo_path} --logpath {self.mongo_log}\mongod.log"
                 p = subprocess.Popen(script, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
                 result = "mongod child process started successfully."
             except Exception as e:
                 result = "Mongo in windows could not be started: \n\n" + str(e)
         else:
             try:
-                script = "mongod {auth} --bind_ip {MONGO_HOST} --dbpath {self.mongo_path} --logpath {self.mongo_log}/mongod.log --fork".format(
-                    **self.data, auth=auth)
+                script = f"mongod {auth} --bind_ip {mongo_host} --dbpath {self.mongo_path} --logpath {self.mongo_log}/mongod.log --fork"
                 result = Script.run(script)
 
             except Exception as e:
@@ -360,8 +361,14 @@ class MongoDBController(object):
             else:
                 result = 'server is already down...'
         else:
-            script = 'kill -2 `pgrep mongo`'
-            result = Script.run(script)
+            try:
+                pid = Script.run('pgrep mongo')
+                script = f'kill -2 {pid}'
+                result = Script.run(script)
+                result = 'server should be down...'
+            except subprocess.CalledProcessError:
+                result = 'server is already down...'
+
         print(result)
 
     def set_auth(self):

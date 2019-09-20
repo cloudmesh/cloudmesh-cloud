@@ -880,6 +880,11 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         """
         instance_ids = []
         for each_instance in self.ec2_resource.instances.all():
+            # print(each_instance.tags)
+            if len(each_instance.tags) > 0:
+                name = [tag['Value'] for tag in each_instance.tags if tag['Key'] == 'Name'][0]
+            else:
+                name = ''
             instance_ids.append({
                 'kind': 'aws',
                 'status': each_instance.state['Name'],
@@ -887,7 +892,8 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                     "%m/%d/%Y, %H:%M:%S") if each_instance.launch_time else '',
                 'updated': each_instance.launch_time.strftime(
                     "%m/%d/%Y, %H:%M:%S") if each_instance.launch_time else '',
-                'name': each_instance.tags[0]['Value'] if each_instance.tags else '',
+                # 'name': each_instance.tags[0]['Value'] if each_instance.tags else '',
+                'name': name,
                 'instance_id': each_instance.id,
                 'instance_tag': each_instance.tags[0]['Value'] if each_instance.tags else '',
                 'image': each_instance.image_id,

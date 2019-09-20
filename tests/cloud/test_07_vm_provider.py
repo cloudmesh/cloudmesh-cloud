@@ -80,7 +80,7 @@ class Test_provider_vm:
 
     def test_vm_status(self):
         HEADING()
-        # name = str(Name())
+        name = str(Name())
         Benchmark.Start()
         data = provider.status(name=name)[0]
         print(data)

@@ -758,7 +758,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                 self.ec2_client.start_instances(
                     InstanceIds=[each_instance.instance_id])
 
-                self.add_server_metadata(name=name, tags=[{'Key': 'cm.status', 'Value': "RUNNING"}])
+                self.add_server_metadata(name=name, tags=[{'Key': 'cm.status', 'Value': "ACTIVE"}])
             except ClientError:
                 Console.error("Currently instance cant be started...Please try again")
             Console.msg("Starting Instance..Please wait...")

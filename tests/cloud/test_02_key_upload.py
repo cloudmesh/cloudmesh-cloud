@@ -36,6 +36,25 @@ provider = Provider(name=cloud)
 @pytest.mark.incremental
 class Test_Key:
 
+    def test_cleanup(self):
+        HEADING()
+        cm.clear(collection=f"local-key")
+        try:
+            r = provider.key_delete(KEY)
+        except:
+            pass
+
+    def test_upload_key_to_database(self):
+        HEADING()
+        local = Key()
+        pprint (local)
+        Benchmark.Start()
+        local.add(KEY, "ssh")
+        Benchmark.Stop()
+
+        key = cm.find_name(KEY, "key")[0]
+        key['name'] == KEY
+
     def test_upload_key_to_cloud(self):
         HEADING()
         if cloud == 'aws':

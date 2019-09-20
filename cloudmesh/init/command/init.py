@@ -1,6 +1,7 @@
 import os.path
 import shutil
 from sys import platform
+from sys import exit
 
 from cloudmesh.common.StopWatch import StopWatch
 from cloudmesh.common.console import Console
@@ -56,19 +57,24 @@ class InitCommand(PluginCommand):
 
         else:
             variables = Variables()
-
+            config = Config()
             try:
                 print("MongoDB stop")
                 MongoDBController().stop()
             except:
                 Console.ok("MongoDB is not running. ok")
-
-            location = path_expand('~/.cloudmesh/mongodb')
+            machine = platform.lower()
+            location = path_expand(config[f'cloudmesh.data.mongo.MONGO_DOWNLOAD.{machine}.MONGO_PATH'])
             try:
-                print("MongoDB delete")
                 shutil.rmtree(location)
+                print("MongoDB folder deleted")
             except:
-                Console.error(f"Could not delete {location}")
+                os.system("cms admin mongo stop")
+                try:
+                    shutil.rmtree(location)
+                    print("MongoDB folder deleted")
+                except:
+                    Console.error(f"Could not delete {location}")
 
             user = Config()["cloudmesh.profile.user"]
             secgroup = "flask"

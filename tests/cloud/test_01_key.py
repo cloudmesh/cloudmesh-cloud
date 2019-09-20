@@ -34,13 +34,13 @@ provider = Provider(name=cloud)
 @pytest.mark.incremental
 class Test_Key:
 
-    # def test_cleanup(self):
-    #     HEADING()
-    #     cm.clear(collection=f"local-key")
-    #     try:
-    #         r = provider.key_delete(KEY)
-    #     except:
-    #         pass
+    def test_cleanup(self):
+        HEADING()
+        cm.clear(collection=f"local-key")
+        try:
+            r = provider.key_delete(KEY)
+        except:
+            pass
 
     def test_upload_key_to_database(self):
         HEADING()

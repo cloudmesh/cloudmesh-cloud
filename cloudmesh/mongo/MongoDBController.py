@@ -6,6 +6,8 @@ import urllib.parse
 import urllib.parse
 import urllib.parse
 from sys import platform
+from pathlib import Path
+from subprocess import STDOUT
 
 import psutil
 import yaml
@@ -17,6 +19,8 @@ from cloudmesh.common3.Shell import Shell
 from cloudmesh.configuration.Config import Config
 from cloudmesh.management.script import Script, SystemPath
 from cloudmesh.management.script import find_process
+from cloudmesh.common3.Shell import Shell as Shell3
+
 # from cloudmesh.mongo.MongoDBController import MongoDBController
 from pymongo import MongoClient
 
@@ -31,6 +35,10 @@ class MongoInstaller(object):
 
         self.config = Config()
         self.data = self.config.data["cloudmesh"]["data"]["mongo"]
+        machine = platform.lower()
+        self.mongo_path = self.config[f"cloudmesh.data.mongo.MONGO_DOWNLOAD.{machine}.MONGO_PATH"]
+        self.mongo_log = self.config[f"cloudmesh.data.mongo.MONGO_DOWNLOAD.{machine}.MONGO_LOG"]
+        self.mongo_home = self.config[f"cloudmesh.data.mongo.MONGO_DOWNLOAD.{machine}.MONGO_HOME"]
         self.expanduser()
 
     #
@@ -65,7 +73,8 @@ class MongoInstaller(object):
         check where the MongoDB is installed in mongo location.
         if MongoDB is not installed, python help install it
         """
-        path = os.path.expanduser(self.data["MONGO_PATH"])
+        machine = platform.lower()
+        path = os.path.expanduser(self.mongo_path)
         print(path)
         # pprint(self.data)
 
@@ -74,15 +83,15 @@ class MongoInstaller(object):
             return ""
 
         if not os.path.isdir(path) and self.data["MONGO_AUTOINSTALL"]:
-            print(
-                "MongoDB is not installed in {MONGO_PATH}".format(**self.data))
+            machine = platform.lower()
+            mongo_path = self.mongo_path
+            print(f"MongoDB is not installed in {mongo_path}")
             #
             # ask if you like to install and give info where it is being installed
             #
             # use cloudmesh yes no question see cloudmesh 3
             #
-            print("Auto-install the MongoDB into {MONGO_PATH}".format(
-                **self.data))
+            # print(f"Auto-install the MongoDB into {mongo_path}")
 
             self.data["MONGO_CODE"] = self.data["MONGO_DOWNLOAD"][platform]
 
@@ -108,12 +117,12 @@ class MongoInstaller(object):
             sudo_command = ""
         script = f"{sudo_command} " + """
         apt-get --yes install libcurl4 openssl
-        mkdir -p {MONGO_PATH}
-        mkdir -p {MONGO_HOME}
-        mkdir -p {MONGO_LOG}
+        mkdir -p {self.mongo_path}
+        mkdir -p {self.mongo_home}
+        mkdir -p {self.mongo_log}
         wget -q -O /tmp/mongodb.tgz {MONGO_CODE}
         tar -zxvf /tmp/mongodb.tgz -C {LOCAL}/mongo --strip 1
-        echo \"export PATH={MONGO_HOME}/bin:$PATH\" >> ~/.bashrc
+        echo \"export PATH={self.mongo_home}/bin:$PATH\" >> ~/.bashrc
             """.format(**self.data)
         installer = Script.run(script)
 
@@ -131,14 +140,14 @@ class MongoInstaller(object):
 
         else:
             script = """
-            mkdir -p {MONGO_PATH}
-            mkdir -p {MONGO_HOME}
-            mkdir -p {MONGO_LOG}
+            mkdir -p {self.mongo_path}
+            mkdir -p {self.mongo_home}
+            mkdir -p {self.mongo_log}
             curl -o /tmp/mongodb.tgz {MONGO_CODE}
             tar -zxvf /tmp/mongodb.tgz -C {LOCAL}/mongo --strip 1
             """.format(**self.data)
             installer = Script.run(script)
-            SystemPath.add("{MONGO_HOME}/bin".format(**self.data))
+            SystemPath.add("{self.mongo_home}/bin".format(**self.data))
 
             # THIS IS BROKEN AS ITS A SUPBROCESS? '. ~/.bashrc'
 
@@ -147,16 +156,16 @@ class MongoInstaller(object):
         install MongoDB in windows
         """
         # Added below code to change unix format to windows format for directory creation
-        self.data["MONGO_HOME"] = self.data["MONGO_HOME"].replace("/", "\\")
-        self.data["MONGO_PATH"] = self.data["MONGO_PATH"].replace("/", "\\")
-        self.data["MONGO_LOG"] = self.data["MONGO_LOG"].replace("/", "\\")
+        # self.data["MONGO_HOME"] = self.data["MONGO_HOME"].replace("/", "\\")
+        # self.data["MONGO_PATH"] = self.data["MONGO_PATH"].replace("/", "\\")
+        # self.data["MONGO_LOG"] = self.data["MONGO_LOG"].replace("/", "\\")
 
         # noinspection PyPep8
         script = """
-        mkdir {MONGO_PATH}
-        mkdir {MONGO_HOME}
-        mkdir {MONGO_LOG}
-        msiexec.exe /l*v {MONGO_LOG}/mdbinstall.log  /qb /i {MONGO_CODE} INSTALLLOCATION={MONGO_PATH} ADDLOCAL="all"
+        mkdir {self.mongo_path}
+        mkdir {self.mongo_home}
+        mkdir {self.mongo_log}
+        msiexec.exe /l*v {self.mongo_log}/mdbinstall.log  /qb /i {MONGO_CODE} INSTALLLOCATION={self.mongo_path} ADDLOCAL="all"
         """.format(**self.data)
         installer = Script.run(script)
 
@@ -209,9 +218,13 @@ class MongoDBController(object):
             if self.data.MONGO_PASSWORD in ["TBD", "admin"]:
                 Console.error("MongoDB password must not be the default")
                 raise Exception("password error")
-            mongo_path = self.data["MONGO_PATH"]
-            mongo_log = self.data["MONGO_LOG"]
-            paths = [mongo_path, mongo_log]
+            machine = platform.lower()
+            self.mongo_path = path_expand(self.config[f"cloudmesh.data.mongo.MONGO_DOWNLOAD.{machine}.MONGO_PATH"])
+            self.mongo_log = path_expand(self.config[f"cloudmesh.data.mongo.MONGO_DOWNLOAD.{machine}.MONGO_LOG"])
+            self.mongo_home = path_expand(self.config[f"cloudmesh.data.mongo.MONGO_DOWNLOAD.{machine}.MONGO_HOME"])
+
+            # mongo_log = self.data["MONGO_LOG"]
+            paths = [self.mongo_path, self.mongo_log]
             for path in paths:
                 if not os.path.exists(path):
                     os.makedirs(path)
@@ -283,8 +296,11 @@ class MongoDBController(object):
         # Added special code for windows. Cant do start service and set_auth in same cms execution.
 
         if platform.lower() == 'win32':
+            Console.info("Starting mongo without authentication ... ")
             self.start(security=False)
+            Console.info("Creating admin user ... ")
             self.set_auth()
+            Console.info("Stopping the service ... ")
             self.stop()
         else:
             self.start(security=False)
@@ -295,7 +311,7 @@ class MongoDBController(object):
         auth = ""
         if security:
             auth = "--auth"
-        command = "mongoimport {auth} --bind_ip {MONGO_HOST} --dbpath {MONGO_PATH} --logpath {MONGO_LOG}/mongod.log" \
+        command = "mongoimport {auth} --bind_ip {MONGO_HOST} --dbpath {self.mongo_path} --logpath {self.mongo_log}/mongod.log" \
              " --fork".format(**self.data, auth=auth)
 
     def start(self, security=True):
@@ -306,32 +322,17 @@ class MongoDBController(object):
         if security:
             auth = "--auth"
 
-        if platform.lower()\
-            == 'win32':
+        if platform.lower() == 'win32':
             try:
-                if self.is_installed_as_win_service():
-                    if not self.win_service_is_running():
-                        import win32com.shell.shell as shell
-                        script = "net start mongodb"
-                        shell.ShellExecuteEx(lpVerb='runas', lpFile='cmd.exe', lpParameters='/c ' + script)
-                        Console.msg("MongoDB Service should be started successfully given the permission")
-                        return
-                    else:
-                        Console.ok("Windows MongoDB service is already running")
-                        return
-                else:
-                    command = "-scriptblock { " + "mongod {auth} --bind_ip {MONGO_HOST} --dbpath {MONGO_PATH} --logpath {MONGO_LOG}/mongod.log".format(
-                        **self.data, auth=auth) + " }"
-                    script = """
-                    powershell -noexit start-job {command}
-                    """.format(**self.data, command=command)
-                    Script.run(script)
-                    result = "child process started successfully. Program existing now"
+                mongo_host = self.data['MONGO_HOST']
+                script =  f"mongod {auth} --bind_ip {mongo_host} --dbpath {self.mongo_path} --logpath {self.mongo_log}\mongod.log".format(auth=auth)
+                p = subprocess.Popen(script, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                result = "mongod child process started successfully."
             except Exception as e:
-                result = "Mongo in windows could not be started." + str(e)
+                result = "Mongo in windows could not be started: \n\n" + str(e)
         else:
             try:
-                script = "mongod {auth} --bind_ip {MONGO_HOST} --dbpath {MONGO_PATH} --logpath {MONGO_LOG}/mongod.log --fork".format(
+                script = "mongod {auth} --bind_ip {MONGO_HOST} --dbpath {self.mongo_path} --logpath {self.mongo_log}/mongod.log --fork".format(
                     **self.data, auth=auth)
                 result = Script.run(script)
 
@@ -351,14 +352,13 @@ class MongoDBController(object):
         """
         # TODO: there  could be more mongos running, be more specific
         if platform.lower() == 'win32':
-            if self.is_installed_as_win_service():
-                import win32com.shell.shell as shell
-                script = "net stop mongodb"
-                shell.ShellExecuteEx(lpVerb='runas', lpFile='cmd.exe', lpParameters='/c '+script)
-                result = 'MongoDB should be stopped given the permission'
+            script = 'mongo --eval "db.getSiblingDB(\'admin\').shutdownServer()"'
+            p = subprocess.Popen(script, shell=True , stdout=subprocess.PIPE, stderr=STDOUT)
+            result = p.stdout.read().decode('utf-8')
+            if 'server should be down...' in result:
+                result = 'server should be down...'
             else:
-                script = 'mongo admin --eval "db.shutdownServer()"'
-                result = Script.run(script)
+                result = 'server is already down...'
         else:
             script = 'kill -2 `pgrep mongo`'
             result = Script.run(script)
@@ -369,19 +369,23 @@ class MongoDBController(object):
         add admin account into the MongoDB admin database
         """
         if platform.lower() == 'win32': # don't remove this otherwise init won't work in windows, eval should start with double quote in windows
-            script = """mongo --eval "db.getSiblingDB('admin').createUser({{user:'{MONGO_USERNAME}',pwd:'{MONGO_PASSWORD}',roles:[{{role:'root',db:'admin'}}]}})" """.format(
-                **self.data)
+            script = """mongo --eval "db.getSiblingDB('admin').createUser({{ user:'{MONGO_USERNAME}',pwd:'{MONGO_PASSWORD}',roles:[{{role:'root',db:'admin'}}]}}) ; db.shutdownServer()" """.format(**self.data)
             try:
-                result = Script.run(script)
-            except subprocess.CalledProcessError:
-                Console.error("admin user exists")
+                # result = Shell3.run2(script)
+                p = subprocess.Popen(script, shell=True, stdout=subprocess.PIPE, stderr=STDOUT)
+                result = p.stdout.read().decode('utf-8')
+            except Exception as e:
+                print(e)
                 return
+
 
         else:
             script = """mongo --eval 'db.getSiblingDB("admin").createUser({{user:"{MONGO_USERNAME}",pwd:"{MONGO_PASSWORD}",roles:[{{role:"root",db:"admin"}}]}})'""".format(**self.data)
             result = Script.run(script)
         if "Successfully added user" in result:
             Console.ok("Administrative user created.")
+        elif "already exists" in result:
+            Console.error('admin user already exists.')
         else:
             Console.error("Problem creating the administrative user. Check "
                           "the yaml file and make sure the password and "
@@ -400,7 +404,7 @@ class MongoDBController(object):
         # TODO: BUG: expand user
         #
 
-        script = "mongodump --authenticationDatabase admin --archive={MONGO_HOME}/{filename}.gz --gzip -u {MONGO_USERNAME} -p {MONGO_PASSWORD}".format(
+        script = "mongodump --authenticationDatabase admin --archive={self.mongo_home}/{filename}.gz --gzip -u {MONGO_USERNAME} -p {MONGO_PASSWORD}".format(
             **self.data, filename=filename)
         result = Script.run(script)
         print(result)
@@ -417,7 +421,7 @@ class MongoDBController(object):
         #
 
         script = "mongorestore --authenticationDatabase admin -u {MONGO_USERNAME} -p " \
-                 "{MONGO_PASSWORD} --gzip --archive={MONGO_HOME}/{filename}.gz".format(**self.data, filename=filename)
+                 "{MONGO_PASSWORD} --gzip --archive={self.mongo_home}/{filename}.gz".format(**self.data, filename=filename)
         result = Script.run(script)
         print(result)
 
@@ -432,11 +436,14 @@ class MongoDBController(object):
             tasklist /FO LIST /FI "IMAGENAME eq mongod.exe"
             """
             output = Script.run(script)
-            result = {}
-            for row in output.split('\n'):
-                if ': ' in row:
-                    key, value = row.split(': ')
-                    result[key.strip()] = value.strip()
+            if 'INFO: No tasks are running which match the specified criteria.' in output:
+                result = None
+            else:
+                result = {}
+                for row in output.split('\n'):
+                    if ': ' in row:
+                        key, value = row.split(': ')
+                        result[key.strip()] = value.strip()
 
             if result is None:
                 state = dotdict(
@@ -534,7 +541,10 @@ class MongoDBController(object):
         '''
         if platform == 'win32':
             win_services = list(psutil.win_service_iter())
-            mongo_service = [service for service in win_services if 'mongo' in service.display_name().lower()]
+            mongo_service = []
+            for service in win_services:
+                if 'mongo' in service.display_name().lower():
+                    mongo_service.append(service)
             is_service = len(mongo_service) > 0
             return is_service
         else:
@@ -548,9 +558,17 @@ class MongoDBController(object):
         :return:
         '''
         if platform == 'win32':
-            win_services = list(psutil.win_service_iter())
-            mongo_service = [service for service in win_services if 'mongo' in service.display_name().lower()][0]
-            return mongo_service.status() == 'running'
+            if self.is_installed_as_win_service():
+                win_services = list(psutil.win_service_iter())
+                mongo_service = []
+                for service in win_services:
+                    if 'mongo' in service.display_name().lower():
+                        mongo_service = service
+                # mongo_service = [service for service in win_services if 'mongo' in service.display_name().lower()][0]
+                return mongo_service[0].status() == 'running'
+            else:
+                return "mongod.exe" in (p.name() for p in psutil.process_iter())
+
         else:
             Console.error(f'Windows platform function called instead of {platform}')
             return False

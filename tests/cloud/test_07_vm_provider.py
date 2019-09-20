@@ -54,10 +54,9 @@ class Test_provider_vm:
         HEADING()
         Benchmark.Start()
         data = provider.list()
-        current_vms = len(data)
+        assert len(data) > 0
         Benchmark.Stop()
         Print(data)
-
 
     def test_provider_vm_create(self):
         HEADING()
@@ -81,21 +80,12 @@ class Test_provider_vm:
 
     def test_vm_status(self):
         HEADING()
-        name = str(Name())
+        # name = str(Name())
         Benchmark.Start()
         data = provider.status(name=name)[0]
+        print(data)
         Benchmark.Stop()
-        assert data["cm.status"] in ['ACTIVE', 'BOOTING']
-
-    def test_provider_vm_start(self):
-        HEADING()
-        name = str(Name())
-        Benchmark.Start()
-        data = provider.start(name=name)
-        Benchmark.Stop()
-        VERBOSE(data)
-        status = provider.status(name=name)[0]
-        assert status["cm.status"] in ['ACTIVE', 'BOOTING']
+        assert data["cm.status"] in ['ACTIVE', 'BOOTING', 'TERMINATED', 'STOPPED']
 
     def test_provider_vm_ssh(self):
         HEADING()
@@ -103,7 +93,9 @@ class Test_provider_vm:
         Benchmark.Start()
         cm = CmDatabase()
         vm = cm.find_name(name, kind="vm")[0]
-        data = provider.ssh(vm=vm, command='ls')
+        data = provider.ssh(vm=vm, command='whoami')
+        print(data)
+        assert 'ubuntu' in data.lower()
         Benchmark.Stop()
         VERBOSE(data)
 
@@ -115,9 +107,21 @@ class Test_provider_vm:
         Benchmark.Stop()
         VERBOSE(data)
         status = provider.status(name=name)[0]
-        assert status["cm.status"] in ['ACTIVE', 'BOOTING', 'STOPPED']
+        print(status)
+        assert status["cm.status"] in ['STOPPED']
 
-    # do other tests before terminationg, keys, metadata, ....
+    def test_provider_vm_start(self):
+        HEADING()
+        name = str(Name())
+        Benchmark.Start()
+        data = provider.start(name=name)
+        Benchmark.Stop()
+        VERBOSE(data)
+        status = provider.status(name=name)[0]
+        print(status)
+        assert status["cm.status"] in ['ACTIVE', 'BOOTING', 'RUNNING']
+
+    # do other tests before terminationg, keys, metadata, .... => keys is already implemented in test02
 
     def test_provider_vm_terminate(self):
         HEADING()
@@ -125,6 +129,8 @@ class Test_provider_vm:
         Benchmark.Start()
         data = provider.destroy(name=name)
         Benchmark.Stop()
+        status = provider.status(name=name)[0]
+        print(status)
         print(data)
         data = provider.info(name=name)
         #below cm.status check required as in aws it takes a while to clear list from you account after terminating vm

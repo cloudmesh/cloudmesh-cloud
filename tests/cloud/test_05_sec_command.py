@@ -113,11 +113,11 @@ class TestSecCLI:
         except:
             assert True
 
-    def test_cms_init(self):
-        HEADING()
-        Benchmark.Start()
-        result = run(f"cms init")
-        Benchmark.Stop()
+    # def test_cms_init(self):
+    #     HEADING()
+    #     Benchmark.Start()
+    #     result = run(f"cms init")
+    #     Benchmark.Stop()
 
     def test_sec_list(self):
         HEADING()

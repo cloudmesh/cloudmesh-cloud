@@ -5,6 +5,7 @@ import subprocess
 import time
 from sys import platform
 import ctypes
+from time import sleep
 
 import boto3
 from cloudmesh.common.Printer import Printer
@@ -595,6 +596,16 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
         cm = CmDatabase()
         ip = vm['public_ips']
+        instance_id = vm['instance_id']
+        timeout = 30
+        Console.info("Checking instance reachability ... (timeout 30seconds) ")
+        timer = 0
+        while  timer < 30 :
+            if self.instance_is_reachable(instance_id):
+                break
+            sleep(0.4)
+            timer += 0.4
+
         try:
             key_name = vm['KeyName']
             keys = cm.find_all_by_name(name=key_name, kind="key")
@@ -746,6 +757,8 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
             try:
                 self.ec2_client.start_instances(
                     InstanceIds=[each_instance.instance_id])
+
+                self.add_server_metadata(name=name, tags=[{'Key': 'cm.status', 'Value': "RUNNING"}])
             except ClientError:
                 Console.error("Currently instance cant be started...Please try again")
             Console.msg("Starting Instance..Please wait...")
@@ -814,6 +827,48 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
             data['status'] = data['State']['Name']
             data.update(self.get_server_metadata(name))
         return data
+
+    def instance_is_reachable(self,instance_id=None):
+        '''
+        gets the information of a statuso of a VM with a given name, useful for when you want to check if the vm is ready for ssh
+        Note: describe_instance_status doesn't filter by tag , so we should use instance ID
+        :param name: name
+        :return:
+        '''
+
+        # example output:
+        # {'InstanceStatuses': [{'AvailabilityZone': 'us-east-2b',
+        #                        'InstanceId': 'i-0014150545f9da2ac',
+        #                        'InstanceState': {'Code': 16, 'Name': 'running'},
+        #                        'InstanceStatus': {'Details': [{'Name': 'reachability',
+        #                                                        'Status': 'passed'}],
+        #                                           'Status': 'ok'},
+        #                        'SystemStatus': {'Details': [{'Name': 'reachability', 'Status': 'passed'}],
+        #                                         'Status': 'ok'}}],
+        #  'ResponseMetadata': {'RequestId': 'a3161eab-386e-482c-873f-c12984262fd5',
+        #                       'HTTPStatusCode': 200,
+        #                       'HTTPHeaders': {'content-type': 'text/xml;charset=UTF-8',
+        #                                       'content-length': '1139',
+        #                                       'date': 'Fri, 20 Sep 2019 17:42:43 GMT',
+        #                                       'server': 'AmazonEC2'},
+        #                       'RetryAttempts': 0}}
+
+        # The Instance Reachability check confirms that we are able to deliver network packets to the operating system hosted on your instance.
+        #
+        # The System Reachability check confirms that we are able to get network packets to your instance.
+
+        if instance_id is None:
+            Console.error("Please provide instance_id ...")
+            return
+        if type(instance_id) != list :
+            instance_id = [instance_id]
+        instance_status = self.ec2_client.describe_instance_status(InstanceIds = instance_id) ['InstanceStatuses']
+        if (len(instance_status) > 0 ) :
+            status = instance_status[0]['InstanceStatus']['Details'][0]['Status']
+            if status.lower() == 'passed':
+                return True
+        return False
+
 
     def list(self):
 

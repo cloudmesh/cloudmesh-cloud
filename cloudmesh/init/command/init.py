@@ -2,6 +2,7 @@ import os.path
 import shutil
 from sys import platform
 from sys import exit
+from time import sleep
 
 from cloudmesh.common.StopWatch import StopWatch
 from cloudmesh.common.console import Console
@@ -13,6 +14,8 @@ from cloudmesh.mongo.MongoDBController import MongoDBController
 from cloudmesh.shell.command import PluginCommand
 from cloudmesh.shell.command import command, map_parameters
 from pathlib import Path
+from cloudmesh.common3.Shell import Shell as Shell3
+
 
 class InitCommand(PluginCommand):
 
@@ -60,8 +63,7 @@ class InitCommand(PluginCommand):
             config = Config()
             try:
                 print("MongoDB stop")
-                # MongoDBController().stop()
-                os.system("cms admin mongo stop")
+                MongoDBController().stop()
             except:
                 Console.ok("MongoDB is not running. ok")
             machine = platform.lower()
@@ -70,12 +72,11 @@ class InitCommand(PluginCommand):
                 shutil.rmtree(location)
                 print("MongoDB folder deleted")
             except:
-                os.system("cms admin mongo stop")
-                try:
-                    shutil.rmtree(location)
-                    print("MongoDB folder deleted")
-                except:
-                    Console.error(f"Could not delete {location}")
+                Console.error(f"Could not delete {location}")
+                if platform == 'win32':
+                    Console.error(f"Please try to run cms init again ... ")
+                    exit(1)
+
 
             user = Config()["cloudmesh.profile.user"]
             secgroup = "flask"

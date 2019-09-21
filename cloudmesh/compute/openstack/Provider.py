@@ -1121,3 +1121,10 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                 print("ERROR: %s" % error)
             else:
                 return result
+
+    def wait(self,
+             vm=None,
+             interval=None,
+             timeout=None):
+        raise NotImplementedError
+

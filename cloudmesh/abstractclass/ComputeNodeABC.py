@@ -148,7 +148,6 @@ class ComputeNodeABC(metaclass=ABCMeta):
         # if destination is None, increase the name counter and use the new name
         raise NotImplementedError
 
-    @abstractmethod
     def keys(self):
         """
         Lists the keys on the cloud
@@ -157,7 +156,6 @@ class ComputeNodeABC(metaclass=ABCMeta):
         """
         raise NotImplementedError
 
-    @abstractmethod
     def key_upload(self, key=None):
         """
         uploads the key specified in the yaml configuration to the cloud
@@ -166,7 +164,6 @@ class ComputeNodeABC(metaclass=ABCMeta):
         """
         raise NotImplementedError
 
-    @abstractmethod
     def key_delete(self, name=None):
         """
         deletes the key with the given name
@@ -175,7 +172,7 @@ class ComputeNodeABC(metaclass=ABCMeta):
         """
         raise NotImplementedError
 
-    @abstractmethod
+
     def images(self, **kwargs):
         """
         Lists the images on the cloud
@@ -183,7 +180,6 @@ class ComputeNodeABC(metaclass=ABCMeta):
         """
         raise NotImplementedError
 
-    @abstractmethod
     def image(self, name=None):
         """
         Gets the image with a given nmae
@@ -192,7 +188,6 @@ class ComputeNodeABC(metaclass=ABCMeta):
         """
         raise NotImplementedError
 
-    @abstractmethod
     def flavors(self, **kwargs):
         """
         Lists the flavors on the cloud
@@ -201,7 +196,6 @@ class ComputeNodeABC(metaclass=ABCMeta):
         """
         raise NotImplementedError
 
-    @abstractmethod
     def flavor(self, name=None):
         """
         Gets the flavor with a given name
@@ -210,7 +204,6 @@ class ComputeNodeABC(metaclass=ABCMeta):
         """
         raise NotImplementedError
 
-    @abstractmethod
     def reboot(self, name=None):
         """
         Reboot a list of nodes with the given names
@@ -220,7 +213,6 @@ class ComputeNodeABC(metaclass=ABCMeta):
         """
         raise NotImplementedError
 
-    @abstractmethod
     def attach_public_ip(self, name=None, ip=None):
         """
         adds a public ip to the named vm
@@ -230,7 +222,6 @@ class ComputeNodeABC(metaclass=ABCMeta):
         """
         raise NotImplementedError
 
-    @abstractmethod
     def detach_public_ip(self, name=None, ip=None):
         """
         adds a public ip to the named vm
@@ -240,7 +231,6 @@ class ComputeNodeABC(metaclass=ABCMeta):
         """
         raise NotImplementedError
 
-    @abstractmethod
     def delete_public_ip(self, ip=None):
         """
         Deletes the ip address
@@ -250,7 +240,6 @@ class ComputeNodeABC(metaclass=ABCMeta):
         """
         raise NotImplementedError
 
-    @abstractmethod
     def list_public_ips(self, available=False):
         """
         Lists the public ip addresses.
@@ -262,7 +251,6 @@ class ComputeNodeABC(metaclass=ABCMeta):
         """
         raise NotImplementedError
 
-    @abstractmethod
     def create_public_ip(self):
         """
         Creates a new public IP address to use
@@ -271,7 +259,6 @@ class ComputeNodeABC(metaclass=ABCMeta):
         """
         raise NotImplementedError
 
-    @abstractmethod
     def find_available_public_ip(self):
         """
         Returns a single public available ip address.
@@ -280,7 +267,6 @@ class ComputeNodeABC(metaclass=ABCMeta):
         """
         raise NotImplementedError
 
-    @abstractmethod
     def get_public_ip(self, name=None):
         """
         returns the public ip
@@ -290,7 +276,6 @@ class ComputeNodeABC(metaclass=ABCMeta):
         """
         raise NotImplementedError
 
-    @abstractmethod
     def list_secgroups(self, name=None):
         """
         List the named security group
@@ -299,7 +284,6 @@ class ComputeNodeABC(metaclass=ABCMeta):
         :return:
         """
 
-    @abstractmethod
     def list_secgroup_rules(self, name='default'):
         """
         List the named security group
@@ -309,19 +293,15 @@ class ComputeNodeABC(metaclass=ABCMeta):
         """
         raise NotImplementedError
 
-    @abstractmethod
     def upload_secgroup(self, name=None):
         raise NotImplementedError
 
-    @abstractmethod
     def list_secgroup_rules(self, name='default'):
         raise NotImplementedError
 
-    @abstractmethod
     def add_secgroup(self, name=None, description=None):
         raise NotImplementedError
 
-    @abstractmethod
     def add_secgroup_rule(self,
                           name=None,  # group name
                           port=None,
@@ -329,23 +309,18 @@ class ComputeNodeABC(metaclass=ABCMeta):
                           ip_range=None):
         raise NotImplementedError
 
-    @abstractmethod
     def remove_secgroup(self, name=None):
         raise NotImplementedError
 
-    @abstractmethod
     def upload_secgroup(self, name=None):
         raise NotImplementedError
 
-    @abstractmethod
     def add_rules_to_secgroup(self, name=None, rules=None):
         raise NotImplementedError
 
-    @abstractmethod
     def remove_rules_from_secgroup(self, name=None, rules=None):
         raise NotImplementedError
 
-    @abstractmethod
     def wait(self,
              vm=None,
              interval=None,
@@ -353,12 +328,11 @@ class ComputeNodeABC(metaclass=ABCMeta):
         raise NotImplementedError
         return False
 
-    @abstractmethod
+
     def console(self, vm=None):
         raise NotImplementedError
         return ""
 
-    @abstractmethod
     def log(self, vm=None):
         raise NotImplementedError
         return ""

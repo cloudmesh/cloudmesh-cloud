@@ -36,7 +36,7 @@ hostname
 uname -a
 ```
 
-maintin a queue or map so that you know wher what hs to be executed
+maintain a queue or map so that you know wher what hs to be executed
 
 queue:
 script.sh 1

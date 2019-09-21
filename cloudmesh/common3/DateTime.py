@@ -8,7 +8,6 @@ import calendar
 import pytz
 
 
-
 class DateTime(object):
 
     """

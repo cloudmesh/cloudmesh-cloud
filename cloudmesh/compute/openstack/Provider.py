@@ -1057,6 +1057,13 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                 found.append(ip)
         return found
 
+    def console(self, vm=None):
+        VERBOSE(vm)
+        server = vm['id']
+        VERBOSE(server)
+        return self.cloudman.get_server_console(server=server)
+
+
     def rename(self, name=None, destination=None):
         """
         rename a node. NOT YET IMPLEMENTED.

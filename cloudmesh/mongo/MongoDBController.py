@@ -331,8 +331,8 @@ class MongoDBController(object):
         if platform.lower() == 'win32':
             try:
                 script =  f"mongod {auth} --bind_ip {mongo_host}"\
-                          f" --dbpath {self.mongo_path} --logpath {self.mongo_log}\mongod.log"
-                print(script)
+                          f" --dbpath {self.mongo_path} --logpath {self.mongo_log}\mongod.log --install"
+                # print(script)
                 p = subprocess.Popen(script, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
                 result = "mongod child process started successfully."
             except Exception as e:
@@ -383,7 +383,7 @@ class MongoDBController(object):
         """
         if platform.lower() == 'win32': # don't remove this otherwise init won't work in windows, eval should start with double quote in windows
             script = """mongo --eval "db.getSiblingDB('admin').createUser({{ user:'{MONGO_USERNAME}',pwd:'{MONGO_PASSWORD}',roles:[{{role:'root',db:'admin'}}]}}) ; db.shutdownServer()" """.format(**self.data)
-            print(script)
+            # print(script)
             try:
                 # result = Shell3.run2(script)
                 p = subprocess.Popen(script, shell=True, stdout=subprocess.PIPE, stderr=STDOUT)

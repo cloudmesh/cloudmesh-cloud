@@ -330,11 +330,17 @@ class MongoDBController(object):
         mongo_host = self.data['MONGO_HOST']
         if platform.lower() == 'win32':
             try:
-                script =  f"mongod {auth} --bind_ip {mongo_host}"\
-                          f" --dbpath {self.mongo_path} --logpath {self.mongo_log}\mongod.log"
+                mongo_runner = f"mongod {auth} --bind_ip {mongo_host}" \
+                         f" --dbpath {self.mongo_path} --logpath {self.mongo_log}\mongod.log"
+                with open(f'{self.mongo_path}/invisible.vbs','w') as f :
+                    f.write('CreateObject("Wscript.Shell").Run """" & WScript.Arguments(0) & """", 0, False')
+                with open(f'{self.mongo_path}/mongo_starter.bat', 'w') as f:
+                    f.write(mongo_runner)
+
+                script = f'wscript.exe {self.mongo_path}/invisible.vbs {self.mongo_path}/mongo_starter.bat'
                 # print(script)
                 p = subprocess.Popen(script, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-                result = "mongod child process started successfully."
+                result = "mongod child process should be started successfully."
             except Exception as e:
                 result = "Mongo in windows could not be started: \n\n" + str(e)
         else:
@@ -346,7 +352,7 @@ class MongoDBController(object):
             except Exception as e:
                 result = "Mongo could not be started." + str(e)
 
-        if "child process started successfully" in result:
+        if "successfully" in result:
             print(Console.ok(result))
         else:
             print(Console.error(result))

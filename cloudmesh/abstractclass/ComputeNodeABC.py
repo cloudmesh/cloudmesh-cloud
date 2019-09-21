@@ -156,6 +156,7 @@ class ComputeNodeABC(metaclass=ABCMeta):
         """
         raise NotImplementedError
 
+    @abstractmethod
     def key_upload(self, key=None):
         """
         uploads the key specified in the yaml configuration to the cloud
@@ -321,6 +322,7 @@ class ComputeNodeABC(metaclass=ABCMeta):
     def remove_rules_from_secgroup(self, name=None, rules=None):
         raise NotImplementedError
 
+    @abstractmethod
     def wait(self,
              vm=None,
              interval=None,

@@ -438,5 +438,8 @@ class Provider(ComputeNodeABC):
     def console(self, vm=None):
         return self.p.console(vm=vm)
 
+    def wait(self, vm=None, interval=None , timeout=None):
+        return self.p.wait(vm=vm, interval=interval, timeout=timeout)
+
     def log(self, vm=None):
         return self.p.log(vm=vm)

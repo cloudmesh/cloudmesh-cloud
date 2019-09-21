@@ -71,6 +71,27 @@ class Test_provider_vm:
         status = provider.status(name=name)[0]
         assert status["cm.status"] in ['ACTIVE', 'BOOTING']
 
+    def test_provider_vm_wait(self):
+        HEADING()
+        name = str(Name())
+        Benchmark.Start()
+        cm = CmDatabase()
+        vm = cm.find_name(name, kind="vm")[0]
+        assert provider.wait(vm=vm), "cms wait timed out ..."
+        Benchmark.Stop()
+
+    def test_provider_vm_ssh(self):
+        HEADING()
+        name = str(Name())
+        Benchmark.Start()
+        cm = CmDatabase()
+        vm = cm.find_name(name, kind="vm")[0]
+        data = provider.ssh(vm=vm, command='whoami')
+        print(data)
+        assert 'ubuntu' in data.lower()
+        Benchmark.Stop()
+        VERBOSE(data)
+
     def test_provider_vm_info_first(self):
         '''
         This test sometime fails the first time, so we won't assert here, the asser is in the second implementation only
@@ -116,17 +137,7 @@ class Test_provider_vm:
         Benchmark.Stop()
         assert data["cm.status"] in ['ACTIVE', 'BOOTING', 'TERMINATED', 'STOPPED']
 
-    def test_provider_vm_ssh(self):
-        HEADING()
-        name = str(Name())
-        Benchmark.Start()
-        cm = CmDatabase()
-        vm = cm.find_name(name, kind="vm")[0]
-        data = provider.ssh(vm=vm, command='whoami')
-        print(data)
-        assert 'ubuntu' in data.lower()
-        Benchmark.Stop()
-        VERBOSE(data)
+
 
     def test_provider_vm_stop(self):
         HEADING()

@@ -1,6 +1,7 @@
 import os
 import subprocess
 from ast import literal_eval
+from time import sleep
 
 import openstack
 from cloudmesh.abstractclass.ComputeNodeABC import ComputeNodeABC
@@ -1126,5 +1127,18 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
              vm=None,
              interval=None,
              timeout=None):
-        raise NotImplementedError
+        if interval is None:
+            interval = 1
+        if timeout is None:
+            timeout = 30
+        instance_id = vm['instance_id']
+        Console.info(f"waiting for instance to be reachable: Interval: {interval}, Timeout: {timeout}")
+        timer = 0
+        while timer < timeout:
+            r = self.ssh(vm=vm,command='echo IAmReady').strip()
+            if 'IAmReady' in r:
+                return True
+            sleep(interval)
+            timer += interval
+        return False
 

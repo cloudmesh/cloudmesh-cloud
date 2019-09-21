@@ -1058,10 +1058,13 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         return found
 
     def console(self, vm=None):
-        VERBOSE(vm)
         server = vm['id']
-        VERBOSE(server)
         return self.cloudman.get_server_console(server=server)
+
+    def log(self, vm=None):
+        # same as console!!!!
+        server = vm['id']
+        return self.cloudman._get_server_console_output(server)
 
 
     def rename(self, name=None, destination=None):

@@ -437,3 +437,6 @@ class Provider(ComputeNodeABC):
 
     def console(self, vm=None):
         return self.p.console(vm=vm)
+
+    def log(self, vm=None):
+        return self.p.log(vm=vm)

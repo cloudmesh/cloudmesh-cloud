@@ -37,6 +37,7 @@ class VmCommand(PluginCommand):
                 vm check [NAMES] [--cloud=CLOUDS] [--username=USERNAME]
                 vm status [NAMES] [--cloud=CLOUDS] [--output=OUTPUT]
                 vm console [NAME] [--force]
+                vm log [NAME] [--force]
                 vm stop [NAMES]  [--dryrun]
                 vm start [NAMES] [--dryrun]
                 vm terminate [NAMES] [--cloud=CLOUD] [--dryrun]
@@ -879,6 +880,32 @@ class VmCommand(PluginCommand):
                         Console.error(f"could not find vm {name}")
                         continue
                     r = p.console(vm=vm)
+                    print(r)
+
+            return""
+
+        elif arguments.log:
+
+            # why is this not vm
+            clouds, names, command = Arguments.get_commands("ssh",
+                                                            arguments,
+                                                            variables)
+
+            print (clouds)
+            print (names)
+            print (command)
+
+
+            for cloud in clouds:
+                p = Provider(cloud)
+                for name in names:
+                    cm = CmDatabase()
+                    try:
+                        vm = cm.find_name(name, "vm")[0]
+                    except IndexError:
+                        Console.error(f"could not find vm {name}")
+                        continue
+                    r = p.log(vm=vm)
                     print(r)
 
             return""

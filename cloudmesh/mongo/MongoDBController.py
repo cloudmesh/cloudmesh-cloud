@@ -369,10 +369,12 @@ class MongoDBController(object):
             p1 = subprocess.Popen(script, shell=True , stdout=subprocess.PIPE, stderr=STDOUT)
             shutdown_with_auth = """mongo -u {MONGO_USERNAME} -p {MONGO_PASSWORD} --eval "db.getSiblingDB(\'admin\').shutdownServer()" """.format(
                 **self.data)
+            # print(shutdown_with_auth)
+            # print(script)
             p2 = subprocess.Popen(shutdown_with_auth, shell=True, stdout=subprocess.PIPE, stderr=STDOUT)
             r1 = p1.stdout.read().decode('utf-8')
             r2 = p2.stdout.read().decode('utf-8')
-            if 'server should be down...' in r1 or 'server should be down...' in r2 :
+            if 'server should be down...' in r1 or 'connect failed' in r2 :
                 result = 'server should be down...'
             else:
                 result = 'server is already down...'

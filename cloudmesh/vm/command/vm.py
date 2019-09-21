@@ -85,7 +85,7 @@ class VmCommand(PluginCommand):
                 vm put SOURCE DESTINATION [NAMES]
                 vm get SOURCE DESTINATION [NAMES]
                 vm rename [OLDNAMES] [NEWNAMES] [--force] [--dryrun]
-                vm wait [--cloud=CLOUD] [--interval=SECONDS]
+                vm wait [--cloud=CLOUD] [--interval=INTERVAL] [--timeout=TIMEOUT]
                 vm info [--cloud=CLOUD]
                         [--output=OUTPUT]
                 vm username USERNAME [NAMES] [--cloud=CLOUD]
@@ -249,6 +249,7 @@ class VmCommand(PluginCommand):
                        'group',
                        'image',
                        'interval',
+                       'timeout',
                        'ip',
                        'key',
                        'modify-knownhosts',
@@ -908,11 +909,33 @@ class VmCommand(PluginCommand):
                     r = p.log(vm=vm)
                     print(r)
 
-            return""
+            return ""
 
         elif arguments.wait:
-            raise NotImplementedError
             """
-            vm wait [--cloud=CLOUD] [--interval=SECONDS]
+            vm wait [--cloud=CLOUD] [--interval=INTERVAL] [--timeout=TIMEOUT]
             """
-            print("waits for the vm till its ready and one can login")
+
+            # why is this not vm
+            clouds, names, command = Arguments.get_commands("ssh",
+                                                            arguments,
+                                                            variables)
+
+            print (clouds)
+            print (names)
+            print (command)
+
+
+            for cloud in clouds:
+                p = Provider(cloud)
+                for name in names:
+                    cm = CmDatabase()
+                    try:
+                        vm = cm.find_name(name, "vm")[0]
+                    except IndexError:
+                        Console.error(f"could not find vm {name}")
+                        continue
+                    r = p.wait(vm=vm,interval=arguments.interval, timeout=arguments.timeout)
+                    print(r)
+
+            return ""

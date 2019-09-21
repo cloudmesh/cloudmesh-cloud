@@ -1131,13 +1131,16 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
             interval = 1
         if timeout is None:
             timeout = 30
-        instance_id = vm['instance_id']
         Console.info(f"waiting for instance to be reachable: Interval: {interval}, Timeout: {timeout}")
         timer = 0
         while timer < timeout:
-            r = self.ssh(vm=vm,command='echo IAmReady').strip()
-            if 'IAmReady' in r:
-                return True
+            try:
+                r = self.list()
+                r = self.ssh(vm=vm,command='echo IAmReady').strip()
+                if 'IAmReady' in r:
+                    return True
+            except:
+                pass
             sleep(interval)
             timer += interval
         return False

@@ -1127,11 +1127,12 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
              vm=None,
              interval=None,
              timeout=None):
+        name =  vm['name']
         if interval is None:
             interval = 1
         if timeout is None:
             timeout = 30
-        Console.info(f"waiting for instance to be reachable: Interval: {interval}, Timeout: {timeout}")
+        Console.info(f"waiting for instance {name} to be reachable: Interval: {interval}, Timeout: {timeout}")
         timer = 0
         while timer < timeout:
             try:

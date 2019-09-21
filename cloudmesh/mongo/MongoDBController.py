@@ -331,7 +331,7 @@ class MongoDBController(object):
         if platform.lower() == 'win32':
             try:
                 script =  f"mongod {auth} --bind_ip {mongo_host}"\
-                          f" --dbpath {self.mongo_path} --logpath {self.mongo_log}\mongod.log --install"
+                          f" --dbpath {self.mongo_path} --logpath {self.mongo_log}\mongod.log"
                 # print(script)
                 p = subprocess.Popen(script, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
                 result = "mongod child process started successfully."
@@ -360,9 +360,13 @@ class MongoDBController(object):
         # TODO: there  could be more mongos running, be more specific
         if platform.lower() == 'win32':
             script = 'mongo --eval "db.getSiblingDB(\'admin\').shutdownServer()"'
-            p = subprocess.Popen(script, shell=True , stdout=subprocess.PIPE, stderr=STDOUT)
-            result = p.stdout.read().decode('utf-8')
-            if 'server should be down...' in result:
+            p1 = subprocess.Popen(script, shell=True , stdout=subprocess.PIPE, stderr=STDOUT)
+            shutdown_with_auth = """mongo -u {MONGO_USERNAME} -p {MONGO_PASSWORD} --eval "db.getSiblingDB(\'admin\').shutdownServer()" """.format(
+                **self.data)
+            p2 = subprocess.Popen(shutdown_with_auth, shell=True, stdout=subprocess.PIPE, stderr=STDOUT)
+            r1 = p1.stdout.read().decode('utf-8')
+            r2 = p2.stdout.read().decode('utf-8')
+            if 'server should be down...' in r1 or 'server should be down...' in r2 :
                 result = 'server should be down...'
             else:
                 result = 'server is already down...'

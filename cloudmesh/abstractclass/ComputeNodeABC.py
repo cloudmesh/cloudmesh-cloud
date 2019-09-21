@@ -320,3 +320,19 @@ class ComputeNodeABC(metaclass=ABCMeta):
 
     def remove_rules_from_secgroup(self, name=None, rules=None):
         raise NotImplementedError
+
+    def wait(self,
+             vm=None,
+             interval=None,
+             timeout=None):
+        raise NotImplementedError
+        return False
+
+
+    def console(self, vm=None):
+        raise NotImplementedError
+        return ""
+
+    def log(self, vm=None):
+        raise NotImplementedError
+        return ""

@@ -17,13 +17,13 @@ class SecgroupExamples:
             "default": {
                 "description": "Default security group",
                 "rules": [
-                    "ssh", "icmp"
+                    "ssh", "icmp", "http", "https"
                 ]
             },
             "flask": {
                 "description": "Flask security group",
                 "rules": [
-                    "ssh", "icmp", "https", "flask"
+                    "ssh", "icmp", "http", "https", "flask"
                 ]
             }
         }

@@ -262,6 +262,13 @@ class KeyCommand(PluginCommand):
             # Step 0. Set keyname to variable
             #
 
+            if names is None or len(names) == 0:
+
+                config = Config()
+                username = config["cloudmesh.profile.user"]
+                names = [username]
+
+
             if len(names) == 1:
                 name = names[0]
                 variables = Variables()

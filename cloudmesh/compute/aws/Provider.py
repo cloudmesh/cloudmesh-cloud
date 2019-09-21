@@ -565,6 +565,24 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
             Console.error(e)
         Console.msg(response)
 
+    def wait(self,
+             vm=None,
+             interval=None,
+             timeout=None):
+        if interval is None:
+            interval = 1
+        if timeout is None:
+            timeout = 30
+        instance_id = vm['instance_id']
+        Console.info(f"waiting for instance to be reachable: Interval: {interval}, Timeout: {timeout}")
+        timer = 0
+        while  timer < timeout :
+            if self.instance_is_reachable(instance_id):
+                return True
+            sleep(interval)
+            timer += interval
+        return False
+
     def ssh(self, vm=None, command=None):
 
         def key_selector(keys):
@@ -596,15 +614,15 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
         cm = CmDatabase()
         ip = vm['public_ips']
-        instance_id = vm['instance_id']
-        timeout = 30
-        Console.info("Checking instance reachability ... (timeout 30seconds) ")
-        timer = 0
-        while  timer < 30 :
-            if self.instance_is_reachable(instance_id):
-                break
-            sleep(0.4)
-            timer += 0.4
+        # instance_id = vm['instance_id']
+        # timeout = 30
+        # Console.info("Checking instance reachability ... (timeout 30seconds) ")
+        # timer = 0
+        # while  timer < 30 :
+        #     if self.instance_is_reachable(instance_id):
+        #         break
+        #     sleep(0.4)
+        #     timer += 0.4
 
         try:
             key_name = vm['KeyName']
@@ -1165,6 +1183,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
             VERBOSE(e)
             raise ValueError # this is raised because key.py catches valueerror
         return r
+
 
     def key_delete(self, name=None):
 

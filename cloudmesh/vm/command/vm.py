@@ -921,9 +921,9 @@ class VmCommand(PluginCommand):
                                                             arguments,
                                                             variables)
 
-            print (clouds)
-            print (names)
-            print (command)
+            # print (clouds)
+            # print (names)
+            # print (command)
 
 
             for cloud in clouds:
@@ -936,6 +936,10 @@ class VmCommand(PluginCommand):
                         Console.error(f"could not find vm {name}")
                         continue
                     r = p.wait(vm=vm,interval=arguments.interval, timeout=arguments.timeout)
-                    print(r)
+                    if r:
+                        Console.ok("Instance available for SSH")
+                    else:
+                        Console.error(f"Instance unavailable after timeout of {arguments.timeout}")
+                    # print(r)
 
             return ""

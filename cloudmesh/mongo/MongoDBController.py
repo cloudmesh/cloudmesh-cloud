@@ -94,7 +94,8 @@ class MongoInstaller(object):
             # print(f"Auto-install the MongoDB into {mongo_path}")
 
             self.data["MONGO_CODE"] = self.data["MONGO_DOWNLOAD"][platform]
-
+            self.mongo_code = self.data["MONGO_CODE"]
+            self.local = self.data["LOCAL"]
             if platform.lower() == 'linux':
                 self.linux(sudo=sudo)
             elif platform.lower() == 'darwin':
@@ -115,15 +116,16 @@ class MongoInstaller(object):
             sudo_command = "sudo"
         else:
             sudo_command = ""
-        script = f"{sudo_command} " + """
+
+        script = f"{sudo_command} " + f"""
         apt-get --yes install libcurl4 openssl
         mkdir -p {self.mongo_path}
         mkdir -p {self.mongo_home}
         mkdir -p {self.mongo_log}
-        wget -q -O /tmp/mongodb.tgz {MONGO_CODE}
-        tar -zxvf /tmp/mongodb.tgz -C {LOCAL}/mongo --strip 1
+        wget -q -O /tmp/mongodb.tgz {self.mongo_code}
+        tar -zxvf /tmp/mongodb.tgz -C {self.local}/mongo --strip 1
         echo \"export PATH={self.mongo_home}/bin:$PATH\" >> ~/.bashrc
-            """.format(**self.data)
+            """
         installer = Script.run(script)
 
     # noinspection PyUnusedLocal
@@ -139,12 +141,12 @@ class MongoInstaller(object):
             SystemPath.add("{path}".format(path=path))
 
         else:
-            script = """
+            script = f"""
             mkdir -p {self.mongo_path}
             mkdir -p {self.mongo_home}
             mkdir -p {self.mongo_log}
-            curl -o /tmp/mongodb.tgz {MONGO_CODE}
-            tar -zxvf /tmp/mongodb.tgz -C {LOCAL}/mongo --strip 1
+            curl -o /tmp/mongodb.tgz {self.mongo_code}
+            tar -zxvf /tmp/mongodb.tgz -C {self.local}/mongo --strip 1
             """.format(**self.data)
             installer = Script.run(script)
             SystemPath.add("{self.mongo_home}/bin".format(**self.data))
@@ -161,11 +163,11 @@ class MongoInstaller(object):
         # self.data["MONGO_LOG"] = self.data["MONGO_LOG"].replace("/", "\\")
 
         # noinspection PyPep8
-        script = """
+        script = f"""
         mkdir {self.mongo_path}
         mkdir {self.mongo_home}
         mkdir {self.mongo_log}
-        msiexec.exe /l*v {self.mongo_log}/mdbinstall.log  /qb /i {MONGO_CODE} INSTALLLOCATION={self.mongo_path} ADDLOCAL="all"
+        msiexec.exe /l*v {self.mongo_log}/mdbinstall.log  /qb /i {self.mongo_code} INSTALLLOCATION={self.mongo_path} ADDLOCAL="all"
         """.format(**self.data)
         installer = Script.run(script)
 
@@ -311,10 +313,11 @@ class MongoDBController(object):
             self.stop()
 
     def import_collection(self,  security=True):
+        mongo_host = self.data['MONGO_HOST']
         auth = ""
         if security:
             auth = "--auth"
-        command = "mongoimport {auth} --bind_ip {MONGO_HOST} --dbpath {self.mongo_path} --logpath {self.mongo_log}/mongod.log" \
+        command = f"mongoimport {auth} --bind_ip {mongo_host} --dbpath {self.mongo_path} --logpath {self.mongo_log}/mongod.log" \
              " --fork".format(**self.data, auth=auth)
 
     def start(self, security=True):
@@ -327,14 +330,17 @@ class MongoDBController(object):
         mongo_host = self.data['MONGO_HOST']
         if platform.lower() == 'win32':
             try:
-                script =  f"mongod {auth} --bind_ip {mongo_host} --dbpath {self.mongo_path} --logpath {self.mongo_log}\mongod.log"
+                script =  f"mongod {auth} --bind_ip {mongo_host}"\
+                          f" --dbpath {self.mongo_path} --logpath {self.mongo_log}\mongod.log"
+                print(script)
                 p = subprocess.Popen(script, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
                 result = "mongod child process started successfully."
             except Exception as e:
                 result = "Mongo in windows could not be started: \n\n" + str(e)
         else:
             try:
-                script = f"mongod {auth} --bind_ip {mongo_host} --dbpath {self.mongo_path} --logpath {self.mongo_log}/mongod.log --fork"
+                script = f"mongod {auth} --bind_ip {mongo_host}"\
+                         f" --dbpath {self.mongo_path} --logpath {self.mongo_log}/mongod.log --fork"
                 result = Script.run(script)
 
             except Exception as e:
@@ -377,6 +383,7 @@ class MongoDBController(object):
         """
         if platform.lower() == 'win32': # don't remove this otherwise init won't work in windows, eval should start with double quote in windows
             script = """mongo --eval "db.getSiblingDB('admin').createUser({{ user:'{MONGO_USERNAME}',pwd:'{MONGO_PASSWORD}',roles:[{{role:'root',db:'admin'}}]}}) ; db.shutdownServer()" """.format(**self.data)
+            print(script)
             try:
                 # result = Shell3.run2(script)
                 p = subprocess.Popen(script, shell=True, stdout=subprocess.PIPE, stderr=STDOUT)

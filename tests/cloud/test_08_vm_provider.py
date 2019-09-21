@@ -7,6 +7,7 @@
 # TODO: assertuons need to be added
 
 import pytest
+from time import sleep
 from cloudmesh.common.debug import VERBOSE
 from cloudmesh.common.util import HEADING
 from cloudmesh.common.variables import Variables
@@ -70,13 +71,41 @@ class Test_provider_vm:
         status = provider.status(name=name)[0]
         assert status["cm.status"] in ['ACTIVE', 'BOOTING']
 
+    def test_provider_vm_info_first(self):
+        '''
+        This test sometime fails the first time, so we won't assert here, the asser is in the second implementation only
+        :return:
+        '''
+        HEADING()
+        Benchmark.Start()
+        data = provider.info(name=name)[0]
+        if cloud == 'aws' and 'cm' not in data: # aws might need a few seconds to get the info updated
+            sleep(5)
+            data = provider.info(name=name)[0]
+        Benchmark.Stop()
+
     def test_provider_vm_info(self):
         HEADING()
         Benchmark.Start()
         data = provider.info(name=name)[0]
+        if cloud == 'aws' and 'cm' not in data: # aws might need a few seconds to get the info updated
+            sleep(5)
+            data = provider.info(name=name)[0]
         Benchmark.Stop()
         print(data)
         assert data["cm"]["status"] in ['ACTIVE', 'BOOTING', 'TERMINATED', 'STOPPED']
+
+    def test_vm_status(self):
+        '''
+        This test sometime fails the first time, so we won't assert here, the asser is in the second implementation only
+        :return:
+        '''
+        HEADING()
+        name = str(Name())
+        Benchmark.Start()
+        data = provider.status(name=name)[0]
+        print(data)
+        Benchmark.Stop()
 
     def test_vm_status(self):
         HEADING()

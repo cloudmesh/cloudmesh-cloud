@@ -209,6 +209,8 @@ class Provider(ComputeNodeABC):
 
         VERBOSE(created)
 
+        self.list()
+
         return created
 
 
@@ -432,3 +434,6 @@ class Provider(ComputeNodeABC):
     def ssh(self, vm=None, command=None):
         # VERBOSE(vm)
         return self.p.ssh(vm=vm, command=command)
+
+    def console(self, vm=None):
+        return self.p.console(vm=vm)

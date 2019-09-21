@@ -858,15 +858,30 @@ class VmCommand(PluginCommand):
             return ""
 
         elif arguments.console:
-            raise NotImplementedError
-            # vm console [NAME] [--force]
 
-            names = Arguments.get_names(arguments, variables)
+            # why is this not vm
+            clouds, names, command = Arguments.get_commands("ssh",
+                                                            arguments,
+                                                            variables)
 
-            for name in names:
-                # r = vm.console(name,force=argument.force)
-                Console.msg("{label} {name}".format(label="console", name=name))
-            return
+            print (clouds)
+            print (names)
+            print (command)
+
+
+            for cloud in clouds:
+                p = Provider(cloud)
+                for name in names:
+                    cm = CmDatabase()
+                    try:
+                        vm = cm.find_name(name, "vm")[0]
+                    except IndexError:
+                        Console.error(f"could not find vm {name}")
+                        continue
+                    r = p.console(vm=vm)
+                    print(r)
+
+            return""
 
         elif arguments.wait:
             raise NotImplementedError

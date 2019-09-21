@@ -1131,7 +1131,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         if interval is None:
             interval = 1
         if timeout is None:
-            timeout = 30
+            timeout = 360
         Console.info(f"waiting for instance {name} to be reachable: Interval: {interval}, Timeout: {timeout}")
         timer = 0
         while timer < timeout:

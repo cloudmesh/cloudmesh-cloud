@@ -122,3 +122,6 @@ class Test_cm_find:
             regex=".*-vm")
         print(collections)
         assert len(collections) == 2
+
+    def test_benchmark(self):
+        Benchmark.print(sysinfo=False, csv=True, tag=cloud)

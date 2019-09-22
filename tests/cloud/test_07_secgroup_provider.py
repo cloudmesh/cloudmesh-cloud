@@ -142,5 +142,5 @@ class Test_secgroup_provider:
         provider.Print(output='json', kind="secgroup", data=g)
 
     def test_benchmark(self):
-        Benchmark.print(sysinfo=False, csv=False, tag=cloud)
+        Benchmark.print(sysinfo=False, csv=True, tag=cloud)
 

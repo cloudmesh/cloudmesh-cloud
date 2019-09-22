@@ -71,4 +71,4 @@ class Test_Flavor:
         Benchmark.Stop()
 
     def test_benchmark(self):
-        Benchmark.print(sysinfo=False, csv=False, tag=cloud)
+        Benchmark.print(sysinfo=False, csv=True, tag=cloud)

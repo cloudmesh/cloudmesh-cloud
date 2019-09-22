@@ -84,4 +84,4 @@ class Test_Key:
         assert found
 
     def test_benchmark(self):
-        Benchmark.print(sysinfo=False, csv=False, tag=cloud)
+        Benchmark.print(sysinfo=False, csv=True, tag=cloud)

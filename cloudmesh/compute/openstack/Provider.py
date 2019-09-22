@@ -2,6 +2,8 @@ import os
 import subprocess
 from ast import literal_eval
 from time import sleep
+from sys import platform
+import ctypes
 
 import openstack
 from cloudmesh.abstractclass.ComputeNodeABC import ComputeNodeABC
@@ -174,24 +176,25 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
         if output == "table":
             if kind == "secrule":
-
+                # this is just a temporary fix, both in sec.py and here the secgruops and secrules should be separated
                 result = []
                 for group in data:
-                    for rule in group['security_group_rules']:
-                        rule['name'] = group['name']
-                        result.append(rule)
+                    # for rule in group['security_group_rules']:
+                    #     rule['name'] = group['name']
+                    result.append(group)
                 data = result
 
             order = self.output[kind]['order']  # not pretty
             header = self.output[kind]['header']  # not pretty
-            humanize = self.output[kind]['humanize']  # not pretty
+            # humanize = self.output[kind]['humanize']  # not pretty
 
             print(Printer.flatwrite(data,
                                     sort_keys=["name"],
                                     order=order,
                                     header=header,
                                     output=output,
-                                    humanize=humanize)
+                                    # humanize=humanize
+                                    )
                   )
         else:
             print(Printer.write(data, output=output))
@@ -502,22 +505,24 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
             self.add_secgroup(name=name, description=group['description'])
 
             for r in group['rules']:
-                found = data[r]
-                print("    ", "rule:", found['name'])
-                self.add_secgroup_rule(
-                    name=name,
-                    port=found["ports"],
-                    protocol=found["protocol"],
-                    ip_range=found["ip_range"])
+                if r != 'nothing':
+                    found = data[r]
+                    print("    ", "rule:", found['name'])
+                    self.add_secgroup_rule(
+                        name=name,
+                        port=found["ports"],
+                        protocol=found["protocol"],
+                        ip_range=found["ip_range"])
 
         else:
 
             for r in group['rules']:
-                found = data[r]
-                print("    ", "rule:", found['name'])
-                self.add_rules_to_secgroup(
-                    name=name,
-                    rules=[found['name']])
+                if r != 'nothing':
+                    found = data[r]
+                    print("    ", "rule:", found['name'])
+                    self.add_rules_to_secgroup(
+                        name=name,
+                        rules=[found['name']])
 
     # ok
     def add_rules_to_secgroup(self, name=None, rules=None):
@@ -659,7 +664,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         :return:  A list of dict representing the nodes
         """
         server = self.cloudman.get_server(name)['id']
-        r = dict(self.cloudman.compute.stop_server(server))
+        r = self.cloudman.compute.stop_server(server)
         return r
 
     def pause(self, name=None):
@@ -1092,7 +1097,14 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         user = Image.guess_username(image)
 
         cm = CmDatabase()
-        key = cm.find_name(name=key_name, kind="key")[0]['location']['private']
+
+        keys = cm.find_all_by_name(name=key_name, kind="key")
+        for k in keys:
+            if 'location' in k.keys():
+                if 'private' in k['location'].keys():
+                    key = k['location']['private']
+                    break
+
         cm.close_client()
 
         if command is None:
@@ -1110,9 +1122,42 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         # VERBOSE(cmd)
 
         if command == "":
-            os.system(cmd)
+            if platform.lower() == 'win32':
+                class disable_file_system_redirection:
+                    _disable = ctypes.windll.kernel32.Wow64DisableWow64FsRedirection
+                    _revert = ctypes.windll.kernel32.Wow64RevertWow64FsRedirection
+
+                    def __enter__(self):
+                        self.old_value = ctypes.c_long()
+                        self.success = self._disable(ctypes.byref(self.old_value))
+
+                    def __exit__(self, type, value, traceback):
+                        if self.success:
+                            self._revert(self.old_value)
+                with disable_file_system_redirection():
+                    os.system(cmd)
+            else:
+                os.system(cmd)
         else:
-            ssh = subprocess.Popen(cmd,
+            if platform.lower() == 'win32':
+                class disable_file_system_redirection:
+                    _disable = ctypes.windll.kernel32.Wow64DisableWow64FsRedirection
+                    _revert = ctypes.windll.kernel32.Wow64RevertWow64FsRedirection
+
+                    def __enter__(self):
+                        self.old_value = ctypes.c_long()
+                        self.success = self._disable(ctypes.byref(self.old_value))
+
+                    def __exit__(self, type, value, traceback):
+                        if self.success:
+                            self._revert(self.old_value)
+                with disable_file_system_redirection():
+                    ssh = subprocess.Popen(cmd,
+                                           shell=True,
+                                           stdout=subprocess.PIPE,
+                                           stderr=subprocess.PIPE)
+            else:
+                ssh = subprocess.Popen(cmd,
                                    shell=True,
                                    stdout=subprocess.PIPE,
                                    stderr=subprocess.PIPE)
@@ -1129,12 +1174,15 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
              timeout=None):
         name =  vm['name']
         if interval is None:
-            interval = 1
+            # if interval is too low, OS will block your ip (I think)
+            interval = 10
         if timeout is None:
             timeout = 360
         Console.info(f"waiting for instance {name} to be reachable: Interval: {interval}, Timeout: {timeout}")
         timer = 0
         while timer < timeout:
+            sleep(interval)
+            timer += interval
             try:
                 r = self.list()
                 r = self.ssh(vm=vm,command='echo IAmReady').strip()
@@ -1142,7 +1190,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                     return True
             except:
                 pass
-            sleep(interval)
-            timer += interval
+
+
         return False
 

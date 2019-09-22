@@ -94,7 +94,7 @@ class Test_secgroup_provider:
 
     def test_secgroups_add(self):
         HEADING()
-        name = "Saurabh_Sec_Group"
+        name = "Test_Sec_Group"
         Benchmark.Start()
         provider.add_secgroup(name=name)
         Benchmark.Stop()
@@ -103,7 +103,7 @@ class Test_secgroup_provider:
 
     def test_upload_secgroup(self):
         HEADING()
-        name = "Saurabh_Sec_Group2"
+        name = "Test_Sec_Group2"
         Benchmark.Start()
         provider.upload_secgroup(name=name)
         Benchmark.Stop()
@@ -112,25 +112,33 @@ class Test_secgroup_provider:
 
     def test_secgroups_delete(self):
         HEADING()
-        name = "Saurabh_Sec_Group2"
+        name = "Test_Sec_Group2"
         Benchmark.Start()
         provider.remove_secgroup(name=name)
         Benchmark.Stop()
         groups = provider.list_secgroups()
+        if cloud == 'aws':
+            group_indicator= 'GroupName'
+        elif cloud == 'chameleon':
+            group_indicator = 'name'
         for e in groups:
-            print(e['GroupName'])
+            print(e[group_indicator])
         provider.Print(output='json', kind="secgroup", data= groups)
 
 
     def test_secgroups_delete_again(self):
         HEADING()
-        name = "Saurabh_Sec_Group2"
+        name = "Test_Sec_Group2"
         Benchmark.Start()
         provider.remove_secgroup(name=name)
         Benchmark.Stop()
         g = provider.list_secgroups()
+        if cloud == 'aws':
+            group_indicator= 'GroupName'
+        elif cloud == 'chameleon':
+            group_indicator = 'name'
         for e in g:
-            print(e['GroupName'])
+            print(e[group_indicator])
         provider.Print(output='json', kind="secgroup", data=g)
 
     def test_benchmark(self):

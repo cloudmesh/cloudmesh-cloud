@@ -51,14 +51,6 @@ current_vms = 0
 @pytest.mark.incremental
 class Test_provider_vm:
 
-    def test_provider_vmprovider_vm_list(self):
-        HEADING()
-        Benchmark.Start()
-        data = provider.list()
-        assert len(data) > 0
-        Benchmark.Stop()
-        Print(data)
-
     def test_provider_vm_create(self):
         HEADING()
         name_generator.incr()
@@ -70,6 +62,15 @@ class Test_provider_vm:
         name = str(Name())
         status = provider.status(name=name)[0]
         assert status["cm.status"] in ['ACTIVE', 'BOOTING']
+
+    def test_provider_vmprovider_vm_list(self):
+        # list should be after create() since it would return empty and len(data) would be 0
+        HEADING()
+        Benchmark.Start()
+        data = provider.list()
+        assert len(data) > 0
+        Benchmark.Stop()
+        Print(data)
 
     def test_provider_vm_wait(self):
         HEADING()
@@ -86,45 +87,18 @@ class Test_provider_vm:
         Benchmark.Start()
         cm = CmDatabase()
         vm = cm.find_name(name, kind="vm")[0]
-        data = provider.ssh(vm=vm, command='whoami')
+        data = provider.ssh(vm=vm, command='echo IAmAlive')
         print(data)
-        assert 'ubuntu' in data.lower()
+        assert 'IAmAlive' in data
         Benchmark.Stop()
         VERBOSE(data)
 
-    def test_provider_vm_info_first(self):
-        '''
-        This test sometime fails the first time, so we won't assert here, the asser is in the second implementation only
-        :return:
-        '''
-        HEADING()
-        Benchmark.Start()
-        data = provider.info(name=name)[0]
-        if cloud == 'aws' and 'cm' not in data: # aws might need a few seconds to get the info updated
-            sleep(5)
-            data = provider.info(name=name)[0]
-        Benchmark.Stop()
-
     def test_provider_vm_info(self):
+        # This is just a dry run, status test actually uses info() in all provider
         HEADING()
         Benchmark.Start()
-        data = provider.info(name=name)[0]
-        if cloud == 'aws' and 'cm' not in data: # aws might need a few seconds to get the info updated
-            sleep(5)
-            data = provider.info(name=name)[0]
-        Benchmark.Stop()
-        print(data)
-        assert data["cm"]["status"] in ['ACTIVE', 'BOOTING', 'TERMINATED', 'STOPPED']
-
-    def test_vm_status(self):
-        '''
-        This test sometime fails the first time, so we won't assert here, the asser is in the second implementation only
-        :return:
-        '''
-        HEADING()
-        name = str(Name())
-        Benchmark.Start()
-        data = provider.status(name=name)[0]
+        data = provider.info(name=name)
+        print ("dry run info():")
         print(data)
         Benchmark.Stop()
 
@@ -132,12 +106,12 @@ class Test_provider_vm:
         HEADING()
         name = str(Name())
         Benchmark.Start()
-        data = provider.status(name=name)[0]
+        data = provider.status(name=name)
+        if type(data) == list:
+            data = data[0]
         print(data)
         Benchmark.Stop()
         assert data["cm.status"] in ['ACTIVE', 'BOOTING', 'TERMINATED', 'STOPPED']
-
-
 
     def test_provider_vm_stop(self):
         HEADING()
@@ -145,10 +119,17 @@ class Test_provider_vm:
         Benchmark.Start()
         data = provider.stop(name=name)
         Benchmark.Stop()
+        stop_timeout = 360
+        time = 0
+        while time <= stop_timeout:
+            sleep(5)
+            time += 5
+            status = provider.status(name=name)[0]
+            if status["cm.status"] in ['STOPPED','SHUTOFF']:
+                break
         VERBOSE(data)
-        status = provider.status(name=name)[0]
         print(status)
-        assert status["cm.status"] in ['STOPPED']
+        assert status["cm.status"] in ['STOPPED','SHUTOFF']
 
     def test_provider_vm_start(self):
         HEADING()
@@ -156,8 +137,15 @@ class Test_provider_vm:
         Benchmark.Start()
         data = provider.start(name=name)
         Benchmark.Stop()
+        start_timeout = 360
+        time = 0
+        while time <= start_timeout:
+            sleep(5)
+            time += 5
+            status = provider.status(name=name)[0]
+            if status["cm.status"] in ['ACTIVE', 'BOOTING', 'RUNNING']:
+                break
         VERBOSE(data)
-        status = provider.status(name=name)[0]
         print(status)
         assert status["cm.status"] in ['ACTIVE', 'BOOTING', 'RUNNING']
 
@@ -170,11 +158,25 @@ class Test_provider_vm:
         data = provider.destroy(name=name)
         Benchmark.Stop()
         status = provider.status(name=name)[0]
-        print(status)
-        print(data)
-        data = provider.info(name=name)
+        termination_timeout = 360
+        time = 0
+        while time <= termination_timeout:
+            sleep(5)
+            time += 5
+            if cloud == 'chameleon' and len(provider.info(name=name)) == 0:
+                break
+            elif cloud=='aws' and  (len(provider.info(name=name)) == 0 or provider.info(name=name)[0]["cm"]["status"] in ['TERMINATED']):
+                break
+        print(provider.info(name=name))
+        if cloud == 'chameleon':
+            assert len(provider.info(name=name)) == 0
+        elif cloud == 'aws':
+            assert len(data) == 0 or ( data[0]["cm"]["status"] in ['BOOTING','TERMINATED'] if data and data[0].get('cm',None) is not None else True)
+        else:
+            raise NotImplementedError
+        # data = provider.info(name=name)
         #below cm.status check required as in aws it takes a while to clear list from you account after terminating vm
-        assert len(data) == 0 or ( data[0]["cm"]["status"] in ['BOOTING','TERMINATED'] if data and data[0].get('cm',None) is not None else True)
+        # assert len(data) == 0 or ( data[0]["cm"]["status"] in ['BOOTING','TERMINATED'] if data and data[0].get('cm',None) is not None else True)
 
     def test_benchmark(self):
         Benchmark.print(sysinfo=False, csv=True, tag=cloud)

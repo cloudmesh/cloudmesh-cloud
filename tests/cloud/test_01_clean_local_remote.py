@@ -46,12 +46,13 @@ class Test_Clean_Local_Remote:
         try:
             keys = provider.keys()
             Benchmark.Start()
-            if cloud == 'aws':
-                for key in keys:
-                    r = provider.key_delete(key['KeyName'])
-                    print(r)
-            else:
-                raise NotImplementedError
+            for key in keys:
+                if cloud == 'aws':
+                    key_name = key['KeyName']
+                elif cloud == 'chameleon':
+                    key_name = key['name']
+                r = provider.key_delete(key_name)
+                print(r)
             Benchmark.Stop()
         except Exception as e:
             print(e)
@@ -62,12 +63,15 @@ class Test_Clean_Local_Remote:
         try:
             secgroups = provider.list_secgroups()
             Benchmark.Start()
-            if cloud == 'aws':
-                for secgroup in secgroups:
-                    r = provider.remove_secgroup(secgroup['GroupName'])
-                    print(secgroup)
-            else:
-                raise NotImplementedError
+            for secgroup in secgroups:
+                if cloud == 'aws':
+                    groupname = secgroup['GroupName']
+                elif cloud == 'chameleon':
+                    groupname = secgroup['name']
+                if groupname == 'default':
+                    continue
+                r = provider.remove_secgroup(groupname)
+                print(secgroup)
             Benchmark.Stop()
         except Exception as e:
             print(e)
@@ -78,12 +82,13 @@ class Test_Clean_Local_Remote:
         try:
             instances = provider.list()
             Benchmark.Start()
-            if cloud == 'aws':
-                for instance in instances:
-                    r = provider.destroy(instance['name'])
-                    print(r)
-            else:
-                raise NotImplementedError
+            for instance in instances:
+                if cloud == 'aws':
+                    instance_name = instance['name']
+                elif cloud == 'chameleon':
+                    instance_name = instance['name']
+                r = provider.destroy(instance_name)
+                print(r)
             Benchmark.Stop()
         except Exception as e:
             print(e)

@@ -28,7 +28,7 @@ class Benchmark(object):
         frame = inspect.getouterframes(inspect.currentframe())
         method = frame[2][3]
 
-        pprint (frame[2])
+        # pprint (frame[2])
 
         if with_class:
             classname = os.path.basename(frame[2].filename).replace(".py", "")

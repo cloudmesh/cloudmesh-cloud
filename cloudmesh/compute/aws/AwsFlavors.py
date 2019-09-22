@@ -18,8 +18,9 @@ class AwsFlavor(object):
         r = requests.get(url)
         return r.json()
 
+    @classmethod
     def fetch_offer_file(
-            self,
+            cls,
             url=None,
             region="us-east-1",
             offer='AmazonEC2'
@@ -37,9 +38,10 @@ class AwsFlavor(object):
         offer_file = self.fetch_json_file(url)
         return offer_file
 
+    @classmethod
+    def list(cls, offer_file):
     # Splitting the fetch and parse steps because the AWS EC2 File is large,
     # and splitting the operations logically makes it easier to test.
-    def list(self, offer_file):
         publication_date = offer_file['publicationDate']
         flavor_info = {}
         bar = Bar('Processing Flavors', max=len(offer_file['terms']['OnDemand'].keys()))

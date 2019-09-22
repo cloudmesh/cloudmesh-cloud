@@ -6,6 +6,7 @@ import yaml
 from cloudmesh.common.StopWatch import StopWatch
 from cloudmesh.common.util import path_expand
 from cloudmesh.common.variables import Variables
+from pathlib import Path
 
 # noinspection PyPep8Naming
 class Benchmark(object):
@@ -18,7 +19,7 @@ class Benchmark(object):
         variables["verbose"] = 10
 
     @staticmethod
-    def name():
+    def name(with_class=False):
         """
         name of the calling method
 
@@ -26,6 +27,12 @@ class Benchmark(object):
         """
         frame = inspect.getouterframes(inspect.currentframe())
         method = frame[2][3]
+
+        pprint (frame[2])
+
+        if with_class:
+            classname = os.path.basename(frame[2].filename).replace(".py", "")
+            method = classname + "/" + method
         return method
 
     @staticmethod
@@ -33,14 +40,14 @@ class Benchmark(object):
         """
         starts a timer while using the name of the calling method
         """
-        StopWatch.start(Benchmark.name())
+        StopWatch.start(Benchmark.name(with_class=True))
 
     @staticmethod
     def Stop():
         """
         stops a timer while using the name of the calling method
         """
-        StopWatch.stop(Benchmark.name())
+        StopWatch.stop(Benchmark.name(with_class=True))
 
     @staticmethod
     def print(sysinfo=True, csv=True, tag=None):

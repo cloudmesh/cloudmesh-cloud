@@ -570,7 +570,8 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
              interval=None,
              timeout=None):
         if interval is None:
-            interval = 1
+            # if interval is too low, OS will block your ip
+            interval = 5
         if timeout is None:
             timeout = 360
         # instance_id = vm['instance_id']
@@ -618,23 +619,15 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
         cm = CmDatabase()
         ip = vm['public_ips']
-        # instance_id = vm['instance_id']
-        # timeout = 30
-        # Console.info("Checking instance reachability ... (timeout 30seconds) ")
-        # timer = 0
-        # while  timer < 30 :
-        #     if self.instance_is_reachable(instance_id):
-        #         break
-        #     sleep(0.4)
-        #     timer += 0.4
 
         try:
             key_name = vm['KeyName']
             keys = cm.find_all_by_name(name=key_name, kind="key")
             for k in keys:
                 if 'location' in k.keys():
-                    key = k['location']['private']
-                    break
+                    if 'private' in k['location'].keys():
+                        key = k['location']['private']
+                        break
 
         except (KeyError, IndexError):
             aws_keys = cm.find(kind='key', cloud='aws')
@@ -902,6 +895,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         """
         instance_ids = []
         for each_instance in self.ec2_resource.instances.all():
+
             # print(each_instance.tags)
             if len(each_instance.tags) > 0:
                 name = [tag['Value'] for tag in each_instance.tags if tag['Key'] == 'Name'][0]
@@ -909,6 +903,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                 name = ''
             instance_ids.append({
                 'kind': 'aws',
+                'KeyName' : each_instance.key_name,
                 'status': each_instance.state['Name'],
                 'created': each_instance.launch_time.strftime(
                     "%m/%d/%Y, %H:%M:%S") if each_instance.launch_time else '',

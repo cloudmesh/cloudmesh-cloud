@@ -27,15 +27,14 @@ class AwsFlavor(object):
             ):
         if url is None:
             offer_index_url = f"https://pricing.{region}.amazonaws.com/offers/v1.0/aws/index.json"
-            offer_index = self.fetch_json_file(offer_index_url)
+            offer_index = cls.fetch_json_file(offer_index_url)
             offer_file_api_url = f"https://pricing.{region}.amazonaws.com"
-            # offer_file_path = offer_index['offers']['AmazonEC2']['currentVersionUrl']
             region_file_path = offer_index['offers'][offer]['currentRegionIndexUrl']
             regions_url = offer_file_api_url + region_file_path
-            regions_file = self.fetch_json_file(regions_url)
+            regions_file = cls.fetch_json_file(regions_url)
             offer_file_path = regions_file["regions"][region]["currentVersionUrl"]
             url = offer_file_api_url + offer_file_path
-        offer_file = self.fetch_json_file(url)
+        offer_file = cls.fetch_json_file(url)
         return offer_file
 
     @classmethod

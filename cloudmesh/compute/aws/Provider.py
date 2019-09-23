@@ -14,7 +14,7 @@ from cloudmesh.common.console import Console
 from cloudmesh.common.debug import VERBOSE
 from cloudmesh.common.util import banner
 from cloudmesh.common3.DictList import DictList
-from cloudmesh.compute.aws.AwsFlavors import AwsFlavor
+from cloudmesh.compute.aws.AwsFlavor import AwsFlavor
 from cloudmesh.configuration.Config import Config
 from cloudmesh.provider import ComputeProviderPlugin
 from cloudmesh.mongo.DataBaseDecorator import DatabaseImportAsJson
@@ -1217,7 +1217,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         """
         flavors = AwsFlavor()
         data = flavors.fetch()
-        return self.update_dict(result, kind="flavor")
+        return self.update_dict(data, kind="flavor")
 
     def flavor(self, name=None):
 

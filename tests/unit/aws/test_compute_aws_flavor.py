@@ -1,44 +1,92 @@
 import pytest
+import requests
 
-from cloudmesh.compute.aws.Provider import Provider
-CLOUD= "aws"
+from cloudmesh.compute.aws.AwsFlavor import AwsFlavor
 
 @pytest.mark.incremental
-class TestName:
+class TestAWSFlavor:
 
-    def setup(self):
-        self.p = Provider(name=CLOUD)
+    # def setup(self):
+    #     self.p = Provider(name=CLOUD)
+
+    @staticmethod
+    def mock_get(url):
+        print(url)
+        if url == 'https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/index.json':
+            return MockOfferIndexResponse()
+        if url == 'https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonEC2/current/region_index.json':
+            return MockRegionIndexResponse()
+        if url == 'https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonEC2/20190916220712/us-east-1/index.json':
+            return MockOfferFileResponse()
+        else:
+            RaiseException("No valid URL followed.")
 
     def test_flavor(self, monkeypatch):
-        def mock_get(*args, **kwargs):
-            return MockOfferResponse()
 
         # apply the monkeypatch for requests.get to mock_get
-        monkeypatch.setattr(requests, "get", mock_get)
-        self.p.flavors()
-        first_result = self.p.flavor("DBCQPZ6Z853WRE98.JRTCKXETXF.6YS6EN2CT7")
-        second_result = self.p.flavor("QUMEF4UK3NPT4MN3.JRTCKXETXF.6YS6EN2CT7")
+        monkeypatch.setattr(requests, "get", self.mock_get)
+        result = AwsFlavor.fetch_offer_file()
+        # the resulting json object should be the offer file json, having gathered the path, starting offer index.
+        assert result == MockOfferFileResponse.json()
 
-        assert first_result['name'] == "DBCQPZ6Z853WRE98.JRTCKXETXF.6YS6EN2CT7"
-        assert first_result['vcpu'] == 48
-        assert first_result['memory'] == "384 GiB"
-        assert first_result['storage'] == "2 x 900 NVMe SSD"
-        assert first_result['clock_speed'] == "TKTK"
-        assert first_result['instance_type'] == "r5d.12xlarge"
-        assert first_result['price'] == 3.586
-        assert first_result['os'] == "RHEL"
+        # first_result = self.p.flavor("DBCQPZ6Z853WRE98.JRTCKXETXF.6YS6EN2CT7")
+        # second_result = self.p.flavor("QUMEF4UK3NPT4MN3.JRTCKXETXF.6YS6EN2CT7")
 
-        assert second_result['name'] == "QUMEF4UK3NPT4MN3.JRTCKXETXF.6YS6EN2CT7"
-        assert second_result['vcpu'] == 4
-        assert second_result['memory'] == "7.5 GiB"
-        assert second_result['storage'] == "2 x 40 SSD"
-        assert second_result['clock_speed'] == "2.8 GHz"
-        assert second_result['instance_type'] == "c3.xlarge"
-        assert second_result['price'] == 0.376
-        assert second_result['os'] == "Windows"
+        # assert first_result['name'] == "DBCQPZ6Z853WRE98.JRTCKXETXF.6YS6EN2CT7"
+        # assert first_result['vcpu'] == 48
+        # assert first_result['memory'] == "384 GiB"
+        # assert first_result['storage'] == "2 x 900 NVMe SSD"
+        # assert first_result['clock_speed'] == "TKTK"
+        # assert first_result['instance_type'] == "r5d.12xlarge"
+        # assert first_result['price'] == 3.586
+        # assert first_result['os'] == "RHEL"
 
-class MockOfferResponse:
+        # assert second_result['name'] == "QUMEF4UK3NPT4MN3.JRTCKXETXF.6YS6EN2CT7"
+        # assert second_result['vcpu'] == 4
+        # assert second_result['memory'] == "7.5 GiB"
+        # assert second_result['storage'] == "2 x 40 SSD"
+        # assert second_result['clock_speed'] == "2.8 GHz"
+        # assert second_result['instance_type'] == "c3.xlarge"
+        # assert second_result['price'] == 0.376
+        # assert second_result['os'] == "Windows"
 
+class MockOfferIndexResponse:
+    # mock json() method always returns a specific testing dictionary
+    # This is a limited subset from an actual Amazon JSON offer.
+    @staticmethod
+    def json():
+        return {
+            "formatVersion" : "v1.0",
+            "disclaimer" : "This pricing list is for informational purposes only. All prices are subject to the additional terms included in the pricing pages on http://aws.amazon.com. All Free Tier prices are also subject to the terms included at https://aws.amazon.com/free/",
+            "publicationDate" : "2019-09-16T22:07:12Z",
+            "offers" : {
+                "AmazonEC2" : {
+                    "offerCode" : "AmazonEC2",
+                    "versionIndexUrl" : "/offers/v1.0/aws/AmazonEC2/index.json",
+                    "currentVersionUrl" : "/offers/v1.0/aws/AmazonEC2/current/index.json",
+                    "currentRegionIndexUrl" : "/offers/v1.0/aws/AmazonEC2/current/region_index.json"
+                }
+            }
+        }
+
+class MockRegionIndexResponse:
+    # mock json() method always returns a specific testing dictionary
+    # This is a limited subset from an actual Amazon JSON offer.
+    @staticmethod
+    def json():
+        return {
+            "formatVersion" : "v1.0",
+            "disclaimer" : "This pricing list is for informational purposes only. All prices are subject to the additional terms included in the pricing pages on http://aws.amazon.com. All Free Tier prices are also subject to the terms included at https://aws.amazon.com/free/",
+            "publicationDate" : "2019-09-16T22:07:12Z",
+            "regions" : {
+                "us-east-1" : {
+                    "regionCode" : "us-east-1",
+                    "currentVersionUrl" : "/offers/v1.0/aws/AmazonEC2/20190916220712/us-east-1/index.json"
+                }
+            }
+        }
+
+class MockOfferFileResponse:
     # mock json() method always returns a specific testing dictionary
     # This is a limited subset from an actual Amazon JSON offer.
     # As well as some fully synthetic data to ensure proper parsing
@@ -159,4 +207,4 @@ class MockOfferResponse:
                     },
                 },
             }
-}
+        }

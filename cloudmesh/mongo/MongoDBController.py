@@ -20,6 +20,7 @@ from cloudmesh.configuration.Config import Config
 from cloudmesh.management.script import Script, SystemPath
 from cloudmesh.management.script import find_process
 from cloudmesh.common3.Shell import Shell as Shell3
+from cloudmesh.common.debug import VERBOSE
 
 # from cloudmesh.mongo.MongoDBController import MongoDBController
 from pymongo import MongoClient
@@ -28,27 +29,27 @@ from pymongo import MongoClient
 # noinspection PyUnusedLocal
 class MongoInstaller(object):
 
-    def __init__(self):
+    def __init__(self, dryrun=False):
         """
         Initialization of the MOngo installer
         """
 
         self.config = Config()
         self.data = self.config.data["cloudmesh"]["data"]["mongo"]
-        machine = platform.lower()
-        self.mongo_path = self.config[f"cloudmesh.data.mongo.MONGO_DOWNLOAD.{machine}.MONGO_PATH"]
-        self.mongo_log = self.config[f"cloudmesh.data.mongo.MONGO_DOWNLOAD.{machine}.MONGO_LOG"]
-        self.mongo_home = self.config[f"cloudmesh.data.mongo.MONGO_DOWNLOAD.{machine}.MONGO_HOME"]
-        self.expanduser()
+        self.machine = platform.lower()
+        download = self.config[f"cloudmesh.data.mongo.MONGO_DOWNLOAD.{self.machine}"]
 
-    #
-    # TODO: This function seems duplicated
-    #
-    def expanduser(self):
-        for key in self.data:
-            if type(self.data[key]) == str:
-                self.data[key] = os.path.expanduser(self.data[key])
-        # pprint(self.data)
+        self.mongo_code = path_expand(download["url"])
+        self.mongo_path = path_expand(download["MONGO_PATH"])
+        self.mongo_log = path_expand(download["MONGO_LOG"])
+        self.mongo_home = path_expand(download["MONGO_HOME"])
+
+        if dryrun:
+            print(self.mongo_path)
+            print(self.mongo_log)
+            print(self.mongo_home)
+            print(self.mongo_code)
+
 
     def __str__(self):
         return yaml.dump(self.data, default_flow_style=False, indent=2)
@@ -68,24 +69,37 @@ class MongoInstaller(object):
         installer = Script.run(script)
         print (installer)
 
-    def install(self, sudo=True):
+    def install(self, sudo=True, dryrun=False):
         """
         check where the MongoDB is installed in mongo location.
         if MongoDB is not installed, python help install it
         """
-        machine = platform.lower()
-        path = os.path.expanduser(self.mongo_path)
-        print(path)
+        path = self.mongo_path
+
+        if dryrun:
+            print(path)
         # pprint(self.data)
 
         if not self.data["MONGO_AUTOINSTALL"]:
-            print("Mongo auto install is off")
+            Console.error("Mongo auto install is off")
+            print("You can set it with")
+            print()
+            Console.ok("    cms config set cloudmesh.data.mongo.MONGO_AUTOINSTALL=True")
+            print()
+            if self.machine == 'darwin':
+                print("To install it with brew you need to set also")
+                print()
+                Console.ok("    cms config set cloudmesh.data.mongo.MONGO_BREWINSTALL=True")
+                print()
+
             return ""
 
+        #
+        # the path test may be wrong as we need to test for mongo and mongod
+        #
+        # print ('OOO', os.path.isdir(path), self.data["MONGO_AUTOINSTALL"] )
         if not os.path.isdir(path) and self.data["MONGO_AUTOINSTALL"]:
-            machine = platform.lower()
-            mongo_path = self.mongo_path
-            print(f"MongoDB is not installed in {mongo_path}")
+            print(f"MongoDB is not installed in {self.mongo_path}")
             #
             # ask if you like to install and give info where it is being installed
             #
@@ -93,20 +107,18 @@ class MongoInstaller(object):
             #
             # print(f"Auto-install the MongoDB into {mongo_path}")
 
-            self.data["MONGO_CODE"] = self.data["MONGO_DOWNLOAD"][platform]
-            self.mongo_code = self.data["MONGO_CODE"]
             self.local = self.data["LOCAL"]
-            if platform.lower() == 'linux':
-                self.linux(sudo=sudo)
-            elif platform.lower() == 'darwin':
-                self.darwin()
-            elif platform.lower() == 'win32':  # Replaced windows with win32
-                self.windows()
+            if self.machine == 'linux':
+                self.linux(sudo=sudo, dryrun=dryrun)
+            elif self.machine == 'darwin':
+                self.darwin(dryrun=dryrun)
+            elif self.machine == 'win32':  # Replaced windows with win32
+                self.windows(dryrun=dryrun)
             else:
                 print("platform not found", platform)
 
     # noinspection PyUnusedLocal
-    def linux(self, sudo=True):
+    def linux(self, sudo=True, dryrun=False):
 
         # TODO UNTESTED
         """
@@ -126,19 +138,24 @@ class MongoInstaller(object):
         tar -zxvf /tmp/mongodb.tgz -C {self.local}/mongo --strip 1
         echo \"export PATH={self.mongo_home}/bin:$PATH\" >> ~/.bashrc
             """
-        installer = Script.run(script)
+        if dryrun:
+            print (script)
+        else:
+            installer = Script.run(script)
 
     # noinspection PyUnusedLocal
-    def darwin(self, brew=False):
+    def darwin(self, brew=False, dryrun=False):
         """
         install MongoDB in Darwin system (Mac)
         """
 
+        print ("AAA")
         if brew:
             print("mongo installer via brew")
-            Brew.install("mongodb")
-            path = Shell.which("mongod")
-            SystemPath.add("{path}".format(path=path))
+            if not dryrun:
+                Brew.install("mongodb")
+                path = Shell.which("mongod")
+                SystemPath.add("{path}".format(path=path))
 
         else:
             script = f"""
@@ -147,13 +164,19 @@ class MongoInstaller(object):
             mkdir -p {self.mongo_log}
             curl -o /tmp/mongodb.tgz {self.mongo_code}
             tar -zxvf /tmp/mongodb.tgz -C {self.local}/mongo --strip 1
-            """.format(**self.data)
-            installer = Script.run(script)
-            SystemPath.add("{self.mongo_home}/bin".format(**self.data))
+            """
+
+            print (script)
+
+            if dryrun:
+                print(script)
+            else:
+                installer = Script.run(script)
+                SystemPath.add("{self.mongo_home}/bin".format(**self.data))
 
             # THIS IS BROKEN AS ITS A SUPBROCESS? '. ~/.bashrc'
 
-    def windows(self, brew=False):
+    def windows(self, brew=False, dryrun=False):
         """
         install MongoDB in windows
         """
@@ -169,7 +192,10 @@ class MongoInstaller(object):
         mkdir {self.mongo_log}
         msiexec.exe /l*v {self.mongo_log}/mdbinstall.log  /qb /i {self.mongo_code} INSTALLLOCATION={self.mongo_path} ADDLOCAL="all"
         """.format(**self.data)
-        installer = Script.run(script)
+        if dryrun:
+            print (script)
+        else:
+            installer = Script.run(script)
 
 
 class MongoDBController(object):
@@ -209,21 +235,34 @@ class MongoDBController(object):
     
     """
 
-    def __init__(self):
+    def __init__(self, dryrun=False):
 
         self.__dict__ = self.__shared_state
         if "data" not in self.__dict__:
+
             self.config = Config()
             self.data = dotdict(self.config.data["cloudmesh"]["data"]["mongo"])
-            self.expanduser()
+            self.machine = platform.lower()
+            download = self.config[
+                f"cloudmesh.data.mongo.MONGO_DOWNLOAD.{self.machine}"]
+
+            self.mongo_code = path_expand(download["url"])
+            self.mongo_path = path_expand(download["MONGO_PATH"])
+            self.mongo_log = path_expand(download["MONGO_LOG"])
+            self.mongo_home = path_expand(download["MONGO_HOME"])
+
+            if dryrun:
+                print(self.mongo_path)
+                print(self.mongo_log)
+                print(self.mongo_home)
+                print(self.mongo_code)
+
 
             if self.data.MONGO_PASSWORD in ["TBD", "admin"]:
-                Console.error("MongoDB password must not be the default")
+                Console.error("MongoDB password must not be the default: TBD")
+
                 raise Exception("password error")
-            machine = platform.lower()
-            self.mongo_path = path_expand(self.config[f"cloudmesh.data.mongo.MONGO_DOWNLOAD.{machine}.MONGO_PATH"])
-            self.mongo_log = path_expand(self.config[f"cloudmesh.data.mongo.MONGO_DOWNLOAD.{machine}.MONGO_LOG"])
-            self.mongo_home = path_expand(self.config[f"cloudmesh.data.mongo.MONGO_DOWNLOAD.{machine}.MONGO_HOME"])
+
 
             # mongo_log = self.data["MONGO_LOG"]
             paths = [self.mongo_path, self.mongo_log]

@@ -34,8 +34,7 @@ class AdminCommand(PluginCommand):
         ::
 
           Usage:
-            admin mongo install [--brew] [--download=PATH] [--nosudo] [--docker] [--dryrun]
-            admin mongo create
+            admin mongo install [--brew] [--download=PATH] [--nosudo] [--docker] [--dryrun] [--force]
             admin mongo status
             admin mongo stats
             admin mongo version
@@ -116,7 +115,9 @@ class AdminCommand(PluginCommand):
 
                 sudo = not arguments.nosudo
                 print ("SUDO:", sudo)
-                r = installer.install(sudo=sudo, dryrun=arguments.dryrun)
+                r = installer.install(sudo=sudo,
+                                      dryrun=arguments.dryrun,
+                                      force=arguments.force)
                 return r
 
             elif arguments.status:

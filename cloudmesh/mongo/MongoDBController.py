@@ -29,11 +29,13 @@ from pymongo import MongoClient
 # noinspection PyUnusedLocal
 class MongoInstaller(object):
 
-    def __init__(self, dryrun=False):
+    def __init__(self, dryrun=False, force=False):
         """
         Initialization of the MOngo installer
         """
 
+        self.dryrun = dryrun
+        self.force = force
         self.config = Config()
         self.data = self.config.data["cloudmesh"]["data"]["mongo"]
         self.machine = platform.lower()
@@ -98,7 +100,7 @@ class MongoInstaller(object):
         # the path test may be wrong as we need to test for mongo and mongod
         #
         # print ('OOO', os.path.isdir(path), self.data["MONGO_AUTOINSTALL"] )
-        if not os.path.isdir(path) and self.data["MONGO_AUTOINSTALL"]:
+        if self.force or (not os.path.isdir(path) and self.data["MONGO_AUTOINSTALL"]):
             print(f"MongoDB is not installed in {self.mongo_path}")
             #
             # ask if you like to install and give info where it is being installed

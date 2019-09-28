@@ -92,7 +92,7 @@ class AdminCommand(PluginCommand):
               This can be very useful in case you are filing an issue or bug.
         """
 
-        map_parameters(arguments, "output", "nosudo", "docker", "dryrun")
+        map_parameters(arguments, "output", "nosudo", "docker", "dryrun", "force")
         arguments.output = arguments.output or "table"
 
         # arguments.PATH = arguments['--download'] or None

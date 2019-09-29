@@ -406,7 +406,7 @@ class MongoDBController(object):
                 # if out == b'':
                 #    Console.error("mongo command not found")
                 #    sys.exit()
-                mongo_runner = f"{self.mongo_path}\\bin\mongod {auth} " \
+                mongo_runner = f"{self.mongo_home}\\bin\mongod {auth} " \
                     f"--bind_ip {mongo_host}" \
                          f" --dbpath {self.mongo_path} --logpath {self.mongo_log}\mongod.log"
                 print(mongo_runner)
@@ -444,10 +444,16 @@ class MongoDBController(object):
         """
         # TODO: there  could be more mongos running, be more specific
         if platform.lower() == 'win32':
-            script = 'mongo --eval "db.getSiblingDB(\'admin\').shutdownServer()"'
+            MONGO = f"{self.mongo_home}\\bin\mongo"
+            script = f'{MONGO} --eval "db.getSiblingDB(\'admin\').shutdownServer()"'
             p1 = subprocess.Popen(script, shell=True , stdout=subprocess.PIPE, stderr=STDOUT)
-            shutdown_with_auth = """mongo -u {MONGO_USERNAME} -p {MONGO_PASSWORD} --eval "db.getSiblingDB(\'admin\').shutdownServer()" """.format(
-                **self.data)
+            MONGO_USERNAME = self.data['MONGO_USERNAME']
+            MONGO_PASSWORD = self.data['MONGO_PASSWORD']
+            shutdown_with_auth = f"""{MONGO} -u {MONGO_USERNAME} -p {MONGO_PASSWORD} --eval "db.getSiblingDB(\'admin\').shutdownServer()" """
+            # print(shutdown_with_auth)
+            # print(script)
+            p2 = subprocess.Popen(shutdown_with_auth, shell=True, stdout=subprocess.PIPE, stderr=STDOUT)
+            shutdown_with_auth = f"""{MONGO} --eval "db.getSiblingDB(\'admin\').shutdownServer()" """
             # print(shutdown_with_auth)
             # print(script)
             p2 = subprocess.Popen(shutdown_with_auth, shell=True, stdout=subprocess.PIPE, stderr=STDOUT)
@@ -473,8 +479,9 @@ class MongoDBController(object):
         add admin account into the MongoDB admin database
         """
         if platform.lower() == 'win32': # don't remove this otherwise init won't work in windows, eval should start with double quote in windows
-            script = """mongo --eval "db.getSiblingDB('admin').createUser({{ user:'{MONGO_USERNAME}',pwd:'{MONGO_PASSWORD}',roles:[{{role:'root',db:'admin'}}]}}) ; db.shutdownServer()" """.format(**self.data)
-            # print(script)
+            self.data['MONGO'] = f"{self.mongo_home}\\bin\mongo"
+            script = """{MONGO} --eval "db.getSiblingDB('admin').createUser({{ user:'{MONGO_USERNAME}',pwd:'{MONGO_PASSWORD}',roles:[{{role:'root',db:'admin'}}]}}) ; db.shutdownServer()" """.format(**self.data)
+            print(script)
             try:
                 # result = Shell3.run2(script)
                 p = subprocess.Popen(script, shell=True, stdout=subprocess.PIPE, stderr=STDOUT)

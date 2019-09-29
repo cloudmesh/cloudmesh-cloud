@@ -73,9 +73,9 @@ class InitCommand(PluginCommand):
                 print("MongoDB folder deleted")
             except:
                 Console.error(f"Could not delete {location}")
-                #if platform == 'win32':
-                #    Console.error(f"Please try to run cms init again ... ")
-                #    exit(1)
+                if platform == 'win32':
+                    Console.error(f"Please try to run cms init again ... ")
+                    exit(1)
 
 
             user = Config()["cloudmesh.profile.user"]

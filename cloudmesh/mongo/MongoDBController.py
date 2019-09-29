@@ -35,6 +35,7 @@ class MongoInstaller(object):
         Initialization of the MOngo installer
         """
         self.dryrun = dryrun
+        self.force = force
         self.config = Config()
         mongoData = self.config.data["cloudmesh"]["data"]["mongo"];
         self.data = dotdict(mongoData)
@@ -96,7 +97,7 @@ class MongoInstaller(object):
         # the path test may be wrong as we need to test for mongo and mongod
         #
         # print ('OOO', os.path.isdir(path), self.data["MONGO_AUTOINSTALL"] )
-        if (not os.path.isdir(self.mongo_home) and self.data["MONGO_AUTOINSTALL"]):
+        if self.force or (not os.path.isdir(self.mongo_home) and self.data["MONGO_AUTOINSTALL"]):
             print(f"MongoDB is not installed in {self.mongo_home}")
             #
             # ask if you like to install and give info where it is being installed

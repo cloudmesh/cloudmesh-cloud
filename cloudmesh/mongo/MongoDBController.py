@@ -71,7 +71,7 @@ class MongoInstaller(object):
         installer = Script.run(script)
         print (installer)
 
-    def install(self, sudo=True, dryrun=False):
+    def install(self, sudo=True, dryrun=False, force=False):
         """
         check where the MongoDB is installed in mongo location.
         if MongoDB is not installed, python help install it
@@ -100,7 +100,7 @@ class MongoInstaller(object):
         # the path test may be wrong as we need to test for mongo and mongod
         #
         # print ('OOO', os.path.isdir(path), self.data["MONGO_AUTOINSTALL"] )
-        if self.force or (not os.path.isdir(path) and self.data["MONGO_AUTOINSTALL"]):
+        if force or (not os.path.isdir(path) and self.data["MONGO_AUTOINSTALL"]):
             print(f"MongoDB is not installed in {self.mongo_path}")
             #
             # ask if you like to install and give info where it is being installed
@@ -188,15 +188,22 @@ class MongoInstaller(object):
         # self.data["MONGO_LOG"] = self.data["MONGO_LOG"].replace("/", "\\")
 
         # noinspection PyPep8
+
+        if not dryrun:
+            os.system(f"mkdir {self.mongo_path}")
+            os.system(f"mkdir {self.mongo_home}")
+            os.system(f"mkdir {self.mongo_log}")
+
+
+
         script = f"""
-        mkdir {self.mongo_path}
-        mkdir {self.mongo_home}
-        mkdir {self.mongo_log}
-        msiexec.exe /l*v {self.mongo_log}/mdbinstall.log  /qb /i {self.mongo_code} INSTALLLOCATION={self.mongo_path} ADDLOCAL="all"
-        """.format(**self.data)
+        msiexec.exe /l*v {self.mongo_log}\mdbinstall.log  /qb /i {self.mongo_code} INSTALLLOCATION={self.mongo_home} ADDLOCAL="all"
+        """
+
         if dryrun:
-            print (script)
+            print(script)
         else:
+            print(script)
             installer = Script.run(script)
 
 

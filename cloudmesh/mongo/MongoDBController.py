@@ -34,19 +34,16 @@ class MongoInstaller(object):
         """
         Initialization of the MOngo installer
         """
-
         self.dryrun = dryrun
-        self.force = force
         self.config = Config()
-        self.data = self.config.data["cloudmesh"]["data"]["mongo"]
+        mongoData = self.config.data["cloudmesh"]["data"]["mongo"];
+        self.data = dotdict(mongoData)
         self.machine = platform.lower()
-        download = self.config[f"cloudmesh.data.mongo.MONGO_DOWNLOAD.{self.machine}"]
 
-        self.mongo_code = path_expand(download["url"])
-        self.mongo_path = path_expand(download["MONGO_PATH"])
-        self.mongo_log = path_expand(download["MONGO_LOG"])
-        self.mongo_home = path_expand(download["MONGO_HOME"])
-
+        self.mongo_code = mongoData["MONGO_DOWNLOAD"][self.machine]
+        self.mongo_path = mongoData["MONGO_PATH"]
+        self.mongo_log = mongoData["MONGO_LOG"]
+        self.mongo_home = mongoData["MONGO_HOME"]
         if self.dryrun:
             print(self.mongo_path)
             print(self.mongo_log)
@@ -263,17 +260,15 @@ class MongoDBController(object):
 
         self.__dict__ = self.__shared_state
         if "data" not in self.__dict__:
-
             self.config = Config()
-            self.data = dotdict(self.config.data["cloudmesh"]["data"]["mongo"])
+            mongoData = self.config.data["cloudmesh"]["data"]["mongo"];
+            self.data = dotdict(mongoData)
             self.machine = platform.lower()
-            download = self.config[
-                f"cloudmesh.data.mongo.MONGO_DOWNLOAD.{self.machine}"]
 
-            self.mongo_code = path_expand(download["url"])
-            self.mongo_path = path_expand(download["MONGO_PATH"])
-            self.mongo_log = path_expand(download["MONGO_LOG"])
-            self.mongo_home = path_expand(download["MONGO_HOME"])
+            self.mongo_code = mongoData["MONGO_DOWNLOAD"][self.machine]
+            self.mongo_path = mongoData["MONGO_PATH"]
+            self.mongo_log = mongoData["MONGO_LOG"]
+            self.mongo_home = mongoData["MONGO_HOME"]
 
             if dryrun:
                 print(self.mongo_path)

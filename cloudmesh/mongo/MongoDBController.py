@@ -217,6 +217,7 @@ class MongoInstaller(object):
         if self.dryrun:
             print (script)
         else:
+            print(script)
             installer = Script.run(script)
 
 class MongoDBController(object):

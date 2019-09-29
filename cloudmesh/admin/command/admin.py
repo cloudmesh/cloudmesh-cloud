@@ -1,4 +1,5 @@
 import textwrap
+from sys import platform
 
 from cloudmesh.common.Printer import Printer
 from cloudmesh.common.console import Console
@@ -38,6 +39,7 @@ class AdminCommand(PluginCommand):
             admin mongo status
             admin mongo stats
             admin mongo version
+            admin mongo create
             admin mongo start
             admin mongo stop
             admin mongo backup FILENAME
@@ -102,7 +104,7 @@ class AdminCommand(PluginCommand):
 
             if arguments.install and arguments.docker:
 
-                installer = MongoInstaller()
+                installer = MongoInstaller(dryrun=arguments.dryrun, force=arguments.force)
                 r = installer.docker()
                 return r
 
@@ -111,13 +113,12 @@ class AdminCommand(PluginCommand):
 
                 print("MongoDB install")
                 print(79 * "=")
-                installer = MongoInstaller()
+                installer = MongoInstaller(dryrun=arguments.dryrun, force=arguments.force)
 
                 sudo = not arguments.nosudo
-                print ("SUDO:", sudo)
-                r = installer.install(sudo=sudo,
-                                      dryrun=arguments.dryrun,
-                                      force=arguments.force)
+                if 'linux' in platform.lower() :
+                    print ("SUDO:", sudo)
+                r = installer.install(sudo=sudo)
                 return r
 
             elif arguments.status:

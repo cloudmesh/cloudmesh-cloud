@@ -72,7 +72,7 @@ class InitCommand(PluginCommand):
                 shutil.rmtree(location)
                 print("MongoDB folder deleted")
             except:
-                Console.error(f"Could not delete {location}")
+                Console.error(f"Could not delete {location}, someprocess is using the folder, most proabably mongodb")
                 if platform == 'win32':
                     Console.error(f"Please try to run cms init again ... ")
                     exit(1)

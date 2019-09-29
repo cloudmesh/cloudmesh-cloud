@@ -8,6 +8,7 @@ import urllib.parse
 from sys import platform
 from pathlib import Path
 from subprocess import STDOUT
+import ctypes
 
 import psutil
 import yaml
@@ -46,7 +47,7 @@ class MongoInstaller(object):
         self.mongo_log = path_expand(download["MONGO_LOG"])
         self.mongo_home = path_expand(download["MONGO_HOME"])
 
-        if dryrun:
+        if self.dryrun:
             print(self.mongo_path)
             print(self.mongo_log)
             print(self.mongo_home)
@@ -71,15 +72,13 @@ class MongoInstaller(object):
         installer = Script.run(script)
         print (installer)
 
-    def install(self, sudo=True, dryrun=False):
+    def install(self, sudo=True):
         """
         check where the MongoDB is installed in mongo location.
         if MongoDB is not installed, python help install it
         """
-        path = self.mongo_path
-
-        if dryrun:
-            print(path)
+        if self.dryrun:
+            print(self.mongo_path)
         # pprint(self.data)
 
         if not self.data["MONGO_AUTOINSTALL"]:
@@ -100,8 +99,8 @@ class MongoInstaller(object):
         # the path test may be wrong as we need to test for mongo and mongod
         #
         # print ('OOO', os.path.isdir(path), self.data["MONGO_AUTOINSTALL"] )
-        if self.force or (not os.path.isdir(path) and self.data["MONGO_AUTOINSTALL"]):
-            print(f"MongoDB is not installed in {self.mongo_path}")
+        if self.force or (not os.path.isdir(self.mongo_home) and self.data["MONGO_AUTOINSTALL"]):
+            print(f"MongoDB is not installed in {self.mongo_home}")
             #
             # ask if you like to install and give info where it is being installed
             #
@@ -111,16 +110,18 @@ class MongoInstaller(object):
 
             self.local = self.data["LOCAL"]
             if self.machine == 'linux':
-                self.linux(sudo=sudo, dryrun=dryrun)
+                self.linux(sudo=sudo)
             elif self.machine == 'darwin':
-                self.darwin(dryrun=dryrun)
+                self.darwin()
             elif self.machine == 'win32':  # Replaced windows with win32
-                self.windows(dryrun=dryrun)
+                self.windows()
             else:
                 print("platform not found", platform)
+        elif os.path.isdir(self.mongo_home):
+            Console.error(f"Folder {self.mongo_home} already exists")
 
     # noinspection PyUnusedLocal
-    def linux(self, sudo=True, dryrun=False):
+    def linux(self, sudo=True):
 
         # TODO UNTESTED
         """
@@ -140,13 +141,13 @@ class MongoInstaller(object):
         tar -zxvf /tmp/mongodb.tgz -C {self.local}/mongo --strip 1
         echo \"export PATH={self.mongo_home}/bin:$PATH\" >> ~/.bashrc
             """
-        if dryrun:
+        if self.dryrun:
             print (script)
         else:
             installer = Script.run(script)
 
     # noinspection PyUnusedLocal
-    def darwin(self, brew=False, dryrun=False):
+    def darwin(self, brew=False):
         """
         install MongoDB in Darwin system (Mac)
         """
@@ -154,7 +155,7 @@ class MongoInstaller(object):
         print ("AAA")
         if brew:
             print("mongo installer via brew")
-            if not dryrun:
+            if not self.dryrun:
                 Brew.install("mongodb")
                 path = Shell.which("mongod")
                 SystemPath.add("{path}".format(path=path))
@@ -170,7 +171,7 @@ class MongoInstaller(object):
 
             print (script)
 
-            if dryrun:
+            if self.dryrun:
                 print(script)
             else:
                 installer = Script.run(script)
@@ -178,7 +179,7 @@ class MongoInstaller(object):
 
             # THIS IS BROKEN AS ITS A SUPBROCESS? '. ~/.bashrc'
 
-    def windows(self, brew=False, dryrun=False):
+    def windows(self):
         """
         install MongoDB in windows
         """
@@ -186,19 +187,37 @@ class MongoInstaller(object):
         # self.data["MONGO_HOME"] = self.data["MONGO_HOME"].replace("/", "\\")
         # self.data["MONGO_PATH"] = self.data["MONGO_PATH"].replace("/", "\\")
         # self.data["MONGO_LOG"] = self.data["MONGO_LOG"].replace("/", "\\")
-
+        def is_admin():
+            try:
+                if platform == 'win32':
+                    return ctypes.windll.shell32.IsUserAnAdmin()
+            except:
+                return False
         # noinspection PyPep8
-        script = f"""
-        mkdir {self.mongo_path}
-        mkdir {self.mongo_home}
-        mkdir {self.mongo_log}
-        msiexec.exe /l*v {self.mongo_log}/mdbinstall.log  /qb /i {self.mongo_code} INSTALLLOCATION={self.mongo_path} ADDLOCAL="all"
-        """.format(**self.data)
-        if dryrun:
+
+        try:
+            os.mkdir(self.mongo_home)
+        except FileExistsError:
+            Console.info(f"Folder {self.mongo_home} already exists")
+        except FileNotFoundError: # means you don't have enough privilege
+            Console.error("Permission denied, requesting admin access")
+            import win32com.shell.shell as shell
+            script = f'mkdir "{self.mongo_home}"'
+            shell.ShellExecuteEx(lpVerb='runas', lpFile='cmd.exe', lpParameters='/c ' + script)
+
+        try:
+            os.mkdir(self.mongo_path)
+        except FileExistsError:
+            Console.info(f"Folder {self.mongo_path} already exists")
+        try:
+            os.mkdir(self.mongo_log)
+        except FileExistsError:
+            Console.info(f"Folder {self.mongo_log} already exists")
+        script = f"""msiexec.exe /l*v {self.mongo_log}/mdbinstall.log  /qb /i {self.mongo_code} INSTALLLOCATION="{self.mongo_home}" ADDLOCAL="all" """
+        if self.dryrun:
             print (script)
         else:
             installer = Script.run(script)
-
 
 class MongoDBController(object):
     __shared_state = {}
@@ -373,11 +392,12 @@ class MongoDBController(object):
             try:
                 mongo_runner = f"mongod {auth} --bind_ip {mongo_host}" \
                          f" --dbpath {self.mongo_path} --logpath {self.mongo_log}\mongod.log"
-                with open(f'{self.mongo_path}/invisible.vbs','w') as f :
-                    f.write('CreateObject("Wscript.Shell").Run """" & WScript.Arguments(0) & """", 0, False')
-                with open(f'{self.mongo_path}/mongo_starter.bat', 'w') as f:
-                    f.write(mongo_runner)
-
+                if not os.path.isfile(f'{self.mongo_path}/invisible.vbs'):
+                    with open(f'{self.mongo_path}/invisible.vbs','w') as f :
+                        f.write('CreateObject("Wscript.Shell").Run """" & WScript.Arguments(0) & """", 0, False')
+                if not os.path.isfile(f'{self.mongo_path}/mongo_starter.bat'):
+                    with open(f'{self.mongo_path}/mongo_starter.bat', 'w') as f:
+                        f.write(mongo_runner)
                 script = f'wscript.exe {self.mongo_path}/invisible.vbs {self.mongo_path}/mongo_starter.bat'
                 # print(script)
                 p = subprocess.Popen(script, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -625,16 +645,19 @@ class MongoDBController(object):
         :return:
         '''
         if platform == 'win32':
-            if self.is_installed_as_win_service():
-                win_services = list(psutil.win_service_iter())
-                mongo_service = []
-                for service in win_services:
-                    if 'mongo' in service.display_name().lower():
-                        mongo_service = service
-                # mongo_service = [service for service in win_services if 'mongo' in service.display_name().lower()][0]
-                return mongo_service[0].status() == 'running'
-            else:
-                return "mongod.exe" in (p.name() for p in psutil.process_iter())
+            # if self.is_installed_as_win_service():
+            #     win_services = list(psutil.win_service_iter())
+            #     mongo_service = []
+            #     for service in win_services:
+            #         if 'mongo' in service.display_name().lower():
+            #             mongo_service = service
+            #     # mongo_service = [service for service in win_services if 'mongo' in service.display_name().lower()][0]
+            #     try:
+            #         return mongo_service[0].status() == 'running'
+            #     except TypeError:
+            #         return False
+            # else:
+            return "mongod.exe" in (p.name() for p in psutil.process_iter())
 
         else:
             Console.error(f'Windows platform function called instead of {platform}')

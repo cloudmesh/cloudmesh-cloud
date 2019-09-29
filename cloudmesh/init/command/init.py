@@ -84,8 +84,8 @@ class InitCommand(PluginCommand):
             print("MongoDB create")
             os.system("cms admin mongo create")
             os.system("cms admin mongo start")
-            os.system(f"cms sec load")
-            os.system(f"cms key add {user} --source=ssh")
+            os.system("cms sec load")
+            os.system("cms key add {user} --source=ssh")
 
             if arguments.CLOUD is not None:
                 cloud = arguments.CLOUD

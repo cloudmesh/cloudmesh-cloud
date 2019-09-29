@@ -35,6 +35,7 @@ class AdminCommand(PluginCommand):
 
           Usage:
             admin mongo install [--brew] [--download=PATH] [--nosudo] [--docker] [--dryrun] [--force]
+            admin mongo create
             admin mongo status
             admin mongo stats
             admin mongo version

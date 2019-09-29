@@ -102,7 +102,7 @@ class AdminCommand(PluginCommand):
                        "force")
         arguments.output = arguments.output or "table"
 
-        VERBOSE(arguments)
+        # VERBOSE(arguments)
         # arguments.PATH = arguments['--download'] or None
         result = None
 

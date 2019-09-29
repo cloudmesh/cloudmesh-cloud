@@ -186,12 +186,14 @@ class MongoInstaller(object):
         # self.data["MONGO_HOME"] = self.data["MONGO_HOME"].replace("/", "\\")
         # self.data["MONGO_PATH"] = self.data["MONGO_PATH"].replace("/", "\\")
         # self.data["MONGO_LOG"] = self.data["MONGO_LOG"].replace("/", "\\")
-        def is_admin():
-            try:
-                if platform == 'win32':
-                    return ctypes.windll.shell32.IsUserAnAdmin()
-            except:
-                return False
+
+        #def is_admin():
+        #    try:
+        #        if platform == 'win32':
+        #            return ctypes.windll.shell32.IsUserAnAdmin()
+        #    except:
+        #        return False
+
         # noinspection PyPep8
 
         try:
@@ -213,8 +215,9 @@ class MongoInstaller(object):
         except FileExistsError:
             Console.info(f"Folder {self.mongo_log} already exists")
         script = f"""msiexec.exe /l*v {self.mongo_log}/mdbinstall.log  /qb /i {self.mongo_code} INSTALLLOCATION="{self.mongo_home}" ADDLOCAL="all" """
+        print(script)
         if self.dryrun:
-            print (script)
+            print(script)
         else:
             print(script)
             installer = Script.run(script)
@@ -403,7 +406,8 @@ class MongoDBController(object):
                 # if out == b'':
                 #    Console.error("mongo command not found")
                 #    sys.exit()
-                mongo_runner = f"mongod {auth} --bind_ip {mongo_host}" \
+                mongo_runner = f"{self.mongo_path}\\bin\mongod {auth} " \
+                    f"--bind_ip {mongo_host}" \
                          f" --dbpath {self.mongo_path} --logpath {self.mongo_log}\mongod.log"
                 print(mongo_runner)
                 if not os.path.isfile(f'{self.mongo_path}/invisible.vbs'):

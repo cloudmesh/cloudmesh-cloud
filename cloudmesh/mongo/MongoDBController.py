@@ -25,7 +25,7 @@ from cloudmesh.common.debug import VERBOSE
 
 # from cloudmesh.mongo.MongoDBController import MongoDBController
 from pymongo import MongoClient
-
+import sys
 
 # noinspection PyUnusedLocal
 class MongoInstaller(object):
@@ -152,7 +152,6 @@ class MongoInstaller(object):
         install MongoDB in Darwin system (Mac)
         """
 
-        print ("AAA")
         if brew:
             print("mongo installer via brew")
             if not self.dryrun:
@@ -391,8 +390,22 @@ class MongoDBController(object):
         mongo_host = self.data['MONGO_HOST']
         if platform.lower() == 'win32':
             try:
+                # command = 'where mongo'
+                # proc = subprocess.Popen(command, shell=True,
+                #                        stdin=subprocess.PIPE,
+                #                        stdout=subprocess.PIPE)
+                # out, err = proc.communicate()
+
+                # print ("MMM", command)
+                # print ("O", out)
+                # print ("E", err)
+
+                # if out == b'':
+                #    Console.error("mongo command not found")
+                #    sys.exit()
                 mongo_runner = f"mongod {auth} --bind_ip {mongo_host}" \
                          f" --dbpath {self.mongo_path} --logpath {self.mongo_log}\mongod.log"
+                print(mongo_runner)
                 if not os.path.isfile(f'{self.mongo_path}/invisible.vbs'):
                     with open(f'{self.mongo_path}/invisible.vbs','w') as f :
                         f.write('CreateObject("Wscript.Shell").Run """" & WScript.Arguments(0) & """", 0, False')
@@ -400,7 +413,7 @@ class MongoDBController(object):
                     with open(f'{self.mongo_path}/mongo_starter.bat', 'w') as f:
                         f.write(mongo_runner)
                 script = f'wscript.exe {self.mongo_path}/invisible.vbs {self.mongo_path}/mongo_starter.bat'
-                # print(script)
+                print(script)
                 p = subprocess.Popen(script, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
                 result = "mongod child process should be started successfully."
             except Exception as e:

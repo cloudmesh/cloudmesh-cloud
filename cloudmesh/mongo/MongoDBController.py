@@ -638,6 +638,7 @@ class MongoDBController(object):
                 for service in win_services:
                     if 'mongo' in service.display_name().lower():
                         mongo_service = service
+                print ("MONGO SERVICE:", mongo_service)
                 # mongo_service = [service for service in win_services if 'mongo' in service.display_name().lower()][0]
                 return mongo_service[0].status() == 'running'
             else:

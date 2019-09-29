@@ -10,7 +10,7 @@ from cloudmesh.mongo.MongoDBController import MongoDBController
 from cloudmesh.mongo.MongoDBController import MongoInstaller
 from cloudmesh.shell.command import PluginCommand, map_parameters
 from cloudmesh.shell.command import command
-
+from cloudmesh.common.debug import VERBOSE
 
 class AdminCommand(PluginCommand):
     # noinspection PyPep8
@@ -92,9 +92,15 @@ class AdminCommand(PluginCommand):
               This can be very useful in case you are filing an issue or bug.
         """
 
-        map_parameters(arguments, "output", "nosudo", "docker", "dryrun", "force")
+        map_parameters(arguments,
+                       "output",
+                       "nosudo",
+                       "docker",
+                       "dryrun",
+                       "force")
         arguments.output = arguments.output or "table"
 
+        VERBOSE(arguments)
         # arguments.PATH = arguments['--download'] or None
         result = None
 
@@ -115,6 +121,7 @@ class AdminCommand(PluginCommand):
 
                 sudo = not arguments.nosudo
                 print ("SUDO:", sudo)
+                print (arguments.force)
                 r = installer.install(sudo=sudo,
                                       dryrun=arguments.dryrun,
                                       force=arguments.force)

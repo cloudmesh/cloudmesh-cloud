@@ -39,6 +39,13 @@ class InitCommand(PluginCommand):
                 information about images, flavors, vms. It also uploads the
                 security groups defined by default to the cloud.
 
+            Bug:
+
+                cms init
+                cms init
+
+                    On Windows you have to run the cms init command twice upon
+                    first installation
         """
 
         if arguments.CLOUD == "yaml":

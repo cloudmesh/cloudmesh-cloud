@@ -449,14 +449,16 @@ class MongoDBController(object):
             p1 = subprocess.Popen(script, shell=True , stdout=subprocess.PIPE, stderr=STDOUT)
             MONGO_USERNAME = self.data['MONGO_USERNAME']
             MONGO_PASSWORD = self.data['MONGO_PASSWORD']
-            shutdown_with_auth = f"""{MONGO} -u {MONGO_USERNAME} -p {MONGO_PASSWORD} --eval "db.getSiblingDB(\'admin\').shutdownServer()" """
-            # print(shutdown_with_auth)
+            shutdown_with_auth1 = f"""{MONGO} -u {MONGO_USERNAME} -p {MONGO_PASSWORD} --eval "db.getSiblingDB(\'admin\').shutdownServer()" """
+            # print(shutdown_with_auth1)
             # print(script)
-            p2 = subprocess.Popen(shutdown_with_auth, shell=True, stdout=subprocess.PIPE, stderr=STDOUT)
+            p2 = subprocess.Popen(shutdown_with_auth1, shell=True,
+                                  stdout=subprocess.PIPE, stderr=STDOUT)
             shutdown_with_auth = f"""{MONGO} --eval "db.getSiblingDB(\'admin\').shutdownServer()" """
             # print(shutdown_with_auth)
             # print(script)
-            p2 = subprocess.Popen(shutdown_with_auth, shell=True, stdout=subprocess.PIPE, stderr=STDOUT)
+            p3 = subprocess.Popen(shutdown_with_auth, shell=True,
+                                  stdout=subprocess.PIPE, stderr=STDOUT)
             r1 = p1.stdout.read().decode('utf-8')
             r2 = p2.stdout.read().decode('utf-8')
             if 'server should be down...' in r1 or 'connect failed' in r2 :

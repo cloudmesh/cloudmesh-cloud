@@ -175,6 +175,7 @@ class MongoInstaller(object):
                 SystemPath.add("{self.mongo_home}/bin".format(**self.data))
 
             # THIS IS BROKEN AS ITS A SUPBROCESS? '. ~/.bashrc'
+            Console.info("MongoDB installation successful!")
 
     def windows(self):
         """
@@ -219,6 +220,8 @@ class MongoInstaller(object):
         else:
             print(script)
             installer = Script.run(script)
+
+            Console.info("MongoDB installation successful!")
 
 class MongoDBController(object):
     __shared_state = {}

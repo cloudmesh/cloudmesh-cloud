@@ -110,7 +110,7 @@ class MongoInstaller(object):
 
             self.local = self.data["LOCAL"]
             if self.machine == 'linux':
-                self.linux(sudo=sudo)
+                self.linux()
             elif self.machine == 'darwin':
                 self.darwin()
             elif self.machine == 'win32':  # Replaced windows with win32
@@ -121,19 +121,15 @@ class MongoInstaller(object):
             Console.error(f"Folder {self.mongo_home} already exists")
 
     # noinspection PyUnusedLocal
-    def linux(self, sudo=True):
-
-        # TODO UNTESTED
+    def linux(self):
         """
         install MongoDB in Linux system (Ubuntu)
         """
-        if sudo:
-            sudo_command = "sudo"
-        else:
-            sudo_command = ""
+        # check if openssl and curl is installed
+        chk_script = "openssl version && curl --version"
+        Script.run(chk_script)
 
-        script = f"{sudo_command} " + f"""
-        apt-get --yes install libcurl4 openssl
+        script = f"""
         mkdir -p {self.mongo_path}
         mkdir -p {self.mongo_home}
         mkdir -p {self.mongo_log}
@@ -142,9 +138,11 @@ class MongoInstaller(object):
         echo \"export PATH={self.mongo_home}/bin:$PATH\" >> ~/.bashrc
             """
         if self.dryrun:
-            print (script)
+            print(script)
         else:
             installer = Script.run(script)
+
+        Console.info("MongoDB installation successful!")
 
     # noinspection PyUnusedLocal
     def darwin(self, brew=False):

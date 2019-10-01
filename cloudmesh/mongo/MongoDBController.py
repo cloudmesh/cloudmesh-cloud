@@ -174,7 +174,7 @@ class MongoInstaller(object):
                 print(script)
             else:
                 installer = Script.run(script)
-                SystemPath.add("{self.mongo_home}/bin".format(**self.data))
+                SystemPath.add(f"{self.mongo_home}/bin")
 
             # THIS IS BROKEN AS ITS A SUPBROCESS? '. ~/.bashrc'
 

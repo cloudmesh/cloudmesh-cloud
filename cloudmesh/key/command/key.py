@@ -245,7 +245,10 @@ class KeyCommand(PluginCommand):
                 name = arguments.NAME or "git"
                 key.add("git", "git")
             else:
-                raise NotImplementedError
+                config = Config()
+                name = config["cloudmesh.profile.user"]
+                kind = "ssh"
+                key.add(name, kind)
 
         elif arguments.upload:
 

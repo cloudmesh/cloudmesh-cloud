@@ -121,7 +121,63 @@ class MongoInstaller(object):
             Console.error(f"Folder {self.mongo_home} already exists")
 
     # noinspection PyUnusedLocal
-    def linux(self):
+    def linux(self, sudo=True):
+        cmd = ['lsb_release','-a']
+        proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        o, e = proc.communicate()
+        p = o.decode('ascii').replace('\t',"").split("\n")
+
+        distro = "none"
+        version = "none"
+
+        for x in range(0, len(p)):
+            s = p.pop(0)
+            if ("Distributor" in s):
+                if ("Debian" in s):
+                    distro = "debian"
+                elif ("Ubuntu" in s):
+                    distro = "ubuntu"
+            elif ("Release" in s):
+                version = s.split(":").pop(1).split(".").pop(0)
+        if "debian" == distro:
+            self.debian(sudo, int(version))
+        elif "ubuntu" == distro:
+            self.ubuntu(sudo)
+        else:
+            Console.error("Unsupported Linux Version")
+            raise Exception("unsupported version")
+
+    def debian(self, sudo=True, version=10):
+        """
+        Install MongoDB in Linux Debian (9,10)
+        """
+        if sudo:
+            sudo_command = "sudo"
+        else:
+            sudo_command = ""
+
+        apt_cmd = "error"
+        if version == 9:
+            apt_cmd = "apt-get --yes install openssl libcurl3"
+        elif version == 10: #UNTESTED
+            apt_cmd = "apt-get --yes install openssl libcurl4"
+        else:
+            Console.error("Unsupported Linux Version")
+            raise Exception("unsupported operating system")
+
+        script = f"{sudo_command} " + f"{apt_cmd} " + """
+        mkdir -p {MONGO_PATH}
+        mkdir -p {MONGO_HOME}
+        mkdir -p {MONGO_LOG}
+        wget -q -O /tmp/mongodb.tgz {MONGO_CODE}
+        tar -zxvf /tmp/mongodb.tgz -C {LOCAL}/mongo --strip 1
+        echo \"export PATH={MONGO_HOME}/bin:$PATH\" >> ~/.bashrc
+            """.format(**self.data)
+        installer = Script.run(script)
+
+    def ubuntu(self, sudo=True):
+
+        # TODO UNTESTED
         """
         install MongoDB in Linux system (Ubuntu)
         """

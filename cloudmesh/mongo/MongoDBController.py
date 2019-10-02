@@ -142,7 +142,7 @@ class MongoInstaller(object):
         if "debian" == distro:
             self.debian(sudo, int(version))
         elif "ubuntu" == distro:
-            self.ubuntu(sudo)
+            self.ubuntu()
         else:
             Console.error("Unsupported Linux Version")
             raise Exception("unsupported version")
@@ -175,9 +175,7 @@ class MongoInstaller(object):
             """.format(**self.data)
         installer = Script.run(script)
 
-    def ubuntu(self, sudo=True):
-
-        # TODO UNTESTED
+    def ubuntu(self):
         """
         install MongoDB in Linux system (Ubuntu)
         """

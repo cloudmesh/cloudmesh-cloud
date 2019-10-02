@@ -123,9 +123,10 @@ class AdminCommand(PluginCommand):
                 installer = MongoInstaller(dryrun=arguments.dryrun, force=arguments.force)
 
                 sudo = not arguments.nosudo
-                if 'linux' in platform.lower() :
-                    print ("SUDO:", sudo)
-                r = installer.install(sudo=sudo)
+                # if 'linux' in platform.lower() :
+                #     print("SUDO:", sudo)
+                # r = installer.install(sudo=sudo)
+                r = installer.install()
                 return r
 
             elif arguments.status:

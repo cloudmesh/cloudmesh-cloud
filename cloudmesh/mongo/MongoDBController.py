@@ -110,7 +110,7 @@ class MongoInstaller(object):
 
             self.local = self.data["LOCAL"]
             if self.machine == 'linux':
-                self.linux(sudo=sudo)
+                self.linux()
             elif self.machine == 'darwin':
                 self.darwin()
             elif self.machine == 'win32':  # Replaced windows with win32
@@ -142,11 +142,11 @@ class MongoInstaller(object):
         if "debian" == distro:
             self.debian(sudo, int(version))
         elif "ubuntu" == distro:
-            self.ubuntu(sudo)
+            self.ubuntu()
         else:
             Console.error("Unsupported Linux Version")
             raise Exception("unsupported version")
-            
+
     def debian(self, sudo=True, version=10):
         """
         Install MongoDB in Linux Debian (9,10)
@@ -155,7 +155,7 @@ class MongoInstaller(object):
             sudo_command = "sudo"
         else:
             sudo_command = ""
-        
+
         apt_cmd = "error"
         if version == 9:
             apt_cmd = "apt-get --yes install openssl libcurl3"
@@ -174,20 +174,16 @@ class MongoInstaller(object):
         echo \"export PATH={MONGO_HOME}/bin:$PATH\" >> ~/.bashrc
             """.format(**self.data)
         installer = Script.run(script)
-        
-    def ubuntu(self, sudo=True):
 
-        # TODO UNTESTED
+    def ubuntu(self):
         """
         install MongoDB in Linux system (Ubuntu)
         """
-        if sudo:
-            sudo_command = "sudo"
-        else:
-            sudo_command = ""
+        # check if openssl and curl is installed
+        chk_script = "openssl version && curl --version"
+        Script.run(chk_script)
 
-        script = f"{sudo_command} " + f"""
-        apt-get --yes install libcurl4 openssl
+        script = f"""
         mkdir -p {self.mongo_path}
         mkdir -p {self.mongo_home}
         mkdir -p {self.mongo_log}
@@ -196,9 +192,11 @@ class MongoInstaller(object):
         echo \"export PATH={self.mongo_home}/bin:$PATH\" >> ~/.bashrc
             """
         if self.dryrun:
-            print (script)
+            print(script)
         else:
             installer = Script.run(script)
+
+        Console.info("MongoDB installation successful!")
 
     # noinspection PyUnusedLocal
     def darwin(self, brew=False):
@@ -228,9 +226,10 @@ class MongoInstaller(object):
                 print(script)
             else:
                 installer = Script.run(script)
-                SystemPath.add(f"{self.mongo_home}/bin")
+                SystemPath.add("{self.mongo_home}/bin".format(**self.data))
 
             # THIS IS BROKEN AS ITS A SUPBROCESS? '. ~/.bashrc'
+            Console.info("MongoDB installation successful!")
 
     def windows(self):
         """
@@ -275,6 +274,8 @@ class MongoInstaller(object):
         else:
             print(script)
             installer = Script.run(script)
+
+            Console.info("MongoDB installation successful!")
 
 class MongoDBController(object):
     __shared_state = {}

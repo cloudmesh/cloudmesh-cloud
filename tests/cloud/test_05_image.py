@@ -60,14 +60,14 @@ class Test_Image:
         HEADING()
         local = Key()
         Benchmark.Start()
-        os.system(f"cms image list --cloud={cloud} --refresh")
+        os.system(f"cms image list --cloud={cloud} --refresh > image-{cloud}.log")
         Benchmark.Stop()
 
     def test_cms_image(self):
         HEADING()
         local = Key()
         Benchmark.Start()
-        os.system(f"cms image list")
+        os.system(f"cms image list > image-local.log")
         Benchmark.Stop()
 
     def test_benchmark(self):

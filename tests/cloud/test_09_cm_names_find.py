@@ -16,8 +16,14 @@ Benchmark.debug()
 cm = CmDatabase()
 variables = Variables()
 
+
 assert variables['cloud'] is not None
 cloud = variables['cloud']
+
+if variables['benchmark_print'] is not None:
+    benchmark_print = variables['benchmark_print']
+else:
+    benchmark_print = False
 
 
 @pytest.mark.incremental
@@ -39,8 +45,12 @@ class Test_cm_find:
             data = cm.find(cloud=f"{cloud}", kind=kind)
             if len(data) > 0:
                 entries.append(data)
+            if benchmark_print:
+                pprint(entries)
+            else:
+                print(f"Number of entries [{kind}", len(data))
         Benchmark.Stop()
-        # pprint(entries)
+
         assert len(entries) > 0
 
     def test_cm_loop(self):
@@ -58,7 +68,11 @@ class Test_cm_find:
         Benchmark.Start()
         names = cm.names(cloud=cloud, kind="image")
         Benchmark.Stop()
-        # pprint(names)
+        kind = "image"
+        if benchmark_print:
+            pprint(names)
+        else:
+            print(f"Number of entries [{kind}", len(names))
         assert len(names) > 0
 
     def test_cm_image_name_collection(self):
@@ -66,8 +80,11 @@ class Test_cm_find:
         Benchmark.Start()
         names = cm.names(collection=f"{cloud}-image")
         Benchmark.Stop()
-
-        # pprint(names)
+        kind = "image"
+        if benchmark_print:
+            pprint(names)
+        else:
+            print(f"Number of entries [{kind}", len(names))
 
     def test_names_regexp(self):
         HEADING()
@@ -80,10 +97,17 @@ class Test_cm_find:
             assert "CC-" in entry
 
         names = cm.names(collection=f"{cloud}-image", regex=".*Ubuntu.*")
-        pprint(names)
+
         for entry in names:
-            print(entry)
             assert "Ubuntu" in entry
+
+        kind = "image"
+        if benchmark_print:
+            pprint(names)
+        else:
+            print(f"Number of entries [{kind}", len(names))
+
+
         Benchmark.Stop()
 
 
@@ -105,12 +129,18 @@ class Test_cm_find:
         entries = cm.find(collection=f"{cloud}-image", query=query)
         Benchmark.Stop()
 
-        print(entries)
-        assert len(entries) > 0
+        kind = "image"
+        if benchmark_print:
+            print(entries)
+            for entry in entries:
+                print(entry['name'])
+        else:
+            print(f"Number of entries [{kind}", len(entries))
 
+        assert len(entries) > 0
         for entry in entries:
-            print(entry['name'])
             assert "Ubuntu" in entry['name']
+
 
     def test_cm_find_cloud_name_attributes(self):
         HEADING()

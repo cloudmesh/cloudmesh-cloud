@@ -22,6 +22,6 @@ for line in result:
                   ]
                  )
 
-pprint(table)
+# pprint(table)
 
 print(tabulate(table, tablefmt="grid"))

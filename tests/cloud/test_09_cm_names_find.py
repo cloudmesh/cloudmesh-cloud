@@ -20,10 +20,12 @@ variables = Variables()
 assert variables['cloud'] is not None
 cloud = variables['cloud']
 
-if variables['benchmark_print'] is not None:
+if 'benchmark_print' in variables:
     benchmark_print = variables['benchmark_print']
 else:
     benchmark_print = False
+
+benchmark_print = False
 
 
 @pytest.mark.incremental
@@ -34,7 +36,10 @@ class Test_cm_find:
         Benchmark.Start()
         entries = cm.find(collection=f"{cloud}-vm")
         Benchmark.Stop()
-        print(entries)
+        if benchmark_print:
+            pprint(entries)
+        else:
+            print(f"Number of entries [vm]", len(entries))
         assert len(entries) > 0
 
     def test_cm_find_loop(self):
@@ -45,10 +50,10 @@ class Test_cm_find:
             data = cm.find(cloud=f"{cloud}", kind=kind)
             if len(data) > 0:
                 entries.append(data)
-            if benchmark_print:
-                pprint(entries)
-            else:
-                print(f"Number of entries [{kind}", len(data))
+        if benchmark_print:
+            pprint(entries)
+        else:
+            print(f"Number of entries [{kind}", len(data))
         Benchmark.Stop()
 
         assert len(entries) > 0
@@ -58,9 +63,12 @@ class Test_cm_find:
         names=[]
         for kind in ['vm', "image", "flavor"]:
             data = cm.names(cloud=cloud, kind=kind)
-            print(names)
             if len(data) >0 :
                 names.append(data)
+        if benchmark_print:
+            pprint(names)
+        else:
+            print(f"Number of entries [{kind}]", len(data))
         assert len(names) > 0
 
     def test_cm_image_name_cloud(self):
@@ -91,9 +99,7 @@ class Test_cm_find:
         Benchmark.Start()
 
         names = cm.names(collection=f"{cloud}-image", regex="^CC-")
-        print(cloud, names)
         for entry in names:
-            print(entry)
             assert "CC-" in entry
 
         names = cm.names(collection=f"{cloud}-image", regex=".*Ubuntu.*")
@@ -103,7 +109,7 @@ class Test_cm_find:
 
         kind = "image"
         if benchmark_print:
-            pprint(names)
+            print(names)
         else:
             print(f"Number of entries [{kind}", len(names))
 
@@ -116,8 +122,11 @@ class Test_cm_find:
         Benchmark.Start()
         entries = cm.find(cloud=f"{cloud},azure", kind="vm")
         Benchmark.Stop()
-
-        pprint(entries)
+        kind = "vm"
+        if benchmark_print:
+            print(entries)
+        else:
+            print(f"Number of entries [{kind}", len(entries))
 
     def test_cm_find_ubuntu_in_images(self):
         HEADING()
@@ -151,7 +160,12 @@ class Test_cm_find:
                           attributes=['cm.cloud', 'cm.name'])
         Benchmark.Stop()
 
-        print(entries)
+        kind = "vm"
+        if benchmark_print:
+            print(entries)
+        else:
+            print(f"Number of entries [{kind}", len(entries))
+
         assert len(entries) > 0
 
     def test_cm_find_cloud_name_attributes(self):
@@ -162,7 +176,12 @@ class Test_cm_find:
                           attributes=['cm.cloud', 'cm.name'])
         Benchmark.Stop()
 
-        print(entries)
+        kind = "vm"
+        if benchmark_print:
+            print(entries)
+        else:
+            print(f"Number of entries [{kind}", len(entries))
+
         assert len(entries) > 0
 
     def test_cm_find_vm_collections(self):
@@ -171,7 +190,11 @@ class Test_cm_find:
         collections = cm.collections()
         Benchmark.Stop()
 
-        print(collections)
+        if benchmark_print:
+            print(collections)
+        else:
+            print(f"Number of entries [collections]", len(collections))
+
         assert len(collections) > 0
 
     def test_cm_find_vm_collections_vm(self):
@@ -179,7 +202,11 @@ class Test_cm_find:
         Benchmark.Start()
         collections = cm.collections(regex=".*-vm")
         Benchmark.Stop()
-        print(collections)
+        if benchmark_print:
+            print(collections)
+        else:
+            print(f"Number of entries [collections]", len(collections))
+
         assert len(collections) > 0
 
     def test_cm_find_vm_collection_form_parameter(self):
@@ -190,7 +217,11 @@ class Test_cm_find:
             regex=".*-vm")
         Benchmark.Stop()
 
-        print(collections)
+        if benchmark_print:
+            print(collections)
+        else:
+            print(f"Number of entries [collections]", len(collections))
+
         assert len(collections) == 2
 
     def test_benchmark(self):

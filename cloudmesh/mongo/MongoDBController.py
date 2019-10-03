@@ -461,9 +461,9 @@ class MongoDBController(object):
                 # if out == b'':
                 #    Console.error("mongo command not found")
                 #    sys.exit()
-                mongo_runner = f"{self.mongo_home}\\bin\mongod {auth} " \
+                mongo_runner = f"\"{self.mongo_home}\\bin\mongod\" {auth} " \
                     f"--bind_ip {mongo_host}" \
-                         f" --dbpath {self.mongo_path} --logpath {self.mongo_log}\mongod.log"
+                         f" --dbpath \"{self.mongo_path}\" --logpath \"{self.mongo_log}\mongod.log\""
                 print(mongo_runner)
                 if not os.path.isfile(f'{self.mongo_path}/invisible.vbs'):
                     with open(f'{self.mongo_path}/invisible.vbs','w') as f :
@@ -471,7 +471,7 @@ class MongoDBController(object):
                 if not os.path.isfile(f'{self.mongo_path}/mongo_starter.bat'):
                     with open(f'{self.mongo_path}/mongo_starter.bat', 'w') as f:
                         f.write(mongo_runner)
-                script = f'wscript.exe {self.mongo_path}/invisible.vbs {self.mongo_path}/mongo_starter.bat'
+                script = f'wscript.exe \"{self.mongo_path}/invisible.vbs\" \"{self.mongo_path}/mongo_starter.bat\"'
                 print(script)
                 p = subprocess.Popen(script, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
                 result = "mongod child process should be started successfully."
@@ -499,7 +499,7 @@ class MongoDBController(object):
         """
         # TODO: there  could be more mongos running, be more specific
         if platform.lower() == 'win32':
-            MONGO = f"{self.mongo_home}\\bin\mongo"
+            MONGO = f"\"{self.mongo_home}\\bin\mongo\""
             script = f'{MONGO} --eval "db.getSiblingDB(\'admin\').shutdownServer()"'
             p1 = subprocess.Popen(script, shell=True , stdout=subprocess.PIPE, stderr=STDOUT)
             MONGO_USERNAME = self.data['MONGO_USERNAME']
@@ -537,8 +537,8 @@ class MongoDBController(object):
         """
         if platform.lower() == 'win32': # don't remove this otherwise init won't work in windows, eval should start with double quote in windows
             self.data['MONGO'] = f"{self.mongo_home}\\bin\mongo"
-            script = """{MONGO} --eval "db.getSiblingDB('admin').createUser({{ user:'{MONGO_USERNAME}',pwd:'{MONGO_PASSWORD}',roles:[{{role:'root',db:'admin'}}]}}) ; db.shutdownServer()" """.format(**self.data)
-            print(script)
+            script = """ "{MONGO}" --eval "db.getSiblingDB('admin').createUser({{ user:'{MONGO_USERNAME}',pwd:'{MONGO_PASSWORD}',roles:[{{role:'root',db:'admin'}}]}}) ; db.shutdownServer()" """.format(**self.data)
+            # print(script)
             try:
                 # result = Shell3.run2(script)
                 p = subprocess.Popen(script, shell=True, stdout=subprocess.PIPE, stderr=STDOUT)

@@ -37,13 +37,16 @@ class AWSRegister(object):
             try:
                 self.driver = webdriver.Chrome()
                 # register = AWSRegister(self.driver)
-            except WebDriverException:
+            except WebDriverException as e:
+                Console.error(e)
+
                 Console.error("Chrome geckodriver not installed. Follow these steps for installation: \n"
                               "1) Download the driver from the following link: \n\t "
                               "https://sites.google.com/a/chromium.org/chromedriver/downloads \n"
                               "2) Copy the `chromedriver` to '/usr/bin' \n"
                               "3) Set the permission using:\n\t"
                               "'sudo chmod +x /usr/bin/chromedriver'")
+
                 return
 
             credentials_file_name = self.create_user()
@@ -71,7 +74,8 @@ class AWSRegister(object):
                 return
             try:
                 self.driver = webdriver.Chrome()
-            except WebDriverException:
+            except WebDriverException as e :
+                Console.error(e)
                 Console.error("Chrome geckodriver not installed. Follow these steps for installation: \n"
                               "1) Download the driver from the following link: \n\t "
                               "https://sites.google.com/a/chromium.org/chromedriver/downloads \n"
@@ -103,7 +107,8 @@ class AWSRegister(object):
                 return
             try:
                 self.driver = webdriver.Chrome()
-            except WebDriverException:
+            except WebDriverException as e:
+                Console.error(e)
                 Console.error("Chrome geckodriver not installed. Follow these steps for installation: \n"
                               "1) Download the driver from the following link: \n\t "
                               "https://sites.google.com/a/chromium.org/chromedriver/downloads \n"

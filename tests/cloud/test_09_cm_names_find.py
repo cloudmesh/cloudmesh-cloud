@@ -34,18 +34,24 @@ class Test_cm_find:
     def test_cm_find_loop(self):
         HEADING()
         Benchmark.Start()
+        entries = []
         for kind in ['vm', "image", "flavor"]:
-            entries = cm.find(cloud=f"{cloud}", kind=kind)
+            data = cm.find(cloud=f"{cloud}", kind=kind)
+            if len(data) > 0:
+                entries.append(data)
         Benchmark.Stop()
         # pprint(entries)
         assert len(entries) > 0
 
     def test_cm_loop(self):
         HEADING()
+        names=[]
         for kind in ['vm', "image", "flavor"]:
-            names = cm.names(cloud=cloud, kind=kind)
+            data = cm.names(cloud=cloud, kind=kind)
             print(names)
-            assert len(names) > 0
+            if len(data) >0 :
+                names.append(data)
+        assert len(names) > 0
 
     def test_cm_image_name_cloud(self):
         HEADING()

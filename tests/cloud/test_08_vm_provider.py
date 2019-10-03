@@ -61,7 +61,7 @@ class Test_provider_vm:
         VERBOSE(data)
         name = str(Name())
         status = provider.status(name=name)[0]
-        assert status["cm.status"] in ['ACTIVE', 'BOOTING']
+        assert status["cm.status"] in ['ACTIVE', 'BOOTING', 'TERMINATED', 'STOPPED']
 
     def test_provider_vmprovider_vm_list(self):
         # list should be after create() since it would return empty and len(data) would be 0

@@ -209,7 +209,7 @@ class MongoInstaller(object):
             if not self.dryrun:
                 Brew.install("mongodb")
                 path = Shell.which("mongod")
-                SystemPath.add("{path}".format(path=path))
+                SystemPath.add(f"{path}")
 
         else:
             script = f"""
@@ -226,7 +226,7 @@ class MongoInstaller(object):
                 print(script)
             else:
                 installer = Script.run(script)
-                SystemPath.add("{self.mongo_home}/bin".format(**self.data))
+                SystemPath.add(f"{self.mongo_home}/bin".format(**self.data))
 
             # THIS IS BROKEN AS ITS A SUPBROCESS? '. ~/.bashrc'
             Console.info("MongoDB installation successful!")

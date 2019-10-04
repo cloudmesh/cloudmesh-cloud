@@ -165,14 +165,14 @@ class MongoInstaller(object):
             Console.error("Unsupported Linux Version")
             raise Exception("unsupported operating system")
 
-        script = f"{sudo_command} " + f"{apt_cmd} " + """
-        mkdir -p {MONGO_PATH}
-        mkdir -p {MONGO_HOME}
-        mkdir -p {MONGO_LOG}
-        wget -q -O /tmp/mongodb.tgz {MONGO_CODE}
-        tar -zxvf /tmp/mongodb.tgz -C {LOCAL}/mongo --strip 1
-        echo \"export PATH={MONGO_HOME}/bin:$PATH\" >> ~/.bashrc
-            """.format(**self.data)
+        script = f"{sudo_command} " + f"{apt_cmd} " + f"""
+        mkdir -p {self.mongo_path}
+        mkdir -p {self.mongo_home}
+        mkdir -p {self.mongo_log}
+        wget -q -O /tmp/mongodb.tgz {self.mongo_code}
+        tar -zxvf /tmp/mongodb.tgz -C {self.local}/mongo --strip 1
+        echo \"export PATH={self.mongo_home}/bin:$PATH\" >> ~/.bashrc
+            """
         installer = Script.run(script)
 
     def ubuntu(self):

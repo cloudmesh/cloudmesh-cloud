@@ -14,8 +14,7 @@ from cloudmesh.mongo.MongoDBController import MongoDBController
 from cloudmesh.shell.command import PluginCommand
 from cloudmesh.shell.command import command, map_parameters
 from pathlib import Path
-from cloudmesh.common3.Shell import Shell as Shell3
-
+import sys
 
 class InitCommand(PluginCommand):
 
@@ -87,7 +86,13 @@ class InitCommand(PluginCommand):
 
             config = Config()
             user = config["cloudmesh.profile.user"]
+
             secgroup = "flask"
+
+            print("Set key")
+            if user == "TBD":
+                Console.error("the user is not set in the yaml file for cloudmesh.profile.user")
+                sys.exit()
 
             print("MongoDB create")
             os.system("cms admin mongo create")

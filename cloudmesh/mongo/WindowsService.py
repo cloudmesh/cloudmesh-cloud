@@ -1,4 +1,5 @@
 
+import os
 
 class WindowsService(object):
 
@@ -13,6 +14,8 @@ class WindowsService(object):
         # use sd delete as posted in piazza
         # needs the service to be stopped we guess
         raise NotImplementedError
+        os.system(f"sc delete {name}")
+
 
     @staticmethod
     def status(name="MongoDB"):
@@ -24,6 +27,8 @@ class WindowsService(object):
         """
         # use the sc query and status command as postedin piazz
         raise NotImplementedError
+        os.system(f"sc delete {name}")
+
 
     @staticmethod
     def stop(name="MongoDB"):
@@ -34,6 +39,15 @@ class WindowsService(object):
         :return:
         """
         # use the stop command before you delete it
+        raise NotImplementedError
+        os.system(f'sc query {name} | findstr /i "STATE"')
+        # use the Shell.execute or run command to redirect the output and than find the stat in the output
+
+    def list():
+        """
+        lists the names of the running services
+        :return:
+        """
         raise NotImplementedError
 
     @staticmethod

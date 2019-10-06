@@ -43,6 +43,7 @@ class WindowsService(object):
         os.system(f'sc query {name} | findstr /i "STATE"')
         # use the Shell.execute or run command to redirect the output and than find the stat in the output
 
+    @staticmethod
     def list():
         """
         lists the names of the running services

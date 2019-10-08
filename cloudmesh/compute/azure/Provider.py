@@ -6,7 +6,8 @@ from azure.common.credentials import ServicePrincipalCredentials
 from azure.mgmt.compute import ComputeManagementClient
 from azure.mgmt.network import NetworkManagementClient
 from azure.mgmt.resource import ResourceManagementClient
-from azure.mgmt.network.v2018_12_01.models import NetworkSecurityGroup, SecurityRule
+from azure.mgmt.network.v2018_12_01.models import NetworkSecurityGroup, \
+    SecurityRule
 from cloudmesh.common3.DictList import DictList
 from cloudmesh.common.Printer import Printer
 import azure.mgmt.network.models
@@ -16,6 +17,8 @@ from cloudmesh.common.console import Console
 from cloudmesh.common.debug import VERBOSE
 from cloudmesh.common.util import HEADING
 from cloudmesh.configuration.Config import Config
+
+CLOUDMESH_YAML_PATH = "~/.cloudmesh/cloudmesh.yaml"
 
 
 class Provider(ComputeNodeABC, ComputeProviderPlugin):
@@ -41,7 +44,6 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         'UNKNOWN',
         'VERIFY_RESIZE'
     ]
-
 
     output = {
         "status": {
@@ -141,8 +143,8 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                        "Plan Name",
                        "Product",
                        "Operating System",
-                    ]
-            },
+                       ]
+        },
         "flavor": {
             "sort_keys": ["name",
                           "number_of_cores",
@@ -159,10 +161,10 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                        "Resource_Disk_Size",
                        "Memory",
                        "Max_Data_Disk"]},
-        "status": {},
-        "key":{}, # Moeen
-        "secgroup": {}, # Moeen
-        "secrule": {}, # Moeen
+        # "status": {},
+        "key": {},  # Moeen
+        "secgroup": {},  # Moeen
+        "secrule": {},  # Moeen
     }
 
     def Print(self, data, output=None, kind=None):
@@ -194,9 +196,9 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
     # noinspection PyPep8Naming
 
-#    def Print(self, output, kind, data):
-        # TODO: Moeen
-#        raise NotImplementedError
+    #    def Print(self, output, kind, data):
+    # TODO: Moeen
+    #        raise NotImplementedError
 
     def keys(self):
         # TODO: Moeen
@@ -209,7 +211,6 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
     def key_delete(self, name=None):
         # TODO: Moeen
         raise NotImplementedError
-
 
     # these are available to be associated
     def list_public_ips(self,
@@ -246,7 +247,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         raise NotImplementedError
 
     # noinspection PyPep8Naming
-    def __init__(self, name=None, configuration="~/.cloudmesh/cloudmesh.yaml"):
+    def __init__(self, name="azure", configuration=None, credentials=None):
         """
         Initializes the provider. The default parameters are read from the
         configuration file that is defined in yaml format.
@@ -254,6 +255,8 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         :param name: The name of the provider as defined in the yaml file
         :param configuration: The location of the yaml configuration file
         """
+        configuration = configuration if configuration is not None \
+            else CLOUDMESH_YAML_PATH
 
         conf = Config(configuration)["cloudmesh"]
 
@@ -265,7 +268,11 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         cred = self.spec["credentials"]
         self.default = self.spec["default"]
         self.cloudtype = self.spec["cm"]["kind"]
-        super().__init__(name, conf)
+        super().__init__(name, configuration)
+
+        # update credentials with the passed dict
+        if credentials is not None:
+            cred.update(credentials)
 
         VERBOSE(cred, verbose=10)
 
@@ -363,7 +370,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
     def get_server_metadata(self, name):
         # TODO: Joaquin -> Completed
-        tags_dict = self.vms.get(self.GROUP_NAME,self.VM_NAME)
+        tags_dict = self.vms.get(self.GROUP_NAME, self.VM_NAME)
 
         return tags_dict.tags
 
@@ -376,12 +383,12 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
             try:
                 tags_dict.pop(key)
             except KeyError:
-                print("Key " +key+ " not found")
+                print("Key " + key + " not found")
 
-        async_vm_tag_updates = self.vms.update(self.GROUP_NAME,self.VM_NAME,
-                                 {
-                                     'tags': tags_dict
-                                 })
+        async_vm_tag_updates = self.vms.update(self.GROUP_NAME, self.VM_NAME,
+                                               {
+                                                   'tags': tags_dict
+                                               })
         async_vm_tag_updates.wait()
 
         return async_vm_tag_updates.result().tags
@@ -417,7 +424,8 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         :return:
         """
 
-        secgroup_rules = self.network_client.security_rules.list(self.GROUP_NAME,name)
+        secgroup_rules = self.network_client.security_rules.list(
+            self.GROUP_NAME, name)
         # Double check to see if there is value of returning the rules from one Network Security Group or
         # return the full list of security gruops
 
@@ -471,7 +479,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                 access=azure.mgmt.network.models.SecurityRuleAccess.allow,
                 priority=500,
                 destination_address_prefix='*',
-                destination_port_range= '*',
+                destination_port_range='*',
                 direction=azure.mgmt.network.models.SecurityRuleDirection.inbound,
                 protocol=azure.mgmt.network.models.SecurityRuleProtocol.tcp,
                 source_address_prefix='*',
@@ -481,7 +489,8 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         else:
             raise ValueError("cloud not initialized")
 
-        add_rule = self.network_client.security_rules.create_or_update(self.GROUP_NAME, network_sec_group_name, name ,parameters)
+        add_rule = self.network_client.security_rules.create_or_update(
+            self.GROUP_NAME, network_sec_group_name, name, parameters)
 
         return add_rule
 
@@ -494,7 +503,8 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         :return:
         """
         if self.network_client:
-            self.network_client.network_security_groups.delete(self.GROUP_NAME, name)
+            self.network_client.network_security_groups.delete(self.GROUP_NAME,
+                                                               name)
         else:
             raise ValueError("cloud not initialized")
 
@@ -507,8 +517,8 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
             print("Warning group already exists")
             group_exists = True
 
-        groups  = NetworkSecurityGroup().list()
-        rules   = SecurityRule().list()
+        groups = NetworkSecurityGroup().list()
+        rules = SecurityRule().list()
 
         # pprint (rules)
         data = {}
@@ -574,7 +584,8 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
     def remove_rules_from_secgroup(self, name=None, rules=None):
         # TODO: Joaquin -> Completed
 
-        remove_rule = self.network_client.security_rules.delete(self.GROUP_NAME, name, rules )
+        remove_rule = self.network_client.security_rules.delete(self.GROUP_NAME,
+                                                                name, rules)
 
         return remove_rule
 
@@ -729,7 +740,6 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         )
         subnet_info = async_subnet_creation.result()
 
-
         # Create NIC
         VERBOSE(" ".join('Create NIC'))
         async_nic_creation = \
@@ -871,8 +881,6 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         r = self.cloudman.list_servers(filters={'name': name})[0]
         return r['status']
 
-
-
     def list(self):
         # TODO: Joaquin -> Completed
         """
@@ -928,7 +936,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         i = 0
 
         for publisher in result_list_pub:
-            if(i<5):
+            if (i < 5):
                 try:
                     result_list_offers = self.imgs.list_offers(
                         region,
@@ -971,19 +979,20 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                                             VERBOSE(msg)
                                             image_list.append(result_get)
                                         except:
-                                            print("Something failed in result_list")
+                                            print(
+                                                "Something failed in result_list")
 
                                 except:
-                                    print("Something failed in result_list_skus")
+                                    print(
+                                        "Something failed in result_list_skus")
 
                         except:
                             print("Something failed in result_list_offers")
 
                 except:
                     print("Something failed in result_list_pub")
-            i=i+1
+            i = i + 1
         return self.get_list(image_list, kind="image")
-
 
     def flavors(self):
         # TODO: Joaquin -> Completed
@@ -992,7 +1001,8 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
         :return: dict of flavors
         """
-        vm_sizes_list = self.compute_client.virtual_machine_sizes.list(location=self.LOCATION)
+        vm_sizes_list = self.compute_client.virtual_machine_sizes.list(
+            location=self.LOCATION)
 
         return self.get_list(vm_sizes_list, kind="flavor")
 
@@ -1082,7 +1092,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         for entry in _elements:
 
             if "cm" not in entry:
-               entry['cm'] = {}
+                entry['cm'] = {}
 
             if kind == 'ip':
                 entry['name'] = entry['floating_ip_address']
@@ -1109,9 +1119,11 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                 entry["cm"]["name"] = entry["name"]
                 entry["cm"]["number_of_cores"] = entry["number_of_cores"]
                 entry["cm"]["os_disk_size_in_mb"] = entry["os_disk_size_in_mb"]
-                entry["cm"]["resource_disk_size_in_mb"] = entry["resource_disk_size_in_mb"]
+                entry["cm"]["resource_disk_size_in_mb"] = entry[
+                    "resource_disk_size_in_mb"]
                 entry["cm"]["memory_in_mb"] = entry["memory_in_mb"]
-                entry["cm"]["max_data_disk_count"] = entry["max_data_disk_count"]
+                entry["cm"]["max_data_disk_count"] = entry[
+                    "max_data_disk_count"]
                 entry["cm"]["updated"] = str(datetime.utcnow())
             elif kind == 'image':
                 entry['cm']['created'] = str(datetime.utcnow())
@@ -1127,3 +1139,9 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
             VERBOSE(d)
 
         return d
+
+    def wait(self,
+             vm=None,
+             interval=None,
+             timeout=None):
+        raise NotImplementedError;

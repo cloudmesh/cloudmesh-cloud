@@ -1,26 +1,27 @@
 from cloudmesh.compute.azure import Provider as prv
-from cloudmesh.common.Shell import Shell
+from azure.cli.core import get_default_cli
+import time
 
-import json
+# AZURE_CLI = 'az'
+SERVICE_PRINCIPAL = 'cloudmesh'
 
-AZURE_CLI = 'az'
-SERVICE_PRINCIPAL = 'http://cloudmeshtest'
+cli = get_default_cli()
 
 
 def get_az_account_list():
-    s = Shell.execute(AZURE_CLI, ['account', 'list'])
-    return json.loads(s[s.find('[') + 1: s.find(']')])
+    cli.invoke(['account', 'list'])
+    res = cli.result
+    return res.result[0]
 
 
 def az_login():
-    Shell.execute('az', ['login'])
+    cli.invoke(['login'])
 
 
 def get_service_principal_credentials():
-    s = Shell.execute(AZURE_CLI,
-                      ['ad', 'sp', 'create-for-rbac', '--name',
-                       SERVICE_PRINCIPAL])
-    return json.loads(s[s.find('{'): s.find('}') + 1])
+    cli.invoke(['ad', 'sp', 'create-for-rbac', '--name', SERVICE_PRINCIPAL])
+    res = cli.result
+    return res.result
 
 
 account = {}
@@ -28,6 +29,10 @@ sp_cred = {}
 try:
     account.update(get_az_account_list())
     sp_cred.update(get_service_principal_credentials())
+
+    # sleep for couple of seconds because it takes sometime
+    # to update the credentials
+    time.sleep(2)
 except ValueError:
     az_login()
     account = get_az_account_list()
@@ -41,9 +46,11 @@ cred = {
     'AZURE_TENANT_ID': account['tenantId'],
     'AZURE_SUBSCRIPTION_ID': account['id'],
 }
-
+print("Cred: " + str(cred))
 p = prv.Provider(credentials=cred)
 
 p.list()
+# p.info()
+# p.images()
 
 pass

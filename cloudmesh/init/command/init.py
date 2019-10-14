@@ -94,11 +94,12 @@ class InitCommand(PluginCommand):
                 Console.error("the user is not set in the yaml file for cloudmesh.profile.user")
                 sys.exit()
 
+            variables["key"] = user
+
             print("MongoDB create")
             os.system("cms admin mongo create")
             os.system("cms admin mongo start")
             os.system("cms sec load")
-            os.system(f"cms key add {user} --source=ssh")
 
             if arguments.CLOUD is not None:
                 cloud = arguments.CLOUD

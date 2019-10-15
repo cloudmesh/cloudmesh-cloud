@@ -213,30 +213,104 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         raise NotImplementedError
 
     # these are available to be associated
-    def list_public_ips(self,
-                        ip=None,
-                        available=False):
-        # TODO: Moeen
-        raise NotImplementedError
+    def list_public_ips(self, ip=None, available=False):
+        """
+        lists public ips of the group
+        """
+        list_result = self.network_client.public_ip_addresses.list(
+            self.GROUP_NAME)
 
-    # release the ip
+        ret = []
+        for res in list_result:
+            ret.append(res)
+
+        return ret
+
     def delete_public_ip(self, ip=None):
-        # TODO: Moeen
-        raise NotImplementedError
+        """
+        deletes public ip by name
+        """
+        if ip is not None:
+            res = self.network_client.public_ip_addresses.delete(
+                self.GROUP_NAME,
+                ip
+            )
+
+            return res.result()
+        else:
+            Console.warning('No ip prefix provided')
+            return None
 
     def create_public_ip(self):
-        # TODO: Moeen
-        raise NotImplementedError
+        """
+        Creates public IP for the group with the ip name provided in the config
+        :return:
+        """
+
+        public_ip_params = {
+            'location': self.LOCATION,
+            'public_ip_allocation_method': 'Static',
+            'sku': {
+                'name': 'Basic',
+            }
+        }
+
+        creation_result = self.network_client.public_ip_addresses.create_or_update(
+            self.GROUP_NAME,
+            self.PUBLIC_IP__NAME,
+            public_ip_params,
+            # custom_headers={'Accept': 'application/json'}
+        )
+
+        return creation_result.result()
 
     def find_available_public_ip(self):
-        # TODO: Moeen
-        raise NotImplementedError
+        """
+        ip will be quarried using the name provided in the config
 
-    def attach_public_ip(self, node, ip):
-        # TODO: Moeen
-        raise NotImplementedError
+        if no ip is available, create the IP and return the publicIP object.
+        else, if IP is available and free, return that object
+        else throw and error
 
-    def detach_public_ip(self, node, ip):
+        :return:
+        """
+        ip = next((x for x in self.list_public_ips() if x.name == self.PUBLIC_IP__NAME), None)
+
+        if ip is None:
+            # if ip is none -> no ip available --> create it!
+            return self.create_public_ip()
+        elif ip.ip_configuration is None:
+            # if ip_configuration is none -> ip is available --> return it!
+            return ip
+        else:
+            raise Exception('IP is already allocated!: ' + self.PUBLIC_IP__NAME)
+
+    def attach_public_ip(self, node=None, ip=None):
+        """
+        attaches a public ip to a node
+        """
+        ip = self.find_available_public_ip()
+
+        # to attach a public ip, get the nic and update the public ip field via
+        # IP config
+        ip_config = self.network_client.network_interface_ip_configurations.get(
+            self.GROUP_NAME, self.NIC_NAME, self.IP_CONFIG_NAME
+        )
+
+        ip_config.public_ip_address = ip
+
+        res = self.network_client.network_interfaces.create_or_update(
+            self.GROUP_NAME,
+            self.NIC_NAME,
+            parameters={
+                'location': self.LOCATION,
+                'ip_configurations': [ip_config]
+            }
+        )
+
+        return res.result()
+
+    def detach_public_ip(self, node=None, ip=None):
         # TODO: Moeen
         raise NotImplementedError
 
@@ -323,6 +397,9 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         self.IP_CONFIG_NAME = self.default["AZURE_VM_IP_CONFIG"]
         self.NIC_NAME = self.default["AZURE_VM_NIC"]
 
+        # public IPs
+        self.PUBLIC_IP__NAME = self.default['AZURE_PUBLIC_IP_NAME']
+
         # Azure VM Storage details
         self.OS_DISK_NAME = self.default["AZURE_VM_DISK_NAME"]
         self.USERNAME = self.default["AZURE_VM_USER"]
@@ -406,7 +483,6 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
         if name is not None:
             for entry in groups:
-
                 if entry['name'] == name:
                     groups = [entry]
                     break

@@ -1,6 +1,7 @@
 from cloudmesh.compute.azure import Provider as prv
 from azure.cli.core import get_default_cli
 import time
+import json
 
 # AZURE_CLI = 'az'
 SERVICE_PRINCIPAL = 'cloudmesh'
@@ -26,31 +27,51 @@ def get_service_principal_credentials():
 
 account = {}
 sp_cred = {}
-try:
-    account.update(get_az_account_list())
-    sp_cred.update(get_service_principal_credentials())
+# try:
+#     account.update(get_az_account_list())
+#
+#     sp_cred.update(get_service_principal_credentials())
+#     time.sleep(2)
+#
+#     # sleep for couple of seconds because it takes sometime
+#     # to update the credentials
+# except ValueError:
+#     az_login()
+#     account = get_az_account_list()
 
-    # sleep for couple of seconds because it takes sometime
-    # to update the credentials
-    time.sleep(2)
-except ValueError:
-    az_login()
-    account = get_az_account_list()
+# print(account)
+# print(sp_cred)
+#
+# cred = {
+#     'AZURE_APPLICATION_ID': sp_cred['appId'],
+#     'AZURE_SECRET_KEY': sp_cred['password'],
+#     'AZURE_TENANT_ID': account['tenantId'],
+#     'AZURE_SUBSCRIPTION_ID': account['id'],
+# }
+# print("Cred: " + str(cred))
 
-print(account)
-print(sp_cred)
+p = prv.Provider()
 
-cred = {
-    'AZURE_APPLICATION_ID': sp_cred['appId'],
-    'AZURE_SECRET_KEY': sp_cred['password'],
-    'AZURE_TENANT_ID': account['tenantId'],
-    'AZURE_SUBSCRIPTION_ID': account['id'],
-}
-print("Cred: " + str(cred))
-p = prv.Provider(credentials=cred)
-
-p.list()
+# p.list()
 # p.info()
 # p.images()
+
+# p.create()
+#
+# exit(0)
+
+# [print(r.__str__()) for r in p.list_public_ips()]
+
+print('####')
+
+print(p.find_available_public_ip().__str__())
+
+print('attach the ip to vm')
+print(p.attach_public_ip())
+
+# print(p.create_public_ip())
+# print(p.list_public_ips())
+# print(p.delete_public_ip(ip='cloudmeshVM-pub-ip'))
+# print(p.list_public_ips())
 
 pass

@@ -9,7 +9,7 @@ from sys import platform
 from cloudmesh.common.Shell import Shell
 
 import psutil
-
+import os
 
 class SystemPath(object):
     """Managing the System path in the .bashrc or .bash_profile files"""
@@ -24,17 +24,38 @@ class SystemPath(object):
         :param path: The path to be added
         :return:
         """
+
+        def which_shell():
+            shell = os.environ["SHELL"]
+            for s in ['bash', 'zsh']:
+                if s in shell:
+                    return s
+            return shell
+
         script = None
         if platform == "darwin":
-            script = f"""
-            echo \"export PATH={path}:$PATH\" >> ~/.bash_profile
-            source ~/.bash_profile
-            """.format(path=path)
+
+            shell = which_shell()
+
+            if shell == 'bash':
+                script = f"""
+                echo \"export PATH={path}:$PATH\" >> ~/.bash_profile
+                source ~/.bash_profile
+                """
+            elif shell == "zsh":
+                script = f"""
+                echo \"export PATH={path}:$PATH\" >> ~/.zprofile
+                source ~/.zprofile
+                """
+            else:
+                script = f"""
+                echo \"Shell {shell} not supported
+                """
         elif platform == "linux":
-            script = """
+            script = f"""
             echo \"export PATH={path}:$PATH\" >> ~/.bashrc
             source ~/.bashrc
-            """.format(path=path)
+            """
         elif platform == "windows":
             script = None
             # TODO: BUG: Implement

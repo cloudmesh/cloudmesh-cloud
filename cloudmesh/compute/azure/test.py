@@ -25,6 +25,7 @@ def get_service_principal_credentials():
     return res.result
 
 
+
 account = {}
 sp_cred = {}
 # try:

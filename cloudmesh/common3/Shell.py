@@ -111,7 +111,7 @@ class Shell(Shell2):
             Console.error(
                 f"You are running an unsupported version "
                 f"of python: {python_version}")
-            Console.error("Please update to python version 3.7")
+            Console.error("Please update to python version 3.7 or 3.8")
             sys.exit(1)
 
         elif python_version[0] == 3:

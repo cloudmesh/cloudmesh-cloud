@@ -1304,7 +1304,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
         :return: dict of flavors
         """
-        flavors = AwsFlavor()
+        flavors = AwsFlavor(session = self.session)
         data = flavors.fetch()
         result = flavors.list(data)
         return self.update_dict(result, kind="flavor")

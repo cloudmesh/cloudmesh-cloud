@@ -22,7 +22,7 @@ set USERNAME="IUUSERNAME"
 
 set FIRSTNAME="Firstname"
 set LASTNAME="Lastname"
-set GITUSER="YURGITHUBID"
+set GITUSER="YOURGITHUBID"
 
 set MONGOPASSWORD=mongopassword
 

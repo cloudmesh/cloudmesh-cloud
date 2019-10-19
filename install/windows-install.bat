@@ -47,27 +47,15 @@ set CLOUD=chameleon
 :: --------------------------------------------------------------------------
 
 :: --------------------------------------------------
-:: Upgrade all Pip packages to the newest available version
-:: --------------------------------------------------
-python -m pip install --upgrade pip
-
-:: --------------------------------------------------
-:: Create the cloudmesh workspace directory
-:: Note: Do NOT use the word 'cloudmesh' or an underscore '_'
-:: --------------------------------------------------
-mkdir cm
-
-:: --------------------------------------------------
-:: Change tp the cloudmesh workspace directory
-:: --------------------------------------------------
-cd cm
-
-:: --------------------------------------------------
 :: Create a new virtual environment in the subdirectory
 :: and configure the current shell to use it as the
 :: default python environment
 :: --------------------------------------------------
 python -m venv ENV3
+:: --------------------------------------------------
+:: Upgrade Pip to use the newest version of pip in ENV3
+:: --------------------------------------------------
+python -m pip install --upgrade pip
 
 :: --------------------------------------------------
 :: Activate your virtualenv:
@@ -76,6 +64,14 @@ python -m venv ENV3
 :: Type: 'deactivate' to exit virtual environment
 :: --------------------------------------------------
 CALL .\ENV3\Scripts\activate
+
+:: --------------------------------------------------
+:: Create the cloudmesh workspace directory
+:: Note: Do NOT use the word 'cloudmesh' or an underscore '_'
+:: Change tp the cm workspace directory
+:: --------------------------------------------------
+mkdir cm
+cd cm
 
 :: --------------------------------------------------
 :: Install Cloudmesh Installer
@@ -90,7 +86,10 @@ cloudmesh-installer git clone %BUNDLE%
 cloudmesh-installer git pull %BUNDLE%
 cloudmesh-installer install %BUNDLE% -e
 
-:: Validate the install worked
+:: --------------------------------------------------
+:: create a cloudmesh.yaml file and Validate the install worked
+:: --------------------------------------------------
+
 cms help
 
 
@@ -147,7 +146,7 @@ cms set key=%USERNAME
 :: Test install by checking Chamelon cloud
 :: --------------------------------------------------
 
-cms config set cloud=%CLOUD%
+cms set cloud=%CLOUD%
 cms key upload %USERNAME% --cloud=%CLOUD%
 cms image list --refresh
 cms flavor list --refresh

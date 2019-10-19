@@ -153,25 +153,3 @@ cms image list --refresh
 cms flavor list --refresh
 cms vm list --refresh
 
-:: --------------------------------------------------
-:: Generate a cloudmesh-EXAMPLE folder in which we put the command
-:: --------------------------------------------------
-mkdir cloudmesh-%EXAMPLECOMMAND%
-cd cloudmesh-%EXAMPLECOMMAND%
-cms sys command generate %EXAMPLECOMMAND% .
-
-:: --------------------------------------------------
-:: Install %EXAMPLECOMMAND%
-:: --------------------------------------------------
-pip install -e .
-
-:: --------------------------------------------------
-:: Test running %EXAMPLECOMMAND% with and without params
-:: --------------------------------------------------
-:: cms %EXAMPLECOMMAND% --file "c:\\mydir\\myfile.txt"
-cms %EXAMPLECOMMAND% list
-
-:: --------------------------------------------------
-:: Open Visual Studio Code in this directory
-:: --------------------------------------------------
-:: code .

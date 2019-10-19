@@ -154,16 +154,16 @@ cms flavor list --refresh
 cms vm list --refresh
 
 :: --------------------------------------------------
-:: Generate a folder for your project
+:: Generate a cloudmesh-EXAMPLE folder in which we put the command
 :: --------------------------------------------------
-mkdir %EXAMPLECOMMAND%
-cd %EXAMPLECOMMAND%
-cms sys command generate %EXAMPLECOMMAND%
+mkdir cloudmesh-%EXAMPLECOMMAND%
+cd cloudmesh-%EXAMPLECOMMAND%
+cms sys command generate %EXAMPLECOMMAND% .
 
 :: --------------------------------------------------
 :: Install %EXAMPLECOMMAND%
 :: --------------------------------------------------
-pip install -e %EXAMPLECOMMAND%\cloudmesh-%EXAMPLECOMMAND%
+pip install -e .
 
 :: --------------------------------------------------
 :: Test running %EXAMPLECOMMAND% with and without params

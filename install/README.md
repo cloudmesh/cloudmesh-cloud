@@ -3,7 +3,7 @@
 In this directory you find examples of install scripts
 
 
-## Bash and zh Scripts
+## Bash and zsh Scripts
 
 THESE ARE UNTESTED
 

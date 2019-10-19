@@ -31,6 +31,7 @@ set CHAMELEONPASSWORD=chameleonpassword
 
 set EXAMPPLECOMMAND=mycommand
 
+set CLOUD=chameleon
 
 :: --------------------------------------------------------------------------
 :: IMPROVEMENT SUGGESTIONS
@@ -92,6 +93,7 @@ cloudmesh-installer install %BUNDLE% -e
 :: Validate the install worked
 cms help
 
+
 :: --------------------------------------------------
 :: Update your .yaml file
 :: --------------------------------------------------
@@ -118,6 +120,8 @@ cms config set chameleon.cloud.chameleon.credentials.OS_PASSWORD="""%CHAMELEONPA
 :: Check the .yaml file
 cms config check
 
+
+
 :: --------------------------------------------------
 :: Install MongoDB
 :: Note: For Windows10 press the [Ignore] button for this error:
@@ -133,9 +137,18 @@ cms init
 cms init
 
 :: --------------------------------------------------
+:: Add the local key
+:: --------------------------------------------------
+
+cms key add %USERNAME% --source=ssh
+cms set key=%USERNAME
+
+:: --------------------------------------------------
 :: Test install by checking Chamelon cloud
 :: --------------------------------------------------
-cms config set cloud=chameleon
+
+cms config set cloud=%CLOUD%
+cms key upload %USERNAME% --cloud=%CLOUD%
 cms image list --refresh
 cms flavor list --refresh
 cms vm list --refresh

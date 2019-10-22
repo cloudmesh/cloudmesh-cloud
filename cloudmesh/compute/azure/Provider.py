@@ -12,6 +12,7 @@ from cloudmesh.common3.DictList import DictList
 from cloudmesh.common.Printer import Printer
 import azure.mgmt.network.models
 from cloudmesh.abstractclass.ComputeNodeABC import ComputeNodeABC
+from cloudmesh.mongo.CmDatabase import CmDatabase
 from cloudmesh.provider import ComputeProviderPlugin
 from cloudmesh.common.console import Console
 from cloudmesh.common.debug import VERBOSE
@@ -167,159 +168,6 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         "secrule": {},  # Moeen
     }
 
-    def Print(self, data, output=None, kind=None):
-        # TODO: Joaquin
-
-        if output == "table":
-            if kind == "secrule":
-
-                result = []
-                for group in data:
-                    for rule in group['security_group_rules']:
-                        rule['name'] = group['name']
-                        result.append(rule)
-                data = result
-
-            order = self.output[kind]['order']  # not pretty
-            header = self.output[kind]['header']  # not pretty
-            humanize = self.output[kind]['humanize']  # not pretty
-
-            print(Printer.flatwrite(data,
-                                    sort_keys=["name"],
-                                    order=order,
-                                    header=header,
-                                    output=output,
-                                    humanize=humanize)
-                  )
-        else:
-            print(Printer.write(data, output=output))
-
-    # noinspection PyPep8Naming
-
-    #    def Print(self, output, kind, data):
-    # TODO: Moeen
-    #        raise NotImplementedError
-
-    def keys(self):
-        # TODO: Moeen
-        raise NotImplementedError
-
-    def key_upload(self, key=None):
-        # TODO: Moeen
-        raise NotImplementedError
-
-    def key_delete(self, name=None):
-        # TODO: Moeen
-        raise NotImplementedError
-
-    # these are available to be associated
-    def list_public_ips(self, ip=None, available=False):
-        """
-        lists public ips of the group
-        """
-        list_result = self.network_client.public_ip_addresses.list(
-            self.GROUP_NAME)
-
-        ret = []
-        for res in list_result:
-            ret.append(res)
-
-        return ret
-
-    def delete_public_ip(self, ip=None):
-        """
-        deletes public ip by name
-        """
-        if ip is not None:
-            res = self.network_client.public_ip_addresses.delete(
-                self.GROUP_NAME,
-                ip
-            )
-
-            return res.result()
-        else:
-            Console.warning('No ip prefix provided')
-            return None
-
-    def create_public_ip(self):
-        """
-        Creates public IP for the group with the ip name provided in the config
-        :return:
-        """
-
-        public_ip_params = {
-            'location': self.LOCATION,
-            'public_ip_allocation_method': 'Static',
-            'sku': {
-                'name': 'Basic',
-            }
-        }
-
-        creation_result = self.network_client.public_ip_addresses.create_or_update(
-            self.GROUP_NAME,
-            self.PUBLIC_IP__NAME,
-            public_ip_params,
-            # custom_headers={'Accept': 'application/json'}
-        )
-
-        return creation_result.result()
-
-    def find_available_public_ip(self):
-        """
-        ip will be quarried using the name provided in the config
-
-        if no ip is available, create the IP and return the publicIP object.
-        else, if IP is available and free, return that object
-        else throw and error
-
-        :return:
-        """
-        ip = next((x for x in self.list_public_ips() if x.name == self.PUBLIC_IP__NAME), None)
-
-        if ip is None:
-            # if ip is none -> no ip available --> create it!
-            return self.create_public_ip()
-        elif ip.ip_configuration is None:
-            # if ip_configuration is none -> ip is available --> return it!
-            return ip
-        else:
-            raise Exception('IP is already allocated!: ' + self.PUBLIC_IP__NAME)
-
-    def attach_public_ip(self, node=None, ip=None):
-        """
-        attaches a public ip to a node
-        """
-        ip = self.find_available_public_ip()
-
-        # to attach a public ip, get the nic and update the public ip field via
-        # IP config
-        ip_config = self.network_client.network_interface_ip_configurations.get(
-            self.GROUP_NAME, self.NIC_NAME, self.IP_CONFIG_NAME
-        )
-
-        ip_config.public_ip_address = ip
-
-        res = self.network_client.network_interfaces.create_or_update(
-            self.GROUP_NAME,
-            self.NIC_NAME,
-            parameters={
-                'location': self.LOCATION,
-                'ip_configurations': [ip_config]
-            }
-        )
-
-        return res.result()
-
-    def detach_public_ip(self, node=None, ip=None):
-        # TODO: Moeen
-        raise NotImplementedError
-
-    # see the openstack example it will be almost the same as in openstack
-    # other than getting
-    # the ip and username
-    def ssh(self, vm=None, command=None):
-        raise NotImplementedError
-
     # noinspection PyPep8Naming
     def __init__(self, name="azure", configuration=None, credentials=None):
         """
@@ -409,6 +257,164 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         # Create or Update Resource group
         self.get_resource_group()
 
+        self.cmDatabase = CmDatabase()
+
+        self.protocol_str_map = {
+            'tcp': 'Tcp',
+            'udp': 'Udp',
+            '*': '*'
+        }
+
+    def Print(self, data, output=None, kind=None):
+        # TODO: Joaquin
+
+        if output == "table":
+            if kind == "secrule":
+
+                result = []
+                for group in data:
+                    for rule in group['security_group_rules']:
+                        rule['name'] = group['name']
+                        result.append(rule)
+                data = result
+
+            order = self.output[kind]['order']  # not pretty
+            header = self.output[kind]['header']  # not pretty
+            humanize = self.output[kind]['humanize']  # not pretty
+
+            print(Printer.flatwrite(data,
+                                    sort_keys=["name"],
+                                    order=order,
+                                    header=header,
+                                    output=output,
+                                    humanize=humanize)
+                  )
+        else:
+            print(Printer.write(data, output=output))
+
+    # noinspection PyPep8Naming
+
+    #    def Print(self, output, kind, data):
+    # TODO: Moeen
+    #        raise NotImplementedError
+
+    def keys(self):
+        # TODO: Moeen
+        raise NotImplementedError
+
+    def key_upload(self, key=None):
+        # TODO: Moeen
+        raise NotImplementedError
+
+    def key_delete(self, name=None):
+        # TODO: Moeen
+        raise NotImplementedError
+
+    # these are available to be associated
+    def list_public_ips(self, ip=None, available=False):
+        """
+        lists public ips of the group
+        """
+        list_result = self.network_client.public_ip_addresses.list(
+            self.GROUP_NAME)
+
+        return list_result
+
+    def delete_public_ip(self, ip=None):
+        """
+        deletes public ip by name
+        """
+        if ip is not None:
+            res = self.network_client.public_ip_addresses.delete(
+                self.GROUP_NAME,
+                ip
+            )
+
+            return res.result()
+        else:
+            Console.warning('No ip prefix provided')
+            return None
+
+    def create_public_ip(self):
+        """
+        Creates public IP for the group with the ip name provided in the config
+        :return:
+        """
+
+        public_ip_params = {
+            'location': self.LOCATION,
+            'public_ip_allocation_method': 'Static',
+            'sku': {
+                'name': 'Basic',
+            }
+        }
+
+        creation_result = self.network_client.public_ip_addresses.create_or_update(
+            self.GROUP_NAME,
+            self.PUBLIC_IP__NAME,
+            public_ip_params,
+            # custom_headers={'Accept': 'application/json'}
+        )
+
+        return creation_result.result()
+
+    def find_available_public_ip(self):
+        """
+        ip will be quarried using the name provided in the config
+
+        if no ip is available, create the IP and return the publicIP object.
+        else, if IP is available and free, return that object
+        else throw and error
+
+        :return:
+        """
+        ip = next((x for x in self.list_public_ips() if
+                   x.name == self.PUBLIC_IP__NAME), None)
+
+        if ip is None:
+            # if ip is none -> no ip available --> create it!
+            return self.create_public_ip()
+        elif ip.ip_configuration is None:
+            # if ip_configuration is none -> ip is available --> return it!
+            return ip
+        else:
+            raise Exception('IP is already allocated!: ' + self.PUBLIC_IP__NAME)
+
+    def attach_public_ip(self, node=None, ip=None):
+        """
+        attaches a public ip to a node
+        """
+        ip = self.find_available_public_ip()
+
+        # to attach a public ip, get the nic and update the public ip field via
+        # IP config
+        ip_config = self.network_client.network_interface_ip_configurations.get(
+            self.GROUP_NAME, self.NIC_NAME, self.IP_CONFIG_NAME
+        )
+
+        ip_config.public_ip_address = ip
+
+        res = self.network_client.network_interfaces.create_or_update(
+            self.GROUP_NAME,
+            self.NIC_NAME,
+            parameters={
+                'location': self.LOCATION,
+                'ip_configurations': [ip_config]
+            }
+        )
+
+        return res.result()
+
+    def detach_public_ip(self, node=None, ip=None):
+        # TODO: Moeen
+        raise NotImplementedError
+
+    # see the openstack example it will be almost the same as in openstack
+    # other than getting
+    # the ip and username
+    def ssh(self, vm=None, command=None):
+        raise NotImplementedError
+
     def get_resource_group(self):
         # TODO: Joaquin -> Completed
 
@@ -479,17 +485,68 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         :return:
         """
 
-        groups = self.network_client.network_security_groups.list_all(self)
+        # groups = self.network_client.network_security_groups.list_all(self)
+        #
+        # if name is not None:
+        #     for entry in groups:
+        #         if entry['name'] == name:
+        #             groups = [entry]
+        #             break
+        #
+        # return self.get_list(
+        #     groups,
+        #     kind="secgroup")
 
-        if name is not None:
-            for entry in groups:
-                if entry['name'] == name:
-                    groups = [entry]
-                    break
+        local_sec_groups = self._get_local_sec_groups(name)
+        Console.info('Local security groups: ')
+        [Console.info(str(i)) for i in local_sec_groups]
 
-        return self.get_list(
-            groups,
-            kind="secgroup")
+        az_sec_groups = self._get_az_sec_groups(name)
+        Console.info('Az security groups: ')
+        [Console.info(i.__str__()) for i in az_sec_groups]
+
+        return local_sec_groups
+
+    def _get_az_sec_groups(self, name=None):
+        groups = self.network_client.network_security_groups.list(
+            self.GROUP_NAME)
+        ret = []
+        for res in groups:
+            if name is not None:
+                if name == res.name:
+                    ret.append(res)
+            else:
+                ret.append(res)
+
+        return ret
+
+    def _get_local_sec_groups(self, name=None):
+        # if name is none, return all the groups, else filter the groups by name
+        query = {} if name is None else {'name': name}
+
+        local_sec_group = \
+            self.cmDatabase.collection('local-secgroup').find(query)
+
+        if local_sec_group.count() == 0:
+            raise ValueError(f'No security groups were not found in '
+                             f'local db for: {name}')
+
+        return list(local_sec_group)
+
+    def _get_local_sec_rules(self, group_name=None):
+        # if group_name is none, return all sec rules
+        sec_rules = None
+        if group_name is None:
+            sec_rules = list(
+                self.cmDatabase.collection('local-secrule').find({}))
+        else:
+            group = self._get_local_sec_groups(group_name)
+            query = {'name': {'$in': group[0]['rules']}}
+            sec_rules = list(
+                self.cmDatabase.collection('local-secrule').find(query)
+            )
+
+        return sec_rules
 
     def list_secgroup_rules(self, name='default'):
         # TODO: Joaquin
@@ -499,15 +556,71 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         :param name: The name of the group
         :return:
         """
+        local_sec_rules = self._get_local_sec_rules(name)
+        Console.info(f'local security rules for \'{name}\': '
+                     f'{str(local_sec_rules)}')
 
-        secgroup_rules = self.network_client.security_rules.list(
+        az_sec_rules = self.network_client.security_rules.list(
             self.GROUP_NAME, name)
-        # Double check to see if there is value of returning the rules from one Network Security Group or
-        # return the full list of security gruops
 
-        return secgroup_rules
+        Console.info(f'az security rules for \'{name}\': ')
+        [Console.info(i.__str__()) for i in az_sec_rules]
 
-    def add_secgroup(self, name=None, description=None):
+    def _sec_rules_local_to_az(self, sec_rule_names):
+        # local rules from the db
+        sec_rules = self.cmDatabase.collection('local-secrule').find(
+            {'name': {'$in': sec_rule_names}})
+
+        az_sec_rules = []
+        priority = 100
+        for rule in sec_rules:
+            az_rule = SecurityRule(
+                protocol=self.protocol_str_map.get(rule['protocol']),
+                name=rule['name'],
+                access='Allow',  # todo: can only set Allows!
+                direction='Inbound',  # todo: add appropriate
+                source_address_prefix='*',  # todo: add appropriate
+                destination_address_prefix='*',  # todo: add appropriate
+                source_port_range='*',  # todo: add appropriate
+                destination_port_range='*',  # todo: add appropriate
+                priority=priority
+            )
+            az_sec_rules.append(az_rule)
+            priority = priority + 1
+
+        return az_sec_rules
+
+    def _add_local_sec_group(self, name, description):
+        add_group = {
+            "description": description,
+            "rules": [],
+            "name": name,
+            "cm": {
+                "kind": "secgroup",
+                "name": name,
+                "cloud": "local",
+                "collection": "local-secgroup",
+                "created": str(datetime.now()),
+                "modified": str(datetime.now())
+            }
+        }
+
+        self.cmDatabase.collection('local-secgroup').insert_one(add_group)
+        return add_group
+
+    def _add_az_sec_group(self, name):
+        parameters = {
+            'location': self.LOCATION,
+        }
+
+        result_add_security_group = self.network_client. \
+            network_security_groups.create_or_update(self.GROUP_NAME, name,
+                                                     parameters)
+        result_add_security_group.wait()
+
+        return result_add_security_group.result()
+
+    def add_secgroup(self, name='default', description=None):
         # TODO: Joaquin -> Completed
         """
         Adds the
@@ -515,25 +628,18 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         :param description: The description
         :return:
         """
-        if self.network_client:
-            if description is None:
-                description = name
+        try:
+            local_sec_group = self._get_local_sec_groups(name)[0]
+            Console.info(f"local sec group: {str(local_sec_group)}")
+        except ValueError:
+            local_sec_group = self._add_local_sec_group(name, description)
+            Console.warning(f'{name} sec group is not found! Created new '
+                            f'group: {str(local_sec_group)}')
 
-            parameters = NetworkSecurityGroup(
-                location=self.LOCATION
-            )
+        self._add_az_sec_group(name)
 
-            result_add_security_group = self.network_client.network_security_groups.create_or_update(
-                self.GROUP_NAME,
-                name,
-                parameters,
-            )
-            result_add_security_group.wait()
-
-        else:
-            raise ValueError("cloud not initialized")
-
-        return result_add_security_group.result()
+        Console.info("sec group created successfully!")
+        return local_sec_group
 
     def add_secgroup_rule(self,
                           name=None,  # group name
@@ -542,31 +648,58 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                           ip_range=None):
         # TODO: Joaquin -> Completed
 
-        network_sec_group_name = 'cloudmesh_jae'
+        # network_sec_group_name = 'cloudmesh_jae'
 
-        if self.network_client:
-            try:
-                portmin, portmax = port.split(":")
-            except:
-                portmin = None
-                portmax = None
+        # if self.network_client:
+        #     # list all the rules available
+        #     sec_rules = self.list_secgroup_rules(name)
+        #
+        #     try:
+        #         portmin, portmax = port.split(":")
+        #     except:
+        #         portmin = None
+        #         portmax = None
+        #
+        #     parameters = SecurityRule(
+        #         access=azure.mgmt.network.models.SecurityRuleAccess.allow,
+        #         priority=500,
+        #         destination_address_prefix='*',
+        #         destination_port_range='*',
+        #         direction=azure.mgmt.network.models.SecurityRuleDirection.inbound,
+        #         protocol=azure.mgmt.network.models.SecurityRuleProtocol.tcp,
+        #         source_address_prefix='*',
+        #         source_port_range='*'
+        #     )
+        #
+        # else:
+        #     raise ValueError("cloud not initialized")
+        #
+        # add_rule = self.network_client.security_rules.create_or_update(
+        #     self.GROUP_NAME, network_sec_group_name, name, parameters)
 
-            parameters = SecurityRule(
-                access=azure.mgmt.network.models.SecurityRuleAccess.allow,
-                priority=500,
-                destination_address_prefix='*',
-                destination_port_range='*',
-                direction=azure.mgmt.network.models.SecurityRuleDirection.inbound,
-                protocol=azure.mgmt.network.models.SecurityRuleProtocol.tcp,
-                source_address_prefix='*',
-                source_port_range='*'
-            )
+        # this method would add sec group rule to local db only, because azure
+        # does not support adding security rules without security group names
+        # todo: change these defaults
+        protocol = "tcp" if protocol is None else protocol
+        ip_range = "0.0.0.0/0" if ip_range is None else ip_range
+        port = "22:22" if port is None else port
+        name = "ssh" if name is None else name
 
-        else:
-            raise ValueError("cloud not initialized")
-
-        add_rule = self.network_client.security_rules.create_or_update(
-            self.GROUP_NAME, network_sec_group_name, name, parameters)
+        add_rule = {
+            "protocol": protocol,
+            "ip_range": ip_range,
+            "ports": port,
+            "name": name,
+            "cm": {
+                "kind": "secrule",
+                "name": name,
+                "cloud": "local",
+                "collection": "local-secrule",
+                "created": str(datetime.now()),
+                "modified": str(datetime.now()),
+            }
+        }
+        self.cmDatabase.collection('local-secrule').insert_one(add_rule)
 
         return add_rule
 
@@ -578,56 +711,85 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         :param name: The name of the Security Group to be deleted
         :return:
         """
-        if self.network_client:
-            self.network_client.network_security_groups.delete(self.GROUP_NAME,
-                                                               name)
-        else:
-            raise ValueError("cloud not initialized")
+
+        del_group = self.network_client.network_security_groups. \
+            delete(self.GROUP_NAME, name)
+        del_group.wait()
+        Console.info(f'Security group {name} deleted from Az!')
 
     def upload_secgroup(self, name=None):
         # TODO: Joaquin -> Completed
+        # cgroups = self.list_secgroups(name)
+        # group_exists = False
+        # if len(cgroups) > 0:
+        #     print("Warning group already exists")
+        #     group_exists = True
+        #
+        # groups = NetworkSecurityGroup().list()
+        # rules = SecurityRule().list()
+        #
+        # # pprint (rules)
+        # data = {}
+        # for rule in rules:
+        #     data[rule['name']] = rule
+        #
+        # # pprint (groups)
+        #
+        # for group in groups:
+        #     if group['name'] == name:
+        #         break
+        # print("upload group:", name)
+        #
+        # if not group_exists:
+        #     self.add_secgroup(name=name, description=group['description'])
+        #
+        #     for r in group['rules']:
+        #         found = data[r]
+        #         print("    ", "rule:", found['name'])
+        #         self.add_secgroup_rule(
+        #             name=name,
+        #             port=found["ports"],
+        #             protocol=found["protocol"],
+        #             ip_range=found["ip_range"])
+        #
+        # else:
+        #
+        #     for r in group['rules']:
+        #         found = data[r]
+        #         print("    ", "rule:", found['name'])
+        #         self.add_rules_to_secgroup(
+        #             name=name,
+        #             rules=[found['name']])
 
-        cgroups = self.list_secgroups(name)
-        group_exists = False
-        if len(cgroups) > 0:
-            print("Warning group already exists")
-            group_exists = True
+        # this method would get the security group from the local db and push it
+        # to az
+        local_group = self._get_local_sec_groups(name)[0]
 
-        groups = NetworkSecurityGroup().list()
-        rules = SecurityRule().list()
+        # transform local rules to az rule objects
+        az_rules = self._sec_rules_local_to_az(local_group['rules'])
 
-        # pprint (rules)
-        data = {}
-        for rule in rules:
-            data[rule['name']] = rule
+        # push az rules
+        results = []
+        for az_rule in az_rules:
+            ret = self.network_client.security_rules.create_or_update(
+                self.GROUP_NAME,
+                local_group['name'],
+                az_rule.name,
+                az_rule
+            )
 
-        # pprint (groups)
+            results.append(ret.result())
 
-        for group in groups:
-            if group['name'] == name:
-                break
-        print("upload group:", name)
+        return results
 
-        if not group_exists:
-            self.add_secgroup(name=name, description=group['description'])
+    def _check_local_rules_available(self, rules):
+        sec_rules = self.cmDatabase.collection('local-secrule').find(
+            {'name': {'$in': rules}})
+        rule_names = {i['name'] for i in sec_rules}
 
-            for r in group['rules']:
-                found = data[r]
-                print("    ", "rule:", found['name'])
-                self.add_secgroup_rule(
-                    name=name,
-                    port=found["ports"],
-                    protocol=found["protocol"],
-                    ip_range=found["ip_range"])
-
-        else:
-
-            for r in group['rules']:
-                found = data[r]
-                print("    ", "rule:", found['name'])
-                self.add_rules_to_secgroup(
-                    name=name,
-                    rules=[found['name']])
+        if len(rule_names) == rules:
+            raise ValueError(f'Some of the security rules are not available: '
+                             f'{str(rules)}')
 
     def add_rules_to_secgroup(self, name=None, rules=None):
         # TODO: Joaquin -> Completed
@@ -635,35 +797,86 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         if name is None and rules is None:
             raise ValueError("name or rules are None")
 
-        cgroups = self.list_secgroups(name)
-        if len(cgroups) == 0:
-            raise ValueError("group does not exist")
+        if not isinstance(rules, list):
+            raise ValueError('rules should be a list')
 
-        groups = DictList(NetworkSecurityGroup().list())
-        rules_details = DictList(SecurityRule().list())
+        # cgroups = self.list_secgroups(name)
+        # if len(cgroups) == 0:
+        #     raise ValueError("group does not exist")
+        #
+        # groups = DictList(NetworkSecurityGroup().list())
+        # rules_details = DictList(SecurityRule().list())
+        #
+        # try:
+        #     group = groups[name]
+        # except:
+        #     raise ValueError("group does not exist")
+        #
+        # for rule in rules:
+        #     try:
+        #         found = rules_details[rule]
+        #         self.add_secgroup_rule(name=name,
+        #                                port=found["ports"],
+        #                                protocol=found["protocol"],
+        #                                ip_range=found["ip_range"])
+        #     except:
+        #         ValueError("rule can not be found")
 
-        try:
-            group = groups[name]
-        except:
-            raise ValueError("group does not exist")
+        # this method will add the rules to te local sec group only! it will
+        # update the az sec group once it is uploaded
+        sec_group = self._get_local_sec_groups(name)[0]
+        current_rules = sec_group['rules']
 
-        for rule in rules:
-            try:
-                found = rules_details[rule]
-                self.add_secgroup_rule(name=name,
-                                       port=found["ports"],
-                                       protocol=found["protocol"],
-                                       ip_range=found["ip_range"])
-            except:
-                ValueError("rule can not be found")
+        # check if the rules are already available
+        self._check_local_rules_available(rules)
+
+        current_rules.extend(rules)
+
+        cm = sec_group['cm']
+        cm.update({"modified": str(datetime.now())})
+
+        update = {
+            "$set": {
+                "rules": current_rules,
+                "cm": cm,
+            }
+        }
+
+        query = {'name': name}
+
+        self.cmDatabase.collection('local-secgroup').update_one(query, update)
+
+        return self._get_local_sec_groups(name)[0]
 
     def remove_rules_from_secgroup(self, name=None, rules=None):
         # TODO: Joaquin -> Completed
 
-        remove_rule = self.network_client.security_rules.delete(self.GROUP_NAME,
-                                                                name, rules)
+        local_group = self._get_local_sec_groups(name)[0]
+        new_rules = local_group['rules']
+        [new_rules.remove(i) for i in rules]
 
-        return remove_rule
+        cm = local_group['cm']
+        cm.update({"modified": str(datetime.now())})
+
+        update = {
+            "$set": {
+                "rules": new_rules,
+                "cm": cm,
+            }
+        }
+        query = {'name': name}
+
+        self.cmDatabase.collection('local-secgroup').update_one(query, update)
+        Console.info(f'Security rules {str(rules)} locally!')
+
+        if isinstance(rules, list):
+            [self.network_client.security_rules.delete(self.GROUP_NAME, name,
+                                                       r).wait() for r in rules]
+        else:
+            self.network_client.security_rules.delete(self.GROUP_NAME,
+                                                      name,
+                                                      rules).wait()
+        Console.info(f'Security rules {str(rules)} from az!')
 
     def create(self, name=None,
                image=None,

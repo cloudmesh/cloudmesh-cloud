@@ -25,7 +25,6 @@ def get_service_principal_credentials():
     return res.result
 
 
-
 account = {}
 sp_cred = {}
 # try:
@@ -58,21 +57,41 @@ p = prv.Provider()
 # p.images()
 
 # p.create()
+# exit(0)
+
 #
 # exit(0)
 
 # [print(r.__str__()) for r in p.list_public_ips()]
 
-print('####')
-
-print(p.find_available_public_ip().__str__())
-
-print('attach the ip to vm')
-print(p.attach_public_ip())
+# print('####')
+#
+# print(p.find_available_public_ip().__str__())
+#
+# print('attach the ip to vm')
+# print(p.attach_public_ip())
 
 # print(p.create_public_ip())
 # print(p.list_public_ips())
 # print(p.delete_public_ip(ip='cloudmeshVM-pub-ip'))
 # print(p.list_public_ips())
 
+# p.add_secgroup(name='my_sec_group', description='aaaaa')
+# [print(i.__str__()) for i in p.list_secgroups()]
+# print('###', p.list_secgroups('test')[0].__str__())
+
+# p.list_secgroup_rules()
+# p.list_secgroups()
+# p.list_secgroups('default')
+# print(p.add_secgroup(name='test'))
+
+# p.list_secgroup_rules()
+# p.list_secgroup_rules('test')
+# p.add_secgroup_rule(name='ssh2')
+
+# p.add_secgroup('default')
+
+# p.add_rules_to_secgroup('test', rules=['ssh', 'ssh2'])
+
+p.upload_secgroup('test')
 pass

@@ -6,10 +6,19 @@ from cloudmesh.management.script import find_process
 
 class MongoDocker(object):
 
+
     def __init__(self, configuration="~/.cloudmesh/cloudmesh.yaml"):
         path = path_expand(configuration)
         self.config = Config(config_path=path)
         self.data = self.config["cloudmesh.data.mongo"]
+
+        self.NAME = "cloudmesh-mongo"
+
+        self.username = self.data["MONGO_USERNAME"]
+        self.password = self.data["MONGO_PASSWORD"]
+        self.port = self.data["MONGO_PORT"]
+        self.host = self.data["MONGO_HOST"]
+
 
     def start(self):
         """
@@ -23,34 +32,78 @@ class MongoDocker(object):
         Stops the MongoDBd Container
         :return:
         """
-        raise NotImplementedError
+        try:
+            script = \
+                f"docker stop {self.NAME}"
+            installer = Script.run(script)
+            print(installer)
+        except:
+            pass
 
-    def create_image(self):
+
+    def ps(self):
+        """
+        Creates the Mongo image
+        :return:
+        """
+
+        #script = \
+        #    f"docker build . -t {self.NAME}"
+
+        script = \
+            f"docker ps"
+
+        installer = Script.run(script)
+        print(installer)
+
+
+    def pull(self):
+        """
+        Creates the Mongo image
+        :return:
+        """
+
+        #script = \
+        #    f"docker build . -t {self.NAME}"
+
+        script = \
+            f"docker pull mongo"
+
+
+
+        installer = Script.run(script)
+        print(installer)
+
+    def start_mongo(self):
         """
         Creates the MongoDB Container
         :return:
         """
-        username = self.data["MONGO_USERNAME"]
-        password = self.data["MONGO_PASSWORD"]
-        port = self.data["MONGO_PORT"]
-        host = self.data["MONGO_HOST"]
         script = \
-            f"docker run -d -p {host}:{port}:{port}" \
-            f" --name cloudmesh-mongo" \
-            f" -e MONGO_INITDB_ROOT_USERNAME={username}" \
-            f" -e MONGO_INITDB_ROOT_PASSWORD={password}" \
+            f"docker run -d -p {self.host}:{self.port}:{self.port}" \
+            f" --name {self.NAME}" \
+            f" -e MONGO_INITDB_ROOT_USERNAME={self.username}" \
+            f" -e MONGO_INITDB_ROOT_PASSWORD={self.password}" \
             f" mongo"
-
         installer = Script.run(script)
         print(installer)
-        raise NotImplementedError
 
     def create_admin(self):
         """
         Creates the admin user in the Container
         :return:
         """
-        raise NotImplementedError
+        # script = """ "{MONGO}" --eval "db.getSiblingDB('admin').createUser({{ user:'{MONGO_USERNAME}',pwd:'{MONGO_PASSWORD}',roles:[{{role:'root',db:'admin'}}]}}) ; db.shutdownServer()" """.format(**self.data)
+        #
+        script = \
+          f"docker run --name {self.NAME}  mongo --eval "\
+          "db.getSiblingDB('admin').createUser({"\
+          f"user:'{self.username}',"\
+          f"pwd:'{self.password}',"\
+          "roles:[{role:'root',db:'admin'\}]\});"\
+          "db.shutdownServer()"
+        installer = Script.run(script)
+        print(installer)
 
     def status(self):
         """
@@ -60,5 +113,14 @@ class MongoDocker(object):
         raise NotImplementedError
 
 
+if __name__ == "__main__":
+    mongo = MongoDocker()
 
+    mongo.ps()
+    mongo.pull()
+    #mongo.create_admin()
+    mongo.start_mongo()
+    mongo.ps()
+
+    mongo.stop()
 

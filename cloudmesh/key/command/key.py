@@ -11,6 +11,7 @@ from cloudmesh.mongo.CmDatabase import CmDatabase
 from cloudmesh.shell.command import PluginCommand
 from cloudmesh.shell.command import command, map_parameters
 from pprint import pprint
+import os
 
 class KeyCommand(PluginCommand):
 
@@ -29,6 +30,7 @@ class KeyCommand(PluginCommand):
              key list --source=ssh [--dir=DIR] [--output=OUTPUT]
              key list --source=git [--output=OUTPUT] [--username=USERNAME]
              key list [--output=OUTPUT]
+             key init
              key add NAME --filename=FILENAME [--output=OUTPUT]
              key add [NAME] [--source=FILENAME]
              key add [NAME] [--source=git]
@@ -83,6 +85,12 @@ class KeyCommand(PluginCommand):
                 key add NAME --git --username=username
                     adds a named github key from a user with the given github
                     username.
+
+                key set
+                    adds the ~/.ssh/id_rsa.pub key with the name specified in
+                    cloudmesh.profile.user.
+                    It also sets the variable key to that user.
+
 
                Once the keys are uploaded to github, they can be listed
                To list these keys the following list functions are provided.
@@ -249,6 +257,29 @@ class KeyCommand(PluginCommand):
                 name = config["cloudmesh.profile.user"]
                 kind = "ssh"
                 key.add(name, kind)
+
+        elif arguments.init:
+
+            """
+            key init 
+            """
+
+            config = Config()
+            username = config["cloudmesh.profile.user"]
+
+            if username == "TBD":
+                Console.error("Please set cloudmesh.profile.user in ~/.cloudmesh.yaml")
+                u = os.environ["USER"].lower().replace(" ", "")
+                Console.msg(f"To change it you can use the command. Define a NAME such as '{u}' e.g.")
+                Console.msg("")
+                Console.msg(f"  cms config set cloudmesh.profile.user={u}")
+                Console.msg("")
+                return ""
+
+            key = Key()
+
+            key.add(username, "ssh")
+            variables['key'] = username
 
         elif arguments.upload:
 

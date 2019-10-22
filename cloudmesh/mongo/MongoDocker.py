@@ -2,12 +2,12 @@ from cloudmesh.configuration.Config import Config
 from cloudmesh.common.util import path_expand
 from cloudmesh.management.script import Script, SystemPath
 from cloudmesh.management.script import find_process
-
+from cloudmesh.common.console import Console
 
 class MongoDocker(object):
 
 
-    def __init__(self, configuration="~/.cloudmesh/cloudmesh.yaml"):
+    def __init__(self, configuration="~/.cloudmesh/cloudmesh.yaml", dryrun=False):
         path = path_expand(configuration)
         self.config = Config(config_path=path)
         self.data = self.config["cloudmesh.data.mongo"]
@@ -18,6 +18,18 @@ class MongoDocker(object):
         self.password = self.data["MONGO_PASSWORD"]
         self.port = self.data["MONGO_PORT"]
         self.host = self.data["MONGO_HOST"]
+        self.dryrun = dryrun
+
+    def run(self, script, verbose=True):
+        if self.dryrun:
+            if verbose:
+                print (script)
+            return "dryrun"
+        else:
+            installer = Script.run(script)
+            if verbose:
+                print(installer)
+            return installer
 
 
     def start(self):
@@ -25,7 +37,13 @@ class MongoDocker(object):
         Starts the MongoDBd Container
         :return:
         """
-        raise NotImplementedError
+        script = "docker run -d -p 127.0.0.1:27017:27017/tcp --name cloudmesh-mongo mongo"
+        id = self.run(script, verbose=False)
+
+        Console.ok("Starting docker mongo container with id")
+        Console.msg("")
+        Console.msg(f"   {id}")
+        Console.msg("")
 
     def stop(self):
         """
@@ -35,8 +53,7 @@ class MongoDocker(object):
         try:
             script = \
                 f"docker stop {self.NAME}"
-            installer = Script.run(script)
-            print(installer)
+            self.run(script)
         except:
             pass
 
@@ -52,9 +69,7 @@ class MongoDocker(object):
 
         script = \
             f"docker ps"
-
-        installer = Script.run(script)
-        print(installer)
+        self.run(script)
 
 
     def pull(self):
@@ -68,11 +83,7 @@ class MongoDocker(object):
 
         script = \
             f"docker pull mongo"
-
-
-
-        installer = Script.run(script)
-        print(installer)
+        self.run(script)
 
     def start_mongo(self):
         """
@@ -85,8 +96,8 @@ class MongoDocker(object):
             f" -e MONGO_INITDB_ROOT_USERNAME={self.username}" \
             f" -e MONGO_INITDB_ROOT_PASSWORD={self.password}" \
             f" mongo"
-        installer = Script.run(script)
-        print(installer)
+        script = f"docker run -d -p {self.host}:{self.port}:{self.port}/tcp --name {self.NAME} mongo"
+        self.run(script)
 
     def create_admin(self):
         """
@@ -95,15 +106,19 @@ class MongoDocker(object):
         """
         # script = """ "{MONGO}" --eval "db.getSiblingDB('admin').createUser({{ user:'{MONGO_USERNAME}',pwd:'{MONGO_PASSWORD}',roles:[{{role:'root',db:'admin'}}]}}) ; db.shutdownServer()" """.format(**self.data)
         #
+
+        # docker exec cloudmesh-mongo  mongo --eval "db.getSiblingDB('admin').createUser({user:'admin',pwd:'ab12',roles:[{role:'root',db:'admin'}]});"
+        # docker exec cloudmesh-mongo  mongo --eval "db.getSiblingDB('admin').createUser({user:'admin',pwd:'ab12',roles:[{role:'root',db:'admin'}]});"
         script = \
-          f"docker run --name {self.NAME}  mongo --eval "\
+          f"docker exec {self.NAME}  mongo --eval "\
+          '"'\
           "db.getSiblingDB('admin').createUser({"\
           f"user:'{self.username}',"\
           f"pwd:'{self.password}',"\
-          "roles:[{role:'root',db:'admin'\}]\});"\
-          "db.shutdownServer()"
-        installer = Script.run(script)
-        print(installer)
+          "roles:[{role:'root',db:'admin'}]});"\
+          '"'
+        print (script)
+        self.run(script)
 
     def status(self):
         """
@@ -112,15 +127,42 @@ class MongoDocker(object):
         """
         raise NotImplementedError
 
+    def kill(self, name=None):
+        """
+        Kills all Containers
+        :return:
+        """
+        try:
+            if name is None:
+                name = self.NAME
+            script = f"docker container ls -aq --filter name={name}"
+            id = self.run(script, verbose=False)
+
+            script = \
+                f"docker stop {id}" \
+                f"docker rm {id}"
+            self.run(script, verbose=False)
+        except:
+            Console.ok("No container found.")
+
 
 if __name__ == "__main__":
     mongo = MongoDocker()
 
-    mongo.ps()
+    #mongo = MongoDocker(dryrun=True)
     mongo.pull()
-    #mongo.create_admin()
-    mongo.start_mongo()
+
     mongo.ps()
+    mongo.kill()
+    mongo.start()
+    mongo.create_admin()
+    #mongo.start_mongo()
+    #mongo.ps()
 
-    mongo.stop()
+    #mongo.stop()
 
+"""
+docker run --name cloudmesh-mongo -d -p 27017:27017 mongo 
+docker exec cloudmesh-mongo ls
+
+"""

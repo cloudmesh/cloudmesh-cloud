@@ -1,3 +1,7 @@
+#
+# Author: Gregor von Laszewski, laszewski@gmail.com
+#
+
 from cloudmesh.configuration.Config import Config
 from cloudmesh.common.util import path_expand
 from cloudmesh.management.script import Script, SystemPath

@@ -264,5 +264,5 @@ if __name__ == "__main__":
 
     mongo.ps()
 
-    #mongo.stop()
+    mongo.kill()
 

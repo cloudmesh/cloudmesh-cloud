@@ -112,7 +112,7 @@ class Provider(ComputeNodeABC):
             if self.cloudtype == 'openstack':
 
                 if cred["OS_PASSWORD"] == 'TBD':
-                    Console.error("The password TBD is not allowed")
+                    Console.error(f"The password TBD is not allowed in cloud {name}")
 
                 self.cloudman = self.driver(cred["OS_USERNAME"],
                                             cred["OS_PASSWORD"],

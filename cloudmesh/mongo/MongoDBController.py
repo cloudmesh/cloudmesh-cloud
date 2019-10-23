@@ -27,6 +27,8 @@ from cloudmesh.common.debug import VERBOSE
 from pymongo import MongoClient
 import sys
 
+
+
 # noinspection PyUnusedLocal
 class MongoInstaller(object):
 
@@ -40,7 +42,8 @@ class MongoInstaller(object):
         self.config = Config()
         self.data = self.config.data["cloudmesh"]["data"]["mongo"]
         self.machine = platform.lower()
-        download = self.config[f"cloudmesh.data.mongo.MONGO_DOWNLOAD.{self.machine}"]
+        download = self.config[
+            f"cloudmesh.data.mongo.MONGO_DOWNLOAD.{self.machine}"]
 
         self.mongo_code = path_expand(download["url"])
         self.mongo_path = path_expand(download["MONGO_PATH"])
@@ -53,24 +56,8 @@ class MongoInstaller(object):
             print(self.mongo_home)
             print(self.mongo_code)
 
-
     def __str__(self):
         return yaml.dump(self.data, default_flow_style=False, indent=2)
-
-    def docker(self):
-        username = self.data["MONGO_USERNAME"]
-        password = self.data["MONGO_PASSWORD"]
-        port = self.data["MONGO_PORT"]
-        host = self.data["MONGO_HOST"]
-        script = \
-            f"docker run -d -p {host}:{port}:{port}" \
-	        f" --name cloudmesh-mongo" \
-	        f" -e MONGO_INITDB_ROOT_USERNAME={username}" \
-	        f" -e MONGO_INITDB_ROOT_PASSWORD={password}" \
-            f" mongo"
-
-        installer = Script.run(script)
-        print (installer)
 
     def install(self, sudo=True):
         """
@@ -81,16 +68,38 @@ class MongoInstaller(object):
             print(self.mongo_path)
         # pprint(self.data)
 
+        mode = self.data['MODE']
+
+        if mode == 'docker':
+            Console.ok("Installing mongoDB in a docker container cloudmesh-mongo")
+
+            from cloudmesh.mongo.MongoDocker import MongoDocker
+            mongo = MongoDocker()
+            mongo.kill()
+            mongo.install(clean=True, pull=True)
+
+            Console.ok("Shutting mongoDB down")
+            Console.msg("")
+            Console.ok("Start the mongodb service with")
+            Console.msg("")
+            Console.msg("   cms admon mongo create")
+            Console.msg("   cms admon mongo start")
+            Console.msg("")
+
+            return ""
+
         if not self.data["MONGO_AUTOINSTALL"]:
             Console.error("Mongo auto install is off")
             print("You can set it with")
             print()
-            Console.ok("    cms config set cloudmesh.data.mongo.MONGO_AUTOINSTALL=True")
+            Console.ok(
+                "    cms config set cloudmesh.data.mongo.MONGO_AUTOINSTALL=True")
             print()
             if self.machine == 'darwin':
                 print("To install it with brew you need to set also")
                 print()
-                Console.ok("    cms config set cloudmesh.data.mongo.MONGO_BREWINSTALL=True")
+                Console.ok(
+                    "    cms config set cloudmesh.data.mongo.MONGO_BREWINSTALL=True")
                 print()
 
             return ""
@@ -99,7 +108,8 @@ class MongoInstaller(object):
         # the path test may be wrong as we need to test for mongo and mongod
         #
         # print ('OOO', os.path.isdir(path), self.data["MONGO_AUTOINSTALL"] )
-        if self.force or (not os.path.isdir(self.mongo_home) and self.data["MONGO_AUTOINSTALL"]):
+        if self.force or (not os.path.isdir(self.mongo_home) and self.data[
+            "MONGO_AUTOINSTALL"]):
             print(f"MongoDB is not installed in {self.mongo_home}")
             #
             # ask if you like to install and give info where it is being installed
@@ -122,10 +132,11 @@ class MongoInstaller(object):
 
     # noinspection PyUnusedLocal
     def linux(self, sudo=True):
-        cmd = ['lsb_release','-a']
-        proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        cmd = ['lsb_release', '-a']
+        proc = subprocess.Popen(cmd, stdout=subprocess.PIPE,
+                                stderr=subprocess.PIPE)
         o, e = proc.communicate()
-        p = o.decode('ascii').replace('\t',"").split("\n")
+        p = o.decode('ascii').replace('\t', "").split("\n")
 
         distro = "none"
         version = "none"
@@ -159,7 +170,7 @@ class MongoInstaller(object):
         apt_cmd = "error"
         if version == 9:
             apt_cmd = "apt-get --yes install openssl libcurl3"
-        elif version == 10: #UNTESTED
+        elif version == 10:  # UNTESTED
             apt_cmd = "apt-get --yes install openssl libcurl4"
         else:
             Console.error("Unsupported Linux Version")
@@ -220,7 +231,7 @@ class MongoInstaller(object):
             tar -zxvf /tmp/mongodb.tgz -C {self.local}/mongo --strip 1
             """
 
-            print (script)
+            print(script)
 
             if self.dryrun:
                 print(script)
@@ -240,7 +251,7 @@ class MongoInstaller(object):
         # self.data["MONGO_PATH"] = self.data["MONGO_PATH"].replace("/", "\\")
         # self.data["MONGO_LOG"] = self.data["MONGO_LOG"].replace("/", "\\")
 
-        #def is_admin():
+        # def is_admin():
         #    try:
         #        if platform == 'win32':
         #            return ctypes.windll.shell32.IsUserAnAdmin()
@@ -253,11 +264,12 @@ class MongoInstaller(object):
             os.mkdir(self.mongo_home)
         except FileExistsError:
             Console.info(f"Folder {self.mongo_home} already exists")
-        except FileNotFoundError: # means you don't have enough privilege
+        except FileNotFoundError:  # means you don't have enough privilege
             Console.error("Permission denied, requesting admin access")
             import win32com.shell.shell as shell
             script = f'mkdir "{self.mongo_home}"'
-            shell.ShellExecuteEx(lpVerb='runas', lpFile='cmd.exe', lpParameters='/c ' + script)
+            shell.ShellExecuteEx(lpVerb='runas', lpFile='cmd.exe',
+                                 lpParameters='/c ' + script)
 
         try:
             os.mkdir(self.mongo_path)
@@ -277,6 +289,7 @@ class MongoInstaller(object):
 
             Console.info("MongoDB installation successful!")
 
+
 class MongoDBController(object):
     __shared_state = {}
 
@@ -286,7 +299,7 @@ class MongoDBController(object):
     """
 
     script_admin = """
-    
+
     use admin
     db.createUser(
       {
@@ -299,19 +312,19 @@ class MongoDBController(object):
 
     """
     Steps to add admin
-    
+
     1. start mongo
     mongod --port {MONGO_PORT} --bind_ip {MONGO_HOST} --dbpath {MONGO_PATH}/{MONGO_DBNAME}
-    
-    
+
+
     2. pip scriptadmin to 
 
     mongo --port 27017
 
     3. restart mongo
-    
+
     mongod --auth --bind_ip {MONGO_HOST} --port {MONGO_PORT} --dbpath {MONGO_PATH}/{MONGO_DBNAME}
-    
+
     """
 
     def __init__(self, dryrun=False):
@@ -334,15 +347,12 @@ class MongoDBController(object):
                 print(self.mongo_path)
                 print(self.mongo_log)
                 print(self.mongo_home)
-                print(self.mongo_home)
                 print(self.mongo_code)
-
 
             if self.data.MONGO_PASSWORD in ["TBD", "admin"]:
                 Console.error("MongoDB password must not be the default: TBD")
 
                 raise Exception("password error")
-
 
             # mongo_log = self.data["MONGO_LOG"]
             paths = [self.mongo_path, self.mongo_log]
@@ -374,10 +384,10 @@ class MongoDBController(object):
             names = client[name].collection_names()
             data[name]['collections'] = names
 
-            #data[name]['collections'] = {}
-            #collections = data[name]['collections']
-            #collections = names
-            #for collection_name in names:
+            # data[name]['collections'] = {}
+            # collections = data[name]['collections']
+            # collections = names
+            # for collection_name in names:
             #    entry = {'name': collection_name}
             #    collections[collection_name] = entry
 
@@ -416,6 +426,14 @@ class MongoDBController(object):
 
         # Added special code for windows. Cant do start service and set_auth in same cms execution.
 
+        mode = self.data['MODE']
+
+        if mode == 'docker':
+            from cloudmesh.mongo.MongoDocker import MongoDocker
+            mongo = MongoDocker()
+            mongo.initialize()
+            return
+
         if platform.lower() == 'win32':
             Console.info("Starting mongo without authentication ... ")
             self.start(security=False)
@@ -431,18 +449,29 @@ class MongoDBController(object):
             Console.info("Stopping the service ... ")
             self.stop()
 
-    def import_collection(self,  security=True):
+    def import_collection(self, security=True):
         mongo_host = self.data['MONGO_HOST']
         auth = ""
         if security:
             auth = "--auth"
         command = f"mongoimport {auth} --bind_ip {mongo_host} --dbpath {self.mongo_path} --logpath {self.mongo_log}/mongod.log" \
-             " --fork".format(**self.data, auth=auth)
+                  " --fork".format(**self.data, auth=auth)
 
     def start(self, security=True):
         """
         start the MongoDB server
         """
+        mode = self.data['MODE']
+
+        if mode == 'docker':
+
+            from cloudmesh.mongo.MongoDocker import MongoDocker
+            mongo = MongoDocker()
+            mongo.start(auth=security)
+            # mongo.wait()
+            # mongo.ps()
+            return
+
         auth = ""
         if security:
             auth = "--auth"
@@ -463,24 +492,26 @@ class MongoDBController(object):
                 #    Console.error("mongo command not found")
                 #    sys.exit()
                 mongo_runner = f"\"{self.mongo_home}\\bin\mongod\" {auth} " \
-                    f"--bind_ip {mongo_host}" \
-                         f" --dbpath \"{self.mongo_path}\" --logpath \"{self.mongo_log}\mongod.log\""
+                               f"--bind_ip {mongo_host}" \
+                               f" --dbpath \"{self.mongo_path}\" --logpath \"{self.mongo_log}\mongod.log\""
                 print(mongo_runner)
                 if not os.path.isfile(f'{self.mongo_path}/invisible.vbs'):
-                    with open(f'{self.mongo_path}/invisible.vbs','w') as f :
-                        f.write('CreateObject("Wscript.Shell").Run """" & WScript.Arguments(0) & """", 0, False')
+                    with open(f'{self.mongo_path}/invisible.vbs', 'w') as f:
+                        f.write(
+                            'CreateObject("Wscript.Shell").Run """" & WScript.Arguments(0) & """", 0, False')
                 if not os.path.isfile(f'{self.mongo_path}/mongo_starter.bat'):
                     with open(f'{self.mongo_path}/mongo_starter.bat', 'w') as f:
                         f.write(mongo_runner)
                 script = f'wscript.exe \"{self.mongo_path}/invisible.vbs\" \"{self.mongo_path}/mongo_starter.bat\"'
                 print(script)
-                p = subprocess.Popen(script, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                p = subprocess.Popen(script, shell=True, stdout=subprocess.PIPE,
+                                     stderr=subprocess.PIPE)
                 result = "mongod child process should be started successfully."
             except Exception as e:
                 result = "Mongo in windows could not be started: \n\n" + str(e)
         else:
             try:
-                script = f"mongod {auth} --bind_ip {mongo_host}"\
+                script = f"mongod {auth} --bind_ip {mongo_host}" \
                          f" --dbpath {self.mongo_path} --logpath {self.mongo_log}/mongod.log --fork"
                 result = Script.run(script)
 
@@ -498,11 +529,20 @@ class MongoDBController(object):
         shutdown the MongoDB server
         linux and darwin have different way to shutdown the server, the common way is kill
         """
-        # TODO: there  could be more mongos running, be more specific
-        if platform.lower() == 'win32':
+        mode = self.data['MODE']
+
+        if mode == 'docker':
+
+            from cloudmesh.mongo.MongoDocker import MongoDocker
+            mongo = MongoDocker()
+            mongo.kill()
+            result = "container is down"
+
+        elif platform.lower() == 'win32':
             MONGO = f"\"{self.mongo_home}\\bin\mongo\""
             script = f'{MONGO} --eval "db.getSiblingDB(\'admin\').shutdownServer()"'
-            p1 = subprocess.Popen(script, shell=True , stdout=subprocess.PIPE, stderr=STDOUT)
+            p1 = subprocess.Popen(script, shell=True, stdout=subprocess.PIPE,
+                                  stderr=STDOUT)
             MONGO_USERNAME = self.data['MONGO_USERNAME']
             MONGO_PASSWORD = self.data['MONGO_PASSWORD']
             shutdown_with_auth1 = f"""{MONGO} -u {MONGO_USERNAME} -p {MONGO_PASSWORD} --eval "db.getSiblingDB(\'admin\').shutdownServer()" """
@@ -517,7 +557,7 @@ class MongoDBController(object):
                                   stdout=subprocess.PIPE, stderr=STDOUT)
             r1 = p1.stdout.read().decode('utf-8')
             r2 = p2.stdout.read().decode('utf-8')
-            if 'server should be down...' in r1 or 'connect failed' in r2 :
+            if 'server should be down...' in r1 or 'connect failed' in r2:
                 result = 'server should be down...'
             else:
                 result = 'server is already down...'
@@ -536,13 +576,27 @@ class MongoDBController(object):
         """
         add admin account into the MongoDB admin database
         """
-        if platform.lower() == 'win32': # don't remove this otherwise init won't work in windows, eval should start with double quote in windows
+
+        mode = self.data['MODE']
+
+        if mode == 'docker':
+
+            from cloudmesh.mongo.MongoDocker import MongoDocker
+            mongo = MongoDocker()
+            mongo.wait()
+            mongo.create_admin()
+            mongo.kill()
+            return
+
+        if platform.lower() == 'win32':  # don't remove this otherwise init won't work in windows, eval should start with double quote in windows
             self.data['MONGO'] = f"{self.mongo_home}\\bin\mongo"
-            script = """ "{MONGO}" --eval "db.getSiblingDB('admin').createUser({{ user:'{MONGO_USERNAME}',pwd:'{MONGO_PASSWORD}',roles:[{{role:'root',db:'admin'}}]}}) ; db.shutdownServer()" """.format(**self.data)
+            script = """ "{MONGO}" --eval "db.getSiblingDB('admin').createUser({{ user:'{MONGO_USERNAME}',pwd:'{MONGO_PASSWORD}',roles:[{{role:'root',db:'admin'}}]}}) ; db.shutdownServer()" """.format(
+                **self.data)
             # print(script)
             try:
                 # result = Shell3.run2(script)
-                p = subprocess.Popen(script, shell=True, stdout=subprocess.PIPE, stderr=STDOUT)
+                p = subprocess.Popen(script, shell=True, stdout=subprocess.PIPE,
+                                     stderr=STDOUT)
                 result = p.stdout.read().decode('utf-8')
             except Exception as e:
                 print(e)
@@ -550,7 +604,8 @@ class MongoDBController(object):
 
 
         else:
-            script = """mongo --eval 'db.getSiblingDB("admin").createUser({{user:"{MONGO_USERNAME}",pwd:"{MONGO_PASSWORD}",roles:[{{role:"root",db:"admin"}}]}})'""".format(**self.data)
+            script = """mongo --eval 'db.getSiblingDB("admin").createUser({{user:"{MONGO_USERNAME}",pwd:"{MONGO_PASSWORD}",roles:[{{role:"root",db:"admin"}}]}})'""".format(
+                **self.data)
             result = Script.run(script)
         if "Successfully added user" in result:
             Console.ok("Administrative user created.")
@@ -574,6 +629,14 @@ class MongoDBController(object):
         # TODO: BUG: expand user
         #
 
+        mode = self.data['MODE']
+
+        if mode == 'docker':
+
+
+            Console.error("Dump: Docker is not yet supported")
+            raise NotImplementedError
+
         script = "mongodump --authenticationDatabase admin --archive={self.mongo_home}/{filename}.gz --gzip -u {MONGO_USERNAME} -p {MONGO_PASSWORD}".format(
             **self.data, filename=filename)
         result = Script.run(script)
@@ -590,8 +653,15 @@ class MongoDBController(object):
         # TODO: BUG: expand user
         #
 
+        mode = self.data['MODE']
+
+        if mode == 'docker':
+            Console.error("Restore: Docker is not yet supported")
+            raise NotImplementedError
+
         script = "mongorestore --authenticationDatabase admin -u {MONGO_USERNAME} -p " \
-                 "{MONGO_PASSWORD} --gzip --archive={self.mongo_home}/{filename}.gz".format(**self.data, filename=filename)
+                 "{MONGO_PASSWORD} --gzip --archive={self.mongo_home}/{filename}.gz".format(
+            **self.data, filename=filename)
         result = Script.run(script)
         print(result)
 
@@ -600,6 +670,14 @@ class MongoDBController(object):
         check the MongoDB status
         returns a json object with status: and pid: command
         """
+
+        mode = self.data['MODE']
+
+        if mode == 'docker':
+
+            from cloudmesh.mongo.MongoDocker import MongoDocker
+            mongo = MongoDocker()
+            state = mongo.status()
 
         if platform.lower() == 'win32':
             script = """
@@ -666,6 +744,13 @@ class MongoDBController(object):
 
     # noinspection PyBroadException
     def version(self):
+
+        mode = self.data['MODE']
+
+        if mode == 'docker':
+            Console.error("Version: Docker is not yet supported")
+            raise NotImplementedError
+
         ver = None
         try:
             out = \
@@ -679,6 +764,13 @@ class MongoDBController(object):
         return ver
 
     def stats(self):
+
+        mode = self.data['MODE']
+
+        if mode == 'docker':
+            Console.error("Stats: Docker is not yet supported")
+            raise NotImplementedError
+
         script = """mongo --eval 'db.stats()'""".format(**self.data)
 
         result = Script.run(script).split("\n")
@@ -718,9 +810,9 @@ class MongoDBController(object):
             is_service = len(mongo_service) > 0
             return is_service
         else:
-            Console.error(f'Windows platform function called instead of {platform}')
+            Console.error(
+                f'Windows platform function called instead of {platform}')
             return False
-
 
     def win_service_is_running(self):
         '''
@@ -743,7 +835,8 @@ class MongoDBController(object):
             return "mongod.exe" in (p.name() for p in psutil.process_iter())
 
         else:
-            Console.error(f'Windows platform function called instead of {platform}')
+            Console.error(
+                f'Windows platform function called instead of {platform}')
             return False
 
     def linux_process_is_running(self):
@@ -753,12 +846,14 @@ class MongoDBController(object):
         '''
         if platform == 'linux':
             try:
-                subprocess.check_output("pgrep mongo", encoding='UTF-8', shell=True)
+                subprocess.check_output("pgrep mongo", encoding='UTF-8',
+                                        shell=True)
                 return True
             except subprocess.CalledProcessError as e:
                 return False
         else:
-            Console.error(f'Linux platform function called instead of {platform}')
+            Console.error(
+                f'Linux platform function called instead of {platform}')
             return False
 
     def mac_process_is_running(self):
@@ -768,12 +863,14 @@ class MongoDBController(object):
         '''
         if platform == 'darwin':
             try:
-                subprocess.check_output("pgrep mongo", encoding='UTF-8', shell=True)
+                subprocess.check_output("pgrep mongo", encoding='UTF-8',
+                                        shell=True)
                 return True
             except subprocess.CalledProcessError as e:
                 return False
         else:
-            Console.error(f'Darwin platform function called instead of {platform}')
+            Console.error(
+                f'Darwin platform function called instead of {platform}')
             return False
 
     def service_is_running(self):
@@ -795,6 +892,22 @@ class MongoDBController(object):
         checks if mongo service is running
         :return:
         '''
+
+        mode = self.data['MODE']
+
+        if mode == 'docker':
+
+            from cloudmesh.mongo.MongoDocker import MongoDocker
+            mongo = MongoDocker()
+
+            result = mongo.ps()
+
+            if 'cloudmesh-mongo' not in result:
+                mongo.start()
+
+            return
+
+
         if platform.lower() == 'linux':
             if not self.linux_process_is_running():
                 self.start()
@@ -807,7 +920,14 @@ class MongoDBController(object):
         else:
             Console.error(f"platform {platform} not found")
 
-    def importAsFile(self, data, collection, db ):
+    def importAsFile(self, data, collection, db):
+
+        mode = self.data['MODE']
+
+        if mode == 'docker':
+            Console.error("ImportasFile: Docker is not yet supported")
+            raise NotImplementedError
+
         self.start_if_not_running()
         tmp_folder = path_expand('~/.cloudmesh/tmp')
         if not os.path.exists(tmp_folder):
@@ -819,13 +939,13 @@ class MongoDBController(object):
                 f.write(json.dumps(dat) + '\n')
 
         username = self.config["cloudmesh.data.mongo.MONGO_USERNAME"]
-        password = self.config ["cloudmesh.data.mongo.MONGO_PASSWORD"]
+        password = self.config["cloudmesh.data.mongo.MONGO_PASSWORD"]
 
         cmd = f'mongoimport --db {db}' \
-              f' --collection {collection} '\
-              f' --authenticationDatabase admin '\
-              f' --username {username}'\
-              f' --password {password} '\
+              f' --collection {collection} ' \
+              f' --authenticationDatabase admin ' \
+              f' --username {username}' \
+              f' --password {password} ' \
               f' --drop' \
               f' --file {tmp_file}'
 

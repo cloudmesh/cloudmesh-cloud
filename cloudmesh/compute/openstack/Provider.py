@@ -238,7 +238,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
         self.cred = self.spec["credentials"]
         if self.cred["OS_PASSWORD"] == 'TBD':
-            Console.error("The password TBD is not allowed")
+            Console.error(f"The password TBD is not allowed in cloud {name}")
         self.credential = self._get_credentials(self.cred)
 
         self.cloudman = openstack.connect(**self.credential)

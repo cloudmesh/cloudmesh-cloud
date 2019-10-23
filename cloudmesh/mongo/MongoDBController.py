@@ -334,6 +334,7 @@ class MongoDBController(object):
                 print(self.mongo_path)
                 print(self.mongo_log)
                 print(self.mongo_home)
+                print(self.mongo_home)
                 print(self.mongo_code)
 
 

@@ -36,7 +36,8 @@ class Provider(ComputeNodeABC):
 
         providers = ProviderList()
 
-        if self.kind in ['openstack', 'azure',
+        if self.kind in ['openstack',
+                         'azure',
                          'docker',
                          "aws",
                          "azureaz",

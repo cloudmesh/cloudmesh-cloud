@@ -108,13 +108,17 @@ class MongoDocker(object):
 
 
 
-    def execute(self, command, terminate=False, verbose=False):
+    def execute(self, command, auth=False, terminate=False, verbose=False):
         """
         Starts the MongoDBd Container
         :return:
         """
 
-        script = f"docker exec {self.NAME} mongo admin --eval {command}"
+        auth_flag = "--auth"
+        if not auth:
+            auth_flag = ""
+
+        script = f"docker exec {self.NAME} mongo admin {auth_flag} --eval {command}"
         result = self.run(script, verbose=verbose, terminate=terminate)
         return result
 
@@ -253,7 +257,7 @@ class MongoDocker(object):
         self.create_admin()
         self.kill()
 
-    def status(self):
+    def status(self, auth=False):
         """
         Status of the the MongoDB Container
         :return: DIct with the status
@@ -261,15 +265,19 @@ class MongoDocker(object):
         msg = "No mongod running"
         state = "error"
 
+        print ("XXX")
         try:
             result = self.execute(
                 "\"printjson(db.adminCommand('listDatabases'))\"",
                 terminate=False,
+                auth=auth,
                 verbose=False)
             if '"ok"' in result:
                 state = "ok"
                 msg = "running"
-        except:
+            print (result)
+        except Exception as e:
+            print (e)
             pass
 
         result = dotdict(

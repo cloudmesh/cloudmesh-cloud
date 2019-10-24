@@ -34,7 +34,6 @@ class Provider(ComputeNodeABC):
 
         provider = None
 
-        print ("OOOO")
         providers = ProviderList()
 
         if self.kind in ['openstack',
@@ -72,10 +71,7 @@ class Provider(ComputeNodeABC):
             Console.error(f"provider {name} not supported")
             raise ValueError(f"provider {name} not supported")
 
-        print ("HHHH")
         self.p = provider(name=name, configuration=configuration)
-
-        print ("YYYY")
 
     def cloudname(self):
         return self.name

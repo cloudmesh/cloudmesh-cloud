@@ -137,7 +137,7 @@ class Name(dotdict):
             user = config["cloudmesh.profile.user"]
             data = {
                 'counter': 1,
-                'path': path,
+                'path': path_expand(path),
                 'schema': "{user}-vm-{counter}",
                 'user': user
             }

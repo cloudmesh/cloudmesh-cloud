@@ -36,6 +36,7 @@ class MongoDocker(object):
         self.flag_name = "--name cloudmesh-mongo"
         self.flag_data = f"-v {self.mongo_path}:/data/db"
         self.flag_log = f"-v {self.mongo_log}/mongod.log:/var/log/mongodb/mongodb.log"
+        self.flag_log = f"-v {self.mongo_log}/mongod.log:/var/log/mongodb/mongodb.log"
 
     def run(self, script, verbose=True, terminate=False):
         if verbose:

@@ -9,7 +9,7 @@ from cloudmesh.abstractclass.ComputeNodeABC import ComputeNodeABC
 from cloudmesh.common.console import Console
 from cloudmesh.common.util import HEADING
 from cloudmesh.common.util import path_expand
-from 'cloudmesh-configuration'.Config import Config
+from cloudmesh.configuration.Config import Config
 from libcloud.compute.base import NodeAuthSSHKey
 from libcloud.compute.base import NodeImage
 from libcloud.compute.base import NodeSize

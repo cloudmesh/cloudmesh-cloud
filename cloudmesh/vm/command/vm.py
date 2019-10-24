@@ -372,7 +372,6 @@ class VmCommand(PluginCommand):
 
                     p = Provider(cloud)
 
-                    print ("OOOO")
                     kind = p.kind
 
                     collection = "{cloud}-vm".format(cloud=cloud,

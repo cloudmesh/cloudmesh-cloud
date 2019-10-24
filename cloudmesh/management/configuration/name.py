@@ -155,6 +155,7 @@ class Name(dotdict):
             yaml.dump(data, yaml_file, default_flow_style=False)
 
 
+
     def __str__(self):
         return str(self.__dict__["schema"].format(**self.__dict__))
 

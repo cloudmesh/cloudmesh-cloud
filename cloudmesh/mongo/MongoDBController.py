@@ -28,7 +28,6 @@ from pymongo import MongoClient
 import sys
 
 
-
 # noinspection PyUnusedLocal
 class MongoInstaller(object):
 
@@ -904,6 +903,31 @@ class MongoDBController(object):
             return self.win_service_is_running()
         else:
             Console.error(f"platform {platform} not found")
+
+    def exit_if_not_running(self):
+
+        status = False
+        mode = self.data['MODE']
+
+        if mode == 'docker':
+            from cloudmesh.mongo.MongoDocker import MongoDocker
+            mongo = MongoDocker()
+
+            status = mongo.status()
+
+        elif platform.lower() == 'linux':
+            status = self.linux_process_is_running()
+        elif platform.lower() == 'darwin':
+            status = self.mac_process_is_running()
+        elif platform.lower() == 'win32':  # Replaced windows with win32
+            status = self.win_service_is_running()
+
+
+        if not status:
+            Console.error(f"Cloudmesh mongodb not found")
+            sys.exit()
+
+
 
     def start_if_not_running(self):
         '''

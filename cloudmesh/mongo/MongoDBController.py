@@ -70,6 +70,8 @@ class MongoInstaller(object):
 
         mode = self.data['MODE']
 
+        Console.msg(f"Installing mongo in  mode: {mode}")
+
         if mode == 'docker':
             Console.ok("Installing mongoDB in a docker container cloudmesh-mongo")
 
@@ -82,8 +84,8 @@ class MongoInstaller(object):
             Console.msg("")
             Console.ok("Start the mongodb service with")
             Console.msg("")
-            Console.msg("   cms admon mongo create")
-            Console.msg("   cms admon mongo start")
+            Console.msg("   cms admin mongo create")
+            Console.msg("   cms admin mongo start")
             Console.msg("")
 
             return ""
@@ -422,6 +424,22 @@ class MongoDBController(object):
         print(
             "Enable the Security. You will use your username and password to login the MongoDB")
 
+
+    def ssh(self):
+
+        # Added special code for windows. Cant do start service and set_auth in same cms execution.
+
+        mode = self.data['MODE']
+
+        if mode == 'docker':
+            from cloudmesh.mongo.MongoDocker import MongoDocker
+            mongo = MongoDocker()
+            mongo.ssh()
+            return
+
+        Console.error("The command is only supported for docker")
+        raise NotImplementedError
+
     def create(self):
 
         # Added special code for windows. Cant do start service and set_auth in same cms execution.
@@ -536,7 +554,7 @@ class MongoDBController(object):
             from cloudmesh.mongo.MongoDocker import MongoDocker
             mongo = MongoDocker()
             mongo.kill()
-            result = "container is down"
+            result = "Container is down"
 
         elif platform.lower() == 'win32':
             MONGO = f"\"{self.mongo_home}\\bin\mongo\""

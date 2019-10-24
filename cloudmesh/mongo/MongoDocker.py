@@ -36,7 +36,8 @@ class MongoDocker(object):
         self.flag_name = "--name cloudmesh-mongo"
         self.flag_data = f"-v {self.mongo_path}:/data/db"
         self.flag_log = f"-v {self.mongo_log}/mongod.log:/var/log/mongodb/mongodb.log"
-        self.flag_log = f"-v {self.mongo_log}/mongod.log:/var/log/mongodb/mongodb.log"
+        self.flag_dot_cloudmesh = f"-v ~/.cloudmesh:/root/.cloudmesh"
+        self.flag_dot_ssh = f"-v ~/.ssh:/root/.ssh"
 
     def run(self, script, verbose=True, terminate=False):
         if verbose:
@@ -73,6 +74,19 @@ class MongoDocker(object):
         Console.msg(f"   {id}")
         Console.msg("")
 
+    def ssh(self, auth=True):
+        """
+        Starts the MongoDBd Container
+        :return:
+        """
+
+        if auth:
+            auth_flag = "--auth"
+        else:
+            auth_flag = ""
+        script = f"docker exec -it {self.NAME} bash"
+        os.system(script)
+
     def start(self, auth=True):
         """
         Starts the MongoDBd Container
@@ -83,7 +97,7 @@ class MongoDocker(object):
             auth_flag = "--auth"
         else:
             auth_flag = ""
-        script = f"docker run -d -p 127.0.0.1:27017:27017/tcp {self.flag_data} {self.flag_log} {self.flag_name} mongo {auth_flag}"
+        script = f"docker run -d -p 127.0.0.1:27017:27017/tcp {self.flag_dot_ssh} {self.flag_dot_cloudmesh} {self.flag_data} {self.flag_log} {self.flag_name} mongo {auth_flag}"
         id = self.run(script)
 
         Console.ok("Starting docker mongo container with id")
@@ -100,7 +114,7 @@ class MongoDocker(object):
         :return:
         """
 
-        script = f"docker exec {self.NAME}  mongo admin --eval {command}"
+        script = f"docker exec {self.NAME} mongo admin --eval {command}"
         result = self.run(script, verbose=verbose, terminate=terminate)
         return result
 
@@ -126,11 +140,10 @@ class MongoDocker(object):
         test if mongo is available
         :return:
         """
-        verbose = True
         bar = Bar('Cloudmesh Docker Setup', max=delay)
         for i in range(delay):
             try:
-                result = mongo.execute(
+                result = self.execute(
                     "\"printjson(db.adminCommand('listDatabases'))\"",
                     terminate=False,
                     verbose=verbose)
@@ -139,7 +152,9 @@ class MongoDocker(object):
                 if '"ok"' in result:
                     bar.finish()
                     return
-            except:
+            except Exception as e:
+                if verbose:
+                    print (e)
                 pass
             bar.next()
             time.sleep(1)
@@ -174,10 +189,12 @@ class MongoDocker(object):
             script = f"docker container ls -aq --filter name={name}"
             id = self.run(script, verbose=False)
 
-            script = \
-                f"docker stop {id}" \
-                f"docker rm {id}"
-            self.run(script, verbose=False)
+            if id != "":
+                Console.msg(f"Kill container with id: {id}")
+                script = \
+                    f"docker stop {id}" \
+                    f"docker rm {id}"
+                self.run(script, verbose=False)
         except:
             Console.ok("No container found.")
 
@@ -202,6 +219,7 @@ class MongoDocker(object):
         :return:
         """
 
+        Console.msg(f"Version: {self.version}")
         if pull:
             script = f"docker pull mongo:{self.version}"
             self.run(script)
@@ -231,7 +249,7 @@ class MongoDocker(object):
         self.kill()
         self.install(clean=True, pull=True)
         self.create()
-        self.wait()
+        self.wait(verbose=False)
         self.create_admin()
         self.kill()
 
@@ -244,7 +262,7 @@ class MongoDocker(object):
         state = "error"
 
         try:
-            result = mongo.execute(
+            result = self.execute(
                 "\"printjson(db.adminCommand('listDatabases'))\"",
                 terminate=False,
                 verbose=False)

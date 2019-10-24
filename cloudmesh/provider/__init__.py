@@ -25,6 +25,7 @@ class Provider(object):
             name = f"cloudmesh.compute.{key}.Provider"
             provider = __import__(name)
             self.load()
+            # self.data[key] = provider
             variables = Variables()
             if variables['debug'] is 'False':
                 Console.cprint("BLUE", "", f"Loading Provider: '{key}'")

@@ -369,7 +369,9 @@ class VmCommand(PluginCommand):
 
                 for cloud in clouds:
                     print(f"List {cloud}")
+
                     p = Provider(cloud)
+
                     kind = p.kind
 
                     collection = "{cloud}-vm".format(cloud=cloud,

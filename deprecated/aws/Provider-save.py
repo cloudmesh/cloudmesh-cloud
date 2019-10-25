@@ -9,7 +9,7 @@ from cloudmesh.abstractclass.ComputeNodeABC import ComputeNodeABC
 from cloudmesh.common.console import Console
 from cloudmesh.common.util import HEADING
 from cloudmesh.common.util import path_expand
-from 'cloudmesh-configuration'.Config import Config
+from cloudmesh.configuration.Config import Config
 from libcloud.compute.base import NodeAuthSSHKey
 from libcloud.compute.base import NodeImage
 from libcloud.compute.base import NodeSize
@@ -112,7 +112,7 @@ class Provider(ComputeNodeABC):
             if self.cloudtype == 'openstack':
 
                 if cred["OS_PASSWORD"] == 'TBD':
-                    Console.error("The password TBD is not allowed")
+                    Console.error(f"The password TBD is not allowed in cloud {name}")
 
                 self.cloudman = self.driver(cred["OS_USERNAME"],
                                             cred["OS_PASSWORD"],

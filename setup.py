@@ -82,6 +82,7 @@ tabulate
 beautifulsoup4
 boto3
 progress
+uuid
 """.split("\n")
 
 

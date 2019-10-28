@@ -1221,11 +1221,13 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
             group)
         async_group_delete.wait()
 
-        server['status'] = 'DELETED'
+        # todo this functionality is broken. Az sdk does not return anything for
+        #  delete operations
+        # server['status'] = 'DELETED'
+        # servers = self.update_dict([server], kind='vm')
+        # return servers
 
-        servers = self.update_dict([server], kind='vm')
-
-        return servers
+        return None
 
     def images(self, **kwargs):
         # TODO: Joaquin -> Completed

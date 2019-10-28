@@ -93,5 +93,7 @@ p = prv.Provider()
 
 # p.add_rules_to_secgroup('test', rules=['ssh', 'ssh2'])
 
-p.upload_secgroup('test')
+# p.upload_secgroup('test')
+
+p.destroy()
 pass

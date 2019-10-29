@@ -181,7 +181,7 @@ class Test_provider_vm:
                     # deleted
                     break
 
-        print(provider.info(name=name))
+        # print(provider.info(name=name))
         if cloud == 'chameleon':
             assert len(provider.info(name=name)) == 0
         elif cloud == 'aws':

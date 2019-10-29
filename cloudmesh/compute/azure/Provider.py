@@ -311,11 +311,19 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
     def keys(self):
         # TODO: Moeen
-        raise NotImplementedError
+        # raise NotImplementedError
+        Console.error("Key list is not supported in Azure!")
+        Console.msg("Please use ")
+        Console.msg("")
+        Console.msg("    cms key list ")
+        Console.msg("")
+        return None
 
     def key_upload(self, key=None):
         # TODO: Moeen
-        raise NotImplementedError
+        # raise NotImplementedError
+        Console.error("Key upload is not supported in Azure!")
+        return None
 
     def key_delete(self, name=None):
         # TODO: Moeen
@@ -971,7 +979,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         )
         async_disk_attach.wait()
 
-        return self.info(group, name, 'ACTIVE')
+        return self.info(group, name, 'ACTIVE')[0]
 
     def create_vm_parameters(self):
         # TODO: Joaquin -> Completed

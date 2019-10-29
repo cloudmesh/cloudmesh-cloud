@@ -2,6 +2,7 @@ import boto3
 import json
 from cloudmesh.common.console import Console
 from progress.bar import Bar
+from pprint import pprint
 
 class AwsFlavor:
 
@@ -31,6 +32,7 @@ class AwsFlavor:
             'Field': 'instancesku',
             'Value': '3MFG4YWWT6SPWHET'
             }
+            # terms.OnDemand.offer.priceDimensions.termoffer.pricePerUnit.USD
         ]
 
         while next_token is not None and len(results) < n_results:
@@ -57,11 +59,17 @@ class AwsFlavor:
         """
         To be run on a single json entry returned by the Amazon EC2 Pricing API
         """
+        # import pdb; pdb.set_trace()
         parsed = []
         for x in list(json['terms']['OnDemand'].keys()):
             for y in list(json['terms']['OnDemand'][x]['priceDimensions'].keys()):
+                name = json['terms']['OnDemand'][x]['priceDimensions'][y].get('rateCode')
+                name = name.replace(".", "")
                 parsed.append({
-                    "name": json['terms']['OnDemand'][x]['priceDimensions'][y].get('rateCode'),
+                    "name": name,
+                    "kind": "flavor",
+                    "cloud": "aws",
+                    "cm": {"kind": "flavor", "name": name, "cloud": "aws", "cloudtype": "aws"},
                     "vcpu": int(json['product']['attributes'].get('vcpu')),
                     "memory": json['product']['attributes'].get('memory'),
                     "storage": json['product']['attributes'].get('storage'),
@@ -84,7 +92,24 @@ class AwsFlavor:
             bar.next()
 
         bar.finish()
-
         return flavors
 
+#    def PrintAWSFlavor()
 
+#{
+#    name:
+#    cm:
+#        kind: flavor
+#        name: same as above
+#        cloud: aws
+#    product
+#    publicationDate
+#    serviceCode
+#    version
+#    terms
+#        OnDemand
+#}
+
+##TODO: Implement Query in List
+##TODO: Write Print for AWS Flavors, andapt Provider.Print
+##TODO: Fix the parsing code to standardize the database entries

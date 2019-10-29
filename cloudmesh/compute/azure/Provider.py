@@ -458,6 +458,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                           ip_range=None):
         # TODO: Joaquin -> Completed
 
+        # TODO: BUG: sec group names need to come form the cloudmesh mongoDB
         network_sec_group_name = 'cloudmesh_jae'
 
         if self.network_client:
@@ -481,7 +482,11 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         else:
             raise ValueError("cloud not initialized")
 
-        add_rule = self.network_client.security_rules.create_or_update(self.GROUP_NAME, network_sec_group_name, name ,parameters)
+        add_rule = self.network_client.security_rules.create_or_update(
+            self.GROUP_NAME,
+            network_sec_group_name,
+            name,
+            parameters)
 
         return add_rule
 
@@ -494,7 +499,9 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         :return:
         """
         if self.network_client:
-            self.network_client.network_security_groups.delete(self.GROUP_NAME, name)
+            self.network_client.network_security_groups.delete(
+                self.GROUP_NAME,
+                name)
         else:
             raise ValueError("cloud not initialized")
 

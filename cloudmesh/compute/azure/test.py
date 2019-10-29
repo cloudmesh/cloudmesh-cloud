@@ -96,4 +96,7 @@ p = prv.Provider()
 # p.upload_secgroup('test')
 
 p.destroy()
+
+# out = p.info(name='test-niranda-vm-20')
+# p.stop(name='test-niranda-vm-19')
 pass

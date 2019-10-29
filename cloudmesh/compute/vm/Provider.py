@@ -252,7 +252,10 @@ class Provider(ComputeNodeABC):
         else:
             arguments.timeout = 360
             data = self.p.create(**arguments)
-
+        # print('entry')
+        # pprint(entry)
+        # print('data')
+        # pprint(data)
         entry.update(data)
 
         StopWatch.stop(f"create vm {arguments.name}")

@@ -143,6 +143,7 @@ class Test_provider_vm:
             sleep(5)
             time += 5
             status = provider.status(name=name)[0]
+            # print(f'status {str(status)}')
             if status["cm.status"] in ['ACTIVE', 'BOOTING', 'RUNNING']:
                 break
         VERBOSE(data)

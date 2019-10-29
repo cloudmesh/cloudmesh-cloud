@@ -5,6 +5,7 @@
 
 # TODO: start this with cloud init, e.g, empty mongodb
 # TODO: assertuons need to be added
+from pprint import pprint
 
 import pytest
 from time import sleep
@@ -61,6 +62,7 @@ class Test_provider_vm:
         VERBOSE(data)
         name = str(Name())
         status = provider.status(name=name)[0]
+        print(f'status: {str(status)}')
         assert status["cm.status"] in ['ACTIVE', 'BOOTING', 'TERMINATED', 'STOPPED']
 
     def test_provider_vmprovider_vm_list(self):
@@ -150,7 +152,8 @@ class Test_provider_vm:
         print(status)
         assert status["cm.status"] in ['ACTIVE', 'BOOTING', 'RUNNING']
 
-    # do other tests before terminationg, keys, metadata, .... => keys is already implemented in test02
+    # do other tests before terminationg, keys, metadata, .... =>
+    # keys is already implemented in test02
 
     def test_provider_vm_terminate(self):
         HEADING()
@@ -158,7 +161,9 @@ class Test_provider_vm:
         Benchmark.Start()
         data = provider.destroy(name=name)
         Benchmark.Stop()
-        status = provider.status(name=name)[0]
+
+        pprint(data)
+
         termination_timeout = 360
         time = 0
         while time <= termination_timeout:
@@ -168,11 +173,26 @@ class Test_provider_vm:
                 break
             elif cloud=='aws' and  (len(provider.info(name=name)) == 0 or provider.info(name=name)[0]["cm"]["status"] in ['TERMINATED']):
                 break
+            elif cloud == 'azure':
+                try:
+                    provider.info(name=name)
+                except Exception:
+                    # if there is an exception that means the group has been
+                    # deleted
+                    break
+
         print(provider.info(name=name))
         if cloud == 'chameleon':
             assert len(provider.info(name=name)) == 0
         elif cloud == 'aws':
             assert len(data) == 0 or ( data[0]["cm"]["status"] in ['BOOTING','TERMINATED'] if data and data[0].get('cm',None) is not None else True)
+        elif cloud == 'azure':
+            try:
+                provider.info(name=name)
+            except Exception:
+                # if there is an exception that means the group has been
+                # deleted
+                pass
         else:
             raise NotImplementedError
         # data = provider.info(name=name)

@@ -254,7 +254,7 @@ class Provider(ComputeNodeABC):
         # print('entry')
         # pprint(entry)
         # print('data')
-        # pprint(data)
+        pprint(data)
         entry.update(data)
 
         StopWatch.stop(f"create vm {arguments.name}")

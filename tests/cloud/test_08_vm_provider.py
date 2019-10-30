@@ -34,10 +34,8 @@ print(f"Test run for {cloud}")
 if cloud is None:
     raise ValueError("cloud is not not set")
 
-
 name_generator = Name()
 name_generator.set(f"test-{user}-vm-" + "{counter}")
-
 
 name = str(name_generator)
 
@@ -47,7 +45,9 @@ provider = Provider(name=cloud)
 def Print(data):
     print(provider.Print(data=data, output='table', kind='vm'))
 
+
 current_vms = 0
+
 
 @pytest.mark.incremental
 class Test_provider_vm:
@@ -63,7 +63,8 @@ class Test_provider_vm:
         name = str(Name())
         status = provider.status(name=name)[0]
         print(f'status: {str(status)}')
-        assert status["cm.status"] in ['ACTIVE', 'BOOTING', 'TERMINATED', 'STOPPED']
+        assert status["cm.status"] in ['ACTIVE', 'BOOTING', 'TERMINATED',
+                                       'STOPPED']
 
     def test_provider_vmprovider_vm_list(self):
         # list should be after create() since it would return empty and len(data) would be 0
@@ -85,6 +86,11 @@ class Test_provider_vm:
 
     def test_provider_vm_ssh(self):
         HEADING()
+
+        if cloud == 'azure':
+            # todo: implement this
+            return
+
         name = str(Name())
         Benchmark.Start()
         cm = CmDatabase()
@@ -99,8 +105,9 @@ class Test_provider_vm:
         # This is just a dry run, status test actually uses info() in all provider
         HEADING()
         Benchmark.Start()
+        name = str(Name())
         data = provider.info(name=name)
-        print ("dry run info():")
+        print("dry run info():")
         print(data)
         Benchmark.Stop()
 
@@ -113,7 +120,8 @@ class Test_provider_vm:
             data = data[0]
         print(data)
         Benchmark.Stop()
-        assert data["cm.status"] in ['ACTIVE', 'BOOTING', 'TERMINATED', 'STOPPED']
+        assert data["cm.status"] in ['ACTIVE', 'BOOTING', 'TERMINATED',
+                                     'STOPPED']
 
     def test_provider_vm_stop(self):
         HEADING()
@@ -127,11 +135,11 @@ class Test_provider_vm:
             sleep(5)
             time += 5
             status = provider.status(name=name)[0]
-            if status["cm.status"] in ['STOPPED','SHUTOFF']:
+            if status["cm.status"] in ['STOPPED', 'SHUTOFF']:
                 break
         VERBOSE(data)
         print(status)
-        assert status["cm.status"] in ['STOPPED','SHUTOFF']
+        assert status["cm.status"] in ['STOPPED', 'SHUTOFF']
 
     def test_provider_vm_start(self):
         HEADING()
@@ -171,7 +179,9 @@ class Test_provider_vm:
             time += 5
             if cloud == 'chameleon' and len(provider.info(name=name)) == 0:
                 break
-            elif cloud=='aws' and  (len(provider.info(name=name)) == 0 or provider.info(name=name)[0]["cm"]["status"] in ['TERMINATED']):
+            elif cloud == 'aws' and (len(provider.info(name=name)) == 0 or
+                                     provider.info(name=name)[0]["cm"][
+                                         "status"] in ['TERMINATED']):
                 break
             elif cloud == 'azure':
                 try:
@@ -185,7 +195,10 @@ class Test_provider_vm:
         if cloud == 'chameleon':
             assert len(provider.info(name=name)) == 0
         elif cloud == 'aws':
-            assert len(data) == 0 or ( data[0]["cm"]["status"] in ['BOOTING','TERMINATED'] if data and data[0].get('cm',None) is not None else True)
+            assert len(data) == 0 \
+                   or (data[0]["cm"]["status"] in ['BOOTING', 'TERMINATED']
+                       if data and data[0].get('cm', None) is not None
+                       else True)
         elif cloud == 'azure':
             try:
                 provider.info(name=name)
@@ -196,8 +209,11 @@ class Test_provider_vm:
         else:
             raise NotImplementedError
         # data = provider.info(name=name)
-        #below cm.status check required as in aws it takes a while to clear list from you account after terminating vm
-        # assert len(data) == 0 or ( data[0]["cm"]["status"] in ['BOOTING','TERMINATED'] if data and data[0].get('cm',None) is not None else True)
+        # below cm.status check required as in aws it takes a while to clear
+        # list from you account after terminating vm
+        # assert len(data) == 0 or ( data[0]["cm"]["status"] in
+        # ['BOOTING','TERMINATED'] if data and data[0].get('cm',None) is not
+        # None else True)
 
     def test_benchmark(self):
         Benchmark.print(sysinfo=False, csv=True, tag=cloud)

@@ -150,8 +150,10 @@ class Name(dotdict):
         if data is None:
             data = self.__dict__
 
-        with open(data['path'], 'w') as yaml_file:
+        path = path_expand(data['path'])
+        with open(path, 'w') as yaml_file:
             yaml.dump(data, yaml_file, default_flow_style=False)
+
 
 
     def __str__(self):

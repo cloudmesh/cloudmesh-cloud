@@ -47,6 +47,7 @@ class AdminCommand(PluginCommand):
             admin mongo security
             admin mongo password PASSWORD
             admin mongo list [--output=OUTPUT]
+            admin mongo ssh
             admin status
             admin system info
 
@@ -92,6 +93,14 @@ class AdminCommand(PluginCommand):
                  cms admin system info
 
               This can be very useful in case you are filing an issue or bug.
+
+              The command
+
+                cms admin mongo ssh
+
+              is only supported for docker and allows for debugging to login
+              to the running container. This function may be disabled in future.
+
         """
 
         map_parameters(arguments,
@@ -119,7 +128,7 @@ class AdminCommand(PluginCommand):
 
                 print("MongoDB install")
                 print(79 * "=")
-                print(arguments.force)
+                # print(arguments.force)
                 installer = MongoInstaller(dryrun=arguments.dryrun, force=arguments.force)
 
                 sudo = not arguments.nosudo
@@ -166,6 +175,12 @@ class AdminCommand(PluginCommand):
 
                 print("MongoDB create")
                 MongoDBController().create()
+
+            elif arguments.ssh:
+
+                print("MongoDB ssh")
+                MongoDBController().ssh()
+
 
             elif arguments.start:
 

@@ -238,7 +238,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
         self.cred = self.spec["credentials"]
         if self.cred["OS_PASSWORD"] == 'TBD':
-            Console.error("The password TBD is not allowed")
+            Console.error(f"The password TBD is not allowed in cloud {name}")
         self.credential = self._get_credentials(self.cred)
 
         self.cloudman = openstack.connect(**self.credential)
@@ -626,16 +626,23 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         :param name: The name of the image
         :return: the dict of the image
         """
-        return self.find(self.images(**kwargs), name=name)
+        return self.find(self.images(), name=name)
 
-    def flavors(self):
+    def flavors(self, **kwargs):
         """
         Lists the flavors on the cloud
 
         :return: dict of flavors
         """
-        return self.get_list(self.cloudman.compute.flavors(),
-                             kind="flavor")
+        if kwargs is None:
+            result = self.get_list(self.cloudman.compute.flavors(), kind="flavor")
+        if "name" in kwargs:
+            result = self.flavor(name=kwargs['name'])
+
+        else:
+            result = self.get_list(self.cloudman.compute.flavors(**kwargs), kind="flavor")
+
+        return result
 
     def flavor(self, name=None):
         """

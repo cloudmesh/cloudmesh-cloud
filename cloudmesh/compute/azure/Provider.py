@@ -1243,6 +1243,8 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
             elm['name'] = vm['name']
             elm['status'] = 'TERMINATED'
+            elm['type'] = vm['type']
+            elm['location'] = vm['location']
             res.append(elm)
 
         res = self.update_dict(res, kind='vm')

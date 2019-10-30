@@ -15,8 +15,6 @@ from cloudmesh.mongo.CmDatabase import CmDatabase
 
 Benchmark.debug()
 
-
-
 user = Config()["cloudmesh.profile.user"]
 variables = Variables()
 KEY = f'{user}-key'
@@ -33,7 +31,7 @@ cm = CmDatabase()
 provider = Provider(name=cloud)
 
 
-@pytest.mark.incremental
+@pytest.mark.skip(reason="These have already been tested in test_02")
 class Test_Key:
 
     def test_cleanup(self):
@@ -47,7 +45,7 @@ class Test_Key:
     def test_upload_key_to_database(self):
         HEADING()
         local = Key()
-        pprint (local)
+        pprint(local)
         Benchmark.Start()
         local.add(KEY, "ssh")
         Benchmark.Stop()
@@ -57,11 +55,16 @@ class Test_Key:
 
     def test_upload_key_to_cloud(self):
         HEADING()
+
+        if cloud == 'azure':
+            # todo: implement this
+            return
+
         if cloud == 'aws':
             all_keys = cm.find_all_by_name(KEY, "key")
             for k in all_keys:
                 if 'public_key' in k.keys():
-                    key =  k
+                    key = k
                     break
         else:
             key = cm.find_name(KEY, "key")[0]
@@ -73,6 +76,11 @@ class Test_Key:
 
     def test_list_key_from_cloud(self):
         HEADING()
+
+        if cloud == 'azure':
+            # todo: implement this
+            return
+
         Benchmark.Start()
         keys = provider.keys()
         Benchmark.Stop()

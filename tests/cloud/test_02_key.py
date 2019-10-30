@@ -5,6 +5,7 @@
 from pprint import pprint
 
 import pytest
+from cloudmesh.common import VERBOSE
 from cloudmesh.common.util import HEADING
 from cloudmesh.common.variables import Variables
 from cloudmesh.common3.Benchmark import Benchmark
@@ -63,6 +64,7 @@ class Test_Key:
                     break
         elif cloud == 'azure':
             # todo: implement this
+            VERBOSE("WARNING: this is not yet implemented in Azure!")
             return
         else:
             key = cm.find_name(KEY, "key")[0]
@@ -77,6 +79,7 @@ class Test_Key:
 
         if cloud == 'azure':
             # todo: implement this
+            VERBOSE("WARNING: this is not yet implemented in Azure!")
             return
 
         Benchmark.Start()
@@ -94,6 +97,7 @@ class Test_Key:
 
         if cloud == 'azure':
             # todo: implement this
+            VERBOSE("WARNING: this is not yet implemented in Azure!")
             return
 
         try:

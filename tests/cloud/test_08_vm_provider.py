@@ -88,6 +88,7 @@ class Test_provider_vm:
         HEADING()
 
         if cloud == 'azure':
+            VERBOSE("WARNING: this is not yet implemented in Azure!")
             # todo: implement this
             return
 

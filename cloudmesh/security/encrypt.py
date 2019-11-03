@@ -60,16 +60,18 @@ class CmsEncryptor:
         return rand_bytes
 
     def getRandomInt(self, len_bytes = 32, order="big"):
-        rb = getRandomBytes(len_bytes)
+        rb = self.getRandomBytes(len_bytes)
         rand_int = int.from_bytes(rb, byteorder=order)
         return rand_int
 
 class KeyHandler:
-    def __init__(self, debug=False):
+    def __init__(self, debug=False, priv=None, pub=None, pem=None):
+        ### CMS debug parameter
         self.debug = debug
-        self.priv = None
-        self.pub = None
-        self.pem = None
+        ### pyca Key Objects
+        self.priv = priv
+        self.pub = pub
+        self.pem = pem
 
     def new_rsa_key(self, byte_size = 2048, pwd=None):
         """
@@ -83,33 +85,102 @@ class KeyHandler:
             backend=default_backend()
         )
 
-        # Add password if given
-        alg = None
-        if pwd is None:
-            alg = serialization.NoEncryption()
-        else:
-            alg = serialization.BestAvailableEncryption(str.encode(pwd))
-
         # Calculate public key
         self.pub = self.priv.public_key()
 
         # Serialize the key
-        self.pem = self.priv.private_bytes(
-            encoding=serialization.Encoding.PEM,
-            format=serialization.PrivateFormat.PKCS8,
-            encryption_algorithm=alg
-        )
+        return self.serialize_key(key_type = "PRIV", password = pwd)
 
-        return self.pem
-
-    def get_pub_key(self, encoding="PEM"):
+    def get_pub_key_bytes(self, encoding="PEM", format="SubjectInfo"):
         if self.pub is None:
-            Console.error("Public key is empty")
+            if self.priv is None:
+                Console.error("Key data is empty")
+            else:
+                self.pub = self.priv.public_key()
         else:
-            encode = serialization.Encoding.PEM
-            forma = serialization.PublicFormat.SubjectPublicKeyInfo
-            return self.pub.public_bytes(encoding=encode, format=forma)
+            return self.serialize_key(key=self.pub, key_type = "PUB", 
+                                    encoding = encoding, format = format)
 
+    def serialize_key(self, debug=False, key=None, key_type=None, encoding="PEM", 
+                      format="PKCS8", password=None):
+        """
+        @param: bool:       cloudmesh debug flag
+        @param: key_object: pyca key object
+        @param: str:        the type of key file [PRIV, PUB]
+        @param: str:        the type of encoding [PEM, SSH]
+        @param: str:        private [PKCS8, OpenSSL], Public [SubjectInfo, SSH]
+        @param: str:        password for key (Private keys only)
+        return:             serialized key bytes
+        """
+        #TODO: add try-catching
+        # Ensure the key is initialized
+        if key is None:
+            if key_type == "PRIV":
+                if self.priv is None:
+                    Console.error("No key given")
+                else:   
+                    key = self.priv
+            elif key_type == "PUB":
+                if self.pub is None:
+                    Console.error("No key given")
+                else:
+                    key = self.pub
+            else:
+                Console.error("No key given")
+
+        # Discern formating based on if key is public or private
+        key_format = None
+        if key_type == "PRIV":
+            key_format = serialization.PrivateFormat
+        elif key_type == "PUB":
+            key_format = serialization.PublicFormat
+        else: 
+            Console.error("key needs to be PRIV or PUB")
+            
+        # Discern formatting of key
+        if key_type == "PRIV":
+            if format == "PKCS8":
+                key_format = key_format.PKCS8
+            elif format == "OpenSSL":
+                key_format = key_format.TraditionalOpenSSL
+            else:
+                Console.error("Unsupported private key format")
+        elif key_type == "PUB":
+            if format == "SubjectInfo":
+                key_format = key_format.SubjectPublicKeyInfo
+            elif format == "SSH":
+                key_format = key_format.OpenSSH
+            else:
+                Console.error("Unsupported public key format")
+
+        # Discern encoding
+        encode = None
+        if encoding == "PEM":
+            encode = serialization.Encoding.PEM
+        elif encoding == "SSH":
+            encod = serialization.Encoding.OpenSSH
+        else:
+            Console.error("Unsupported key encoding")
+            
+        # Discern encryption algorithm (Private keys only)
+        # This also assigns the password if given
+        enc_alg = None
+        if key_type == "PRIV":
+            if password is None:
+                enc_alg = serialization.NoEncryption()
+            else:
+                pwd = str.encode(password)
+                enc_alg = serialization.BestAvailableEncryption(pwd)
+
+        # Serialize key
+        sk = None
+        if key_type == "PUB":
+            sk = key.public_bytes( encoding = encode, format = key_format)
+        elif key_type == "PRIV":
+            sk = key.private_bytes(encoding = encode, format = key_format,
+                                   encryption_algorithm = enc_alg)
+        return sk
+            
 class PemHandler:
     """ 
     Responsible for loading and verify PEM files
@@ -126,28 +197,37 @@ class PemHandler:
     def read_file_bytes(self, input_path=""):
         #TODO: add try catch for input_path (ensure its not empty)
         path = path_expand(input_path)
-        if debug:
+        if self.debug:
             Console.ok( f"Opening file: {path}" )
         in_file = open(path, "rb")
         data = in_file.read()
         in_file.close()
         return data
             
-    def load_private_pem_bytes(self, input_path=""):
-        #TODO: support pem files with passwords
-        pem_data = read_file_bytes(input_path)
+    def load_private_pem_bytes(self, input_path="", pwd=None):
+        """
+        @param: str: path to file being loaded
+        @param: bytes: password bytes to unlock pem file
+        """
+        pem_data = self.read_file_bytes(input_path)
         try:
-            key = load_pem_private_key(pem_data
-            , password = None
-            , backend = default_backend())
+            key = load_pem_private_key(pem_data,
+                    password = pwd,
+                    backend = default_backend())
+
+            # Currently only RSA keys are supported
             if isinstance (key, rsa.RSAPrivateKey):
-                #...
+                k = KeyHandler(priv=key)
+                sk = k.serialize_key(key_type="PRIV")
+                return sk
             else:
                 raise TypeError
         except ValueError as e:
             Console.Error("Pem file could not be read")
-        #TODO: except TypeError
-        #TODO: cryptography.exceptions.UnSupportedAlgorithm
+        except TypeError as e:
+            Console.Error("Must use RSA private keys")
+        except cyptorgaphy.exceptions.UnSupportedAlgorithm as e:
+            Console.error(e)
 
 #BUG: TODO: usage of path_expand is compleyely wrong
 

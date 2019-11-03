@@ -9,6 +9,7 @@ from cloudmesh.common.dotdict import dotdict
 from cloudmesh.common.util import path_expand
 
 from cryptography.hazmat.backends import default_backend
+from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric import rsa
 from cryptography.hazmat.primitives.serialization import load_pem_private_key
 
@@ -62,6 +63,52 @@ class CmsEncryptor:
         rb = getRandomBytes(len_bytes)
         rand_int = int.from_bytes(rb, byteorder=order)
         return rand_int
+
+class KeyHandler:
+    def __init__(self, debug=False):
+        self.debug = debug
+        self.priv = None
+        self.pub = None
+        self.pem = None
+
+    def new_rsa_key(self, byte_size = 2048, pwd=None):
+        """
+        @param: int: size of key in bytes
+        @param: str: password for key
+        return: bytes of private RSA key
+        """
+        self.priv = rsa.generate_private_key(
+            public_exponent = 65537, # do NOT change this!!!
+            key_size = byte_size,
+            backend=default_backend()
+        )
+
+        # Add password if given
+        alg = None
+        if pwd is None:
+            alg = serialization.NoEncryption()
+        else:
+            alg = serialization.BestAvailableEncryption(str.encode(pwd))
+
+        # Calculate public key
+        self.pub = self.priv.public_key()
+
+        # Serialize the key
+        self.pem = self.priv.private_bytes(
+            encoding=serialization.Encoding.PEM,
+            format=serialization.PrivateFormat.PKCS8,
+            encryption_algorithm=alg
+        )
+
+        return self.pem
+
+    def get_pub_key(self, encoding="PEM"):
+        if self.pub is None:
+            Console.error("Public key is empty")
+        else:
+            encode = serialization.Encoding.PEM
+            forma = serialization.PublicFormat.SubjectPublicKeyInfo
+            return self.pub.public_bytes(encoding=encode, format=forma)
 
 class PemHandler:
     """ 

@@ -11,6 +11,7 @@ from cloudmesh.common.util import path_expand
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric import rsa
+from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 from cryptography.hazmat.primitives.serialization import load_pem_private_key
 
 """
@@ -63,6 +64,32 @@ class CmsEncryptor:
         rb = self.getRandomBytes(len_bytes)
         rand_int = int.from_bytes(rb, byteorder=order)
         return rand_int
+
+    def decrypt_aesgcm(self, key=None, nonce=None, aad=None, ct=None):
+        aesgcm = AESGCM(key)
+        pt = aesgcm.decrypt(nonce, ct, aad)
+        return pt
+
+    def encrypt_aesgcm(self, data = None, aad = None):
+        """
+        @param: bytes: the plaintext data 
+        @param: bytes: the additional authenticated data (can be public)
+        @return: 
+            - bytes: AESGCM key object
+            - bytes: nonce (random data)
+            - bytes: ciphertext
+        """
+        if data is None:
+            Console.error("Attempted to encrypt empty data")
+
+        # ALWAYS generate a new nonce. 
+        # ALL security is lost if same nonce and key are used with diff text 
+        nonce = self.getRandomBytes(12)
+        key = AESGCM.generate_key(bit_length=256)
+        aesgcm = AESGCM(key)
+        ct = aesgcm.encrypt(nonce, data, aad)
+
+        return key, nonce, ct
 
 class KeyHandler:
     def __init__(self, debug=False, priv=None, pub=None, pem=None):

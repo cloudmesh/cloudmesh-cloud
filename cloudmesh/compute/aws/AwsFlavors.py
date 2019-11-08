@@ -61,24 +61,21 @@ class AwsFlavor:
         """
         # import pdb; pdb.set_trace()
         parsed = []
+        json_tmp = json
         for x in list(json['terms']['OnDemand'].keys()):
             for y in list(json['terms']['OnDemand'][x]['priceDimensions'].keys()):
                 name = json['terms']['OnDemand'][x]['priceDimensions'][y].get('rateCode')
                 name = name.replace(".", "")
-                parsed.append({
-                    "name": name,
-                    "kind": "flavor",
-                    "cloud": "aws",
-                    "cm": {"kind": "flavor", "name": name, "cloud": "aws", "cloudtype": "aws"},
-                    "vcpu": int(json['product']['attributes'].get('vcpu')),
-                    "memory": json['product']['attributes'].get('memory'),
-                    "storage": json['product']['attributes'].get('storage'),
-                    "clockSpeed": json['product']['attributes'].get('clockSpeed'),
-                    "instanceType": json['product']['attributes'].get('instanceType'),
-                    "os": json['product']['attributes'].get('operatingSystem'),
-                    "price": float(json['terms']['OnDemand'][x]['priceDimensions'][y]['pricePerUnit'].get('USD')),
-                    "metadata": json
-                })
+                json_tmp['name'] = name
+                json_tmp["sku"] = json['product'].get('sku')
+                json_tmp["sku_offerTermCode"] = x
+                json_tmp["sku_offerTerm_priceDimension"] = y
+                json_tmp["cm"] = {"kind": "flavor", "name": name, "cloud": "aws", "cloudtype": "aws"}
+                json_tmp['terms']['OnDemand']['sku_offerTermCode'] = json['terms']['OnDemand'][x]
+                json_tmp['terms']['OnDemand']['sku_offerTermCode']['priceDimensions']['sku_offerTerm_priceDimension'] = json['terms']['OnDemand'][x]['priceDimensions'][y]
+
+                parsed.append(json_tmp)
+# flavor['terms']['OnDemand']['sku_offerTermCode']['priceDimensions']['sku_offerTerm_priceDimension']['pricePerUnit']['USD']
         return parsed
 
     def list(self, json_string_list):
@@ -113,3 +110,5 @@ class AwsFlavor:
 ##TODO: Implement Query in List
 ##TODO: Write Print for AWS Flavors, andapt Provider.Print
 ##TODO: Fix the parsing code to standardize the database entries
+
+# flavor['terms']['OnDemand']['sku_offerTermCode']['priceDimensions']['sku_offerTerm_priceDimension']['pricePerUnit']['USD']

@@ -8,9 +8,11 @@ from cloudmesh.common.debug import VERBOSE
 from cloudmesh.common.dotdict import dotdict
 from cloudmesh.common.util import path_expand
 
+from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric import rsa
+from cryptography.hazmat.primitives.asymmetric import padding
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 from cryptography.hazmat.primitives.serialization import load_pem_private_key
 
@@ -65,6 +67,45 @@ class CmsEncryptor:
         rand_int = int.from_bytes(rb, byteorder=order)
         return rand_int
 
+    def encrypt_rsa(self, pub = None, pt = None, padding="OAEP"):
+        if pub is None:
+            Console.error("empty key argument")
+
+        if pt is None:
+            Console.error("attempted to encrypt empty data")
+
+        pad = None
+        if padding == "OAEP":
+            pad = padding.OAEP(
+                    mfg = padding.MFG1( algorithm = hashes.SHA256()),
+                    algorithm = hashes.SHA256(),
+                    label = None)
+        elif padding == "PKCS":
+            pad = padding.PKCS1v15
+        else:
+            Console.error("Unsupported padding scheme")
+
+        return pub.encrypt(pt, pad)
+
+    def decrypt_rsa(self, priv = None, ct = None, padding="OAEP"):
+        if priv is None:
+            Console.error("empty key arugment")
+        if ct is None:
+            Console.error("attempted to decrypt empty data")
+        pad = None
+        if padding == "OAEP":
+            pad = padding.OAEP(
+                    mfg = padding.MFG1( algorithm = hashes.SHA256() ),
+                    algorithm = hashes.SHA256(),
+                    label = None )
+        elif padding == "PKCS":
+            pad = padding.PKCS1v15
+        else:
+            Console.error("Unsupported padding scheme")
+
+        return priv.decrypt( ct, pad )
+            
+                
     def decrypt_aesgcm(self, key=None, nonce=None, aad=None, ct=None):
         aesgcm = AESGCM(key)
         pt = aesgcm.decrypt(nonce, ct, aad)

@@ -1,4 +1,5 @@
 from cloudmesh.compute.azure import Provider as prv
+from cloudmesh.compute.vm import Provider as parentPrv
 from azure.cli.core import get_default_cli
 import time
 import json
@@ -50,53 +51,27 @@ sp_cred = {}
 # }
 # print("Cred: " + str(cred))
 
-p = prv.Provider()
+p = parentPrv.Provider('azure')
 
-# p.list()
-# p.info()
-# p.images()
+print('$$$$$$$$$$$$$$$$$$$$ secgroup')
+print(p.add_secgroup('test'))
+p.list_secgroups()
 
-# p.create()
-# exit(0)
+print('$$$$$$$$$$$$$$$$$$$$ rules')
+print(p.add_secgroup_rule(name='ssh-test'))
+p.list_secgroups_rules()
 
-#
-# exit(0)
+print('$$$$$$$$$$$$$$$$$$$$ rule to group and upload')
+print(p.add_rules_to_secgroup(name='test', rules=['ssh-test', 'ssh']))
+print(p.upload_secgroup('test'))
 
-# [print(r.__str__()) for r in p.list_public_ips()]
+print('$$$$$$$$$$$$$$$$$$$$ create vm')
+print(p.create(secgroup='test'))
 
-# print('####')
-#
-# print(p.find_available_public_ip().__str__())
-#
-# print('attach the ip to vm')
-# print(p.attach_public_ip())
+print('$$$$$$$$$$$$$$$$$$$$ create second vm')
+print(p.create(secgroup='test'))
 
-# print(p.create_public_ip())
-# print(p.list_public_ips())
-# print(p.delete_public_ip(ip='cloudmeshVM-pub-ip'))
-# print(p.list_public_ips())
+# print('$$$$$$$$$$$$$$$$$$$$ destroy')
+# print(p.destroy())
 
-# p.add_secgroup(name='my_sec_group', description='aaaaa')
-# [print(i.__str__()) for i in p.list_secgroups()]
-# print('###', p.list_secgroups('test')[0].__str__())
-
-# p.list_secgroup_rules()
-# p.list_secgroups()
-# p.list_secgroups('default')
-# print(p.add_secgroup(name='test'))
-
-# p.list_secgroup_rules()
-# p.list_secgroup_rules('test')
-# p.add_secgroup_rule(name='ssh2')
-
-# p.add_secgroup('default')
-
-# p.add_rules_to_secgroup('test', rules=['ssh', 'ssh2'])
-
-# p.upload_secgroup('test')
-
-p.destroy()
-
-# out = p.info(name='test-niranda-vm-20')
-# p.stop(name='test-niranda-vm-19')
 pass

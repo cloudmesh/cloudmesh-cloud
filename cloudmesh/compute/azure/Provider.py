@@ -13,6 +13,7 @@ from cloudmesh.common.Printer import Printer
 import azure.mgmt.network.models
 from cloudmesh.abstractclass.ComputeNodeABC import ComputeNodeABC
 from cloudmesh.mongo.CmDatabase import CmDatabase
+from cloudmesh.mongo.DataBaseDecorator import DatabaseUpdate
 from cloudmesh.provider import ComputeProviderPlugin
 from cloudmesh.common.console import Console
 from cloudmesh.common.debug import VERBOSE
@@ -276,7 +277,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         self.VM_NAME = self.default["AZURE_VM_NAME"]
 
         # Create or Update Resource group
-        self.get_resource_group()
+        self._get_resource_group()
 
         self.cmDatabase = CmDatabase()
 
@@ -320,8 +321,6 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
     #        raise NotImplementedError
 
     def keys(self):
-        # TODO: Moeen
-        # raise NotImplementedError
         Console.error("Key list is not supported in Azure!")
         Console.msg("Please use ")
         Console.msg("")
@@ -330,27 +329,44 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         return None
 
     def key_upload(self, key=None):
-        # TODO: Moeen
-        # raise NotImplementedError
-        Console.error("Key upload is not supported in Azure!")
+        """
+        azure does not allow explicit key upload!
+        """
+        Console.error(f'Azure does not allow explicit key upload! '
+                      f'Please use \'cms key\' operations to add keys to the '
+                      f'local db and reference them at the VM creation!')
+
         return None
 
     def key_delete(self, name=None):
-        # TODO: Moeen
-        raise NotImplementedError
+        """
+        azure does not allow explicit key upload!
+        """
+        Console.error(f'Azure does not allow explicit key delete! '
+                      f'Please use \'cms key\' operations to delete keys from '
+                      f'the local db!')
+        return None
 
     def get_public_ip(self, name=None):
-        raise NotImplementedError
+        """
+        returns public IP by name from the Az public IPs
+        :param name:
+        :return:
+        """
+        ip = next((x for x in self.list_public_ips() if
+                   x['name'] == name), None)
+        return ip
 
     # these are available to be associated
     def list_public_ips(self, ip=None, available=False):
         """
         lists public ips of the group
         """
-        list_result = self.network_client.public_ip_addresses.list(
-            self.GROUP_NAME)
+        list_result = [i.__dict__ for i in
+                       self.network_client.public_ip_addresses.list(
+                           self.GROUP_NAME)]
 
-        return list_result
+        return self.update_dict(list_result, kind='ip')
 
     def delete_public_ip(self, ip=None):
         """
@@ -361,56 +377,55 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                 self.GROUP_NAME,
                 ip
             )
+            res.wait()
 
-            return res.result()
+            Console.info(f'{ip} was deleted!')
         else:
-            Console.warning('No ip prefix provided')
-            return None
+            Console.warning('No ip was provided')
 
     def create_public_ip(self):
         """
-        Creates public IP for the group with the ip name provided in the config
+        Creates public IP for the group using the ip name provided in the config
+        as a prefix
         :return:
         """
+        current_pub_count = len(self.list_public_ips())
 
         public_ip_params = {
             'location': self.LOCATION,
-            'public_ip_allocation_method': 'Static',
+            # 'public_ip_allocation_method': 'Static',
             'sku': {
                 'name': 'Basic',
             }
         }
 
-        creation_result = self.network_client.public_ip_addresses.create_or_update(
-            self.GROUP_NAME,
-            self.PUBLIC_IP__NAME,
-            public_ip_params,
-            # custom_headers={'Accept': 'application/json'}
-        )
+        creation_result = [
+            self.network_client.public_ip_addresses.create_or_update(
+                self.GROUP_NAME,
+                f"{self.PUBLIC_IP__NAME}_{current_pub_count}",
+                public_ip_params,
+            ).result().__dict__]
 
-        return creation_result.result()
+        return self.update_dict(creation_result, kind='ip')
 
     def find_available_public_ip(self):
         """
-        ip will be quarried using the name provided in the config
-
-        if no ip is available, create the IP and return the publicIP object.
-        else, if IP is available and free, return that object
-        else throw and error
-
+        Azure currenly has no direct API to check if an IP is available or not!
+        hence create an IP everytime this method is called!
         :return:
         """
-        ip = next((x for x in self.list_public_ips() if
-                   x.name == self.PUBLIC_IP__NAME), None)
+        # pub_ips = self.list_public_ips()
+        #
+        # for ip in pub_ips:
+        #     if ip['ip_configuration'] is None:
+        #         # if ip_configuration is none -> ip is available
+        #         # --> return it!
+        #         Console.info(f"Found available ip {ip['name']}")
+        #         return ip
 
-        if ip is None:
-            # if ip is none -> no ip available --> create it!
-            return self.create_public_ip()
-        elif ip.ip_configuration is None:
-            # if ip_configuration is none -> ip is available --> return it!
-            return ip
-        else:
-            raise Exception('IP is already allocated!: ' + self.PUBLIC_IP__NAME)
+        # if not len(pub_ips) == 0 create one
+        Console.info(f"Creating new public IP")
+        return self.create_public_ip()
 
     def attach_public_ip(self, node=None, ip=None):
         """
@@ -447,9 +462,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
     def ssh(self, vm=None, command=None):
         raise NotImplementedError
 
-    def get_resource_group(self):
-        # TODO: Joaquin -> Completed
-
+    def _get_resource_group(self):
         groups = self.resource_client.resource_groups
         if groups.check_existence(self.GROUP_NAME):
             return groups.get(self.GROUP_NAME)
@@ -509,33 +522,19 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         return async_vm_tag_updates.result().tags
 
     def list_secgroups(self, name=None):
-        # TODO: Joaquin -> Completed
         """
         List the security group by name
 
         :param name: The name of the group, if None all will be returned
         :return:
         """
-
-        # groups = self.network_client.network_security_groups.list_all(self)
-        #
-        # if name is not None:
-        #     for entry in groups:
-        #         if entry['name'] == name:
-        #             groups = [entry]
-        #             break
-        #
-        # return self.get_list(
-        #     groups,
-        #     kind="secgroup")
-
         local_sec_groups = self._get_local_sec_groups(name)
         Console.info('Local security groups: ')
         [Console.info(str(i)) for i in local_sec_groups]
 
         az_sec_groups = self._get_az_sec_groups(name)
         Console.info('Az security groups: ')
-        [Console.info(i.__str__()) for i in az_sec_groups]
+        [Console.info(str(i.__dict__)) for i in az_sec_groups]
 
         return local_sec_groups
 
@@ -583,7 +582,6 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         return _remove_mongo_id_obj(sec_rules)
 
     def list_secgroup_rules(self, name='default'):
-        # TODO: Joaquin
         """
         List the security group rules by for provided Network Security Group
 
@@ -656,14 +654,16 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
         return result_add_security_group.result()
 
-    def add_secgroup(self, name='default', description=None):
-        # TODO: Joaquin -> Completed
+    def add_secgroup(self, name=None, description=None):
         """
-        Adds the
+        Adds the sec group locally
         :param name: Name of the group
         :param description: The description
         :return:
         """
+        if name is None:
+            name = 'default'
+
         try:
             local_sec_group = self._get_local_sec_groups(name)[0]
             Console.info(f"local sec group: {str(local_sec_group)}")
@@ -672,7 +672,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
             Console.warning(f'{name} sec group is not found! Created new '
                             f'group: {str(local_sec_group)}')
 
-        self._add_az_sec_group(name)
+        # self._add_az_sec_group(name)
 
         Console.info("sec group created successfully!")
         return local_sec_group
@@ -682,59 +682,28 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                           port=None,
                           protocol=None,
                           ip_range=None):
-        # TODO: Joaquin -> Completed
-
-        # network_sec_group_name = 'cloudmesh_jae'
-
-        # if self.network_client:
-        #     # list all the rules available
-        #     sec_rules = self.list_secgroup_rules(name)
-        #
-        #     try:
-        #         portmin, portmax = port.split(":")
-        #     except:
-        #         portmin = None
-        #         portmax = None
-        #
-        #     parameters = SecurityRule(
-        #         access=azure.mgmt.network.models.SecurityRuleAccess.allow,
-        #         priority=500,
-        #         destination_address_prefix='*',
-        #         destination_port_range='*',
-        #         direction=azure.mgmt.network.models.SecurityRuleDirection.inbound,
-        #         protocol=azure.mgmt.network.models.SecurityRuleProtocol.tcp,
-        #         source_address_prefix='*',
-        #         source_port_range='*'
-        #     )
-        #
-        # else:
-        #     raise ValueError("cloud not initialized")
-        #
-        # add_rule = self.network_client.security_rules.create_or_update(
-        #     self.GROUP_NAME, network_sec_group_name, name, parameters)
-
-        # this method would add sec group rule to local db only, because azure
-        # does not support adding security rules without security group names
+        """
+        Adding sec rule to the local db as azure does not support explicit sec
+        rules
+        :param name:
+        :param port:
+        :param protocol:
+        :param ip_range:
+        :return:
+        """
         # todo: change these defaults
         protocol = "tcp" if protocol is None else protocol
         ip_range = "0.0.0.0/0" if ip_range is None else ip_range
         port = "22:22" if port is None else port
         name = "ssh" if name is None else name
 
-        add_rule = {
+        add_rule = self.update_dict({
             "protocol": protocol,
             "ip_range": ip_range,
             "ports": port,
             "name": name,
-            "cm": {
-                "kind": "secrule",
-                "name": name,
-                "cloud": "local",
-                "collection": "local-secrule",
-                "created": str(datetime.now()),
-                "modified": str(datetime.now()),
-            }
-        }
+        }, kind='secrule')[0]
+
         self.cmDatabase.collection('local-secrule').insert_one(add_rule)
 
         return add_rule
@@ -754,55 +723,18 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         Console.info(f'Security group {name} deleted from Az!')
 
     def upload_secgroup(self, name=None):
-        # TODO: Joaquin -> Completed
-        # cgroups = self.list_secgroups(name)
-        # group_exists = False
-        # if len(cgroups) > 0:
-        #     print("Warning group already exists")
-        #     group_exists = True
-        #
-        # groups = NetworkSecurityGroup().list()
-        # rules = SecurityRule().list()
-        #
-        # # pprint (rules)
-        # data = {}
-        # for rule in rules:
-        #     data[rule['name']] = rule
-        #
-        # # pprint (groups)
-        #
-        # for group in groups:
-        #     if group['name'] == name:
-        #         break
-        # print("upload group:", name)
-        #
-        # if not group_exists:
-        #     self.add_secgroup(name=name, description=group['description'])
-        #
-        #     for r in group['rules']:
-        #         found = data[r]
-        #         print("    ", "rule:", found['name'])
-        #         self.add_secgroup_rule(
-        #             name=name,
-        #             port=found["ports"],
-        #             protocol=found["protocol"],
-        #             ip_range=found["ip_range"])
-        #
-        # else:
-        #
-        #     for r in group['rules']:
-        #         found = data[r]
-        #         print("    ", "rule:", found['name'])
-        #         self.add_rules_to_secgroup(
-        #             name=name,
-        #             rules=[found['name']])
-
-        # this method would get the security group from the local db and push it
-        # to az
+        """
+        Takes the security group from the local db and push it to az
+        :param name:
+        :return:
+        """
         local_group = self._get_local_sec_groups(name)[0]
 
         # transform local rules to az rule objects
         az_rules = self._sec_rules_local_to_az(local_group['rules'])
+
+        # add az sec group
+        self._add_az_sec_group(name)
 
         # push az rules
         results = []
@@ -814,7 +746,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                 az_rule
             )
 
-            results.append(ret.result())
+            results.append(ret.result().__dict__)
 
         return results
 
@@ -827,65 +759,45 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
             raise ValueError(f'Some of the security rules are not available: '
                              f'{str(rules)}')
 
-    def add_rules_to_secgroup(self, name=None, rules=None):
-        # TODO: Joaquin -> Completed
-
-        if name is None and rules is None:
+    def add_rules_to_secgroup(self, secgroupname=None, newrules=None):
+        """
+        Adds the rules to te local sec group only! it will update the az sec
+        group once it is uploaded
+        :param secgroupname:
+        :param newrules:
+        :return:
+        """
+        if secgroupname is None and newrules is None:
             raise ValueError("name or rules are None")
 
-        if not isinstance(rules, list):
+        if not isinstance(newrules, list):
             raise ValueError('rules should be a list')
 
-        # cgroups = self.list_secgroups(name)
-        # if len(cgroups) == 0:
-        #     raise ValueError("group does not exist")
-        #
-        # groups = DictList(NetworkSecurityGroup().list())
-        # rules_details = DictList(SecurityRule().list())
-        #
-        # try:
-        #     group = groups[name]
-        # except:
-        #     raise ValueError("group does not exist")
-        #
-        # for rule in rules:
-        #     try:
-        #         found = rules_details[rule]
-        #         self.add_secgroup_rule(name=name,
-        #                                port=found["ports"],
-        #                                protocol=found["protocol"],
-        #                                ip_range=found["ip_range"])
-        #     except:
-        #         ValueError("rule can not be found")
-
-        # this method will add the rules to te local sec group only! it will
-        # update the az sec group once it is uploaded
-        sec_group = self._get_local_sec_groups(name)[0]
-        current_rules = sec_group['rules']
+        sec_group = self._get_local_sec_groups(secgroupname)[0]
+        current_rules = set(sec_group['rules'])
 
         # check if the rules are already available
-        self._check_local_rules_available(rules)
+        self._check_local_rules_available(newrules)
 
-        current_rules.extend(rules)
+        current_rules.update(newrules)
 
         cm = sec_group['cm']
         cm.update({"modified": str(datetime.now())})
 
-        update = {
-            "$set": {
-                "rules": current_rules,
-                "cm": cm,
-            }
-        }
-
-        query = {'name': name}
+        update = {"$set": {"rules": list(current_rules), "cm": cm, }}
+        query = {'name': secgroupname}
 
         self.cmDatabase.collection('local-secgroup').update_one(query, update)
 
-        return self._get_local_sec_groups(name)[0]
+        return self._get_local_sec_groups(secgroupname)[0]
 
     def remove_rules_from_secgroup(self, name=None, rules=None):
-        # TODO: Joaquin -> Completed
+        """
+        removes rules from a secgroup both locally and from azure group
+        :param name:
+        :param rules:
+        :return:
+        """
 
         local_group = self._get_local_sec_groups(name)[0]
         new_rules = local_group['rules']
@@ -894,12 +806,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         cm = local_group['cm']
         cm.update({"modified": str(datetime.now())})
 
-        update = {
-            "$set": {
-                "rules": new_rules,
-                "cm": cm,
-            }
-        }
+        update = {"$set": {"rules": new_rules, "cm": cm, }}
         query = {'name': name}
 
         self.cmDatabase.collection('local-secgroup').update_one(query, update)
@@ -939,8 +846,10 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         :param kwargs: additional arguments passed along at time of boot
         :return:
         """
+        if secgroup is None:
+            secgroup = 'default'
 
-        vm_parameters = self.create_vm_parameters()
+        vm_parameters = self._create_vm_parameters(secgroup=secgroup, ip=ip)
 
         if group is None:
             group = self.GROUP_NAME
@@ -953,13 +862,16 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
             vm_parameters)
         async_vm_creation.wait()
 
+        disks_count = len(
+            list(self.compute_client.disks.list_by_resource_group(group)))
+
         # Creating a Managed Data Disk
         async_disk_creation = self.compute_client.disks.create_or_update(
             group,
-            'cloudmesh-datadisk1',
+            f"{self.OS_DISK_NAME}_{disks_count}",
             {
                 'location': self.LOCATION,
-                'disk_size_gb': 1,
+                'disk_size_gb': 8,
                 'creation_data': {
                     'create_option': 'Empty'
                 }
@@ -975,8 +887,8 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
         # Attaching Data Disk to a Virtual Machine
         virtual_machine.storage_profile.data_disks.append({
-            'lun': 12,
-            'name': 'cloudmesh-datadisk1',
+            'lun': 0,
+            'name': data_disk.name,
             'create_option': 'Attach',
             'managed_disk': {
                 'id': data_disk.id
@@ -991,16 +903,14 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
         return self.info(group, name, 'ACTIVE')[0]
 
-    def create_vm_parameters(self):
-        # TODO: Joaquin -> Completed
-        nic = self.create_nic()
+    def _create_vm_parameters(self, secgroup=None, ip=None):
+        nic = self._create_nic(secgroup, ip)
 
         # Parse Image from yaml file
 
         publisher, offer, sku, version = self.default["image"].split(":")
 
         # Declare Virtual Machine Settings
-
         """
             Create the VM parameters structure.
         """
@@ -1031,17 +941,12 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
         return vm_parameters
 
-    def create_nic(self):
-        # TODO: Joaquin -> Completed
-        """
-            Create a Network Interface for a Virtual Machine
-        :return:
-        """
-        # A Resource group needs to be in place
-        self.get_resource_group()
+    def _create_vnet_if_not_exists(self):
+        for vnet in self.network_client.virtual_networks.list(self.GROUP_NAME):
+            if vnet.name == self.VNET_NAME:
+                Console.info("vnet exists!")
+                return vnet
 
-        # Create Virtual Network
-        VERBOSE(" ".join('Create Vnet'))
         async_vnet_creation = \
             self.network_client.virtual_networks.create_or_update(
                 self.GROUP_NAME,
@@ -1053,38 +958,86 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                     }
                 }
             )
-        async_vnet_creation.wait()
+        return async_vnet_creation.result()
 
-        # Create Subnet
-        VERBOSE(" ".join('Create Subnet'))
+    def _create_subnet_if_not_exitsts(self, secgroup):
+        for subnet in self.network_client.subnets.list(self.GROUP_NAME,
+                                                       self.VNET_NAME):
+            if subnet.name == self.SUBNET_NAME:
+                Console.info("subnet exists!")
+                return subnet
+
+        subnet_params = {
+            'address_prefix': '10.0.0.0/24',
+            'network_security_group': {
+                'id': self._get_az_sec_groups(name=secgroup)[0].id
+            }
+        }
+
         async_subnet_creation = self.network_client.subnets.create_or_update(
             self.GROUP_NAME,
             self.VNET_NAME,
             self.SUBNET_NAME,
-            {'address_prefix': '10.0.0.0/24'}
+            subnet_parameters=subnet_params,
         )
-        subnet_info = async_subnet_creation.result()
+
+        return async_subnet_creation.result()
+
+    def _create_nic(self, secgroup=None, ip=None):
+        """
+        Create a Network Interface for a Virtual Machine
+        :return:
+        """
+        if secgroup is None:
+            secgroup = 'default'
+
+        # A Resource group needs to be in place
+        self._get_resource_group()
+
+        # Create Virtual Network
+        VERBOSE(" ".join('Create Vnet'))
+        vnet = self._create_vnet_if_not_exists()
+
+        # Create Subnet
+        VERBOSE(" ".join('Create Subnet'))
+        subnet = self._create_subnet_if_not_exitsts(secgroup)
 
         # Create NIC
         VERBOSE(" ".join('Create NIC'))
-        async_nic_creation = \
-            self.network_client.network_interfaces.create_or_update(
-                self.GROUP_NAME,
-                self.NIC_NAME,
-                {
-                    'location': self.LOCATION,
-                    'ip_configurations': [{
-                        'name': self.IP_CONFIG_NAME,
-                        'subnet': {
-                            'id': subnet_info.id
-                        }
-                    }]
+
+        # each vm needs a nic. so, use self.NIC_NAME as a prefix for the NICs
+        nic_count = len(
+            list(self.network_client.network_interfaces.list(self.GROUP_NAME)))
+
+        # public ip as a dict
+        if ip is None:
+            pub_ip = self.find_available_public_ip()[0]
+        else:
+            pub_ip = self.get_public_ip(name=ip)
+
+        nic_params = {
+            'location': self.LOCATION,
+            'ip_configurations': [{
+                'name': self.IP_CONFIG_NAME,
+                'subnet': {
+                    'id': subnet.id
+                },
+                'public_ip_address': {
+                    'id': pub_ip['id']
                 }
-            )
+            }],
+            'network_security_group': {
+                'id': subnet.network_security_group.id,
+            }
+        }
 
-        nic = async_nic_creation.result()
+        nic = self.network_client.network_interfaces.create_or_update(
+            self.GROUP_NAME,
+            f"{self.NIC_NAME}_{nic_count}",
+            parameters=nic_params,
+        )
 
-        return nic
+        return nic.result()
 
     def start(self, group=None, name=None):
         # TODO: Joaquin -> Completed
@@ -1218,16 +1171,12 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
         return self.get_list(servers, kind="vm")
 
-    def destroy(self, group=None, name=None):
-        # TODO: Joaquin -> Completed
+    def destroy(self, name=None):
         """
         Destroys the node
         :param name: the name of the node
         :return: the dict of the node
         """
-        if group is None:
-            group = self.GROUP_NAME
-
         if name is None:
             vms = self.list()
         else:
@@ -1238,7 +1187,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         for vm in vms:
             elm = {}
             VERBOSE(" ".join('Deleting Azure Virtual Machine'))
-            del_vm = self.vms.delete(group, vm['name'])
+            del_vm = self.vms.delete(self.GROUP_NAME, vm['name'])
             del_vm.wait()
 
             elm['name'] = vm['name']
@@ -1251,8 +1200,8 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
         # # Delete Resource Group
         VERBOSE(" ".join('Deleting Azure Resource Group'))
-        async_group_delete = self.resource_client.resource_groups.delete(
-            group)
+        async_group_delete = \
+            self.resource_client.resource_groups.delete(self.GROUP_NAME)
         async_group_delete.wait()
 
         return res
@@ -1366,7 +1315,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                 return element
         return None
 
-    def image(self, name=None):
+    def image(self, name=None, **kwargs):
         # TODO: Joaquin -> Completed
         """
         Gets the image with a given nmae
@@ -1432,7 +1381,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                 entry['cm'] = {}
 
             if kind == 'ip':
-                entry['name'] = entry['floating_ip_address']
+                entry['name'] = entry['name']
 
             entry["cm"].update({
                 "kind": kind,
@@ -1467,10 +1416,17 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                 entry['cm']['updated'] = str(datetime.utcnow())
                 entry["cm"]["name"] = entry["name"]
             elif kind == 'secgroup':
-                if self.cloudtype == 'azure':
-                    entry["cm"]["name"] = entry["name"]
-                else:
-                    pass
+                entry["cm"]["name"] = entry["name"]
+                entry['cm']['created'] = str(datetime.utcnow())
+                entry['cm']['updated'] = str(datetime.utcnow())
+
+            elif kind == 'key':
+                entry['cm']['created'] = str(datetime.utcnow())
+                entry['cm']['updated'] = str(datetime.utcnow())
+
+            elif kind == 'secrule':
+                entry['cm']['created'] = str(datetime.utcnow())
+                entry['cm']['updated'] = str(datetime.utcnow())
 
             d.append(entry)
             VERBOSE(d)

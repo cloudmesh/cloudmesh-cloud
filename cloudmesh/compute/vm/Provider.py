@@ -16,6 +16,7 @@ from cloudmesh.common.debug import VERBOSE
 
 from cloudmesh.mongo.CmDatabase import CmDatabase
 
+
 class Provider(ComputeNodeABC):
 
     def __init__(self,
@@ -56,7 +57,7 @@ class Provider(ComputeNodeABC):
                 Provider as OracleComputeProvider
             provider = OracleComputeProvider
 
-            print ("RRRR")
+            print("RRRR")
 
         # elif self.kind in ["vagrant", "virtualbox"]:
         #    from cloudmesh.compute.virtualbox.Provider import \
@@ -121,7 +122,6 @@ class Provider(ComputeNodeABC):
                 raise NotImplementedError
         return r
 
-
     @DatabaseUpdate()
     def keys(self):
         return self.p.keys()
@@ -159,7 +159,8 @@ class Provider(ComputeNodeABC):
 
         if name is None:
             name_generator = Name()
-            # name_generator.incr() # this is already called in the vm.py not needed to be called here.
+            # name_generator.incr() # this is already called in the vm.py not
+            # needed to be called here.
             vms = [str(name_generator)]
         else:
             vms = self.expand(name)
@@ -189,7 +190,6 @@ class Provider(ComputeNodeABC):
                                     header=['Name', 'Cloud'],
                                     output='table'))
             raise Exception("these vms already exists")
-            return None
 
         # Step 2. identify the image and flavor from kwargs and if they do
         # not exist read them for that cloud from the yaml file
@@ -221,7 +221,6 @@ class Provider(ComputeNodeABC):
         self.list()
 
         return created
-
 
     def _create(self, **arguments):
 
@@ -450,8 +449,23 @@ class Provider(ComputeNodeABC):
     def console(self, vm=None):
         return self.p.console(vm=vm)
 
-    def wait(self, vm=None, interval=None , timeout=None):
+    def wait(self, vm=None, interval=None, timeout=None):
         return self.p.wait(vm=vm, interval=interval, timeout=timeout)
 
     def log(self, vm=None):
         return self.p.log(vm=vm)
+
+    def add_secgroup_rule(self,
+                          name=None,  # group name
+                          port=None,
+                          protocol=None,
+                          ip_range=None):
+        return self.p.add_secgroup_rule(name=name, port=port, protocol=protocol,
+                                        ip_range=ip_range)
+
+    def add_rules_to_secgroup(self, name=None, rules=None):
+        return self.p.add_rules_to_secgroup(secgroupname=name, newrules=rules)
+
+    def destroy(self, name=None):
+        return self.p.destroy(name=name)
+

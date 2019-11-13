@@ -1,5 +1,6 @@
 import os
 import platform
+from base64 import b64encode
 from getpass import getpass
 
 from cloudmesh.common.Shell import Shell
@@ -131,6 +132,52 @@ class CmsEncryptor:
         ct = aesgcm.encrypt(nonce, data, aad)
 
         return key, nonce, ct
+
+class CmsHasher:
+    def __init__(self, data = None, data_type = str):
+        #Check if data is empty
+        if data is not None:
+            # Ensure proper data type
+            if data_type is str:
+                self.data = data.encode()
+            elif data_type is bytes:
+                self.data = data
+            else:
+                Console.error("data_type not supported")
+
+    def hash_data(self, data = None, hash_alg="SHA256"
+                    , encoding = False, clean = False):
+        digest = None
+        if hash_alg == "MD5":
+            # !!!!!!!!!!!!!!!!!!!!!!! Warning !!!!!!!!!!!!!!!!!!!!!!!!
+            # This hash has know vulnerabilities. 
+            # ONLY used this when the data does not need to be secert. 
+            # !!!!!!!!!!!!!!!!!!!!!!! Warning !!!!!!!!!!!!!!!!!!!!!!!!
+            digest = hashes.Hash(hashes.MD5(), backend = default_backend())
+        else:
+            Console.error("Unsupported Hashing algorithm")
+        if type(data) is str:
+            data = data.encode()
+        digest.update(data)
+        hashed = digest.finalize()
+
+        # Encode data if requested
+        if encoding == False:
+            """no op, just for check"""
+        elif encoding == "b64":
+            hashed = b64encode(hashed).decode()
+        else:
+            Console.error("Unknown encoding requested")
+
+        # Clean data for system purposes if requested
+        if clean:
+            remove_chars = ['+','=','\\','/'] #special dir chars on typical os
+            for char in remove_chars:
+                if char in hashed:
+                    hashed = hashed.replace(char, "")
+
+        return hashed 
+            
 
 class KeyHandler:
     def __init__(self, debug=False, priv=None, pub=None, pem=None):

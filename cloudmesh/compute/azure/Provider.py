@@ -289,6 +289,9 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         self.protocol_str_map = {
             'tcp': 'Tcp',
             'udp': 'Udp',
+            'icmp': 'Icmp',
+            'esp': 'Esp',
+            'ah': 'Ah',
             '*': '*'
         }
 
@@ -398,7 +401,6 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
         public_ip_params = {
             'location': self.LOCATION,
-            # 'public_ip_allocation_method': 'Static',
             'sku': {
                 'name': 'Basic',
             }
@@ -477,7 +479,8 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         pub_ip = None
         for ip in list(self.network_client.public_ip_addresses
                            .list(self.GROUP_NAME)):
-            if nic_id in ip.ip_configuration.id:
+            if ip.ip_configuration is not None and nic_id \
+                in ip.ip_configuration.id:
                 pub_ip = ip
         return pub_ip
 
@@ -494,7 +497,11 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         if vm is None or command is None:
             raise Exception(f"vm or command can not be null")
 
-        vm_obj = self._get_local_vm(vm)
+        if isinstance(vm, dict):
+            vm_obj = vm
+        else:
+            vm_obj = self._get_local_vm(vm)
+
         nic_id = vm_obj['network_profile']['network_interfaces'][0]['id']
 
         pub_ip = self._get_az_pub_ip_from_nic_id(nic_id)
@@ -573,7 +580,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
             return groups.get(self.GROUP_NAME)
         else:
             # Create or Update Resource group
-            VERBOSE(" ".join('Create Azure Resource Group'))
+            Console.info('Create Azure Resource Group')
             return groups.create_or_update(
                 self.GROUP_NAME, {'location': self.LOCATION})
 
@@ -714,7 +721,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         priority = 100
         for rule in sec_rules:
             az_rule = SecurityRule(
-                protocol=self.protocol_str_map.get(rule['protocol']),
+                protocol=self.protocol_str_map.get(rule['protocol'].lower()),
                 name=rule['name'],
                 access='Allow',  # todo: can only set Allows!
                 direction='Inbound',  # todo: add appropriate
@@ -851,7 +858,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                 az_rule
             )
 
-            results.append(ret.result().__dict__)
+            results.append(ret.result().as_dict())
 
         return results
 
@@ -939,7 +946,6 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                group=None,
                metadata=None,
                **kwargs):
-        # TODO: Joaquin -> Completed
         """
         creates a named node
 
@@ -968,53 +974,56 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         if key is None:
             key = 'test-key'  # todo default key is named test-key? why?
 
-        vm_parameters = self._create_vm_parameters(secgroup, pub_ip, key)
+        vm_parameters = self._create_vm_parameters(name, secgroup, pub_ip, key)
 
-        async_vm_creation = self.vms.create_or_update(
+        vm = self.vms.create_or_update(
             group,
             name,
-            vm_parameters)
-        async_vm_creation.wait()
+            vm_parameters).result()
 
-        disks_count = len(
-            list(self.compute_client.disks.list_by_resource_group(group)))
+        Console.info('VM created: ' + vm.name)
 
-        # Creating a Managed Data Disk
-        async_disk_creation = self.compute_client.disks.create_or_update(
-            group,
-            f"{self.OS_DISK_NAME}_{disks_count}",
-            {
-                'location': self.LOCATION,
-                'disk_size_gb': 8,
-                'creation_data': {
-                    'create_option': 'Empty'
-                }
-            }
-        )
-        data_disk = async_disk_creation.result()
+        #  todo data disk creation is taken off due to cost limitations!
+        # disks_count = len(
+        #     list(self.compute_client.disks.list_by_resource_group(group)))
+        #
+        # # Creating a Managed Data Disk
+        # async_disk_creation = self.compute_client.disks.create_or_update(
+        #     group,
+        #     f"{self.OS_DISK_NAME}_{disks_count}",
+        #     {
+        #         'location': self.LOCATION,
+        #         'disk_size_gb': 8,
+        #         'creation_data': {
+        #             'create_option': 'Empty'
+        #         }
+        #     }
+        # )
+        # data_disk = async_disk_creation.result()
+        #
+        # # Get the virtual machine by name
+        # virtual_machine = self.vms.get(
+        #     group,
+        #     name
+        # )
+        #
+        # # Attaching Data Disk to a Virtual Machine
+        # virtual_machine.storage_profile.data_disks.append({
+        #     'lun': 0,
+        #     'name': data_disk.name,
+        #     'create_option': 'Attach',
+        #     'managed_disk': {
+        #         'id': data_disk.id
+        #     }
+        # })
+        # updated_vm = self.vms.create_or_update(
+        #     group,
+        #     name,
+        #     virtual_machine
+        # )
+        # updated_dict = updated_vm.result().as_dict()
 
-        # Get the virtual machine by name
-        virtual_machine = self.vms.get(
-            group,
-            name
-        )
-
-        # Attaching Data Disk to a Virtual Machine
-        virtual_machine.storage_profile.data_disks.append({
-            'lun': 0,
-            'name': data_disk.name,
-            'create_option': 'Attach',
-            'managed_disk': {
-                'id': data_disk.id
-            }
-        })
-        updated_vm = self.vms.create_or_update(
-            group,
-            name,
-            virtual_machine
-        )
-
-        updated_dict = updated_vm.result().as_dict()
+        updated_dict = vm.as_dict()
         updated_dict['status'] = 'ACTIVE'
         updated_dict['ssh_key_name'] = key
 
@@ -1030,7 +1039,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
         return key[0]
 
-    def _create_vm_parameters(self, secgroup, ip, key):
+    def _create_vm_parameters(self, name, secgroup, ip, key):
         """
         Create the VM parameters structure.
         :param secgroup: sec group name
@@ -1039,9 +1048,9 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         :return:
         """
 
-        nic = self._create_nic(secgroup, ip)
+        nic = self._create_az_nic(secgroup, ip)
 
-        # Parse Image from yaml file
+        # # Parse Image from yaml file
         publisher, offer, sku, version = self.default["image"].split(":")
 
         # Declare Virtual Machine Settings
@@ -1064,7 +1073,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                 }
             },
             'hardware_profile': {
-                'vm_size': 'Standard_DS1_v2'
+                'vm_size': 'Standard_B1s'
             },
             'storage_profile': {
                 'image_reference': {
@@ -1073,6 +1082,14 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                     'sku': sku,
                     'version': version
                 },
+                'os_disk': {
+                    'name': f"{self.OS_DISK_NAME}_{name}",
+                    'create_option': 'FromImage',
+                    'disk_size_gb': 64,
+                    'managed_disk': {
+                        'storage_account_type': 'Premium_LRS',
+                    }
+                }
             },
             'network_profile': {
                 'network_interfaces': [{
@@ -1083,7 +1100,15 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
         return vm_parameters
 
-    def _create_vnet_if_not_exists(self):
+    def _create_az_sec_group_if_not_exists(self, sec_group_name):
+        az_group = self._get_az_sec_groups(sec_group_name)
+
+        if len(az_group) > 0:
+            Console.info(f"secgroup {sec_group_name} exists!")
+        else:
+            self.upload_secgroup(sec_group_name)
+
+    def _create_az_vnet_if_not_exists(self):
         for vnet in self.network_client.virtual_networks.list(self.GROUP_NAME):
             if vnet.name == self.VNET_NAME:
                 Console.info("vnet exists!")
@@ -1102,7 +1127,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
             )
         return async_vnet_creation.result()
 
-    def _create_subnet_if_not_exitsts(self, secgroup):
+    def _create_az_subnet_if_not_exitsts(self, secgroup):
         for subnet in self.network_client.subnets.list(self.GROUP_NAME,
                                                        self.VNET_NAME):
             if subnet.name == self.SUBNET_NAME:
@@ -1125,7 +1150,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
         return async_subnet_creation.result()
 
-    def _create_nic(self, secgroup, ip):
+    def _create_az_nic(self, secgroup, ip):
         """
         Create a Network Interface for a Virtual Machine
         :return:
@@ -1133,16 +1158,19 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         # A Resource group needs to be in place
         self._get_resource_group()
 
+        # create sec group
+        self._create_az_sec_group_if_not_exists(secgroup)
+
         # Create Virtual Network
-        VERBOSE(" ".join('Create Vnet'))
-        vnet = self._create_vnet_if_not_exists()
+        VERBOSE('Create Vnet')
+        vnet = self._create_az_vnet_if_not_exists()
 
         # Create Subnet
-        VERBOSE(" ".join('Create Subnet'))
-        subnet = self._create_subnet_if_not_exitsts(secgroup)
+        VERBOSE('Create Subnet')
+        subnet = self._create_az_subnet_if_not_exitsts(secgroup)
 
         # Create NIC
-        VERBOSE(" ".join('Create NIC'))
+        VERBOSE('Create NIC')
 
         # each vm needs a nic. so, use self.NIC_NAME as a prefix for the NICs
         nic_count = len(
@@ -1168,9 +1196,11 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
             self.GROUP_NAME,
             f"{self.NIC_NAME}_{nic_count}",
             parameters=nic_params,
-        )
+        ).result()
 
-        return nic.result()
+        Console.info("NIC created: " + nic.name)
+
+        return nic
 
     def start(self, group=None, name=None):
         # TODO: Joaquin -> Completed
@@ -1530,7 +1560,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                 if 'status' in entry.keys():
                     entry["cm"]["status"] = str(entry["status"])
                 if 'ssh_key_name' in entry.keys():
-                    entry["cm"]["ssh-key-name"] = str(entry["ssh_key_name"])
+                    entry["cm"]["ssh_key_name"] = str(entry["ssh_key_name"])
 
             elif kind == 'flavor':
                 entry["cm"]["created"] = str(datetime.utcnow())

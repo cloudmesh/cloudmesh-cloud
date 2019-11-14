@@ -38,7 +38,7 @@ print(p.add_rules_to_secgroup(name='test', rules=['ssh-test', 'ssh']))
 print(p.upload_secgroup('test'))
 
 print('$$$$$$$$$$$$$$$$$$$$ create vm')
-print(p.create(name='vm1', secgroup='test'))
+print(p.create(name='vm1'))
 
 print('$$$$$$$$$$$$$$$$$$$$ create second vm')
 print(p.create(name='vm2', secgroup='test'))

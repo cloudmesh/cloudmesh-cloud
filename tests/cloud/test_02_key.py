@@ -62,10 +62,6 @@ class Test_Key:
                 if 'public_key' in k.keys():
                     key = k
                     break
-        elif cloud == 'azure':
-            # todo: implement this
-            VERBOSE("WARNING: this is not yet implemented in Azure!")
-            return
         else:
             key = cm.find_name(KEY, "key")[0]
         pprint(key)
@@ -76,30 +72,24 @@ class Test_Key:
 
     def test_list_key_from_cloud(self):
         HEADING()
-
-        if cloud == 'azure':
-            # todo: implement this
-            VERBOSE("WARNING: this is not yet implemented in Azure!")
-            return
-
         Benchmark.Start()
         keys = provider.keys()
         Benchmark.Stop()
+
+        if cloud == 'azure':
+            VERBOSE("Azure does not support key list!")
+            return
+
         found = False
         for key in keys:
             if key['name'] == KEY:
                 found = True
                 break
+
         assert found
 
     def test_delete_key_from_cloud(self):
         HEADING()
-
-        if cloud == 'azure':
-            # todo: implement this
-            VERBOSE("WARNING: this is not yet implemented in Azure!")
-            return
-
         try:
             Benchmark.Start()
             r = provider.key_delete(KEY)

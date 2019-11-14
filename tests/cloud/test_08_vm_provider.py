@@ -67,7 +67,8 @@ class Test_provider_vm:
                                        'STOPPED']
 
     def test_provider_vmprovider_vm_list(self):
-        # list should be after create() since it would return empty and len(data) would be 0
+        # list should be after create() since it would return empty and
+        # len(data) would be 0
         HEADING()
         Benchmark.Start()
         data = provider.list()
@@ -86,30 +87,25 @@ class Test_provider_vm:
 
     def test_provider_vm_ssh(self):
         HEADING()
-
-        if cloud == 'azure':
-            VERBOSE("WARNING: this is not yet implemented in Azure!")
-            # todo: implement this
-            return
-
         name = str(Name())
         Benchmark.Start()
         cm = CmDatabase()
         vm = cm.find_name(name, kind="vm")[0]
-        data = provider.ssh(vm=vm, command='echo IAmAlive')
+        data = provider.ssh(vm=vm, command='\"echo IAmAlive\"')
         print(data)
         assert 'IAmAlive' in data
         Benchmark.Stop()
         VERBOSE(data)
 
     def test_provider_vm_info(self):
-        # This is just a dry run, status test actually uses info() in all provider
+        # This is just a dry run, status test actually uses info() in all
+        # provider
         HEADING()
         Benchmark.Start()
         name = str(Name())
         data = provider.info(name=name)
         print("dry run info():")
-        print(data)
+        pprint(data)
         Benchmark.Stop()
 
     def test_vm_status(self):

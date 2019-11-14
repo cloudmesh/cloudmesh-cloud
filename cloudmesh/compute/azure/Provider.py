@@ -1,6 +1,11 @@
+import ctypes
+import os
+import subprocess
 from ast import literal_eval
 from datetime import datetime
 from pprint import pprint
+
+from sys import platform
 
 from azure.common.credentials import ServicePrincipalCredentials
 from azure.mgmt.compute import ComputeManagementClient
@@ -431,7 +436,10 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         """
         attaches a public ip to a node
         """
-        ip = self.find_available_public_ip()
+        ip = self.find_available_public_ip()[0].as_dict()
+
+        # remove cm dict
+        ip.pop('cm')
 
         # to attach a public ip, get the nic and update the public ip field via
         # IP config
@@ -446,21 +454,118 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
             self.NIC_NAME,
             parameters={
                 'location': self.LOCATION,
-                'ip_configurations': [ip_config]
+                'ip_configurations': [ip_config.as_dict()]
             }
         )
 
         return res.result()
 
     def detach_public_ip(self, node=None, ip=None):
-        # TODO: Moeen
-        raise NotImplementedError
+        if ip is None:
+            vm_obj = self._get_local_vm(node)
+            nic_id = vm_obj['network_profile']['network_interfaces'][0]['id']
+            pub_ip = self._get_az_pub_ip_from_nic_id(nic_id)
 
-    # see the openstack example it will be almost the same as in openstack
-    # other than getting
-    # the ip and username
+            ip = pub_ip.name
+
+        req = self.network_client.public_ip_addresses.delete(self.GROUP_NAME,
+                                                             ip)
+        req.wait()
+        Console.info(f"deleted pub ip {ip}")
+
+    def _get_az_pub_ip_from_nic_id(self, nic_id):
+        pub_ip = None
+        for ip in list(self.network_client.public_ip_addresses
+                           .list(self.GROUP_NAME)):
+            if nic_id in ip.ip_configuration.id:
+                pub_ip = ip
+        return pub_ip
+
+    def _get_local_vm(self, vm_name):
+        vm_search = list(
+            self.cmDatabase.collection('azure-vm').find({'name': vm_name}))
+
+        if len(vm_search) == 0:
+            raise Exception(f"unable to locate {vm_name} in local db!")
+
+        return vm_search[0]
+
     def ssh(self, vm=None, command=None):
-        raise NotImplementedError
+        if vm is None or command is None:
+            raise Exception(f"vm or command can not be null")
+
+        vm_obj = self._get_local_vm(vm)
+        nic_id = vm_obj['network_profile']['network_interfaces'][0]['id']
+
+        pub_ip = self._get_az_pub_ip_from_nic_id(nic_id)
+        if pub_ip is None:
+            raise Exception(f"unable to find public IP for {vm}")
+
+        # in the current API (vm/Provider), it does not provide a key name for
+        # ssh. therefore, the key needs to be pulled from the vm. And therefore
+        # key name is injected to the local db entry as 'ssh_key_name'
+        key_obj = self._get_local_key_content(vm_obj['ssh_key_name'])
+
+        cmd = "ssh " \
+              "-o StrictHostKeyChecking=no " \
+              "-o UserKnownHostsFile=/dev/null " \
+              f"-i {key_obj['location']['private']} " \
+              f"{self.USERNAME}@{pub_ip.ip_address} {command}"
+        cmd = cmd.strip()
+
+        if command == "":
+            if platform.lower() == 'win32':
+                class disable_file_system_redirection:
+                    _disable = ctypes.windll.kernel32.Wow64DisableWow64FsRedirection
+                    _revert = ctypes.windll.kernel32.Wow64RevertWow64FsRedirection
+
+                    def __enter__(self):
+                        self.old_value = ctypes.c_long()
+                        self.success = self._disable(
+                            ctypes.byref(self.old_value))
+
+                    def __exit__(self, type, value, traceback):
+                        if self.success:
+                            self._revert(self.old_value)
+
+                with disable_file_system_redirection():
+                    os.system(cmd)
+            else:
+                os.system(cmd)
+        else:
+            if platform.lower() == 'win32':
+                class disable_file_system_redirection:
+                    _disable = ctypes.windll.kernel32.Wow64DisableWow64FsRedirection
+                    _revert = ctypes.windll.kernel32.Wow64RevertWow64FsRedirection
+
+                    def __enter__(self):
+                        self.old_value = ctypes.c_long()
+                        self.success = self._disable(
+                            ctypes.byref(self.old_value))
+
+                    def __exit__(self, type, value, traceback):
+                        if self.success:
+                            self._revert(self.old_value)
+
+                with disable_file_system_redirection():
+                    Console.info('cmd: ' + cmd)
+                    ssh = subprocess.Popen(cmd,
+                                           shell=True,
+                                           stdout=subprocess.PIPE,
+                                           stderr=subprocess.PIPE)
+            else:
+                Console.info('cmd: ' + cmd)
+                ssh = subprocess.Popen(cmd,
+                                       shell=True,
+                                       stdout=subprocess.PIPE,
+                                       stderr=subprocess.PIPE)
+            result = ssh.stdout.read().decode("utf-8")
+            if not result:
+                error = ssh.stderr.readlines()
+                Console.error(error)
+            else:
+                Console.info("cmd result: " + result)
+                return result
 
     def _get_resource_group(self):
         groups = self.resource_client.resource_groups
@@ -846,15 +951,24 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         :param kwargs: additional arguments passed along at time of boot
         :return:
         """
+        if group is None:
+            group = self.GROUP_NAME
+
+        if name is None:
+            name = self.VM_NAME
+
         if secgroup is None:
             secgroup = 'default'
 
-        vm_parameters = self._create_vm_parameters(secgroup=secgroup, ip=ip)
+        if ip is None:
+            pub_ip = self.find_available_public_ip()[0]
+        else:
+            pub_ip = self.get_public_ip(name=ip)
 
-        if group is None:
-            group = self.GROUP_NAME
-        if name is None:
-            name = self.VM_NAME
+        if key is None:
+            key = 'test-key'  # todo default key is named test-key? why?
+
+        vm_parameters = self._create_vm_parameters(secgroup, pub_ip, key)
 
         async_vm_creation = self.vms.create_or_update(
             group,
@@ -894,32 +1008,60 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                 'id': data_disk.id
             }
         })
-        async_disk_attach = self.vms.create_or_update(
+        updated_vm = self.vms.create_or_update(
             group,
             name,
             virtual_machine
         )
-        async_disk_attach.wait()
 
-        return self.info(group, name, 'ACTIVE')[0]
+        updated_dict = updated_vm.result().as_dict()
+        updated_dict['status'] = 'ACTIVE'
+        updated_dict['ssh_key_name'] = key
 
-    def _create_vm_parameters(self, secgroup=None, ip=None):
+        return self.update_dict(updated_dict, kind='vm')[0]
+
+    def _get_local_key_content(self, key_name):
+        query = {'name': key_name}
+
+        key = list(self.cmDatabase.collection('local-key').find(query))
+
+        if len(key) == 0:
+            raise ValueError(f'Unable to find key: {key_name}')
+
+        return key[0]
+
+    def _create_vm_parameters(self, secgroup, ip, key):
+        """
+        Create the VM parameters structure.
+        :param secgroup: sec group name
+        :param ip: az PublicIP object as dict
+        :param key: pub key content
+        :return:
+        """
+
         nic = self._create_nic(secgroup, ip)
 
         # Parse Image from yaml file
-
         publisher, offer, sku, version = self.default["image"].split(":")
 
         # Declare Virtual Machine Settings
-        """
-            Create the VM parameters structure.
-        """
         vm_parameters = {
             'location': self.LOCATION,
             'os_profile': {
                 'computer_name': self.VM_NAME,
                 'admin_username': self.USERNAME,
-                'admin_password': self.PASSWORD
+                'admin_password': self.PASSWORD,
+                'linux_configuration': {
+                    'ssh': {
+                        'public_keys': [{
+                            'path': "/home/" + self.USERNAME +
+                                    "/.ssh/authorized_keys",
+                            'key_data':
+                                str(self._get_local_key_content(key)
+                                    ['public_key']),
+                        }]
+                    }
+                }
             },
             'hardware_profile': {
                 'vm_size': 'Standard_DS1_v2'
@@ -983,14 +1125,11 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
         return async_subnet_creation.result()
 
-    def _create_nic(self, secgroup=None, ip=None):
+    def _create_nic(self, secgroup, ip):
         """
         Create a Network Interface for a Virtual Machine
         :return:
         """
-        if secgroup is None:
-            secgroup = 'default'
-
         # A Resource group needs to be in place
         self._get_resource_group()
 
@@ -1009,12 +1148,6 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         nic_count = len(
             list(self.network_client.network_interfaces.list(self.GROUP_NAME)))
 
-        # public ip as a dict
-        if ip is None:
-            pub_ip = self.find_available_public_ip()[0]
-        else:
-            pub_ip = self.get_public_ip(name=ip)
-
         nic_params = {
             'location': self.LOCATION,
             'ip_configurations': [{
@@ -1023,7 +1156,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                     'id': subnet.id
                 },
                 'public_ip_address': {
-                    'id': pub_ip['id']
+                    'id': ip['id']
                 }
             }],
             'network_security_group': {
@@ -1377,11 +1510,8 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
         for entry in _elements:
 
-            if "cm" not in entry:
+            if "cm" not in entry.keys():
                 entry['cm'] = {}
-
-            if kind == 'ip':
-                entry['name'] = entry['name']
 
             entry["cm"].update({
                 "kind": kind,
@@ -1397,8 +1527,10 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                     "type"]  # Check feasibility of the following items
                 entry["cm"]["location"] = entry[
                     "location"]  # Check feasibility of the following items
-                if 'status' in entry:
+                if 'status' in entry.keys():
                     entry["cm"]["status"] = str(entry["status"])
+                if 'ssh_key_name' in entry.keys():
+                    entry["cm"]["ssh-key-name"] = str(entry["ssh_key_name"])
 
             elif kind == 'flavor':
                 entry["cm"]["created"] = str(datetime.utcnow())

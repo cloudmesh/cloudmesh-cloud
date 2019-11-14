@@ -1,8 +1,5 @@
-from cloudmesh.compute.azure import Provider as prv
-from cloudmesh.compute.vm import Provider as parentPrv
 from azure.cli.core import get_default_cli
-import time
-import json
+from cloudmesh.compute.vm import Provider as parentPrv
 
 # AZURE_CLI = 'az'
 SERVICE_PRINCIPAL = 'cloudmesh'
@@ -26,31 +23,6 @@ def get_service_principal_credentials():
     return res.result
 
 
-account = {}
-sp_cred = {}
-# try:
-#     account.update(get_az_account_list())
-#
-#     sp_cred.update(get_service_principal_credentials())
-#     time.sleep(2)
-#
-#     # sleep for couple of seconds because it takes sometime
-#     # to update the credentials
-# except ValueError:
-#     az_login()
-#     account = get_az_account_list()
-
-# print(account)
-# print(sp_cred)
-#
-# cred = {
-#     'AZURE_APPLICATION_ID': sp_cred['appId'],
-#     'AZURE_SECRET_KEY': sp_cred['password'],
-#     'AZURE_TENANT_ID': account['tenantId'],
-#     'AZURE_SUBSCRIPTION_ID': account['id'],
-# }
-# print("Cred: " + str(cred))
-
 p = parentPrv.Provider('azure')
 
 print('$$$$$$$$$$$$$$$$$$$$ secgroup')
@@ -66,12 +38,15 @@ print(p.add_rules_to_secgroup(name='test', rules=['ssh-test', 'ssh']))
 print(p.upload_secgroup('test'))
 
 print('$$$$$$$$$$$$$$$$$$$$ create vm')
-print(p.create(secgroup='test'))
+print(p.create(name='vm1', secgroup='test'))
 
 print('$$$$$$$$$$$$$$$$$$$$ create second vm')
-print(p.create(secgroup='test'))
+print(p.create(name='vm2', secgroup='test'))
 
-# print('$$$$$$$$$$$$$$$$$$$$ destroy')
-# print(p.destroy())
+print('$$$$$$$$$$$$$$$$$$$$ ssh vm')
+p.ssh('vm1', '\"echo xxxx\"')
+
+print('$$$$$$$$$$$$$$$$$$$$ destroy')
+print(p.destroy())
 
 pass

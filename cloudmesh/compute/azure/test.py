@@ -40,6 +40,9 @@ print(p.upload_secgroup('test'))
 print('$$$$$$$$$$$$$$$$$$$$ create vm')
 print(p.create(name='vm1'))
 
+print('$$$$$$$$$$$$$$$$$$$$ create vm')
+print(p.list())
+
 print('$$$$$$$$$$$$$$$$$$$$ create second vm')
 print(p.create(name='vm2', secgroup='test'))
 

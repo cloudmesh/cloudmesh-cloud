@@ -511,7 +511,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         # in the current API (vm/Provider), it does not provide a key name for
         # ssh. therefore, the key needs to be pulled from the vm. And therefore
         # key name is injected to the local db entry as 'ssh_key_name'
-        key_obj = self._get_local_key_content(vm_obj['ssh_key_name'])
+        key_obj = self._get_local_key_content(vm_obj['cm']['ssh_key_name'])
 
         cmd = "ssh " \
               "-o StrictHostKeyChecking=no " \

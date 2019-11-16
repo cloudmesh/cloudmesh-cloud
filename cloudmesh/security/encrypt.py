@@ -7,7 +7,7 @@ from cloudmesh.common.Shell import Shell
 from cloudmesh.common.console import Console
 from cloudmesh.common.debug import VERBOSE
 from cloudmesh.common.dotdict import dotdict
-from cloudmesh.common.util import path_expand
+from cloudmesh.common.util import path_expand, readfile
 
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.backends import default_backend
@@ -15,7 +15,7 @@ from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric import rsa
 from cryptography.hazmat.primitives.asymmetric import padding
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
-from cryptography.hazmat.primitives.serialization import load_pem_private_key
+from cryptography.exceptions import UnsupportedAlgorithm
 
 """
 Functions to be replaced
@@ -181,6 +181,14 @@ class CmsHasher:
             
 
 class KeyHandler:
+    """ 
+    Responsible for the loading and creation of keys
+
+    Replaces the older functions of 
+        1) EncryptFile.check_key
+        1) EncryptFile.check_passphares
+        1) EncryptFile.pem_verify
+    """
     def __init__(self, debug=False, priv=None, pub=None, pem=None):
         ### CMS debug parameter
         self.debug = debug
@@ -305,6 +313,77 @@ class KeyHandler:
                                    encryption_algorithm = enc_alg)
         return sk
 
+    def load_key(self, path="", key_type="PUB", encoding = "SSH", ask_pass = True): 
+        """
+        Loads a public or private key from the path using pyca
+        @param: str: path to file being loaded
+        @param: str: indicates if key is public (PUB) or private (PRIV)
+        @param: str: indicates encoding of file (SSH, PEM)
+        @param: bol: Flag to ask for the key's password 
+        return: rsa.RSAPublicKey, rsa.RSAPrivate, or None
+        """
+        # Discern target key instance
+        key_instance = None
+        if key_type == "PUB":
+            key_instance = rsa.RSAPublicKey
+        elif key_type == "PRIV":
+            key_instance = rsa.RSAPrivateKey
+        else:
+            Console.error("Unsupported key type")
+
+        # Discern function from encoding and key type
+        load_function = None
+        if encoding == "SSH" and key_type == "PUB":
+            load_function = serialization.load_ssh_public_key
+        elif encoding == "PEM":
+            if key_type == "PRIV":
+                load_function = serialization.load_pem_private_key
+            elif key_type == "PUB":
+                load_function = serialization.load_pem_public_key
+            else:
+                Console.error("Unsupported key type for PEM keys")
+        else:
+            Console.error("Unsupported encoding and key-type pairing")
+
+        #Discern password
+        password = None
+        if ask_pass == False:
+            password = None
+        else: #All other cases should request password
+            password = self.requestPass("Password for key [press enter if none]:")
+            if password == "":
+                password = None
+            else:
+                password = password.encode()
+        
+        # Read key file bytes
+        data = readfile(path, mode='rb')
+
+        #Attempt to load the formatted contents
+        try:
+            if key_type == "PUB":
+                key = load_function(data, default_backend())
+            elif key_type == "PRIV":
+                key = load_function(data, password, default_backend())
+                
+            # Check if key instance is correct
+            if isinstance (key, key_instance):
+                return key 
+            else:
+                Console.error( f"Key instance must be {key_instance}")
+
+        except ValueError as e:
+            Console.error( f"Could not properly decode {encoding} key" )
+        except TypeError as e:
+            Console.error( """Password mismatch either: 
+            1. given a password when file is not encrypted 
+            2. Not given a password when file is encrypted""")
+            raise 
+        except UnsupportedAlgorithm as e:
+            Console.error( "Unsupported format for pyca serialization" ) 
+        except Exception as e:
+            Console.error( f"{e}" )
+
     def requestPass(self, prompt="Password for key:"):
         try:
             pwd = getpass(prompt)
@@ -313,54 +392,6 @@ class KeyHandler:
             Console.error("Danger: password may be echoed")
         except Exception as e:
             raise e
-            
-class PemHandler:
-    """ 
-    Responsible for loading and verify PEM files
-
-    replaces following functions:
-        1) EncryptFile.check_key
-        1) EncryptFile.check_passphares
-        1) EncryptFile.pem_verify
-    """
-    def __init__(self, debug=False):
-        self.debug = debug
-        self.data = b""
-
-    def read_file_bytes(self, input_path=""):
-        #TODO: add try catch for input_path (ensure its not empty)
-        path = path_expand(input_path)
-        if self.debug:
-            Console.ok( f"Opening file: {path}" )
-        in_file = open(path, "rb")
-        data = in_file.read()
-        in_file.close()
-        return data
-            
-    def load_private_pem_bytes(self, input_path="", pwd=None):
-        """
-        @param: str: path to file being loaded
-        @param: bytes: password bytes to unlock pem file
-        """
-        pem_data = self.read_file_bytes(input_path)
-        try:
-            key = load_pem_private_key(pem_data,
-                    password = pwd,
-                    backend = default_backend())
-
-            # Currently only RSA keys are supported
-            if isinstance (key, rsa.RSAPrivateKey):
-                k = KeyHandler(priv=key)
-                sk = k.serialize_key(key_type="PRIV")
-                return sk
-            else:
-                raise TypeError
-        except ValueError as e:
-            Console.Error("Pem file could not be read")
-        except TypeError as e:
-            Console.Error("Must use RSA private keys")
-        except cyptorgaphy.exceptions.UnSupportedAlgorithm as e:
-            Console.error(e)
 
 #BUG: TODO: usage of path_expand is compleyely wrong
 

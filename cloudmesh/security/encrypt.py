@@ -189,11 +189,12 @@ class KeyHandler:
         self.pub = pub
         self.pem = pem
 
-    def new_rsa_key(self, byte_size = 2048, pwd=None):
+    def new_rsa_key(self, byte_size = 2048, ask_password = True):
         """
+        Generates a new RSA private key and serializes it
         @param: int: size of key in bytes
-        @param: str: password for key
-        return: bytes of private RSA key
+        @param: bol: indicates if app must prompt for password
+        return: serialized bytes of private the RSA key
         """
         self.priv = rsa.generate_private_key(
             public_exponent = 65537, # do NOT change this!!!
@@ -203,6 +204,13 @@ class KeyHandler:
 
         # Calculate public key
         self.pub = self.priv.public_key()
+
+        # Password management
+        pwd = None
+        if ask_password == False: # Explicitly ensure password wasn't desired
+            pwd = None
+        else: #All other cases will request password
+            pwd = self.requestPass("Password for the new key:")
 
         # Serialize the key
         return self.serialize_key(key_type = "PRIV", password = pwd)
@@ -296,6 +304,15 @@ class KeyHandler:
             sk = key.private_bytes(encoding = encode, format = key_format,
                                    encryption_algorithm = enc_alg)
         return sk
+
+    def requestPass(self, prompt="Password for key:"):
+        try:
+            pwd = getpass(prompt)
+            return pwd
+        except getpass.GetPassWarning:
+            Console.error("Danger: password may be echoed")
+        except Exception as e:
+            raise e
             
 class PemHandler:
     """ 

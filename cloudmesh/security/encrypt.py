@@ -68,43 +68,44 @@ class CmsEncryptor:
         rand_int = int.from_bytes(rb, byteorder=order)
         return rand_int
 
-    def encrypt_rsa(self, pub = None, pt = None, padding="OAEP"):
+    def encrypt_rsa(self, pub = None, pt = None, padding_scheme="OAEP"):
         if pub is None:
             Console.error("empty key argument")
 
         if pt is None:
             Console.error("attempted to encrypt empty data")
+        elif not type(pt) == bytes:
+            pt = pt.encode()
 
         pad = None
-        if padding == "OAEP":
-            pad = padding.OAEP(
-                    mfg = padding.MFG1( algorithm = hashes.SHA256()),
+        if padding_scheme == "OAEP":
+            pad = padding.OAEP(mgf = padding.MGF1( algorithm = hashes.SHA256()),
                     algorithm = hashes.SHA256(),
                     label = None)
-        elif padding == "PKCS":
+        elif padding_scheme == "PKCS":
             pad = padding.PKCS1v15
         else:
             Console.error("Unsupported padding scheme")
 
         return pub.encrypt(pt, pad)
 
-    def decrypt_rsa(self, priv = None, ct = None, padding="OAEP"):
+    def decrypt_rsa(self, priv = None, ct = None, padding_scheme="OAEP"):
         if priv is None:
             Console.error("empty key arugment")
         if ct is None:
             Console.error("attempted to decrypt empty data")
         pad = None
-        if padding == "OAEP":
+        if padding_scheme == "OAEP":
             pad = padding.OAEP(
-                    mfg = padding.MFG1( algorithm = hashes.SHA256() ),
+                    mgf = padding.MGF1( algorithm = hashes.SHA256() ),
                     algorithm = hashes.SHA256(),
                     label = None )
-        elif padding == "PKCS":
+        elif padding_scheme == "PKCS":
             pad = padding.PKCS1v15
         else:
             Console.error("Unsupported padding scheme")
 
-        return priv.decrypt( ct, pad )
+        return priv.decrypt( ct, pad ).decode()
             
                 
     def decrypt_aesgcm(self, key=None, nonce=None, aad=None, ct=None):

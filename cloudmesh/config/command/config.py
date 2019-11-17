@@ -30,6 +30,7 @@ class ConfigCommand(PluginCommand):
              config  -h | --help
              config cat [less]
              config check
+             config secinit
              config encrypt [SOURCE] [--keep]
              config decrypt [SOURCE]
              config edit [ATTRIBUTE]
@@ -321,6 +322,13 @@ class ConfigCommand(PluginCommand):
             except Exception as e:
                 print (e)
                 return ""
+
+        elif arguments.secinit:
+            secpath = "~/.cloudmesh/security"
+            gcm_path = f"{secpath}/gcm"
+            
+            if not os.path.isdir(gcm_path):
+                Shell.mkdir(gcm_path)
 
         elif arguments.get:
 

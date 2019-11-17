@@ -8,7 +8,7 @@ from cloudmesh.common.Printer import Printer
 from cloudmesh.common.Shell import Shell
 from cloudmesh.common.console import Console
 from cloudmesh.common.util import banner
-from cloudmesh.common.util import path_expand, writefile
+from cloudmesh.common.util import path_expand, writefile, readfile
 from cloudmesh.configuration.Config import Config
 # from cloudmesh.security.encrypt import EncryptFile
 from cloudmesh.shell.command import PluginCommand
@@ -305,28 +305,80 @@ class ConfigCommand(PluginCommand):
             Console.ok("Success")
 
         elif arguments.decrypt:
+            """
+            Decrypts all secrets within the config file
 
-            if ".enc" not in source:
-                source = source + ".enc"
-            else:
-                destination = source.replace(".enc", "")
+            Assumptions: please reference assumptions within encryption section above
 
-            if not os.path.exists(source):
-                Console.error(f"encrypted file {source} does not exist")
-                sys.exit(1)
+            Note: could be migrated to Config() directly
 
-            if os.path.exists(destination):
-                Console.error(
-                    f"decrypted file {destination} does already exist")
-                sys.exit(1)
+            """
+            #TODO: file reversion on failed encryption or decryption
 
-            e = EncryptFile(source, destination)
+            # Secinit variables: location where keys are stored
+            cmssec_path = path_expand("~/.cloudmesh/security")
+            gcm_path = f"{cmssec_path}/gcm"
+            
+            # Helper Classes 
+            config = Config()
+            ch = CmsHasher() # Will hash the paths to produce file name
+            kh = KeyHandler() # Loads the public or private key bytes
+            ce = CmsEncryptor() # Assymmetric and Symmetric encryptor
 
-            e.decrypt(source)
-            Console.ok(f"{source} --> {source}")
+            # Load the private key
+            # Assumptions: all private keys ...
+            ## 1. are password protected
+            ## 2. are within the same directory as the public key
+            ## 3. share same base name as public key
+            ## 4. have a public key partner that ends with .[3 chars]
+            kp = config.get_value('cloudmesh.profile.publickey')
+            prv = kh.load_key(kp[:-4], "PRIV", "PEM", True)
 
-            Console.ok("file decrypted")
-            return ""
+            # values used to collect secrets
+            d = config.dict() # dictionary of config 
+            secrets = config.secrets() #secret value key names
+            
+            # for ever secret, for every path to secret, encrypt value
+            for secret in secrets:
+                paths = config.get_path(secret, d)
+                for path in paths:
+                    # hash the path to find the file name
+                    # MD5 is acceptable, attacker gains nothing by knowing path
+                    h = ch.hash_data(path, "MD5", "b64", True)
+                    fp = f"{gcm_path}/{h}"
+                    if not os.path.exists(f"{fp}.key"):
+                        Console.error("Already plaintext: {path}")
+                    else:
+                        # Decrypt symmetric key, using private key
+                        k_ct = readfile(f"{fp}.key")
+                        b_k_ct = b64decode(k_ct)
+                        b_k = ce.decrypt_rsa(priv = prv, ct = b_k_ct)
+
+                        # Decrypt nonce, using private key
+                        n_ct = readfile(f"{fp}.nonce")
+                        b_n_ct = b64decode(n_ct)
+                        b_n = ce.decrypt_rsa(priv = prv, ct = b_n_ct)
+
+                        # Version number was used as aad
+                        aad = config.get_value('cloudmesh.version')
+                        b_aad = aad.encode()
+
+                        # Read ciphertext from config
+                        ct = config.get_value(path)
+                        b_ct = b64decode(ct)
+
+                        # Decrypt the attribute value ciphertext
+                        pt = ce.decrypt_aesgcm(key=b_k, nonce=b_n, aad=b_aad, ct=b_ct)
+                        pt = pt.decode()
+
+                        # Set the attribute with the plaintext value
+                        config.set(path, pt)
+
+                        #Remove old ciphers
+                        os.remove(f"{fp}.key")
+                        os.remove(f"{fp}.nonce")
+
+            Console.ok("Success")
 
         elif arguments.ssh and arguments.verify:
 

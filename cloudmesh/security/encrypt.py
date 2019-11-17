@@ -105,7 +105,8 @@ class CmsEncryptor:
         else:
             Console.error("Unsupported padding scheme")
 
-        return priv.decrypt( ct, pad ).decode()
+        #return priv.decrypt( ct, pad ).decode()
+        return priv.decrypt( ct, pad )
             
                 
     def decrypt_aesgcm(self, key=None, nonce=None, aad=None, ct=None):
@@ -350,7 +351,7 @@ class KeyHandler:
         if ask_pass == False:
             password = None
         else: #All other cases should request password
-            password = self.requestPass("Password for key [press enter if none]:")
+            password = self.requestPass(f"Password for {path} [press enter if none]:")
             if password == "":
                 password = None
             else:

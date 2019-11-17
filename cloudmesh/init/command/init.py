@@ -89,6 +89,9 @@ class InitCommand(PluginCommand):
             user = config["cloudmesh.profile.user"]
             secgroup = "flask"
 
+            Console.ok("Config Security Initialization")
+            Shell.execute("cms",["config", "secinit"])
+
             print("MongoDB create")
             os.system("cms admin mongo create")
             os.system("cms admin mongo start")

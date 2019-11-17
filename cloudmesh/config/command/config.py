@@ -1,19 +1,21 @@
 import os
 import sys
 import shutil
-
 import oyaml as yaml
+from base64 import b64encode, b64decode
 from cloudmesh.common.FlatDict import flatten
 from cloudmesh.common.Printer import Printer
 from cloudmesh.common.Shell import Shell
 from cloudmesh.common.console import Console
 from cloudmesh.common.util import banner
-from cloudmesh.common.util import path_expand
+from cloudmesh.common.util import path_expand, writefile
 from cloudmesh.configuration.Config import Config
 # from cloudmesh.security.encrypt import EncryptFile
 from cloudmesh.shell.command import PluginCommand
 from cloudmesh.shell.command import command, map_parameters
 from cloudmesh.common.util import path_expand
+from cloudmesh.security.encrypt import CmsEncryptor, KeyHandler, CmsHasher
+from progress.bar import Bar
 
 class ConfigCommand(PluginCommand):
 
@@ -226,17 +228,81 @@ class ConfigCommand(PluginCommand):
             Config.check()
 
         elif arguments.encrypt:
+            """ 
+            Encrypts the keys listed within Config.secrets()
 
-            e = EncryptFile(source, destination)
+            Assumptions:
+              1. ```cms init``` or ```cms config secinit``` has been executed
+              2. that the secidr is ~/.cloudmesh/security and exists [secinit]
+              3. Private key has same base name as public key
+              4. Public key ends with .pub, .pem, or any .[3 char combo]
+              5. Private key is in PEM format
+              6. The cloudmesh config version has not changed since encrypt
+                 This means data must re-encrypt upon every config upgrade
 
-            e.encrypt()
-            Console.ok(f"{source} --> {destination}")
-            if not arguments.keep:
-                os.remove(source)
+            Note: this could be migrated to Config() directly
+            """
+            # Secinit variables: location where keys are stored
+            cmssec_path = path_expand("~/.cloudmesh/security")
+            gcm_path = f"{cmssec_path}/gcm"
+            
+            # Helper variables
+            config = Config()
+            d = config.dict() # dictionary of config 
+            secrets = config.secrets() #secret value key names
+            ch = CmsHasher() # Will hash the paths to produce file name
+            kh = KeyHandler() # Loads the public or private key bytes
+            ce = CmsEncryptor() # Assymmetric and Symmetric encryptor
 
-            Console.ok("file encrypted")
+            # Get the public key
+            kp = config.get_value('cloudmesh.profile.publickey')
+            pub = kh.load_key(kp, "PUB", "SSH", False)
 
-            return ""
+            #TODO: file reversion on failed encryption or decryption
+            bar = Bar('Cloudmesh Config Encryption', max=len(secrets))
+            for secret in secrets: # for each secret defined in Config.secrets()
+                paths = config.get_path(secret, d) # get all paths to key
+                for path in paths: # for each path that reaches the key
+                    # Hash the path to create a base filename
+                    # MD5 is acceptable since security does not rely on hiding the path
+                    h = ch.hash_data(path, "MD5", "b64", True)
+                    fp = f"{gcm_path}/{h}" #path to filename for key and nonce
+                    if os.path.exists(f"{fp}.key"):
+                        Console.error(f"already encrypted: {path}")
+                    else:
+                        ## Additional Authenticated Data: the cloudmesh version
+                        # number is used to future-proof for version attacks 
+                        aad = config.get_value('cloudmesh.version')
+
+                        # Get plaintext data from config
+                        pt = config.get_value(path)
+                        b_pt = pt.encode()
+
+                        # Encrypt the cloudmesh.yaml attribute value
+                        k, n, ct = ce.encrypt_aesgcm(data = b_pt, aad = aad.encode())
+
+                        ## Write ciphertext contents
+                        #TODO: Ensure the value set is within ""
+                        #TODO: Ensure decryption removes "" wrapping
+                        ct = b64encode(ct).decode()
+                        config.set(path, f"{ct}")
+
+                        # Encrypt symmetric key with users public key
+                        k_ct = ce.encrypt_rsa(pub = pub, pt = k)
+                        ## Write key to file
+                        k_ct = b64encode(k_ct).decode()
+                        fk = f"{fp}.key" # use hashed filename with indicator
+                        writefile(filename = fk , content = k_ct, permissions = 0o600)
+
+                        # Encrypt nonce with users private key
+                        n_ct = ce.encrypt_rsa(pub = pub, pt = n)
+                        ## Write nonce to file
+                        n_ct = b64encode(n_ct).decode()
+                        fn = f"{fp}.nonce"
+                        writefile(filename = fn, content = n_ct, permissions = 0o600)
+                bar.next()
+            bar.finish()
+            Console.ok("Success")
 
         elif arguments.decrypt:
 

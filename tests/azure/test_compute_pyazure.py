@@ -47,7 +47,7 @@ class TestAzure:
     def test_resource_group(self):
         HEADING()
         Benchmark.Start()
-        test_resource_group = self.p.get_resource_group()
+        test_resource_group = self.p._get_resource_group()
         VERBOSE(test_resource_group, label='RESOURCE GROUP')
         Benchmark.Stop()
 
@@ -199,8 +199,9 @@ class TestAzure:
         # BUG: this seems wrong: cloudmesh_upload
 
         Benchmark.Start()
-        test_add_rules_to_secgroup = self.p.add_rules_to_secgroup(name=SECGROUP_UPLOAD,
-                                                                  rules='resource_name_security_rule_upload')
+        test_add_rules_to_secgroup = self.p.add_rules_to_secgroup(
+            secgroupname=SECGROUP_UPLOAD,
+            newrules='resource_name_security_rule_upload')
         Benchmark.Stop()
         VERBOSE(test_add_rules_to_secgroup, label='Add Rules to Security Group')
 

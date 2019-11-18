@@ -16,8 +16,6 @@ from cloudmesh.mongo.CmDatabase import CmDatabase
 
 Benchmark.debug()
 
-
-
 user = Config()["cloudmesh.profile.user"]
 variables = Variables()
 
@@ -66,10 +64,13 @@ class Test_Clean_Local_Remote:
             for secgroup in secgroups:
                 if cloud == 'aws':
                     groupname = secgroup['GroupName']
-                elif cloud == 'chameleon':
+                # elif cloud == 'chameleon':
+                else:
                     groupname = secgroup['name']
+
                 if groupname == 'default':
                     continue
+
                 r = provider.remove_secgroup(groupname)
                 print(secgroup)
             Benchmark.Stop()

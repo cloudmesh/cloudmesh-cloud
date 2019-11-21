@@ -1,4 +1,5 @@
 import boto3
+import copy
 import json
 from cloudmesh.common.console import Console
 from progress.bar import Bar
@@ -59,11 +60,11 @@ class AwsFlavor:
         """
         To be run on a single json entry returned by the Amazon EC2 Pricing API
         """
-        # import pdb; pdb.set_trace()
+        # flavor['terms']['OnDemand']['sku_offerTermCode']['priceDimensions']['sku_offerTerm_priceDimension']['pricePerUnit']['USD']
         parsed = []
-        json_tmp = json
         for x in list(json['terms']['OnDemand'].keys()):
             for y in list(json['terms']['OnDemand'][x]['priceDimensions'].keys()):
+                json_tmp = copy.deepcopy(json)
                 name = json['terms']['OnDemand'][x]['priceDimensions'][y].get('rateCode')
                 name = name.replace(".", "")
                 json_tmp['name'] = name
@@ -71,11 +72,11 @@ class AwsFlavor:
                 json_tmp["sku_offerTermCode"] = x
                 json_tmp["sku_offerTerm_priceDimension"] = y
                 json_tmp["cm"] = {"kind": "flavor", "name": name, "cloud": "aws", "cloudtype": "aws"}
-                json_tmp['terms']['OnDemand']['sku_offerTermCode'] = json['terms']['OnDemand'][x]
-                json_tmp['terms']['OnDemand']['sku_offerTermCode']['priceDimensions']['sku_offerTerm_priceDimension'] = json['terms']['OnDemand'][x]['priceDimensions'][y]
-
+                json_tmp['terms']['OnDemand']= {}
+                json_tmp['terms']['OnDemand']['sku_offerTermCode'] = copy.deepcopy(json['terms']['OnDemand'][x])
+                json_tmp['terms']['OnDemand']['sku_offerTermCode']['priceDimensions'] = {}
+                json_tmp['terms']['OnDemand']['sku_offerTermCode']['priceDimensions']['sku_offerTerm_priceDimension'] = copy.deepcopy(json['terms']['OnDemand'][x]['priceDimensions'][y])
                 parsed.append(json_tmp)
-# flavor['terms']['OnDemand']['sku_offerTermCode']['priceDimensions']['sku_offerTerm_priceDimension']['pricePerUnit']['USD']
         return parsed
 
     def list(self, json_string_list):
@@ -111,4 +112,3 @@ class AwsFlavor:
 ##TODO: Write Print for AWS Flavors, andapt Provider.Print
 ##TODO: Fix the parsing code to standardize the database entries
 
-# flavor['terms']['OnDemand']['sku_offerTermCode']['priceDimensions']['sku_offerTerm_priceDimension']['pricePerUnit']['USD']

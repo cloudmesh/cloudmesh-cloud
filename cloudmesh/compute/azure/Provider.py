@@ -270,16 +270,16 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         self.VNET_NAME = self.default["network"]
         self.SUBNET_NAME = self.default["subnet"]
         self.IP_CONFIG_NAME = self.default["AZURE_VM_IP_CONFIG"]
-        self.NIC_NAME = self.default["AZURE_VM_NIC"]
-
-        # public IPs
-        self.PUBLIC_IP__NAME = self.default['AZURE_PUBLIC_IP_NAME']
 
         # Azure VM Storage details
         self.OS_DISK_NAME = self.default["AZURE_VM_DISK_NAME"]
         self.USERNAME = self.default["AZURE_VM_USER"]
         self.PASSWORD = self.default["AZURE_VM_PASSWORD"]
         self.VM_NAME = self.default["AZURE_VM_NAME"]
+        self.NIC_NAME = self.default["AZURE_VM_NIC"]
+
+        # public IPs
+        self.PUBLIC_IP__NAME = self.VM_NAME + '-pub-ip'
 
         # Create or Update Resource group
         self._get_resource_group()

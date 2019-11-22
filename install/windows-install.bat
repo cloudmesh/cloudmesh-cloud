@@ -29,8 +29,6 @@ set MONGOPASSWORD=mongopassword
 set CHAMELEONUSERNAME=chameleonusername
 set CHAMELEONPASSWORD=chameleonpassword
 
-set EXAMPPLECOMMAND=mycommand
-
 set CLOUD=chameleon
 
 :: --------------------------------------------------------------------------

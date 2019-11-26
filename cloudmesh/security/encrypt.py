@@ -156,8 +156,11 @@ class CmsHasher:
             # ONLY used this when the data does not need to be secert. 
             # !!!!!!!!!!!!!!!!!!!!!!! Warning !!!!!!!!!!!!!!!!!!!!!!!!
             digest = hashes.Hash(hashes.MD5(), backend = default_backend())
+        elif hash_alg == "SHA256":
+            digest = hashes.Hash(hashes.SHA256(), backend = default_backend())
         else:
             Console.error("Unsupported Hashing algorithm")
+
         if type(data) is str:
             data = data.encode()
         digest.update(data)

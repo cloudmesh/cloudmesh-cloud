@@ -3,6 +3,7 @@ import re
 import sys
 import shutil
 import oyaml as yaml
+import tempfile
 from pprint import pprint
 from base64 import b64encode, b64decode
 from cloudmesh.common.FlatDict import flatten
@@ -10,7 +11,7 @@ from cloudmesh.common.Printer import Printer
 from cloudmesh.common.Shell import Shell
 from cloudmesh.common.console import Console
 from cloudmesh.common.util import banner
-from cloudmesh.common.util import path_expand, writefd, readfile, tempdir
+from cloudmesh.common.util import path_expand, writefd, readfile
 from cloudmesh.configuration.Config import Config
 from cloudmesh.shell.command import PluginCommand
 from cloudmesh.shell.command import command, map_parameters
@@ -242,15 +243,20 @@ class ConfigCommand(PluginCommand):
               5. Private key is in PEM format
               6. The cloudmesh config version has not changed since encrypt
                  This means data must re-encrypt upon every config upgrade
-
-            Note: this could be migrated to Config() directly
             """
+
             # Helper variables
             config = Config()
             d = config.dict() # dictionary of config 
             ch = CmsHasher() # Will hash the paths to produce file name
             kh = KeyHandler() # Loads the public or private key bytes
             ce = CmsEncryptor() # Assymmetric and Symmetric encryptor
+
+            #Create tmp file in case reversion is needed
+            named_temp = tempfile.NamedTemporaryFile(delete=True)
+            revertfd = open(named_temp.name, 'w') # open file for reading and writing
+            yaml.dump(config.data, revertfd) # dump file in yaml format
+            revertfd.close() # close the data fd used to backup reversion file 
 
             # Secinit variables: location where keys are stored
             cmssec_path = path_expand(config.get_value('cloudmesh.security.secpath'))
@@ -262,51 +268,59 @@ class ConfigCommand(PluginCommand):
             pub = kh.load_key(kp, "PUB", "SSH", False)
 
             # Get the regular expressions from config file
-            secexps = config.get_value('cloudmesh.security.secrets')
-            flat_conf = flatten(config.data, sep='.')
-            keys = flat_conf.keys()
-            for e in secexps: # for each expression in section
-                r = re.compile(e)
-                paths = list( filter( r.match, keys ) )
-                Console.ok( f"Expression:{e}")
-                for path in paths: # for each path that reaches the key
-                    # Hash the path to create a base filename
-                    # MD5 is acceptable since security does not rely on hiding the path
-                    h = ch.hash_data(path, "MD5", "b64", True)
-                    fp = f"{gcm_path}/{h}" #path to filename for key and nonce
-                    # Check if the attribute has already been encrypted
-                    if os.path.exists(f"{fp}.key"):
-                        Console.ok( f"\tAlready encrypted: {path}")
-                    else:
-                        Console.ok( f"\tencrypting: {path}")
-                        ## Additional Authenticated Data: the cloudmesh version
-                        # number is used to future-proof for version attacks 
-                        aad = config.get_value('cloudmesh.version')
+            try:
+                secexps = config.get_value('cloudmesh.security.secrets')
+                flat_conf = flatten(config.data, sep='.')
+                keys = flat_conf.keys()
+                for e in secexps: # for each expression in section
+                    r = re.compile(e)
+                    paths = list( filter( r.match, keys ) )
+                    Console.ok( f"Expression:{e}")
+                    for path in paths: # for each path that reaches the key
+                        # Hash the path to create a base filename
+                        # MD5 is acceptable since security does not rely on hiding path
+                        h = ch.hash_data(path, "MD5", "b64", True)
+                        fp = f"{gcm_path}/{h}" #path to filename for key and nonce
+                        # Check if the attribute has already been encrypted
+                        if os.path.exists(f"{fp}.key"):
+                            Console.ok( f"\tAlready encrypted: {path}")
+                        else:
+                            Console.ok( f"\tencrypting: {path}")
+                            ## Additional Authenticated Data: the cloudmesh version
+                            # number is used to future-proof for version attacks 
+                            aad = config.get_value('cloudmesh.version')
 
-                        # Get plaintext data from config
-                        pt = config.get_value(path)
-                        b_pt = pt.encode()
+                            # Get plaintext data from config
+                            pt = config.get_value(path)
+                            b_pt = pt.encode()
 
-                        # Encrypt the cloudmesh.yaml attribute value
-                        k, n, ct = ce.encrypt_aesgcm(data = b_pt, aad = aad.encode())
+                            # Encrypt the cloudmesh.yaml attribute value
+                            k, n, ct = ce.encrypt_aesgcm(data =b_pt, aad = aad.encode())
 
-                        ## Write ciphertext contents
-                        ct = int.from_bytes(ct, "big")
-                        config.set(path, f"{ct}")
+                            ## Write ciphertext contents
+                            ct = int.from_bytes(ct, "big")
+                            config.set(path, f"{ct}")
 
-                        # Encrypt symmetric key with users public key
-                        k_ct = ce.encrypt_rsa(pub = pub, pt = k)
-                        ## Write key to file
-                        k_ct = b64encode(k_ct).decode()
-                        fk = f"{fp}.key" # use hashed filename with indicator
-                        writefd(filename = fk , content = k_ct)
+                            # Encrypt symmetric key with users public key
+                            k_ct = ce.encrypt_rsa(pub = pub, pt = k)
+                            ## Write key to file
+                            k_ct = b64encode(k_ct).decode()
+                            fk = f"{fp}.key" # use hashed filename with indicator
+                            writefd(filename = fk , content = k_ct)
 
-                        # Encrypt nonce with users private key
-                        n_ct = ce.encrypt_rsa(pub = pub, pt = n)
-                        ## Write nonce to file
-                        n_ct = b64encode(n_ct).decode()
-                        fn = f"{fp}.nonce"
-                        writefd(filename = fn, content = n_ct)
+                            # Encrypt nonce with users private key
+                            n_ct = ce.encrypt_rsa(pub = pub, pt = n)
+                            ## Write nonce to file
+                            n_ct = b64encode(n_ct).decode()
+                            fn = f"{fp}.nonce"
+                            writefd(filename = fn, content = n_ct)
+            except Exception as e:
+                Console.error("reverting cloudmesh.yaml")
+                copy2(src = named_temp.name, dst = config.config_path)
+                named_temp.close() #close (and delete) the reversion file
+                raise e
+
+            named_temp.close() #close (and delete) the reversion file
             Console.ok("Success")
 
         elif arguments.decrypt:

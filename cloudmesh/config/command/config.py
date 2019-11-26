@@ -253,7 +253,7 @@ class ConfigCommand(PluginCommand):
             ce = CmsEncryptor() # Assymmetric and Symmetric encryptor
 
             # Secinit variables: location where keys are stored
-            cmssec_path = path_expand(config.get_value('cloudmesh.security.path'))
+            cmssec_path = path_expand(config.get_value('cloudmesh.security.secpath'))
             gcm_path = f"{cmssec_path}/gcm"
 
             # Get the public key
@@ -291,9 +291,7 @@ class ConfigCommand(PluginCommand):
                         k, n, ct = ce.encrypt_aesgcm(data = b_pt, aad = aad.encode())
 
                         ## Write ciphertext contents
-                        #TODO: Ensure the value set is within ""
-                        #TODO: Ensure decryption removes "" wrapping
-                        ct = b64encode(ct).decode()
+                        ct = int.from_bytes(ct, "big")
                         config.set(path, f"{ct}")
 
                         # Encrypt symmetric key with users public key
@@ -329,7 +327,7 @@ class ConfigCommand(PluginCommand):
             ce = CmsEncryptor() # Assymmetric and Symmetric encryptor
 
             # Secinit variables: location where keys are stored
-            cmssec_path = path_expand(config.get_value('cloudmesh.security.path'))
+            cmssec_path = path_expand(config.get_value('cloudmesh.security.secpath'))
             gcm_path = f"{cmssec_path}/gcm"
 
             # Load the private key
@@ -372,8 +370,8 @@ class ConfigCommand(PluginCommand):
                         b_aad = aad.encode()
 
                         # Read ciphertext from config
-                        ct = config.get_value(path)
-                        b_ct = b64decode(ct)
+                        ct = int(config.get_value(path))
+                        b_ct = ct.to_bytes((ct.bit_length() + 7) // 8, 'big')
 
                         # Decrypt the attribute value ciphertext
                         pt = ce.decrypt_aesgcm(key=b_k, nonce=b_n, aad=b_aad, ct=b_ct)

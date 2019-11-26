@@ -1,21 +1,24 @@
 import os
+import re
 import sys
 import shutil
 import oyaml as yaml
+from pprint import pprint
 from base64 import b64encode, b64decode
 from cloudmesh.common.FlatDict import flatten
 from cloudmesh.common.Printer import Printer
 from cloudmesh.common.Shell import Shell
 from cloudmesh.common.console import Console
 from cloudmesh.common.util import banner
-from cloudmesh.common.util import path_expand, writefile, readfile
+from cloudmesh.common.util import path_expand, writefd, readfile, tempdir
 from cloudmesh.configuration.Config import Config
-# from cloudmesh.security.encrypt import EncryptFile
 from cloudmesh.shell.command import PluginCommand
 from cloudmesh.shell.command import command, map_parameters
 from cloudmesh.common.util import path_expand
 from cloudmesh.security.encrypt import CmsEncryptor, KeyHandler, CmsHasher
 from progress.bar import Bar
+
+from shutil import copy2
 
 class ConfigCommand(PluginCommand):
 
@@ -33,7 +36,7 @@ class ConfigCommand(PluginCommand):
              config cat [less]
              config check
              config secinit
-             config encrypt [SOURCE] [--keep]
+             config encrypt [SOURCE] 
              config decrypt [SOURCE]
              config edit [ATTRIBUTE]
              config set ATTRIBUTE=VALUE
@@ -242,34 +245,40 @@ class ConfigCommand(PluginCommand):
 
             Note: this could be migrated to Config() directly
             """
-            # Secinit variables: location where keys are stored
-            cmssec_path = path_expand("~/.cloudmesh/security")
-            gcm_path = f"{cmssec_path}/gcm"
-            
             # Helper variables
             config = Config()
             d = config.dict() # dictionary of config 
-            secrets = config.secrets() #secret value key names
             ch = CmsHasher() # Will hash the paths to produce file name
             kh = KeyHandler() # Loads the public or private key bytes
             ce = CmsEncryptor() # Assymmetric and Symmetric encryptor
 
+            # Secinit variables: location where keys are stored
+            cmssec_path = path_expand(config.get_value('cloudmesh.security.path'))
+            gcm_path = f"{cmssec_path}/gcm"
+
             # Get the public key
-            kp = config.get_value('cloudmesh.profile.publickey')
+            kp = config.get_value('cloudmesh.security.publickey')
+            print(f"pub:{kp}")
             pub = kh.load_key(kp, "PUB", "SSH", False)
 
-            #TODO: file reversion on failed encryption or decryption
-            bar = Bar('Cloudmesh Config Encryption', max=len(secrets))
-            for secret in secrets: # for each secret defined in Config.secrets()
-                paths = config.get_path(secret, d) # get all paths to key
+            # Get the regular expressions from config file
+            secexps = config.get_value('cloudmesh.security.secrets')
+            flat_conf = flatten(config.data, sep='.')
+            keys = flat_conf.keys()
+            for e in secexps: # for each expression in section
+                r = re.compile(e)
+                paths = list( filter( r.match, keys ) )
+                Console.ok( f"Expression:{e}")
                 for path in paths: # for each path that reaches the key
                     # Hash the path to create a base filename
                     # MD5 is acceptable since security does not rely on hiding the path
                     h = ch.hash_data(path, "MD5", "b64", True)
                     fp = f"{gcm_path}/{h}" #path to filename for key and nonce
+                    # Check if the attribute has already been encrypted
                     if os.path.exists(f"{fp}.key"):
-                        Console.error(f"already encrypted: {path}")
+                        Console.ok( f"\tAlready encrypted: {path}")
                     else:
+                        Console.ok( f"\tencrypting: {path}")
                         ## Additional Authenticated Data: the cloudmesh version
                         # number is used to future-proof for version attacks 
                         aad = config.get_value('cloudmesh.version')
@@ -292,16 +301,14 @@ class ConfigCommand(PluginCommand):
                         ## Write key to file
                         k_ct = b64encode(k_ct).decode()
                         fk = f"{fp}.key" # use hashed filename with indicator
-                        writefile(filename = fk , content = k_ct, permissions = 0o600)
+                        writefd(filename = fk , content = k_ct)
 
                         # Encrypt nonce with users private key
                         n_ct = ce.encrypt_rsa(pub = pub, pt = n)
                         ## Write nonce to file
                         n_ct = b64encode(n_ct).decode()
                         fn = f"{fp}.nonce"
-                        writefile(filename = fn, content = n_ct, permissions = 0o600)
-                bar.next()
-            bar.finish()
+                        writefd(filename = fn, content = n_ct)
             Console.ok("Success")
 
         elif arguments.decrypt:
@@ -315,40 +322,41 @@ class ConfigCommand(PluginCommand):
             """
             #TODO: file reversion on failed encryption or decryption
 
-            # Secinit variables: location where keys are stored
-            cmssec_path = path_expand("~/.cloudmesh/security")
-            gcm_path = f"{cmssec_path}/gcm"
-            
             # Helper Classes 
             config = Config()
             ch = CmsHasher() # Will hash the paths to produce file name
             kh = KeyHandler() # Loads the public or private key bytes
             ce = CmsEncryptor() # Assymmetric and Symmetric encryptor
 
+            # Secinit variables: location where keys are stored
+            cmssec_path = path_expand(config.get_value('cloudmesh.security.path'))
+            gcm_path = f"{cmssec_path}/gcm"
+
             # Load the private key
-            # Assumptions: all private keys ...
-            ## 1. are password protected
-            ## 2. are within the same directory as the public key
-            ## 3. share same base name as public key
-            ## 4. have a public key partner that ends with .[3 chars]
-            kp = config.get_value('cloudmesh.profile.publickey')
-            prv = kh.load_key(kp[:-4], "PRIV", "PEM", True)
+            kp = config.get_value('cloudmesh.security.privatekey')
+            prv = kh.load_key(kp, "PRIV", "PEM", True)
 
             # values used to collect secrets
             d = config.dict() # dictionary of config 
             secrets = config.secrets() #secret value key names
             
-            # for ever secret, for every path to secret, encrypt value
-            for secret in secrets:
-                paths = config.get_path(secret, d)
-                for path in paths:
+            # Get the regular expressions from config file
+            secexps = config.get_value('cloudmesh.security.secrets')
+            flat_conf = flatten(config.data, sep='.')
+            keys = flat_conf.keys()
+            for e in secexps: # for each expression in section
+                r = re.compile(e)
+                paths = list( filter( r.match, keys ) )
+                Console.ok( f"Expression:{e}")
+                for path in paths: # for each path that reaches the key
                     # hash the path to find the file name
                     # MD5 is acceptable, attacker gains nothing by knowing path
                     h = ch.hash_data(path, "MD5", "b64", True)
                     fp = f"{gcm_path}/{h}"
                     if not os.path.exists(f"{fp}.key"):
-                        Console.error("Already plaintext: {path}")
+                        Console.ok( f"\tAlready plaintext: {path}" )
                     else:
+                        Console.ok( f"\tDecrypting: {path}")
                         # Decrypt symmetric key, using private key
                         k_ct = readfile(f"{fp}.key")
                         b_k_ct = b64decode(k_ct)
@@ -480,13 +488,10 @@ class ConfigCommand(PluginCommand):
                 print (e)
                 return ""
 
-
         elif arguments.ssh and arguments.keygen:
 
             e = EncryptFile(source, destination)
 
             e.ssh_keygen()
-
-
 
         return ""

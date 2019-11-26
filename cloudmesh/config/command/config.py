@@ -332,13 +332,17 @@ class ConfigCommand(PluginCommand):
             Note: could be migrated to Config() directly
 
             """
-            #TODO: file reversion on failed encryption or decryption
-
             # Helper Classes 
             config = Config()
             ch = CmsHasher() # Will hash the paths to produce file name
             kh = KeyHandler() # Loads the public or private key bytes
             ce = CmsEncryptor() # Assymmetric and Symmetric encryptor
+
+            #Create tmp file in case reversion is needed
+            named_temp = tempfile.NamedTemporaryFile(delete=True)
+            revertfd = open(named_temp.name, 'w') # open file for reading and writing
+            yaml.dump(config.data, revertfd) # dump file in yaml format
+            revertfd.close() # close the data fd used to backup reversion file 
 
             # Secinit variables: location where keys are stored
             cmssec_path = path_expand(config.get_value('cloudmesh.security.secpath'))
@@ -348,55 +352,59 @@ class ConfigCommand(PluginCommand):
             kp = config.get_value('cloudmesh.security.privatekey')
             prv = kh.load_key(kp, "PRIV", "PEM", True)
 
-            # values used to collect secrets
-            d = config.dict() # dictionary of config 
-            secrets = config.secrets() #secret value key names
-            
-            # Get the regular expressions from config file
-            secexps = config.get_value('cloudmesh.security.secrets')
-            flat_conf = flatten(config.data, sep='.')
-            keys = flat_conf.keys()
-            for e in secexps: # for each expression in section
-                r = re.compile(e)
-                paths = list( filter( r.match, keys ) )
-                Console.ok( f"Expression:{e}")
-                for path in paths: # for each path that reaches the key
-                    # hash the path to find the file name
-                    # MD5 is acceptable, attacker gains nothing by knowing path
-                    h = ch.hash_data(path, "MD5", "b64", True)
-                    fp = f"{gcm_path}/{h}"
-                    if not os.path.exists(f"{fp}.key"):
-                        Console.ok( f"\tAlready plaintext: {path}" )
-                    else:
-                        Console.ok( f"\tDecrypting: {path}")
-                        # Decrypt symmetric key, using private key
-                        k_ct = readfile(f"{fp}.key")
-                        b_k_ct = b64decode(k_ct)
-                        b_k = ce.decrypt_rsa(priv = prv, ct = b_k_ct)
+            try:
+                # Get the regular expressions from config file
+                secexps = config.get_value('cloudmesh.security.secrets')
+                flat_conf = flatten(config.data, sep='.')
+                keys = flat_conf.keys()
+                for e in secexps: # for each expression in section
+                    r = re.compile(e)
+                    paths = list( filter( r.match, keys ) )
+                    Console.ok( f"Expression:{e}")
+                    for path in paths: # for each path that reaches the key
+                        # hash the path to find the file name
+                        # MD5 is acceptable, attacker gains nothing by knowing path
+                        h = ch.hash_data(path, "MD5", "b64", True)
+                        fp = f"{gcm_path}/{h}"
+                        if not os.path.exists(f"{fp}.key"):
+                            Console.ok( f"\tAlready plaintext: {path}" )
+                        else:
+                            Console.ok( f"\tDecrypting: {path}")
+                            # Decrypt symmetric key, using private key
+                            k_ct = readfile(f"{fp}.key")
+                            b_k_ct = b64decode(k_ct)
+                            b_k = ce.decrypt_rsa(priv = prv, ct = b_k_ct)
 
-                        # Decrypt nonce, using private key
-                        n_ct = readfile(f"{fp}.nonce")
-                        b_n_ct = b64decode(n_ct)
-                        b_n = ce.decrypt_rsa(priv = prv, ct = b_n_ct)
+                            # Decrypt nonce, using private key
+                            n_ct = readfile(f"{fp}.nonce")
+                            b_n_ct = b64decode(n_ct)
+                            b_n = ce.decrypt_rsa(priv = prv, ct = b_n_ct)
 
-                        # Version number was used as aad
-                        aad = config.get_value('cloudmesh.version')
-                        b_aad = aad.encode()
+                            # Version number was used as aad
+                            aad = config.get_value('cloudmesh.version')
+                            b_aad = aad.encode()
 
-                        # Read ciphertext from config
-                        ct = int(config.get_value(path))
-                        b_ct = ct.to_bytes((ct.bit_length() + 7) // 8, 'big')
+                            # Read ciphertext from config
+                            ct = int(config.get_value(path))
+                            b_ct = ct.to_bytes((ct.bit_length() + 7) // 8, 'big')
 
-                        # Decrypt the attribute value ciphertext
-                        pt = ce.decrypt_aesgcm(key=b_k, nonce=b_n, aad=b_aad, ct=b_ct)
-                        pt = pt.decode()
+                            # Decrypt the attribute value ciphertext
+                            pt=ce.decrypt_aesgcm(key=b_k, nonce=b_n, aad=b_aad, ct=b_ct)
+                            pt = pt.decode()
 
-                        # Set the attribute with the plaintext value
-                        config.set(path, pt)
+                            # Set the attribute with the plaintext value
+                            config.set(path, pt)
 
-                        #Remove old ciphers
-                        os.remove(f"{fp}.key")
-                        os.remove(f"{fp}.nonce")
+                            #Remove old ciphers
+                            os.remove(f"{fp}.key")
+                            os.remove(f"{fp}.nonce")
+            except Exception as e:
+                Console.error("reverting cloudmesh.yaml")
+                copy2(src = named_temp.name, dst = config.config_path)
+                named_temp.close() #close (and delete) the reversion file
+                raise e
+
+            named_temp.close() #close (and delete) the reversion file
 
             Console.ok("Success")
 

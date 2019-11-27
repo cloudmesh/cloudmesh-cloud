@@ -16,6 +16,7 @@ from cloudmesh.common.debug import VERBOSE
 
 from cloudmesh.mongo.CmDatabase import CmDatabase
 
+
 class Provider(ComputeNodeABC):
 
     def __init__(self,
@@ -36,18 +37,28 @@ class Provider(ComputeNodeABC):
 
         providers = ProviderList()
 
-        if self.kind in ['openstack', 'azure',
+        if self.kind in ['openstack',
+                         'azure',
                          'docker',
                          "aws",
                          "azureaz",
                          "virtualbox"]:
 
             provider = providers[self.kind]
+
         elif self.kind in ["awslibcloud", "google"]:
 
             from cloudmesh.compute.libcloud.Provider import \
                 Provider as LibCloudProvider
             provider = LibCloudProvider
+
+        elif self.kind in ['oracle']:
+            from cloudmesh.oracle.compute.Provider import \
+                Provider as OracleComputeProvider
+            provider = OracleComputeProvider
+
+            print("RRRR")
+
         # elif self.kind in ["vagrant", "virtualbox"]:
         #    from cloudmesh.compute.virtualbox.Provider import \
         #        Provider as VirtualboxCloudProvider
@@ -111,22 +122,21 @@ class Provider(ComputeNodeABC):
                 raise NotImplementedError
         return r
 
-
     @DatabaseUpdate()
     def keys(self):
         return self.p.keys()
 
     @DatabaseUpdate()
-    def list(self):
-        return self.p.list()
+    def list(self, **kwargs):
+        return self.p.list(**kwargs)
 
     @DatabaseUpdate()
-    def flavor(self):
-        return self.p.flavors()
+    def flavor(self, **kwargs):
+        return self.p.flavors(**kwargs)
 
     @DatabaseUpdate()
-    def flavors(self):
-        return self.p.flavors()
+    def flavors(self, **kwargs):
+        return self.p.flavors(**kwargs)
 
     def add_collection(self, d, *args):
         if d is None:
@@ -137,9 +147,8 @@ class Provider(ComputeNodeABC):
         return d
 
     @DatabaseUpdate()
-    def images(self):
-        return self.p.images()
-
+    def images(self, *args, **kwargs):
+        return self.p.images(*args, **kwargs)
 
     @DatabaseUpdate()
     def create(self, **kwargs):
@@ -150,7 +159,8 @@ class Provider(ComputeNodeABC):
 
         if name is None:
             name_generator = Name()
-            # name_generator.incr() # this is already called in the vm.py not needed to be called here.
+            # name_generator.incr() # this is already called in the vm.py not
+            # needed to be called here.
             vms = [str(name_generator)]
         else:
             vms = self.expand(name)
@@ -180,7 +190,6 @@ class Provider(ComputeNodeABC):
                                     header=['Name', 'Cloud'],
                                     output='table'))
             raise Exception("these vms already exists")
-            return None
 
         # Step 2. identify the image and flavor from kwargs and if they do
         # not exist read them for that cloud from the yaml file
@@ -213,7 +222,6 @@ class Provider(ComputeNodeABC):
 
         return created
 
-
     def _create(self, **arguments):
 
         arguments = dotdict(arguments)
@@ -242,7 +250,10 @@ class Provider(ComputeNodeABC):
         else:
             arguments.timeout = 360
             data = self.p.create(**arguments)
-
+        # print('entry')
+        # pprint(entry)
+        # print('data')
+        pprint(data)
         entry.update(data)
 
         StopWatch.stop(f"create vm {arguments.name}")
@@ -438,8 +449,23 @@ class Provider(ComputeNodeABC):
     def console(self, vm=None):
         return self.p.console(vm=vm)
 
-    def wait(self, vm=None, interval=None , timeout=None):
+    def wait(self, vm=None, interval=None, timeout=None):
         return self.p.wait(vm=vm, interval=interval, timeout=timeout)
 
     def log(self, vm=None):
         return self.p.log(vm=vm)
+
+    def add_secgroup_rule(self,
+                          name=None,  # group name
+                          port=None,
+                          protocol=None,
+                          ip_range=None):
+        return self.p.add_secgroup_rule(name=name, port=port, protocol=protocol,
+                                        ip_range=ip_range)
+
+    def add_rules_to_secgroup(self, name=None, rules=None):
+        return self.p.add_rules_to_secgroup(secgroupname=name, newrules=rules)
+
+    def destroy(self, name=None):
+        return self.p.destroy(name=name)
+

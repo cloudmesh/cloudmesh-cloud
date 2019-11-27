@@ -7,9 +7,10 @@ import subprocess
 import textwrap
 from sys import platform
 from cloudmesh.common.Shell import Shell
+from cloudmesh.common.console import Console
 
 import psutil
-
+import os
 
 class SystemPath(object):
     """Managing the System path in the .bashrc or .bash_profile files"""
@@ -24,22 +25,62 @@ class SystemPath(object):
         :param path: The path to be added
         :return:
         """
+
+        def which_shell():
+            shell = os.environ["SHELL"]
+            for s in ['bash', 'zsh']:
+                if s in shell:
+                    return s
+            return shell
+
+        def is_in_path(what):
+            os_path = os.environ['PATH'].split(":")
+            return what in os_path
+
+
         script = None
+
         if platform == "darwin":
-            script = f"""
-            echo \"export PATH={path}:$PATH\" >> ~/.bash_profile
-            source ~/.bash_profile
-            """.format(path=path)
+
+            if is_in_path(path):
+                return
+
+            shell = which_shell()
+
+            if shell == 'bash':
+                Console.ok(f"We will be adding to the ~.bash_profile {path}")
+                script = f"""
+                echo \"export PATH={path}:$PATH\" >> ~/.bash_profile
+                source ~/.bash_profile
+                """
+            elif shell == "zsh":
+                Console.ok(f"We will be adding to the ~/.zprofile {path}")
+                script = f"""
+                echo \"export PATH={path}:$PATH\" >> ~/.zprofile
+                source ~/.zprofile
+                """
+            else:
+                script = f"""
+                echo \"Shell {shell} not supported
+                """
         elif platform == "linux":
-            script = """
+            if is_in_path(path):
+                return
+
+            Console.ok(f"We will be adding to the ~.bash_profile {path}")
+            script = f"""
             echo \"export PATH={path}:$PATH\" >> ~/.bashrc
             source ~/.bashrc
-            """.format(path=path)
+            """
         elif platform == "windows":
             script = None
-            # TODO: BUG: Implement
+            # TODO: BUG: Implement.
+            # Current workaround functiosn as follows. We could even make this the default model,
+            # e.g. take the path from cloudmesh.yaml
+            # in windows we added the path to mongod and mongo from the cloudmesh.yaml file
         # noinspection PyUnusedLocal
-        installer = Script.run(script)
+        if script is not None:
+            installer = Script.run(script)
 
 
 class Script(object):

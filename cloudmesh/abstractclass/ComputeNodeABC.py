@@ -53,7 +53,7 @@ class ComputeNodeABC(metaclass=ABCMeta):
         raise NotImplementedError
 
     @abstractmethod
-    def list(self):
+    def list(self, **kwargs):
         """
         list all vms
 

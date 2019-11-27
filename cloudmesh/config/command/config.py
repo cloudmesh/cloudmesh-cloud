@@ -470,11 +470,11 @@ class ConfigCommand(PluginCommand):
                 return ""
 
         elif arguments.secinit:
-            secpath = "~/.cloudmesh/security"
-            gcm_path = f"{secpath}/gcm"
-            
+            config = Config()
+            secpath = path_expand(config.get_value('cloudmesh.security.secpath'))
+            gcm_path = f"{secpath}/gcm" # Location of nonces and keys for encryption            
             if not os.path.isdir(gcm_path):
-                Shell.mkdir(gcm_path)
+                Shell.mkdir(gcm_path) # Use Shell that makes all dirs as needed
 
         elif arguments.get:
 

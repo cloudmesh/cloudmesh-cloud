@@ -50,6 +50,7 @@ cloudmesh-sys
 cloudmesh-inventory
 apache-libcloud
 azure
+base64
 beautifulsoup4
 boto3
 certifi
@@ -58,11 +59,13 @@ colorama
 config
 connexion[swagger-ui]
 coverage
+cryptography
 dateparser
 docker
 docopt
 flask
 Flask-PyMongo
+getpass
 humanize
 idna
 munch
@@ -77,8 +80,10 @@ PyYAML
 recommonmark
 requests
 selenium
-termcolor
+shutil
 tabulate
+tempfile
+termcolor
 urllib3
 yamllint
 yamllint

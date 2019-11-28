@@ -64,7 +64,6 @@ docker
 docopt
 flask
 Flask-PyMongo
-getpass
 humanize
 idna
 munch
@@ -79,9 +78,7 @@ PyYAML
 recommonmark
 requests
 selenium
-shutil
 tabulate
-tempfile
 termcolor
 urllib3
 uuid

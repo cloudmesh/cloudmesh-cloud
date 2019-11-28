@@ -83,7 +83,6 @@ termcolor
 urllib3
 uuid
 yamllint
-yamllint
 """.split("\n")
 
 

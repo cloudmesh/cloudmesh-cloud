@@ -1,19 +1,25 @@
 import os
+import re
 import sys
 import shutil
-
 import oyaml as yaml
+import tempfile
+from pprint import pprint
+from base64 import b64encode, b64decode
 from cloudmesh.common.FlatDict import flatten
 from cloudmesh.common.Printer import Printer
 from cloudmesh.common.Shell import Shell
 from cloudmesh.common.console import Console
 from cloudmesh.common.util import banner
-from cloudmesh.common.util import path_expand
+from cloudmesh.common.util import path_expand, writefd, readfile
 from cloudmesh.configuration.Config import Config
-# from cloudmesh.security.encrypt import EncryptFile
 from cloudmesh.shell.command import PluginCommand
 from cloudmesh.shell.command import command, map_parameters
 from cloudmesh.common.util import path_expand
+from cloudmesh.security.encrypt import CmsEncryptor, KeyHandler, CmsHasher
+from progress.bar import Bar
+
+from shutil import copy2
 
 class ConfigCommand(PluginCommand):
 
@@ -30,8 +36,9 @@ class ConfigCommand(PluginCommand):
              config  -h | --help
              config cat [less]
              config check
-             config encrypt [SOURCE] [--keep]
-             config decrypt [SOURCE]
+             config secinit
+             config encrypt 
+             config decrypt 
              config edit [ATTRIBUTE]
              config set ATTRIBUTE=VALUE
              config get ATTRIBUTE [--output=OUTPUT]
@@ -225,41 +232,12 @@ class ConfigCommand(PluginCommand):
             Config.check()
 
         elif arguments.encrypt:
-
-            e = EncryptFile(source, destination)
-
-            e.encrypt()
-            Console.ok(f"{source} --> {destination}")
-            if not arguments.keep:
-                os.remove(source)
-
-            Console.ok("file encrypted")
-
-            return ""
+            config = Config()
+            config.encrypt()
 
         elif arguments.decrypt:
-
-            if ".enc" not in source:
-                source = source + ".enc"
-            else:
-                destination = source.replace(".enc", "")
-
-            if not os.path.exists(source):
-                Console.error(f"encrypted file {source} does not exist")
-                sys.exit(1)
-
-            if os.path.exists(destination):
-                Console.error(
-                    f"decrypted file {destination} does already exist")
-                sys.exit(1)
-
-            e = EncryptFile(source, destination)
-
-            e.decrypt(source)
-            Console.ok(f"{source} --> {source}")
-
-            Console.ok("file decrypted")
-            return ""
+            config = Config()
+            config.decrypt()
 
         elif arguments.ssh and arguments.verify:
 
@@ -322,6 +300,13 @@ class ConfigCommand(PluginCommand):
                 print (e)
                 return ""
 
+        elif arguments.secinit:
+            config = Config()
+            secpath = path_expand(config.get_value('cloudmesh.security.secpath'))
+            gcm_path = f"{secpath}/gcm" # Location of nonces and keys for encryption            
+            if not os.path.isdir(gcm_path):
+                Shell.mkdir(gcm_path) # Use Shell that makes all dirs as needed
+
         elif arguments.get:
 
             print ()
@@ -354,13 +339,10 @@ class ConfigCommand(PluginCommand):
                 print (e)
                 return ""
 
-
         elif arguments.ssh and arguments.keygen:
 
             e = EncryptFile(source, destination)
 
             e.ssh_keygen()
-
-
 
         return ""

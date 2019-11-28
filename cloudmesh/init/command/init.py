@@ -96,6 +96,9 @@ class InitCommand(PluginCommand):
 
             variables["key"] = user
 
+            Console.ok("Config Security Initialization")
+            Shell.execute("cms",["config", "secinit"])
+
             print("MongoDB create")
             os.system("cms admin mongo create")
             os.system("cms admin mongo start")

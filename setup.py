@@ -50,7 +50,6 @@ cloudmesh-sys
 cloudmesh-inventory
 apache-libcloud
 azure
-base64
 beautifulsoup4
 boto3
 certifi

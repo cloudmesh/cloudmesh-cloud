@@ -19,7 +19,8 @@ from cloudmesh.common3.Benchmark import Benchmark
 
 Benchmark.debug()
 
-CLOUD= "aws"
+CLOUD = "aws"
+
 
 @pytest.mark.incremental
 class TestName:

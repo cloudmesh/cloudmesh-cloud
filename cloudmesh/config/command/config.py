@@ -21,6 +21,7 @@ from progress.bar import Bar
 
 from shutil import copy2
 
+
 class ConfigCommand(PluginCommand):
 
     # see https://github.com/cloudmesh/client/blob/master/cloudmesh_client/shell/plugins/KeyCommand.py
@@ -136,8 +137,6 @@ class ConfigCommand(PluginCommand):
 
         configuration = Config()
 
-
-
         if arguments.cloud and arguments.verify:
             service = configuration[f"cloudmesh.{kind}.{cloud}"]
 
@@ -167,7 +166,7 @@ class ConfigCommand(PluginCommand):
             lines = yaml.dump(result).split("\n")
             secrets = not arguments.secrets
             result = Config.cat_lines(lines, mask_secrets=secrets)
-            print (result)
+            print(result)
 
         elif arguments.cloud and arguments.edit:
 
@@ -218,11 +217,11 @@ class ConfigCommand(PluginCommand):
             counter = 1
             for line in lines:
                 if arguments.less:
-                    if  counter % (rows-2) == 0:
+                    if counter % (rows - 2) == 0:
                         x = input().split("\n")[0].strip()
-                        if x !='' and x in 'qQxX' :
+                        if x != '' and x in 'qQxX':
                             return ""
-                print (line)
+                print(line)
                 counter += 1
 
             return ""
@@ -270,7 +269,7 @@ class ConfigCommand(PluginCommand):
             line = arguments["ATTRIBUTE=VALUE"]
             attribute, value = line.split("=", 1)
 
-            cloud, field = attribute.split(".",1)
+            cloud, field = attribute.split(".", 1)
 
             if cloud in clouds:
                 attribute = f"cloudmesh.cloud.{cloud}.credentials.{field}"
@@ -297,19 +296,20 @@ class ConfigCommand(PluginCommand):
                     print(f"{value}")
 
             except Exception as e:
-                print (e)
+                print(e)
                 return ""
 
         elif arguments.secinit:
             config = Config()
-            secpath = path_expand(config.get_value('cloudmesh.security.secpath'))
-            gcm_path = f"{secpath}/gcm" # Location of nonces and keys for encryption            
+            secpath = path_expand(
+                config.get_value('cloudmesh.security.secpath'))
+            gcm_path = f"{secpath}/gcm"  # Location of nonces and keys for encryption
             if not os.path.isdir(gcm_path):
-                Shell.mkdir(gcm_path) # Use Shell that makes all dirs as needed
+                Shell.mkdir(gcm_path)  # Use Shell that makes all dirs as needed
 
         elif arguments.get:
 
-            print ()
+            print()
 
             config = Config()
             clouds = config["cloudmesh.cloud"].keys()
@@ -317,7 +317,7 @@ class ConfigCommand(PluginCommand):
             attribute = arguments.ATTRIBUTE
 
             try:
-                cloud, field = attribute.split(".",1)
+                cloud, field = attribute.split(".", 1)
                 field = f".{field}"
             except:
                 cloud = attribute
@@ -336,7 +336,7 @@ class ConfigCommand(PluginCommand):
                     print(f"{attribute}={value}")
 
             except Exception as e:
-                print (e)
+                print(e)
                 return ""
 
         elif arguments.ssh and arguments.keygen:

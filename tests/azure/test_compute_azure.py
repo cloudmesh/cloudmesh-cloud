@@ -19,7 +19,8 @@ from cloudmesh.common3.Benchmark import Benchmark
 
 Benchmark.debug()
 
-CLOUD="azure"
+CLOUD = "azure"
+
 
 @pytest.mark.incremental
 class TestName:
@@ -95,7 +96,6 @@ class TestName:
 
         # TODO: bug th eprint function is not implemented
         # print (self.p.Print(vms, kind="vm"))
-
 
         # '''
         print(Printer.flatwrite(vms,

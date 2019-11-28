@@ -104,10 +104,12 @@ class AwsFlavor(object):
             offer_index = self.fetch_json_file(offer_index_url)
             offer_file_api_url = f"https://pricing.{region}.amazonaws.com"
             # offer_file_path = offer_index['offers']['AmazonEC2']['currentVersionUrl']
-            region_file_path = offer_index['offers'][offer]['currentRegionIndexUrl']
+            region_file_path = offer_index['offers'][offer][
+                'currentRegionIndexUrl']
             regions_url = offer_file_api_url + region_file_path
             regions_file = self.fetch_json_file(regions_url)
-            offer_file_path = regions_file["regions"][region]["currentVersionUrl"]
+            offer_file_path = regions_file["regions"][region][
+                "currentVersionUrl"]
             url = offer_file_api_url + offer_file_path
 
         offer_data = self.fetch_json_file(url)
@@ -149,9 +151,7 @@ class AwsFlavor(object):
 
         bar.finish()
 
-
         bar = Bar('Processing Flavor Prices', max=len(offer["products"]))
-
 
         #
         # Manage terms for prices
@@ -186,5 +186,3 @@ class AwsFlavor(object):
         bar.finish()
 
         return [v for v in flavors.values()]
-
-

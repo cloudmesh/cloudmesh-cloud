@@ -26,7 +26,6 @@ name_generator = Name(
     counter=1)
 
 
-
 #
 # we need to set a cm = { kind, cloud, name } to use teh new DatabaseUpdate()
 #

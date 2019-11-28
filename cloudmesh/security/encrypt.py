@@ -31,6 +31,8 @@ Functions to be removed
 3) EncryptFile.pem_create()  
 4) EncryptFile.pem_cat()  
 """
+
+
 class CmsEncryptor:
     """ 
     Encrypts bytes for CMS
@@ -53,22 +55,22 @@ class CmsEncryptor:
     Replaces the following functions
         4) EncryptFile.encrypt()  
         5) EncryptFile.decrypt()  
-    """        
+    """
 
     def __init__(self, debug=False):
         self.debug = debug
         self.tmp = path_expand("~/.cloudmesh/tmp")
 
-    def getRandomBytes(self, len_bytes = 32):
+    def getRandomBytes(self, len_bytes=32):
         rand_bytes = os.urandom(len_bytes)
         return rand_bytes
 
-    def getRandomInt(self, len_bytes = 32, order="big"):
+    def getRandomInt(self, len_bytes=32, order="big"):
         rb = self.getRandomBytes(len_bytes)
         rand_int = int.from_bytes(rb, byteorder=order)
         return rand_int
 
-    def encrypt_rsa(self, pub = None, pt = None, padding_scheme="OAEP"):
+    def encrypt_rsa(self, pub=None, pt=None, padding_scheme="OAEP"):
         if pub is None:
             Console.error("empty key argument")
 
@@ -79,9 +81,9 @@ class CmsEncryptor:
 
         pad = None
         if padding_scheme == "OAEP":
-            pad = padding.OAEP(mgf = padding.MGF1( algorithm = hashes.SHA256()),
-                    algorithm = hashes.SHA256(),
-                    label = None)
+            pad = padding.OAEP(mgf=padding.MGF1(algorithm=hashes.SHA256()),
+                               algorithm=hashes.SHA256(),
+                               label=None)
         elif padding_scheme == "PKCS":
             pad = padding.PKCS1v15
         else:
@@ -89,7 +91,7 @@ class CmsEncryptor:
 
         return pub.encrypt(pt, pad)
 
-    def decrypt_rsa(self, priv = None, ct = None, padding_scheme="OAEP"):
+    def decrypt_rsa(self, priv=None, ct=None, padding_scheme="OAEP"):
         if priv is None:
             Console.error("empty key arugment")
         if ct is None:
@@ -97,24 +99,23 @@ class CmsEncryptor:
         pad = None
         if padding_scheme == "OAEP":
             pad = padding.OAEP(
-                    mgf = padding.MGF1( algorithm = hashes.SHA256() ),
-                    algorithm = hashes.SHA256(),
-                    label = None )
+                mgf=padding.MGF1(algorithm=hashes.SHA256()),
+                algorithm=hashes.SHA256(),
+                label=None)
         elif padding_scheme == "PKCS":
             pad = padding.PKCS1v15
         else:
             Console.error("Unsupported padding scheme")
 
-        #return priv.decrypt( ct, pad ).decode()
-        return priv.decrypt( ct, pad )
-            
-                
+        # return priv.decrypt( ct, pad ).decode()
+        return priv.decrypt(ct, pad)
+
     def decrypt_aesgcm(self, key=None, nonce=None, aad=None, ct=None):
         aesgcm = AESGCM(key)
         pt = aesgcm.decrypt(nonce, ct, aad)
         return pt
 
-    def encrypt_aesgcm(self, data = None, aad = None):
+    def encrypt_aesgcm(self, data=None, aad=None):
         """
         @param: bytes: the plaintext data 
         @param: bytes: the additional authenticated data (can be public)
@@ -135,9 +136,10 @@ class CmsEncryptor:
 
         return key, nonce, ct
 
+
 class CmsHasher:
-    def __init__(self, data = None, data_type = str):
-        #Check if data is empty
+    def __init__(self, data=None, data_type=str):
+        # Check if data is empty
         if data is not None:
             # Ensure proper data type
             if data_type is str:
@@ -147,17 +149,17 @@ class CmsHasher:
             else:
                 Console.error("data_type not supported")
 
-    def hash_data(self, data = None, hash_alg="SHA256"
-                    , encoding = False, clean = False):
+    def hash_data(self, data=None, hash_alg="SHA256"
+                  , encoding=False, clean=False):
         digest = None
         if hash_alg == "MD5":
             # !!!!!!!!!!!!!!!!!!!!!!! Warning !!!!!!!!!!!!!!!!!!!!!!!!
             # This hash has know vulnerabilities. 
             # ONLY used this when the data does not need to be secert. 
             # !!!!!!!!!!!!!!!!!!!!!!! Warning !!!!!!!!!!!!!!!!!!!!!!!!
-            digest = hashes.Hash(hashes.MD5(), backend = default_backend())
+            digest = hashes.Hash(hashes.MD5(), backend=default_backend())
         elif hash_alg == "SHA256":
-            digest = hashes.Hash(hashes.SHA256(), backend = default_backend())
+            digest = hashes.Hash(hashes.SHA256(), backend=default_backend())
         else:
             Console.error("Unsupported Hashing algorithm")
 
@@ -176,13 +178,14 @@ class CmsHasher:
 
         # Clean data for system purposes if requested
         if clean:
-            remove_chars = ['+','=','\\','/'] #special dir chars on typical os
+            remove_chars = ['+', '=', '\\',
+                            '/']  # special dir chars on typical os
             for char in remove_chars:
                 if char in hashed:
                     hashed = hashed.replace(char, "")
 
-        return hashed 
-            
+        return hashed
+
 
 class KeyHandler:
     """ 
@@ -193,6 +196,7 @@ class KeyHandler:
         1) EncryptFile.check_passphares
         1) EncryptFile.pem_verify
     """
+
     def __init__(self, debug=False, priv=None, pub=None, pem=None):
         ### CMS debug parameter
         self.debug = debug
@@ -201,7 +205,7 @@ class KeyHandler:
         self.pub = pub
         self.pem = pem
 
-    def new_rsa_key(self, byte_size = 2048, ask_password = True):
+    def new_rsa_key(self, byte_size=2048, ask_password=True):
         """
         Generates a new RSA private key and serializes it
         @param: int: size of key in bytes
@@ -209,8 +213,8 @@ class KeyHandler:
         return: serialized bytes of private the RSA key
         """
         self.priv = rsa.generate_private_key(
-            public_exponent = 65537, # do NOT change this!!!
-            key_size = byte_size,
+            public_exponent=65537,  # do NOT change this!!!
+            key_size=byte_size,
             backend=default_backend()
         )
 
@@ -219,13 +223,13 @@ class KeyHandler:
 
         # Password management
         pwd = None
-        if ask_password == False: # Explicitly ensure password wasn't desired
+        if ask_password == False:  # Explicitly ensure password wasn't desired
             pwd = None
-        else: #All other cases will request password
+        else:  # All other cases will request password
             pwd = self.requestPass("Password for the new key:")
 
         # Serialize the key
-        return self.serialize_key(key_type = "PRIV", password = pwd)
+        return self.serialize_key(key_type="PRIV", password=pwd)
 
     def get_pub_key_bytes(self, encoding="PEM", format="SubjectInfo"):
         if self.pub is None:
@@ -234,10 +238,11 @@ class KeyHandler:
             else:
                 self.pub = self.priv.public_key()
         else:
-            return self.serialize_key(key=self.pub, key_type = "PUB", 
-                                    encoding = encoding, format = format)
+            return self.serialize_key(key=self.pub, key_type="PUB",
+                                      encoding=encoding, format=format)
 
-    def serialize_key(self, debug=False, key=None, key_type=None, encoding="PEM", 
+    def serialize_key(self, debug=False, key=None, key_type=None,
+                      encoding="PEM",
                       format="PKCS8", password=None):
         """
         @param: bool:       cloudmesh debug flag
@@ -248,13 +253,13 @@ class KeyHandler:
         @param: str:        password for key (Private keys only)
         return:             serialized key bytes
         """
-        #TODO: add try-catching
+        # TODO: add try-catching
         # Ensure the key is initialized
         if key is None:
             if key_type == "PRIV":
                 if self.priv is None:
                     Console.error("No key given")
-                else:   
+                else:
                     key = self.priv
             elif key_type == "PUB":
                 if self.pub is None:
@@ -270,9 +275,9 @@ class KeyHandler:
             key_format = serialization.PrivateFormat
         elif key_type == "PUB":
             key_format = serialization.PublicFormat
-        else: 
+        else:
             Console.error("key needs to be PRIV or PUB")
-            
+
         # Discern formatting of key
         if key_type == "PRIV":
             if format == "PKCS8":
@@ -297,7 +302,7 @@ class KeyHandler:
             encod = serialization.Encoding.OpenSSH
         else:
             Console.error("Unsupported key encoding")
-            
+
         # Discern encryption algorithm (Private keys only)
         # This also assigns the password if given
         enc_alg = None
@@ -311,13 +316,13 @@ class KeyHandler:
         # Serialize key
         sk = None
         if key_type == "PUB":
-            sk = key.public_bytes( encoding = encode, format = key_format)
+            sk = key.public_bytes(encoding=encode, format=key_format)
         elif key_type == "PRIV":
-            sk = key.private_bytes(encoding = encode, format = key_format,
-                                   encryption_algorithm = enc_alg)
+            sk = key.private_bytes(encoding=encode, format=key_format,
+                                   encryption_algorithm=enc_alg)
         return sk
 
-    def load_key(self, path="", key_type="PUB", encoding = "SSH", ask_pass = True): 
+    def load_key(self, path="", key_type="PUB", encoding="SSH", ask_pass=True):
         """
         Loads a public or private key from the path using pyca
         @param: str: path to file being loaded
@@ -349,44 +354,45 @@ class KeyHandler:
         else:
             Console.error("Unsupported encoding and key-type pairing")
 
-        #Discern password
+        # Discern password
         password = None
         if ask_pass == False:
             password = None
-        else: #All other cases should request password
-            password = self.requestPass(f"Password for {path} [press enter if none]:")
+        else:  # All other cases should request password
+            password = self.requestPass(
+                f"Password for {path} [press enter if none]:")
             if password == "":
                 password = None
             else:
                 password = password.encode()
-        
+
         # Read key file bytes
         data = readfile(path, mode='rb')
 
-        #Attempt to load the formatted contents
+        # Attempt to load the formatted contents
         try:
             if key_type == "PUB":
                 key = load_function(data, default_backend())
             elif key_type == "PRIV":
                 key = load_function(data, password, default_backend())
-                
+
             # Check if key instance is correct
-            if isinstance (key, key_instance):
-                return key 
+            if isinstance(key, key_instance):
+                return key
             else:
-                Console.error( f"Key instance must be {key_instance}")
+                Console.error(f"Key instance must be {key_instance}")
 
         except ValueError as e:
-            Console.error( f"Could not properly decode {encoding} key" )
+            Console.error(f"Could not properly decode {encoding} key")
         except TypeError as e:
-            Console.error( """Password mismatch either: 
+            Console.error("""Password mismatch either: 
             1. given a password when file is not encrypted 
             2. Not given a password when file is encrypted""")
-            raise 
+            raise
         except UnsupportedAlgorithm as e:
-            Console.error( "Unsupported format for pyca serialization" ) 
+            Console.error("Unsupported format for pyca serialization")
         except Exception as e:
-            Console.error( f"{e}" )
+            Console.error(f"{e}")
 
     def requestPass(self, prompt="Password for key:"):
         try:
@@ -397,7 +403,8 @@ class KeyHandler:
         except Exception as e:
             raise e
 
-#BUG: TODO: usage of path_expand is compleyely wrong
+
+# BUG: TODO: usage of path_expand is compleyely wrong
 
 # security import ~/.ssh/id_rsa_.pem -k ~/Library/Keychains/login.keychain
 

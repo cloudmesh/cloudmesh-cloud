@@ -27,8 +27,8 @@ from cloudmesh.common3.Benchmark import Benchmark
 import json
 from cloudmesh.management.configuration.name import Name
 
-class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
+class Provider(ComputeNodeABC, ComputeProviderPlugin):
     kind = "aws"
 
     # TODO: change to what you see in boto dicts the next values are from
@@ -36,7 +36,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
     output = {
 
-        "vm": { # updted for aws
+        "vm": {  # updted for aws
             "sort_keys": ["cm.name"],
             "order": ["cm.name",
                       "cm.cloud",
@@ -57,7 +57,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                        "Started at",
                        "Kind"]
         },
-        "image": { # updated for aws
+        "image": {  # updated for aws
             "sort_keys": ["cm.name",
                           "State"],
             "order": ["cm.name",
@@ -163,7 +163,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                                     sort_keys=["name"],
                                     order=order,
                                     header=header,
-                                    output=output,)
+                                    output=output, )
                   )
         else:
             print(Printer.write(data, output=output))
@@ -186,7 +186,8 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
             if name is None:
                 response = self.ec2_client.describe_security_groups()
             else:
-                response = self.ec2_client.describe_security_groups(GroupNames=[name])
+                response = self.ec2_client.describe_security_groups(
+                    GroupNames=[name])
         except ClientError as e:
             Console.info("Security group doesn't exist")
         if response:
@@ -237,7 +238,8 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                                                                  Description=description,
                                                                  VpcId=vpc_id)
                 security_group_id = response['GroupId']
-                Console.ok(f'Security Group Created {security_group_id} in vpc{vpc_id}')
+                Console.ok(
+                    f'Security Group Created {security_group_id} in vpc{vpc_id}')
 
             except ClientError as e:
                 Console.info("Security group can't be added")
@@ -281,7 +283,8 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
             response = self.ec2_client.delete_security_group(GroupName=name)
             VERBOSE(response)
         except ClientError as e:
-            Console.info("Security group couldn't be removed as it doesn't exist")
+            Console.info(
+                "Security group couldn't be removed as it doesn't exist")
 
     def upload_secgroup(self, name=None):
 
@@ -405,8 +408,8 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         cm = self.get_server_metadata(name=name)
         cm.update(data)
         metadata = []
-        for key,value in cm['cm'].items():
-            metadata.append({'Key': f'cm.{key}' , 'Value': value})
+        for key, value in cm['cm'].items():
+            metadata.append({'Key': f'cm.{key}', 'Value': value})
         response = self.ec2_client.create_tags(
             Resources=[
                 id,
@@ -439,9 +442,8 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                 {'Name': 'tag:cm.name', 'Values': [name]}
             ]
         )
-        data =instance_info['Reservations'][0]['Instances'][0]
+        data = instance_info['Reservations'][0]['Instances'][0]
         return data['Tags']
-
 
     def get_server_metadata(self, name):
         """
@@ -468,7 +470,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
             ]
         )
         data = instance_info['Reservations'][0]['Instances'][0]
-        metadata = {'cm':{}}
+        metadata = {'cm': {}}
         for dat in data['Tags']:
             if 'cm.' in dat['Key']:
                 key = dat['Key'].split('cm.')[1]
@@ -481,7 +483,8 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                         available=False):
 
         addresses = self.ec2_client.describe_addresses()
-        ip_list = [address.get('PublicIp') for address in addresses.get('Addresses')
+        ip_list = [address.get('PublicIp') for address in
+                   addresses.get('Addresses')
                    if 'AssociationId' not in address]
         return ip_list[0]
 
@@ -512,7 +515,8 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
     def find_available_public_ip(self):
         addresses = self.ec2_client.describe_addresses()
-        public_ips = [address['PublicIp'] for address in addresses.get('Addresses')]
+        public_ips = [address['PublicIp'] for address in
+                      addresses.get('Addresses')]
         VERBOSE(public_ips)
         return public_ips
 
@@ -539,7 +543,8 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
         try:
             response = self.ec2_client.associate_address(
-                AllocationId=self._get_allocation_ids(self.ec2_client, ip).get('AllocationId'),
+                AllocationId=self._get_allocation_ids(self.ec2_client, ip).get(
+                    'AllocationId'),
                 InstanceId=instance_id[0],
                 AllowReassociation=True,
             )
@@ -559,7 +564,8 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
             raise ValueError("IP address is not in pool")
         try:
             response = self.ec2_client.disassociate_address(
-                AssociationId=self._get_allocation_ids(self.ec2_client, ip).get('AssociationId'),
+                AssociationId=self._get_allocation_ids(self.ec2_client, ip).get(
+                    'AssociationId'),
             )
         except ClientError as e:
             Console.error(e)
@@ -575,11 +581,12 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         if timeout is None:
             timeout = 360
         # instance_id = vm['instance_id']
-        Console.info(f"waiting for instance to be reachable: Interval: {interval}, Timeout: {timeout}")
+        Console.info(
+            f"waiting for instance to be reachable: Interval: {interval}, Timeout: {timeout}")
         timer = 0
-        while  timer < timeout :
+        while timer < timeout:
             try:
-                r = self.ssh(vm=vm,command='echo IAmReady').strip()
+                r = self.ssh(vm=vm, command='echo IAmReady').strip()
                 if 'IAmReady' in r:
                     return True
             except:
@@ -604,7 +611,8 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
             print(Printer.flatwrite(tmp_keys,
                                     sort_keys=["idx"],
                                     order=['idx', 'KeyName', 'KeyFingerprint'],
-                                    header=['Index', 'Key Name', "Key Fingerprint"],
+                                    header=['Index', 'Key Name',
+                                            "Key Fingerprint"],
                                     output="table",
                                     humanize=None)
                   )
@@ -612,7 +620,8 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
             picked = 0
             while picked < 1 or picked > len(keys):
                 try:
-                    picked = int(input("Please select one of the AWS key indices from the table above: "))
+                    picked = int(input(
+                        "Please select one of the AWS key indices from the table above: "))
                 except ValueError:
                     pass
             return keys[picked - 1]
@@ -631,12 +640,15 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
         except (KeyError, IndexError):
             aws_keys = cm.find(kind='key', cloud='aws')
-            if len(aws_keys) == 0 :
-                Console.error(f"Could not find a key for the AWS instance '{vm['name']}'")
-                Console.error(f"Use `cms help key` to learn how to add and upload a key for AWS")
+            if len(aws_keys) == 0:
+                Console.error(
+                    f"Could not find a key for the AWS instance '{vm['name']}'")
+                Console.error(
+                    f"Use `cms help key` to learn how to add and upload a key for AWS")
                 return
             aws_key = key_selector(aws_keys)
-            for sshkey in cm.find_all_by_name(name=aws_key['KeyName'], kind="key"):
+            for sshkey in cm.find_all_by_name(name=aws_key['KeyName'],
+                                              kind="key"):
                 if "location" in sshkey.keys():
                     key = sshkey['location']['private']
                     break
@@ -665,11 +677,13 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
                     def __enter__(self):
                         self.old_value = ctypes.c_long()
-                        self.success = self._disable(ctypes.byref(self.old_value))
+                        self.success = self._disable(
+                            ctypes.byref(self.old_value))
 
                     def __exit__(self, type, value, traceback):
                         if self.success:
                             self._revert(self.old_value)
+
                 with disable_file_system_redirection():
                     os.system(cmd)
             else:
@@ -683,11 +697,13 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
                     def __enter__(self):
                         self.old_value = ctypes.c_long()
-                        self.success = self._disable(ctypes.byref(self.old_value))
+                        self.success = self._disable(
+                            ctypes.byref(self.old_value))
 
                     def __exit__(self, type, value, traceback):
                         if self.success:
                             self._revert(self.old_value)
+
                 with disable_file_system_redirection():
                     ssh = subprocess.Popen(cmd,
                                            shell=True,
@@ -773,9 +789,11 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                 self.ec2_client.start_instances(
                     InstanceIds=[each_instance.instance_id])
 
-                self.add_server_metadata(name=name, tags=[{'Key': 'cm.status', 'Value': "ACTIVE"}])
+                self.add_server_metadata(name=name, tags=[
+                    {'Key': 'cm.status', 'Value': "ACTIVE"}])
             except ClientError:
-                Console.error("Currently instance cant be started...Please try again")
+                Console.error(
+                    "Currently instance cant be started...Please try again")
             Console.msg("Starting Instance..Please wait...")
             waiter = self.ec2_client.get_waiter('instance_running')
             waiter.wait(Filters=[
@@ -784,7 +802,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                 f"Instance having Tag:{name} and "
                 f"Instance-Id:{each_instance.instance_id} started")
 
-    def stop(self, name=None, hibernate = False):
+    def stop(self, name=None, hibernate=False):
 
         """
         stops the node with the given name
@@ -803,11 +821,14 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         for each_instance in instances:
             try:
                 self.ec2_client.stop_instances(
-                    InstanceIds=[each_instance.instance_id], Hibernate = hibernate)
+                    InstanceIds=[each_instance.instance_id],
+                    Hibernate=hibernate)
 
-                self.add_server_metadata(name=name, tags= [{'Key': 'cm.status', 'Value': "STOPPED"}])
+                self.add_server_metadata(name=name, tags=[
+                    {'Key': 'cm.status', 'Value': "STOPPED"}])
             except ClientError:
-                Console.error("Currently instance cant be stopped...Please try again")
+                Console.error(
+                    "Currently instance cant be stopped...Please try again")
             Console.msg("Stopping Instance..Please wait...")
             waiter = self.ec2_client.get_waiter('instance_stopped')
             waiter.wait(Filters=[
@@ -831,19 +852,19 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
         instance_info = self.ec2_client.describe_instances(
             Filters=[
-                    {'Name': 'tag:cm.name','Values':[name]}
+                {'Name': 'tag:cm.name', 'Values': [name]}
             ]
         )
-        data={}
-        if (len(instance_info['Reservations']) > 0 ) :
-            data =instance_info['Reservations'][0]['Instances'][0]
+        data = {}
+        if (len(instance_info['Reservations']) > 0):
+            data = instance_info['Reservations'][0]['Instances'][0]
             # TODO: this needs to be fixed :
             data['name'] = name
             data['status'] = data['State']['Name']
             data.update(self.get_server_metadata(name))
         return data
 
-    def instance_is_reachable(self,instance_id=None):
+    def instance_is_reachable(self, instance_id=None):
         '''
         gets the information of a statuso of a VM with a given name, useful for when you want to check if the vm is ready for ssh
         Note: describe_instance_status doesn't filter by tag , so we should use instance ID
@@ -875,15 +896,17 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         if instance_id is None:
             Console.error("Please provide instance_id ...")
             return
-        if type(instance_id) != list :
+        if type(instance_id) != list:
             instance_id = [instance_id]
-        instance_status = self.ec2_client.describe_instance_status(InstanceIds = instance_id) ['InstanceStatuses']
-        if (len(instance_status) > 0 ) :
-            status = instance_status[0]['InstanceStatus']['Details'][0]['Status']
+        instance_status = \
+        self.ec2_client.describe_instance_status(InstanceIds=instance_id)[
+            'InstanceStatuses']
+        if (len(instance_status) > 0):
+            status = instance_status[0]['InstanceStatus']['Details'][0][
+                'Status']
             if status.lower() == 'passed':
                 return True
         return False
-
 
     def list(self):
 
@@ -898,12 +921,13 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
             # print(each_instance.tags)
             if len(each_instance.tags) > 0:
-                name = [tag['Value'] for tag in each_instance.tags if tag['Key'] == 'Name'][0]
+                name = [tag['Value'] for tag in each_instance.tags if
+                        tag['Key'] == 'Name'][0]
             else:
                 name = ''
             instance_ids.append({
                 'kind': 'aws',
-                'KeyName' : each_instance.key_name,
+                'KeyName': each_instance.key_name,
                 'status': each_instance.state['Name'],
                 'created': each_instance.launch_time.strftime(
                     "%m/%d/%Y, %H:%M:%S") if each_instance.launch_time else '',
@@ -912,7 +936,8 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                 # 'name': each_instance.tags[0]['Value'] if each_instance.tags else '',
                 'name': name,
                 'instance_id': each_instance.id,
-                'instance_tag': each_instance.tags[0]['Value'] if each_instance.tags else '',
+                'instance_tag': each_instance.tags[0][
+                    'Value'] if each_instance.tags else '',
                 'image': each_instance.image_id,
                 'public_ips': each_instance.public_ip_address,
                 'private_ips': each_instance.private_ip_address
@@ -967,7 +992,8 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                 self.ec2_client.terminate_instances(
                     InstanceIds=[each_instance.instance_id], )
 
-                self.add_server_metadata(name=name, tags= [{'Key': 'cm.status', 'Value': "TERMINATED"}])
+                self.add_server_metadata(name=name, tags=[
+                    {'Key': 'cm.status', 'Value': "TERMINATED"}])
             except ClientError:
                 Console.error(
                     "Currently instance cant be terminated...Please try again")
@@ -993,7 +1019,6 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                group=None,
                metadata=None,
                **kwargs):
-
 
         """
         creates a named node
@@ -1056,14 +1081,14 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         #
         if metadata is None:
             metadata = []
-        metadata = [ {'Key': 'cm.image', 'Value': image},
-                     {'Key': 'cm.name' , 'Value':name} ,
-                     {'Key': 'cm.flavor' , 'Value':size } ,
-                     {'Key': 'cm.user', 'Value':self.user} ,
-                     {'Key': 'cm.kind', 'Value':  "vm"} ,
-                     {'Key': 'cm.status', 'Value': "BOOTING"},
-                     {'Key': 'Name', 'Value': name}
-                     ]
+        metadata = [{'Key': 'cm.image', 'Value': image},
+                    {'Key': 'cm.name', 'Value': name},
+                    {'Key': 'cm.flavor', 'Value': size},
+                    {'Key': 'cm.user', 'Value': self.user},
+                    {'Key': 'cm.kind', 'Value': "vm"},
+                    {'Key': 'cm.status', 'Value': "BOOTING"},
+                    {'Key': 'Name', 'Value': name}
+                    ]
         # VERBOSE(metadata)
         new_ec2_instance = self.ec2_resource.create_instances(
             ImageId=image,
@@ -1073,7 +1098,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
             SecurityGroups=[secgroup],
             KeyName=key,
             TagSpecifications=[{'ResourceType': 'instance',
-                                'Tags': metadata }]
+                                'Tags': metadata}]
         )
         # VERBOSE(new_ec2_instance)
         new_ec2_instance = new_ec2_instance[0]
@@ -1104,7 +1129,8 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
             "%m/%d/%Y, %H:%M:%S") if new_ec2_instance.launch_time else '',
         data['updated'] = new_ec2_instance.launch_time.strftime(
             "%m/%d/%Y, %H:%M:%S") if new_ec2_instance.launch_time else '',
-        data['name'] = new_ec2_instance.tags[0]['Value'] if new_ec2_instance.tags else '',
+        data['name'] = new_ec2_instance.tags[0][
+                           'Value'] if new_ec2_instance.tags else '',
         data['instance_id'] = new_ec2_instance.id,
         data['image'] = new_ec2_instance.image_id,
         data['key_name'] = key,
@@ -1112,8 +1138,10 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         while True:
             try:
                 public_ip = \
-                self.ec2_client.describe_instances(InstanceIds=[new_ec2_instance.id])['Reservations'][0]['Instances']\
-                [0]['PublicIpAddress'],
+                    self.ec2_client.describe_instances(
+                        InstanceIds=[new_ec2_instance.id])['Reservations'][0][
+                        'Instances'] \
+                        [0]['PublicIpAddress'],
                 break
             except KeyError:
                 time.sleep(0.5)
@@ -1176,13 +1204,14 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         cloud = self.cloud
         Console.msg(f"uploading the key: {key_name} -> {cloud}")
         try:
-            r = self.ec2_client.import_key_pair(KeyName=key_name,PublicKeyMaterial=key['public_key'])
+            r = self.ec2_client.import_key_pair(KeyName=key_name,
+                                                PublicKeyMaterial=key[
+                                                    'public_key'])
         except ClientError as e:
             # Console.error("Key already exists")
             VERBOSE(e)
-            raise ValueError # this is raised because key.py catches valueerror
+            raise ValueError  # this is raised because key.py catches valueerror
         return r
-
 
     def key_delete(self, name=None):
 
@@ -1216,14 +1245,15 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         response = None
         for each_instance in instances:
             try:
-                response = self.ec2_client.create_tags(Resources = [each_instance.instance_id],
-                                              Tags=tags)
+                response = self.ec2_client.create_tags(
+                    Resources=[each_instance.instance_id],
+                    Tags=tags)
             except ClientError:
                 Console.error(
                     "Currently metadata cant not be added or updated...Please try again")
         return response
 
-    def delete_server_metadata(self, name, tags = None):
+    def delete_server_metadata(self, name, tags=None):
         """
         gets the metadata for the server
 
@@ -1240,12 +1270,13 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         instances = self._get_instance_id(self.ec2_resource, name)
 
         if tags is None:
-            tags = self.get_server_metadata_tags(name =name)
+            tags = self.get_server_metadata_tags(name=name)
         response = None
         for each_instance in instances:
             try:
-                response = self.ec2_client.delete_tags(Resources = [each_instance.instance_id],
-                                              Tags=tags)
+                response = self.ec2_client.delete_tags(
+                    Resources=[each_instance.instance_id],
+                    Tags=tags)
             except ClientError:
                 Console.error(
                     "Currently metadata cant not be deleted...Please try again")
@@ -1256,9 +1287,9 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         retrieves the acount id which is used to find the images of the current account
         :return:
         '''
-        client = boto3.client("sts", aws_access_key_id=self.access_id, aws_secret_access_key=self.secret_key)
+        client = boto3.client("sts", aws_access_key_id=self.access_id,
+                              aws_secret_access_key=self.secret_key)
         return client.get_caller_identity()["Account"]
-
 
     def images(self, **kwargs):
 
@@ -1267,23 +1298,22 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
         :return: the dict of the images
         """
-        Console.msg(f"Getting the list of images for {self.cloud} cloud, this might take a few minutes ...")
+        Console.msg(
+            f"Getting the list of images for {self.cloud} cloud, this might take a few minutes ...")
         images = self.ec2_client.describe_images()
         Console.ok(f"Images list for {self.cloud} cloud retrieved successfully")
         data = self.update_dict(images['Images'], kind="image")
         self.get_images_and_import(data)
 
-
     @DatabaseImportAsJson()
-    def get_images_and_import(self,data):
+    def get_images_and_import(self, data):
         '''
         this is a helper function for images() to allow the images to be passed and saved to the database with
         databaseimportasjson() decorator instead of the regular databaseupdate() decorator.
         :param data:
         :return:
         '''
-        return {'db': 'cloudmesh', 'collection': 'aws-image', 'data':data}
-
+        return {'db': 'cloudmesh', 'collection': 'aws-image', 'data': data}
 
     def image(self, name=None):
 
@@ -1401,6 +1431,4 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
 
 if __name__ == "__main__":
-
     provider = Provider(name='aws')
-

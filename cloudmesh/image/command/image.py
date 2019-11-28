@@ -7,6 +7,7 @@ from cloudmesh.shell.command import PluginCommand
 from cloudmesh.shell.command import command, map_parameters
 from cloudmesh.common.parameter import Parameter
 
+
 class ImageCommand(PluginCommand):
 
     # see https://github.com/cloudmesh/client/blob/master/cloudmesh_client/shell/plugins/ImageCommand.py
@@ -49,7 +50,6 @@ class ImageCommand(PluginCommand):
                                                 arguments,
                                                 variables)
         if arguments.list and arguments["--query"]:
-
 
             names = []
 
@@ -103,7 +103,6 @@ class ImageCommand(PluginCommand):
                     provider = Provider(name=cloud)
 
                     db = CmDatabase()
-
 
                     images = db.find(collection=f"{cloud}-image")
 

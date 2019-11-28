@@ -186,8 +186,8 @@ class AzureProvider(object):
         resource_group = self.resource_group
 
         action = f"/subscriptions/{subscription}/resourceGroups/" \
-            f"{resource_group}/providers/" \
-            "Microsoft.Network/virtualNetworks/{name}"
+                 f"{resource_group}/providers/" \
+                 "Microsoft.Network/virtualNetworks/{name}"
 
         r = self.provider.connection.request(
             action,
@@ -212,8 +212,8 @@ class AzureProvider(object):
         resource_group = self.resource_group
 
         action = f"/subscriptions/{subscription}/resourceGroups/" \
-            f"{resource_group}/providers/" \
-            "Microsoft.Network/virtualNetworks/{name}"
+                 f"{resource_group}/providers/" \
+                 "Microsoft.Network/virtualNetworks/{name}"
 
         r = self.provider.connection.request(
             action,
@@ -237,9 +237,9 @@ class AzureProvider(object):
         resource_group = self.resource_group
 
         action = f"/subscriptions/{subscription}/resourceGroups/" \
-            f"{resource_group}/providers/" \
-            f"Microsoft.Network/virtualNetworks/" \
-            f"{network_name}/subnets/{name}"
+                 f"{resource_group}/providers/" \
+                 f"Microsoft.Network/virtualNetworks/" \
+                 f"{network_name}/subnets/{name}"
 
         r = self.provider.connection.request(
             action,
@@ -263,8 +263,8 @@ class AzureProvider(object):
         resource_group = self.resource_group
 
         target = f"/subscriptions/{subscription}/resourceGroups/" \
-            f"{resource_group}/" \
-            "providers/Microsoft.Network/publicIPAddresses/name"
+                 f"{resource_group}/" \
+                 "providers/Microsoft.Network/publicIPAddresses/name"
 
         data = {
             "location": self.provider.default_location.id,
@@ -298,8 +298,8 @@ class AzureProvider(object):
         resource_group = self.resource_group
 
         action = f"/subscriptions/{subscription}/resourceGroups/" \
-            f"{resource_group}/providers/" \
-            f"Microsoft.Network/publicIPAddresses/{name}"
+                 f"{resource_group}/providers/" \
+                 f"Microsoft.Network/publicIPAddresses/{name}"
 
         r = self.provider.connection.request(
             action,

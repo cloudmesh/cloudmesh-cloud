@@ -81,7 +81,6 @@ class TestSsh:
 
             assert result.success
 
-
     def test_ssh_processors(self):
 
         print()

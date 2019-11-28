@@ -13,6 +13,7 @@ from cloudmesh.shell.command import command, map_parameters
 from pprint import pprint
 import os
 
+
 class KeyCommand(PluginCommand):
 
     # see https://github.com/cloudmesh/client/blob/master/cloudmesh_client/shell/plugins/KeyCommand.py
@@ -268,9 +269,11 @@ class KeyCommand(PluginCommand):
             username = config["cloudmesh.profile.user"]
 
             if username == "TBD":
-                Console.error("Please set cloudmesh.profile.user in ~/.cloudmesh.yaml")
+                Console.error(
+                    "Please set cloudmesh.profile.user in ~/.cloudmesh.yaml")
                 u = os.environ["USER"].lower().replace(" ", "")
-                Console.msg(f"To change it you can use the command. Define a NAME such as '{u}' e.g.")
+                Console.msg(
+                    f"To change it you can use the command. Define a NAME such as '{u}' e.g.")
                 Console.msg("")
                 Console.msg(f"  cms config set cloudmesh.profile.user={u}")
                 Console.msg("")
@@ -297,11 +300,9 @@ class KeyCommand(PluginCommand):
             #
 
             if names is None or len(names) == 0:
-
                 config = Config()
                 username = config["cloudmesh.profile.user"]
                 names = [username]
-
 
             if len(names) == 1:
                 name = names[0]
@@ -309,13 +310,13 @@ class KeyCommand(PluginCommand):
                 if "key" in variables:
                     old = variables["key"]
                     if old != name:
-                        Console.msg(f"Changing defualt key from {old} to {name}")
+                        Console.msg(
+                            f"Changing defualt key from {old} to {name}")
                         variables["key"] = name
 
             #
             # Step 1. keys = find keys to upload
             #
-
 
             cloud = "local"
             db = CmDatabase()
@@ -327,8 +328,9 @@ class KeyCommand(PluginCommand):
                     keys.append(key)
 
             if len(keys) == 0:
-                Console.error(f"No keys with the names {names} found in cloudmesh. \n"
-                              "       Use the command 'key add' to add the key.")
+                Console.error(
+                    f"No keys with the names {names} found in cloudmesh. \n"
+                    "       Use the command 'key add' to add the key.")
 
             #
             # Step 2. iterate over the clouds to upload
@@ -348,8 +350,8 @@ class KeyCommand(PluginCommand):
                             r = provider.key_upload(key)
                             Console.ok(f"upload key '{name} successful'. ")
                         except ValueError as e:
-                            Console.error(f"key '{name} already exists in {cloud}.")
-
+                            Console.error(
+                                f"key '{name} already exists in {cloud}.")
 
             return ""
 

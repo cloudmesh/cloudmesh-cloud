@@ -13,9 +13,7 @@ from cloudmesh.configuration.Config import Config
 
 Benchmark.debug()
 
-
 CLOUD = "azazure"
-
 
 user = Config()["cloudmesh.profile.user"]
 
@@ -23,6 +21,7 @@ name_generator = Name()
 name_generator.set(f"test-{user}-vm-" + "{counter}")
 
 VM = str(name_generator)
+
 
 @pytest.mark.incremental
 class Testazure(object):

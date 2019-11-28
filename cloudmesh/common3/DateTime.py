@@ -9,7 +9,6 @@ import pytz
 
 
 class DateTime(object):
-
     """
     This class provides some simple date time functions so we can use all the
     same format. Here is a simple example
@@ -57,7 +56,7 @@ class DateTime(object):
 
     @staticmethod
     def datetime(time):
-        if type (time) == TIME:
+        if type(time) == TIME:
             return time
         else:
             return DateTime.humanize(time)
@@ -90,25 +89,26 @@ class DateTime(object):
     def utc_to_local(time):
         TIME_FORMAT = '%Y-%m-%d %H:%M:%S'
         utc = TIME.datetime.utcnow().strftime(TIME_FORMAT)
-        timestamp =  calendar.timegm((TIME.datetime.strptime( utc, TIME_FORMAT)).timetuple())
+        timestamp = calendar.timegm(
+            (TIME.datetime.strptime(utc, TIME_FORMAT)).timetuple())
         local = TIME.datetime.fromtimestamp(timestamp).strftime(TIME_FORMAT)
         return local + " " + DateTime.timezone
 
-if __name__ == "__main__":
 
+if __name__ == "__main__":
     start = DateTime.now()
     stop = DateTime.now() + DateTime.delta(1)
 
-    print ("START", start)
-    print ("STOP", stop)
+    print("START", start)
+    print("STOP", stop)
     print("HUMANIZE STOP", DateTime.humanize(stop - start))
-    print ("LOCAL", DateTime.local(start))
+    print("LOCAL", DateTime.local(start))
     print("UTC", DateTime.utc(start))
     print("NATURAL", DateTime.natural(start))
     print("WORDS", DateTime.words(start))
     print("TIMEZONE", DateTime.timezone)
 
-    #print("CONVERT", DateTime.local("2019-08-03 20:48:27.205442 UTC"))
+    # print("CONVERT", DateTime.local("2019-08-03 20:48:27.205442 UTC"))
     """
     START 2019-08-03 21:34:14.019147
     STOP 2019-08-03 21:34:15.019150

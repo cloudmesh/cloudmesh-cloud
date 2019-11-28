@@ -132,9 +132,6 @@ class Test_Compute_Database:
                                 header=["Name", "Fingerprint"])
               )
 
-
-
-
     def test_vm_login(self):
         HEADING()
         self.test_list_vm()
@@ -183,4 +180,3 @@ class Test_Compute_Database:
         Benchmark.Start()
         provider.rename(source=self.name, destination=self.new_name)
         Benchmark.Stop()
-

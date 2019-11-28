@@ -23,6 +23,7 @@ from cloudmesh.common3.DateTime import DateTime
 from cloudmesh.common.debug import VERBOSE
 from cloudmesh.image.Image import Image
 
+
 class Provider(ComputeNodeABC, ComputeProviderPlugin):
     kind = "openstack"
 
@@ -635,12 +636,14 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         :return: dict of flavors
         """
         if kwargs is None:
-            result = self.get_list(self.cloudman.compute.flavors(), kind="flavor")
+            result = self.get_list(self.cloudman.compute.flavors(),
+                                   kind="flavor")
         if "name" in kwargs:
             result = self.flavor(name=kwargs['name'])
 
         else:
-            result = self.get_list(self.cloudman.compute.flavors(**kwargs), kind="flavor")
+            result = self.get_list(self.cloudman.compute.flavors(**kwargs),
+                                   kind="flavor")
 
         return result
 
@@ -1079,7 +1082,6 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         server = vm['id']
         return self.cloudman._get_server_console_output(server)
 
-
     def rename(self, name=None, destination=None):
         """
         rename a node. NOT YET IMPLEMENTED.
@@ -1136,11 +1138,13 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
                     def __enter__(self):
                         self.old_value = ctypes.c_long()
-                        self.success = self._disable(ctypes.byref(self.old_value))
+                        self.success = self._disable(
+                            ctypes.byref(self.old_value))
 
                     def __exit__(self, type, value, traceback):
                         if self.success:
                             self._revert(self.old_value)
+
                 with disable_file_system_redirection():
                     os.system(cmd)
             else:
@@ -1153,11 +1157,13 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
                     def __enter__(self):
                         self.old_value = ctypes.c_long()
-                        self.success = self._disable(ctypes.byref(self.old_value))
+                        self.success = self._disable(
+                            ctypes.byref(self.old_value))
 
                     def __exit__(self, type, value, traceback):
                         if self.success:
                             self._revert(self.old_value)
+
                 with disable_file_system_redirection():
                     ssh = subprocess.Popen(cmd,
                                            shell=True,
@@ -1165,9 +1171,9 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                                            stderr=subprocess.PIPE)
             else:
                 ssh = subprocess.Popen(cmd,
-                                   shell=True,
-                                   stdout=subprocess.PIPE,
-                                   stderr=subprocess.PIPE)
+                                       shell=True,
+                                       stdout=subprocess.PIPE,
+                                       stderr=subprocess.PIPE)
             result = ssh.stdout.read().decode("utf-8")
             if not result:
                 error = ssh.stderr.readlines()
@@ -1179,25 +1185,24 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
              vm=None,
              interval=None,
              timeout=None):
-        name =  vm['name']
+        name = vm['name']
         if interval is None:
             # if interval is too low, OS will block your ip (I think)
             interval = 10
         if timeout is None:
             timeout = 360
-        Console.info(f"waiting for instance {name} to be reachable: Interval: {interval}, Timeout: {timeout}")
+        Console.info(
+            f"waiting for instance {name} to be reachable: Interval: {interval}, Timeout: {timeout}")
         timer = 0
         while timer < timeout:
             sleep(interval)
             timer += interval
             try:
                 r = self.list()
-                r = self.ssh(vm=vm,command='echo IAmReady').strip()
+                r = self.ssh(vm=vm, command='echo IAmReady').strip()
                 if 'IAmReady' in r:
                     return True
             except:
                 pass
 
-
         return False
-

@@ -3,7 +3,7 @@
 # pytest  tests/azure/test_compute_pyazure.py
 ###############################################################
 
-CLOUD="azure"
+CLOUD = "azure"
 
 import pytest
 from cloudmesh.common.debug import VERBOSE
@@ -13,7 +13,6 @@ from cloudmesh.common3.Benchmark import Benchmark
 
 from cloudmesh.configuration.Config import Config
 from cloudmesh.management.configuration.name import Name
-
 
 if CLOUD == "azure":
     from cloudmesh.compute.azure.Provider import Provider
@@ -25,8 +24,9 @@ Benchmark.debug()
 
 user = Config()["cloudmesh.profile.user"]
 
-SECGROUP=f"cloudmesh_{user}"
-SECGROUP_UPLOAD=f"cloudmesh_{user}_upload"
+SECGROUP = f"cloudmesh_{user}"
+SECGROUP_UPLOAD = f"cloudmesh_{user}_upload"
+
 
 @pytest.mark.incremental
 class TestAzure:
@@ -89,9 +89,10 @@ class TestAzure:
         tags = 'This is my cloudmesh metadata Tag'
 
         Benchmark.Start()
-        test_set_metadata = self.p.set_server_metadata(name=None,cm=tags)
+        test_set_metadata = self.p.set_server_metadata(name=None, cm=tags)
         Benchmark.Stop()
-        VERBOSE(test_set_metadata, label='Added Metadata to Virtual Machine Created')
+        VERBOSE(test_set_metadata,
+                label='Added Metadata to Virtual Machine Created')
 
         assert test_set_metadata is not None
 
@@ -111,7 +112,8 @@ class TestAzure:
         Benchmark.Start()
         test_delete_metadata = self.p.delete_server_metadata(None, 'cm')
         Benchmark.Stop()
-        VERBOSE(test_delete_metadata, label='Metadata from Virtual Machine after deleting tag')
+        VERBOSE(test_delete_metadata,
+                label='Metadata from Virtual Machine after deleting tag')
 
         assert test_delete_metadata is not None
 
@@ -142,9 +144,10 @@ class TestAzure:
         HEADING()
 
         Benchmark.Start()
-        test_add_sec_rule = self.p.add_secgroup_rule(name='resource_name_security_rule',
-                                                     port=None,protocol=None,
-                                                     ip_range='3389:3390')
+        test_add_sec_rule = self.p.add_secgroup_rule(
+            name='resource_name_security_rule',
+            port=None, protocol=None,
+            ip_range='3389:3390')
         Benchmark.Stop()
         VERBOSE(test_add_sec_rule, label='Add Security Rule')
 

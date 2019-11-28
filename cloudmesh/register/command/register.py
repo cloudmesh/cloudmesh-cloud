@@ -7,7 +7,6 @@ from cloudmesh.shell.command import command
 import importlib
 
 
-
 class RegisterCommand(PluginCommand):
 
     # noinspection PyUnusedLocal
@@ -73,7 +72,8 @@ class RegisterCommand(PluginCommand):
             # the csv code needs to be changed
 
             if arguments.yaml:
-                AWSReg = importlib.import_module("cloudmesh.register.AWSRegister")
+                AWSReg = importlib.import_module(
+                    "cloudmesh.register.AWSRegister")
                 AWSregisterer = AWSReg.AWSRegister()
                 AWSregisterer.register()
 
@@ -92,4 +92,3 @@ class RegisterCommand(PluginCommand):
             Console.error("not yet implemented")
 
         return ""
-

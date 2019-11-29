@@ -484,14 +484,14 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                 pub_ip = ip
         return pub_ip
 
-    def _get_local_vm(self, vm_name):
+    def _get_local_vm(self, vm_name, quiet=False):
         vm_search = list(
             self.cmDatabase.collection('azure-vm').find({'name': vm_name}))
 
-        if len(vm_search) == 0:
+        if not quiet and len(vm_search) == 0:
             raise Exception(f"unable to locate {vm_name} in local db!")
 
-        return vm_search[0]
+        return vm_search[0] if len(vm_search) > 0 else None
 
     def ssh(self, vm=None, command=None):
         if vm is None or command is None:
@@ -1325,14 +1325,23 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         return r['status']
 
     def list(self):
-        # TODO: Joaquin -> Completed
         """
         List all Azure Virtual Machines from my Account
         :return: dict or libcloud object
         """
-        servers = self.vms.list_all()
+        az_servers = []
 
-        return self.get_list(servers, kind="vm")
+        for vm in self.vms.list(self.GROUP_NAME):
+            v = vm.as_dict()
+            local_vm = self._get_local_vm(v['name'], quiet=True)
+
+            if local_vm is None:
+                Console.warning("no local vm found for " + v['name'])
+
+            v.update(local_vm)
+            az_servers.append(v)
+
+        return self.update_dict(az_servers, kind="vm")
 
     def destroy(self, name=None):
         """

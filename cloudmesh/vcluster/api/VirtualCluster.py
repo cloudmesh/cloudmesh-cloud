@@ -55,16 +55,16 @@ class VirtualCluster(object):
                 virt_cluster[node]['credentials']['sshconfigpath'])):
                 raise ValueError(
                     "%s: The ssh config file %s does not exists" % (
-                    node, virt_cluster[node] \
-                        ['credentials']['sshconfigpath']))
+                        node, virt_cluster[node] \
+                            ['credentials']['sshconfigpath']))
         if not os.path.isfile(os.path.expanduser(job_metadata['script_path'])):
             raise ValueError("The script file %s does not exists" % (
-            job_metadata['script_path']))
+                job_metadata['script_path']))
         if runtime_config['input-type'] == 'params+file':
             if not os.path.isfile(
                 os.path.expanduser(job_metadata['argfile_path'])):
                 raise ValueError("The arg file %s does not exists" % (
-                job_metadata['arg_file_path']))
+                    job_metadata['arg_file_path']))
 
     def _clean_remote_in_parallel(self, target_node, remote_path):
         """
@@ -204,7 +204,7 @@ class VirtualCluster(object):
                 nested_remote_path = os.path.join(job_metadata['remote_path'],
                                                   'run{}'.format(node_idx))
                 scp_caller('-r', '%s:%s' % (
-                dest_node_info['name'], nested_remote_path),
+                    dest_node_info['name'], nested_remote_path),
                            os.path.join(job_metadata \
                                             [
                                             'local_path'],
@@ -240,7 +240,7 @@ class VirtualCluster(object):
         # directory_check = ssh_caller('if test -d %s; then echo "exist"; fi' % job_metadata['remote_path'])
         # if len(directory_check) == 0:
         ssh_caller('cd %s && mkdir job%s' % (
-        job_metadata['raw_remote_path'], job_metadata['suffix']), True)
+            job_metadata['raw_remote_path'], job_metadata['suffix']), True)
         if self.runtime_config['output-type'].lower() in ['file',
                                                           'stdout+file']:
             ssh_caller(
@@ -262,23 +262,23 @@ class VirtualCluster(object):
                                                        'argfile_name'])))
         else:
             scp_caller(job_metadata['script_path'], '%s:%s' % (
-            target_node['name'], job_metadata['remote_script_path']))
+                target_node['name'], job_metadata['remote_script_path']))
             ssh_caller('chmod +x', job_metadata['remote_script_path'])
             if self.runtime_config['input-type'].lower() == 'params+file':
                 scp_caller(job_metadata['argfile_path'], '%s:%s' % (
-                target_node['name'], job_metadata['remote_path']))
+                    target_node['name'], job_metadata['remote_path']))
 
         if self.runtime_config['output-type'].lower() == 'stdout':
             remote_pid = ssh_caller(
                 'cd %s && nohup %s %s > %s 2>&1 </dev/null& echo $!' % (
-                job_metadata['remote_path'],
-                job_metadata['remote_script_path'],
-                params,
-                os.path.join(job_metadata['remote_path'],
-                             self.add_suffix_to_path(
-                                 'outputfile_%d' % \
-                                 param_idx,
-                                 job_metadata['suffix']))))
+                    job_metadata['remote_path'],
+                    job_metadata['remote_script_path'],
+                    params,
+                    os.path.join(job_metadata['remote_path'],
+                                 self.add_suffix_to_path(
+                                     'outputfile_%d' % \
+                                     param_idx,
+                                     job_metadata['suffix']))))
         elif self.runtime_config['output-type'].lower() == 'stdout+file':
             remote_pid = ssh_caller(
                 'cd %s && nohup %s %s > %s 2>&1 </dev/null& echo $!' % \
@@ -293,10 +293,10 @@ class VirtualCluster(object):
                                              job_metadata['suffix']))))
         elif self.runtime_config['output-type'].lower() == 'file':
             remote_pid = ssh_caller('cd %s && nohup ./%s %s >&- & echo $!' % (
-            os.path.join(job_metadata['remote_path'],
-                         'run{}'.format(param_idx)),
-            job_metadata['script_name_with_suffix'],
-            params))
+                os.path.join(job_metadata['remote_path'],
+                             'run{}'.format(param_idx)),
+                job_metadata['script_name_with_suffix'],
+                params))
         all_pids.append((target_node_key, remote_pid, param_idx))
         print(
             'Remote Pid on %s: %s' % (target_node_key, remote_pid.strip('\n')))
@@ -562,10 +562,10 @@ class VirtualCluster(object):
         self.vcluster_config.deep_set(['job-metadata'], job_metadata)
         all_pids = Manager().list()
         all_jobs = [(
-                    self, '_run_remote_job_in_parallel', job_metadata[job_name],
-                    param_idx, param, all_pids) for \
-                    param_idx, param in
-                    enumerate(job_metadata[job_name]['params_list'])]
+            self, '_run_remote_job_in_parallel', job_metadata[job_name],
+            param_idx, param, all_pids) for \
+            param_idx, param in
+            enumerate(job_metadata[job_name]['params_list'])]
         pool = Pool(processes=self.runtime_config['proc_num'])
         pool.map(self._execute_in_parallel, all_jobs)
         self.all_pids = all_pids

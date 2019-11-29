@@ -62,6 +62,7 @@ from cloudmesh.common.dotdict import dotdict
 from cloudmesh.common.util import path_expand
 from cloudmesh.configuration.Config import Config
 
+
 class Name(dotdict):
 
     def __init__(self, schema=None, **kwargs):
@@ -74,24 +75,22 @@ class Name(dotdict):
         # init dict with schema, path, kwargs
         #
 
-
-        if schema is None  and len(kwargs) == 0:
+        if schema is None and len(kwargs) == 0:
             path = path_expand("~/.cloudmesh/name.yaml")
             data = self.load(path)
             self.assign(data)
 
         else:
 
-
             self.assign(kwargs)
             if "path" not in kwargs:
-                path= self.__dict__['path'] = path_expand("~/.cloudmesh/name.yaml")
+                path = self.__dict__['path'] = path_expand(
+                    "~/.cloudmesh/name.yaml")
                 data = self.load(path)
                 self.assign(data)
 
             if schema is not None:
                 self.__dict__['schema'] = schema
-
 
         if "counter" not in self.__dict__:
             self.reset()
@@ -104,10 +103,8 @@ class Name(dotdict):
     def schema(self):
         return self.__dict__['schema']
 
-
     def set(self, schema):
         self.__dict__['schema'] = schema
-
 
     def assign(self, data):
         for entry in data:
@@ -154,14 +151,11 @@ class Name(dotdict):
         with open(path, 'w') as yaml_file:
             yaml.dump(data, yaml_file, default_flow_style=False)
 
-
-
     def __str__(self):
         return str(self.__dict__["schema"].format(**self.__dict__))
 
     def dict(self):
         return self.__dict__
-
 
     def reset(self):
         self.__dict__["counter"] = 1
@@ -171,5 +165,5 @@ class Name(dotdict):
         self.__dict__["counter"] += 1
         self.flush()
 
-name = Name()
 
+name = Name()

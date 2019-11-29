@@ -1,19 +1,26 @@
 import os
+import re
 import sys
 import shutil
-
 import oyaml as yaml
+import tempfile
+from pprint import pprint
+from base64 import b64encode, b64decode
 from cloudmesh.common.FlatDict import flatten
 from cloudmesh.common.Printer import Printer
 from cloudmesh.common.Shell import Shell
 from cloudmesh.common.console import Console
 from cloudmesh.common.util import banner
-from cloudmesh.common.util import path_expand
+from cloudmesh.common.util import path_expand, writefd, readfile
 from cloudmesh.configuration.Config import Config
-# from cloudmesh.security.encrypt import EncryptFile
 from cloudmesh.shell.command import PluginCommand
 from cloudmesh.shell.command import command, map_parameters
 from cloudmesh.common.util import path_expand
+from cloudmesh.configuration.security.encrypt import CmsEncryptor, KeyHandler, CmsHasher
+from progress.bar import Bar
+
+from shutil import copy2
+
 
 class ConfigCommand(PluginCommand):
 
@@ -30,8 +37,9 @@ class ConfigCommand(PluginCommand):
              config  -h | --help
              config cat [less]
              config check
-             config encrypt [SOURCE] [--keep]
-             config decrypt [SOURCE]
+             config secinit
+             config encrypt 
+             config decrypt 
              config edit [ATTRIBUTE]
              config set ATTRIBUTE=VALUE
              config get ATTRIBUTE [--output=OUTPUT]
@@ -129,8 +137,6 @@ class ConfigCommand(PluginCommand):
 
         configuration = Config()
 
-
-
         if arguments.cloud and arguments.verify:
             service = configuration[f"cloudmesh.{kind}.{cloud}"]
 
@@ -160,7 +166,7 @@ class ConfigCommand(PluginCommand):
             lines = yaml.dump(result).split("\n")
             secrets = not arguments.secrets
             result = Config.cat_lines(lines, mask_secrets=secrets)
-            print (result)
+            print(result)
 
         elif arguments.cloud and arguments.edit:
 
@@ -211,11 +217,11 @@ class ConfigCommand(PluginCommand):
             counter = 1
             for line in lines:
                 if arguments.less:
-                    if  counter % (rows-2) == 0:
+                    if counter % (rows - 2) == 0:
                         x = input().split("\n")[0].strip()
-                        if x !='' and x in 'qQxX' :
+                        if x != '' and x in 'qQxX':
                             return ""
-                print (line)
+                print(line)
                 counter += 1
 
             return ""
@@ -225,41 +231,12 @@ class ConfigCommand(PluginCommand):
             Config.check()
 
         elif arguments.encrypt:
-
-            e = EncryptFile(source, destination)
-
-            e.encrypt()
-            Console.ok(f"{source} --> {destination}")
-            if not arguments.keep:
-                os.remove(source)
-
-            Console.ok("file encrypted")
-
-            return ""
+            config = Config()
+            config.encrypt()
 
         elif arguments.decrypt:
-
-            if ".enc" not in source:
-                source = source + ".enc"
-            else:
-                destination = source.replace(".enc", "")
-
-            if not os.path.exists(source):
-                Console.error(f"encrypted file {source} does not exist")
-                sys.exit(1)
-
-            if os.path.exists(destination):
-                Console.error(
-                    f"decrypted file {destination} does already exist")
-                sys.exit(1)
-
-            e = EncryptFile(source, destination)
-
-            e.decrypt(source)
-            Console.ok(f"{source} --> {source}")
-
-            Console.ok("file decrypted")
-            return ""
+            config = Config()
+            config.decrypt()
 
         elif arguments.ssh and arguments.verify:
 
@@ -292,7 +269,7 @@ class ConfigCommand(PluginCommand):
             line = arguments["ATTRIBUTE=VALUE"]
             attribute, value = line.split("=", 1)
 
-            cloud, field = attribute.split(".",1)
+            cloud, field = attribute.split(".", 1)
 
             if cloud in clouds:
                 attribute = f"cloudmesh.cloud.{cloud}.credentials.{field}"
@@ -319,12 +296,19 @@ class ConfigCommand(PluginCommand):
                     print(f"{value}")
 
             except Exception as e:
-                print (e)
+                print(e)
                 return ""
+
+        elif arguments.secinit:
+            config = Config()
+            secpath = path_expand(config['cloudmesh.security.secpath'])
+            gcm_path = f"{secpath}/gcm"  # Location of nonces and keys for encryption
+            if not os.path.isdir(gcm_path):
+                Shell.mkdir(gcm_path)  # Use Shell that makes all dirs as needed
 
         elif arguments.get:
 
-            print ()
+            print()
 
             config = Config()
             clouds = config["cloudmesh.cloud"].keys()
@@ -332,7 +316,7 @@ class ConfigCommand(PluginCommand):
             attribute = arguments.ATTRIBUTE
 
             try:
-                cloud, field = attribute.split(".",1)
+                cloud, field = attribute.split(".", 1)
                 field = f".{field}"
             except:
                 cloud = attribute
@@ -351,16 +335,13 @@ class ConfigCommand(PluginCommand):
                     print(f"{attribute}={value}")
 
             except Exception as e:
-                print (e)
+                print(e)
                 return ""
-
 
         elif arguments.ssh and arguments.keygen:
 
             e = EncryptFile(source, destination)
 
             e.ssh_keygen()
-
-
 
         return ""

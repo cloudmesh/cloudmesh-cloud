@@ -9,6 +9,7 @@ from cloudmesh.common.parameter import Parameter
 from cloudmesh.common.console import Console
 from pprint import pprint
 
+
 class FlavorCommand(PluginCommand):
 
     # see https://github.com/cloudmesh/client/blob/master/cloudmesh_client/shell/plugins/FlavorCommand.py
@@ -57,7 +58,6 @@ class FlavorCommand(PluginCommand):
 
 
         """
-
 
         map_parameters(arguments,
                        "query",
@@ -116,7 +116,8 @@ class FlavorCommand(PluginCommand):
                     db = CmDatabase()
                     flavors = db.find(collection=f"{cloud}-flavor")
 
-                    provider.Print(flavors, output=arguments.output, kind="flavor")
+                    provider.Print(flavors, output=arguments.output,
+                                   kind="flavor")
 
             except Exception as e:
 

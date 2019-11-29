@@ -468,4 +468,3 @@ class Provider(ComputeNodeABC):
 
     def destroy(self, name=None):
         return self.p.destroy(name=name)
-

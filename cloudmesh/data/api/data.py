@@ -55,7 +55,8 @@ class Data(object):
             az_key = az_conf.get('credentials.AZURE_STORAGE_KEY')
             az_container = az_conf.get('container')
             if az_act and az_key:
-                self._providers['azure'] = AzureStorageProvider(az_act, az_key, az_container)
+                self._providers['azure'] = AzureStorageProvider(az_act, az_key,
+                                                                az_container)
 
         # Set a default storage provider.
         default_storage_provider = self._conf.get('default.service')
@@ -100,7 +101,8 @@ class Data(object):
         cloud_file = self._db.get(file_name)
 
         if not cloud_file:
-            print("Requested file not found. Use `ls` to see a list of file names.")
+            print(
+                "Requested file not found. Use `ls` to see a list of file names.")
             raise SystemExit
 
         # Todo: docopt default for this?

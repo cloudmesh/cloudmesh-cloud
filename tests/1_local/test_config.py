@@ -18,9 +18,9 @@ from cloudmesh.configuration.Config import Config
 
 Benchmark.debug()
 
+
 @pytest.mark.incremental
 class TestConfig:
-
 
     def config_n_load(self, n):
         config = [None] * n
@@ -30,12 +30,12 @@ class TestConfig:
         StopWatch.stop(f"test_config_load n={n}")
 
     def test_config(self):
-        print ()
+        print()
         for n in range(1, 10):
             self.config_n_load(n)
             n_1 = StopWatch.get(f"test_config_load n=1")
             n_n = StopWatch.get(f"test_config_load n={n}")
-            print (n, n_1 >= n_n, n_1, n_n, n_1 - n_n)
+            print(n, n_1 >= n_n, n_1, n_n, n_1 - n_n)
 
         n_1 = StopWatch.get(f"test_config_load n=1")
         n_n = StopWatch.get(f"test_config_load n=9")
@@ -47,7 +47,7 @@ class TestConfig:
         Benchmark.Start()
         r = config.search("cloudmesh.cloud.*.cm.active", True)
         Benchmark.Stop()
-        pprint (r)
+        pprint(r)
 
     def test_dict(self):
         HEADING()

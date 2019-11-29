@@ -16,7 +16,7 @@ from cloudmesh.configuration.Config import Config
 from cloudmesh.shell.command import PluginCommand
 from cloudmesh.shell.command import command, map_parameters
 from cloudmesh.common.util import path_expand
-from cloudmesh.security.encrypt import CmsEncryptor, KeyHandler, CmsHasher
+from cloudmesh.configuration.security.encrypt import CmsEncryptor, KeyHandler, CmsHasher
 from progress.bar import Bar
 
 from shutil import copy2
@@ -301,8 +301,7 @@ class ConfigCommand(PluginCommand):
 
         elif arguments.secinit:
             config = Config()
-            secpath = path_expand(
-                config.get_value('cloudmesh.security.secpath'))
+            secpath = path_expand(config['cloudmesh.security.secpath'])
             gcm_path = f"{secpath}/gcm"  # Location of nonces and keys for encryption
             if not os.path.isdir(gcm_path):
                 Shell.mkdir(gcm_path)  # Use Shell that makes all dirs as needed

@@ -29,16 +29,16 @@ job-metadata:
     argfile_path: ''
     argfile_name: ''
     params_list:
-    - _
-    - _
-    - _
-    - _
-    - _
-    - _
-    - _
-    - _
-    - _
-    - _
+      - _
+      - _
+      - _
+      - _
+      - _
+      - _
+      - _
+      - _
+      - _
+      - _
     outfile_name: ''
     script_name: inf_script_stdin_stdout.sh
     script_name_with_suffix: inf_script_stdin_stdout_20181031_22352006.sh
@@ -46,33 +46,33 @@ job-metadata:
     remote_script_path: ~/job_20181031_22352006/inf_script_stdin_stdout_20181031_22352006.sh
     local_path: ./cloud/vcluster/sample_output
     nodes-pids:
-    - - c2
-      - '17307'
-      - 1
-    - - c2
-      - '17309'
-      - 3
-    - - c2
-      - '17603'
-      - 5
-    - - computer_a
-      - '16391'
-      - 0
-    - - computer_a
-      - '16398'
-      - 2
-    - - computer_a
-      - '16402'
-      - 4
-    - - computer_a
-      - '16765'
-      - 6
-    - - c2
-      - '18118'
-      - 7
-    - - computer_a
-      - '16896'
-      - 8
-    - - c2
-      - '18194'
-      - 9
+      - - c2
+        - '17307'
+        - 1
+      - - c2
+        - '17309'
+        - 3
+      - - c2
+        - '17603'
+        - 5
+      - - computer_a
+        - '16391'
+        - 0
+      - - computer_a
+        - '16398'
+        - 2
+      - - computer_a
+        - '16402'
+        - 4
+      - - computer_a
+        - '16765'
+        - 6
+      - - c2
+        - '18118'
+        - 7
+      - - computer_a
+        - '16896'
+        - 8
+      - - c2
+        - '18194'
+        - 9

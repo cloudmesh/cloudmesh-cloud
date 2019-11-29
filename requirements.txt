@@ -18,6 +18,7 @@ colorama==0.4.1
 config==0.4.2
 connexion[swagger-ui]==2.3.0
 coverage==4.5.3
+cryptography
 dateparser==0.7.1
 docker==4.0.2
 docopt==0.6.2

@@ -18,7 +18,6 @@ class WindowsService(object):
         # needs the service to be stopped we guess
         os.system(f"sc delete {name}")
 
-
     @staticmethod
     def status(name="MongoDB"):
         """
@@ -61,7 +60,7 @@ class WindowsService(object):
             element = {}
             for line in attributes:
                 if ":" in line:
-                    name, value = line.split(":",1)
+                    name, value = line.split(":", 1)
                     name = name.strip()
                     value = value.strip()
                     if name == "STATE":

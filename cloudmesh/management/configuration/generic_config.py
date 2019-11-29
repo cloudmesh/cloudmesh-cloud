@@ -57,7 +57,8 @@ class GenericConfig(object):
         # BUG: dict and set operations are different
         self._conf_dict.set(key, value)
         with open(self.config_path, "w") as stream:
-            yaml.safe_dump(dict(self._conf_dict), stream, default_flow_style=False)
+            yaml.safe_dump(dict(self._conf_dict), stream,
+                           default_flow_style=False)
 
     def deep_set(self, keys, value=None):
         """
@@ -77,12 +78,14 @@ class GenericConfig(object):
             if index < end or value is None:
                 inner_dict = inner_dict.setdefault(component, {})
             else:
-                if component not in inner_dict.keys() or type(inner_dict[component]) != dict:
+                if component not in inner_dict.keys() or type(
+                    inner_dict[component]) != dict:
                     inner_dict[component] = value
                 else:
                     inner_dict[component].update(value)
         with open(self.config_path, "w") as stream:
-            yaml.safe_dump(dict(self._conf_dict), stream, default_flow_style=False)
+            yaml.safe_dump(dict(self._conf_dict), stream,
+                           default_flow_style=False)
 
     def keys(self):
         """
@@ -105,4 +108,5 @@ class GenericConfig(object):
         except KeyError:
             print("{} doesn't exist to remove.".format(key_to_remove))
         with open(self.config_path, "w") as stream:
-            yaml.safe_dump(dict(self._conf_dict), stream, default_flow_style=False)
+            yaml.safe_dump(dict(self._conf_dict), stream,
+                           default_flow_style=False)

@@ -12,6 +12,7 @@ from cloudmesh.common.debug import VERBOSE
 from pprint import pprint
 from cloudmesh.configuration.Config import Config
 
+
 # noinspection PyPep8Naming
 class Key(object):
 
@@ -63,6 +64,7 @@ class Key(object):
             # source is filename
 
         return keys
+
 
 if __name__ == "__main__":
     Key.get_from_dir(None, True)

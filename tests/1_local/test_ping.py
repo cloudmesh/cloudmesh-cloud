@@ -26,6 +26,7 @@ hosts = ['127.0.0.1',
          'www.ec2instances.info',
          'aws.amazon.com']
 
+
 @pytest.mark.incremental
 class TestPing:
 
@@ -35,7 +36,6 @@ class TestPing:
         StopWatch.stop(f"total p={processors} c=1")
 
         return r
-
 
     def test_internal_ping(self):
         StopWatch.start("total _ping")
@@ -52,22 +52,21 @@ class TestPing:
 
             StopWatch.stop("total _ping")
 
-
             assert result['success']
 
     def test_ping_processor(self):
 
-        print ()
-        for processors in range(1,len(hosts)):
-            print ("Processors:", processors)
+        print()
+        for processors in range(1, len(hosts)):
+            print("Processors:", processors)
             results = self.ping(processors=processors)
-            print (Printer.write(results,
-                                 order=['host',
-                                         'success',
-                                         'max',
-                                         'min',
-                                         'stddev']
-                                 ))
+            print(Printer.write(results,
+                                order=['host',
+                                       'success',
+                                       'max',
+                                       'min',
+                                       'stddev']
+                                ))
             for result in results:
                 assert result['success']
 
@@ -80,4 +79,3 @@ class TestPing:
 
     def test_benchmark(self):
         StopWatch.benchmark(sysinfo=False)
-

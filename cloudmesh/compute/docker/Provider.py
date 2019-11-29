@@ -256,7 +256,7 @@ class Provider(ComputeNodeABC):
         :return:  The dict representing the node
         """
         command = f"docker run -v {directory}:/share -w /share --rm " \
-            f"-it {name}:{version}  /bin/bash"
+                  f"-it {name}:{version}  /bin/bash"
         os.system(command)
 
     def create(self, **kwargs):

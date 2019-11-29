@@ -1,6 +1,7 @@
 from abc import ABCMeta, abstractmethod
 from cloudmesh.configuration.Config import Config
 
+
 # noinspection PyUnusedLocal
 class ComputeNodeABC(metaclass=ABCMeta):
 
@@ -173,7 +174,6 @@ class ComputeNodeABC(metaclass=ABCMeta):
         """
         raise NotImplementedError
 
-
     def images(self, **kwargs):
         """
         Lists the images on the cloud
@@ -329,7 +329,6 @@ class ComputeNodeABC(metaclass=ABCMeta):
              timeout=None):
         raise NotImplementedError
         return False
-
 
     def console(self, vm=None):
         raise NotImplementedError

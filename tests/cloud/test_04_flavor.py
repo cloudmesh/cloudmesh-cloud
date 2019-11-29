@@ -60,7 +60,8 @@ class Test_Flavor:
         HEADING()
         local = Key()
         Benchmark.Start()
-        os.system(f"cms flavor list --cloud={cloud} --refresh > flavor-{cloud}.log")
+        os.system(
+            f"cms flavor list --cloud={cloud} --refresh > flavor-{cloud}.log")
         Benchmark.Stop()
 
     def test_cms_flavor(self):

@@ -12,6 +12,7 @@ from cloudmesh.common.console import Console
 import psutil
 import os
 
+
 class SystemPath(object):
     """Managing the System path in the .bashrc or .bash_profile files"""
 
@@ -36,7 +37,6 @@ class SystemPath(object):
         def is_in_path(what):
             os_path = os.environ['PATH'].split(":")
             return what in os_path
-
 
         script = None
 
@@ -109,7 +109,8 @@ class Script(object):
                 if live:
                     r = Shell.live(line)
                 else:
-                    r = subprocess.check_output(line, encoding='UTF-8', shell=True)
+                    r = subprocess.check_output(line, encoding='UTF-8',
+                                                shell=True)
                 if debug:
                     print(r)
                 result = result + r

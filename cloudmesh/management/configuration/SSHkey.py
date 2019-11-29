@@ -39,7 +39,8 @@ class SSHkey(dict):
          self['comment']) = SSHkey._parse(self['public_key'])
 
         self['fingerprint'] = SSHkey._fingerprint(self['public_key'])
-        self["name"] = basename(self["path"]).replace(".pub", "").replace("id_", "")
+        self["name"] = basename(self["path"]).replace(".pub", "").replace("id_",
+                                                                          "")
 
         self['comment'] = self['comment']
         self['source'] = 'ssh'
@@ -139,7 +140,8 @@ class SSHkey(dict):
         """
         # key = base64.decodestring(key_string)
         # fp_plain = hashlib.md5(key).hexdigest()
-        key_padding = key_string.strip() + '=' * (4 - len(key_string.strip()) % 4)
+        key_padding = key_string.strip() + '=' * (
+                4 - len(key_string.strip()) % 4)
         key = base64.b64decode(key_padding.encode('ascii'))
         fp_plain = hashlib.md5(key).hexdigest()
 
@@ -197,4 +199,3 @@ class SSHkey(dict):
             username=username,
             keyname=keyname.replace('.', '_').replace('@', '_'))
         return _keyname
-

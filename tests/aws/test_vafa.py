@@ -19,7 +19,8 @@ Benchmark.debug()
 # TODO: THIS IS A BUG, the deprecated api shoudl not be used
 #
 
-CLOUD="aws"
+CLOUD = "aws"
+
 
 @pytest.mark.incremental
 class Test_Vafa:
@@ -28,13 +29,13 @@ class Test_Vafa:
         provider = Provider(name=CLOUD)
         print(provider.list())
 
-
     def test_aws_aws_boot(self):
         HEADING()
         name = Name()
         name.incr()
         vm_name = str(name)
         provider = Provider(name=CLOUD)
-        vm = provider.create(name = vm_name, image = "ami-0c929bde1796e1484", size="t2.micro")
+        vm = provider.create(name=vm_name, image="ami-0c929bde1796e1484",
+                             size="t2.micro")
         print(vm)
         print(provider.list())

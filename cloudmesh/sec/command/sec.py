@@ -12,6 +12,7 @@ from cloudmesh.shell.command import map_parameters
 from cloudmesh.common.debug import VERBOSE
 from cloudmesh.compute.vm.Provider import Provider
 
+
 class SecCommand(PluginCommand):
 
     # see https://github.com/cloudmesh/client/blob/master/cloudmesh_client/shell/plugins/SecgroupCommand.py
@@ -174,7 +175,7 @@ class SecCommand(PluginCommand):
             else:
                 groups.remove(arguments.GROUP)
 
-        elif (arguments.group or arguments.rule) and  arguments.list and \
+        elif (arguments.group or arguments.rule) and arguments.list and \
             arguments.cloud:
 
             clouds = Parameter.expand(arguments.cloud)
@@ -197,9 +198,11 @@ class SecCommand(PluginCommand):
                                 rule['name'] = group['GroupName']
                                 rule['direction'] = "Inbound"
                                 if rule['UserIdGroupPairs']:
-                                    rule['groupId'] = rule['UserIdGroupPairs'][0]['GroupId']
+                                    rule['groupId'] = \
+                                    rule['UserIdGroupPairs'][0]['GroupId']
                                 if rule['IpRanges']:
-                                    rule['ipRange'] = rule['IpRanges'][0]['CidrIp']
+                                    rule['ipRange'] = rule['IpRanges'][0][
+                                        'CidrIp']
 
                                 result.append(rule)
                         else:
@@ -208,8 +211,8 @@ class SecCommand(PluginCommand):
                                 result.append(rule)
                         cloud_groups = result
                 provider.p.Print(cloud_groups,
-                               output=arguments.output,
-                               kind="secrule", )
+                                 output=arguments.output,
+                                 kind="secrule", )
 
             return ""
 
@@ -235,7 +238,7 @@ class SecCommand(PluginCommand):
             #  name=None, protocol=None, ports=None, ip_range=None
             rules.add(
                 name=arguments.RULE,
-                ports=f"{arguments.FROMPORT}" + ":" +f"{arguments.TOPORT}",
+                ports=f"{arguments.FROMPORT}" + ":" + f"{arguments.TOPORT}",
                 protocol=arguments.PROTOCOL,
                 ip_range=arguments.CIDR
             )

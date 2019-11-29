@@ -41,7 +41,7 @@ class Shell(Shell2):
         :param encoding:
         :return:
         """
-        if platform.lower() =='win32':
+        if platform.lower() == 'win32':
             class disable_file_system_redirection:
                 _disable = ctypes.windll.kernel32.Wow64DisableWow64FsRedirection
                 _revert = ctypes.windll.kernel32.Wow64RevertWow64FsRedirection
@@ -53,6 +53,7 @@ class Shell(Shell2):
                 def __exit__(self, type, value, traceback):
                     if self.success:
                         self._revert(self.old_value)
+
             with disable_file_system_redirection():
                 command = f"{command}"
                 r = subprocess.check_output(command,
@@ -118,7 +119,7 @@ class Shell(Shell2):
 
             python_version_s = '.'.join(v_string)
             if (python_version[0] == 3) and (python_version[1] >= 7) and \
-               (python_version[2] >= 0):
+                (python_version[2] >= 0):
 
                 Console.ok(f"You are running a supported version of python: "
                            f"{python_version_s}")

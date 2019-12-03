@@ -2,8 +2,6 @@
 # pytest -v --capture=no tests/cloud/test_secgroup_database.py
 # pytest -v  tests/cloud/test_secgroup_database.py
 ###############################################################
-import warnings
-warnings.simplefilter("once")
 
 from cloudmesh.common.util import HEADING
 from cloudmesh.common3.Benchmark import Benchmark

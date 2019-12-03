@@ -3,9 +3,6 @@
 # pytest -v  tests/1_local/test_name.py
 # pytest -v --capture=no  tests/1_local/test_name.py:Test_name.<METHIDNAME>
 ###############################################################
-import warnings
-warnings.simplefilter("once")
-
 import os
 from pprint import pprint
 
@@ -14,8 +11,18 @@ from cloudmesh.common.util import path_expand
 from cloudmesh.common3.Benchmark import Benchmark
 from cloudmesh.management.configuration.name import Name
 from cloudmesh.common.util import HEADING
+from cloudmesh.common.console import Console
+from cloudmesh.configuration.Config import Config
+import sys
 
 Benchmark.debug()
+
+config = Config()
+username = config["cloudmesh.profile.user"]
+
+if username == 'TBD':
+    Console.error("please set cloudmesh.profile.user in ~/.cloudmesh.yaml")
+    sys.exit()
 
 path = path_expand("~/.cloudmesh/name.yaml")
 data = {
@@ -53,7 +60,7 @@ class TestName:
         Benchmark.Start()
         n = Name(schema="{user}-{kind}-{counter}",
                  counter="3",
-                 user="gregor",
+                 user=username,
                  kind="vm")
         Benchmark.Stop()
         data = n.dict()
@@ -62,7 +69,7 @@ class TestName:
                              'kind': 'vm',
                              'path': '/Users/grey/.cloudmesh/name.yaml',
                              'schema': '{user}-{kind}-{counter}',
-                             'user': 'gregor'})
+                             'user': username})
 
     def test_name_reset(self):
         HEADING()
@@ -78,7 +85,7 @@ class TestName:
         Benchmark.Start()
         print(n)
         Benchmark.Start()
-        assert str(n) == "gregor-vm-1"
+        assert str(n) == f"{username}-vm-1"
 
     def test_name_dict(self):
         HEADING()
@@ -91,7 +98,7 @@ class TestName:
                              'kind': 'vm',
                              'path': '/Users/grey/.cloudmesh/name.yaml',
                              'schema': '{user}-{kind}-{counter}',
-                             'user': 'gregor'})
+                             'user': username})
 
     def test_name_incr(self):
         HEADING()
@@ -100,7 +107,7 @@ class TestName:
         n.incr()
         Benchmark.Stop()
         print(n)
-        assert str(n) == "gregor-vm-2"
+        assert str(n) == f"{username}-vm-2"
 
     def test_name_counter(self):
         HEADING()

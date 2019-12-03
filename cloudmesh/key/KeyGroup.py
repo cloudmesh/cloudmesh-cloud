@@ -1,6 +1,7 @@
 from cloudmesh.common.parameter import Parameter
 from cloudmesh.mongo.CmDatabase import CmDatabase
 from cloudmesh.mongo.DataBaseDecorator import DatabaseUpdate
+from cloudmesh.common.Printer import Printer
 
 class KeyGroupDatabase:
 
@@ -118,6 +119,33 @@ class KeyGroup(KeyGroupDatabase):
         }
 
     }
+
+
+
+    # noinspection PyPep8Naming
+    def Print(self, data, output=None, kind=None):
+
+        if output == "table":
+            if kind == "key" or kind == 'keygroup':
+                result = []
+                for group in data:
+                    result.append(group)
+                data = result
+
+            order = self.output[kind]['order']  # not pretty
+            header = self.output[kind]['header']  # not pretty
+
+            print(Printer.flatwrite(data,
+                                    sort_keys=["name"],
+                                    order=order,
+                                    header=header,
+                                    output=output,
+                                    # humanize=humanize
+                                    )
+                  )
+        else:
+            print(Printer.write(data, output=output))
+
 
     def __init__(self, cloud="local"):
         super().__init__(cloud, kind="keygroup")

@@ -13,6 +13,7 @@ from cloudmesh.management.configuration.name import Name
 from cloudmesh.common.util import HEADING
 from cloudmesh.common.console import Console
 from cloudmesh.configuration.Config import Config
+from cloudmesh.common.debug import VERBOSE
 import sys
 
 Benchmark.debug()
@@ -49,8 +50,11 @@ class TestName:
     def test_define(self):
         HEADING()
         Benchmark.Start()
-        n = Name()
+        n = Name(**data)
         Benchmark.Stop()
+
+        VERBOSE(data)
+        VERBOSE(n.dict())
         assert dict(data) == n.dict()
 
     def test_define_new(self):

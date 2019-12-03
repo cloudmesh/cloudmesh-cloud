@@ -221,4 +221,5 @@ class Test_cm_find:
         assert len(collections) == 2
 
     def test_benchmark(self):
+        HEADING()
         Benchmark.print(sysinfo=False, csv=True, tag=cloud)

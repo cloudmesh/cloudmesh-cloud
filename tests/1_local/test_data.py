@@ -2,6 +2,8 @@
 # pytest -v --capture=no tests/1_local/test_data.py
 # pytest -v  tests/1_local/test_data.py
 ###############################################################
+import warnings
+warnings.simplefilter("once")
 try:
     import grp
 except:
@@ -89,13 +91,15 @@ class TestDatabaseUpdate:
         assert i[0]['path'] == '/Users/grey/.cloudmesh/cloudmesh.yaml'
 
     def test_remove_collection(self):
+        HEADING()
         cm = CmDatabase()
         Benchmark.Start()
         collection = cm.clear(collection="debug-file")
         Benchmark.Stop()
 
     def test_benchmark(self):
-        Benchmark.print()
+        HEADING()
+        Benchmark.print(csv=True)
 
 
 """

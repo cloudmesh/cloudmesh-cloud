@@ -3,6 +3,9 @@
 # pytest -v  tests/1_local/test_group.py
 # pytest -v --capture=no  tests/1_local/test_group.py:Test_group.<METHIDNAME>
 ###############################################################
+import warnings
+warnings.simplefilter("once")
+
 import os
 from pprint import pprint
 
@@ -64,4 +67,5 @@ class TestName:
         assert len(members) == len(services)
 
     def test_benchmark(self):
-        Benchmark.print(sysinfo=False)
+        HEADING()
+        Benchmark.print(csv=True, sysinfo=False)

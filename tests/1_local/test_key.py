@@ -3,6 +3,9 @@
 # pytest -v  tests/1_local/test_key.py
 # pytest -v --capture=no  tests/1_local/test_key.py:Test_key.<METHIDNAME>
 ###############################################################
+import warnings
+warnings.simplefilter("once")
+
 from pprint import pprint
 
 import pytest
@@ -52,4 +55,5 @@ class TestName:
         assert len(keys) > 0
 
     def test_benchmark(self):
-        Benchmark.print()
+        HEADING()
+        Benchmark.print(csv=True)

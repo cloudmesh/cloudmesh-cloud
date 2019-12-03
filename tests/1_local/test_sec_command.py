@@ -16,7 +16,8 @@
 # cms sec group list
 #
 ###############################################################
-
+import warnings
+warnings.simplefilter("once")
 
 import pytest
 from cloudmesh.common.util import HEADING
@@ -55,6 +56,7 @@ class TestSecCLI:
         assert len(g) == 0
 
     def test_load(self):
+        HEADING()
         Benchmark.Start()
         run("load", "cms sec load")
         Benchmark.Stop()
@@ -160,4 +162,5 @@ class TestSecCLI:
             assert name in result
 
     def test_benchmark(self):
-        Benchmark.print()
+        HEADING()
+        Benchmark.print(csv=True)

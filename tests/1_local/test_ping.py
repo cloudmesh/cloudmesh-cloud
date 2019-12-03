@@ -3,12 +3,15 @@
 # pytest -v  tests/1_local/test_name.py
 # pytest -v --capture=no  tests/1_local/test_name.py:Test_name.<METHIDNAME>
 ###############################################################
+import warnings
+warnings.simplefilter("once")
 
 import pytest
 from cloudmesh.common.StopWatch import StopWatch
 from cloudmesh.common3.host import Host
 from cloudmesh.common.Printer import Printer
 from cloudmesh.common3.Benchmark import Benchmark
+from cloudmesh.common.util import HEADING
 
 Benchmark.debug()
 
@@ -38,6 +41,7 @@ class TestPing:
         return r
 
     def test_internal_ping(self):
+        HEADING()
         StopWatch.start("total _ping")
 
         for host in hosts:
@@ -55,7 +59,7 @@ class TestPing:
             assert result['success']
 
     def test_ping_processor(self):
-
+        HEADING()
         print()
         for processors in range(1, len(hosts)):
             print("Processors:", processors)
@@ -78,4 +82,5 @@ class TestPing:
     #     responses, no_responses = ping(hosts, timeout=2, retry=1)
 
     def test_benchmark(self):
-        StopWatch.benchmark(sysinfo=False)
+        HEADING()
+        StopWatch.benchmark(csv=True, sysinfo=False)

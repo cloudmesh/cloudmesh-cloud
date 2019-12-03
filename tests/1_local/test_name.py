@@ -3,6 +3,9 @@
 # pytest -v  tests/1_local/test_name.py
 # pytest -v --capture=no  tests/1_local/test_name.py:Test_name.<METHIDNAME>
 ###############################################################
+import warnings
+warnings.simplefilter("once")
+
 import os
 from pprint import pprint
 
@@ -10,6 +13,7 @@ import pytest
 from cloudmesh.common.util import path_expand
 from cloudmesh.common3.Benchmark import Benchmark
 from cloudmesh.management.configuration.name import Name
+from cloudmesh.common.util import HEADING
 
 Benchmark.debug()
 
@@ -36,12 +40,14 @@ n = None
 class TestName:
 
     def test_define(self):
+        HEADING()
         Benchmark.Start()
         n = Name()
         Benchmark.Stop()
         assert dict(data) == n.dict()
 
     def test_define_new(self):
+        HEADING()
         os.remove(path)
 
         Benchmark.Start()
@@ -59,6 +65,7 @@ class TestName:
                              'user': 'gregor'})
 
     def test_name_reset(self):
+        HEADING()
         n = Name()
         Benchmark.Start()
         n.reset()
@@ -66,6 +73,7 @@ class TestName:
         assert n.counter == 1
 
     def test_name_print(self):
+        HEADING()
         n = Name()
         Benchmark.Start()
         print(n)
@@ -73,6 +81,7 @@ class TestName:
         assert str(n) == "gregor-vm-1"
 
     def test_name_dict(self):
+        HEADING()
         n = Name()
         pprint(n.dict())
         Benchmark.Start()
@@ -85,6 +94,7 @@ class TestName:
                              'user': 'gregor'})
 
     def test_name_incr(self):
+        HEADING()
         n = Name()
         Benchmark.Start()
         n.incr()
@@ -93,6 +103,7 @@ class TestName:
         assert str(n) == "gregor-vm-2"
 
     def test_name_counter(self):
+        HEADING()
         n = Name()
         Benchmark.Start()
         c = n.counter
@@ -108,4 +119,5 @@ class TestName:
         assert str(n) == str(m)
 
     def test_benchmark(self):
-        Benchmark.print()
+        HEADING()
+        Benchmark.print(csv=True)

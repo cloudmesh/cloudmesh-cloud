@@ -2,9 +2,19 @@
 # pytest -v --capture=no tests/1_local/test_data.py
 # pytest -v  tests/1_local/test_data.py
 ###############################################################
-import grp
+try:
+    import grp
+except:
+    print ("ERROR: import grp not supported on your OS. please find altrenative to grp")
+
+try:
+    import pwd
+except:
+    print ("ERROR: import grp not supported on your OS. please find altrenative to grp")
+
+
 import os
-import pwd
+
 from pathlib import Path
 from pprint import pprint
 
@@ -32,6 +42,20 @@ class TestDatabaseUpdate:
             st = os.stat(file)
             userinfo = pwd.getpwuid(os.stat(file).st_uid)
 
+
+            try:
+                group = {
+                    "name": grp.getgrgid(userinfo.pw_gid).gr_name,
+                    "id": userinfo.pw_gid,
+                    "members": grp.getgrgid(userinfo.pw_gid).gr_mem
+                }
+            except:
+                group = {
+                    "name": "not supported on your os, please fix this test.",
+                    "id": "not supported on your os, please fix this test.",
+                    "members": "not supported on your os, please fix this test.",
+                }
+
             d = {
                 "cm": {
                     "kind": "file",
@@ -46,11 +70,7 @@ class TestDatabaseUpdate:
                 "modified": None,  # needs to be same format as we  use in vms
                 "created": None,  # needs to be same format as we  use in vms
                 "owner": userinfo.pw_name,
-                "group": {
-                    "name": grp.getgrgid(userinfo.pw_gid).gr_name,
-                    "id": userinfo.pw_gid,
-                    "members": grp.getgrgid(userinfo.pw_gid).gr_mem
-                },
+                "group": group,
                 "permission": {
                     "readable": os.access(file, os.R_OK),
                     "writable": os.access(file, os.W_OK),

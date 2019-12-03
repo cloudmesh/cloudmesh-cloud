@@ -61,11 +61,12 @@ import oyaml as yaml
 from cloudmesh.common.dotdict import dotdict
 from cloudmesh.common.util import path_expand
 from cloudmesh.configuration.Config import Config
-
+from cloudmesh.common.console import Console
+import sys
 
 class Name(dotdict):
 
-    def __init__(self, schema=None, **kwargs):
+    def __init__(self, **kwargs):
         """
         Defines a name tag that sets the format of the name to the specified schema
         :param schema:
@@ -75,21 +76,23 @@ class Name(dotdict):
         # init dict with schema, path, kwargs
         #
 
-        if schema is None and len(kwargs) == 0:
+        if len(kwargs) == 0:
             path = path_expand("~/.cloudmesh/name.yaml")
             data = self.load(path)
             self.assign(data)
 
         else:
-
-            self.assign(kwargs)
             if "path" not in kwargs:
                 path = self.__dict__['path'] = path_expand(
                     "~/.cloudmesh/name.yaml")
                 data = self.load(path)
                 self.assign(data)
 
-            if schema is not None:
+            self.assign(kwargs)
+
+
+            if kwargs["schema"]:
+                schema = kwargs["schema"]
                 self.__dict__['schema'] = schema
 
         if "counter" not in self.__dict__:
@@ -110,6 +113,9 @@ class Name(dotdict):
         for entry in data:
             self.__dict__[entry] = data[entry]
 
+    def overwrite(self, d):
+        self.__dict__ = d
+
     def load(self, path):
 
         data = {"wrong": "True"}
@@ -121,24 +127,18 @@ class Name(dotdict):
             if not os.path.exists(prefix):
                 os.makedirs(prefix)
 
-            # data = {
-            #     'counter': 1,
-            #     'path': path,
-            #     'kind': "vm",
-            #     'schema': "{experiment}-{group}-{user}-{kind}-{counter}",
-            #     'experiment': 'exp',
-            #     'group': 'group',
-            #     'user': 'user'
-            # }
             config = Config()
             user = config["cloudmesh.profile.user"]
+            if user == "TBD":
+                print ("ERROR: please set cloudmesh.profile.user we found TBD")
+                sys.exit()
             data = {
                 'counter': 1,
                 'path': path,
-                'schema': "{user}-vm-{counter}",
+                'kind': 'vm',
+                'schema': "{user}-{kind}-{counter}",
                 'user': user
             }
-
             self.flush(data)
         return data
 

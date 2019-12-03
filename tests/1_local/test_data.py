@@ -2,8 +2,6 @@
 # pytest -v --capture=no tests/1_local/test_data.py
 # pytest -v  tests/1_local/test_data.py
 ###############################################################
-import warnings
-warnings.simplefilter("once")
 try:
     import grp
 except:

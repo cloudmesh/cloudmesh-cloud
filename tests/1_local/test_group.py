@@ -3,8 +3,6 @@
 # pytest -v  tests/1_local/test_group.py
 # pytest -v --capture=no  tests/1_local/test_group.py:Test_group.<METHIDNAME>
 ###############################################################
-import warnings
-warnings.simplefilter("once")
 
 import os
 from pprint import pprint

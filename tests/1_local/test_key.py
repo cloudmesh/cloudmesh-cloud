@@ -3,8 +3,7 @@
 # pytest -v  tests/1_local/test_key.py
 # pytest -v --capture=no  tests/1_local/test_key.py:Test_key.<METHIDNAME>
 ###############################################################
-import warnings
-warnings.simplefilter("once")
+
 
 from pprint import pprint
 

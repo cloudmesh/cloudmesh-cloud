@@ -3,9 +3,6 @@
 # pytest -v  tests/1_local/test_config.py
 # pytest -v --capture=no  tests/1_local/test_config.py:Test_config.<METHIDNAME>
 ###############################################################
-import warnings
-warnings.simplefilter("once")
-
 import os
 import textwrap
 from pathlib import Path

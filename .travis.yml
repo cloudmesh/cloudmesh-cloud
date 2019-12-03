@@ -27,5 +27,6 @@ install:
 
 
 script:
+  - cms set cloudmesh.profile.user=test
   - pytest -v --capture=no tests/0_installer/test_cloud_installer.py
 #  - pytest -v --capture=no tests/1_local/test_ping.py

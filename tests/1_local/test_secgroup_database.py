@@ -2,6 +2,8 @@
 # pytest -v --capture=no tests/cloud/test_secgroup_database.py
 # pytest -v  tests/cloud/test_secgroup_database.py
 ###############################################################
+import warnings
+warnings.simplefilter("once")
 
 from cloudmesh.common.util import HEADING
 from cloudmesh.common3.Benchmark import Benchmark
@@ -118,6 +120,7 @@ def test_delete_rule_from_group():
 
 
 def test_remove_group():
+    HEADING()
     name = list(examples.secgroups.keys())[0]
 
     original = groups.list()
@@ -134,6 +137,7 @@ def test_remove_group():
 
 
 def test_remove_rule():
+    HEADING()
     old = rules.list()
     name = old[0]["name"]
 
@@ -153,6 +157,7 @@ def test_remove_rule():
 
 
 def test_load_defaults():
+    HEADING()
     examples = SecgroupExamples()
     examples.load()
 
@@ -167,4 +172,5 @@ def test_load_defaults():
 
 
 def test_benchmark():
-    Benchmark.print()
+    HEADING()
+    Benchmark.print(csv=True)

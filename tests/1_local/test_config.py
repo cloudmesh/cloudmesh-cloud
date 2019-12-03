@@ -3,6 +3,9 @@
 # pytest -v  tests/1_local/test_config.py
 # pytest -v --capture=no  tests/1_local/test_config.py:Test_config.<METHIDNAME>
 ###############################################################
+import warnings
+warnings.simplefilter("once")
+
 import os
 import textwrap
 from pathlib import Path
@@ -30,6 +33,7 @@ class TestConfig:
         StopWatch.stop(f"test_config_load n={n}")
 
     def test_config(self):
+        HEADING()
         print()
         for n in range(1, 10):
             self.config_n_load(n)
@@ -42,6 +46,7 @@ class TestConfig:
         assert (n_1 * 9 >= n_n)
 
     def test_search(self):
+        HEADING()
         config = Config()
 
         Benchmark.Start()
@@ -105,12 +110,14 @@ class TestConfig:
         pprint(config["cloudmesh"]["profile"])
 
     def test_if_yaml_file_exists(self):
+        HEADING()
         config = Config()
         config.create()
         filename = path_expand("~/.cloudmesh/cloudmesh.yaml")
         assert os.path.isfile(Path(filename))
 
     def test_set(self):
+        HEADING()
         Benchmark.Start()
         config = Config()
         config["cloudmesh.test.nested"] = "Gregor"
@@ -126,4 +133,5 @@ class TestConfig:
     '''
 
     def test_benchmark(self):
-        Benchmark.print(sysinfo=False)
+        HEADING()
+        Benchmark.print(csv=True, sysinfo=False)

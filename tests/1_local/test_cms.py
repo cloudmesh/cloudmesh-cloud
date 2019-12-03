@@ -3,6 +3,9 @@
 # pytest -v  tests/1_local/test_cms.py
 # pytest -v --capture=no  tests/1_local/test_cms.py:Test_cms.<METHIDNAME>
 ###############################################################
+import warnings
+warnings.simplefilter("once")
+
 import pytest
 from cloudmesh.common.Shell import Shell
 from cloudmesh.common.debug import VERBOSE
@@ -47,4 +50,5 @@ class TestConfig:
         assert "clear" in result
 
     def test_benchmark(self):
-        Benchmark.print()
+        HEADING()
+        Benchmark.print(csv=True)

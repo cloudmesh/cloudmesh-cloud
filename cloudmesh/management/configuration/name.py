@@ -130,8 +130,7 @@ class Name(dotdict):
             config = Config()
             user = config["cloudmesh.profile.user"]
             if user == "TBD":
-                print ("ERROR: please set cloudmesh.profile.user we found TBD")
-                sys.exit()
+                print ("WARNING: please set cloudmesh.profile.user we found TBD")
             data = {
                 'counter': 1,
                 'path': path,

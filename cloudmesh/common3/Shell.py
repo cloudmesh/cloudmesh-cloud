@@ -24,7 +24,12 @@ class Shell(Shell2):
         :param encoding:
         :return:
         """
-        command = f"{command}; exit 0"
+        
+        if sys.platform == "win32":
+            command = f"{command}"
+        else:
+            command = f"{command}; exit 0"
+            
         r = subprocess.check_output(command,
                                     stderr=subprocess.STDOUT,
                                     shell=True)

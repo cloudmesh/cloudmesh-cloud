@@ -82,7 +82,7 @@ pip install cloudmesh-installer
 :: --------------------------------------------------
 cloudmesh-installer git clone %BUNDLE%
 cloudmesh-installer git pull %BUNDLE%
-cloudmesh-installer install %BUNDLE% -e
+cloudmesh-installer install %BUNDLE%
 
 :: --------------------------------------------------
 :: create a cloudmesh.yaml file and Validate the install worked
@@ -122,7 +122,9 @@ cms config check
 :: --------------------------------------------------
 :: Install MongoDB
 :: Note: For Windows10 press the [Ignore] button for this error:
-:: Service 'MongoDB Server (MongoDB) failed to start. Verify that you have sufficient priviledges to start system services.'
+:: Service 'MongoDB Server (MongoDB) failed to start.
+:: Verify that you have sufficient priviledges to start
+:: system services.'
 :: --------------------------------------------------
 cms admin mongo install
 

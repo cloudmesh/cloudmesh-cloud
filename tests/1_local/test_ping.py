@@ -53,7 +53,9 @@ class TestPing:
             StopWatch.stop(f"ping {host}")
 
             StopWatch.stop("total _ping")
-
+            if b'Access denied' in result['stdout'] and sys.platform == "win32":
+                print("ERROR: This test must be run in an administrative "
+                      "terminal")
             assert result['success']
 
     def test_ping_processor(self):

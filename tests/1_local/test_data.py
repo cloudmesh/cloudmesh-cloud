@@ -40,8 +40,10 @@ class TestDatabaseUpdate:
         @DatabaseUpdate()
         def info(cloud, file):
             st = os.stat(file)
-            userinfo = pwd.getpwuid(os.stat(file).st_uid)
-
+            try:
+                userinfo = pwd.getpwuid(os.stat(file).st_uid)
+            except :
+                userinfo = "windows"
 
             try:
                 group = {
@@ -55,6 +57,10 @@ class TestDatabaseUpdate:
                     "id": "not supported on your os, please fix this test.",
                     "members": "not supported on your os, please fix this test.",
                 }
+            try:
+                owner = userinfo.pw_name
+            except:
+                owner = "windows"
 
             d = {
                 "cm": {
@@ -69,7 +75,7 @@ class TestDatabaseUpdate:
                 # needs to be same format as we  use in vms
                 "modified": None,  # needs to be same format as we  use in vms
                 "created": None,  # needs to be same format as we  use in vms
-                "owner": userinfo.pw_name,
+                "owner": owner,
                 "group": group,
                 "permission": {
                     "readable": os.access(file, os.R_OK),
@@ -85,8 +91,8 @@ class TestDatabaseUpdate:
         Benchmark.Stop()
 
         pprint(i)
-
-        assert i[0]['path'] == '/Users/grey/.cloudmesh/cloudmesh.yaml'
+        path = path_expand("~/.cloudmesh/cloudmesh.yaml")
+        assert i[0]['path'] == path
 
     def test_remove_collection(self):
         HEADING()

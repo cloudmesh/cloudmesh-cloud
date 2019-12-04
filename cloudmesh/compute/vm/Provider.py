@@ -154,7 +154,7 @@ class Provider(ComputeNodeABC):
     def create(self, **kwargs):
 
         arguments = dotdict(kwargs)
-        name = arguments.name
+        name = arguments.names
         cloud = arguments.cloud
 
         if name is None:
@@ -193,18 +193,20 @@ class Provider(ComputeNodeABC):
 
         # Step 2. identify the image and flavor from kwargs and if they do
         # not exist read them for that cloud from the yaml file
-
-        arguments.image = self.find_attribute('image', [variables, defaults])
+        if arguments.image is None:
+            arguments.image = self.find_attribute('image', [variables, defaults])
 
         if arguments.image is None:
             raise ValueError("image not specified")
 
-        arguments.group = self.find_attribute('group', [variables, defaults])
+        if arguments.group is None:
+            arguments.group = self.find_attribute('group', [variables, defaults])
 
         if arguments.group is None:
             arguments.group = "default"
 
-        arguments.size = self.find_attribute('size', [variables, defaults])
+        if arguments.size is None:
+            arguments.size = self.find_attribute('size', [variables, defaults])
 
         if arguments.size is None and 'size' is None:
             raise ValueError("size not specified")

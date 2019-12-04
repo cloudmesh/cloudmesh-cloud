@@ -10,6 +10,7 @@ from cloudmesh.common3.host import Host
 from cloudmesh.common.Printer import Printer
 from cloudmesh.common3.Benchmark import Benchmark
 from cloudmesh.common.util import HEADING
+import sys
 
 Benchmark.debug()
 

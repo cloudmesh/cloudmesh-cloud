@@ -5,6 +5,7 @@ from sys import exit
 from time import sleep
 
 from cloudmesh.common.StopWatch import StopWatch
+from cloudmesh.common.Shell import Shell
 from cloudmesh.common.console import Console
 from cloudmesh.common.util import path_expand
 from cloudmesh.common.util import yn_choice

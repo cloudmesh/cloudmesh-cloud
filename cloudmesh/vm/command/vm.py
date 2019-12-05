@@ -726,7 +726,7 @@ class VmCommand(PluginCommand):
                     try:
                         vms = provider.create(**parameters)
                     except TimeoutError:
-                        Console.error(f"Timeout during vm creation. There may be a problem with teh cloud {cloud}")
+                        Console.error(f"Timeout during vm creation. There may be a problem with the cloud {cloud}")
 
                     except Exception as e:
                         Console.error("create problem")

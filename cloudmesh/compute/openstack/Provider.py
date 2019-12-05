@@ -1128,7 +1128,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
               "-o UserKnownHostsFile=/dev/null " \
               f"-i {key} {location} {command}"
         cmd = cmd.strip()
-        VERBOSE(cmd)
+        # VERBOSE(cmd)
 
         if command == "":
             if platform.lower() == 'win32':

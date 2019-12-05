@@ -119,7 +119,7 @@ class Test_secgroup_provider:
         if cloud == 'aws':
             group_indicator = 'GroupName'
         elif cloud == 'oracle':
-            group_indicator = '_dispaly_name'
+            group_indicator = '_display_name'
         # elif cloud == 'chameleon':
         else:
             group_indicator = 'name'
@@ -139,7 +139,7 @@ class Test_secgroup_provider:
             group_indicator = 'GroupName'
         # elif cloud == 'chameleon':
         elif cloud == 'oracle':
-            group_indicator = '_dispaly_name'
+            group_indicator = '_display_name'
         else:
             group_indicator = 'name'
 

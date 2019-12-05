@@ -977,6 +977,11 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
             #    key=PRIVATE_KEYPAIR_FILE,
             #    ip=server.access_ipv4))
 
+        except openstack.exceptions.ResourceTimeout:
+            Console.error("Problem starting vm in time.")
+            raise TimeoutError
+
+
         except Exception as e:
             Console.error("Problem starting vm", traceflag=True)
             print(e)

@@ -57,8 +57,6 @@ class Provider(ComputeNodeABC):
                 Provider as OracleComputeProvider
             provider = OracleComputeProvider
 
-            print("RRRR")
-
         # elif self.kind in ["vagrant", "virtualbox"]:
         #    from cloudmesh.compute.virtualbox.Provider import \
         #        Provider as VirtualboxCloudProvider

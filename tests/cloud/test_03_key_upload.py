@@ -18,7 +18,7 @@ Benchmark.debug()
 user = Config()["cloudmesh.profile.user"]
 variables = Variables()
 KEY = f'{user}-key'
-#variables['key'] = KEY
+variables['key'] = KEY
 
 cloud = variables.parameter('cloud')
 

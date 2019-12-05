@@ -282,7 +282,7 @@ class KeyCommand(PluginCommand):
             key = Key()
 
             key.add(username, "ssh")
-            #variables['key'] = username
+            variables['key'] = username
 
         elif arguments.upload:
 

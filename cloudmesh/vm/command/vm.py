@@ -509,7 +509,7 @@ class VmCommand(PluginCommand):
                 if arguments['--dryrun']:
                     print(f"start node {name}")
                 else:
-                    vms = provider.start(names=name, cloud=cloud)
+                    vms = provider.start(name=name, cloud=cloud)
 
                     provider.Print(vms, output=arguments.output, kind="vm")
 

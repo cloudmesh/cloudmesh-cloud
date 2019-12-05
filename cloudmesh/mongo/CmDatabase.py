@@ -440,8 +440,6 @@ class CmDatabase(object):
 
                     # entry['cm']['created'] = cm['created']
                     entry['cm'] = cm
-                    # For update, primary id of the object shouldn't be updated
-                    entry.pop("_id", None)
 
                     post = self.col.replace_one(
                         {

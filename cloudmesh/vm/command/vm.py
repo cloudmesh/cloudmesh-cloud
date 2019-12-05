@@ -358,6 +358,8 @@ class VmCommand(PluginCommand):
 
                 provider.Print(vms, output=arguments.output, kind="vm")
 
+                return ""
+
         elif arguments.list:
 
             names = []
@@ -370,9 +372,7 @@ class VmCommand(PluginCommand):
 
                 for cloud in clouds:
                     print(f"List {cloud}")
-
                     p = Provider(cloud)
-
                     kind = p.kind
 
                     collection = "{cloud}-vm".format(cloud=cloud,
@@ -383,7 +383,7 @@ class VmCommand(PluginCommand):
                     p.Print(vms, output=arguments.output, kind="vm")
 
             except Exception as e:
-
+                Console.error(e)
                 VERBOSE(e)
 
             return ""
@@ -1008,4 +1008,4 @@ class VmCommand(PluginCommand):
                             f"Instance unavailable after timeout of {arguments.timeout}")
                     # print(r)
 
-            return ""
+        return ""

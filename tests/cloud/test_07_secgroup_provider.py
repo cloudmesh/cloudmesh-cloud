@@ -118,6 +118,8 @@ class Test_secgroup_provider:
         sec_groups = provider.list_secgroups()
         if cloud == 'aws':
             group_indicator = 'GroupName'
+        elif cloud == 'oracle':
+            group_indicator = '_dispaly_name'
         # elif cloud == 'chameleon':
         else:
             group_indicator = 'name'
@@ -136,6 +138,8 @@ class Test_secgroup_provider:
         if cloud == 'aws':
             group_indicator = 'GroupName'
         # elif cloud == 'chameleon':
+        elif cloud == 'oracle':
+            group_indicator = '_dispaly_name'
         else:
             group_indicator = 'name'
 

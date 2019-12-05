@@ -389,7 +389,6 @@ class VmCommand(PluginCommand):
 
 
         elif arguments.ping:
-            raise NotImplementedError
 
             """
             vm ping [NAMES] [--cloud=CLOUDS] [--count=N]
@@ -408,7 +407,7 @@ class VmCommand(PluginCommand):
             else:
                 count = 1
 
-            ips = set()
+            ips = []
 
             for cloud in clouds:
                 params = {}
@@ -416,12 +415,15 @@ class VmCommand(PluginCommand):
                 cursor = database.db[f'{cloud}-vm']
                 for name in names:
                     for node in cursor.find({'name': name}):
-                        ips.update(set(node['public_ips']))
-                ips = list(ips)
+                        ips.append(node['ip_public'])
+                ips = list(set(ips))
                 pprint(ips)
 
             for ip in ips:
-                Shell.ping(host=ip, count=count)
+                result = Shell.ping(host=ip, count=count)
+                banner(ip)
+                print (result)
+                print()
 
         elif arguments.check:
 

@@ -79,9 +79,6 @@ class Test_Key:
         if cloud in ['azure', 'oracle']:
             VERBOSE(f"{cloud} does not support key list!")
             return
-        elif cloud == 'oracle':
-            VERBOSE("Oracle does not support key list!")
-            return
         found = False
         for key in keys:
             if key['name'] == KEY:

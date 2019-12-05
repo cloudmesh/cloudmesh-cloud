@@ -76,8 +76,8 @@ class Test_Key:
         keys = provider.keys()
         Benchmark.Stop()
 
-        if cloud == 'azure':
-            VERBOSE("Azure does not support key list!")
+        if cloud in ['azure', 'oracle']:
+            VERBOSE(f"{cloud} does not support key list!")
             return
         elif cloud == 'oracle':
             VERBOSE("Oracle does not support key list!")

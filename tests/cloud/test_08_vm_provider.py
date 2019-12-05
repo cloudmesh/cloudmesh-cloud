@@ -63,7 +63,6 @@ class Test_provider_vm:
         name = str(Name())
         status = provider.status(name=name)[0]
         print(f'status: {str(status)}')
-
         if cloud == 'oracle':
             assert status["cm.status"] in ['STARTING', 'RUNNING', 'STOPPING',
                                            'STOPPED']
@@ -122,7 +121,6 @@ class Test_provider_vm:
             data = data[0]
         print(data)
         Benchmark.Stop()
-
         if cloud == 'oracle':
             assert data["cm.status"] in ['STARTING', 'RUNNING', 'STOPPING',
                                          'STOPPED']
@@ -206,14 +204,7 @@ class Test_provider_vm:
                    or (data[0]["cm"]["status"] in ['BOOTING', 'TERMINATED']
                        if data and data[0].get('cm', None) is not None
                        else True)
-        elif cloud == 'azure':
-            try:
-                provider.info(name=name)
-            except Exception:
-                # if there is an exception that means the group has been
-                # deleted
-                pass
-        elif cloud == 'oracle':
+        elif cloud in ['azure', 'oracle']:
             try:
                 provider.info(name=name)
             except Exception:

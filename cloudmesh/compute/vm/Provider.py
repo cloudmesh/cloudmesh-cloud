@@ -200,7 +200,8 @@ class Provider(ComputeNodeABC):
         if arguments.group is None:
             arguments.group = "default"
 
-        arguments.size = self.find_attribute('size', [variables, defaults])
+        if arguments.size is None:
+            arguments.size = self.find_attribute('size', [variables, defaults])
 
         if arguments.size is None and 'size' is None:
             raise ValueError("size not specified")

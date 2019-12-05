@@ -212,9 +212,13 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         d = {'version': '2', 'username': config['OS_USERNAME'],
              'password': config['OS_PASSWORD'],
              'auth_url': config['OS_AUTH_URL'],
-             'project_id': config['OS_TENANT_NAME'],
+
              'region_name': config['OS_REGION_NAME'],
-             'tenant_id': config['OS_TENANT_ID']}
+             }
+        if 'OS_TENANT_ID' in config:
+            d['tenant_id'] = config['OS_TENANT_ID']
+        if 'OS_TENANT_NAME' in config:
+            d['project_id'] = config['OS_TENANT_NAME']
         # d['project_domain_name'] = config['OS_PROJECT_NAME']
         return d
 

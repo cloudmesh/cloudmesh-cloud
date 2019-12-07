@@ -37,6 +37,10 @@ class ConfigCommand(PluginCommand):
              config cat [less]
              config check
              config secinit
+             config security add --secret=REGEXP
+             config security add --exception=REGEXP
+             config security rmv --secret=REGEXP
+             config security rmv --exception=REGEXP
              config encrypt 
              config decrypt [--nopass]
              config edit [ATTRIBUTE]
@@ -62,8 +66,14 @@ class ConfigCommand(PluginCommand):
                               in the configuration file
                               If the attribute is a password, * is written instead
                               of the character included
+             REGEXP           python regular expression
 
            Options:
+              --secret=REGEXP       ensures all attributes within cloudmesh.yaml 
+                                    whose dot path matches REGEXP are not encrypted
+                                    (even if listed in secrets)
+              --exception=REGEXP    ensures attributes within cloudmesh.yaml whose 
+                                    dot path matches REGEXP are encrypted
               --name=KEYNAME        The name of a key
               --nopass              Indicates if private key is password protected
               --output=OUTPUT       The output format [default: yaml]
@@ -120,9 +130,11 @@ class ConfigCommand(PluginCommand):
         # d = Config(encryted=True)   # ~/.cloudmesh/cloudmesh.yaml.enc
 
         map_parameters(arguments,
+                       "exception",
                        "keep", 
                        "nopass",
                        "output", 
+                       "secret",
                        "secrets")
 
         source = arguments.SOURCE or path_expand("~/.cloudmesh/cloudmesh.yaml")
@@ -310,6 +322,54 @@ class ConfigCommand(PluginCommand):
             secpath = path_expand(config['cloudmesh.security.secpath'])
             if not os.path.isdir(secpath):
                 Shell.mkdir(secpath) # Use Shell that makes all dirs as needed
+        
+        elif arguments.security:
+            # Get the regular expression from command line
+            regexp = None
+            if arguments.secret:
+                regexp = arguments.secret
+            elif arguments.exception:
+                regexp = arguments.exception
+
+            # Verify argument is valid python regular expression
+            valid = False
+            try:
+                r = re.compile(regexp)
+                valid = True
+            except re.error:
+                Console.error( f"Invalid Python RegExp:{regexp}")
+
+            if valid:
+                config = Config()
+                path = None
+                section = None
+                # Assign information based on arguments
+                if arguments.secret:
+                    path = 'cloudmesh.security.secrets'
+                    section = "secrets"
+                elif arguments.exception:
+                    path = 'cloudmesh.security.exceptions'
+                    section = "exceptions"
+
+                # Get current list of regular expressions from related section
+                exps = config[path]
+
+                # Add argument to expressions in related section
+                if arguments.add:
+                    if regexp not in exps:
+                        config[path].append(regexp)
+                        config.save()
+                        Console.ok( f"Added {regexp} to {section}" )
+                    else:
+                        Console.warning( f"{regexp} already in {section}" )
+                # Remove argument from expressions in related section
+                elif arguments.rmv:
+                    if regexp in exps:
+                        config[path].remove(regexp)
+                        config.save()
+                        Console.ok( f"Removed {regexp} from {section}" )
+                    else:
+                        Console.warning( f"{regexp} not in {section}" )
 
         elif arguments.get:
 

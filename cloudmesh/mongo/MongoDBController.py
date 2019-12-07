@@ -479,6 +479,8 @@ class MongoDBController(object):
         start the MongoDB server
         """
         mode = self.data['MODE']
+        if mode == "running":
+            return
 
         if mode == 'docker':
             from cloudmesh.mongo.MongoDocker import MongoDocker

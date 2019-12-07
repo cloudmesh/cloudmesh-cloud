@@ -110,7 +110,7 @@ class Name(dotdict):
         self.__dict__['schema'] = schema
 
     def assign(self, data):
-        VERBOSE(data)
+        # VERBOSE(data)
         for entry in data:
             self.__dict__[entry] = data[entry]
 

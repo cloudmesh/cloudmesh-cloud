@@ -38,7 +38,7 @@ class ConfigCommand(PluginCommand):
              config check
              config secinit
              config encrypt 
-             config decrypt 
+             config decrypt [--nopass]
              config edit [ATTRIBUTE]
              config set ATTRIBUTE=VALUE
              config get ATTRIBUTE [--output=OUTPUT]
@@ -64,9 +64,10 @@ class ConfigCommand(PluginCommand):
                               of the character included
 
            Options:
-              --name=KEYNAME     The name of a key
-              --output=OUTPUT    The output format [default: yaml]
-              --secrets          Print the secrets. Use carefully.
+              --name=KEYNAME        The name of a key
+              --nopass              Indicates if private key is password protected
+              --output=OUTPUT       The output format [default: yaml]
+              --secrets             Print the secrets. Use carefully.
 
            Description:
 
@@ -118,7 +119,11 @@ class ConfigCommand(PluginCommand):
         # d = Config()                #~/.cloudmesh/cloudmesh.yaml
         # d = Config(encryted=True)   # ~/.cloudmesh/cloudmesh.yaml.enc
 
-        map_parameters(arguments, "keep", "secrets", "output")
+        map_parameters(arguments,
+                       "keep", 
+                       "nopass",
+                       "output", 
+                       "secrets")
 
         source = arguments.SOURCE or path_expand("~/.cloudmesh/cloudmesh.yaml")
         destination = source + ".enc"
@@ -237,7 +242,7 @@ class ConfigCommand(PluginCommand):
 
         elif arguments.decrypt:
             config = Config()
-            config.decrypt()
+            config.decrypt(ask_pass=not arguments.nopass)
 
         elif arguments.ssh and arguments.verify:
 
@@ -302,10 +307,9 @@ class ConfigCommand(PluginCommand):
 
         elif arguments.secinit:
             config = Config()
-            secpath = path_expand(config.get_value('cloudmesh.security.secpath'))
-            gcm_path = f"{secpath}/gcm" # Location of nonces and keys for encryption            
-            if not os.path.isdir(gcm_path):
-                Shell.mkdir(gcm_path) # Use Shell that makes all dirs as needed
+            secpath = path_expand(config['cloudmesh.security.secpath'])
+            if not os.path.isdir(secpath):
+                Shell.mkdir(secpath) # Use Shell that makes all dirs as needed
 
         elif arguments.get:
 

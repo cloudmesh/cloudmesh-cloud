@@ -76,16 +76,16 @@ class Name(dotdict):
         # init dict with schema, path, kwargs
         #
 
+        self.path = path_expand("~/.cloudmesh/name.yaml")
+
         if len(kwargs) == 0:
-            path = path_expand("~/.cloudmesh/name.yaml")
-            data = self.load(path)
+            data = self.load(self.path)
             self.assign(data)
 
         else:
             if "path" not in kwargs:
-                path = self.__dict__['path'] = path_expand(
-                    "~/.cloudmesh/name.yaml")
-                data = self.load(path)
+                self.path  = "~/.cloudmesh/name.yaml"
+                data = self.load(self.path)
                 self.assign(data)
 
             self.assign(kwargs)
@@ -110,6 +110,7 @@ class Name(dotdict):
         self.__dict__['schema'] = schema
 
     def assign(self, data):
+        VERBOSE(data)
         for entry in data:
             self.__dict__[entry] = data[entry]
 
@@ -117,7 +118,7 @@ class Name(dotdict):
         self.__dict__ = d
 
     def load(self, path):
-
+        path = path_expand(path)
         data = {"wrong": "True"}
         if os.path.exists(path):
             with open(path, 'rb') as dbfile:
@@ -133,7 +134,6 @@ class Name(dotdict):
                 print ("WARNING: please set cloudmesh.profile.user we found TBD")
             data = {
                 'counter': 1,
-                'path': path,
                 'kind': 'vm',
                 'schema': "{user}-{kind}-{counter}",
                 'user': user
@@ -142,12 +142,9 @@ class Name(dotdict):
         return data
 
     def flush(self, data=None):
-
         if data is None:
             data = self.__dict__
-
-        path = path_expand(data['path'])
-        with open(path, 'w') as yaml_file:
+        with open(self.path, 'w') as yaml_file:
             yaml.dump(data, yaml_file, default_flow_style=False)
 
     def __str__(self):

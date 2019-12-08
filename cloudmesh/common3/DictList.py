@@ -1,5 +1,7 @@
-from pprint import pprint
-
+import sys
+from cloudmesh.common.console import Console
+Console.error("cloudmesh.common3.Benchmark is deprecated use cloudmesh.common.Benchmark")
+sys.exit()
 
 class DictList(dict):
     """

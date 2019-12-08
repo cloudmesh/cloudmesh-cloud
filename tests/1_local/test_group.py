@@ -13,7 +13,7 @@ from cloudmesh.common.Benchmark import Benchmark
 from cloudmesh.management.configuration.name import Name
 from cloudmesh.group.Group import Group
 from cloudmesh.common.parameter import Parameter
-from cloudmesh.common3.DictList import DictList
+from cloudmesh.common.DictList import DictList
 from cloudmesh.common.util import HEADING
 from cloudmesh.common.Printer import Printer
 import oyaml as yaml

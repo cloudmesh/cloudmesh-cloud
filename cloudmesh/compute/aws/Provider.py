@@ -14,7 +14,7 @@ from cloudmesh.abstractclass.ComputeNodeABC import ComputeNodeABC
 from cloudmesh.common.console import Console
 from cloudmesh.common.debug import VERBOSE
 from cloudmesh.common.util import banner
-from cloudmesh.common3.DictList import DictList
+from cloudmesh.common.DictList import DictList
 from cloudmesh.compute.aws.AwsFlavors import AwsFlavor
 from cloudmesh.configuration.Config import Config
 from cloudmesh.provider import ComputeProviderPlugin

@@ -7,6 +7,10 @@ import calendar
 
 import pytz
 
+import sys
+from cloudmesh.common.console import Console
+Console.error("cloudmesh.common3.Benchmark is deprecated use cloudmesh.common.Benchmark")
+sys.exit()
 
 class DateTime(object):
     """

@@ -7,12 +7,15 @@ from cloudmesh.common.StopWatch import StopWatch
 from cloudmesh.common.util import path_expand
 from cloudmesh.common.variables import Variables
 from pathlib import Path
-from deprecated import deprecated
-
+from cloudmesh.common.console import Console
+import sys
 # noinspection PyPep8Naming
+
+Console.error("cloudmesh.common3.Benchmark is deprecated use cloudmesh.common.Benchmark")
+sys.exit()
+
 class Benchmark(object):
 
-    @deprecated(version='1.3.0', reason="This method is deprecated")
     @staticmethod
     def debug():
         variables = Variables()

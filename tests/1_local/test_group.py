@@ -9,7 +9,7 @@ from pprint import pprint
 
 import pytest
 from cloudmesh.common.util import path_expand
-from cloudmesh.common3.Benchmark import Benchmark
+from cloudmesh.common.Benchmark import Benchmark
 from cloudmesh.management.configuration.name import Name
 from cloudmesh.group.Group import Group
 from cloudmesh.common.parameter import Parameter

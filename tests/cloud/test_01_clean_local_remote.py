@@ -8,7 +8,7 @@ import os
 import pytest
 from cloudmesh.common.util import HEADING
 from cloudmesh.common.variables import Variables
-from cloudmesh.common3.Benchmark import Benchmark
+from cloudmesh.common.Benchmark import Benchmark
 from cloudmesh.compute.vm.Provider import Provider
 from cloudmesh.configuration.Config import Config
 from cloudmesh.key.Key import Key
@@ -65,6 +65,8 @@ class Test_Clean_Local_Remote:
                 if cloud == 'aws':
                     groupname = secgroup['GroupName']
                 # elif cloud == 'chameleon':
+                elif cloud == 'oracle':
+                    groupname = secgroup['_display_name']
                 else:
                     groupname = secgroup['name']
 

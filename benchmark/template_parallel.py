@@ -3,7 +3,7 @@ from multiprocessing import Pool
 from cloudmesh.common.StopWatch import StopWatch
 from cloudmesh.common.console import Console
 from cloudmesh.common.util import HEADING
-from cloudmesh.common3.Benchmark import Benchmark
+from cloudmesh.common.Benchmark import Benchmark
 
 batch = 10
 sleep = 60

@@ -157,12 +157,37 @@ class SecCommand(PluginCommand):
                         pass
             Print("all", data)
 
-        if arguments.load and arguments.group and arguments.cloud:
+
+
+        if (arguments.load and not arguments.group) or \
+            (arguments.load and arguments.group and not arguments.GROUP) :
+
+            examples = SecgroupExamples()
+            examples.load()
+            list_all()
+
+            return ""
+
+        elif arguments.load and arguments.group and arguments.cloud:
 
             provider = Provider(name=arguments.cloud)
             provider.upload_secgroup(name=arguments.GROUP)
 
             return ""
+
+        elif arguments.list and not arguments.rule and not arguments.group:
+
+            found = groups.list()
+            for entry in found:
+                group_rules = entry['rules']
+                if type(group_rules) == list:
+                    entry['rules'] = ', '.join(group_rules)
+
+            Print("secgroup", found)
+
+            found = rules.list()
+            Print("secrule", found)
+
         elif arguments.group and arguments.delete:
 
             if arguments.cloud:
@@ -260,16 +285,6 @@ class SecCommand(PluginCommand):
 
             found = rules.list()
             Print("secrule", found)
-
-            return ""
-
-
-
-        elif arguments.load and not arguments.group:
-
-            examples = SecgroupExamples()
-            examples.load()
-            list_all()
 
             return ""
 

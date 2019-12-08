@@ -8,7 +8,7 @@ import pytest
 from cloudmesh.common import VERBOSE
 from cloudmesh.common.util import HEADING
 from cloudmesh.common.variables import Variables
-from cloudmesh.common3.Benchmark import Benchmark
+from cloudmesh.common.Benchmark import Benchmark
 from cloudmesh.compute.vm.Provider import Provider
 from cloudmesh.configuration.Config import Config
 from cloudmesh.key.Key import Key
@@ -76,8 +76,8 @@ class Test_Key:
         keys = provider.keys()
         Benchmark.Stop()
 
-        if cloud == 'azure':
-            VERBOSE("Azure does not support key list!")
+        if cloud in ['azure', 'oracle']:
+            VERBOSE(f"{cloud} does not support key list!")
             return
 
         found = False

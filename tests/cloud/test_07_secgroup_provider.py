@@ -18,7 +18,7 @@ from cloudmesh.management.configuration.name import Name
 from cloudmesh.secgroup.Secgroup import Secgroup
 from cloudmesh.secgroup.Secgroup import SecgroupExamples
 from cloudmesh.secgroup.Secgroup import SecgroupRule
-from cloudmesh.common3.Benchmark import Benchmark
+from cloudmesh.common.Benchmark import Benchmark
 from pprint import pprint
 
 Benchmark.debug()
@@ -118,6 +118,8 @@ class Test_secgroup_provider:
         sec_groups = provider.list_secgroups()
         if cloud == 'aws':
             group_indicator = 'GroupName'
+        elif cloud == 'oracle':
+            group_indicator = '_display_name'
         # elif cloud == 'chameleon':
         else:
             group_indicator = 'name'
@@ -136,6 +138,8 @@ class Test_secgroup_provider:
         if cloud == 'aws':
             group_indicator = 'GroupName'
         # elif cloud == 'chameleon':
+        elif cloud == 'oracle':
+            group_indicator = '_display_name'
         else:
             group_indicator = 'name'
 

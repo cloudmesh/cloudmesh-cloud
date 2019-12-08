@@ -12,7 +12,7 @@ from cloudmesh.common.util import HEADING
 from cloudmesh.configuration.Config import Config
 from cloudmesh.management.configuration.name import Name
 from cloudmesh.mongo.CmDatabase import CmDatabase
-from cloudmesh.common3.Benchmark import Benchmark
+from cloudmesh.common.Benchmark import Benchmark
 from cloudmesh.mongo.DataBaseDecorator import DatabaseUpdate
 
 Benchmark.debug()

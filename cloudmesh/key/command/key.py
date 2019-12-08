@@ -11,6 +11,7 @@ from cloudmesh.mongo.CmDatabase import CmDatabase
 from cloudmesh.shell.command import PluginCommand
 from cloudmesh.shell.command import command, map_parameters
 from pprint import pprint
+from cloudmesh.key.KeyGroup import KeyGroup
 import os
 
 
@@ -168,6 +169,16 @@ class KeyCommand(PluginCommand):
                 If a key is included in multiple groups they will be added
                 to the grouplist of the key
         """
+        def get_key_list(db_keys):
+            #pprint(db_keys)
+            keys = []
+            for key in db_keys:
+                print('abc', key)
+                pprint(key)
+                if key["name"] in names:
+                    keys.append(key)
+
+            return keys
 
         def print_keys(keys):
             print(Printer.write(
@@ -224,6 +235,39 @@ class KeyCommand(PluginCommand):
                 keys = provider.keys()
 
                 provider.Print(keys, output=arguments.output, kind="key")
+
+            return ""
+
+        elif arguments.group and arguments.list:
+            key = KeyGroup()
+            #key group delete NAMES [--dryrun]
+
+            names = Parameter.expand(arguments.NAMES)
+
+            cloud = "local"
+            db = CmDatabase()
+
+            for kind in ['key', 'keygroup']:
+                db_keys = db.find(collection=f"{cloud}-{kind}")
+                keys = get_key_list(db_keys)
+                # print("DDDD", keys)
+                key.Print(data=keys, kind=kind)
+
+
+            return ""
+
+        elif arguments.group and arguments.add:
+            print('aaa')
+            key = KeyGroup()
+            #key group add NAMES
+
+            names = Parameter.expand(arguments.NAMES)
+
+            cloud = "local"
+            db = CmDatabase()
+
+            key.add(names)
+
 
             return ""
 
@@ -322,10 +366,7 @@ class KeyCommand(PluginCommand):
             db = CmDatabase()
             db_keys = db.find(collection=f"{cloud}-key")
 
-            keys = []
-            for key in db_keys:
-                if key["name"] in names:
-                    keys.append(key)
+            keys = get_key_list(db_keys)
 
             if len(keys) == 0:
                 Console.error(
@@ -393,8 +434,27 @@ class KeyCommand(PluginCommand):
                         Console.ok(f"delete {name}")
             return ""
 
-        elif arguments.group:
+        elif arguments.group and arguments.delete:
 
-            raise NotImplementedError
+            key = KeyGroup()
+            #key group delete NAMES [--dryrun]
+
+            names = Parameter.expand(arguments.NAMES)
+
+            cloud = "local"
+            db = CmDatabase()
+            db_keys = db.find(collection=f"{cloud}-keygroup")
+
+            error = []
+            for key in db_keys:
+                name = key['name']
+                if name in names:
+                    if arguments.dryrun:
+                        Console.ok(f"Dryrun: delete {name}")
+                    else:
+                        db.delete(collection="local-keygroup",
+                                  name=name)
+                        Console.ok(f"delete {name}")
+            return ""
 
         return ""

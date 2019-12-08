@@ -58,7 +58,8 @@ class KeyGroupDatabase:
             entry['cm'] = {
                 "kind": self.kind,
                 "name": entry['name'],
-                "cloud": self.cloud
+                "cloud": self.cloud,
+                "key": entry['key']
             }
         return entries
 
@@ -152,7 +153,7 @@ class KeyGroup(KeyGroupDatabase):
 
     # noinspection PyBroadException
     @DatabaseUpdate()
-    def add(self, name=None):
+    def add(self, name=None, key=None):
         """
         adds a key to a given group. If the group does not exist, it will be
         created.
@@ -162,10 +163,11 @@ class KeyGroup(KeyGroupDatabase):
         :return:
         """
 
-        new_key = name
-        if type(name) == str:
-            new_key = Parameter.expand(name)
-        elif type(name) == list:
+        new_key = key
+        # pubkey = key.publickey
+        if type(key) == str:
+            new_key = Parameter.expand(key)
+        elif type(key) == list:
             pass
         else:
             raise ValueError("key have wrong type")
@@ -175,17 +177,20 @@ class KeyGroup(KeyGroupDatabase):
             entry = self.find(name=name)[0]
         except Exception as e:
             entry = {
-                'name': name
+                'name': name,
+                'key': key
             }
 
         if name is not None:
             old = list(entry['name'])
             entry['name'] = list(set(new_key + old))
+        else:
+            entry['name'] = list(set(new_key))
 
         return self.update_dict_list([entry])
 
     @DatabaseUpdate()
-    def delete(self, name=None):
+    def delete(self, name=None, key=None):
         """
         deletes the groups
         :param name:

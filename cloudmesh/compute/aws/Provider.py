@@ -23,7 +23,7 @@ from cloudmesh.mongo.CmDatabase import CmDatabase
 from cloudmesh.common3.Shell import Shell
 from cloudmesh.secgroup.Secgroup import Secgroup, SecgroupRule
 from cloudmesh.common.util import path_expand
-from cloudmesh.common3.Benchmark import Benchmark
+from cloudmesh.common.Benchmark import Benchmark
 import json
 from cloudmesh.management.configuration.name import Name
 

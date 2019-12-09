@@ -2,9 +2,19 @@
 # pytest -v --capture=no tests/1_local/test_data.py
 # pytest -v  tests/1_local/test_data.py
 ###############################################################
-import grp
+try:
+    import grp
+except:
+    print ("ERROR: import grp not supported on your OS. please find altrenative to grp")
+
+try:
+    import pwd
+except:
+    print ("ERROR: import grp not supported on your OS. please find altrenative to grp")
+
+
 import os
-import pwd
+
 from pathlib import Path
 from pprint import pprint
 
@@ -30,7 +40,27 @@ class TestDatabaseUpdate:
         @DatabaseUpdate()
         def info(cloud, file):
             st = os.stat(file)
-            userinfo = pwd.getpwuid(os.stat(file).st_uid)
+            try:
+                userinfo = pwd.getpwuid(os.stat(file).st_uid)
+            except :
+                userinfo = "windows"
+
+            try:
+                group = {
+                    "name": grp.getgrgid(userinfo.pw_gid).gr_name,
+                    "id": userinfo.pw_gid,
+                    "members": grp.getgrgid(userinfo.pw_gid).gr_mem
+                }
+            except:
+                group = {
+                    "name": "not supported on your os, please fix this test.",
+                    "id": "not supported on your os, please fix this test.",
+                    "members": "not supported on your os, please fix this test.",
+                }
+            try:
+                owner = userinfo.pw_name
+            except:
+                owner = "windows"
 
             d = {
                 "cm": {
@@ -45,12 +75,8 @@ class TestDatabaseUpdate:
                 # needs to be same format as we  use in vms
                 "modified": None,  # needs to be same format as we  use in vms
                 "created": None,  # needs to be same format as we  use in vms
-                "owner": userinfo.pw_name,
-                "group": {
-                    "name": grp.getgrgid(userinfo.pw_gid).gr_name,
-                    "id": userinfo.pw_gid,
-                    "members": grp.getgrgid(userinfo.pw_gid).gr_mem
-                },
+                "owner": owner,
+                "group": group,
                 "permission": {
                     "readable": os.access(file, os.R_OK),
                     "writable": os.access(file, os.W_OK),
@@ -65,17 +91,19 @@ class TestDatabaseUpdate:
         Benchmark.Stop()
 
         pprint(i)
-
-        assert i[0]['path'] == '/Users/grey/.cloudmesh/cloudmesh.yaml'
+        path = path_expand("~/.cloudmesh/cloudmesh.yaml")
+        assert i[0]['path'] == path
 
     def test_remove_collection(self):
+        HEADING()
         cm = CmDatabase()
         Benchmark.Start()
         collection = cm.clear(collection="debug-file")
         Benchmark.Stop()
 
     def test_benchmark(self):
-        Benchmark.print()
+        HEADING()
+        Benchmark.print(csv=True)
 
 
 """

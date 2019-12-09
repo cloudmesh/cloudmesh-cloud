@@ -65,6 +65,8 @@ class Test_Clean_Local_Remote:
                 if cloud == 'aws':
                     groupname = secgroup['GroupName']
                 # elif cloud == 'chameleon':
+                elif cloud == 'oracle':
+                    groupname = secgroup['_display_name']
                 else:
                     groupname = secgroup['name']
 

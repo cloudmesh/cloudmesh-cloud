@@ -63,8 +63,12 @@ class Test_provider_vm:
         name = str(Name())
         status = provider.status(name=name)[0]
         print(f'status: {str(status)}')
-        assert status["cm.status"] in ['ACTIVE', 'BOOTING', 'TERMINATED',
-                                       'STOPPED']
+        if cloud == 'oracle':
+            assert status["cm.status"] in ['STARTING', 'RUNNING', 'STOPPING',
+                                           'STOPPED']
+        else:
+            assert status["cm.status"] in ['ACTIVE', 'BOOTING', 'TERMINATED',
+                                           'STOPPED']
 
     def test_provider_vmprovider_vm_list(self):
         # list should be after create() since it would return empty and
@@ -117,8 +121,12 @@ class Test_provider_vm:
             data = data[0]
         print(data)
         Benchmark.Stop()
-        assert data["cm.status"] in ['ACTIVE', 'BOOTING', 'TERMINATED',
-                                     'STOPPED']
+        if cloud == 'oracle':
+            assert data["cm.status"] in ['STARTING', 'RUNNING', 'STOPPING',
+                                         'STOPPED']
+        else:
+            assert data["cm.status"] in ['ACTIVE', 'BOOTING', 'TERMINATED',
+                                         'STOPPED']
 
     def test_provider_vm_stop(self):
         HEADING()
@@ -196,7 +204,7 @@ class Test_provider_vm:
                    or (data[0]["cm"]["status"] in ['BOOTING', 'TERMINATED']
                        if data and data[0].get('cm', None) is not None
                        else True)
-        elif cloud == 'azure':
+        elif cloud in ['azure', 'oracle']:
             try:
                 provider.info(name=name)
             except Exception:

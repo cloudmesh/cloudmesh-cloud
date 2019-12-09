@@ -9,10 +9,11 @@ import shutil
 
 import pytest
 from cloudmesh.common3.Benchmark import Benchmark
-from cloudmesh_installer.install.test import run
+from cloudmesh_installer.install.util import run
 from cloudmesh.common3.Benchmark import Benchmark
 
 Benchmark.debug()
+
 
 @pytest.mark.incremental
 class Test_cloud_installer:

@@ -1,5 +1,6 @@
 from cloudmesh.mongo.CmDatabase import CmDatabase
 
+
 class DatabaseUpdate:
     """
     The data base decorator automatically replaces an entry in the database with
@@ -96,6 +97,7 @@ class DatabaseUpdate:
 
         return wrapper
 
+
 class DatabaseImportAsJson:
     """
     Updating the database using MongoImport.
@@ -121,15 +123,14 @@ class DatabaseImportAsJson:
                 collection = current['collection']
                 data = current['data']
 
-            if current is None or type (current) != dict:
+            if current is None or type(current) != dict:
                 return []
 
-            result = self.database.importAsFile(data,collection,db)
+            result = self.database.importAsFile(data, collection, db)
             self.database.close_client()
             return result
 
         return wrapper
-
 
 
 class DatabaseAlter:

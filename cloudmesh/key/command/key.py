@@ -10,8 +10,11 @@ from cloudmesh.configuration.Config import Config
 from cloudmesh.mongo.CmDatabase import CmDatabase
 from cloudmesh.shell.command import PluginCommand
 from cloudmesh.shell.command import command, map_parameters
+from cloudmesh.configuration.security.encrypt import KeyHandler
+from cloudmesh.common.util import path_expand
 from pprint import pprint
 import os
+
 
 class KeyCommand(PluginCommand):
 
@@ -36,6 +39,7 @@ class KeyCommand(PluginCommand):
              key add [NAME] [--source=git]
              key add [NAME] [--source=ssh]
              key delete NAMES [--cloud=CLOUDS] [--dryrun]
+             key gen (rsa | ssh) [--nopass] [--priv=FILENAME] [--pub=FILENAME] [--encoding=ENCODING]
              key upload [NAMES] [--cloud=CLOUDS] [--dryrun]
              key upload [NAMES] [VMS] [--dryrun]
              key group upload [NAMES] [--group=GROUPNAMES] [--cloud=CLOUDS] [--dryrun]
@@ -55,13 +59,18 @@ class KeyCommand(PluginCommand):
              OUTPUT         The format of the output (table, json, yaml)
              FILENAME       The filename with full path in which the key
                             is located
+             ENCODING       The encoding of the key (PEM or SSH)
 
            Options:
-              --dir=DIR                     the directory with keys [default: ~/.ssh]
-              --output=OUTPUT               the format of the output [default: table]
-              --source=SOURCE               the source for the keys
-              --username=USERNAME           the source for the keys [default: none]
-              --name=KEYNAME                The name of a key
+              --dir=DIR             the directory with keys [default: ~/.ssh]
+              --filename=FILENAME   the name and full path to the file
+              --encoding=ENCODING   The encoding of the key
+              --name=KEYNAME        The name of a key
+              --output=OUTPUT       the format of the output [default: table]
+              --priv=FILENAME       The full path location to the private key
+              --pub=FILENAME        The full path location to the public key
+              --source=SOURCE       the source for the keys
+              --username=USERNAME   the source for the keys [default: none]
 
 
            Description:
@@ -179,12 +188,16 @@ class KeyCommand(PluginCommand):
 
         map_parameters(arguments,
                        'cloud',
-                       'output',
-                       'source',
                        'dir',
+                       'dryrun',
+                       'filename',
+                       'format',
+                       'name',
+                       'nopass',
+                       'priv',
+                       'pub',
                        'output',
-                       'source',
-                       'dryrun')
+                       'source')
 
         variables = Variables()
 
@@ -268,9 +281,11 @@ class KeyCommand(PluginCommand):
             username = config["cloudmesh.profile.user"]
 
             if username == "TBD":
-                Console.error("Please set cloudmesh.profile.user in ~/.cloudmesh.yaml")
+                Console.error(
+                    "Please set cloudmesh.profile.user in ~/.cloudmesh.yaml")
                 u = os.environ["USER"].lower().replace(" ", "")
-                Console.msg(f"To change it you can use the command. Define a NAME such as '{u}' e.g.")
+                Console.msg(
+                    f"To change it you can use the command. Define a NAME such as '{u}' e.g.")
                 Console.msg("")
                 Console.msg(f"  cms config set cloudmesh.profile.user={u}")
                 Console.msg("")
@@ -297,11 +312,9 @@ class KeyCommand(PluginCommand):
             #
 
             if names is None or len(names) == 0:
-
                 config = Config()
                 username = config["cloudmesh.profile.user"]
                 names = [username]
-
 
             if len(names) == 1:
                 name = names[0]
@@ -309,13 +322,13 @@ class KeyCommand(PluginCommand):
                 if "key" in variables:
                     old = variables["key"]
                     if old != name:
-                        Console.msg(f"Changing defualt key from {old} to {name}")
+                        Console.msg(
+                            f"Changing defualt key from {old} to {name}")
                         variables["key"] = name
 
             #
             # Step 1. keys = find keys to upload
             #
-
 
             cloud = "local"
             db = CmDatabase()
@@ -327,8 +340,9 @@ class KeyCommand(PluginCommand):
                     keys.append(key)
 
             if len(keys) == 0:
-                Console.error(f"No keys with the names {names} found in cloudmesh. \n"
-                              "       Use the command 'key add' to add the key.")
+                Console.error(
+                    f"No keys with the names {names} found in cloudmesh. \n"
+                    "       Use the command 'key add' to add the key.")
 
             #
             # Step 2. iterate over the clouds to upload
@@ -348,8 +362,8 @@ class KeyCommand(PluginCommand):
                             r = provider.key_upload(key)
                             Console.ok(f"upload key '{name} successful'. ")
                         except ValueError as e:
-                            Console.error(f"key '{name} already exists in {cloud}.")
-
+                            Console.error(
+                                f"key '{name} already exists in {cloud}.")
 
             return ""
 
@@ -369,6 +383,55 @@ class KeyCommand(PluginCommand):
                         images = provider.key_delete(name)
 
             return ""
+
+        elif arguments.gen:
+            config = Config()
+            ap = not arguments.nopass
+
+            # Get the full path for the private key
+            rk_path = None
+            if arguments.priv:
+                rk_path = path_expand(arguments.priv)
+            else:
+                rk_path = path_expand(config['cloudmesh.security.privatekey'])
+            Console.msg( f"\nPrivate key: {rk_path}")
+
+            # Get the full path for the public key
+            uk_path = None
+            if arguments.pub:
+                uk_path = path_expand(arguments.pub)
+            elif arguments.priv:
+                uk_path = f"{rk_path}.pub"
+            else:
+                uk_path = path_expand(config['cloudmesh.security.publickey'])
+            Console.msg( f"Public  key: {uk_path}\n")
+
+            # Generate the Private and Public keys
+            kh = KeyHandler()
+            r = kh.new_rsa_key()
+            u = kh.get_pub_key(priv = r)
+
+            # Serialize and write the private key to the path
+            sr = kh.serialize_key(key = r, key_type = "PRIV", encoding = "PEM",
+                                  format = "PKCS8", ask_pass = ap)
+            kh.write_key(key = sr, path = rk_path)
+
+            # Determine the public key format and encoding
+            enc = None
+            forma = None
+            if arguments.ssh:
+                enc = "SSH"
+                forma = "SSH"
+            elif arguments.rsa:
+                enc = "PEM"
+                forma = "SubjectInfo"
+
+            # Serialize and write the public key to the path
+            su = kh.serialize_key(key = u, key_type = "PUB", encoding = enc,
+                                  format = forma, ask_pass = False)
+            kh.write_key(key = su, path = uk_path)
+
+            Console.ok("ok")
 
         elif arguments.delete and arguments.NAMES:
             # key delete NAMES [--dryrun]
@@ -396,3 +459,6 @@ class KeyCommand(PluginCommand):
             raise NotImplementedError
 
         return ""
+
+            
+

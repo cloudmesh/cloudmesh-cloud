@@ -3,6 +3,7 @@ from cloudmesh.common.console import Console
 from cloudmesh.configuration.Config import Active
 from cloudmesh.common.dotdict import dotdict
 
+
 class Arguments(object):
 
     @staticmethod

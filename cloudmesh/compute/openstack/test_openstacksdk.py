@@ -57,56 +57,48 @@ if False:
     pprint(cloud.get_compute_usage(project))
     pprint(cloud.get_compute_quotas(project))
 
-
-
-
-
 if False:
     command = "openstack usage show --os-auth-url={auth_url} " \
-                  "--os-project-name={project_id} --os-username={username} " \
-                  "--os-password={password} -f=json".format(**config)
-        # print (command)
+              "--os-project-name={project_id} --os-username={username} " \
+              "--os-password={password} -f=json".format(**config)
+    # print (command)
     os.system(command)
 
 if False:
     command = "openstack quota show --os-auth-url={auth_url} " \
-                  "--os-project-name={project_id} --os-username={username} " \
-                  "--os-password={password} -f=json".format(**config)
-        # print (command)
+              "--os-project-name={project_id} --os-username={username} " \
+              "--os-password={password} -f=json".format(**config)
+    # print (command)
     os.system(command)
-
 
 if False:
     command = "openstack --version --os-auth-url={auth_url} " \
-                  "--os-project-name={project_id} --os-username={username} " \
-                  "--os-password={password} -f=json".format(**config)
-        # print (command)
+              "--os-project-name={project_id} --os-username={username} " \
+              "--os-password={password} -f=json".format(**config)
+    # print (command)
     os.system(command)
 
 if False:
-
     command = "openstack hypervisor stats show --os-auth-url={auth_url} " \
-                  "--os-project-name={project_id} --os-username={username} " \
-                  "--os-password={password} -f=json".format(**config)
-        # print (command)
+              "--os-project-name={project_id} --os-username={username} " \
+              "--os-password={password} -f=json".format(**config)
+    # print (command)
     os.system(command)
 
     command = "nova --os-auth-url={auth_url} " \
-                  "--os-project-name={project_id} --os-username={username} " \
-                  "--os-password={password} hypervisor-stats ".format(**config)
-        # print (command)
+              "--os-project-name={project_id} --os-username={username} " \
+              "--os-password={password} hypervisor-stats ".format(**config)
+    # print (command)
     os.system(command)
 
-
-
-
 if False:
-    name= "test-gregor-vm-3"
+    name = "test-gregor-vm-3"
+
 
     def status():
-
-        r = cloud.list_servers(filters={'name':name})[0]
+        r = cloud.list_servers(filters={'name': name})[0]
         return r['status']
+
 
     print(status())
     server = cloud.get_server(name)['id']
@@ -114,16 +106,14 @@ if False:
 
     print(status())
 
-
-#cloud.resume_server()
+# cloud.resume_server()
 
 
 if True:
-    pprint (dir(cloud))
-
+    pprint(dir(cloud))
 
 if False:
-    print (cloud.compute.version)
+    print(cloud.compute.version)
 
     # not authorized
     # pprint(cloud.list_services())
@@ -137,27 +127,20 @@ if False:
     # pprint (cloud.list_hypervisors())
     # pprint(cloud.telemetry())
 
-
     pprint(cloud.list_routers())
     pprint(cloud.list_subnets())
 
     name = str(Name())
 
-
     pprint(cloud.get_compute_limits())
 
     VERBOSE(name)
-
-
 
     # not found
     # pprint(cloud.meter)
     # pprint(cloud.placement)
 
-
-
 if False:
-
     pprint(config)
 
     cloud = openstack.connect(**config)

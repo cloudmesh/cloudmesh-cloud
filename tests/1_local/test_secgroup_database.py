@@ -9,7 +9,6 @@ from cloudmesh.secgroup.Secgroup import Secgroup
 from cloudmesh.secgroup.Secgroup import SecgroupExamples
 from cloudmesh.secgroup.Secgroup import SecgroupRule
 
-
 Benchmark.debug()
 
 examples = SecgroupExamples()
@@ -119,6 +118,7 @@ def test_delete_rule_from_group():
 
 
 def test_remove_group():
+    HEADING()
     name = list(examples.secgroups.keys())[0]
 
     original = groups.list()
@@ -135,6 +135,7 @@ def test_remove_group():
 
 
 def test_remove_rule():
+    HEADING()
     old = rules.list()
     name = old[0]["name"]
 
@@ -154,6 +155,7 @@ def test_remove_rule():
 
 
 def test_load_defaults():
+    HEADING()
     examples = SecgroupExamples()
     examples.load()
 
@@ -168,4 +170,5 @@ def test_load_defaults():
 
 
 def test_benchmark():
-    Benchmark.print()
+    HEADING()
+    Benchmark.print(csv=True)

@@ -158,7 +158,6 @@ class a:
         result = run(f"cms sec group load deleteme --cloud={cloud}")
         Benchmark.Stop()
 
-
     #        Pro
     #        entry = rules.list(name="deleteme")
     #        assert len(entry) > 0

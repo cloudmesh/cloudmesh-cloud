@@ -16,7 +16,6 @@ Benchmark.debug()
 cm = CmDatabase()
 variables = Variables()
 
-
 assert variables['cloud'] is not None
 cloud = variables['cloud']
 
@@ -60,10 +59,10 @@ class Test_cm_find:
 
     def test_cm_loop(self):
         HEADING()
-        names=[]
+        names = []
         for kind in ['vm', "image", "flavor"]:
             data = cm.names(cloud=cloud, kind=kind)
-            if len(data) >0 :
+            if len(data) > 0:
                 names.append(data)
         if benchmark_print:
             pprint(names)
@@ -113,9 +112,7 @@ class Test_cm_find:
         else:
             print(f"Number of entries [{kind}", len(names))
 
-
         Benchmark.Stop()
-
 
     def test_cm_find_vms(self):
         HEADING()
@@ -149,7 +146,6 @@ class Test_cm_find:
         assert len(entries) > 0
         for entry in entries:
             assert "Ubuntu" in entry['name']
-
 
     def test_cm_find_cloud_name_attributes(self):
         HEADING()
@@ -225,4 +221,5 @@ class Test_cm_find:
         assert len(collections) == 2
 
     def test_benchmark(self):
+        HEADING()
         Benchmark.print(sysinfo=False, csv=True, tag=cloud)

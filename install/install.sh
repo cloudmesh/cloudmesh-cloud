@@ -12,7 +12,7 @@
 
 BUNDLE=storage
 
-# Set a unique username here. It must not have spaces or cahracters not in a-Z0-9
+# Set a unique username here. It must not have spaces or characters not in a-Z0-9
 
 # USERNAME=$USER
 USERNAME="IUUSERNAME"
@@ -64,7 +64,7 @@ pip install cloudmesh-installer
 # --------------------------------------------------
 cloudmesh-installer git clone $BUNDLE
 cloudmesh-installer git pull $BUNDLE
-cloudmesh-installer install $BUNDLE -e
+cloudmesh-installer install $BUNDLE
 
 # --------------------------------------------------
 # create a cloudmesh.yaml file and Validate the install worked

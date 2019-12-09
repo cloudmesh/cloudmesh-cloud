@@ -13,13 +13,13 @@ from cloudmesh.common.parameter import Parameter
 from cloudmesh.common.util import banner
 from cloudmesh.common.util import path_expand
 from cloudmesh.common.variables import Variables
-from cloudmesh.common3.DictList import DictList
+from cloudmesh.common.DictList import DictList
 from cloudmesh.configuration.Config import Config
 from cloudmesh.image.Image import Image
 from cloudmesh.mongo.CmDatabase import CmDatabase
 from cloudmesh.provider import ComputeProviderPlugin
 from cloudmesh.secgroup.Secgroup import Secgroup, SecgroupRule
-from cloudmesh.common3.DateTime import DateTime
+from cloudmesh.common.DateTime import DateTime
 from cloudmesh.common.debug import VERBOSE
 from cloudmesh.image.Image import Image
 
@@ -212,9 +212,13 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         d = {'version': '2', 'username': config['OS_USERNAME'],
              'password': config['OS_PASSWORD'],
              'auth_url': config['OS_AUTH_URL'],
-             'project_id': config['OS_TENANT_NAME'],
+
              'region_name': config['OS_REGION_NAME'],
-             'tenant_id': config['OS_TENANT_ID']}
+             }
+        if 'OS_TENANT_ID' in config:
+            d['tenant_id'] = config['OS_TENANT_ID']
+        if 'OS_TENANT_NAME' in config:
+            d['project_id'] = config['OS_TENANT_NAME']
         # d['project_domain_name'] = config['OS_PROJECT_NAME']
         return d
 
@@ -976,6 +980,11 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
             # print("ssh -i {key} root@{ip}".format(
             #    key=PRIVATE_KEYPAIR_FILE,
             #    ip=server.access_ipv4))
+
+        except openstack.exceptions.ResourceTimeout:
+            Console.error("Problem starting vm in time.")
+            raise TimeoutError
+
 
         except Exception as e:
             Console.error("Problem starting vm", traceflag=True)

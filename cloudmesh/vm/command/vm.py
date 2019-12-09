@@ -1,6 +1,7 @@
 import hashlib
 from datetime import datetime
 from pprint import pprint
+import sys
 
 from cloudmesh.common.debug import VERBOSE
 from cloudmesh.common.Printer import Printer
@@ -357,6 +358,8 @@ class VmCommand(PluginCommand):
 
                 provider.Print(vms, output=arguments.output, kind="vm")
 
+                return ""
+
         elif arguments.list:
 
             names = []
@@ -369,9 +372,7 @@ class VmCommand(PluginCommand):
 
                 for cloud in clouds:
                     print(f"List {cloud}")
-
                     p = Provider(cloud)
-
                     kind = p.kind
 
                     collection = "{cloud}-vm".format(cloud=cloud,
@@ -382,14 +383,13 @@ class VmCommand(PluginCommand):
                     p.Print(vms, output=arguments.output, kind="vm")
 
             except Exception as e:
-
+                Console.error(e)
                 VERBOSE(e)
 
             return ""
 
 
         elif arguments.ping:
-            raise NotImplementedError
 
             """
             vm ping [NAMES] [--cloud=CLOUDS] [--count=N]
@@ -408,7 +408,7 @@ class VmCommand(PluginCommand):
             else:
                 count = 1
 
-            ips = set()
+            ips = []
 
             for cloud in clouds:
                 params = {}
@@ -416,12 +416,15 @@ class VmCommand(PluginCommand):
                 cursor = database.db[f'{cloud}-vm']
                 for name in names:
                     for node in cursor.find({'name': name}):
-                        ips.update(set(node['public_ips']))
-                ips = list(ips)
+                        ips.append(node['ip_public'])
+                ips = list(set(ips))
                 pprint(ips)
 
             for ip in ips:
-                Shell.ping(host=ip, count=count)
+                result = Shell.ping(host=ip, count=count)
+                banner(ip)
+                print (result)
+                print()
 
         elif arguments.check:
 
@@ -507,7 +510,7 @@ class VmCommand(PluginCommand):
                 if arguments['--dryrun']:
                     print(f"start node {name}")
                 else:
-                    vms = provider.start(names=name, cloud=cloud)
+                    vms = provider.start(name=name, cloud=cloud)
 
                     provider.Print(vms, output=arguments.output, kind="vm")
 
@@ -632,7 +635,8 @@ class VmCommand(PluginCommand):
 
             parameters = dotdict()
 
-            parameters.names = arguments.name
+            # parameters.names = arguments.name
+
             parameters.group = groups
             for attribute in ["image", "username", "flavor", "key", "secgroup"]:
                 parameters[attribute] = Parameter.find(attribute,
@@ -647,43 +651,94 @@ class VmCommand(PluginCommand):
 
             parameters.secgroup = arguments.secgroup or "default"
 
-            # pprint(parameters)
-
-            if arguments['--dryrun']:
-                Console.ok(f"Dryrun stop: \n"
-                           f"        cloud={cloud}\n"
-                           f"        names={names}\n"
-                           f"        provide={provider}")
-                for attribute in parameters:
-                    value = parameters[attribute]
-                    Console.ok(f"        {attribute}={value}")
+            #
+            # determine names
+            #
 
 
+            if names and arguments.n and len(names) > 1:
+                Console.error(
+                    f"When using --n={arguments.n}, you can only specify one name")
+                return ""
+            # cases
+            #
 
+            # only name --name = "a[1,2]"
+            # name and count # --name="a" --n=3, names must be of length 1
+            # only count --n=2 names are read form var
+            # nothing, just use one vm
 
-            else:
+            # determin names
+            _names = []
+            if not names:
 
-                # pprint (parameters)
                 if not arguments.n:
                     count = 1
                 else:
                     count = int(arguments.n)
 
+
                 for i in range(0, count):
                     if names is None:
                         n = Name()
                         n.incr()
-                        parameters.names = str(n)
+                        name = str(n)
+                    else:
+                        n = names[i]
+                        name = str(n)
+                    _names.append(name)
+                names = _names
+
+            elif len(names) == 1 and arguments.n:
+
+                name = names[0]
+                for i in range(0,int(arguments.n)):
+
+                    _names.append(f"{name}-{i}")
+                names = _names
+
+
+            # pprint(parameters)
+
+
+            for name in names:
+
+
+                parameters.name = name
+                if arguments['--dryrun']:
+                    banner("boot")
+
+                    pprint(parameters)
+
+                    Console.ok(f"Dryrun boot {name}: \n"
+                               f"        cloud={cloud}\n"
+                               f"        names={names}\n"
+                               f"        provide={provider}")
+                    print()
+                    for attribute in parameters:
+                        value = parameters[attribute]
+                        Console.ok(f"        {attribute}={value}")
+
+                else:
 
                     # parameters.progress = len(parameters.names) < 2
 
-                    vms = provider.create(**parameters)
+                    try:
+                        vms = provider.create(**parameters)
+                    except TimeoutError:
+                        Console.error(f"Timeout during vm creation. There may be a problem with the cloud {cloud}")
+
+                    except Exception as e:
+                        Console.error("create problem")
+                        print (e)
+                        return ""
+
                     variables['vm'] = str(n)
                     if arguments["-v"]:
                         banner("Details")
                         pprint(vms)
 
-                # provider.Print(arguments.output, "vm", vms)
+            # provider.Print(arguments.output, "vm", vms)
 
 
 
@@ -843,7 +898,14 @@ class VmCommand(PluginCommand):
                 # VERBOSE(vm)
                 cloud = vm["cm"]["cloud"]
                 provider = Provider(name=cloud)
-                provider.ssh(vm=vm)
+                try:
+                    provider.ssh(vm=vm)
+                except KeyError:
+                    vms = provider.list()
+
+                    provider.Print(vms, output=arguments.output, kind="vm")
+
+                    provider.ssh(vm=vm)
                 return ""
             else:
                 # command on all vms
@@ -946,4 +1008,4 @@ class VmCommand(PluginCommand):
                             f"Instance unavailable after timeout of {arguments.timeout}")
                     # print(r)
 
-            return ""
+        return ""

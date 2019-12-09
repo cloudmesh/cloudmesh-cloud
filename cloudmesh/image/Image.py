@@ -16,6 +16,8 @@ class Image(object):
             username = "cc"
         elif any(x in image for x in ["ubuntu", "wily", "xenial"]):
             username = "ubuntu"
+        elif image.startswith("oracle"):
+            username = "opc"
         elif "centos" in image:
             username = "root"
         elif "fedora" in image:

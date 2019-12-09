@@ -57,8 +57,6 @@ class Provider(ComputeNodeABC):
                 Provider as OracleComputeProvider
             provider = OracleComputeProvider
 
-            print("RRRR")
-
         # elif self.kind in ["vagrant", "virtualbox"]:
         #    from cloudmesh.compute.virtualbox.Provider import \
         #        Provider as VirtualboxCloudProvider
@@ -159,8 +157,6 @@ class Provider(ComputeNodeABC):
 
         if name is None:
             name_generator = Name()
-            # name_generator.incr() # this is already called in the vm.py not
-            # needed to be called here.
             vms = [str(name_generator)]
         else:
             vms = self.expand(name)
@@ -194,19 +190,22 @@ class Provider(ComputeNodeABC):
         # Step 2. identify the image and flavor from kwargs and if they do
         # not exist read them for that cloud from the yaml file
 
-        arguments.image = self.find_attribute('image', [variables, defaults])
+        if arguments.image is None:
+            arguments.image = self.find_attribute('image', [variables, defaults])
 
         if arguments.image is None:
             raise ValueError("image not specified")
 
-        arguments.group = self.find_attribute('group', [variables, defaults])
+        if arguments.group is None:
+            arguments.group = self.find_attribute('group', [variables, defaults])
 
         if arguments.group is None:
             arguments.group = "default"
 
-        arguments.size = self.find_attribute('size', [variables, defaults])
+        if arguments.size is None:
+            arguments.size = self.find_attribute('size', [variables, defaults])
 
-        if arguments.size is None and 'size' is None:
+        if arguments.size is None:
             raise ValueError("size not specified")
 
         # Step 3: use the create command to create the vms

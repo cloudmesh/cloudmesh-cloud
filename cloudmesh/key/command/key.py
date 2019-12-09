@@ -239,8 +239,8 @@ class KeyCommand(PluginCommand):
             return ""
 
         elif arguments.group and arguments.list:
+
             key = KeyGroup()
-            #key group delete NAMES [--dryrun]
 
             names = Parameter.expand(arguments.NAMES)
 
@@ -251,7 +251,7 @@ class KeyCommand(PluginCommand):
                 db_keys = db.find(collection=f"{cloud}-{kind}")
                 keys = get_key_list(db_keys)
                 # print("DDDD", keys)
-                key.Print(data=keys, kind=kind)
+                key.Print(data=keys, kind=kind, output=arguments.output)
 
 
             return ""

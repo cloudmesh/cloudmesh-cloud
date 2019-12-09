@@ -16,6 +16,7 @@ from cloudmesh.provider import ComputeProviderPlugin
 import sys, inspect
 from cloudmesh.provider import Provider as ProviderList
 
+
 class ProviderCommand(PluginCommand):
 
     # see https://github.com/cloudmesh/client/blob/master/cloudmesh_client/shell/plugins/KeyCommand.py
@@ -55,7 +56,7 @@ class ProviderCommand(PluginCommand):
             providers = ComputeProviderPlugin.__subclasses__()
 
             for provider in providers:
-                print (provider.kind)
+                print(provider.kind)
                 pprint(provider)
 
             banner("Available Compute Providers")
@@ -66,9 +67,9 @@ class ProviderCommand(PluginCommand):
                          "azure"]:
                 try:
                     provider = providers[name]
-                    print (name)
+                    print(name)
                 except Exception as e:
-                    print (e)
+                    print(e)
         elif arguments.delete:
             raise NotImplementedError
 

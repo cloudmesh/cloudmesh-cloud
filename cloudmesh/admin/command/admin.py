@@ -13,6 +13,7 @@ from cloudmesh.shell.command import PluginCommand, map_parameters
 from cloudmesh.shell.command import command
 from cloudmesh.common.debug import VERBOSE
 
+
 class AdminCommand(PluginCommand):
     # noinspection PyPep8
     banner = textwrap.dedent("""
@@ -119,17 +120,18 @@ class AdminCommand(PluginCommand):
 
             if arguments.install and arguments.docker:
 
-                installer = MongoInstaller(dryrun=arguments.dryrun, force=arguments.force)
+                installer = MongoInstaller(dryrun=arguments.dryrun,
+                                           force=arguments.force)
                 r = installer.docker()
                 return r
 
             elif arguments.install:
 
-
                 print("MongoDB install")
                 print(79 * "=")
                 # print(arguments.force)
-                installer = MongoInstaller(dryrun=arguments.dryrun, force=arguments.force)
+                installer = MongoInstaller(dryrun=arguments.dryrun,
+                                           force=arguments.force)
 
                 sudo = not arguments.nosudo
                 # if 'linux' in platform.lower() :

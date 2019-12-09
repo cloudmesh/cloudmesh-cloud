@@ -16,9 +16,11 @@ class AzureStorageProvider(StorageProviderABC):
         self._container = self._driver.get_container(container_name=container)
 
         if not self._container:
-            raise Exception(f"The container `{container}` not found in account {account_name}.")
+            raise Exception(
+                f"The container `{container}` not found in account {account_name}.")
 
-        self._container_url = self._container.extra.get('url').replace('http', 'https')
+        self._container_url = self._container.extra.get('url').replace('http',
+                                                                       'https')
 
     def put(self, local_path):
         """

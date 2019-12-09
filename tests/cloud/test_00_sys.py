@@ -35,6 +35,5 @@ class Test_Sys:
         Benchmark.Stop()
         VERBOSE(result)
 
-
     def test_benchmark(self):
         Benchmark.print(sysinfo=True, csv=True, tag=cloud)

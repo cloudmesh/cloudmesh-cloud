@@ -61,10 +61,12 @@ import oyaml as yaml
 from cloudmesh.common.dotdict import dotdict
 from cloudmesh.common.util import path_expand
 from cloudmesh.configuration.Config import Config
+from cloudmesh.common.console import Console
+import sys
 
 class Name(dotdict):
 
-    def __init__(self, schema=None, **kwargs):
+    def __init__(self, **kwargs):
         """
         Defines a name tag that sets the format of the name to the specified schema
         :param schema:
@@ -74,24 +76,24 @@ class Name(dotdict):
         # init dict with schema, path, kwargs
         #
 
+        self.path = path_expand("~/.cloudmesh/name.yaml")
 
-        if schema is None  and len(kwargs) == 0:
-            path = path_expand("~/.cloudmesh/name.yaml")
-            data = self.load(path)
+        if len(kwargs) == 0:
+            data = self.load(self.path)
             self.assign(data)
 
         else:
-
-
-            self.assign(kwargs)
             if "path" not in kwargs:
-                path= self.__dict__['path'] = path_expand("~/.cloudmesh/name.yaml")
-                data = self.load(path)
+                self.path  = "~/.cloudmesh/name.yaml"
+                data = self.load(self.path)
                 self.assign(data)
 
-            if schema is not None:
-                self.__dict__['schema'] = schema
+            self.assign(kwargs)
 
+
+            if kwargs["schema"]:
+                schema = kwargs["schema"]
+                self.__dict__['schema'] = schema
 
         if "counter" not in self.__dict__:
             self.reset()
@@ -104,17 +106,19 @@ class Name(dotdict):
     def schema(self):
         return self.__dict__['schema']
 
-
     def set(self, schema):
         self.__dict__['schema'] = schema
 
-
     def assign(self, data):
+        # VERBOSE(data)
         for entry in data:
             self.__dict__[entry] = data[entry]
 
-    def load(self, path):
+    def overwrite(self, d):
+        self.__dict__ = d
 
+    def load(self, path):
+        path = path_expand(path)
         data = {"wrong": "True"}
         if os.path.exists(path):
             with open(path, 'rb') as dbfile:
@@ -124,44 +128,30 @@ class Name(dotdict):
             if not os.path.exists(prefix):
                 os.makedirs(prefix)
 
-            # data = {
-            #     'counter': 1,
-            #     'path': path,
-            #     'kind': "vm",
-            #     'schema': "{experiment}-{group}-{user}-{kind}-{counter}",
-            #     'experiment': 'exp',
-            #     'group': 'group',
-            #     'user': 'user'
-            # }
             config = Config()
             user = config["cloudmesh.profile.user"]
+            if user == "TBD":
+                print ("WARNING: please set cloudmesh.profile.user we found TBD")
             data = {
                 'counter': 1,
-                'path': path,
-                'schema': "{user}-vm-{counter}",
+                'kind': 'vm',
+                'schema': "{user}-{kind}-{counter}",
                 'user': user
             }
-
             self.flush(data)
         return data
 
     def flush(self, data=None):
-
         if data is None:
             data = self.__dict__
-
-        path = path_expand(data['path'])
-        with open(path, 'w') as yaml_file:
+        with open(self.path, 'w') as yaml_file:
             yaml.dump(data, yaml_file, default_flow_style=False)
-
-
 
     def __str__(self):
         return str(self.__dict__["schema"].format(**self.__dict__))
 
     def dict(self):
         return self.__dict__
-
 
     def reset(self):
         self.__dict__["counter"] = 1
@@ -171,5 +161,5 @@ class Name(dotdict):
         self.__dict__["counter"] += 1
         self.flush()
 
-name = Name()
 
+name = Name()

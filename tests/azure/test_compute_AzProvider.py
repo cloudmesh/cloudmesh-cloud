@@ -13,9 +13,7 @@ from cloudmesh.configuration.Config import Config
 
 Benchmark.debug()
 
-
 CLOUD = "azazure"
-
 
 user = Config()["cloudmesh.profile.user"]
 

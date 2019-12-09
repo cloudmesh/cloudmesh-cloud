@@ -18,9 +18,9 @@ from cloudmesh.configuration.Config import Config
 
 Benchmark.debug()
 
+
 @pytest.mark.incremental
 class TestConfig:
-
 
     def config_n_load(self, n):
         config = [None] * n
@@ -30,24 +30,26 @@ class TestConfig:
         StopWatch.stop(f"test_config_load n={n}")
 
     def test_config(self):
-        print ()
+        HEADING()
+        print()
         for n in range(1, 10):
             self.config_n_load(n)
             n_1 = StopWatch.get(f"test_config_load n=1")
             n_n = StopWatch.get(f"test_config_load n={n}")
-            print (n, n_1 >= n_n, n_1, n_n, n_1 - n_n)
+            print(n, n_1 >= n_n, n_1, n_n, n_1 - n_n)
 
         n_1 = StopWatch.get(f"test_config_load n=1")
         n_n = StopWatch.get(f"test_config_load n=9")
         assert (n_1 * 9 >= n_n)
 
     def test_search(self):
+        HEADING()
         config = Config()
 
         Benchmark.Start()
         r = config.search("cloudmesh.cloud.*.cm.active", True)
         Benchmark.Stop()
-        pprint (r)
+        pprint(r)
 
     def test_dict(self):
         HEADING()
@@ -105,12 +107,14 @@ class TestConfig:
         pprint(config["cloudmesh"]["profile"])
 
     def test_if_yaml_file_exists(self):
+        HEADING()
         config = Config()
         config.create()
         filename = path_expand("~/.cloudmesh/cloudmesh.yaml")
         assert os.path.isfile(Path(filename))
 
     def test_set(self):
+        HEADING()
         Benchmark.Start()
         config = Config()
         config["cloudmesh.test.nested"] = "Gregor"
@@ -126,4 +130,5 @@ class TestConfig:
     '''
 
     def test_benchmark(self):
-        Benchmark.print(sysinfo=False)
+        HEADING()
+        Benchmark.print(csv=True, sysinfo=False)

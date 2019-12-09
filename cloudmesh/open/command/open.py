@@ -67,7 +67,7 @@ class OpenCommand(PluginCommand):
                 filename = f"https://console.aws.amazon.com/iam/home#/users"
             else:
                 filename = "https://console.aws.amazon.com/iam/home#/users" \
-                         f"/{name}?section=security_credentials"
+                           f"/{name}?section=security_credentials"
         elif arguments.baremetal and arguments.tacc:
             filename = str("https://chi.tacc.chameleoncloud.org")
         elif arguments.baremetal and arguments.uc:
@@ -81,10 +81,6 @@ class OpenCommand(PluginCommand):
         elif filename == "doc":
             # filename = "https://cloudmesh-community.github.io/"
             filename = "https://cloudmesh.github.io/cloudmesh-manual/"
-
-
-
-
 
         if not (filename.startswith("file:") or filename.startswith("http")):
 

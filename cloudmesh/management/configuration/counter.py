@@ -27,7 +27,8 @@ class Counter(object):
             mkdir(config_folder)
 
         if not isfile(self.counter_file_path):
-            destination_path = Path(join(dirname(realpath(__file__)), "../etc/counter.yaml"))
+            destination_path = Path(
+                join(dirname(realpath(__file__)), "../etc/counter.yaml"))
             copyfile(destination_path.resolve(), self.counter_file_path)
 
         with open(self.counter_file_path, "r") as stream:
@@ -40,9 +41,10 @@ class Counter(object):
         """
         counter_value = self.counters.get(name)
         if counter_value is not None:
-            self.set(name,  counter_value + 1)
+            self.set(name, counter_value + 1)
         else:
-            raise AttributeError("Counters does not contain a counter with the name: " + name)
+            raise AttributeError(
+                "Counters does not contain a counter with the name: " + name)
 
     def decr(self, name='counter'):
         """
@@ -55,7 +57,8 @@ class Counter(object):
             counter_value = 0 if counter_value <= 1 else counter_value - 1
             self.set(name, counter_value)
         else:
-            raise AttributeError("Counters does not contain a counter with the name: " + name)
+            raise AttributeError(
+                "Counters does not contain a counter with the name: " + name)
 
     def get(self, name='counter'):
         """
@@ -76,7 +79,8 @@ class Counter(object):
         if isinstance(value, int):
             self.counters.__setitem__(name, value)
             with open(self.counter_file_path, "w") as stream:
-                yaml.safe_dump(self.counters.copy(), stream, default_flow_style=False)
+                yaml.safe_dump(self.counters.copy(), stream,
+                               default_flow_style=False)
         elif value is None:
             raise ValueError("The value for the counter cannot be empty")
         else:

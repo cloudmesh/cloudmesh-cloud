@@ -14,10 +14,11 @@ import shutil
 from progress.bar import Bar
 from cloudmesh.common.dotdict import dotdict
 
+
 class MongoDocker(object):
 
-
-    def __init__(self, configuration="~/.cloudmesh/cloudmesh.yaml", dryrun=False):
+    def __init__(self, configuration="~/.cloudmesh/cloudmesh.yaml",
+                 dryrun=False):
         path = path_expand(configuration)
         self.config = Config(config_path=path)
         self.data = self.config["cloudmesh.data.mongo"]
@@ -29,9 +30,11 @@ class MongoDocker(object):
         self.port = self.data["MONGO_PORT"]
         self.host = self.data["MONGO_HOST"]
         self.dryrun = dryrun
-        self.mongo_path=path_expand(self.data["MONGO_DOWNLOAD"]["docker"]["MONGO_PATH"])
-        self.mongo_log=path_expand(self.data["MONGO_DOWNLOAD"]["docker"]["MONGO_LOG"])
-        self.version=self.data["MONGO_DOWNLOAD"]["docker"]["version"]
+        self.mongo_path = path_expand(
+            self.data["MONGO_DOWNLOAD"]["docker"]["MONGO_PATH"])
+        self.mongo_log = path_expand(
+            self.data["MONGO_DOWNLOAD"]["docker"]["MONGO_LOG"])
+        self.version = self.data["MONGO_DOWNLOAD"]["docker"]["version"]
 
         self.flag_name = "--name cloudmesh-mongo"
         self.flag_data = f"-v {self.mongo_path}:/data/db"
@@ -41,7 +44,6 @@ class MongoDocker(object):
 
     def run(self, script, verbose=True, terminate=False):
         if verbose:
-
             Console.msg(script)
 
         if self.dryrun:
@@ -56,7 +58,7 @@ class MongoDocker(object):
             except Exception as e:
                 if verbose:
                     Console.error("Script returned with error")
-                    print (e)
+                    print(e)
                 if terminate:
                     sys.exit()
                 return "error"
@@ -104,9 +106,7 @@ class MongoDocker(object):
         Console.msg("")
         Console.msg(f"   {id}")
         Console.msg("")
-        print (script)
-
-
+        print(script)
 
     def execute(self, command, auth=False, terminate=False, verbose=False):
         """
@@ -138,7 +138,6 @@ class MongoDocker(object):
         except:
             pass
 
-
     def wait(self, delay=20, verbose=False):
         """
         test if mongo is available
@@ -158,12 +157,10 @@ class MongoDocker(object):
                     return
             except Exception as e:
                 if verbose:
-                    print (e)
+                    print(e)
                 pass
             bar.next()
             time.sleep(1)
-
-
 
     def create_admin(self):
         """
@@ -171,16 +168,15 @@ class MongoDocker(object):
         :return:
         """
         script = \
-          f"docker exec {self.NAME}  mongo admin --eval "\
-          '"'\
-          "db.getSiblingDB('admin').createUser({"\
-          f"user:'{self.username}',"\
-          f"pwd:'{self.password}',"\
-          "roles:[{role:'root',db:'admin'}]}); " \
-          "db.shutdownServer();"\
-          '"'
+            f"docker exec {self.NAME}  mongo admin --eval " \
+            '"' \
+            "db.getSiblingDB('admin').createUser({" \
+            f"user:'{self.username}'," \
+            f"pwd:'{self.password}'," \
+            "roles:[{role:'root',db:'admin'}]}); " \
+            "db.shutdownServer();" \
+            '"'
         os.system(script)
-
 
     def kill(self, name=None):
         """
@@ -208,14 +204,13 @@ class MongoDocker(object):
         :return:
         """
 
-        #script = \
+        # script = \
         #    f"docker build . -t {self.NAME}"
 
         script = \
             f"docker ps"
         result = self.run(script, verbose=False)
         return result
-
 
     def install(self, clean=False, pull=True):
         """
@@ -229,11 +224,11 @@ class MongoDocker(object):
             self.run(script)
         if clean:
             try:
-               shutil.rmtree(self.mongo_path)
+                shutil.rmtree(self.mongo_path)
             except:
                 pass
             try:
-               shutil.rmtree(self.mongo_log)
+                shutil.rmtree(self.mongo_log)
             except:
                 pass
 
@@ -265,7 +260,7 @@ class MongoDocker(object):
         msg = "No mongod running"
         state = "error"
 
-        print ("XXX")
+        print("XXX")
         try:
             result = self.execute(
                 "\"printjson(db.adminCommand('listDatabases'))\"",
@@ -275,9 +270,9 @@ class MongoDocker(object):
             if '"ok"' in result:
                 state = "ok"
                 msg = "running"
-            print (result)
+            print(result)
         except Exception as e:
-            print (e)
+            print(e)
             pass
 
         result = dotdict(
@@ -287,14 +282,15 @@ class MongoDocker(object):
              })
         return result
 
+
 if __name__ == "__main__":
     mongo = MongoDocker()
 
-    #mongo = MongoDocker(dryrun=True)
+    # mongo = MongoDocker(dryrun=True)
 
     mongo.initialize()
 
-    #mongo.sh("ps -e | grep mongo")
+    # mongo.sh("ps -e | grep mongo")
 
     mongo.start()
     mongo.wait()
@@ -302,4 +298,3 @@ if __name__ == "__main__":
     mongo.ps()
 
     mongo.kill()
-

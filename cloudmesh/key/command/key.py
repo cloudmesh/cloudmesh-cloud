@@ -33,19 +33,19 @@ class KeyCommand(PluginCommand):
              key list --source=git [--output=OUTPUT] [--username=USERNAME]
              key list [--output=OUTPUT]
              key init
-             key add NAME --filename=FILENAME [--output=OUTPUT]
              key add [NAME] [--source=FILENAME]
              key add [NAME] [--source=git]
              key add [NAME] [--source=ssh]
              key delete NAMES [--cloud=CLOUDS] [--dryrun]
              key upload [NAMES] [--cloud=CLOUDS] [--dryrun]
              key upload [NAMES] [VMS] [--dryrun]
-             key group upload [NAMES] [--group=GROUPNAMES] [--cloud=CLOUDS] [--dryrun]
-             key group add [--group=GROUPNAMES] [--cloud=CLOUDS] [--dryrun]
-             key group add --file=FILENAME
+             key group add GROUPNAMES KEYNAME
+             key todo group upload [NAMES] [--group=GROUPNAMES] [--cloud=CLOUDS] [--dryrun]
+             key todo group add [--group=GROUPNAMES] [--cloud=CLOUDS] [--dryrun]
+             key todo group add --file=FILENAME
              key group delete [--group=GROUPNAMES] [NAMES] [--dryrun]
              key group list [--group=GROUPNAMES] [--output=OUTPUT]
-             key group export --group=GROUNAMES --filename=FILENAME
+             key todo group export --group=GROUNAMES --filename=FILENAME
 
 
            Arguments:
@@ -168,6 +168,20 @@ class KeyCommand(PluginCommand):
 
                 If a key is included in multiple groups they will be added
                 to the grouplist of the key
+
+                NEW EXAMPLE
+
+                cms key add junk --source=~/.ssh/junk
+                cms key group add --group=abc --name=\"laszewsk_git_[0,,1,2]\"
+                cms key goup list
+                cms key goup list --gropu=abc
+
+                cms key group export --file=~/authorized_keys --group=abc,klm
+
+                cmas key group upload --group=NAME ip=.... --authorized_keys
+                cmas key group add --group=NAME  ip=.... --authorized_keys
+
+
         """
         def get_key_list(db_keys):
             #pprint(db_keys)
@@ -268,6 +282,7 @@ class KeyCommand(PluginCommand):
 
             key.add(names)
 
+            # def add(self, name=None, key=None):
 
             return ""
 

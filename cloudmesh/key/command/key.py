@@ -11,9 +11,10 @@ from cloudmesh.mongo.CmDatabase import CmDatabase
 from cloudmesh.shell.command import PluginCommand
 from cloudmesh.shell.command import command, map_parameters
 from cloudmesh.configuration.security.encrypt import KeyHandler
-from cloudmesh.common.util import path_expand
+from cloudmesh.common.util import path_expand, yn_choice
 from pprint import pprint
 import os
+import sys
 
 
 class KeyCommand(PluginCommand):
@@ -39,7 +40,6 @@ class KeyCommand(PluginCommand):
              key add [NAME] [--source=git]
              key add [NAME] [--source=ssh]
              key delete NAMES [--cloud=CLOUDS] [--dryrun]
-             key gen (rsa | ssh) [--name=KEYNAME] [--nopass] [--set_path]
              key upload [NAMES] [--cloud=CLOUDS] [--dryrun]
              key upload [NAMES] [VMS] [--dryrun]
              key group upload [NAMES] [--group=GROUPNAMES] [--cloud=CLOUDS] [--dryrun]
@@ -48,7 +48,8 @@ class KeyCommand(PluginCommand):
              key group delete [--group=GROUPNAMES] [NAMES] [--dryrun]
              key group list [--group=GROUPNAMES] [--output=OUTPUT]
              key group export --group=GROUNAMES --filename=FILENAME
-
+             key gen (rsa | ssh) [--filename=FILENAME] [--nopass] [--set_path]
+             key verify (ssh | pem) --filename=FILENAME [--pub]
 
            Arguments:
              VMS            Parameterized list of virtual machines
@@ -62,12 +63,12 @@ class KeyCommand(PluginCommand):
            Options:
               --dir=DIR             the directory with keys [default: ~/.ssh]
               --filename=FILENAME   the name and full path to the file
-              --name=KEYNAME        The name of a key
+              --nopass              Flag indicating if the key has no password
               --output=OUTPUT       the format of the output [default: table]
+              --pub                 Indicates that the public key is passed in
+              --set_path            Sets the security key paths to KEYNAME
               --source=SOURCE       the source for the keys
               --username=USERNAME   the source for the keys [default: none]
-              --nopass              Flag indicating if the key has no password
-              --set_path            Sets the security key paths to KEYNAME
 
 
            Description:
@@ -191,6 +192,8 @@ class KeyCommand(PluginCommand):
                        'name',
                        'nopass',
                        'output',
+                       'pub',
+                       'pwd',
                        'set_path',
                        'source')
 
@@ -380,28 +383,41 @@ class KeyCommand(PluginCommand):
             return ""
 
         elif arguments.gen:
+            """
+            key gen (rsa | ssh) [--filename=FILENAME] [--nopass] [--set_path]
+            Generate an RSA key pair with pem or ssh encoding for the public
+            key. The private key is always encoded as a PEM file.
+            """
             config = Config()
+
+            # Check if password will be requested
             ap = not arguments.nopass
+
+            if not ap:
+                Console.warning( "Private key will NOT have a password" )
+                cnt = yn_choice( message="Continue, despite risk?", default="N")
+                if not cnt:
+                    sys.exit()
 
             # Discern the name of the public and private keys
             rk_path = None
             uk_path = None
-            if arguments.name:
-                if arguments.name[-4:] == ".pub":
+            if arguments.filename:
+                if arguments.filename[-4:] == ".pub":
                     rk_path = path_expand(arguments.name[-4:])
                     uk_path = path_expand(arguments.name)
-                elif arguments.name[-5:] == ".priv":
+                elif arguments.filename[-5:] == ".priv":
                     rk_path = path_expand(arguments.name)
                     uk_path = path_expand(arguments.name[-5:])
                 else:
-                    rk_path = path_expand(arguments.name)
+                    rk_path = path_expand(arguments.filename)
                     uk_path = rk_path + ".pub"
             else:
                 rk_path = path_expand(config['cloudmesh.security.privatekey'])
                 uk_path = path_expand(config['cloudmesh.security.publickey'])
 
             # Set the path if requested
-            if arguments.set_path and arguments.name:
+            if arguments.set_path and arguments.filename:
                 config['cloudmesh.security.privatekey'] = rk_path
                 config['cloudmesh.security.publickey'] = uk_path
                 config.save()
@@ -436,6 +452,38 @@ class KeyCommand(PluginCommand):
 
             Console.ok("Success")
 
+        elif arguments.verify:
+            """
+            key verify (ssh | pem) --filename=FILENAME --pub
+            Verifies the encoding (pem or ssh) of the key (private or public)
+            """
+            kh = KeyHandler()
+            fp = arguments.filename
+            kt = None
+            enc = None
+
+            # Discern key type
+            if arguments.pub:
+                kt = "public"
+                # Discern public key encoding
+                if arguments.ssh:
+                    enc, e = "OpenSSH", "SSH"
+                elif arguments.pem: #PEM encoding
+                    enc = e = "PEM"
+
+                # Load the public key, if no error occurs formatting is correct
+                u = kh.load_key(path=fp, key_type="PUB", encoding = e, ask_pass=False)
+
+            else:
+                kt, enc = "private", "PEM"
+
+                # Load the private key to verify the formatting and password of
+                # the key file. If no error occurs the format and pwd are correct
+                r = kh.load_key(path=fp, key_type="PRIV", encoding=enc, ask_pass=True)
+
+            m = f"Success the {kt} key {fp} has proper {enc} format"
+            Console.ok( m )
+                
         elif arguments.delete and arguments.NAMES:
             # key delete NAMES [--dryrun]
 

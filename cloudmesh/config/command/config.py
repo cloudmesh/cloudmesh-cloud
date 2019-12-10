@@ -46,10 +46,6 @@ class ConfigCommand(PluginCommand):
              config set ATTRIBUTE=VALUE
              config get ATTRIBUTE [--output=OUTPUT]
              config value ATTRIBUTE
-             config ssh keygen
-             config ssh verify
-             config ssh check
-             config ssh pem
              config cloud verify NAME [KIND]
              config cloud edit [NAME] [KIND]
              config cloud list NAME [KIND] [--secrets]
@@ -86,27 +82,19 @@ class ConfigCommand(PluginCommand):
 
              Key generation
 
-                Keys must be generated with
+                Keys can be generated with 
 
-                    ssh-keygen -t rsa -m pem
-                    openssl rsa -in ~/.ssh/id_rsa -out ~/.ssh/id_rsa.pem
+                    cms key gen ssh 
 
-                or
-                    cms config ssh keygen
+                Key validity and password can be verified with
 
-                Key validity can be checked with
-
-                    cms config check
-
-                The key password can be verified with
-
-                    cms config verify
-
+                    cms key verify 
 
                 ssh-add
 
-                cms config encrypt ~/.cloudmesh/cloudmesh.yaml
-                cms config decrypt ~/.cloudmesh/cloudmesh.yaml
+                cms config encrypt 
+
+                cms config decrypt 
 
 
                 config set ATTRIBUTE=VALUE
@@ -241,7 +229,7 @@ class ConfigCommand(PluginCommand):
 
             return ""
 
-        elif arguments.check and not arguments.ssh:
+        elif arguments.check:
 
             Config.check()
 
@@ -252,29 +240,6 @@ class ConfigCommand(PluginCommand):
         elif arguments.decrypt:
             config = Config()
             config.decrypt(ask_pass=not arguments.nopass)
-
-        elif arguments.ssh and arguments.verify:
-
-            e = EncryptFile(source, destination)
-
-            e.pem_verify()
-
-        elif arguments.ssh and arguments.check:
-
-            e = EncryptFile(source, destination)
-
-            key = path_expand("~/.ssh/id_rsa")
-            r = e.check_key(key)
-            if r:
-                Console.ok(f"Key {key} is valid")
-            # does not work as it does not change it to pem format
-            # e.check_passphrase()
-
-        elif arguments.ssh and arguments.pem:
-
-            e = EncryptFile(source, destination)
-
-            r = e.pem_create()
 
         elif arguments.set:
 
@@ -329,44 +294,43 @@ class ConfigCommand(PluginCommand):
                 regexp = arguments.exception
 
             # Verify argument is valid python regular expression
-            valid = False
             try:
                 r = re.compile(regexp)
-                valid = True
             except re.error:
                 Console.error( f"Invalid Python RegExp:{regexp}")
+                sys.exit()
 
-            if valid:
-                config = Config()
-                path = None
-                section = None
-                # Assign information based on arguments
-                if arguments.secret:
-                    path = 'cloudmesh.security.secrets'
-                    section = "secrets"
-                elif arguments.exception:
-                    path = 'cloudmesh.security.exceptions'
-                    section = "exceptions"
+            config = Config()
+            path = None
+            section = None
 
-                # Get current list of regular expressions from related section
-                exps = config[path]
+            # Assign information based on arguments
+            if arguments.secret:
+                path = 'cloudmesh.security.secrets'
+                section = "secrets"
+            elif arguments.exception:
+                path = 'cloudmesh.security.exceptions'
+                section = "exceptions"
 
-                # Add argument to expressions in related section
-                if arguments.add:
-                    if regexp not in exps:
-                        config[path].append(regexp)
-                        config.save()
-                        Console.ok( f"Added {regexp} to {section}" )
-                    else:
-                        Console.warning( f"{regexp} already in {section}" )
-                # Remove argument from expressions in related section
-                elif arguments.rmv:
-                    if regexp in exps:
-                        config[path].remove(regexp)
-                        config.save()
-                        Console.ok( f"Removed {regexp} from {section}" )
-                    else:
-                        Console.warning( f"{regexp} not in {section}" )
+            # Get current list of regular expressions from related section
+            exps = config[path]
+
+            # Add argument to expressions in related section
+            if arguments.add:
+                if regexp not in exps:
+                    config[path].append(regexp)
+                    config.save()
+                    Console.ok( f"Added {regexp} to {section}" )
+                else:
+                    Console.warning( f"{regexp} already in {section}" )
+            # Remove argument from expressions in related section
+            elif arguments.rmv:
+                if regexp in exps:
+                    config[path].remove(regexp)
+                    config.save()
+                    Console.ok( f"Removed {regexp} from {section}" )
+                else:
+                    Console.warning( f"{regexp} not in {section}" )
 
         elif arguments.get:
 
@@ -399,11 +363,5 @@ class ConfigCommand(PluginCommand):
             except Exception as e:
                 print(e)
                 return ""
-
-        elif arguments.ssh and arguments.keygen:
-
-            e = EncryptFile(source, destination)
-
-            e.ssh_keygen()
 
         return ""

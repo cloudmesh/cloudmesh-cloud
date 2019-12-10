@@ -38,10 +38,8 @@ class ConfigCommand(PluginCommand):
              config cat [less]
              config check
              config secinit
-             config security add --secret=REGEXP
-             config security add --exception=REGEXP
-             config security rmv --secret=REGEXP
-             config security rmv --exception=REGEXP
+             config security add (--secret=REGEXP | --exception=REGEXP )
+             config security rmv (--secret=REGEXP | --exception=REGEXP )
              config encrypt 
              config decrypt [--nopass]
              config edit [ATTRIBUTE]

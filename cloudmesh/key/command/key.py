@@ -39,7 +39,7 @@ class KeyCommand(PluginCommand):
              key add [NAME] [--source=git]
              key add [NAME] [--source=ssh]
              key delete NAMES [--cloud=CLOUDS] [--dryrun]
-             key gen (rsa | ssh) [--nopass] [--priv=FILENAME] [--pub=FILENAME] [--encoding=ENCODING]
+             key gen (rsa | ssh) [--name=KEYNAME] [--nopass] [--set_path]
              key upload [NAMES] [--cloud=CLOUDS] [--dryrun]
              key upload [NAMES] [VMS] [--dryrun]
              key group upload [NAMES] [--group=GROUPNAMES] [--cloud=CLOUDS] [--dryrun]
@@ -55,22 +55,19 @@ class KeyCommand(PluginCommand):
              CLOUDS         The clouds
              NAME           The name of the key.
              SOURCE         db, ssh, all
-             KEYNAME        The name of a key. For key upload it defaults to the default key name.
+             KEYNAME        The desired full path name to the key file
              OUTPUT         The format of the output (table, json, yaml)
-             FILENAME       The filename with full path in which the key
-                            is located
-             ENCODING       The encoding of the key (PEM or SSH)
+             FILENAME       The filename with full path in which the key is located
 
            Options:
               --dir=DIR             the directory with keys [default: ~/.ssh]
               --filename=FILENAME   the name and full path to the file
-              --encoding=ENCODING   The encoding of the key
               --name=KEYNAME        The name of a key
               --output=OUTPUT       the format of the output [default: table]
-              --priv=FILENAME       The full path location to the private key
-              --pub=FILENAME        The full path location to the public key
               --source=SOURCE       the source for the keys
               --username=USERNAME   the source for the keys [default: none]
+              --nopass              Flag indicating if the key has no password
+              --set_path            Sets the security key paths to KEYNAME
 
 
            Description:
@@ -191,12 +188,10 @@ class KeyCommand(PluginCommand):
                        'dir',
                        'dryrun',
                        'filename',
-                       'format',
                        'name',
                        'nopass',
-                       'priv',
-                       'pub',
                        'output',
+                       'set_path',
                        'source')
 
         variables = Variables()
@@ -388,22 +383,30 @@ class KeyCommand(PluginCommand):
             config = Config()
             ap = not arguments.nopass
 
-            # Get the full path for the private key
+            # Discern the name of the public and private keys
             rk_path = None
-            if arguments.priv:
-                rk_path = path_expand(arguments.priv)
+            uk_path = None
+            if arguments.name:
+                if arguments.name[-4:] == ".pub":
+                    rk_path = path_expand(arguments.name[-4:])
+                    uk_path = path_expand(arguments.name)
+                elif arguments.name[-5:] == ".priv":
+                    rk_path = path_expand(arguments.name)
+                    uk_path = path_expand(arguments.name[-5:])
+                else:
+                    rk_path = path_expand(arguments.name)
+                    uk_path = rk_path + ".pub"
             else:
                 rk_path = path_expand(config['cloudmesh.security.privatekey'])
-            Console.msg( f"\nPrivate key: {rk_path}")
-
-            # Get the full path for the public key
-            uk_path = None
-            if arguments.pub:
-                uk_path = path_expand(arguments.pub)
-            elif arguments.priv:
-                uk_path = f"{rk_path}.pub"
-            else:
                 uk_path = path_expand(config['cloudmesh.security.publickey'])
+
+            # Set the path if requested
+            if arguments.set_path and arguments.name:
+                config['cloudmesh.security.privatekey'] = rk_path
+                config['cloudmesh.security.publickey'] = uk_path
+                config.save()
+
+            Console.msg( f"\nPrivate key: {rk_path}")
             Console.msg( f"Public  key: {uk_path}\n")
 
             # Generate the Private and Public keys
@@ -431,7 +434,7 @@ class KeyCommand(PluginCommand):
                                   format = forma, ask_pass = False)
             kh.write_key(key = su, path = uk_path)
 
-            Console.ok("ok")
+            Console.ok("Success")
 
         elif arguments.delete and arguments.NAMES:
             # key delete NAMES [--dryrun]

@@ -4,7 +4,7 @@
 # pytest -v --capture=no  tests/1_local/test_shell.py:Test_name.<METHIDNAME>
 ###############################################################
 import pytest
-from cloudmesh.common3.Benchmark import Benchmark
+from cloudmesh.common.Benchmark import Benchmark
 from cloudmesh.common3.Shell import Shell
 from cloudmesh.common.util import HEADING
 

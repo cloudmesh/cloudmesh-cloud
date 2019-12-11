@@ -9,7 +9,7 @@ import subprocess
 
 import pytest
 from cloudmesh.common.util import HEADING
-from cloudmesh.common3.Benchmark import Benchmark
+from cloudmesh.common.Benchmark import Benchmark
 
 Benchmark.debug()
 

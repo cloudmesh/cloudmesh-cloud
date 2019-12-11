@@ -13,7 +13,7 @@ from azure.mgmt.network import NetworkManagementClient
 from azure.mgmt.resource import ResourceManagementClient
 from azure.mgmt.network.v2018_12_01.models import NetworkSecurityGroup, \
     SecurityRule
-from cloudmesh.common3.DictList import DictList
+from cloudmesh.common.DictList import DictList
 from cloudmesh.common.Printer import Printer
 import azure.mgmt.network.models
 from cloudmesh.abstractclass.ComputeNodeABC import ComputeNodeABC

@@ -6,7 +6,7 @@
 from os.path import isfile
 
 from cloudmesh.data.api.data import Data
-from cloudmesh.common3.Benchmark import Benchmark
+from cloudmesh.common.Benchmark import Benchmark
 
 Benchmark.debug()
 

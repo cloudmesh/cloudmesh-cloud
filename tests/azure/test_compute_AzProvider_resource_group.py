@@ -5,7 +5,7 @@
 
 import pytest
 from cloudmesh.common.util import HEADING
-from cloudmesh.common3.Benchmark import Benchmark
+from cloudmesh.common.Benchmark import Benchmark
 from cloudmesh.compute.libcloud.Provider import Provider
 from cloudmesh.compute.vm.Provider import Provider
 from cloudmesh.management.configuration.name import Name

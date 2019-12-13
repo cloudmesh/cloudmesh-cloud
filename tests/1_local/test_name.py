@@ -71,7 +71,7 @@ class TestName:
         pprint(data)
         assert data == dict({'counter': 3,
                              'kind': 'vm',
-                             'path': path_expand("~/.cloudmesh/name.yaml"),
+                             #'path': path_expand("~/.cloudmesh/name.yaml"),
                              'schema': '{user}-{kind}-{counter}',
                              'user': username})
 
@@ -100,7 +100,7 @@ class TestName:
         Benchmark.Stop()
         assert data == dict({'counter': 1,
                              'kind': 'vm',
-                             'path': path_expand("~/.cloudmesh/name.yaml"),
+                             #'path': path_expand("~/.cloudmesh/name.yaml"),
                              'schema': '{user}-{kind}-{counter}',
                              'user': username})
 

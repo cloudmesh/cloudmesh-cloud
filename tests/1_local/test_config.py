@@ -58,7 +58,6 @@ class TestConfig:
         result = config.dict()
         Benchmark.Stop()
         pprint(result)
-        print(config)
         print(type(config.data))
 
         assert config is not None

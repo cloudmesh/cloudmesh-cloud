@@ -63,6 +63,7 @@ from cloudmesh.common.util import path_expand
 from cloudmesh.configuration.Config import Config
 from cloudmesh.common.console import Console
 import sys
+from pathlib import Path
 
 class Name(dotdict):
 
@@ -84,7 +85,7 @@ class Name(dotdict):
 
         else:
             if "path" not in kwargs:
-                self.path  = "~/.cloudmesh/name.yaml"
+                self.path  = path_expand("~/.cloudmesh/name.yaml")
                 data = self.load(self.path)
                 self.assign(data)
 
@@ -144,8 +145,8 @@ class Name(dotdict):
     def flush(self, data=None):
         if data is None:
             data = self.__dict__
-        with open(self.path, 'w') as yaml_file:
-            yaml.dump(data, yaml_file, default_flow_style=False)
+        with open(Path(self.path), 'w') as f:
+            f.write(yaml.dump(data, default_flow_style=False))
 
     def __str__(self):
         return str(self.__dict__["schema"].format(**self.__dict__))

@@ -84,7 +84,7 @@ class Name(dotdict):
 
         else:
             if "path" not in kwargs:
-                self.path  = "~/.cloudmesh/name.yaml"
+                self.path  = path_expand("~/.cloudmesh/name.yaml")
                 data = self.load(self.path)
                 self.assign(data)
 

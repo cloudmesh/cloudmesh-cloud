@@ -56,7 +56,6 @@ class KeyCommand(PluginCommand):
              CLOUDS         The clouds
              NAME           The name of the key.
              SOURCE         db, ssh, all
-             KEYNAME        The desired full path name to the key file
              OUTPUT         The format of the output (table, json, yaml)
              FILENAME       The filename with full path in which the key is located
 
@@ -66,7 +65,8 @@ class KeyCommand(PluginCommand):
               --nopass              Flag indicating if the key has no password
               --output=OUTPUT       the format of the output [default: table]
               --pub                 Indicates that the public key is passed in
-              --set_path            Sets the security key paths to KEYNAME
+              --set_path            Sets the cloudmesh encryption key path to 
+                                    the full path of the generated keys 
               --source=SOURCE       the source for the keys
               --username=USERNAME   the source for the keys [default: none]
 

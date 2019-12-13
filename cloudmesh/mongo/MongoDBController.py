@@ -597,6 +597,9 @@ class MongoDBController(object):
 
         mode = self.data['MODE']
 
+        if mode == 'running':
+            return
+
         if mode == 'docker':
             from cloudmesh.mongo.MongoDocker import MongoDocker
             mongo = MongoDocker()

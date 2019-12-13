@@ -57,9 +57,8 @@ class TestConfig:
         Benchmark.Start()
         result = config.dict()
         Benchmark.Stop()
-        pprint(result)
         print(type(config.data))
-
+        pprint (config['cloudmesh.profile'])
         assert config is not None
 
     def test_config_subscriptable(self):

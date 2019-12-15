@@ -152,7 +152,7 @@ class Provider(ComputeNodeABC):
     def create(self, **kwargs):
 
         arguments = dotdict(kwargs)
-        name = arguments.names
+        name = arguments.name
         cloud = arguments.cloud
 
         if name is None:
@@ -189,6 +189,7 @@ class Provider(ComputeNodeABC):
 
         # Step 2. identify the image and flavor from kwargs and if they do
         # not exist read them for that cloud from the yaml file
+
         if arguments.image is None:
             arguments.image = self.find_attribute('image', [variables, defaults])
 

@@ -13,13 +13,13 @@ from cloudmesh.common.parameter import Parameter
 from cloudmesh.common.util import banner
 from cloudmesh.common.util import path_expand
 from cloudmesh.common.variables import Variables
-from cloudmesh.common3.DictList import DictList
+from cloudmesh.common.DictList import DictList
 from cloudmesh.configuration.Config import Config
 from cloudmesh.image.Image import Image
 from cloudmesh.mongo.CmDatabase import CmDatabase
 from cloudmesh.provider import ComputeProviderPlugin
 from cloudmesh.secgroup.Secgroup import Secgroup, SecgroupRule
-from cloudmesh.common3.DateTime import DateTime
+from cloudmesh.common.DateTime import DateTime
 from cloudmesh.common.debug import VERBOSE
 from cloudmesh.image.Image import Image
 

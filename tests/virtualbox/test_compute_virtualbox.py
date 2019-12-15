@@ -16,7 +16,7 @@ from cloudmesh.common.util import path_expand
 from cloudmesh.compute.virtualbox.Provider import Provider
 from cloudmesh.configuration.Config import Config
 from cloudmesh.management.configuration.name import Name
-from cloudmesh.common3.Benchmark import Benchmark
+from cloudmesh.common.Benchmark import Benchmark
 
 Benchmark.debug()
 

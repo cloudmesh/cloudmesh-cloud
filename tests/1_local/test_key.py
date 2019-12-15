@@ -10,7 +10,7 @@ from pprint import pprint
 import pytest
 from cloudmesh.common.Printer import Printer
 from cloudmesh.common.util import HEADING
-from cloudmesh.common3.Benchmark import Benchmark
+from cloudmesh.common.Benchmark import Benchmark
 from cloudmesh.management.configuration.SSHkey import SSHkey
 from cloudmesh.configuration.Config import Config
 

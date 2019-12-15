@@ -28,6 +28,6 @@ class Provider(object):
             self.load()
             # self.data[key] = provider
             variables = Variables()
-            if variables['debug'] is 'False':
+            if variables['debug'] == 'False':
                 Console.cprint("BLUE", "", f"Loading Provider: '{key}'")
             return self.data[key]

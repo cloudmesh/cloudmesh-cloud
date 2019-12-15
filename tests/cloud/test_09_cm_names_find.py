@@ -9,7 +9,7 @@ import pytest
 from cloudmesh.common.util import HEADING
 from cloudmesh.common.variables import Variables
 from cloudmesh.mongo.CmDatabase import CmDatabase
-from cloudmesh.common3.Benchmark import Benchmark
+from cloudmesh.common.Benchmark import Benchmark
 
 Benchmark.debug()
 

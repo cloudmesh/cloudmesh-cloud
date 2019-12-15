@@ -204,13 +204,16 @@ class Test_provider_vm:
                    or (data[0]["cm"]["status"] in ['BOOTING', 'TERMINATED']
                        if data and data[0].get('cm', None) is not None
                        else True)
-        elif cloud in ['azure', 'oracle']:
+        elif cloud == 'azure':
             try:
                 provider.info(name=name)
             except Exception:
                 # if there is an exception that means the group has been
                 # deleted
                 pass
+        elif cloud == 'oracle':
+            info = provider.info(name)
+            assert info is None or info[0]['_lifecycle_state'] in ['TERMINATED']
         else:
             raise NotImplementedError
         # data = provider.info(name=name)

@@ -2,6 +2,7 @@ import hashlib
 from datetime import datetime
 from pprint import pprint
 import sys
+import os
 
 from cloudmesh.common.debug import VERBOSE
 from cloudmesh.common.Printer import Printer
@@ -1008,4 +1009,46 @@ class VmCommand(PluginCommand):
                             f"Instance unavailable after timeout of {arguments.timeout}")
                     # print(r)
 
-        return ""
+            return ""
+
+        elif arguments.put:
+            """
+            vm put SOURCE DESTINATION
+            """
+            clouds, names, command = Arguments.get_commands("ssh",
+                                                            arguments,
+                                                            variables)
+
+            key = variables['key']
+
+            source = arguments['SOURCE']
+            destination = arguments['DESTINATION']
+            for cloud in clouds:
+                # p = Provider(cloud)
+                cm = CmDatabase()
+                for name in names:
+                    try:
+                        vms = cm.find_name(name, "vm")
+                    except IndexError:
+                        Console.error(f"could not find vm {name}")
+                        return ""
+                    # VERBOSE(vm)
+                    for vm in vms:
+                        try:
+                            ip = vm['public_ips']
+                        except:
+                            Console.error(f"could not find a public ip for vm {name}")
+                            return
+
+                        # get the username
+                        try:
+                            user = vm['username']
+                        except:
+                            # username not in vm...guessing
+                            imagename = list(cm.collection(cloud + '-image').find({'ImageId': vm['ImageId']}))[0][
+                                'name']
+                            user = Image.guess_username(image=imagename, cloud=cloud)
+                        cmd = f'scp -i {key} {source} {user}@{ip}:{destination}'
+                        print(cmd)
+                        os.system(cmd)
+            return ""

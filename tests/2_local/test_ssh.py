@@ -1,7 +1,7 @@
 ###############################################################
-# pytest -v --capture=no tests/1_local/test_name.py
-# pytest -v  tests/1_local/test_name.py
-# pytest -v --capture=no  tests/1_local/test_name.py:Test_name.<METHIDNAME>
+# pytest -v --capture=no tests/2_local/test_ssh.py
+# pytest -v  tests/tests/2_local/test_ssh.py
+# pytest -v --capture=no  tests/2_local/test_ssh.py:Test_name.<METHIDNAME>
 ###############################################################
 
 import os
@@ -12,7 +12,7 @@ from cloudmesh.common.Printer import Printer
 from cloudmesh.common.StopWatch import StopWatch
 from cloudmesh.common3.host import Host
 from cloudmesh.common.Shell import Shell
-from cloudmesh.common3.Benchmark import Benchmark
+from cloudmesh.common.Benchmark import Benchmark
 from cloudmesh.common.util import HEADING
 
 Benchmark.debug()

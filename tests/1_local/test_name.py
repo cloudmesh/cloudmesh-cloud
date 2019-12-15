@@ -8,7 +8,7 @@ from pprint import pprint
 
 import pytest
 from cloudmesh.common.util import path_expand
-from cloudmesh.common3.Benchmark import Benchmark
+from cloudmesh.common.Benchmark import Benchmark
 from cloudmesh.management.configuration.name import Name
 from cloudmesh.common.util import HEADING
 from cloudmesh.common.console import Console
@@ -71,7 +71,6 @@ class TestName:
         pprint(data)
         assert data == dict({'counter': 3,
                              'kind': 'vm',
-                             'path': path_expand("~/.cloudmesh/name.yaml"),
                              'schema': '{user}-{kind}-{counter}',
                              'user': username})
 
@@ -100,7 +99,6 @@ class TestName:
         Benchmark.Stop()
         assert data == dict({'counter': 1,
                              'kind': 'vm',
-                             'path': path_expand("~/.cloudmesh/name.yaml"),
                              'schema': '{user}-{kind}-{counter}',
                              'user': username})
 

@@ -204,7 +204,7 @@ class Provider(ComputeNodeABC):
         if arguments.size is None:
             arguments.size = self.find_attribute('size', [variables, defaults])
 
-        if arguments.size is None and 'size' is None:
+        if arguments.size is None:
             raise ValueError("size not specified")
 
         # Step 3: use the create command to create the vms

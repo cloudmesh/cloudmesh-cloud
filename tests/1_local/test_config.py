@@ -13,7 +13,7 @@ import pytest
 from cloudmesh.common.StopWatch import StopWatch
 from cloudmesh.common.util import HEADING
 from cloudmesh.common.util import path_expand
-from cloudmesh.common3.Benchmark import Benchmark
+from cloudmesh.common.Benchmark import Benchmark
 from cloudmesh.configuration.Config import Config
 
 Benchmark.debug()
@@ -57,10 +57,8 @@ class TestConfig:
         Benchmark.Start()
         result = config.dict()
         Benchmark.Stop()
-        pprint(result)
-        print(config)
         print(type(config.data))
-
+        pprint (config['cloudmesh.profile'])
         assert config is not None
 
     def test_config_subscriptable(self):

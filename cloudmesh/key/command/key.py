@@ -405,10 +405,10 @@ class KeyCommand(PluginCommand):
             if arguments.filename:
                 fp = path_expand(arguments.filename)
                 fname, fext = os.path.splitext(fp)
-                if fext == ".pub" || fext == ".ssh":
+                if fext == ".pub" or fext == ".ssh":
                     rk_path = fname
                     uk_path = fp
-                elif fext == ".priv" || fext == ".pem":
+                elif fext == ".priv" or fext == ".pem":
                     rk_path = fp
                     uk_path = fname + ".pub"
                 else:

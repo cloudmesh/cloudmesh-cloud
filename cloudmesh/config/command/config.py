@@ -84,12 +84,12 @@ class ConfigCommand(PluginCommand):
 
                 Keys can be generated with 
 
-                    cms key gen (ssh|pem) 
+                    cms key gen (ssh | pem) 
 
                 Key validity and password can be verified with
 
                     cms key verify (ssh | pem) 
-                    cms key gen (ssh | pem) [--filename=FILENAME] [--nopass] [--set_path]
+
              key verify (ssh | pem) [--filename=FILENAME] [--pub]
 
                 ssh-add

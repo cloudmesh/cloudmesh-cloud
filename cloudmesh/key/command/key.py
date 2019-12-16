@@ -48,8 +48,8 @@ class KeyCommand(PluginCommand):
              key group delete [--group=GROUPNAMES] [NAMES] [--dryrun]
              key group list [--group=GROUPNAMES] [--output=OUTPUT]
              key group export --group=GROUNAMES --filename=FILENAME
-             key gen (rsa | ssh) [--filename=FILENAME] [--nopass] [--set_path]
-             key verify (ssh | pem) --filename=FILENAME [--pub]
+             key gen (ssh | pem) [--filename=FILENAME] [--nopass] [--set_path]
+             key verify (ssh | pem) [--filename=FILENAME] [--pub]
 
            Arguments:
              VMS            Parameterized list of virtual machines
@@ -384,7 +384,7 @@ class KeyCommand(PluginCommand):
 
         elif arguments.gen:
             """
-            key gen (rsa | ssh) [--filename=FILENAME] [--nopass] [--set_path]
+            key gen (ssh | pem) [--filename=FILENAME] [--nopass] [--set_path]
             Generate an RSA key pair with pem or ssh encoding for the public
             key. The private key is always encoded as a PEM file.
             """
@@ -403,14 +403,16 @@ class KeyCommand(PluginCommand):
             rk_path = None
             uk_path = None
             if arguments.filename:
-                if arguments.filename[-4:] == ".pub":
-                    rk_path = path_expand(arguments.name[-4:])
-                    uk_path = path_expand(arguments.name)
-                elif arguments.filename[-5:] == ".priv":
-                    rk_path = path_expand(arguments.name)
-                    uk_path = path_expand(arguments.name[-5:])
+                fp = path_expand(arguments.filename)
+                fname, fext = os.path.splitext(fp)
+                if fext == ".pub" || fext == ".ssh":
+                    rk_path = fname
+                    uk_path = fp
+                elif fext == ".priv" || fext == ".pem":
+                    rk_path = fp
+                    uk_path = fname + ".pub"
                 else:
-                    rk_path = path_expand(arguments.filename)
+                    rk_path = fp
                     uk_path = rk_path + ".pub"
             else:
                 rk_path = path_expand(config['cloudmesh.security.privatekey'])
@@ -441,7 +443,7 @@ class KeyCommand(PluginCommand):
             if arguments.ssh:
                 enc = "SSH"
                 forma = "SSH"
-            elif arguments.rsa:
+            elif arguments.pem:
                 enc = "PEM"
                 forma = "SubjectInfo"
 
@@ -454,15 +456,26 @@ class KeyCommand(PluginCommand):
 
         elif arguments.verify:
             """
-            key verify (ssh | pem) --filename=FILENAME --pub
+            key verify (ssh | pem) [--filename=FILENAME] [--pub]
             Verifies the encoding (pem or ssh) of the key (private or public)
             """
+            # Initialize variables
             kh = KeyHandler()
-            fp = arguments.filename
-            kt = None
-            enc = None
+
+            # Determine filepath
+            fp = None
+            if arguments.filename is None:
+                config = Config()
+                if arguments.pub:
+                    fp = config['cloudmesh.profile.publickey']
+                else:
+                    fp = config['cloudmesh.security.privatekey']
+            else:
+                fp = arguments.filename
 
             # Discern key type
+            kt = None
+            enc = None
             if arguments.pub:
                 kt = "public"
                 # Discern public key encoding
@@ -482,8 +495,8 @@ class KeyCommand(PluginCommand):
                 r = kh.load_key(path=fp, key_type="PRIV", encoding=enc, ask_pass=True)
 
             m = f"Success the {kt} key {fp} has proper {enc} format"
-            Console.ok( m )
-                
+            Console.ok(m)
+
         elif arguments.delete and arguments.NAMES:
             # key delete NAMES [--dryrun]
 

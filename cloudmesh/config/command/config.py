@@ -84,18 +84,41 @@ class ConfigCommand(PluginCommand):
 
                 Keys can be generated with 
 
-                    cms key gen ssh 
+                    cms key gen (ssh|pem) 
 
                 Key validity and password can be verified with
 
-                    cms key verify 
+                    cms key verify (ssh | pem) 
+                    cms key gen (ssh | pem) [--filename=FILENAME] [--nopass] [--set_path]
+             key verify (ssh | pem) [--filename=FILENAME] [--pub]
 
                 ssh-add
 
                 cms config encrypt 
+                    Encrypts the config data at-rest. This means that the data
+                    is encrypted when not in use. This command checks two
+                    attributes within the cloudmesh config file
+
+                        1. cloudmesh.security.secrets:
+                            This attribute will hold a list of python regular
+                            expressions that detail which attributes will be 
+                            encrypted by the command. 
+                            ex) .*: will encrypt all attributes
+                            ex) .*mdbpwd.*: will encrypt all paths with mdbpwd
+
+                        2. cloudmesh.security.exceptions:
+                            This attribute will hold a list of python regular
+                            expressions that detail which attributes will not
+                            be encrypted by the command. 
+                            ex) .*pubkey.*: ensures no pubkey path is encrypted 
+
+                    Currently the data will not be decrypted upon query. 
+                    This means that you should decrypt the data when needed.
 
                 cms config decrypt 
-
+                    Decrypts the config data that was held in rest. This 
+                    command decrypts and attributes that were encrypted
+                    using the sister `cms config encrypt` command. 
 
                 config set ATTRIBUTE=VALUE
 

@@ -343,7 +343,6 @@ class VmCommand(PluginCommand):
 
             pprint(r)
 
-
         elif arguments.list and arguments.refresh:
 
             names = []
@@ -389,7 +388,6 @@ class VmCommand(PluginCommand):
 
             return ""
 
-
         elif arguments.ping:
 
             """
@@ -424,7 +422,7 @@ class VmCommand(PluginCommand):
             for ip in ips:
                 result = Shell.ping(host=ip, count=count)
                 banner(ip)
-                print (result)
+                print(result)
                 print()
 
         elif arguments.check:
@@ -656,7 +654,6 @@ class VmCommand(PluginCommand):
             # determine names
             #
 
-
             if names and arguments.n and len(names) > 1:
                 Console.error(
                     f"When using --n={arguments.n}, you can only specify one name")
@@ -678,7 +675,6 @@ class VmCommand(PluginCommand):
                 else:
                     count = int(arguments.n)
 
-
                 for i in range(0, count):
                     if names is None:
                         n = Name()
@@ -693,17 +689,13 @@ class VmCommand(PluginCommand):
             elif len(names) == 1 and arguments.n:
 
                 name = names[0]
-                for i in range(0,int(arguments.n)):
-
+                for i in range(0, int(arguments.n)):
                     _names.append(f"{name}-{i}")
                 names = _names
 
-
             # pprint(parameters)
 
-
             for name in names:
-
 
                 parameters.name = name
                 if arguments['--dryrun']:
@@ -727,11 +719,12 @@ class VmCommand(PluginCommand):
                     try:
                         vms = provider.create(**parameters)
                     except TimeoutError:
-                        Console.error(f"Timeout during vm creation. There may be a problem with the cloud {cloud}")
+                        Console.error(
+                            f"Timeout during vm creation. There may be a problem with the cloud {cloud}")
 
                     except Exception as e:
                         Console.error("create problem")
-                        print (e)
+                        print(e)
                         return ""
 
                     variables['vm'] = str(n)
@@ -1037,7 +1030,8 @@ class VmCommand(PluginCommand):
                         try:
                             ip = vm['public_ips']
                         except:
-                            Console.error(f"could not find a public ip for vm {name}")
+                            Console.error(
+                                f"could not find a public ip for vm {name}")
                             return
 
                         # get the username
@@ -1045,9 +1039,12 @@ class VmCommand(PluginCommand):
                             user = vm['username']
                         except:
                             # username not in vm...guessing
-                            imagename = list(cm.collection(cloud + '-image').find({'ImageId': vm['ImageId']}))[0][
+                            imagename = list(
+                                cm.collection(cloud + '-image').find(
+                                    {'ImageId': vm['ImageId']}))[0][
                                 'name']
-                            user = Image.guess_username(image=imagename, cloud=cloud)
+                            user = Image.guess_username(image=imagename,
+                                                        cloud=cloud)
                         cmd = f'scp -i {key} {source} {user}@{ip}:{destination}'
                         print(cmd)
                         os.system(cmd)

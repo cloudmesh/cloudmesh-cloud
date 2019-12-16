@@ -394,8 +394,8 @@ class KeyCommand(PluginCommand):
             ap = not arguments.nopass
 
             if not ap:
-                Console.warning( "Private key will NOT have a password" )
-                cnt = yn_choice( message="Continue, despite risk?", default="N")
+                Console.warning("Private key will NOT have a password")
+                cnt = yn_choice(message="Continue, despite risk?", default="N")
                 if not cnt:
                     sys.exit()
 
@@ -422,18 +422,18 @@ class KeyCommand(PluginCommand):
                 config['cloudmesh.security.publickey'] = uk_path
                 config.save()
 
-            Console.msg( f"\nPrivate key: {rk_path}")
-            Console.msg( f"Public  key: {uk_path}\n")
+            Console.msg(f"\nPrivate key: {rk_path}")
+            Console.msg(f"Public  key: {uk_path}\n")
 
             # Generate the Private and Public keys
             kh = KeyHandler()
             r = kh.new_rsa_key()
-            u = kh.get_pub_key(priv = r)
+            u = kh.get_pub_key(priv=r)
 
             # Serialize and write the private key to the path
-            sr = kh.serialize_key(key = r, key_type = "PRIV", encoding = "PEM",
-                                  format = "PKCS8", ask_pass = ap)
-            kh.write_key(key = sr, path = rk_path)
+            sr = kh.serialize_key(key=r, key_type="PRIV", encoding="PEM",
+                                  format="PKCS8", ask_pass=ap)
+            kh.write_key(key=sr, path=rk_path)
 
             # Determine the public key format and encoding
             enc = None
@@ -446,9 +446,9 @@ class KeyCommand(PluginCommand):
                 forma = "SubjectInfo"
 
             # Serialize and write the public key to the path
-            su = kh.serialize_key(key = u, key_type = "PUB", encoding = enc,
-                                  format = forma, ask_pass = False)
-            kh.write_key(key = su, path = uk_path)
+            su = kh.serialize_key(key=u, key_type="PUB", encoding=enc,
+                                  format=forma, ask_pass=False)
+            kh.write_key(key=su, path=uk_path)
 
             Console.ok("Success")
 
@@ -468,22 +468,24 @@ class KeyCommand(PluginCommand):
                 # Discern public key encoding
                 if arguments.ssh:
                     enc, e = "OpenSSH", "SSH"
-                elif arguments.pem: #PEM encoding
+                elif arguments.pem:  # PEM encoding
                     enc = e = "PEM"
 
                 # Load the public key, if no error occurs formatting is correct
-                u = kh.load_key(path=fp, key_type="PUB", encoding = e, ask_pass=False)
+                u = kh.load_key(path=fp, key_type="PUB", encoding=e,
+                                ask_pass=False)
 
             else:
                 kt, enc = "private", "PEM"
 
                 # Load the private key to verify the formatting and password of
                 # the key file. If no error occurs the format and pwd are correct
-                r = kh.load_key(path=fp, key_type="PRIV", encoding=enc, ask_pass=True)
+                r = kh.load_key(path=fp, key_type="PRIV", encoding=enc,
+                                ask_pass=True)
 
             m = f"Success the {kt} key {fp} has proper {enc} format"
-            Console.ok( m )
-                
+            Console.ok(m)
+
         elif arguments.delete and arguments.NAMES:
             # key delete NAMES [--dryrun]
 
@@ -510,6 +512,3 @@ class KeyCommand(PluginCommand):
             raise NotImplementedError
 
         return ""
-
-            
-

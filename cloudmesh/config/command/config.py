@@ -1,25 +1,17 @@
 import os
 import re
 import sys
-import shutil
+
 import oyaml as yaml
-import tempfile
-from pprint import pprint
-from base64 import b64encode, b64decode
 from cloudmesh.common.FlatDict import flatten
 from cloudmesh.common.Printer import Printer
 from cloudmesh.common.Shell import Shell
 from cloudmesh.common.console import Console
 from cloudmesh.common.util import banner
-from cloudmesh.common.util import path_expand, writefd, readfile
+from cloudmesh.common.util import path_expand
 from cloudmesh.configuration.Config import Config
 from cloudmesh.shell.command import PluginCommand
 from cloudmesh.shell.command import command, map_parameters
-from cloudmesh.common.util import path_expand
-from cloudmesh.configuration.security.encrypt import CmsEncryptor, KeyHandler, CmsHasher
-from progress.bar import Bar
-
-from shutil import copy2
 
 
 class ConfigCommand(PluginCommand):
@@ -84,18 +76,41 @@ class ConfigCommand(PluginCommand):
 
                 Keys can be generated with 
 
-                    cms key gen ssh 
+                    cms key gen (ssh | pem) 
 
                 Key validity and password can be verified with
 
-                    cms key verify 
+                    cms key verify (ssh | pem) 
+
+             key verify (ssh | pem) [--filename=FILENAME] [--pub]
 
                 ssh-add
 
                 cms config encrypt 
+                    Encrypts the config data at-rest. This means that the data
+                    is encrypted when not in use. This command checks two
+                    attributes within the cloudmesh config file
+
+                        1. cloudmesh.security.secrets:
+                            This attribute will hold a list of python regular
+                            expressions that detail which attributes will be 
+                            encrypted by the command. 
+                            ex) .*: will encrypt all attributes
+                            ex) .*mdbpwd.*: will encrypt all paths with mdbpwd
+
+                        2. cloudmesh.security.exceptions:
+                            This attribute will hold a list of python regular
+                            expressions that detail which attributes will not
+                            be encrypted by the command. 
+                            ex) .*pubkey.*: ensures no pubkey path is encrypted 
+
+                    Currently the data will not be decrypted upon query. 
+                    This means that you should decrypt the data when needed.
 
                 cms config decrypt 
-
+                    Decrypts the config data that was held in rest. This 
+                    command decrypts and attributes that were encrypted
+                    using the sister `cms config encrypt` command. 
 
                 config set ATTRIBUTE=VALUE
 
@@ -118,9 +133,9 @@ class ConfigCommand(PluginCommand):
 
         map_parameters(arguments,
                        "exception",
-                       "keep", 
+                       "keep",
                        "nopass",
-                       "output", 
+                       "output",
                        "secret",
                        "secrets")
 
@@ -283,8 +298,8 @@ class ConfigCommand(PluginCommand):
             config = Config()
             secpath = path_expand(config['cloudmesh.security.secpath'])
             if not os.path.isdir(secpath):
-                Shell.mkdir(secpath) # Use Shell that makes all dirs as needed
-        
+                Shell.mkdir(secpath)  # Use Shell that makes all dirs as needed
+
         elif arguments.security:
             # Get the regular expression from command line
             regexp = None
@@ -297,7 +312,7 @@ class ConfigCommand(PluginCommand):
             try:
                 r = re.compile(regexp)
             except re.error:
-                Console.error( f"Invalid Python RegExp:{regexp}")
+                Console.error(f"Invalid Python RegExp:{regexp}")
                 sys.exit()
 
             config = Config()
@@ -320,17 +335,17 @@ class ConfigCommand(PluginCommand):
                 if regexp not in exps:
                     config[path].append(regexp)
                     config.save()
-                    Console.ok( f"Added {regexp} to {section}" )
+                    Console.ok(f"Added {regexp} to {section}")
                 else:
-                    Console.warning( f"{regexp} already in {section}" )
+                    Console.warning(f"{regexp} already in {section}")
             # Remove argument from expressions in related section
             elif arguments.rmv:
                 if regexp in exps:
                     config[path].remove(regexp)
                     config.save()
-                    Console.ok( f"Removed {regexp} from {section}" )
+                    Console.ok(f"Removed {regexp} from {section}")
                 else:
-                    Console.warning( f"{regexp} not in {section}" )
+                    Console.warning(f"{regexp} not in {section}")
 
         elif arguments.get:
 

@@ -1,7 +1,7 @@
 ###############################################################
 # pytest -v --capture=no tests/1_local/test_config.py
 # pytest -v  tests/1_local/test_config.py
-# pytest -v --capture=no  tests/1_local/test_config.py:Test_config.<METHIDNAME>
+# pytest -v --capture=no  tests/1_local/test_config.py:Test_config.<METHODNAME>
 ###############################################################
 import os
 import textwrap
@@ -57,10 +57,8 @@ class TestConfig:
         Benchmark.Start()
         result = config.dict()
         Benchmark.Stop()
-        pprint(result)
-        print(config)
         print(type(config.data))
-
+        pprint (config['cloudmesh.profile'])
         assert config is not None
 
     def test_config_subscriptable(self):

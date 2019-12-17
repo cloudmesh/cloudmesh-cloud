@@ -200,7 +200,7 @@ class Test_provider_vm:
         if cloud == 'chameleon':
             assert len(provider.info(name=name)) == 0
         elif cloud == 'aws':
-            assert len(data) == 0 \
+            assert len(data) == 0 if data else True \
                    or (data[0]["cm"]["status"] in ['BOOTING', 'TERMINATED']
                        if data and data[0].get('cm', None) is not None
                        else True)

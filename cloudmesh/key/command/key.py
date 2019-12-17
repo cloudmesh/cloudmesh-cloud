@@ -48,15 +48,14 @@ class KeyCommand(PluginCommand):
              key group delete [--group=GROUPNAMES] [NAMES] [--dryrun]
              key group list [--group=GROUPNAMES] [--output=OUTPUT]
              key group export --group=GROUNAMES --filename=FILENAME
-             key gen (rsa | ssh) [--filename=FILENAME] [--nopass] [--set_path]
-             key verify (ssh | pem) --filename=FILENAME [--pub]
+             key gen (ssh | pem) [--filename=FILENAME] [--nopass] [--set_path]
+             key verify (ssh | pem) [--filename=FILENAME] [--pub]
 
            Arguments:
              VMS            Parameterized list of virtual machines
              CLOUDS         The clouds
              NAME           The name of the key.
              SOURCE         db, ssh, all
-             KEYNAME        The desired full path name to the key file
              OUTPUT         The format of the output (table, json, yaml)
              FILENAME       The filename with full path in which the key is located
 
@@ -66,7 +65,8 @@ class KeyCommand(PluginCommand):
               --nopass              Flag indicating if the key has no password
               --output=OUTPUT       the format of the output [default: table]
               --pub                 Indicates that the public key is passed in
-              --set_path            Sets the security key paths to KEYNAME
+              --set_path            Sets the cloudmesh encryption key path to
+                                    the full path of the generated keys
               --source=SOURCE       the source for the keys
               --username=USERNAME   the source for the keys [default: none]
 
@@ -384,7 +384,7 @@ class KeyCommand(PluginCommand):
 
         elif arguments.gen:
             """
-            key gen (rsa | ssh) [--filename=FILENAME] [--nopass] [--set_path]
+            key gen (ssh | pem) [--filename=FILENAME] [--nopass] [--set_path]
             Generate an RSA key pair with pem or ssh encoding for the public
             key. The private key is always encoded as a PEM file.
             """
@@ -394,8 +394,8 @@ class KeyCommand(PluginCommand):
             ap = not arguments.nopass
 
             if not ap:
-                Console.warning( "Private key will NOT have a password" )
-                cnt = yn_choice( message="Continue, despite risk?", default="N")
+                Console.warning("Private key will NOT have a password")
+                cnt = yn_choice(message="Continue, despite risk?", default="N")
                 if not cnt:
                     sys.exit()
 
@@ -403,14 +403,16 @@ class KeyCommand(PluginCommand):
             rk_path = None
             uk_path = None
             if arguments.filename:
-                if arguments.filename[-4:] == ".pub":
-                    rk_path = path_expand(arguments.name[-4:])
-                    uk_path = path_expand(arguments.name)
-                elif arguments.filename[-5:] == ".priv":
-                    rk_path = path_expand(arguments.name)
-                    uk_path = path_expand(arguments.name[-5:])
+                fp = path_expand(arguments.filename)
+                fname, fext = os.path.splitext(fp)
+                if fext == ".pub" or fext == ".ssh":
+                    rk_path = fname
+                    uk_path = fp
+                elif fext == ".priv" or fext == ".pem":
+                    rk_path = fp
+                    uk_path = fname + ".pub"
                 else:
-                    rk_path = path_expand(arguments.filename)
+                    rk_path = fp
                     uk_path = rk_path + ".pub"
             else:
                 rk_path = path_expand(config['cloudmesh.security.privatekey'])
@@ -422,18 +424,18 @@ class KeyCommand(PluginCommand):
                 config['cloudmesh.security.publickey'] = uk_path
                 config.save()
 
-            Console.msg( f"\nPrivate key: {rk_path}")
-            Console.msg( f"Public  key: {uk_path}\n")
+            Console.msg(f"\nPrivate key: {rk_path}")
+            Console.msg(f"Public  key: {uk_path}\n")
 
             # Generate the Private and Public keys
             kh = KeyHandler()
             r = kh.new_rsa_key()
-            u = kh.get_pub_key(priv = r)
+            u = kh.get_pub_key(priv=r)
 
             # Serialize and write the private key to the path
-            sr = kh.serialize_key(key = r, key_type = "PRIV", encoding = "PEM",
-                                  format = "PKCS8", ask_pass = ap)
-            kh.write_key(key = sr, path = rk_path)
+            sr = kh.serialize_key(key=r, key_type="PRIV", encoding="PEM",
+                                  format="PKCS8", ask_pass=ap)
+            kh.write_key(key=sr, path=rk_path)
 
             # Determine the public key format and encoding
             enc = None
@@ -441,49 +443,62 @@ class KeyCommand(PluginCommand):
             if arguments.ssh:
                 enc = "SSH"
                 forma = "SSH"
-            elif arguments.rsa:
+            elif arguments.pem:
                 enc = "PEM"
                 forma = "SubjectInfo"
 
             # Serialize and write the public key to the path
-            su = kh.serialize_key(key = u, key_type = "PUB", encoding = enc,
-                                  format = forma, ask_pass = False)
-            kh.write_key(key = su, path = uk_path)
+            su = kh.serialize_key(key=u, key_type="PUB", encoding=enc,
+                                  format=forma, ask_pass=False)
+            kh.write_key(key=su, path=uk_path)
 
             Console.ok("Success")
 
         elif arguments.verify:
             """
-            key verify (ssh | pem) --filename=FILENAME --pub
+            key verify (ssh | pem) [--filename=FILENAME] [--pub]
             Verifies the encoding (pem or ssh) of the key (private or public)
             """
+            # Initialize variables
             kh = KeyHandler()
-            fp = arguments.filename
-            kt = None
-            enc = None
+
+            # Determine filepath
+            fp = None
+            if arguments.filename is None:
+                config = Config()
+                if arguments.pub:
+                    fp = config['cloudmesh.profile.publickey']
+                else:
+                    fp = config['cloudmesh.security.privatekey']
+            else:
+                fp = arguments.filename
 
             # Discern key type
+            kt = None
+            enc = None
             if arguments.pub:
                 kt = "public"
                 # Discern public key encoding
                 if arguments.ssh:
                     enc, e = "OpenSSH", "SSH"
-                elif arguments.pem: #PEM encoding
+                elif arguments.pem:  # PEM encoding
                     enc = e = "PEM"
 
                 # Load the public key, if no error occurs formatting is correct
-                u = kh.load_key(path=fp, key_type="PUB", encoding = e, ask_pass=False)
+                u = kh.load_key(path=fp, key_type="PUB", encoding=e,
+                                ask_pass=False)
 
             else:
                 kt, enc = "private", "PEM"
 
                 # Load the private key to verify the formatting and password of
                 # the key file. If no error occurs the format and pwd are correct
-                r = kh.load_key(path=fp, key_type="PRIV", encoding=enc, ask_pass=True)
+                r = kh.load_key(path=fp, key_type="PRIV", encoding=enc,
+                                ask_pass=True)
 
             m = f"Success the {kt} key {fp} has proper {enc} format"
-            Console.ok( m )
-                
+            Console.ok(m)
+
         elif arguments.delete and arguments.NAMES:
             # key delete NAMES [--dryrun]
 
@@ -511,5 +526,4 @@ class KeyCommand(PluginCommand):
 
         return ""
 
-            
 

@@ -1,7 +1,7 @@
 ###############################################################
 # pytest -v --capture=no tests/docker/test_compute_docker.py
 # pytest -v  tests/docker/test_compute_docker.py
-# pytest -v --capture=no  tests/docker/test_compute_docker.py:Test_compute_docker.<METHIDNAME>
+# pytest -v --capture=no  tests/docker/test_compute_docker.py:Test_compute_docker.<METHODNAME>
 ###############################################################
 import subprocess
 import time

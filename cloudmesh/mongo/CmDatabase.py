@@ -1,5 +1,14 @@
+import re
 import urllib.parse
 from datetime import datetime
+
+from cloudmesh.common.console import Console
+from cloudmesh.common.debug import VERBOSE
+from cloudmesh.common.parameter import Parameter
+from cloudmesh.configuration.Config import Config
+from cloudmesh.mongo.MongoDBController import MongoDBController
+from progress.bar import Bar
+from pymongo import MongoClient
 import json
 import os
 from sys import platform
@@ -7,17 +16,6 @@ import subprocess
 import ctypes
 import shutil
 import re
-
-from cloudmesh.common.console import Console
-from cloudmesh.common.parameter import Parameter
-from cloudmesh.configuration.Config import Config
-from pymongo import MongoClient
-from cloudmesh.common.debug import VERBOSE
-from progress.bar import Bar
-from cloudmesh.common.util import path_expand
-from cloudmesh.mongo.MongoDBController import MongoDBController
-from cloudmesh.common3.Shell import Shell
-
 
 # cm:
 #   id:

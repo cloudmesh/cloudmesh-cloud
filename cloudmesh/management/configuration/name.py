@@ -64,6 +64,7 @@ from cloudmesh.configuration.Config import Config
 from cloudmesh.common.console import Console
 import sys
 
+
 class Name(dotdict):
 
     def __init__(self, **kwargs):
@@ -84,12 +85,11 @@ class Name(dotdict):
 
         else:
             if "path" not in kwargs:
-                self.path  = "~/.cloudmesh/name.yaml"
+                self.path = path_expand("~/.cloudmesh/name.yaml")
                 data = self.load(self.path)
                 self.assign(data)
 
             self.assign(kwargs)
-
 
             if kwargs["schema"]:
                 schema = kwargs["schema"]
@@ -131,7 +131,7 @@ class Name(dotdict):
             config = Config()
             user = config["cloudmesh.profile.user"]
             if user == "TBD":
-                print ("WARNING: please set cloudmesh.profile.user we found TBD")
+                print("WARNING: please set cloudmesh.profile.user we found TBD")
             data = {
                 'counter': 1,
                 'kind': 'vm',

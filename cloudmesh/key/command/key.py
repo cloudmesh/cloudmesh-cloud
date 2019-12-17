@@ -437,6 +437,19 @@ class KeyCommand(PluginCommand):
                 rk_path = path_expand("~/.ssh/id_rsa")
                 uk_path = rk_path + ".pub"
 
+            # Check if the file exist, if so confirm overwrite
+            def check_exists(path):
+                if os.path.exists(path):
+                    Console.info(f"{path} already exists")
+                    ovwr_r = yn_choice(message=f"overwrite {path}?", default="N")
+                    if not ovwr_r:
+                        Console.info(f"Not overwriting {path}. Quitting")
+                        sys.exit()
+
+            if not arguments.force:
+                check_exists(rk_path)
+                check_exists(uk_path)
+
             # Set the path if requested
             if arguments.set_path:
                 config['cloudmesh.security.privatekey'] = rk_path
@@ -454,7 +467,9 @@ class KeyCommand(PluginCommand):
             # Serialize and write the private key to the path
             sr = kh.serialize_key(key = r, key_type = "PRIV", encoding = "PEM",
                                   format = "PKCS8", ask_pass = ap)
-            kh.write_key(key = sr, path = rk_path, force=arguments.force)
+
+            # Force write the key (since we check file existence above)
+            kh.write_key(key = sr, path = rk_path, force = True)
 
             # Determine the public key format and encoding
             enc = None
@@ -469,7 +484,9 @@ class KeyCommand(PluginCommand):
             # Serialize and write the public key to the path
             su = kh.serialize_key(key = u, key_type = "PUB", encoding = enc,
                                   format = forma, ask_pass = False)
-            kh.write_key(key = su, path = uk_path, force=arguments.force)
+
+            # Force write the key (since we check file existence above)
+            kh.write_key(key = su, path = uk_path, force = True)
 
             Console.ok("Success")
 

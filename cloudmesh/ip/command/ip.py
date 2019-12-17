@@ -1,12 +1,10 @@
-from cloudmesh.shell.command import PluginCommand
-from cloudmesh.shell.command import command, map_parameters
-from cloudmesh.common.debug import VERBOSE
+from cloudmesh.common.console import Console
 from cloudmesh.common.parameter import Parameter
 from cloudmesh.common.variables import Variables
 from cloudmesh.compute.vm.Provider import Provider
-from pprint import pprint
-from cloudmesh.common.console import Console
 from cloudmesh.mongo.CmDatabase import CmDatabase
+from cloudmesh.shell.command import PluginCommand
+from cloudmesh.shell.command import command, map_parameters
 
 
 # see https://github.com/cloudmesh/client/blob/master/cloudmesh_client/shell/plugins/NetworkCommand.py

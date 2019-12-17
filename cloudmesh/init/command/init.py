@@ -1,10 +1,10 @@
 import os.path
 import shutil
-from sys import platform
+import sys
+from pathlib import Path
 from sys import exit
-from time import sleep
+from sys import platform
 
-from cloudmesh.common.StopWatch import StopWatch
 from cloudmesh.common.Shell import Shell
 from cloudmesh.common.console import Console
 from cloudmesh.common.util import path_expand
@@ -13,9 +13,7 @@ from cloudmesh.common.variables import Variables
 from cloudmesh.configuration.Config import Config
 from cloudmesh.mongo.MongoDBController import MongoDBController
 from cloudmesh.shell.command import PluginCommand
-from cloudmesh.shell.command import command, map_parameters
-from pathlib import Path
-import sys
+from cloudmesh.shell.command import command
 
 
 class InitCommand(PluginCommand):

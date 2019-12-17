@@ -157,10 +157,8 @@ class SecCommand(PluginCommand):
                         pass
             Print("all", data)
 
-
-
         if (arguments.load and not arguments.group) or \
-            (arguments.load and arguments.group and not arguments.GROUP) :
+            (arguments.load and arguments.group and not arguments.GROUP):
 
             examples = SecgroupExamples()
             examples.load()
@@ -224,7 +222,7 @@ class SecCommand(PluginCommand):
                                 rule['direction'] = "Inbound"
                                 if rule['UserIdGroupPairs']:
                                     rule['groupId'] = \
-                                    rule['UserIdGroupPairs'][0]['GroupId']
+                                        rule['UserIdGroupPairs'][0]['GroupId']
                                 if rule['IpRanges']:
                                     rule['ipRange'] = rule['IpRanges'][0][
                                         'CidrIp']
@@ -279,7 +277,6 @@ class SecCommand(PluginCommand):
             )
 
             return ""
-
 
         elif arguments.list:
 

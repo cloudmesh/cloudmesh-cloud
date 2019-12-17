@@ -13,7 +13,8 @@ from cloudmesh.shell.command import command, map_parameters
 from pprint import pprint
 from cloudmesh.common.util import banner
 from cloudmesh.provider import ComputeProviderPlugin
-import sys, inspect
+import sys
+import inspect
 from cloudmesh.provider import Provider as ProviderList
 
 

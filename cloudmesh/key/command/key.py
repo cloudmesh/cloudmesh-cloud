@@ -49,7 +49,7 @@ class KeyCommand(PluginCommand):
              key group list [--group=GROUPNAMES] [--output=OUTPUT]
              key group export --group=GROUNAMES --filename=FILENAME
              key gen (ssh | pem) [--filename=FILENAME] [--nopass] [--set_path] [--force]
-             key verify (ssh | pem) [--filename=FILENAME] [--pub]
+             key verify (ssh | pem) [--filename=FILENAME] [--pub] [--check_pass]
 
            Arguments:
              VMS            Parameterized list of virtual machines
@@ -61,6 +61,7 @@ class KeyCommand(PluginCommand):
 
            Options:
               --dir=DIR             the directory with keys [default: ~/.ssh]
+              --check_pass          Flag where program query user for password
               --filename=FILENAME   the name and full path to the file
               --nopass              Flag indicating if the key has no password
               --output=OUTPUT       the format of the output [default: table]
@@ -97,6 +98,23 @@ class KeyCommand(PluginCommand):
                key gen (ssh | pem) --filename=~/.cloudmesh/foobar --set_path
                    This will generate the keys as stated above, but it will
                    also set cloudmesh to use these keys for encryption.
+
+               Keys can also be verified for their formatting and passwords.
+               By default cloudmesh checks ~/.ssh/id_rsa and ~/.ssh/id_rsa.pub
+               If the key is password protected the formatting can only be
+               verified if the password is provided (--check_pass argument)
+
+               key verify pem
+                   Verifies that ~/.ssh/id_rsa has PEM format
+
+               key verify ssh --pub
+                   Verifies that ~/.ssh/id_rsa.pub has OpenSSH format
+
+               key verify pem --filename=~/.cloudmesh/foobar
+                   Verifies that the private key located at ~/.cloudmesh/foobar
+                   has PEM format
+
+                key verify pem --check_pass
 
                Keys will be uploaded into cloudmesh database with the add
                command under the given NAME. If the name is not specified the name
@@ -202,6 +220,7 @@ class KeyCommand(PluginCommand):
             )
 
         map_parameters(arguments,
+                       'check_pass',
                        'cloud',
                        'dir',
                        'dryrun',
@@ -492,7 +511,7 @@ class KeyCommand(PluginCommand):
 
         elif arguments.verify:
             """
-            key verify (ssh | pem) [--filename=FILENAME] [--pub]
+            key verify (ssh | pem) [--filename=FILENAME] [--pub] [--check_pass]
             Verifies the encoding (pem or ssh) of the key (private or public)
             """
             # Initialize variables
@@ -511,28 +530,44 @@ class KeyCommand(PluginCommand):
                 fp = arguments.filename
 
             # Discern key type
-            kt = None
-            enc = None
+            kt = enc = None
+            ap = True
             if arguments.pub:
-                kt = "public"
+                # Load the public key, if no error occurs formatting is correct
+                kt, kta, ap = "public", "PUB", False
                 # Discern public key encoding
                 if arguments.ssh:
                     enc, e = "OpenSSH", "SSH"
                 elif arguments.pem: #PEM encoding
                     enc = e = "PEM"
-
-                # Load the public key, if no error occurs formatting is correct
-                u = kh.load_key(path=fp, key_type="PUB", encoding = e, ask_pass=False)
-
             else:
-                kt, enc = "private", "PEM"
+                # Load the private key to verify the format and password of the
+                # key file. If no error occurs the format and pwd are correct
+                kt, kta = "private", "PRIV"
+                enc = e = "PEM"
+                ap = False
+                if arguments.check_pass:
+                    ap = True
 
-                # Load the private key to verify the formatting and password of
-                # the key file. If no error occurs the format and pwd are correct
-                r = kh.load_key(path=fp, key_type="PRIV", encoding=enc, ask_pass=True)
+            try:
+                k = kh.load_key(path=fp, key_type=kta, encoding=e, ask_pass=ap)
+                m = f"Success the {kt} key {fp} has proper {enc} format"
+                Console.ok(m)
+            except ValueError as e:
+                # The formatting was incorrect
+                m = f"Failure, {kt} key {fp} does not have proper {enc} format"
+                Console.error(m)
+                raise e
+            except TypeError as e:
+                # Success, we didn't ask the user for the key password and 
+                # we received an error for not entering the password, thus
+                # the key is password protectd
+                if not arguments.check_pass:
+                    Console.ok("The key is password protected")
+                else:
+                    # Error Message handled in kh.load_key()
+                    raise e
 
-            m = f"Success the {kt} key {fp} has proper {enc} format"
-            Console.ok(m)
 
         elif arguments.delete and arguments.NAMES:
             # key delete NAMES [--dryrun]

@@ -1017,7 +1017,7 @@ class VmCommand(PluginCommand):
             source = arguments['SOURCE']
             destination = arguments['DESTINATION']
             for cloud in clouds:
-                # p = Provider(cloud)
+                p = Provider(name=cloud)
                 cm = CmDatabase()
                 for name in names:
                     try:
@@ -1030,21 +1030,37 @@ class VmCommand(PluginCommand):
                         try:
                             ip = vm['public_ips']
                         except:
+                            try:
+                                ip = p.get_public_ip(name=name)
+                            except:
+                                Console.error(
+                                    f"could not find a public ip for vm {name}")
+                                return
                             Console.error(
                                 f"could not find a public ip for vm {name}")
                             return
 
                         # get the username
                         try:
-                            user = vm['username']
-                        except:
                             # username not in vm...guessing
                             imagename = list(
                                 cm.collection(cloud + '-image').find(
                                     {'ImageId': vm['ImageId']}))[0][
                                 'name']
+                            print(imagename)
                             user = Image.guess_username(image=imagename,
                                                         cloud=cloud)
+                        except:
+                            try:
+                                user = vm['os_profile']['admin_username']
+                            except:
+                                Console.error(
+                                    f"could not find a valid username for {name}, try refreshing the image list")
+                                return
+                            Console.error(
+                                f"could not find a valid username for {name}, try refreshing the image list")
+                            return
+
                         cmd = f'scp -i {key} {source} {user}@{ip}:{destination}'
                         print(cmd)
                         os.system(cmd)

@@ -48,7 +48,7 @@ class KeyCommand(PluginCommand):
              key group delete [--group=GROUPNAMES] [NAMES] [--dryrun]
              key group list [--group=GROUPNAMES] [--output=OUTPUT]
              key group export --group=GROUNAMES --filename=FILENAME
-             key gen (ssh | pem) [--filename=FILENAME] [--nopass] [--set_path]
+             key gen (ssh | pem) [--filename=FILENAME] [--nopass] [--set_path] [--force]
              key verify (ssh | pem) [--filename=FILENAME] [--pub]
 
            Arguments:
@@ -206,6 +206,7 @@ class KeyCommand(PluginCommand):
                        'dir',
                        'dryrun',
                        'filename',
+                       'force',
                        'name',
                        'nopass',
                        'output',
@@ -402,6 +403,7 @@ class KeyCommand(PluginCommand):
         elif arguments.gen:
             """
             key gen (ssh | pem) [--filename=FILENAME] [--nopass] [--set_path]
+                    [--force]
             Generate an RSA key pair with pem or ssh encoding for the public
             key. The private key is always encoded as a PEM file.
             """
@@ -436,7 +438,7 @@ class KeyCommand(PluginCommand):
                 uk_path = rk_path + ".pub"
 
             # Set the path if requested
-            if arguments.set_path and arguments.filename:
+            if arguments.set_path:
                 config['cloudmesh.security.privatekey'] = rk_path
                 config['cloudmesh.security.publickey'] = uk_path
                 config.save()
@@ -452,7 +454,7 @@ class KeyCommand(PluginCommand):
             # Serialize and write the private key to the path
             sr = kh.serialize_key(key = r, key_type = "PRIV", encoding = "PEM",
                                   format = "PKCS8", ask_pass = ap)
-            kh.write_key(key = sr, path = rk_path)
+            kh.write_key(key = sr, path = rk_path, force=arguments.force)
 
             # Determine the public key format and encoding
             enc = None
@@ -467,7 +469,7 @@ class KeyCommand(PluginCommand):
             # Serialize and write the public key to the path
             su = kh.serialize_key(key = u, key_type = "PUB", encoding = enc,
                                   format = forma, ask_pass = False)
-            kh.write_key(key = su, path = uk_path)
+            kh.write_key(key = su, path = uk_path, force=arguments.force)
 
             Console.ok("Success")
 

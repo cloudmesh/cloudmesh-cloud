@@ -1,7 +1,7 @@
 ###############################################################
 # pytest -v --capture=no tests/2_local/test_ssh.py
 # pytest -v  tests/tests/2_local/test_ssh.py
-# pytest -v --capture=no  tests/2_local/test_ssh.py:Test_name.<METHIDNAME>
+# pytest -v --capture=no  tests/2_local/test_ssh.py:Test_name.<METHODNAME>
 ###############################################################
 
 import os

@@ -77,9 +77,26 @@ class KeyCommand(PluginCommand):
                file. One such value is cloudmesh.profile.user
 
                Manages public keys is an essential component of accessing
-               virtual machine sin the cloud. There are a number of sources
-               where you can find public keys. This includes teh ~/.ssh
-               directory and for example github.
+               virtual machines in the cloud. There are a number of sources
+               where you can find public keys. This includes the ~/.ssh
+               directory and for example github. If do not already have a
+               public-private key pairs they can be generated using cloudmesh
+
+               key gen ssh 
+                   This will create the public-private keypair of ~/.ssh/id_rsa
+                   and ~/.ssh/id_rsa.pub in OpenSSH format
+
+               key gen pem 
+                   This will create the public-private keypair of ~/.ssh/id_rsa
+                   and ~/.ssh/id_rsa.pub in PEM format
+
+               key gen (ssh | pem) --filename=~/.cloudmesh/foobar
+                   This will generate the public-private key pair of 
+                   ~/.cloudmesh/foobar and ~/.cloudmesh/foobar.pub
+
+               key gen (ssh | pem) --filename=~/.cloudmesh/foobar --set_path
+                   This will generate the keys as stated above, but it will
+                   also set cloudmesh to use these keys for encryption.
 
                Keys will be uploaded into cloudmesh database with the add
                command under the given NAME. If the name is not specified the name
@@ -415,8 +432,8 @@ class KeyCommand(PluginCommand):
                     rk_path = fp
                     uk_path = rk_path + ".pub"
             else:
-                rk_path = path_expand(config['cloudmesh.security.privatekey'])
-                uk_path = path_expand(config['cloudmesh.security.publickey'])
+                rk_path = path_expand("~/.ssh/id_rsa")
+                uk_path = rk_path + ".pub"
 
             # Set the path if requested
             if arguments.set_path and arguments.filename:
@@ -466,10 +483,11 @@ class KeyCommand(PluginCommand):
             fp = None
             if arguments.filename is None:
                 config = Config()
+                kp = path_expand("~/.ssh/id_rsa")
                 if arguments.pub:
-                    fp = config['cloudmesh.profile.publickey']
+                    fp = kp + ".pub"
                 else:
-                    fp = config['cloudmesh.security.privatekey']
+                    fp = kp
             else:
                 fp = arguments.filename
 

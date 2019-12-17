@@ -48,7 +48,7 @@ class KeyCommand(PluginCommand):
              key group delete [--group=GROUPNAMES] [NAMES] [--dryrun]
              key group list [--group=GROUPNAMES] [--output=OUTPUT]
              key group export --group=GROUNAMES --filename=FILENAME
-             key gen (rsa | ssh) [--filename=FILENAME] [--nopass] [--set_path]
+             key gen (ssh | pem) [--filename=FILENAME] [--nopass] [--set_path]
              key verify (ssh | pem) --filename=FILENAME [--pub]
 
            Arguments:
@@ -388,69 +388,78 @@ class KeyCommand(PluginCommand):
             Generate an RSA key pair with pem or ssh encoding for the public
             key. The private key is always encoded as a PEM file.
             """
-            config = Config()
+            try:
+                config = Config()
 
-            # Check if password will be requested
-            ap = not arguments.nopass
+                # Check if password will be requested
+                ap = not arguments.nopass
 
-            if not ap:
-                Console.warning("Private key will NOT have a password")
-                cnt = yn_choice(message="Continue, despite risk?", default="N")
-                if not cnt:
-                    sys.exit()
+                if not ap:
+                    Console.warning("Private key will NOT have a password")
+                    cnt = yn_choice(message="Continue, despite risk?", default="N")
+                    if not cnt:
+                        sys.exit()
 
-            # Discern the name of the public and private keys
-            rk_path = None
-            uk_path = None
-            if arguments.filename:
-                if arguments.filename[-4:] == ".pub":
-                    rk_path = path_expand(arguments.name[-4:])
-                    uk_path = path_expand(arguments.name)
-                elif arguments.filename[-5:] == ".priv":
-                    rk_path = path_expand(arguments.name)
-                    uk_path = path_expand(arguments.name[-5:])
+                # Discern the name of the public and private keys
+                rk_path = None
+                uk_path = None
+                if arguments.filename:
+                    if arguments.filename[-4:] == ".pub":
+                        rk_path = path_expand(arguments.name[-4:])
+                        uk_path = path_expand(arguments.name)
+                    elif arguments.filename[-5:] == ".priv":
+                        rk_path = path_expand(arguments.name)
+                        uk_path = path_expand(arguments.name[-5:])
+                    else:
+                        rk_path = path_expand(arguments.filename)
+                        uk_path = rk_path + ".pub"
                 else:
-                    rk_path = path_expand(arguments.filename)
-                    uk_path = rk_path + ".pub"
-            else:
-                rk_path = path_expand(config['cloudmesh.security.privatekey'])
-                uk_path = path_expand(config['cloudmesh.security.publickey'])
+                    rk_path = path_expand(config['cloudmesh.security.privatekey'])
+                    uk_path = path_expand(config['cloudmesh.security.publickey'])
 
-            # Set the path if requested
-            if arguments.set_path and arguments.filename:
-                config['cloudmesh.security.privatekey'] = rk_path
-                config['cloudmesh.security.publickey'] = uk_path
-                config.save()
+                # Set the path if requested
+                if arguments.set_path and arguments.filename:
+                    config['cloudmesh.security.privatekey'] = rk_path
+                    config['cloudmesh.security.publickey'] = uk_path
+                    config.save()
 
-            Console.msg(f"\nPrivate key: {rk_path}")
-            Console.msg(f"Public  key: {uk_path}\n")
+                Console.msg(f"\nPrivate key: {rk_path}")
+                Console.msg(f"Public  key: {uk_path}\n")
 
-            # Generate the Private and Public keys
-            kh = KeyHandler()
-            r = kh.new_rsa_key()
-            u = kh.get_pub_key(priv=r)
+                # Generate the Private and Public keys
+                kh = KeyHandler()
+                r = kh.new_rsa_key()
+                u = kh.get_pub_key(priv=r)
 
-            # Serialize and write the private key to the path
-            sr = kh.serialize_key(key=r, key_type="PRIV", encoding="PEM",
-                                  format="PKCS8", ask_pass=ap)
-            kh.write_key(key=sr, path=rk_path)
+                # Serialize and write the private key to the path
+                sr = kh.serialize_key(key=r, key_type="PRIV",
+                                      encoding="PEM",
+                                      format="PKCS8",
+                                      ask_pass=ap)
+                kh.write_key(key=sr, path=rk_path)
 
-            # Determine the public key format and encoding
-            enc = None
-            forma = None
-            if arguments.ssh:
-                enc = "SSH"
-                forma = "SSH"
-            elif arguments.rsa:
-                enc = "PEM"
-                forma = "SubjectInfo"
+                # Determine the public key format and encoding
+                enc = None
+                forma = None
+                if arguments.ssh:
+                    enc = "SSH"
+                    forma = "SSH"
+                elif arguments.rsa:
+                    enc = "PEM"
+                    forma = "SubjectInfo"
 
-            # Serialize and write the public key to the path
-            su = kh.serialize_key(key=u, key_type="PUB", encoding=enc,
-                                  format=forma, ask_pass=False)
-            kh.write_key(key=su, path=uk_path)
+                # Serialize and write the public key to the path
+                su = kh.serialize_key(key=u, key_type="PUB", encoding=enc,
+                                      format=forma, ask_pass=False)
+                kh.write_key(key=su, path=uk_path)
 
-            Console.ok("Success")
+                Console.ok("Success")
+
+            except Exception as e:
+                print (e)
+                return ""
+
+            return ""
 
         elif arguments.verify:
             """
@@ -485,6 +494,8 @@ class KeyCommand(PluginCommand):
 
             m = f"Success the {kt} key {fp} has proper {enc} format"
             Console.ok(m)
+
+            return ""
 
         elif arguments.delete and arguments.NAMES:
             # key delete NAMES [--dryrun]

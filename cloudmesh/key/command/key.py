@@ -35,13 +35,13 @@ class KeyCommand(PluginCommand):
              key list --source=git [--output=OUTPUT] [--username=USERNAME]
              key list [--output=OUTPUT]
              key init
-             key add NAME --filename=FILENAME [--output=OUTPUT]
              key add [NAME] [--source=FILENAME]
              key add [NAME] [--source=git]
              key add [NAME] [--source=ssh]
              key delete NAMES [--cloud=CLOUDS] [--dryrun]
              key upload [NAMES] [--cloud=CLOUDS] [--dryrun]
              key upload [NAMES] [VMS] [--dryrun]
+<<<<<<< HEAD
              key group upload [NAMES] [--group=GROUPNAMES] [--cloud=CLOUDS] [--dryrun]
              key group add [--group=GROUPNAMES] [--cloud=CLOUDS] [--dryrun]
              key group add --file=FILENAME
@@ -49,6 +49,15 @@ class KeyCommand(PluginCommand):
              key group delete [--group=GROUPNAMES] [NAMES] [--dryrun]
              key group list [--group=GROUPNAMES] [--output=OUTPUT]
              key group export --group=GROUNAMES --file=FILENAME
+=======
+             key group add GROUPNAMES KEYNAME
+             key todo group upload [NAMES] [--group=GROUPNAMES] [--cloud=CLOUDS] [--dryrun]
+             key todo group add [--group=GROUPNAMES] [--cloud=CLOUDS] [--dryrun]
+             key todo group add --file=FILENAME
+             key group delete [--group=GROUPNAMES] [NAMES] [--dryrun]
+             key group list [--group=GROUPNAMES] [--output=OUTPUT]
+             key todo group export --group=GROUNAMES --filename=FILENAME
+>>>>>>> 148b9ed00910d036a4db09b9b5500dffb72a8958
 
 
            Arguments:
@@ -174,6 +183,20 @@ class KeyCommand(PluginCommand):
 
                 If a key is included in multiple groups they will be added
                 to the grouplist of the key
+
+                NEW EXAMPLE
+
+                cms key add junk --source=~/.ssh/junk
+                cms key group add --group=abc --name=\"laszewsk_git_[0,,1,2]\"
+                cms key goup list
+                cms key goup list --gropu=abc
+
+                cms key group export --file=~/authorized_keys --group=abc,klm
+
+                cmas key group upload --group=NAME ip=.... --authorized_keys
+                cmas key group add --group=NAME  ip=.... --authorized_keys
+
+
         """
         dryrun = arguments["--dryrun"]
         def get_key_list(db_keys, names):
@@ -253,9 +276,10 @@ class KeyCommand(PluginCommand):
             return ""
 
         elif arguments.group and arguments.list:
-            print('In key group list')
+
             key = KeyGroup()
-            #key group list
+
+
 
             groups = Parameter.expand(arguments["--group"])
             #print(groups)
@@ -271,6 +295,11 @@ class KeyCommand(PluginCommand):
             kind = "keygroup"
             db_keys = db.find(collection=f"{cloud}-{kind}")
             print_keygroups(db_keys)
+
+            for kind in ['key', 'keygroup']:
+                db_keys = db.find(collection=f"{cloud}-{kind}")
+                keys = get_key_list(db_keys)
+                key.Print(data=keys, kind=kind, output=arguments.output)
 
 
             return ""
@@ -292,6 +321,7 @@ class KeyCommand(PluginCommand):
 
             if list(set(names) - set(keys)) is not None:
                 print('Keys dont exist, please add them', list(set(names) - set(keys)))
+
 
             return ""
 

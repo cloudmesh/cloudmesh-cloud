@@ -60,8 +60,9 @@ class Key(object):
             keys = [key]
 
         else:
-            raise NotImplementedError
             # source is filename
+            key = SSHkey(name=name, path=source)
+            keys = [key]
 
         return keys
 

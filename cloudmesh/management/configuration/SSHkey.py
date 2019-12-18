@@ -12,8 +12,8 @@ from cloudmesh.configuration.Config import Config
 # noinspection PyBroadException
 class SSHkey(dict):
 
-    def __init__(self, name=None):
-        self.load()
+    def __init__(self, name=None, path=None):
+        self.load(path=path)
         if name is not None:
             self['name'] = name
             self['cm']['name'] = name
@@ -27,9 +27,13 @@ class SSHkey(dict):
         }
         return d
 
-    def load(self):
+    def load(self, path=None):
         self["profile"] = Config()["cloudmesh"]["profile"]
-        self["path"] = path_expand(self["profile"]["publickey"])
+
+        if path is None:
+            self["path"] = path_expand(self["profile"]["publickey"])
+        else:
+            self["path"] = path_expand(path)
 
         self["uri"] = 'file://{path}'.format(path=self["path"])
         self['public_key'] = open(Path(self["path"]), "r").read().rstrip()
@@ -39,8 +43,7 @@ class SSHkey(dict):
          self['comment']) = SSHkey._parse(self['public_key'])
 
         self['fingerprint'] = SSHkey._fingerprint(self['public_key'])
-        self["name"] = basename(self["path"]).replace(".pub", "").replace("id_",
-                                                                          "")
+        self["name"] = basename(self["path"]).replace(".pub", "").replace("id_", "")
 
         self['comment'] = self['comment']
         self['source'] = 'ssh'

@@ -12,6 +12,8 @@ from cloudmesh.shell.command import PluginCommand
 from cloudmesh.shell.command import command, map_parameters
 from pprint import pprint
 from cloudmesh.key.KeyGroup import KeyGroup
+from cloudmesh.host.host import Host
+from cloudmesh.common.util import path_expand
 import os
 
 
@@ -43,9 +45,10 @@ class KeyCommand(PluginCommand):
              key group upload [NAMES] [--group=GROUPNAMES] [--cloud=CLOUDS] [--dryrun]
              key group add [--group=GROUPNAMES] [--cloud=CLOUDS] [--dryrun]
              key group add --file=FILENAME
+             key group add [--group=GROUPNAMES] [NAMES] [--dryrun]
              key group delete [--group=GROUPNAMES] [NAMES] [--dryrun]
              key group list [--group=GROUPNAMES] [--output=OUTPUT]
-             key group export --group=GROUNAMES --filename=FILENAME
+             key group export --group=GROUNAMES --file=FILENAME
 
 
            Arguments:
@@ -145,12 +148,15 @@ class KeyCommand(PluginCommand):
                In some cases you may want to store the public keys in files. For
                this reason we support the following commands.
 
+                key group add [GROUPNAMES] [NAMES] [--dryrun]
+                    adds the named keys to the named groups.
+
                 key group add --group=GROUPNAME --file=FILENAME
                     the command adds the keys to the given group. The keys are
                     written in the files in yaml format.
 
 
-                key group export --group=GROUNAMES --filename=FILENAME
+                key group export --group=GROUNAMES --file=FILENAME
                     the command exports the keys to the given group. The keys are
                     written in the files in yaml format.
 
@@ -169,14 +175,13 @@ class KeyCommand(PluginCommand):
                 If a key is included in multiple groups they will be added
                 to the grouplist of the key
         """
-        def get_key_list(db_keys):
-            #pprint(db_keys)
+        dryrun = arguments["--dryrun"]
+        def get_key_list(db_keys, names):
             keys = []
             for key in db_keys:
-                print('abc', key)
-                pprint(key)
-                if key["name"] in names:
-                    keys.append(key)
+                for i in names:
+                    if key["name"].strip() == i.strip():
+                        keys.append(key["name"])
 
             return keys
 
@@ -186,6 +191,15 @@ class KeyCommand(PluginCommand):
                 sort_keys=["name"],
                 order=["name", "type", "fingerprint", "comment"],
                 header=["Name", "Type", "Fingerprint", "Comment"],
+                output=arguments.output)
+            )
+
+        def print_keygroups(groups):
+            print(Printer.write(
+                groups,
+                sort_keys=["name"],
+                order=["name", "keys"],
+                header=["Name", "Keys"],
                 output=arguments.output)
             )
 
@@ -239,35 +253,45 @@ class KeyCommand(PluginCommand):
             return ""
 
         elif arguments.group and arguments.list:
+            print('In key group list')
             key = KeyGroup()
-            #key group delete NAMES [--dryrun]
+            #key group list
 
-            names = Parameter.expand(arguments.NAMES)
+            groups = Parameter.expand(arguments["--group"])
+            #print(groups)
 
             cloud = "local"
             db = CmDatabase()
 
-            for kind in ['key', 'keygroup']:
-                db_keys = db.find(collection=f"{cloud}-{kind}")
-                keys = get_key_list(db_keys)
-                # print("DDDD", keys)
-                key.Print(data=keys, kind=kind)
+            kind = "key"
+            db_keys = db.find(collection=f"{cloud}-{kind}")
+            print_keys(db_keys)
+
+
+            kind = "keygroup"
+            db_keys = db.find(collection=f"{cloud}-{kind}")
+            print_keygroups(db_keys)
 
 
             return ""
 
         elif arguments.group and arguments.add:
-            print('aaa')
             key = KeyGroup()
-            #key group add NAMES
+            #key group add --group=abc [NAMES]
 
+            groups = arguments["--group"]
             names = Parameter.expand(arguments.NAMES)
 
             cloud = "local"
             db = CmDatabase()
+            db_keys = db.find(collection=f"{cloud}-key")
+            keys = get_key_list(db_keys, names)
 
-            key.add(names)
+            for i in keys:
+                key.add(groups, i)
 
+            if list(set(names) - set(keys)) is not None:
+                print('Keys dont exist, please add them', list(set(names) - set(keys)))
 
             return ""
 
@@ -297,6 +321,11 @@ class KeyCommand(PluginCommand):
             elif arguments["--source"] == "git":
                 name = arguments.NAME or "git"
                 key.add("git", "git")
+            elif arguments["--source"] is not None:
+                filename = arguments["--source"]
+                name = arguments.NAME
+                # print(f"File name {filename}")
+                key.add(name, filename)
             else:
                 config = Config()
                 name = config["cloudmesh.profile.user"]
@@ -327,6 +356,24 @@ class KeyCommand(PluginCommand):
 
             key.add(username, "ssh")
             variables['key'] = username
+
+        elif arguments.group and arguments.upload:
+
+            # key group upload [NAMES] [--group=GROUPNAMES] [--cloud=CLOUDS] [--dryrun]
+            print('blah blah')
+
+            groupkeys = arguments["--group"]
+            print('groupkeys: ', groupkeys)
+
+            source = path_expand("~/.ssh/authorized_keys")
+
+            names = Parameter.expand(arguments.NAMES)
+
+            for name in names:
+                destinations = [f"{name}:~/.ssh/authorized_keys"]
+                results = Host.scp(source, destinations, dryrun=dryrun)
+
+            return ""
 
         elif arguments.upload:
 
@@ -366,7 +413,10 @@ class KeyCommand(PluginCommand):
             db = CmDatabase()
             db_keys = db.find(collection=f"{cloud}-key")
 
-            keys = get_key_list(db_keys)
+            keys = []
+            for key in db_keys:
+                if key["name"] in names:
+                    keys.append(key)
 
             if len(keys) == 0:
                 Console.error(
@@ -396,6 +446,45 @@ class KeyCommand(PluginCommand):
 
             return ""
 
+        elif arguments.group and arguments.export:
+            # key group export --group=GROUPNAMES --file=FILENAME
+
+            groupkeys = arguments["--group"]
+            filename = arguments["--file"]
+            print('groupkeys: ', groupkeys)
+            print('filename: ', filename)
+
+            cloud = "local"
+            db = CmDatabase()
+
+            kind = "key"
+            db_keys = db.find(collection=f"{cloud}-{kind}")
+
+            kind = "keygroup"
+            db_keygroups = db.find(collection=f"{cloud}-{kind}")
+
+
+            keygroups = []
+            for groups in db_keygroups:
+                if groups["name"] == groupkeys:
+                    for x in groups["keys"]:
+                        keygroups.append(x)
+
+            print('keygroups: ', keygroups)
+
+            keys = ""
+            for key in db_keys:
+                if key["name"] in keygroups:
+                 #   print(key["name"])
+                    keys += key["public_key"]
+                    keys += "\n"
+
+            sample = open(filename, 'a+')
+            print(keys, file=sample)
+            sample.close()
+
+            return ""
+
 
         elif arguments.delete and arguments.cloud and arguments.NAMES:
 
@@ -410,6 +499,21 @@ class KeyCommand(PluginCommand):
                         Console.ok(f"Dryrun: delete {name} in {cloud}")
                     else:
                         images = provider.key_delete(name)
+
+            return ""
+
+
+        elif arguments.group and arguments.delete:
+
+            key = KeyGroup()
+            #key group delete --group=GROUPNAME NAMES
+            #deletes the keys from the said group
+
+            groups = arguments["--group"]
+            names = arguments.NAMES
+            print('names: ', names)
+
+            key.delete(groups, names)
 
             return ""
 
@@ -434,27 +538,3 @@ class KeyCommand(PluginCommand):
                         Console.ok(f"delete {name}")
             return ""
 
-        elif arguments.group and arguments.delete:
-
-            key = KeyGroup()
-            #key group delete NAMES [--dryrun]
-
-            names = Parameter.expand(arguments.NAMES)
-
-            cloud = "local"
-            db = CmDatabase()
-            db_keys = db.find(collection=f"{cloud}-keygroup")
-
-            error = []
-            for key in db_keys:
-                name = key['name']
-                if name in names:
-                    if arguments.dryrun:
-                        Console.ok(f"Dryrun: delete {name}")
-                    else:
-                        db.delete(collection="local-keygroup",
-                                  name=name)
-                        Console.ok(f"delete {name}")
-            return ""
-
-        return ""

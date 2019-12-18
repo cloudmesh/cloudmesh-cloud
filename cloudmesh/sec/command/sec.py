@@ -160,7 +160,7 @@ class SecCommand(PluginCommand):
 
 
         if (arguments.load and not arguments.group) or \
-            (arguments.load and arguments.group and not arguments.GROUP) :
+            (arguments.load and arguments.group and not arguments.GROUP):
 
             examples = SecgroupExamples()
             examples.load()

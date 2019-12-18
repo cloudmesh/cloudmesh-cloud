@@ -1,7 +1,7 @@
 ###############################################################
 # pytest -v --capture=no tests/1_local/test_name.py
 # pytest -v  tests/1_local/test_name.py
-# pytest -v --capture=no  tests/1_local/test_name.py:Test_name.<METHIDNAME>
+# pytest -v --capture=no  tests/1_local/test_name.py:Test_name.<METHODNAME>
 ###############################################################
 import os
 from pprint import pprint
@@ -71,7 +71,6 @@ class TestName:
         pprint(data)
         assert data == dict({'counter': 3,
                              'kind': 'vm',
-                             'path': path_expand("~/.cloudmesh/name.yaml"),
                              'schema': '{user}-{kind}-{counter}',
                              'user': username})
 
@@ -100,7 +99,6 @@ class TestName:
         Benchmark.Stop()
         assert data == dict({'counter': 1,
                              'kind': 'vm',
-                             'path': path_expand("~/.cloudmesh/name.yaml"),
                              'schema': '{user}-{kind}-{counter}',
                              'user': username})
 

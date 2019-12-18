@@ -32,6 +32,7 @@ class ConfigCommand(PluginCommand):
              config secinit
              config security add (--secret=REGEXP | --exception=REGEXP )
              config security rmv (--secret=REGEXP | --exception=REGEXP )
+             config security list
              config encrypt 
              config decrypt [--nopass]
              config edit [ATTRIBUTE]
@@ -88,8 +89,13 @@ class ConfigCommand(PluginCommand):
 
                 cms config encrypt 
                     Encrypts the config data at-rest. This means that the data
-                    is encrypted when not in use. This command checks two
-                    attributes within the cloudmesh config file
+                    is encrypted when not in use. This command is reliant upon
+                    the cloudmesh.security.secrets attribute and the
+                    cloudmesh.security.exceptions attribute within the
+                    cloudmesh.yaml file. Note, that the encrypted data is not 
+                    encrypted upon request/query to the attribute. This means 
+                    you must decrypt the config when needed in use and
+                    re-encrypt when not using the file, or delivering the file.
 
                         1. cloudmesh.security.secrets:
                             This attribute will hold a list of python regular
@@ -103,9 +109,22 @@ class ConfigCommand(PluginCommand):
                             expressions that detail which attributes will not
                             be encrypted by the command. 
                             ex) .*pubkey.*: ensures no pubkey path is encrypted 
+                    
+                security add --secret=REGEXP 
+                    Adds valid REGEXP to the cloudmesh.security.secrets section
 
-                    Currently the data will not be decrypted upon query. 
-                    This means that you should decrypt the data when needed.
+                security rmv --secret=REGEXP 
+                    Removes REGEXP from the cloudmesh.security.secrets section
+
+                security add --exception=REGEXP
+                    Adds valid REGEXP to cloudmesh.security.exceptions section
+
+                security rmv --exception=REGEXP
+                    Removes REGEXP from cloudmesh.security.exceptions section
+
+                security list
+                    Prints a list of all the attribute dot-paths that are 
+                    referenced by cms config encryption and decryption commands
 
                 cms config decrypt 
                     Decrypts the config data that was held in rest. This 
@@ -299,6 +318,12 @@ class ConfigCommand(PluginCommand):
             secpath = path_expand(config['cloudmesh.security.secpath'])
             if not os.path.isdir(secpath):
                 Shell.mkdir(secpath)  # Use Shell that makes all dirs as needed
+
+        elif arguments.security and arguments.list:
+            config = Config()
+            secrets = config.get_list_secrets()
+            for s in secrets:
+                Console.msg(s)
 
         elif arguments.security:
             # Get the regular expression from command line

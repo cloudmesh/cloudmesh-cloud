@@ -43,8 +43,7 @@ class KeyCommand(PluginCommand):
              key upload [NAMES] [--cloud=CLOUDS] [--dryrun]
              key upload [NAMES] [VMS] [--dryrun]
              key group upload [NAMES] [--group=GROUPNAMES] [--cloud=CLOUDS] [--dryrun]
-             key group add [--group=GROUPNAMES] [--cloud=CLOUDS] [--dryrun]
-             key group add --file=FILENAME
+             key group add [NAMES] [--group=GROUPNAMES] [--cloud=CLOUDS] [--dryrun]
              key group delete [--group=GROUPNAMES] [NAMES] [--dryrun]
              key group list [--group=GROUPNAMES] [--output=OUTPUT]
              key group export --group=GROUNAMES --filename=FILENAME
@@ -307,10 +306,12 @@ class KeyCommand(PluginCommand):
         elif arguments.add:
 
             """
-             key add [NAME] [--source=FILENAME] # NOT IMPLEMENTED YET
-             key add [NAME] [--source=git]
-             key add [NAME] [--source=ssh]
-             """
+            key add [NAME] [--source=FILENAME] # NOT IMPLEMENTED YET
+            key add [NAME] [--source=git]
+            key add [NAME] [--source=ssh]
+            """
+
+            print ("AAA")
             key = Key()
 
             if arguments["--source"] == "ssh":
@@ -320,8 +321,10 @@ class KeyCommand(PluginCommand):
                 name = arguments.NAME or "git"
                 key.add("git", "git")
             else:
+                print ("BBB")
                 config = Config()
                 name = config["cloudmesh.profile.user"]
+                print ("NAME", name)
                 kind = "ssh"
                 key.add(name, kind)
 

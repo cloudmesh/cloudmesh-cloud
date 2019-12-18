@@ -49,15 +49,18 @@ class KeyCommand(PluginCommand):
              key group list [--group=GROUPNAMES] [--output=OUTPUT]
              key group export --group=GROUNAMES --filename=FILENAME
              key gen (ssh | pem) [--filename=FILENAME] [--nopass] [--set_path] [--force]
+             key reformat (ssh | pem) [--filename=FILENAME] [--format=FORMAT]
+                                      [--nopass] [--pub]
              key verify (ssh | pem) [--filename=FILENAME] [--pub] [--check_pass]
 
            Arguments:
-             VMS            Parameterized list of virtual machines
-             CLOUDS         The clouds
-             NAME           The name of the key.
-             SOURCE         db, ssh, all
-             OUTPUT         The format of the output (table, json, yaml)
-             FILENAME       The filename with full path in which the key is located
+             VMS        Parameterized list of virtual machines
+             CLOUDS     The clouds
+             NAME       The name of the key.
+             SOURCE     db, ssh, all
+             OUTPUT     The format of the output (table, json, yaml)
+             FILENAME   The filename with full path in which the key is located
+             FORMAT     Desired key format (SubjectInfo, SSH, OpenSSL, PKCS8)
 
            Options:
               --dir=DIR             the directory with keys [default: ~/.ssh]
@@ -77,11 +80,11 @@ class KeyCommand(PluginCommand):
                Please note that some values are read from the cloudmesh.yaml
                file. One such value is cloudmesh.profile.user
 
-               Manages public keys is an essential component of accessing
+               Management of public keys is an essential component of accessing
                virtual machines in the cloud. There are a number of sources
                where you can find public keys. This includes the ~/.ssh
-               directory and for example github. If do not already have a
-               public-private key pairs they can be generated using cloudmesh
+               directory and for example github. If you do not already have a
+               public-private key pair they can be generated using cloudmesh
 
                key gen ssh 
                    This will create the public-private keypair of ~/.ssh/id_rsa
@@ -111,10 +114,25 @@ class KeyCommand(PluginCommand):
                    Verifies that ~/.ssh/id_rsa.pub has OpenSSH format
 
                key verify pem --filename=~/.cloudmesh/foobar
-                   Verifies that the private key located at ~/.cloudmesh/foobar
-                   has PEM format
+                   Verifies if the private key located at ~/.cloudmesh/foobar
+                   is password protected
 
-                key verify pem --check_pass
+               key verify pem --filenam=~/.cloudmesh/foobar --check_pass
+                   Request the password to the file, then checks if the
+                   key is in proper PEM format
+
+               You may find the need to keep the values of your keys but
+               different encodings or formats. These aspects of your key can
+               also be changed using cloudmesh.
+
+               key reformat pem
+                   Will reformat the ~/.id_rsa.pub key from PEM to OpenSSH
+
+               key reformat ssh
+                   Will reformat the ~/.id_rsa.pub key from OpenSSH to PEM
+
+               key reformat --filename=~/.id_rsa --format=PKCS8
+                   Will reformat the private key to PKCS8 format
 
                Keys will be uploaded into cloudmesh database with the add
                command under the given NAME. If the name is not specified the name
@@ -226,6 +244,7 @@ class KeyCommand(PluginCommand):
                        'dryrun',
                        'filename',
                        'force',
+                       'format',
                        'name',
                        'nopass',
                        'output',
@@ -568,6 +587,32 @@ class KeyCommand(PluginCommand):
                     # Error Message handled in kh.load_key()
                     raise e
 
+        elif arguments.reformat:
+            """
+            key reformat (ssh | pem) [--filename=FILENAME] [--format=FORMAT]
+                                      [--nopass] [--pub]
+            Restructures a key's format, encoding, and password
+            """
+
+            # Initialize variables
+            kh = KeyHandler()
+
+            # Determine key type
+            fname, fext = os.path.splitext(arguments.filename)
+            kt = "PRIV"
+            if arguments.pub or fext == ".pub":
+                kt = "PUB"
+
+            # Determine new encoding
+            use_pem = True
+            if arguments.ssh:
+                use_pem = False
+
+            kh.reformat_key(path = arguments.filename,
+                            key_type = kt,
+                            use_pem = use_pem,
+                            new_format = arguments.format,
+                            ask_pass = not arguments.nopass)
 
         elif arguments.delete and arguments.NAMES:
             # key delete NAMES [--dryrun]

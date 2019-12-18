@@ -1,7 +1,7 @@
 ###############################################################
 # pytest -v --capture=no tests/aws/test_cms_aws.py
 # pytest -v  tests/aws/test_cms_aws.py
-# pytest -v --capture=no -v --nocapture  tests/aws/test_cms_aws.py:Test_cms_aws.<METHIDNAME>
+# pytest -v --capture=no -v --nocapture  tests/aws/test_cms_aws.py:Test_cms_aws.<METHODNAME>
 ###############################################################
 import time
 

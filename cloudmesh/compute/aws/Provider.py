@@ -607,7 +607,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
             tmp_keys = keys[:]
             # indices = range(1,len(tmp_keys)+1)
             for key_idx, key in enumerate(keys):
-                key['idx'] = key_idx + 1;
+                key['idx'] = key_idx + 1
             print(Printer.flatwrite(tmp_keys,
                                     sort_keys=["idx"],
                                     order=['idx', 'KeyName', 'KeyFingerprint'],
@@ -899,8 +899,8 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         if type(instance_id) != list:
             instance_id = [instance_id]
         instance_status = \
-        self.ec2_client.describe_instance_status(InstanceIds=instance_id)[
-            'InstanceStatuses']
+            self.ec2_client.describe_instance_status(InstanceIds=instance_id)[
+                'InstanceStatuses']
         if (len(instance_status) > 0):
             status = instance_status[0]['InstanceStatus']['Details'][0][
                 'Status']

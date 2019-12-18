@@ -945,6 +945,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                public=True,
                group=None,
                metadata=None,
+               flavor=None,
                **kwargs):
         """
         creates a named node
@@ -974,7 +975,11 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         if key is None:
             key = 'test-key'  # todo default key is named test-key? why?
 
-        vm_parameters = self._create_vm_parameters(name, secgroup, pub_ip, key)
+        if flavor is None:
+            flavor = 'Standard_B1s'
+
+        vm_parameters = self._create_vm_parameters(name, secgroup, pub_ip, key,
+                                                   flavor)
 
         vm = self.vms.create_or_update(
             group,
@@ -1039,7 +1044,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
         return key[0]
 
-    def _create_vm_parameters(self, name, secgroup, ip, key):
+    def _create_vm_parameters(self, name, secgroup, ip, key, flavor):
         """
         Create the VM parameters structure.
         :param secgroup: sec group name
@@ -1073,7 +1078,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                 }
             },
             'hardware_profile': {
-                'vm_size': 'Standard_B1s'
+                'vm_size': flavor,
             },
             'storage_profile': {
                 'image_reference': {

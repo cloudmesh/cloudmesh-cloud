@@ -69,8 +69,8 @@ class KeyCommand(PluginCommand):
               --nopass              Flag indicating if the key has no password
               --output=OUTPUT       the format of the output [default: table]
               --pub                 Indicates that the public key is passed in
-              --set_path            Sets the cloudmesh encryption key path to 
-                                    the full path of the generated keys 
+              --set_path            Sets the cloudmesh encryption key path to
+                                    the full path of the generated keys
               --source=SOURCE       the source for the keys
               --username=USERNAME   the source for the keys [default: none]
 
@@ -451,8 +451,8 @@ class KeyCommand(PluginCommand):
             ap = not arguments.nopass
 
             if not ap:
-                Console.warning( "Private key will NOT have a password" )
-                cnt = yn_choice( message="Continue, despite risk?", default="N")
+                Console.warning("Private key will NOT have a password")
+                cnt = yn_choice(message="Continue, despite risk?", default="N")
                 if not cnt:
                     sys.exit()
 
@@ -494,13 +494,13 @@ class KeyCommand(PluginCommand):
                 config['cloudmesh.security.publickey'] = uk_path
                 config.save()
 
-            Console.msg( f"\nPrivate key: {rk_path}")
-            Console.msg( f"Public  key: {uk_path}\n")
+            Console.msg(f"\nPrivate key: {rk_path}")
+            Console.msg(f"Public  key: {uk_path}\n")
 
             # Generate the Private and Public keys
             kh = KeyHandler()
             r = kh.new_rsa_key()
-            u = kh.get_pub_key(priv = r)
+            u = kh.get_pub_key(priv=r)
 
             # Serialize and write the private key to the path
             sr = kh.serialize_key(key = r, key_type = "PRIV", encoding = "PEM",
@@ -557,7 +557,7 @@ class KeyCommand(PluginCommand):
                 # Discern public key encoding
                 if arguments.ssh:
                     enc, e = "OpenSSH", "SSH"
-                elif arguments.pem: #PEM encoding
+                elif arguments.pem:  # PEM encoding
                     enc = e = "PEM"
             else:
                 # Load the private key to verify the format and password of the
@@ -641,5 +641,4 @@ class KeyCommand(PluginCommand):
 
         return ""
 
-            
 

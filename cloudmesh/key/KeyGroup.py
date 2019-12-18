@@ -3,6 +3,7 @@ from cloudmesh.mongo.CmDatabase import CmDatabase
 from cloudmesh.mongo.DataBaseDecorator import DatabaseUpdate
 from cloudmesh.common.Printer import Printer
 
+
 class KeyGroupDatabase:
 
     # noinspection PyShadowingBuiltins
@@ -62,6 +63,7 @@ class KeyGroupDatabase:
             }
         return entries
 
+
 class KeyGroup(KeyGroupDatabase):
     """
        "_id" : ObjectId("5dd766f3d860ed9e50f374c4"),
@@ -108,7 +110,7 @@ class KeyGroup(KeyGroupDatabase):
                        "Comment",
                        "Fingerprint",
                        "Publickey"
-                      ]
+                       ]
         },
         "keygroup": {
             "sort_keys": ["name"],
@@ -119,8 +121,6 @@ class KeyGroup(KeyGroupDatabase):
         }
 
     }
-
-
 
     # noinspection PyPep8Naming
     def Print(self, data, output=None, kind=None):
@@ -145,7 +145,6 @@ class KeyGroup(KeyGroupDatabase):
                   )
         else:
             print(Printer.write(data, output=output))
-
 
     def __init__(self, cloud="local"):
         super().__init__(cloud, kind="keygroup")

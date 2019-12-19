@@ -41,7 +41,7 @@ class KeyCommand(PluginCommand):
              key delete NAMES [--cloud=CLOUDS] [--dryrun]
              key upload [NAMES] [--cloud=CLOUDS] [--dryrun]
              key upload [NAMES] [VMS] [--dryrun]
-<<<<<<< HEAD
+
              key group upload [NAMES] [--group=GROUPNAMES] [--cloud=CLOUDS] [--dryrun]
              key group add [--group=GROUPNAMES] [--cloud=CLOUDS] [--dryrun]
              key group add --file=FILENAME
@@ -49,15 +49,14 @@ class KeyCommand(PluginCommand):
              key group delete [--group=GROUPNAMES] [NAMES] [--dryrun]
              key group list [--group=GROUPNAMES] [--output=OUTPUT]
              key group export --group=GROUNAMES --file=FILENAME
-=======
              key group add GROUPNAMES KEYNAME
-             key todo group upload [NAMES] [--group=GROUPNAMES] [--cloud=CLOUDS] [--dryrun]
-             key todo group add [--group=GROUPNAMES] [--cloud=CLOUDS] [--dryrun]
-             key todo group add --file=FILENAME
+             key group upload [NAMES] [--group=GROUPNAMES] [--cloud=CLOUDS] [--dryrun]
+             key group add [--group=GROUPNAMES] [--cloud=CLOUDS] [--dryrun]
+             key group add --file=FILENAME
              key group delete [--group=GROUPNAMES] [NAMES] [--dryrun]
              key group list [--group=GROUPNAMES] [--output=OUTPUT]
-             key todo group export --group=GROUNAMES --filename=FILENAME
->>>>>>> 148b9ed00910d036a4db09b9b5500dffb72a8958
+             key group export --group=GROUPNAME --filename=FILENAME
+
 
 
            Arguments:
@@ -310,6 +309,15 @@ class KeyCommand(PluginCommand):
 
             groups = arguments["--group"]
             names = Parameter.expand(arguments.NAMES)
+
+            filename = arguments["--file"]
+
+            if filename is not None:
+                key = Key()
+                name = arguments.NAME
+                key.add(name, filename)
+
+
 
             cloud = "local"
             db = CmDatabase()

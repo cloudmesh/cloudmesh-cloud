@@ -35,54 +35,36 @@ class Entry:
 
     @staticmethod
     def add(entry=None,
-            base = "cloudmesh.compute",
+            base = "cloudmesh.cloud",
             path="~/.cloudmesh/cloudmesh.yaml"):
 
         try:
             _entry = dedent(entry)
-            print (_entry)
+
             data = yaml.safe_load(_entry)
 
-            pprint (data)
-            # verify format
-            # cloudmesh.entry contains "cm",
-            # in case of credentials it also contains "default" and "credentials
 
+            name, entry = Entry.extract(data, base)
 
-
-            if Entry.verify(data, "credential", base=base):
+            if Entry.verify(entry):
                 Console.ok("Verification passed")
-
-                name, entry = Entry.extract(data, base)
-
-                pprint (entry)
-
-
-                print ("NAME", name)
-
-
-
                 config = Config() # todo: add the path
-                config[base][name] = data
-
-                #config.save()
-
+                config[base][name] = entry
+                config.save()
             else:
                 Console.error("entry format is wrong")
+                return ""
 
         except yaml.YAMLError:
             Console.error(f"parsing YAML entry: {entry}")
             sys.exit()
 
     @staticmethod
-    def verify(data, kind, base):
+    def verify(data):
 
-
-        _data = Entry.extract(data, base)
-        pprint (_data)
         valid = True
         for attribute in ["cm", "default", "credentials"]:
-            if attribute not in _data:
+            if attribute not in data:
                 Console.error(f"{attribute} is not in the entry")
                 return False
             else:

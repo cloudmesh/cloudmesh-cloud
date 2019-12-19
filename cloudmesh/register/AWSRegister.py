@@ -130,7 +130,7 @@ class AWSRegister(object):
                     "https://sites.google.com/a/chromium.org/chromedriver/downloads \n"
                     "2) Copy the `chromedriver` to path, for instance you can add "
                     "it to the followtin path: "
-                    "\n\t %USERPROFILE%\AppData\Local\Microsoft\WindowsApps")
+                    "\n\t %USERPROFILE%\\AppData\\Local\\Microsoft\\WindowsApps")
                 return
             credentials_file_name = self.create_user()
 

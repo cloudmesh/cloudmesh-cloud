@@ -31,8 +31,33 @@ from cloudmesh.management.configuration.name import Name
 class Provider(ComputeNodeABC, ComputeProviderPlugin):
     kind = "aws"
 
+    sample = """
+    cloudmesh:
+      cloud:
+        {name}:
+          cm:
+            active: true
+            heading: AWS
+            host: TBD
+            label: {name}
+            kind: aws
+            version: TBD
+            service: compute
+          default:
+            image: ami-0c929bde1796e1484
+            size: t2.medium
+          credentials:
+            region: {region}
+            EC2_SECURITY_GROUP: cloudmesh
+            EC2_ACCESS_ID: {EC2_ACCESS_ID}
+            EC2_SECRET_KEY: {EC2_SECRET_KEY}
+            EC2_PRIVATE_KEY_FILE_PATH: ~/.cloudmesh/aws_cert.pem
+            EC2_PRIVATE_KEY_FILE_NAME: aws_cert
+    """
+
     # TODO: change to what you see in boto dicts the next values are from
     #  openstack which you must change
+
 
     output = {
 
@@ -607,7 +632,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
             tmp_keys = keys[:]
             # indices = range(1,len(tmp_keys)+1)
             for key_idx, key in enumerate(keys):
-                key['idx'] = key_idx + 1;
+                key['idx'] = key_idx + 1
             print(Printer.flatwrite(tmp_keys,
                                     sort_keys=["idx"],
                                     order=['idx', 'KeyName', 'KeyFingerprint'],
@@ -899,8 +924,8 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         if type(instance_id) != list:
             instance_id = [instance_id]
         instance_status = \
-        self.ec2_client.describe_instance_status(InstanceIds=instance_id)[
-            'InstanceStatuses']
+            self.ec2_client.describe_instance_status(InstanceIds=instance_id)[
+                'InstanceStatuses']
         if (len(instance_status) > 0):
             status = instance_status[0]['InstanceStatus']['Details'][0][
                 'Status']

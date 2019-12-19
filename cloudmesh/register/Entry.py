@@ -23,19 +23,20 @@ class Entry:
 
     """
 
-    def extract(self, data, base):
+    @staticmethod
+    def extract(data, base):
         location = base.split(".")
         _data = deepcopy(data)
         for i in location:
             _data = _data[i]
         name = list(_data.keys())[0]
         _data = _data[name]
-        return _data
+        return name, _data
 
     @staticmethod
     def add(entry=None,
             base = "cloudmesh.compute",
-            path="~/.cloudmesh/cloudmesh.yaml", ):
+            path="~/.cloudmesh/cloudmesh.yaml"):
 
         try:
             _entry = dedent(entry)
@@ -51,10 +52,21 @@ class Entry:
 
             if Entry.verify(data, "credential", base=base):
                 Console.ok("Verification passed")
-                #config = Config() # todo: add the path
-                #config.data.update(data)
+
+                name, entry = Entry.extract(data, base)
+
+                pprint (entry)
+
+
+                print ("NAME", name)
+
+
+
+                config = Config() # todo: add the path
+                config[base][name] = data
+
                 #config.save()
-                print ("verify")
+
             else:
                 Console.error("entry format is wrong")
 

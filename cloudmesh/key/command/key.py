@@ -41,6 +41,7 @@ class KeyCommand(PluginCommand):
              key delete NAMES [--cloud=CLOUDS] [--dryrun]
              key upload [NAMES] [--cloud=CLOUDS] [--dryrun]
              key upload [NAMES] [VMS] [--dryrun]
+             key group upload [--group=GROUPNAMES] [--vm=VM][--cloud=CLOUDS] [--dryrun]
              key group upload [NAMES] [--group=GROUPNAMES] [--cloud=CLOUDS] [--dryrun]
              key group add [--group=GROUPNAMES] [--cloud=CLOUDS] [--dryrun]
              key group add [--file=FILENAME]
@@ -65,7 +66,7 @@ class KeyCommand(PluginCommand):
               --source=SOURCE               the source for the keys
               --username=USERNAME           the source for the keys [default: none]
               --name=KEYNAME                The name of a key
-
+              --vm=VM                       The name of the VM
 
            Description:
 
@@ -154,7 +155,7 @@ class KeyCommand(PluginCommand):
                     written in the files in yaml format.
 
 
-                key group export --group=GROUNAMES --file=FILENAME
+                key group export --group=GROUPNAMES --file=FILENAME
                     the command exports the keys to the given group. The keys are
                     written in the files in yaml format.
 
@@ -285,10 +286,10 @@ class KeyCommand(PluginCommand):
             db_keys = db.find(collection=f"{cloud}-{kind}")
             print_keygroups(db_keys)
 
-            for kind in ['key', 'keygroup']:
-                db_keys = db.find(collection=f"{cloud}-{kind}")
-                keys = get_key_list(db_keys)
-                key.Print(data=keys, kind=kind, output=arguments.output)
+            #for kind in ['key', 'keygroup']:
+            #    db_keys = db.find(collection=f"{cloud}-{kind}")
+            #    keys = get_key_list(db_keys)
+            #    key.Print(data=keys, kind=kind, output=arguments.output)
 
 
             return ""
@@ -317,8 +318,8 @@ class KeyCommand(PluginCommand):
             for i in keys:
                 key.add(groups, i)
 
-            if list(set(names) - set(keys)) is not None:
-                print('Keys dont exist, please add them', list(set(names) - set(keys)))
+            #if list(set(names) - set(keys)) is not None:
+            #    print('Keys dont exist, please add them', list(set(names) - set(keys)))
 
 
             return ""
@@ -387,19 +388,38 @@ class KeyCommand(PluginCommand):
 
         elif arguments.group and arguments.upload:
 
-            # key group upload [NAMES] [--group=GROUPNAMES] [--cloud=CLOUDS] [--dryrun]
-            print('blah blah')
+            # key group upload [--group=GROUPNAMES] [--cloud=CLOUDS] [ip/vm] [--dryrun]
 
             groupkeys = arguments["--group"]
-            print('groupkeys: ', groupkeys)
 
-            source = path_expand("~/.ssh/authorized_keys")
+            cloud = "local"
+            #cloud = "local"
+            db = CmDatabase()
 
-            names = Parameter.expand(arguments.NAMES)
+            kind = "key"
+            db_keys = db.find(collection=f"{cloud}-{kind}")
 
-            for name in names:
-                destinations = [f"{name}:~/.ssh/authorized_keys"]
-                results = Host.scp(source, destinations, dryrun=dryrun)
+            kind = "keygroup"
+            db_keygroups = db.find(collection=f"{cloud}-{kind}")
+
+            keygroups = []
+            for groups in db_keygroups:
+                if groups["name"] == groupkeys:
+                    for x in groups["keys"]:
+                        keygroups.append(x)
+
+
+            cloud = arguments["--cloud"]
+            provider = Provider(name=cloud)
+            vm = arguments["--vm"]
+            keys = ""
+            for key in db_keys:
+                if key["name"] in keygroups:
+                    keys += key["public_key"]
+                    keys += "\n"
+                    command = "echo " + keys + " >> " + "$HOME/.ssh/authorized_keys"
+                    #print(command, "\n")
+                    provider.ssh(vm, command)
 
             return ""
 
@@ -479,8 +499,6 @@ class KeyCommand(PluginCommand):
 
             groupkeys = arguments["--group"]
             filename = arguments["--file"]
-            print('groupkeys: ', groupkeys)
-            print('filename: ', filename)
 
             cloud = "local"
             db = CmDatabase()
@@ -498,7 +516,6 @@ class KeyCommand(PluginCommand):
                     for x in groups["keys"]:
                         keygroups.append(x)
 
-            print('keygroups: ', keygroups)
 
             keys = ""
             for key in db_keys:

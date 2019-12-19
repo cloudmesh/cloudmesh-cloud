@@ -27,6 +27,36 @@ from cloudmesh.image.Image import Image
 class Provider(ComputeNodeABC, ComputeProviderPlugin):
     kind = "openstack"
 
+    sample = """
+    cloudmesh:
+      compute:
+        {name}:
+          cm:
+            active: true
+            heading: {name}
+            host: TBD
+            label: {name}
+            kind: openstack
+            version: liberty
+            service: compute
+          credentials:
+            OS_AUTH_URL: https://{uri}:5000/v2.0
+            OS_USERNAME: TBD
+            OS_PASSWORD: TBD
+            OS_TENANT_NAME: {tenant}
+            OS_TENANT_ID: {tenant}
+            OS_PROJECT_NAME: {tenant}
+            OS_PROJECT_DOMAIN_ID: default
+            OS_USER_DOMAIN_ID: default
+            OS_VERSION: kilo
+            OS_REGION_NAME: {region}
+            OS_KEY_PATH: ~/.ssh/id_rsa.pub
+          default:
+            size: m1.medium
+            image: CC-Ubuntu18.04
+            username: TBD
+        """
+
     vm_state = [
         'ACTIVE',
         'BUILDING',

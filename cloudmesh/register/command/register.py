@@ -5,7 +5,8 @@ from cloudmesh.common.util import path_expand
 from cloudmesh.shell.command import PluginCommand
 from cloudmesh.shell.command import command
 import importlib
-
+from cloudmesh.register.Entry import Entry
+from textwrap import dedent
 
 class RegisterCommand(PluginCommand):
 
@@ -21,6 +22,8 @@ class RegisterCommand(PluginCommand):
               register azure [FILENAME] [--keep]
               register google [FILENAME] [--keep]
               register chameleon [FILENAME] [--keep]
+              register new KIND SERVICE NAME ATTRIBUTES...
+              register list KIND SERVICE NAME [ATTRIBUTES...]
 
 
           This command adds the registration information the th cloudmesh
@@ -63,6 +66,29 @@ class RegisterCommand(PluginCommand):
             Chameleon Cloud
 
                 is not yet implemented
+
+          Register from template:
+
+            register list KIND SERVICE NAME [ATTRIBUTES...]
+
+                This command lists the template for a provider and fills it out
+                with the attributes. It can be used to check what information
+                would be added with the new command. The template is included in
+                the Provider itself. Leaving the attributes off, just prints the
+                template
+
+                Examples:
+
+                    cms register list compute openstack ABC
+                    cms register list compute openstack ABC uri=TBD tenant=TBD region=TBD
+
+                    In the last example the values for uri, tennant, and region
+                    will be cahnged to TBD
+
+            register new KIND SERVICE NAME ATTRIBUTES...
+
+
+
         """
 
         if arguments.aws:
@@ -90,5 +116,41 @@ class RegisterCommand(PluginCommand):
         elif arguments.chameleon:
 
             Console.error("not yet implemented")
+
+        elif arguments.list:
+
+            kind = arguments.KIND
+            service = arguments.SERVICE
+            attributes = arguments.ATTRIBUTES
+            name = arguments.NAME
+
+            replacements = {'name': name,
+                            'service': service}
+            for attribute in attributes:
+                key, value = attribute.split("=")
+                replacements[key] = value
+
+            if kind == "compute" and service == "openstack":
+                from cloudmesh.compute.openstack.Provider import Provider
+
+            elif kind == "compute" and service == "azure":
+                from cloudmesh.compute.azure.Provider import Provider
+
+            elif kind == "compute" and service == "aws":
+                from cloudmesh.compute.aws.Provider import Provider
+
+            elif kind == "compute" and service == "oracle":
+                from cloudmesh.oracle.compute.Provider import Provider
+
+            sample = Provider.sample
+
+
+            try:
+                if len(attributes) > 0:
+                    sample = sample.format(**replacements)
+            except KeyError as e:
+                Console.error(f"Value for {e} is not specified")
+            print (dedent(sample))
+
 
         return ""

@@ -22,7 +22,7 @@ class RegisterCommand(PluginCommand):
               register azure [FILENAME] [--keep]
               register google [FILENAME] [--keep]
               register chameleon [FILENAME] [--keep]
-              register new KIND SERVICE NAME ATTRIBUTES...
+              register new KIND SERVICE NAME [ATTRIBUTES...]
               register list KIND SERVICE NAME [ATTRIBUTES...]
 
 
@@ -148,6 +148,45 @@ class RegisterCommand(PluginCommand):
             try:
                 if len(attributes) > 0:
                     sample = sample.format(**replacements)
+            except KeyError as e:
+                Console.error(f"Value for {e} is not specified")
+            print (dedent(sample))
+
+        elif arguments.new:
+
+            kind = arguments.KIND
+            service = arguments.SERVICE
+            attributes = arguments.ATTRIBUTES
+            name = arguments.NAME
+
+            replacements = {'name': name,
+                            'service': service}
+            for attribute in attributes:
+                key, value = attribute.split("=")
+                replacements[key] = value
+
+            if kind == "compute" and service == "openstack":
+                from cloudmesh.compute.openstack.Provider import Provider
+
+            elif kind == "compute" and service == "azure":
+                from cloudmesh.compute.azure.Provider import Provider
+
+            elif kind == "compute" and service == "aws":
+                from cloudmesh.compute.aws.Provider import Provider
+
+            elif kind == "compute" and service == "oracle":
+                from cloudmesh.oracle.compute.Provider import Provider
+
+            sample = Provider.sample
+
+            try:
+                sample = sample.format(**replacements)
+
+                Entry.add(entry=sample,
+                        base="cloudmesh.compute",
+                        path="~/.cloudmesh/cloudmesh.yaml")
+
+
             except KeyError as e:
                 Console.error(f"Value for {e} is not specified")
             print (dedent(sample))

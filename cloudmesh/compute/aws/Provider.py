@@ -33,7 +33,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
     sample = """
     cloudmesh:
-      compute:
+      cloud:
         {name}:
           cm:
             active: true

@@ -22,7 +22,7 @@ class RegisterCommand(PluginCommand):
               register azure [FILENAME] [--keep]
               register google [FILENAME] [--keep]
               register chameleon [FILENAME] [--keep]
-              register new KIND SERVICE NAME [ATTRIBUTES...]
+              register new [-v] KIND SERVICE NAME [ATTRIBUTES...]
               register list KIND SERVICE NAME [ATTRIBUTES...]
 
 
@@ -182,8 +182,11 @@ class RegisterCommand(PluginCommand):
             try:
                 sample = sample.format(**replacements)
 
+                if arguments["-v"]:
+                    print (sample)
+
                 Entry.add(entry=sample,
-                        base="cloudmesh.compute",
+                        base="cloudmesh.cloud",
                         path="~/.cloudmesh/cloudmesh.yaml")
 
 

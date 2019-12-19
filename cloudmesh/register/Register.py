@@ -4,8 +4,11 @@ class Register(object):
         print("init {name}".format(name=self.__class__.__name__))
 
     def aws(self, filename):
+        #
+        # do import
+        # have a uniform entry sample in each provider
+        # verify against entry
         print("register", filename)
-
         raise NotImplementedError
 
     def azure(self, filename):

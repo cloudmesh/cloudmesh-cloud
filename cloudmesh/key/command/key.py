@@ -41,23 +41,13 @@ class KeyCommand(PluginCommand):
              key delete NAMES [--cloud=CLOUDS] [--dryrun]
              key upload [NAMES] [--cloud=CLOUDS] [--dryrun]
              key upload [NAMES] [VMS] [--dryrun]
-
              key group upload [NAMES] [--group=GROUPNAMES] [--cloud=CLOUDS] [--dryrun]
              key group add [--group=GROUPNAMES] [--cloud=CLOUDS] [--dryrun]
-             key group add --file=FILENAME
+             key group add [--file=FILENAME]
              key group add [--group=GROUPNAMES] [NAMES] [--dryrun]
              key group delete [--group=GROUPNAMES] [NAMES] [--dryrun]
              key group list [--group=GROUPNAMES] [--output=OUTPUT]
-             key group export --group=GROUNAMES --file=FILENAME
-             key group add GROUPNAMES KEYNAME
-             key group upload [NAMES] [--group=GROUPNAMES] [--cloud=CLOUDS] [--dryrun]
-             key group add [--group=GROUPNAMES] [--cloud=CLOUDS] [--dryrun]
-             key group add --file=FILENAME
-             key group delete [--group=GROUPNAMES] [NAMES] [--dryrun]
-             key group list [--group=GROUPNAMES] [--output=OUTPUT]
-             key group export --group=GROUPNAME --filename=FILENAME
-
-
+             key group export [--group=GROUPNAMES] [--file=FILENAME]
 
            Arguments:
              VMS            Parameterized list of virtual machines

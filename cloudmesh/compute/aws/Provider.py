@@ -31,8 +31,33 @@ from cloudmesh.management.configuration.name import Name
 class Provider(ComputeNodeABC, ComputeProviderPlugin):
     kind = "aws"
 
+    sample = """
+    cloudmesh:
+      compute:
+        {name}:
+          cm:
+            active: true
+            heading: AWS
+            host: TBD
+            label: {name}
+            kind: aws
+            version: TBD
+            service: compute
+          default:
+            image: ami-0c929bde1796e1484
+            size: t2.medium
+          credentials:
+            region: {region}
+            EC2_SECURITY_GROUP: cloudmesh
+            EC2_ACCESS_ID: {EC2_ACCESS_ID}
+            EC2_SECRET_KEY: {EC2_SECRET_KEY}
+            EC2_PRIVATE_KEY_FILE_PATH: ~/.cloudmesh/aws_cert.pem
+            EC2_PRIVATE_KEY_FILE_NAME: aws_cert
+    """
+
     # TODO: change to what you see in boto dicts the next values are from
     #  openstack which you must change
+
 
     output = {
 

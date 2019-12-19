@@ -361,9 +361,8 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         :param name:
         :return:
         """
-        ip = next((x for x in self.list_public_ips() if
-                   x['name'] == name), None)
-        return ip
+        _, pub_ip = self._get_pub_ip_for_vm(name)
+        return pub_ip
 
     # these are available to be associated
     def list_public_ips(self, ip=None, available=False):
@@ -480,7 +479,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         for ip in list(self.network_client.public_ip_addresses
                            .list(self.GROUP_NAME)):
             if ip.ip_configuration is not None and nic_id \
-                in ip.ip_configuration.id:
+                    in ip.ip_configuration.id:
                 pub_ip = ip
         return pub_ip
 
@@ -493,10 +492,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
         return vm_search[0] if len(vm_search) > 0 else None
 
-    def ssh(self, vm=None, command=None):
-        if vm is None or command is None:
-            raise Exception(f"vm or command can not be null")
-
+    def _get_pub_ip_for_vm(self, vm):
         if isinstance(vm, dict):
             vm_obj = vm
         else:
@@ -507,6 +503,14 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         pub_ip = self._get_az_pub_ip_from_nic_id(nic_id)
         if pub_ip is None:
             raise Exception(f"unable to find public IP for {vm}")
+
+        return vm_obj, pub_ip
+
+    def ssh(self, vm=None, command=None):
+        if vm is None or command is None:
+            raise Exception(f"vm or command can not be null")
+
+        vm_obj, pub_ip = self._get_pub_ip_for_vm(vm)
 
         # in the current API (vm/Provider), it does not provide a key name for
         # ssh. therefore, the key needs to be pulled from the vm. And therefore

@@ -44,7 +44,7 @@ A typical use is
              counter=1)
 
     n.incr()
-    counter = n.get()
+    counter = n.get()  ?? is this right
 
 Which will return
 
@@ -161,5 +161,7 @@ class Name(dotdict):
         self.__dict__["counter"] += 1
         self.flush()
 
+    def assign(self, counter):
+        self.__dict__["counter"] = counter
 
 name = Name()

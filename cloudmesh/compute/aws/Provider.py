@@ -70,6 +70,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                       "image",
                       "public_ips",
                       "private_ips",
+                      "cm.creation_time",
                       "created",
                       "cm.kind"],
             "header": ["Name",
@@ -79,6 +80,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                        "Image",
                        "Public IPs",
                        "Private IPs",
+                       "Creation Time",
                        "Started at",
                        "Kind"]
         },

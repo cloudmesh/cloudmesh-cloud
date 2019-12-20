@@ -75,7 +75,7 @@ class Test_provider_vm:
 
     def test_find_largest_id(self):
         name = Name()
-        counter = self.find_counter()
+        counter = {"counter": self.find_counter()}
         name.assign(counter)
 
     def test_provider_vm_create(self):

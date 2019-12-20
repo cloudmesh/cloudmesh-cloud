@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """We use a uniform naming convention method. The name is defined by different kinds of objects. The name is a string
 its syntax is defined in a yaml file located at ``~/.cloudmesh/name.yaml``
 
@@ -161,7 +160,6 @@ class Name(dotdict):
         self.__dict__["counter"] += 1
         self.flush()
 
-    def assign(self, counter):
-        self.__dict__["counter"] = counter
 
-name = Name()
+
+# name = Name()

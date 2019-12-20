@@ -9,6 +9,7 @@
 from pprint import pprint
 
 import pytest
+import os
 from time import sleep
 from cloudmesh.common.debug import VERBOSE
 from cloudmesh.common.util import HEADING
@@ -52,6 +53,12 @@ current_vms = 0
 
 @pytest.mark.incremental
 class Test_provider_vm:
+
+    def test_key_upload(self):
+        os.system("cms key add")
+        os.system("cms key list")
+        os.system(f"cms key upload {key} --cloud={cloud}")
+        os.system(f"cms key list --cloud={cloud}")
 
     def test_provider_vm_create(self):
         HEADING()

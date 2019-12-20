@@ -60,7 +60,7 @@ class Test_provider_vm:
         os.system(f"cms key upload {key} --cloud={cloud}")
         os.system(f"cms key list --cloud={cloud}")
 
-    def test_find_counter(self):
+    def find_counter(self):
         name = str(Name())
         print(name)
         vms = provider.list()
@@ -73,6 +73,10 @@ class Test_provider_vm:
             numbers.sort()
             return numbers[-1]
 
+    def test_find_largest_id(self):
+        name = Name()
+        counter = self.find_counter()
+        name.assign(counter)
 
     def test_provider_vm_create(self):
         HEADING()

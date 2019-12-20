@@ -1069,31 +1069,19 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
             return None
 
         banner("Create Server")
-        Console.msg(f"    Name:    {name}")
-        Console.msg(f"    IP:      {ip}")
-        Console.msg(f"    Image:   {image}")
-        Console.msg(f"    Size:    {size}")
-        Console.msg(f"    Public:  {public}")
-        Console.msg(f"    Key:     {key}")
-        Console.msg(f"    location:{location}")
-        Console.msg(f"    timeout: {timeout}")
-        Console.msg(f"    secgroup:{secgroup}")
-        Console.msg(f"    group:   {group}")
-
-        # Validate if there is any VM with same tag name and state other than Terminated.
-        # If there is any VM, throw error
-
-        # ec2_reservations = self.info(name)['Reservations']
-        #
-        # if ec2_reservations:
-        #     reservation_instances = None
-        #     for reservation in ec2_reservations:
-        #         reservation_instances = list(
-        #             filter(lambda instance: instance['State']['Name'] != 'terminated', reservation['Instances']))
-        #
-        #     if reservation_instances:
-        #         Console.error("Tag name already exists, Please use different tag name.")
-        #         return
+        Console.msg(f"    Name:     {name}")
+        Console.msg(f"    User:     {user}")
+        Console.msg(f"    IP:       {ip}")
+        Console.msg(f"    Image:    {image}")
+        Console.msg(f"    Size:     {size}")
+        Console.msg(f"    Public:   {public}")
+        Console.msg(f"    Key:      {key}")
+        Console.msg(f"    Location: {location}")
+        Console.msg(f"    Timeout:  {timeout}")
+        Console.msg(f"    Secgroup: {secgroup}")
+        Console.msg(f"    Group:    {group}")
+        # Console.msg(f"    Groups:   {groups}")
+        Console.msg("")
 
         if secgroup is None:
             secgroup = 'default'

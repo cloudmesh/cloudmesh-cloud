@@ -1160,6 +1160,21 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
         vm_parameters = self._create_vm_parameters(name, secgroup, pub_ip, key,
                                                    flavor)
+        banner("Create Server")
+        print(f"ERROR ERROR ERROR . YOU NEED TO INCLUDE FOLLOWING INFO, SEE AWS AND OPENSTACK")
+        # Console.msg(f"    Name:     {name}")
+        # Console.msg(f"    User:     {user}")
+        # Console.msg(f"    IP:       {ip}")
+        # Console.msg(f"    Image:    {image}")
+        # Console.msg(f"    Size:     {size}")
+        # Console.msg(f"    Public:   {public}")
+        # Console.msg(f"    Key:      {key}")
+        # Console.msg(f"    Location: {location}")
+        # Console.msg(f"    Timeout:  {timeout}")
+        # Console.msg(f"    Secgroup: {secgroup}")
+        # Console.msg(f"    Group:    {group}")
+        # Console.msg(f"    Groups:   {groups}")
+        # Console.msg("")
 
         vm = self.vms.create_or_update(
             group,

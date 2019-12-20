@@ -80,6 +80,7 @@ class Test_provider_vm:
 
     def test_provider_vm_create(self):
         HEADING()
+        os.system(f"cms vm list --cloud={cloud}")
         name_generator.incr()
         Benchmark.Start()
         data = provider.create(key=key)

@@ -609,8 +609,11 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         :return:
         """
 
-        if vm is None or command is None:
+        if vm is None:
             raise Exception(f"vm or command can not be null")
+
+        if command is None:
+            command = ""
 
         vm_obj, pub_ip = self._get_pub_ip_for_vm(vm)
 

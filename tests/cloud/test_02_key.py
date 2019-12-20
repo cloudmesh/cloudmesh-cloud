@@ -16,10 +16,11 @@ from cloudmesh.mongo.CmDatabase import CmDatabase
 
 Benchmark.debug()
 
-KEY = 'test-key'
 
 user = Config()["cloudmesh.profile.user"]
 variables = Variables()
+
+KEY = variables["key"]
 
 cloud = variables.parameter('cloud')
 

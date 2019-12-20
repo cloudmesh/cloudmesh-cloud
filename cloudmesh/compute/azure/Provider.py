@@ -50,6 +50,14 @@ def _get_az_vm_status(az_status):
 
 
 class Provider(ComputeNodeABC, ComputeProviderPlugin):
+    """
+    verbosity
+
+    8 - prints major actions
+    9 - prints all images
+    10 - prints all update dicts
+
+    """
     kind = 'azure'
 
     sample = """
@@ -331,8 +339,6 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         }
 
     def Print(self, data, output=None, kind=None):
-        # TODO: Joaquin
-
         if output == "table":
             if kind == "secrule":
 
@@ -364,6 +370,15 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
     #        raise NotImplementedError
 
     def keys(self):
+        """
+        The keys command in Azure is not supported
+
+        TODO: BUG: therefore it should just return the keys form the local db to
+                   make it appear it is supported. So instead do get the output,
+                   see how it is implemented in key list
+
+        :return:
+        """
         Console.error("Key list is not supported in Azure!")
         Console.msg("Please use ")
         Console.msg("")
@@ -372,6 +387,15 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         return None
 
     def key_upload(self, key=None):
+        """
+        TODO: implement alternative
+
+        azure does not allow explicit key upload!
+
+
+        :param key:
+        :return:
+        """
         """
         azure does not allow explicit key upload!
         """
@@ -383,16 +407,23 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
     def key_delete(self, name=None):
         """
-        azure does not allow explicit key upload!
+        TODO: implement alternative
+
+                azure does not allow explicit key upload!
+
+
+        :param name:
+        :return:
         """
-        Console.error(f'Azure does not allow explicit key delete! '
-                      f'Please use \'cms key\' operations to delete keys from '
-                      f'the local db!')
+        Console.error(f"Azure does not allow explicit key delete! "
+                      f"Please use 'cms key' operations to delete keys from "
+                      f"the local db!")
         return None
 
     def get_public_ip(self, name=None):
         """
         returns public IP by name from the Az public IPs
+
         :param name:
         :return:
         """
@@ -404,6 +435,10 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
     def list_public_ips(self, ip=None, available=False):
         """
         lists public ips of the group
+
+        :param ip:
+        :param available:
+        :return:
         """
         list_result = [i.__dict__ for i in
                        self.network_client.public_ip_addresses.list(
@@ -414,6 +449,9 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
     def delete_public_ip(self, ip=None):
         """
         deletes public ip by name
+
+        :param ip:
+        :return:
         """
         if ip is not None:
             res = self.network_client.public_ip_addresses.delete(
@@ -430,6 +468,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         """
         Creates public IP for the group using the ip name provided in the config
         as a prefix
+
         :return:
         """
         current_pub_count = len(self.list_public_ips())
@@ -454,6 +493,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         """
         Azure currenly has no direct API to check if an IP is available or not!
         hence create an IP everytime this method is called!
+
         :return:
         """
         # pub_ips = self.list_public_ips()
@@ -472,6 +512,10 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
     def attach_public_ip(self, node=None, ip=None):
         """
         attaches a public ip to a node
+
+        :param node:
+        :param ip:
+        :return:
         """
         ip = self.find_available_public_ip()[0].as_dict()
 
@@ -498,6 +542,13 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         return res.result()
 
     def detach_public_ip(self, node=None, ip=None):
+        """
+        TBD
+
+        :param node:
+        :param ip:
+        :return:
+        """
         if ip is None:
             vm_obj = self._get_local_vm(node)
             nic_id = vm_obj['network_profile']['network_interfaces'][0]['id']
@@ -511,6 +562,12 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         Console.info(f"deleted pub ip {ip}")
 
     def _get_az_pub_ip_from_nic_id(self, nic_id):
+        """
+        TBD
+
+        :param nic_id:
+        :return:
+        """
         pub_ip = None
         for ip in list(self.network_client.public_ip_addresses
                            .list(self.GROUP_NAME)):
@@ -520,6 +577,13 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         return pub_ip
 
     def _get_local_vm(self, vm_name, quiet=False):
+        """
+        TBD
+
+        :param vm_name:
+        :param quiet:
+        :return:
+        """
         vm_search = list(
             self.cmDatabase.collection('azure-vm').find({'name': vm_name}))
 
@@ -529,6 +593,13 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         return vm_search[0] if len(vm_search) > 0 else None
 
     def ssh(self, vm=None, command=None):
+        """
+        TBD
+
+        :param vm:
+        :param command:
+        :return:
+        """
         if vm is None or command is None:
             raise Exception(f"vm or command can not be null")
 
@@ -620,9 +691,15 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                 self.GROUP_NAME, {'location': self.LOCATION})
 
     def set_server_metadata(self, name=None, cm=None):
+        """
+        TBD
+
+        :param name:
+        :param cm:
+        :return:
+        """
         # see https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-using-tags
         # https://github.com/Azure-Samples/virtual-machines-python-manage/blob/master/example.py
-        # TODO: Joaquin -> Completed
         # tags = FlatDict(cm)
 
         data = {}
@@ -644,14 +721,24 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         return async_vm_key_updates.result().tags
 
     def get_server_metadata(self, name):
-        # TODO: Joaquin -> Completed
+        """
+        TBD
+
+        :param name:
+        :return:
+        """
         tags_dict = self.vms.get(self.GROUP_NAME, self.VM_NAME)
 
         return tags_dict.tags
 
     def delete_server_metadata(self, name, key):
-        # TODO: Joaquin -> Completed
+        """
+        TBD
 
+        :param name:
+        :param key:
+        :return:
+        """
         tags_dict = self.get_server_metadata(self)
 
         if key is not None:
@@ -686,6 +773,12 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         return local_sec_groups
 
     def _get_az_sec_groups(self, name=None):
+        """
+        TBD
+
+        :param name:
+        :return:
+        """
         groups = self.network_client.network_security_groups.list(
             self.GROUP_NAME)
         ret = []
@@ -699,6 +792,12 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         return ret
 
     def _get_local_sec_groups(self, name=None):
+        """
+        TBD
+
+        :param name:
+        :return:
+        """
         # if name is none, return all the groups, else filter the groups by name
         query = {} if name is None else {'name': name}
 
@@ -714,6 +813,12 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         return _remove_mongo_id_obj(res)
 
     def _get_local_sec_rules(self, group_name=None):
+        """
+        TBD
+
+        :param group_name:
+        :return:
+        """
         # if group_name is none, return all sec rules
         sec_rules = None
         if group_name is None:
@@ -748,6 +853,12 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
             Console.warning("Error in pulling sec rules: " + str(e))
 
     def _sec_rules_local_to_az(self, sec_rule_names):
+        """
+        TBD
+
+        :param sec_rule_names:
+        :return:
+        """
         # local rules from the db
         sec_rules = self.cmDatabase.collection('local-secrule').find(
             {'name': {'$in': sec_rule_names}})
@@ -772,6 +883,13 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         return az_sec_rules
 
     def _add_local_sec_group(self, name, description):
+        """
+        TBD
+
+        :param name:
+        :param description:
+        :return:
+        """
         add_group = {
             "description": description,
             "rules": [],
@@ -790,6 +908,12 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         return add_group
 
     def _add_az_sec_group(self, name):
+        """
+        TBD
+
+        :param name:
+        :return:
+        """
         parameters = {
             'location': self.LOCATION,
         }
@@ -856,7 +980,6 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         return add_rule
 
     def remove_secgroup(self, name=None):
-        # TODO: Joaquin -> Completed
         """
         Delete the names security group
 
@@ -898,6 +1021,12 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         return results
 
     def _check_local_rules_available(self, rules):
+        """
+        TBD
+
+        :param rules:
+        :return:
+        """
         sec_rules = self.cmDatabase.collection('local-secrule').find(
             {'name': {'$in': rules}})
         rule_names = {i['name'] for i in sec_rules}
@@ -991,7 +1120,17 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         :param timeout: a timeout in seconds that is invoked in case the image
                         does not boot. The default is set to 3 minutes.
         :param kwargs: additional arguments passed along at time of boot
+        :param location:
+        :param key:
+        :param secgroup:
+        :param ip:
+        :param user:
+        :param public:
+        :param group:
+        :param metadata:
+        :param flavor:
         :return:
+
         """
         if group is None:
             group = self.GROUP_NAME
@@ -1070,6 +1209,12 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         return self.update_dict(updated_dict, kind='vm')[0]
 
     def _get_local_key_content(self, key_name):
+        """
+        TBD
+
+        :param key_name:
+        :return:
+        """
         query = {'name': key_name}
 
         key = list(self.cmDatabase.collection('local-key').find(query))
@@ -1141,6 +1286,12 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         return vm_parameters
 
     def _create_az_sec_group_if_not_exists(self, sec_group_name):
+        """
+        TBD
+
+        :param sec_group_name:
+        :return:
+        """
         az_group = self._get_az_sec_groups(sec_group_name)
 
         if len(az_group) > 0:
@@ -1149,6 +1300,11 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
             self.upload_secgroup(sec_group_name)
 
     def _create_az_vnet_if_not_exists(self):
+        """
+        TBD
+
+        :return:
+        """
         for vnet in self.network_client.virtual_networks.list(self.GROUP_NAME):
             if vnet.name == self.VNET_NAME:
                 Console.info("vnet exists!")
@@ -1168,6 +1324,12 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         return async_vnet_creation.result()
 
     def _create_az_subnet_if_not_exitsts(self, secgroup):
+        """
+        TBD
+
+        :param secgroup:
+        :return:
+        """
         for subnet in self.network_client.subnets.list(self.GROUP_NAME,
                                                        self.VNET_NAME):
             if subnet.name == self.SUBNET_NAME:
@@ -1193,6 +1355,9 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
     def _create_az_nic(self, secgroup, ip):
         """
         Create a Network Interface for a Virtual Machine
+
+        :param secgroup:
+        :param ip:
         :return:
         """
         # A Resource group needs to be in place
@@ -1202,15 +1367,15 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         self._create_az_sec_group_if_not_exists(secgroup)
 
         # Create Virtual Network
-        VERBOSE('Create Vnet')
+        VERBOSE('Create Vnet', verbose=8)
         vnet = self._create_az_vnet_if_not_exists()
 
         # Create Subnet
-        VERBOSE('Create Subnet')
+        VERBOSE('Create Subnet', verbose=8)
         subnet = self._create_az_subnet_if_not_exitsts(secgroup)
 
         # Create NIC
-        VERBOSE('Create NIC')
+        VERBOSE('Create NIC', verbose=8)
 
         # each vm needs a nic. so, use self.NIC_NAME as a prefix for the NICs
         nic_count = len(
@@ -1243,7 +1408,6 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         return nic
 
     def start(self, group=None, name=None):
-        # TODO: Joaquin -> Completed
         """
         start a node
 
@@ -1257,13 +1421,12 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
             name = self.VM_NAME
 
         # Start the VM
-        VERBOSE(" ".join('Starting Azure VM'))
+        VERBOSE(" ".join('Starting Azure VM'), verbose=8)
         async_vm_start = self.vms.start(group, name)
         async_vm_start.wait()
         return self.info(group, name, 'ACTIVE')
 
     def reboot(self, group=None, name=None):
-        # TODO: Joaquin -> Completed
         """
         restart/reboot a node
 
@@ -1277,14 +1440,13 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
             name = self.VM_NAME
 
         # Restart the VM
-        VERBOSE(" ".join('Restarting Azure VM'))
+        VERBOSE(" ".join('Restarting Azure VM'), verbose=8)
         async_vm_restart = self.vms.restart(group, name)
         async_vm_restart.wait()
 
         return self.info(group, name, 'REBOOT')
 
     def stop(self, group=None, name=None):
-        # TODO: Joaquin -> Completed
         """
         stops the node with the given name
 
@@ -1298,13 +1460,12 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
             name = self.VM_NAME
 
         # Stop the VM
-        VERBOSE(" ".join('Stopping Azure VM'))
+        VERBOSE(" ".join('Stopping Azure VM'), verbose=8)
         async_vm_stop = self.vms.power_off(group, name)
         async_vm_stop.result()
         return self.info(group, name, 'SHUTOFF')
 
     def resume(self, group=None, name=None):
-        # TODO: Joaquin -> Completed
         """
         resume the named node since Azure does not handle resume it uses start
 
@@ -1336,7 +1497,6 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         return self.power_off(group, name)
 
     def info(self, group=None, name=None, status=None):
-        # TODO: Joaquin -> Completed
         """
         gets the information of a node with a given name
         List VM in resource group
@@ -1360,14 +1520,20 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         return self.update_dict(nodedict, kind='vm')
 
     def status(self, name=None):
-        # TODO: Joaquin -> Completed
+        """
+        TBD
+
+        :param name:
+        :return:
+        """
         r = self.cloudman.list_servers(filters={'name': name})[0]
         return r['status']
 
     def list(self):
         """
         List all Azure Virtual Machines from my Account
-        :return: dict or libcloud object
+
+        :return: dict
         """
         az_servers = []
 
@@ -1386,6 +1552,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
     def destroy(self, name=None):
         """
         Destroys the node
+
         :param name: the name of the node
         :return: the dict of the node
         """
@@ -1398,7 +1565,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         res = []
         for vm in vms:
             elm = {}
-            VERBOSE(" ".join('Deleting Azure Virtual Machine'))
+            VERBOSE(" ".join('Deleting Azure Virtual Machine'), verbose=8)
             del_vm = self.vms.delete(self.GROUP_NAME, vm['name'])
             del_vm.wait()
 
@@ -1411,7 +1578,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         res = self.update_dict(res, kind='vm')
 
         # # Delete Resource Group
-        VERBOSE(" ".join('Deleting Azure Resource Group'))
+        VERBOSE(" ".join('Deleting Azure Resource Group'), verbose=8)
         async_group_delete = \
             self.resource_client.resource_groups.delete(self.GROUP_NAME)
         async_group_delete.wait()
@@ -1419,10 +1586,11 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         return res
 
     def images(self, **kwargs):
-        # TODO: Joaquin -> Completed
         """
         Lists the images on the cloud
-        :return: dict or libcloud object
+
+        :param kwargs:
+        :return: dict
         """
         region = self.LOCATION
 
@@ -1474,7 +1642,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                                                 sku.name,
                                                 version.name,
                                             )
-                                            VERBOSE(msg)
+                                            VERBOSE(msg, verbose=9)
                                             image_list.append(result_get)
                                         except:
                                             print(
@@ -1493,7 +1661,6 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         return self.get_list(image_list, kind="image")
 
     def flavors(self):
-        # TODO: Joaquin -> Completed
         """
         Lists the flavors on the cloud
 
@@ -1505,9 +1672,9 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         return self.get_list(vm_sizes_list, kind="flavor")
 
     def flavor(self, name=None):
-        # TODO: Joaquin -> Completed
         """
         Gets the flavor with a given name
+
         :param name: The name of the flavor
         :return: The dict of the flavor
         """
@@ -1528,19 +1695,24 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         return None
 
     def image(self, name=None, **kwargs):
-        # TODO: Joaquin -> Completed
         """
         Gets the image with a given nmae
+
         :param name: The name of the image
+        :param kwargs:
         :return: the dict of the image
         """
         return self.find(self.images(**kwargs), name=name)
 
     def get_list(self, d, kind=None, debug=False, **kwargs):
-        # TODO: Joaquin -> Completed
         """
         Lists the dict d on the cloud
-        :return: dict or libcloud object
+
+        :param d:
+        :param kind:
+        :param debug:
+        :param kwargs:
+        :return: dict
         """
         if self.vms:
             entries = []
@@ -1553,7 +1725,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         return None
 
     def rename(self, name=None, destination=None):
-        # TODO: Moeen
+        # TODO: Azure Provider rename function not implemented
         """
         rename a node
 
@@ -1568,10 +1740,9 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         return None
 
     def update_dict(self, elements, kind=None):
-        # TODO: Joaquin -> Completed
         """
-        Libcloud returns an object or list of objects With the dict method
-        this object is converted to a dict. Typically this method is used
+        The cloud returns an object or list of objects With the dict method this
+        object is converted to a cloudmesh dict. Typically this method is used
         internally.
 
         :param elements: the elements
@@ -1600,6 +1771,9 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
             })
 
             if kind == 'vm':
+                #
+                # TODO: BUG: public ip if present is not copied to entry["public_ip"
+                #
                 entry["cm"]["updated"] = str(datetime.utcnow())
                 entry["cm"]["name"] = entry["name"]
                 entry["cm"]["type"] = entry[
@@ -1612,6 +1786,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                     entry["cm"]["ssh_key_name"] = str(entry["ssh_key_name"])
 
             elif kind == 'flavor':
+
                 entry["cm"]["created"] = str(datetime.utcnow())
                 entry["cm"]["name"] = entry["name"]
                 entry["cm"]["number_of_cores"] = entry["number_of_cores"]
@@ -1622,25 +1797,31 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                 entry["cm"]["max_data_disk_count"] = entry[
                     "max_data_disk_count"]
                 entry["cm"]["updated"] = str(datetime.utcnow())
+
             elif kind == 'image':
+
                 entry['cm']['created'] = str(datetime.utcnow())
                 entry['cm']['updated'] = str(datetime.utcnow())
                 entry["cm"]["name"] = entry["name"]
+
             elif kind == 'secgroup':
+
                 entry["cm"]["name"] = entry["name"]
                 entry['cm']['created'] = str(datetime.utcnow())
                 entry['cm']['updated'] = str(datetime.utcnow())
 
             elif kind == 'key':
+
                 entry['cm']['created'] = str(datetime.utcnow())
                 entry['cm']['updated'] = str(datetime.utcnow())
 
             elif kind == 'secrule':
+
                 entry['cm']['created'] = str(datetime.utcnow())
                 entry['cm']['updated'] = str(datetime.utcnow())
 
             d.append(entry)
-            VERBOSE(d)
+            VERBOSE(d, verbose=10)
 
         return d
 
@@ -1648,4 +1829,12 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
              vm=None,
              interval=None,
              timeout=None):
+        """
+        TBD
+
+        :param vm:
+        :param interval:
+        :param timeout:
+        :return:
+        """
         return self.list()

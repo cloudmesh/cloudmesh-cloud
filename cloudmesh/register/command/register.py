@@ -87,7 +87,16 @@ class RegisterCommand(PluginCommand):
 
             register new KIND SERVICE NAME ATTRIBUTES...
 
+                A new cloud can be added to the existing cloudmesh.yaml file
+                with thsi command. AN example is
 
+                cms register -v  compute aws ABC \
+                    region=one \
+                    EC2_ACCESS_ID=TBD
+                    EC2_SECRET_KEY=TBD
+                    EC2_SECRET_KEY=TBD
+
+                This command can also be used to overwrite an existing entry
 
         """
 

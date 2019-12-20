@@ -1,29 +1,23 @@
 import ctypes
 import os
 import subprocess
-from ast import literal_eval
 from datetime import datetime
 from pprint import pprint
-
 from sys import platform
 
 from azure.common.credentials import ServicePrincipalCredentials
 from azure.mgmt.compute import ComputeManagementClient
 from azure.mgmt.network import NetworkManagementClient
+from azure.mgmt.network.v2018_12_01.models import SecurityRule
 from azure.mgmt.resource import ResourceManagementClient
-from azure.mgmt.network.v2018_12_01.models import NetworkSecurityGroup, \
-    SecurityRule
-from cloudmesh.common.DictList import DictList
-from cloudmesh.common.Printer import Printer
-import azure.mgmt.network.models
 from cloudmesh.abstractclass.ComputeNodeABC import ComputeNodeABC
-from cloudmesh.mongo.CmDatabase import CmDatabase
-from cloudmesh.mongo.DataBaseDecorator import DatabaseUpdate
-from cloudmesh.provider import ComputeProviderPlugin
+from cloudmesh.common.Printer import Printer
 from cloudmesh.common.console import Console
 from cloudmesh.common.debug import VERBOSE
-from cloudmesh.common.util import HEADING
+from cloudmesh.common.util import HEADING, banner
 from cloudmesh.configuration.Config import Config
+from cloudmesh.mongo.CmDatabase import CmDatabase
+from cloudmesh.provider import ComputeProviderPlugin
 from msrestazure.azure_exceptions import CloudError
 
 CLOUDMESH_YAML_PATH = "~/.cloudmesh/cloudmesh.yaml"
@@ -416,9 +410,14 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                       f"the local db!")
         return None
 
+    def _get_az_public_ip(self, ip_name):
+        ip = next((x for x in self.list_public_ips() if
+                   x['name'] == ip_name), None)
+        return ip
+
     def get_public_ip(self, name=None):
         """
-        returns public IP by name from the Az public IPs
+        returns public IP by vm name from the Az public IPs
 
         :param name:
         :return:
@@ -1136,8 +1135,6 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         :return:
 
         """
-        Console.info('Creating vm')
-
         if group is None:
             group = self.GROUP_NAME
 
@@ -1150,7 +1147,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         if ip is None:
             pub_ip = self.find_available_public_ip()[0]
         else:
-            pub_ip = self.get_public_ip(name=ip)
+            pub_ip = self._get_az_public_ip(ip)
 
         if key is None:
             key = self.user
@@ -1160,21 +1157,19 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
         vm_parameters = self._create_vm_parameters(name, secgroup, pub_ip, key,
                                                    flavor)
-        banner("Create Server")
-        print(f"ERROR ERROR ERROR . YOU NEED TO INCLUDE FOLLOWING INFO, SEE AWS AND OPENSTACK")
-        # Console.msg(f"    Name:     {name}")
-        # Console.msg(f"    User:     {user}")
-        # Console.msg(f"    IP:       {ip}")
-        # Console.msg(f"    Image:    {image}")
-        # Console.msg(f"    Size:     {size}")
-        # Console.msg(f"    Public:   {public}")
-        # Console.msg(f"    Key:      {key}")
-        # Console.msg(f"    Location: {location}")
-        # Console.msg(f"    Timeout:  {timeout}")
-        # Console.msg(f"    Secgroup: {secgroup}")
-        # Console.msg(f"    Group:    {group}")
-        # Console.msg(f"    Groups:   {groups}")
-        # Console.msg("")
+        banner("Creating Server")
+        Console.msg(f"    Name:     {name}")
+        Console.msg(f"    User:     {user}")
+        Console.msg(f"    IP:       {pub_ip['name']}")
+        Console.msg(f"    Image:    {image}")
+        Console.msg(f"    Size:     {size}")
+        Console.msg(f"    Public:   ?")
+        Console.msg(f"    Key:      {key}")
+        Console.msg(f"    Location: {location}")
+        Console.msg(f"    Timeout:  {timeout}")
+        Console.msg(f"    Secgroup: {secgroup}")
+        Console.msg(f"    Group:    {group}")
+        Console.msg("")
 
         vm = self.vms.create_or_update(
             group,
@@ -1846,7 +1841,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                 entry['cm']['updated'] = str(datetime.utcnow())
 
             d.append(entry)
-            VERBOSE(d, verbose=10)
+            # VERBOSE(d, verbose=10)
 
         return d
 

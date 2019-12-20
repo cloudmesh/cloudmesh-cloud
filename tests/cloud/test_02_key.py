@@ -5,6 +5,7 @@
 from pprint import pprint
 
 import pytest
+import os
 from cloudmesh.common import VERBOSE
 from cloudmesh.common.util import HEADING
 from cloudmesh.common.variables import Variables
@@ -12,6 +13,7 @@ from cloudmesh.common.Benchmark import Benchmark
 from cloudmesh.compute.vm.Provider import Provider
 from cloudmesh.configuration.Config import Config
 from cloudmesh.key.Key import Key
+from cloudmesh.common.Shell import Shell
 from cloudmesh.mongo.CmDatabase import CmDatabase
 
 Benchmark.debug()
@@ -20,11 +22,10 @@ Benchmark.debug()
 user = Config()["cloudmesh.profile.user"]
 variables = Variables()
 
-KEY = variables["key"]
-
+KEY = "test-key"
 cloud = variables.parameter('cloud')
 
-print(f"Test run for {cloud}")
+print(f"Test run for {cloud} on key {KEY}")
 
 if cloud is None:
     raise ValueError("cloud is not not set")
@@ -36,13 +37,8 @@ provider = Provider(name=cloud)
 @pytest.mark.incremental
 class Test_Key:
 
-    def test_cleanup(self):
-        HEADING()
-        cm.clear(collection=f"local-key")
-        try:
-            r = provider.key_delete(KEY)
-        except:
-            pass
+
+
 
     def test_upload_key_to_database(self):
         HEADING()
@@ -57,6 +53,10 @@ class Test_Key:
 
     def test_upload_key_to_cloud(self):
         HEADING()
+        if cloud == 'azure':
+            # todo: implement this
+            return
+
         if cloud == 'aws':
             all_keys = cm.find_all_by_name(KEY, "key")
             for k in all_keys:
@@ -103,5 +103,18 @@ class Test_Key:
         HEADING()
         pass
 
+    def test_key_delete(self):
+        HEADING()
+        cm.clear(collection=f"local-key")
+        try:
+            r = provider.key_delete(KEY)
+        except:
+            pass
+
     def test_benchmark(self):
         Benchmark.print(sysinfo=False, csv=True, tag=cloud)
+
+
+    def test_list(self):
+        os.system("cms key add")
+        os.system("cms key list")

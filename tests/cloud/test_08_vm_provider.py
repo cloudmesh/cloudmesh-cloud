@@ -60,6 +60,20 @@ class Test_provider_vm:
         os.system(f"cms key upload {key} --cloud={cloud}")
         os.system(f"cms key list --cloud={cloud}")
 
+    def test_find_counter(self):
+        name = str(Name())
+        print(name)
+        vms = provider.list()
+        if vms is not None:
+            numbers = []
+            names = []
+            for vm in vms:
+                names.append(vm['name'])
+                numbers.append(int(vm['name'].rsplit("-", 1)[1]))
+            numbers.sort()
+            return numbers[-1]
+
+
     def test_provider_vm_create(self):
         HEADING()
         name_generator.incr()

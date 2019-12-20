@@ -3,7 +3,6 @@ from cloudmesh.mongo.CmDatabase import CmDatabase
 from cloudmesh.mongo.DataBaseDecorator import DatabaseUpdate
 from cloudmesh.common.Printer import Printer
 
-
 class KeyGroupDatabase:
 
     # noinspection PyShadowingBuiltins
@@ -63,41 +62,8 @@ class KeyGroupDatabase:
             }
         return entries
 
-
 class KeyGroup(KeyGroupDatabase):
-    """
-       "_id" : ObjectId("5dd766f3d860ed9e50f374c4"),
-    "profile" : {
-        "firstname" : "Nayeem",
-        "lastname" : "Baig",
-        "email" : "",
-        "user" : "nayeemb",
-        "github" : "nayeembaig",
-        "publickey" : "~/.ssh/cloud.key.pub"
-    },
-    "path" : "/home/nayeem/.ssh/cloud.key.pub",
-    "uri" : "file:///home/nayeem/.ssh/cloud.key.pub",
-    "public_key" : "",
-    "type" : "ssh-rsa",
-    "key" : "",
-    "comment" : "nayeem@DESKTOP-3SA2H9T",
-    "fingerprint" : "",
-    "name" : "nayeemb",
-    "source" : "ssh",
-    "location" : {
-        "public" : "/home/nayeem/.ssh/cloud.key.pub",
-        "private" : "/home/nayeem/.ssh/cloud.key"
-    },
-    "cm" : {
-        "kind" : "key",
-        "cloud" : "local",
-        "name" : "nayeemb",
-        "collection" : "local-key",
-        "created" : "2019-11-22 04:41:23.181287",
-        "modified" : "2019-11-29 15:39:47.850334"
-    }
 
-    """
     output = {
         "key": {
             "sort_keys": ["name"],
@@ -110,7 +76,7 @@ class KeyGroup(KeyGroupDatabase):
                        "Comment",
                        "Fingerprint",
                        "Publickey"
-                       ]
+                      ]
         },
         "keygroup": {
             "sort_keys": ["name"],
@@ -121,6 +87,8 @@ class KeyGroup(KeyGroupDatabase):
         }
 
     }
+
+
 
     # noinspection PyPep8Naming
     def Print(self, data, output=None, kind=None):
@@ -146,66 +114,70 @@ class KeyGroup(KeyGroupDatabase):
         else:
             print(Printer.write(data, output=output))
 
+
     def __init__(self, cloud="local"):
         super().__init__(cloud, kind="keygroup")
 
     # noinspection PyBroadException
     @DatabaseUpdate()
-    def add(self, name=None):
+    def add(self, groupname=None, keyname=None):
         """
         adds a key to a given group. If the group does not exist, it will be
         created.
 
-        :param name:
-        :param keys:
+        :param groupname:
+        :param keyname:
         :return:
         """
-
-        new_key = name
-        if type(name) == str:
-            new_key = Parameter.expand(name)
-        elif type(name) == list:
+        #print('In KeyGroup')
+        #print('name: ' , keyname)
+        new_key = keyname
+        if type(keyname) == str:
+            new_key = Parameter.expand(keyname)
+        elif type(keyname) == list:
             pass
         else:
             raise ValueError("key have wrong type")
 
         # noinspection PyUnusedLocal
         try:
-            entry = self.find(name=name)[0]
+            entry = self.find(name=groupname)[0]
         except Exception as e:
             entry = {
-                'name': name
+                'name': groupname,
+                'keys': [keyname]
             }
 
-        if name is not None:
-            old = list(entry['name'])
-            entry['name'] = list(set(new_key + old))
+        if groupname is not None:
+            entry['keys'] += list(set(new_key))
+            entry['keys'] = list(set(entry['keys']))
+        else:
+            entry['keys'] = list(set(new_key))
 
         return self.update_dict_list([entry])
 
     @DatabaseUpdate()
-    def delete(self, name=None):
+    def delete(self, groupname=None, keyname=None):
         """
-        deletes the groups
-        :param name:
-        :param rules:
+        deletes the key from group
+        :param groupname:
+        :param keyname:
         :return:
         """
-
-        delete_key = name
-        if type(name) == str:
-            delete_key = Parameter.expand(name)
-        elif type(name) == list:
+        delete_key = keyname
+        if type(keyname) == str:
+            delete_key = Parameter.expand(keyname)
+        elif type(keyname) == list:
             pass
         else:
             raise ValueError("key have wrong type")
         delete_key = set(delete_key)
 
-        entry = self.find(name=name)[0]
+        entry = self.find(name=groupname)[0]
 
-        if name is not None:
-            old = set(entry['key'])
+        if groupname is not None:
+            old = set(entry['keys'])
             old -= delete_key
-            entry['key'] = list(old)
+            entry['keys'] = list(old)
 
         return entry

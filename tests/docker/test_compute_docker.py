@@ -21,6 +21,7 @@ from cloudmesh.common.Benchmark import Benchmark
 
 Benchmark.debug()
 
+cloud = "docker"
 
 @pytest.mark.incremental
 class TestName:
@@ -348,6 +349,9 @@ class other:
         self.test_destroy()
         self.test_list_vm()
 
+
+    def test_benchmark(self):
+        Benchmark.print(csv=True, sysinfo=False, tag=cloud)
 
 class other:
 

@@ -10,6 +10,7 @@ from cloudmesh.common.debug import VERBOSE
 from cloudmesh.common.util import HEADING
 from cloudmesh.common.Benchmark import Benchmark
 
+cloud = "local"
 
 @pytest.mark.incremental
 class TestConfig:
@@ -48,5 +49,6 @@ class TestConfig:
 
         assert "vm" in result
 
+
     def test_benchmark(self):
-        Benchmark.print()
+        Benchmark.print(csv=True, sysinfo=False, tag=cloud)

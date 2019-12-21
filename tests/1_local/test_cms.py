@@ -11,6 +11,7 @@ from cloudmesh.common.Benchmark import Benchmark
 
 Benchmark.debug()
 
+cloud= "local"
 
 @pytest.mark.incremental
 class TestName:
@@ -48,4 +49,4 @@ class TestName:
 
     def test_benchmark(self):
         HEADING()
-        Benchmark.print(csv=True)
+        Benchmark.print(csv=True, tag=cloud)

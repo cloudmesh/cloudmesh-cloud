@@ -290,5 +290,7 @@ class TestAzure:
 
         assert destroy_vm is None
 
+
     def test_benchmark(self):
-        Benchmark.print()
+        Benchmark.print(csv=True, sysinfo=False, tag=CLOUD)
+

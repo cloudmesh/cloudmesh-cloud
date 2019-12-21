@@ -17,6 +17,7 @@ from cloudmesh.common.util import HEADING
 
 Benchmark.debug()
 
+cloud = "local"
 # multiping only works if you have root, so we can not use it
 # from multiping import MultiPing
 
@@ -100,4 +101,5 @@ class TestSsh:
     #     responses, no_responses = ping(hosts, timeout=2, retry=1)
 
     def test_benchmark(self):
-        StopWatch.benchmark(sysinfo=False)
+        Benchmark.print(csv=True, sysinfo=False, tag=cloud)
+

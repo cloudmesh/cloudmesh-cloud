@@ -14,6 +14,8 @@ import sys
 
 Benchmark.debug()
 
+cloud = "local"
+
 # multiping only works if you have root, so we can not use it
 # from multiping import MultiPing
 
@@ -84,4 +86,5 @@ class TestPing:
 
     def test_benchmark(self):
         HEADING()
-        StopWatch.benchmark(csv=True, sysinfo=False)
+        Benchmark.print(csv=True, sysinfo=False, tag=cloud)
+

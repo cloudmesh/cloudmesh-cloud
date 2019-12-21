@@ -15,6 +15,7 @@ from cloudmesh.common.Benchmark import Benchmark
 
 Benchmark.debug()
 
+cloud="google"
 
 @pytest.mark.incremental
 class TestName:
@@ -185,3 +186,7 @@ class TestName:
             self.test_list_vm()
 
         self.p.destroy(names=self.name)
+
+
+    def test_benchmark(self):
+        Benchmark.print(csv=True, sysinfo=False, tag=cloud)

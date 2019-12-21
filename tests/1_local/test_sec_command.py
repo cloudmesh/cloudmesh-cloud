@@ -28,6 +28,8 @@ from cloudmesh.secgroup.Secgroup import SecgroupRule
 
 Benchmark.debug()
 
+cloud = "local"
+
 rules = SecgroupRule()
 groups = Secgroup()
 
@@ -162,4 +164,5 @@ class TestSecCLI:
 
     def test_benchmark(self):
         HEADING()
-        Benchmark.print(csv=True)
+        Benchmark.print(csv=True, sysinfo=False, tag=cloud)
+

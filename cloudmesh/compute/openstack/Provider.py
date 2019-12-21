@@ -104,6 +104,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                       "ip_public",
                       "ip_private",
                       "project_id",
+                      "cm.creation_time",
                       "launched_at",
                       "cm.kind"],
             "header": ["Name",
@@ -116,6 +117,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                        "Public IPs",
                        "Private IPs",
                        "Project ID",
+                       "Creation time",
                        "Started at",
                        "Kind"],
             "humanize": ["launched_at"]

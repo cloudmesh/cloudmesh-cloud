@@ -64,6 +64,7 @@ class Test_provider_vm:
         name = str(Name())
         print(name)
         vms = provider.list()
+        print(f'VM is {vms}')
         if vms is not None:
             numbers = []
             names = []
@@ -75,8 +76,13 @@ class Test_provider_vm:
 
     def test_find_largest_id(self):
         name = Name()
-        counter = {"counter": self.find_counter()}
-        name.assign(counter)
+        counter = 1
+        if self.find_counter() is not None:
+            counter = {"counter": self.find_counter()}
+            name.assign(counter)
+        else:
+            name.assign(counter)
+
 
     def test_provider_vm_create(self):
         HEADING()

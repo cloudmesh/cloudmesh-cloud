@@ -142,7 +142,12 @@ class RegisterCommand(PluginCommand):
                 Console.error("not yet implemented")
 
         elif arguments.azure:
-            Console.error("not yet implemented")
+            if arguments.yaml:
+                Registry = importlib.import_module(
+                    "cloudmesh.register.AzRegister")
+                AZregisterer = Registry.AzRegister()
+                AZregisterer.register()
+            #Console.error("not yet implemented")
 
         elif arguments.google:
 

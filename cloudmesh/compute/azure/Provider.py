@@ -1,29 +1,23 @@
 import ctypes
 import os
 import subprocess
-from ast import literal_eval
 from datetime import datetime
 from pprint import pprint
-
 from sys import platform
 
 from azure.common.credentials import ServicePrincipalCredentials
 from azure.mgmt.compute import ComputeManagementClient
 from azure.mgmt.network import NetworkManagementClient
+from azure.mgmt.network.v2018_12_01.models import SecurityRule
 from azure.mgmt.resource import ResourceManagementClient
-from azure.mgmt.network.v2018_12_01.models import NetworkSecurityGroup, \
-    SecurityRule
-from cloudmesh.common.DictList import DictList
-from cloudmesh.common.Printer import Printer
-import azure.mgmt.network.models
 from cloudmesh.abstractclass.ComputeNodeABC import ComputeNodeABC
-from cloudmesh.mongo.CmDatabase import CmDatabase
-from cloudmesh.mongo.DataBaseDecorator import DatabaseUpdate
-from cloudmesh.provider import ComputeProviderPlugin
+from cloudmesh.common.Printer import Printer
 from cloudmesh.common.console import Console
 from cloudmesh.common.debug import VERBOSE
-from cloudmesh.common.util import HEADING
+from cloudmesh.common.util import HEADING, banner
 from cloudmesh.configuration.Config import Config
+from cloudmesh.mongo.CmDatabase import CmDatabase
+from cloudmesh.provider import ComputeProviderPlugin
 from msrestazure.azure_exceptions import CloudError
 
 CLOUDMESH_YAML_PATH = "~/.cloudmesh/cloudmesh.yaml"
@@ -93,7 +87,6 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                 AZURE_SECRET_KEY: {secretkey}
                 AZURE_REGION: eastus
         """
-
 
     vm_state = [
         'ACTIVE',
@@ -396,9 +389,6 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         :param key:
         :return:
         """
-        """
-        azure does not allow explicit key upload!
-        """
         Console.error(f'Azure does not allow explicit key upload! '
                       f'Please use \'cms key\' operations to add keys to the '
                       f'local db and reference them at the VM creation!')
@@ -420,16 +410,20 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                       f"the local db!")
         return None
 
+    def _get_az_public_ip(self, ip_name):
+        ip = next((x for x in self.list_public_ips() if
+                   x['name'] == ip_name), None)
+        return ip
+
     def get_public_ip(self, name=None):
         """
-        returns public IP by name from the Az public IPs
+        returns public IP by vm name from the Az public IPs
 
         :param name:
         :return:
         """
-        ip = next((x for x in self.list_public_ips() if
-                   x['name'] == name), None)
-        return ip
+        _, pub_ip = self._get_pub_ip_for_vm(name)
+        return pub_ip['ip_address']
 
     # these are available to be associated
     def list_public_ips(self, ip=None, available=False):
@@ -480,14 +474,13 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
             }
         }
 
-        creation_result = [
-            self.network_client.public_ip_addresses.create_or_update(
-                self.GROUP_NAME,
-                f"{self.PUBLIC_IP__NAME}_{current_pub_count}",
-                public_ip_params,
-            ).result().__dict__]
-
-        return self.update_dict(creation_result, kind='ip')
+        creation_result = self.network_client.public_ip_addresses. \
+            create_or_update(self.GROUP_NAME,
+                             f"{self.PUBLIC_IP__NAME}_{current_pub_count}",
+                             public_ip_params,
+                             ).result()
+        Console.info("Public IP created: " + creation_result.name)
+        return self.update_dict([creation_result.as_dict()], kind='ip')
 
     def find_available_public_ip(self):
         """
@@ -592,17 +585,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
         return vm_search[0] if len(vm_search) > 0 else None
 
-    def ssh(self, vm=None, command=None):
-        """
-        TBD
-
-        :param vm:
-        :param command:
-        :return:
-        """
-        if vm is None or command is None:
-            raise Exception(f"vm or command can not be null")
-
+    def _get_pub_ip_for_vm(self, vm):
         if isinstance(vm, dict):
             vm_obj = vm
         else:
@@ -614,6 +597,25 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         if pub_ip is None:
             raise Exception(f"unable to find public IP for {vm}")
 
+        return vm_obj, pub_ip.as_dict()
+
+    def ssh(self, vm=None, command=None):
+        """
+        TBD
+
+        :param vm:
+        :param command:
+        :return:
+        """
+
+        if vm is None:
+            raise Exception(f"vm or command can not be null")
+
+        if command is None:
+            command = ""
+
+        vm_obj, pub_ip = self._get_pub_ip_for_vm(vm)
+
         # in the current API (vm/Provider), it does not provide a key name for
         # ssh. therefore, the key needs to be pulled from the vm. And therefore
         # key name is injected to the local db entry as 'ssh_key_name'
@@ -623,7 +625,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
               "-o StrictHostKeyChecking=no " \
               "-o UserKnownHostsFile=/dev/null " \
               f"-i {key_obj['location']['private']} " \
-              f"{self.USERNAME}@{pub_ip.ip_address} {command}"
+              f"{self.USERNAME}@{pub_ip['ip_address']} {command}"
         cmd = cmd.strip()
 
         if command == "":
@@ -685,10 +687,12 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         if groups.check_existence(self.GROUP_NAME):
             return groups.get(self.GROUP_NAME)
         else:
-            # Create or Update Resource group
-            Console.info('Create Azure Resource Group')
-            return groups.create_or_update(
-                self.GROUP_NAME, {'location': self.LOCATION})
+            # Create or Update Resource groupCreating new public IP
+            Console.info('Creating Azure Resource Group')
+            res = groups.create_or_update(self.GROUP_NAME,
+                                          {'location': self.LOCATION})
+            Console.info('Azure Resource Group created: ' + res.name)
+            return res
 
     def set_server_metadata(self, name=None, cm=None):
         """
@@ -921,7 +925,6 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         result_add_security_group = self.network_client. \
             network_security_groups.create_or_update(self.GROUP_NAME, name,
                                                      parameters)
-        result_add_security_group.wait()
 
         return result_add_security_group.result()
 
@@ -1132,7 +1135,6 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         :return:
 
         """
-
         if group is None:
             group = self.GROUP_NAME
 
@@ -1145,32 +1147,29 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         if ip is None:
             pub_ip = self.find_available_public_ip()[0]
         else:
-            pub_ip = self.get_public_ip(name=ip)
+            pub_ip = self._get_az_public_ip(ip)
 
-        # BUG: THIS IS OBVIOUSLY A BUG, variables["key"]
         if key is None:
-            key = 'test-key'  # todo default key is named test-key? why?
+            key = self.user
 
         if flavor is None:
             flavor = 'Standard_B1s'
 
         vm_parameters = self._create_vm_parameters(name, secgroup, pub_ip, key,
                                                    flavor)
-        banner("Create Server")
-        print(f"ERROR ERROR ERROR . YOU NEED TO INCLUDE FOLLOWING INFO, SEE AWS AND OPENSTACK")
-        # Console.msg(f"    Name:     {name}")
-        # Console.msg(f"    User:     {user}")
-        # Console.msg(f"    IP:       {ip}")
-        # Console.msg(f"    Image:    {image}")
-        # Console.msg(f"    Size:     {size}")
-        # Console.msg(f"    Public:   {public}")
-        # Console.msg(f"    Key:      {key}")
-        # Console.msg(f"    Location: {location}")
-        # Console.msg(f"    Timeout:  {timeout}")
-        # Console.msg(f"    Secgroup: {secgroup}")
-        # Console.msg(f"    Group:    {group}")
-        # Console.msg(f"    Groups:   {groups}")
-        # Console.msg("")
+        banner("Creating Server")
+        Console.msg(f"    Name:     {name}")
+        Console.msg(f"    User:     {user}")
+        Console.msg(f"    IP:       {pub_ip['name']}")
+        Console.msg(f"    Image:    {image}")
+        Console.msg(f"    Size:     {size}")
+        Console.msg(f"    Public:   ?")
+        Console.msg(f"    Key:      {key}")
+        Console.msg(f"    Location: {location}")
+        Console.msg(f"    Timeout:  {timeout}")
+        Console.msg(f"    Secgroup: {secgroup}")
+        Console.msg(f"    Group:    {group}")
+        Console.msg("")
 
         vm = self.vms.create_or_update(
             group,
@@ -1223,6 +1222,9 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         updated_dict['status'] = 'ACTIVE'
         updated_dict['ssh_key_name'] = key
 
+        _, pub_ip = self._get_pub_ip_for_vm(updated_dict)
+        updated_dict['public_ip'] = pub_ip['ip_address']
+
         return self.update_dict(updated_dict, kind='vm')[0]
 
     def _get_local_key_content(self, key_name):
@@ -1259,7 +1261,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         vm_parameters = {
             'location': self.LOCATION,
             'os_profile': {
-                'computer_name': self.VM_NAME,
+                'computer_name': name,
                 'admin_username': self.USERNAME,
                 'admin_password': self.PASSWORD,
                 'linux_configuration': {
@@ -1324,7 +1326,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         """
         for vnet in self.network_client.virtual_networks.list(self.GROUP_NAME):
             if vnet.name == self.VNET_NAME:
-                Console.info("vnet exists!")
+                Console.info(f"vnet {vnet.name} exists!")
                 return vnet
 
         async_vnet_creation = \
@@ -1338,7 +1340,9 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                     }
                 }
             )
-        return async_vnet_creation.result()
+        res = async_vnet_creation.result()
+        Console.info("VNET created: " + res.name)
+        return res
 
     def _create_az_subnet_if_not_exitsts(self, secgroup):
         """
@@ -1350,7 +1354,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         for subnet in self.network_client.subnets.list(self.GROUP_NAME,
                                                        self.VNET_NAME):
             if subnet.name == self.SUBNET_NAME:
-                Console.info("subnet exists!")
+                Console.info(f"subnet {subnet.name} exists!")
                 return subnet
 
         subnet_params = {
@@ -1367,7 +1371,9 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
             subnet_parameters=subnet_params,
         )
 
-        return async_subnet_creation.result()
+        res = async_subnet_creation.result()
+        Console.info("Subnet created: " + res.name)
+        return res
 
     def _create_az_nic(self, secgroup, ip):
         """
@@ -1384,15 +1390,15 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         self._create_az_sec_group_if_not_exists(secgroup)
 
         # Create Virtual Network
-        VERBOSE('Create Vnet', verbose=8)
+        Console.info('Creating Vnet')
         vnet = self._create_az_vnet_if_not_exists()
 
         # Create Subnet
-        VERBOSE('Create Subnet', verbose=8)
+        Console.info('Creating Subnet')
         subnet = self._create_az_subnet_if_not_exitsts(secgroup)
 
         # Create NIC
-        VERBOSE('Create NIC', verbose=8)
+        Console.info('Creating NIC')
 
         # each vm needs a nic. so, use self.NIC_NAME as a prefix for the NICs
         nic_count = len(
@@ -1438,7 +1444,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
             name = self.VM_NAME
 
         # Start the VM
-        VERBOSE(" ".join('Starting Azure VM'), verbose=8)
+        Console.info('Starting Azure VM')
         async_vm_start = self.vms.start(group, name)
         async_vm_start.wait()
         return self.info(group, name, 'ACTIVE')
@@ -1457,7 +1463,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
             name = self.VM_NAME
 
         # Restart the VM
-        VERBOSE(" ".join('Restarting Azure VM'), verbose=8)
+        Console.info('Restarting Azure VM')
         async_vm_restart = self.vms.restart(group, name)
         async_vm_restart.wait()
 
@@ -1477,7 +1483,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
             name = self.VM_NAME
 
         # Stop the VM
-        VERBOSE(" ".join('Stopping Azure VM'), verbose=8)
+        Console.info('Stopping Azure VM')
         async_vm_stop = self.vms.power_off(group, name)
         async_vm_stop.result()
         return self.info(group, name, 'SHUTOFF')
@@ -1582,7 +1588,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         res = []
         for vm in vms:
             elm = {}
-            VERBOSE(" ".join('Deleting Azure Virtual Machine'), verbose=8)
+            Console.info('Deleting Azure Virtual Machine')
             del_vm = self.vms.delete(self.GROUP_NAME, vm['name'])
             del_vm.wait()
 
@@ -1595,7 +1601,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         res = self.update_dict(res, kind='vm')
 
         # # Delete Resource Group
-        VERBOSE(" ".join('Deleting Azure Resource Group'), verbose=8)
+        Console.info('Deleting Azure Resource Group')
         async_group_delete = \
             self.resource_client.resource_groups.delete(self.GROUP_NAME)
         async_group_delete.wait()
@@ -1659,7 +1665,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                                                 sku.name,
                                                 version.name,
                                             )
-                                            VERBOSE(msg, verbose=9)
+                                            Console.debug_msg(str(msg))
                                             image_list.append(result_get)
                                         except:
                                             print(
@@ -1788,9 +1794,6 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
             })
 
             if kind == 'vm':
-                #
-                # TODO: BUG: public ip if present is not copied to entry["public_ip"
-                #
                 entry["cm"]["updated"] = str(datetime.utcnow())
                 entry["cm"]["name"] = entry["name"]
                 entry["cm"]["type"] = entry[
@@ -1838,7 +1841,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                 entry['cm']['updated'] = str(datetime.utcnow())
 
             d.append(entry)
-            VERBOSE(d, verbose=10)
+            # VERBOSE(d, verbose=10)
 
         return d
 

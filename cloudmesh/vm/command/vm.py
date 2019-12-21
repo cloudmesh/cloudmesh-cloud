@@ -383,7 +383,7 @@ class VmCommand(PluginCommand):
                     p.Print(vms, output=arguments.output, kind="vm")
 
             except Exception as e:
-                Console.error(e)
+                Console.error("Error in listing ", traceflag=True)
                 VERBOSE(e)
 
             return ""
@@ -723,7 +723,7 @@ class VmCommand(PluginCommand):
                             f"Timeout during vm creation. There may be a problem with the cloud {cloud}")
 
                     except Exception as e:
-                        Console.error("create problem")
+                        Console.error("create problem", traceflag=True)
                         print(e)
                         return ""
 
@@ -1034,10 +1034,12 @@ class VmCommand(PluginCommand):
                                 ip = p.get_public_ip(name=name)
                             except:
                                 Console.error(
-                                    f"could not find a public ip for vm {name}")
+                                    f"could not find a public ip for vm {name}",
+                                    traceflag=True)
                                 return
                             Console.error(
-                                f"could not find a public ip for vm {name}")
+                                f"could not find a public ip for vm {name}",
+                                traceflag=True)
                             return
 
                         # get the username
@@ -1055,7 +1057,9 @@ class VmCommand(PluginCommand):
                                 user = vm['os_profile']['admin_username']
                             except:
                                 Console.error(
-                                    f"could not find a valid username for {name}, try refreshing the image list")
+                                    f"could not find a valid username for "
+                                    f"{name}, try refreshing the image list",
+                                    traceflag=True)
                                 return
                             Console.error(
                                 f"could not find a valid username for {name}, try refreshing the image list")

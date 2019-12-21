@@ -11,6 +11,8 @@ from cloudmesh.secgroup.Secgroup import SecgroupRule
 
 Benchmark.debug()
 
+cloud = "local"
+
 examples = SecgroupExamples()
 examples.load()
 
@@ -171,4 +173,5 @@ def test_load_defaults():
 
 def test_benchmark():
     HEADING()
-    Benchmark.print(csv=True)
+    Benchmark.print(csv=True, sysinfo=False, tag=cloud)
+

@@ -23,6 +23,7 @@ Benchmark.debug()
 g = Group()
 services = Parameter.expand('vm-[1-3]')
 
+cloud="local"
 
 @pytest.mark.incremental
 class TestName:
@@ -66,4 +67,5 @@ class TestName:
 
     def test_benchmark(self):
         HEADING()
-        Benchmark.print(csv=True, sysinfo=False)
+        Benchmark.print(csv=True, sysinfo=False, tag=cloud)
+

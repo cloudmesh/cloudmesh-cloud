@@ -10,6 +10,8 @@ from cloudmesh.common.util import HEADING
 
 Benchmark.debug()
 
+cloud = locals
+
 shell = Shell()
 
 
@@ -50,4 +52,5 @@ class TestName:
 
     def test_benchmark(self):
         HEADING()
-        Benchmark.print(csv=True)
+        Benchmark.print(csv=True, sysinfo=False, tag=cloud)
+

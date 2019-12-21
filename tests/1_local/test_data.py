@@ -27,6 +27,7 @@ from cloudmesh.mongo.DataBaseDecorator import DatabaseUpdate
 
 Benchmark.debug()
 
+cloud="local"
 
 @pytest.mark.incremental
 class TestDatabaseUpdate:
@@ -103,7 +104,7 @@ class TestDatabaseUpdate:
 
     def test_benchmark(self):
         HEADING()
-        Benchmark.print(csv=True)
+        Benchmark.print(csv=True, sysinfo=False, tag=cloud)
 
 
 """

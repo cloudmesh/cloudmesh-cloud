@@ -18,6 +18,7 @@ from cloudmesh.configuration.Config import Config
 
 Benchmark.debug()
 
+cloud="local"
 
 @pytest.mark.incremental
 class TestConfig:
@@ -129,4 +130,4 @@ class TestConfig:
 
     def test_benchmark(self):
         HEADING()
-        Benchmark.print(csv=True, sysinfo=False)
+        Benchmark.print(csv=True, sysinfo=False, tag=cloud)

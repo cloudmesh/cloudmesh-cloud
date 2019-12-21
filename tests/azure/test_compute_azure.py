@@ -360,6 +360,10 @@ class TestName:
         self.test_list_vm()
 
 
+    def test_benchmark(self):
+        Benchmark.print(csv=True, sysinfo=False, tag=CLOUD)
+
+
 class other:
 
     def test_rename(self):

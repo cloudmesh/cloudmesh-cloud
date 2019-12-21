@@ -393,4 +393,5 @@ class TestCmsAWS:
         assert "test_boot_02" in result
 
     def test_benchmark(self):
-        Benchmark.print()
+        Benchmark.print(csv=True, sysinfo=False, tag=CLOUD)
+

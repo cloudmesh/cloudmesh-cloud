@@ -18,6 +18,8 @@ import sys
 
 Benchmark.debug()
 
+cloud = "local"
+
 config = Config()
 username = config["cloudmesh.profile.user"]
 
@@ -129,4 +131,5 @@ class TestName:
 
     def test_benchmark(self):
         HEADING()
-        Benchmark.print(csv=True)
+        Benchmark.print(csv=True, sysinfo=False, tag=cloud)
+

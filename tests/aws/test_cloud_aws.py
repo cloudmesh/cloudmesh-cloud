@@ -10,11 +10,12 @@ import pytest
 from cloudmesh.common.util import HEADING
 from cloudmesh.configuration.Config import Config
 from cloudmesh.compute.vm.Provider import Provider
-from cloudmesh.common3.Benchmark import Benchmark
+from cloudmesh.common.Benchmark import Benchmark
 
 Benchmark.debug()
 
-CLOUD="aws"
+cloud = "aws"
+
 
 @pytest.mark.incremental
 class TestCloudAws:
@@ -71,3 +72,6 @@ class TestCloudAws:
         HEADING()
         vols = self.provider.provider.list_sizes()
         assert vols is not None
+
+    def test_benchmark(self):
+        Benchmark.print(csv=True, sysinfo=False, tag=cloud)

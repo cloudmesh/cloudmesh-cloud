@@ -1,7 +1,7 @@
 ###############################################################
 # pytest -v --capture=no tests/virtualbox/test_compute_virtualbox.py
 # pytest -v  tests/virtualbox/test_compute_virtualbox.py
-# pytest -v --capture=no  tests/virtualbox/test_compute_virtualbox.py:Test_compute_virtualbox.<METHIDNAME>
+# pytest -v --capture=no  tests/virtualbox/test_compute_virtualbox.py:Test_compute_virtualbox.<METHODNAME>
 ###############################################################
 import subprocess
 import time
@@ -16,9 +16,10 @@ from cloudmesh.common.util import path_expand
 from cloudmesh.compute.virtualbox.Provider import Provider
 from cloudmesh.configuration.Config import Config
 from cloudmesh.management.configuration.name import Name
-from cloudmesh.common3.Benchmark import Benchmark
+from cloudmesh.common.Benchmark import Benchmark
 
 Benchmark.debug()
+
 
 @pytest.mark.incremental
 class TestName:

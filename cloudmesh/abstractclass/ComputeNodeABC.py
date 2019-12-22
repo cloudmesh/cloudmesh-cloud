@@ -1,6 +1,7 @@
 from abc import ABCMeta, abstractmethod
 from cloudmesh.configuration.Config import Config
 
+
 # noinspection PyUnusedLocal
 class ComputeNodeABC(metaclass=ABCMeta):
 
@@ -53,7 +54,7 @@ class ComputeNodeABC(metaclass=ABCMeta):
         raise NotImplementedError
 
     @abstractmethod
-    def list(self):
+    def list(self, **kwargs):
         """
         list all vms
 
@@ -172,7 +173,6 @@ class ComputeNodeABC(metaclass=ABCMeta):
         :return:
         """
         raise NotImplementedError
-
 
     def images(self, **kwargs):
         """
@@ -329,7 +329,6 @@ class ComputeNodeABC(metaclass=ABCMeta):
              timeout=None):
         raise NotImplementedError
         return False
-
 
     def console(self, vm=None):
         raise NotImplementedError

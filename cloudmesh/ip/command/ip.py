@@ -1,18 +1,16 @@
-from cloudmesh.shell.command import PluginCommand
-from cloudmesh.shell.command import command, map_parameters
-from cloudmesh.common.debug import VERBOSE
+from cloudmesh.common.console import Console
 from cloudmesh.common.parameter import Parameter
 from cloudmesh.common.variables import Variables
 from cloudmesh.compute.vm.Provider import Provider
-from pprint import pprint
-from cloudmesh.common.console import Console
 from cloudmesh.mongo.CmDatabase import CmDatabase
+from cloudmesh.shell.command import PluginCommand
+from cloudmesh.shell.command import command, map_parameters
+
 
 # see https://github.com/cloudmesh/client/blob/master/cloudmesh_client/shell/plugins/NetworkCommand.py
 
 
 class IpCommand(PluginCommand):
-
 
     # noinspection PyUnusedLocal
     @command
@@ -95,7 +93,7 @@ class IpCommand(PluginCommand):
             print(f"cloud {cloud}")
             provider = Provider(name=cloud)
 
-            for i in range(0,int(n)):
+            for i in range(0, int(n)):
                 ips = provider.create_public_ip()
             ips = provider.list_public_ips()
 
@@ -125,7 +123,6 @@ class IpCommand(PluginCommand):
             vm = cm.find_name(name, kind="vm")[0]
             cloud = vm["cm"]["cloud"]
 
-
             print(f"cloud {cloud}")
             provider = Provider(name=cloud)
 
@@ -147,11 +144,10 @@ class IpCommand(PluginCommand):
             provider = Provider(name=cloud)
             ip = provider.get_public_ip(name=name)
 
-            print (name, ip)
+            print(name, ip)
 
             try:
                 ips = provider.detach_public_ip(name=name, ip=ip)
             except Exception as e:
-                print (e)
+                print(e)
                 Console.error("can not detach ip")
-

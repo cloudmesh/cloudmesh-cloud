@@ -3,17 +3,16 @@
 # pytest  tests/azure/test_compute_pyazure.py
 ###############################################################
 
-CLOUD="azure"
+CLOUD = "azure"
 
 import pytest
 from cloudmesh.common.debug import VERBOSE
 from cloudmesh.common.util import HEADING
 from cloudmesh.common.util import banner
-from cloudmesh.common3.Benchmark import Benchmark
+from cloudmesh.common.Benchmark import Benchmark
 
 from cloudmesh.configuration.Config import Config
 from cloudmesh.management.configuration.name import Name
-
 
 if CLOUD == "azure":
     from cloudmesh.compute.azure.Provider import Provider
@@ -25,8 +24,9 @@ Benchmark.debug()
 
 user = Config()["cloudmesh.profile.user"]
 
-SECGROUP=f"cloudmesh_{user}"
-SECGROUP_UPLOAD=f"cloudmesh_{user}_upload"
+SECGROUP = f"cloudmesh_{user}"
+SECGROUP_UPLOAD = f"cloudmesh_{user}_upload"
+
 
 @pytest.mark.incremental
 class TestAzure:
@@ -47,7 +47,7 @@ class TestAzure:
     def test_resource_group(self):
         HEADING()
         Benchmark.Start()
-        test_resource_group = self.p.get_resource_group()
+        test_resource_group = self.p._get_resource_group()
         VERBOSE(test_resource_group, label='RESOURCE GROUP')
         Benchmark.Stop()
 
@@ -89,9 +89,10 @@ class TestAzure:
         tags = 'This is my cloudmesh metadata Tag'
 
         Benchmark.Start()
-        test_set_metadata = self.p.set_server_metadata(name=None,cm=tags)
+        test_set_metadata = self.p.set_server_metadata(name=None, cm=tags)
         Benchmark.Stop()
-        VERBOSE(test_set_metadata, label='Added Metadata to Virtual Machine Created')
+        VERBOSE(test_set_metadata,
+                label='Added Metadata to Virtual Machine Created')
 
         assert test_set_metadata is not None
 
@@ -111,7 +112,8 @@ class TestAzure:
         Benchmark.Start()
         test_delete_metadata = self.p.delete_server_metadata(None, 'cm')
         Benchmark.Stop()
-        VERBOSE(test_delete_metadata, label='Metadata from Virtual Machine after deleting tag')
+        VERBOSE(test_delete_metadata,
+                label='Metadata from Virtual Machine after deleting tag')
 
         assert test_delete_metadata is not None
 
@@ -142,9 +144,10 @@ class TestAzure:
         HEADING()
 
         Benchmark.Start()
-        test_add_sec_rule = self.p.add_secgroup_rule(name='resource_name_security_rule',
-                                                     port=None,protocol=None,
-                                                     ip_range='3389:3390')
+        test_add_sec_rule = self.p.add_secgroup_rule(
+            name='resource_name_security_rule',
+            port=None, protocol=None,
+            ip_range='3389:3390')
         Benchmark.Stop()
         VERBOSE(test_add_sec_rule, label='Add Security Rule')
 
@@ -199,8 +202,9 @@ class TestAzure:
         # BUG: this seems wrong: cloudmesh_upload
 
         Benchmark.Start()
-        test_add_rules_to_secgroup = self.p.add_rules_to_secgroup(name=SECGROUP_UPLOAD,
-                                                                  rules='resource_name_security_rule_upload')
+        test_add_rules_to_secgroup = self.p.add_rules_to_secgroup(
+            secgroupname=SECGROUP_UPLOAD,
+            newrules='resource_name_security_rule_upload')
         Benchmark.Stop()
         VERBOSE(test_add_rules_to_secgroup, label='Add Rules to Security Group')
 
@@ -286,5 +290,7 @@ class TestAzure:
 
         assert destroy_vm is None
 
+
     def test_benchmark(self):
-        Benchmark.print()
+        Benchmark.print(csv=True, sysinfo=False, tag=CLOUD)
+

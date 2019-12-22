@@ -1,7 +1,7 @@
 ###############################################################
 # pytest -v --capture=no tests/aws/test_cms_aws.py
 # pytest -v  tests/aws/test_cms_aws.py
-# pytest -v --capture=no -v --nocapture  tests/aws/test_cms_aws.py:Test_cms_aws.<METHIDNAME>
+# pytest -v --capture=no -v --nocapture  tests/aws/test_cms_aws.py:Test_cms_aws.<METHODNAME>
 ###############################################################
 import time
 
@@ -9,14 +9,14 @@ import pytest
 from cloudmesh.common.Shell import Shell
 from cloudmesh.common.debug import VERBOSE
 from cloudmesh.common.util import HEADING
-from cloudmesh.common3.Benchmark import Benchmark
+from cloudmesh.common.Benchmark import Benchmark
 from cloudmesh.configuration.Config import Config
-
 
 Benchmark.debug()
 
-IMAGE="ubuntu/images/hvm-ssd/ubuntu-xenial-16.04-amd64-server-20190212"
-CLOUD="aws"
+IMAGE = "ubuntu/images/hvm-ssd/ubuntu-xenial-16.04-amd64-server-20190212"
+CLOUD = "aws"
+
 
 @pytest.mark.incremental
 class TestCmsAWS:
@@ -117,7 +117,8 @@ class TestCmsAWS:
             f"cms vm list test_boot_01 --cloud={CLOUD} --output=table --refresh",
             shell=True)
         r2 = Shell.execute(
-            f"cms vm list test_boot_01 --cloud={CLOUD} --output=table", shell=True)
+            f"cms vm list test_boot_01 --cloud={CLOUD} --output=table",
+            shell=True)
         Benchmark.Stop()
 
         assert r1 == r2
@@ -144,8 +145,9 @@ class TestCmsAWS:
         HEADING()
 
         Benchmark.Start()
-        result = Shell.execute(f"cms vm stop test_boot_02 --cloud={CLOUD} --dryrun",
-                               shell=True)
+        result = Shell.execute(
+            f"cms vm stop test_boot_02 --cloud={CLOUD} --dryrun",
+            shell=True)
         Benchmark.Stop()
 
         VERBOSE(result)
@@ -265,8 +267,9 @@ class TestCmsAWS:
         HEADING()
 
         Benchmark.Start()
-        result = Shell.execute(f"cms vm start test_boot_02 --cloud={CLOUD} --dryrun",
-                               shell=True)
+        result = Shell.execute(
+            f"cms vm start test_boot_02 --cloud={CLOUD} --dryrun",
+            shell=True)
         Benchmark.Stop()
 
         VERBOSE(result)
@@ -390,4 +393,5 @@ class TestCmsAWS:
         assert "test_boot_02" in result
 
     def test_benchmark(self):
-        Benchmark.print()
+        Benchmark.print(csv=True, sysinfo=False, tag=CLOUD)
+

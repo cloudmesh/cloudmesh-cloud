@@ -7,6 +7,7 @@ from cloudmesh.shell.command import PluginCommand
 from cloudmesh.shell.command import command, map_parameters
 from cloudmesh.common.parameter import Parameter
 
+
 class ImageCommand(PluginCommand):
 
     # see https://github.com/cloudmesh/client/blob/master/cloudmesh_client/shell/plugins/ImageCommand.py
@@ -33,6 +34,7 @@ class ImageCommand(PluginCommand):
         """
 
         map_parameters(arguments,
+                       "query",
                        "refresh",
                        "cloud",
                        "output")
@@ -48,24 +50,23 @@ class ImageCommand(PluginCommand):
                                                 arguments,
                                                 variables)
         if arguments.list and arguments["--query"]:
+
             names = []
 
             clouds, names = Arguments.get_cloud_and_names("list",
                                                           arguments,
                                                           variables)
-            cloud = clouds[0]
-            query = arguments["--query"]
 
-            provider = Provider(name=cloud)
+            for cloud in clouds:
+                print(f"cloud {cloud} query={arguments.query}")
+                provider = Provider(name=cloud)
+                if arguments.query is not None:
+                    query = eval(arguments.query)
+                    images = provider.images(**query)
+                else:
+                    images = provider.images()
 
-            images = []
-            #
-            # images = provider.images(query=query)
-            #
-
-            return NotImplementedError
-
-            provider.Print(arguments.output, images)
+                provider.Print(images, output=arguments.output, kind="image")
 
             return ""
 
@@ -102,7 +103,6 @@ class ImageCommand(PluginCommand):
                     provider = Provider(name=cloud)
 
                     db = CmDatabase()
-
 
                     images = db.find(collection=f"{cloud}-image")
 

@@ -168,11 +168,11 @@ class Provider(ComputeNodeABC):
         # noinspection PyPep8
         command = \
             "az vm create" \
-                f" --resource-group {self.resource_group}" \
-                f" --name {name}" \
-                f" --image {image}" \
-                f" --admin-username {username}" \
-                f" --generate-ssh-keys"
+            f" --resource-group {self.resource_group}" \
+            f" --name {name}" \
+            f" --image {image}" \
+            f" --admin-username {username}" \
+            f" --generate-ssh-keys"
 
         return self.az(command)
 
@@ -181,8 +181,8 @@ class Provider(ComputeNodeABC):
         # noinspection PyPep8
         command = \
             "az vm delete --yes" \
-                f" --resource-group {self.resource_group}" \
-                f" --name {name}"
+            f" --resource-group {self.resource_group}" \
+            f" --name {name}"
         # print(command)
         # r = Shell.execute(command, shell=True)
         # BUG MUST RETURN A DICT
@@ -194,7 +194,7 @@ class Provider(ComputeNodeABC):
             # noinspection PyPep8
             command = \
                 "az vm list" \
-                    f" --resource-group {self.resource_group}"
+                f" --resource-group {self.resource_group}"
             data = self.az(command)
             data = self.update_list(data)
             VERBOSE(data)
@@ -204,25 +204,25 @@ class Provider(ComputeNodeABC):
 
     def info(self, name=None):
         command = f"az vm show" \
-            f" --resource-group {self.resource_group}" \
-            f" --name {name}"
+                  f" --resource-group {self.resource_group}" \
+                  f" --name {name}"
         return self.az(command)
 
     def status(self, name=None):
         # noinspection PyPep8
         command = \
             "az vm get-instance-view" \
-                f" --name {name}" \
-                f" --resource-group {self.resource_group}" \
-                f" --query instanceView.statuses[1]"
+            f" --name {name}" \
+            f" --resource-group {self.resource_group}" \
+            f" --query instanceView.statuses[1]"
         return self.az(command)
 
     def stop(self, name=None):
         # noinspection PyPep8
         command = \
             f"az vm stop" \
-                f" --resource-group {self.resource_group}" \
-                f" --name {name}"
+            f" --resource-group {self.resource_group}" \
+            f" --name {name}"
         # print(command)
         # r = Shell.execute(command, shell=True)
         return self.az_2(command)
@@ -231,8 +231,8 @@ class Provider(ComputeNodeABC):
         # noinspection PyPep8
         command = \
             f"az vm start" \
-                f" --resource-group {self.resource_group}" \
-                f" --name {name}"
+            f" --resource-group {self.resource_group}" \
+            f" --name {name}"
         # return self.az(command)
         # print(command)
         # r = Shell.execute(command, shell=True)
@@ -244,8 +244,8 @@ class Provider(ComputeNodeABC):
         # noinspection PyPep8
         command = \
             f"az vm restart" \
-                f" --resource-group {self.resource_group}" \
-                f" --name {name}"
+            f" --resource-group {self.resource_group}" \
+            f" --name {name}"
         return self.az(command)
 
     def ssh(self,
@@ -262,8 +262,8 @@ class Provider(ComputeNodeABC):
 
                name=None):
         command = f"az vm list-ip-addresses" \
-            f" --resource-group {self.resource_group}" \
-            f" --name {name}"
+                  f" --resource-group {self.resource_group}" \
+                  f" --name {name}"
         return self.az(command)
 
     def connect(self,
@@ -285,7 +285,7 @@ class Provider(ComputeNodeABC):
         # noinspection PyPep8
         command = \
             "az vm image list" \
-                f" --location {location}"
+            f" --location {location}"
         # THIS OUGHT TO RETURN A DICT
         return self.az_2(command)
 
@@ -294,7 +294,7 @@ class Provider(ComputeNodeABC):
         # noinspection PyPep8
         command = \
             "az vm list-sizes" \
-                f" --location {location}"
+            f" --location {location}"
         # THIS SHOULD RETURN A DICT
         return self.az_2(command)
 

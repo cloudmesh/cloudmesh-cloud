@@ -36,7 +36,8 @@ class LocalDBProvider(DBProviderABC):
         """
         Return a list of Cloud Files tracked in this DB
         """
-        return [self._read_file(entry) for entry in list(self._path.glob('**/*.yaml'))]
+        return [self._read_file(entry) for entry in
+                list(self._path.glob('**/*.yaml'))]
 
     def add(self, cloud_file):
         """

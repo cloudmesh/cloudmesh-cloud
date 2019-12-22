@@ -1,7 +1,7 @@
 ###############################################################
 # pytest -v --capture=no tests/test_database.py
 # pytest -v  tests/test_database.py
-# pytest -v --capture=no  tests/test_database.py:Test_database.<METHIDNAME>
+# pytest -v --capture=no  tests/test_database.py:Test_database.<METHODNAME>
 ###############################################################
 # from cloudmesh.mongo import DatabaseUpdate
 from pprint import pprint
@@ -12,7 +12,7 @@ from cloudmesh.common.util import HEADING
 from cloudmesh.configuration.Config import Config
 from cloudmesh.management.configuration.name import Name
 from cloudmesh.mongo.CmDatabase import CmDatabase
-from cloudmesh.common3.Benchmark import Benchmark
+from cloudmesh.common.Benchmark import Benchmark
 from cloudmesh.mongo.DataBaseDecorator import DatabaseUpdate
 
 Benchmark.debug()
@@ -24,7 +24,6 @@ user = Config()["cloudmesh.profile.user"]
 name_generator = Name(
     schema=f"{user}-vm",
     counter=1)
-
 
 
 #

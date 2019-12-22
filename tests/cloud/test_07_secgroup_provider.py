@@ -18,7 +18,7 @@ from cloudmesh.management.configuration.name import Name
 from cloudmesh.secgroup.Secgroup import Secgroup
 from cloudmesh.secgroup.Secgroup import SecgroupExamples
 from cloudmesh.secgroup.Secgroup import SecgroupRule
-from cloudmesh.common3.Benchmark import Benchmark
+from cloudmesh.common.Benchmark import Benchmark
 from pprint import pprint
 
 Benchmark.debug()
@@ -42,7 +42,6 @@ def run(label, command):
 
 
 name_generator = Name(schema=f"test-{user}-vm", counter=1)
-
 
 provider = Provider(name=cloud)
 
@@ -88,9 +87,9 @@ class Test_secgroup_provider:
     def test_list_secgroups_rules(self):
         HEADING()
         Benchmark.Start()
-        groups = provider.list_secgroups_rules()
+        rule_groups = provider.list_secgroups_rules()
         Benchmark.Stop()
-        provider.Print(output='json', kind="secgroup", data=groups)
+        provider.Print(output='json', kind="secgroup", data=rule_groups)
 
     def test_secgroups_add(self):
         HEADING()
@@ -98,49 +97,55 @@ class Test_secgroup_provider:
         Benchmark.Start()
         provider.add_secgroup(name=name)
         Benchmark.Stop()
-        groups = provider.list_secgroups()
-        provider.Print(output='json', kind="secgroup", data=groups)
+        sec_groups = provider.list_secgroups()
+        provider.Print(output='json', kind="secgroup", data=sec_groups)
 
     def test_upload_secgroup(self):
         HEADING()
-        name = "Test_Sec_Group2"
+        name = "Test_Sec_Group"
         Benchmark.Start()
         provider.upload_secgroup(name=name)
         Benchmark.Stop()
-        groups = provider.list_secgroups()
-        provider.Print(output='json', kind="secgroup", data=groups)
+        sec_groups = provider.list_secgroups()
+        provider.Print(output='json', kind="secgroup", data=sec_groups)
 
     def test_secgroups_delete(self):
         HEADING()
-        name = "Test_Sec_Group2"
+        name = "Test_Sec_Group"
         Benchmark.Start()
         provider.remove_secgroup(name=name)
         Benchmark.Stop()
-        groups = provider.list_secgroups()
+        sec_groups = provider.list_secgroups()
         if cloud == 'aws':
-            group_indicator= 'GroupName'
-        elif cloud == 'chameleon':
+            group_indicator = 'GroupName'
+        elif cloud == 'oracle':
+            group_indicator = '_display_name'
+        # elif cloud == 'chameleon':
+        else:
             group_indicator = 'name'
-        for e in groups:
-            print(e[group_indicator])
-        provider.Print(output='json', kind="secgroup", data= groups)
 
+        for e in sec_groups:
+            print(e[group_indicator])
+        provider.Print(output='json', kind="secgroup", data=sec_groups)
 
     def test_secgroups_delete_again(self):
         HEADING()
-        name = "Test_Sec_Group2"
+        name = "Test_Sec_Group"
         Benchmark.Start()
         provider.remove_secgroup(name=name)
         Benchmark.Stop()
         g = provider.list_secgroups()
         if cloud == 'aws':
-            group_indicator= 'GroupName'
-        elif cloud == 'chameleon':
+            group_indicator = 'GroupName'
+        # elif cloud == 'chameleon':
+        elif cloud == 'oracle':
+            group_indicator = '_display_name'
+        else:
             group_indicator = 'name'
+
         for e in g:
             print(e[group_indicator])
         provider.Print(output='json', kind="secgroup", data=g)
 
     def test_benchmark(self):
         Benchmark.print(sysinfo=False, csv=True, tag=cloud)
-

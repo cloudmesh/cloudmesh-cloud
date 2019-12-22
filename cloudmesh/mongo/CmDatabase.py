@@ -1,5 +1,14 @@
+import re
 import urllib.parse
 from datetime import datetime
+
+from cloudmesh.common.console import Console
+from cloudmesh.common.debug import VERBOSE
+from cloudmesh.common.parameter import Parameter
+from cloudmesh.configuration.Config import Config
+from cloudmesh.mongo.MongoDBController import MongoDBController
+from progress.bar import Bar
+from pymongo import MongoClient
 import json
 import os
 from sys import platform
@@ -7,17 +16,6 @@ import subprocess
 import ctypes
 import shutil
 import re
-
-from cloudmesh.common.console import Console
-from cloudmesh.common.parameter import Parameter
-from cloudmesh.configuration.Config import Config
-from pymongo import MongoClient
-from cloudmesh.common.debug import VERBOSE
-from progress.bar import Bar
-from cloudmesh.common.util import path_expand
-from cloudmesh.mongo.MongoDBController import MongoDBController
-from cloudmesh.common3.Shell import Shell
-
 
 # cm:
 #   id:
@@ -219,7 +217,6 @@ class CmDatabase(object):
                 pass
         return entries
 
-
     # ok
     def find_names(self, names):
         """
@@ -354,7 +351,7 @@ class CmDatabase(object):
         _attributes = {"_id": 0}
 
         if attributes:
-           for a in attributes:
+            for a in attributes:
                 _attributes[a] = 1
 
         def add(collection):
@@ -395,7 +392,6 @@ class CmDatabase(object):
             records.append(entry)
         return records
 
-
     @staticmethod
     def UPDATE(_entries, progress=True):
         cm = CmDatabase()
@@ -429,13 +425,13 @@ class CmDatabase(object):
                 self.col = self.db[entry['cm']['collection']]
 
                 old_entry = self.col.find_one({"cm.kind": entry["cm"]["kind"],
-                                          "cm.cloud": entry["cm"]["cloud"],
-                                          "cm.name": entry["cm"]["name"]
-                                          })
+                                               "cm.cloud": entry["cm"]["cloud"],
+                                               "cm.name": entry["cm"]["name"]
+                                               })
 
                 if old_entry is not None:
 
-                    cm  = dict(old_entry['cm'])
+                    cm = dict(old_entry['cm'])
 
                     cm.update(entry['cm'])
                     cm['modified'] = str(datetime.utcnow())
@@ -477,7 +473,8 @@ class CmDatabase(object):
             try:
                 # self.db["{cloud}-{kind}".format(**entry)].update(uniqueKeyVal,{'$set': keyvalToUpdate})
                 entry['modified'] = str(datetime.utcnow())
-                self.db["{cloud}-{kind}".format(**entry)].update({'cm': entry['cm']}, {'$set': entry})
+                self.db["{cloud}-{kind}".format(**entry)].update(
+                    {'cm': entry['cm']}, {'$set': entry})
             except Exception as e:
                 Console.error("modifying document {entry}".format(
                     entry=str(entry)))
@@ -496,7 +493,8 @@ class CmDatabase(object):
             entries = [entries]
         for entry in entries:
             collection = self.db["{cloud}-{kind}".format(**entry)]
-            status = collection.find({'cm': {'$exists': entry['cm']}}).count() > 0
+            status = collection.find(
+                {'cm': {'$exists': entry['cm']}}).count() > 0
             exist_status.append(status)
         return exist_status
 
@@ -584,7 +582,7 @@ class CmDatabase(object):
         col = self.db[collection]
         col.drop()
 
-    def importAsFile(self, data, collection, db ):
+    def importAsFile(self, data, collection, db):
         if collection in self.collections():
             self.clear(collection=collection)
             Console.msg(f"Collection {collection} dropped to be rewritten")
@@ -629,7 +627,3 @@ class CmDatabase(object):
         #                            stderr=subprocess.PIPE)
         # result = ssh.stdout.read().decode("utf-8")
         # print(result)
-
-
-
-

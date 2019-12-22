@@ -11,9 +11,11 @@ from cloudmesh.common.util import path_expand
 from cloudmesh.compute.libcloud.Provider import Provider as GCloudProvider
 from cloudmesh.configuration.Config import Config
 from cloudmesh.management.configuration.name import Name
-from cloudmesh.common3.Benchmark import Benchmark
+from cloudmesh.common.Benchmark import Benchmark
 
 Benchmark.debug()
+
+cloud="google"
 
 @pytest.mark.incremental
 class TestName:
@@ -184,3 +186,7 @@ class TestName:
             self.test_list_vm()
 
         self.p.destroy(names=self.name)
+
+
+    def test_benchmark(self):
+        Benchmark.print(csv=True, sysinfo=False, tag=cloud)

@@ -1,15 +1,16 @@
 ###############################################################
 # pytest -v --capture=no tests/benchmark/test_cms.py
 # pytest -v  tests/benchmark/test_cms.py
-# pytest -v --capture=no tests/benchmark/test_cms.py:Test_cms.<METHIDNAME>
+# pytest -v --capture=no tests/benchmark/test_cms.py:Test_cms.<METHODNAME>
 ###############################################################
 
 import pytest
 from cloudmesh.common.Shell import Shell
 from cloudmesh.common.debug import VERBOSE
 from cloudmesh.common.util import HEADING
-from cloudmesh.common3.Benchmark import Benchmark
+from cloudmesh.common.Benchmark import Benchmark
 
+cloud = "local"
 
 @pytest.mark.incremental
 class TestConfig:
@@ -48,5 +49,6 @@ class TestConfig:
 
         assert "vm" in result
 
+
     def test_benchmark(self):
-        Benchmark.print()
+        Benchmark.print(csv=True, sysinfo=False, tag=cloud)

@@ -8,15 +8,13 @@ import os
 import pytest
 from cloudmesh.common.util import HEADING
 from cloudmesh.common.variables import Variables
-from cloudmesh.common3.Benchmark import Benchmark
+from cloudmesh.common.Benchmark import Benchmark
 from cloudmesh.compute.vm.Provider import Provider
 from cloudmesh.configuration.Config import Config
 from cloudmesh.key.Key import Key
 from cloudmesh.mongo.CmDatabase import CmDatabase
 
 Benchmark.debug()
-
-
 
 user = Config()["cloudmesh.profile.user"]
 variables = Variables()
@@ -66,10 +64,15 @@ class Test_Clean_Local_Remote:
             for secgroup in secgroups:
                 if cloud == 'aws':
                     groupname = secgroup['GroupName']
-                elif cloud == 'chameleon':
+                # elif cloud == 'chameleon':
+                elif cloud == 'oracle':
+                    groupname = secgroup['_display_name']
+                else:
                     groupname = secgroup['name']
+
                 if groupname == 'default':
                     continue
+
                 r = provider.remove_secgroup(groupname)
                 print(secgroup)
             Benchmark.Stop()

@@ -1,10 +1,11 @@
 import os.path
 import shutil
-from sys import platform
+import sys
+from pathlib import Path
 from sys import exit
-from time import sleep
+from sys import platform
 
-from cloudmesh.common.StopWatch import StopWatch
+from cloudmesh.common.Shell import Shell
 from cloudmesh.common.console import Console
 from cloudmesh.common.util import path_expand
 from cloudmesh.common.util import yn_choice
@@ -12,9 +13,8 @@ from cloudmesh.common.variables import Variables
 from cloudmesh.configuration.Config import Config
 from cloudmesh.mongo.MongoDBController import MongoDBController
 from cloudmesh.shell.command import PluginCommand
-from cloudmesh.shell.command import command, map_parameters
-from pathlib import Path
-import sys
+from cloudmesh.shell.command import command
+
 
 class InitCommand(PluginCommand):
 
@@ -55,7 +55,9 @@ class InitCommand(PluginCommand):
             path = Path(location)
             if path.is_file():
                 print()
-                if yn_choice("The file ~/.cloudmesh/cloudmesh.yaml exists, do you wnat to overwrite it", default='n'):
+                if yn_choice(
+                    "The file ~/.cloudmesh/cloudmesh.yaml exists, do you wnat to overwrite it",
+                    default='n'):
                     config.fetch()
                     print()
                     Console.ok("File cloudmesh.yaml downloaded from Github")
@@ -73,7 +75,8 @@ class InitCommand(PluginCommand):
             except:
                 Console.ok("MongoDB is not running. ok")
             machine = platform.lower()
-            location = path_expand(config[f'cloudmesh.data.mongo.MONGO_DOWNLOAD.{machine}.MONGO_PATH'])
+            location = path_expand(config[
+                                       f'cloudmesh.data.mongo.MONGO_DOWNLOAD.{machine}.MONGO_PATH'])
             try:
                 shutil.rmtree(location)
                 print("MongoDB folder deleted")
@@ -83,7 +86,6 @@ class InitCommand(PluginCommand):
                     Console.error(f"Please try to run cms init again ... ")
                     exit(1)
 
-
             config = Config()
             user = config["cloudmesh.profile.user"]
 
@@ -91,10 +93,14 @@ class InitCommand(PluginCommand):
 
             print("Set key")
             if user == "TBD":
-                Console.error("the user is not set in the yaml file for cloudmesh.profile.user")
+                Console.error(
+                    "the user is not set in the yaml file for cloudmesh.profile.user")
                 sys.exit()
 
             variables["key"] = user
+
+            Console.ok("Config Security Initialization")
+            Shell.execute("cms", ["config", "secinit"])
 
             print("MongoDB create")
             os.system("cms admin mongo create")
@@ -124,4 +130,3 @@ class InitCommand(PluginCommand):
             for name in variables:
                 value = variables[name]
                 print(f"    {name}={value}")
-

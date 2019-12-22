@@ -154,7 +154,6 @@ class SshCommand(PluginCommand):
 
             variables = Variables()
 
-
             if arguments.name is None:
                 name = arguments.NAME or variables['vm']
                 names = [name]
@@ -197,7 +196,8 @@ class SshCommand(PluginCommand):
                 try:
                     vm = cm.find_name(name, kind="vm")[0]
                 except IndexError:
-                    Console.error("VM not found, make sure the vm exists in the list below: ")
+                    Console.error(
+                        "VM not found, make sure the vm exists in the list below: ")
                     os.system('cms vm list')
                     return
 
@@ -205,12 +205,10 @@ class SshCommand(PluginCommand):
                 provider = Provider(name=cloud)
                 result = provider.ssh(vm=vm, command=command)
                 print(result)
-        else: # ssh with no argument
+        else:  # ssh with no argument
             last_vm = Variables()['vm']
             cm = CmDatabase()
             vm = cm.find_name(last_vm, kind="vm")[0]
             cloud = vm['cm']['cloud']
             provider = Provider(name=cloud)
             provider.ssh(vm=vm)
-
-

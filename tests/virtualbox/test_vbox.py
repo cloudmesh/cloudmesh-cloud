@@ -1,7 +1,7 @@
 ###############################################################
 # pytest -v --capture=no tests/virtualbox/test_vbox.py
 # pytest -v  tests/virtualbox/test_vbox.py
-# pytest -v --capture=no  tests/virtualbox/test_vbox.py:Test_vbox.<METHIDNAME>
+# pytest -v --capture=no  tests/virtualbox/test_vbox.py:Test_vbox.<METHODNAME>
 ###############################################################
 # from cloud.vm.Vm import Vm
 # from cloud.mongo.mongoDB import MongoDB
@@ -9,9 +9,10 @@ import subprocess
 
 import pytest
 from cloudmesh.common.util import HEADING
-from cloudmesh.common3.Benchmark import Benchmark
+from cloudmesh.common.Benchmark import Benchmark
 
 Benchmark.debug()
+
 
 @pytest.mark.incremental
 class Test_vagrant:

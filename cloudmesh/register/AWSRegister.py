@@ -11,6 +11,7 @@ from pathlib import Path
 import pandas
 from cloudmesh.configuration.Config import Config
 
+
 class AWSRegister(object):
 
     def __init__(self, cloud='aws'):
@@ -40,68 +41,41 @@ class AWSRegister(object):
             except WebDriverException as e:
                 Console.error(e)
 
-                Console.error("Chrome geckodriver not installed. Follow these steps for installation: \n"
-                              "1) Download the driver from the following link: \n\t "
-                              "https://sites.google.com/a/chromium.org/chromedriver/downloads \n"
-                              "2) Copy the `chromedriver` to '/usr/bin' \n"
-                              "3) Set the permission using:\n\t"
-                              "'sudo chmod +x /usr/bin/chromedriver'")
+                Console.error(
+                    "Chrome geckodriver not installed. Follow these steps for installation: \n"
+                    "1) Download the driver from the following link: \n\t "
+                    "https://sites.google.com/a/chromium.org/chromedriver/downloads \n"
+                    "2) Copy the `chromedriver` to '/usr/bin' \n"
+                    "3) Set the permission using:\n\t"
+                    "'sudo chmod +x /usr/bin/chromedriver'")
 
                 return
 
             credentials_file_name = self.create_user()
 
-            credentials_csv_path = Path.home().joinpath('Downloads').joinpath(credentials_file_name).resolve()
+            credentials_csv_path = Path.home().joinpath('Downloads').joinpath(
+                credentials_file_name).resolve()
             cloudmesh_folder = Path.home().joinpath('.cloudmesh').resolve()
 
+            os.rename(credentials_csv_path, cloudmesh_folder.joinpath(
+                credentials_file_name).resolve())
+            Console.info("{filename} moved to ~/.cloudmesh folder".format(
+                filename=credentials_file_name))
 
-            os.rename(credentials_csv_path, cloudmesh_folder.joinpath(credentials_file_name).resolve())
-            Console.info("{filename} moved to ~/.cloudmesh folder".format(filename=credentials_file_name))
-
-            creds = pandas.read_csv("{cm}/{filename}".format(cm=cloudmesh_folder,filename=credentials_file_name))
-
+            creds = pandas.read_csv(
+                "{cm}/{filename}".format(cm=cloudmesh_folder,
+                                         filename=credentials_file_name))
 
             self.set_credentials(creds)
 
             self.config.save()
 
-            Console.info("AWS 'Access Key ID' and 'Secret Access Key' in the cloudmesh.yaml updated")
+            Console.info(
+                "AWS 'Access Key ID' and 'Secret Access Key' in the cloudmesh.yaml updated")
 
         elif platform == "darwin":
-            chrome = Path("/Applications/Google Chrome.app/Contents/MacOS/Google Chrome")
-            if not chrome.is_file():
-                Console.error("Google chrome is not installed")
-                return
-            try:
-                self.driver = webdriver.Chrome()
-            except WebDriverException as e :
-                Console.error(e)
-                Console.error("Chrome geckodriver not installed. Follow these steps for installation: \n"
-                              "1) Download the driver from the following link: \n\t "
-                              "https://sites.google.com/a/chromium.org/chromedriver/downloads \n"
-                              "2) Copy the `chromedriver` to '/usr/local/bin' \n"
-                              "3) Set the permission using:\n\t"
-                              "'chmod +x /usr/local/bin/chromedriver'")
-                return
-
-            credentials_file_name = self.create_user()
-            credentials_csv_path = Path.home().joinpath('Downloads').joinpath(credentials_file_name).resolve()
-            # check if the DOwanloaded file exists
-            # Path("~/.cloudmesh/{credentials_file_name}).resolve()
-
-            cloudmesh_folder = Path.home().joinpath('.cloudmesh').resolve()
-            os.rename(credentials_csv_path, cloudmesh_folder.joinpath(credentials_file_name).resolve())
-            Console.info(f"{credentials_file_name} moved to ~/.cloudmesh folder")
-
-            creds = pandas.read_csv("{cm}/{filename}".format(cm=cloudmesh_folder,filename=credentials_file_name))
-
-            self.set_credentials(creds)
-
-            Console.info("AWS 'Access Key ID' and 'Secret Access Key' in the cloudmesh.yaml updated")
-
-
-        elif platform == "win32":
-            chrome = Path("C:\Program Files (x86)\Google\Chrome\Application\Chrome.exe")
+            chrome = Path(
+                "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome")
             if not chrome.is_file():
                 Console.error("Google chrome is not installed")
                 return
@@ -109,37 +83,84 @@ class AWSRegister(object):
                 self.driver = webdriver.Chrome()
             except WebDriverException as e:
                 Console.error(e)
-                Console.error("Chrome geckodriver not installed. Follow these steps for installation: \n"
-                              "1) Download the driver from the following link: \n\t "
-                              "https://sites.google.com/a/chromium.org/chromedriver/downloads \n"
-                              "2) Copy the `chromedriver` to path, for instance you can add "
-                              "it to the followtin path: "
-                              "\n\t %USERPROFILE%\AppData\Local\Microsoft\WindowsApps")
+                Console.error(
+                    "Chrome geckodriver not installed. Follow these steps for installation: \n"
+                    "1) Download the driver from the following link: \n\t "
+                    "https://sites.google.com/a/chromium.org/chromedriver/downloads \n"
+                    "2) Copy the `chromedriver` to '/usr/local/bin' \n"
+                    "3) Set the permission using:\n\t"
+                    "'chmod +x /usr/local/bin/chromedriver'")
                 return
+
             credentials_file_name = self.create_user()
+            credentials_csv_path = Path.home().joinpath('Downloads').joinpath(
+                credentials_file_name).resolve()
+            # check if the DOwanloaded file exists
+            # Path("~/.cloudmesh/{credentials_file_name}).resolve()
 
-            credentials_csv_path = Path.home().joinpath('Downloads').joinpath(credentials_file_name).resolve()
             cloudmesh_folder = Path.home().joinpath('.cloudmesh').resolve()
-            os.rename(credentials_csv_path, cloudmesh_folder.joinpath(credentials_file_name).resolve())
+            os.rename(credentials_csv_path, cloudmesh_folder.joinpath(
+                credentials_file_name).resolve())
+            Console.info(
+                f"{credentials_file_name} moved to ~/.cloudmesh folder")
 
-            Console.info(f"{credentials_file_name} moved to ~/.cloudmesh folder")
-
-
-            creds = pandas.read_csv("{cm}/{filename}".format(cm=cloudmesh_folder,filename=credentials_file_name))
+            creds = pandas.read_csv(
+                "{cm}/{filename}".format(cm=cloudmesh_folder,
+                                         filename=credentials_file_name))
 
             self.set_credentials(creds)
 
-            Console.info("AWS 'Access Key ID' and 'Secret Access Key' in the cloudmesh.yaml updated")
+            Console.info(
+                "AWS 'Access Key ID' and 'Secret Access Key' in the cloudmesh.yaml updated")
 
-    def slow_typer(self,element, text):
+
+        elif platform == "win32":
+            chrome = Path(
+                "C:\Program Files (x86)\Google\Chrome\Application\Chrome.exe")
+            if not chrome.is_file():
+                Console.error("Google chrome is not installed")
+                return
+            try:
+                self.driver = webdriver.Chrome()
+            except WebDriverException as e:
+                Console.error(e)
+                Console.error(
+                    "Chrome geckodriver not installed. Follow these steps for installation: \n"
+                    "1) Download the driver from the following link: \n\t "
+                    "https://sites.google.com/a/chromium.org/chromedriver/downloads \n"
+                    "2) Copy the `chromedriver` to path, for instance you can add "
+                    "it to the followtin path: "
+                    "\n\t %USERPROFILE%\\AppData\\Local\\Microsoft\\WindowsApps")
+                return
+            credentials_file_name = self.create_user()
+
+            credentials_csv_path = Path.home().joinpath('Downloads').joinpath(
+                credentials_file_name).resolve()
+            cloudmesh_folder = Path.home().joinpath('.cloudmesh').resolve()
+            os.rename(credentials_csv_path, cloudmesh_folder.joinpath(
+                credentials_file_name).resolve())
+
+            Console.info(
+                f"{credentials_file_name} moved to ~/.cloudmesh folder")
+
+            creds = pandas.read_csv(
+                "{cm}/{filename}".format(cm=cloudmesh_folder,
+                                         filename=credentials_file_name))
+
+            self.set_credentials(creds)
+
+            Console.info(
+                "AWS 'Access Key ID' and 'Secret Access Key' in the cloudmesh.yaml updated")
+
+    def slow_typer(self, element, text):
         for character in text:
             element.send_keys(character)
             sleep(random.random() * 0.05)
 
-
     def check_captcha(self):
         if "Type the characters seen in the image below" in self.driver.page_source:
-            text = input("Captcha encountered. Please enter the captcha and press Submit then press Enter to continue")
+            text = input(
+                "Captcha encountered. Please enter the captcha and press Submit then press Enter to continue")
             while (text != ""):
                 text = input(
                     "Captcha encountered. Please enter the captcha and press Submit then press Enter to continue")
@@ -172,7 +193,8 @@ class AWSRegister(object):
         self.driver.find_element_by_link_text("Add user").click()
         sleep(1.5)
 
-        self.driver.find_element_by_id("awsui-textfield-17").send_keys("cloudmesh")
+        self.driver.find_element_by_id("awsui-textfield-17").send_keys(
+            "cloudmesh")
         self.driver.find_element_by_name("accessKey").click()
         sleep(1.5)
 
@@ -182,16 +204,19 @@ class AWSRegister(object):
         self.driver.find_element_by_class_name("awsui-util-pt-s").click()
         sleep(1.5)
 
-        self.driver.find_element_by_xpath("//awsui-textfield[@ng-model='createGroupModal.groupName']/input").send_keys(
+        self.driver.find_element_by_xpath(
+            "//awsui-textfield[@ng-model='createGroupModal.groupName']/input").send_keys(
             "cloudmesh")
         sleep(1.5)
-        self.driver.find_element_by_xpath('//*/policies-table//table-search//search/div/input').send_keys(
+        self.driver.find_element_by_xpath(
+            '//*/policies-table//table-search//search/div/input').send_keys(
             "AmazonEC2FullAccess")
         sleep(1.5)
         self.driver.find_element_by_xpath(
             '//div[@data-item-id="arn:aws:iam::aws:policy/AmazonEC2FullAccess"]//awsui-checkbox//div').click()
         sleep(1.5)
-        self.driver.find_element_by_xpath("//awsui-button[@click-tracker='CreateGroup']").click()
+        self.driver.find_element_by_xpath(
+            "//awsui-button[@click-tracker='CreateGroup']").click()
         sleep(1.5)
         Console.info("'cloudmesh' group created")
 
@@ -203,11 +228,13 @@ class AWSRegister(object):
         Console.info("'cloudmesh' user created")
         self.driver.find_element_by_class_name("wizard-next-button").click()
         sleep(1.5)
-        self.driver.find_element_by_xpath("//awsui-button[@text='Download .csv']").click()
+        self.driver.find_element_by_xpath(
+            "//awsui-button[@text='Download .csv']").click()
         Console.info("credentials.csv downloaded")
         sleep(2)
 
-        self.driver.find_element_by_xpath("//awsui-button[@text='Close']").click()
+        self.driver.find_element_by_xpath(
+            "//awsui-button[@text='Close']").click()
         sleep(4)
         return "credentials.csv"
 
@@ -216,18 +243,23 @@ class AWSRegister(object):
         return len(self.driver.find_elements_by_link_text("cloudmesh")) > 0
 
     def create_accesskey_on_current_account(self):
-        self.driver.find_element_by_xpath('//a[@href="#/users/cloudmesh"]').click()
+        self.driver.find_element_by_xpath(
+            '//a[@href="#/users/cloudmesh"]').click()
         sleep(1.5)
 
         self.driver.find_element_by_link_text("Security credentials").click()
         sleep(1.5)
 
-        while len(self.driver.find_elements_by_xpath('//span[text()="Make inactive"]')) == 2 :
-            input("Two access keys already exist for the user, remove one manually before creating another one and press Enter")
+        while len(self.driver.find_elements_by_xpath(
+            '//span[text()="Make inactive"]')) == 2:
+            input(
+                "Two access keys already exist for the user, remove one manually before creating another one and press Enter")
 
-        self.driver.find_element_by_xpath('//button[.//span[text()="Create access key"]]').click()
+        self.driver.find_element_by_xpath(
+            '//button[.//span[text()="Create access key"]]').click()
         sleep(1.5)
-        self.driver.find_element_by_xpath('//*[@id="modal-container"]//awsui-button[contains(@text,"Download .csv file")]').click()
+        self.driver.find_element_by_xpath(
+            '//*[@id="modal-container"]//awsui-button[contains(@text,"Download .csv file")]').click()
         sleep(1.5)
 
         Console.info("accessKeys.csv downloaded")

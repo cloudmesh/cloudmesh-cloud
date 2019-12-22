@@ -13,22 +13,22 @@ layout = [
     [gui.Text('Cloudmesh Cloud Activation', font=('Helvetica', 16))],
     [gui.Text('Compute Services')]]
 
-layout.append([gui.Text('_'  * 100, size=(65, 1))])
+layout.append([gui.Text('_' * 100, size=(65, 1))])
 
 for cloud in clouds:
     tbd = "TBD" in str(config[f"cloudmesh.cloud.{cloud}.credentials"])
     active = config[f"cloudmesh.cloud.{cloud}.cm.active"]
     if tbd:
-        color='red'
+        color = 'red'
     else:
-        color="green"
+        color = "green"
 
     choice = [gui.Checkbox(cloud,
-                          text_color=color,
-                          default=active)]
+                           text_color=color,
+                           default=active)]
     layout.append(choice)
 
-layout.append([gui.Text('_'  * 100, size=(65, 1))])
+layout.append([gui.Text('_' * 100, size=(65, 1))])
 
 layout.append([gui.Submit(), gui.Cancel()])
 
@@ -36,9 +36,8 @@ window = gui.Window('Cloudmesh Configuration', layout, font=("Helvetica", 12))
 
 event, values = window.Read()
 
-
 selected = []
-for i in range(0,len(clouds)):
+for i in range(0, len(clouds)):
     cloud = clouds[i]
     if values[i]:
         selected.append(cloud)

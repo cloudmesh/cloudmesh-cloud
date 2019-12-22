@@ -1,7 +1,7 @@
 ###############################################################
 # pytest -v --capture=no tests/test_compute_database.py
 # pytest -v  tests/test_compute_database.py
-# pytest -v --capture=no tests/test_compute_database.py:Test_compute_database.<METHIDNAME>
+# pytest -v --capture=no tests/test_compute_database.py:Test_compute_database.<METHODNAME>
 ###############################################################
 import subprocess
 import time
@@ -14,7 +14,7 @@ from cloudmesh.common.debug import VERBOSE
 from cloudmesh.common.util import HEADING
 from cloudmesh.common.util import banner
 from cloudmesh.common.variables import Variables
-from cloudmesh.common3.Benchmark import Benchmark
+from cloudmesh.common.Benchmark import Benchmark
 from cloudmesh.compute.vm.Provider import Provider
 from cloudmesh.configuration.Config import Config
 from cloudmesh.management.configuration.SSHkey import SSHkey
@@ -132,9 +132,6 @@ class Test_Compute_Database:
                                 header=["Name", "Fingerprint"])
               )
 
-
-
-
     def test_vm_login(self):
         HEADING()
         self.test_list_vm()
@@ -183,4 +180,3 @@ class Test_Compute_Database:
         Benchmark.Start()
         provider.rename(source=self.name, destination=self.new_name)
         Benchmark.Stop()
-

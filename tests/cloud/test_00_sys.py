@@ -9,7 +9,7 @@ from cloudmesh.common.Shell import Shell
 from cloudmesh.common.debug import VERBOSE
 from cloudmesh.common.util import HEADING
 from cloudmesh.common.variables import Variables
-from cloudmesh.common3.Benchmark import Benchmark
+from cloudmesh.common.Benchmark import Benchmark
 from cloudmesh.key.Key import Key
 
 Benchmark.debug()
@@ -34,7 +34,6 @@ class Test_Sys:
         result = Shell.execute("cms help", shell=True)
         Benchmark.Stop()
         VERBOSE(result)
-
 
     def test_benchmark(self):
         Benchmark.print(sysinfo=True, csv=True, tag=cloud)

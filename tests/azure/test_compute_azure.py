@@ -1,7 +1,7 @@
 ###############################################################
 # pytest -v --capture=no tests/azure/test_compute_azure.py
 # pytest -v  tests/azure/test_compute_azure.py
-# pytest -v --capture=no  tests/azure/test_compute_azure.py:Test_compute_azure.<METHIDNAME>
+# pytest -v --capture=no  tests/azure/test_compute_azure.py:Test_compute_azure.<METHODNAME>
 ###############################################################
 import subprocess
 import time
@@ -15,11 +15,12 @@ from cloudmesh.compute.libcloud.Provider import Provider
 from cloudmesh.management.configuration.SSHkey import SSHkey
 from cloudmesh.configuration.Config import Config
 from cloudmesh.management.configuration.name import Name
-from cloudmesh.common3.Benchmark import Benchmark
+from cloudmesh.common.Benchmark import Benchmark
 
 Benchmark.debug()
 
-CLOUD="azure"
+CLOUD = "azure"
+
 
 @pytest.mark.incremental
 class TestName:
@@ -95,7 +96,6 @@ class TestName:
 
         # TODO: bug th eprint function is not implemented
         # print (self.p.Print(vms, kind="vm"))
-
 
         # '''
         print(Printer.flatwrite(vms,
@@ -358,6 +358,10 @@ class TestName:
 
         self.test_destroy()
         self.test_list_vm()
+
+
+    def test_benchmark(self):
+        Benchmark.print(csv=True, sysinfo=False, tag=CLOUD)
 
 
 class other:

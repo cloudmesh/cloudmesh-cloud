@@ -1,16 +1,20 @@
 ###############################################################
 # pytest -v --capture=no tests/1_local/test_name.py
 # pytest -v  tests/1_local/test_name.py
-# pytest -v --capture=no  tests/1_local/test_name.py:Test_name.<METHIDNAME>
+# pytest -v --capture=no  tests/1_local/test_name.py:Test_name.<METHODNAME>
 ###############################################################
 
 import pytest
 from cloudmesh.common.StopWatch import StopWatch
 from cloudmesh.common3.host import Host
 from cloudmesh.common.Printer import Printer
-from cloudmesh.common3.Benchmark import Benchmark
+from cloudmesh.common.Benchmark import Benchmark
+from cloudmesh.common.util import HEADING
+import sys
 
 Benchmark.debug()
+
+cloud = "local"
 
 # multiping only works if you have root, so we can not use it
 # from multiping import MultiPing
@@ -26,6 +30,7 @@ hosts = ['127.0.0.1',
          'www.ec2instances.info',
          'aws.amazon.com']
 
+
 @pytest.mark.incremental
 class TestPing:
 
@@ -36,8 +41,8 @@ class TestPing:
 
         return r
 
-
     def test_internal_ping(self):
+        HEADING()
         StopWatch.start("total _ping")
 
         for host in hosts:
@@ -51,23 +56,24 @@ class TestPing:
             StopWatch.stop(f"ping {host}")
 
             StopWatch.stop("total _ping")
-
-
+            if b'Access denied' in result['stdout'] and sys.platform == "win32":
+                print("ERROR: This test must be run in an administrative "
+                      "terminal")
             assert result['success']
 
     def test_ping_processor(self):
-
-        print ()
-        for processors in range(1,len(hosts)):
-            print ("Processors:", processors)
+        HEADING()
+        print()
+        for processors in range(1, len(hosts)):
+            print("Processors:", processors)
             results = self.ping(processors=processors)
-            print (Printer.write(results,
-                                 order=['host',
-                                         'success',
-                                         'max',
-                                         'min',
-                                         'stddev']
-                                 ))
+            print(Printer.write(results,
+                                order=['host',
+                                       'success',
+                                       'max',
+                                       'min',
+                                       'stddev']
+                                ))
             for result in results:
                 assert result['success']
 
@@ -79,5 +85,6 @@ class TestPing:
     #     responses, no_responses = ping(hosts, timeout=2, retry=1)
 
     def test_benchmark(self):
-        StopWatch.benchmark(sysinfo=False)
+        HEADING()
+        Benchmark.print(csv=True, sysinfo=False, tag=cloud)
 

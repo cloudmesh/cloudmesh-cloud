@@ -3,6 +3,7 @@ from pprint import pprint
 from cloudmesh.common.variables import Variables
 from cloudmesh.common.debug import VERBOSE
 
+
 class ComputeProviderPlugin(object):
     pass
 
@@ -27,7 +28,6 @@ class Provider(object):
             self.load()
             # self.data[key] = provider
             variables = Variables()
-            if variables['debug'] is 'False':
+            if variables['debug'] == 'False':
                 Console.cprint("BLUE", "", f"Loading Provider: '{key}'")
             return self.data[key]
-

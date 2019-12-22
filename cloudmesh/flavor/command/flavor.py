@@ -1,11 +1,11 @@
 from cloudmesh.common.debug import VERBOSE
+from cloudmesh.common.parameter import Parameter
 from cloudmesh.common.variables import Variables
 from cloudmesh.compute.vm.Provider import Provider
 from cloudmesh.management.configuration.arguments import Arguments
 from cloudmesh.mongo.CmDatabase import CmDatabase
 from cloudmesh.shell.command import PluginCommand
 from cloudmesh.shell.command import command, map_parameters
-from cloudmesh.common.parameter import Parameter
 
 
 class FlavorCommand(PluginCommand):
@@ -19,7 +19,7 @@ class FlavorCommand(PluginCommand):
         ::
 
             Usage:
-                flavor list [NAMES] [--cloud=CLOUD] [--refresh] [--output=OUTPUT]
+                flavor list [NAMES] [--cloud=CLOUD] [--refresh] [--output=OUTPUT] [--query=QUERY]
 
 
             Options:
@@ -39,9 +39,26 @@ class FlavorCommand(PluginCommand):
 
                 please remember that a uuid or the flavor name can be used to
                 identify a flavor.
+
+
+                cms flavor list --refresh --query=\'{\"a\": \"b\"}\'
+
+            OpenStack Query Example:
+
+                cms flavor list --refresh --query=\'{\"minDisk\": \"80\"}\'
+                cms flavor list --refresh --query=\'{\"name\": \"m1.large\"}\'
+
+                supported query parameters for OpenStack:
+
+                        min_disk
+                        min_ram
+                        name
+
+
         """
 
         map_parameters(arguments,
+                       "query",
                        "refresh",
                        "cloud",
                        "output")
@@ -66,9 +83,14 @@ class FlavorCommand(PluginCommand):
                                                           variables)
 
             for cloud in clouds:
-                print(f"cloud {cloud}")
+                print(f"cloud {cloud} query={arguments.query}")
                 provider = Provider(name=cloud)
-                flavors = provider.flavors()
+                if arguments.query is not None:
+                    query = eval(arguments.query)
+                    flavors = provider.flavors(**query)
+                else:
+
+                    flavors = provider.flavors()
 
                 provider.Print(flavors, output=arguments.output, kind="flavor")
 
@@ -92,7 +114,8 @@ class FlavorCommand(PluginCommand):
                     db = CmDatabase()
                     flavors = db.find(collection=f"{cloud}-flavor")
 
-                    provider.Print(flavors, output=arguments.output, kind="flavor")
+                    provider.Print(flavors, output=arguments.output,
+                                   kind="flavor")
 
             except Exception as e:
 

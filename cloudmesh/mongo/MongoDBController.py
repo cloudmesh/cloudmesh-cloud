@@ -72,7 +72,8 @@ class MongoInstaller(object):
         Console.msg(f"Installing mongo in  mode: {mode}")
 
         if mode == 'docker':
-            Console.ok("Installing mongoDB in a docker container cloudmesh-mongo")
+            Console.ok(
+                "Installing mongoDB in a docker container cloudmesh-mongo")
 
             from cloudmesh.mongo.MongoDocker import MongoDocker
             mongo = MongoDocker()
@@ -177,14 +178,14 @@ class MongoInstaller(object):
             Console.error("Unsupported Linux Version")
             raise Exception("unsupported operating system")
 
-        script = f"{sudo_command} " + f"{apt_cmd} " + """
-        mkdir -p {MONGO_PATH}
-        mkdir -p {MONGO_HOME}
-        mkdir -p {MONGO_LOG}
-        wget -q -O /tmp/mongodb.tgz {MONGO_CODE}
-        tar -zxvf /tmp/mongodb.tgz -C {LOCAL}/mongo --strip 1
-        echo \"export PATH={MONGO_HOME}/bin:$PATH\" >> ~/.bashrc
-            """.format(**self.data)
+        script = f"{sudo_command} " + f"{apt_cmd} " + f"""
+        mkdir -p {self.mongo_path}
+        mkdir -p {self.mongo_home}
+        mkdir -p {self.mongo_log}
+        wget -q -O /tmp/mongodb.tgz {self.mongo_code}
+        tar -zxvf /tmp/mongodb.tgz -C {self.local}/mongo --strip 1
+        echo \"export PATH={self.mongo_home}/bin:$PATH\" >> ~/.bashrc
+            """
         installer = Script.run(script)
 
     def ubuntu(self):
@@ -423,7 +424,6 @@ class MongoDBController(object):
         print(
             "Enable the Security. You will use your username and password to login the MongoDB")
 
-
     def ssh(self):
 
         # Added special code for windows. Cant do start service and set_auth in same cms execution.
@@ -479,9 +479,10 @@ class MongoDBController(object):
         start the MongoDB server
         """
         mode = self.data['MODE']
+        if mode == "running":
+            return
 
         if mode == 'docker':
-
             from cloudmesh.mongo.MongoDocker import MongoDocker
             mongo = MongoDocker()
             mongo.start(auth=security)
@@ -596,8 +597,10 @@ class MongoDBController(object):
 
         mode = self.data['MODE']
 
-        if mode == 'docker':
+        if mode == 'running':
+            return
 
+        if mode == 'docker':
             from cloudmesh.mongo.MongoDocker import MongoDocker
             mongo = MongoDocker()
             mongo.wait()
@@ -649,8 +652,6 @@ class MongoDBController(object):
         mode = self.data['MODE']
 
         if mode == 'docker':
-
-
             Console.error("Dump: Docker is not yet supported")
             raise NotImplementedError
 
@@ -691,7 +692,6 @@ class MongoDBController(object):
         mode = self.data['MODE']
 
         if mode == 'docker':
-
             from cloudmesh.mongo.MongoDocker import MongoDocker
             mongo = MongoDocker()
             state = mongo.status()
@@ -922,12 +922,9 @@ class MongoDBController(object):
         elif platform.lower() == 'win32':  # Replaced windows with win32
             status = self.win_service_is_running()
 
-
         if not status:
             Console.error(f"Cloudmesh mongodb not found")
             sys.exit()
-
-
 
     def start_if_not_running(self):
         '''
@@ -948,7 +945,6 @@ class MongoDBController(object):
                 mongo.start()
 
             return
-
 
         if platform.lower() == 'linux':
             if not self.linux_process_is_running():

@@ -1,7 +1,7 @@
 ###############################################################
-# pytest -v --capture=no tests/1_local/test_name.py
-# pytest -v  tests/1_local/test_name.py
-# pytest -v --capture=no  tests/1_local/test_name.py:Test_name.<METHIDNAME>
+# pytest -v --capture=no tests/2_local/test_ssh.py
+# pytest -v  tests/tests/2_local/test_ssh.py
+# pytest -v --capture=no  tests/2_local/test_ssh.py:Test_name.<METHODNAME>
 ###############################################################
 
 import os
@@ -12,10 +12,12 @@ from cloudmesh.common.Printer import Printer
 from cloudmesh.common.StopWatch import StopWatch
 from cloudmesh.common3.host import Host
 from cloudmesh.common.Shell import Shell
-from cloudmesh.common3.Benchmark import Benchmark
+from cloudmesh.common.Benchmark import Benchmark
+from cloudmesh.common.util import HEADING
 
 Benchmark.debug()
 
+cloud = "local"
 # multiping only works if you have root, so we can not use it
 # from multiping import MultiPing
 
@@ -81,7 +83,6 @@ class TestSsh:
 
             assert result.success
 
-
     def test_ssh_processors(self):
 
         print()
@@ -100,4 +101,5 @@ class TestSsh:
     #     responses, no_responses = ping(hosts, timeout=2, retry=1)
 
     def test_benchmark(self):
-        StopWatch.benchmark(sysinfo=False)
+        Benchmark.print(csv=True, sysinfo=False, tag=cloud)
+

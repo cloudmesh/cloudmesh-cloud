@@ -7,15 +7,13 @@ import pytest
 from cloudmesh.common.util import HEADING
 from cloudmesh.compute.vm.Provider import Provider
 from cloudmesh.compute.libcloud.Provider import Provider
-from cloudmesh.common3.Benchmark import Benchmark
+from cloudmesh.common.Benchmark import Benchmark
 from cloudmesh.management.configuration.name import Name
 from cloudmesh.configuration.Config import Config
 
 Benchmark.debug()
 
-
 CLOUD = "azazure"
-
 
 user = Config()["cloudmesh.profile.user"]
 
@@ -84,3 +82,6 @@ class Testazure(object):
         r = self.p.delete_vm(resource_group=self.group,
                              name=self.name)
         assert r['status'] == 0
+
+    def test_benchmark(self):
+        Benchmark.print(csv=True, sysinfo=False, tag=CLOUD)

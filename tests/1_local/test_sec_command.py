@@ -20,14 +20,15 @@
 
 import pytest
 from cloudmesh.common.util import HEADING
-from cloudmesh.common3.Benchmark import Benchmark
+from cloudmesh.common.Benchmark import Benchmark
 from cloudmesh.common3.Shell import Shell
 from cloudmesh.secgroup.Secgroup import Secgroup
 from cloudmesh.secgroup.Secgroup import SecgroupExamples
 from cloudmesh.secgroup.Secgroup import SecgroupRule
 
-
 Benchmark.debug()
+
+cloud = "local"
 
 rules = SecgroupRule()
 groups = Secgroup()
@@ -56,6 +57,7 @@ class TestSecCLI:
         assert len(g) == 0
 
     def test_load(self):
+        HEADING()
         Benchmark.Start()
         run("load", "cms sec load")
         Benchmark.Stop()
@@ -161,4 +163,6 @@ class TestSecCLI:
             assert name in result
 
     def test_benchmark(self):
-        Benchmark.print()
+        HEADING()
+        Benchmark.print(csv=True, sysinfo=False, tag=cloud)
+

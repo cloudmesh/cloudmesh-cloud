@@ -1,0 +1,2677 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.8.0, pytest-5.3.1, py-1.8.0, pluggy-0.13.1 -- /Users/grey/ENV3/bin/python3
+cachedir: .pytest_cache
+rootdir: /Users/grey/Desktop/github/cloudmesh-community/cm/cloudmesh-cloud, inifile: pytest.ini
+plugins: cov-2.8.1
+collecting ... 
+
+collected 59 items
+
+tests/1_local/test_cms.py::TestName::test_help 
+[35m
+# ######################################################################
+# test_help /tests/1_local/test_cms.py 18
+# ######################################################################
+[0m
+[34m
+# ----------------------------------------------------------------------
+# result
+# ----------------------------------------------------------------------
+# 24:test_help ./tests/1_local/test_cms.py
+# ----------------------------------------------------------------------
+# ('Documented commands (type help <topic>):\n'
+#  '========================================\n'
+#  'EOF                 data     image      pause     set        sys           \n'
+#  'admin               debug    info       plugin    shell      var           \n'
+#  'banner              default  init       provider  sleep      vbox          \n'
+#  'bookmanagerservice  echo     inventory  q         source     vcluster      \n'
+#  'clear               flavor   ip         quit      ssh        version       \n'
+#  'commands            group    key        register  start      vm            \n'
+#  'config              help     man        sec       stop       workflow_draft\n'
+#  'container           host     open       service   stopwatch\n'
+#  '\n'
+#  'Timer: 0.0000s (help)')
+# ----------------------------------------------------------------------
+[0m
+PASSED
+tests/1_local/test_cms.py::TestName::test_vm 
+[35m
+# ######################################################################
+# test_vm /tests/1_local/test_cms.py 29
+# ######################################################################
+[0m
+[34m
+# ----------------------------------------------------------------------
+# result
+# ----------------------------------------------------------------------
+# 34:test_vm ./tests/1_local/test_cms.py
+# ----------------------------------------------------------------------
+# ('Command vm\n'
+#  '==========\n'
+#  '\n'
+#  '::\n'
+#  '\n'
+#  '    Usage:\n'
+#  '        vm ping [NAMES] [--cloud=CLOUDS] [--count=N]\n'
+#  '        vm check [NAMES] [--cloud=CLOUDS] [--username=USERNAME]\n'
+#  '        vm status [NAMES] [--cloud=CLOUDS] [--output=OUTPUT]\n'
+#  '        vm console [NAME] [--force]\n'
+#  '        vm log [NAME] [--force]\n'
+#  '        vm stop [NAMES]  [--dryrun]\n'
+#  '        vm start [NAMES] [--dryrun]\n'
+#  '        vm terminate [NAMES] [--cloud=CLOUD] [--dryrun]\n'
+#  '        vm delete [NAMES] [--cloud=CLOUD] [--dryrun]\n'
+#  '        vm refresh [--cloud=CLOUDS]\n'
+#  '        vm list [NAMES]\n'
+#  '                [--cloud=CLOUDS]\n'
+#  '                [--output=OUTPUT]\n'
+#  '                [--refresh]\n'
+#  '        vm boot [--n=COUNT]\n'
+#  '                [--name=VMNAMES]\n'
+#  '                [--cloud=CLOUD]\n'
+#  '                [--username=USERNAME]\n'
+#  '                [--image=IMAGE]\n'
+#  '                [--flavor=FLAVOR]\n'
+#  '                [--public]\n'
+#  '                [--secgroup=SECGROUPs]\n'
+#  '                [--group=GROUPs]\n'
+#  '                [--key=KEY]\n'
+#  '                [--dryrun]\n'
+#  '                [-v]\n'
+#  '        vm meta list [NAME]\n'
+#  '        vm meta set [NAME] KEY=VALUE...\n'
+#  '        vm meta delete [NAME] KEY...\n'
+#  '        vm script [--name=NAMES]\n'
+#  '                  [--username=USERNAME]\n'
+#  '                  [--key=KEY]\n'
+#  '                  [--dryrun]\n'
+#  '                  [--dir=DESTINATION]\n'
+#  '                  SCRIPT\n'
+#  '        vm ip assign [NAMES]\n'
+#  '                  [--cloud=CLOUD]\n'
+#  '        vm ip show [NAMES]\n'
+#  '                   [--group=GROUP]\n'
+#  '                   [--cloud=CLOUD]\n'
+#  '                   [--output=OUTPUT]\n'
+#  '                   [--refresh]\n'
+#  '        vm ip inventory [NAMES]\n'
+#  '        vm ssh [NAMES]\n'
+#  '               [--username=USER]\n'
+#  '               [--quiet]\n'
+#  '               [--ip=IP]\n'
+#  '               [--key=KEY]\n'
+#  '               [--command=COMMAND]\n'
+#  '        vm put SOURCE DESTINATION [NAMES]\n'
+#  '        vm get SOURCE DESTINATION [NAMES]\n'
+#  '        vm rename [OLDNAMES] [NEWNAMES] [--force] [--dryrun]\n'
+#  '        vm wait [--cloud=CLOUD] [--interval=INTERVAL] [--timeout=TIMEOUT]\n'
+#  '        vm info [--cloud=CLOUD]\n'
+#  '                [--output=OUTPUT]\n'
+#  '        vm username USERNAME [NAMES] [--cloud=CLOUD]\n'
+#  '        vm resize [NAMES] [--size=SIZE]\n'
+#  '\n'
+#  '    Arguments:\n'
+#  '        OUTPUT         the output format\n'
+#  '        COMMAND        positional arguments, the commands you want to\n'
+#  "                       execute on the server(e.g. ls -a) separated by ';',\n"
+#  '                       you will get a return of executing result instead of '
+#  'login to\n'
+#  '                       the server, note that type in -- is suggested before\n'
+#  '                       you input the commands\n'
+#  '        NAME           server name. By default it is set to the name of last '
+#  'vm from database.\n'
+#  '        NAMES          server name. By default it is set to the name of last '
+#  'vm from database.\n'
+#  '        KEYPAIR_NAME   Name of the vm keypair to be used to create VM. Note '
+#  'this is\n'
+#  '                       not a path to key.\n'
+#  '        NEWNAMES       New names of the VM while renaming.\n'
+#  '        OLDNAMES       Old names of the VM while renaming.\n'
+#  '\n'
+#  '    Options:\n'
+#  '        -v             verbose, prints the dict at the end\n'
+#  '        --output=OUTPUT   the output format\n'
+#  '        -H --modify-knownhosts  Do not modify ~/.ssh/known_hosts file\n'
+#  "                              when ssh'ing into a machine\n"
+#  '        --username=USERNAME   the username to login into the vm. If not\n'
+#  '                              specified it will be guessed\n'
+#  '                              from the image name and the cloud\n'
+#  '        --ip=IP          give the public ip of the server\n'
+#  '        --cloud=CLOUD    give a cloud to work on, if not given, selected\n'
+#  '                         or default cloud will be used\n'
+#  '        --count=COUNT    give the number of servers to start\n'
+#  '        --detail         for table, a brief version\n'
+#  '                         is used as default, use this flag to print\n'
+#  '                         detailed table\n'
+#  '        --flavor=FLAVOR  give the name or id of the flavor\n'
+#  '        --group=GROUP          give the group name of server\n'
+#  '        --secgroup=SECGROUP    security group name for the server\n'
+#  '        --image=IMAGE    give the name or id of the image\n'
+#  '        --key=KEY        specify a key to use, input a string which\n'
+#  '                         is the full path to the private key file\n'
+#  '        --keypair_name=KEYPAIR_NAME   Name of the vm keypair to\n'
+#  '                                      be used to create VM.\n'
+#  '                                      Note this is not a path to key.\n'
+#  '        --user=USER      give the user name of the server that you want\n'
+#  '                         to use to login\n'
+#  '        --name=NAME      give the name of the virtual machine\n'
+#  "        --force          rename/ delete vms without user's confirmation\n"
+#  '        --command=COMMAND\n'
+#  '                         specify the commands to be executed\n'
+#  '\n'
+#  '\n'
+#  '    Description:\n'
+#  '        commands used to boot, start or delete servers of a cloud\n'
+#  '\n'
+#  '        vm default [options...]\n'
+#  '            Displays default parameters that are set for vm boot either\n'
+#  '            on the default cloud or the specified cloud.\n'
+#  '\n'
+#  '        vm boot [options...]\n'
+#  '            Boots servers on a cloud, user may specify flavor, image\n'
+#  '            .etc, otherwise default values will be used, see how to set\n'
+#  '            default values of a cloud: cloud help\n'
+#  '\n'
+#  '        vm start [options...]\n'
+#  '            Starts a suspended or stopped vm instance.\n'
+#  '\n'
+#  '        vm stop [options...]\n'
+#  '            Stops a vm instance .\n'
+#  '\n'
+#  '        vm delete [options...]\n'
+#  '\n'
+#  '            Delete servers of a cloud, user may delete a server by its\n'
+#  '            name or id, delete servers of a group or servers of a cloud,\n'
+#  '            give prefix and/or range to find servers by their names.\n'
+#  '            Or user may specify more options to narrow the search\n'
+#  '\n'
+#  '        vm floating_ip_assign [options...]\n'
+#  '            assign a public ip to a VM of a cloud\n'
+#  '\n'
+#  '        vm ip show [options...]\n'
+#  '            show the ips of VMs\n'
+#  '\n'
+#  '        vm ssh [options...]\n'
+#  '            login to a server or execute commands on it\n'
+#  '\n'
+#  '        vm list [options...]\n'
+#  '            same as command "list vm", please refer to it\n'
+#  '\n'
+#  '        vm status [options...]\n'
+#  '            Retrieves status of last VM booted on cloud and displays it.\n'
+#  '\n'
+#  '        vm refresh [--cloud=CLOUDS]\n'
+#  '            this command refreshes the data for virtual machines,\n'
+#  '            images and flavors for the specified clouds.\n'
+#  '\n'
+#  '        vm ping [NAMES] [--cloud=CLOUDS] [--count=N] '
+#  '[--processors=PROCESSORS]\n'
+#  '             pings the specified virtual machines, while using at most N '
+#  'pings.\n'
+#  '             The ping is executed in parallel.\n'
+#  '             If names are specifies the ping is restricted to the given '
+#  'names in\n'
+#  '             parameter format. If clouds are specified, names that are not '
+#  'in\n'
+#  '             these clouds are ignored. If the name is set in the variables\n'
+#  '             this name is used.\n'
+#  '\n'
+#  '        cms vm ssh --command="uname -a"\n'
+#  '\n'
+#  '              executes the uname command on the last booted vm\n'
+#  '\n'
+#  '        vm script [--name=NAMES]\n'
+#  '                  [--username=USERNAME]\n'
+#  '                  [--key=KEY]\n'
+#  '                  [--dryrun]\n'
+#  '                  [--dir=DESTINATION]\n'
+#  '                  [--shell=SHELL]\n'
+#  '                  SCRIPT\n'
+#  '\n'
+#  '           The script command copies a shell script to the specified vms\n'
+#  '           into the DESTINATION directory and than execute it. With\n'
+#  '           SHELL you can set the shell for executing the command,\n'
+#  '           this coudl even be a python interpreter. Examples for\n'
+#  '           SHELL are /bin/sh, /usr/bin/env python\n'
+#  '\n'
+#  '        vm put SOURCE DESTINATION [NAMES]\n'
+#  '\n'
+#  '            puts the file defined by SOURCE into the DESINATION folder\n'
+#  '            on the specified machines. If the file exists it is\n'
+#  '            overwritten, so be careful.\n'
+#  '\n'
+#  '        vm get SOURCE DESTINATION [NAMES]\n'
+#  '\n'
+#  '            gets  the file defined by SOURCE into the DESINATION folder\n'
+#  '            on the specified machines. The SOURCE is on the remote\n'
+#  '            machine. If one machine is specified, the SOURCE is the same\n'
+#  '            name as on the remote machine. If multiple machines are\n'
+#  '            specified, the name of the machine will be a prefix to the\n'
+#  '            filename. If the filenames exists, they will be overwritten,\n'
+#  '            so be careful.\n'
+#  '\n'
+#  '    Tip:\n'
+#  '        give the VM name, but in a hostlist style, which is very\n'
+#  '        convenient when you need a range of VMs e.g. sample[1-3]\n'
+#  "        => ['sample1', 'sample2', 'sample3']\n"
+#  "        sample[1-3,18] => ['sample1', 'sample2', 'sample3', 'sample18']\n"
+#  '\n'
+#  '    Quoting commands:\n'
+#  '        cm vm login gregor-004 --command="uname -a"\n'
+#  '\n'
+#  '    Limitations:\n'
+#  '\n'
+#  '        Azure: rename is not supported\n'
+#  '\n'
+#  'Timer: 0.0000s (help vm)')
+# ----------------------------------------------------------------------
+[0m
+PASSED
+tests/1_local/test_cms.py::TestName::test_help_again 
+[35m
+# ######################################################################
+# test_help_again /tests/1_local/test_cms.py 38
+# ######################################################################
+[0m
+[34m
+# ----------------------------------------------------------------------
+# result
+# ----------------------------------------------------------------------
+# 44:test_help_again ./tests/1_local/test_cms.py
+# ----------------------------------------------------------------------
+# ('Documented commands (type help <topic>):\n'
+#  '========================================\n'
+#  'EOF                 data     image      pause     set        sys           \n'
+#  'admin               debug    info       plugin    shell      var           \n'
+#  'banner              default  init       provider  sleep      vbox          \n'
+#  'bookmanagerservice  echo     inventory  q         source     vcluster      \n'
+#  'clear               flavor   ip         quit      ssh        version       \n'
+#  'commands            group    key        register  start      vm            \n'
+#  'config              help     man        sec       stop       workflow_draft\n'
+#  'container           host     open       service   stopwatch\n'
+#  '\n'
+#  'Timer: 0.0000s (help)')
+# ----------------------------------------------------------------------
+[0m
+PASSED
+tests/1_local/test_cms.py::TestName::test_benchmark 
+[35m
+# ######################################################################
+# test_benchmark /tests/1_local/test_cms.py 49
+# ######################################################################
+[0m
+
++-------------------+---------------------------------------------------------------------------------------------------+
+| Machine Attribute | Value                                                                                             |
++-------------------+---------------------------------------------------------------------------------------------------+
+| cpu_count         | 8                                                                                                 |
+| mac_version       | 10.14.6                                                                                           |
+| machine           | ('x86_64',)                                                                                       |
+| mem_active        | 6.6 GiB                                                                                           |
+| mem_available     | 7.2 GiB                                                                                           |
+| mem_free          | 601.9 MiB                                                                                         |
+| mem_inactive      | 5.8 GiB                                                                                           |
+| mem_percent       | 55.3%                                                                                             |
+| mem_total         | 16.0 GiB                                                                                          |
+| mem_used          | 8.8 GiB                                                                                           |
+| mem_wired         | 2.3 GiB                                                                                           |
+| node              | ('gray',)                                                                                         |
+| platform          | macOS-10.14.6-x86_64-i386-64bit                                                                   |
+| processor         | ('i386',)                                                                                         |
+| processors        | Darwin                                                                                            |
+| python            | 3.8.0 (v3.8.0:fa919fdf25, Oct 14 2019, 10:23:27)                                                  |
+|                   | [Clang 6.0 (clang-600.0.57)]                                                                      |
+| release           | ('18.7.0',)                                                                                       |
+| sys               | darwin                                                                                            |
+| system            | Darwin                                                                                            |
+| user              | grey                                                                                              |
+| version           | Darwin Kernel Version 18.7.0: Sat Oct 12 00:02:19 PDT 2019; root:xnu-4903.278.12~1/RELEASE_X86_64 |
+| win_version       |                                                                                                   |
++-------------------+---------------------------------------------------------------------------------------------------+
++--------------------------+-------+---------------------+-----+-----------+------+--------+-------------+-------------+
+| timer                    | time  | start               | tag | node      | user | system | mac_version | win_version |
++--------------------------+-------+---------------------+-----+-----------+------+--------+-------------+-------------+
+| test_cms/test_help       | 1.436 | 2019-12-13 07:00:26 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_cms/test_vm         | 1.407 | 2019-12-13 07:00:27 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_cms/test_help_again | 1.431 | 2019-12-13 07:00:29 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| benchmark_start_stop     | 0.0   | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
++--------------------------+-------+---------------------+-----+-----------+------+--------+-------------+-------------+
+
+csv,timer,time,starttag,node,user,system,mac_version,win_version
+#csv,test_cms/test_help,1.436,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_cms/test_vm,1.407,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_cms/test_help_again,1.431,None,('gray',),grey,Darwin,10.14.6,
+#csv,benchmark_start_stop,0.0,None,('gray',),grey,Darwin,10.14.6,
+
+PASSED
+tests/1_local/test_config.py::TestConfig::test_config 
+[35m
+# ######################################################################
+# test_config /tests/1_local/test_config.py 32
+# ######################################################################
+[0m
+
+1 True 0 0 0
+2 True 0 0 0
+3 True 0 0 0
+4 True 0 0 0
+5 True 0 0 0
+6 True 0 0 0
+7 True 0 0 0
+8 True 0 0 0
+9 True 0 0 0
+PASSED
+tests/1_local/test_config.py::TestConfig::test_search 
+[35m
+# ######################################################################
+# test_search /tests/1_local/test_config.py 45
+# ######################################################################
+[0m
+['cloudmesh.cloud.docker.cm.active',
+ 'cloudmesh.cloud.azure.cm.active',
+ 'cloudmesh.cloud.azurearm.cm.active',
+ 'cloudmesh.cloud.azureaz.cm.active',
+ 'cloudmesh.cloud.awslibcloud.cm.active',
+ 'cloudmesh.cloud.aws.cm.active',
+ 'cloudmesh.cloud.google.cm.active',
+ 'cloudmesh.cloud.oracle.cm.active',
+ 'cloudmesh.cloud.chameleon.cm.active',
+ 'cloudmesh.cloud.jetstream.cm.active',
+ 'cloudmesh.cloud.cybera-e.cm.active',
+ 'cloudmesh.cloud.vagrant.cm.active',
+ 'cloudmesh.cloud.vagrant_remote.cm.active']
+PASSED
+tests/1_local/test_config.py::TestConfig::test_dict 
+[35m
+# ######################################################################
+# test_dict /tests/1_local/test_config.py 54
+# ######################################################################
+[0m
+<class 'dict'>
+{'email': 'laszewski@gmail.com',
+ 'firstname': 'Gregor',
+ 'github': 'laszewsk',
+ 'lastname': 'von Laszewski',
+ 'publickey': '~/.ssh/id_rsa.pub',
+ 'user': 'gregor'}
+PASSED
+tests/1_local/test_config.py::TestConfig::test_config_subscriptable 
+[35m
+# ######################################################################
+# test_config_subscriptable /tests/1_local/test_config.py 64
+# ######################################################################
+[0m
+PASSED
+tests/1_local/test_config.py::TestConfig::test_dictreplace 
+[35m
+# ######################################################################
+# test_dictreplace /tests/1_local/test_config.py 72
+# ######################################################################
+[0m
+
+cloudmesh:
+  profile:
+    name: Gregor
+  unordered:
+    name: "{cloudmesh.other.name}.postfix"
+  other:
+    name: "{cloudmesh.profile.name}"
+
+
+
+cloudmesh:
+  profile:
+    name: Gregor
+  unordered:
+    name: "Gregor.postfix"
+  other:
+    name: "Gregor"
+
+
+{'cloudmesh': {'other': {'name': 'Gregor'},
+               'profile': {'name': 'Gregor'},
+               'unordered': {'name': 'Gregor.postfix'}}}
+PASSED
+tests/1_local/test_config.py::TestConfig::test_configreplace 
+[35m
+# ######################################################################
+# test_configreplace /tests/1_local/test_config.py 102
+# ######################################################################
+[0m
+{'email': 'laszewski@gmail.com',
+ 'firstname': 'Gregor',
+ 'github': 'laszewsk',
+ 'lastname': 'von Laszewski',
+ 'publickey': '~/.ssh/id_rsa.pub',
+ 'user': 'gregor'}
+PASSED
+tests/1_local/test_config.py::TestConfig::test_if_yaml_file_exists 
+[35m
+# ######################################################################
+# test_if_yaml_file_exists /tests/1_local/test_config.py 107
+# ######################################################################
+[0m
+PASSED
+tests/1_local/test_config.py::TestConfig::test_set 
+[35m
+# ######################################################################
+# test_set /tests/1_local/test_config.py 114
+# ######################################################################
+[0m
+Gregor
+PASSED
+tests/1_local/test_config.py::TestConfig::test_benchmark 
+[35m
+# ######################################################################
+# test_benchmark /tests/1_local/test_config.py 130
+# ######################################################################
+[0m
+
++---------------------------------------+-------+---------------------+-----+-----------+------+--------+-------------+-------------+
+| timer                                 | time  | start               | tag | node      | user | system | mac_version | win_version |
++---------------------------------------+-------+---------------------+-----+-----------+------+--------+-------------+-------------+
+| test_cms/test_help                    | 1.436 | 2019-12-13 07:00:26 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_cms/test_vm                      | 1.407 | 2019-12-13 07:00:27 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_cms/test_help_again              | 1.431 | 2019-12-13 07:00:29 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| benchmark_start_stop                  | 0.0   | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config_load n=1                  | 0.0   | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config_load n=2                  | 0.0   | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config_load n=3                  | 0.0   | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config_load n=4                  | 0.0   | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config_load n=5                  | 0.0   | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config_load n=6                  | 0.0   | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config_load n=7                  | 0.0   | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config_load n=8                  | 0.0   | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config_load n=9                  | 0.0   | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config/test_search               | 0.003 | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config/test_dict                 | 0.001 | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config/test_config_subscriptable | 0.001 | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config/test_dictreplace          | 0.003 | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config/test_set                  | 0.032 | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
++---------------------------------------+-------+---------------------+-----+-----------+------+--------+-------------+-------------+
+
+csv,timer,time,starttag,node,user,system,mac_version,win_version
+#csv,test_cms/test_help,1.436,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_cms/test_vm,1.407,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_cms/test_help_again,1.431,None,('gray',),grey,Darwin,10.14.6,
+#csv,benchmark_start_stop,0.0,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config_load n=1,0.0,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config_load n=2,0.0,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config_load n=3,0.0,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config_load n=4,0.0,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config_load n=5,0.0,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config_load n=6,0.0,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config_load n=7,0.0,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config_load n=8,0.0,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config_load n=9,0.0,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config/test_search,0.003,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config/test_dict,0.001,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config/test_config_subscriptable,0.001,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config/test_dictreplace,0.003,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config/test_set,0.032,None,('gray',),grey,Darwin,10.14.6,
+
+PASSED
+tests/1_local/test_data.py::TestDatabaseUpdate::test_DatabaseUpdate 
+[35m
+# ######################################################################
+# test_DatabaseUpdate /tests/1_local/test_data.py 34
+# ######################################################################
+[0m
+[{'_id': ObjectId('5df3370efa43a394904f642c'),
+  'acess': '1576220430.5864775',
+  'cm': {'cloud': 'debug',
+         'collection': 'debug-file',
+         'created': '2019-12-13 07:00:30.667436',
+         'kind': 'file',
+         'modified': '2019-12-13 07:00:30.667436',
+         'name': 'debug:/Users/grey/.cloudmesh/cloudmesh.yaml'},
+  'created': None,
+  'group': {'id': 20, 'members': ['root'], 'name': 'staff'},
+  'modified': None,
+  'name': 'debug:/Users/grey/.cloudmesh/cloudmesh.yaml',
+  'owner': 'grey',
+  'path': '/Users/grey/.cloudmesh/cloudmesh.yaml',
+  'permission': {'executable': False, 'readable': True, 'writable': True},
+  'size': 13990}]
+PASSED
+tests/1_local/test_data.py::TestDatabaseUpdate::test_remove_collection 
+[35m
+# ######################################################################
+# test_remove_collection /tests/1_local/test_data.py 97
+# ######################################################################
+[0m
+PASSED
+tests/1_local/test_data.py::TestDatabaseUpdate::test_benchmark 
+[35m
+# ######################################################################
+# test_benchmark /tests/1_local/test_data.py 104
+# ######################################################################
+[0m
+
++-------------------+---------------------------------------------------------------------------------------------------+
+| Machine Attribute | Value                                                                                             |
++-------------------+---------------------------------------------------------------------------------------------------+
+| cpu_count         | 8                                                                                                 |
+| mac_version       | 10.14.6                                                                                           |
+| machine           | ('x86_64',)                                                                                       |
+| mem_active        | 6.5 GiB                                                                                           |
+| mem_available     | 7.1 GiB                                                                                           |
+| mem_free          | 601.0 MiB                                                                                         |
+| mem_inactive      | 5.8 GiB                                                                                           |
+| mem_percent       | 55.3%                                                                                             |
+| mem_total         | 16.0 GiB                                                                                          |
+| mem_used          | 8.8 GiB                                                                                           |
+| mem_wired         | 2.4 GiB                                                                                           |
+| node              | ('gray',)                                                                                         |
+| platform          | macOS-10.14.6-x86_64-i386-64bit                                                                   |
+| processor         | ('i386',)                                                                                         |
+| processors        | Darwin                                                                                            |
+| python            | 3.8.0 (v3.8.0:fa919fdf25, Oct 14 2019, 10:23:27)                                                  |
+|                   | [Clang 6.0 (clang-600.0.57)]                                                                      |
+| release           | ('18.7.0',)                                                                                       |
+| sys               | darwin                                                                                            |
+| system            | Darwin                                                                                            |
+| user              | grey                                                                                              |
+| version           | Darwin Kernel Version 18.7.0: Sat Oct 12 00:02:19 PDT 2019; root:xnu-4903.278.12~1/RELEASE_X86_64 |
+| win_version       |                                                                                                   |
++-------------------+---------------------------------------------------------------------------------------------------+
++---------------------------------------+-------+---------------------+-----+-----------+------+--------+-------------+-------------+
+| timer                                 | time  | start               | tag | node      | user | system | mac_version | win_version |
++---------------------------------------+-------+---------------------+-----+-----------+------+--------+-------------+-------------+
+| test_cms/test_help                    | 1.436 | 2019-12-13 07:00:26 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_cms/test_vm                      | 1.407 | 2019-12-13 07:00:27 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_cms/test_help_again              | 1.431 | 2019-12-13 07:00:29 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| benchmark_start_stop                  | 0.0   | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config_load n=1                  | 0.0   | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config_load n=2                  | 0.0   | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config_load n=3                  | 0.0   | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config_load n=4                  | 0.0   | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config_load n=5                  | 0.0   | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config_load n=6                  | 0.0   | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config_load n=7                  | 0.0   | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config_load n=8                  | 0.0   | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config_load n=9                  | 0.0   | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config/test_search               | 0.003 | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config/test_dict                 | 0.001 | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config/test_config_subscriptable | 0.001 | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config/test_dictreplace          | 0.003 | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config/test_set                  | 0.032 | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_data/test_DatabaseUpdate         | 0.072 | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_data/test_remove_collection      | 0.061 | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
++---------------------------------------+-------+---------------------+-----+-----------+------+--------+-------------+-------------+
+
+csv,timer,time,starttag,node,user,system,mac_version,win_version
+#csv,test_cms/test_help,1.436,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_cms/test_vm,1.407,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_cms/test_help_again,1.431,None,('gray',),grey,Darwin,10.14.6,
+#csv,benchmark_start_stop,0.0,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config_load n=1,0.0,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config_load n=2,0.0,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config_load n=3,0.0,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config_load n=4,0.0,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config_load n=5,0.0,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config_load n=6,0.0,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config_load n=7,0.0,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config_load n=8,0.0,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config_load n=9,0.0,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config/test_search,0.003,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config/test_dict,0.001,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config/test_config_subscriptable,0.001,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config/test_dictreplace,0.003,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config/test_set,0.032,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_data/test_DatabaseUpdate,0.072,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_data/test_remove_collection,0.061,None,('gray',),grey,Darwin,10.14.6,
+
+PASSED
+tests/1_local/test_group.py::TestName::test_list 
+[35m
+# ######################################################################
+# test_list /tests/1_local/test_group.py 30
+# ######################################################################
+[0m
+PASSED
+tests/1_local/test_group.py::TestName::test_add 
+[35m
+# ######################################################################
+# test_add /tests/1_local/test_group.py 36
+# ######################################################################
+[0m
+[{'cm': {'cloud': 'local',
+         'collection': 'local-group',
+         'created': '2019-12-13 06:54:07.070520',
+         'kind': 'group',
+         'modified': '2019-12-13 07:00:30.849005',
+         'name': 'test'},
+  'members': [{'kind': 'vm', 'name': 'vm-1'},
+              {'kind': 'vm', 'name': 'vm-2'},
+              {'kind': 'vm', 'name': 'vm-3'}]}]
+[{'cm': {'cloud': 'local',
+         'collection': 'local-group',
+         'created': '2019-12-13 06:54:07.070520',
+         'kind': 'group',
+         'modified': '2019-12-13 07:00:30.849005',
+         'name': 'test'},
+  'members': [{'kind': 'vm', 'name': 'vm-1'},
+              {'kind': 'vm', 'name': 'vm-2'},
+              {'kind': 'vm', 'name': 'vm-3'}]}]
+- cm:
+    name: test
+    cloud: local
+    kind: group
+    collection: local-group
+    created: '2019-12-13 06:54:07.070520'
+    modified: '2019-12-13 07:00:30.849005'
+  members:
+  - name: vm-1
+    kind: vm
+  - name: vm-2
+    kind: vm
+  - name: vm-3
+    kind: vm
+
+PASSED
+tests/1_local/test_group.py::TestName::test_members 
+[35m
+# ######################################################################
+# test_members /tests/1_local/test_group.py 55
+# ######################################################################
+[0m
+[{'kind': 'vm', 'name': 'vm-1'},
+ {'kind': 'vm', 'name': 'vm-2'},
+ {'kind': 'vm', 'name': 'vm-3'}]
++------+------+
+| kind | name |
++------+------+
+| vm   | vm-1 |
+| vm   | vm-2 |
+| vm   | vm-3 |
++------+------+
+PASSED
+tests/1_local/test_group.py::TestName::test_benchmark 
+[35m
+# ######################################################################
+# test_benchmark /tests/1_local/test_group.py 67
+# ######################################################################
+[0m
+
++---------------------------------------+-------+---------------------+-----+-----------+------+--------+-------------+-------------+
+| timer                                 | time  | start               | tag | node      | user | system | mac_version | win_version |
++---------------------------------------+-------+---------------------+-----+-----------+------+--------+-------------+-------------+
+| test_cms/test_help                    | 1.436 | 2019-12-13 07:00:26 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_cms/test_vm                      | 1.407 | 2019-12-13 07:00:27 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_cms/test_help_again              | 1.431 | 2019-12-13 07:00:29 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| benchmark_start_stop                  | 0.0   | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config_load n=1                  | 0.0   | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config_load n=2                  | 0.0   | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config_load n=3                  | 0.0   | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config_load n=4                  | 0.0   | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config_load n=5                  | 0.0   | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config_load n=6                  | 0.0   | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config_load n=7                  | 0.0   | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config_load n=8                  | 0.0   | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config_load n=9                  | 0.0   | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config/test_search               | 0.003 | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config/test_dict                 | 0.001 | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config/test_config_subscriptable | 0.001 | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config/test_dictreplace          | 0.003 | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config/test_set                  | 0.032 | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_data/test_DatabaseUpdate         | 0.072 | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_data/test_remove_collection      | 0.061 | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_group/test_list                  | 0.035 | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_group/test_add                   | 0.02  | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
++---------------------------------------+-------+---------------------+-----+-----------+------+--------+-------------+-------------+
+
+csv,timer,time,starttag,node,user,system,mac_version,win_version
+#csv,test_cms/test_help,1.436,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_cms/test_vm,1.407,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_cms/test_help_again,1.431,None,('gray',),grey,Darwin,10.14.6,
+#csv,benchmark_start_stop,0.0,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config_load n=1,0.0,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config_load n=2,0.0,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config_load n=3,0.0,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config_load n=4,0.0,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config_load n=5,0.0,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config_load n=6,0.0,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config_load n=7,0.0,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config_load n=8,0.0,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config_load n=9,0.0,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config/test_search,0.003,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config/test_dict,0.001,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config/test_config_subscriptable,0.001,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config/test_dictreplace,0.003,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config/test_set,0.032,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_data/test_DatabaseUpdate,0.072,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_data/test_remove_collection,0.061,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_group/test_list,0.035,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_group/test_add,0.02,None,('gray',),grey,Darwin,10.14.6,
+
+PASSED
+tests/1_local/test_key.py::TestName::test_key 
+[35m
+# ######################################################################
+# test_key /tests/1_local/test_key.py 23
+# ######################################################################
+[0m
+{'cm': {'cloud': 'local', 'kind': 'key', 'name': 'rsa'},
+ 'comment': 'grey@gray',
+ 'fingerprint': '29:fa:fc:5b:10:f7:88:1c:49:c8:08:45:a7:a5:4f:3a',
+ 'key': 'AAAAB3NzaC1yc2EAAAADAQABAAABAQC3KPTx5iQpFumKXt4uLmOeSEGAAMAKa2jPBhqvprMttuk/k5VCnYWjpZuDD1ECnc+rByGNnzJPnp0s1nvpYNpa2QanoXHbBU+TtFw3qJDAI5cJ+xzkhf+KFaxJQq3n3nfBsOMRqKNqGQFse3/ZRpoIeAWnk0h84dWc4KcObG4+hMt5/HSiaazkBNvSYngyPYm4u0swy//nJT+thhRBK4Z1yPnIl/+a4ufEdUeW3S4QRW2qBmRxB9oZfUMYpoRYCewI/zwwLhJHGv4KO95zpq477//ZOg6oSvioYm4I8CqmZOhFj6Le/AsM1KAUF+vmMj2+UU9OTPHY4auHiIjA9Om1',
+ 'location': {'private': '/Users/grey/.ssh/id_rsa',
+              'public': '/Users/grey/.ssh/id_rsa.pub'},
+ 'name': 'rsa',
+ 'path': '/Users/grey/.ssh/id_rsa.pub',
+ 'profile': {'email': 'laszewski@gmail.com',
+             'firstname': 'Gregor',
+             'github': 'laszewsk',
+             'lastname': 'von Laszewski',
+             'publickey': '~/.ssh/id_rsa.pub',
+             'user': 'gregor'},
+ 'public_key': 'ssh-rsa '
+               'AAAAB3NzaC1yc2EAAAADAQABAAABAQC3KPTx5iQpFumKXt4uLmOeSEGAAMAKa2jPBhqvprMttuk/k5VCnYWjpZuDD1ECnc+rByGNnzJPnp0s1nvpYNpa2QanoXHbBU+TtFw3qJDAI5cJ+xzkhf+KFaxJQq3n3nfBsOMRqKNqGQFse3/ZRpoIeAWnk0h84dWc4KcObG4+hMt5/HSiaazkBNvSYngyPYm4u0swy//nJT+thhRBK4Z1yPnIl/+a4ufEdUeW3S4QRW2qBmRxB9oZfUMYpoRYCewI/zwwLhJHGv4KO95zpq477//ZOg6oSvioYm4I8CqmZOhFj6Le/AsM1KAUF+vmMj2+UU9OTPHY4auHiIjA9Om1 '
+               'grey@gray',
+ 'source': 'ssh',
+ 'type': 'ssh-rsa',
+ 'uri': 'file:///Users/grey/.ssh/id_rsa.pub'}
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC3KPTx5iQpFumKXt4uLmOeSEGAAMAKa2jPBhqvprMttuk/k5VCnYWjpZuDD1ECnc+rByGNnzJPnp0s1nvpYNpa2QanoXHbBU+TtFw3qJDAI5cJ+xzkhf+KFaxJQq3n3nfBsOMRqKNqGQFse3/ZRpoIeAWnk0h84dWc4KcObG4+hMt5/HSiaazkBNvSYngyPYm4u0swy//nJT+thhRBK4Z1yPnIl/+a4ufEdUeW3S4QRW2qBmRxB9oZfUMYpoRYCewI/zwwLhJHGv4KO95zpq477//ZOg6oSvioYm4I8CqmZOhFj6Le/AsM1KAUF+vmMj2+UU9OTPHY4auHiIjA9Om1 grey@gray
+<class 'cloudmesh.management.configuration.SSHkey.SSHkey'>
+{}
+PASSED
+tests/1_local/test_key.py::TestName::test_benchmark 
+[35m
+# ######################################################################
+# test_benchmark /tests/1_local/test_key.py 56
+# ######################################################################
+[0m
+
++-------------------+---------------------------------------------------------------------------------------------------+
+| Machine Attribute | Value                                                                                             |
++-------------------+---------------------------------------------------------------------------------------------------+
+| cpu_count         | 8                                                                                                 |
+| mac_version       | 10.14.6                                                                                           |
+| machine           | ('x86_64',)                                                                                       |
+| mem_active        | 6.5 GiB                                                                                           |
+| mem_available     | 7.2 GiB                                                                                           |
+| mem_free          | 601.4 MiB                                                                                         |
+| mem_inactive      | 5.8 GiB                                                                                           |
+| mem_percent       | 55.3%                                                                                             |
+| mem_total         | 16.0 GiB                                                                                          |
+| mem_used          | 8.8 GiB                                                                                           |
+| mem_wired         | 2.4 GiB                                                                                           |
+| node              | ('gray',)                                                                                         |
+| platform          | macOS-10.14.6-x86_64-i386-64bit                                                                   |
+| processor         | ('i386',)                                                                                         |
+| processors        | Darwin                                                                                            |
+| python            | 3.8.0 (v3.8.0:fa919fdf25, Oct 14 2019, 10:23:27)                                                  |
+|                   | [Clang 6.0 (clang-600.0.57)]                                                                      |
+| release           | ('18.7.0',)                                                                                       |
+| sys               | darwin                                                                                            |
+| system            | Darwin                                                                                            |
+| user              | grey                                                                                              |
+| version           | Darwin Kernel Version 18.7.0: Sat Oct 12 00:02:19 PDT 2019; root:xnu-4903.278.12~1/RELEASE_X86_64 |
+| win_version       |                                                                                                   |
++-------------------+---------------------------------------------------------------------------------------------------+
++---------------------------------------+-------+---------------------+-----+-----------+------+--------+-------------+-------------+
+| timer                                 | time  | start               | tag | node      | user | system | mac_version | win_version |
++---------------------------------------+-------+---------------------+-----+-----------+------+--------+-------------+-------------+
+| test_cms/test_help                    | 1.436 | 2019-12-13 07:00:26 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_cms/test_vm                      | 1.407 | 2019-12-13 07:00:27 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_cms/test_help_again              | 1.431 | 2019-12-13 07:00:29 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| benchmark_start_stop                  | 0.0   | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config_load n=1                  | 0.0   | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config_load n=2                  | 0.0   | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config_load n=3                  | 0.0   | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config_load n=4                  | 0.0   | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config_load n=5                  | 0.0   | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config_load n=6                  | 0.0   | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config_load n=7                  | 0.0   | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config_load n=8                  | 0.0   | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config_load n=9                  | 0.0   | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config/test_search               | 0.003 | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config/test_dict                 | 0.001 | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config/test_config_subscriptable | 0.001 | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config/test_dictreplace          | 0.003 | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config/test_set                  | 0.032 | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_data/test_DatabaseUpdate         | 0.072 | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_data/test_remove_collection      | 0.061 | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_group/test_list                  | 0.035 | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_group/test_add                   | 0.02  | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_key/test_key                     | 0.001 | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
++---------------------------------------+-------+---------------------+-----+-----------+------+--------+-------------+-------------+
+
+csv,timer,time,starttag,node,user,system,mac_version,win_version
+#csv,test_cms/test_help,1.436,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_cms/test_vm,1.407,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_cms/test_help_again,1.431,None,('gray',),grey,Darwin,10.14.6,
+#csv,benchmark_start_stop,0.0,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config_load n=1,0.0,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config_load n=2,0.0,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config_load n=3,0.0,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config_load n=4,0.0,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config_load n=5,0.0,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config_load n=6,0.0,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config_load n=7,0.0,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config_load n=8,0.0,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config_load n=9,0.0,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config/test_search,0.003,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config/test_dict,0.001,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config/test_config_subscriptable,0.001,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config/test_dictreplace,0.003,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config/test_set,0.032,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_data/test_DatabaseUpdate,0.072,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_data/test_remove_collection,0.061,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_group/test_list,0.035,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_group/test_add,0.02,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_key/test_key,0.001,None,('gray',),grey,Darwin,10.14.6,
+
+PASSED
+tests/1_local/test_name.py::TestName::test_define 
+[35m
+# ######################################################################
+# test_define /tests/1_local/test_name.py 50
+# ######################################################################
+[0m
+[34m
+# ----------------------------------------------------------------------
+# data
+# ----------------------------------------------------------------------
+# 56:test_define ./tests/1_local/test_name.py
+# ----------------------------------------------------------------------
+# {'counter': 1,
+#  'experiment': 'exp',
+#  'group': 'group',
+#  'kind': 'vm',
+#  'path': '/Users/grey/.cloudmesh/name.yaml',
+#  'schema': '{experiment}-{group}-{user}-{kind}-{counter}',
+#  'user': 'user'}
+# ----------------------------------------------------------------------
+[0m
+[34m
+# ----------------------------------------------------------------------
+# n.dict()
+# ----------------------------------------------------------------------
+# 57:test_define ./tests/1_local/test_name.py
+# ----------------------------------------------------------------------
+# {'counter': 1,
+#  'experiment': 'exp',
+#  'group': 'group',
+#  'kind': 'vm',
+#  'path': '/Users/grey/.cloudmesh/name.yaml',
+#  'schema': '{experiment}-{group}-{user}-{kind}-{counter}',
+#  'user': 'user'}
+# ----------------------------------------------------------------------
+[0m
+PASSED
+tests/1_local/test_name.py::TestName::test_define_new 
+[35m
+# ######################################################################
+# test_define_new /tests/1_local/test_name.py 60
+# ######################################################################
+[0m
+{'counter': 3,
+ 'kind': 'vm',
+ 'schema': '{user}-{kind}-{counter}',
+ 'user': 'gregor'}
+PASSED
+tests/1_local/test_name.py::TestName::test_name_reset 
+[35m
+# ######################################################################
+# test_name_reset /tests/1_local/test_name.py 77
+# ######################################################################
+[0m
+PASSED
+tests/1_local/test_name.py::TestName::test_name_print 
+[35m
+# ######################################################################
+# test_name_print /tests/1_local/test_name.py 85
+# ######################################################################
+[0m
+gregor-vm-1
+PASSED
+tests/1_local/test_name.py::TestName::test_name_dict 
+[35m
+# ######################################################################
+# test_name_dict /tests/1_local/test_name.py 93
+# ######################################################################
+[0m
+{'counter': 1,
+ 'kind': 'vm',
+ 'schema': '{user}-{kind}-{counter}',
+ 'user': 'gregor'}
+PASSED
+tests/1_local/test_name.py::TestName::test_name_incr 
+[35m
+# ######################################################################
+# test_name_incr /tests/1_local/test_name.py 105
+# ######################################################################
+[0m
+gregor-vm-2
+PASSED
+tests/1_local/test_name.py::TestName::test_name_counter 
+[35m
+# ######################################################################
+# test_name_counter /tests/1_local/test_name.py 114
+# ######################################################################
+[0m
+2
+{'counter': 2,
+ 'kind': 'vm',
+ 'schema': '{user}-{kind}-{counter}',
+ 'user': 'gregor'}
+{'counter': 2,
+ 'kind': 'vm',
+ 'schema': '{user}-{kind}-{counter}',
+ 'user': 'gregor'}
+gregor-vm-2
+PASSED
+tests/1_local/test_name.py::TestName::test_benchmark 
+[35m
+# ######################################################################
+# test_benchmark /tests/1_local/test_name.py 130
+# ######################################################################
+[0m
+
++-------------------+---------------------------------------------------------------------------------------------------+
+| Machine Attribute | Value                                                                                             |
++-------------------+---------------------------------------------------------------------------------------------------+
+| cpu_count         | 8                                                                                                 |
+| mac_version       | 10.14.6                                                                                           |
+| machine           | ('x86_64',)                                                                                       |
+| mem_active        | 6.5 GiB                                                                                           |
+| mem_available     | 7.2 GiB                                                                                           |
+| mem_free          | 601.4 MiB                                                                                         |
+| mem_inactive      | 5.8 GiB                                                                                           |
+| mem_percent       | 55.3%                                                                                             |
+| mem_total         | 16.0 GiB                                                                                          |
+| mem_used          | 8.8 GiB                                                                                           |
+| mem_wired         | 2.4 GiB                                                                                           |
+| node              | ('gray',)                                                                                         |
+| platform          | macOS-10.14.6-x86_64-i386-64bit                                                                   |
+| processor         | ('i386',)                                                                                         |
+| processors        | Darwin                                                                                            |
+| python            | 3.8.0 (v3.8.0:fa919fdf25, Oct 14 2019, 10:23:27)                                                  |
+|                   | [Clang 6.0 (clang-600.0.57)]                                                                      |
+| release           | ('18.7.0',)                                                                                       |
+| sys               | darwin                                                                                            |
+| system            | Darwin                                                                                            |
+| user              | grey                                                                                              |
+| version           | Darwin Kernel Version 18.7.0: Sat Oct 12 00:02:19 PDT 2019; root:xnu-4903.278.12~1/RELEASE_X86_64 |
+| win_version       |                                                                                                   |
++-------------------+---------------------------------------------------------------------------------------------------+
++---------------------------------------+-------+---------------------+-----+-----------+------+--------+-------------+-------------+
+| timer                                 | time  | start               | tag | node      | user | system | mac_version | win_version |
++---------------------------------------+-------+---------------------+-----+-----------+------+--------+-------------+-------------+
+| test_cms/test_help                    | 1.436 | 2019-12-13 07:00:26 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_cms/test_vm                      | 1.407 | 2019-12-13 07:00:27 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_cms/test_help_again              | 1.431 | 2019-12-13 07:00:29 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| benchmark_start_stop                  | 0.0   | 2019-12-13 07:00:31 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config_load n=1                  | 0.0   | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config_load n=2                  | 0.0   | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config_load n=3                  | 0.0   | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config_load n=4                  | 0.0   | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config_load n=5                  | 0.0   | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config_load n=6                  | 0.0   | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config_load n=7                  | 0.0   | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config_load n=8                  | 0.0   | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config_load n=9                  | 0.0   | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config/test_search               | 0.003 | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config/test_dict                 | 0.001 | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config/test_config_subscriptable | 0.001 | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config/test_dictreplace          | 0.003 | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config/test_set                  | 0.032 | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_data/test_DatabaseUpdate         | 0.072 | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_data/test_remove_collection      | 0.061 | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_group/test_list                  | 0.035 | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_group/test_add                   | 0.02  | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_key/test_key                     | 0.001 | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_name/test_define                 | 0.002 | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_name/test_define_new             | 0.003 | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_name/test_name_reset             | 0.001 | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_name/test_name_print             |       | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_name/test_name_dict              | 0.001 | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_name/test_name_incr              | 0.001 | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_name/test_name_counter           | 0.001 | 2019-12-13 07:00:31 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
++---------------------------------------+-------+---------------------+-----+-----------+------+--------+-------------+-------------+
+
+csv,timer,time,starttag,node,user,system,mac_version,win_version
+#csv,test_cms/test_help,1.436,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_cms/test_vm,1.407,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_cms/test_help_again,1.431,None,('gray',),grey,Darwin,10.14.6,
+#csv,benchmark_start_stop,0.0,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config_load n=1,0.0,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config_load n=2,0.0,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config_load n=3,0.0,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config_load n=4,0.0,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config_load n=5,0.0,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config_load n=6,0.0,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config_load n=7,0.0,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config_load n=8,0.0,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config_load n=9,0.0,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config/test_search,0.003,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config/test_dict,0.001,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config/test_config_subscriptable,0.001,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config/test_dictreplace,0.003,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config/test_set,0.032,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_data/test_DatabaseUpdate,0.072,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_data/test_remove_collection,0.061,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_group/test_list,0.035,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_group/test_add,0.02,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_key/test_key,0.001,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_name/test_define,0.002,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_name/test_define_new,0.003,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_name/test_name_reset,0.001,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_name/test_name_print,None,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_name/test_name_dict,0.001,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_name/test_name_incr,0.001,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_name/test_name_counter,0.001,None,('gray',),grey,Darwin,10.14.6,
+
+PASSED
+tests/1_local/test_ping.py::TestPing::test_internal_ping 
+[35m
+# ######################################################################
+# test_internal_ping /tests/1_local/test_ping.py 42
+# ######################################################################
+[0m
+PASSED
+tests/1_local/test_ping.py::TestPing::test_ping_processor 
+[35m
+# ######################################################################
+# test_ping_processor /tests/1_local/test_ping.py 62
+# ######################################################################
+[0m
+
+Processors: 1
++-----------------------+---------+--------+--------+--------+
+| host                  | success | max    | min    | stddev |
++-----------------------+---------+--------+--------+--------+
+| 127.0.0.1             | True    | 0.033  | 0.033  | 0.000  |
+| localhost             | True    | 0.024  | 0.024  | 0.000  |
+| www.indiana.edu       | True    | 9.992  | 9.992  | 0.000  |
+| www.pbs.org           | True    | 15.699 | 15.699 | 0.000  |
+| www.github.com        | True    | 34.533 | 34.533 | 0.000  |
+| www.redhat.com        | True    | 13.024 | 13.024 | 0.000  |
+| www.openstack.org     | True    | 8.123  | 8.123  | 0.000  |
+| www.bbc.com           | True    | 24.695 | 24.695 | 0.000  |
+| www.ec2instances.info | True    | 14.489 | 14.489 | 0.000  |
+| aws.amazon.com        | True    | 14.824 | 14.824 | 0.000  |
++-----------------------+---------+--------+--------+--------+
+Processors: 2
++-----------------------+---------+--------+--------+--------+
+| host                  | success | max    | min    | stddev |
++-----------------------+---------+--------+--------+--------+
+| 127.0.0.1             | True    | 0.062  | 0.062  | 0.000  |
+| localhost             | True    | 0.027  | 0.027  | 0.000  |
+| www.indiana.edu       | True    | 10.641 | 10.641 | 0.000  |
+| www.pbs.org           | True    | 13.924 | 13.924 | 0.000  |
+| www.github.com        | True    | 33.351 | 33.351 | 0.000  |
+| www.redhat.com        | True    | 12.067 | 12.067 | 0.000  |
+| www.openstack.org     | True    | 7.278  | 7.278  | 0.000  |
+| www.bbc.com           | True    | 24.369 | 24.369 | 0.000  |
+| www.ec2instances.info | True    | 14.163 | 14.163 | 0.000  |
+| aws.amazon.com        | True    | 14.014 | 14.014 | 0.000  |
++-----------------------+---------+--------+--------+--------+
+Processors: 3
++-----------------------+---------+--------+--------+--------+
+| host                  | success | max    | min    | stddev |
++-----------------------+---------+--------+--------+--------+
+| 127.0.0.1             | True    | 0.069  | 0.069  | 0.000  |
+| localhost             | True    | 0.027  | 0.027  | 0.000  |
+| www.indiana.edu       | True    | 10.909 | 10.909 | 0.000  |
+| www.pbs.org           | True    | 14.387 | 14.387 | 0.000  |
+| www.github.com        | True    | 34.160 | 34.160 | 0.000  |
+| www.redhat.com        | True    | 12.343 | 12.343 | 0.000  |
+| www.openstack.org     | True    | 7.084  | 7.084  | 0.000  |
+| www.bbc.com           | True    | 24.163 | 24.163 | 0.000  |
+| www.ec2instances.info | True    | 15.570 | 15.570 | 0.000  |
+| aws.amazon.com        | True    | 14.882 | 14.882 | 0.000  |
++-----------------------+---------+--------+--------+--------+
+Processors: 4
++-----------------------+---------+--------+--------+--------+
+| host                  | success | max    | min    | stddev |
++-----------------------+---------+--------+--------+--------+
+| 127.0.0.1             | True    | 0.046  | 0.046  | 0.000  |
+| localhost             | True    | 0.028  | 0.028  | 0.000  |
+| www.indiana.edu       | True    | 10.719 | 10.719 | 0.000  |
+| www.pbs.org           | True    | 13.573 | 13.573 | 0.000  |
+| www.github.com        | True    | 32.940 | 32.940 | 0.000  |
+| www.redhat.com        | True    | 12.684 | 12.684 | 0.000  |
+| www.openstack.org     | True    | 6.355  | 6.355  | 0.000  |
+| www.bbc.com           | True    | 23.400 | 23.400 | 0.000  |
+| www.ec2instances.info | True    | 13.732 | 13.732 | 0.000  |
+| aws.amazon.com        | True    | 15.122 | 15.122 | 0.000  |
++-----------------------+---------+--------+--------+--------+
+Processors: 5
++-----------------------+---------+--------+--------+--------+
+| host                  | success | max    | min    | stddev |
++-----------------------+---------+--------+--------+--------+
+| 127.0.0.1             | True    | 0.037  | 0.037  | 0.000  |
+| localhost             | True    | 0.028  | 0.028  | 0.000  |
+| www.indiana.edu       | True    | 10.245 | 10.245 | 0.000  |
+| www.pbs.org           | True    | 14.190 | 14.190 | 0.000  |
+| www.github.com        | True    | 33.297 | 33.297 | 0.000  |
+| www.redhat.com        | True    | 25.304 | 25.304 | 0.000  |
+| www.openstack.org     | True    | 18.856 | 18.856 | 0.000  |
+| www.bbc.com           | True    | 34.386 | 34.386 | 0.000  |
+| www.ec2instances.info | True    | 15.654 | 15.654 | 0.000  |
+| aws.amazon.com        | True    | 14.458 | 14.458 | 0.000  |
++-----------------------+---------+--------+--------+--------+
+Processors: 6
++-----------------------+---------+--------+--------+--------+
+| host                  | success | max    | min    | stddev |
++-----------------------+---------+--------+--------+--------+
+| 127.0.0.1             | True    | 0.050  | 0.050  | 0.000  |
+| localhost             | True    | 0.039  | 0.039  | 0.000  |
+| www.indiana.edu       | True    | 12.076 | 12.076 | 0.000  |
+| www.pbs.org           | True    | 14.556 | 14.556 | 0.000  |
+| www.github.com        | True    | 35.581 | 35.581 | 0.000  |
+| www.redhat.com        | True    | 14.030 | 14.030 | 0.000  |
+| www.openstack.org     | True    | 8.263  | 8.263  | 0.000  |
+| www.bbc.com           | True    | 25.030 | 25.030 | 0.000  |
+| www.ec2instances.info | True    | 14.426 | 14.426 | 0.000  |
+| aws.amazon.com        | True    | 15.079 | 15.079 | 0.000  |
++-----------------------+---------+--------+--------+--------+
+Processors: 7
++-----------------------+---------+--------+--------+--------+
+| host                  | success | max    | min    | stddev |
++-----------------------+---------+--------+--------+--------+
+| 127.0.0.1             | True    | 0.041  | 0.041  | 0.000  |
+| localhost             | True    | 0.054  | 0.054  | 0.000  |
+| www.indiana.edu       | True    | 8.954  | 8.954  | 0.000  |
+| www.pbs.org           | True    | 13.658 | 13.658 | 0.000  |
+| www.github.com        | True    | 33.149 | 33.149 | 0.000  |
+| www.redhat.com        | True    | 12.504 | 12.504 | 0.000  |
+| www.openstack.org     | True    | 6.955  | 6.955  | 0.000  |
+| www.bbc.com           | True    | 23.770 | 23.770 | 0.000  |
+| www.ec2instances.info | True    | 14.352 | 14.352 | 0.000  |
+| aws.amazon.com        | True    | 13.998 | 13.998 | 0.000  |
++-----------------------+---------+--------+--------+--------+
+Processors: 8
++-----------------------+---------+--------+--------+--------+
+| host                  | success | max    | min    | stddev |
++-----------------------+---------+--------+--------+--------+
+| 127.0.0.1             | True    | 0.047  | 0.047  | 0.000  |
+| localhost             | True    | 0.042  | 0.042  | 0.000  |
+| www.indiana.edu       | True    | 8.977  | 8.977  | 0.000  |
+| www.pbs.org           | True    | 15.112 | 15.112 | 0.000  |
+| www.github.com        | True    | 33.160 | 33.160 | 0.000  |
+| www.redhat.com        | True    | 12.099 | 12.099 | 0.000  |
+| www.openstack.org     | True    | 7.971  | 7.971  | 0.000  |
+| www.bbc.com           | True    | 23.995 | 23.995 | 0.000  |
+| www.ec2instances.info | True    | 15.420 | 15.420 | 0.000  |
+| aws.amazon.com        | True    | 13.774 | 13.774 | 0.000  |
++-----------------------+---------+--------+--------+--------+
+Processors: 9
++-----------------------+---------+--------+--------+--------+
+| host                  | success | max    | min    | stddev |
++-----------------------+---------+--------+--------+--------+
+| 127.0.0.1             | True    | 0.064  | 0.064  | 0.000  |
+| localhost             | True    | 0.053  | 0.053  | 0.000  |
+| www.indiana.edu       | True    | 10.698 | 10.698 | 0.000  |
+| www.pbs.org           | True    | 13.622 | 13.622 | 0.000  |
+| www.github.com        | True    | 33.596 | 33.596 | 0.000  |
+| www.redhat.com        | True    | 11.910 | 11.910 | 0.000  |
+| www.openstack.org     | True    | 7.254  | 7.254  | 0.000  |
+| www.bbc.com           | True    | 23.869 | 23.869 | 0.000  |
+| www.ec2instances.info | True    | 15.032 | 15.032 | 0.000  |
+| aws.amazon.com        | True    | 15.206 | 15.206 | 0.000  |
++-----------------------+---------+--------+--------+--------+
+PASSED
+tests/1_local/test_ping.py::TestPing::test_benchmark 
+[35m
+# ######################################################################
+# test_benchmark /tests/1_local/test_ping.py 85
+# ######################################################################
+[0m
+
++---------------------------------------+-------+---------------------+-----+-----------+------+--------+-------------+-------------+
+| timer                                 | time  | start               | tag | node      | user | system | mac_version | win_version |
++---------------------------------------+-------+---------------------+-----+-----------+------+--------+-------------+-------------+
+| test_cms/test_help                    | 1.436 | 2019-12-13 07:00:26 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_cms/test_vm                      | 1.407 | 2019-12-13 07:00:27 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_cms/test_help_again              | 1.431 | 2019-12-13 07:00:29 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| benchmark_start_stop                  | 0.0   | 2019-12-13 07:00:31 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config_load n=1                  | 0.0   | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config_load n=2                  | 0.0   | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config_load n=3                  | 0.0   | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config_load n=4                  | 0.0   | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config_load n=5                  | 0.0   | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config_load n=6                  | 0.0   | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config_load n=7                  | 0.0   | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config_load n=8                  | 0.0   | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config_load n=9                  | 0.0   | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config/test_search               | 0.003 | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config/test_dict                 | 0.001 | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config/test_config_subscriptable | 0.001 | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config/test_dictreplace          | 0.003 | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config/test_set                  | 0.032 | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_data/test_DatabaseUpdate         | 0.072 | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_data/test_remove_collection      | 0.061 | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_group/test_list                  | 0.035 | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_group/test_add                   | 0.02  | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_key/test_key                     | 0.001 | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_name/test_define                 | 0.002 | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_name/test_define_new             | 0.003 | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_name/test_name_reset             | 0.001 | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_name/test_name_print             |       | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_name/test_name_dict              | 0.001 | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_name/test_name_incr              | 0.001 | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_name/test_name_counter           | 0.001 | 2019-12-13 07:00:31 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| total _ping                           | 0.547 | 2019-12-13 07:00:31 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| ping 127.0.0.1                        | 0.004 | 2019-12-13 07:00:31 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| ping localhost                        | 0.004 | 2019-12-13 07:00:31 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| ping www.indiana.edu                  | 0.015 | 2019-12-13 07:00:31 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| ping www.pbs.org                      | 0.021 | 2019-12-13 07:00:31 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| ping www.github.com                   | 0.044 | 2019-12-13 07:00:31 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| ping www.redhat.com                   | 0.033 | 2019-12-13 07:00:31 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| ping www.openstack.org                | 0.042 | 2019-12-13 07:00:31 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| ping www.bbc.com                      | 0.342 | 2019-12-13 07:00:31 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| ping www.ec2instances.info            | 0.02  | 2019-12-13 07:00:31 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| ping aws.amazon.com                   | 0.021 | 2019-12-13 07:00:31 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| total p=1 c=1                         | 0.501 | 2019-12-13 07:00:31 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| total p=2 c=1                         | 0.42  | 2019-12-13 07:00:32 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| total p=3 c=1                         | 0.378 | 2019-12-13 07:00:32 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| total p=4 c=1                         | 0.44  | 2019-12-13 07:00:32 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| total p=5 c=1                         | 0.452 | 2019-12-13 07:00:33 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| total p=6 c=1                         | 0.502 | 2019-12-13 07:00:33 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| total p=7 c=1                         | 0.56  | 2019-12-13 07:00:34 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| total p=8 c=1                         | 0.637 | 2019-12-13 07:00:34 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| total p=9 c=1                         | 0.734 | 2019-12-13 07:00:35 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
++---------------------------------------+-------+---------------------+-----+-----------+------+--------+-------------+-------------+
+
+csv,timer,time,starttag,node,user,system,mac_version,win_version
+#csv,test_cms/test_help,1.436,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_cms/test_vm,1.407,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_cms/test_help_again,1.431,None,('gray',),grey,Darwin,10.14.6,
+#csv,benchmark_start_stop,0.0,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config_load n=1,0.0,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config_load n=2,0.0,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config_load n=3,0.0,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config_load n=4,0.0,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config_load n=5,0.0,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config_load n=6,0.0,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config_load n=7,0.0,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config_load n=8,0.0,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config_load n=9,0.0,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config/test_search,0.003,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config/test_dict,0.001,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config/test_config_subscriptable,0.001,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config/test_dictreplace,0.003,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config/test_set,0.032,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_data/test_DatabaseUpdate,0.072,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_data/test_remove_collection,0.061,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_group/test_list,0.035,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_group/test_add,0.02,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_key/test_key,0.001,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_name/test_define,0.002,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_name/test_define_new,0.003,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_name/test_name_reset,0.001,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_name/test_name_print,None,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_name/test_name_dict,0.001,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_name/test_name_incr,0.001,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_name/test_name_counter,0.001,None,('gray',),grey,Darwin,10.14.6,
+#csv,total _ping,0.547,None,('gray',),grey,Darwin,10.14.6,
+#csv,ping 127.0.0.1,0.004,None,('gray',),grey,Darwin,10.14.6,
+#csv,ping localhost,0.004,None,('gray',),grey,Darwin,10.14.6,
+#csv,ping www.indiana.edu,0.015,None,('gray',),grey,Darwin,10.14.6,
+#csv,ping www.pbs.org,0.021,None,('gray',),grey,Darwin,10.14.6,
+#csv,ping www.github.com,0.044,None,('gray',),grey,Darwin,10.14.6,
+#csv,ping www.redhat.com,0.033,None,('gray',),grey,Darwin,10.14.6,
+#csv,ping www.openstack.org,0.042,None,('gray',),grey,Darwin,10.14.6,
+#csv,ping www.bbc.com,0.342,None,('gray',),grey,Darwin,10.14.6,
+#csv,ping www.ec2instances.info,0.02,None,('gray',),grey,Darwin,10.14.6,
+#csv,ping aws.amazon.com,0.021,None,('gray',),grey,Darwin,10.14.6,
+#csv,total p=1 c=1,0.501,None,('gray',),grey,Darwin,10.14.6,
+#csv,total p=2 c=1,0.42,None,('gray',),grey,Darwin,10.14.6,
+#csv,total p=3 c=1,0.378,None,('gray',),grey,Darwin,10.14.6,
+#csv,total p=4 c=1,0.44,None,('gray',),grey,Darwin,10.14.6,
+#csv,total p=5 c=1,0.452,None,('gray',),grey,Darwin,10.14.6,
+#csv,total p=6 c=1,0.502,None,('gray',),grey,Darwin,10.14.6,
+#csv,total p=7 c=1,0.56,None,('gray',),grey,Darwin,10.14.6,
+#csv,total p=8 c=1,0.637,None,('gray',),grey,Darwin,10.14.6,
+#csv,total p=9 c=1,0.734,None,('gray',),grey,Darwin,10.14.6,
+
+PASSED
+tests/1_local/test_sec_command.py::TestSecCLI::test_clear 
+[35m
+# ######################################################################
+# test_clear /tests/1_local/test_sec_command.py 44
+# ######################################################################
+[0m
+clear cms sec clear
+Timer: 0.0000s (sec clear)
+
+PASSED
+tests/1_local/test_sec_command.py::TestSecCLI::test_load 
+[35m
+# ######################################################################
+# test_load /tests/1_local/test_sec_command.py 57
+# ######################################################################
+[0m
+load cms sec load
+
++---------+-------+----------+-----------+-----------+
+| Group   | Rule  | Protocol | Ports     | IP Range  |
++---------+-------+----------+-----------+-----------+
+| default | ssh   | tcp      | 22:22     | 0.0.0.0/0 |
+| default | icmp  | icmp     |           | 0.0.0.0/0 |
+| default | http  | tcp      | 80:80     | 0.0.0.0/0 |
+| default | https | tcp      | 443:443   | 0.0.0.0/0 |
+| flask   | ssh   | tcp      | 22:22     | 0.0.0.0/0 |
+| flask   | icmp  | icmp     |           | 0.0.0.0/0 |
+| flask   | http  | tcp      | 80:80     | 0.0.0.0/0 |
+| flask   | https | tcp      | 443:443   | 0.0.0.0/0 |
+| flask   | flask | tcp      | 8000:8000 | 0.0.0.0/0 |
++---------+-------+----------+-----------+-----------+
+Timer: 1.0000s (sec load)
+
+PASSED
+tests/1_local/test_sec_command.py::TestSecCLI::test_rule_add 
+[35m
+# ######################################################################
+# test_rule_add /tests/1_local/test_sec_command.py 73
+# ######################################################################
+[0m
+rule add cms sec rule add deleteme FROMPORT TOPORT PROTOCOL CIDR
+Timer: 0.0000s (sec rule add deleteme FROMPORT TOPORT PROTOCOL CIDR)
+
+PASSED
+tests/1_local/test_sec_command.py::TestSecCLI::test_rule_delete 
+[35m
+# ######################################################################
+# test_rule_delete /tests/1_local/test_sec_command.py 86
+# ######################################################################
+[0m
+rule delete cms sec rule delete deleteme
+Timer: 0.0000s (sec rule delete deleteme)
+
+PASSED
+tests/1_local/test_sec_command.py::TestSecCLI::test_group_add 
+[35m
+# ######################################################################
+# test_group_add /tests/1_local/test_sec_command.py 97
+# ######################################################################
+[0m
+group add cms sec group add deleteme empty empty
+Timer: 0.0000s (sec group add deleteme empty empty)
+
+PASSED
+tests/1_local/test_sec_command.py::TestSecCLI::test_group_delete 
+[35m
+# ######################################################################
+# test_group_delete /tests/1_local/test_sec_command.py 109
+# ######################################################################
+[0m
+group delete cms sec group delete deleteme
+Timer: 0.0000s (sec group delete deleteme)
+
+PASSED
+tests/1_local/test_sec_command.py::TestSecCLI::test_rule_list 
+[35m
+# ######################################################################
+# test_rule_list /tests/1_local/test_sec_command.py 120
+# ######################################################################
+[0m
+rule list cms sec rule list
+None
+Timer: 0.0000s (sec rule list)
+
+PASSED
+tests/1_local/test_sec_command.py::TestSecCLI::test_list 
+[35m
+# ######################################################################
+# test_list /tests/1_local/test_sec_command.py 137
+# ######################################################################
+[0m
+list cms sec list
+None
+None
+Timer: 0.0000s (sec list)
+
+PASSED
+tests/1_local/test_sec_command.py::TestSecCLI::test_group_list 
+[35m
+# ######################################################################
+# test_group_list /tests/1_local/test_sec_command.py 150
+# ######################################################################
+[0m
+list cms sec group list
+None
+Timer: 0.0000s (sec group list)
+
+PASSED
+tests/1_local/test_sec_command.py::TestSecCLI::test_benchmark 
+[35m
+# ######################################################################
+# test_benchmark /tests/1_local/test_sec_command.py 163
+# ######################################################################
+[0m
+
++-------------------+---------------------------------------------------------------------------------------------------+
+| Machine Attribute | Value                                                                                             |
++-------------------+---------------------------------------------------------------------------------------------------+
+| cpu_count         | 8                                                                                                 |
+| mac_version       | 10.14.6                                                                                           |
+| machine           | ('x86_64',)                                                                                       |
+| mem_active        | 6.5 GiB                                                                                           |
+| mem_available     | 7.2 GiB                                                                                           |
+| mem_free          | 673.7 MiB                                                                                         |
+| mem_inactive      | 5.9 GiB                                                                                           |
+| mem_percent       | 54.8%                                                                                             |
+| mem_total         | 16.0 GiB                                                                                          |
+| mem_used          | 8.8 GiB                                                                                           |
+| mem_wired         | 2.3 GiB                                                                                           |
+| node              | ('gray',)                                                                                         |
+| platform          | macOS-10.14.6-x86_64-i386-64bit                                                                   |
+| processor         | ('i386',)                                                                                         |
+| processors        | Darwin                                                                                            |
+| python            | 3.8.0 (v3.8.0:fa919fdf25, Oct 14 2019, 10:23:27)                                                  |
+|                   | [Clang 6.0 (clang-600.0.57)]                                                                      |
+| release           | ('18.7.0',)                                                                                       |
+| sys               | darwin                                                                                            |
+| system            | Darwin                                                                                            |
+| user              | grey                                                                                              |
+| version           | Darwin Kernel Version 18.7.0: Sat Oct 12 00:02:19 PDT 2019; root:xnu-4903.278.12~1/RELEASE_X86_64 |
+| win_version       |                                                                                                   |
++-------------------+---------------------------------------------------------------------------------------------------+
++---------------------------------------+-------+---------------------+-----+-----------+------+--------+-------------+-------------+
+| timer                                 | time  | start               | tag | node      | user | system | mac_version | win_version |
++---------------------------------------+-------+---------------------+-----+-----------+------+--------+-------------+-------------+
+| test_cms/test_help                    | 1.436 | 2019-12-13 07:00:26 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_cms/test_vm                      | 1.407 | 2019-12-13 07:00:27 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_cms/test_help_again              | 1.431 | 2019-12-13 07:00:29 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| benchmark_start_stop                  | 0.0   | 2019-12-13 07:00:53 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config_load n=1                  | 0.0   | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config_load n=2                  | 0.0   | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config_load n=3                  | 0.0   | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config_load n=4                  | 0.0   | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config_load n=5                  | 0.0   | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config_load n=6                  | 0.0   | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config_load n=7                  | 0.0   | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config_load n=8                  | 0.0   | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config_load n=9                  | 0.0   | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config/test_search               | 0.003 | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config/test_dict                 | 0.001 | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config/test_config_subscriptable | 0.001 | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config/test_dictreplace          | 0.003 | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config/test_set                  | 0.032 | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_data/test_DatabaseUpdate         | 0.072 | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_data/test_remove_collection      | 0.061 | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_group/test_list                  | 0.035 | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_group/test_add                   | 0.02  | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_key/test_key                     | 0.001 | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_name/test_define                 | 0.002 | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_name/test_define_new             | 0.003 | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_name/test_name_reset             | 0.001 | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_name/test_name_print             |       | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_name/test_name_dict              | 0.001 | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_name/test_name_incr              | 0.001 | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_name/test_name_counter           | 0.001 | 2019-12-13 07:00:31 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| total _ping                           | 0.547 | 2019-12-13 07:00:31 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| ping 127.0.0.1                        | 0.004 | 2019-12-13 07:00:31 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| ping localhost                        | 0.004 | 2019-12-13 07:00:31 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| ping www.indiana.edu                  | 0.015 | 2019-12-13 07:00:31 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| ping www.pbs.org                      | 0.021 | 2019-12-13 07:00:31 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| ping www.github.com                   | 0.044 | 2019-12-13 07:00:31 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| ping www.redhat.com                   | 0.033 | 2019-12-13 07:00:31 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| ping www.openstack.org                | 0.042 | 2019-12-13 07:00:31 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| ping www.bbc.com                      | 0.342 | 2019-12-13 07:00:31 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| ping www.ec2instances.info            | 0.02  | 2019-12-13 07:00:31 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| ping aws.amazon.com                   | 0.021 | 2019-12-13 07:00:31 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| total p=1 c=1                         | 0.501 | 2019-12-13 07:00:31 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| total p=2 c=1                         | 0.42  | 2019-12-13 07:00:32 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| total p=3 c=1                         | 0.378 | 2019-12-13 07:00:32 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| total p=4 c=1                         | 0.44  | 2019-12-13 07:00:32 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| total p=5 c=1                         | 0.452 | 2019-12-13 07:00:33 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| total p=6 c=1                         | 0.502 | 2019-12-13 07:00:33 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| total p=7 c=1                         | 0.56  | 2019-12-13 07:00:34 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| total p=8 c=1                         | 0.637 | 2019-12-13 07:00:34 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| total p=9 c=1                         | 0.734 | 2019-12-13 07:00:35 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_sec_command/test_clear           | 1.867 | 2019-12-13 07:00:36 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| local clear                           | 1.865 | 2019-12-13 07:00:36 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_sec_command/test_load            | 2.339 | 2019-12-13 07:00:38 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| local load                            | 2.336 | 2019-12-13 07:00:38 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_sec_command/test_rule_add        | 1.792 | 2019-12-13 07:00:40 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| local rule add                        | 1.79  | 2019-12-13 07:00:40 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_sec_command/test_rule_delete     | 1.751 | 2019-12-13 07:00:42 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| local rule delete                     | 1.749 | 2019-12-13 07:00:42 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_sec_command/test_group_add       | 1.751 | 2019-12-13 07:00:44 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| local group add                       | 1.749 | 2019-12-13 07:00:44 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_sec_command/test_group_delete    | 1.761 | 2019-12-13 07:00:45 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| local group delete                    | 1.759 | 2019-12-13 07:00:45 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_sec_command/test_rule_list       | 1.779 | 2019-12-13 07:00:47 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| local rule list                       | 1.777 | 2019-12-13 07:00:47 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_sec_command/test_list            | 1.782 | 2019-12-13 07:00:49 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| local list                            | 1.779 | 2019-12-13 07:00:51 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_sec_command/test_group_list      | 1.782 | 2019-12-13 07:00:51 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
++---------------------------------------+-------+---------------------+-----+-----------+------+--------+-------------+-------------+
+
+csv,timer,time,starttag,node,user,system,mac_version,win_version
+#csv,test_cms/test_help,1.436,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_cms/test_vm,1.407,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_cms/test_help_again,1.431,None,('gray',),grey,Darwin,10.14.6,
+#csv,benchmark_start_stop,0.0,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config_load n=1,0.0,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config_load n=2,0.0,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config_load n=3,0.0,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config_load n=4,0.0,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config_load n=5,0.0,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config_load n=6,0.0,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config_load n=7,0.0,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config_load n=8,0.0,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config_load n=9,0.0,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config/test_search,0.003,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config/test_dict,0.001,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config/test_config_subscriptable,0.001,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config/test_dictreplace,0.003,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config/test_set,0.032,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_data/test_DatabaseUpdate,0.072,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_data/test_remove_collection,0.061,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_group/test_list,0.035,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_group/test_add,0.02,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_key/test_key,0.001,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_name/test_define,0.002,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_name/test_define_new,0.003,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_name/test_name_reset,0.001,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_name/test_name_print,None,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_name/test_name_dict,0.001,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_name/test_name_incr,0.001,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_name/test_name_counter,0.001,None,('gray',),grey,Darwin,10.14.6,
+#csv,total _ping,0.547,None,('gray',),grey,Darwin,10.14.6,
+#csv,ping 127.0.0.1,0.004,None,('gray',),grey,Darwin,10.14.6,
+#csv,ping localhost,0.004,None,('gray',),grey,Darwin,10.14.6,
+#csv,ping www.indiana.edu,0.015,None,('gray',),grey,Darwin,10.14.6,
+#csv,ping www.pbs.org,0.021,None,('gray',),grey,Darwin,10.14.6,
+#csv,ping www.github.com,0.044,None,('gray',),grey,Darwin,10.14.6,
+#csv,ping www.redhat.com,0.033,None,('gray',),grey,Darwin,10.14.6,
+#csv,ping www.openstack.org,0.042,None,('gray',),grey,Darwin,10.14.6,
+#csv,ping www.bbc.com,0.342,None,('gray',),grey,Darwin,10.14.6,
+#csv,ping www.ec2instances.info,0.02,None,('gray',),grey,Darwin,10.14.6,
+#csv,ping aws.amazon.com,0.021,None,('gray',),grey,Darwin,10.14.6,
+#csv,total p=1 c=1,0.501,None,('gray',),grey,Darwin,10.14.6,
+#csv,total p=2 c=1,0.42,None,('gray',),grey,Darwin,10.14.6,
+#csv,total p=3 c=1,0.378,None,('gray',),grey,Darwin,10.14.6,
+#csv,total p=4 c=1,0.44,None,('gray',),grey,Darwin,10.14.6,
+#csv,total p=5 c=1,0.452,None,('gray',),grey,Darwin,10.14.6,
+#csv,total p=6 c=1,0.502,None,('gray',),grey,Darwin,10.14.6,
+#csv,total p=7 c=1,0.56,None,('gray',),grey,Darwin,10.14.6,
+#csv,total p=8 c=1,0.637,None,('gray',),grey,Darwin,10.14.6,
+#csv,total p=9 c=1,0.734,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_sec_command/test_clear,1.867,None,('gray',),grey,Darwin,10.14.6,
+#csv,local clear,1.865,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_sec_command/test_load,2.339,None,('gray',),grey,Darwin,10.14.6,
+#csv,local load,2.336,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_sec_command/test_rule_add,1.792,None,('gray',),grey,Darwin,10.14.6,
+#csv,local rule add,1.79,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_sec_command/test_rule_delete,1.751,None,('gray',),grey,Darwin,10.14.6,
+#csv,local rule delete,1.749,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_sec_command/test_group_add,1.751,None,('gray',),grey,Darwin,10.14.6,
+#csv,local group add,1.749,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_sec_command/test_group_delete,1.761,None,('gray',),grey,Darwin,10.14.6,
+#csv,local group delete,1.759,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_sec_command/test_rule_list,1.779,None,('gray',),grey,Darwin,10.14.6,
+#csv,local rule list,1.777,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_sec_command/test_list,1.782,None,('gray',),grey,Darwin,10.14.6,
+#csv,local list,1.779,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_sec_command/test_group_list,1.782,None,('gray',),grey,Darwin,10.14.6,
+
+PASSED
+tests/1_local/test_secgroup_database.py::test_clear 
+[35m
+# ######################################################################
+# test_clear /tests/1_local/test_secgroup_database.py 26
+# ######################################################################
+[0m
+PASSED
+tests/1_local/test_secgroup_database.py::test_upload_groups 
+[35m
+# ######################################################################
+# test_upload_groups /tests/1_local/test_secgroup_database.py 44
+# ######################################################################
+[0m
+add group: default
+add group: flask
+2
+PASSED
+tests/1_local/test_secgroup_database.py::test_upload_rules 
+[35m
+# ######################################################################
+# test_upload_rules /tests/1_local/test_secgroup_database.py 63
+# ######################################################################
+[0m
+add rule: ssh
+add rule: icmp
+add rule: flask
+add rule: http
+add rule: https
+5
+PASSED
+tests/1_local/test_secgroup_database.py::test_add_rule_to_group 
+[35m
+# ######################################################################
+# test_add_rule_to_group /tests/1_local/test_secgroup_database.py 83
+# ######################################################################
+[0m
+PASSED
+tests/1_local/test_secgroup_database.py::test_delete_rule_from_group 
+[35m
+# ######################################################################
+# test_delete_rule_from_group /tests/1_local/test_secgroup_database.py 101
+# ######################################################################
+[0m
+PASSED
+tests/1_local/test_secgroup_database.py::test_remove_group 
+[35m
+# ######################################################################
+# test_remove_group /tests/1_local/test_secgroup_database.py 120
+# ######################################################################
+[0m
+2 -> 1
+PASSED
+tests/1_local/test_secgroup_database.py::test_remove_rule 
+[35m
+# ######################################################################
+# test_remove_rule /tests/1_local/test_secgroup_database.py 137
+# ######################################################################
+[0m
+5 -> 4
+PASSED
+tests/1_local/test_secgroup_database.py::test_load_defaults 
+[35m
+# ######################################################################
+# test_load_defaults /tests/1_local/test_secgroup_database.py 157
+# ######################################################################
+[0m
+
+PASSED
+tests/1_local/test_secgroup_database.py::test_benchmark 
+[35m
+# ######################################################################
+# test_benchmark /tests/1_local/test_secgroup_database.py 172
+# ######################################################################
+[0m
+
++-------------------+---------------------------------------------------------------------------------------------------+
+| Machine Attribute | Value                                                                                             |
++-------------------+---------------------------------------------------------------------------------------------------+
+| cpu_count         | 8                                                                                                 |
+| mac_version       | 10.14.6                                                                                           |
+| machine           | ('x86_64',)                                                                                       |
+| mem_active        | 6.5 GiB                                                                                           |
+| mem_available     | 7.2 GiB                                                                                           |
+| mem_free          | 592.8 MiB                                                                                         |
+| mem_inactive      | 5.9 GiB                                                                                           |
+| mem_percent       | 55.3%                                                                                             |
+| mem_total         | 16.0 GiB                                                                                          |
+| mem_used          | 8.8 GiB                                                                                           |
+| mem_wired         | 2.4 GiB                                                                                           |
+| node              | ('gray',)                                                                                         |
+| platform          | macOS-10.14.6-x86_64-i386-64bit                                                                   |
+| processor         | ('i386',)                                                                                         |
+| processors        | Darwin                                                                                            |
+| python            | 3.8.0 (v3.8.0:fa919fdf25, Oct 14 2019, 10:23:27)                                                  |
+|                   | [Clang 6.0 (clang-600.0.57)]                                                                      |
+| release           | ('18.7.0',)                                                                                       |
+| sys               | darwin                                                                                            |
+| system            | Darwin                                                                                            |
+| user              | grey                                                                                              |
+| version           | Darwin Kernel Version 18.7.0: Sat Oct 12 00:02:19 PDT 2019; root:xnu-4903.278.12~1/RELEASE_X86_64 |
+| win_version       |                                                                                                   |
++-------------------+---------------------------------------------------------------------------------------------------+
++----------------------------------------------------+-------+---------------------+-----+-----------+------+--------+-------------+-------------+
+| timer                                              | time  | start               | tag | node      | user | system | mac_version | win_version |
++----------------------------------------------------+-------+---------------------+-----+-----------+------+--------+-------------+-------------+
+| test_cms/test_help                                 | 1.436 | 2019-12-13 07:00:26 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_cms/test_vm                                   | 1.407 | 2019-12-13 07:00:27 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_cms/test_help_again                           | 1.431 | 2019-12-13 07:00:29 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| benchmark_start_stop                               | 0.0   | 2019-12-13 07:00:58 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config_load n=1                               | 0.0   | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config_load n=2                               | 0.0   | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config_load n=3                               | 0.0   | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config_load n=4                               | 0.0   | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config_load n=5                               | 0.0   | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config_load n=6                               | 0.0   | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config_load n=7                               | 0.0   | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config_load n=8                               | 0.0   | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config_load n=9                               | 0.0   | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config/test_search                            | 0.003 | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config/test_dict                              | 0.001 | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config/test_config_subscriptable              | 0.001 | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config/test_dictreplace                       | 0.003 | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config/test_set                               | 0.032 | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_data/test_DatabaseUpdate                      | 0.072 | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_data/test_remove_collection                   | 0.061 | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_group/test_list                               | 0.035 | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_group/test_add                                | 0.02  | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_key/test_key                                  | 0.001 | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_name/test_define                              | 0.002 | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_name/test_define_new                          | 0.003 | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_name/test_name_reset                          | 0.001 | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_name/test_name_print                          |       | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_name/test_name_dict                           | 0.001 | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_name/test_name_incr                           | 0.001 | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_name/test_name_counter                        | 0.001 | 2019-12-13 07:00:31 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| total _ping                                        | 0.547 | 2019-12-13 07:00:31 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| ping 127.0.0.1                                     | 0.004 | 2019-12-13 07:00:31 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| ping localhost                                     | 0.004 | 2019-12-13 07:00:31 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| ping www.indiana.edu                               | 0.015 | 2019-12-13 07:00:31 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| ping www.pbs.org                                   | 0.021 | 2019-12-13 07:00:31 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| ping www.github.com                                | 0.044 | 2019-12-13 07:00:31 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| ping www.redhat.com                                | 0.033 | 2019-12-13 07:00:31 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| ping www.openstack.org                             | 0.042 | 2019-12-13 07:00:31 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| ping www.bbc.com                                   | 0.342 | 2019-12-13 07:00:31 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| ping www.ec2instances.info                         | 0.02  | 2019-12-13 07:00:31 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| ping aws.amazon.com                                | 0.021 | 2019-12-13 07:00:31 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| total p=1 c=1                                      | 0.501 | 2019-12-13 07:00:31 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| total p=2 c=1                                      | 0.42  | 2019-12-13 07:00:32 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| total p=3 c=1                                      | 0.378 | 2019-12-13 07:00:32 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| total p=4 c=1                                      | 0.44  | 2019-12-13 07:00:32 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| total p=5 c=1                                      | 0.452 | 2019-12-13 07:00:33 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| total p=6 c=1                                      | 0.502 | 2019-12-13 07:00:33 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| total p=7 c=1                                      | 0.56  | 2019-12-13 07:00:34 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| total p=8 c=1                                      | 0.637 | 2019-12-13 07:00:34 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| total p=9 c=1                                      | 0.734 | 2019-12-13 07:00:35 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_sec_command/test_clear                        | 1.867 | 2019-12-13 07:00:36 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| local clear                                        | 1.865 | 2019-12-13 07:00:36 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_sec_command/test_load                         | 2.339 | 2019-12-13 07:00:38 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| local load                                         | 2.336 | 2019-12-13 07:00:38 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_sec_command/test_rule_add                     | 1.792 | 2019-12-13 07:00:40 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| local rule add                                     | 1.79  | 2019-12-13 07:00:40 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_sec_command/test_rule_delete                  | 1.751 | 2019-12-13 07:00:42 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| local rule delete                                  | 1.749 | 2019-12-13 07:00:42 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_sec_command/test_group_add                    | 1.751 | 2019-12-13 07:00:44 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| local group add                                    | 1.749 | 2019-12-13 07:00:44 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_sec_command/test_group_delete                 | 1.761 | 2019-12-13 07:00:45 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| local group delete                                 | 1.759 | 2019-12-13 07:00:45 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_sec_command/test_rule_list                    | 1.779 | 2019-12-13 07:00:47 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| local rule list                                    | 1.777 | 2019-12-13 07:00:47 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_sec_command/test_list                         | 1.782 | 2019-12-13 07:00:49 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| local list                                         | 1.779 | 2019-12-13 07:00:51 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_sec_command/test_group_list                   | 1.782 | 2019-12-13 07:00:51 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_secgroup_database/test_clear                  | 0.036 | 2019-12-13 07:00:53 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_secgroup_database/test_upload_groups          | 0.316 | 2019-12-13 07:00:53 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_secgroup_database/test_upload_rules           | 2.042 | 2019-12-13 07:00:54 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_secgroup_database/test_add_rule_to_group      | 0.042 | 2019-12-13 07:00:56 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_secgroup_database/test_delete_rule_from_group | 0.042 | 2019-12-13 07:00:57 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_secgroup_database/test_remove_group           | 0.022 | 2019-12-13 07:00:57 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_secgroup_database/test_remove_rule            | 0.021 | 2019-12-13 07:00:57 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_secgroup_database/test_load_defaults          | 0.475 | 2019-12-13 07:00:57 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
++----------------------------------------------------+-------+---------------------+-----+-----------+------+--------+-------------+-------------+
+
+csv,timer,time,starttag,node,user,system,mac_version,win_version
+#csv,test_cms/test_help,1.436,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_cms/test_vm,1.407,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_cms/test_help_again,1.431,None,('gray',),grey,Darwin,10.14.6,
+#csv,benchmark_start_stop,0.0,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config_load n=1,0.0,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config_load n=2,0.0,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config_load n=3,0.0,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config_load n=4,0.0,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config_load n=5,0.0,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config_load n=6,0.0,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config_load n=7,0.0,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config_load n=8,0.0,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config_load n=9,0.0,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config/test_search,0.003,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config/test_dict,0.001,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config/test_config_subscriptable,0.001,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config/test_dictreplace,0.003,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config/test_set,0.032,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_data/test_DatabaseUpdate,0.072,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_data/test_remove_collection,0.061,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_group/test_list,0.035,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_group/test_add,0.02,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_key/test_key,0.001,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_name/test_define,0.002,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_name/test_define_new,0.003,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_name/test_name_reset,0.001,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_name/test_name_print,None,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_name/test_name_dict,0.001,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_name/test_name_incr,0.001,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_name/test_name_counter,0.001,None,('gray',),grey,Darwin,10.14.6,
+#csv,total _ping,0.547,None,('gray',),grey,Darwin,10.14.6,
+#csv,ping 127.0.0.1,0.004,None,('gray',),grey,Darwin,10.14.6,
+#csv,ping localhost,0.004,None,('gray',),grey,Darwin,10.14.6,
+#csv,ping www.indiana.edu,0.015,None,('gray',),grey,Darwin,10.14.6,
+#csv,ping www.pbs.org,0.021,None,('gray',),grey,Darwin,10.14.6,
+#csv,ping www.github.com,0.044,None,('gray',),grey,Darwin,10.14.6,
+#csv,ping www.redhat.com,0.033,None,('gray',),grey,Darwin,10.14.6,
+#csv,ping www.openstack.org,0.042,None,('gray',),grey,Darwin,10.14.6,
+#csv,ping www.bbc.com,0.342,None,('gray',),grey,Darwin,10.14.6,
+#csv,ping www.ec2instances.info,0.02,None,('gray',),grey,Darwin,10.14.6,
+#csv,ping aws.amazon.com,0.021,None,('gray',),grey,Darwin,10.14.6,
+#csv,total p=1 c=1,0.501,None,('gray',),grey,Darwin,10.14.6,
+#csv,total p=2 c=1,0.42,None,('gray',),grey,Darwin,10.14.6,
+#csv,total p=3 c=1,0.378,None,('gray',),grey,Darwin,10.14.6,
+#csv,total p=4 c=1,0.44,None,('gray',),grey,Darwin,10.14.6,
+#csv,total p=5 c=1,0.452,None,('gray',),grey,Darwin,10.14.6,
+#csv,total p=6 c=1,0.502,None,('gray',),grey,Darwin,10.14.6,
+#csv,total p=7 c=1,0.56,None,('gray',),grey,Darwin,10.14.6,
+#csv,total p=8 c=1,0.637,None,('gray',),grey,Darwin,10.14.6,
+#csv,total p=9 c=1,0.734,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_sec_command/test_clear,1.867,None,('gray',),grey,Darwin,10.14.6,
+#csv,local clear,1.865,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_sec_command/test_load,2.339,None,('gray',),grey,Darwin,10.14.6,
+#csv,local load,2.336,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_sec_command/test_rule_add,1.792,None,('gray',),grey,Darwin,10.14.6,
+#csv,local rule add,1.79,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_sec_command/test_rule_delete,1.751,None,('gray',),grey,Darwin,10.14.6,
+#csv,local rule delete,1.749,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_sec_command/test_group_add,1.751,None,('gray',),grey,Darwin,10.14.6,
+#csv,local group add,1.749,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_sec_command/test_group_delete,1.761,None,('gray',),grey,Darwin,10.14.6,
+#csv,local group delete,1.759,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_sec_command/test_rule_list,1.779,None,('gray',),grey,Darwin,10.14.6,
+#csv,local rule list,1.777,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_sec_command/test_list,1.782,None,('gray',),grey,Darwin,10.14.6,
+#csv,local list,1.779,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_sec_command/test_group_list,1.782,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_secgroup_database/test_clear,0.036,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_secgroup_database/test_upload_groups,0.316,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_secgroup_database/test_upload_rules,2.042,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_secgroup_database/test_add_rule_to_group,0.042,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_secgroup_database/test_delete_rule_from_group,0.042,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_secgroup_database/test_remove_group,0.022,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_secgroup_database/test_remove_rule,0.021,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_secgroup_database/test_load_defaults,0.475,None,('gray',),grey,Darwin,10.14.6,
+
+PASSED
+tests/1_local/test_shell.py::TestName::test_shell 
+[35m
+# ######################################################################
+# test_shell /tests/1_local/test_shell.py 19
+# ######################################################################
+[0m
+darwin
+PASSED
+tests/1_local/test_shell.py::TestName::test_pwd 
+[35m
+# ######################################################################
+# test_pwd /tests/1_local/test_shell.py 27
+# ######################################################################
+[0m
+/Users/grey/Desktop/github/cloudmesh-community/cm/cloudmesh-cloud
+PASSED
+tests/1_local/test_shell.py::TestName::test_ls_la_list 
+[35m
+# ######################################################################
+# test_ls_la_list /tests/1_local/test_shell.py 34
+# ######################################################################
+[0m
+total 464
+drwxr-xr-x   37 grey  staff    1184 Dec 13 01:57 .
+drwxr-xr-x  212 grey  staff    6784 Dec 12 14:02 ..
+-rw-r--r--    1 grey  staff     285 Oct 29 09:28 .bumpversion.cfg
+-rw-r--r--    1 grey  staff     672 Oct 29 09:28 .editorconfig
+drwxr-xr-x   16 grey  staff     512 Dec 13 01:29 .git
+-rw-r--r--    1 grey  staff    1566 Oct 29 09:28 .gitignore
+-rw-r--r--    1 grey  staff    2045 Oct 29 09:28 .mailmap
+drwxr-xr-x    6 grey  staff     192 Oct 31 14:11 .pytest_cache
+-rw-r--r--    1 grey  staff     794 Dec  9 12:44 .travis.yml
+-rw-r--r--@   1 grey  staff  132972 Dec 13 02:00 1.txt
+-rw-r--r--@   1 grey  staff    4071 Dec 13 01:56 2.txt
+-rw-r--r--    1 grey  staff   11365 Oct 29 09:28 LICENSE
+-rw-r--r--    1 grey  staff    5275 Oct 29 09:28 Makefile
+-rw-r--r--    1 grey  staff    1662 Dec  9 12:44 README.md
+-rw-r--r--    1 grey  staff     553 Oct 29 09:28 RELEASE-NOTES.md
+-rw-r--r--    1 grey  staff       5 Oct 29 09:28 VERSION
+-rw-r--r--    1 grey  staff       0 Oct 29 09:28 __init__.py
+drwxr-xr-x    9 grey  staff     288 Dec  9 12:44 benchmark
+-rw-r--r--    1 grey  staff     580 Oct 29 09:28 benchmark_table.py
+drwxr-xr-x    3 grey  staff      96 Oct 29 09:28 bin
+drwxr-xr-x   36 grey  staff    1152 Dec  4 12:58 cloudmesh
+drwxr-xr-x    9 grey  staff     288 Dec  8 13:57 cloudmesh_cloud.egg-info
+-rw-r--r--    1 grey  staff     993 Oct 29 09:28 command.md
+-rw-r--r--    1 grey  staff     999 Oct 29 09:28 demo.py
+drwxr-xr-x   17 grey  staff     544 Oct 29 09:28 deprecated
+drwxr-xr-x    9 grey  staff     288 Dec  9 12:44 docker
+drwxr-xr-x    7 grey  staff     224 Oct 29 09:28 docs-source
+drwxr-xr-x    8 grey  staff     256 Dec  9 12:44 install
+drwxr-xr-x    4 grey  staff     128 Oct 29 09:28 notebooks
+-rw-r--r--    1 grey  staff     377 Oct 29 09:28 pytest.ini
+-rw-r--r--    1 grey  staff      64 Oct 29 09:28 requirements-dev.txt
+-rw-r--r--    1 grey  staff     233 Oct 29 09:28 requirements-frozen.txt
+-rw-r--r--    1 grey  staff     811 Nov 28 11:20 requirements.txt
+-rw-r--r--    1 grey  staff     620 Oct 29 09:28 setup.cfg
+-rw-r--r--    1 grey  staff    4634 Nov 28 11:20 setup.py
+-rw-r--r--    1 grey  staff      21 Oct 29 09:28 test.cm
+drwxr-xr-x   15 grey  staff     480 Dec 12 21:48 tests
+PASSED
+tests/1_local/test_shell.py::TestName::test_ls_la_string 
+[35m
+# ######################################################################
+# test_ls_la_string /tests/1_local/test_shell.py 41
+# ######################################################################
+[0m
+total 592
+drwxr-xr-x   37 grey  staff    1184 Dec 13 01:57 .
+drwxr-xr-x  212 grey  staff    6784 Dec 12 14:02 ..
+-rw-r--r--    1 grey  staff     285 Oct 29 09:28 .bumpversion.cfg
+-rw-r--r--    1 grey  staff     672 Oct 29 09:28 .editorconfig
+drwxr-xr-x   16 grey  staff     512 Dec 13 01:29 .git
+-rw-r--r--    1 grey  staff    1566 Oct 29 09:28 .gitignore
+-rw-r--r--    1 grey  staff    2045 Oct 29 09:28 .mailmap
+drwxr-xr-x    6 grey  staff     192 Oct 31 14:11 .pytest_cache
+-rw-r--r--    1 grey  staff     794 Dec  9 12:44 .travis.yml
+-rw-r--r--@   1 grey  staff  135471 Dec 13 02:00 1.txt
+-rw-r--r--@   1 grey  staff    4071 Dec 13 01:56 2.txt
+-rw-r--r--    1 grey  staff   11365 Oct 29 09:28 LICENSE
+-rw-r--r--    1 grey  staff    5275 Oct 29 09:28 Makefile
+-rw-r--r--    1 grey  staff    1662 Dec  9 12:44 README.md
+-rw-r--r--    1 grey  staff     553 Oct 29 09:28 RELEASE-NOTES.md
+-rw-r--r--    1 grey  staff       5 Oct 29 09:28 VERSION
+-rw-r--r--    1 grey  staff       0 Oct 29 09:28 __init__.py
+drwxr-xr-x    9 grey  staff     288 Dec  9 12:44 benchmark
+-rw-r--r--    1 grey  staff     580 Oct 29 09:28 benchmark_table.py
+drwxr-xr-x    3 grey  staff      96 Oct 29 09:28 bin
+drwxr-xr-x   36 grey  staff    1152 Dec  4 12:58 cloudmesh
+drwxr-xr-x    9 grey  staff     288 Dec  8 13:57 cloudmesh_cloud.egg-info
+-rw-r--r--    1 grey  staff     993 Oct 29 09:28 command.md
+-rw-r--r--    1 grey  staff     999 Oct 29 09:28 demo.py
+drwxr-xr-x   17 grey  staff     544 Oct 29 09:28 deprecated
+drwxr-xr-x    9 grey  staff     288 Dec  9 12:44 docker
+drwxr-xr-x    7 grey  staff     224 Oct 29 09:28 docs-source
+drwxr-xr-x    8 grey  staff     256 Dec  9 12:44 install
+drwxr-xr-x    4 grey  staff     128 Oct 29 09:28 notebooks
+-rw-r--r--    1 grey  staff     377 Oct 29 09:28 pytest.ini
+-rw-r--r--    1 grey  staff      64 Oct 29 09:28 requirements-dev.txt
+-rw-r--r--    1 grey  staff     233 Oct 29 09:28 requirements-frozen.txt
+-rw-r--r--    1 grey  staff     811 Nov 28 11:20 requirements.txt
+-rw-r--r--    1 grey  staff     620 Oct 29 09:28 setup.cfg
+-rw-r--r--    1 grey  staff    4634 Nov 28 11:20 setup.py
+-rw-r--r--    1 grey  staff      21 Oct 29 09:28 test.cm
+drwxr-xr-x   15 grey  staff     480 Dec 12 21:48 tests
+PASSED
+tests/1_local/test_shell.py::TestName::test_ls_la_wrapper 
+[35m
+# ######################################################################
+# test_ls_la_wrapper /tests/1_local/test_shell.py 48
+# ######################################################################
+[0m
+FAILED
+tests/1_local/test_shell.py::TestName::test_ls_la_wrapper_multi_options 
+[35m
+# ######################################################################
+# test_ls_la_wrapper_multi_options /tests/1_local/test_shell.py 55
+# ######################################################################
+[0m
+FAILED
+tests/1_local/test_shell.py::TestName::test_benchmark 
+[35m
+# ######################################################################
+# test_benchmark /tests/1_local/test_shell.py 62
+# ######################################################################
+[0m
+
++-------------------+---------------------------------------------------------------------------------------------------+
+| Machine Attribute | Value                                                                                             |
++-------------------+---------------------------------------------------------------------------------------------------+
+| cpu_count         | 8                                                                                                 |
+| mac_version       | 10.14.6                                                                                           |
+| machine           | ('x86_64',)                                                                                       |
+| mem_active        | 6.5 GiB                                                                                           |
+| mem_available     | 7.2 GiB                                                                                           |
+| mem_free          | 592.1 MiB                                                                                         |
+| mem_inactive      | 5.9 GiB                                                                                           |
+| mem_percent       | 55.3%                                                                                             |
+| mem_total         | 16.0 GiB                                                                                          |
+| mem_used          | 8.8 GiB                                                                                           |
+| mem_wired         | 2.4 GiB                                                                                           |
+| node              | ('gray',)                                                                                         |
+| platform          | macOS-10.14.6-x86_64-i386-64bit                                                                   |
+| processor         | ('i386',)                                                                                         |
+| processors        | Darwin                                                                                            |
+| python            | 3.8.0 (v3.8.0:fa919fdf25, Oct 14 2019, 10:23:27)                                                  |
+|                   | [Clang 6.0 (clang-600.0.57)]                                                                      |
+| release           | ('18.7.0',)                                                                                       |
+| sys               | darwin                                                                                            |
+| system            | Darwin                                                                                            |
+| user              | grey                                                                                              |
+| version           | Darwin Kernel Version 18.7.0: Sat Oct 12 00:02:19 PDT 2019; root:xnu-4903.278.12~1/RELEASE_X86_64 |
+| win_version       |                                                                                                   |
++-------------------+---------------------------------------------------------------------------------------------------+
++----------------------------------------------------+-------+---------------------+-----+-----------+------+--------+-------------+-------------+
+| timer                                              | time  | start               | tag | node      | user | system | mac_version | win_version |
++----------------------------------------------------+-------+---------------------+-----+-----------+------+--------+-------------+-------------+
+| test_cms/test_help                                 | 1.436 | 2019-12-13 07:00:26 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_cms/test_vm                                   | 1.407 | 2019-12-13 07:00:27 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_cms/test_help_again                           | 1.431 | 2019-12-13 07:00:29 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| benchmark_start_stop                               | 0.0   | 2019-12-13 07:00:58 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config_load n=1                               | 0.0   | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config_load n=2                               | 0.0   | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config_load n=3                               | 0.0   | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config_load n=4                               | 0.0   | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config_load n=5                               | 0.0   | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config_load n=6                               | 0.0   | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config_load n=7                               | 0.0   | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config_load n=8                               | 0.0   | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config_load n=9                               | 0.0   | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config/test_search                            | 0.003 | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config/test_dict                              | 0.001 | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config/test_config_subscriptable              | 0.001 | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config/test_dictreplace                       | 0.003 | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_config/test_set                               | 0.032 | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_data/test_DatabaseUpdate                      | 0.072 | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_data/test_remove_collection                   | 0.061 | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_group/test_list                               | 0.035 | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_group/test_add                                | 0.02  | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_key/test_key                                  | 0.001 | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_name/test_define                              | 0.002 | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_name/test_define_new                          | 0.003 | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_name/test_name_reset                          | 0.001 | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_name/test_name_print                          |       | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_name/test_name_dict                           | 0.001 | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_name/test_name_incr                           | 0.001 | 2019-12-13 07:00:30 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_name/test_name_counter                        | 0.001 | 2019-12-13 07:00:31 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| total _ping                                        | 0.547 | 2019-12-13 07:00:31 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| ping 127.0.0.1                                     | 0.004 | 2019-12-13 07:00:31 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| ping localhost                                     | 0.004 | 2019-12-13 07:00:31 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| ping www.indiana.edu                               | 0.015 | 2019-12-13 07:00:31 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| ping www.pbs.org                                   | 0.021 | 2019-12-13 07:00:31 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| ping www.github.com                                | 0.044 | 2019-12-13 07:00:31 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| ping www.redhat.com                                | 0.033 | 2019-12-13 07:00:31 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| ping www.openstack.org                             | 0.042 | 2019-12-13 07:00:31 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| ping www.bbc.com                                   | 0.342 | 2019-12-13 07:00:31 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| ping www.ec2instances.info                         | 0.02  | 2019-12-13 07:00:31 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| ping aws.amazon.com                                | 0.021 | 2019-12-13 07:00:31 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| total p=1 c=1                                      | 0.501 | 2019-12-13 07:00:31 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| total p=2 c=1                                      | 0.42  | 2019-12-13 07:00:32 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| total p=3 c=1                                      | 0.378 | 2019-12-13 07:00:32 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| total p=4 c=1                                      | 0.44  | 2019-12-13 07:00:32 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| total p=5 c=1                                      | 0.452 | 2019-12-13 07:00:33 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| total p=6 c=1                                      | 0.502 | 2019-12-13 07:00:33 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| total p=7 c=1                                      | 0.56  | 2019-12-13 07:00:34 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| total p=8 c=1                                      | 0.637 | 2019-12-13 07:00:34 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| total p=9 c=1                                      | 0.734 | 2019-12-13 07:00:35 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_sec_command/test_clear                        | 1.867 | 2019-12-13 07:00:36 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| local clear                                        | 1.865 | 2019-12-13 07:00:36 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_sec_command/test_load                         | 2.339 | 2019-12-13 07:00:38 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| local load                                         | 2.336 | 2019-12-13 07:00:38 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_sec_command/test_rule_add                     | 1.792 | 2019-12-13 07:00:40 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| local rule add                                     | 1.79  | 2019-12-13 07:00:40 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_sec_command/test_rule_delete                  | 1.751 | 2019-12-13 07:00:42 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| local rule delete                                  | 1.749 | 2019-12-13 07:00:42 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_sec_command/test_group_add                    | 1.751 | 2019-12-13 07:00:44 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| local group add                                    | 1.749 | 2019-12-13 07:00:44 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_sec_command/test_group_delete                 | 1.761 | 2019-12-13 07:00:45 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| local group delete                                 | 1.759 | 2019-12-13 07:00:45 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_sec_command/test_rule_list                    | 1.779 | 2019-12-13 07:00:47 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| local rule list                                    | 1.777 | 2019-12-13 07:00:47 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_sec_command/test_list                         | 1.782 | 2019-12-13 07:00:49 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| local list                                         | 1.779 | 2019-12-13 07:00:51 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_sec_command/test_group_list                   | 1.782 | 2019-12-13 07:00:51 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_secgroup_database/test_clear                  | 0.036 | 2019-12-13 07:00:53 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_secgroup_database/test_upload_groups          | 0.316 | 2019-12-13 07:00:53 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_secgroup_database/test_upload_rules           | 2.042 | 2019-12-13 07:00:54 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_secgroup_database/test_add_rule_to_group      | 0.042 | 2019-12-13 07:00:56 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_secgroup_database/test_delete_rule_from_group | 0.042 | 2019-12-13 07:00:57 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_secgroup_database/test_remove_group           | 0.022 | 2019-12-13 07:00:57 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_secgroup_database/test_remove_rule            | 0.021 | 2019-12-13 07:00:57 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_secgroup_database/test_load_defaults          | 0.475 | 2019-12-13 07:00:57 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_shell/test_shell                              | 0.001 | 2019-12-13 07:00:58 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_shell/test_pwd                                | 0.005 | 2019-12-13 07:00:58 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_shell/test_ls_la_list                         | 0.007 | 2019-12-13 07:00:58 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_shell/test_ls_la_string                       | 0.007 | 2019-12-13 07:00:58 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_shell/test_ls_la_wrapper                      |       | 2019-12-13 07:00:58 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| test_shell/test_ls_la_wrapper_multi_options        |       | 2019-12-13 07:00:58 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
++----------------------------------------------------+-------+---------------------+-----+-----------+------+--------+-------------+-------------+
+
+csv,timer,time,starttag,node,user,system,mac_version,win_version
+#csv,test_cms/test_help,1.436,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_cms/test_vm,1.407,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_cms/test_help_again,1.431,None,('gray',),grey,Darwin,10.14.6,
+#csv,benchmark_start_stop,0.0,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config_load n=1,0.0,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config_load n=2,0.0,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config_load n=3,0.0,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config_load n=4,0.0,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config_load n=5,0.0,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config_load n=6,0.0,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config_load n=7,0.0,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config_load n=8,0.0,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config_load n=9,0.0,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config/test_search,0.003,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config/test_dict,0.001,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config/test_config_subscriptable,0.001,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config/test_dictreplace,0.003,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_config/test_set,0.032,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_data/test_DatabaseUpdate,0.072,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_data/test_remove_collection,0.061,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_group/test_list,0.035,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_group/test_add,0.02,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_key/test_key,0.001,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_name/test_define,0.002,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_name/test_define_new,0.003,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_name/test_name_reset,0.001,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_name/test_name_print,None,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_name/test_name_dict,0.001,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_name/test_name_incr,0.001,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_name/test_name_counter,0.001,None,('gray',),grey,Darwin,10.14.6,
+#csv,total _ping,0.547,None,('gray',),grey,Darwin,10.14.6,
+#csv,ping 127.0.0.1,0.004,None,('gray',),grey,Darwin,10.14.6,
+#csv,ping localhost,0.004,None,('gray',),grey,Darwin,10.14.6,
+#csv,ping www.indiana.edu,0.015,None,('gray',),grey,Darwin,10.14.6,
+#csv,ping www.pbs.org,0.021,None,('gray',),grey,Darwin,10.14.6,
+#csv,ping www.github.com,0.044,None,('gray',),grey,Darwin,10.14.6,
+#csv,ping www.redhat.com,0.033,None,('gray',),grey,Darwin,10.14.6,
+#csv,ping www.openstack.org,0.042,None,('gray',),grey,Darwin,10.14.6,
+#csv,ping www.bbc.com,0.342,None,('gray',),grey,Darwin,10.14.6,
+#csv,ping www.ec2instances.info,0.02,None,('gray',),grey,Darwin,10.14.6,
+#csv,ping aws.amazon.com,0.021,None,('gray',),grey,Darwin,10.14.6,
+#csv,total p=1 c=1,0.501,None,('gray',),grey,Darwin,10.14.6,
+#csv,total p=2 c=1,0.42,None,('gray',),grey,Darwin,10.14.6,
+#csv,total p=3 c=1,0.378,None,('gray',),grey,Darwin,10.14.6,
+#csv,total p=4 c=1,0.44,None,('gray',),grey,Darwin,10.14.6,
+#csv,total p=5 c=1,0.452,None,('gray',),grey,Darwin,10.14.6,
+#csv,total p=6 c=1,0.502,None,('gray',),grey,Darwin,10.14.6,
+#csv,total p=7 c=1,0.56,None,('gray',),grey,Darwin,10.14.6,
+#csv,total p=8 c=1,0.637,None,('gray',),grey,Darwin,10.14.6,
+#csv,total p=9 c=1,0.734,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_sec_command/test_clear,1.867,None,('gray',),grey,Darwin,10.14.6,
+#csv,local clear,1.865,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_sec_command/test_load,2.339,None,('gray',),grey,Darwin,10.14.6,
+#csv,local load,2.336,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_sec_command/test_rule_add,1.792,None,('gray',),grey,Darwin,10.14.6,
+#csv,local rule add,1.79,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_sec_command/test_rule_delete,1.751,None,('gray',),grey,Darwin,10.14.6,
+#csv,local rule delete,1.749,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_sec_command/test_group_add,1.751,None,('gray',),grey,Darwin,10.14.6,
+#csv,local group add,1.749,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_sec_command/test_group_delete,1.761,None,('gray',),grey,Darwin,10.14.6,
+#csv,local group delete,1.759,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_sec_command/test_rule_list,1.779,None,('gray',),grey,Darwin,10.14.6,
+#csv,local rule list,1.777,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_sec_command/test_list,1.782,None,('gray',),grey,Darwin,10.14.6,
+#csv,local list,1.779,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_sec_command/test_group_list,1.782,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_secgroup_database/test_clear,0.036,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_secgroup_database/test_upload_groups,0.316,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_secgroup_database/test_upload_rules,2.042,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_secgroup_database/test_add_rule_to_group,0.042,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_secgroup_database/test_delete_rule_from_group,0.042,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_secgroup_database/test_remove_group,0.022,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_secgroup_database/test_remove_rule,0.021,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_secgroup_database/test_load_defaults,0.475,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_shell/test_shell,0.001,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_shell/test_pwd,0.005,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_shell/test_ls_la_list,0.007,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_shell/test_ls_la_string,0.007,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_shell/test_ls_la_wrapper,None,None,('gray',),grey,Darwin,10.14.6,
+#csv,test_shell/test_ls_la_wrapper_multi_options,None,None,('gray',),grey,Darwin,10.14.6,
+
+PASSED
+
+=================================== FAILURES ===================================
+_________________________ TestName.test_ls_la_wrapper __________________________
+
+self = <test_shell.TestName object at 0x10ada3460>
+
+    def test_ls_la_wrapper(self):
+        HEADING()
+        Benchmark.Start()
+>       r = shell.ls("-la")
+E       TypeError: new_f() takes 0 positional arguments but 2 were given
+
+tests/1_local/test_shell.py:51: TypeError
+__________________ TestName.test_ls_la_wrapper_multi_options ___________________
+
+self = <test_shell.TestName object at 0x10ada3a00>
+
+    def test_ls_la_wrapper_multi_options(self):
+        HEADING()
+        Benchmark.Start()
+>       r = shell.ls("-a", "-l")
+E       TypeError: new_f() takes 0 positional arguments but 3 were given
+
+tests/1_local/test_shell.py:58: TypeError
+=============================== warnings summary ===============================
+/Users/grey/ENV3/lib/python3.8/site-packages/pymongo/message.py:771
+/Users/grey/ENV3/lib/python3.8/site-packages/pymongo/message.py:771
+/Users/grey/ENV3/lib/python3.8/site-packages/pymongo/message.py:771
+/Users/grey/ENV3/lib/python3.8/site-packages/pymongo/message.py:771
+/Users/grey/ENV3/lib/python3.8/site-packages/pymongo/message.py:771
+/Users/grey/ENV3/lib/python3.8/site-packages/pymongo/message.py:771
+/Users/grey/ENV3/lib/python3.8/site-packages/pymongo/message.py:771
+/Users/grey/ENV3/lib/python3.8/site-packages/pymongo/message.py:771
+/Users/grey/ENV3/lib/python3.8/site-packages/pymongo/message.py:771
+/Users/grey/ENV3/lib/python3.8/site-packages/pymongo/message.py:771
+/Users/grey/ENV3/lib/python3.8/site-packages/pymongo/message.py:771
+/Users/grey/ENV3/lib/python3.8/site-packages/pymongo/message.py:771
+/Users/grey/ENV3/lib/python3.8/site-packages/pymongo/message.py:771
+/Users/grey/ENV3/lib/python3.8/site-packages/pymongo/message.py:771
+tests/1_local/test_data.py::TestDatabaseUpdate::test_DatabaseUpdate
+tests/1_local/test_data.py::TestDatabaseUpdate::test_DatabaseUpdate
+tests/1_local/test_data.py::TestDatabaseUpdate::test_DatabaseUpdate
+tests/1_local/test_data.py::TestDatabaseUpdate::test_DatabaseUpdate
+tests/1_local/test_data.py::TestDatabaseUpdate::test_remove_collection
+tests/1_local/test_data.py::TestDatabaseUpdate::test_remove_collection
+tests/1_local/test_data.py::TestDatabaseUpdate::test_remove_collection
+tests/1_local/test_data.py::TestDatabaseUpdate::test_remove_collection
+tests/1_local/test_group.py::TestName::test_list
+tests/1_local/test_group.py::TestName::test_list
+tests/1_local/test_group.py::TestName::test_list
+tests/1_local/test_group.py::TestName::test_list
+tests/1_local/test_group.py::TestName::test_add
+tests/1_local/test_group.py::TestName::test_add
+tests/1_local/test_group.py::TestName::test_add
+tests/1_local/test_group.py::TestName::test_add
+tests/1_local/test_group.py::TestName::test_members
+tests/1_local/test_group.py::TestName::test_members
+tests/1_local/test_group.py::TestName::test_members
+tests/1_local/test_group.py::TestName::test_members
+tests/1_local/test_secgroup_database.py::test_upload_groups
+tests/1_local/test_secgroup_database.py::test_upload_groups
+tests/1_local/test_secgroup_database.py::test_upload_groups
+tests/1_local/test_secgroup_database.py::test_upload_groups
+tests/1_local/test_secgroup_database.py::test_upload_groups
+tests/1_local/test_secgroup_database.py::test_upload_groups
+tests/1_local/test_secgroup_database.py::test_upload_groups
+tests/1_local/test_secgroup_database.py::test_upload_groups
+tests/1_local/test_secgroup_database.py::test_upload_rules
+tests/1_local/test_secgroup_database.py::test_upload_rules
+tests/1_local/test_secgroup_database.py::test_upload_rules
+tests/1_local/test_secgroup_database.py::test_upload_rules
+tests/1_local/test_secgroup_database.py::test_upload_rules
+tests/1_local/test_secgroup_database.py::test_upload_rules
+tests/1_local/test_secgroup_database.py::test_upload_rules
+tests/1_local/test_secgroup_database.py::test_upload_rules
+tests/1_local/test_secgroup_database.py::test_upload_rules
+tests/1_local/test_secgroup_database.py::test_upload_rules
+tests/1_local/test_secgroup_database.py::test_upload_rules
+tests/1_local/test_secgroup_database.py::test_upload_rules
+tests/1_local/test_secgroup_database.py::test_upload_rules
+tests/1_local/test_secgroup_database.py::test_upload_rules
+tests/1_local/test_secgroup_database.py::test_upload_rules
+tests/1_local/test_secgroup_database.py::test_upload_rules
+tests/1_local/test_secgroup_database.py::test_upload_rules
+tests/1_local/test_secgroup_database.py::test_upload_rules
+tests/1_local/test_secgroup_database.py::test_upload_rules
+tests/1_local/test_secgroup_database.py::test_upload_rules
+tests/1_local/test_secgroup_database.py::test_add_rule_to_group
+tests/1_local/test_secgroup_database.py::test_add_rule_to_group
+tests/1_local/test_secgroup_database.py::test_add_rule_to_group
+tests/1_local/test_secgroup_database.py::test_add_rule_to_group
+tests/1_local/test_secgroup_database.py::test_delete_rule_from_group
+tests/1_local/test_secgroup_database.py::test_delete_rule_from_group
+tests/1_local/test_secgroup_database.py::test_delete_rule_from_group
+tests/1_local/test_secgroup_database.py::test_delete_rule_from_group
+tests/1_local/test_secgroup_database.py::test_load_defaults
+tests/1_local/test_secgroup_database.py::test_load_defaults
+tests/1_local/test_secgroup_database.py::test_load_defaults
+tests/1_local/test_secgroup_database.py::test_load_defaults
+tests/1_local/test_secgroup_database.py::test_load_defaults
+tests/1_local/test_secgroup_database.py::test_load_defaults
+tests/1_local/test_secgroup_database.py::test_load_defaults
+tests/1_local/test_secgroup_database.py::test_load_defaults
+tests/1_local/test_secgroup_database.py::test_load_defaults
+tests/1_local/test_secgroup_database.py::test_load_defaults
+  /Users/grey/ENV3/lib/python3.8/site-packages/pymongo/message.py:771: DeprecationWarning: PY_SSIZE_T_CLEAN will be required for '#' formats
+    return _query_uncompressed(options, collection_name, num_to_skip,
+
+/Users/grey/ENV3/lib/python3.8/site-packages/pymongo/message.py:703
+/Users/grey/ENV3/lib/python3.8/site-packages/pymongo/message.py:703
+/Users/grey/ENV3/lib/python3.8/site-packages/pymongo/message.py:703
+/Users/grey/ENV3/lib/python3.8/site-packages/pymongo/message.py:703
+/Users/grey/ENV3/lib/python3.8/site-packages/pymongo/message.py:703
+/Users/grey/ENV3/lib/python3.8/site-packages/pymongo/message.py:703
+/Users/grey/ENV3/lib/python3.8/site-packages/pymongo/message.py:703
+/Users/grey/ENV3/lib/python3.8/site-packages/pymongo/message.py:703
+/Users/grey/ENV3/lib/python3.8/site-packages/pymongo/message.py:703
+/Users/grey/ENV3/lib/python3.8/site-packages/pymongo/message.py:703
+/Users/grey/ENV3/lib/python3.8/site-packages/pymongo/message.py:703
+/Users/grey/ENV3/lib/python3.8/site-packages/pymongo/message.py:703
+/Users/grey/ENV3/lib/python3.8/site-packages/pymongo/message.py:703
+/Users/grey/ENV3/lib/python3.8/site-packages/pymongo/message.py:703
+/Users/grey/ENV3/lib/python3.8/site-packages/pymongo/message.py:703
+/Users/grey/ENV3/lib/python3.8/site-packages/pymongo/message.py:703
+/Users/grey/ENV3/lib/python3.8/site-packages/pymongo/message.py:703
+/Users/grey/ENV3/lib/python3.8/site-packages/pymongo/message.py:703
+/Users/grey/ENV3/lib/python3.8/site-packages/pymongo/message.py:703
+/Users/grey/ENV3/lib/python3.8/site-packages/pymongo/message.py:703
+/Users/grey/ENV3/lib/python3.8/site-packages/pymongo/message.py:703
+/Users/grey/ENV3/lib/python3.8/site-packages/pymongo/message.py:703
+/Users/grey/ENV3/lib/python3.8/site-packages/pymongo/message.py:703
+/Users/grey/ENV3/lib/python3.8/site-packages/pymongo/message.py:703
+/Users/grey/ENV3/lib/python3.8/site-packages/pymongo/message.py:703
+/Users/grey/ENV3/lib/python3.8/site-packages/pymongo/message.py:703
+/Users/grey/ENV3/lib/python3.8/site-packages/pymongo/message.py:703
+/Users/grey/ENV3/lib/python3.8/site-packages/pymongo/message.py:703
+/Users/grey/ENV3/lib/python3.8/site-packages/pymongo/message.py:703
+/Users/grey/ENV3/lib/python3.8/site-packages/pymongo/message.py:703
+/Users/grey/ENV3/lib/python3.8/site-packages/pymongo/message.py:703
+/Users/grey/ENV3/lib/python3.8/site-packages/pymongo/message.py:703
+/Users/grey/ENV3/lib/python3.8/site-packages/pymongo/message.py:703
+/Users/grey/ENV3/lib/python3.8/site-packages/pymongo/message.py:703
+/Users/grey/ENV3/lib/python3.8/site-packages/pymongo/message.py:703
+/Users/grey/ENV3/lib/python3.8/site-packages/pymongo/message.py:703
+/Users/grey/ENV3/lib/python3.8/site-packages/pymongo/message.py:703
+/Users/grey/ENV3/lib/python3.8/site-packages/pymongo/message.py:703
+tests/1_local/test_data.py::TestDatabaseUpdate::test_DatabaseUpdate
+tests/1_local/test_data.py::TestDatabaseUpdate::test_DatabaseUpdate
+tests/1_local/test_data.py::TestDatabaseUpdate::test_DatabaseUpdate
+tests/1_local/test_data.py::TestDatabaseUpdate::test_DatabaseUpdate
+tests/1_local/test_data.py::TestDatabaseUpdate::test_DatabaseUpdate
+tests/1_local/test_data.py::TestDatabaseUpdate::test_DatabaseUpdate
+tests/1_local/test_data.py::TestDatabaseUpdate::test_DatabaseUpdate
+tests/1_local/test_data.py::TestDatabaseUpdate::test_DatabaseUpdate
+tests/1_local/test_data.py::TestDatabaseUpdate::test_DatabaseUpdate
+tests/1_local/test_data.py::TestDatabaseUpdate::test_DatabaseUpdate
+tests/1_local/test_data.py::TestDatabaseUpdate::test_DatabaseUpdate
+tests/1_local/test_data.py::TestDatabaseUpdate::test_DatabaseUpdate
+tests/1_local/test_data.py::TestDatabaseUpdate::test_DatabaseUpdate
+tests/1_local/test_data.py::TestDatabaseUpdate::test_DatabaseUpdate
+tests/1_local/test_data.py::TestDatabaseUpdate::test_remove_collection
+tests/1_local/test_data.py::TestDatabaseUpdate::test_remove_collection
+tests/1_local/test_data.py::TestDatabaseUpdate::test_remove_collection
+tests/1_local/test_data.py::TestDatabaseUpdate::test_remove_collection
+tests/1_local/test_data.py::TestDatabaseUpdate::test_remove_collection
+tests/1_local/test_data.py::TestDatabaseUpdate::test_remove_collection
+tests/1_local/test_data.py::TestDatabaseUpdate::test_remove_collection
+tests/1_local/test_data.py::TestDatabaseUpdate::test_remove_collection
+tests/1_local/test_data.py::TestDatabaseUpdate::test_remove_collection
+tests/1_local/test_data.py::TestDatabaseUpdate::test_remove_collection
+tests/1_local/test_group.py::TestName::test_list
+tests/1_local/test_group.py::TestName::test_list
+tests/1_local/test_group.py::TestName::test_list
+tests/1_local/test_group.py::TestName::test_list
+tests/1_local/test_group.py::TestName::test_list
+tests/1_local/test_group.py::TestName::test_list
+tests/1_local/test_group.py::TestName::test_list
+tests/1_local/test_group.py::TestName::test_list
+tests/1_local/test_group.py::TestName::test_list
+tests/1_local/test_group.py::TestName::test_list
+tests/1_local/test_group.py::TestName::test_add
+tests/1_local/test_group.py::TestName::test_add
+tests/1_local/test_group.py::TestName::test_add
+tests/1_local/test_group.py::TestName::test_add
+tests/1_local/test_group.py::TestName::test_add
+tests/1_local/test_group.py::TestName::test_add
+tests/1_local/test_group.py::TestName::test_add
+tests/1_local/test_group.py::TestName::test_add
+tests/1_local/test_group.py::TestName::test_add
+tests/1_local/test_group.py::TestName::test_add
+tests/1_local/test_group.py::TestName::test_add
+tests/1_local/test_group.py::TestName::test_add
+tests/1_local/test_group.py::TestName::test_add
+tests/1_local/test_group.py::TestName::test_add
+tests/1_local/test_group.py::TestName::test_add
+tests/1_local/test_group.py::TestName::test_add
+tests/1_local/test_group.py::TestName::test_members
+tests/1_local/test_group.py::TestName::test_members
+tests/1_local/test_group.py::TestName::test_members
+tests/1_local/test_group.py::TestName::test_members
+tests/1_local/test_group.py::TestName::test_members
+tests/1_local/test_group.py::TestName::test_members
+tests/1_local/test_group.py::TestName::test_members
+tests/1_local/test_group.py::TestName::test_members
+tests/1_local/test_group.py::TestName::test_members
+tests/1_local/test_group.py::TestName::test_members
+tests/1_local/test_sec_command.py::TestSecCLI::test_clear
+tests/1_local/test_sec_command.py::TestSecCLI::test_clear
+tests/1_local/test_sec_command.py::TestSecCLI::test_clear
+tests/1_local/test_sec_command.py::TestSecCLI::test_clear
+tests/1_local/test_sec_command.py::TestSecCLI::test_load
+tests/1_local/test_sec_command.py::TestSecCLI::test_load
+tests/1_local/test_sec_command.py::TestSecCLI::test_load
+tests/1_local/test_sec_command.py::TestSecCLI::test_load
+tests/1_local/test_sec_command.py::TestSecCLI::test_rule_add
+tests/1_local/test_sec_command.py::TestSecCLI::test_rule_add
+tests/1_local/test_sec_command.py::TestSecCLI::test_rule_add
+tests/1_local/test_sec_command.py::TestSecCLI::test_rule_add
+tests/1_local/test_sec_command.py::TestSecCLI::test_rule_delete
+tests/1_local/test_sec_command.py::TestSecCLI::test_rule_delete
+tests/1_local/test_sec_command.py::TestSecCLI::test_group_add
+tests/1_local/test_sec_command.py::TestSecCLI::test_group_add
+tests/1_local/test_sec_command.py::TestSecCLI::test_group_delete
+tests/1_local/test_sec_command.py::TestSecCLI::test_group_delete
+tests/1_local/test_sec_command.py::TestSecCLI::test_rule_list
+tests/1_local/test_sec_command.py::TestSecCLI::test_rule_list
+tests/1_local/test_sec_command.py::TestSecCLI::test_rule_list
+tests/1_local/test_sec_command.py::TestSecCLI::test_rule_list
+tests/1_local/test_sec_command.py::TestSecCLI::test_list
+tests/1_local/test_sec_command.py::TestSecCLI::test_list
+tests/1_local/test_sec_command.py::TestSecCLI::test_list
+tests/1_local/test_sec_command.py::TestSecCLI::test_list
+tests/1_local/test_sec_command.py::TestSecCLI::test_group_list
+tests/1_local/test_sec_command.py::TestSecCLI::test_group_list
+tests/1_local/test_secgroup_database.py::test_clear
+tests/1_local/test_secgroup_database.py::test_clear
+tests/1_local/test_secgroup_database.py::test_clear
+tests/1_local/test_secgroup_database.py::test_clear
+tests/1_local/test_secgroup_database.py::test_clear
+tests/1_local/test_secgroup_database.py::test_clear
+tests/1_local/test_secgroup_database.py::test_clear
+tests/1_local/test_secgroup_database.py::test_clear
+tests/1_local/test_secgroup_database.py::test_upload_groups
+tests/1_local/test_secgroup_database.py::test_upload_groups
+tests/1_local/test_secgroup_database.py::test_upload_groups
+tests/1_local/test_secgroup_database.py::test_upload_groups
+tests/1_local/test_secgroup_database.py::test_upload_groups
+tests/1_local/test_secgroup_database.py::test_upload_groups
+tests/1_local/test_secgroup_database.py::test_upload_groups
+tests/1_local/test_secgroup_database.py::test_upload_groups
+tests/1_local/test_secgroup_database.py::test_upload_groups
+tests/1_local/test_secgroup_database.py::test_upload_groups
+tests/1_local/test_secgroup_database.py::test_upload_groups
+tests/1_local/test_secgroup_database.py::test_upload_groups
+tests/1_local/test_secgroup_database.py::test_upload_groups
+tests/1_local/test_secgroup_database.py::test_upload_groups
+tests/1_local/test_secgroup_database.py::test_upload_groups
+tests/1_local/test_secgroup_database.py::test_upload_groups
+tests/1_local/test_secgroup_database.py::test_upload_groups
+tests/1_local/test_secgroup_database.py::test_upload_groups
+tests/1_local/test_secgroup_database.py::test_upload_groups
+tests/1_local/test_secgroup_database.py::test_upload_groups
+tests/1_local/test_secgroup_database.py::test_upload_groups
+tests/1_local/test_secgroup_database.py::test_upload_groups
+tests/1_local/test_secgroup_database.py::test_upload_groups
+tests/1_local/test_secgroup_database.py::test_upload_groups
+tests/1_local/test_secgroup_database.py::test_upload_groups
+tests/1_local/test_secgroup_database.py::test_upload_groups
+tests/1_local/test_secgroup_database.py::test_upload_groups
+tests/1_local/test_secgroup_database.py::test_upload_groups
+tests/1_local/test_secgroup_database.py::test_upload_groups
+tests/1_local/test_secgroup_database.py::test_upload_groups
+tests/1_local/test_secgroup_database.py::test_upload_groups
+tests/1_local/test_secgroup_database.py::test_upload_groups
+tests/1_local/test_secgroup_database.py::test_upload_groups
+tests/1_local/test_secgroup_database.py::test_upload_groups
+tests/1_local/test_secgroup_database.py::test_upload_rules
+tests/1_local/test_secgroup_database.py::test_upload_rules
+tests/1_local/test_secgroup_database.py::test_upload_rules
+tests/1_local/test_secgroup_database.py::test_upload_rules
+tests/1_local/test_secgroup_database.py::test_upload_rules
+tests/1_local/test_secgroup_database.py::test_upload_rules
+tests/1_local/test_secgroup_database.py::test_upload_rules
+tests/1_local/test_secgroup_database.py::test_upload_rules
+tests/1_local/test_secgroup_database.py::test_upload_rules
+tests/1_local/test_secgroup_database.py::test_upload_rules
+tests/1_local/test_secgroup_database.py::test_upload_rules
+tests/1_local/test_secgroup_database.py::test_upload_rules
+tests/1_local/test_secgroup_database.py::test_upload_rules
+tests/1_local/test_secgroup_database.py::test_upload_rules
+tests/1_local/test_secgroup_database.py::test_upload_rules
+tests/1_local/test_secgroup_database.py::test_upload_rules
+tests/1_local/test_secgroup_database.py::test_upload_rules
+tests/1_local/test_secgroup_database.py::test_upload_rules
+tests/1_local/test_secgroup_database.py::test_upload_rules
+tests/1_local/test_secgroup_database.py::test_upload_rules
+tests/1_local/test_secgroup_database.py::test_upload_rules
+tests/1_local/test_secgroup_database.py::test_upload_rules
+tests/1_local/test_secgroup_database.py::test_upload_rules
+tests/1_local/test_secgroup_database.py::test_upload_rules
+tests/1_local/test_secgroup_database.py::test_upload_rules
+tests/1_local/test_secgroup_database.py::test_upload_rules
+tests/1_local/test_secgroup_database.py::test_upload_rules
+tests/1_local/test_secgroup_database.py::test_upload_rules
+tests/1_local/test_secgroup_database.py::test_upload_rules
+tests/1_local/test_secgroup_database.py::test_upload_rules
+tests/1_local/test_secgroup_database.py::test_upload_rules
+tests/1_local/test_secgroup_database.py::test_upload_rules
+tests/1_local/test_secgroup_database.py::test_upload_rules
+tests/1_local/test_secgroup_database.py::test_upload_rules
+tests/1_local/test_secgroup_database.py::test_upload_rules
+tests/1_local/test_secgroup_database.py::test_upload_rules
+tests/1_local/test_secgroup_database.py::test_upload_rules
+tests/1_local/test_secgroup_database.py::test_upload_rules
+tests/1_local/test_secgroup_database.py::test_upload_rules
+tests/1_local/test_secgroup_database.py::test_upload_rules
+tests/1_local/test_secgroup_database.py::test_upload_rules
+tests/1_local/test_secgroup_database.py::test_upload_rules
+tests/1_local/test_secgroup_database.py::test_upload_rules
+tests/1_local/test_secgroup_database.py::test_upload_rules
+tests/1_local/test_secgroup_database.py::test_upload_rules
+tests/1_local/test_secgroup_database.py::test_upload_rules
+tests/1_local/test_secgroup_database.py::test_upload_rules
+tests/1_local/test_secgroup_database.py::test_upload_rules
+tests/1_local/test_secgroup_database.py::test_upload_rules
+tests/1_local/test_secgroup_database.py::test_upload_rules
+tests/1_local/test_secgroup_database.py::test_upload_rules
+tests/1_local/test_secgroup_database.py::test_upload_rules
+tests/1_local/test_secgroup_database.py::test_upload_rules
+tests/1_local/test_secgroup_database.py::test_upload_rules
+tests/1_local/test_secgroup_database.py::test_upload_rules
+tests/1_local/test_secgroup_database.py::test_upload_rules
+tests/1_local/test_secgroup_database.py::test_upload_rules
+tests/1_local/test_secgroup_database.py::test_upload_rules
+tests/1_local/test_secgroup_database.py::test_upload_rules
+tests/1_local/test_secgroup_database.py::test_upload_rules
+tests/1_local/test_secgroup_database.py::test_upload_rules
+tests/1_local/test_secgroup_database.py::test_upload_rules
+tests/1_local/test_secgroup_database.py::test_upload_rules
+tests/1_local/test_secgroup_database.py::test_upload_rules
+tests/1_local/test_secgroup_database.py::test_upload_rules
+tests/1_local/test_secgroup_database.py::test_upload_rules
+tests/1_local/test_secgroup_database.py::test_upload_rules
+tests/1_local/test_secgroup_database.py::test_upload_rules
+tests/1_local/test_secgroup_database.py::test_upload_rules
+tests/1_local/test_secgroup_database.py::test_upload_rules
+tests/1_local/test_secgroup_database.py::test_upload_rules
+tests/1_local/test_secgroup_database.py::test_upload_rules
+tests/1_local/test_secgroup_database.py::test_add_rule_to_group
+tests/1_local/test_secgroup_database.py::test_add_rule_to_group
+tests/1_local/test_secgroup_database.py::test_add_rule_to_group
+tests/1_local/test_secgroup_database.py::test_add_rule_to_group
+tests/1_local/test_secgroup_database.py::test_add_rule_to_group
+tests/1_local/test_secgroup_database.py::test_add_rule_to_group
+tests/1_local/test_secgroup_database.py::test_add_rule_to_group
+tests/1_local/test_secgroup_database.py::test_add_rule_to_group
+tests/1_local/test_secgroup_database.py::test_add_rule_to_group
+tests/1_local/test_secgroup_database.py::test_add_rule_to_group
+tests/1_local/test_secgroup_database.py::test_add_rule_to_group
+tests/1_local/test_secgroup_database.py::test_add_rule_to_group
+tests/1_local/test_secgroup_database.py::test_add_rule_to_group
+tests/1_local/test_secgroup_database.py::test_add_rule_to_group
+tests/1_local/test_secgroup_database.py::test_add_rule_to_group
+tests/1_local/test_secgroup_database.py::test_add_rule_to_group
+tests/1_local/test_secgroup_database.py::test_add_rule_to_group
+tests/1_local/test_secgroup_database.py::test_add_rule_to_group
+tests/1_local/test_secgroup_database.py::test_add_rule_to_group
+tests/1_local/test_secgroup_database.py::test_add_rule_to_group
+tests/1_local/test_secgroup_database.py::test_add_rule_to_group
+tests/1_local/test_secgroup_database.py::test_add_rule_to_group
+tests/1_local/test_secgroup_database.py::test_delete_rule_from_group
+tests/1_local/test_secgroup_database.py::test_delete_rule_from_group
+tests/1_local/test_secgroup_database.py::test_delete_rule_from_group
+tests/1_local/test_secgroup_database.py::test_delete_rule_from_group
+tests/1_local/test_secgroup_database.py::test_delete_rule_from_group
+tests/1_local/test_secgroup_database.py::test_delete_rule_from_group
+tests/1_local/test_secgroup_database.py::test_delete_rule_from_group
+tests/1_local/test_secgroup_database.py::test_delete_rule_from_group
+tests/1_local/test_secgroup_database.py::test_delete_rule_from_group
+tests/1_local/test_secgroup_database.py::test_delete_rule_from_group
+tests/1_local/test_secgroup_database.py::test_delete_rule_from_group
+tests/1_local/test_secgroup_database.py::test_delete_rule_from_group
+tests/1_local/test_secgroup_database.py::test_delete_rule_from_group
+tests/1_local/test_secgroup_database.py::test_delete_rule_from_group
+tests/1_local/test_secgroup_database.py::test_delete_rule_from_group
+tests/1_local/test_secgroup_database.py::test_delete_rule_from_group
+tests/1_local/test_secgroup_database.py::test_delete_rule_from_group
+tests/1_local/test_secgroup_database.py::test_delete_rule_from_group
+tests/1_local/test_secgroup_database.py::test_delete_rule_from_group
+tests/1_local/test_secgroup_database.py::test_delete_rule_from_group
+tests/1_local/test_secgroup_database.py::test_delete_rule_from_group
+tests/1_local/test_secgroup_database.py::test_delete_rule_from_group
+tests/1_local/test_secgroup_database.py::test_remove_group
+tests/1_local/test_secgroup_database.py::test_remove_group
+tests/1_local/test_secgroup_database.py::test_remove_group
+tests/1_local/test_secgroup_database.py::test_remove_group
+tests/1_local/test_secgroup_database.py::test_remove_group
+tests/1_local/test_secgroup_database.py::test_remove_group
+tests/1_local/test_secgroup_database.py::test_remove_rule
+tests/1_local/test_secgroup_database.py::test_remove_rule
+tests/1_local/test_secgroup_database.py::test_remove_rule
+tests/1_local/test_secgroup_database.py::test_remove_rule
+tests/1_local/test_secgroup_database.py::test_remove_rule
+tests/1_local/test_secgroup_database.py::test_remove_rule
+tests/1_local/test_secgroup_database.py::test_load_defaults
+tests/1_local/test_secgroup_database.py::test_load_defaults
+tests/1_local/test_secgroup_database.py::test_load_defaults
+tests/1_local/test_secgroup_database.py::test_load_defaults
+tests/1_local/test_secgroup_database.py::test_load_defaults
+tests/1_local/test_secgroup_database.py::test_load_defaults
+tests/1_local/test_secgroup_database.py::test_load_defaults
+tests/1_local/test_secgroup_database.py::test_load_defaults
+tests/1_local/test_secgroup_database.py::test_load_defaults
+tests/1_local/test_secgroup_database.py::test_load_defaults
+tests/1_local/test_secgroup_database.py::test_load_defaults
+tests/1_local/test_secgroup_database.py::test_load_defaults
+tests/1_local/test_secgroup_database.py::test_load_defaults
+tests/1_local/test_secgroup_database.py::test_load_defaults
+tests/1_local/test_secgroup_database.py::test_load_defaults
+tests/1_local/test_secgroup_database.py::test_load_defaults
+tests/1_local/test_secgroup_database.py::test_load_defaults
+tests/1_local/test_secgroup_database.py::test_load_defaults
+tests/1_local/test_secgroup_database.py::test_load_defaults
+tests/1_local/test_secgroup_database.py::test_load_defaults
+tests/1_local/test_secgroup_database.py::test_load_defaults
+tests/1_local/test_secgroup_database.py::test_load_defaults
+tests/1_local/test_secgroup_database.py::test_load_defaults
+tests/1_local/test_secgroup_database.py::test_load_defaults
+tests/1_local/test_secgroup_database.py::test_load_defaults
+tests/1_local/test_secgroup_database.py::test_load_defaults
+tests/1_local/test_secgroup_database.py::test_load_defaults
+tests/1_local/test_secgroup_database.py::test_load_defaults
+tests/1_local/test_secgroup_database.py::test_load_defaults
+tests/1_local/test_secgroup_database.py::test_load_defaults
+tests/1_local/test_secgroup_database.py::test_load_defaults
+tests/1_local/test_secgroup_database.py::test_load_defaults
+tests/1_local/test_secgroup_database.py::test_load_defaults
+tests/1_local/test_secgroup_database.py::test_load_defaults
+tests/1_local/test_secgroup_database.py::test_load_defaults
+tests/1_local/test_secgroup_database.py::test_load_defaults
+tests/1_local/test_secgroup_database.py::test_load_defaults
+tests/1_local/test_secgroup_database.py::test_load_defaults
+tests/1_local/test_secgroup_database.py::test_load_defaults
+tests/1_local/test_secgroup_database.py::test_load_defaults
+tests/1_local/test_secgroup_database.py::test_load_defaults
+tests/1_local/test_secgroup_database.py::test_load_defaults
+tests/1_local/test_secgroup_database.py::test_load_defaults
+tests/1_local/test_secgroup_database.py::test_load_defaults
+tests/1_local/test_secgroup_database.py::test_load_defaults
+tests/1_local/test_secgroup_database.py::test_load_defaults
+tests/1_local/test_secgroup_database.py::test_load_defaults
+tests/1_local/test_secgroup_database.py::test_load_defaults
+tests/1_local/test_secgroup_database.py::test_load_defaults
+tests/1_local/test_secgroup_database.py::test_load_defaults
+  /Users/grey/ENV3/lib/python3.8/site-packages/pymongo/message.py:703: DeprecationWarning: PY_SSIZE_T_CLEAN will be required for '#' formats
+    return _op_msg_uncompressed(
+
+/Users/grey/ENV3/lib/python3.8/site-packages/bson/__init__.py:1098
+/Users/grey/ENV3/lib/python3.8/site-packages/bson/__init__.py:1098
+/Users/grey/ENV3/lib/python3.8/site-packages/bson/__init__.py:1098
+/Users/grey/ENV3/lib/python3.8/site-packages/bson/__init__.py:1098
+/Users/grey/ENV3/lib/python3.8/site-packages/bson/__init__.py:1098
+/Users/grey/ENV3/lib/python3.8/site-packages/bson/__init__.py:1098
+/Users/grey/ENV3/lib/python3.8/site-packages/bson/__init__.py:1098
+tests/1_local/test_group.py::TestName::test_add
+tests/1_local/test_secgroup_database.py::test_add_rule_to_group
+tests/1_local/test_secgroup_database.py::test_delete_rule_from_group
+tests/1_local/test_secgroup_database.py::test_load_defaults
+tests/1_local/test_secgroup_database.py::test_load_defaults
+tests/1_local/test_secgroup_database.py::test_load_defaults
+tests/1_local/test_secgroup_database.py::test_load_defaults
+tests/1_local/test_secgroup_database.py::test_load_defaults
+  /Users/grey/ENV3/lib/python3.8/site-packages/bson/__init__.py:1098: DeprecationWarning: PY_SSIZE_T_CLEAN will be required for '#' formats
+    return decode_all(data, codec_options)
+
+-- Docs: https://docs.pytest.org/en/latest/warnings.html
+================= 2 failed, 57 passed, 441 warnings in 32.81s ==================

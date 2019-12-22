@@ -217,6 +217,24 @@ class RegisterCommand(PluginCommand):
             elif kind == "compute" and service == "oracle":
                 from cloudmesh.oracle.compute.Provider import Provider
 
+            elif kind == "storage" and service == "google":
+                # cloud = name
+                from cloudmesh.google.storage.Provider import Provider
+
+            else:
+                Console.error("The provider {google} for {kind}"
+                              " does not have a sample configuration")
+                return ""
+
+            if kind in ["compute", "cloud"]:
+                kind = "cloud"
+            if kind in ["storage"]:
+                kind = "storage"
+            else:
+                Console.error("the kind {kind} is not supported")
+                return ""
+
+
             sample = Provider.sample
 
             try:
@@ -225,10 +243,10 @@ class RegisterCommand(PluginCommand):
                 if arguments["-v"]:
                     print (sample)
 
-                Entry.add(entry=sample,
-                        base="cloudmesh.cloud",
-                        path="~/.cloudmesh/cloudmesh.yaml")
 
+                Entry.add(entry=sample,
+                        base=f"cloudmesh.{kind}",
+                        path="~/.cloudmesh/cloudmesh.yaml")
 
             except KeyError as e:
                 Console.error(f"Value for {e} is not specified")

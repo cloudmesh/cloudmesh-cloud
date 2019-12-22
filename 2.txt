@@ -1,0 +1,67 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.8.0, pytest-5.3.1, py-1.8.0, pluggy-0.13.1 -- /Users/grey/ENV3/bin/python3
+cachedir: .pytest_cache
+rootdir: /Users/grey/Desktop/github/cloudmesh-community/cm/cloudmesh-cloud, inifile: pytest.ini
+plugins: cov-2.8.1
+collecting ... collected 3 items
+
+tests/2_local/test_ssh.py::TestSsh::test_internal_ssh 
+PASSED
+tests/2_local/test_ssh.py::TestSsh::test_ssh_processors 
+Processors: 1
+Processors: 2
+Processors: 3
+Processors: 4
+Processors: 5
+Processors: 6
+Processors: 7
+Processors: 8
+Processors: 9
+Processors: 10
+Processors: 11
+Processors: 12
+Processors: 13
+PASSED
+tests/2_local/test_ssh.py::TestSsh::test_benchmark 
++----------------+-------+---------------------+-----+-----------+------+--------+-------------+-------------+
+| timer          | time  | start               | tag | node      | user | system | mac_version | win_version |
++----------------+-------+---------------------+-----+-----------+------+--------+-------------+-------------+
+| total _ssh     | 1.531 | 2019-12-13 06:56:35 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| ssh 127.0.0.1  | 0.105 | 2019-12-13 06:56:36 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| ssh localhost  | 0.109 | 2019-12-13 06:56:37 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| total p=1 c=1  | 1.875 | 2019-12-13 06:56:37 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| total p=2 c=1  | 1.22  | 2019-12-13 06:56:39 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| total p=3 c=1  | 1.0   | 2019-12-13 06:56:40 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| total p=4 c=1  | 0.801 | 2019-12-13 06:56:41 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| total p=5 c=1  | 0.785 | 2019-12-13 06:56:42 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| total p=6 c=1  | 0.838 | 2019-12-13 06:56:42 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| total p=7 c=1  | 0.821 | 2019-12-13 06:56:43 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| total p=8 c=1  | 1.029 | 2019-12-13 06:56:44 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| total p=9 c=1  | 0.961 | 2019-12-13 06:56:45 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| total p=10 c=1 | 1.042 | 2019-12-13 06:56:46 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| total p=11 c=1 | 1.137 | 2019-12-13 06:56:47 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| total p=12 c=1 | 1.281 | 2019-12-13 06:56:48 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
+| total p=13 c=1 | 1.307 | 2019-12-13 06:56:49 |     | ('gray',) | grey | Darwin | 10.14.6     |             |
++----------------+-------+---------------------+-----+-----------+------+--------+-------------+-------------+
+
+csv,timer,time,starttag,node,user,system,mac_version,win_version
+#csv,total _ssh,1.531,None,('gray',),grey,Darwin,10.14.6,
+#csv,ssh 127.0.0.1,0.105,None,('gray',),grey,Darwin,10.14.6,
+#csv,ssh localhost,0.109,None,('gray',),grey,Darwin,10.14.6,
+#csv,total p=1 c=1,1.875,None,('gray',),grey,Darwin,10.14.6,
+#csv,total p=2 c=1,1.22,None,('gray',),grey,Darwin,10.14.6,
+#csv,total p=3 c=1,1.0,None,('gray',),grey,Darwin,10.14.6,
+#csv,total p=4 c=1,0.801,None,('gray',),grey,Darwin,10.14.6,
+#csv,total p=5 c=1,0.785,None,('gray',),grey,Darwin,10.14.6,
+#csv,total p=6 c=1,0.838,None,('gray',),grey,Darwin,10.14.6,
+#csv,total p=7 c=1,0.821,None,('gray',),grey,Darwin,10.14.6,
+#csv,total p=8 c=1,1.029,None,('gray',),grey,Darwin,10.14.6,
+#csv,total p=9 c=1,0.961,None,('gray',),grey,Darwin,10.14.6,
+#csv,total p=10 c=1,1.042,None,('gray',),grey,Darwin,10.14.6,
+#csv,total p=11 c=1,1.137,None,('gray',),grey,Darwin,10.14.6,
+#csv,total p=12 c=1,1.281,None,('gray',),grey,Darwin,10.14.6,
+#csv,total p=13 c=1,1.307,None,('gray',),grey,Darwin,10.14.6,
+
+PASSED
+
+============================== 3 passed in 15.85s ==============================

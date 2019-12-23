@@ -1342,7 +1342,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         cm = CmDatabase()
         return cm.find_name(name, kind='image')
 
-    def flavors(self, **kwargs):
+    def flavors(self, n_results = float("inf"), **query):
 
         """
         Lists the flavors on the cloud
@@ -1350,7 +1350,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         :return: dict of flavors
         """
         flavors = AwsFlavor(session = self.session)
-        data = flavors.fetch()
+        data = flavors.fetch(n_results, **query)
         result = flavors.list(data)
         return self.update_dict(result, kind="flavor")
 

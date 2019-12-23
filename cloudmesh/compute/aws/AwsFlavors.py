@@ -1,6 +1,7 @@
 import boto3
 import copy
 import json
+import re
 from cloudmesh.common.console import Console
 from progress.bar import Bar
 from pprint import pprint
@@ -16,37 +17,46 @@ class AwsFlavor:
         pass
 
     def fetch(self,
+              n_results,
               url=None,
               offer='AmazonEC2',
-              # n_results = None,
-              n_results = 152,
               page_size = 100,
-              filter = []
+              **query
               ):
 
         results = []
         next_token = ''
+        import pdb; pdb.set_trace()
 
-        filterx = [
-            {
-            'Type': 'TERM_MATCH',
-            'Field': 'instancesku',
-            'Value': '3MFG4YWWT6SPWHET'
-            }
-            # terms.OnDemand.offer.priceDimensions.termoffer.pricePerUnit.USD
-        ]
+        if query == {}:
+            query = None
+        elif isinstance(query, dict):
+            query = [query]
 
         while next_token is not None and len(results) < n_results:
             if n_results and page_size > n_results - len(results):
                 page_size = n_results - len(results)
-            response = self.client.get_products(
-                ServiceCode = 'AmazonEC2',
-                MaxResults = page_size,
-                FormatVersion = 'aws_v1',
-                NextToken = next_token,
-                Filters = filterx
-            )
+            if query is None:
+                response = self.client.get_products(
+                    ServiceCode = 'AmazonEC2',
+                    MaxResults = page_size,
+                    FormatVersion = 'aws_v1',
+                    NextToken = next_token
+                )
+            else:
+                response = self.client.get_products(
+                    ServiceCode = 'AmazonEC2',
+                    MaxResults = page_size,
+                    FormatVersion = 'aws_v1',
+                    NextToken = next_token,
+                    Filters = query
+                )
+            # clean up rate codes.
+            response_str = json.dumps(response)
+            response_str = re.sub('([0-9A-Z]{16})\.', r'\1', response_str)
+            response_str = re.sub('([0-9A-Z]{10})\.', r'\1', response_str)
             # Add new price elements to results
+            response = json.loads(response_str)
             results.extend([json.loads(x) for x in response['PriceList']])
             if 'NextToken' in response.keys():
                 next_token = response['NextToken']
@@ -62,21 +72,24 @@ class AwsFlavor:
         """
         # flavor['terms']['OnDemand']['sku_offerTermCode']['priceDimensions']['sku_offerTerm_priceDimension']['pricePerUnit']['USD']
         parsed = []
-        for x in list(json['terms']['OnDemand'].keys()):
-            for y in list(json['terms']['OnDemand'][x]['priceDimensions'].keys()):
-                json_tmp = copy.deepcopy(json)
-                name = json['terms']['OnDemand'][x]['priceDimensions'][y].get('rateCode')
-                name = name.replace(".", "")
-                json_tmp['name'] = name
-                json_tmp["sku"] = json['product'].get('sku')
-                json_tmp["sku_offerTermCode"] = x
-                json_tmp["sku_offerTerm_priceDimension"] = y
-                json_tmp["cm"] = {"kind": "flavor", "name": name, "cloud": "aws", "cloudtype": "aws"}
-                json_tmp['terms']['OnDemand']= {}
-                json_tmp['terms']['OnDemand']['sku_offerTermCode'] = copy.deepcopy(json['terms']['OnDemand'][x])
-                json_tmp['terms']['OnDemand']['sku_offerTermCode']['priceDimensions'] = {}
-                json_tmp['terms']['OnDemand']['sku_offerTermCode']['priceDimensions']['sku_offerTerm_priceDimension'] = copy.deepcopy(json['terms']['OnDemand'][x]['priceDimensions'][y])
-                parsed.append(json_tmp)
+        if 'OnDemand' in json['terms'].keys():
+            for x in list(json['terms']['OnDemand'].keys()):
+                for y in list(json['terms']['OnDemand'][x]['priceDimensions'].keys()):
+                    json_tmp = copy.deepcopy(json)
+                    name = json['terms']['OnDemand'][x]['priceDimensions'][y].get('rateCode')
+                    name = name.replace(".", "")
+                    json_tmp['name'] = name
+                    json_tmp["sku"] = json['product'].get('sku')
+                    json_tmp["sku_offerTermCode"] = x
+                    json_tmp["sku_offerTerm_priceDimension"] = y
+                    json_tmp["cm"] = {"kind": "flavor", "name": name, "cloud": "aws", "cloudtype": "aws"}
+                    json_tmp['terms']['OnDemand']= {}
+                    json_tmp['terms']['OnDemand']['sku_offerTermCode'] = copy.deepcopy(json['terms']['OnDemand'][x])
+                    json_tmp['terms']['OnDemand']['sku_offerTermCode']['priceDimensions'] = {}
+                    json_tmp['terms']['OnDemand']['sku_offerTermCode']['priceDimensions']['sku_offerTerm_priceDimension'] = copy.deepcopy(json['terms']['OnDemand'][x]['priceDimensions'][y])
+                    parsed.append(json_tmp)
+        if len(parsed) == 0:
+            parsed = None
         return parsed
 
     def list(self, json_string_list):
@@ -86,7 +99,9 @@ class AwsFlavor:
         flavors = []
 
         for s in json_string_list:
-            flavors.extend(self.parse_aws_json(s))
+            flavor = self.parse_aws_json(s)
+            if flavor is not None:
+                flavors.extend(flavor)
             bar.next()
 
         bar.finish()

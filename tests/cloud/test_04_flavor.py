@@ -44,7 +44,7 @@ class Test_Flavor:
         HEADING()
         local = Key()
         Benchmark.Start()
-        r = provider.flavors()
+        r = provider.flavors(n_results=100)
         Benchmark.Stop()
 
     def test_provider_flavor_update(self):

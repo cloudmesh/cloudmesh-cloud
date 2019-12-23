@@ -2,6 +2,7 @@ from pprint import pprint
 
 from cloudmesh.common.console import Console
 from cloudmesh.common.util import path_expand
+from cloudmesh.common.util import banner
 from cloudmesh.shell.command import PluginCommand
 from cloudmesh.shell.command import command
 import importlib
@@ -130,16 +131,12 @@ class RegisterCommand(PluginCommand):
 
         """
 
-        if arguments.aws:
+        if arguments.aws and arguments.yaml:
 
-            if arguments.yaml:
-                AWSReg = importlib.import_module(
-                    "cloudmesh.register.AWSRegister")
-                AWSregisterer = AWSReg.AWSRegister()
-                AWSregisterer.register()
-
-            else:
-                Console.error("not yet implemented")
+            AWSReg = importlib.import_module(
+                "cloudmesh.register.AWSRegister")
+            AWSregisterer = AWSReg.AWSRegister()
+            AWSregisterer.register()
 
         elif arguments.azure:
             if arguments.yaml:
@@ -147,15 +144,28 @@ class RegisterCommand(PluginCommand):
                     "cloudmesh.register.AzRegister")
                 AZregisterer = Registry.AzRegister()
                 AZregisterer.register()
-            #Console.error("not yet implemented")
+
+            return ""
 
         elif arguments.google:
 
-            Console.error("not yet implemented")
+            from cloudmesh.google.storage.Provider import Provider
+
+            banner("Read the  specification from json and write to yaml file")
+            path = path_expand(
+                arguments.FILE_JSON or "~/.cloudmesh/google.json")
+
+            name = arguments.storage or "google"
+            Provider.json_to_yaml(name, filename=path)
+
+            Console.error("deleting {path} not implemented")
+            return ""
 
         elif arguments.chameleon:
 
             Console.error("not yet implemented")
+            return ""
+
 
         elif arguments.list:
 
@@ -181,6 +191,9 @@ class RegisterCommand(PluginCommand):
 
             elif kind == "compute" and service == "oracle":
                 from cloudmesh.oracle.compute.Provider import Provider
+
+            elif kind == "storage" and service == "google":
+                from cloudmesh.google.storage.Provider import Provider
 
             sample = Provider.sample
 
@@ -218,7 +231,6 @@ class RegisterCommand(PluginCommand):
                 from cloudmesh.oracle.compute.Provider import Provider
 
             elif kind == "storage" and service == "google":
-                # cloud = name
                 from cloudmesh.google.storage.Provider import Provider
 
             else:

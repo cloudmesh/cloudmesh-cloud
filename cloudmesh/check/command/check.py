@@ -11,9 +11,12 @@ from cloudmesh.common.Printer import Printer
 from cloudmesh.common.Shell import Shell
 from cloudmesh.configuration.Config import Config
 from cloudmesh.common.util import path_expand
+from cloudmesh.common.util import banner
 import sys
 from pathlib import Path
 from pprint import pprint
+import json
+import os
 
 class CheckCommand(PluginCommand):
 
@@ -131,9 +134,6 @@ class CheckCommand(PluginCommand):
 
                 data[keyword].update(entry)
 
-        #
-        # probe ssh
-        #
         path, v = get_info('ssh')
         data['ssh']= {
             'system': {
@@ -143,7 +143,36 @@ class CheckCommand(PluginCommand):
                 'enabled': check_ssh()
             }
         }
+
+        #
+        # probe ssh commands
+        #
+        for c in ["ssh-keygen", "ssh-add", "ssh-agent"]:
+            data[c] = {
+                'system': {
+                    'name': c,
+                    'path': Shell.which(c),
+                }
+            }
+
         if len(data) > 0:
-            pprint (data)
+            banner("ssh, mongo, mongod")
+            print(json.dumps(data, indent=2))
+
+
+        banner("os.environ")
+        for attribute in os.environ:
+            print (attribute, os.environ[attribute])
+
+        banner("Shell.run")
+
+        for c in ["echo $0",
+                  "echo $SHELL"]:
+            try:
+                r = Shell.run(c).strip()
+            except:
+                r = 'error'
+            print(f"Shell.run('{c}')", r)
+
 
         return ""

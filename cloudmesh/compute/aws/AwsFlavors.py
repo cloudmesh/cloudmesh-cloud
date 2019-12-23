@@ -26,7 +26,6 @@ class AwsFlavor:
 
         results = []
         next_token = ''
-        import pdb; pdb.set_trace()
 
         if query == {}:
             query = None

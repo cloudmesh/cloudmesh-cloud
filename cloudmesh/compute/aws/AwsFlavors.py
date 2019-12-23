@@ -8,6 +8,11 @@ from pprint import pprint
 
 class AwsFlavor:
 
+    # Changes need to be made in the provider and test files to make use of the
+    # new api fetching features, namely to reduce the number of elements
+    # fetched, so tests take less time.
+    # See Commit 1907ec2 for an example implementation
+
     def __init__(self,
                  session,
                  region_name = "us-east-1",

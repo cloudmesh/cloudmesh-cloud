@@ -17,7 +17,7 @@ class AwsFlavor:
         pass
 
     def fetch(self,
-              n_results,
+              n_results=float("inf"),
               url=None,
               offer='AmazonEC2',
               page_size = 100,

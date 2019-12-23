@@ -7,6 +7,7 @@ import pytest
 from cloudmesh.common.Benchmark import Benchmark
 from cloudmesh.common.Shell import Shell
 from cloudmesh.common.util import HEADING
+import sys
 
 Benchmark.debug()
 
@@ -29,26 +30,49 @@ class TestName:
         Benchmark.Stop()
         print(r)
 
-    def test_ls_la_list(self):
-        HEADING()
-        Benchmark.Start()
-        r = Shell.execute('ls', ["-l", "-a"])
-        Benchmark.Stop()
-        print(r)
+    def test_execute_list(self):
+        if sys.platform != 'win32':
+            HEADING()
+            Benchmark.Start()
+            r = Shell.execute('ls', ["-l", "-a"])
+            Benchmark.Stop()
+            print(r)
+        else:
+            HEADING()
+            Benchmark.Start()
+            r = Shell.execute('whoami', ["/user", "/fo", "table"])
+            Benchmark.Stop()
+            print(r)
 
-    def test_ls_la_string(self):
-        HEADING()
-        Benchmark.Start()
-        r = Shell.execute('ls', "-l -a")
-        Benchmark.Stop()
-        print(r)
+    def test_execute_string(self):
+        if sys.platform != 'win32':
+            HEADING()
+            Benchmark.Start()
+            r = Shell.execute('ls', "-l -a")
+            Benchmark.Stop()
+            print(r)
+        else:
+            HEADING()
+            Benchmark.Start()
+            r = Shell.execute('whoami', "/user /fo table")
+            Benchmark.Stop()
+            print(r)
 
     def test_ls(self):
         HEADING()
         Benchmark.Start()
-        r = Shell.ls(".", "*")
+        r = Shell.ls("./*.py")
         Benchmark.Stop()
         print(r)
+        assert len(r) > 0
+
+    def test_check(self):
+        HEADING()
+        Benchmark.Start()
+        r = Shell.run("cms check")
+        Benchmark.Stop()
+        print(r)
+        assert len(r) > 0
 
     def test_benchmark(self):
         HEADING()

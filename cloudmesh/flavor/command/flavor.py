@@ -43,14 +43,6 @@ class FlavorCommand(PluginCommand):
 
                 cms flavor list --refresh --query=\'{\"a\": \"b\"}\'
 
-            aws Query Example:
-
-                cms flavor list --refresh --query='''{ \\
-                \\\"Type\\\":\\ \\\"TERM_MATCH\\\"\\,\\ \\
-                \\\"Field\\\":\\ \\\"instancesku\\\"\\,\\ \\
-                \\\"Value\\\":\\ \\\"3MFG4YWWT6SPWHET\\\" \\
-                }'''
-
             OpenStack Query Example:
 
                 cms flavor list --refresh --query=\'{\"minDisk\": \"80\"}\'

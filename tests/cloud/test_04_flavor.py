@@ -44,14 +44,14 @@ class Test_Flavor:
         HEADING()
         local = Key()
         Benchmark.Start()
-        r = provider.flavors(n_results=30)
+        r = provider.flavors()
         Benchmark.Stop()
 
     def test_provider_flavor_update(self):
         HEADING()
         local = Key()
         Benchmark.Start()
-        r = provider.flavors(n_results=30)
+        r = provider.flavors()
         Benchmark.Stop()
 
         cm.clear(collection=f"{cloud}-falvor")
@@ -60,21 +60,8 @@ class Test_Flavor:
         HEADING()
         local = Key()
         Benchmark.Start()
-        if cloud == 'aws':
-            query = '''{\
-                \\\"Type\\\":\\ \\\"TERM_MATCH\\\"\\,\\ \
-                \\\"Field\\\":\\ \\\"instancesku\\\"\\,\\ \
-                \\\"Value\\\":\\ \\\"3MFG4YWWT6SPWHET\\\"\
-                }'''
-            system_cmd = \
-                f"cms flavor list --cloud={cloud} --query={query} --refresh \
-                > flavor-{cloud}.log"
-            os.system(system_cmd)
-        else:
-            os.system(
-                f"cms flavor list --cloud={cloud} --refresh \
-                > flavor-{cloud}.log"
-            )
+        os.system(
+            f"cms flavor list --cloud={cloud} --refresh > flavor-{cloud}.log")
         Benchmark.Stop()
 
     def test_cms_flavor(self):

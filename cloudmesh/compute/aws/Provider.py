@@ -1342,15 +1342,15 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         cm = CmDatabase()
         return cm.find_name(name, kind='image')
 
-    def flavors(self, n_results = float("inf"), **query):
+    def flavors(self, **kwargs):
 
         """
         Lists the flavors on the cloud
 
         :return: dict of flavors
         """
-        flavors = AwsFlavor(session = self.session)
-        data = flavors.fetch(n_results, **query)
+        flavors = AwsFlavor()
+        data = flavors.fetch()
         result = flavors.list(data)
         return self.update_dict(result, kind="flavor")
 

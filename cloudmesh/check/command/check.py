@@ -55,7 +55,7 @@ class CheckCommand(PluginCommand):
                                           variables,
                                           "table")
 
-        keywords = arguments.KEYWORDS or ['mongo', "mongod"]
+        keywords = arguments.KEYWORDS or ['mongo', "mongod", "mongoimport"]
 
         def check_ssh():
             cmd = "ssh " \
@@ -77,6 +77,9 @@ class CheckCommand(PluginCommand):
                         v = v.splitlines()[0].replace("MongoDB shell version ", "")
                     elif shell_command.endswith("mongod"):
                         v = v.splitlines()[0].replace("db version ", "")
+                    elif shell_command.endswith("mongoimport"):
+                        v = v.splitlines()[0].replace("mongoimport version: ", "")
+
                 except:
                     v = "unkown"
             return path, v
@@ -112,7 +115,7 @@ class CheckCommand(PluginCommand):
             # probe cloudmesh mongo
             #
 
-            if "mongo" in ['mongo', 'mongod']:
+            if "mongo" in ['mongo', 'mongod', 'mongoimport']:
                 if mongo_path:
 
                     path = str(Path(path_expand(mongo_path)) / "bin" / keyword)
@@ -156,7 +159,7 @@ class CheckCommand(PluginCommand):
             }
 
         if len(data) > 0:
-            banner("ssh, mongo, mongod")
+            banner("ssh, mongo, mongod, mongoimport")
             print(json.dumps(data, indent=2))
 
 

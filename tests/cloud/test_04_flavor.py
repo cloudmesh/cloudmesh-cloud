@@ -61,7 +61,11 @@ class Test_Flavor:
         local = Key()
         Benchmark.Start()
         if cloud == 'aws':
-            query = '''{\\\"Type\\\":\\ \\\"TERM_MATCH\\\"\\,\\ \\\"Field\\\":\\ \\\"instancesku\\\"\\,\\ \\\"Value\\\":\\ \\\"3MFG4YWWT6SPWHET\\\"}'''
+            query = '''{\
+                \\\"Type\\\":\\ \\\"TERM_MATCH\\\"\\,\\ \
+                \\\"Field\\\":\\ \\\"instancesku\\\"\\,\\ \
+                \\\"Value\\\":\\ \\\"3MFG4YWWT6SPWHET\\\"\
+                }'''
             system_cmd = \
                 f"cms flavor list --cloud={cloud} --query={query} --refresh \
                 > flavor-{cloud}.log"

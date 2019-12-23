@@ -41,9 +41,11 @@ class Shell(Shell2):
     @staticmethod
     def run2(command, encoding='utf-8'):
         """
-        executes the command and returns the output as string
-        :param command:
-        :param encoding:
+        executes the command and returns the output as string. This command also
+        allows execution of 32 bit commands.
+
+        :param command: the program or command to be executed
+        :param encoding: encoding of the output
         :return:
         """
         if platform.lower() == 'win32':

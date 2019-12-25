@@ -37,12 +37,13 @@ class Provider(ComputeNodeABC):
 
         providers = ProviderList()
 
-        if self.kind in ['openstack',
-                         'azure',
-                         'docker',
-                         "aws",
-                         "azureaz",
-                         "virtualbox"]:
+        if self.kind in [
+#            'openstack',
+             'azure',
+             'docker',
+             "aws",
+             "azureaz",
+             "virtualbox"]:
 
             provider = providers[self.kind]
 
@@ -51,6 +52,11 @@ class Provider(ComputeNodeABC):
             from cloudmesh.compute.libcloud.Provider import \
                 Provider as LibCloudProvider
             provider = LibCloudProvider
+
+        elif self.kind in ['openstack']:
+            from cloudmesh.openstack.compute.Provider import \
+                Provider as OpenStackComputeProvider
+            provider = OpenStackComputeProvider
 
         elif self.kind in ['oracle']:
             from cloudmesh.oracle.compute.Provider import \

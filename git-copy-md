@@ -1,0 +1,22 @@
+https://github.community/t5/How-to-use-Git-and-GitHub/Adding-a-folder-from-one-repo-to-another/td-p/5425
+
+mkdir backup
+cd backup
+git clone https://github.com/user/source.git
+cd source
+
+
+git remote rm origin
+git filter-branch --subdirectory-filter foo -- --all
+mkdir foo
+mv * foo
+git add .
+git commit
+
+
+
+cd ../../projects/destination
+
+git remote add modified-source ../../backup/source
+git pull modified-source master --allow-unrelated-histories
+git remote rm modified-source

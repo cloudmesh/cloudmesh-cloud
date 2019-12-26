@@ -43,6 +43,7 @@ def _get_az_vm_status(az_status):
         return None
 
 
+# noinspection PyPep8
 class Provider(ComputeNodeABC, ComputeProviderPlugin):
     """
     verbosity
@@ -125,72 +126,74 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         },
         "vm": {
             "sort_keys": ["cm.name"],
-            "order": ["cm.name",
-                      "cm.cloud",
-                      "id",
-                      "type",
-                      "location",
-                      "hardware_profile.vm_size",
-                      "storage_profile.image_reference.image_reference",
-                      "storage_profile.image_reference.offer",
-                      "storage_profile.image_reference.sku",
-                      "storage_profile.image_reference.version",
-                      "storage_profile.os_disk.os_type",
-                      "storage_profile.os_disk.name",
-                      "storage_profile.os_disk.caching",
-                      "storage_profile.os_disk.create_option",
-                      "storage_profile.os_disk.disk_size_gb",
-                      "storage_profile.os_disk.managed_disk.id",
-                      "storage_profile.os_disk.managed_disk.storage_account_type",
-                      "storage_profile.data_disks.lun",
-                      "storage_profile.data_disks.name",
-                      "storage_profile.data_disks.caching",
-                      "storage_profile.data_disks.create_option",
-                      "storage_profile.data_disks.disk_size_gb",
-                      "storage_profile.data_disks.managed_disk.id",
-                      "storage_profile.data_disks.managed_disk.storage_account_type",
-                      "os_profile.computer_name",
-                      "os_profile.admin_username",
-                      "os_profile.linux_configuration.disable_password_authentication",
-                      "os_profile.linux_configuration.provision_vm_agent",
-                      "os_profile.allow_extension_operations",
-                      "network_profile.network_interfaces.id",
-                      "provisioning_state",
-                      "vm_id",
-                      "cm.kind"],
-            "header": ["Name",
-                       "Cloud",
-                       "Id",
-                       "Type",
-                       "Location",
-                       "VM_Size",
-                       "Image Reference",
-                       "Image Offer",
-                       "Image Sku",
-                       "Image Version",
-                       "Image OS Type",
-                       "Image OS Disk Name",
-                       "Image OS Disk Caching",
-                       "Image OS Disk Create Option",
-                       "Image OS Disk Size",
-                       "Image OS Disk ID",
-                       "Image OS Disk Storage Type",
-                       "Image Data Disk Lun",
-                       "Image Data Disk Name",
-                       "Image Data Disk Caching",
-                       "Image Data Disk Create Option",
-                       "Image Data Disk Size",
-                       "Image Data Disk Id",
-                       "Image Data Disk Storage Type",
-                       "Image Os Profile Computer Name",
-                       "Image Os Profile Admin Username",
-                       "Image Linux Conf Disable Password",
-                       "Image Linux Conf Provision VM Agent",
-                       "Image Os Profile Allow Extension Operations",
-                       "Network Interfaces ID",
-                       "Provisioning State",
-                       "VM ID",
-                       "Kind"]
+            "order": [
+                "cm.name",
+                "cm.cloud",
+                "id",
+                "type",
+                "location",
+                "hardware_profile.vm_size",
+                "storage_profile.image_reference.image_reference",
+                "storage_profile.image_reference.offer",
+                "storage_profile.image_reference.sku",
+                "storage_profile.image_reference.version",
+                "storage_profile.os_disk.os_type",
+                "storage_profile.os_disk.name",
+                "storage_profile.os_disk.caching",
+                "storage_profile.os_disk.create_option",
+                "storage_profile.os_disk.disk_size_gb",
+                "storage_profile.os_disk.managed_disk.id",
+                "storage_profile.os_disk.managed_disk.storage_account_type",
+                "storage_profile.data_disks.lun",
+                "storage_profile.data_disks.name",
+                "storage_profile.data_disks.caching",
+                "storage_profile.data_disks.create_option",
+                "storage_profile.data_disks.disk_size_gb",
+                "storage_profile.data_disks.managed_disk.id",
+                "storage_profile.data_disks.managed_disk.storage_account_type",
+                "os_profile.computer_name",
+                "os_profile.admin_username",
+                "os_profile.linux_configuration.disable_password_authentication",
+                "os_profile.linux_configuration.provision_vm_agent",
+                "os_profile.allow_extension_operations",
+                "network_profile.network_interfaces.id",
+                "provisioning_state",
+                "vm_id",
+                "cm.kind"],
+            "header": [
+                "Name",
+                "Cloud",
+                "Id",
+                "Type",
+                "Location",
+                "VM_Size",
+                "Image Reference",
+                "Image Offer",
+                "Image Sku",
+                "Image Version",
+                "Image OS Type",
+                "Image OS Disk Name",
+                "Image OS Disk Caching",
+                "Image OS Disk Create Option",
+                "Image OS Disk Size",
+                "Image OS Disk ID",
+                "Image OS Disk Storage Type",
+                "Image Data Disk Lun",
+                "Image Data Disk Name",
+                "Image Data Disk Caching",
+                "Image Data Disk Create Option",
+                "Image Data Disk Size",
+                "Image Data Disk Id",
+                "Image Data Disk Storage Type",
+                "Image Os Profile Computer Name",
+                "Image Os Profile Admin Username",
+                "Image Linux Conf Disable Password",
+                "Image Linux Conf Provision VM Agent",
+                "Image Os Profile Allow Extension Operations",
+                "Network Interfaces ID",
+                "Provisioning State",
+                "VM ID",
+                "Kind"]
         },
         "image": {
             "sort_keys": ["cm.name",
@@ -226,9 +229,9 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                        "Memory",
                        "Max_Data_Disk"]},
         # "status": {},
-        "key": {},  # Moeen
-        "secgroup": {},  # Moeen
-        "secrule": {},  # Moeen
+        "key": {},  # Niranda, we need this for printing tables
+        "secgroup": {},  # Niranda, we need this for printing tables
+        "secrule": {},  # Niranda, we need this for printing tables
     }
 
     # noinspection PyPep8Naming
@@ -331,6 +334,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
             '*': '*'
         }
 
+    # noinspection PyPep8Naming
     def Print(self, data, output=None, kind=None):
         if output == "table":
             if kind == "secrule":
@@ -355,12 +359,6 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                   )
         else:
             print(Printer.write(data, output=output))
-
-    # noinspection PyPep8Naming
-
-    #    def Print(self, output, kind, data):
-    # TODO: Moeen
-    #        raise NotImplementedError
 
     def keys(self):
         """
@@ -484,8 +482,8 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
     def find_available_public_ip(self):
         """
-        Azure currenly has no direct API to check if an IP is available or not!
-        hence create an IP everytime this method is called!
+        Azure currently has no direct API to check if an IP is available or not!
+        Hence create an IP everytime this method is called!
 
         :return:
         """
@@ -599,6 +597,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
         return vm_obj, pub_ip.as_dict()
 
+    # noinspection PyPep8
     def ssh(self, vm=None, command=None):
         """
         TBD
@@ -1344,7 +1343,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         Console.info("VNET created: " + res.name)
         return res
 
-    def _create_az_subnet_if_not_exitsts(self, secgroup):
+    def _create_az_subnet_if_not_exits(self, secgroup):
         """
         TBD
 
@@ -1395,7 +1394,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
         # Create Subnet
         Console.info('Creating Subnet')
-        subnet = self._create_az_subnet_if_not_exitsts(secgroup)
+        subnet = self._create_az_subnet_if_not_exits(secgroup)
 
         # Create NIC
         Console.info('Creating NIC')
@@ -1506,7 +1505,8 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
     def suspend(self, group=None, name=None):
         # TODO: Joaquin -> Completed
         """
-        suspends the node with the given name since Azure does not handle suspend it uses stop
+        suspends the node with the given name since Azure does not handle
+        suspend it uses stop
 
         :param group: the unique Resource Group name
         :param name: the unique Virtual Machine name
@@ -1522,10 +1522,12 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
     def info(self, group=None, name=None, status=None):
         """
         gets the information of a node with a given name
-        List VM in resource group
+        list VM in resource group
+
         :param group: the unique Resource Group name
         :param name: the unique Virtual Machine name
-        :return: The dict representing the node including updated status
+        :param status: TODO
+        :return: dict representing the node including updated status
         """
         if group is None:
             group = self.GROUP_NAME
@@ -1625,7 +1627,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         i = 0
 
         for publisher in result_list_pub:
-            if (i < 5):
+            if i < 5:
                 try:
                     result_list_offers = self.imgs.list_offers(
                         region,
@@ -1703,6 +1705,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         """
         return self.find(self.flavors(), name=name)
 
+    # noinspection PyMethodMayBeStatic
     def find(self, elements, name=None):
         """
         Finds an element in elements with the specified name.

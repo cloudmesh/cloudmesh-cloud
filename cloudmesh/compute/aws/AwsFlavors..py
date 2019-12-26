@@ -5,9 +5,10 @@ from progress.bar import Bar
 # please use requests
 
 """
-I do not yet understand why flavor is restricted and we do not just use what the dict under product returns
+I do not yet understand why flavor is restricted and we do not 
+just use what the dict under product returns
 
- I see for example. Are all of them returned, or just some selected values?
+I see for example. Are all of them returned, or just some selected values?
  
  {
     "WR4JPHDYW77XS7MC" : {
@@ -51,7 +52,8 @@ price is something like
         "priceDimensions" : {
             "DBCQPZ6Z853WRE98.JRTCKXETXF.6YS6EN2CT7" : {
                 "rateCode" : "DBCQPZ6Z853WRE98.JRTCKXETXF.6YS6EN2CT7",
-                "description" : "$3.586 per Unused Reservation RHEL r5d.12xlarge Instance Hour",
+                "description" : "$3.586 per Unused Reservation RHEL "
+                                "r5d.12xlarge Instance Hour",
                 "beginRange" : "0",
                 "endRange" : "Inf",
                 "unit" : "Hrs",
@@ -100,10 +102,12 @@ class AwsFlavor(object):
               offer='AmazonEC2'
               ):
         if url is None:
-            offer_index_url = f"https://pricing.{region}.amazonaws.com/offers/v1.0/aws/index.json"
+            offer_index_url = f"https://pricing.{region}"\
+                              ".amazonaws.com/offers/v1.0/aws/index.json"
             offer_index = self.fetch_json_file(offer_index_url)
             offer_file_api_url = f"https://pricing.{region}.amazonaws.com"
-            # offer_file_path = offer_index['offers']['AmazonEC2']['currentVersionUrl']
+            # offer_file_path = offer_index['offers']['AmazonEC2']\
+            #                   ['currentVersionUrl']
             region_file_path = offer_index['offers'][offer][
                 'currentRegionIndexUrl']
             regions_url = offer_file_api_url + region_file_path
@@ -115,6 +119,7 @@ class AwsFlavor(object):
         offer_data = self.fetch_json_file(url)
         return offer_data
 
+    # noinspection PyMethodMayBeStatic
     def list(self, offer):
 
         bar = Bar('Processing Flavor Products', max=len(offer["products"]))

@@ -235,26 +235,22 @@ class AdminCommand(PluginCommand):
 
         elif arguments.status:
 
-            config = Config()
-            data = config.data["cloudmesh.data.mongo"]
-            # self.expanduser()
+
+            #config = Config()
+            #data = config["cloudmesh.data.mongo"]
 
             print("Rest Service status")
 
             print("MongoDB status")
 
-            mongo = MongoDBController()
-
-            print(mongo)
-            # mongo.expanduser()
-            # data = mongo.data
-            # print ("DDD", data)
-
-            # data["MONGO_VERSION"]  = '.'.join(str(x) for x in mongo.version())
-
-            # print (data)
-            # print(Printer.attribute(data))
-            # mongo.set_auth()
+            try:
+                mongo = MongoDBController()
+                mongo.login()
+                if mongo.status()['status'] == 'ok':
+                    Console.ok("MOngo is running")
+            except Exception as e:
+                Console.error("Mongo is not running")
+                print (e)
 
         elif arguments.system:
 

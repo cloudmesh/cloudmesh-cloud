@@ -327,10 +327,24 @@ class ComputeNodeABC(metaclass=ABCMeta):
              vm=None,
              interval=None,
              timeout=None):
+        """
+        wais till the given VM can be logged into
+
+        :param vm: name of the vm
+        :param interval: interval for checking
+        :param timeout: timeout
+        :return:
+        """
         raise NotImplementedError
         return False
 
     def console(self, vm=None):
+        """
+        gets the output from the console
+
+        :param vm: name of the VM
+        :return:
+        """
         raise NotImplementedError
         return ""
 

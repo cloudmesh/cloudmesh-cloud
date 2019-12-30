@@ -30,7 +30,7 @@ from sys import platform
 from cloudmesh.common.util import HEADING
 from cloudmesh.common.variables import Variables
 from cloudmesh.common.Benchmark import Benchmark
-from cloudmesh.common3.Shell import Shell
+from cloudmesh.common.Shell import Shell
 from cloudmesh.compute.vm.Provider import Provider
 from cloudmesh.mongo.CmDatabase import CmDatabase
 from cloudmesh.secgroup.Secgroup import Secgroup

@@ -5,7 +5,7 @@
 ###############################################################
 import pytest
 from cloudmesh.common.Benchmark import Benchmark
-from cloudmesh.common3.Shell import Shell
+from cloudmesh.common.Shell import Shell
 from cloudmesh.common.util import HEADING
 import sys
 

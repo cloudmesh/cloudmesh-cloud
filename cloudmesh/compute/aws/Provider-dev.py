@@ -20,7 +20,7 @@ from cloudmesh.configuration.Config import Config
 from cloudmesh.provider import ComputeProviderPlugin
 from cloudmesh.mongo.DataBaseDecorator import DatabaseImportAsJson
 from cloudmesh.mongo.CmDatabase import CmDatabase
-from cloudmesh.common3.Shell import Shell
+from cloudmesh.common.Shell import Shell
 from cloudmesh.secgroup.Secgroup import Secgroup, SecgroupRule
 from cloudmesh.common.util import path_expand
 from cloudmesh.common.Benchmark import Benchmark

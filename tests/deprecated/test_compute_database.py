@@ -153,7 +153,7 @@ class Test_Compute_Database:
 
         Benchmark.Start()
         #
-        # BUG this should be using cloudmesh common or cloudmesh common3
+        # BUG this should be using cloudmesh common or cloudmesh common
         #
         ssh = subprocess.Popen(
             ["ssh", "%s@%s" % (self.clouduser, pubip), COMMAND],

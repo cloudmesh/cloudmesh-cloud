@@ -9,7 +9,7 @@ from cloudmesh.common.Printer import Printer
 from cloudmesh.common.console import Console
 from cloudmesh.common.error import Error
 from cloudmesh.common.parameter import Parameter
-from cloudmesh.common3.host import Host
+from cloudmesh.common.Host import Host
 from cloudmesh.compute.vm.Provider import Provider
 from cloudmesh.management.configuration.arguments import Arguments
 from cloudmesh.mongo.CmDatabase import CmDatabase

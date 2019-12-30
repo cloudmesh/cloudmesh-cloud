@@ -35,7 +35,7 @@ class CheckCommand(PluginCommand):
 
             Description:
 
-                checks if some programs are available to cms in teh system. This
+                checks if some programs are available to cms in the system. This
                 includes
 
                     mongodb

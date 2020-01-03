@@ -958,7 +958,6 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         list all nodes id
 
         :return: an array of dicts representing the nodes
-        'instance_tag': each_instance.tags[0]['Name']
         """
         instance_ids = []
         for each_instance in self.ec2_resource.instances.all():

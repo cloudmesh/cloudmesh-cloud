@@ -43,12 +43,30 @@ class TestConfig:
         n_n = StopWatch.get(f"test_config_load n=9")
         assert (n_1 * 9 >= n_n)
 
-    def test_search(self):
+    def test_search_active_all(self):
+        HEADING()
+        config = Config()
+
+        Benchmark.Start()
+        r = config.search("cloudmesh.cloud.*.cm.active")
+        Benchmark.Stop()
+        pprint(r)
+
+    def test_search_active_true(self):
         HEADING()
         config = Config()
 
         Benchmark.Start()
         r = config.search("cloudmesh.cloud.*.cm.active", True)
+        Benchmark.Stop()
+        pprint(r)
+
+    def test_search_openstack(self):
+        HEADING()
+        config = Config()
+
+        Benchmark.Start()
+        r = config.search("cloudmesh.cloud.*.cm.kind", "openstack")
         Benchmark.Stop()
         pprint(r)
 

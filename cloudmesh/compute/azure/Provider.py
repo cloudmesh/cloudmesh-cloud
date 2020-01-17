@@ -1224,6 +1224,12 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         _, pub_ip = self._get_pub_ip_for_vm(updated_dict)
         updated_dict['public_ip'] = pub_ip['ip_address']
 
+        updated_dict['key'] = key
+        updated_dict['secgroup'] = secgroup
+
+        local_group = self._get_local_sec_groups(secgroup)[0]
+        updated_dict['secrule'] = local_group['rules']
+
         return self.update_dict(updated_dict, kind='vm')[0]
 
     def _get_local_key_content(self, key_name):

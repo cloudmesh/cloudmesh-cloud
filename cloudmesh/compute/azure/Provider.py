@@ -1230,6 +1230,12 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         _, pub_ip = self._get_pub_ip_for_vm(updated_dict)
         updated_dict['public_ip'] = pub_ip['ip_address']
 
+        updated_dict['key'] = key
+        updated_dict['secgroup'] = secgroup
+
+        local_group = self._get_local_sec_groups(secgroup)[0]
+        updated_dict['secrule'] = local_group['rules']
+
         return self.update_dict(updated_dict, kind='vm')[0]
 
     def _get_local_key_content(self, key_name):
@@ -1523,7 +1529,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         if name is None:
             name = self.VM_NAME
 
-        return self.power_off(group, name)
+        return self.vms.power_off(group, name).result()
 
     def info(self, group=None, name=None, status=None):
         """
@@ -1552,13 +1558,12 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
     def status(self, name=None):
         """
-        TBD
+        gets the status of a VM by name
 
         :param name:
         :return:
         """
-        r = self.cloudman.list_servers(filters={'name': name})[0]
-        return r['status']
+        return self.info(name=name)[0]['status']
 
     def list(self):
         """
@@ -1803,6 +1808,8 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
             })
 
             if kind == 'vm':
+                if 'created' not in entry["cm"].keys():
+                    entry["cm"]["created"] = str(datetime.utcnow())
                 entry["cm"]["updated"] = str(datetime.utcnow())
                 entry["cm"]["name"] = entry["name"]
                 entry["cm"]["type"] = entry[

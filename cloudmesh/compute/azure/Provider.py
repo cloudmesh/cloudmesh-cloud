@@ -1552,13 +1552,12 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
     def status(self, name=None):
         """
-        TBD
+        gets the status of a VM by name
 
         :param name:
         :return:
         """
-        r = self.cloudman.list_servers(filters={'name': name})[0]
-        return r['status']
+        return self.info(name=name)[0]['status']
 
     def list(self):
         """

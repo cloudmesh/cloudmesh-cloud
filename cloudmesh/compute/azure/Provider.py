@@ -730,11 +730,14 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         :param name:
         :return:
         """
-        tags_dict = self.vms.get(self.GROUP_NAME, self.VM_NAME)
+        if name is None:
+            name = self.VM_NAME
+
+        tags_dict = self.vms.get(self.GROUP_NAME, name)
 
         return tags_dict.tags
 
-    def delete_server_metadata(self, name, key):
+    def delete_server_metadata(self, name, key=None):
         """
         TBD
 
@@ -742,7 +745,10 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         :param key:
         :return:
         """
-        tags_dict = self.get_server_metadata(self)
+        if name is None:
+            name = self.VM_NAME
+
+        tags_dict = self.get_server_metadata(name)
 
         if key is not None:
             try:
@@ -750,7 +756,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
             except KeyError:
                 print("Key " + key + " not found")
 
-        async_vm_tag_updates = self.vms.update(self.GROUP_NAME, self.VM_NAME,
+        async_vm_tag_updates = self.vms.update(self.GROUP_NAME, name,
                                                {
                                                    'tags': tags_dict
                                                })

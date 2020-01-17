@@ -1523,7 +1523,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         if name is None:
             name = self.VM_NAME
 
-        return self.power_off(group, name)
+        return self.vms.power_off(group, name).result()
 
     def info(self, group=None, name=None, status=None):
         """

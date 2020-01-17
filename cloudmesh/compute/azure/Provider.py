@@ -596,7 +596,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                         self.success = self._disable(
                             ctypes.byref(self.old_value))
 
-                    def __exit__(self, type, value, traceback):
+                    def __exit__(self, type_, value, traceback):
                         if self.success:
                             self._revert(self.old_value)
 
@@ -615,7 +615,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                         self.success = self._disable(
                             ctypes.byref(self.old_value))
 
-                    def __exit__(self, type, value, traceback):
+                    def __exit__(self, type_, value, traceback):
                         if self.success:
                             self._revert(self.old_value)
 

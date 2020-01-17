@@ -1802,6 +1802,8 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
             })
 
             if kind == 'vm':
+                if 'created' not in entry["cm"].keys():
+                    entry["cm"]["created"] = str(datetime.utcnow())
                 entry["cm"]["updated"] = str(datetime.utcnow())
                 entry["cm"]["name"] = entry["name"]
                 entry["cm"]["type"] = entry[

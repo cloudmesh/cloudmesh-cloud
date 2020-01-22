@@ -9,6 +9,7 @@ import importlib
 from cloudmesh.register.Entry import Entry
 from textwrap import dedent
 
+
 class RegisterCommand(PluginCommand):
 
     # noinspection PyUnusedLocal
@@ -197,13 +198,12 @@ class RegisterCommand(PluginCommand):
 
             sample = Provider.sample
 
-
             try:
                 if len(attributes) > 0:
                     sample = sample.format(**replacements)
             except KeyError as e:
                 Console.error(f"Value for {e} is not specified")
-            print (dedent(sample))
+            print(dedent(sample))
 
         elif arguments.new:
 
@@ -246,23 +246,20 @@ class RegisterCommand(PluginCommand):
                 Console.error("the kind {kind} is not supported")
                 return ""
 
-
             sample = Provider.sample
 
             try:
                 sample = sample.format(**replacements)
 
                 if arguments["-v"]:
-                    print (sample)
-
+                    print(sample)
 
                 Entry.add(entry=sample,
-                        base=f"cloudmesh.{kind}",
-                        path="~/.cloudmesh/cloudmesh.yaml")
+                          base=f"cloudmesh.{kind}",
+                          path="~/.cloudmesh/cloudmesh.yaml")
 
             except KeyError as e:
                 Console.error(f"Value for {e} is not specified")
-            print (dedent(sample))
-
+            print(dedent(sample))
 
         return ""

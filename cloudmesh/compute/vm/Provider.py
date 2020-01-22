@@ -449,6 +449,7 @@ class Provider(ComputeNodeABC):
 
     def ssh(self, vm=None, command=None):
         # VERBOSE(vm)
+        self.list()
         return self.p.ssh(vm=vm, command=command)
 
     def console(self, vm=None):

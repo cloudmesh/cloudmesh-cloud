@@ -1069,6 +1069,8 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         :param name: the name of the node
         :param image: the image used
         :param size: the size of the image
+        :param ip: The ip to attach to the vm
+        :param key: the name of the key
         :param timeout: a timeout in seconds that is invoked in case the image
                         does not boot. The default is set to 3 minutes.
         :param kwargs: additional arguments passed along at time of boot

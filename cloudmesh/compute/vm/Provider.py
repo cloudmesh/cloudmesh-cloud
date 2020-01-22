@@ -334,7 +334,7 @@ class Provider(ComputeNodeABC):
         """
         sets the metadata for the server
 
-        :param name: name of the fm
+        :param name: name of the vm
         :param metadata: the metadata
         :return:
         """
@@ -344,7 +344,7 @@ class Provider(ComputeNodeABC):
         """
         gets the metadata for the server
 
-        :param name: name of the fm
+        :param name: name of the vm
         :return:
         """
         r = self.p.get_server_metadata(name)
@@ -354,7 +354,9 @@ class Provider(ComputeNodeABC):
         """
         gets the metadata for the server
 
-        :param name: name of the fm
+        :param name: name of the vm
+        :param key: name of the key
+
         :return:
         """
         r = self.p.delete_server_metadata(name, key)

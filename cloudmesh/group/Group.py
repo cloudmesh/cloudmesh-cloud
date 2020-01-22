@@ -56,6 +56,7 @@ class Group(object):
     def copy_group(self, source, destination):
         """
         copies the group source to destination
+
         :param source: name of the source
         :param destination: name of the destination
         :return:
@@ -65,7 +66,8 @@ class Group(object):
     def merge(self, destination, *groups):
         """
         merge the members of the groups into the destination group
-        :param group_a:
+
+        :param destination:
         :param groups:
         :return:
         """

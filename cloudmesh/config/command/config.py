@@ -241,7 +241,6 @@ class ConfigCommand(PluginCommand):
 
             return ""
 
-
         elif arguments.cat:
 
             content = Config.cat()

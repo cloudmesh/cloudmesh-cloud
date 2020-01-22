@@ -181,7 +181,6 @@ class AdminCommand(PluginCommand):
                 print("MongoDB ssh")
                 MongoDBController().ssh()
 
-
             elif arguments.start:
 
                 print("MongoDB start")
@@ -235,9 +234,8 @@ class AdminCommand(PluginCommand):
 
         elif arguments.status:
 
-
-            #config = Config()
-            #data = config["cloudmesh.data.mongo"]
+            # config = Config()
+            # data = config["cloudmesh.data.mongo"]
 
             print("Rest Service status")
 
@@ -250,7 +248,7 @@ class AdminCommand(PluginCommand):
                     Console.ok("MOngo is running")
             except Exception as e:
                 Console.error("Mongo is not running")
-                print (e)
+                print(e)
 
         elif arguments.system:
 

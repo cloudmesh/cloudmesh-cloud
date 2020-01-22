@@ -13,6 +13,7 @@ from cloudmesh.common.debug import VERBOSE
 from cloudmesh.compute.vm.Provider import Provider
 import sys
 
+
 class SecCommand(PluginCommand):
 
     # see https://github.com/cloudmesh/client/blob/master/cloudmesh_client/shell/plugins/SecgroupCommand.py
@@ -128,13 +129,13 @@ class SecCommand(PluginCommand):
         rules = SecgroupRule()
         groups = Secgroup()
 
-        def Print(kind, list):
+        def Print(kind, liste):
             if kind == "group":
                 output = ""
             else:
                 output = groups.output
 
-            print(Printer.write(list,
+            print(Printer.write(liste,
                                 sort_keys=output[kind]['sort_keys'],
                                 order=output[kind]['order'],
                                 header=output[kind]['header'],
@@ -170,7 +171,6 @@ class SecCommand(PluginCommand):
             return ""
 
         elif arguments.load and arguments.group and arguments.cloud:
-
 
             provider = Provider(name=arguments.cloud)
             provider.upload_secgroup(name=arguments.GROUP)

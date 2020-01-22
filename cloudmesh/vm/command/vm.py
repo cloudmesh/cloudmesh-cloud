@@ -408,8 +408,6 @@ class VmCommand(PluginCommand):
             else:
                 count = 1
 
-
-
             def get_ips():
                 ips = []
                 for cloud in clouds:
@@ -435,7 +433,6 @@ class VmCommand(PluginCommand):
             if len(ips) == 0:
                 Console.error("No vms with public IPS found.")
                 Console.error("  Make sure to use cms vm list --refresh")
-
 
             for ip in ips:
                 result = Shell.ping(host=ip, count=count)
@@ -656,7 +653,8 @@ class VmCommand(PluginCommand):
             # parameters.names = arguments.name
 
             parameters.group = groups
-            for attribute in ["image", "username", "flavor", "key", "network", "secgroup"]:
+            for attribute in ["image", "username", "flavor", "key", "network",
+                              "secgroup"]:
                 parameters[attribute] = Parameter.find(attribute,
                                                        arguments,
                                                        variables.dict(),
@@ -887,13 +885,10 @@ class VmCommand(PluginCommand):
                  [--command=COMMAND]
             """
 
-
             # VERBOSE(arguments)
             clouds, names, command = Arguments.get_commands("ssh",
                                                             arguments,
                                                             variables)
-
-
 
             # print (clouds)
             # print(names)

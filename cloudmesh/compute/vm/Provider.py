@@ -38,12 +38,12 @@ class Provider(ComputeNodeABC):
         providers = ProviderList()
 
         if self.kind in [
-#            'openstack',
-             'azure',
-             'docker',
-             "aws",
-             "azureaz",
-             "virtualbox"]:
+            #            'openstack',
+            'azure',
+            'docker',
+            "aws",
+            "azureaz",
+            "virtualbox"]:
 
             provider = providers[self.kind]
 
@@ -197,13 +197,15 @@ class Provider(ComputeNodeABC):
         # not exist read them for that cloud from the yaml file
 
         if arguments.image is None:
-            arguments.image = self.find_attribute('image', [variables, defaults])
+            arguments.image = self.find_attribute('image',
+                                                  [variables, defaults])
 
         if arguments.image is None:
             raise ValueError("image not specified")
 
         if arguments.group is None:
-            arguments.group = self.find_attribute('group', [variables, defaults])
+            arguments.group = self.find_attribute('group',
+                                                  [variables, defaults])
 
         if arguments.group is None:
             arguments.group = "default"

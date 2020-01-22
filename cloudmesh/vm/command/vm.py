@@ -56,6 +56,7 @@ class VmCommand(PluginCommand):
                         [--username=USERNAME]
                         [--image=IMAGE]
                         [--flavor=FLAVOR]
+                        [--network=NETWORK]
                         [--public]
                         [--secgroup=SECGROUPs]
                         [--group=GROUPs]
@@ -407,17 +408,34 @@ class VmCommand(PluginCommand):
             else:
                 count = 1
 
-            ips = []
 
-            for cloud in clouds:
-                params = {}
-                # gets public ips from database
-                cursor = database.db[f'{cloud}-vm']
-                for name in names:
-                    for node in cursor.find({'name': name}):
-                        ips.append(node['ip_public'])
-                ips = list(set(ips))
-                pprint(ips)
+
+            def get_ips():
+                ips = []
+                for cloud in clouds:
+                    params = {}
+                    # gets public ips from database
+                    cursor = database.db[f'{cloud}-vm']
+                    for name in names:
+                        for node in cursor.find({'name': name}):
+                            ips.append(node['ip_public'])
+                    ips = list(set(ips))
+                    pprint(ips)
+                return ips
+
+            ips = get_ips()
+            if len(ips) == 0:
+                Console.warning("no public ip found.")
+                for cloud in clouds:
+                    print(f"refresh for cloud {cloud}")
+                    provider = Provider(name=cloud)
+                    vms = provider.list()
+                ips = get_ips()
+
+            if len(ips) == 0:
+                Console.error("No vms with public IPS found.")
+                Console.error("  Make sure to use cms vm list --refresh")
+
 
             for ip in ips:
                 result = Shell.ping(host=ip, count=count)
@@ -609,6 +627,7 @@ class VmCommand(PluginCommand):
                         [--username=USERNAME]
                         [--image=IMAGE]
                         [--flavor=FLAVOR]
+                        [--network=NETWORK]
                         [--public]
                         [--secgroup=SECGROUP]
                         [--key=KEY]
@@ -637,7 +656,7 @@ class VmCommand(PluginCommand):
             # parameters.names = arguments.name
 
             parameters.group = groups
-            for attribute in ["image", "username", "flavor", "key", "secgroup"]:
+            for attribute in ["image", "username", "flavor", "key", "network", "secgroup"]:
                 parameters[attribute] = Parameter.find(attribute,
                                                        arguments,
                                                        variables.dict(),
@@ -868,10 +887,13 @@ class VmCommand(PluginCommand):
                  [--command=COMMAND]
             """
 
+
             # VERBOSE(arguments)
             clouds, names, command = Arguments.get_commands("ssh",
                                                             arguments,
                                                             variables)
+
+
 
             # print (clouds)
             # print(names)

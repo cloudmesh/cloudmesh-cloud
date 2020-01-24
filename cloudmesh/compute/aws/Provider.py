@@ -410,9 +410,10 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         except ClientError as e:
             Console.error(e)
 
-    def set_server_metadata(self, name, data):
+    def set_server_metadata(self, name, **data):
         """
-        TODO
+        sets the metadata for the server
+
 
         :param name: virtual machine name
         :param data: cm dict
@@ -559,7 +560,12 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         except ClientError as e:
             Console.error(e)
 
-    def attach_public_ip(self, node, ip):
+    def attach_public_ip(self, node=None, ip=None):
+        if node is None:
+            raise ValueError("Node name can not be None")
+
+        if ip is None:
+            raise ValueError("ip can not be None")
 
         instances = self._get_instance_id(self.ec2_resource, node)
         instance_id = []
@@ -577,11 +583,16 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                 InstanceId=instance_id[0],
                 AllowReassociation=True,
             )
+            return response
         except ClientError as e:
             Console.error(e)
-        return response
 
-    def detach_public_ip(self, node, ip):
+    def detach_public_ip(self, node=None, ip=None):
+        if node is None:
+            raise ValueError("Node name can not be None")
+
+        if ip is None:
+            raise ValueError("ip can not be None")
 
         instances = self._get_instance_id(self.ec2_resource, node)
         instance_id = []
@@ -596,9 +607,9 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                 AssociationId=self._get_allocation_ids(self.ec2_client, ip).get(
                     'AssociationId'),
             )
+            Console.msg(response)
         except ClientError as e:
             Console.error(e)
-        Console.msg(response)
 
     def wait(self,
              vm=None,

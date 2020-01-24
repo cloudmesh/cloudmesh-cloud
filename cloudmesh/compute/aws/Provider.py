@@ -1073,6 +1073,12 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         :param key: the name of the key
         :param timeout: a timeout in seconds that is invoked in case the image
                         does not boot. The default is set to 3 minutes.
+        :param user: user name
+        :param public: public IP
+        :param group: group name
+        :param metadata: cm metadata
+        :param secgroup: security group
+        :param location: location
         :param kwargs: additional arguments passed along at time of boot
 
         :return: the list with the modified dicts

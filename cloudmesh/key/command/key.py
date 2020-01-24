@@ -479,7 +479,8 @@ class KeyCommand(PluginCommand):
             def check_exists(path):
                 if os.path.exists(path):
                     Console.info(f"{path} already exists")
-                    ovwr_r = yn_choice(message=f"overwrite {path}?", default="N")
+                    ovwr_r = yn_choice(message=f"overwrite {path}?",
+                                       default="N")
                     if not ovwr_r:
                         Console.info(f"Not overwriting {path}. Quitting")
                         sys.exit()
@@ -503,11 +504,11 @@ class KeyCommand(PluginCommand):
             u = kh.get_pub_key(priv=r)
 
             # Serialize and write the private key to the path
-            sr = kh.serialize_key(key = r, key_type = "PRIV", encoding = "PEM",
-                                  format = "PKCS8", ask_pass = ap)
+            sr = kh.serialize_key(key=r, key_type="PRIV", encoding="PEM",
+                                  format="PKCS8", ask_pass=ap)
 
             # Force write the key (since we check file existence above)
-            kh.write_key(key = sr, path = rk_path, force = True)
+            kh.write_key(key=sr, path=rk_path, force=True)
 
             # Determine the public key format and encoding
             enc = None
@@ -520,11 +521,11 @@ class KeyCommand(PluginCommand):
                 forma = "SubjectInfo"
 
             # Serialize and write the public key to the path
-            su = kh.serialize_key(key = u, key_type = "PUB", encoding = enc,
-                                  format = forma, ask_pass = False)
+            su = kh.serialize_key(key=u, key_type="PUB", encoding=enc,
+                                  format=forma, ask_pass=False)
 
             # Force write the key (since we check file existence above)
-            kh.write_key(key = su, path = uk_path, force = True)
+            kh.write_key(key=su, path=uk_path, force=True)
 
             Console.ok("Success")
 
@@ -608,11 +609,11 @@ class KeyCommand(PluginCommand):
             if arguments.ssh:
                 use_pem = False
 
-            kh.reformat_key(path = arguments.filename,
-                            key_type = kt,
-                            use_pem = use_pem,
-                            new_format = arguments.format,
-                            ask_pass = not arguments.nopass)
+            kh.reformat_key(path=arguments.filename,
+                            key_type=kt,
+                            use_pem=use_pem,
+                            new_format=arguments.format,
+                            ask_pass=not arguments.nopass)
 
         elif arguments.delete and arguments.NAMES:
             # key delete NAMES [--dryrun]
@@ -640,5 +641,3 @@ class KeyCommand(PluginCommand):
             raise NotImplementedError
 
         return ""
-
-

@@ -209,7 +209,7 @@ class ComputeNodeABC(metaclass=ABCMeta):
         """
         Reboot a list of nodes with the given names
 
-        :param names: A list of node names
+        :param name: A list of node names
         :return:  A list of dict representing the nodes
         """
         raise NotImplementedError
@@ -219,6 +219,7 @@ class ComputeNodeABC(metaclass=ABCMeta):
         adds a public ip to the named vm
 
         :param name: Name of the vm
+        :param ip: The ip address
         :return:
         """
         raise NotImplementedError
@@ -228,6 +229,7 @@ class ComputeNodeABC(metaclass=ABCMeta):
         adds a public ip to the named vm
 
         :param name: Name of the vm
+        :param ip: The ip address
         :return:
         """
         raise NotImplementedError

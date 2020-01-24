@@ -11,6 +11,7 @@ from cloudmesh.shell.command import command
 from cloudmesh.shell.command import map_parameters
 from cloudmesh.common.debug import VERBOSE
 from cloudmesh.compute.vm.Provider import Provider
+import sys
 
 
 class SecCommand(PluginCommand):
@@ -118,6 +119,8 @@ class SecCommand(PluginCommand):
 
         """
 
+        no_cloud = "--cloud" not in arguments
+
         map_parameters(arguments,
                        'cloud',
                        'output',
@@ -126,13 +129,13 @@ class SecCommand(PluginCommand):
         rules = SecgroupRule()
         groups = Secgroup()
 
-        def Print(kind, list):
+        def Print(kind, liste):
             if kind == "group":
                 output = ""
             else:
                 output = groups.output
 
-            print(Printer.write(list,
+            print(Printer.write(liste,
                                 sort_keys=output[kind]['sort_keys'],
                                 order=output[kind]['order'],
                                 header=output[kind]['header'],
@@ -158,7 +161,8 @@ class SecCommand(PluginCommand):
             Print("all", data)
 
         if (arguments.load and not arguments.group) or \
-            (arguments.load and arguments.group and not arguments.GROUP):
+            (arguments.load and arguments.group and not arguments.GROUP) \
+            and no_cloud:
 
             examples = SecgroupExamples()
             examples.load()
@@ -291,5 +295,9 @@ class SecCommand(PluginCommand):
             rules.clear()
 
             return ""
+
+        else:
+
+            print("COMMNAD NOT FOUND")
 
         return ""

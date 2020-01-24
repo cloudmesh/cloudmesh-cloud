@@ -38,12 +38,12 @@ class Provider(ComputeNodeABC):
         providers = ProviderList()
 
         if self.kind in [
-#            'openstack',
-             'azure',
-             'docker',
-             "aws",
-             "azureaz",
-             "virtualbox"]:
+            #            'openstack',
+            'azure',
+            'docker',
+            "aws",
+            "azureaz",
+            "virtualbox"]:
 
             provider = providers[self.kind]
 
@@ -197,13 +197,15 @@ class Provider(ComputeNodeABC):
         # not exist read them for that cloud from the yaml file
 
         if arguments.image is None:
-            arguments.image = self.find_attribute('image', [variables, defaults])
+            arguments.image = self.find_attribute('image',
+                                                  [variables, defaults])
 
         if arguments.image is None:
             raise ValueError("image not specified")
 
         if arguments.group is None:
-            arguments.group = self.find_attribute('group', [variables, defaults])
+            arguments.group = self.find_attribute('group',
+                                                  [variables, defaults])
 
         if arguments.group is None:
             arguments.group = "default"
@@ -332,7 +334,7 @@ class Provider(ComputeNodeABC):
         """
         sets the metadata for the server
 
-        :param name: name of the fm
+        :param name: name of the vm
         :param metadata: the metadata
         :return:
         """
@@ -342,7 +344,7 @@ class Provider(ComputeNodeABC):
         """
         gets the metadata for the server
 
-        :param name: name of the fm
+        :param name: name of the vm
         :return:
         """
         r = self.p.get_server_metadata(name)
@@ -352,7 +354,9 @@ class Provider(ComputeNodeABC):
         """
         gets the metadata for the server
 
-        :param name: name of the fm
+        :param name: name of the vm
+        :param key: name of the key
+
         :return:
         """
         r = self.p.delete_server_metadata(name, key)
@@ -449,6 +453,7 @@ class Provider(ComputeNodeABC):
 
     def ssh(self, vm=None, command=None):
         # VERBOSE(vm)
+        self.list()
         return self.p.ssh(vm=vm, command=command)
 
     def console(self, vm=None):

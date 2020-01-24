@@ -17,6 +17,7 @@ import ctypes
 import shutil
 import re
 
+
 # cm:
 #   id:
 #   user:
@@ -482,11 +483,11 @@ class CmDatabase(object):
         return entries
 
     def exists(self, entries):
-        '''
+        """
         Check if entry exists in the database
         :param entries:
         :return:
-        '''
+        """
         MongoDBController().start_if_not_running()
         exist_status = []
         if type(entries) is dict:

@@ -18,6 +18,7 @@ from pprint import pprint
 import json
 import os
 
+
 class CheckCommand(PluginCommand):
 
     # noinspection PyUnusedLocal
@@ -68,17 +69,19 @@ class CheckCommand(PluginCommand):
         def get_info(shell_command):
             v = "unkown"
             path = Shell.which(shell_command)
-            if shell_command =="ssh":
+            if shell_command == "ssh":
                 v = Shell.run(f"{shell_command} -V")
             elif path and len(path) > 0:
                 try:
                     v = Shell.run(f"{shell_command} --version")
                     if shell_command.endswith("mongo"):
-                        v = v.splitlines()[0].replace("MongoDB shell version ", "")
+                        v = v.splitlines()[0].replace("MongoDB shell version ",
+                                                      "")
                     elif shell_command.endswith("mongod"):
                         v = v.splitlines()[0].replace("db version ", "")
                     elif shell_command.endswith("mongoimport"):
-                        v = v.splitlines()[0].replace("mongoimport version: ", "")
+                        v = v.splitlines()[0].replace("mongoimport version: ",
+                                                      "")
 
                 except:
                     v = "unkown"
@@ -92,7 +95,6 @@ class CheckCommand(PluginCommand):
         except:
             mongo_path = None
         data = {}
-
 
         for keyword in keywords:
 
@@ -138,7 +140,7 @@ class CheckCommand(PluginCommand):
                 data[keyword].update(entry)
 
         path, v = get_info('ssh')
-        data['ssh']= {
+        data['ssh'] = {
             'system': {
                 'name': 'ssh',
                 'path': path,
@@ -162,10 +164,9 @@ class CheckCommand(PluginCommand):
             banner("ssh, mongo, mongod, mongoimport")
             print(json.dumps(data, indent=2))
 
-
         banner("os.environ")
         for attribute in os.environ:
-            print (attribute, os.environ[attribute])
+            print(attribute, os.environ[attribute])
 
         banner("Shell.run")
 
@@ -176,6 +177,5 @@ class CheckCommand(PluginCommand):
             except:
                 r = 'error'
             print(f"Shell.run('{c}')", r)
-
 
         return ""

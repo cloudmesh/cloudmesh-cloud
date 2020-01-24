@@ -1384,12 +1384,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         :param name: The name of the flavor
         :return: The dict of the flavor
         """
-        flavors = AwsFlavor()
-        flavors.update()
-        for flavor in flavors.get():
-            if flavor['name'] == name:
-                return [flavor]
-        return []
+        return self.find(self.flavors(), name=name)
 
     def update_dict(self, elements, kind=None):
 

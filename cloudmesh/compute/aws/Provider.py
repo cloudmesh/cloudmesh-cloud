@@ -448,7 +448,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         )
         return response
 
-    def get_server_metadata_tags(self, name):
+    def _get_server_metadata_tags(self, name):
         """
         Describes the metadata tag of EC2 resource
         :param name: Virtual machine name
@@ -911,7 +911,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
             data.update(self.get_server_metadata(name))
         return data
 
-    def instance_is_reachable(self, instance_id=None):
+    def _instance_is_reachable(self, instance_id=None):
         """
         gets the information of a statuso of a VM with a given name, useful for
         when you want to check if the vm is ready for ssh Note:
@@ -1320,7 +1320,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         instances = self._get_instance_id(self.ec2_resource, name)
 
         if tags is None:
-            tags = self.get_server_metadata_tags(name=name)
+            tags = self._get_server_metadata_tags(name=name)
         response = None
         for each_instance in instances:
             try:

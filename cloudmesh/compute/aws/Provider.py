@@ -1173,11 +1173,11 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                 public_ip = \
                     self.ec2_client.describe_instances(
                         InstanceIds=[new_ec2_instance.id])['Reservations'][0][
-                        'Instances'][0]['PublicIpAddress'],
+                        'Instances'][0]['PublicIpAddress']
                 break
             except KeyError:
                 time.sleep(0.5)
-        data['public_ips'] = public_ip[0]
+        data['public_ips'] = public_ip
         data['private_ips'] = new_ec2_instance.private_ip_address
 
         Console.msg(f"    Public IP:   {data['public_ips']}")

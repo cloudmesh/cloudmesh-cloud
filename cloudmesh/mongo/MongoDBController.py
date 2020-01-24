@@ -144,12 +144,12 @@ class MongoInstaller(object):
 
         for x in range(0, len(p)):
             s = p.pop(0)
-            if ("Distributor" in s):
-                if ("Debian" in s):
+            if "Distributor" in s:
+                if "Debian" in s:
                     distro = "debian"
-                elif ("Ubuntu" in s):
+                elif "Ubuntu" in s:
                     distro = "ubuntu"
-            elif ("Release" in s):
+            elif "Release" in s:
                 version = s.split(":").pop(1).split(".").pop(0)
         if "debian" == distro:
             self.debian(sudo, int(version))
@@ -813,10 +813,10 @@ class MongoDBController(object):
         return output
 
     def is_installed_as_win_service(self):
-        '''
+        """
         returns True if mongodb is installed as a windows service
         :return:
-        '''
+        """
         if platform == 'win32':
             win_services = list(psutil.win_service_iter())
             mongo_service = []
@@ -831,10 +831,10 @@ class MongoDBController(object):
             return False
 
     def win_service_is_running(self):
-        '''
+        """
         returns True if mongodb running
         :return:
-        '''
+        """
         if platform == 'win32':
             # if self.is_installed_as_win_service():
             #     win_services = list(psutil.win_service_iter())
@@ -856,10 +856,10 @@ class MongoDBController(object):
             return False
 
     def linux_process_is_running(self):
-        '''
+        """
         returns True if mongod is running
         :return:
-        '''
+        """
         if platform == 'linux':
             try:
                 subprocess.check_output("pgrep mongo", encoding='UTF-8',
@@ -873,10 +873,10 @@ class MongoDBController(object):
             return False
 
     def mac_process_is_running(self):
-        '''
+        """
         returns True if mongod is running
         :return:
-        '''
+        """
         if platform == 'darwin':
             try:
                 subprocess.check_output("pgrep mongo", encoding='UTF-8',
@@ -890,10 +890,10 @@ class MongoDBController(object):
             return False
 
     def service_is_running(self):
-        '''
+        """
         checks if mongo service is running
         :return:
-        '''
+        """
         if platform.lower() == 'linux':
             return self.linux_process_is_running()
         elif platform.lower() == 'darwin':
@@ -926,10 +926,10 @@ class MongoDBController(object):
             sys.exit()
 
     def start_if_not_running(self):
-        '''
+        """
         checks if mongo service is running
         :return:
-        '''
+        """
 
         mode = self.data['MODE']
 

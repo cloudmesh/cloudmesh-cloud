@@ -160,6 +160,4 @@ class Name(dotdict):
         self.__dict__["counter"] += 1
         self.flush()
 
-
-
 # name = Name()

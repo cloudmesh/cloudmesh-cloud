@@ -229,6 +229,7 @@ class Provider(ComputeNodeABC):
     def flavor(self, name=None):
         """
         Gets the flavor with a given name
+
         :param name: The name of the flavor
         :return: The dict of the flavor
         """
@@ -239,7 +240,7 @@ class Provider(ComputeNodeABC):
         """
         Reboot a list of nodes with the given names
 
-        :param names: A list of node names
+        :param name: A list of node names
         :return:  A list of dict representing the nodes
         """
         raise NotImplementedError
@@ -249,6 +250,7 @@ class Provider(ComputeNodeABC):
         adds a public ip to the named vm
 
         :param name: Name of the vm
+        :param ip: The ip to attach to the vm
         :return:
         """
         raise NotImplementedError
@@ -258,6 +260,7 @@ class Provider(ComputeNodeABC):
         adds a public ip to the named vm
 
         :param name: Name of the vm
+        :param ip: The ip to attach to the vm
         :return:
         """
         raise NotImplementedError

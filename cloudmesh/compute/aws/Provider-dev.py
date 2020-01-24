@@ -58,7 +58,6 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
     # TODO: change to what you see in boto dicts the next values are from
     #  openstack which you must change
 
-
     output = {
 
         "vm": {  # updted for aws
@@ -625,12 +624,12 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
     def ssh(self, vm=None, command=None):
 
         def key_selector(keys):
-            '''
+            """
            This is a helper method for ssh key selection
            THIS IS JUST A SAFETY MEASURE, PLEASE DON'T MIND IT
             :param keys:
             :return:
-            '''
+            """
             tmp_keys = keys[:]
             # indices = range(1,len(tmp_keys)+1)
             for key_idx, key in enumerate(keys):
@@ -883,7 +882,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
             ]
         )
         data = {}
-        if (len(instance_info['Reservations']) > 0):
+        if len(instance_info['Reservations']) > 0:
             data = instance_info['Reservations'][0]['Instances'][0]
             # TODO: this needs to be fixed :
             data['name'] = name
@@ -892,12 +891,12 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         return data
 
     def instance_is_reachable(self, instance_id=None):
-        '''
+        """
         gets the information of a statuso of a VM with a given name, useful for when you want to check if the vm is ready for ssh
         Note: describe_instance_status doesn't filter by tag , so we should use instance ID
         :param name: name
         :return:
-        '''
+        """
 
         # example output:
         # {'InstanceStatuses': [{'AvailabilityZone': 'us-east-2b',
@@ -928,7 +927,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         instance_status = \
             self.ec2_client.describe_instance_status(InstanceIds=instance_id)[
                 'InstanceStatuses']
-        if (len(instance_status) > 0):
+        if len(instance_status) > 0:
             status = instance_status[0]['InstanceStatus']['Details'][0][
                 'Status']
             if status.lower() == 'passed':
@@ -1298,10 +1297,10 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         return response
 
     def _get_account_id(self):
-        '''
+        """
         retrieves the acount id which is used to find the images of the current account
         :return:
-        '''
+        """
         client = boto3.client("sts", aws_access_key_id=self.access_id,
                               aws_secret_access_key=self.secret_key)
         return client.get_caller_identity()["Account"]
@@ -1322,12 +1321,12 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
     @DatabaseImportAsJson()
     def get_images_and_import(self, data):
-        '''
+        """
         this is a helper function for images() to allow the images to be passed and saved to the database with
         databaseimportasjson() decorator instead of the regular databaseupdate() decorator.
         :param data:
         :return:
-        '''
+        """
         return {'db': 'cloudmesh', 'collection': 'aws-image', 'data': data}
 
     def image(self, name=None):
@@ -1349,7 +1348,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
 
         :return: dict of flavors
         """
-        flavors = AwsFlavor(session = self.session)
+        flavors = AwsFlavor(session=self.session)
         data = flavors.fetch()
         result = flavors.list(data)
         return self.update_dict(result, kind="flavor")

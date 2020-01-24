@@ -106,6 +106,7 @@ class InitCommand(PluginCommand):
             os.system("cms admin mongo create")
             os.system("cms admin mongo start")
             os.system("cms sec load")
+            os.system("cms key add")
 
             if arguments.CLOUD is not None:
                 cloud = arguments.CLOUD

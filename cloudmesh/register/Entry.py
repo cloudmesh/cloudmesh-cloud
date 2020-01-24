@@ -6,6 +6,7 @@ import sys
 from pprint import pprint
 from copy import deepcopy
 
+
 class Entry:
     """
     add an entry to the yaml file.
@@ -35,7 +36,7 @@ class Entry:
 
     @staticmethod
     def add(entry=None,
-            base = "cloudmesh.cloud",
+            base="cloudmesh.cloud",
             path="~/.cloudmesh/cloudmesh.yaml"):
 
         try:
@@ -43,12 +44,11 @@ class Entry:
 
             data = yaml.safe_load(_entry)
 
-
             name, entry = Entry.extract(data, base)
 
             if Entry.verify(entry):
                 Console.ok("Verification passed")
-                config = Config() # todo: add the path
+                config = Config()  # todo: add the path
                 config[base][name] = entry
                 config.save()
             else:
@@ -70,6 +70,3 @@ class Entry:
             else:
                 Console.ok(f"{attribute} is in the entry")
         return valid
-
-
-

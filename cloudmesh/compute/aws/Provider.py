@@ -410,9 +410,10 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         except ClientError as e:
             Console.error(e)
 
-    def set_server_metadata(self, name, data):
+    def set_server_metadata(self, name, **data):
         """
-        TODO
+        sets the metadata for the server
+
 
         :param name: virtual machine name
         :param data: cm dict
@@ -447,7 +448,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         )
         return response
 
-    def get_server_metadata_tags(self, name):
+    def _get_server_metadata_tags(self, name):
         """
         Describes the metadata tag of EC2 resource
         :param name: Virtual machine name
@@ -559,7 +560,12 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         except ClientError as e:
             Console.error(e)
 
-    def attach_public_ip(self, node, ip):
+    def attach_public_ip(self, node=None, ip=None):
+        if node is None:
+            raise ValueError("Node name can not be None")
+
+        if ip is None:
+            raise ValueError("ip can not be None")
 
         instances = self._get_instance_id(self.ec2_resource, node)
         instance_id = []
@@ -577,11 +583,16 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                 InstanceId=instance_id[0],
                 AllowReassociation=True,
             )
+            return response
         except ClientError as e:
             Console.error(e)
-        return response
 
-    def detach_public_ip(self, node, ip):
+    def detach_public_ip(self, node=None, ip=None):
+        if node is None:
+            raise ValueError("Node name can not be None")
+
+        if ip is None:
+            raise ValueError("ip can not be None")
 
         instances = self._get_instance_id(self.ec2_resource, node)
         instance_id = []
@@ -596,9 +607,9 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                 AssociationId=self._get_allocation_ids(self.ec2_client, ip).get(
                     'AssociationId'),
             )
+            Console.msg(response)
         except ClientError as e:
             Console.error(e)
-        Console.msg(response)
 
     def wait(self,
              vm=None,
@@ -900,7 +911,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
             data.update(self.get_server_metadata(name))
         return data
 
-    def instance_is_reachable(self, instance_id=None):
+    def _instance_is_reachable(self, instance_id=None):
         """
         gets the information of a statuso of a VM with a given name, useful for
         when you want to check if the vm is ready for ssh Note:
@@ -1073,6 +1084,12 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         :param key: the name of the key
         :param timeout: a timeout in seconds that is invoked in case the image
                         does not boot. The default is set to 3 minutes.
+        :param user: user name
+        :param public: public IP
+        :param group: group name
+        :param metadata: cm metadata
+        :param secgroup: security group
+        :param location: location
         :param kwargs: additional arguments passed along at time of boot
 
         :return: the list with the modified dicts
@@ -1173,11 +1190,11 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
                 public_ip = \
                     self.ec2_client.describe_instances(
                         InstanceIds=[new_ec2_instance.id])['Reservations'][0][
-                        'Instances'][0]['PublicIpAddress'],
+                        'Instances'][0]['PublicIpAddress']
                 break
             except KeyError:
                 time.sleep(0.5)
-        data['public_ips'] = public_ip[0]
+        data['public_ips'] = public_ip
         data['private_ips'] = new_ec2_instance.private_ip_address
 
         Console.msg(f"    Public IP:   {data['public_ips']}")
@@ -1303,7 +1320,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         instances = self._get_instance_id(self.ec2_resource, name)
 
         if tags is None:
-            tags = self.get_server_metadata_tags(name=name)
+            tags = self._get_server_metadata_tags(name=name)
         response = None
         for each_instance in instances:
             try:
@@ -1384,12 +1401,7 @@ class Provider(ComputeNodeABC, ComputeProviderPlugin):
         :param name: The name of the flavor
         :return: The dict of the flavor
         """
-        flavors = AwsFlavor()
-        flavors.update()
-        for flavor in flavors.get():
-            if flavor['name'] == name:
-                return [flavor]
-        return []
+        return self.find(self.flavors(), name=name)
 
     def update_dict(self, elements, kind=None):
 

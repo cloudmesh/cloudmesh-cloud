@@ -40,7 +40,6 @@ class Provider(ComputeNodeABC):
         if self.kind in [
             #            'openstack',
             'docker',
-            "aws",
             "virtualbox"]:
 
             provider = providers[self.kind]
@@ -98,8 +97,7 @@ class Provider(ComputeNodeABC):
     @DatabaseUpdate()
     def destroy(self, name=None):
         # bug should determine provider from name
-        r = self.loop_name(name, self.p.destroy)
-        return r
+        return self.loop_name(name, self.p.destroy)
 
     def loop_name(self, names, func):
         names = self.expand(names)
@@ -346,7 +344,7 @@ class Provider(ComputeNodeABC):
         :param metadata: the metadata
         :return:
         """
-        self.p.set_server_metadata(name, metadata)
+        self.p.set_server_metadata(name, **metadata)
 
     def get_server_metadata(self, name):
         """
@@ -484,5 +482,5 @@ class Provider(ComputeNodeABC):
     def add_rules_to_secgroup(self, name=None, rules=None):
         return self.p.add_rules_to_secgroup(secgroupname=name, newrules=rules)
 
-    def destroy(self, name=None):
-        return self.p.destroy(name=name)
+    # def destroy(self, name=None):
+    #     return self.p.destroy(name=name)

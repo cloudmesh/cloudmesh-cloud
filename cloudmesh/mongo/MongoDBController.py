@@ -620,10 +620,8 @@ class MongoDBController(object):
             except Exception as e:
                 print(e)
                 return
-
-
         else:
-            script = """mongo --eval 'db.getSiblingDB("admin").createUser({{user:"{MONGO_USERNAME}",pwd:"{MONGO_PASSWORD}",roles:[{{role:"root",db:"admin"}}]}})'""".format(
+            script = """mongo --host {MONGO_HOST} --eval 'db.getSiblingDB("admin").createUser({{user:"{MONGO_USERNAME}",pwd:"{MONGO_PASSWORD}",roles:[{{role:"root",db:"admin"}}]}})'""".format(
                 **self.data)
             result = Script.run(script)
         if "Successfully added user" in result:

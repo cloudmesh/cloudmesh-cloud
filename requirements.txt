@@ -9,7 +9,6 @@ cloudmesh-configuration
 #    pip-compile setup.py
 #
 apache-libcloud==2.5.0
-azure==4.0.0
 beautifulsoup4==4.8.0
 boto3==1.9.193
 certifi==2019.6.16

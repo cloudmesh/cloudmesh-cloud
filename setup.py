@@ -49,7 +49,6 @@ cloudmesh-cmd5
 cloudmesh-sys
 cloudmesh-inventory
 apache-libcloud
-azure
 beautifulsoup4
 boto3
 certifi

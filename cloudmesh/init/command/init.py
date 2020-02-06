@@ -69,24 +69,31 @@ class InitCommand(PluginCommand):
         else:
             variables = Variables()
             config = Config()
-            try:
-                print("MongoDB stop")
-                MongoDBController().stop()
-            except:
-                Console.ok("MongoDB is not running. ok")
-            machine = platform.lower()
-            location = path_expand(config[
-                                       f'cloudmesh.data.mongo.MONGO_DOWNLOAD.{machine}.MONGO_PATH'])
-            try:
-                shutil.rmtree(location)
-                print("MongoDB folder deleted")
-            except:
-                Console.error(f"Could not delete {location}")
-                if platform == 'win32':
-                    Console.error(f"Please try to run cms init again ... ")
-                    exit(1)
+            
+            if config["cloudmesh.data.mongo.MODE"] != 'running':
+                try:
+                    print("MongoDB stop")
+                    MongoDBController().stop()
+                except:
+                    Console.ok("MongoDB is not running. ok")
+                machine = platform.lower()
+                location = path_expand(config[
+                                           f'cloudmesh.data.mongo.MONGO_DOWNLOAD.{machine}.MONGO_PATH'])
+                try:
+                    shutil.rmtree(location)
+                    print("MongoDB folder deleted")
+                except:
+                    Console.error(f"Could not delete {location}")
+                    if platform == 'win32':
+                        Console.error(f"Please try to run cms init again ... ")
+                        exit(1)
 
-            config = Config()
+                print("MongoDB create")
+                os.system("cms admin mongo create")
+                os.system("cms admin mongo start")
+            else:
+                print("MongoDB is on \"running\" mode!")
+
             user = config["cloudmesh.profile.user"]
 
             secgroup = "flask"
@@ -102,9 +109,6 @@ class InitCommand(PluginCommand):
             Console.ok("Config Security Initialization")
             Shell.execute("cms", ["config", "secinit"])
 
-            print("MongoDB create")
-            os.system("cms admin mongo create")
-            os.system("cms admin mongo start")
             os.system("cms sec load")
             os.system("cms key add")
 

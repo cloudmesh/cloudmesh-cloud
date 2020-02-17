@@ -266,6 +266,7 @@ class VmCommand(PluginCommand):
                        'username',
                        'output',
                        'count',
+                       'network',
                        'refresh')
 
         variables = Variables()
@@ -653,7 +654,11 @@ class VmCommand(PluginCommand):
             # parameters.names = arguments.name
 
             parameters.group = groups
-            for attribute in ["image", "username", "flavor", "key", "network",
+            for attribute in ["image",
+                              "username",
+                              "flavor",
+                              "key",
+                              "network",
                               "secgroup"]:
                 parameters[attribute] = Parameter.find(attribute,
                                                        arguments,
@@ -723,7 +728,7 @@ class VmCommand(PluginCommand):
                     Console.ok(f"Dryrun boot {name}: \n"
                                f"        cloud={cloud}\n"
                                f"        names={names}\n"
-                               f"        provide={provider}")
+                               f"        provider={provider}")
                     print()
                     for attribute in parameters:
                         value = parameters[attribute]

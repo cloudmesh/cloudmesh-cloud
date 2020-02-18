@@ -1,7 +1,7 @@
 ###############################################################
 # pytest -v --capture=no tests/aws/test_compute_aws.py
 # pytest -v  tests/aws/test_compute_aws.py
-# pytest -v --capture=no  tests/aws/test_compute_awas.py:Test_compute_aws.<METHODNAME>
+# pytest -v --capture=no  tests/aws/test_compute_awas..py::Test_compute_aws::<METHODNAME>
 ###############################################################
 import subprocess
 import time

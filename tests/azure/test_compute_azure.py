@@ -1,7 +1,7 @@
 ###############################################################
 # pytest -v --capture=no tests/azure/test_compute_azure.py
 # pytest -v  tests/azure/test_compute_azure.py
-# pytest -v --capture=no  tests/azure/test_compute_azure.py:Test_compute_azure.<METHODNAME>
+# pytest -v --capture=no  tests/azure/test_compute_azure..py::Test_compute_azure::<METHODNAME>
 ###############################################################
 import subprocess
 import time

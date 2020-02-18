@@ -1,7 +1,7 @@
 ###############################################################
 # pytest -v --capture=no tests/test_compute_database.py
 # pytest -v  tests/test_compute_database.py
-# pytest -v --capture=no tests/test_compute_database.py:Test_compute_database.<METHODNAME>
+# pytest -v --capture=no tests/test_compute_database..py::Test_compute_database::<METHODNAME>
 ###############################################################
 import subprocess
 import time

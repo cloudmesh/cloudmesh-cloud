@@ -5,6 +5,9 @@
 # pip install python-novaclient
 #
 
+#python nova.py --os-auth-url=https://kvm.tacc.chameleoncloud.org:5000/v3 --os-user-domain-name=Default  --os-username=??? --os-password=??? 
+
+
 import argparse
 import pprint
 import sys

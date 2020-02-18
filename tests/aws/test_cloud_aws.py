@@ -1,5 +1,5 @@
 ###############################################################
-# pip install .; pytest -v --capture=no  tests/aws/test_aws.py:Test_aws.test_001
+# pip install .; pytest -v --capture=no  tests/aws/test_aws..py::Test_aws.test_001
 # pytest -v --capture=no tests/aws/test_aws.py
 # pytest -v  tests/aws/test_aws.py
 ###############################################################

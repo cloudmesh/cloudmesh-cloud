@@ -517,6 +517,7 @@ class MongoDBController(object):
                 #mongo_runner = f"\"{self.mongo_home}\\bin\mongod\" {auth} " \
                 #               f"--bind_ip {mongo_host}" \
                 #               f" --dbpath \"{self.mongo_path}\" --logpath \"{self.mongo_log}\mongod.log\""
+
                 print(mongo_runner)
 
 
@@ -530,11 +531,12 @@ class MongoDBController(object):
                     with open(f'{self.mongo_path}\\mongo_starter.bat', 'w') as f:
                         f.write(mongo_runner)
                 script = f'wscript.exe "{self.mongo_path}\\invisible.vbs" "{self.mongo_path}\\mongo_starter.bat"'
+
                 print(script)
-                #p = subprocess.Popen(script,
-                #                     shell=True,
-                #                     stdout=subprocess.PIPE,
-                #                     stderr=subprocess.PIPE)
+                p = subprocess.Popen(script,
+                                     shell=True,
+                                     stdout=subprocess.PIPE,
+                                     stderr=subprocess.PIPE)
                 result = "mongod child process should be started successfully."
             except Exception as e:
                 result = "Mongo in windows could not be started: \n\n" + str(e)

@@ -510,7 +510,7 @@ class MongoDBController(object):
                 #    Console.error("mongo command not found")
                 #    sys.exit()
 
-                mongo_runner = f"\"mongod\" {auth} " \
+                mongo_runner = f"mongod {auth} " \
                                f"--bind_ip {mongo_host}" \
                                f" --dbpath \"{self.mongo_path}\" --logpath \"{self.mongo_log}\mongod.log\""
 

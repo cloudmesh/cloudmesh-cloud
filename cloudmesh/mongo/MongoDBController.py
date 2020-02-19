@@ -598,7 +598,7 @@ class MongoDBController(object):
                 result = Shell.run("taskkill /IM mongod.exe /F")
                 print (result)
             except Exception as e:
-                print (e)
+                result = e
 
         else:
             try:

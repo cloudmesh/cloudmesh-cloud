@@ -455,7 +455,9 @@ class MongoDBController(object):
             Console.info("Starting mongo without authentication ... ")
             self.start(security=False)
             Console.info("Creating admin user ... ")
+
             self.set_auth()
+
             Console.info("Stopping the service ... ")
             self.stop()
         else:
@@ -630,7 +632,7 @@ class MongoDBController(object):
             return
 
         if platform.lower() == 'win32':  # don't remove this otherwise init won't work in windows, eval should start with double quote in windows
-            self.data['MONGO'] = f"{self.mongo_home}\\bin\mongo"
+            self.data['MONGO'] = f"mongo"
             script = """ "{MONGO}" --eval "db.getSiblingDB('admin').createUser({{ user:'{MONGO_USERNAME}',pwd:'{MONGO_PASSWORD}',roles:[{{role:'root',db:'admin'}}]}}) ; db.shutdownServer()" """.format(
                 **self.data)
             # print(script)

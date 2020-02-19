@@ -561,6 +561,7 @@ class MongoDBController(object):
         linux and darwin have different way to shutdown the server, the common way is kill
         """
         mode = self.data['MODE']
+        result = "Result unkown"
 
         if mode == 'docker':
 
@@ -596,9 +597,8 @@ class MongoDBController(object):
             '''
             try:
                 result = Shell.run("taskkill /IM mongod.exe /F")
-                print (result)
             except Exception as e:
-                result = e
+                result = str(e)
 
         else:
             try:

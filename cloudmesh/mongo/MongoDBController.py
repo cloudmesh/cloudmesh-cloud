@@ -509,9 +509,14 @@ class MongoDBController(object):
                 # if out == b'':
                 #    Console.error("mongo command not found")
                 #    sys.exit()
-                mongo_runner = f"\"{self.mongo_home}\\bin\mongod\" {auth} " \
+
+                mongo_runner = f"\"mongod\" {auth} " \
                                f"--bind_ip {mongo_host}" \
                                f" --dbpath \"{self.mongo_path}\" --logpath \"{self.mongo_log}\mongod.log\""
+
+                #mongo_runner = f"\"{self.mongo_home}\\bin\mongod\" {auth} " \
+                #               f"--bind_ip {mongo_host}" \
+                #               f" --dbpath \"{self.mongo_path}\" --logpath \"{self.mongo_log}\mongod.log\""
                 print(mongo_runner)
                 if not os.path.isfile(f'{self.mongo_path}/invisible.vbs'):
                     with open(f'{self.mongo_path}/invisible.vbs', 'w') as f:

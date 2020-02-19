@@ -280,7 +280,8 @@ class MongoInstaller(object):
             os.mkdir(self.mongo_log)
         except FileExistsError:
             Console.info(f"Folder {self.mongo_log} already exists")
-        script = f"""msiexec.exe /l*v {self.mongo_log}/mdbinstall.log  /qb /i {self.mongo_code} INSTALLLOCATION="{self.mongo_home}" ADDLOCAL="all" """
+
+        script = f"""msiexec.exe /l*v {self.mongo_log}\\mdbinstall.log  /qb /i {self.mongo_code} INSTALLLOCATION="{self.mongo_home}" ADDLOCAL="all" """
         print(script)
         if self.dryrun:
             print(script)

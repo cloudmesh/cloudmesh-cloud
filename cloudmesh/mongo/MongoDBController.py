@@ -517,10 +517,10 @@ class MongoDBController(object):
                     with open(f'{self.mongo_path}/invisible.vbs', 'w') as f:
                         f.write(
                             'CreateObject("Wscript.Shell").Run """" & WScript.Arguments(0) & """", 0, False')
-                if not os.path.isfile(f'{self.mongo_path}/mongo_starter.bat'):
+                if not os.path.isfile(f'{self.mongo_path}\\mongo_starter.bat'):
                     with open(f'{self.mongo_path}/mongo_starter.bat', 'w') as f:
                         f.write(mongo_runner)
-                script = f'wscript.exe \"{self.mongo_path}/invisible.vbs\" \"{self.mongo_path}/mongo_starter.bat\"'
+                script = f'wscript.exe \"{self.mongo_path}\\invisible.vbs\" \"{self.mongo_path}/mongo_starter.bat\"'
                 print(script)
                 p = subprocess.Popen(script, shell=True, stdout=subprocess.PIPE,
                                      stderr=subprocess.PIPE)

@@ -570,6 +570,7 @@ class MongoDBController(object):
             result = "Container is down"
 
         elif platform.lower() == 'win32':
+            '''
             MONGO = f"\"{self.mongo_home}\\bin\mongo\""
             script = f'{MONGO} --eval "db.getSiblingDB(\'admin\').shutdownServer()"'
             p1 = subprocess.Popen(script, shell=True, stdout=subprocess.PIPE,
@@ -592,6 +593,13 @@ class MongoDBController(object):
                 result = 'server should be down...'
             else:
                 result = 'server is already down...'
+            '''
+            try:
+                result = Shell.run("taskkill /IM mongod.exe /F")
+                print (result)
+            except Exception as e:
+                print (e)
+
         else:
             try:
                 pid = Script.run('pgrep mongo')

@@ -86,7 +86,7 @@ class InitCommand(PluginCommand):
                     Console.error(f"Could not delete {location}")
                     if platform == 'win32':
                         Console.error(f"Please try to run cms init again ... ")
-                        exit(1)
+                        return ""
 
                 print("MongoDB create")
                 os.system("cms admin mongo create")

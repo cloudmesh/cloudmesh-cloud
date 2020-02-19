@@ -245,7 +245,7 @@ class AdminCommand(PluginCommand):
                 mongo = MongoDBController()
                 mongo.login()
                 if mongo.status()['status'] == 'ok':
-                    Console.ok("MOngo is running")
+                    Console.ok("Mongo is running")
             except Exception as e:
                 Console.error("Mongo is not running")
                 print(e)

@@ -80,11 +80,13 @@ class InitCommand(PluginCommand):
                 location = path_expand(config[
                                            f'cloudmesh.data.mongo.MONGO_DOWNLOAD.{machine}.MONGO_PATH'])
                 try:
+                    print("deleting:", location)
                     shutil.rmtree(location)
                     print("MongoDB folder deleted")
-                except:
+                except Exception as e:
                     Console.error(f"Could not delete {location}")
                     if platform == 'win32':
+                        print (e)
                         Console.error(f"Please try to run cms init again ... ")
                         return ""
 

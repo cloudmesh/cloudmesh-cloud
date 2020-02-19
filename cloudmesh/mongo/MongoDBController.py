@@ -518,9 +518,8 @@ class MongoDBController(object):
                 #               f"--bind_ip {mongo_host}" \
                 #               f" --dbpath \"{self.mongo_path}\" --logpath \"{self.mongo_log}\mongod.log\""
                 print(mongo_runner)
-                script = """
-                
-                """
+
+
 
 
                 if not os.path.isfile(f'{self.mongo_path}\\invisible.vbs'):
@@ -530,7 +529,7 @@ class MongoDBController(object):
                 if not os.path.isfile(f'{self.mongo_path}\\mongo_starter.bat'):
                     with open(f'{self.mongo_path}\\mongo_starter.bat', 'w') as f:
                         f.write(mongo_runner)
-                script = f'wscript.exe \"{self.mongo_path}\\invisible.vbs\" \"{self.mongo_path}\\mongo_starter.bat\"'
+                script = f'wscript.exe "{self.mongo_path}\\invisible.vbs" "{self.mongo_path}\\mongo_starter.bat"'
                 print(script)
                 #p = subprocess.Popen(script,
                 #                     shell=True,

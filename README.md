@@ -10,8 +10,8 @@
 
 ## Requirements
 
-Please note that several packages are available which are pointed to in the
-installation documentation.
+Please note that several packages are available which are pointed to
+in the installation documentation.
 
 |                          | Links                                              |
 |--------------------------|----------------------------------------------------|

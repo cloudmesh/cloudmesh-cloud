@@ -149,6 +149,8 @@ class MongoInstaller(object):
                     distro = "debian"
                 elif "Ubuntu" in s:
                     distro = "ubuntu"
+                elif "Mint" in s:
+                    distro = "ubuntu"
             elif "Release" in s:
                 version = s.split(":").pop(1).split(".").pop(0)
         if "debian" == distro:

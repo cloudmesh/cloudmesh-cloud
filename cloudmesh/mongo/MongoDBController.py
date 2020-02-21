@@ -547,7 +547,7 @@ class MongoDBController(object):
         else:
             try:
                 script = f"mongod {auth} --bind_ip {mongo_host}" \
-                         f" --dbpath {self.mongo_path} --logpath {self.mongo_log}\\mongod.log --fork"
+                         f" --dbpath {self.mongo_path} --logpath {self.mongo_log}/mongod.log --fork"
                 result = Script.run(script)
 
             except Exception as e:

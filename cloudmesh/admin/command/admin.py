@@ -47,6 +47,7 @@ class AdminCommand(PluginCommand):
             admin mongo password PASSWORD
             admin mongo list [--output=OUTPUT]
             admin mongo ssh
+            admin mongo mode MODE
             admin status
             admin system info
 
@@ -232,6 +233,18 @@ class AdminCommand(PluginCommand):
                 else:
                     Console.ok("is your MongoDB server running")
 
+            elif arguments.mode:
+
+                mode = arguments.MODE
+                config = Config()
+
+                old = config["cloudmesh.data.mongo.MODE"]
+
+                print (f"Mongo mode: {old} -> {mode}")
+                config["cloudmesh.data.mongo.MODE"] = mode
+                config.save()
+
+
         elif arguments.status:
 
             # config = Config()
@@ -254,5 +267,6 @@ class AdminCommand(PluginCommand):
 
             s = OperatingSystem.get()
             print(Printer.attribute(s))
+
 
         return result

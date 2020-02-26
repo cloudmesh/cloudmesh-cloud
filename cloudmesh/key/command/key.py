@@ -377,12 +377,14 @@ class KeyCommand(PluginCommand):
                     old = variables["key"]
                     if old != name:
                         Console.msg(
-                            f"Changing defualt key from {old} to {name}")
+                            f"Changing default key from {old} to {name}")
                         variables["key"] = name
 
             #
             # Step 1. keys = find keys to upload
             #
+
+
 
             cloud = "local"
             db = CmDatabase()
@@ -402,7 +404,7 @@ class KeyCommand(PluginCommand):
             # Step 2. iterate over the clouds to upload
             #
 
-            clouds, names = Arguments.get_cloud_and_names("list",
+            clouds, vmnames = Arguments.get_cloud_and_names("list",
                                                           arguments,
                                                           variables)
 

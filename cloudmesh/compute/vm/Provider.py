@@ -44,7 +44,7 @@ class Provider(ComputeNodeABC):
 
             provider = providers[self.kind]
 
-        elif self.kind in ["awslibcloud", "google"]:
+        elif self.kind in ["awslibcloud", "googlelibcloud"]:
 
             from cloudmesh.compute.libcloud.Provider import \
                 Provider as LibCloudProvider
@@ -54,6 +54,11 @@ class Provider(ComputeNodeABC):
             from cloudmesh.openstack.compute.Provider import \
                 Provider as OpenStackComputeProvider
             provider = OpenStackComputeProvider
+
+        elif self.kind in ['google']:
+            from cloudmesh.google.compute.Provider import \
+                Provider as GoogleComputeProvider
+            provider = GoogleComputeProvider
 
         elif self.kind in ['oracle']:
             from cloudmesh.oracle.compute.Provider import \

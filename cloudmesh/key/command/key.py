@@ -639,7 +639,7 @@ class KeyCommand(PluginCommand):
             return ""
 
         elif arguments.group:
-
+            # Testing keygroup_1 creation
             raise NotImplementedError
 
         return ""

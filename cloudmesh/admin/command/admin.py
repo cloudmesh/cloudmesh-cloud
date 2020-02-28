@@ -102,10 +102,10 @@ class AdminCommand(PluginCommand):
               to the running container. This function may be disabled in future.
 
 
-            admin mongo native
+            admin mongo mode native
                switches configuration file to use native mode
 
-            admin mongo running
+            admin mongo mode running
                 switches the configuration to use running mode
 
         """

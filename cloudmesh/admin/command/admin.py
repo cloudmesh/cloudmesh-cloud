@@ -47,6 +47,8 @@ class AdminCommand(PluginCommand):
             admin mongo password PASSWORD
             admin mongo list [--output=OUTPUT]
             admin mongo ssh
+            admin mongo native
+            admin mongo running
             admin status
             admin system info
 
@@ -99,6 +101,13 @@ class AdminCommand(PluginCommand):
 
               is only supported for docker and allows for debugging to login
               to the running container. This function may be disabled in future.
+
+
+            admin mongo native
+               switches configuration file to use native mode
+
+            admin mongo running
+                switches the configuration to use running mode
 
         """
 
@@ -231,6 +240,18 @@ class AdminCommand(PluginCommand):
                     Console.ok("ok")
                 else:
                     Console.ok("is your MongoDB server running")
+
+            elif arguments.running:
+
+                config = Config()
+                config["cloudmesh.data.mongo.MODE"] = "running"
+                config.save()
+
+            elif arguments.native:
+
+                config = Config()
+                config["cloudmesh.data.mongo.MODE"] = "native"
+                config.save()
 
         elif arguments.status:
 

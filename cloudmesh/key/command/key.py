@@ -35,7 +35,7 @@ class KeyCommand(PluginCommand):
              key list --source=git [--output=OUTPUT] [--username=USERNAME]
              key list [--output=OUTPUT]
              key init
-             key add NAME --filename=FILENAME [--output=OUTPUT]
+             key add NAME --source=FILENAME [--output=OUTPUT]
              key add [NAME] [--source=FILENAME]
              key add [NAME] [--source=git]
              key add [NAME] [--source=ssh]
@@ -319,6 +319,10 @@ class KeyCommand(PluginCommand):
             elif arguments["--source"] == "git":
                 name = arguments.NAME or "git"
                 key.add("git", "git")
+            elif arguments["--source"] is not None:
+                filename = arguments["--source"]
+                name = arguments.NAME
+                key.add(name, filename)
             else:
                 config = Config()
                 name = config["cloudmesh.profile.user"]

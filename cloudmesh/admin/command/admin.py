@@ -47,7 +47,7 @@ class AdminCommand(PluginCommand):
             admin mongo password PASSWORD
             admin mongo list [--output=OUTPUT]
             admin mongo ssh
-            admon mongo mode MODE
+            admon mongo mode [MODE]
             admin mongo native
             admin mongo running
             admin status
@@ -242,6 +242,22 @@ class AdminCommand(PluginCommand):
                 else:
                     Console.ok("is your MongoDB server running")
 
+            elif arguments.mode:
+
+                if arguments.MODE:
+
+                    if arguments.MODE not in ["native", "running", "docker"]:
+                        Console.error("The mode is not supported")
+                    config = Config()
+                    config["cloudmesh.data.mongo.MODE"] = arguments.MODE
+                    config.save()
+
+                else:
+                    config = Config()
+                    mode = config["cloudmesh.data.mongo.MODE"]
+                    print(mode)
+                    return ""
+
             elif arguments.running:
 
                 config = Config()
@@ -252,14 +268,6 @@ class AdminCommand(PluginCommand):
 
                 config = Config()
                 config["cloudmesh.data.mongo.MODE"] = "native"
-                config.save()
-
-            elif arguments.mode:
-
-                if arguments.MODE not in ["native", "running", "docker"]:
-                    Console.error("The mode is not supported")
-                config = Config()
-                config["cloudmesh.data.mongo.MODE"] = arguments.MODE
                 config.save()
 
 

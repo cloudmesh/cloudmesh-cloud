@@ -257,8 +257,8 @@ class ConfigCommand(PluginCommand):
             for line in lines:
                 if arguments.less:
                     if counter % (rows - 2) == 0:
-                        x = input().splitlines()[0].strip()
-                        if x != '' and x in 'qQxX':
+                        x = input()
+                        if x != '' and 'q' in x.lower():
                             return ""
                 print(line)
                 counter += 1

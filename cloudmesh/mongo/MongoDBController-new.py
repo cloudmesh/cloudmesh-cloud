@@ -137,7 +137,7 @@ class MongoInstaller(object):
         proc = subprocess.Popen(cmd, stdout=subprocess.PIPE,
                                 stderr=subprocess.PIPE)
         o, e = proc.communicate()
-        p = o.decode('ascii').replace('\t', "").split("\n")
+        p = o.decode('ascii').replace('\t', "").splitlines()
 
         distro = "none"
         version = "none"
@@ -732,7 +732,7 @@ class MongoDBController(object):
         try:
             out = \
                 subprocess.check_output("mongod --version", encoding='UTF-8',
-                                        shell=True).split("\n")[0].split(
+                                        shell=True).splitlines()[0].split(
                     "version")[
                     1].strip().split(".")
             ver = (int(out[0][1:]), int(out[1]), int(out[2]))
@@ -750,7 +750,7 @@ class MongoDBController(object):
 
         script = """mongo --eval 'db.stats()'""".format(**self.data)
 
-        result = Script.run(script).split("\n")
+        result = Script.run(script).splitlines()
 
         output = {}
         for line in result:

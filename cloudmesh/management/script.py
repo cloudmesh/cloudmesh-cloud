@@ -100,7 +100,7 @@ class Script(object):
         """
         if script is not None:
             result = ""
-            lines = textwrap.dedent(script).strip().split("\n")
+            lines = textwrap.dedent(script).strip().splitlines()
             if debug:
                 print("===============")
                 print(lines)

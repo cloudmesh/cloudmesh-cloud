@@ -10,7 +10,7 @@ from cloudmesh.mongo.MongoDBController import MongoDBController
 from cloudmesh.mongo.MongoDBController import MongoInstaller
 from cloudmesh.shell.command import PluginCommand, map_parameters
 from cloudmesh.shell.command import command
-
+from cloudmesh.common.debug import VERBOSE
 
 class AdminCommand(PluginCommand):
     # noinspection PyPep8
@@ -47,9 +47,7 @@ class AdminCommand(PluginCommand):
             admin mongo password PASSWORD
             admin mongo list [--output=OUTPUT]
             admin mongo ssh
-            admon mongo mode [MODE]
-            admin mongo native
-            admin mongo running
+            admin mongo mode [MODE]
             admin status
             admin system info
 
@@ -120,7 +118,7 @@ class AdminCommand(PluginCommand):
                        "force")
         arguments.output = arguments.output or "table"
 
-        # VERBOSE(arguments)
+        VERBOSE(arguments)
         # arguments.PATH = arguments['--download'] or None
         result = None
 
@@ -257,18 +255,6 @@ class AdminCommand(PluginCommand):
                     mode = config["cloudmesh.data.mongo.MODE"]
                     print(mode)
                     return ""
-
-            elif arguments.running:
-
-                config = Config()
-                config["cloudmesh.data.mongo.MODE"] = "running"
-                config.save()
-
-            elif arguments.native:
-
-                config = Config()
-                config["cloudmesh.data.mongo.MODE"] = "native"
-                config.save()
 
 
         elif arguments.status:

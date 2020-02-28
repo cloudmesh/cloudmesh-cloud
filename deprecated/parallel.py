@@ -45,7 +45,7 @@ class ParallelProcess(ProcessABC):
             return item, username, publickey
 
     def run_remote(self, username, publickey, script):
-        s = subprocess.check_output(["ssh", "-i", publickey, username, "sh", script]).decode("utf-8").split("\n")
+        s = subprocess.check_output(["ssh", "-i", publickey, username, "sh", script]).decode("utf-8").splitlines()
         return s
 
     def scp(self, username, publickey, script):

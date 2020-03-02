@@ -508,6 +508,20 @@ class KeyCommand(PluginCommand):
 
             return ""
 
+        elif arguments.group and arguments.delete:
+
+            key = KeyGroup()
+            # key group delete --group=GROUPNAME NAMES
+            # deletes the keys from the said group
+
+            groups = arguments["--group"]
+            names = arguments.NAMES
+            print('names: ', names)
+
+            key.delete(groups, names)
+
+            return ""
+
         elif arguments.gen:
             """
             key gen (ssh | pem) [--filename=FILENAME] [--nopass] [--set_path]

@@ -58,7 +58,7 @@ class Key(ListResource):
         :rtype: list
         """
         uri = 'https://github.com/{:}.keys'.format(username)
-        content = requests.get(uri).text.strip("\n").split("\n")
+        content = requests.get(uri).text.strip("\n").splitlines()
 
         d = []
 

@@ -10,8 +10,8 @@
 
 ## Requirements
 
-Please note that several packages are available which are pointed to in the
-installation documentation.
+Please note that several packages are available which are pointed to
+in the installation documentation.
 
 |                          | Links                                              |
 |--------------------------|----------------------------------------------------|
@@ -31,5 +31,5 @@ where we also document how to use pyenv virtualenv.
 
 * See <https://github.com/cloudmesh/cloudmesh-installer>
 
-
+* See <https://github.com/cloudmesh/cloudmesh-manual>
 .

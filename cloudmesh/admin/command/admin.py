@@ -10,7 +10,7 @@ from cloudmesh.mongo.MongoDBController import MongoDBController
 from cloudmesh.mongo.MongoDBController import MongoInstaller
 from cloudmesh.shell.command import PluginCommand, map_parameters
 from cloudmesh.shell.command import command
-
+from cloudmesh.common.debug import VERBOSE
 
 class AdminCommand(PluginCommand):
     # noinspection PyPep8
@@ -47,6 +47,7 @@ class AdminCommand(PluginCommand):
             admin mongo password PASSWORD
             admin mongo list [--output=OUTPUT]
             admin mongo ssh
+            admin mongo mode [MODE]
             admin status
             admin system info
 
@@ -100,6 +101,13 @@ class AdminCommand(PluginCommand):
               is only supported for docker and allows for debugging to login
               to the running container. This function may be disabled in future.
 
+
+            admin mongo mode native
+               switches configuration file to use native mode
+
+            admin mongo mode running
+                switches the configuration to use running mode
+
         """
 
         map_parameters(arguments,
@@ -110,7 +118,7 @@ class AdminCommand(PluginCommand):
                        "force")
         arguments.output = arguments.output or "table"
 
-        # VERBOSE(arguments)
+        VERBOSE(arguments)
         # arguments.PATH = arguments['--download'] or None
         result = None
 
@@ -232,6 +240,23 @@ class AdminCommand(PluginCommand):
                 else:
                     Console.ok("is your MongoDB server running")
 
+            elif arguments.mode:
+
+                if arguments.MODE:
+
+                    if arguments.MODE not in ["native", "running", "docker"]:
+                        Console.error("The mode is not supported")
+                    config = Config()
+                    config["cloudmesh.data.mongo.MODE"] = arguments.MODE
+                    config.save()
+
+                else:
+                    config = Config()
+                    mode = config["cloudmesh.data.mongo.MODE"]
+                    print(mode)
+                    return ""
+
+
         elif arguments.status:
 
             # config = Config()
@@ -245,7 +270,7 @@ class AdminCommand(PluginCommand):
                 mongo = MongoDBController()
                 mongo.login()
                 if mongo.status()['status'] == 'ok':
-                    Console.ok("MOngo is running")
+                    Console.ok("Mongo is running")
             except Exception as e:
                 Console.error("Mongo is not running")
                 print(e)

@@ -299,9 +299,6 @@ class ComputeNodeABC(metaclass=ABCMeta):
     def upload_secgroup(self, name=None):
         raise NotImplementedError
 
-    def list_secgroup_rules(self, name='default'):
-        raise NotImplementedError
-
     def add_secgroup(self, name=None, description=None):
         raise NotImplementedError
 
@@ -313,9 +310,6 @@ class ComputeNodeABC(metaclass=ABCMeta):
         raise NotImplementedError
 
     def remove_secgroup(self, name=None):
-        raise NotImplementedError
-
-    def upload_secgroup(self, name=None):
         raise NotImplementedError
 
     def add_rules_to_secgroup(self, name=None, rules=None):

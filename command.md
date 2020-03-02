@@ -51,7 +51,7 @@ os.sytsem("script.sh 1")
 
 ```
 from subprocess import check_output
-out = check_output(["script.sh", "1"]).decode("utf-8").split("\n")
+out = check_output(["script.sh", "1"]).decode("utf-8").splitlines()
 out = check_output(["script.sh", "1"]).splitlines()
 #  splitlines, better, but still in binary, so you need to convert from binary each part of the array to utf-8
 

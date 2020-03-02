@@ -315,6 +315,23 @@ class KeyCommand(PluginCommand):
 
             return ""
 
+        elif arguments.group and arguments.list:
+            key = KeyGroup()
+
+            groups = Parameter.expand(arguments["--group"])
+
+            cloud = "local"
+            db = CmDatabase()
+            kind = "key"
+            db_keys = db.find(collection=f"{cloud}-{kind}")
+            print_keys(db_keys)
+
+            kind = "keygroup"
+            db_keys = db.find(collection=f"{cloud}-{kind}")
+            print_keygroups(db_keys)
+
+            return ""
+
         elif arguments.group and arguments.add:
             key = KeyGroup()
             #key group add --group=abc [NAMES]

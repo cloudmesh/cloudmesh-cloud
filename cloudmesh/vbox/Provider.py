@@ -79,7 +79,7 @@ class Provider(object):
             return None
 
         lines = []
-        for line in result.split("\n")[2:]:
+        for line in result.splitlines()[2:]:
             if line == " ":
                 break
             else:
@@ -157,7 +157,7 @@ class Provider(object):
 
     def _convert_assignment_to_dict(self, content):
         d = {}
-        lines = content.split("\n")
+        lines = content.splitlines()
         for line in lines:
             attribute, value = line.split("=", 1)
             attribute = attribute.replace('"', "")
@@ -205,7 +205,7 @@ class Provider(object):
             data["cm"]["status"] = "poweroff"
         else:
             print(result)
-            lines = result.split("\n")
+            lines = result.splitlines()
             data_vagrant = {}
             for line in lines:
                 attribute, value = line.strip().split(" ", 1)
@@ -214,7 +214,7 @@ class Provider(object):
 
                 data_vagrant[attribute] = value
 
-        vms = Shell.execute('VBoxManage', ["list", "vms"]).split("\n")
+        vms = Shell.execute('VBoxManage', ["list", "vms"]).splitlines()
         #
         # find vm
         #
@@ -294,7 +294,7 @@ class Provider(object):
 
         if provision is not None:
             arg.provision = 'config.vm.provision "shell", inline: <<-SHELL\n'
-            for line in textwrap.dedent(provision).split("\n"):
+            for line in textwrap.dedent(provision).splitlines():
                 if line.strip() != "":
                     arg.provision += 12 * " " + "    " + line + "\n"
             arg.provision += 12 * " " + "  " + "SHELL\n"
@@ -452,7 +452,7 @@ class Provider(object):
         if "There are no installed boxes" in result:
             return None
         else:
-            result = result.split("\n")
+            result = result.splitlines()
         lines = []
         for line in result:
             entry = convert(line)

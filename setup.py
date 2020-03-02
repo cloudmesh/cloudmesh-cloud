@@ -82,7 +82,7 @@ termcolor
 urllib3
 uuid
 yamllint
-""".split("\n")
+""".splitlines()
 
 
 def read(fname):

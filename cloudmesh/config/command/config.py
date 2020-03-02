@@ -200,7 +200,10 @@ class ConfigCommand(PluginCommand):
             banner(
                 f"{action} cloudmesh.{kind}.{cloud} in ~/.cloudmesh/cloudmesh.yaml")
 
-            lines = yaml.dump(result).split("\n")
+            #
+            # Bug: should this not be splitlines()
+            #
+            lines = yaml.dump(result).splitlines()
             secrets = not arguments.secrets
             result = Config.cat_lines(lines, mask_secrets=secrets)
             print(result)
@@ -248,14 +251,14 @@ class ConfigCommand(PluginCommand):
             import shutil
             columns, rows = shutil.get_terminal_size(fallback=(80, 24))
 
-            lines = content.split("\n")
+            lines = content.splitlines()
 
             counter = 1
             for line in lines:
                 if arguments.less:
                     if counter % (rows - 2) == 0:
-                        x = input().split("\n")[0].strip()
-                        if x != '' and x in 'qQxX':
+                        x = input()
+                        if x != '' and 'q' in x.lower():
                             return ""
                 print(line)
                 counter += 1

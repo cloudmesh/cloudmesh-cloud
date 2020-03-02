@@ -140,14 +140,14 @@ class Provider(ComputeNodeABC):
         try:
 
             result = Shell.execute(self.vboxmanage, shell=True)
-            txt, version["virtualbox"]["version"] = result.split("\n")[0].split(
+            txt, version["virtualbox"]["version"] = result.splitlines()[0].split(
                 "Version ")
 
             result = Shell.execute(self.vboxmanage + " list -l extpacks",
                                    shell=True)
             extension = {}
 
-            for line in result.split("\n"):
+            for line in result.splitlines():
                 if "Oracle VM VirtualBox Extension Pack" in line:
                     extension["extensionpack"] = True
                 elif "Revision:" in line:
@@ -183,7 +183,7 @@ class Provider(ComputeNodeABC):
         if "There are no installed boxes" in result:
             return None
         else:
-            result = result.split("\n")
+            result = result.splitlines()
         lines = []
         for line in result:
             entry = convert(line)
@@ -274,7 +274,7 @@ class Provider(ComputeNodeABC):
             return None
 
         lines = []
-        for line in result.split("\n")[2:]:
+        for line in result.splitlines()[2:]:
             if line == " ":
                 break
             else:
@@ -345,7 +345,7 @@ class Provider(ComputeNodeABC):
 
     def _convert_assignment_to_dict(self, content):
         d = {}
-        lines = content.split("\n")
+        lines = content.splitlines()
         for line in lines:
             attribute, value = line.split("=", 1)
             attribute = attribute.replace('"', "")
@@ -392,7 +392,7 @@ class Provider(ComputeNodeABC):
         result = None
 
         vms = Shell.execute(self.vboxmanage + " list vms", shell=True).replace(
-            '"', '').replace('{', '').replace('}', '').split("\n")
+            '"', '').replace('{', '').replace('}', '').splitlines()
         vagrant_data = self.to_dict(self.vagrant_nodes())
 
         data = {}
@@ -445,7 +445,7 @@ class Provider(ComputeNodeABC):
                                    witherror=False,
                                    shell=True)
             if result is not None:
-                lines = result.split("\n")
+                lines = result.splitlines()
                 for line in lines:
                     attribute, value = line.strip().split(" ")
                     attribute = attribute.lower()
@@ -571,7 +571,7 @@ class Provider(ComputeNodeABC):
 
         if provision is not None:
             arg.provision = 'config.vm.provision "shell", inline: <<-SHELL\n'
-            for line in textwrap.dedent(provision).split("\n"):
+            for line in textwrap.dedent(provision).splitlines():
                 if line.strip() != "":
                     arg.provision += 12 * " " + "    " + line + "\n"
             arg.provision += 12 * " " + "  " + "SHELL\n"
@@ -725,7 +725,7 @@ class Provider(ComputeNodeABC):
         arguments = ['modifyvm', '"', name, '"', "--name", '"', destination,
                      '"']
 
-        vms = Shell.execute(self.vboxmanage, arguments, shell=True).split("\n")
+        vms = Shell.execute(self.vboxmanage, arguments, shell=True).splitlines()
         return {}
 
     def list_os(self):
@@ -742,7 +742,7 @@ class Provider(ComputeNodeABC):
 
         id = "None"
         for element in result:
-            attributes = element.split("\n")
+            attributes = element.splitlines()
             for a in attributes:
 
                 attribute, value = a.split(":")

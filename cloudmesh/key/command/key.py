@@ -12,6 +12,9 @@ from cloudmesh.shell.command import PluginCommand
 from cloudmesh.shell.command import command, map_parameters
 from cloudmesh.configuration.security.encrypt import KeyHandler
 from cloudmesh.common.util import path_expand, yn_choice
+from cloudmesh.host.host import Host
+from cloudmesh.common.util import path_expand
+from cloudmesh.key.KeyGroup import KeyGroup
 from pprint import pprint
 import os
 import sys
@@ -43,6 +46,7 @@ class KeyCommand(PluginCommand):
              key upload [NAMES] [--cloud=CLOUDS] [--dryrun]
              key upload [NAMES] [VMS] [--dryrun]
              key group upload [NAMES] [--group=GROUPNAMES] [--cloud=CLOUDS] [--dryrun]
+             key group add [--file=FILENAME] [--group=GROUPNAMES]
              key group add [NAMES] [--group=GROUPNAMES] [--cloud=CLOUDS] [--dryrun]
              key group delete [--group=GROUPNAMES] [NAMES] [--dryrun]
              key group list [--group=GROUPNAMES] [--output=OUTPUT]
@@ -202,7 +206,7 @@ class KeyCommand(PluginCommand):
                In some cases you may want to store the public keys in files. For
                this reason we support the following commands.
 
-                key group add --group=GROUPNAME --file=FILENAME
+                key group add --group=GROUPNAME [--file=FILENAME]
                     the command adds the keys to the given group. The keys are
                     written in the files in yaml format.
 
@@ -227,12 +231,31 @@ class KeyCommand(PluginCommand):
                 to the grouplist of the key
         """
 
+        dryrun = arguments["--dryrun"]
+
+        def get_key_list(db_keys, names):
+            keys = []
+            for key in db_keys:
+                for i in names:
+                    if key["name"].strip() == i.strip():
+                        keys.append(key["name"])
+            return keys
+
         def print_keys(keys):
             print(Printer.write(
                 keys,
                 sort_keys=["name"],
                 order=["name", "type", "fingerprint", "comment"],
                 header=["Name", "Type", "Fingerprint", "Comment"],
+                output=arguments.output)
+            )
+
+        def print_keygroups(groups):
+            print(Printer.write(
+             groups,
+                sort_keys=["name"],
+                order=["name", "keys"],
+                header=["Name", "Keys"],
                 output=arguments.output)
             )
 
@@ -289,6 +312,30 @@ class KeyCommand(PluginCommand):
                 keys = provider.keys()
 
                 provider.Print(keys, output=arguments.output, kind="key")
+
+            return ""
+
+        elif arguments.group and arguments.add:
+            key = KeyGroup()
+            #key group add --group=abc [NAMES]
+
+            groups = arguments["--group"]
+            names = Parameter.expand(arguments.NAMES)
+
+            filename = arguments["--file"]
+
+            if filename is not None:
+                key = Key()
+                name = arguments.NAME
+                key.add(name, filename)
+
+            cloud = "local"
+            db = CmDatabase()
+            db_keys = db.find(collection=f"{cloud}-key")
+            keys = get_key_list(db_keys, names)
+
+            for i in keys:
+                key.add(groups, i)
 
             return ""
 

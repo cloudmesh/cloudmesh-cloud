@@ -45,12 +45,12 @@ class KeyCommand(PluginCommand):
              key delete NAMES [--cloud=CLOUDS] [--dryrun]
              key upload [NAMES] [--cloud=CLOUDS] [--dryrun]
              key upload [NAMES] [VMS] [--dryrun]
-             key group upload [NAMES] [--group=GROUPNAMES] [--cloud=CLOUDS] [--dryrun]
+             key group upload [--group=GROUPNAMES] [--cloud=CLOUDS] [--vm=VM][--dryrun]
              key group add [--file=FILENAME] [--group=GROUPNAMES]
              key group add [NAMES] [--group=GROUPNAMES] [--cloud=CLOUDS] [--dryrun]
              key group delete [--group=GROUPNAMES] [NAMES] [--dryrun]
              key group list [--group=GROUPNAMES] [--output=OUTPUT]
-             key group export --group=GROUNAMES --filename=FILENAME
+             key group export [--group=GROUPNAMES] [--file=FILENAME]
              key gen (ssh | pem) [--filename=FILENAME] [--nopass] [--set_path] [--force]
              key reformat (ssh | pem) [--filename=FILENAME] [--format=FORMAT]
                                       [--nopass] [--pub]
@@ -211,7 +211,7 @@ class KeyCommand(PluginCommand):
                     written in the files in yaml format.
 
 
-                key group export --group=GROUNAMES --filename=FILENAME
+                key group export --group=GROUPNAMES --file=FILENAME
                     the command exports the keys to the given group. The keys are
                     written in the files in yaml format.
 
@@ -418,6 +418,43 @@ class KeyCommand(PluginCommand):
             key.add(username, "ssh")
             variables['key'] = username
 
+        elif arguments.group and arguments.upload:
+
+            # key group upload [--group=GROUPNAMES] [--cloud=CLOUDS] [--vm] [--dryrun]
+
+            groupkeys = arguments["--group"]
+
+            cloud = "local"
+            db = CmDatabase()
+
+            kind = "key"
+            db_keys = db.find(collection=f"{cloud}-{kind}")
+
+            kind = "keygroup"
+            db_keygroups = db.find(collection=f"{cloud}-{kind}")
+
+            keygroups = []
+            for groups in db_keygroups:
+                if groups["name"] == groupkeys:
+                    for x in groups["keys"]:
+                        keygroups.append(x)
+
+            cloud = arguments["--cloud"]
+            provider = Provider(name=cloud)
+            vm = arguments["--vm"]
+            keys = ""
+            for key in db_keys:
+                if key["name"] in keygroups:
+                    keys += key["public_key"]
+                    command = "\"echo " + keys +\
+                              " >> /home/cc/.ssh/authorized_keys; cat time >> /tmp/time.txt\""
+                    print("vm: ", vm)
+                    print("\"command: ", command)
+                    x = provider.info(vm)
+                    provider.ssh(x[0], command)
+
+            return ""
+
         elif arguments.upload:
 
             """
@@ -491,6 +528,39 @@ class KeyCommand(PluginCommand):
 
             return ""
 
+        elif arguments.export and arguments.group:
+            # key group export --group=GROUPNAMES --file=FILENAME
+
+            groupkeys = arguments["--group"]
+            filename = arguments["--file"]
+            print(groupkeys)
+            cloud = "local"
+            db = CmDatabase()
+
+            kind = "key"
+            db_keys = db.find(collection=f"{cloud}-{kind}")
+
+            kind = "keygroup"
+            db_keygroups = db.find(collection=f"{cloud}-{kind}")
+
+            keygroups = []
+            for groups in db_keygroups:
+                if groups["name"] == groupkeys:
+                    for x in groups["keys"]:
+                        keygroups.append(x)
+
+            keys = ""
+            for key in db_keys:
+                if key["name"] in keygroups:
+                    #   print(key["name"])
+                    keys += key["public_key"]
+                    keys += "\n"
+
+            sample = open(filename, 'a+')
+            print(keys, file=sample)
+            sample.close()
+
+            return ""
 
         elif arguments.delete and arguments.cloud and arguments.NAMES:
 

@@ -48,7 +48,7 @@ class Test_Keygroup:
 
     # create test for adding key to group
     # create test for all other functions
-
+    """
     def test_upload_key_to_database(self):
         HEADING()
         local = Key()
@@ -123,8 +123,8 @@ class Test_Keygroup:
     def test_benchmark(self):
         Benchmark.print(sysinfo=False, csv=True, tag=cloud)
 
-
+    """
     def test_list(self):
-        os.system("cms keygroup add ")
-        os.system("cms key list")
+        #os.system("cms keygroup add ")
+        os.system("cms key group list")
 

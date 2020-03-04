@@ -111,8 +111,8 @@ class InitCommand(PluginCommand):
             Console.ok("Config Security Initialization")
             Shell.execute("cms", ["config", "secinit"])
 
-            os.system("cms sec load")
             os.system("cms key add")
+            os.system("cms sec load")
 
             if arguments.CLOUD is not None:
                 cloud = arguments.CLOUD

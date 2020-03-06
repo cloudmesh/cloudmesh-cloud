@@ -6,7 +6,7 @@ from sys import platform
 import ctypes
 
 import openstack
-from cloudmesh.abstractclass.ComputeNodeABC import ComputeNodeABC
+from cloudmesh.abstract.ComputeNodeABC import ComputeNodeABC
 from cloudmesh.common.Printer import Printer
 from cloudmesh.common.console import Console
 from cloudmesh.common.parameter import Parameter

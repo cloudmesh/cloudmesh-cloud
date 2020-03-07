@@ -48,6 +48,7 @@ cloudmesh-configuration
 cloudmesh-cmd5
 cloudmesh-sys
 cloudmesh-inventory
+cloudmesh-abstract
 apache-libcloud
 beautifulsoup4
 boto3
@@ -66,7 +67,6 @@ Flask-PyMongo
 humanize
 idna
 munch
-openstacksdk
 oyaml
 pandas
 progress

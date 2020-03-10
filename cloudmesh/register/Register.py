@@ -24,7 +24,7 @@ class Register(object):
 
             elif service == 'storage':
 
-                from cloudmesh.compute.vm.Provider import Provider as P
+                from cloudmesh.storage.Provider import Provider as P
                 Provider = P.get_provider(kind)
 
             elif service == 'volume':

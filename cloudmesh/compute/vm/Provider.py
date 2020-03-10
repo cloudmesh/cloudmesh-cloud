@@ -20,6 +20,15 @@ from cloudmesh.mongo.CmDatabase import CmDatabase
 class Provider(ComputeNodeABC):
 
     @staticmethod
+    def get_kind():
+        kind = ["opensatck",
+                "google",
+                "oracle",
+                "azure",
+                "aws"]
+        return kind
+
+    @staticmethod
     def get_provider(kind):
 
         if kind in ["awslibcloud", "googlelibcloud"]:

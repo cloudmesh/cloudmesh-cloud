@@ -21,7 +21,8 @@ class RegisterCommand(PluginCommand):
         ::
 
             Usage:
-                register list --cloud=CLOUD [--service=SERVICE]
+                register list kind --service=SERVICE
+                register list sample --cloud=CLOUD [--service=SERVICE]
                 register --cloud=CLOUD [--service=SERVICE] [--name=NAME] [--filename=FILENAME] [--keep] [ATTRIBUTES...] [--dryrun]
 
 
@@ -98,7 +99,7 @@ class RegisterCommand(PluginCommand):
 
         provider = Register.get_provider(service=service, kind=kind)
 
-        if arguments["list"]:
+        if arguments["list"] and arguments["sample"]:
 
             sample = provider.sample
 
@@ -115,6 +116,18 @@ class RegisterCommand(PluginCommand):
                 print()
 
             return ""
+
+        if arguments["list"] and arguments["kind"]:
+
+            kinds = provider.get_kind()
+
+            Console.info(f"Kind for service={service}")
+            print()
+            print("    " + "\n    ".join(sorted(kinds)))
+            print()
+
+            return ""
+
 
         if provider is None:
             return

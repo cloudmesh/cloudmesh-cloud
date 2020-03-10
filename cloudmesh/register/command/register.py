@@ -20,7 +20,9 @@ class RegisterCommand(PluginCommand):
         ::
 
             Usage:
+                register list --cloud=CLOUD [--service=SERVICE]
                 register --cloud=CLOUD [--service=SERVICE] [--name=NAME] [--filename=FILENAME] [--keep] [ATTRIBUTES...] [--dryrun]
+
 
                 This command adds the registration information in the cloudmesh
                 yaml file. A FILENAME can be passed along that contains
@@ -74,7 +76,9 @@ class RegisterCommand(PluginCommand):
         entry_name = arguments.name or arguments.cloud
 
         """
-        TODO: Check if this is required.
+        TODO: This is a special register allowing to use the web interface 
+        to get the aws json file.
+        
         if arguments.aws and arguments.yaml:
 
             AWSReg = importlib.import_module(
@@ -92,36 +96,56 @@ class RegisterCommand(PluginCommand):
             return ""
         """
 
-
         provider = Register.get_provider(service=service, kind=kind)
+
+        if arguments["list"]:
+
+            sample = provider.sample
+            if len(sample) >= 1:
+                Console.error("The following attributes are not defined")
+                print()
+                keys = Register.get_sample_variables(sample)
+
+                print("    " + "\n    ".join(sorted(keys)))
+                print()
+
+            return ""
 
 
         if provider is None:
             return
 
-        if not arguments.ATTRIBUTES:
-            if arguments.filename is None:
-                raise ValueError("Either filename or attributes is required.")
+        attributes = {}
+
+        if arguments.filename:
 
             # Load JSON File.
             path = path_expand(arguments.filename)
             with open(path, "r") as file:
-                attributes = []
-                json_content = json.load(file)
-                for item in json_content:
-                    attributes.append(f"{item}={json_content[item]}")
+                attributes = json.load(file)
 
             # Add the filename to attributes
-            attributes.append(f"filename={arguments.filename}")
-        else:
-            # Use Arguments.
-            attributes = arguments.ATTRIBUTES
+            attributes["filename"] = arguments.filename
+
+        if arguments.ATTRIBUTES:
+
+            atts =  arguments.ATTRIBUTES
+            for attribute in atts:
+                key,value = attribute.split("=", 1)
+                attributes[key] = value
+
+
+        VERBOSE(attributes)
 
         sample = Register.get_sample(provider,
                                      kind,
-                                     cloud,
+                                     service,
                                      entry_name,
                                      attributes)
+
+        if sample is None:
+            Console.error("The sample is not fully filled out.")
+            return ""
 
         if arguments.dryrun:
             # Just print the value
@@ -133,7 +157,7 @@ class RegisterCommand(PluginCommand):
                       path="~/.cloudmesh/cloudmesh.yaml")
 
         Console.ok(
-            f"Registered {cloud} service for {kind}"
+            f"Registered {service} service for {kind}"
             f" provider with name {entry_name}.")
         return ""
 

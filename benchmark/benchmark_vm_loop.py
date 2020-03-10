@@ -18,7 +18,6 @@ from cloudmesh.common.console import Console
 from cloudmesh.common.StopWatch import StopWatch
 import time
 
-
 Benchmark.debug()
 
 user = Config()["cloudmesh.profile.user"]
@@ -32,7 +31,6 @@ print(f"Test run for {cloud}")
 if cloud is None:
     raise ValueError("cloud is not not set")
 
-
 name_generator = Name()
 name_generator.set(f"benchmark-{user}-vm-" + "{counter}")
 # name_generator.reset()
@@ -45,6 +43,7 @@ provider = Provider(name=cloud)
 def Print():
     data = provider.list()
     print(provider.Print(data=data, output='table', kind='vm'))
+
 
 current_vms = 0
 
@@ -64,9 +63,10 @@ def provider_vm_create():
 
     except Exception as e:
         Console.error(f"could not create VM {name}", traceflag=True)
-        print (e)
+        print(e)
     Print()
-    data = provider.list() # update the db
+    data = provider.list()  # update the db
+
 
 def provider_vm_terminate():
     HEADING()
@@ -78,13 +78,14 @@ def provider_vm_terminate():
 
     except Exception as e:
         Console.error(f"could not terminate VM {name}")
-        print (e)
+        print(e)
+
 
 def test_benchmark():
     StopWatch.benchmark(sysinfo=False, csv=False, tag=cloud)
 
 
-for i in range(0,repeat):
+for i in range(0, repeat):
     provider_vm_create()
     provider_vm_terminate()
     test_benchmark()

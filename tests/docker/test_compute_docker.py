@@ -23,6 +23,7 @@ Benchmark.debug()
 
 cloud = "docker"
 
+
 @pytest.mark.incremental
 class TestName:
     os = "ubuntu"
@@ -349,9 +350,9 @@ class other:
         self.test_destroy()
         self.test_list_vm()
 
-
     def test_benchmark(self):
         Benchmark.print(csv=True, sysinfo=False, tag=cloud)
+
 
 class other:
 

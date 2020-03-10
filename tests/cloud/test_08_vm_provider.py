@@ -83,7 +83,6 @@ class Test_provider_vm:
         else:
             name.assign(counter)
 
-
     def test_provider_vm_create(self):
         HEADING()
         os.system(f"cms vm list --cloud={cloud}")
@@ -234,9 +233,11 @@ class Test_provider_vm:
             assert len(provider.info(name=name)) == 0
         elif cloud == 'aws':
             assert len(data) == 0 if data else True \
-                   or (data[0]["cm"]["status"] in ['BOOTING', 'TERMINATED']
-                       if data and data[0].get('cm', None) is not None
-                       else True)
+                                               or (data[0]["cm"]["status"] in [
+                'BOOTING', 'TERMINATED']
+                                                   if data and data[0].get('cm',
+                                                                           None) is not None
+                                                   else True)
         elif cloud == 'azure':
             try:
                 provider.info(name=name)

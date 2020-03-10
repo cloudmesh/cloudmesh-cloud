@@ -102,4 +102,3 @@ class TestSsh:
 
     def test_benchmark(self):
         Benchmark.print(csv=True, sysinfo=False, tag=cloud)
-

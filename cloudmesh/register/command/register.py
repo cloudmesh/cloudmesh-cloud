@@ -101,7 +101,13 @@ class RegisterCommand(PluginCommand):
         if arguments["list"]:
 
             sample = provider.sample
+
             if len(sample) >= 1:
+
+                Console.info(f"Sample for service={service} kind={kind}")
+
+                print (dedent(sample))
+
                 Console.error("The following attributes are not defined")
                 print()
                 keys = Register.get_sample_variables(sample)

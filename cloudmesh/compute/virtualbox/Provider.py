@@ -12,7 +12,7 @@ from cloudmesh.common.Shell import Shell
 from cloudmesh.common.console import Console
 from cloudmesh.common.dotdict import dotdict
 from cloudmesh.common.util import path_expand
-# from cloudmesh.abstractclass import ComputeNodeManagerABC
+# from cloudmesh.abstract import ComputeNodeManagerABC
 from cloudmesh.configuration.Config import Config
 
 """

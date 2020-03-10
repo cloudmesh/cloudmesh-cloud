@@ -5,7 +5,7 @@ from pprint import pprint
 from botocore.exceptions import ClientError
 
 from cloudmesh.provider import ComputeProviderPlugin
-from cloudmesh.abstractclass.ComputeNodeABC import ComputeNodeABC
+from cloudmesh.abstract.ComputeNodeABC import ComputeNodeABC
 from 'cloudmesh-configuration'.Config import Config
 
 

@@ -19,6 +19,44 @@ from cloudmesh.mongo.CmDatabase import CmDatabase
 
 class Provider(ComputeNodeABC):
 
+    def get_provider(self, kind):
+
+        if kind in ["awslibcloud", "googlelibcloud"]:
+
+            from cloudmesh.compute.libcloud.Provider import Provider as P
+
+        elif kind in ['openstack']:
+            from cloudmesh.openstack.compute.Provider import Provider as P
+
+        elif kind in ['google']:
+            from cloudmesh.google.compute.Provider import Provider as P
+
+        elif kind in ['oracle']:
+            from cloudmesh.oracle.compute.Provider import Provider as P
+
+        elif kind in ['azure']:
+            from cloudmesh.azure.compute.Provider import Provider as P
+
+        elif kind in ['aws']:
+            from cloudmesh.aws.compute.Provider import Provider as P
+
+        # elif kind in ["vagrant", "virtualbox"]:
+        #    from cloudmesh.compute.virtualbox.Provider import \
+        #        Provider as VirtualboxCloudProvider
+        #    provider = VirtualboxCloudProvider
+        # elif kind in ["azureaz"]:
+        #    from cloudmesh.compute.azure.AzProvider import \
+        #        Provider as AzAzureProvider
+        #    provider = AzAzureProvider
+
+        else:
+            Console.error(f"Compute provider {kind} not supported")
+
+            raise ValueError(f"Compute provider {kind} not supported")
+
+        return P
+
+
     def __init__(self,
                  name=None,
                  configuration="~/.cloudmesh/cloudmesh.yaml"):

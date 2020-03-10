@@ -9,6 +9,7 @@ from cloudmesh.register.Entry import Entry
 from cloudmesh.shell.command import PluginCommand
 from cloudmesh.shell.command import command, map_parameters
 from cloudmesh.register.Register import Register
+from cloudmesh.common.debug import VERBOSE
 
 class RegisterCommand(PluginCommand):
 
@@ -19,18 +20,15 @@ class RegisterCommand(PluginCommand):
         ::
 
             Usage:
-                register --cloud=CLOUD
-                         [--service=SERVICE]
-                         [--name=NAME]
-                         [--filename=FILENAME]
-                         [--keep]
-                         [ATTRIBUTES...]
-                         [--dryrun]
+                register --cloud=CLOUD [--service=SERVICE] [--name=NAME] [--filename=FILENAME] [--keep] [ATTRIBUTES...] [--dryrun]
 
                 This command adds the registration information in the cloudmesh
-                yaml file. The permissions of the FILENAME will also be changed.
-                A y/n question will be asked if the files with the filename should
-                be deleted after integration.
+                yaml file. A FILENAME can be passed along that contains
+                credential information downloaded from the cloud. The
+                permissions of the FILENAME will also be changed. A y/n question
+                will be asked if the file with the FILENAME should be deleted
+                after integration. THis helps that all credential information
+                could be managed with the cloudmesh.yaml file.
 
             Arguments:
                 FILENAME    a filename in which the cloud credentials are stored
@@ -44,20 +42,22 @@ class RegisterCommand(PluginCommand):
                                      updating the cloudmesh.yaml file.
                 --filename=FILENAME  json filename containing the details to be replaced
                 --cloud=CLOUD        cloud provider e.g. aws, google, openstack, oracle etc.
-                --service=SERVICE    service type e.g. storage, compute etc.
+                --service=SERVICE    service type e.g. storage, compute, volume
                 --name=NAME          name for the new registration
 
             Examples:
 
                 cms register google compute --name=west_region \
-                    filename=~/.cloudmesh/google_west.json project_id=west1 \
+                    filename=~/.cloudmesh/google.json project_id=west1 \
                     client_email=example@gmail.com
 
                   In the last example the values for filename, project_id, and
                   client_email will be changed to respective values from google
-                  compute sample.
+                  compute sample. We assume you have downloaded the credentials
+                  form google and stored it in the file ~/.cloudmesh/google.json
 
         """
+
 
         map_parameters(arguments,
                        'cloud',
@@ -67,8 +67,10 @@ class RegisterCommand(PluginCommand):
                        'filename',
                        'name')
 
+        VERBOSE(arguments)
+
+        service = arguments.service or "cloud"
         kind = arguments.cloud
-        service = arguments.service
         entry_name = arguments.name or arguments.cloud
 
         """
@@ -90,7 +92,9 @@ class RegisterCommand(PluginCommand):
             return ""
         """
 
-        provider = Register.get_provider(service, kind)
+
+        provider = Register.get_provider(service=service, kind=kind)
+
 
         if provider is None:
             return
@@ -115,7 +119,7 @@ class RegisterCommand(PluginCommand):
 
         sample = Register.get_sample(provider,
                                      kind,
-                                     service,
+                                     cloud,
                                      entry_name,
                                      attributes)
 
@@ -129,7 +133,7 @@ class RegisterCommand(PluginCommand):
                       path="~/.cloudmesh/cloudmesh.yaml")
 
         Console.ok(
-            f"Registered {service} service for {kind}"
+            f"Registered {cloud} service for {kind}"
             f" provider with name {entry_name}.")
         return ""
 

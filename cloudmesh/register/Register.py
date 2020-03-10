@@ -6,63 +6,42 @@ class Register(object):
         print("init {name}".format(name=self.__class__.__name__))
 
     @staticmethod
-    def get_provider(service, kind):
+    def get_provider(kind=None, service=None):
         """
         Method to import the provider based on the service and kind.
-        :param service: Type of the service e.g. compute or storage etc.
+
+        :param service: Type of the service e.g. compute or storage, volume
         :param kind: Name of the cloud e.g. google, azure, aws etc.
         :return: Provider class
         """
+        Provider = None
+
         try:
-            if service == 'compute' or service == 'cloud':
+            if service in ['compute', 'cloud']:
 
                 from cloudmesh.compute.vm.Provider import Provider as P
-
-
-                if kind == 'openstack':
-                    from cloudmesh.openstack.compute.Provider import Provider
-                elif kind == 'azure':
-                    from cloudmesh.azure.compute.Provider import Provider
-                elif kind == 'aws':
-                    from cloudmesh.aws.compute.Provider import Provider
-                elif kind == 'oracle':
-                    from cloudmesh.oracle.compute.Provider import Provider
-                elif kind == 'google':
-                    from cloudmesh.google.compute.Provider import Provider
-                else:
-                    Console.error(
-                        f"No suitable provider found for {kind} and {service}")
-                    return None
+                Provider = P.get_provider(kind)
 
             elif service == 'storage':
 
-                if kind == 'openstack':
-                    from cloudmesh.openstack.storage.Provider import Provider
-                elif kind == 'azure':
-                    from cloudmesh.storage.azure.Provider import Provider
-                elif kind == 'aws':
-                    from cloudmesh.storage.aws.Provider import Provider
-                elif kind == 'oracle':
-                    from cloudmesh.oracle.compute.Provider import Provider
-                elif kind == 'google':
-                    from cloudmesh.google.storage.Provider import Provider
-                else:
-                    Console.error(
-                        f"No suitable provider found for {kind} and {service}")
-                    return None
+                from cloudmesh.compute.vm.Provider import Provider as P
+                Provider = P.get_provider(kind)
 
             elif service == 'volume':
 
-                from cloudmesh.volume.Volume import Provider
-                p = Provider ()
-                return p.get(kind)
+                from cloudmesh.volume.Volume import Provider as P
+                Provider = P.get_provider(kind)
 
-            else:
-                Console.error(f"Invalid {service} provided.")
-                return None
-        except:
-            Console.error(f"Registration failed {service} and {kind}")
+        except Exception as e:
+            Console.error(f"Registration failed kind={kind} and service={service}")
+            print(e)
             return None
+
+        if Provider is None:
+            Console.error(f"Registration no Provider found for kind={kind} and service={service}")
+            return None
+
+        print("Provider:", Provider)
 
         p = Provider
 

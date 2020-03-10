@@ -5,7 +5,7 @@ from pathlib import Path
 from pprint import pprint
 
 from cloudmesh.common.debug import VERBOSE
-from cloudmesh.abstractclass.ComputeNodeABC import ComputeNodeABC
+from cloudmesh.abstract.ComputeNodeABC import ComputeNodeABC
 from cloudmesh.common.console import Console
 from cloudmesh.common.util import HEADING
 from cloudmesh.common.util import path_expand

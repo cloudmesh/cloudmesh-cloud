@@ -1,4 +1,4 @@
-from cloudmesh.abstractclass import ComputeNodeABC
+from cloudmesh.abstract.ComputeNodeABC import ComputeNodeABC
 from libcloud.compute.types import Provider
 from libcloud.compute.providers import get_driver
 

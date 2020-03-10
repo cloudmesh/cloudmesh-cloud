@@ -16,6 +16,9 @@ class Register(object):
         try:
             if service == 'compute' or service == 'cloud':
 
+                from cloudmesh.compute.vm.Provider import Provider as P
+
+                P.get
                 if kind == 'openstack':
                     from cloudmesh.openstack.compute.Provider import Provider
                 elif kind == 'azure':

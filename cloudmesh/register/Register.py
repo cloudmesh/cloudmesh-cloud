@@ -48,6 +48,17 @@ class Register(object):
         return p
 
     @staticmethod
+    def get_sample_variables(sample):
+        keys = set()
+        lines = sample.splitlines()
+        for line in lines:
+            if "{" in line and "}" in line:
+                name = (line.split("{",1)[1]).split("}",1)[0]
+                keys.add(name)
+        return list(keys)
+
+
+    @staticmethod
     def get_sample(provider, kind, service, name, attributes):
 
         # Default replacements.
@@ -56,8 +67,7 @@ class Register(object):
                         "kind": kind}
 
         # Add the attributes to the dict.
-        for attribute in attributes:
-            key, value = attribute.split("=")
+        for key, value in attributes.items():
             replacements[key] = value
 
         try:
@@ -72,6 +82,9 @@ class Register(object):
             sample = sample.format(**replacements)
 
         except KeyError as e:
+
+            print(sample)
+
             Console.error(f"Value for {e} is not specified")
             sample = None
 

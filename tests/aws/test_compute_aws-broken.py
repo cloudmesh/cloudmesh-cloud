@@ -296,9 +296,9 @@ class TestName:
         self.test_14_destroy()
         self.test_04_list_vm()
 
-
     def test_benchmark(self):
         Benchmark.print(csv=True, sysinfo=False, tag=CLOUD)
+
 
 class takestoolong:
 

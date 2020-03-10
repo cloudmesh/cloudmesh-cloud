@@ -11,6 +11,7 @@ from cloudmesh.shell.command import command, map_parameters
 from cloudmesh.register.Register import Register
 from cloudmesh.common.debug import VERBOSE
 
+
 class RegisterCommand(PluginCommand):
 
     # noinspection PyUnusedLocal
@@ -60,7 +61,6 @@ class RegisterCommand(PluginCommand):
 
         """
 
-
         map_parameters(arguments,
                        'cloud',
                        'service',
@@ -103,10 +103,9 @@ class RegisterCommand(PluginCommand):
             sample = provider.sample
 
             if len(sample) >= 1:
-
                 Console.info(f"Sample for service={service} kind={kind}")
 
-                print (dedent(sample))
+                print(dedent(sample))
 
                 Console.error("The following attributes are not defined")
                 print()
@@ -117,14 +116,12 @@ class RegisterCommand(PluginCommand):
 
             return ""
 
-
         if provider is None:
             return
 
         attributes = {}
 
         if arguments.filename:
-
             # Load JSON File.
             path = path_expand(arguments.filename)
             with open(path, "r") as file:
@@ -135,11 +132,10 @@ class RegisterCommand(PluginCommand):
 
         if arguments.ATTRIBUTES:
 
-            atts =  arguments.ATTRIBUTES
+            atts = arguments.ATTRIBUTES
             for attribute in atts:
-                key,value = attribute.split("=", 1)
+                key, value = attribute.split("=", 1)
                 attributes[key] = value
-
 
         VERBOSE(attributes)
 
@@ -166,5 +162,3 @@ class RegisterCommand(PluginCommand):
             f"Registered {service} service for {kind}"
             f" provider with name {entry_name}.")
         return ""
-
-

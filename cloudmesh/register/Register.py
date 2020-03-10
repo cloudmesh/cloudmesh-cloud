@@ -1,5 +1,6 @@
 from cloudmesh.common.console import Console
 
+
 class Register(object):
 
     def __init__(self):
@@ -33,12 +34,14 @@ class Register(object):
                 Provider = P.get_provider(kind)
 
         except Exception as e:
-            Console.error(f"Registration failed kind={kind} and service={service}")
+            Console.error(
+                f"Registration failed kind={kind} and service={service}")
             print(e)
             return None
 
         if Provider is None:
-            Console.error(f"Registration no Provider found for kind={kind} and service={service}")
+            Console.error(
+                f"Registration no Provider found for kind={kind} and service={service}")
             return None
 
         print("Provider:", Provider)
@@ -53,10 +56,9 @@ class Register(object):
         lines = sample.splitlines()
         for line in lines:
             if "{" in line and "}" in line:
-                name = (line.split("{",1)[1]).split("}",1)[0]
+                name = (line.split("{", 1)[1]).split("}", 1)[0]
                 keys.add(name)
         return list(keys)
-
 
     @staticmethod
     def get_sample(provider, kind, service, name, attributes):

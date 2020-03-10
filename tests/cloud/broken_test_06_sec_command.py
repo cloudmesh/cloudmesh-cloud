@@ -188,6 +188,5 @@ class a:
             name = entry['name']
             assert name in result
 
-
     def test_benchmark(self):
         Benchmark.print(csv=True, sysinfo=False, tag=cloud)

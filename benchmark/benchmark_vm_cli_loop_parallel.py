@@ -33,7 +33,6 @@ print(f"Test run for {cloud}")
 if cloud is None:
     raise ValueError("cloud is not not set")
 
-
 name_generator = Name()
 name_generator.set(f"benchmark-{user}-vm-" + "{counter}")
 # name_generator.reset()
@@ -47,16 +46,17 @@ def Print():
     data = provider.list()
     print(provider.Print(data=data, output='table', kind='vm'))
 
+
 current_vms = 0
 
 repeat = 100
 
-batch=3
+batch = 3
+
 
 def generate_names(n):
-
     names = []
-    for i in range(0,n):
+    for i in range(0, n):
         name_generator.incr()
         names.append(str(name_generator))
     return names
@@ -64,7 +64,7 @@ def generate_names(n):
 
 def list():
     Print()
-    data = provider.list() # update the db
+    data = provider.list()  # update the db
 
 
 def provider_vm_create(name):
@@ -75,11 +75,12 @@ def provider_vm_create(name):
         parameters = {'name': name}
         data = Shell.execute(f"cms vm boot --name={name}", shell=True)
         StopWatch.stop(f"start {name}")
-        print (data)
+        print(data)
 
     except Exception as e:
         Console.error(f"could not create VM {name}", traceflag=True)
-        print (e)
+        print(e)
+
 
 def provider_vm_terminate(name):
     HEADING()
@@ -92,13 +93,15 @@ def provider_vm_terminate(name):
 
     except Exception as e:
         Console.error(f"could not terminate VM {name}")
-        print (e)
+        print(e)
+
 
 def create_terrminate(name):
     provider_vm_create(name)
     time.sleep(5)
     provider_vm_terminate(name)
     return name
+
 
 def test_benchmark():
     StopWatch.benchmark(sysinfo=False, csv=False, tag=cloud)
@@ -111,11 +114,9 @@ names = generate_names(batch)
 results = pool.map(create_terrminate, names)
 pool.close()
 pool.join()
-print (results)
-
+print(results)
 
 test_benchmark()
-
 
 """
 TODO:

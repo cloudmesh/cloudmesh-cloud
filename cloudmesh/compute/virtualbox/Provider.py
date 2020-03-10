@@ -140,7 +140,8 @@ class Provider(ComputeNodeABC):
         try:
 
             result = Shell.execute(self.vboxmanage, shell=True)
-            txt, version["virtualbox"]["version"] = result.splitlines()[0].split(
+            txt, version["virtualbox"]["version"] = result.splitlines()[
+                0].split(
                 "Version ")
 
             result = Shell.execute(self.vboxmanage + " list -l extpacks",

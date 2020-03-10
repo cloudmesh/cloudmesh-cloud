@@ -383,8 +383,6 @@ class KeyCommand(PluginCommand):
             # Step 1. keys = find keys to upload
             #
 
-
-
             cloud = "local"
             db = CmDatabase()
             db_keys = db.find(collection=f"{cloud}-key")
@@ -404,8 +402,8 @@ class KeyCommand(PluginCommand):
             #
 
             clouds, vmnames = Arguments.get_cloud_and_names("list",
-                                                          arguments,
-                                                          variables)
+                                                            arguments,
+                                                            variables)
 
             for cloud in clouds:
                 print(f"cloud {cloud}")

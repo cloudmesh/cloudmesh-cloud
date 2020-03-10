@@ -24,7 +24,6 @@ import io
 
 from setuptools import find_packages, setup
 
-
 v = sys.version_info
 if v.major != 3 and v.minor != 7 and v.micro < 2:
     print(70 * "#")
@@ -35,11 +34,11 @@ if v.major != 3 and v.minor != 7 and v.micro < 2:
 
 command = None
 this_platform = platform.system().lower()
-#if this_platform in ['darwin']:
+# if this_platform in ['darwin']:
 #    command = "easy_install readline"
-#elif this_platform in ['windows']:
+# elif this_platform in ['windows']:
 #    command = "pip install pyreadline"
-#if command is not None:
+# if command is not None:
 #    print("Install readline")
 #    os.system(command)
 
@@ -88,6 +87,7 @@ yamllint
 def read(fname):
     return open(os.path.join(os.path.dirname(__file__), fname)).read()
 
+
 with open('README.md') as f:
     long_description = f.read()
 
@@ -96,7 +96,6 @@ DESCRIPTION = "Cloudmesh Multicloud Cloud Plugins for Cloudmesh cmd5 CMD"
 AUTHOR = "Gregor von Laszewski"
 AUTHOR_EMAIL = "laszewski@gmail.com"
 URL = "https://github.com/cloudmesh/cloudmesh-cloud"
-
 
 setup(
     name=NAME,

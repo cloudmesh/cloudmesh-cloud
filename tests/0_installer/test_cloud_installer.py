@@ -17,6 +17,7 @@ Benchmark.debug()
 
 cloud = "local"
 
+
 @pytest.mark.incremental
 class Test_cloud_installer:
 

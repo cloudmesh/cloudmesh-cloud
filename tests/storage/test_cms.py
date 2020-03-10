@@ -12,6 +12,7 @@ from cloudmesh.common.Benchmark import Benchmark
 
 cloud = "local"
 
+
 @pytest.mark.incremental
 class TestConfig:
 
@@ -48,7 +49,6 @@ class TestConfig:
         VERBOSE(result)
 
         assert "vm" in result
-
 
     def test_benchmark(self):
         Benchmark.print(csv=True, sysinfo=False, tag=cloud)

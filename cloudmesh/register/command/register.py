@@ -23,7 +23,8 @@ class RegisterCommand(PluginCommand):
             Usage:
                 register list kind --service=SERVICE
                 register list sample --cloud=CLOUD [--service=SERVICE]
-                register --cloud=CLOUD [--service=SERVICE] [--name=NAME] [--filename=FILENAME] [--keep] [ATTRIBUTES...] [--dryrun]
+                register delete --cloud=CLOUD [--service=SERVICE]
+                register update --cloud=CLOUD [--service=SERVICE] [--name=NAME] [--filename=FILENAME] [--keep] [ATTRIBUTES...] [--dryrun]
 
 
                 This command adds the registration information in the cloudmesh

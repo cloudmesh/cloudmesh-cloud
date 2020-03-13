@@ -1,4 +1,6 @@
 from cloudmesh.common.console import Console
+from cloudmesh.configuration.Config import Config
+from cloudmesh.register.Entry import Entry
 
 
 class Register(object):
@@ -18,6 +20,7 @@ class Register(object):
         Provider = None
 
         try:
+
             if service in ['compute', 'cloud']:
 
                 from cloudmesh.compute.vm.Provider import Provider as P
@@ -75,7 +78,7 @@ class Register(object):
         try:
             # Extract the sample from Provider.
             sample = provider.sample
-        except:
+        except Exception as e:
             Console.error(f"Can not find the sample in the Provider")
             return ""
 
@@ -91,3 +94,53 @@ class Register(object):
             sample = None
 
         return sample
+
+    @staticmethod
+    def remove(service, name):
+        removed_item = None
+        try:
+            # Update the google cloud section of cloudmesh.yaml config file.
+            config = Config()
+            config_service = config["cloudmesh"][service]
+
+            if name in config_service:
+                removed_item = config_service.pop(name, None)
+                config.save()
+
+                Console.ok(
+                    f"Removed {name} from {service} service.")
+
+            else:
+                Console.warning(
+                    f"{name} is not registered for cloudmesh.{service}")
+
+        except Exception as se:
+            Console.error(f"Error removing {service}-{name} :: {se}")
+
+        return removed_item
+
+    @staticmethod
+    def update(provider, kind, service, name, attributes):
+        try:
+            sample = Register.get_sample(provider,
+                                         kind,
+                                         service,
+                                         name,
+                                         attributes)
+
+            if sample is None:
+                Console.error("The sample is not fully filled out.")
+                return ""
+
+            # Add the entry into cloudmesh.yaml file.
+            Entry.add(entry=sample,
+                      base=f"cloudmesh.{service}",
+                      path="~/.cloudmesh/cloudmesh.yaml")
+
+            Console.ok(
+                f"Registered {service} service for {kind}"
+                f" provider with name {name}.")
+
+        except Exception as se:
+            Console.error(f"Error updating {service}-{name} :: {se}")
+        return ""

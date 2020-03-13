@@ -90,8 +90,7 @@ class VmCommand(PluginCommand):
                 vm get SOURCE DESTINATION [NAMES]
                 vm rename [OLDNAMES] [NEWNAMES] [--force] [--dryrun]
                 vm wait [--cloud=CLOUD] [--interval=INTERVAL] [--timeout=TIMEOUT]
-                vm info [--cloud=CLOUD]
-                        [--output=OUTPUT]
+                vm info [NAMES] [--cloud=CLOUD] [--output=OUTPUT] [--dryrun]
                 vm username USERNAME [NAMES] [--cloud=CLOUD]
                 vm resize [NAMES] [--size=SIZE]
 
@@ -756,18 +755,25 @@ class VmCommand(PluginCommand):
 
             # provider.Print(arguments.output, "vm", vms)
 
-
-
         elif arguments.info:
             """
-            vm info [--cloud=CLOUD] [--output=OUTPUT]
+            vm info [NAMES] [--cloud=CLOUD] [--output=OUTPUT] [--dryrun]
             """
-            print("info for the vm")
-
             cloud, names = Arguments.get_cloud_and_names("info", arguments,
                                                          variables)
 
-            raise NotImplementedError
+            cloud_kind = cloud[0]
+
+            for name in names:
+                #Get Cloud Provider.
+                provider = Provider(cloud_kind)
+                if arguments['--dryrun']:
+                    print(f"info node {name}")
+                else:
+                    vms = provider.info(name=name)
+                    provider.Print(vms, output=arguments.output, kind="vm")
+
+            return ""
 
         elif arguments.rename:
             raise NotImplementedError

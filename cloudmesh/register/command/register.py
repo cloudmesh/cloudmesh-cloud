@@ -1,13 +1,15 @@
+import json
 from pprint import pprint
+from textwrap import dedent
 
 from cloudmesh.common.console import Console
-from cloudmesh.common.util import path_expand
 from cloudmesh.common.util import banner
-from cloudmesh.shell.command import PluginCommand
-from cloudmesh.shell.command import command
-import importlib
+from cloudmesh.common.util import path_expand
 from cloudmesh.register.Entry import Entry
-from textwrap import dedent
+from cloudmesh.shell.command import PluginCommand
+from cloudmesh.shell.command import command, map_parameters
+from cloudmesh.register.Register import Register
+from cloudmesh.common.debug import VERBOSE
 
 
 class RegisterCommand(PluginCommand):
@@ -18,120 +20,67 @@ class RegisterCommand(PluginCommand):
         """
         ::
 
-          Usage:
-              register aws yaml
-              register aws [FILENAME] [--keep]
-              register azure [FILENAME] [--keep]
-              register google [FILENAME] [--keep]
-              register chameleon [FILENAME] [--keep]
-              register new [-v] KIND SERVICE NAME [ATTRIBUTES...]
-              register list KIND SERVICE NAME [ATTRIBUTES...]
+            Usage:
+                register list kind --service=SERVICE
+                register list sample --cloud=CLOUD [--service=SERVICE]
+                register delete --cloud=CLOUD [--service=SERVICE]
+                register update --cloud=CLOUD [--service=SERVICE] [--name=NAME] [--filename=FILENAME] [--keep] [ATTRIBUTES...] [--dryrun]
 
 
-          This command adds the registration information the th cloudmesh
-          yaml file. The permissions of theFILENAME will also be changed.
-          A y/n question will be asked if the files with the filename should
-          be deleted after integration
+                This command adds the registration information in the cloudmesh
+                yaml file. A FILENAME can be passed along that contains
+                credential information downloaded from the cloud. The
+                permissions of the FILENAME will also be changed. A y/n question
+                will be asked if the file with the FILENAME should be deleted
+                after integration. THis helps that all credential information
+                could be managed with the cloudmesh.yaml file.
 
-          Arguments:
-              FILENAME   a filename in which the cloud credentials are stored
+            Arguments:
+                FILENAME    a filename in which the cloud credentials are stored
+                ATTRIBUTES  Attribute list to replace if json file is not provided.
+                            Note: Attributes will override the values from file
+                            if both are used.
 
-          Options:
-              --keep    keeps the file with the filename.
+            Options:
+                --keep               keeps the file with the filename.
+                --dryrun             option to just display the formatted sample without
+                                     updating the cloudmesh.yaml file.
+                --filename=FILENAME  json filename containing the details to be replaced
+                --cloud=CLOUD        cloud provider e.g. aws, google, openstack, oracle etc.
+                --service=SERVICE    service type e.g. storage, compute, volume
+                --name=NAME          name for the new registration
 
-          Description:
+            Examples:
 
-            AWS
+                cms register google compute --name=west_region \
+                    filename=~/.cloudmesh/google.json project_id=west1 \
+                    client_email=example@gmail.com
 
-                AWS dependent on how you downloaded the credentials will either
-                use the filename `credentials.csv` or `accessKey.csv`
-
-                Our command is smart provides some convenience functionality.
-
-
-                1. If either file is found in `~/Downloads`, it is moved to
-                   `~/.cloudmesh` and the permissions are changed
-                2. If such a file already exists there it will ask if it should
-                   be overwritten in case the content is not the same
-                3. The content of the file will be read to determine if it is
-                   likely to be an AWS credential
-                4. The credential will be added to the cloudmesh yaml file
-
-            Azure (TODO: THIS HAS TO BE IMPLEMENTED)
-
-                To use this command you must have an Azure account and Azure CLI
-                installed. Mote deatils to this can be found at:
-
-                   TBD: include link
-
-                This command leverages the Azure CLI to extract specific account
-                parameters and update the `cloudmesh.yaml` configuration file.
-
-                1. When this command is run, the `az login` Azure CLI command is
-                   executed, prompting you to login to your azure account via
-                   your default browser, which should then redirect you back to
-                   your CLI.
-
-                2. The azure cli command for `az account show` is then
-                   referenced to pull the account's subscription id and tenant
-                   id.
-
-                3. Run the command
-
-                        `az ad sp create-for-rbac --name http://cloudmesh`
-
-                   to reference the application id and secret key.
-
-                   NOTE: If there is already a secret key reference in the
-                   `cloudmesh.yaml` file, it will be rendered useless once the new
-                   secret key is obtained; requiring you to ensure the key has
-                   been successfully applied in the next step to the
-                   configuration file and cms init is called.
-
-                4. The credentials will be added to the
-                   `~/.cloudmesh.yaml` configuration file.
-
-            Google
-
-                Is not yet implemented
-
-            Chameleon Cloud
-
-                is not yet implemented
-
-          Register from template:
-
-            register list KIND SERVICE NAME [ATTRIBUTES...]
-
-                This command lists the template for a provider and fills it out
-                with the attributes. It can be used to check what information
-                would be added with the new command. The template is included in
-                the Provider itself. Leaving the attributes off, just prints the
-                template
-
-                Examples:
-
-                    cms register list compute openstack ABC
-                    cms register list compute openstack ABC uri=TBD tenant=TBD region=TBD
-
-                    In the last example the values for uri, tennant, and region
-                    will be cahnged to TBD
-
-            register new KIND SERVICE NAME ATTRIBUTES...
-
-                A new cloud can be added to the existing cloudmesh.yaml file
-                with thsi command. AN example is
-
-                cms register -v  compute aws ABC \
-                    region=one \
-                    EC2_ACCESS_ID=TBD
-                    EC2_SECRET_KEY=TBD
-                    EC2_SECRET_KEY=TBD
-
-                This command can also be used to overwrite an existing entry
+                  In the last example the values for filename, project_id, and
+                  client_email will be changed to respective values from google
+                  compute sample. We assume you have downloaded the credentials
+                  form google and stored it in the file ~/.cloudmesh/google.json
 
         """
 
+        map_parameters(arguments,
+                       'cloud',
+                       'service',
+                       'dryrun',
+                       'keep',
+                       'filename',
+                       'name')
+
+        VERBOSE(arguments)
+
+        service = arguments.service or "cloud"
+        kind = arguments.cloud
+        entry_name = arguments.name or arguments.cloud
+
+        """
+        TODO: This is a special register allowing to use the web interface 
+        to get the aws json file.
+        
         if arguments.aws and arguments.yaml:
 
             AWSReg = importlib.import_module(
@@ -147,119 +96,83 @@ class RegisterCommand(PluginCommand):
                 AZregisterer.register()
 
             return ""
+        """
 
-        elif arguments.google:
+        provider = Register.get_provider(service=service, kind=kind)
 
-            from cloudmesh.google.storage.Provider import Provider
+        if arguments["list"] and arguments["sample"]:
 
-            banner("Read the  specification from json and write to yaml file")
-            path = path_expand(
-                arguments.FILE_JSON or "~/.cloudmesh/google.json")
+            sample = provider.sample
 
-            name = arguments.storage or "google"
-            Provider.json_to_yaml(name, filename=path)
+            if len(sample) >= 1:
+                Console.info(f"Sample for service={service} kind={kind}")
 
-            Console.error("deleting {path} not implemented")
+                print(dedent(sample))
+
+                Console.error("The following attributes are not defined")
+                print()
+                keys = Register.get_sample_variables(sample)
+
+                print("    " + "\n    ".join(sorted(keys)))
+                print()
+
             return ""
 
-        elif arguments.chameleon:
+        if arguments["list"] and arguments["kind"]:
 
-            Console.error("not yet implemented")
+            kinds = provider.get_kind()
+
+            Console.info(f"Kind for service={service}")
+            print()
+            print("    " + "\n    ".join(sorted(kinds)))
+            print()
+
             return ""
 
 
-        elif arguments.list:
+        if provider is None:
+            return
 
-            kind = arguments.KIND
-            service = arguments.SERVICE
-            attributes = arguments.ATTRIBUTES
-            name = arguments.NAME
+        attributes = {}
 
-            replacements = {'name': name,
-                            'service': service}
-            for attribute in attributes:
-                key, value = attribute.split("=")
-                replacements[key] = value
+        if arguments.filename:
+            # Load JSON File.
+            path = path_expand(arguments.filename)
+            with open(path, "r") as file:
+                attributes = json.load(file)
 
-            if kind == "compute" and service == "openstack":
-                from cloudmesh.compute.openstack.Provider import Provider
+            # Add the filename to attributes
+            attributes["filename"] = arguments.filename
 
-            elif kind == "compute" and service == "azure":
-                from cloudmesh.compute.azure.Provider import Provider
+        if arguments.ATTRIBUTES:
 
-            elif kind == "compute" and service == "aws":
-                from cloudmesh.compute.aws.Provider import Provider
+            atts = arguments.ATTRIBUTES
+            for attribute in atts:
+                key, value = attribute.split("=", 1)
+                attributes[key] = value
 
-            elif kind == "compute" and service == "oracle":
-                from cloudmesh.oracle.compute.Provider import Provider
+        VERBOSE(attributes)
 
-            elif kind == "storage" and service == "google":
-                from cloudmesh.google.storage.Provider import Provider
+        sample = Register.get_sample(provider,
+                                     kind,
+                                     service,
+                                     entry_name,
+                                     attributes)
 
-            sample = Provider.sample
+        if sample is None:
+            Console.error("The sample is not fully filled out.")
+            return ""
 
-            try:
-                if len(attributes) > 0:
-                    sample = sample.format(**replacements)
-            except KeyError as e:
-                Console.error(f"Value for {e} is not specified")
-            print(dedent(sample))
+        if arguments.dryrun:
+            # Just print the value
+            pprint(dedent(sample))
+        else:
+            # Add the entry into cloudmesh.yaml file.
+            Entry.add(entry=sample,
+                      base=f"cloudmesh.{sample}",
+                      path="~/.cloudmesh/cloudmesh.yaml")
 
-        elif arguments.new:
-
-            kind = arguments.KIND
-            service = arguments.SERVICE
-            attributes = arguments.ATTRIBUTES
-            name = arguments.NAME
-
-            replacements = {'name': name,
-                            'service': service}
-            for attribute in attributes:
-                key, value = attribute.split("=")
-                replacements[key] = value
-
-            if kind == "compute" and service == "openstack":
-                from cloudmesh.compute.openstack.Provider import Provider
-
-            elif kind == "compute" and service == "azure":
-                from cloudmesh.compute.azure.Provider import Provider
-
-            elif kind == "compute" and service == "aws":
-                from cloudmesh.compute.aws.Provider import Provider
-
-            elif kind == "compute" and service == "oracle":
-                from cloudmesh.oracle.compute.Provider import Provider
-
-            elif kind == "storage" and service == "google":
-                from cloudmesh.google.storage.Provider import Provider
-
-            else:
-                Console.error("The provider {google} for {kind}"
-                              " does not have a sample configuration")
-                return ""
-
-            if kind in ["compute", "cloud"]:
-                kind = "cloud"
-            if kind in ["storage"]:
-                kind = "storage"
-            else:
-                Console.error("the kind {kind} is not supported")
-                return ""
-
-            sample = Provider.sample
-
-            try:
-                sample = sample.format(**replacements)
-
-                if arguments["-v"]:
-                    print(sample)
-
-                Entry.add(entry=sample,
-                          base=f"cloudmesh.{kind}",
-                          path="~/.cloudmesh/cloudmesh.yaml")
-
-            except KeyError as e:
-                Console.error(f"Value for {e} is not specified")
-            print(dedent(sample))
-
+        Console.ok(
+            f"Registered {service} service for {kind}"
+            f" provider with name {entry_name}.")
         return ""

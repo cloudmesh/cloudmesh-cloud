@@ -359,7 +359,6 @@ class TestName:
         self.test_destroy()
         self.test_list_vm()
 
-
     def test_benchmark(self):
         Benchmark.print(csv=True, sysinfo=False, tag=CLOUD)
 

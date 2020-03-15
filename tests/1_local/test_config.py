@@ -18,7 +18,8 @@ from cloudmesh.configuration.Config import Config
 
 Benchmark.debug()
 
-cloud="local"
+cloud = "local"
+
 
 @pytest.mark.incremental
 class TestConfig:
@@ -77,7 +78,7 @@ class TestConfig:
         result = config.dict()
         Benchmark.Stop()
         print(type(config.data))
-        pprint (config['cloudmesh.profile'])
+        pprint(config['cloudmesh.profile'])
         assert config is not None
 
     def test_config_subscriptable(self):

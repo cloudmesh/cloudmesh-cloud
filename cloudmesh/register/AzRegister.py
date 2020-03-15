@@ -12,6 +12,7 @@ from pathlib import Path
 import pandas
 import re
 
+
 # cloudmesh.cloud.azure.credentials.AZURE_TENANT_ID
 # cloudmesh.cloud.azure.credentials.AZURE_SUBSCRIPTION_ID
 # cloudmesh.cloud.azure.credentials.AZURE_APPLICATION_ID
@@ -56,7 +57,8 @@ class AzRegister(object):
         AZURE_TENANT_ID = azoutput['tenantId']
 
         # WARNING: FOLLOWING CODE WILL RENDER OLD SECRET KEY INVALID
-        azAppKeyStr = subprocess.getoutput('az ad sp create-for-rbac --name http://cloudmesh')
+        azAppKeyStr = subprocess.getoutput(
+            'az ad sp create-for-rbac --name http://cloudmesh')
         azAppKeyDict = self.azString2Dict(azAppKeyStr)
 
         AZURE_APPLICATION_ID = azAppKeyDict['appId']

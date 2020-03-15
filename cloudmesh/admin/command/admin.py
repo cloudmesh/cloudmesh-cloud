@@ -12,6 +12,7 @@ from cloudmesh.shell.command import PluginCommand, map_parameters
 from cloudmesh.shell.command import command
 from cloudmesh.common.debug import VERBOSE
 
+
 class AdminCommand(PluginCommand):
     # noinspection PyPep8
     banner = textwrap.dedent("""

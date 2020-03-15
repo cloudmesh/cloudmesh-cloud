@@ -11,7 +11,8 @@ from cloudmesh.common.Benchmark import Benchmark
 
 Benchmark.debug()
 
-cloud= "local"
+cloud = "local"
+
 
 @pytest.mark.incremental
 class TestName:

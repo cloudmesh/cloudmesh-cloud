@@ -518,21 +518,19 @@ class MongoDBController(object):
                                f"--bind_ip {mongo_host}" \
                                f" --dbpath \"{self.mongo_path}\" --logpath \"{self.mongo_log}\mongod.log\""
 
-                #mongo_runner = f"\"{self.mongo_home}\\bin\mongod\" {auth} " \
+                # mongo_runner = f"\"{self.mongo_home}\\bin\mongod\" {auth} " \
                 #               f"--bind_ip {mongo_host}" \
                 #               f" --dbpath \"{self.mongo_path}\" --logpath \"{self.mongo_log}\mongod.log\""
 
                 print(mongo_runner)
-
-
-
 
                 if not os.path.isfile(f'{self.mongo_path}\\invisible.vbs'):
                     with open(f'{self.mongo_path}\\invisible.vbs', 'w') as f:
                         f.write(
                             'CreateObject("Wscript.Shell").Run """" & WScript.Arguments(0) & """", 0, False')
                 if not os.path.isfile(f'{self.mongo_path}\\mongo_starter.bat'):
-                    with open(f'{self.mongo_path}\\mongo_starter.bat', 'w') as f:
+                    with open(f'{self.mongo_path}\\mongo_starter.bat',
+                              'w') as f:
                         f.write(mongo_runner)
                 script = f'wscript.exe "{self.mongo_path}\\invisible.vbs" "{self.mongo_path}\\mongo_starter.bat"'
 

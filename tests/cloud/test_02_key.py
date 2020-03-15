@@ -18,7 +18,6 @@ from cloudmesh.mongo.CmDatabase import CmDatabase
 
 Benchmark.debug()
 
-
 user = Config()["cloudmesh.profile.user"]
 variables = Variables()
 
@@ -36,9 +35,6 @@ provider = Provider(name=cloud)
 
 @pytest.mark.incremental
 class Test_Key:
-
-
-
 
     def test_upload_key_to_database(self):
         HEADING()
@@ -113,7 +109,6 @@ class Test_Key:
 
     def test_benchmark(self):
         Benchmark.print(sysinfo=False, csv=True, tag=cloud)
-
 
     def test_list(self):
         os.system("cms key add")

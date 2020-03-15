@@ -69,7 +69,7 @@ class InitCommand(PluginCommand):
         else:
             variables = Variables()
             config = Config()
-            
+
             if config["cloudmesh.data.mongo.MODE"] != 'running':
                 try:
                     print("MongoDB stop")
@@ -86,7 +86,7 @@ class InitCommand(PluginCommand):
                 except Exception as e:
                     Console.error(f"Could not delete {location}")
                     if platform == 'win32':
-                        print (e)
+                        print(e)
                         Console.error(f"Please try to run cms init again ... ")
                         return ""
 

@@ -1,6 +1,6 @@
 from pprint import pprint
 
-from cloudmesh.abstractclass.ComputeNodeABC import ComputeNodeABC
+from cloudmesh.abstract.ComputeNodeABC import ComputeNodeABC
 from cloudmesh.common.Printer import Printer
 from cloudmesh.common.StopWatch import StopWatch
 from cloudmesh.common.console import Console
@@ -18,6 +18,52 @@ from cloudmesh.mongo.CmDatabase import CmDatabase
 
 
 class Provider(ComputeNodeABC):
+
+    @staticmethod
+    def get_kind():
+        kind = ["opensatck",
+                "google",
+                "oracle",
+                "azure",
+                "aws"]
+        return kind
+
+    @staticmethod
+    def get_provider(kind):
+
+        if kind in ["awslibcloud", "googlelibcloud"]:
+            from cloudmesh.compute.libcloud.Provider import Provider as P
+
+        elif kind in ['openstack']:
+            from cloudmesh.openstack.compute.Provider import Provider as P
+
+        elif kind in ['google']:
+            from cloudmesh.google.compute.Provider import Provider as P
+
+        elif kind in ['oracle']:
+            from cloudmesh.oracle.compute.Provider import Provider as P
+
+        elif kind in ['azure']:
+            from cloudmesh.azure.compute.Provider import Provider as P
+
+        elif kind in ['aws']:
+            from cloudmesh.aws.compute.Provider import Provider as P
+
+        # elif kind in ["vagrant", "virtualbox"]:
+        #    from cloudmesh.compute.virtualbox.Provider import \
+        #        Provider as VirtualboxCloudProvider
+        #    provider = VirtualboxCloudProvider
+        # elif kind in ["azureaz"]:
+        #    from cloudmesh.compute.azure.AzProvider import \
+        #        Provider as AzAzureProvider
+        #    provider = AzAzureProvider
+
+        else:
+            Console.error(f"Compute provider {kind} not supported")
+
+            raise ValueError(f"Compute provider {kind} not supported")
+
+        return P
 
     def __init__(self,
                  name=None,
@@ -45,36 +91,14 @@ class Provider(ComputeNodeABC):
             provider = providers[self.kind]
 
 
-        elif self.kind in ["awslibcloud", "googlelibcloud"]:
-
-            from cloudmesh.compute.libcloud.Provider import \
-                Provider as LibCloudProvider
-            provider = LibCloudProvider
-
-        elif self.kind in ['openstack']:
-            from cloudmesh.openstack.compute.Provider import \
-                Provider as OpenStackComputeProvider
-            provider = OpenStackComputeProvider
-
-        elif self.kind in ['google']:
-            from cloudmesh.google.compute.Provider import \
-                Provider as GoogleComputeProvider
-            provider = GoogleComputeProvider
-
-        elif self.kind in ['oracle']:
-            from cloudmesh.oracle.compute.Provider import \
-                Provider as OracleComputeProvider
-            provider = OracleComputeProvider
-
-        elif self.kind in ['azure']:
-            from cloudmesh.azure.compute.Provider import \
-                Provider as AzureComputeProvider
-            provider = AzureComputeProvider
-
-        elif self.kind in ['aws']:
-            from cloudmesh.aws.compute.Provider import \
-                Provider as AWSComputeProvider
-            provider = AWSComputeProvider
+        elif self.kind in ["awslibcloud",
+                           "googlelibcloud",
+                           'openstack',
+                           'google',
+                           'oracle',
+                           'azure',
+                           'aws']:
+            provider = Provider.get_provider(self.kind)
 
         # elif self.kind in ["vagrant", "virtualbox"]:
         #    from cloudmesh.compute.virtualbox.Provider import \

@@ -28,31 +28,30 @@ clouds:
     identity_api_version: 3
 """
 
-#data = yaml.load(cred)['clouds']['openstack']
+# data = yaml.load(cred)['clouds']['openstack']
 config = Config()
 data = config['cloudmesh.cloud.chameleon.credentials']
-pprint (data)
+pprint(data)
 
-#with open(r'E:\data\fruits.yaml') as file:
-    # The FullLoader parameter handles the conversion from YAML
-    # scalar values to Python the dictionary format
+# with open(r'E:\data\fruits.yaml') as file:
+# The FullLoader parameter handles the conversion from YAML
+# scalar values to Python the dictionary format
 #    fruits_list = yaml.load(file, Loader=yaml.FullLoader)
 
 
 conn = connection.Connection(**data)
 
 banner("Connection")
-print (conn)
+print(conn)
 
 servers = conn.list_servers()
 
-pprint (servers[0]['hostname'])
+pprint(servers[0]['hostname'])
 
-
-#projects = conn.identity.projects()
+# projects = conn.identity.projects()
 #
-#pprint(projects)
-#for project in projects:
+# pprint(projects)
+# for project in projects:
 #    pprint(project)
 
 
@@ -63,7 +62,6 @@ for network in conn.network.networks():
 
 banner("List SubNetworks")
 
-
 for subnet in conn.network.subnets():
     pprint(subnet)
 
@@ -71,7 +69,6 @@ banner("List Ports")
 
 for port in conn.network.ports():
     pprint(port)
-
 
 banner("List Routers")
 
@@ -82,7 +79,6 @@ print("List Network Agents")
 
 for agent in conn.network.agents():
     pprint(agent)
-
 
 banner("List Servers")
 
@@ -99,20 +95,15 @@ banner("List Flavors:")
 for flavor in conn.compute.flavors():
     pprint(flavor)
 
-
 banner("List Security Groups")
 
 for port in conn.network.security_groups():
     pprint(port)
 
-
-
     banner("Open a port:")
 
 example_sec_group = conn.network.find_security_group(
     name_or_id='openstacksdk-example-security-group')
-
-
 
 print(example_sec_group)
 
@@ -127,20 +118,17 @@ example_rule = conn.network.create_security_group_rule(
 
 print(example_rule)
 
-
-
 sys.exit()
 
 print("Create Server:")
 
-NAME="test2"
-IMAGE="CC-Ubuntu18.04"
-FLAVOR="m1.medium"
-NETWORK="cloudmesh-net"
+NAME = "test2"
+IMAGE = "CC-Ubuntu18.04"
+FLAVOR = "m1.medium"
+NETWORK = "cloudmesh-net"
 image = conn.compute.find_image(IMAGE)
 flavor = conn.compute.find_flavor(FLAVOR)
 network = conn.network.find_network(NETWORK)
-
 
 data = {
     'description': f'cloudmesh-server-{NAME}',
@@ -151,7 +139,7 @@ data = {
     'key_name': "gregor"
 }
 
-pprint (data)
+pprint(data)
 
 server = conn.compute.create_server(
     name=NAME,

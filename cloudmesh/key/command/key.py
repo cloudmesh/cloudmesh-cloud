@@ -10,7 +10,6 @@ from cloudmesh.configuration.Config import Config
 from cloudmesh.mongo.CmDatabase import CmDatabase
 from cloudmesh.shell.command import PluginCommand
 from cloudmesh.shell.command import command, map_parameters
-from cloudmesh.configuration.security.encrypt import KeyHandler
 from cloudmesh.common.util import path_expand, yn_choice
 from pprint import pprint
 import os
@@ -384,8 +383,6 @@ class KeyCommand(PluginCommand):
             # Step 1. keys = find keys to upload
             #
 
-
-
             cloud = "local"
             db = CmDatabase()
             db_keys = db.find(collection=f"{cloud}-key")
@@ -405,8 +402,8 @@ class KeyCommand(PluginCommand):
             #
 
             clouds, vmnames = Arguments.get_cloud_and_names("list",
-                                                          arguments,
-                                                          variables)
+                                                            arguments,
+                                                            variables)
 
             for cloud in clouds:
                 print(f"cloud {cloud}")
@@ -438,204 +435,6 @@ class KeyCommand(PluginCommand):
                     else:
                         images = provider.key_delete(name)
 
-            return ""
-
-        elif arguments.gen:
-            """
-            key gen (ssh | pem) [--filename=FILENAME] [--nopass] [--set_path]
-                    [--force]
-            Generate an RSA key pair with pem or ssh encoding for the public
-            key. The private key is always encoded as a PEM file.
-            """
-            config = Config()
-
-            # Check if password will be requested
-            ap = not arguments.nopass
-
-            if not ap:
-                Console.warning("Private key will NOT have a password")
-                cnt = yn_choice(message="Continue, despite risk?", default="N")
-                if not cnt:
-                    sys.exit()
-
-            # Discern the name of the public and private keys
-            rk_path = None
-            uk_path = None
-            if arguments.filename:
-                fp = path_expand(arguments.filename)
-                fname, fext = os.path.splitext(fp)
-                if fext == ".pub" or fext == ".ssh":
-                    rk_path = fname
-                    uk_path = fp
-                elif fext == ".priv" or fext == ".pem":
-                    rk_path = fp
-                    uk_path = fname + ".pub"
-                else:
-                    rk_path = fp
-                    uk_path = rk_path + ".pub"
-            else:
-                rk_path = path_expand("~/.ssh/id_rsa")
-                uk_path = rk_path + ".pub"
-
-            # Check if the file exist, if so confirm overwrite
-            def check_exists(path):
-                if os.path.exists(path):
-                    Console.info(f"{path} already exists")
-                    ovwr_r = yn_choice(message=f"overwrite {path}?",
-                                       default="N")
-                    if not ovwr_r:
-                        Console.info(f"Not overwriting {path}. Quitting")
-                        sys.exit()
-
-            if not arguments.force:
-                check_exists(rk_path)
-                check_exists(uk_path)
-
-            # Set the path if requested
-            if arguments.set_path:
-                config['cloudmesh.security.privatekey'] = rk_path
-                config['cloudmesh.security.publickey'] = uk_path
-                config.save()
-
-            Console.msg(f"\nPrivate key: {rk_path}")
-            Console.msg(f"Public  key: {uk_path}\n")
-
-            # Generate the Private and Public keys
-            kh = KeyHandler()
-            r = kh.new_rsa_key()
-            u = kh.get_pub_key(priv=r)
-
-            # Serialize and write the private key to the path
-            sr = kh.serialize_key(key=r, key_type="PRIV", encoding="PEM",
-                                  format="PKCS8", ask_pass=ap)
-
-            # Force write the key (since we check file existence above)
-            kh.write_key(key=sr, path=rk_path, force=True)
-
-            # Determine the public key format and encoding
-            enc = None
-            forma = None
-            if arguments.ssh:
-                enc = "SSH"
-                forma = "SSH"
-            elif arguments.pem:
-                enc = "PEM"
-                forma = "SubjectInfo"
-
-            # Serialize and write the public key to the path
-            su = kh.serialize_key(key=u, key_type="PUB", encoding=enc,
-                                  format=forma, ask_pass=False)
-
-            # Force write the key (since we check file existence above)
-            kh.write_key(key=su, path=uk_path, force=True)
-
-            Console.ok("Success")
-
-        elif arguments.verify:
-            """
-            key verify (ssh | pem) [--filename=FILENAME] [--pub] [--check_pass]
-            Verifies the encoding (pem or ssh) of the key (private or public)
-            """
-            # Initialize variables
-            kh = KeyHandler()
-
-            # Determine filepath
-            fp = None
-            if arguments.filename is None:
-                config = Config()
-                kp = path_expand("~/.ssh/id_rsa")
-                if arguments.pub:
-                    fp = kp + ".pub"
-                else:
-                    fp = kp
-            else:
-                fp = arguments.filename
-
-            # Discern key type
-            kt = enc = None
-            ap = True
-            if arguments.pub:
-                # Load the public key, if no error occurs formatting is correct
-                kt, kta, ap = "public", "PUB", False
-                # Discern public key encoding
-                if arguments.ssh:
-                    enc, e = "OpenSSH", "SSH"
-                elif arguments.pem:  # PEM encoding
-                    enc = e = "PEM"
-            else:
-                # Load the private key to verify the format and password of the
-                # key file. If no error occurs the format and pwd are correct
-                kt, kta = "private", "PRIV"
-                enc = e = "PEM"
-                ap = False
-                if arguments.check_pass:
-                    ap = True
-
-            try:
-                k = kh.load_key(path=fp, key_type=kta, encoding=e, ask_pass=ap)
-                m = f"Success the {kt} key {fp} has proper {enc} format"
-                Console.ok(m)
-            except ValueError as e:
-                # The formatting was incorrect
-                m = f"Failure, {kt} key {fp} does not have proper {enc} format"
-                Console.error(m)
-                raise e
-            except TypeError as e:
-                # Success, we didn't ask the user for the key password and 
-                # we received an error for not entering the password, thus
-                # the key is password protectd
-                if not arguments.check_pass:
-                    Console.ok("The key is password protected")
-                else:
-                    # Error Message handled in kh.load_key()
-                    raise e
-
-        elif arguments.reformat:
-            """
-            key reformat (ssh | pem) [--filename=FILENAME] [--format=FORMAT]
-                                      [--nopass] [--pub]
-            Restructures a key's format, encoding, and password
-            """
-
-            # Initialize variables
-            kh = KeyHandler()
-
-            # Determine key type
-            fname, fext = os.path.splitext(arguments.filename)
-            kt = "PRIV"
-            if arguments.pub or fext == ".pub":
-                kt = "PUB"
-
-            # Determine new encoding
-            use_pem = True
-            if arguments.ssh:
-                use_pem = False
-
-            kh.reformat_key(path=arguments.filename,
-                            key_type=kt,
-                            use_pem=use_pem,
-                            new_format=arguments.format,
-                            ask_pass=not arguments.nopass)
-
-        elif arguments.delete and arguments.NAMES:
-            # key delete NAMES [--dryrun]
-
-            names = Parameter.expand(arguments.NAMES)
-
-            cloud = "local"
-            db = CmDatabase()
-            db_keys = db.find(collection=f"{cloud}-key")
-
-            error = []
-            for key in db_keys:
-                name = key['name']
-                if name in names:
-                    if arguments.dryrun:
-                        Console.ok(f"Dryrun: delete {name}")
-                    else:
-                        db.delete(collection="local-key",
-                                  name=name)
-                        Console.ok(f"delete {name}")
             return ""
 
         elif arguments.group:

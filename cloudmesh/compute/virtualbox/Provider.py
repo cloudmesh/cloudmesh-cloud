@@ -7,12 +7,12 @@ import textwrap
 import webbrowser
 from pprint import pprint
 
-from cloudmesh.abstractclass.ComputeNodeABC import ComputeNodeABC
+from cloudmesh.abstract.ComputeNodeABC import ComputeNodeABC
 from cloudmesh.common.Shell import Shell
 from cloudmesh.common.console import Console
 from cloudmesh.common.dotdict import dotdict
 from cloudmesh.common.util import path_expand
-# from cloudmesh.abstractclass import ComputeNodeManagerABC
+# from cloudmesh.abstract import ComputeNodeManagerABC
 from cloudmesh.configuration.Config import Config
 
 """
@@ -140,7 +140,8 @@ class Provider(ComputeNodeABC):
         try:
 
             result = Shell.execute(self.vboxmanage, shell=True)
-            txt, version["virtualbox"]["version"] = result.splitlines()[0].split(
+            txt, version["virtualbox"]["version"] = result.splitlines()[
+                0].split(
                 "Version ")
 
             result = Shell.execute(self.vboxmanage + " list -l extpacks",

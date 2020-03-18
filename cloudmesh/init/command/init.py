@@ -14,7 +14,7 @@ from cloudmesh.configuration.Config import Config
 from cloudmesh.mongo.MongoDBController import MongoDBController
 from cloudmesh.shell.command import PluginCommand
 from cloudmesh.shell.command import command
-
+from cloudmesh.mongo.CmDatabase import CmDatabase
 
 class InitCommand(PluginCommand):
 
@@ -95,6 +95,10 @@ class InitCommand(PluginCommand):
                 os.system("cms admin mongo start")
             else:
                 print("MongoDB is on \"running\" mode!")
+                print("Dropping cloudmesh database...")
+                cm_db = CmDatabase()
+                cm_db.connect()
+                cm_db.drop_database()
 
             user = config["cloudmesh.profile.user"]
 

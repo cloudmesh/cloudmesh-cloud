@@ -3,15 +3,14 @@ from pprint import pprint
 from textwrap import dedent
 
 from cloudmesh.common.console import Console
-from cloudmesh.common.util import banner
+from cloudmesh.common.debug import VERBOSE
 from cloudmesh.common.util import path_expand
-from cloudmesh.register.Entry import Entry
+from cloudmesh.register.Register import Register
 from cloudmesh.shell.command import PluginCommand
 from cloudmesh.shell.command import command, map_parameters
-from cloudmesh.register.Register import Register
-from cloudmesh.common.debug import VERBOSE
 
 
+# noinspection
 class RegisterCommand(PluginCommand):
 
     # noinspection PyUnusedLocal
@@ -21,10 +20,10 @@ class RegisterCommand(PluginCommand):
         ::
 
             Usage:
-                register list kind --service=SERVICE
-                register list sample --cloud=CLOUD [--service=SERVICE]
-                register delete --cloud=CLOUD [--service=SERVICE]
-                register update --cloud=CLOUD [--service=SERVICE] [--name=NAME] [--filename=FILENAME] [--keep] [ATTRIBUTES...] [--dryrun]
+                register list --kind=KIND --service=SERVICE
+                register list sample --kind=KIND [--service=SERVICE]
+                register remove --kind=KIND [--service=SERVICE] [--name=NAME]
+                register update --kind=KIND [--service=SERVICE] [--name=NAME] [--filename=FILENAME] [--keep] [ATTRIBUTES...] [--dryrun]
 
 
                 This command adds the registration information in the cloudmesh
@@ -32,7 +31,7 @@ class RegisterCommand(PluginCommand):
                 credential information downloaded from the cloud. The
                 permissions of the FILENAME will also be changed. A y/n question
                 will be asked if the file with the FILENAME should be deleted
-                after integration. THis helps that all credential information
+                after integration. This helps that all credential information
                 could be managed with the cloudmesh.yaml file.
 
             Arguments:
@@ -40,6 +39,11 @@ class RegisterCommand(PluginCommand):
                 ATTRIBUTES  Attribute list to replace if json file is not provided.
                             Note: Attributes will override the values from file
                             if both are used.
+                SERVICE     service type e.g: compute, storage, volume etc.
+                KIND        kind that needs to be registered. E.g: aws, google,
+                            awslibcloud, googlelibcloud, azure etc.
+                            Multiple kind might be supported by same cloud
+                            service provider.
 
             Options:
                 --keep               keeps the file with the filename.
@@ -49,6 +53,8 @@ class RegisterCommand(PluginCommand):
                 --cloud=CLOUD        cloud provider e.g. aws, google, openstack, oracle etc.
                 --service=SERVICE    service type e.g. storage, compute, volume
                 --name=NAME          name for the new registration
+                --kind=KIND          kind that you want to register e.g: google,
+                                     googlelibcloud, aws, azure
 
             Examples:
 
@@ -65,6 +71,7 @@ class RegisterCommand(PluginCommand):
 
         map_parameters(arguments,
                        'cloud',
+                       'kind',
                        'service',
                        'dryrun',
                        'keep',
@@ -74,8 +81,12 @@ class RegisterCommand(PluginCommand):
         VERBOSE(arguments)
 
         service = arguments.service or "cloud"
-        kind = arguments.cloud
-        entry_name = arguments.name or arguments.cloud
+
+        if service == 'compute':
+            service = 'cloud'
+
+        kind = arguments.kind
+        entry_name = arguments.name or kind
 
         """
         TODO: This is a special register allowing to use the web interface 
@@ -100,7 +111,10 @@ class RegisterCommand(PluginCommand):
 
         provider = Register.get_provider(service=service, kind=kind)
 
-        if arguments["list"] and arguments["sample"]:
+        if provider is None:
+            return
+
+        if arguments.list and arguments.sample:
 
             sample = provider.sample
 
@@ -118,8 +132,7 @@ class RegisterCommand(PluginCommand):
 
             return ""
 
-        if arguments["list"] and arguments["kind"]:
-
+        if arguments.list and arguments.kind:
             kinds = provider.get_kind()
 
             Console.info(f"Kind for service={service}")
@@ -129,50 +142,48 @@ class RegisterCommand(PluginCommand):
 
             return ""
 
+        if arguments.remove:
+            removed_item = Register.remove(service, entry_name)
 
-        if provider is None:
-            return
+            VERBOSE(removed_item)
 
-        attributes = {}
-
-        if arguments.filename:
-            # Load JSON File.
-            path = path_expand(arguments.filename)
-            with open(path, "r") as file:
-                attributes = json.load(file)
-
-            # Add the filename to attributes
-            attributes["filename"] = arguments.filename
-
-        if arguments.ATTRIBUTES:
-
-            atts = arguments.ATTRIBUTES
-            for attribute in atts:
-                key, value = attribute.split("=", 1)
-                attributes[key] = value
-
-        VERBOSE(attributes)
-
-        sample = Register.get_sample(provider,
-                                     kind,
-                                     service,
-                                     entry_name,
-                                     attributes)
-
-        if sample is None:
-            Console.error("The sample is not fully filled out.")
             return ""
 
-        if arguments.dryrun:
-            # Just print the value
-            pprint(dedent(sample))
-        else:
-            # Add the entry into cloudmesh.yaml file.
-            Entry.add(entry=sample,
-                      base=f"cloudmesh.{sample}",
-                      path="~/.cloudmesh/cloudmesh.yaml")
+        if arguments.update:
+            attributes = {}
 
-        Console.ok(
-            f"Registered {service} service for {kind}"
-            f" provider with name {entry_name}.")
+            if arguments.filename:
+                # Load JSON File.
+                path = path_expand(arguments.filename)
+                with open(path, "r") as file:
+                    attributes = json.load(file)
+
+                # Add the filename to attributes
+                attributes["filename"] = arguments.filename
+
+            # Attributes will override values from file.
+            if arguments.ATTRIBUTES:
+
+                atts = arguments.ATTRIBUTES
+                for attribute in atts:
+                    key, value = attribute.split("=", 1)
+                    attributes[key] = value
+
+            VERBOSE(attributes)
+
+            if arguments.dryrun:
+                # Just print the value, no update.
+                sample = Register.get_sample(provider,
+                                             kind,
+                                             service,
+                                             entry_name,
+                                             attributes)
+                pprint(dedent(sample))
+            else:
+                sample = Register.update(provider,
+                                         kind,
+                                         service,
+                                         entry_name,
+                                         attributes)
+
         return ""

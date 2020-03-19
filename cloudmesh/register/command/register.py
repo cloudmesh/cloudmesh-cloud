@@ -9,7 +9,6 @@ from cloudmesh.register.Register import Register
 from cloudmesh.shell.command import PluginCommand
 from cloudmesh.shell.command import command, map_parameters
 
-
 # noinspection
 class RegisterCommand(PluginCommand):
 
@@ -20,11 +19,15 @@ class RegisterCommand(PluginCommand):
         ::
 
             Usage:
-                register list --kind=KIND --service=SERVICE
+                register list [--service=SERVICE] [--kind=KIND]
                 register list sample --kind=KIND [--service=SERVICE]
                 register remove --kind=KIND [--service=SERVICE] [--name=NAME]
-                register update --kind=KIND [--service=SERVICE] [--name=NAME] [--filename=FILENAME] [--keep] [ATTRIBUTES...] [--dryrun]
-
+                register update --kind=KIND [--service=SERVICE]
+                                            [--name=NAME]
+                                            [--filename=FILENAME]
+                                            [--keep]
+                                            [ATTRIBUTES...]
+                                            [--dryrun]
 
                 This command adds the registration information in the cloudmesh
                 yaml file. A FILENAME can be passed along that contains
@@ -80,14 +83,6 @@ class RegisterCommand(PluginCommand):
 
         VERBOSE(arguments)
 
-        service = arguments.service or "cloud"
-
-        if service == 'compute':
-            service = 'cloud'
-
-        kind = arguments.kind
-        entry_name = arguments.name or kind
-
         """
         TODO: This is a special register allowing to use the web interface 
         to get the aws json file.
@@ -109,38 +104,32 @@ class RegisterCommand(PluginCommand):
             return ""
         """
 
-        provider = Register.get_provider(service=service, kind=kind)
+        # Extract and validate arguments.
+        service = arguments.service or "cloud"
+        if service == 'compute':
+            service = 'cloud'
 
-        if provider is None:
-            return
+        entry_name = arguments.name or arguments.kind
 
-        if arguments.list and arguments.sample:
-
-            sample = provider.sample
-
-            if len(sample) >= 1:
-                Console.info(f"Sample for service={service} kind={kind}")
-
-                print(dedent(sample))
-
-                Console.error("The following attributes are not defined")
-                print()
-                keys = Register.get_sample_variables(sample)
-
-                print("    " + "\n    ".join(sorted(keys)))
-                print()
-
+        # Validate entity name.
+        if entry_name and "_" in entry_name:
+            Console.error("Name cannot have have '_'.")
             return ""
 
-        if arguments.list and arguments.kind:
-            kinds = provider.get_kind()
+        # Analyze command.
+        if arguments.list:
+            if arguments.sample:
+                Register.print_sample(service, arguments.kind)
+                return
 
-            Console.info(f"Kind for service={service}")
-            print()
-            print("    " + "\n    ".join(sorted(kinds)))
-            print()
+            if arguments.service:
+                Register.print_kinds(service, arguments.kind)
+                return
 
-            return ""
+            else:
+                # List all supported kinds and services.
+                list = Register.list_all()
+                return ""
 
         if arguments.remove:
             removed_item = Register.remove(service, entry_name)
@@ -170,6 +159,9 @@ class RegisterCommand(PluginCommand):
                     attributes[key] = value
 
             VERBOSE(attributes)
+
+            kind = arguments.kind
+            provider = Register.get_provider(service=service, kind=kind)
 
             if arguments.dryrun:
                 # Just print the value, no update.

@@ -9,6 +9,60 @@ class Register(object):
         print("init {name}".format(name=self.__class__.__name__))
 
     @staticmethod
+    def list_all():
+        config = Config()
+        config_service = config["cloudmesh"]
+
+        service_list = []
+
+        for item in config_service:
+            if item in "cloud storage volume data cluster":
+                list_item = {}
+                kinds = []
+                for sub_item in config_service[item]:
+                    kinds.append(sub_item)
+
+                list_item["service"] = item
+                list_item["kind"] = kinds
+
+                service_list.append(list_item)
+
+        return service_list
+
+
+    @staticmethod
+    def get_provider_sample(service=None, kind=None):
+        if not kind or not service:
+            Console.error("Both kind and service required to print sample.")
+            return
+
+        provider = Register.get_provider(service=service, kind=kind)
+
+        if provider is None:
+            Console.error("No suitable provider found.")
+            return
+
+        sample = provider.sample
+
+        return sample
+
+    @staticmethod
+    def get_kinds(service=None, kind=None):
+        if not service:
+            Console.error("Service required to print kind.")
+            return
+
+        provider = Register.get_provider(service=service, kind=kind)
+
+        if provider is None:
+            Console.error("No suitable provider found.")
+            return
+
+        kinds = provider.get_kind()
+
+        return kinds
+
+    @staticmethod
     def get_provider(kind=None, service=None):
         """
         Method to import the provider based on the service and kind.
@@ -23,13 +77,19 @@ class Register(object):
 
             if service in ['compute', 'cloud']:
 
-                from cloudmesh.compute.vm.Provider import Provider as P
-                Provider = P.get_provider(kind)
+                if kind is None:
+                    from cloudmesh.compute.vm.Provider import Provider
+                else:
+                    from cloudmesh.compute.vm.Provider import Provider as P
+                    Provider = P.get_provider(kind)
 
             elif service == 'storage':
 
                 from cloudmesh.storage.Provider import Provider as P
-                Provider = P.get_provider(kind)
+                if kind is None:
+                    from cloudmesh.storage.Provider import Provider
+                else:
+                    Provider = P.get_provider(kind)
 
             elif service == 'volume':
 
@@ -47,7 +107,7 @@ class Register(object):
                 f"Registration no Provider found for kind={kind} and service={service}")
             return None
 
-        print("Provider:", Provider)
+        # print("Provider:", Provider)
 
         p = Provider
 
@@ -133,9 +193,12 @@ class Register(object):
                 return ""
 
             # Add the entry into cloudmesh.yaml file.
+            config = Config()
+            config_path = config.location.config()
+
             Entry.add(entry=sample,
                       base=f"cloudmesh.{service}",
-                      path="~/.cloudmesh/cloudmesh.yaml")
+                      path=config_path)
 
             Console.ok(
                 f"Registered {service} service for {kind}"

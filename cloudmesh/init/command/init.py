@@ -1,9 +1,10 @@
-import os.path
+import os
 import shutil
 import sys
 from pathlib import Path
 from sys import exit
 from sys import platform
+import textwrap
 
 from cloudmesh.common.Shell import Shell
 from cloudmesh.common.console import Console
@@ -15,6 +16,7 @@ from cloudmesh.mongo.MongoDBController import MongoDBController
 from cloudmesh.shell.command import PluginCommand
 from cloudmesh.shell.command import command
 from cloudmesh.mongo.CmDatabase import CmDatabase
+
 
 class InitCommand(PluginCommand):
 
@@ -46,6 +48,20 @@ class InitCommand(PluginCommand):
                     On Windows you have to run the cms init command twice upon
                     first installation
         """
+
+        ssh_key = path_expand("~/.ssh/id_rsa.pub")
+        if not os.path.exists(ssh_key):
+            Console.error(f"The ssh key {ssh_key} does not exist.")
+            print()
+
+            Console.info(
+                "cms init is a convenient program to set up cloudmesh"
+                "with defaukt values. Please make sure you use ssh-keygen"
+                "to set up the keys.\n\n"
+                "      Additionally we recommend that you use. \n\n"
+                "        cms test\n\n"
+                "      to identify other issues\n")
+            return ""
 
         if arguments.CLOUD == "yaml":
 

@@ -2,12 +2,14 @@ import json
 from pprint import pprint
 from textwrap import dedent
 
+from cloudmesh.common.Printer import Printer
 from cloudmesh.common.console import Console
 from cloudmesh.common.debug import VERBOSE
 from cloudmesh.common.util import path_expand
 from cloudmesh.register.Register import Register
 from cloudmesh.shell.command import PluginCommand
 from cloudmesh.shell.command import command, map_parameters
+
 
 # noinspection
 class RegisterCommand(PluginCommand):
@@ -119,16 +121,53 @@ class RegisterCommand(PluginCommand):
         # Analyze command.
         if arguments.list:
             if arguments.sample:
-                Register.print_sample(service, arguments.kind)
+                sample = Register.get_provider_sample(service, arguments.kind)
+
+                if sample and len(sample) >= 1:
+                    Console.info(
+                        f"Sample for service={service} kind={arguments.kind}")
+
+                    print(dedent(sample))
+
+                    Console.error("The following attributes are not defined")
+                    print()
+                    keys = Register.get_sample_variables(sample)
+
+                    print("    " + "\n    ".join(sorted(keys)))
+                    print()
+
                 return
 
-            if arguments.service:
-                Register.print_kinds(service, arguments.kind)
+            elif arguments.service and not arguments.kind:
+                kinds = Register.get_kinds(service, arguments.kind)
+                if kinds:
+                    Console.info(f"Kind for service={service}")
+                    print()
+                    print("    " + "\n    ".join(sorted(kinds)))
+                    print()
+                return
+
+            elif arguments.kind and not arguments.service:
+                list = Register.list_all()
+                Console.info(f"Services for kind={arguments.kind}")
+                print()
+                for item in list:
+                    if arguments.kind in item['kind']:
+                        print("        " + item['service'])
+                print()
                 return
 
             else:
                 # List all supported kinds and services.
                 list = Register.list_all()
+                Console.info("Services to be registered")
+                print(Printer.flatwrite(list,
+                                        sort_keys=["service"],
+                                        order=["service", "kind"],
+                                        header=["Service", "Supported Kind"],
+                                        output="table",
+                                        humanize=None)
+                      )
                 return ""
 
         if arguments.remove:

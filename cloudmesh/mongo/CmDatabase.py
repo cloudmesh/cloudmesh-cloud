@@ -628,3 +628,11 @@ class CmDatabase(object):
         #                            stderr=subprocess.PIPE)
         # result = ssh.stdout.read().decode("utf-8")
         # print(result)
+
+    def drop_database(self):
+        """
+        dropping cloudmesh database
+        :return:
+        """
+        MongoDBController().start_if_not_running()
+        self.client.drop_database(self.db)

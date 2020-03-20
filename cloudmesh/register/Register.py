@@ -1,6 +1,3 @@
-from textwrap import dedent
-
-from cloudmesh.common.Printer import Printer
 from cloudmesh.common.console import Console
 from cloudmesh.configuration.Config import Config
 from cloudmesh.register.Entry import Entry
@@ -30,23 +27,11 @@ class Register(object):
 
                 service_list.append(list_item)
 
-        Console.info("Services to be registered")
-        print(Printer.flatwrite(service_list,
-                                sort_keys=["service"],
-                                order=["service", "kind"],
-                                header=["Service", "Supported Kind"],
-                                output="table",
-                                humanize=None)
-              )
-
         return service_list
 
-        # print(config_service);
-
-        return ""
 
     @staticmethod
-    def print_sample(service=None, kind=None):
+    def get_provider_sample(service=None, kind=None):
         if not kind or not service:
             Console.error("Both kind and service required to print sample.")
             return
@@ -59,22 +44,10 @@ class Register(object):
 
         sample = provider.sample
 
-        if len(sample) >= 1:
-            Console.info(f"Sample for service={service} kind={kind}")
-
-            print(dedent(sample))
-
-            Console.error("The following attributes are not defined")
-            print()
-            keys = Register.get_sample_variables(sample)
-
-            print("    " + "\n    ".join(sorted(keys)))
-            print()
-
-        return ""
+        return sample
 
     @staticmethod
-    def print_kinds(service=None, kind=None):
+    def get_kinds(service=None, kind=None):
         if not service:
             Console.error("Service required to print kind.")
             return
@@ -87,12 +60,7 @@ class Register(object):
 
         kinds = provider.get_kind()
 
-        Console.info(f"Kind for service={service}")
-        print()
-        print("    " + "\n    ".join(sorted(kinds)))
-        print()
-
-        return ""
+        return kinds
 
     @staticmethod
     def get_provider(kind=None, service=None):

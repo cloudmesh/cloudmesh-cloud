@@ -485,6 +485,7 @@ class CmDatabase(object):
     def exists(self, entries):
         """
         Check if entry exists in the database
+
         :param entries:
         :return:
         """
@@ -545,7 +546,6 @@ class CmDatabase(object):
     def delete(self, collection="cloudmesh", **kwargs):
         MongoDBController().start_if_not_running()
         col = self.db[collection]
-        # f = col.find(kwargs)
         r = col.delete_many(kwargs)
         return r.deleted_count
 

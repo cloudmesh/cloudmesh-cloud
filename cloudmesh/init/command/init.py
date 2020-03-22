@@ -56,16 +56,28 @@ class InitCommand(PluginCommand):
 
             Console.info(
                 "cms init is a convenient program to set up cloudmesh"
-                "with defaukt values. Please make sure you use ssh-keygen"
-                "to set up the keys.\n\n"
+                " with defaukt values. Please make sure you use ssh-keygen"
+                " to set up the keys.\n\n"
+                "      Additionally we recommend that you use. \n\n"
+                "        cms test\n\n"
+                "      to identify other issues\n")
+            return ""
+
+        config = Config()
+
+        if config["cloudmesh.profile.user"] == "TBD":
+            Console.info(
+                "cms init is a convenient program to set up cloudmesh"
+                " with defaukt values. Please make sure you use in your"
+                " ~/.cloudmesh/yaml file a valid value for\n\n"
+                "        cloudmesh.profile.user\n\n"
+                "      This name is aslo used as keyname in the cloud providers\n\n"
                 "      Additionally we recommend that you use. \n\n"
                 "        cms test\n\n"
                 "      to identify other issues\n")
             return ""
 
         if arguments.CLOUD == "yaml":
-
-            config = Config()
 
             location = path_expand("~/.cloudmesh/cloudmesh.yaml")
             path = Path(location)
@@ -84,7 +96,6 @@ class InitCommand(PluginCommand):
 
         else:
             variables = Variables()
-            config = Config()
 
             if config["cloudmesh.data.mongo.MODE"] != 'running':
                 try:

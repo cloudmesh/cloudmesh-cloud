@@ -77,24 +77,21 @@ class Name(dotdict):
         # init dict with schema, path, kwargs
         #
 
-        self.path = path_expand("~/.cloudmesh/name.yaml")
+        pprint(kwargs)
 
-        if len(kwargs) == 0:
-            data = self.load(self.path)
-            self.assign(data)
+        config = Config()
 
-        else:
-            if "path" not in kwargs:
-                self.path  = path_expand("~/.cloudmesh/name.yaml")
-                data = self.load(self.path)
-                self.assign(data)
+        self.path = path_expand(kwargs.get("path") or
+                                f"{config.location}.cloudmesh/name.yaml")
 
+        data = self.load(self.path)
+        pprint(data)
+        self.assign(data)
+        if kwargs:
             self.assign(kwargs)
 
-
-            if kwargs["schema"]:
-                schema = kwargs["schema"]
-                self.__dict__['schema'] = schema
+        if "schema" in kwargs:
+            self.__dict__['schema'] = kwargs["schema"]
 
         if "counter" not in self.__dict__:
             self.reset()

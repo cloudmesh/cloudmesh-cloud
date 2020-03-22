@@ -25,7 +25,7 @@ if username == 'TBD':
     Console.error("please set cloudmesh.profile.user in ~/.cloudmesh.yaml")
     sys.exit()
 
-path = path_expand("~/.cloudmesh/name.yaml")
+path = path_expand(f"{config.location}/name.yaml")
 data = {
     'counter': 1,
     'path': path,
@@ -69,11 +69,11 @@ class TestName:
         Benchmark.Stop()
         data = n.dict()
         pprint(data)
-        assert data == dict({'counter': 3,
-                             'kind': 'vm',
-                             'path': path_expand("~/.cloudmesh/name.yaml"),
-                             'schema': '{user}-{kind}-{counter}',
-                             'user': username})
+        assert data == dict({
+            'schema': '{user}-{kind}-{counter}',
+            'counter': 3,
+            'user': username,
+            'kind': 'vm'})
 
     def test_name_reset(self):
         HEADING()
@@ -98,11 +98,13 @@ class TestName:
         Benchmark.Start()
         data = n.dict()
         Benchmark.Stop()
-        assert data == dict({'counter': 1,
-                             'kind': 'vm',
-                             'path': path_expand("~/.cloudmesh/name.yaml"),
-                             'schema': '{user}-{kind}-{counter}',
-                             'user': username})
+        assert data == dict({
+            'schema': '{user}-{kind}-{counter}',
+            'counter': 1,
+            'user': username,
+            'kind': 'vm'})
+
+
 
     def test_name_incr(self):
         HEADING()

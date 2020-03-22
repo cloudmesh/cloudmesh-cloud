@@ -41,6 +41,7 @@ A typical use is
              group="grp",
              user="gregor",
              kind="vm",
+             path="~/.cloudmesh/name.yaml",
              counter=1)
 
     n.incr()

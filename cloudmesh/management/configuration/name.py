@@ -33,19 +33,27 @@ The last is a counter which is always increased and written into this file in or
 value is safely included in it.
 
 
+
 A typical use is
 
+
 ::
+
+    config = Config()
+    directory = config.location
+
+    path=f"{directory}/name.yaml",
 
     n = Name(experiment="exp",
              group="grp",
              user="gregor",
              kind="vm",
-             path="~/.cloudmesh/name.yaml",
+             path=path
              counter=1)
 
     n.incr()
     counter = n.get()
+
 
 Which will return
 

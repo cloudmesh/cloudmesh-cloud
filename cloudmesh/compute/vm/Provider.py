@@ -129,11 +129,11 @@ class Provider(ComputeNodeABC):
         # bug should determine provider from name
         return self.loop_name(name, self.p.destroy)
 
-    def loop_name(self, names, func):
+    def loop_name(self, names, func, **kwargs):
         names = self.expand(names)
         r = []
         for name in names:
-            vm = func(name=name)
+            vm = func(name=name, **kwargs)
             if type(vm) == list:
                 r = r + vm
             elif type(vm) == dict:
@@ -341,7 +341,7 @@ class Provider(ComputeNodeABC):
         return self.loop_name(name, self.p.start)
 
     # @DatabaseUpdate()
-    def info(self, name=None):
+    def info(self, name=None, **kwargs):
         # BUG: needs to work on name and not provider
         return self.loop_name(name, self.p.info)
 

@@ -331,11 +331,21 @@ class Provider(ComputeNodeABC):
         cm['status'] = 'available'
 
         try:
+            #
+            # due to metadata limitation in openstack do not add the creation time
+            #
+
+            if 'created' in cm:
+                del cm['created']
+
             self.p.set_server_metadata(arguments.name, cm)
+            #self.set_server_metadata(arguments.name, cm)
         except Exception as e:
-            print (type(cm))
-            pprint (cm)
-            print ("EEE", e)
+            Console.error("Openstack reported the following error")
+
+            Console.error(79 * "-")
+            print(e)
+            Console.error(79 * "-")
 
         result = CmDatabase.UPDATE(entry, progress=False)[0]
 

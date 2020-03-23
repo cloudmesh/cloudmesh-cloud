@@ -52,6 +52,7 @@ class VmCommand(PluginCommand):
                         [--refresh]
                 vm boot [--n=COUNT]
                         [--name=VMNAMES]
+                        [--label=LABEL]
                         [--cloud=CLOUD]
                         [--username=USERNAME]
                         [--image=IMAGE]
@@ -243,6 +244,7 @@ class VmCommand(PluginCommand):
         map_parameters(arguments,
                        'active',
                        'cloud',
+                       'label',
                        'command',
                        'dryrun',
                        'flavor',
@@ -620,6 +622,7 @@ class VmCommand(PluginCommand):
             """
                 vm boot 
                         [--name=VMNAMES]
+                        [--label=LABEL]
                         [--cloud=CLOUD]
                         [--username=USERNAME]
                         [--image=IMAGE]
@@ -719,12 +722,16 @@ class VmCommand(PluginCommand):
             for name in names:
 
                 parameters.name = name
+                label = arguments.get("label") or arguments.name
+                parameters["label"] = label
+
                 if arguments['--dryrun']:
                     banner("boot")
 
                     pprint(parameters)
 
                     Console.ok(f"Dryrun boot {name}: \n"
+                               f"        label={label}\n"
                                f"        cloud={cloud}\n"
                                f"        names={names}\n"
                                f"        provider={provider}")

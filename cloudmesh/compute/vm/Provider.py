@@ -265,6 +265,17 @@ class Provider(ComputeNodeABC):
 
         return created
 
+    def compress(self, cm):
+        """
+        Opensatck metadata is limited, we remove the spaces
+
+        :param cm:
+        :return:
+        """
+        cm = cm.replace(": ", ":").replace(", ", ":")
+        return cm
+
+
     def _create(self, **arguments):
 
         arguments = dotdict(arguments)
@@ -273,13 +284,18 @@ class Provider(ComputeNodeABC):
 
         StopWatch.start(f"create vm {arguments.name}")
 
+        label = arguments.get("label") or arguments.name
+
         cm = {
             'kind': "vm",
             'name': arguments.name,
+            'label': label,
             'group': arguments.group,
             'cloud': self.cloudname(),
             'status': 'booting'
         }
+
+
         entry = {}
         entry.update(cm=cm, name=arguments.name)
 
@@ -296,12 +312,12 @@ class Provider(ComputeNodeABC):
         # print('entry')
         # pprint(entry)
         # print('data')
-        pprint(data)
+        # pprint(data)
         entry.update(data)
 
         StopWatch.stop(f"create vm {arguments.name}")
         t = format(StopWatch.get(f"create vm {arguments.name}"), '.2f')
-        cm['creation_time'] = t
+        cm['creation'] = t
 
         entry.update({'cm': cm})
 
@@ -313,7 +329,13 @@ class Provider(ComputeNodeABC):
                                            "size": arguments.size})})
 
         cm['status'] = 'available'
-        self.p.set_server_metadata(arguments.name, cm)
+
+        try:
+            self.p.set_server_metadata(arguments.name, cm)
+        except Exception as e:
+            print (type(cm))
+            pprint (cm)
+            print ("EEE", e)
 
         result = CmDatabase.UPDATE(entry, progress=False)[0]
 

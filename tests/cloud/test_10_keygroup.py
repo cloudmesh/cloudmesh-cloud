@@ -4,7 +4,7 @@
 ###############################################################
 from pprint import pprint
 
-import pytest
+#import pytest
 import os
 from cloudmesh.common import VERBOSE
 from cloudmesh.common.util import HEADING
@@ -22,7 +22,7 @@ Benchmark.debug()
 user = Config()["cloudmesh.profile.user"]
 variables = Variables()
 
-KEY = "test-key"
+KEY = "test-keygroup"
 cloud = variables.parameter('cloud')
 
 print(f"Test run for {cloud} on key {KEY}")
@@ -33,21 +33,28 @@ if cloud is None:
 cm = CmDatabase()
 provider = Provider(name=cloud)
 
-
-@pytest.mark.incremental
+#@pytest.mark.incremental
 class Test_Keygroup:
 
     def test_create_keys(self):
         n = 5
-        for i in range[0, n]:
-            name = f"test_id_rsa{n}"
-            command = f"ssh-keygen ?? {name}"
-            print(command)
+        for i in range(0, n):
+            name = f"test_id_rsa{i}"
+            command = f"ssh-keygen -f $HOME/.ssh/{name}"
             os.system(command)
-            assert os.path.isfile(name)
+            # assert os.path.isfile(name)
+
+
+    # create test for all other functions
 
     # create test for adding key to group
-    # create test for all other functions
+    def test_add_key_to_keygroup_database(self):
+        n = 5
+        keygroup = "testKeyGroup"
+        for i in range(0, n):
+            name = f"test_id_rsa{i}"
+            command = f"cms keygroup add $HOME/.ssh/{name}"
+            os.system(command)
     """
     def test_upload_key_to_database(self):
         HEADING()

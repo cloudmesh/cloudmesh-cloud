@@ -447,7 +447,7 @@ class KeyCommand(PluginCommand):
                 if key["name"] in keygroups:
                     keys += key["public_key"]
                     command = "\"echo " + keys +\
-                              " >> /home/cc/.ssh/authorized_keys; cat time >> /tmp/time.txt\""
+                              " >> /home/cc/.ssh/authorized_keys" #; cat time >> /tmp/time.txt\""
                     print("vm: ", vm)
                     print("\"command: ", command)
                     x = provider.info(vm)

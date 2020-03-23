@@ -52,6 +52,7 @@ class VmCommand(PluginCommand):
                         [--refresh]
                 vm boot [--n=COUNT]
                         [--name=VMNAMES]
+                        [--label=LABEL]
                         [--cloud=CLOUD]
                         [--username=USERNAME]
                         [--image=IMAGE]
@@ -90,8 +91,7 @@ class VmCommand(PluginCommand):
                 vm get SOURCE DESTINATION [NAMES]
                 vm rename [OLDNAMES] [NEWNAMES] [--force] [--dryrun]
                 vm wait [--cloud=CLOUD] [--interval=INTERVAL] [--timeout=TIMEOUT]
-                vm info [--cloud=CLOUD]
-                        [--output=OUTPUT]
+                vm info [NAMES] [--cloud=CLOUD] [--output=OUTPUT] [--dryrun]
                 vm username USERNAME [NAMES] [--cloud=CLOUD]
                 vm resize [NAMES] [--size=SIZE]
 
@@ -244,6 +244,7 @@ class VmCommand(PluginCommand):
         map_parameters(arguments,
                        'active',
                        'cloud',
+                       'label',
                        'command',
                        'dryrun',
                        'flavor',
@@ -621,6 +622,7 @@ class VmCommand(PluginCommand):
             """
                 vm boot 
                         [--name=VMNAMES]
+                        [--label=LABEL]
                         [--cloud=CLOUD]
                         [--username=USERNAME]
                         [--image=IMAGE]
@@ -720,12 +722,16 @@ class VmCommand(PluginCommand):
             for name in names:
 
                 parameters.name = name
+                label = arguments.get("label") or arguments.name
+                parameters["label"] = label
+
                 if arguments['--dryrun']:
                     banner("boot")
 
                     pprint(parameters)
 
                     Console.ok(f"Dryrun boot {name}: \n"
+                               f"        label={label}\n"
                                f"        cloud={cloud}\n"
                                f"        names={names}\n"
                                f"        provider={provider}")
@@ -756,18 +762,25 @@ class VmCommand(PluginCommand):
 
             # provider.Print(arguments.output, "vm", vms)
 
-
-
         elif arguments.info:
             """
-            vm info [--cloud=CLOUD] [--output=OUTPUT]
+            vm info [NAMES] [--cloud=CLOUD] [--output=OUTPUT] [--dryrun]
             """
-            print("info for the vm")
-
             cloud, names = Arguments.get_cloud_and_names("info", arguments,
                                                          variables)
 
-            raise NotImplementedError
+            cloud_kind = cloud[0]
+
+            for name in names:
+                #Get Cloud Provider.
+                provider = Provider(cloud_kind)
+                if arguments['--dryrun']:
+                    print(f"info node {name}")
+                else:
+                    vms = provider.info(name=name)
+                    provider.Print(vms, output=arguments.output, kind="vm")
+
+            return ""
 
         elif arguments.rename:
             raise NotImplementedError

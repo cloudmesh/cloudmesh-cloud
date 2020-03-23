@@ -10,7 +10,6 @@ from cloudmesh.configuration.Config import Config
 from cloudmesh.mongo.CmDatabase import CmDatabase
 from cloudmesh.shell.command import PluginCommand
 from cloudmesh.shell.command import command, map_parameters
-from cloudmesh.configuration.security.encrypt import KeyHandler
 from cloudmesh.common.util import path_expand, yn_choice
 from cloudmesh.host.host import Host
 from cloudmesh.common.util import path_expand
@@ -489,8 +488,6 @@ class KeyCommand(PluginCommand):
             # Step 1. keys = find keys to upload
             #
 
-
-
             cloud = "local"
             db = CmDatabase()
             db_keys = db.find(collection=f"{cloud}-key")
@@ -510,8 +507,8 @@ class KeyCommand(PluginCommand):
             #
 
             clouds, vmnames = Arguments.get_cloud_and_names("list",
-                                                          arguments,
-                                                          variables)
+                                                            arguments,
+                                                            variables)
 
             for cloud in clouds:
                 print(f"cloud {cloud}")
@@ -578,6 +575,7 @@ class KeyCommand(PluginCommand):
 
             return ""
 
+<<<<<<< HEAD
         elif arguments.group and arguments.delete:
 
             key = KeyGroup()
@@ -790,6 +788,8 @@ class KeyCommand(PluginCommand):
                         Console.ok(f"delete {name}")
             return ""
 
+=======
+>>>>>>> master
         elif arguments.group:
             # Testing keygroup_1 creation
             raise NotImplementedError

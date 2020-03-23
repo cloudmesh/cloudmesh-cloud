@@ -9,13 +9,14 @@ import shutil
 
 import pytest
 from cloudmesh.common.Benchmark import Benchmark
-from cloudmesh_installer.install.util import run
+from cloudmesh.common.Shell import Shell
 from cloudmesh.common.Benchmark import Benchmark
 from cloudmesh.common.util import HEADING
 
 Benchmark.debug()
 
 cloud = "local"
+
 
 @pytest.mark.incremental
 class Test_cloud_installer:
@@ -36,7 +37,7 @@ class Test_cloud_installer:
         HEADING()
         cmd = "cloudmesh-installer info"
         Benchmark.Start()
-        result = run(cmd)
+        result = Shell.run(cmd)
         Benchmark.Stop()
         print(result)
         assert "Package" in str(result)
@@ -45,7 +46,7 @@ class Test_cloud_installer:
         HEADING()
         cmd = "cd tmp; cloudmesh-installer git clone cloud"
         Benchmark.Start()
-        result = run(cmd)
+        result = Shell.run(cmd)
         Benchmark.Stop()
         print(result)
         assert os.path.isdir("tmp/cloudmesh-cmd5")
@@ -54,7 +55,7 @@ class Test_cloud_installer:
         HEADING()
         cmd = "cd tmp; cloudmesh-installer install cms -e"
         Benchmark.Start()
-        result = run(cmd)
+        result = Shell.run(cmd)
         Benchmark.Stop()
         print(result)
         assert os.path.isdir("tmp/cloudmesh-cmd5/cloudmesh_cmd5.egg-info")
@@ -63,7 +64,7 @@ class Test_cloud_installer:
         HEADING()
         cmd = "cms help"
         Benchmark.Start()
-        result = run(cmd)
+        result = Shell.run(cmd)
         Benchmark.Stop()
         print(result)
         assert "quit" in result
@@ -72,7 +73,7 @@ class Test_cloud_installer:
         HEADING()
         cmd = "cms info"
         Benchmark.Start()
-        result = run(cmd)
+        result = Shell.run(cmd)
         Benchmark.Stop()
         print(result)
         assert "cloudmesh.common" in result
@@ -81,7 +82,7 @@ class Test_cloud_installer:
         HEADING()
         cmd = "cd tmp; cloudmesh-installer install cloud -e"
         Benchmark.Start()
-        result = run(cmd)
+        result = Shell.run(cmd)
         Benchmark.Stop()
         print(result)
         assert os.path.isdir("tmp/cloudmesh-cloud/cloudmesh_cloud.egg-info")
@@ -89,7 +90,7 @@ class Test_cloud_installer:
     def test_cms_info_cloud(self):
         HEADING()
         cmd = "cms info"
-        result = run(cmd)
+        result = Shell.run(cmd)
         print(result)
         assert "cloudmesh.cloud" in result
 
@@ -97,7 +98,7 @@ class Test_cloud_installer:
         HEADING()
         cmd = "cms help"
         Benchmark.Start()
-        result = run(cmd)
+        result = Shell.run(cmd)
         Benchmark.Stop()
         print(result)
         assert "vm" in result
@@ -106,7 +107,7 @@ class Test_cloud_installer:
         HEADING()
         cmd = "cms info"
         Benchmark.Start()
-        result = run(cmd)
+        result = Shell.run(cmd)
         Benchmark.Stop()
         print(result)
         assert "cloudmesh.common" in result
@@ -115,7 +116,7 @@ class Test_cloud_installer:
         HEADING()
         cmd = "cms version"
         Benchmark.Start()
-        result = run(cmd)
+        result = Shell.run(cmd)
         Benchmark.Stop()
         print(result)
         assert "cloudmesh.common" in result

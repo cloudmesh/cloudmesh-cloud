@@ -1,6 +1,6 @@
 from pprint import pprint
 
-from cloudmesh.abstractclass.ComputeNodeABC import ComputeNodeABC
+from cloudmesh.abstract.ComputeNodeABC import ComputeNodeABC
 from cloudmesh.common.Printer import Printer
 from cloudmesh.common.StopWatch import StopWatch
 from cloudmesh.common.console import Console
@@ -18,6 +18,52 @@ from cloudmesh.mongo.CmDatabase import CmDatabase
 
 
 class Provider(ComputeNodeABC):
+
+    @staticmethod
+    def get_kind():
+        kind = ["opensatck",
+                "google",
+                "oracle",
+                "azure",
+                "aws"]
+        return kind
+
+    @staticmethod
+    def get_provider(kind):
+
+        if kind in ["awslibcloud", "googlelibcloud"]:
+            from cloudmesh.compute.libcloud.Provider import Provider as P
+
+        elif kind in ['openstack']:
+            from cloudmesh.openstack.compute.Provider import Provider as P
+
+        elif kind in ['google']:
+            from cloudmesh.google.compute.Provider import Provider as P
+
+        elif kind in ['oracle']:
+            from cloudmesh.oracle.compute.Provider import Provider as P
+
+        elif kind in ['azure']:
+            from cloudmesh.azure.compute.Provider import Provider as P
+
+        elif kind in ['aws']:
+            from cloudmesh.aws.compute.Provider import Provider as P
+
+        # elif kind in ["vagrant", "virtualbox"]:
+        #    from cloudmesh.compute.virtualbox.Provider import \
+        #        Provider as VirtualboxCloudProvider
+        #    provider = VirtualboxCloudProvider
+        # elif kind in ["azureaz"]:
+        #    from cloudmesh.compute.azure.AzProvider import \
+        #        Provider as AzAzureProvider
+        #    provider = AzAzureProvider
+
+        else:
+            Console.error(f"Compute provider {kind} not supported")
+
+            raise ValueError(f"Compute provider {kind} not supported")
+
+        return P
 
     def __init__(self,
                  name=None,
@@ -45,36 +91,14 @@ class Provider(ComputeNodeABC):
             provider = providers[self.kind]
 
 
-        elif self.kind in ["awslibcloud", "googlelibcloud"]:
-
-            from cloudmesh.compute.libcloud.Provider import \
-                Provider as LibCloudProvider
-            provider = LibCloudProvider
-
-        elif self.kind in ['openstack']:
-            from cloudmesh.openstack.compute.Provider import \
-                Provider as OpenStackComputeProvider
-            provider = OpenStackComputeProvider
-
-        elif self.kind in ['google']:
-            from cloudmesh.google.compute.Provider import \
-                Provider as GoogleComputeProvider
-            provider = GoogleComputeProvider
-
-        elif self.kind in ['oracle']:
-            from cloudmesh.oracle.compute.Provider import \
-                Provider as OracleComputeProvider
-            provider = OracleComputeProvider
-
-        elif self.kind in ['azure']:
-            from cloudmesh.azure.compute.Provider import \
-                Provider as AzureComputeProvider
-            provider = AzureComputeProvider
-
-        elif self.kind in ['aws']:
-            from cloudmesh.aws.compute.Provider import \
-                Provider as AWSComputeProvider
-            provider = AWSComputeProvider
+        elif self.kind in ["awslibcloud",
+                           "googlelibcloud",
+                           'openstack',
+                           'google',
+                           'oracle',
+                           'azure',
+                           'aws']:
+            provider = Provider.get_provider(self.kind)
 
         # elif self.kind in ["vagrant", "virtualbox"]:
         #    from cloudmesh.compute.virtualbox.Provider import \
@@ -105,11 +129,11 @@ class Provider(ComputeNodeABC):
         # bug should determine provider from name
         return self.loop_name(name, self.p.destroy)
 
-    def loop_name(self, names, func):
+    def loop_name(self, names, func, **kwargs):
         names = self.expand(names)
         r = []
         for name in names:
-            vm = func(name=name)
+            vm = func(name=name, **kwargs)
             if type(vm) == list:
                 r = r + vm
             elif type(vm) == dict:
@@ -241,6 +265,17 @@ class Provider(ComputeNodeABC):
 
         return created
 
+    def compress(self, cm):
+        """
+        Opensatck metadata is limited, we remove the spaces
+
+        :param cm:
+        :return:
+        """
+        cm = cm.replace(": ", ":").replace(", ", ":")
+        return cm
+
+
     def _create(self, **arguments):
 
         arguments = dotdict(arguments)
@@ -249,13 +284,18 @@ class Provider(ComputeNodeABC):
 
         StopWatch.start(f"create vm {arguments.name}")
 
+        label = arguments.get("label") or arguments.name
+
         cm = {
             'kind': "vm",
             'name': arguments.name,
+            'label': label,
             'group': arguments.group,
             'cloud': self.cloudname(),
             'status': 'booting'
         }
+
+
         entry = {}
         entry.update(cm=cm, name=arguments.name)
 
@@ -272,12 +312,12 @@ class Provider(ComputeNodeABC):
         # print('entry')
         # pprint(entry)
         # print('data')
-        pprint(data)
+        # pprint(data)
         entry.update(data)
 
         StopWatch.stop(f"create vm {arguments.name}")
         t = format(StopWatch.get(f"create vm {arguments.name}"), '.2f')
-        cm['creation_time'] = t
+        cm['creation'] = t
 
         entry.update({'cm': cm})
 
@@ -289,7 +329,23 @@ class Provider(ComputeNodeABC):
                                            "size": arguments.size})})
 
         cm['status'] = 'available'
-        self.p.set_server_metadata(arguments.name, cm)
+
+        try:
+            #
+            # due to metadata limitation in openstack do not add the creation time
+            #
+
+            if 'created' in cm:
+                del cm['created']
+
+            self.p.set_server_metadata(arguments.name, cm)
+            #self.set_server_metadata(arguments.name, cm)
+        except Exception as e:
+            Console.error("Openstack reported the following error")
+
+            Console.error(79 * "-")
+            print(e)
+            Console.error(79 * "-")
 
         result = CmDatabase.UPDATE(entry, progress=False)[0]
 
@@ -317,7 +373,7 @@ class Provider(ComputeNodeABC):
         return self.loop_name(name, self.p.start)
 
     # @DatabaseUpdate()
-    def info(self, name=None):
+    def info(self, name=None, **kwargs):
         # BUG: needs to work on name and not provider
         return self.loop_name(name, self.p.info)
 

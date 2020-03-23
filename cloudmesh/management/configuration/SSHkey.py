@@ -145,7 +145,7 @@ class SSHkey(dict):
         # key = base64.decodestring(key_string)
         # fp_plain = hashlib.md5(key).hexdigest()
         key_padding = key_string.strip() + '=' * (
-                4 - len(key_string.strip()) % 4)
+            4 - len(key_string.strip()) % 4)
         key = base64.b64decode(key_padding.encode('ascii'))
         fp_plain = hashlib.md5(key).hexdigest()
 

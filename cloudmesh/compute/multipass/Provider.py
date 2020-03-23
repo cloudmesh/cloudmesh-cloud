@@ -1,7 +1,7 @@
 from abc import ABCMeta, abstractmethod
 from cloudmesh.configuration.Config import Config
 
-from cloudmesh.abstractclass.ComputeNodeABC import ComputeNodeABC
+from cloudmesh.abstract.ComputeNodeABC import ComputeNodeABC
 
 
 #
@@ -156,7 +156,6 @@ class Provider(ComputeNodeABC):
         """
         raise NotImplementedError
 
-    
     def delete_server_metadata(self, name):
         """
         gets the metadata for the server
@@ -186,7 +185,6 @@ class Provider(ComputeNodeABC):
         """
         raise NotImplementedError
 
-    
     def key_upload(self, key=None):
         """
         uploads the key specified in the yaml configuration to the cloud

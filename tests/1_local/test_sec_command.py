@@ -165,4 +165,3 @@ class TestSecCLI:
     def test_benchmark(self):
         HEADING()
         Benchmark.print(csv=True, sysinfo=False, tag=cloud)
-

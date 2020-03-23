@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """We use a uniform naming convention method. The name is defined by different kinds of objects. The name is a string
 its syntax is defined in a yaml file located at ``~/.cloudmesh/name.yaml``
 
@@ -32,18 +33,27 @@ The last is a counter which is always increased and written into this file in or
 value is safely included in it.
 
 
+
 A typical use is
 
+
 ::
+
+    config = Config()
+    directory = config.location
+
+    path=f"{directory}/name.yaml",
 
     n = Name(experiment="exp",
              group="grp",
              user="gregor",
              kind="vm",
+             path=path
              counter=1)
 
     n.incr()
-    counter = n.get()  ?? is this right
+    counter = n.get()
+
 
 Which will return
 
@@ -62,7 +72,7 @@ from cloudmesh.common.util import path_expand
 from cloudmesh.configuration.Config import Config
 from cloudmesh.common.console import Console
 import sys
-
+from pathlib import Path
 
 class Name(dotdict):
 
@@ -76,23 +86,18 @@ class Name(dotdict):
         # init dict with schema, path, kwargs
         #
 
-        self.path = path_expand("~/.cloudmesh/name.yaml")
+        config = Config()
 
-        if len(kwargs) == 0:
-            data = self.load(self.path)
-            self.assign(data)
+        self.path = path_expand(kwargs.get("path") or
+                                f"{config.location}/name.yaml")
 
-        else:
-            if "path" not in kwargs:
-                self.path = path_expand("~/.cloudmesh/name.yaml")
-                data = self.load(self.path)
-                self.assign(data)
-
+        data = self.load(self.path)
+        self.assign(data)
+        if kwargs:
             self.assign(kwargs)
 
-            if kwargs["schema"]:
-                schema = kwargs["schema"]
-                self.__dict__['schema'] = schema
+        if "schema" in kwargs:
+            self.__dict__['schema'] = kwargs["schema"]
 
         if "counter" not in self.__dict__:
             self.reset()
@@ -130,7 +135,7 @@ class Name(dotdict):
             config = Config()
             user = config["cloudmesh.profile.user"]
             if user == "TBD":
-                print("WARNING: please set cloudmesh.profile.user we found TBD")
+                print ("WARNING: please set cloudmesh.profile.user we found TBD")
             data = {
                 'counter': 1,
                 'kind': 'vm',
@@ -143,8 +148,8 @@ class Name(dotdict):
     def flush(self, data=None):
         if data is None:
             data = self.__dict__
-        with open(self.path, 'w') as yaml_file:
-            yaml.dump(data, yaml_file, default_flow_style=False)
+        with open(Path(self.path), 'w') as f:
+            f.write(yaml.dump(data, default_flow_style=False))
 
     def __str__(self):
         return str(self.__dict__["schema"].format(**self.__dict__))
@@ -160,4 +165,5 @@ class Name(dotdict):
         self.__dict__["counter"] += 1
         self.flush()
 
-# name = Name()
+
+name = Name()

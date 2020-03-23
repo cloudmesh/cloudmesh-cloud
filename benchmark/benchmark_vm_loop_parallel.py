@@ -21,8 +21,7 @@ from multiprocessing import Pool
 import sys
 from pprint import pprint
 
-
-batch=10
+batch = 10
 sleep = 60
 
 Benchmark.debug()
@@ -38,7 +37,6 @@ print(f"Test run for {cloud}")
 if cloud is None:
     raise ValueError("cloud is not not set")
 
-
 name_generator = Name()
 name_generator.set(f"benchmark-{user}-vm-" + "{counter}")
 # name_generator.reset()
@@ -52,17 +50,19 @@ def Print():
     data = provider.list()
     print(provider.Print(data=data, output='table', kind='vm'))
 
+
 current_vms = 0
 
 repeat = 100
 
-def generate_names(n):
 
+def generate_names(n):
     names = []
-    for i in range(0,n):
+    for i in range(0, n):
         name_generator.incr()
         names.append(str(name_generator))
     return names
+
 
 def generate_ips(n):
     ips = provider.list_public_ips(available=True)
@@ -76,18 +76,18 @@ def generate_ips(n):
 
 def list():
     Print()
-    data = provider.list() # update the db
+    data = provider.list()  # update the db
 
 
 def provider_vm_create(name, ip):
     HEADING()
 
     try:
-        print ("start", name, ip)
+        print("start", name, ip)
 
         StopWatch.start(f"start {name}")
         parameter = {
-            'name':name,
+            'name': name,
             'ip': ip
         }
         data = provider.create(**parameter)
@@ -95,19 +95,21 @@ def provider_vm_create(name, ip):
 
     except Exception as e:
         Console.error(f"could not create VM {name}", traceflag=True)
-        print (e)
+        print(e)
+
 
 def provider_vm_terminate(name):
     HEADING()
     try:
         StopWatch.start(f"terminate {name}")
-        print ("terminate", name)
+        print("terminate", name)
         data = provider.destroy(name)
         StopWatch.stop(f"terminate {name}")
 
     except Exception as e:
         Console.error(f"could not terminate VM {name}", traceflag=True)
-        print (e)
+        print(e)
+
 
 def create_terrminate(parameters):
     name = parameters['name']
@@ -116,6 +118,7 @@ def create_terrminate(parameters):
     time.sleep(sleep)
     provider_vm_terminate(name)
     return name
+
 
 def test_benchmark():
     StopWatch.benchmark(sysinfo=False, csv=False, tag=cloud)
@@ -127,13 +130,11 @@ p = {}
 names = generate_names(batch)
 ips = generate_ips(batch)
 
-print (names)
-print (ips)
-
-
+print(names)
+print(ips)
 
 parameter = []
-for i in range(0,batch):
+for i in range(0, batch):
     parameter.append(
         {
             'name': names[i],
@@ -148,4 +149,3 @@ pool.join()
 
 
 test_benchmark()
-

@@ -575,7 +575,7 @@ class KeyCommand(PluginCommand):
 
             return ""
 
-<<<<<<< HEAD
+
         elif arguments.group and arguments.delete:
 
             key = KeyGroup()
@@ -788,8 +788,7 @@ class KeyCommand(PluginCommand):
                         Console.ok(f"delete {name}")
             return ""
 
-=======
->>>>>>> master
+
         elif arguments.group:
             # Testing keygroup_1 creation
             raise NotImplementedError

@@ -34,7 +34,7 @@ class RegisterCommand(PluginCommand):
                 yaml file. A FILENAME can be passed along that contains
                 credential information downloaded from the cloud. The
                 permissions of the FILENAME will also be changed. A y/n question
-                may be asked if the file with the FILENAME should be deleted
+                will be asked if the file with the FILENAME should be deleted
                 after integration. This helps that all credential information
                 could be managed with the cloudmesh.yaml file.
 
@@ -88,6 +88,7 @@ class RegisterCommand(PluginCommand):
                     project_id, and client_email will be changed to respective
                     values from google compute sample. We assume you have
                     downloaded the service account credentials form google cloud.
+
         """
 
         map_parameters(arguments,

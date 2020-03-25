@@ -4,7 +4,6 @@ from textwrap import dedent
 
 from cloudmesh.common.Printer import Printer
 from cloudmesh.common.console import Console
-from cloudmesh.common.debug import VERBOSE
 from cloudmesh.common.util import path_expand
 from cloudmesh.register.Register import Register
 from cloudmesh.shell.command import PluginCommand
@@ -35,43 +34,61 @@ class RegisterCommand(PluginCommand):
                 yaml file. A FILENAME can be passed along that contains
                 credential information downloaded from the cloud. The
                 permissions of the FILENAME will also be changed. A y/n question
-                will be asked if the file with the FILENAME should be deleted
+                may be asked if the file with the FILENAME should be deleted
                 after integration. This helps that all credential information
                 could be managed with the cloudmesh.yaml file.
 
             Arguments:
                 FILENAME    a filename in which the cloud credentials are stored
-                ATTRIBUTES  Attribute list to replace if json file is not provided.
+                ATTRIBUTES  Attribute list to replace if json file is not
+                            provided.
                             Note: Attributes will override the values from file
                             if both are used.
                 SERVICE     service type e.g: compute, storage, volume etc.
                 KIND        kind that needs to be registered. E.g: aws, google,
-                            awslibcloud, googlelibcloud, azure etc.
+                            azure etc.
                             Multiple kind might be supported by same cloud
                             service provider.
 
             Options:
                 --keep               keeps the file with the filename.
-                --dryrun             option to just display the formatted sample without
-                                     updating the cloudmesh.yaml file.
-                --filename=FILENAME  json filename containing the details to be replaced
-                --cloud=CLOUD        cloud provider e.g. aws, google, openstack, oracle etc.
-                --service=SERVICE    service type e.g. storage, compute, volume
-                --name=NAME          name for the new registration
+                --dryrun             option to just display the formatted sample
+                                     without updating the cloudmesh.yaml file.
+                --filename=FILENAME  json filename containing the details to be
+                                     replaced.
+                --service=SERVICE    service type e.g. storage, cloud, volume etc.
+                --name=NAME          name for the registration to use to add,
+                                     update or remove.
                 --kind=KIND          kind that you want to register e.g: google,
-                                     googlelibcloud, aws, azure
+                                     aws, azure.
 
             Examples:
 
-                cms register google compute --name=west_region \
-                    filename=~/.cloudmesh/google.json project_id=west1 \
-                    client_email=example@gmail.com
+                cms register list
+                    List all services and related kinds that can be registered.
 
-                  In the last example the values for filename, project_id, and
-                  client_email will be changed to respective values from google
-                  compute sample. We assume you have downloaded the credentials
-                  form google and stored it in the file ~/.cloudmesh/google.json
+                cms register list --service=cloud
+                    List the supported kinds for given cloud service type.
 
+                cms register list sample --kind=google --service=cloud
+                    Display the sample entry google cloud. It also lists all
+                    attributes that are needed to successfully register for
+                    the given kind and service.
+
+                cms remove --kind=google --serivce=cloud --name=mygoogle
+                    Remove the cloudmesh.yaml for google cloud registered with
+                    name mygoogle. If name attribute is not provided, the name
+                    is defaulted to kind i.e. google in this example.
+
+                cms register update --kind=google --service=compute --filename=
+                    /Users/rahul/.cloudmesh/security/google-service-account.json
+                    Add or update the cloudmesh.yaml entry for google
+                    cloud/compute type with replacable attributes provided in
+                    the json file.
+                    In this example the values for credential filename,
+                    project_id, and client_email will be changed to respective
+                    values from google compute sample. We assume you have
+                    downloaded the service account credentials form google cloud.
         """
 
         map_parameters(arguments,
@@ -83,7 +100,7 @@ class RegisterCommand(PluginCommand):
                        'filename',
                        'name')
 
-        VERBOSE(arguments)
+        # VERBOSE(arguments)
 
         """
         TODO: This is a special register allowing to use the web interface 
@@ -173,7 +190,7 @@ class RegisterCommand(PluginCommand):
         if arguments.remove:
             removed_item = Register.remove(service, entry_name)
 
-            VERBOSE(removed_item)
+            # VERBOSE(removed_item)
 
             return ""
 
@@ -197,7 +214,7 @@ class RegisterCommand(PluginCommand):
                     key, value = attribute.split("=", 1)
                     attributes[key] = value
 
-            VERBOSE(attributes)
+            # VERBOSE(attributes)
 
             kind = arguments.kind
             provider = Register.get_provider(service=service, kind=kind)

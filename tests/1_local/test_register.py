@@ -1,21 +1,21 @@
 ###############################################################
-# pytest -v --capture=no tests/register/test_register.py
-# pytest -v  tests/register/test_register.py
-# pytest -v --capture=no  tests/register/test_register.py::Test_register::<METHODNAME>
+# pytest -v --capture=no tests/1_local/test_register.py
+# pytest -v  tests/1_local/test_register.py
+# pytest -v --capture=no  tests/1_local/test_register.py::Test_register::<METHODNAME>
 ###############################################################
 
-from cloudmesh.common.Shell import Shell
-
 import pytest
-from cloudmesh.common.util import HEADING
 from cloudmesh.common.Benchmark import Benchmark
+from cloudmesh.common.Shell import Shell
+from cloudmesh.common.util import HEADING
 
 Benchmark.debug()
-
 
 @pytest.mark.incremental
 class Test_register:
     services = ['storage', "compute", "volume"]
+    google_compute_json_file = \
+        "./../cloudmesh-google/tests/google_sample_credentials.json"
 
     def setup(self):
         pass
@@ -111,9 +111,9 @@ class Test_register:
         HEADING()
         service = self.services[1]  # compute service
         kind = "google"
-        json_file = "~/cm/cloudmesh-google/tests/google_sample_credentials.json"
         update_json_cmd = f"cms register update --service={service} " \
-                          f"--kind={kind} --file={json_file}"
+                          f"--kind={kind} " \
+                          f"--file={self.google_compute_json_file}"
         Benchmark.Start()
         result = Shell.execute(update_json_cmd, shell=True)
         Benchmark.Stop()
@@ -133,9 +133,9 @@ class Test_register:
         service = self.services[1]  # compute service
         kind = "google"
         name = "testGoogle"
-        json_file = "~/cm/cloudmesh-google/tests/google_sample_credentials.json"
         update_json_cmd = f"cms register update --service={service} " \
-                          f"--kind={kind} --name={name} --file={json_file}"
+                          f"--kind={kind} --name={name} " \
+                          f"--file={self.google_compute_json_file}"
         Benchmark.Start()
         result = Shell.execute(update_json_cmd, shell=True)
         Benchmark.Stop()
@@ -157,10 +157,10 @@ class Test_register:
         service = self.services[1]  # compute service
         kind = "google"
         name = "testGoogle"
-        json_file = "~/cm/cloudmesh-google/tests/google_sample_credentials.json"
         update_json_cmd = f"cms register update --service={service} " \
                           f"--kind={kind} --name={name} " \
-                          f"--file={json_file} project_id=pytest_project"
+                          f"--file={self.google_compute_json_file} " \
+                          f"project_id=pytest_project"
         Benchmark.Start()
         result = Shell.execute(update_json_cmd, shell=True)
         Benchmark.Stop()

@@ -41,9 +41,8 @@ class RegisterCommand(PluginCommand):
             Arguments:
                 FILENAME    a filename in which the cloud credentials are stored
                 ATTRIBUTES  Attribute list to replace if json file is not
-                            provided.
-                            Note: Attributes will override the values from file
-                            if both are used.
+                            provided. Attributes will override the values from
+                            file if both are used.
                 SERVICE     service type e.g: compute, storage, volume etc.
                 KIND        kind that needs to be registered. E.g: aws, google,
                             azure etc.
@@ -56,7 +55,7 @@ class RegisterCommand(PluginCommand):
                                      without updating the cloudmesh.yaml file.
                 --filename=FILENAME  json filename containing the details to be
                                      replaced.
-                --service=SERVICE    service type e.g. storage, cloud, volume etc.
+                --service=SERVICE    service type e.g. storage,cloud,volume etc.
                 --name=NAME          name for the registration to use to add,
                                      update or remove.
                 --kind=KIND          kind that you want to register e.g: google,
@@ -75,15 +74,15 @@ class RegisterCommand(PluginCommand):
                     attributes that are needed to successfully register for
                     the given kind and service.
 
-                cms remove --kind=google --serivce=cloud --name=mygoogle
+                cms remove --kind=google --service=cloud --name=mygoogle
                     Remove the cloudmesh.yaml for google cloud registered with
                     name mygoogle. If name attribute is not provided, the name
                     is defaulted to kind i.e. google in this example.
 
                 cms register update --kind=google --service=compute --filename=
-                    /Users/rahul/.cloudmesh/security/google-service-account.json
+                    ~/.cloudmesh/security/google-service-account.json
                     Add or update the cloudmesh.yaml entry for google
-                    cloud/compute type with replacable attributes provided in
+                    cloud/compute type with replaceable attributes provided in
                     the json file.
                     In this example the values for credential filename,
                     project_id, and client_email will be changed to respective

@@ -1,20 +1,15 @@
-# See also the methods already implemented we have in cm for ssh management
-# I think you reimplemented things that already exists.
-
-# see and inspect cloudmesh.common
 import os
 from os.path import expanduser
-# see content of path_expand it does expanduser as far as I know
-from cloudmesh.common.util import path_expand
-from cloudmesh.management.configuration.SSHkey import SSHkey
-from cloudmesh.mongo.DataBaseDecorator import DatabaseUpdate
-from cloudmesh.common.debug import VERBOSE
 from pprint import pprint
-from cloudmesh.configuration.Config import Config
-from cloudmesh.common.util import readfile
-from cloudmesh.common.util import writefile
-from cloudmesh.mongo.CmDatabase import CmDatabase
+
 from cloudmesh.common.parameter import Parameter
+from cloudmesh.common.util import path_expand
+from cloudmesh.common.util import readfile
+from cloudmesh.configuration.Config import Config
+from cloudmesh.management.configuration.SSHkey import SSHkey
+from cloudmesh.mongo.CmDatabase import CmDatabase
+from cloudmesh.mongo.DataBaseDecorator import DatabaseUpdate
+
 
 # noinspection PyPep8Naming
 class Key(object):

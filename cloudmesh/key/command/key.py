@@ -1,15 +1,14 @@
 import os
 
-from cloudmesh.common.util import writefile
-from cloudmesh.common.util import path_expand
 from cloudmesh.common.Printer import Printer
 from cloudmesh.common.console import Console
 from cloudmesh.common.parameter import Parameter
+from cloudmesh.common.util import path_expand
+from cloudmesh.common.util import writefile
 from cloudmesh.common.variables import Variables
 from cloudmesh.compute.vm.Provider import Provider
 from cloudmesh.configuration.Config import Config
 from cloudmesh.key.Key import Key
-from cloudmesh.key.KeyGroup import KeyGroup
 from cloudmesh.management.configuration.SSHkey import SSHkey
 from cloudmesh.management.configuration.arguments import Arguments
 from cloudmesh.mongo.CmDatabase import CmDatabase
@@ -248,9 +247,7 @@ class KeyCommand(PluginCommand):
         def print_keys(keys):
             if keys:
                 for entry in keys:
-
                     entry["group"] = ', '.join(entry['group'])
-
 
                 print(Printer.write(
                     keys,
@@ -259,15 +256,6 @@ class KeyCommand(PluginCommand):
                     header=["Name", "Type", "Fingerprint", "Comment", "Group"],
                     output=arguments.output)
                 )
-
-        def print_keygroups(groups):
-            print(Printer.write(
-                groups,
-                sort_keys=["name"],
-                order=["name", "keys"],
-                header=["Name", "Keys"],
-                output=arguments.output)
-            )
 
         map_parameters(arguments,
                        'check_pass',
@@ -342,7 +330,7 @@ class KeyCommand(PluginCommand):
 
             content = ""
             for entry in found:
-                content += entry["public_key"] +"\n"
+                content += entry["public_key"] + "\n"
 
             if arguments.filename:
                 writefile(filename=path_expand(filename))
@@ -352,7 +340,7 @@ class KeyCommand(PluginCommand):
 
         elif arguments.list:
 
-            key  = Key()
+            key = Key()
             keys = key.list()
 
             print_keys(keys)
@@ -365,8 +353,9 @@ class KeyCommand(PluginCommand):
                 Console.error(" You must specify groups and names")
                 return ""
 
-            key  = Key()
-            keys = key.group_add(name=arguments.NAMES, group=arguments["--group"])
+            key = Key()
+            keys = key.group_add(name=arguments.NAMES,
+                                 group=arguments["--group"])
 
             print_keys(keys)
 
@@ -378,8 +367,9 @@ class KeyCommand(PluginCommand):
                 Console.error(" You must specify groups and names")
                 return ""
 
-            key  = Key()
-            keys = key.group_delete(name=arguments.NAMES, group=arguments["--group"])
+            key = Key()
+            keys = key.group_delete(name=arguments.NAMES,
+                                    group=arguments["--group"])
 
             print_keys(keys)
 

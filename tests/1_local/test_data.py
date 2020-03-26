@@ -5,13 +5,14 @@
 try:
     import grp
 except:
-    print ("ERROR: import grp not supported on your OS. please find altrenative to grp")
+    print(
+        "ERROR: import grp not supported on your OS. please find altrenative to grp")
 
 try:
     import pwd
 except:
-    print ("ERROR: import grp not supported on your OS. please find altrenative to grp")
-
+    print(
+        "ERROR: import grp not supported on your OS. please find altrenative to grp")
 
 import os
 
@@ -26,6 +27,8 @@ from cloudmesh.mongo.CmDatabase import CmDatabase
 from cloudmesh.mongo.DataBaseDecorator import DatabaseUpdate
 
 Benchmark.debug()
+
+cloud = "local"
 
 
 @pytest.mark.incremental
@@ -42,7 +45,7 @@ class TestDatabaseUpdate:
             st = os.stat(file)
             try:
                 userinfo = pwd.getpwuid(os.stat(file).st_uid)
-            except :
+            except:
                 userinfo = "windows"
 
             try:
@@ -103,7 +106,7 @@ class TestDatabaseUpdate:
 
     def test_benchmark(self):
         HEADING()
-        Benchmark.print(csv=True)
+        Benchmark.print(csv=True, sysinfo=False, tag=cloud)
 
 
 """

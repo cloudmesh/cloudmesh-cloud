@@ -1,18 +1,20 @@
 ###############################################################
 # pytest -v --capture=no tests/1_local/test_name.py
 # pytest -v  tests/1_local/test_name.py
-# pytest -v --capture=no  tests/1_local/test_name.py:Test_name.<METHIDNAME>
+# pytest -v --capture=no  tests/1_local/test_name..py::Test_name::<METHODNAME>
 ###############################################################
 
 import pytest
 from cloudmesh.common.StopWatch import StopWatch
-from cloudmesh.common3.host import Host
+from cloudmesh.common.Host import Host
 from cloudmesh.common.Printer import Printer
 from cloudmesh.common.Benchmark import Benchmark
 from cloudmesh.common.util import HEADING
 import sys
 
 Benchmark.debug()
+
+cloud = "local"
 
 # multiping only works if you have root, so we can not use it
 # from multiping import MultiPing
@@ -84,4 +86,4 @@ class TestPing:
 
     def test_benchmark(self):
         HEADING()
-        StopWatch.benchmark(csv=True, sysinfo=False)
+        Benchmark.print(csv=True, sysinfo=False, tag=cloud)

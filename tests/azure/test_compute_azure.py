@@ -1,7 +1,7 @@
 ###############################################################
 # pytest -v --capture=no tests/azure/test_compute_azure.py
 # pytest -v  tests/azure/test_compute_azure.py
-# pytest -v --capture=no  tests/azure/test_compute_azure.py:Test_compute_azure.<METHIDNAME>
+# pytest -v --capture=no  tests/azure/test_compute_azure..py::Test_compute_azure::<METHODNAME>
 ###############################################################
 import subprocess
 import time
@@ -358,6 +358,9 @@ class TestName:
 
         self.test_destroy()
         self.test_list_vm()
+
+    def test_benchmark(self):
+        Benchmark.print(csv=True, sysinfo=False, tag=CLOUD)
 
 
 class other:

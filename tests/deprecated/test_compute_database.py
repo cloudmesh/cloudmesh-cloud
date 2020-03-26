@@ -1,7 +1,7 @@
 ###############################################################
 # pytest -v --capture=no tests/test_compute_database.py
 # pytest -v  tests/test_compute_database.py
-# pytest -v --capture=no tests/test_compute_database.py:Test_compute_database.<METHIDNAME>
+# pytest -v --capture=no tests/test_compute_database..py::Test_compute_database::<METHODNAME>
 ###############################################################
 import subprocess
 import time
@@ -153,7 +153,7 @@ class Test_Compute_Database:
 
         Benchmark.Start()
         #
-        # BUG this should be using cloudmesh common or cloudmesh common3
+        # BUG this should be using cloudmesh common or cloudmesh common
         #
         ssh = subprocess.Popen(
             ["ssh", "%s@%s" % (self.clouduser, pubip), COMMAND],

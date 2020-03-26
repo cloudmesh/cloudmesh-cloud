@@ -21,12 +21,14 @@
 import pytest
 from cloudmesh.common.util import HEADING
 from cloudmesh.common.Benchmark import Benchmark
-from cloudmesh.common3.Shell import Shell
+from cloudmesh.common.Shell import Shell
 from cloudmesh.secgroup.Secgroup import Secgroup
 from cloudmesh.secgroup.Secgroup import SecgroupExamples
 from cloudmesh.secgroup.Secgroup import SecgroupRule
 
 Benchmark.debug()
+
+cloud = "local"
 
 rules = SecgroupRule()
 groups = Secgroup()
@@ -162,4 +164,4 @@ class TestSecCLI:
 
     def test_benchmark(self):
         HEADING()
-        Benchmark.print(csv=True)
+        Benchmark.print(csv=True, sysinfo=False, tag=cloud)

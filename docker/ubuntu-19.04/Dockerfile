@@ -24,7 +24,7 @@ WORKDIR cm
 RUN ls
 RUN echo
 RUN cloudmesh-installer git clone cloud
-RUN cloudmesh-installer install cloud -e
+RUN cloudmesh-installer install cloud
 
 # RUN cms help
 

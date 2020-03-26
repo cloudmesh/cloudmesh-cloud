@@ -1,10 +1,11 @@
-import os.path
+import os
 import shutil
-from sys import platform
+import sys
+from pathlib import Path
 from sys import exit
-from time import sleep
+from sys import platform
+import textwrap
 
-from cloudmesh.common.StopWatch import StopWatch
 from cloudmesh.common.Shell import Shell
 from cloudmesh.common.console import Console
 from cloudmesh.common.util import path_expand
@@ -13,9 +14,8 @@ from cloudmesh.common.variables import Variables
 from cloudmesh.configuration.Config import Config
 from cloudmesh.mongo.MongoDBController import MongoDBController
 from cloudmesh.shell.command import PluginCommand
-from cloudmesh.shell.command import command, map_parameters
-from pathlib import Path
-import sys
+from cloudmesh.shell.command import command
+from cloudmesh.mongo.CmDatabase import CmDatabase
 
 
 class InitCommand(PluginCommand):
@@ -49,9 +49,35 @@ class InitCommand(PluginCommand):
                     first installation
         """
 
-        if arguments.CLOUD == "yaml":
+        ssh_key = path_expand("~/.ssh/id_rsa.pub")
+        if not os.path.exists(ssh_key):
+            Console.error(f"The ssh key {ssh_key} does not exist.")
+            print()
 
-            config = Config()
+            Console.info(
+                "cms init is a convenient program to set up cloudmesh"
+                " with defaukt values. Please make sure you use ssh-keygen"
+                " to set up the keys.\n\n"
+                "      Additionally we recommend that you use. \n\n"
+                "        cms test\n\n"
+                "      to identify other issues\n")
+            return ""
+
+        config = Config()
+
+        if config["cloudmesh.profile.user"] == "TBD":
+            Console.info(
+                "cms init is a convenient program to set up cloudmesh"
+                " with defaukt values. Please make sure you use in your"
+                " ~/.cloudmesh/yaml file a valid value for\n\n"
+                "        cloudmesh.profile.user\n\n"
+                "      This name is aslo used as keyname in the cloud providers\n\n"
+                "      Additionally we recommend that you use. \n\n"
+                "        cms test\n\n"
+                "      to identify other issues\n")
+            return ""
+
+        if arguments.CLOUD == "yaml":
 
             location = path_expand("~/.cloudmesh/cloudmesh.yaml")
             path = Path(location)
@@ -70,25 +96,37 @@ class InitCommand(PluginCommand):
 
         else:
             variables = Variables()
-            config = Config()
-            try:
-                print("MongoDB stop")
-                MongoDBController().stop()
-            except:
-                Console.ok("MongoDB is not running. ok")
-            machine = platform.lower()
-            location = path_expand(config[
-                                       f'cloudmesh.data.mongo.MONGO_DOWNLOAD.{machine}.MONGO_PATH'])
-            try:
-                shutil.rmtree(location)
-                print("MongoDB folder deleted")
-            except:
-                Console.error(f"Could not delete {location}")
-                if platform == 'win32':
-                    Console.error(f"Please try to run cms init again ... ")
-                    exit(1)
 
-            config = Config()
+            if config["cloudmesh.data.mongo.MODE"] != 'running':
+                try:
+                    print("MongoDB stop")
+                    MongoDBController().stop()
+                except:
+                    Console.ok("MongoDB is not running. ok")
+                machine = platform.lower()
+                location = path_expand(config[
+                                           f'cloudmesh.data.mongo.MONGO_DOWNLOAD.{machine}.MONGO_PATH'])
+                try:
+                    print("deleting:", location)
+                    shutil.rmtree(location)
+                    print("MongoDB folder deleted")
+                except Exception as e:
+                    Console.error(f"Could not delete {location}")
+                    if platform == 'win32':
+                        print(e)
+                        Console.error(f"Please try to run cms init again ... ")
+                        return ""
+
+                print("MongoDB create")
+                os.system("cms admin mongo create")
+                os.system("cms admin mongo start")
+            else:
+                print("MongoDB is on \"running\" mode!")
+                print("Dropping cloudmesh database...")
+                cm_db = CmDatabase()
+                cm_db.connect()
+                cm_db.drop_database()
+
             user = config["cloudmesh.profile.user"]
 
             secgroup = "flask"
@@ -104,9 +142,7 @@ class InitCommand(PluginCommand):
             Console.ok("Config Security Initialization")
             Shell.execute("cms", ["config", "secinit"])
 
-            print("MongoDB create")
-            os.system("cms admin mongo create")
-            os.system("cms admin mongo start")
+            os.system("cms key add")
             os.system("cms sec load")
 
             if arguments.CLOUD is not None:

@@ -1,5 +1,4 @@
 import textwrap
-from sys import platform
 
 from cloudmesh.common.Printer import Printer
 from cloudmesh.common.console import Console
@@ -49,6 +48,7 @@ class AdminCommand(PluginCommand):
             admin mongo password PASSWORD
             admin mongo list [--output=OUTPUT]
             admin mongo ssh
+            admin mongo mode [MODE]
             admin status
             admin system info
 
@@ -102,6 +102,13 @@ class AdminCommand(PluginCommand):
               is only supported for docker and allows for debugging to login
               to the running container. This function may be disabled in future.
 
+
+            admin mongo mode native
+               switches configuration file to use native mode
+
+            admin mongo mode running
+                switches the configuration to use running mode
+
         """
 
         map_parameters(arguments,
@@ -112,7 +119,7 @@ class AdminCommand(PluginCommand):
                        "force")
         arguments.output = arguments.output or "table"
 
-        # VERBOSE(arguments)
+        VERBOSE(arguments)
         # arguments.PATH = arguments['--download'] or None
         result = None
 
@@ -183,7 +190,6 @@ class AdminCommand(PluginCommand):
                 print("MongoDB ssh")
                 MongoDBController().ssh()
 
-
             elif arguments.start:
 
                 print("MongoDB start")
@@ -235,28 +241,40 @@ class AdminCommand(PluginCommand):
                 else:
                     Console.ok("is your MongoDB server running")
 
+            elif arguments.mode:
+
+                if arguments.MODE:
+
+                    if arguments.MODE not in ["native", "running", "docker"]:
+                        Console.error("The mode is not supported")
+                    config = Config()
+                    config["cloudmesh.data.mongo.MODE"] = arguments.MODE
+                    config.save()
+
+                else:
+                    config = Config()
+                    mode = config["cloudmesh.data.mongo.MODE"]
+                    print(mode)
+                    return ""
+
+
         elif arguments.status:
 
-            config = Config()
-            data = config.data["cloudmesh.data.mongo"]
-            # self.expanduser()
+            # config = Config()
+            # data = config["cloudmesh.data.mongo"]
 
             print("Rest Service status")
 
             print("MongoDB status")
 
-            mongo = MongoDBController()
-
-            print(mongo)
-            # mongo.expanduser()
-            # data = mongo.data
-            # print ("DDD", data)
-
-            # data["MONGO_VERSION"]  = '.'.join(str(x) for x in mongo.version())
-
-            # print (data)
-            # print(Printer.attribute(data))
-            # mongo.set_auth()
+            try:
+                mongo = MongoDBController()
+                mongo.login()
+                if mongo.status()['status'] == 'ok':
+                    Console.ok("Mongo is running")
+            except Exception as e:
+                Console.error("Mongo is not running")
+                print(e)
 
         elif arguments.system:
 

@@ -1,5 +1,14 @@
+import re
 import urllib.parse
 from datetime import datetime
+
+from cloudmesh.common.console import Console
+from cloudmesh.common.debug import VERBOSE
+from cloudmesh.common.parameter import Parameter
+from cloudmesh.configuration.Config import Config
+from cloudmesh.mongo.MongoDBController import MongoDBController
+from progress.bar import Bar
+from pymongo import MongoClient
 import json
 import os
 from sys import platform
@@ -7,16 +16,6 @@ import subprocess
 import ctypes
 import shutil
 import re
-
-from cloudmesh.common.console import Console
-from cloudmesh.common.parameter import Parameter
-from cloudmesh.configuration.Config import Config
-from pymongo import MongoClient
-from cloudmesh.common.debug import VERBOSE
-from progress.bar import Bar
-from cloudmesh.common.util import path_expand
-from cloudmesh.mongo.MongoDBController import MongoDBController
-from cloudmesh.common3.Shell import Shell
 
 
 # cm:
@@ -484,11 +483,12 @@ class CmDatabase(object):
         return entries
 
     def exists(self, entries):
-        '''
+        """
         Check if entry exists in the database
+
         :param entries:
         :return:
-        '''
+        """
         MongoDBController().start_if_not_running()
         exist_status = []
         if type(entries) is dict:
@@ -546,7 +546,6 @@ class CmDatabase(object):
     def delete(self, collection="cloudmesh", **kwargs):
         MongoDBController().start_if_not_running()
         col = self.db[collection]
-        # f = col.find(kwargs)
         r = col.delete_many(kwargs)
         return r.deleted_count
 
@@ -629,3 +628,11 @@ class CmDatabase(object):
         #                            stderr=subprocess.PIPE)
         # result = ssh.stdout.read().decode("utf-8")
         # print(result)
+
+    def drop_database(self):
+        """
+        dropping cloudmesh database
+        :return:
+        """
+        MongoDBController().start_if_not_running()
+        self.client.drop_database(self.db)

@@ -7,13 +7,13 @@ from datetime import datetime
 from pprint import pprint
 
 import docker
-from cloudmesh.abstractclass.ComputeNodeABC import ComputeNodeABC
+from cloudmesh.abstract.ComputeNodeABC import ComputeNodeABC
 from cloudmesh.common.Shell import Shell
 from cloudmesh.common.console import Console
 from cloudmesh.common.debug import VERBOSE
 from cloudmesh.common.dotdict import dotdict
 from cloudmesh.common.util import path_expand
-# from cloudmesh.abstractclass import ComputeNodeManagerABC
+# from cloudmesh.abstract import ComputeNodeManagerABC
 from cloudmesh.configuration.Config import Config
 from docker.version import version as pydocker_version
 

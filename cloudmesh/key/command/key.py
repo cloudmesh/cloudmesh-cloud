@@ -10,11 +10,13 @@ from cloudmesh.configuration.Config import Config
 from cloudmesh.mongo.CmDatabase import CmDatabase
 from cloudmesh.shell.command import PluginCommand
 from cloudmesh.shell.command import command, map_parameters
+from cloudmesh.common.util import path_expand, yn_choice
 from pprint import pprint
 from cloudmesh.key.KeyGroup import KeyGroup
 from cloudmesh.host.host import Host
 from cloudmesh.common.util import path_expand
 import os
+import sys
 
 
 class KeyCommand(PluginCommand):
@@ -49,34 +51,97 @@ class KeyCommand(PluginCommand):
              key group delete [--group=GROUPNAMES] [NAMES] [--dryrun]
              key group list [--group=GROUPNAMES] [--output=OUTPUT]
              key group export [--group=GROUPNAMES] [--file=FILENAME]
+             key xgroup add [NAMES] [--group=GROUPNAMES] [--cloud=CLOUDS] [--dryrun]
+             key xgroup delete [--group=GROUPNAMES] [NAMES] [--dryrun]
+             key xgroup list [--group=GROUPNAMES] [--output=OUTPUT]
+             key xgroup export --group=GROUNAMES --filename=FILENAME
+             key xgen (ssh | pem) [--filename=FILENAME] [--nopass] [--set_path] [--force]
+             key reformat (ssh | pem) [--filename=FILENAME] [--format=FORMAT]
+                                      [--nopass] [--pub]
+             key verify (ssh | pem) [--filename=FILENAME] [--pub] [--check_pass]
 
            Arguments:
-             VMS            Parameterized list of virtual machines
-             CLOUDS         The clouds
-             NAME           The name of the key.
-             SOURCE         db, ssh, all
-             KEYNAME        The name of a key. For key upload it defaults to the default key name.
-             OUTPUT         The format of the output (table, json, yaml)
-             FILENAME       The filename with full path in which the key
-                            is located
+             VMS        Parameterized list of virtual machines
+             CLOUDS     The clouds
+             NAME       The name of the key.
+             SOURCE     db, ssh, all
+             OUTPUT     The format of the output (table, json, yaml)
+             FILENAME   The filename with full path in which the key is located
+             FORMAT     Desired key format (SubjectInfo, SSH, OpenSSL, PKCS8)
 
            Options:
-              --dir=DIR                     the directory with keys [default: ~/.ssh]
-              --output=OUTPUT               the format of the output [default: table]
-              --source=SOURCE               the source for the keys
-              --username=USERNAME           the source for the keys [default: none]
               --name=KEYNAME                The name of a key
               --vm=VM                       The name of the VM
+              --dir=DIR             the directory with keys [default: ~/.ssh]
+              --check_pass          Flag where program query user for password
+              --filename=FILENAME   the name and full path to the file
+              --nopass              Flag indicating if the key has no password
+              --output=OUTPUT       the format of the output [default: table]
+              --pub                 Indicates that the public key is passed in
+              --set_path            Sets the cloudmesh encryption key path to
+                                    the full path of the generated keys
+              --source=SOURCE       the source for the keys
+              --username=USERNAME   the source for the keys [default: none]
+
 
            Description:
 
                Please note that some values are read from the cloudmesh.yaml
                file. One such value is cloudmesh.profile.user
 
-               Manages public keys is an essential component of accessing
-               virtual machine sin the cloud. There are a number of sources
-               where you can find public keys. This includes teh ~/.ssh
-               directory and for example github.
+               Management of public keys is an essential component of accessing
+               virtual machines in the cloud. There are a number of sources
+               where you can find public keys. This includes the ~/.ssh
+               directory and for example github. If you do not already have a
+               public-private key pair they can be generated using cloudmesh
+
+               key gen ssh 
+                   This will create the public-private keypair of ~/.ssh/id_rsa
+                   and ~/.ssh/id_rsa.pub in OpenSSH format
+
+               key gen pem 
+                   This will create the public-private keypair of ~/.ssh/id_rsa
+                   and ~/.ssh/id_rsa.pub in PEM format
+
+               key gen (ssh | pem) --filename=~/.cloudmesh/foobar
+                   This will generate the public-private key pair of 
+                   ~/.cloudmesh/foobar and ~/.cloudmesh/foobar.pub
+
+               key gen (ssh | pem) --filename=~/.cloudmesh/foobar --set_path
+                   This will generate the keys as stated above, but it will
+                   also set cloudmesh to use these keys for encryption.
+
+               Keys can also be verified for their formatting and passwords.
+               By default cloudmesh checks ~/.ssh/id_rsa and ~/.ssh/id_rsa.pub
+               If the key is password protected the formatting can only be
+               verified if the password is provided (--check_pass argument)
+
+               key verify pem
+                   Verifies that ~/.ssh/id_rsa has PEM format
+
+               key verify ssh --pub
+                   Verifies that ~/.ssh/id_rsa.pub has OpenSSH format
+
+               key verify pem --filename=~/.cloudmesh/foobar
+                   Verifies if the private key located at ~/.cloudmesh/foobar
+                   is password protected
+
+               key verify pem --filenam=~/.cloudmesh/foobar --check_pass
+                   Request the password to the file, then checks if the
+                   key is in proper PEM format
+
+               You may find the need to keep the values of your keys but
+               different encodings or formats. These aspects of your key can
+               also be changed using cloudmesh.
+
+               key reformat pem
+                   Will reformat the ~/.id_rsa.pub key from PEM to OpenSSH
+
+               key reformat ssh
+                   Will reformat the ~/.id_rsa.pub key from OpenSSH to PEM
+
+               key reformat --filename=~/.id_rsa --format=PKCS8
+                   Will reformat the private key to PKCS8 format
 
                Keys will be uploaded into cloudmesh database with the add
                command under the given NAME. If the name is not specified the name
@@ -217,13 +282,20 @@ class KeyCommand(PluginCommand):
             )
 
         map_parameters(arguments,
+                       'check_pass',
                        'cloud',
-                       'output',
-                       'source',
                        'dir',
+                       'dryrun',
+                       'filename',
+                       'force',
+                       'format',
+                       'name',
+                       'nopass',
                        'output',
-                       'source',
-                       'dryrun')
+                       'pub',
+                       'pwd',
+                       'set_path',
+                       'source')
 
         variables = Variables()
 
@@ -338,10 +410,11 @@ class KeyCommand(PluginCommand):
         elif arguments.add:
 
             """
-             key add [NAME] [--source=FILENAME] # NOT IMPLEMENTED YET
-             key add [NAME] [--source=git]
-             key add [NAME] [--source=ssh]
-             """
+            key add [NAME] [--source=FILENAME] # NOT IMPLEMENTED YET
+            key add [NAME] [--source=git]
+            key add [NAME] [--source=ssh]
+            """
+
             key = Key()
 
             if arguments["--source"] == "ssh":
@@ -450,7 +523,7 @@ class KeyCommand(PluginCommand):
                     old = variables["key"]
                     if old != name:
                         Console.msg(
-                            f"Changing defualt key from {old} to {name}")
+                            f"Changing default key from {old} to {name}")
                         variables["key"] = name
 
             #
@@ -475,9 +548,9 @@ class KeyCommand(PluginCommand):
             # Step 2. iterate over the clouds to upload
             #
 
-            clouds, names = Arguments.get_cloud_and_names("list",
-                                                          arguments,
-                                                          variables)
+            clouds, vmnames = Arguments.get_cloud_and_names("list",
+                                                            arguments,
+                                                            variables)
 
             for cloud in clouds:
                 print(f"cloud {cloud}")
@@ -583,3 +656,4 @@ class KeyCommand(PluginCommand):
                         Console.ok(f"delete {name}")
             return ""
 
+        return ""

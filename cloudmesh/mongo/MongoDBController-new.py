@@ -16,11 +16,11 @@ from cloudmesh.common.Shell import Shell, Brew
 from cloudmesh.common.console import Console
 from cloudmesh.common.dotdict import dotdict
 from cloudmesh.common.util import path_expand
-from cloudmesh.common3.Shell import Shell
+from cloudmesh.common.Shell import Shell
 from cloudmesh.configuration.Config import Config
 from cloudmesh.management.script import Script, SystemPath
 from cloudmesh.management.script import find_process
-from cloudmesh.common3.Shell import Shell as Shell3
+from cloudmesh.common.Shell import Shell
 from cloudmesh.common.debug import VERBOSE
 
 # from cloudmesh.mongo.MongoDBController import MongoDBController
@@ -137,19 +137,19 @@ class MongoInstaller(object):
         proc = subprocess.Popen(cmd, stdout=subprocess.PIPE,
                                 stderr=subprocess.PIPE)
         o, e = proc.communicate()
-        p = o.decode('ascii').replace('\t', "").split("\n")
+        p = o.decode('ascii').replace('\t', "").splitlines()
 
         distro = "none"
         version = "none"
 
         for x in range(0, len(p)):
             s = p.pop(0)
-            if ("Distributor" in s):
-                if ("Debian" in s):
+            if "Distributor" in s:
+                if "Debian" in s:
                     distro = "debian"
-                elif ("Ubuntu" in s):
+                elif "Ubuntu" in s:
                     distro = "ubuntu"
-            elif ("Release" in s):
+            elif "Release" in s:
                 version = s.split(":").pop(1).split(".").pop(0)
         if "debian" == distro:
             self.debian(sudo, int(version))
@@ -575,7 +575,7 @@ class MongoDBController(object):
                 **self.data)
             # print(script)
             try:
-                # result = Shell3.run2(script)
+                # result = Shell.run2(script)
                 p = subprocess.Popen(script, shell=True, stdout=subprocess.PIPE,
                                      stderr=STDOUT)
                 result = p.stdout.read().decode('utf-8')
@@ -732,7 +732,7 @@ class MongoDBController(object):
         try:
             out = \
                 subprocess.check_output("mongod --version", encoding='UTF-8',
-                                        shell=True).split("\n")[0].split(
+                                        shell=True).splitlines()[0].split(
                     "version")[
                     1].strip().split(".")
             ver = (int(out[0][1:]), int(out[1]), int(out[2]))
@@ -750,7 +750,7 @@ class MongoDBController(object):
 
         script = """mongo --eval 'db.stats()'""".format(**self.data)
 
-        result = Script.run(script).split("\n")
+        result = Script.run(script).splitlines()
 
         output = {}
         for line in result:
@@ -774,10 +774,10 @@ class MongoDBController(object):
         return output
 
     def is_installed_as_win_service(self):
-        '''
+        """
         returns True if mongodb is installed as a windows service
         :return:
-        '''
+        """
         if platform == 'win32':
             win_services = list(psutil.win_service_iter())
             mongo_service = []
@@ -792,10 +792,10 @@ class MongoDBController(object):
             return False
 
     def win_service_is_running(self):
-        '''
+        """
         returns True if mongodb running
         :return:
-        '''
+        """
         if platform == 'win32':
             # if self.is_installed_as_win_service():
             #     win_services = list(psutil.win_service_iter())
@@ -817,10 +817,10 @@ class MongoDBController(object):
             return False
 
     def linux_process_is_running(self):
-        '''
+        """
         returns True if mongod is running
         :return:
-        '''
+        """
         if platform == 'linux':
             try:
                 subprocess.check_output("pgrep mongo", encoding='UTF-8',
@@ -834,10 +834,10 @@ class MongoDBController(object):
             return False
 
     def mac_process_is_running(self):
-        '''
+        """
         returns True if mongod is running
         :return:
-        '''
+        """
         if platform == 'darwin':
             try:
                 subprocess.check_output("pgrep mongo", encoding='UTF-8',
@@ -851,10 +851,10 @@ class MongoDBController(object):
             return False
 
     def service_is_running(self):
-        '''
+        """
         checks if mongo service is running
         :return:
-        '''
+        """
         if platform.lower() == 'linux':
             return self.linux_process_is_running()
         elif platform.lower() == 'darwin':
@@ -865,10 +865,10 @@ class MongoDBController(object):
             Console.error(f"platform {platform} not found")
 
     def start_if_not_running(self):
-        '''
+        """
         checks if mongo service is running
         :return:
-        '''
+        """
 
         mode = self.data['MODE']
 

@@ -1,7 +1,7 @@
 ###############################################################
 # pytest -v --capture=no tests/test_database.py
 # pytest -v  tests/test_database.py
-# pytest -v --capture=no  tests/test_database.py:Test_database.<METHIDNAME>
+# pytest -v --capture=no  tests/test_database..py::Test_database::<METHODNAME>
 ###############################################################
 # from cloudmesh.mongo import DatabaseUpdate
 from pprint import pprint

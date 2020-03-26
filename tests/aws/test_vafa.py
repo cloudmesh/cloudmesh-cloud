@@ -1,5 +1,5 @@
 ###############################################################
-# pip install .; pytest -v --capture=no  tests/aws/test_aws.py:Test_aws.test_001
+# pip install .; pytest -v --capture=no  tests/aws/test_aws..py::Test_aws.test_001
 # pytest -v --capture=no tests/aws/test_aws.py
 # pytest -v  tests/aws/test_aws.py
 ###############################################################
@@ -39,3 +39,6 @@ class Test_Vafa:
                              size="t2.micro")
         print(vm)
         print(provider.list())
+
+    def test_benchmark(self):
+        Benchmark.print(csv=True, sysinfo=False, tag=CLOUD)

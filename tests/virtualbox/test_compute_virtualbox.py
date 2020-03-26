@@ -1,7 +1,7 @@
 ###############################################################
 # pytest -v --capture=no tests/virtualbox/test_compute_virtualbox.py
 # pytest -v  tests/virtualbox/test_compute_virtualbox.py
-# pytest -v --capture=no  tests/virtualbox/test_compute_virtualbox.py:Test_compute_virtualbox.<METHIDNAME>
+# pytest -v --capture=no  tests/virtualbox/test_compute_virtualbox..py::Test_compute_virtualbox::<METHODNAME>
 ###############################################################
 import subprocess
 import time

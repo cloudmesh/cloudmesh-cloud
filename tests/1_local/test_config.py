@@ -1,7 +1,7 @@
 ###############################################################
 # pytest -v --capture=no tests/1_local/test_config.py
 # pytest -v  tests/1_local/test_config.py
-# pytest -v --capture=no  tests/1_local/test_config.py:Test_config.<METHIDNAME>
+# pytest -v --capture=no  tests/1_local/test_config..py::Test_config::<METHODNAME>
 ###############################################################
 import os
 import textwrap
@@ -17,6 +17,8 @@ from cloudmesh.common.Benchmark import Benchmark
 from cloudmesh.configuration.Config import Config
 
 Benchmark.debug()
+
+cloud = "local"
 
 
 @pytest.mark.incremental
@@ -42,12 +44,30 @@ class TestConfig:
         n_n = StopWatch.get(f"test_config_load n=9")
         assert (n_1 * 9 >= n_n)
 
-    def test_search(self):
+    def test_search_active_all(self):
+        HEADING()
+        config = Config()
+
+        Benchmark.Start()
+        r = config.search("cloudmesh.cloud.*.cm.active")
+        Benchmark.Stop()
+        pprint(r)
+
+    def test_search_active_true(self):
         HEADING()
         config = Config()
 
         Benchmark.Start()
         r = config.search("cloudmesh.cloud.*.cm.active", True)
+        Benchmark.Stop()
+        pprint(r)
+
+    def test_search_openstack(self):
+        HEADING()
+        config = Config()
+
+        Benchmark.Start()
+        r = config.search("cloudmesh.cloud.*.cm.kind", "openstack")
         Benchmark.Stop()
         pprint(r)
 
@@ -57,10 +77,8 @@ class TestConfig:
         Benchmark.Start()
         result = config.dict()
         Benchmark.Stop()
-        pprint(result)
-        print(config)
         print(type(config.data))
-
+        pprint(config['cloudmesh.profile'])
         assert config is not None
 
     def test_config_subscriptable(self):
@@ -131,4 +149,4 @@ class TestConfig:
 
     def test_benchmark(self):
         HEADING()
-        Benchmark.print(csv=True, sysinfo=False)
+        Benchmark.print(csv=True, sysinfo=False, tag=cloud)

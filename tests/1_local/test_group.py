@@ -1,7 +1,7 @@
 ###############################################################
 # pytest -v --capture=no tests/1_local/test_group.py
 # pytest -v  tests/1_local/test_group.py
-# pytest -v --capture=no  tests/1_local/test_group.py:Test_group.<METHIDNAME>
+# pytest -v --capture=no  tests/1_local/test_group..py::Test_group::<METHODNAME>
 ###############################################################
 
 import os
@@ -22,6 +22,8 @@ Benchmark.debug()
 
 g = Group()
 services = Parameter.expand('vm-[1-3]')
+
+cloud = "local"
 
 
 @pytest.mark.incremental
@@ -66,4 +68,4 @@ class TestName:
 
     def test_benchmark(self):
         HEADING()
-        Benchmark.print(csv=True, sysinfo=False)
+        Benchmark.print(csv=True, sysinfo=False, tag=cloud)

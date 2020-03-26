@@ -4,7 +4,7 @@ from datetime import datetime
 from pathlib import Path
 from pprint import pprint
 
-from cloudmesh.abstractclass.ComputeNodeABC import ComputeNodeABC
+from cloudmesh.abstract.ComputeNodeABC import ComputeNodeABC
 from cloudmesh.common.console import Console
 from cloudmesh.common.debug import VERBOSE
 from cloudmesh.common.util import HEADING
@@ -596,14 +596,20 @@ class Provider(ComputeNodeABC):
         """
         return self.apply(self.cloudman.reboot_node, names)
 
-    def create(self, name=None, image=None, size=None, location=None,
-               timeout=360, **kwargs):
+    def create(self,
+               name=None,
+               image=None,
+               size=None,
+               location=None,
+               timeout=360,
+               **kwargs):
         """
         creates a named node
 
         :param name: the name of the node
         :param image: the image used
         :param size: the size of the image
+        :param location: the location of the image
         :param timeout: a timeout in seconds that is invoked in case the image
                         does not boot. The default is set to 3 minutes.
         :param kwargs: additional arguments HEADING(c=".")ed along at time of

@@ -16,11 +16,10 @@ from cloudmesh.common.Shell import Shell, Brew
 from cloudmesh.common.console import Console
 from cloudmesh.common.dotdict import dotdict
 from cloudmesh.common.util import path_expand
-from cloudmesh.common3.Shell import Shell
+from cloudmesh.common.Shell import Shell
 from cloudmesh.configuration.Config import Config
 from cloudmesh.management.script import Script, SystemPath
 from cloudmesh.management.script import find_process
-from cloudmesh.common3.Shell import Shell as Shell3
 from cloudmesh.common.debug import VERBOSE
 
 # from cloudmesh.mongo.MongoDBController import MongoDBController
@@ -138,19 +137,21 @@ class MongoInstaller(object):
         proc = subprocess.Popen(cmd, stdout=subprocess.PIPE,
                                 stderr=subprocess.PIPE)
         o, e = proc.communicate()
-        p = o.decode('ascii').replace('\t', "").split("\n")
+        p = o.decode('ascii').replace('\t', "").splitlines()
 
         distro = "none"
         version = "none"
 
         for x in range(0, len(p)):
             s = p.pop(0)
-            if ("Distributor" in s):
-                if ("Debian" in s):
+            if "Distributor" in s:
+                if "Debian" in s:
                     distro = "debian"
-                elif ("Ubuntu" in s):
+                elif "Ubuntu" in s:
                     distro = "ubuntu"
-            elif ("Release" in s):
+                elif "Mint" in s:
+                    distro = "ubuntu"
+            elif "Release" in s:
                 version = s.split(":").pop(1).split(".").pop(0)
         if "debian" == distro:
             self.debian(sudo, int(version))
@@ -281,7 +282,8 @@ class MongoInstaller(object):
             os.mkdir(self.mongo_log)
         except FileExistsError:
             Console.info(f"Folder {self.mongo_log} already exists")
-        script = f"""msiexec.exe /l*v {self.mongo_log}/mdbinstall.log  /qb /i {self.mongo_code} INSTALLLOCATION="{self.mongo_home}" ADDLOCAL="all" """
+
+        script = f"""msiexec.exe /l*v {self.mongo_log}\\mdbinstall.log  /qb /i {self.mongo_code} INSTALLLOCATION="{self.mongo_home}" ADDLOCAL="all" """
         print(script)
         if self.dryrun:
             print(script)
@@ -455,7 +457,9 @@ class MongoDBController(object):
             Console.info("Starting mongo without authentication ... ")
             self.start(security=False)
             Console.info("Creating admin user ... ")
+
             self.set_auth()
+
             Console.info("Stopping the service ... ")
             self.stop()
         else:
@@ -509,20 +513,31 @@ class MongoDBController(object):
                 # if out == b'':
                 #    Console.error("mongo command not found")
                 #    sys.exit()
-                mongo_runner = f"\"{self.mongo_home}\\bin\mongod\" {auth} " \
+
+                mongo_runner = f"mongod {auth} " \
                                f"--bind_ip {mongo_host}" \
                                f" --dbpath \"{self.mongo_path}\" --logpath \"{self.mongo_log}\mongod.log\""
+
+                # mongo_runner = f"\"{self.mongo_home}\\bin\mongod\" {auth} " \
+                #               f"--bind_ip {mongo_host}" \
+                #               f" --dbpath \"{self.mongo_path}\" --logpath \"{self.mongo_log}\mongod.log\""
+
                 print(mongo_runner)
-                if not os.path.isfile(f'{self.mongo_path}/invisible.vbs'):
-                    with open(f'{self.mongo_path}/invisible.vbs', 'w') as f:
+
+                if not os.path.isfile(f'{self.mongo_path}\\invisible.vbs'):
+                    with open(f'{self.mongo_path}\\invisible.vbs', 'w') as f:
                         f.write(
                             'CreateObject("Wscript.Shell").Run """" & WScript.Arguments(0) & """", 0, False')
-                if not os.path.isfile(f'{self.mongo_path}/mongo_starter.bat'):
-                    with open(f'{self.mongo_path}/mongo_starter.bat', 'w') as f:
+                if not os.path.isfile(f'{self.mongo_path}\\mongo_starter.bat'):
+                    with open(f'{self.mongo_path}\\mongo_starter.bat',
+                              'w') as f:
                         f.write(mongo_runner)
-                script = f'wscript.exe \"{self.mongo_path}/invisible.vbs\" \"{self.mongo_path}/mongo_starter.bat\"'
+                script = f'wscript.exe "{self.mongo_path}\\invisible.vbs" "{self.mongo_path}\\mongo_starter.bat"'
+
                 print(script)
-                p = subprocess.Popen(script, shell=True, stdout=subprocess.PIPE,
+                p = subprocess.Popen(script,
+                                     shell=True,
+                                     stdout=subprocess.PIPE,
                                      stderr=subprocess.PIPE)
                 result = "mongod child process should be started successfully."
             except Exception as e:
@@ -548,6 +563,7 @@ class MongoDBController(object):
         linux and darwin have different way to shutdown the server, the common way is kill
         """
         mode = self.data['MODE']
+        result = "Result unkown"
 
         if mode == 'docker':
 
@@ -557,6 +573,7 @@ class MongoDBController(object):
             result = "Container is down"
 
         elif platform.lower() == 'win32':
+            '''
             MONGO = f"\"{self.mongo_home}\\bin\mongo\""
             script = f'{MONGO} --eval "db.getSiblingDB(\'admin\').shutdownServer()"'
             p1 = subprocess.Popen(script, shell=True, stdout=subprocess.PIPE,
@@ -579,6 +596,12 @@ class MongoDBController(object):
                 result = 'server should be down...'
             else:
                 result = 'server is already down...'
+            '''
+            try:
+                result = Shell.run("taskkill /IM mongod.exe /F")
+            except Exception as e:
+                result = str(e)
+
         else:
             try:
                 pid = Script.run('pgrep mongo')
@@ -597,6 +620,9 @@ class MongoDBController(object):
 
         mode = self.data['MODE']
 
+        if mode == 'running':
+            return
+
         if mode == 'docker':
             from cloudmesh.mongo.MongoDocker import MongoDocker
             mongo = MongoDocker()
@@ -606,7 +632,7 @@ class MongoDBController(object):
             return
 
         if platform.lower() == 'win32':  # don't remove this otherwise init won't work in windows, eval should start with double quote in windows
-            self.data['MONGO'] = f"{self.mongo_home}\\bin\mongo"
+            self.data['MONGO'] = f"mongo"
             script = """ "{MONGO}" --eval "db.getSiblingDB('admin').createUser({{ user:'{MONGO_USERNAME}',pwd:'{MONGO_PASSWORD}',roles:[{{role:'root',db:'admin'}}]}}) ; db.shutdownServer()" """.format(
                 **self.data)
             # print(script)
@@ -618,10 +644,8 @@ class MongoDBController(object):
             except Exception as e:
                 print(e)
                 return
-
-
         else:
-            script = """mongo --eval 'db.getSiblingDB("admin").createUser({{user:"{MONGO_USERNAME}",pwd:"{MONGO_PASSWORD}",roles:[{{role:"root",db:"admin"}}]}})'""".format(
+            script = """mongo --host {MONGO_HOST} --eval 'db.getSiblingDB("admin").createUser({{user:"{MONGO_USERNAME}",pwd:"{MONGO_PASSWORD}",roles:[{{role:"root",db:"admin"}}]}})'""".format(
                 **self.data)
             result = Script.run(script)
         if "Successfully added user" in result:
@@ -769,7 +793,7 @@ class MongoDBController(object):
         try:
             out = \
                 subprocess.check_output("mongod --version", encoding='UTF-8',
-                                        shell=True).split("\n")[0].split(
+                                        shell=True).splitlines()[0].split(
                     "version")[
                     1].strip().split(".")
             ver = (int(out[0][1:]), int(out[1]), int(out[2]))
@@ -787,7 +811,7 @@ class MongoDBController(object):
 
         script = """mongo --eval 'db.stats()'""".format(**self.data)
 
-        result = Script.run(script).split("\n")
+        result = Script.run(script).splitlines()
 
         output = {}
         for line in result:
@@ -811,10 +835,10 @@ class MongoDBController(object):
         return output
 
     def is_installed_as_win_service(self):
-        '''
+        """
         returns True if mongodb is installed as a windows service
         :return:
-        '''
+        """
         if platform == 'win32':
             win_services = list(psutil.win_service_iter())
             mongo_service = []
@@ -829,10 +853,10 @@ class MongoDBController(object):
             return False
 
     def win_service_is_running(self):
-        '''
+        """
         returns True if mongodb running
         :return:
-        '''
+        """
         if platform == 'win32':
             # if self.is_installed_as_win_service():
             #     win_services = list(psutil.win_service_iter())
@@ -854,10 +878,10 @@ class MongoDBController(object):
             return False
 
     def linux_process_is_running(self):
-        '''
+        """
         returns True if mongod is running
         :return:
-        '''
+        """
         if platform == 'linux':
             try:
                 subprocess.check_output("pgrep mongo", encoding='UTF-8',
@@ -871,10 +895,10 @@ class MongoDBController(object):
             return False
 
     def mac_process_is_running(self):
-        '''
+        """
         returns True if mongod is running
         :return:
-        '''
+        """
         if platform == 'darwin':
             try:
                 subprocess.check_output("pgrep mongo", encoding='UTF-8',
@@ -888,10 +912,10 @@ class MongoDBController(object):
             return False
 
     def service_is_running(self):
-        '''
+        """
         checks if mongo service is running
         :return:
-        '''
+        """
         if platform.lower() == 'linux':
             return self.linux_process_is_running()
         elif platform.lower() == 'darwin':
@@ -924,10 +948,10 @@ class MongoDBController(object):
             sys.exit()
 
     def start_if_not_running(self):
-        '''
+        """
         checks if mongo service is running
         :return:
-        '''
+        """
 
         mode = self.data['MODE']
 

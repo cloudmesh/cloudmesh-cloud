@@ -1,6 +1,7 @@
 ###############################################################
-# pytest -v --capture=no tests/cloud/test_06_vm_provider.py
-# pytest -v  tests/cloud/test_06_vm_provider.py
+# pytest -v --capture=no tests/cloud/test_08_vm_provider.py
+# pytest -v  tests/cloud/test_08_vm_provider.py
+# pytest -v --capture=no  tests/cloud/test_08_vm_provider..py::Test_provider_vm.METHODNAME
 ###############################################################
 
 # TODO: start this with cloud init, e.g, empty mongodb
@@ -8,6 +9,7 @@
 from pprint import pprint
 
 import pytest
+import os
 from time import sleep
 from cloudmesh.common.debug import VERBOSE
 from cloudmesh.common.util import HEADING
@@ -52,8 +54,38 @@ current_vms = 0
 @pytest.mark.incremental
 class Test_provider_vm:
 
+    def test_key_upload(self):
+        os.system("cms key add")
+        os.system("cms key list")
+        os.system(f"cms key upload {key} --cloud={cloud}")
+        os.system(f"cms key list --cloud={cloud}")
+
+    def find_counter(self):
+        name = str(Name())
+        print(name)
+        vms = provider.list()
+        print(f'VM is {vms}')
+        if vms is not None:
+            numbers = []
+            names = []
+            for vm in vms:
+                names.append(vm['name'])
+                numbers.append(int(vm['name'].rsplit("-", 1)[1]))
+            numbers.sort()
+            return numbers[-1]
+
+    def test_find_largest_id(self):
+        name = Name()
+        counter = 1
+        if self.find_counter() is not None:
+            counter = {"counter": self.find_counter()}
+            name.assign(counter)
+        else:
+            name.assign(counter)
+
     def test_provider_vm_create(self):
         HEADING()
+        os.system(f"cms vm list --cloud={cloud}")
         name_generator.incr()
         Benchmark.Start()
         data = provider.create(key=key)
@@ -200,17 +232,22 @@ class Test_provider_vm:
         if cloud == 'chameleon':
             assert len(provider.info(name=name)) == 0
         elif cloud == 'aws':
-            assert len(data) == 0 \
-                   or (data[0]["cm"]["status"] in ['BOOTING', 'TERMINATED']
-                       if data and data[0].get('cm', None) is not None
-                       else True)
-        elif cloud in ['azure', 'oracle']:
+            assert len(data) == 0 if data else True \
+                                               or (data[0]["cm"]["status"] in [
+                'BOOTING', 'TERMINATED']
+                                                   if data and data[0].get('cm',
+                                                                           None) is not None
+                                                   else True)
+        elif cloud == 'azure':
             try:
                 provider.info(name=name)
             except Exception:
                 # if there is an exception that means the group has been
                 # deleted
                 pass
+        elif cloud == 'oracle':
+            info = provider.info(name)
+            assert info is None or info[0]['_lifecycle_state'] in ['TERMINATED']
         else:
             raise NotImplementedError
         # data = provider.info(name=name)

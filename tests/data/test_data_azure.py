@@ -1,5 +1,5 @@
 ###############################################################
-# pip install .; pytest -v --capture=no tests/test_data_azure.py:Test_aws.test_001
+# pip install .; pytest -v --capture=no tests/test_data_azure..py::Test_aws.test_001
 # pytest -v --capture=no tests/test_data_azure.py
 # pytest -v  tests/test_data_azure.py
 ###############################################################

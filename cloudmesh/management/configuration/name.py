@@ -33,18 +33,27 @@ The last is a counter which is always increased and written into this file in or
 value is safely included in it.
 
 
+
 A typical use is
 
+
 ::
+
+    config = Config()
+    directory = config.location
+
+    path=f"{directory}/name.yaml",
 
     n = Name(experiment="exp",
              group="grp",
              user="gregor",
              kind="vm",
+             path=path
              counter=1)
 
     n.incr()
     counter = n.get()
+
 
 Which will return
 
@@ -77,15 +86,12 @@ class Name(dotdict):
         # init dict with schema, path, kwargs
         #
 
-        pprint(kwargs)
-
         config = Config()
 
         self.path = path_expand(kwargs.get("path") or
-                                f"{config.location}.cloudmesh/name.yaml")
+                                f"{config.location}/name.yaml")
 
         data = self.load(self.path)
-        pprint(data)
         self.assign(data)
         if kwargs:
             self.assign(kwargs)

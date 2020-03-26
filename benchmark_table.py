@@ -7,7 +7,7 @@ import sys
 filename = sys.argv[1]
 
 lines = readfile(filename).splitlines()
-#print (lines)
+# print (lines)
 
 result = Shell.find_lines_with(lines, "#csv")
 

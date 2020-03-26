@@ -1,7 +1,7 @@
 ###############################################################
 # pytest -v --capture=no tests/docker/test_compute_docker.py
 # pytest -v  tests/docker/test_compute_docker.py
-# pytest -v --capture=no  tests/docker/test_compute_docker.py:Test_compute_docker.<METHIDNAME>
+# pytest -v --capture=no  tests/docker/test_compute_docker..py::Test_compute_docker::<METHODNAME>
 ###############################################################
 import subprocess
 import time
@@ -20,6 +20,8 @@ from cloudmesh.management.configuration.name import Name
 from cloudmesh.common.Benchmark import Benchmark
 
 Benchmark.debug()
+
+cloud = "docker"
 
 
 @pytest.mark.incremental
@@ -347,6 +349,9 @@ class other:
 
         self.test_destroy()
         self.test_list_vm()
+
+    def test_benchmark(self):
+        Benchmark.print(csv=True, sysinfo=False, tag=cloud)
 
 
 class other:

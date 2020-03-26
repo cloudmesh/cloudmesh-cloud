@@ -113,7 +113,6 @@ class AWSRegister(object):
             Console.info(
                 "AWS 'Access Key ID' and 'Secret Access Key' in the cloudmesh.yaml updated")
 
-
         elif platform == "win32":
             chrome = Path(
                 "C:\Program Files (x86)\Google\Chrome\Application\Chrome.exe")
@@ -130,7 +129,7 @@ class AWSRegister(object):
                     "https://sites.google.com/a/chromium.org/chromedriver/downloads \n"
                     "2) Copy the `chromedriver` to path, for instance you can add "
                     "it to the followtin path: "
-                    "\n\t %USERPROFILE%\AppData\Local\Microsoft\WindowsApps")
+                    "\n\t %USERPROFILE%\\AppData\\Local\\Microsoft\\WindowsApps")
                 return
             credentials_file_name = self.create_user()
 
@@ -161,15 +160,15 @@ class AWSRegister(object):
         if "Type the characters seen in the image below" in self.driver.page_source:
             text = input(
                 "Captcha encountered. Please enter the captcha and press Submit then press Enter to continue")
-            while (text != ""):
+            while text != "":
                 text = input(
                     "Captcha encountered. Please enter the captcha and press Submit then press Enter to continue")
 
     def create_user(self):
-        '''
+        """
         Creates the user or if the user exists creates another access key
         :return: the name of the file containing the access key
-        '''
+        """
         email = input("Enter your email: ")
         passw = getpass.getpass("Enter your password: ")
         self.driver.get("https://console.aws.amazon.com/iam/home#/users")

@@ -1,5 +1,7 @@
 import os
 
+from cloudmesh.common.util import writefile
+from cloudmesh.common.util import path_expand
 from cloudmesh.common.Printer import Printer
 from cloudmesh.common.console import Console
 from cloudmesh.common.parameter import Parameter
@@ -29,25 +31,21 @@ class KeyCommand(PluginCommand):
 
            Usage:
              key  -h | --help
+             key init
              key list --cloud=CLOUDS [--output=OUTPUT]
              key list --source=ssh [--dir=DIR] [--output=OUTPUT]
              key list --source=git [--output=OUTPUT] [--username=USERNAME]
-             key list [--output=OUTPUT]
-             key init
-             key add [NAME] [--source=FILENAME]
+             key list [--group=GROUP] [--output=OUTPUT]
+             key export [--group=GROUPS] [--filename=FILENAME]
+             key add [NAME] [--group=GROUPS] [--source=FILENAME]
              key add [NAME] [--source=git]
              key add [NAME] [--source=ssh]
              key delete NAMES [--cloud=CLOUDS] [--dryrun]
              key upload [NAMES] [--cloud=CLOUDS] [--dryrun]
              key upload [NAMES] [VMS] [--dryrun]
-             key group upload [--group=GROUPNAMES] [--vm=VM][--cloud=CLOUDS] [--dryrun]
-             key group upload [NAMES] [--group=GROUPNAMES] [--cloud=CLOUDS] [--dryrun]
-             key group add [--group=GROUPNAMES] [--cloud=CLOUDS] [--dryrun]
-             key group add [--file=FILENAME]
-             key group add [--group=GROUPNAMES] [NAMES] [--dryrun]
-             key group delete [--group=GROUPNAMES] [NAMES] [--dryrun]
-             key group list [--group=GROUPNAMES] [--output=OUTPUT]
-             key group export [--group=GROUPNAMES] [--file=FILENAME]
+             key group delete [NAMES] [--group=GROUPS]  [--dryrun]
+             key group add [NAMES] [--group=GROUPS] [--dryrun]
+             key group upload [--group=GROUPS] [--vm=VM] [--cloud=CLOUDS] [--dryrun]
              key gen (ssh | pem) [--filename=FILENAME] [--nopass] [--set_path] [--force]
              key reformat (ssh | pem) [--filename=FILENAME] [--format=FORMAT]
                                       [--nopass] [--pub]
@@ -249,13 +247,19 @@ class KeyCommand(PluginCommand):
         dryrun = arguments["--dryrun"]
 
         def print_keys(keys):
-            print(Printer.write(
-                keys,
-                sort_keys=["name"],
-                order=["name", "type", "fingerprint", "comment"],
-                header=["Name", "Type", "Fingerprint", "Comment"],
-                output=arguments.output)
-            )
+            if keys:
+                for entry in keys:
+
+                    entry["group"] = ', '.join(entry['group'])
+
+
+                print(Printer.write(
+                    keys,
+                    sort_keys=["name"],
+                    order=["name", "type", "fingerprint", "comment", "group"],
+                    header=["Name", "Type", "Fingerprint", "Comment", "Group"],
+                    output=arguments.output)
+                )
 
         def print_keygroups(groups):
             print(Printer.write(
@@ -323,34 +327,60 @@ class KeyCommand(PluginCommand):
 
             return ""
 
-        elif arguments.group and arguments.list:
+        elif arguments["--group"] and arguments.list:
 
-            keygroups = KeyGroup()
+            keys = Key()
+            found = keys.export(group=arguments["--group"])
 
-            db_keys, db_keygroups = \
-                keygroups.list_groups(group=arguments["--group"])
-
-            print_keys(db_keys)
-            print_keygroups(db_keygroups)
+            print_keys(found)
 
             return ""
 
-        elif arguments.group and arguments.add:
-            keygroup = KeyGroup()
+        elif arguments["--group"] and arguments.export:
 
-            keygroup.add_broken(groups=arguments["--group"],
-                                names=arguments.NAMES,
-                                name=arguments.NAME,
-                                filename=arguments["--file"],
-                                cloud=arguments.cloud)
+            keys = Key()
+            found = keys.export(group=arguments["--group"])
+
+            content = ""
+            for entry in found:
+                content += entry["public_key"] +"\n"
+
+            if arguments.filename:
+                writefile(filename=path_expand(filename))
 
             return ""
+
 
         elif arguments.list:
 
-            cloud = "local"
-            db = CmDatabase()
-            keys = db.find(collection=f"{cloud}-key")
+            key  = Key()
+            keys = key.list()
+
+            print_keys(keys)
+
+            return ""
+
+        elif arguments.add and arguments.group:
+
+            if arguments.NAMES is None or arguments["--group"] is None:
+                Console.error(" You must specify groups and names")
+                return ""
+
+            key  = Key()
+            keys = key.group_add(name=arguments.NAMES, group=arguments["--group"])
+
+            print_keys(keys)
+
+            return ""
+
+        elif arguments.delete and arguments.group:
+
+            if arguments.NAMES is None or arguments["--group"] is None:
+                Console.error(" You must specify groups and names")
+                return ""
+
+            key  = Key()
+            keys = key.group_delete(name=arguments.NAMES, group=arguments["--group"])
 
             print_keys(keys)
 
@@ -381,7 +411,8 @@ class KeyCommand(PluginCommand):
                 config = Config()
                 name = config["cloudmesh.profile.user"]
                 kind = "ssh"
-                key.add(name, kind)
+                group = arguments.group or "local"
+                key.add(name, kind, group)
 
         elif arguments.init:
 
@@ -408,20 +439,6 @@ class KeyCommand(PluginCommand):
 
             key.add(username, "ssh")
             variables['key'] = username
-
-        elif arguments.group and arguments.upload:
-
-            # key group upload [--group=GROUPNAMES]
-            #     [--cloud=CLOUDS] [ip/vm] [--dryrun]
-
-            groupkeys = arguments.group
-
-            keygroup = KeyGroup()
-            keygroup.upload(group=groupkeys,
-                            cloud=arguments.cloud,
-                            vm=arguments.vm)
-
-            return ""
 
         elif arguments.upload:
 
@@ -494,15 +511,15 @@ class KeyCommand(PluginCommand):
 
             return ""
 
-        elif arguments.group and arguments.export:
-            # key group export --group=GROUPNAMES --file=FILENAME
+            """
+             key group add NAMES --groups=GROUPS
+             key group add --groups=GROUPS --file=FILENAME 
+             key group delete [NAMES] [--group=GROUPS]  [--dryrun]
+             key group list [--group=GROUPS] [--output=OUTPUT]
+             key group export [--group=GROUPS] [--file=FILENAME]
+             key group upload [--group=GROUPS] [--vm=VM][--cloud=CLOUDS] [--dryrun]
+            """
 
-            keygroup = KeyGroup()
-            keygroup.export_broken(self,
-                                   group=arguments["--group"],
-                                   filename=arguments["--file"])
-
-            return ""
 
         elif arguments.delete and arguments.cloud and arguments.NAMES:
 
@@ -520,19 +537,6 @@ class KeyCommand(PluginCommand):
 
             return ""
 
-        elif arguments.group and arguments.delete:
-
-            key = KeyGroup()
-            # key group delete --group=GROUPNAME NAMES
-            # deletes the keys from the said group
-
-            groups = arguments["--group"]
-            names = arguments.NAMES
-            print('names: ', names)
-
-            key.delete(groups, names)
-
-            return ""
 
         elif arguments.delete and arguments.NAMES:
             # key delete NAMES [--dryrun]

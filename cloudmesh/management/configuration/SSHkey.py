@@ -27,7 +27,7 @@ class SSHkey(dict):
         }
         return d
 
-    def load(self, path=None):
+    def load(self, path=None, group=['local']):
         self["profile"] = Config()["cloudmesh"]["profile"]
 
         if path is None:
@@ -42,6 +42,7 @@ class SSHkey(dict):
          self['key'],
          self['comment']) = SSHkey._parse(self['public_key'])
 
+        self['group'] = group
         self['fingerprint'] = SSHkey._fingerprint(self['public_key'])
         self["name"] = basename(self["path"]).replace(".pub", "").replace("id_", "")
 
@@ -52,6 +53,35 @@ class SSHkey(dict):
             'private': self['path'].replace(".pub", "")
         }
         self = self._update_dict(self['name'], self)
+
+    def add(self, key=None, group=['local'], filename=None):
+        self["profile"] = None
+
+        if filename is None:
+            self["path"] =None
+        else:
+            self["path"] = path_expand(filename)
+
+        self["uri"] = 'file://{path}'.format(path=self["path"])
+        self['public_key'] = key
+
+        (self['type'],
+         self['key'],
+         self['comment']) = SSHkey._parse(self['public_key'])
+
+        self['group'] = group
+        self['fingerprint'] = SSHkey._fingerprint(self['public_key'])
+        self["name"] = basename(self["path"]).replace(".pub", "").replace("id_", "")
+
+        self['comment'] = self['comment']
+        self['source'] = 'ssh'
+        self['location'] = {
+            'public': self['path'],
+            'private': self['path'].replace(".pub", "")
+        }
+        self = self._update_dict(self['name'], self)
+
+
 
     def set_permissions(self, path):
         """

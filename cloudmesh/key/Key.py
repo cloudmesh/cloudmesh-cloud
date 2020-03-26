@@ -173,7 +173,12 @@ class Key(object):
                             key["group"].remove(_group)
         return keys
 
-  #
+    """
+    
+    Due to the bug this code has been outcommented, we will use the one from
+    host insead
+    
+    #
     # BUG: passing cloud is not needed
     # CHECK: does the command work with >>
     #
@@ -204,3 +209,5 @@ class Key(object):
                 command = "echo " + keys + " >> " + "$HOME/.ssh/authorized_keys"
                 # print(command, "\n")
                 provider.ssh(vm, command)
+                
+    """

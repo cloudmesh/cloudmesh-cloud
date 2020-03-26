@@ -42,10 +42,9 @@ class KeyCommand(PluginCommand):
              key add [NAME] [--source=ssh]
              key delete NAMES [--cloud=CLOUDS] [--dryrun]
              key upload [NAMES] [--cloud=CLOUDS] [--dryrun]
-             key upload [NAMES] [VMS] [--dryrun]
              key group delete [NAMES] [--group=GROUPS]  [--dryrun]
              key group add [NAMES] [--group=GROUPS] [--dryrun]
-             key group upload [--group=GROUPS] [--vm=VM] [--cloud=CLOUDS] [--dryrun]
+             key group upload [--group=GROUPS] --vm=VM [--cloud=CLOUDS] [--dryrun]
              key gen (ssh | pem) [--filename=FILENAME] [--nopass] [--set_path] [--force]
              key reformat (ssh | pem) [--filename=FILENAME] [--format=FORMAT]
                                       [--nopass] [--pub]
@@ -440,11 +439,18 @@ class KeyCommand(PluginCommand):
             key.add(username, "ssh")
             variables['key'] = username
 
+        elif arguments["group"] and arguments.upload and arguments.vm:
+
+            " key group upload [NAMES] [VMS] [--dryrun]"
+
+            Console.error("This method has been deprecated and we recommend"
+                          " to us the command\n\n"
+                          "    cms host\n\n")
+
         elif arguments.upload:
 
             """
             key upload [NAMES] [--cloud=CLOUDS] [--dryrun]
-            key upload [NAMES] [VMS] [--dryrun]
             """
 
             names = Parameter.expand(arguments.NAMES)

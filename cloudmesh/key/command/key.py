@@ -257,14 +257,6 @@ class KeyCommand(PluginCommand):
 
         """
         dryrun = arguments["--dryrun"]
-        def get_key_list(db_keys, names):
-            keys = []
-            for key in db_keys:
-                for i in names:
-                    if key["name"].strip() == i.strip():
-                        keys.append(key["name"])
-
-            return keys
 
         def print_keys(keys):
             print(Printer.write(
@@ -345,7 +337,10 @@ class KeyCommand(PluginCommand):
 
             keygroups = KeyGroup()
 
-            result = keygroups.list_groups(group=arguments["--group"])
+            db_keys, db_keygroups  = keygroups.list_groups(group=arguments["--group"])
+
+            print_keys(db_keys)
+            print_keygroups(db_keygroups)
 
             return ""
 
@@ -355,7 +350,8 @@ class KeyCommand(PluginCommand):
             keygroup.add_broken(groups=arguments["--group"],
                                 names=arguments.NAMES,
                                 name=arguments.NAME,
-                                filename=arguments["--file"])
+                                filename=arguments["--file"],
+                                cloud=arguments.cloud)
 
             return ""
 

@@ -219,19 +219,12 @@ class KeyGroup(KeyGroupDatabase):
 
         groups = Parameter.expand(group)
 
-
         db_keys = self.cm.find(collection=f"{self.cloud}-key")
         db_keygroups = self.cm.find(collection=f"{self.cloud}-keygroup")
 
-        print_keys(db_keys)
-        print_keygroups(db_keys)
+        return db_keys, db_keygroups
 
-        # for kind in ['key', 'keygroup']:
-        #    db_keys = db.find(collection=f"{cloud}-{kind}")
-        #    keys = get_key_list(db_keys)
-        #    key.Print(data=keys, kind=kind, output=arguments.output)
-
-    def add_broken(self, groups=None, names=None, name=None, filename=None):
+    def add_broken(self, groups=None, names=None, name=None, filename=None, cloud=None):
 
          #key group add --group=abc [NAMES]
 
@@ -242,7 +235,7 @@ class KeyGroup(KeyGroupDatabase):
             key.add(name, filename)
 
         db_keys = self.cm.find(collection=f"{cloud}-key")
-        keys = get_key_list(db_keys, names)
+        keys = self.get_key_list(db_keys, names)
 
         for i in keys:
             key.add(groups, i)
@@ -267,11 +260,18 @@ class KeyGroup(KeyGroupDatabase):
         keys = ""
         for key in db_keys:
             if key["name"] in keygroups:
-                #   print(key["name"])
                 keys += key["public_key"]
                 keys += "\n"
 
         sample = open(filename, 'a+')
         sample.close()
 
+    def get_key_list(self, db_keys, names):
+        keys = []
+        for key in db_keys:
+            for i in names:
+                if key["name"].strip() == i.strip():
+                    keys.append(key["name"])
+
+        return keys
 

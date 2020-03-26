@@ -15,6 +15,7 @@ from cloudmesh.shell.command import PluginCommand
 from cloudmesh.shell.command import command, map_parameters
 
 
+# noinspection PyPep8
 class KeyCommand(PluginCommand):
 
     # see https://github.com/cloudmesh/client/blob/master/cloudmesh_client/shell/plugins/KeyCommand.py
@@ -136,8 +137,8 @@ class KeyCommand(PluginCommand):
                    Will reformat the private key to PKCS8 format
 
                Keys will be uploaded into cloudmesh database with the add
-               command under the given NAME. If the name is not specified the name
-               cloudmesh.profile.user is assumed.
+               command under the given NAME. If the name is not specified the
+               name cloudmesh.profile.user is assumed.
 
                 key add NAME  --source=ssh
                     adds the default key in ~/.ssh/id_rsa.pub
@@ -178,19 +179,21 @@ class KeyCommand(PluginCommand):
                 are available:
 
                 key delete NAMES
-                    deletes the Named keys. This may also have an impact on groups
+                    deletes the Named keys. This may also have an impact on
+                    groups
+
                 key rename NAME NEW
                     renames the key from NAME to NEW in the cloudmesh database.
 
                Group management of keys is an important concept in cloudmesh,
                allowing multiple users to be added to virtual machines while
                managing the keys associated with them. The keys must be uploaded
-               to cloudmesh database with a name so they can be used in a
-               group. The --dryrun option executes the command without
-               uploading the information to the clouds. If no group name is
-               specified the group name default is assumed. If no cloudnamesh
-               are specified, all active clouds are assumed. active clouds
-               can be set in the cloudmesh.yaml file.
+               to cloudmesh database with a name so they can be used in a group.
+               The --dryrun option executes the command without uploading the
+               information to the clouds. If no group name is specified the
+               group name default is assumed. If no cloudnamesh are specified,
+               all active clouds are assumed. active clouds can be set in the
+               cloudmesh.yaml file.
 
                 key group delete [GROUPNAMES] [NAMES] [--dryrun]
                     deletes the named keys from the named groups.
@@ -211,11 +214,9 @@ class KeyCommand(PluginCommand):
                     the command adds the keys to the given group. The keys are
                     written in the files in yaml format.
 
-
                 key group export --group=GROUPNAMES --file=FILENAME
-                    the command exports the keys to the given group. The keys are
-                    written in the files in yaml format.
-
+                    the command exports the keys to the given group. The keys
+                    are written in the files in yaml format.
 
                 The yaml format is as follows:
 
@@ -326,7 +327,8 @@ class KeyCommand(PluginCommand):
 
             keygroups = KeyGroup()
 
-            db_keys, db_keygroups  = keygroups.list_groups(group=arguments["--group"])
+            db_keys, db_keygroups = \
+                keygroups.list_groups(group=arguments["--group"])
 
             print_keys(db_keys)
             print_keygroups(db_keygroups)
@@ -353,7 +355,6 @@ class KeyCommand(PluginCommand):
             print_keys(keys)
 
             return ""
-
 
         elif arguments.add:
 
@@ -396,7 +397,8 @@ class KeyCommand(PluginCommand):
                     "Please set cloudmesh.profile.user in ~/.cloudmesh.yaml")
                 u = os.environ["USER"].lower().replace(" ", "")
                 Console.msg(
-                    f"To change it you can use the command. Define a NAME such as '{u}' e.g.")
+                    f"To change it you can use the command. "
+                    "Define a NAME such as '{u}' e.g.")
                 Console.msg("")
                 Console.msg(f"  cms config set cloudmesh.profile.user={u}")
                 Console.msg("")
@@ -409,8 +411,8 @@ class KeyCommand(PluginCommand):
 
         elif arguments.group and arguments.upload:
 
-            # key group upload [--group=GROUPNAMES] [--cloud=CLOUDS] [ip/vm] [--dryrun]
-
+            # key group upload [--group=GROUPNAMES]
+            #     [--cloud=CLOUDS] [ip/vm] [--dryrun]
 
             groupkeys = arguments.group
 
@@ -502,7 +504,6 @@ class KeyCommand(PluginCommand):
 
             return ""
 
-
         elif arguments.delete and arguments.cloud and arguments.NAMES:
 
             # key delete NAMES --cloud=CLOUDS [--dryrun]
@@ -519,12 +520,11 @@ class KeyCommand(PluginCommand):
 
             return ""
 
-
         elif arguments.group and arguments.delete:
 
             key = KeyGroup()
-            #key group delete --group=GROUPNAME NAMES
-            #deletes the keys from the said group
+            # key group delete --group=GROUPNAME NAMES
+            # deletes the keys from the said group
 
             groups = arguments["--group"]
             names = arguments.NAMES

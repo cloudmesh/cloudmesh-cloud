@@ -2,7 +2,8 @@ from cloudmesh.common.parameter import Parameter
 from cloudmesh.mongo.CmDatabase import CmDatabase
 from cloudmesh.mongo.DataBaseDecorator import DatabaseUpdate
 from cloudmesh.common.Printer import Printer
-
+from cloudmesh.compute.vm.Provider import Provider
+from cloudmesh.key.Key import Key
 
 class KeyGroupDatabase:
 
@@ -178,3 +179,99 @@ class KeyGroup(KeyGroupDatabase):
             entry['keys'] = list(old)
 
         return entry
+
+    #
+    # BUG: passing cloud is not needed
+    # CHECK: does the command work with >>
+    #
+    def upload(self, group=None, cloud=None, vm=None):
+
+        # key group upload [--group=GROUPNAMES] [--cloud=CLOUDS] [ip/vm]
+
+        groupkeys = group
+
+        db_keys = self.cm.find(collection=f"{self.cloud}-key")
+        db_keygroups = self.cm.find(collection=f"{self.cloud}-keygroup")
+
+        keygroups = []
+        for groups in db_keygroups:
+            if groups["name"] == groupkeys:
+                for x in groups["keys"]:
+                    keygroups.append(x)
+
+        provider = Provider(name=cloud)
+        keys = ""
+        for key in db_keys:
+            if key["name"] in keygroups:
+                keys += key["public_key"]
+                keys += "\n"
+                command = "echo " + keys + " >> " + "$HOME/.ssh/authorized_keys"
+                # print(command, "\n")
+                provider.ssh(vm, command)
+
+    #
+    # BUG: this seems to just list the collection names?
+    # BUG: print keys and keygroups missing
+    #
+    def list_groups_broken(self, group=None):
+
+        key = KeyGroup()
+
+        groups = Parameter.expand(group)
+
+
+        db_keys = self.cm.find(collection=f"{self.cloud}-key")
+        db_keygroups = self.cm.find(collection=f"{self.cloud}-keygroup")
+
+        print_keys(db_keys)
+        print_keygroups(db_keys)
+
+        # for kind in ['key', 'keygroup']:
+        #    db_keys = db.find(collection=f"{cloud}-{kind}")
+        #    keys = get_key_list(db_keys)
+        #    key.Print(data=keys, kind=kind, output=arguments.output)
+
+    def add_broken(self, groups=None, names=None, name=None, filename=None):
+
+         #key group add --group=abc [NAMES]
+
+        names = Parameter.expand(names)
+
+        if filename is not None:
+            key = Key()
+            key.add(name, filename)
+
+        db_keys = self.cm.find(collection=f"{cloud}-key")
+        keys = get_key_list(db_keys, names)
+
+        for i in keys:
+            key.add(groups, i)
+
+        #if list(set(names) - set(keys)) is not None:
+        #    print('Keys dont exist, please add them', list(set(names) - set(keys)))
+
+    def export_broken(self, group=None, filename=None):
+        # key group export --group=GROUPNAMES --file=FILENAME
+
+        groupkeys = group
+
+        db_keys = self.cm.find(collection=f"{self.cloud}-key")
+        db_keygroups = self.cm.find(collection=f"{self.cloud}-keygroup")
+
+        keygroups = []
+        for groups in db_keygroups:
+            if groups["name"] == groupkeys:
+                for x in groups["keys"]:
+                    keygroups.append(x)
+
+        keys = ""
+        for key in db_keys:
+            if key["name"] in keygroups:
+                #   print(key["name"])
+                keys += key["public_key"]
+                keys += "\n"
+
+        sample = open(filename, 'a+')
+        sample.close()
+
+

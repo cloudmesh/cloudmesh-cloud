@@ -43,6 +43,7 @@ class KeyCommand(PluginCommand):
              key delete NAMES [--cloud=CLOUDS] [--dryrun]
              key upload [NAMES] [--cloud=CLOUDS] [--dryrun]
              key upload [NAMES] [VMS] [--dryrun]
+
              key group upload [--group=GROUPNAMES] [--vm=VM][--cloud=CLOUDS] [--dryrun]
              key group upload [NAMES] [--group=GROUPNAMES] [--cloud=CLOUDS] [--dryrun]
              key group add [--group=GROUPNAMES] [--cloud=CLOUDS] [--dryrun]
@@ -51,11 +52,13 @@ class KeyCommand(PluginCommand):
              key group delete [--group=GROUPNAMES] [NAMES] [--dryrun]
              key group list [--group=GROUPNAMES] [--output=OUTPUT]
              key group export [--group=GROUPNAMES] [--file=FILENAME]
+
              key xgroup add [NAMES] [--group=GROUPNAMES] [--cloud=CLOUDS] [--dryrun]
              key xgroup delete [--group=GROUPNAMES] [NAMES] [--dryrun]
              key xgroup list [--group=GROUPNAMES] [--output=OUTPUT]
              key xgroup export --group=GROUNAMES --filename=FILENAME
              key xgen (ssh | pem) [--filename=FILENAME] [--nopass] [--set_path] [--force]
+
              key reformat (ssh | pem) [--filename=FILENAME] [--format=FORMAT]
                                       [--nopass] [--pub]
              key verify (ssh | pem) [--filename=FILENAME] [--pub] [--check_pass]
@@ -284,6 +287,7 @@ class KeyCommand(PluginCommand):
         map_parameters(arguments,
                        'check_pass',
                        'cloud',
+                       'vm',
                        'dir',
                        'dryrun',
                        'filename',
@@ -339,60 +343,19 @@ class KeyCommand(PluginCommand):
 
         elif arguments.group and arguments.list:
 
-            key = KeyGroup()
+            keygroups = KeyGroup()
 
-
-
-            groups = Parameter.expand(arguments["--group"])
-            #print(groups)
-
-            cloud = "local"
-            db = CmDatabase()
-
-            kind = "key"
-            db_keys = db.find(collection=f"{cloud}-{kind}")
-            print_keys(db_keys)
-
-
-            kind = "keygroup"
-            db_keys = db.find(collection=f"{cloud}-{kind}")
-            print_keygroups(db_keys)
-
-            #for kind in ['key', 'keygroup']:
-            #    db_keys = db.find(collection=f"{cloud}-{kind}")
-            #    keys = get_key_list(db_keys)
-            #    key.Print(data=keys, kind=kind, output=arguments.output)
-
+            result = keygroups.list_groups(group=arguments["--group"])
 
             return ""
 
         elif arguments.group and arguments.add:
-            key = KeyGroup()
-            #key group add --group=abc [NAMES]
+            keygroup = KeyGroup()
 
-            groups = arguments["--group"]
-            names = Parameter.expand(arguments.NAMES)
-
-            filename = arguments["--file"]
-
-            if filename is not None:
-                key = Key()
-                name = arguments.NAME
-                key.add(name, filename)
-
-
-
-            cloud = "local"
-            db = CmDatabase()
-            db_keys = db.find(collection=f"{cloud}-key")
-            keys = get_key_list(db_keys, names)
-
-            for i in keys:
-                key.add(groups, i)
-
-            #if list(set(names) - set(keys)) is not None:
-            #    print('Keys dont exist, please add them', list(set(names) - set(keys)))
-
+            keygroup.add_broken(groups=arguments["--group"],
+                                names=arguments.NAMES,
+                                name=arguments.NAME,
+                                filename=arguments["--file"])
 
             return ""
 
@@ -463,36 +426,13 @@ class KeyCommand(PluginCommand):
 
             # key group upload [--group=GROUPNAMES] [--cloud=CLOUDS] [ip/vm] [--dryrun]
 
-            groupkeys = arguments["--group"]
 
-            cloud = "local"
-            #cloud = "local"
-            db = CmDatabase()
+            groupkeys = arguments.group
 
-            kind = "key"
-            db_keys = db.find(collection=f"{cloud}-{kind}")
-
-            kind = "keygroup"
-            db_keygroups = db.find(collection=f"{cloud}-{kind}")
-
-            keygroups = []
-            for groups in db_keygroups:
-                if groups["name"] == groupkeys:
-                    for x in groups["keys"]:
-                        keygroups.append(x)
-
-
-            cloud = arguments["--cloud"]
-            provider = Provider(name=cloud)
-            vm = arguments["--vm"]
-            keys = ""
-            for key in db_keys:
-                if key["name"] in keygroups:
-                    keys += key["public_key"]
-                    keys += "\n"
-                    command = "echo " + keys + " >> " + "$HOME/.ssh/authorized_keys"
-                    #print(command, "\n")
-                    provider.ssh(vm, command)
+            keygroup = KeyGroup()
+            keygroup.upload(group=groupkeys,
+                            cloud=arguments.cloud,
+                            vm=arguments.vm)
 
             return ""
 
@@ -570,36 +510,10 @@ class KeyCommand(PluginCommand):
         elif arguments.group and arguments.export:
             # key group export --group=GROUPNAMES --file=FILENAME
 
-            groupkeys = arguments["--group"]
-            filename = arguments["--file"]
-
-            cloud = "local"
-            db = CmDatabase()
-
-            kind = "key"
-            db_keys = db.find(collection=f"{cloud}-{kind}")
-
-            kind = "keygroup"
-            db_keygroups = db.find(collection=f"{cloud}-{kind}")
-
-
-            keygroups = []
-            for groups in db_keygroups:
-                if groups["name"] == groupkeys:
-                    for x in groups["keys"]:
-                        keygroups.append(x)
-
-
-            keys = ""
-            for key in db_keys:
-                if key["name"] in keygroups:
-                 #   print(key["name"])
-                    keys += key["public_key"]
-                    keys += "\n"
-
-            sample = open(filename, 'a+')
-            print(keys, file=sample)
-            sample.close()
+            keygroup = KeyGroup()
+            keygroup.export_broken(self,
+                                   group=arguments["--group"],
+                                   filename=arguments["--file"])
 
             return ""
 

@@ -1,22 +1,18 @@
+import os
+
 from cloudmesh.common.Printer import Printer
 from cloudmesh.common.console import Console
 from cloudmesh.common.parameter import Parameter
 from cloudmesh.common.variables import Variables
 from cloudmesh.compute.vm.Provider import Provider
+from cloudmesh.configuration.Config import Config
 from cloudmesh.key.Key import Key
+from cloudmesh.key.KeyGroup import KeyGroup
 from cloudmesh.management.configuration.SSHkey import SSHkey
 from cloudmesh.management.configuration.arguments import Arguments
-from cloudmesh.configuration.Config import Config
 from cloudmesh.mongo.CmDatabase import CmDatabase
 from cloudmesh.shell.command import PluginCommand
 from cloudmesh.shell.command import command, map_parameters
-from cloudmesh.common.util import path_expand, yn_choice
-from pprint import pprint
-from cloudmesh.key.KeyGroup import KeyGroup
-from cloudmesh.host.host import Host
-from cloudmesh.common.util import path_expand
-import os
-import sys
 
 
 class KeyCommand(PluginCommand):
@@ -43,7 +39,6 @@ class KeyCommand(PluginCommand):
              key delete NAMES [--cloud=CLOUDS] [--dryrun]
              key upload [NAMES] [--cloud=CLOUDS] [--dryrun]
              key upload [NAMES] [VMS] [--dryrun]
-
              key group upload [--group=GROUPNAMES] [--vm=VM][--cloud=CLOUDS] [--dryrun]
              key group upload [NAMES] [--group=GROUPNAMES] [--cloud=CLOUDS] [--dryrun]
              key group add [--group=GROUPNAMES] [--cloud=CLOUDS] [--dryrun]
@@ -52,13 +47,7 @@ class KeyCommand(PluginCommand):
              key group delete [--group=GROUPNAMES] [NAMES] [--dryrun]
              key group list [--group=GROUPNAMES] [--output=OUTPUT]
              key group export [--group=GROUPNAMES] [--file=FILENAME]
-
-             key xgroup add [NAMES] [--group=GROUPNAMES] [--cloud=CLOUDS] [--dryrun]
-             key xgroup delete [--group=GROUPNAMES] [NAMES] [--dryrun]
-             key xgroup list [--group=GROUPNAMES] [--output=OUTPUT]
-             key xgroup export --group=GROUNAMES --filename=FILENAME
-             key xgen (ssh | pem) [--filename=FILENAME] [--nopass] [--set_path] [--force]
-
+             key gen (ssh | pem) [--filename=FILENAME] [--nopass] [--set_path] [--force]
              key reformat (ssh | pem) [--filename=FILENAME] [--format=FORMAT]
                                       [--nopass] [--pub]
              key verify (ssh | pem) [--filename=FILENAME] [--pub] [--check_pass]

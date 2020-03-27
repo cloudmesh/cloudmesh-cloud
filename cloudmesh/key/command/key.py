@@ -31,10 +31,10 @@ class KeyCommand(PluginCommand):
            Usage:
              key  -h | --help
              key init
-             key list --cloud=CLOUDS [--output=OUTPUT]
-             key list --source=ssh [--dir=DIR] [--output=OUTPUT]
-             key list --source=git [--output=OUTPUT] [--username=USERNAME]
-             key list [--group=GROUP] [--output=OUTPUT]
+             key list --cloud=CLOUDS [--output=FORMAT]
+             key list --source=ssh [--dir=DIR] [--output=FORMAT]
+             key list --source=git [--output=FORMAT] [--username=USERNAME]
+             key list [--group=GROUP] [--output=FORMAT]
              key export [--group=GROUPS] [--filename=FILENAME]
              key add [NAME] [--group=GROUPS] [--source=FILENAME]
              key add [NAME] [--source=git]
@@ -50,39 +50,39 @@ class KeyCommand(PluginCommand):
              key verify (ssh | pem) [--filename=FILENAME] [--pub] [--check_pass]
 
            Arguments:
-             VMS        Parameterized list of virtual machines
-             CLOUDS     The clouds
-             NAME       The name of the key.
-             SOURCE     db, ssh, all
-             OUTPUT     The format of the output (table, json, yaml)
-             FILENAME   The filename with full path in which the key is located
-             FORMAT     Desired key format (SubjectInfo, SSH, OpenSSL, PKCS8)
+             NAME       The name of the key
+             NAMES      Parameterized list of keys
 
            Options:
-              --name=KEYNAME                The name of a key
-              --vm=VM                       The name of the VM
-              --dir=DIR             the directory with keys [default: ~/.ssh]
-              --check_pass          Flag where program query user for password
-              --filename=FILENAME   the name and full path to the file
-              --nopass              Flag indicating if the key has no password
-              --output=OUTPUT       the format of the output [default: table]
-              --pub                 Indicates that the public key is passed in
-              --set_path            Sets the cloudmesh encryption key path to
-                                    the full path of the generated keys
-              --source=SOURCE       the source for the keys
-              --username=USERNAME   the source for the keys [default: none]
-
+              --cloud=CLOUDS       the cloud providers
+              --dir=DIR            the directory with keys [default: ~/.ssh]
+              --dryrun             dryrun (WARNING NOT YET IMPLEMENTED)
+              --filename=FILENAME  the name and full path to the file
+              --force              force the execution
+              --format=FORMAT      Desired key format (SubjectInfo, SSH,
+                                   OpenSSL, PKCS8)
+              --group=GROUP        key group names
+              --output=FORMAT      The format of the output (table, json, yaml)
+                                     [default: table]
+              --source=SOURCE      The source for the keys, ssh, git, a filename
+              --username=USERNAME  the source for the keys [default: none]
+              --vm=VM              The name of the VM
+              --nopass             Flag indicating if the key has no password
+              --pub                Indicates that the public key is passed in
+              --set_path           Sets the cloudmesh encryption key path to
+                                   the full path of the generated keys
+              --check_pass         Flag where program query user for password
 
            Description:
 
-               Please note that some values are read from the cloudmesh.yaml
-               file. One such value is cloudmesh.profile.user
+            Please note that some values are read from the cloudmesh.yaml file.
+            One such value is cloudmesh.profile.user
 
-               Management of public keys is an essential component of accessing
-               virtual machines in the cloud. There are a number of sources
-               where you can find public keys. This includes the ~/.ssh
-               directory and for example github. If you do not already have a
-               public-private key pair they can be generated using cloudmesh
+            Management of public keys is an essential component of accessing
+            virtual machines in the cloud. There are a number of sources where
+            you can find public keys. This includes the ~/.ssh directory and for
+            example github. If you do not already have a public-private key pair
+            they can be generated using cloudmesh
 
                key gen ssh 
                    This will create the public-private keypair of ~/.ssh/id_rsa
@@ -100,10 +100,10 @@ class KeyCommand(PluginCommand):
                    This will generate the keys as stated above, but it will
                    also set cloudmesh to use these keys for encryption.
 
-               Keys can also be verified for their formatting and passwords.
-               By default cloudmesh checks ~/.ssh/id_rsa and ~/.ssh/id_rsa.pub
-               If the key is password protected the formatting can only be
-               verified if the password is provided (--check_pass argument)
+            Keys can also be verified for their formatting and passwords. By
+            default cloudmesh checks ~/.ssh/id_rsa and ~/.ssh/id_rsa.pub If the
+            key is password protected the formatting can only be verified if the
+            password is provided (--check_pass argument)
 
                key verify pem
                    Verifies that ~/.ssh/id_rsa has PEM format
@@ -119,9 +119,9 @@ class KeyCommand(PluginCommand):
                    Request the password to the file, then checks if the
                    key is in proper PEM format
 
-               You may find the need to keep the values of your keys but
-               different encodings or formats. These aspects of your key can
-               also be changed using cloudmesh.
+            You may find the need to keep the values of your keys but different
+            encodings or formats. These aspects of your key can also be changed
+            using cloudmesh.
 
                key reformat pem
                    Will reformat the ~/.id_rsa.pub key from PEM to OpenSSH
@@ -132,9 +132,9 @@ class KeyCommand(PluginCommand):
                key reformat --filename=~/.id_rsa --format=PKCS8
                    Will reformat the private key to PKCS8 format
 
-               Keys will be uploaded into cloudmesh database with the add
-               command under the given NAME. If the name is not specified the
-               name cloudmesh.profile.user is assumed.
+            Keys will be uploaded into cloudmesh database with the add command
+            under the given NAME. If the name is not specified the name
+            cloudmesh.profile.user is assumed.
 
                 key add NAME  --source=ssh
                     adds the default key in ~/.ssh/id_rsa.pub
@@ -150,8 +150,8 @@ class KeyCommand(PluginCommand):
                     It also sets the variable key to that user.
 
 
-               Once the keys are uploaded to github, they can be listed
-               To list these keys the following list functions are provided.
+            Once the keys are uploaded to github, they can be listed To list
+            these keys the following list functions are provided.
 
                 key list --source=git  [--username=USERNAME]
                     lists all keys in git for the specified user. If the
@@ -171,8 +171,8 @@ class KeyCommand(PluginCommand):
                     specified and if omitted the name cloudmesh.profile.user
                     is assumed.
 
-                To get keys from the cloudmesh database the following commands
-                are available:
+            To get keys from the cloudmesh database the following commands are
+            available:
 
                 key delete NAMES
                     deletes the Named keys. This may also have an impact on
@@ -181,65 +181,40 @@ class KeyCommand(PluginCommand):
                 key rename NAME NEW
                     renames the key from NAME to NEW in the cloudmesh database.
 
-               Group management of keys is an important concept in cloudmesh,
-               allowing multiple users to be added to virtual machines while
-               managing the keys associated with them. The keys must be uploaded
-               to cloudmesh database with a name so they can be used in a group.
-               The --dryrun option executes the command without uploading the
-               information to the clouds. If no group name is specified the
-               group name default is assumed. If no cloudnamesh are specified,
-               all active clouds are assumed. active clouds can be set in the
-               cloudmesh.yaml file.
+            Group management of keys is an important concept in cloudmesh,
+            allowing multiple users to be added to virtual machines while
+            managing the keys associated with them. The keys must be uploaded to
+            cloudmesh database with a name so they can be used in a group. The
+            --dryrun option executes the command without uploading the
+            information to the clouds. If no group name is specified the group
+            name default is assumed. If no cloudnamesh are specified, all active
+            clouds are assumed. active clouds can be set in the cloudmesh.yaml
+            file.
 
-                key group delete [GROUPNAMES] [NAMES] [--dryrun]
+                key list [--group=GROUP] [--output=FORMAT]
+                    list the key taht are in the specified group.
+
+                key group delete [NAMES] [--group=GROUPS]  [--dryrun]
                     deletes the named keys from the named groups.
 
-                key group list [GROUPNAMES] [--output=OUTPUT]
-                    list the key names and details in the group.
 
-                key group upload [GROUPNAMES] [CLOUDS] [--dryrun]
-                    uploads the named groups to the specified clouds.
+            In some cases you may want to store the public keys in files. For
+            this reason we support the following commands.
 
-               In some cases you may want to store the public keys in files. For
-               this reason we support the following commands.
+                key add [NAME] [--group=GROUPS] [--source=FILENAME]
+                    adds the named file with the keys in the file to the groups.
 
-                key group add [GROUPNAMES] [NAMES] [--dryrun]
-                    adds the named keys to the named groups.
-
-                key group add --group=GROUPNAME --file=FILENAME
-                    the command adds the keys to the given group. The keys are
-                    written in the files in yaml format.
-
-                key group export --group=GROUPNAMES --file=FILENAME
+                key export [--group=GROUPS] [--filename=FILENAME]
                     the command exports the keys to the given group. The keys
                     are written in the files in yaml format.
 
-                The yaml format is as follows:
+            Examples for keygroup commands:
 
-                cloudmesh:
-                  keys:
-                    NAMEOFKEY:
-                      name: NAMEOFKEY
-                      key: ssh-rsa AAAA..... comment
-                      group:
-                      - GROUPNAME
-                    ...
-
-                If a key is included in multiple groups they will be added
-                to the grouplist of the key
-
-                NEW EXAMPLE
-
-                cms key add junk --source=~/.ssh/junk
-                cms key group add --group=abc --name=\"laszewsk_git_[0,,1,2]\"
-                cms key goup list
-                cms key goup list --gropu=abc
-
-                cms key group export --file=~/authorized_keys --group=abc,klm
-
-                cmas key group upload --group=NAME ip=.... --authorized_keys
-                cmas key group add --group=NAME  ip=.... --authorized_keys
-
+                cms key add example --source=~/.ssh/id_rsa.pub
+                cms key add --group=abc --name=\"laszewsk_git_[0-2]\"
+                cms key list
+                cms key list --gropu=abc
+                cms key export --file=~/authorized_keys --group=abc,klm
 
         """
         dryrun = arguments["--dryrun"]

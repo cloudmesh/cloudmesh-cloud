@@ -50,14 +50,7 @@ cloudmesh-inventory
 cloudmesh-abstract
 apache-libcloud
 beautifulsoup4
-boto3
-certifi
-chardet
 colorama
-config
-connexion[swagger-ui]
-coverage
-cryptography
 dateparser
 docker
 docopt

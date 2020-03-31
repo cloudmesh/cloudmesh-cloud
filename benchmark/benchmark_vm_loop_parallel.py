@@ -6,20 +6,18 @@
 # TODO: start this with cloud init, e.g, empty mongodb
 # TODO: assertuons need to be added
 
-import pytest
+import time
+from multiprocessing import Pool
+
+from cloudmesh.common.Benchmark import Benchmark
+from cloudmesh.common.StopWatch import StopWatch
+from cloudmesh.common.console import Console
 from cloudmesh.common.debug import VERBOSE
 from cloudmesh.common.util import HEADING
 from cloudmesh.common.variables import Variables
-from cloudmesh.common.Benchmark import Benchmark
 from cloudmesh.compute.vm.Provider import Provider
 from cloudmesh.configuration.Config import Config
 from cloudmesh.management.configuration.name import Name
-from cloudmesh.common.console import Console
-from cloudmesh.common.StopWatch import StopWatch
-import time
-from multiprocessing import Pool
-import sys
-from pprint import pprint
 
 batch = 10
 sleep = 60

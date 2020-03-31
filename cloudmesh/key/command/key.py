@@ -56,7 +56,6 @@ class KeyCommand(PluginCommand):
            Options:
               --cloud=CLOUDS       the cloud providers
               --dir=DIR            the directory with keys [default: ~/.ssh]
-              --dryrun             dryrun (WARNING NOT YET IMPLEMENTED)
               --filename=FILENAME  the name and full path to the file
               --force              force the execution
               --format=FORMAT      Desired key format (SubjectInfo, SSH,
@@ -184,8 +183,8 @@ class KeyCommand(PluginCommand):
             Group management of keys is an important concept in cloudmesh,
             allowing multiple users to be added to virtual machines while
             managing the keys associated with them. The keys must be uploaded to
-            cloudmesh database with a name so they can be used in a group. The
-            --dryrun option executes the command without uploading the
+            cloudmesh database with a name so they can be used in a group.
+            The --dryrun option executes the command without uploading the
             information to the clouds. If no group name is specified the group
             name default is assumed. If no cloudnamesh are specified, all active
             clouds are assumed. active clouds can be set in the cloudmesh.yaml
@@ -217,8 +216,6 @@ class KeyCommand(PluginCommand):
                 cms key export --file=~/authorized_keys --group=abc,klm
 
         """
-        dryrun = arguments["--dryrun"]
-
         def print_keys(keys):
             if keys:
                 for entry in keys:

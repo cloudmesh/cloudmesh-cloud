@@ -16,11 +16,11 @@ Options:
   --config      Location of a cmdata.yaml file
 """
 
-from docopt import docopt
-from cloudmesh.data.api.db import LocalDBProvider
-from cloudmesh.data.api.storage import LocalStorageProvider
-from cloudmesh.data.api.storage import AzureStorageProvider
 from cloudmesh.configuration.Config import Config
+from cloudmesh.data.api.db import LocalDBProvider
+from cloudmesh.data.api.storage import AzureStorageProvider
+from cloudmesh.data.api.storage import LocalStorageProvider
+from docopt import docopt
 
 
 class Data(object):

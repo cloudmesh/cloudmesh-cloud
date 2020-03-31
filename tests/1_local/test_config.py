@@ -10,10 +10,10 @@ from pprint import pprint
 
 import oyaml as yaml
 import pytest
+from cloudmesh.common.Benchmark import Benchmark
 from cloudmesh.common.StopWatch import StopWatch
 from cloudmesh.common.util import HEADING
 from cloudmesh.common.util import path_expand
-from cloudmesh.common.Benchmark import Benchmark
 from cloudmesh.configuration.Config import Config
 
 Benchmark.debug()

@@ -1,6 +1,6 @@
+import os
 import platform
 import sys
-import os
 
 
 class OperatingSystem(object):

@@ -25,12 +25,13 @@
 # the local test is in 1_local
 #
 
-import pytest
 from sys import platform
-from cloudmesh.common.util import HEADING
-from cloudmesh.common.variables import Variables
+
+import pytest
 from cloudmesh.common.Benchmark import Benchmark
 from cloudmesh.common.Shell import Shell
+from cloudmesh.common.util import HEADING
+from cloudmesh.common.variables import Variables
 from cloudmesh.compute.vm.Provider import Provider
 from cloudmesh.mongo.CmDatabase import CmDatabase
 from cloudmesh.secgroup.Secgroup import Secgroup

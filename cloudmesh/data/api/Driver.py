@@ -18,11 +18,10 @@
 ########################################################################
 import os
 
+from cloudmesh.common.variables import Variables
+from cloudmesh.configuration.Config import Config
 from libcloud.compute.providers import get_driver
 from libcloud.compute.types import Provider
-
-from cloudmesh.configuration.Config import Config
-from cloudmesh.common.variables import Variables
 
 
 class Driver(object):

@@ -4,13 +4,14 @@
 # pytest -v --capture=no  tests/1_local/test_name..py::Test_name::<METHODNAME>
 ###############################################################
 
+import sys
+
 import pytest
-from cloudmesh.common.StopWatch import StopWatch
+from cloudmesh.common.Benchmark import Benchmark
 from cloudmesh.common.Host import Host
 from cloudmesh.common.Printer import Printer
-from cloudmesh.common.Benchmark import Benchmark
+from cloudmesh.common.StopWatch import StopWatch
 from cloudmesh.common.util import HEADING
-import sys
 
 Benchmark.debug()
 

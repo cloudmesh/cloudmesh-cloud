@@ -16,7 +16,6 @@ import traceback
 import keystoneauth1
 from keystoneauth1 import loading
 from keystoneclient.v3 import client as KeystoneClient
-
 from novaclient import client as NovaClient
 
 pp = pprint.PrettyPrinter(indent=4)

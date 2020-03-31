@@ -3,11 +3,12 @@
 # pytest -v  tests/1_local/test_shell.py
 # pytest -v --capture=no  tests/1_local/test_shell..py::Test_name::<METHODNAME>
 ###############################################################
+import sys
+
 import pytest
 from cloudmesh.common.Benchmark import Benchmark
 from cloudmesh.common.Shell import Shell
 from cloudmesh.common.util import HEADING
-import sys
 
 Benchmark.debug()
 

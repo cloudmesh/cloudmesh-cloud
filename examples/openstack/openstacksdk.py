@@ -1,9 +1,9 @@
-from openstack import connection
-from pprint import pprint
-import yaml
-from cloudmesh.configuration.Config import Config
-from cloudmesh.common.util import banner
 import sys
+from pprint import pprint
+
+from cloudmesh.common.util import banner
+from cloudmesh.configuration.Config import Config
+from openstack import connection
 
 cred = """
 # This is a clouds.yaml file, which can be used by OpenStack tools as a source

@@ -4,14 +4,11 @@
 # pytest -v  tests/aws/test_aws.py
 ###############################################################
 
-import time
-
 import pytest
+from cloudmesh.common.Benchmark import Benchmark
 from cloudmesh.common.util import HEADING
-from cloudmesh.configuration.Config import Config
 from cloudmesh.compute.aws.Provider import Provider
 from cloudmesh.management.configuration.name import Name
-from cloudmesh.common.Benchmark import Benchmark
 
 Benchmark.debug()
 

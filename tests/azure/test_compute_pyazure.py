@@ -6,11 +6,10 @@
 CLOUD = "azure"
 
 import pytest
+from cloudmesh.common.Benchmark import Benchmark
 from cloudmesh.common.debug import VERBOSE
 from cloudmesh.common.util import HEADING
 from cloudmesh.common.util import banner
-from cloudmesh.common.Benchmark import Benchmark
-
 from cloudmesh.configuration.Config import Config
 from cloudmesh.management.configuration.name import Name
 

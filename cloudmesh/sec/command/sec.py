@@ -1,17 +1,12 @@
-from pprint import pprint
-
 from cloudmesh.common.Printer import Printer
 from cloudmesh.common.parameter import Parameter
 from cloudmesh.common.variables import Variables
-
+from cloudmesh.compute.vm.Provider import Provider
 from cloudmesh.secgroup.Secgroup import Secgroup, SecgroupRule
 from cloudmesh.secgroup.Secgroup import SecgroupExamples
 from cloudmesh.shell.command import PluginCommand
 from cloudmesh.shell.command import command
 from cloudmesh.shell.command import map_parameters
-from cloudmesh.common.debug import VERBOSE
-from cloudmesh.compute.vm.Provider import Provider
-import sys
 
 
 class SecCommand(PluginCommand):

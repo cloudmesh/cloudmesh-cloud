@@ -8,11 +8,9 @@
 from pprint import pprint
 
 import pytest
-from cloudmesh.common.Printer import Printer
-from cloudmesh.common.util import HEADING
 from cloudmesh.common.Benchmark import Benchmark
+from cloudmesh.common.util import HEADING
 from cloudmesh.management.configuration.SSHkey import SSHkey
-from cloudmesh.configuration.Config import Config
 
 Benchmark.debug()
 

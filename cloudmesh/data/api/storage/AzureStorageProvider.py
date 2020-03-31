@@ -1,7 +1,7 @@
-from libcloud.storage.types import Provider, ObjectDoesNotExistError
-from libcloud.storage.providers import get_driver
 from cloudmesh.data.api.CloudFile import CloudFile
 from cloudmesh.data.api.storage import StorageProviderABC
+from libcloud.storage.providers import get_driver
+from libcloud.storage.types import Provider, ObjectDoesNotExistError
 
 
 class AzureStorageProvider(StorageProviderABC):

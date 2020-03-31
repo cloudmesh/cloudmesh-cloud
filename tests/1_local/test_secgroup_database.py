@@ -3,8 +3,8 @@
 # pytest -v  tests/cloud/test_secgroup_database.py
 ###############################################################
 
-from cloudmesh.common.util import HEADING
 from cloudmesh.common.Benchmark import Benchmark
+from cloudmesh.common.util import HEADING
 from cloudmesh.secgroup.Secgroup import Secgroup
 from cloudmesh.secgroup.Secgroup import SecgroupExamples
 from cloudmesh.secgroup.Secgroup import SecgroupRule

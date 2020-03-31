@@ -7,10 +7,10 @@
 import time
 
 import pytest
-from cloudmesh.common.util import HEADING
-from cloudmesh.configuration.Config import Config
-from cloudmesh.compute.vm.Provider import Provider
 from cloudmesh.common.Benchmark import Benchmark
+from cloudmesh.common.util import HEADING
+from cloudmesh.compute.vm.Provider import Provider
+from cloudmesh.configuration.Config import Config
 
 Benchmark.debug()
 

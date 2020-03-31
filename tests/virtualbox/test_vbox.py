@@ -8,8 +8,8 @@
 import subprocess
 
 import pytest
-from cloudmesh.common.util import HEADING
 from cloudmesh.common.Benchmark import Benchmark
+from cloudmesh.common.util import HEADING
 
 Benchmark.debug()
 

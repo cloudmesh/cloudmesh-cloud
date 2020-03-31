@@ -1,7 +1,8 @@
 import os
 import shutil
-from pathlib import Path
 from os.path import abspath, exists
+from pathlib import Path
+
 from cloudmesh.data.api.CloudFile import CloudFile
 from cloudmesh.data.api.storage import StorageProviderABC
 

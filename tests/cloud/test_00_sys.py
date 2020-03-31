@@ -2,15 +2,13 @@
 # pytest -v --capture=no tests/cloud/test_00_sys.py
 # pytest -v  tests/cloud/test_00_sys.py
 ###############################################################
-from pprint import pprint
 
 import pytest
+from cloudmesh.common.Benchmark import Benchmark
 from cloudmesh.common.Shell import Shell
 from cloudmesh.common.debug import VERBOSE
 from cloudmesh.common.util import HEADING
 from cloudmesh.common.variables import Variables
-from cloudmesh.common.Benchmark import Benchmark
-from cloudmesh.key.Key import Key
 
 Benchmark.debug()
 

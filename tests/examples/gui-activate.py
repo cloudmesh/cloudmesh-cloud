@@ -1,7 +1,6 @@
 import PySimpleGUI as gui
-from cloudmesh.configuration.Config import Config
-from pprint import pprint
 from cloudmesh.common.console import Console
+from cloudmesh.configuration.Config import Config
 
 config = Config()
 

@@ -1,7 +1,7 @@
+from cloudmesh.common.console import Console
 from cloudmesh.mongo.MongoDBController import MongoDBController
 from cloudmesh.shell.command import PluginCommand
 from cloudmesh.shell.command import command
-from cloudmesh.common.console import Console
 
 
 class StartCommand(PluginCommand):

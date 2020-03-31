@@ -4,22 +4,21 @@
 # pytest -v --capture=no  tests/cloud/test_08_vm_provider..py::Test_provider_vm.METHODNAME
 ###############################################################
 
+import os
 # TODO: start this with cloud init, e.g, empty mongodb
 # TODO: assertuons need to be added
 from pprint import pprint
+from time import sleep
 
 import pytest
-import os
-from time import sleep
+from cloudmesh.common.Benchmark import Benchmark
 from cloudmesh.common.debug import VERBOSE
 from cloudmesh.common.util import HEADING
 from cloudmesh.common.variables import Variables
-from cloudmesh.common.Benchmark import Benchmark
 from cloudmesh.compute.vm.Provider import Provider
 from cloudmesh.configuration.Config import Config
 from cloudmesh.management.configuration.name import Name
 from cloudmesh.mongo.CmDatabase import CmDatabase
-import sys
 
 Benchmark.debug()
 

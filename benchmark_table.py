@@ -1,8 +1,8 @@
-from cloudmesh.common.util import readfile
-from cloudmesh.common.Shell import Shell
-from pprint import pprint
-from tabulate import tabulate
 import sys
+
+from cloudmesh.common.Shell import Shell
+from cloudmesh.common.util import readfile
+from tabulate import tabulate
 
 filename = sys.argv[1]
 

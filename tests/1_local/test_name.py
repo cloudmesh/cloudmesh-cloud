@@ -4,17 +4,17 @@
 # pytest -v --capture=no  tests/1_local/test_name.py:Test_name.<METHIDNAME>
 ###############################################################
 import os
+import sys
 from pprint import pprint
 
 import pytest
-from cloudmesh.common.util import path_expand
 from cloudmesh.common.Benchmark import Benchmark
-from cloudmesh.management.configuration.name import Name
-from cloudmesh.common.util import HEADING
 from cloudmesh.common.console import Console
-from cloudmesh.configuration.Config import Config
 from cloudmesh.common.debug import VERBOSE
-import sys
+from cloudmesh.common.util import HEADING
+from cloudmesh.common.util import path_expand
+from cloudmesh.configuration.Config import Config
+from cloudmesh.management.configuration.name import Name
 
 Benchmark.debug()
 

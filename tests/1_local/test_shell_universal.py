@@ -7,7 +7,6 @@ import pytest
 from cloudmesh.common.Benchmark import Benchmark
 from cloudmesh.common.Shell import Shell
 from cloudmesh.common.util import HEADING
-import sys
 
 Benchmark.debug()
 

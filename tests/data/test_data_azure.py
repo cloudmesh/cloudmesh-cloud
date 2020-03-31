@@ -5,8 +5,8 @@
 ###############################################################
 from os.path import isfile
 
-from cloudmesh.data.api.data import Data
 from cloudmesh.common.Benchmark import Benchmark
+from cloudmesh.data.api.data import Data
 
 Benchmark.debug()
 

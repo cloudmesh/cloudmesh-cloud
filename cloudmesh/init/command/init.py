@@ -2,9 +2,7 @@ import os
 import shutil
 import sys
 from pathlib import Path
-from sys import exit
 from sys import platform
-import textwrap
 
 from cloudmesh.common.Shell import Shell
 from cloudmesh.common.console import Console
@@ -12,10 +10,10 @@ from cloudmesh.common.util import path_expand
 from cloudmesh.common.util import yn_choice
 from cloudmesh.common.variables import Variables
 from cloudmesh.configuration.Config import Config
+from cloudmesh.mongo.CmDatabase import CmDatabase
 from cloudmesh.mongo.MongoDBController import MongoDBController
 from cloudmesh.shell.command import PluginCommand
 from cloudmesh.shell.command import command
-from cloudmesh.mongo.CmDatabase import CmDatabase
 
 
 class InitCommand(PluginCommand):

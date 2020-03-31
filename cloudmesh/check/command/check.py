@@ -1,22 +1,17 @@
-from cloudmesh.common.debug import VERBOSE
-from cloudmesh.common.parameter import Parameter
-from cloudmesh.common.variables import Variables
-from cloudmesh.compute.vm.Provider import Provider
-from cloudmesh.management.configuration.arguments import Arguments
-from cloudmesh.mongo.CmDatabase import CmDatabase
-from cloudmesh.shell.command import PluginCommand
-from cloudmesh.shell.command import command, map_parameters
-from cloudmesh.common.console import Console
-from cloudmesh.common.Printer import Printer
-from cloudmesh.common.Shell import Shell
-from cloudmesh.configuration.Config import Config
-from cloudmesh.common.util import path_expand
-from cloudmesh.common.util import banner
-import sys
-from pathlib import Path
-from pprint import pprint
 import json
 import os
+import sys
+from pathlib import Path
+
+from cloudmesh.common.Shell import Shell
+from cloudmesh.common.console import Console
+from cloudmesh.common.parameter import Parameter
+from cloudmesh.common.util import banner
+from cloudmesh.common.util import path_expand
+from cloudmesh.common.variables import Variables
+from cloudmesh.configuration.Config import Config
+from cloudmesh.shell.command import PluginCommand
+from cloudmesh.shell.command import command, map_parameters
 
 
 class CheckCommand(PluginCommand):

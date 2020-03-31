@@ -2,18 +2,17 @@
 # pytest -v --capture=no tests/cloud/test_01_key.py
 # pytest -v  tests/cloud/test_01_key.py
 ###############################################################
+import os
 from pprint import pprint
 
 import pytest
-import os
 from cloudmesh.common import VERBOSE
+from cloudmesh.common.Benchmark import Benchmark
 from cloudmesh.common.util import HEADING
 from cloudmesh.common.variables import Variables
-from cloudmesh.common.Benchmark import Benchmark
 from cloudmesh.compute.vm.Provider import Provider
 from cloudmesh.configuration.Config import Config
 from cloudmesh.key.Key import Key
-from cloudmesh.common.Shell import Shell
 from cloudmesh.mongo.CmDatabase import CmDatabase
 
 Benchmark.debug()

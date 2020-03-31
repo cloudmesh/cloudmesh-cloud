@@ -1,28 +1,22 @@
-import hashlib
-from datetime import datetime
-from pprint import pprint
-import sys
 import os
+from pprint import pprint
 
-from cloudmesh.common.debug import VERBOSE
-from cloudmesh.common.Printer import Printer
+from cloudmesh.common.Shell import Shell
 from cloudmesh.common.console import Console
+from cloudmesh.common.debug import VERBOSE
+from cloudmesh.common.dotdict import dotdict
 from cloudmesh.common.error import Error
 from cloudmesh.common.parameter import Parameter
-from cloudmesh.common.Host import Host
+from cloudmesh.common.util import banner
+from cloudmesh.common.variables import Variables
 from cloudmesh.compute.vm.Provider import Provider
+from cloudmesh.configuration.Config import Config
+from cloudmesh.image.Image import Image
 from cloudmesh.management.configuration.arguments import Arguments
+from cloudmesh.management.configuration.name import Name
 from cloudmesh.mongo.CmDatabase import CmDatabase
 from cloudmesh.shell.command import PluginCommand
 from cloudmesh.shell.command import command, map_parameters
-from cloudmesh.common.variables import Variables
-from cloudmesh.common.Shell import Shell
-from cloudmesh.common.parameter import Parameter
-from cloudmesh.common.dotdict import dotdict
-from cloudmesh.configuration.Config import Config
-from cloudmesh.management.configuration.name import Name
-from cloudmesh.common.util import banner
-from cloudmesh.image.Image import Image
 
 
 class VmCommand(PluginCommand):

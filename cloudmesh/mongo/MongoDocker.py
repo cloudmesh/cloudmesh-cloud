@@ -2,17 +2,17 @@
 # Author: Gregor von Laszewski, laszewski@gmail.com
 #
 
-from cloudmesh.configuration.Config import Config
-from cloudmesh.common.util import path_expand
-from cloudmesh.management.script import Script, SystemPath
-from cloudmesh.management.script import find_process
-from cloudmesh.common.console import Console
 import os
-import time
-import sys
 import shutil
-from progress.bar import Bar
+import sys
+import time
+
+from cloudmesh.common.console import Console
 from cloudmesh.common.dotdict import dotdict
+from cloudmesh.common.util import path_expand
+from cloudmesh.configuration.Config import Config
+from cloudmesh.management.script import Script
+from progress.bar import Bar
 
 
 class MongoDocker(object):

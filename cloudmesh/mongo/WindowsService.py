@@ -1,6 +1,7 @@
 import os
-from cloudmesh.common.Shell import Shell
 from pprint import pprint
+
+from cloudmesh.common.Shell import Shell
 from cloudmesh.common.console import Console
 
 

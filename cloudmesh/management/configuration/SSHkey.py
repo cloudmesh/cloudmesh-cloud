@@ -2,10 +2,10 @@ import base64
 import hashlib
 import struct
 from os.path import basename
-from cloudmesh.common.util import path_expand
 from pathlib import Path
-import requests
 
+import requests
+from cloudmesh.common.util import path_expand
 from cloudmesh.configuration.Config import Config
 
 

@@ -15,14 +15,13 @@ except:
         "ERROR: import grp not supported on your OS. please find altrenative to grp")
 
 import os
-
 from pathlib import Path
 from pprint import pprint
 
 import pytest
+from cloudmesh.common.Benchmark import Benchmark
 from cloudmesh.common.util import HEADING
 from cloudmesh.common.util import path_expand
-from cloudmesh.common.Benchmark import Benchmark
 from cloudmesh.mongo.CmDatabase import CmDatabase
 from cloudmesh.mongo.DataBaseDecorator import DatabaseUpdate
 

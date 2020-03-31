@@ -3,14 +3,14 @@ A convenient method to execute shell commands and return their output. Note:
 that this method requires that the command be completely executed before the
 output is returned. For many activities in cloudmesh this is sufficient.
 """
+import os
 import subprocess
 import textwrap
 from sys import platform
-from cloudmesh.common.Shell import Shell
-from cloudmesh.common.console import Console
 
 import psutil
-import os
+from cloudmesh.common.Shell import Shell
+from cloudmesh.common.console import Console
 
 
 class SystemPath(object):

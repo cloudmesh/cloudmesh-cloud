@@ -1,5 +1,5 @@
-import getpass
 import datetime
+import getpass
 from os.path import isfile, abspath, basename, getsize
 
 

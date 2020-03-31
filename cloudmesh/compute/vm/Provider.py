@@ -1,9 +1,8 @@
-from pprint import pprint
-
 from cloudmesh.abstract.ComputeNodeABC import ComputeNodeABC
 from cloudmesh.common.Printer import Printer
 from cloudmesh.common.StopWatch import StopWatch
 from cloudmesh.common.console import Console
+from cloudmesh.common.debug import VERBOSE
 from cloudmesh.common.dotdict import dotdict
 from cloudmesh.common.parameter import Parameter
 from cloudmesh.common.variables import Variables
@@ -12,9 +11,6 @@ from cloudmesh.management.configuration.name import Name
 from cloudmesh.mongo.CmDatabase import CmDatabase
 from cloudmesh.mongo.DataBaseDecorator import DatabaseUpdate
 from cloudmesh.provider import Provider as ProviderList
-from cloudmesh.common.debug import VERBOSE
-
-from cloudmesh.mongo.CmDatabase import CmDatabase
 
 
 class Provider(ComputeNodeABC):

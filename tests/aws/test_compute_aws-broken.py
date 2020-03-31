@@ -8,14 +8,14 @@ import time
 from pprint import pprint
 
 import pytest
+from cloudmesh.common.Benchmark import Benchmark
 from cloudmesh.common.Printer import Printer
 from cloudmesh.common.util import HEADING
 from cloudmesh.common.util import banner
 from cloudmesh.compute.libcloud.Provider import Provider
-from cloudmesh.management.configuration.SSHkey import SSHkey
 from cloudmesh.configuration.Config import Config
+from cloudmesh.management.configuration.SSHkey import SSHkey
 from cloudmesh.management.configuration.name import Name
-from cloudmesh.common.Benchmark import Benchmark
 
 Benchmark.debug()
 

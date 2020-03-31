@@ -1,15 +1,16 @@
-import random
 import getpass
-from time import sleep
-from cloudmesh.common.console import Console
-from selenium import webdriver
-from selenium.common.exceptions import WebDriverException
-from sys import platform
 import os
+import random
 import subprocess
 from pathlib import Path
+from sys import platform
+from time import sleep
+
 import pandas
+from cloudmesh.common.console import Console
 from cloudmesh.configuration.Config import Config
+from selenium import webdriver
+from selenium.common.exceptions import WebDriverException
 
 
 class AWSRegister(object):

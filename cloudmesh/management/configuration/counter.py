@@ -1,7 +1,8 @@
-from os.path import isfile, expanduser, join, dirname, realpath, exists
 from os import mkdir
-from shutil import copyfile
+from os.path import isfile, expanduser, join, dirname, realpath, exists
 from pathlib import Path
+from shutil import copyfile
+
 import oyaml as yaml
 
 

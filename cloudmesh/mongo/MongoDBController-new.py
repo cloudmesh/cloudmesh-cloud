@@ -1,31 +1,25 @@
-import ctypes
+import json
 import json
 import os
 import subprocess
 import urllib.parse
 import urllib.parse
 import urllib.parse
-from sys import platform
-from pathlib import Path
 from subprocess import STDOUT
-import ctypes
+from sys import platform
 
 import psutil
 import yaml
-from cloudmesh.common.Shell import Shell, Brew
+from cloudmesh.common.Shell import Brew
+from cloudmesh.common.Shell import Shell
 from cloudmesh.common.console import Console
 from cloudmesh.common.dotdict import dotdict
 from cloudmesh.common.util import path_expand
-from cloudmesh.common.Shell import Shell
 from cloudmesh.configuration.Config import Config
 from cloudmesh.management.script import Script, SystemPath
 from cloudmesh.management.script import find_process
-from cloudmesh.common.Shell import Shell
-from cloudmesh.common.debug import VERBOSE
-
 # from cloudmesh.mongo.MongoDBController import MongoDBController
 from pymongo import MongoClient
-import sys
 
 
 # noinspection PyUnusedLocal

@@ -10,7 +10,6 @@ import shutil
 import pytest
 from cloudmesh.common.Benchmark import Benchmark
 from cloudmesh.common.Shell import Shell
-from cloudmesh.common.Benchmark import Benchmark
 from cloudmesh.common.util import HEADING
 
 Benchmark.debug()
@@ -53,7 +52,7 @@ class Test_cloud_installer:
 
     def test_install_cms(self):
         HEADING()
-        cmd = "cd tmp; cloudmesh-installer install cms -e"
+        cmd = "cd tmp; cloudmesh-installer install cms"
         Benchmark.Start()
         result = Shell.run(cmd)
         Benchmark.Stop()
@@ -80,7 +79,7 @@ class Test_cloud_installer:
 
     def test_install_cloud(self):
         HEADING()
-        cmd = "cd tmp; cloudmesh-installer install cloud -e"
+        cmd = "cd tmp; cloudmesh-installer install cloud"
         Benchmark.Start()
         result = Shell.run(cmd)
         Benchmark.Stop()

@@ -10,6 +10,7 @@ from pprint import pprint
 
 import docker
 import pytest
+from cloudmesh.common.Benchmark import Benchmark
 from cloudmesh.common.Printer import Printer
 from cloudmesh.common.util import HEADING
 from cloudmesh.common.util import banner
@@ -17,7 +18,6 @@ from cloudmesh.common.util import path_expand
 from cloudmesh.compute.docker.Provider import Provider
 from cloudmesh.configuration.Config import Config
 from cloudmesh.management.configuration.name import Name
-from cloudmesh.common.Benchmark import Benchmark
 
 Benchmark.debug()
 

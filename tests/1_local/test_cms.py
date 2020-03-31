@@ -4,10 +4,10 @@
 # pytest -v --capture=no  tests/1_local/test_name..py::Test_name::<METHODNAME>
 ###############################################################
 import pytest
+from cloudmesh.common.Benchmark import Benchmark
 from cloudmesh.common.Shell import Shell
 from cloudmesh.common.debug import VERBOSE
 from cloudmesh.common.util import HEADING
-from cloudmesh.common.Benchmark import Benchmark
 
 Benchmark.debug()
 

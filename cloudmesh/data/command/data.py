@@ -1,5 +1,5 @@
-from cloudmesh.shell.command import command
 from cloudmesh.shell.command import PluginCommand
+from cloudmesh.shell.command import command
 
 
 # from cloudmesh.data.api.manager import Manager

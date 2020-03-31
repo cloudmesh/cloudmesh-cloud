@@ -1,7 +1,5 @@
-from abc import ABCMeta, abstractmethod
-from cloudmesh.configuration.Config import Config
-
 from cloudmesh.abstract.ComputeNodeABC import ComputeNodeABC
+from cloudmesh.configuration.Config import Config
 
 
 #

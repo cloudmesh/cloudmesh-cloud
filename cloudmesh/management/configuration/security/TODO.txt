@@ -1,2 +1,0 @@
-the encryption code is duplicated and needs to be merged into the security
-encryption code and vice versa

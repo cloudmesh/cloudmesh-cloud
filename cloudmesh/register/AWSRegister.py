@@ -6,7 +6,7 @@ from pathlib import Path
 from sys import platform
 from time import sleep
 
-import pandas
+import csv
 from cloudmesh.common.console import Console
 from cloudmesh.configuration.Config import Config
 from selenium import webdriver
@@ -63,9 +63,13 @@ class AWSRegister(object):
             Console.info("{filename} moved to ~/.cloudmesh folder".format(
                 filename=credentials_file_name))
 
-            creds = pandas.read_csv(
-                "{cm}/{filename}".format(cm=cloudmesh_folder,
-                                         filename=credentials_file_name))
+            #creds = pandas.read_csv(
+            #    "{cm}/{filename}".format(cm=cloudmesh_folder,
+            #                             filename=credentials_file_name))
+
+            with open("{cm}/{filename}", 'r') as file:
+                reader = csv.reader(file)
+                creds = reader.read()
 
             self.set_credentials(creds)
 

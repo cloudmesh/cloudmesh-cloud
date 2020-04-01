@@ -5,7 +5,7 @@
 
 Intermediate Releases: 4.3.8
 
-#### Enhancements:
+#### Enhancements and Changes:
 
 - moved the following kommands to `cloudmesh.admin`
 
@@ -20,8 +20,8 @@ Intermediate Releases: 4.3.8
 - implemented key groups
 - implemented improved register command
 - enhanced Name() so it can be also used for volumes
-- optimize imports
-- 
+- optimize imports, remove pandas, termcolor, colorama, python-hostlist
+
 #### Bug Fixes:
 
 

@@ -1,6 +1,6 @@
 from datetime import datetime
 
-import hostlist
+from cloudmesh.common.parameter import Parameter
 from cloudmesh.shell.command import PluginCommand
 from cloudmesh.shell.command import command
 from cloudmesh.vcluster.api.VirtualCluster import VirtualCluster
@@ -50,9 +50,9 @@ class VclusterCommand(PluginCommand):
             vcluster_manager = VirtualCluster(debug=debug)
             if arguments.get("create"):
                 if arguments.get("cluster") and arguments.get("--clusters"):
-                    clusters = hostlist.expand_hostlist(
+                    clusters = Parameter.expand(
                         arguments.get("--clusters"))
-                    computers = hostlist.expand_hostlist(
+                    computers = Parameter.expand(
                         arguments.get("--computers"))
                     vcluster_manager.create(arguments.get("CLUSTER_NAME"),
                                             cluster_list=clusters,

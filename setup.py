@@ -46,9 +46,9 @@ cloudmesh-cmd5
 cloudmesh-sys
 cloudmesh-inventory
 cloudmesh-abstract
+cloudmesh-admin
 apache-libcloud
 beautifulsoup4
-colorama
 dateparser
 docker
 docopt
@@ -58,20 +58,15 @@ humanize
 idna
 munch
 oyaml
-pandas
 progress
 psutil
 pymongo
-python-hostlist
 PyYAML
 recommonmark
 requests
 selenium
 tabulate
-termcolor
-urllib3
 uuid
-yamllint
 """.splitlines()
 
 

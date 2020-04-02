@@ -45,16 +45,17 @@ class VmCommand(PluginCommand):
                         [--output=OUTPUT]
                         [--refresh]
                 vm boot [--n=COUNT]
-                        [--name=VMNAMES]
+                        [--name=NAMES]
                         [--label=LABEL]
                         [--cloud=CLOUD]
                         [--username=USERNAME]
                         [--image=IMAGE]
                         [--flavor=FLAVOR]
+                        [--size=SIZE]
                         [--network=NETWORK]
                         [--public]
-                        [--secgroup=SECGROUPs]
-                        [--group=GROUPs]
+                        [--secgroup=SECGROUP]
+                        [--group=GROUP]
                         [--key=KEY]
                         [--dryrun]
                         [-v]
@@ -615,18 +616,21 @@ class VmCommand(PluginCommand):
 
             """
                 vm boot 
-                        [--name=VMNAMES]
+                        [--n=COUNT]
+                        [--name=NAMES]
                         [--label=LABEL]
                         [--cloud=CLOUD]
                         [--username=USERNAME]
                         [--image=IMAGE]
                         [--flavor=FLAVOR]
+                        [--size=SIZE]
                         [--network=NETWORK]
                         [--public]
                         [--secgroup=SECGROUP]
-                        [--key=KEY]
                         [--group=GROUP]
+                        [--key=KEY]
                         [--dryrun]
+                        [-v]
             """
             # for name in names:
             #    node = p.create(name=name, size=flavor, image=image)
@@ -654,6 +658,7 @@ class VmCommand(PluginCommand):
                               "username",
                               "flavor",
                               "key",
+                              "size",
                               "network",
                               "secgroup"]:
                 parameters[attribute] = Parameter.find(attribute,

@@ -1,6 +1,9 @@
+from pprint import pprint
+
 from cloudmesh.abstract.ComputeNodeABC import ComputeNodeABC
-from cloudmesh.common.Printer import Printer
 from cloudmesh.common.StopWatch import StopWatch
+# from cloudmesh.common.Printer import Printer
+from cloudmesh.common.Tabulate import Printer
 from cloudmesh.common.console import Console
 from cloudmesh.common.debug import VERBOSE
 from cloudmesh.common.dotdict import dotdict
@@ -12,6 +15,8 @@ from cloudmesh.mongo.CmDatabase import CmDatabase
 from cloudmesh.mongo.DataBaseDecorator import DatabaseUpdate
 from cloudmesh.provider import Provider as ProviderList
 
+
+# from prettytable import PrettyTable
 
 class Provider(ComputeNodeABC):
 
@@ -459,7 +464,7 @@ class Provider(ComputeNodeABC):
         if kind is None and len(data) > 0:
             kind = data[0]["cm"]["kind"]
 
-        if output == "table":
+        if output in ["flat", "table"]:
 
             order = self.p.output[kind]['order']  # not pretty
             header = self.p.output[kind]['header']  # not pretty
@@ -469,14 +474,20 @@ class Provider(ComputeNodeABC):
             else:
                 humanize = None
 
-            print(Printer.flatwrite(data,
-                                    sort_keys=["name"],
-                                    order=order,
-                                    header=header,
-                                    output=output,
-                                    humanize=humanize)
-                  )
+            _output = Printer.flatwrite(data,
+                                        sort_keys=["name"],
+                                        order=order,
+                                        header=header,
+                                        output=output,
+                                        humanize=humanize)
+            if output in ["flat"]:
+                _print = pprint
+            else:
+                _print = print
+
+            _print(_output)
         else:
+
             print(Printer.write(data, output=output))
 
     def list_secgroups(self):

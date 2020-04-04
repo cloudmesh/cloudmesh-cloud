@@ -65,10 +65,11 @@ class FlavorCommand(PluginCommand):
 
         variables = Variables()
 
-        arguments.output = Parameter.find("output",
-                                          arguments,
-                                          variables,
-                                          "table")
+        arguments.output = Parameter.find(
+            "output",
+            arguments,
+            variables,
+            "table")
 
         arguments.refresh = Parameter.find_bool("refresh",
                                                 arguments,
@@ -89,7 +90,6 @@ class FlavorCommand(PluginCommand):
                     query = eval(arguments.query)
                     flavors = provider.flavors(**query)
                 else:
-
                     flavors = provider.flavors()
 
                 provider.Print(flavors, output=arguments.output, kind="flavor")
@@ -104,17 +104,17 @@ class FlavorCommand(PluginCommand):
                                                           arguments,
                                                           variables)
 
-            print(clouds, names)
             try:
 
                 for cloud in clouds:
-                    print(f"List {cloud}")
-                    provider = Provider(cloud)
+                    if arguments.output in ["table"]:
+                        print(f"List {cloud}")
+                    provider = Provider(name=cloud)
 
                     db = CmDatabase()
                     flavors = db.find(collection=f"{cloud}-flavor")
-
-                    provider.Print(flavors, output=arguments.output,
+                    provider.Print(flavors,
+                                   output=arguments.output,
                                    kind="flavor")
 
             except Exception as e:

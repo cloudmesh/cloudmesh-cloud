@@ -44,6 +44,7 @@ class VmCommand(PluginCommand):
                         [--cloud=CLOUDS]
                         [--output=OUTPUT]
                         [--refresh]
+                        [--short]
                 vm boot [--n=COUNT]
                         [--name=NAMES]
                         [--label=LABEL]
@@ -354,7 +355,9 @@ class VmCommand(PluginCommand):
                 provider = Provider(name=cloud)
                 vms = provider.list()
 
-                provider.Print(vms, output=arguments.output, kind="vm")
+                provider.Print(vms,
+                               output=arguments.output,
+                               kind="vm")
 
                 return ""
 

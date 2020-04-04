@@ -90,7 +90,7 @@ setup(
     description=DESCRIPTION,
     long_description=long_description,
     long_description_content_type="text/markdown",
-    version="4.3.9",
+    version="4.3.10",
     license="Apache 2.0",
     url=URL,
     packages=find_packages(exclude=("tests",

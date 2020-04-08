@@ -52,7 +52,6 @@ class VmCommand(PluginCommand):
                         [--username=USERNAME]
                         [--image=IMAGE]
                         [--flavor=FLAVOR]
-                        [--size=SIZE]
                         [--network=NETWORK]
                         [--public]
                         [--secgroup=SECGROUP]
@@ -626,7 +625,6 @@ class VmCommand(PluginCommand):
                         [--username=USERNAME]
                         [--image=IMAGE]
                         [--flavor=FLAVOR]
-                        [--size=SIZE]
                         [--network=NETWORK]
                         [--public]
                         [--secgroup=SECGROUP]
@@ -661,7 +659,6 @@ class VmCommand(PluginCommand):
                               "username",
                               "flavor",
                               "key",
-                              "size",
                               "network",
                               "secgroup"]:
                 parameters[attribute] = Parameter.find(attribute,

@@ -1,5 +1,5 @@
-from pydoc import locate
 from pprint import pprint
+from pydoc import locate
 
 from cloudmesh.abstract.ComputeNodeABC import ComputeNodeABC
 from cloudmesh.common.StopWatch import StopWatch
@@ -14,7 +14,6 @@ from cloudmesh.configuration.Config import Config
 from cloudmesh.management.configuration.name import Name
 from cloudmesh.mongo.CmDatabase import CmDatabase
 from cloudmesh.mongo.DataBaseDecorator import DatabaseUpdate
-from cloudmesh.provider import Provider as ProviderList
 
 
 # from prettytable import PrettyTable
@@ -46,15 +45,6 @@ class Provider(ComputeNodeABC):
             # Locate the Provider from the respective Provider module.
             P = locate(f'cloudmesh.compute.{kind}.Provider')
 
-        # elif kind in ["vagrant", "virtualbox"]:
-        #    from cloudmesh.compute.virtualbox.Provider import \
-        #        Provider as VirtualboxCloudProvider
-        #    provider = VirtualboxCloudProvider
-        # elif kind in ["azureaz"]:
-        #    from cloudmesh.compute.azure.AzProvider import \
-        #        Provider as AzAzureProvider
-        #    provider = AzAzureProvider
-
         else:
             Console.error(f"Compute provider {kind} not supported")
 
@@ -76,17 +66,8 @@ class Provider(ComputeNodeABC):
             Console.error(f"provider {name} not found in {configuration}")
             raise ValueError(f"provider {name} not found in {configuration}")
 
-        #Get the Provider for given kind.
+        # Get the Provider for given kind.
         provider = Provider.get_provider(self.kind)
-
-        # elif self.kind in ["vagrant", "virtualbox"]:
-        #    from cloudmesh.compute.virtualbox.Provider import \
-        #        Provider as VirtualboxCloudProvider
-        #    provider = VirtualboxCloudProvider
-        # elif self.kind in ["azureaz"]:
-        #    from cloudmesh.compute.azure.AzProvider import \
-        #        Provider as AzAzureProvider
-        #    provider = AzAzureProvider
 
         if provider is None:
             Console.error(f"provider {name} not supported")

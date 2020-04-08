@@ -63,8 +63,16 @@ class OpenCommand(PluginCommand):
 
         if arguments.git and arguments.REPO:
 
-            from cloudmesh_installer.install.installer import Git
-            filename = Git.url(arguments.REPO)
+            try:
+                from cloudmesh_installer.install.installer import Git
+                filename = Git.url(arguments.REPO)
+            except ModuleNotFoundError:
+                Console.error("To run this command you need to install "
+                              "cloudmesh-installer.\n"
+                              "       Install it with\n\n"
+                              "       pip install cloudmesh-installer -U\n")
+                return ""
+
         elif arguments.aws and arguments.account:
             name = arguments.NAME or "users"
 

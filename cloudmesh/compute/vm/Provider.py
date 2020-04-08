@@ -418,7 +418,7 @@ class Provider(ComputeNodeABC):
         raise NotImplementedError
 
     # noinspection PyPep8Naming
-    def Print(self, data, output='table', kind=None):
+    def Prints(self, data, output='table', kind=None):
 
         if kind is None and len(data) > 0:
             kind = data[0]["cm"]["kind"]
@@ -439,15 +439,21 @@ class Provider(ComputeNodeABC):
                                         header=header,
                                         output=output,
                                         humanize=humanize)
-            if output in ["flat"]:
-                _print = pprint
-            else:
-                _print = print
 
-            _print(_output)
         else:
+            _output = Printer.write(data, output=output)
 
-            print(Printer.write(data, output=output))
+        return _output
+
+    # noinspection PyPep8Naming
+    def Print(self, data, output='table', kind=None):
+        content = self.Prints(data, output=output, kind=kind)
+        if output in ["flat"]:
+            _print = pprint
+        else:
+            _print = print
+
+        _print(content)
 
     def list_secgroups(self):
         return self.p.list_secgroups()

@@ -1,3 +1,4 @@
+from pydoc import locate
 from pprint import pprint
 
 from cloudmesh.abstract.ComputeNodeABC import ComputeNodeABC
@@ -26,7 +27,9 @@ class Provider(ComputeNodeABC):
                 "google",
                 "oracle",
                 "azure",
-                "aws"]
+                "aws",
+                "awslibcloud",
+                "googlelibcloud"]
         return kind
 
     @staticmethod
@@ -35,20 +38,13 @@ class Provider(ComputeNodeABC):
         if kind in ["awslibcloud", "googlelibcloud"]:
             from cloudmesh.compute.libcloud.Provider import Provider as P
 
-        elif kind in ['openstack']:
-            from cloudmesh.openstack.compute.Provider import Provider as P
+        elif kind in ['openstack', 'google', 'aws', 'azure', 'oracle']:
+            # Locate the Provider from the respective Provider module.
+            P = locate(f'cloudmesh.{kind}.compute.Provider.Provider')
 
-        elif kind in ['google']:
-            from cloudmesh.google.compute.Provider import Provider as P
-
-        elif kind in ['oracle']:
-            from cloudmesh.oracle.compute.Provider import Provider as P
-
-        elif kind in ['azure']:
-            from cloudmesh.azure.compute.Provider import Provider as P
-
-        elif kind in ['aws']:
-            from cloudmesh.aws.compute.Provider import Provider as P
+        elif kind in ['docker', 'virtualbox']:
+            # Locate the Provider from the respective Provider module.
+            P = locate(f'cloudmesh.compute.{kind}.Provider')
 
         # elif kind in ["vagrant", "virtualbox"]:
         #    from cloudmesh.compute.virtualbox.Provider import \
@@ -80,26 +76,8 @@ class Provider(ComputeNodeABC):
             Console.error(f"provider {name} not found in {configuration}")
             raise ValueError(f"provider {name} not found in {configuration}")
 
-        provider = None
-
-        providers = ProviderList()
-
-        if self.kind in [
-            #            'openstack',
-            'docker',
-            "virtualbox"]:
-
-            provider = providers[self.kind]
-
-
-        elif self.kind in ["awslibcloud",
-                           "googlelibcloud",
-                           'openstack',
-                           'google',
-                           'oracle',
-                           'azure',
-                           'aws']:
-            provider = Provider.get_provider(self.kind)
+        #Get the Provider for given kind.
+        provider = Provider.get_provider(self.kind)
 
         # elif self.kind in ["vagrant", "virtualbox"]:
         #    from cloudmesh.compute.virtualbox.Provider import \

@@ -26,6 +26,7 @@ class OpenCommand(PluginCommand):
                 open FILENAME
                 open doc local
                 open doc
+                open git REPO
                 open account aws [NAME]
 
 
@@ -60,7 +61,11 @@ class OpenCommand(PluginCommand):
         # pprint(arguments)
         filename = arguments.FILENAME
 
-        if arguments.aws and arguments.account:
+        if arguments.git and arguments.REPO:
+
+            from cloudmesh_installer.install.installer import Git
+            filename = Git.url(arguments.REPO)
+        elif arguments.aws and arguments.account:
             name = arguments.NAME or "users"
 
             if name == "users":
@@ -69,17 +74,16 @@ class OpenCommand(PluginCommand):
                 filename = "https://console.aws.amazon.com/iam/home#/users" \
                            f"/{name}?section=security_credentials"
         elif arguments.baremetal and arguments.tacc:
-            filename = str("https://chi.tacc.chameleoncloud.org")
+            filename = "https://chi.tacc.chameleoncloud.org"
         elif arguments.baremetal and arguments.uc:
-            filename = str("https://chi.uc.chameleoncloud.org")
+            filename = "https://chi.uc.chameleoncloud.org"
         elif arguments.chameleon and (arguments.vm or arguments.openstack):
-            filename = str("https://openstack.tacc.chameleoncloud.org")
+            filename = "https://openstack.tacc.chameleoncloud.org"
 
         elif arguments.doc and arguments.local:
             filename = "./docs/index.html"
 
         elif filename == "doc":
-            # filename = "https://cloudmesh-community.github.io/"
             filename = "https://cloudmesh.github.io/cloudmesh-manual/"
 
         if not (filename.startswith("file:") or filename.startswith("http")):

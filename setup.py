@@ -74,7 +74,7 @@ def read(fname):
     return open(os.path.join(os.path.dirname(__file__), fname)).read()
 
 
-with open('README-old.md') as f:
+with open('README.md') as f:
     long_description = f.read()
 
 NAME = "cloudmesh-cloud"

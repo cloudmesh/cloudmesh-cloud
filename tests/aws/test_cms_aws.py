@@ -22,7 +22,7 @@ CLOUD = "aws"
 class TestCmsAWS:
 
     def setup(self):
-        conf = Config("~/.cloudmesh/cloudmesh.yaml")["cloudmesh"]
+        conf = * Config()["cloudmesh"]
         cred = conf["cloud"][CLOUD]["credentials"]
         self.key = (cred['EC2_PRIVATE_KEY_FILE_NAME']).split('.')[0]
 

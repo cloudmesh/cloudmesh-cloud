@@ -370,6 +370,10 @@ class VmCommand(PluginCommand):
 
             try:
 
+                if clouds is None:
+                    Console.error("No cloud specified")
+                    return ""
+
                 for cloud in clouds:
                     print(f"List {cloud}")
                     p = Provider(cloud)

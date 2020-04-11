@@ -52,14 +52,12 @@ class Provider(ComputeNodeABC):
 
         return P
 
-    def __init__(self,
-                 name=None,
-                 configuration="~/.cloudmesh/cloudmesh.yaml"):
+    def __init__(self, name=None):
         # noinspection PyPep8
         try:
-            super().__init__(name, configuration)
-            self.kind = Config(configuration)[f"cloudmesh.cloud.{name}.cm.kind"]
-            self.credentials = Config(configuration)[
+            super().__init__(name)
+            self.kind = Config()[f"cloudmesh.cloud.{name}.cm.kind"]
+            self.credentials = Config()[
                 f"cloudmesh.cloud.{name}.credentials"]
             self.name = name
         except:
@@ -73,7 +71,7 @@ class Provider(ComputeNodeABC):
             Console.error(f"provider {name} not supported")
             raise ValueError(f"provider {name} not supported")
 
-        self.p = provider(name=name, configuration=configuration)
+        self.p = provider(name=name)
 
     def cloudname(self):
         return self.name

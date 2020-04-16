@@ -39,7 +39,6 @@ class VmCommand(PluginCommand):
                 vm start [NAMES] [--dryrun]
                 vm terminate [NAMES] [--cloud=CLOUD] [--dryrun]
                 vm delete [NAMES] [--cloud=CLOUD] [--dryrun]
-                vm refresh [--cloud=CLOUDS]
                 vm list [NAMES]
                         [--cloud=CLOUDS]
                         [--output=OUTPUT]
@@ -250,7 +249,6 @@ class VmCommand(PluginCommand):
                        'image',
                        'interval',
                        'timeout',
-                       'ip',
                        'key',
                        'modify-knownhosts',
                        'n',
@@ -259,7 +257,6 @@ class VmCommand(PluginCommand):
                        'quiet',
                        'secgroup',
                        'size',
-                       'username',
                        'output',
                        'count',
                        'network',
@@ -660,7 +657,7 @@ class VmCommand(PluginCommand):
 
             parameters.group = groups
             for attribute in ["image",
-                              "username",
+                              arguments["--username"],
                               "flavor",
                               "key",
                               "network",
@@ -670,7 +667,7 @@ class VmCommand(PluginCommand):
                                                        variables.dict(),
                                                        defaults)
 
-            if arguments.username is None:
+            if arguments["--username"] is None:
                 parameters.user = Image.guess_username(parameters.image)
 
             provider = Provider(name=cloud)
@@ -826,7 +823,7 @@ class VmCommand(PluginCommand):
                 Error.traceback(e)
                 Console.error("Problem renaming instances", traceflag=True)
 
-        elif arguments["ip"] and arguments["show"]:
+        elif arguments.ip and arguments["show"]:
             raise NotImplementedError
 
             print("show the ips")
@@ -839,14 +836,14 @@ class VmCommand(PluginCommand):
 
             """
 
-        elif arguments["ip"] and arguments["assign"]:
+        elif arguments.ip and arguments["assign"]:
             raise NotImplementedError
             """
             vm ip assign [NAMES] [--cloud=CLOUD]
             """
             print("assign the public ip")
 
-        elif arguments["ip"] and arguments["inventory"]:
+        elif arguments.ip and arguments["inventory"]:
             raise NotImplementedError
 
             """

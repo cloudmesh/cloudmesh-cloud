@@ -237,7 +237,6 @@ class KeyCommand(PluginCommand):
                        'dryrun',
                        'filename',
                        'force',
-                       'format',
                        'name',
                        'nopass',
                        'output',

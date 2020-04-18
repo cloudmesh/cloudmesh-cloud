@@ -657,18 +657,21 @@ class VmCommand(PluginCommand):
 
             parameters.group = groups
             for attribute in ["image",
-                              arguments["--username"],
+                              "username",
                               "flavor",
                               "key",
                               "network",
                               "secgroup"]:
-                parameters[attribute] = Parameter.find(attribute,
-                                                       arguments,
-                                                       variables.dict(),
-                                                       defaults)
-
+                if attribute is not None:
+                    parameters[attribute] = Parameter.find(attribute,
+                                                           arguments,
+                                                           variables.dict(),
+                                                           defaults)
+                    print("AAA", attribute, parameters[attribute])
             if arguments["--username"] is None:
                 parameters.user = Image.guess_username(parameters.image)
+
+            VERBOSE(parameters)
 
             provider = Provider(name=cloud)
 
@@ -743,7 +746,7 @@ class VmCommand(PluginCommand):
                 else:
 
                     # parameters.progress = len(parameters.names) < 2
-
+                    VERBOSE(parameters)
                     try:
                         vms = provider.create(**parameters)
                     except TimeoutError:
@@ -755,7 +758,7 @@ class VmCommand(PluginCommand):
                         print(e)
                         return ""
 
-                    variables['vm'] = str(n)
+                    variables['vm'] = str(name)
                     if arguments["-v"]:
                         banner("Details")
                         pprint(vms)

@@ -667,11 +667,8 @@ class VmCommand(PluginCommand):
                                                            arguments,
                                                            variables.dict(),
                                                            defaults)
-                    print("AAA", attribute, parameters[attribute])
             if arguments["--username"] is None:
                 parameters.user = Image.guess_username(parameters.image)
-
-            VERBOSE(parameters)
 
             provider = Provider(name=cloud)
 
@@ -746,7 +743,6 @@ class VmCommand(PluginCommand):
                 else:
 
                     # parameters.progress = len(parameters.names) < 2
-                    VERBOSE(parameters)
                     try:
                         vms = provider.create(**parameters)
                     except TimeoutError:

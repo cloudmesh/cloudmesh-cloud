@@ -1,6 +1,7 @@
 ###############################################################
-# pytest -v --capture=no tests/cloud/test_01_key.py
-# pytest -v  tests/cloud/test_01_key.py
+# pytest -v --capture=no tests/cloud/test_02_key.py
+# pytest -v  tests/cloud/test_02_key.py
+# pytest -v --capture=no tests/cloud/test_02_key.py::Test_Key::test_upload_key_to_database
 ###############################################################
 import os
 from pprint import pprint
@@ -35,8 +36,23 @@ provider = Provider(name=cloud)
 @pytest.mark.incremental
 class Test_Key:
 
+    def test_clear_local_database(self):
+        HEADING()
+        Benchmark.Start()
+        cm.clear(collection=f"local-key")
+        Benchmark.Stop()
+        assert True
+
+    def test_clear_cloud_database(self):
+        HEADING()
+        Benchmark.Start()
+        cm.clear(collection=f"{cloud}-key")
+        Benchmark.Stop()
+        assert True
+
     def test_upload_key_to_database(self):
         HEADING()
+
         local = Key()
         pprint(local)
         Benchmark.Start()
@@ -44,7 +60,8 @@ class Test_Key:
         Benchmark.Stop()
 
         key = cm.find_name(KEY, "key")[0]
-        key['name'] == KEY
+
+        assert key is not None
 
     def test_upload_key_to_cloud(self):
         HEADING()
@@ -60,7 +77,7 @@ class Test_Key:
                     break
         else:
             key = cm.find_name(KEY, "key")[0]
-        pprint(key)
+        VERBOSE(key)
         Benchmark.Start()
         r = provider.key_upload(key)
         Benchmark.Stop()
@@ -76,7 +93,6 @@ class Test_Key:
             VERBOSE(f"{cloud} does not support key list!")
             return
 
-        found = False
         for key in keys:
             if key['name'] == KEY:
                 found = True
@@ -100,15 +116,26 @@ class Test_Key:
 
     def test_key_delete(self):
         HEADING()
-        cm.clear(collection=f"local-key")
-        try:
-            r = provider.key_delete(KEY)
-        except:
-            pass
+        Benchmark.Start()
+        self.test_clear_cloud_database()
+        Benchmark.Stop()
+
+    def test_cms_local(self):
+        HEADING()
+        Benchmark.Start()
+        os.system("cms key add")
+        os.system("cms key list > key-local.log")
+        Benchmark.Stop()
+
+    def test_cms_cloud(self):
+        HEADING()
+        self.test_clear_cloud_database()
+
+        Benchmark.Start()
+        os.system(f"cms key upload --cloud={cloud}")
+        os.system(f"cms key list --cloud={cloud} > key-{cloud}.log")
+        #os.system(f"cms key delete {KEY} --cloud={cloud}")
+        Benchmark.Stop()
 
     def test_benchmark(self):
         Benchmark.print(sysinfo=False, csv=True, tag=cloud)
-
-    def test_list(self):
-        os.system("cms key add")
-        os.system("cms key list")

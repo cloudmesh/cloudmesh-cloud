@@ -61,8 +61,8 @@ class Provider(ComputeNodeABC):
                 f"cloudmesh.cloud.{name}.credentials"]
             self.name = name
         except:
-            Console.error(f"provider {name} not found in {configuration}")
-            raise ValueError(f"provider {name} not found in {configuration}")
+            Console.error(f"provider {name} not found in the cloudmesh.yaml file")
+            raise ValueError(f"provider {name} not found in cloudmesh.yaml file")
 
         # Get the Provider for given kind.
         provider = Provider.get_provider(self.kind)

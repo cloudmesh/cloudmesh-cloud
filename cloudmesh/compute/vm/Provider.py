@@ -244,15 +244,16 @@ class Provider(ComputeNodeABC):
 
         label = arguments.get("label") or arguments.name
 
+        cloud = self.cloudname()
+
         cm = {
             'kind': "vm",
             'name': arguments.name,
             'label': label,
             'group': arguments.group,
-            'cloud': self.cloudname(),
+            'cloud': cloud,
             'status': 'booting'
         }
-
 
         entry = {}
         entry.update(cm=cm, name=arguments.name)
@@ -267,11 +268,14 @@ class Provider(ComputeNodeABC):
         else:
             arguments.timeout = 360
             data = self.p.create(**arguments)
+
         # print('entry')
         # pprint(entry)
         # print('data')
         # pprint(data)
         entry.update(data)
+
+        cm['status'] = 'available'
 
         StopWatch.stop(f"create vm {arguments.name}")
         t = format(StopWatch.get(f"create vm {arguments.name}"), '.2f')
@@ -280,26 +284,25 @@ class Provider(ComputeNodeABC):
         entry.update({'cm': cm})
 
         if arguments.metadata:
-            entry.update({"metadata": arguments.metadata})
+            metadata = arguments.metadata
         else:
-            entry.update({"metadata": str({"cm": cm,
-                                           "image": arguments.image,
-                                           "size": arguments.size})})
+            metadata = {"cm": str(cm),
+                        "image": arguments.image,
+                        "size": arguments.size}
 
-        cm['status'] = 'available'
+        entry.update({"metadata": str(metadata)})
 
         try:
             #
             # due to metadata limitation in openstack do not add the creation time
             #
-
-            if 'created' in cm:
+            if 'chameleon' == cloud and 'created' in cm:
                 del cm['created']
 
-            self.p.set_server_metadata(arguments.name, cm)
-            #self.set_server_metadata(arguments.name, cm)
+            self.p.set_server_metadata(arguments.name, **metadata)
+
         except Exception as e:
-            Console.error("Openstack reported the following error")
+            Console.error(f"{cloud} reported the following error")
 
             Console.error(79 * "-")
             print(e)

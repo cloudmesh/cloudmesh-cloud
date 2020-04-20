@@ -1,6 +1,7 @@
 ###############################################################
-# pytest -v --capture=no tests/cloud/test_02_flavor.py
-# pytest -v  tests/cloud/test_02_flavor.py
+# pytest -v --capture=no tests/cloud/test_04_flavor.py
+# pytest -v  tests/cloud/test_04_flavor.py
+# pytest -v --capture=no tests/cloud/test_04_flavor.py::Test_Flavor::<<method_name>>
 ###############################################################
 
 import os
@@ -25,7 +26,7 @@ variables["refresh"] = 'False'
 print(f"Test run for {cloud}")
 
 if cloud is None:
-    raise ValueError("cloud is not not set")
+    raise ValueError("cloud is not set")
 
 cm = CmDatabase()
 provider = Provider(name=cloud)
@@ -37,28 +38,25 @@ class Test_Flavor:
     def test_empty_database(self):
         HEADING()
         Benchmark.Start()
-        cm.clear(collection=f"{cloud}-falvor")
+        cm.clear(collection=f"{cloud}-flavor")
         Benchmark.Stop()
 
     def test_provider_flavor(self):
         HEADING()
-        local = Key()
         Benchmark.Start()
         r = provider.flavors()
         Benchmark.Stop()
 
     def test_provider_flavor_update(self):
         HEADING()
-        local = Key()
         Benchmark.Start()
         r = provider.flavors()
         Benchmark.Stop()
 
-        cm.clear(collection=f"{cloud}-falvor")
+        cm.clear(collection=f"{cloud}-flavor")
 
     def test_cms_flavor_refresh(self):
         HEADING()
-        local = Key()
         Benchmark.Start()
         os.system(
             f"cms flavor list --cloud={cloud} --refresh > flavor-{cloud}.log")
@@ -66,9 +64,8 @@ class Test_Flavor:
 
     def test_cms_flavor(self):
         HEADING()
-        local = Key()
         Benchmark.Start()
-        os.system(f"cms flavor list > flavor-mongo.log")
+        os.system(f"cms flavor list > flavor-local.log")
         Benchmark.Stop()
 
     def test_benchmark(self):

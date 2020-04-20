@@ -27,7 +27,7 @@ cloud = variables.parameter('cloud')
 print(f"Test run for {cloud} on key {KEY}")
 
 if cloud is None:
-    raise ValueError("cloud is not not set")
+    raise ValueError("cloud is not set")
 
 cm = CmDatabase()
 provider = Provider(name=cloud)

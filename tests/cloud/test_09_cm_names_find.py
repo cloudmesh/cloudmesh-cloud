@@ -1,6 +1,6 @@
 ###############################################################
-# pytest -v --capture=no tests/test_cm_names_find.py
-# pytest -v  tests/test_cm_names_find.py
+# pytest -v --capture=no tests/cloud/test_09_cm_names_find.py
+# pytest -v  tests/cloud/test_09_cm_names_find.py
 ###############################################################
 
 from pprint import pprint
@@ -18,6 +18,9 @@ variables = Variables()
 
 assert variables['cloud'] is not None
 cloud = variables['cloud']
+
+if cloud is None:
+    raise ValueError("cloud is not set")
 
 if 'benchmark_print' in variables:
     benchmark_print = variables['benchmark_print']

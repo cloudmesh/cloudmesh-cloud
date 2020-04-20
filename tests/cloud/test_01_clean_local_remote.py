@@ -23,7 +23,7 @@ cloud = variables.parameter('cloud')
 print(f"Test run for {cloud}")
 
 if cloud is None:
-    raise ValueError("cloud is not not set")
+    raise ValueError("cloud is not set")
 
 cm = CmDatabase()
 provider = Provider(name=cloud)
@@ -46,8 +46,9 @@ class Test_Clean_Local_Remote:
             for key in keys:
                 if cloud == 'aws':
                     key_name = key['KeyName']
-                elif cloud == 'chameleon':
+                else:
                     key_name = key['name']
+
                 r = provider.key_delete(key_name)
                 print(r)
             Benchmark.Stop()
@@ -58,6 +59,8 @@ class Test_Clean_Local_Remote:
     def test_delete_all_secgroups_from_cloud(self):
         HEADING()
         try:
+            if cloud == 'google':
+                return
             secgroups = provider.list_secgroups()
             Benchmark.Start()
             for secgroup in secgroups:

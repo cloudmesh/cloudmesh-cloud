@@ -1,6 +1,7 @@
 ###############################################################
-# pytest -v --capture=no tests/cloud/test_03_image.py
-# pytest -v  tests/cloud/test_03_image.py
+# pytest -v --capture=no tests/cloud/test_05_image.py
+# pytest -v  tests/cloud/test_05_image.py
+# pytest -v --capture=no tests/cloud/test_05_image.py::Test_Image::<<method_name>>
 ###############################################################
 
 import os
@@ -25,7 +26,7 @@ variables["refresh"] = 'False'
 print(f"Test run for {cloud}")
 
 if cloud is None:
-    raise ValueError("cloud is not not set")
+    raise ValueError("cloud is not set")
 
 cm = CmDatabase()
 provider = Provider(name=cloud)
@@ -37,28 +38,25 @@ class Test_Image:
     def test_empty_database(self):
         HEADING()
         Benchmark.Start()
-        cm.clear(collection=f"{cloud}-falvor")
+        cm.clear(collection=f"{cloud}-image")
         Benchmark.Stop()
 
     def test_provider_image(self):
         HEADING()
-        local = Key()
         Benchmark.Start()
         r = provider.images()
         Benchmark.Stop()
 
     def test_provider_image_update(self):
         HEADING()
-        local = Key()
         Benchmark.Start()
         r = provider.images()
         Benchmark.Stop()
 
-        cm.clear(collection=f"{cloud}-falvor")
+        cm.clear(collection=f"{cloud}-image")
 
     def test_cms_image_refresh(self):
         HEADING()
-        local = Key()
         Benchmark.Start()
         os.system(
             f"cms image list --cloud={cloud} --refresh > image-{cloud}.log")
@@ -66,7 +64,6 @@ class Test_Image:
 
     def test_cms_image(self):
         HEADING()
-        local = Key()
         Benchmark.Start()
         os.system(f"cms image list > image-local.log")
         Benchmark.Stop()

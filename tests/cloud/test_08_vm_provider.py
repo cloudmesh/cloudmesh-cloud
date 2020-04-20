@@ -1,7 +1,7 @@
 ###############################################################
 # pytest -v --capture=no tests/cloud/test_08_vm_provider.py
 # pytest -v  tests/cloud/test_08_vm_provider.py
-# pytest -v --capture=no  tests/cloud/test_08_vm_provider..py::Test_provider_vm.METHODNAME
+# pytest -v --capture=no  tests/cloud/test_08_vm_provider..py::Test_provider_vm::METHODNAME
 ###############################################################
 
 import os
@@ -33,7 +33,7 @@ cloud = variables.parameter('cloud')
 print(f"Test run for {cloud}")
 
 if cloud is None:
-    raise ValueError("cloud is not not set")
+    raise ValueError("cloud is not set")
 
 name_generator = Name()
 name_generator.set(f"test-{user}-vm-" + "{counter}")
@@ -56,6 +56,7 @@ class Test_provider_vm:
     def test_key_upload(self):
         os.system("cms key add")
         os.system("cms key list")
+        os.system(f"cms key delete {key} --cloud={cloud}")
         os.system(f"cms key upload {key} --cloud={cloud}")
         os.system(f"cms key list --cloud={cloud}")
 
@@ -64,23 +65,27 @@ class Test_provider_vm:
         print(name)
         vms = provider.list()
         print(f'VM is {vms}')
-        if vms is not None:
-            numbers = []
+
+        numbers = []
+        if not vms:
             names = []
             for vm in vms:
                 names.append(vm['name'])
                 numbers.append(int(vm['name'].rsplit("-", 1)[1]))
+
             numbers.sort()
-            return numbers[-1]
+
+        if len(numbers) > 0:
+            counter = numbers[-1]
+        else:
+            counter = 1
+
+        return counter
 
     def test_find_largest_id(self):
         name = Name()
-        counter = 1
-        if self.find_counter() is not None:
-            counter = {"counter": self.find_counter()}
-            name.assign(counter)
-        else:
-            name.assign(counter)
+        counter = {"counter": self.find_counter()}
+        name.assign(counter)
 
     def test_provider_vm_create(self):
         HEADING()
@@ -99,7 +104,7 @@ class Test_provider_vm:
                                            'STOPPED']
         else:
             assert status["cm.status"] in ['ACTIVE', 'BOOTING', 'TERMINATED',
-                                           'STOPPED']
+                                           'STOPPED', 'RUNNING']
 
     def test_provider_vmprovider_vm_list(self):
         # list should be after create() since it would return empty and
@@ -117,7 +122,12 @@ class Test_provider_vm:
         Benchmark.Start()
         cm = CmDatabase()
         vm = cm.find_name(name, kind="vm")[0]
-        assert provider.wait(vm=vm), "cms wait timed out ..."
+
+        if cloud == 'google':
+            pass
+        else:
+            assert provider.wait(vm=vm), "cms wait timed out ..."
+
         Benchmark.Stop()
 
     def test_provider_vm_ssh(self):
@@ -157,7 +167,7 @@ class Test_provider_vm:
                                          'STOPPED']
         else:
             assert data["cm.status"] in ['ACTIVE', 'BOOTING', 'TERMINATED',
-                                         'STOPPED']
+                                         'STOPPED', 'RUNNING']
 
     def test_provider_vm_stop(self):
         HEADING()
@@ -171,11 +181,13 @@ class Test_provider_vm:
             sleep(5)
             time += 5
             status = provider.status(name=name)[0]
-            if status["cm.status"] in ['STOPPED', 'SHUTOFF']:
+            if cloud == 'google':
+                break
+            if status["cm.status"] in ['STOPPED', 'SHUTOFF', 'TERMINATED']:
                 break
         VERBOSE(data)
         print(status)
-        assert status["cm.status"] in ['STOPPED', 'SHUTOFF']
+        assert status["cm.status"] in ['STOPPED', 'SHUTOFF', 'TERMINATED']
 
     def test_provider_vm_start(self):
         HEADING()
@@ -210,10 +222,13 @@ class Test_provider_vm:
 
         termination_timeout = 360
         time = 0
+
         while time <= termination_timeout:
             sleep(5)
             time += 5
             if cloud == 'chameleon' and len(provider.info(name=name)) == 0:
+                break
+            elif cloud == 'google':
                 break
             elif cloud == 'aws' and (len(provider.info(name=name)) == 0 or
                                      provider.info(name=name)[0]["cm"][
@@ -230,6 +245,10 @@ class Test_provider_vm:
         # print(provider.info(name=name))
         if cloud == 'chameleon':
             assert len(provider.info(name=name)) == 0
+        elif cloud == 'google':
+            cm = CmDatabase()
+            vm = cm.find_name(name, kind="vm")[0]
+            assert 'status' in vm and vm['status'] == 'DELETED'
         elif cloud == 'aws':
             assert len(data) == 0 if data else True \
                                                or (data[0]["cm"]["status"] in [

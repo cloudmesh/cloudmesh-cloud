@@ -19,7 +19,7 @@ cloud = variables.parameter('cloud')
 print(f"Test run for {cloud}")
 
 if cloud is None:
-    raise ValueError("cloud is not not set")
+    raise ValueError("cloud is not set")
 
 
 @pytest.mark.incremental

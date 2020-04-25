@@ -459,7 +459,7 @@ class Provider(ComputeNodeABC):
     def list_secgroups(self):
         return self.p.list_secgroups()
 
-    def list_secgroups_rules(self):
+    def list_secgroup_rules(self, name=None):
         return self.p.list_secgroup_rules()
 
     def remove_secgroup(self, name=None):

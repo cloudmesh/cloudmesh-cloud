@@ -210,31 +210,51 @@ class SecCommand(PluginCommand):
             for cloud in clouds:
                 print(f"cloud {cloud}")
                 provider = Provider(name=cloud)
-                cloud_groups = provider.list_secgroups()
 
-                if arguments.output == 'table':
-                    result = []
-                    for group in cloud_groups:
-                        if cloud == "aws":
-                            for rule in group['IpPermissions']:
-                                rule['name'] = group['GroupName']
-                                rule['direction'] = "Inbound"
-                                if rule['UserIdGroupPairs']:
-                                    rule['groupId'] = \
-                                        rule['UserIdGroupPairs'][0]['GroupId']
-                                if rule['IpRanges']:
-                                    rule['ipRange'] = rule['IpRanges'][0][
-                                        'CidrIp']
+                if cloud == 'google':
+                    """
+                        Google does not support sec groups. So the firewall 
+                        rules use name cm-{sec-group-name}-{rule-name} format.
+                    """
+                    if arguments.rule:
+                        cloud_groups = provider.list_secgroup_rules(name=None)
+                    else:
+                        cloud_groups = provider.list_secgroups()
+                else:
+                    cloud_groups = provider.list_secgroups()
 
-                                result.append(rule)
-                        else:
-                            for rule in group['security_group_rules']:
-                                rule['name'] = group['name']
-                                result.append(rule)
-                        cloud_groups = result
-                provider.p.Print(cloud_groups,
-                                 output=arguments.output,
-                                 kind="secrule", )
+                    if arguments.output == 'table':
+                        result = []
+                        for group in cloud_groups:
+                            if cloud == "aws":
+                                for rule in group['IpPermissions']:
+                                    rule['name'] = group['GroupName']
+                                    rule['direction'] = "Inbound"
+                                    if rule['UserIdGroupPairs']:
+                                        rule['groupId'] = \
+                                            rule['UserIdGroupPairs'][0]['GroupId']
+                                    if rule['IpRanges']:
+                                        rule['ipRange'] = rule['IpRanges'][0][
+                                            'CidrIp']
+
+                                    result.append(rule)
+                            else:
+                                for rule in group['security_group_rules']:
+                                    rule['name'] = group['name']
+                                    result.append(rule)
+                            cloud_groups = result
+
+                if arguments.rule:
+                    secrule_output = provider.p.output["secrule"]
+                else:
+                    secrule_output = provider.p.output["secgroup"]
+
+                #Print here.
+                print(Printer.flatwrite(cloud_groups,
+                                  sort_keys=secrule_output["sort_keys"],
+                                  order=secrule_output["order"],
+                                  header=secrule_output["header"],
+                                  output=arguments.output))
 
             return ""
 

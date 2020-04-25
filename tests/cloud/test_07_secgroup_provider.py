@@ -1,6 +1,7 @@
 ###############################################################
-# pytest -v --capture=no tests/cloud/test_05_secgroup_provider.py
-# pytest -v  tests/cloud/test_05_secgroup_provider.py
+# pytest -v --capture=no tests/cloud/test_07_secgroup_provider.py
+# pytest -v  tests/cloud/test_07_secgroup_provider.py
+# pytest -v --capture=no tests/cloud/test_07_secgroup_provider.py::Test_secgroup_provider::test_list_secgroups_rules
 ###############################################################
 
 # TODO: start this with cloud init, e.g, empty mongodb
@@ -85,7 +86,7 @@ class Test_secgroup_provider:
     def test_list_secgroups_rules(self):
         HEADING()
         Benchmark.Start()
-        rule_groups = provider.list_secgroups_rules()
+        rule_groups = provider.list_secgroup_rules()
         Benchmark.Stop()
         provider.Print(output='json', kind="secgroup", data=rule_groups)
 
@@ -93,10 +94,16 @@ class Test_secgroup_provider:
         HEADING()
         name = "Test_Sec_Group"
         Benchmark.Start()
-        provider.add_secgroup(name=name)
+        if cloud != 'google':
+            provider.add_secgroup(name=name)
         Benchmark.Stop()
-        sec_groups = provider.list_secgroups()
-        provider.Print(output='json', kind="secgroup", data=sec_groups)
+
+        if cloud == 'google':
+            # This is not impleted for google cloud.
+            pass
+        else:
+            sec_groups = provider.list_secgroups()
+            provider.Print(output='json', kind="secgroup", data=sec_groups)
 
     def test_upload_secgroup(self):
         HEADING()

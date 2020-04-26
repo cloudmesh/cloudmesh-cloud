@@ -122,13 +122,9 @@ class Test_provider_vm:
         Benchmark.Start()
         cm = CmDatabase()
         vm = cm.find_name(name, kind="vm")[0]
-
-        if cloud == 'google':
-            pass
-        else:
-            assert provider.wait(vm=vm), "cms wait timed out ..."
-
+        assert provider.wait(vm=vm), "cms wait timed out ..."
         Benchmark.Stop()
+
 
     def test_provider_vm_ssh(self):
         HEADING()

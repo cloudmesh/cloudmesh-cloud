@@ -92,22 +92,21 @@ class Test_secgroup_provider:
 
     def test_secgroups_add(self):
         HEADING()
-        name = "Test_Sec_Group"
+        name = "test-sec-group"
         Benchmark.Start()
-        if cloud != 'google':
+        if cloud == 'google':
+            # Add is not implement for google cloud, so manually adding for uplaod.
+            groups.add(name, ["ssh", "icmp", "https"], "Test security group")
+        else:
             provider.add_secgroup(name=name)
         Benchmark.Stop()
 
-        if cloud == 'google':
-            # This is not impleted for google cloud.
-            pass
-        else:
-            sec_groups = provider.list_secgroups()
-            provider.Print(output='json', kind="secgroup", data=sec_groups)
+        sec_groups = provider.list_secgroups()
+        provider.Print(output='json', kind="secgroup", data=sec_groups)
 
     def test_upload_secgroup(self):
         HEADING()
-        name = "Test_Sec_Group"
+        name = "test-sec-group"
         Benchmark.Start()
         provider.upload_secgroup(name=name)
         Benchmark.Stop()
@@ -116,14 +115,15 @@ class Test_secgroup_provider:
 
     def test_secgroups_delete(self):
         HEADING()
-        name = "Test_Sec_Group"
+        name = "test-sec-group"
         Benchmark.Start()
         provider.remove_secgroup(name=name)
         Benchmark.Stop()
         sec_groups = provider.list_secgroups()
         if cloud == 'aws':
             group_indicator = 'GroupName'
-        # elif cloud == 'chameleon':
+        elif cloud == 'google':
+            del groups.secgroups[name]
         else:
             group_indicator = 'name'
 
@@ -133,7 +133,7 @@ class Test_secgroup_provider:
 
     def test_secgroups_delete_again(self):
         HEADING()
-        name = "Test_Sec_Group"
+        name = "test-sec-group"
         Benchmark.Start()
         provider.remove_secgroup(name=name)
         Benchmark.Stop()

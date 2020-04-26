@@ -1,6 +1,7 @@
 ###############################################################
 # pytest -v --capture=no tests/cloud/test_09_cm_names_find.py
 # pytest -v  tests/cloud/test_09_cm_names_find.py
+# pytest -v --capture=no tests/cloud/test_09_cm_names_find.py::Test_cm_find::test_names_regexp
 ###############################################################
 
 from pprint import pprint
@@ -98,18 +99,26 @@ class Test_cm_find:
 
     def test_names_regexp(self):
         HEADING()
+
+        if cloud == 'google':
+            image = "ubuntu"
+        else:
+            image = "Ubuntu"
+
         Benchmark.Start()
 
         names = cm.names(collection=f"{cloud}-image", regex="^CC-")
+
         for entry in names:
             assert "CC-" in entry
 
-        names = cm.names(collection=f"{cloud}-image", regex=".*Ubuntu.*")
+        names = cm.names(collection=f"{cloud}-image", regex=f".*{image}.*")
 
         for entry in names:
-            assert "Ubuntu" in entry
+            assert image in entry
 
         kind = "image"
+
         if benchmark_print:
             print(names)
         else:
@@ -131,7 +140,13 @@ class Test_cm_find:
     def test_cm_find_ubuntu_in_images(self):
         HEADING()
         print()
-        query = {"name": {'$regex': ".*Ubuntu.*"}}
+
+        if cloud == 'google':
+            image_name = "ubuntu"
+        else:
+            image_name = "Ubuntu"
+
+        query = {"name": {'$regex': f".*{image_name}.*"}}
         print(query)
 
         Benchmark.Start()
@@ -148,7 +163,7 @@ class Test_cm_find:
 
         assert len(entries) > 0
         for entry in entries:
-            assert "Ubuntu" in entry['name']
+            assert image_name in entry['name']
 
     def test_cm_find_cloud_name_attributes(self):
         HEADING()

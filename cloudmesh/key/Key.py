@@ -69,40 +69,34 @@ class Key(object):
 
         else:
             # source is filename
-
-            key = SSHkey()
+            def get_group_name(x):
+                if x and "." in x:
+                    x = [x.rsplit(".", 1)[0]]
+                return x
 
             if not group:
-                group = os.path.basename(source)
-                if "." in group:
-                    group = [group.rsplit(".", 1)[0]]
+                group = ["local"]
+                print(source)
+                file_group = os.path.basename(source)
+                file_group = get_group_name(file_group)
+                group = group + file_group
 
             filename = path_expand(source)
 
-            print (group)
-            print (filename)
-
             lines = readfile(filename).splitlines()
 
-            pprint(lines)
-
             keys = []
+
+            group = [get_group_name(x) for x in group]
+
             for line in lines:
-
                 key = SSHkey()
+                key_group = group + [line.split("-", 1)[0]]
 
-                key.add(key=line, group=group, filename=source)
+                key.add(key=line, group=key_group, filename=source)
                 key["cm"]["name"] = key["name"] = line.split(' ',2)[2]
                 keys.append(key)
 
-            pprint(keys)
-
-            # key = SSHkey(name=name, path=path_expand(source))
-            # key['group'] = group or ["local", "ssh"]
-            # keys = [key]
-
-            for key in keys:
-                print (key['name'], key['fingerprint'])
         return keys
 
     def export(self, group=None):

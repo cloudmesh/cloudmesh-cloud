@@ -61,10 +61,9 @@ class Key(object):
             for key in keys:
                 key['group'] = group or ["git"]
 
-
         elif source == "ssh":
             key = SSHkey(name=name)
-            key['group'] = group or ["local", "ssh"]
+            key['group'] = list(set([group] + ["local", "ssh"]))
             keys = [key]
 
         else:
@@ -76,7 +75,6 @@ class Key(object):
 
             if not group:
                 group = ["local"]
-                print(source)
                 file_group = os.path.basename(source)
                 file_group = get_group_name(file_group)
                 group = group + file_group

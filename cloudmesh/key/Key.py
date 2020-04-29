@@ -1,6 +1,5 @@
 import os
 from os.path import expanduser
-from pprint import pprint
 
 from cloudmesh.common.parameter import Parameter
 from cloudmesh.common.util import path_expand
@@ -53,7 +52,7 @@ class Key(object):
         key add [NAME] [--source=git]
         key add [NAME] [--source=ssh]
         """
-        keys = None
+
         if source == "git":
             config = Config()
             username = config["cloudmesh.profile.github"]
@@ -61,10 +60,9 @@ class Key(object):
             for key in keys:
                 key['group'] = group or ["git"]
 
-
         elif source == "ssh":
             key = SSHkey(name=name)
-            key['group'] = group or ["local", "ssh"]
+            key['group'] = list(set([group] + ["local", "ssh"]))
             keys = [key]
 
         else:
@@ -76,7 +74,6 @@ class Key(object):
 
             if not group:
                 group = ["local"]
-                print(source)
                 file_group = os.path.basename(source)
                 file_group = get_group_name(file_group)
                 group = group + file_group
@@ -94,7 +91,7 @@ class Key(object):
                 key_group = group + [line.split("-", 1)[0]]
 
                 key.add(key=line, group=key_group, filename=source)
-                key["cm"]["name"] = key["name"] = line.split(' ',2)[2]
+                key["cm"]["name"] = key["name"] = line.split(' ', 2)[2]
                 keys.append(key)
 
         return keys
@@ -109,7 +106,6 @@ class Key(object):
         cm = CmDatabase()
         cloud = "local"
 
-
         keys = cm.find(collection=f"{cloud}-key")
 
         found = []
@@ -122,8 +118,8 @@ class Key(object):
 
     @DatabaseUpdate()
     def add_group(self, name=None, group=None):
-        names=Parameter.expand(name)
-        groups=Parameter.expand(group)
+        names = Parameter.expand(name)
+        groups = Parameter.expand(group)
 
         cloud = "local"
         db = CmDatabase()
@@ -135,7 +131,6 @@ class Key(object):
                         key["group"].append(_group)
         return keys
 
-
     @DatabaseUpdate()
     def group_add(self, name=None, group=None):
         return self.group_action(name=name, group=group, action="add")
@@ -145,8 +140,8 @@ class Key(object):
         return self.group_action(name=name, group=group, action="delete")
 
     def group_action(self, name=None, group=None, action="add"):
-        names=Parameter.expand(name)
-        groups=Parameter.expand(group)
+        names = Parameter.expand(name)
+        groups = Parameter.expand(group)
 
         cloud = "local"
         db = CmDatabase()

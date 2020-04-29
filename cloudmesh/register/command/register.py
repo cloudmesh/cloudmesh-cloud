@@ -1,6 +1,6 @@
 import json
 from pprint import pprint
-from textwrap import dedent
+from textwrap import dedent, indent
 
 from cloudmesh.common.Printer import Printer
 from cloudmesh.common.console import Console
@@ -21,7 +21,7 @@ class RegisterCommand(PluginCommand):
 
             Usage:
                 register list [--service=SERVICE] [--kind=KIND]
-                register list sample --kind=KIND [--service=SERVICE]
+                register list sample --kind=KIND [--service=SERVICE] [--output=FORMAT]
                 register remove --kind=KIND [--service=SERVICE] [--name=NAME]
                 register update --kind=KIND [--service=SERVICE]
                                             [--name=NAME]
@@ -60,6 +60,8 @@ class RegisterCommand(PluginCommand):
                                      update or remove.
                 --kind=KIND          kind that you want to register e.g: google,
                                      aws, azure.
+                --output=FORMAT      the foramt output, such as rst, txt
+                                     [default:txt]
 
             Examples:
 
@@ -98,6 +100,7 @@ class RegisterCommand(PluginCommand):
                        'dryrun',
                        'keep',
                        'filename',
+                       'output',
                        'name')
 
         # VERBOSE(arguments)
@@ -141,16 +144,32 @@ class RegisterCommand(PluginCommand):
                 sample = Register.get_provider_sample(service, arguments.kind)
 
                 if sample and len(sample) >= 1:
-                    Console.info(
-                        f"Sample for service={service} kind={arguments.kind}")
 
-                    print(dedent(sample))
+                    if sample == "txt":
+                        Console.info(
+                            f"Sample for service={service} kind={arguments.kind}")
 
-                    Console.error("The following attributes are not defined")
+                        print(dedent(sample))
+                    else:
+                        headline = f"Configuration for Cloud={arguments.kind} Service={service}"
+                        print()
+                        print (headline)
+                        print ("-" * len(headline))
+                        print()
+                        print("::")
+                        print()
+
+                        print(indent(dedent(sample), prefix="    "))
+
+                    if sample == 'txt':
+                        Console.error("The following attributes are not defined")
+                    else:
+                        print("To register this service the following parameter ned to be defined::")
                     print()
                     keys = Register.get_sample_variables(sample)
 
                     print("    " + "\n    ".join(sorted(keys)))
+                    print()
                     print()
 
                 return

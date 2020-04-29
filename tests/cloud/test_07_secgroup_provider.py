@@ -123,7 +123,8 @@ class Test_secgroup_provider:
         if cloud == 'aws':
             group_indicator = 'GroupName'
         elif cloud == 'google':
-            del groups.secgroups[name]
+            group_indicator = 'name'
+            groups.remove(name)
         else:
             group_indicator = 'name'
 

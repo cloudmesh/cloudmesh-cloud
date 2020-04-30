@@ -21,7 +21,7 @@ class RegisterCommand(PluginCommand):
 
             Usage:
                 register list [--service=SERVICE] [--kind=KIND]
-                register list sample --kind=KIND [--service=SERVICE] [--output=FORMAT]
+                register list sample --kind=KIND [--service=SERVICE] [--output=FORMAT] [--underline=C]
                 register remove --kind=KIND [--service=SERVICE] [--name=NAME]
                 register update --kind=KIND [--service=SERVICE]
                                             [--name=NAME]
@@ -62,6 +62,9 @@ class RegisterCommand(PluginCommand):
                                      aws, azure.
                 --output=FORMAT      the foramt output, such as rst, txt
                                      [default:txt]
+                --underline=C        in case you use rst as output format the
+                                     underline character can be defined
+                                     [default: -]
 
             Examples:
 
@@ -101,6 +104,7 @@ class RegisterCommand(PluginCommand):
                        'keep',
                        'filename',
                        'output',
+                       'underline',
                        'name')
 
         # VERBOSE(arguments)
@@ -154,10 +158,9 @@ class RegisterCommand(PluginCommand):
                         headline = f"Configuration for Cloud={arguments.kind} Service={service}"
                         print()
                         print (headline)
-                        print ("-" * len(headline))
+                        print (arguments.underline * len(headline))
                         print()
                         print("::")
-                        print()
 
                         print(indent(dedent(sample), prefix="    "))
 

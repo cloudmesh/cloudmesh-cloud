@@ -93,7 +93,7 @@ class Register(object):
 
             elif service == 'volume':
 
-                from cloudmesh.volume.Volume import Provider as P
+                from cloudmesh.volume.Provider import Provider as P
                 Provider = P.get_provider(kind)
 
         except Exception as e:

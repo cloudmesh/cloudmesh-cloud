@@ -103,3 +103,14 @@ Azure
   of some functionality might succeed in spite of improperly set resource groups, but the 
   tests will not be accurate. Documentation on resource group 
   setup https://cloudmesh.github.io/cloudmesh-manual/accounts/azure.html/ . 
+
+Aws
+~~~
+
+- Due to the nature of AWS vm creation, the test can get hung up on the wait command depending 
+  on your configuration.
+
+Oracle
+~~~~~~
+
+- Hangs on input at the end of testing

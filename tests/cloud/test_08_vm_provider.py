@@ -102,6 +102,11 @@ class Test_provider_vm:
         if cloud == 'oracle':
             assert status["cm.status"] in ['STARTING', 'RUNNING', 'STOPPING',
                                            'STOPPED']
+
+        # https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-lifecycle.html
+        elif cloud == 'aws': 
+            assert status["cm.status"] in ['PENDING', 'RUNNING', 'TERMINATED', 'STOPPING', 'STOPPED', 'available']
+            
         else:
             assert status["cm.status"] in ['ACTIVE', 'BOOTING', 'TERMINATED',
                                            'STOPPED', 'RUNNING']
@@ -124,7 +129,6 @@ class Test_provider_vm:
         vm = cm.find_name(name, kind="vm")[0]
         assert provider.wait(vm=vm), "cms wait timed out ..."
         Benchmark.Stop()
-
 
     def test_provider_vm_ssh(self):
         HEADING()
@@ -161,6 +165,9 @@ class Test_provider_vm:
         if cloud == 'oracle':
             assert data["cm.status"] in ['STARTING', 'RUNNING', 'STOPPING',
                                          'STOPPED']
+        elif cloud == 'aws': 
+            assert data["cm.status"] in ['PENDING', 'RUNNING', 'TERMINATED', 'STOPPING', 'STOPPED', 'available']
+         
         else:
             assert data["cm.status"] in ['ACTIVE', 'BOOTING', 'TERMINATED',
                                          'STOPPED', 'RUNNING']
@@ -176,9 +183,13 @@ class Test_provider_vm:
         while time <= stop_timeout:
             sleep(5)
             time += 5
-            status = provider.status(name=name)[0]
+            status = provider.status(name=name)
             if cloud == 'google':
                 break
+            if cloud == 'aws':
+                if status[0]["cm.status"] in ['STOPPED', 'SHUTOFF', 'TERMINATED']:
+                    status = status[0]
+                    break
             if status["cm.status"] in ['STOPPED', 'SHUTOFF', 'TERMINATED']:
                 break
         VERBOSE(data)

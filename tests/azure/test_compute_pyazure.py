@@ -88,7 +88,7 @@ class TestAzure:
         tags = 'This is my cloudmesh metadata Tag'
 
         Benchmark.Start()
-        test_set_metadata = self.p.set_server_metadata(name=None, cm=tags)
+        test_set_metadata = self.p.set_server_metadata(name=None, metadata=tags)
         Benchmark.Stop()
         VERBOSE(test_set_metadata,
                 label='Added Metadata to Virtual Machine Created')

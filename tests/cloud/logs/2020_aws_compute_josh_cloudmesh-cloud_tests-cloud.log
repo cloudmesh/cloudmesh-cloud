@@ -1,0 +1,1561 @@
+============================= test session starts ==============================
+platform linux -- Python 3.8.2, pytest-5.4.1, py-1.8.1, pluggy-0.13.1 -- /home/josh/ENV3/bin/python3
+cachedir: .pytest_cache
+rootdir: /home/josh/dev/cloud/cloudmesh-cloud, inifile: pytest.ini
+plugins: cov-2.8.1
+collecting ... Test run for aws
+Test run for aws
+Test run for aws on key test-key
+Test run for aws
+Test run for aws
+[34m
+# ----------------------------------------------------------------------
+# variables.dict()
+# ----------------------------------------------------------------------
+# 27:<module> ./tests/cloud/test_07_secgroup_provider.py
+# ----------------------------------------------------------------------
+# {'cloud': 'aws',
+#  'debug': 'True',
+#  'group': 'cloudmesh',
+#  'key': 'josh',
+#  'refresh': 'False',
+#  'storage': 'google',
+#  'timer': 'False',
+#  'trace': 'True',
+#  'verbose': '10',
+#  'vm': 'test-josh-vm'}
+# ----------------------------------------------------------------------
+[0m
+Test run for aws
+[34m
+# ----------------------------------------------------------------------
+# variables.dict()
+# ----------------------------------------------------------------------
+# 27:<module> ./tests/cloud/test_08_vm_provider.py
+# ----------------------------------------------------------------------
+# {'cloud': 'aws',
+#  'debug': 'True',
+#  'group': 'cloudmesh',
+#  'key': 'josh',
+#  'refresh': 'False',
+#  'storage': 'google',
+#  'timer': 'False',
+#  'trace': 'True',
+#  'verbose': '10',
+#  'vm': 'test-josh-vm'}
+# ----------------------------------------------------------------------
+[0m
+Test run for aws
+collected 63 items
+
+tests/cloud/test_00_sys.py::Test_Sys::test_cms_help 
+[35m
+# ######################################################################
+# test_cms_help /tests/cloud/test_00_sys.py 28
+# ######################################################################
+[0m
+[34m
+# ----------------------------------------------------------------------
+# result
+# ----------------------------------------------------------------------
+# 34:test_cms_help ./tests/cloud/test_00_sys.py
+# ----------------------------------------------------------------------
+# ('help\n'
+#  '\n'
+#  'Documented commands (type help <topic>):\n'
+#  '========================================\n'
+#  'EOF        data     help       man        register  start      '
+#  'vcluster      \n'
+#  'admin      debug    host       open       sec       stop       '
+#  'version       \n'
+#  'banner     default  image      openstack  service   stopwatch  '
+#  'vm            \n'
+#  'check      dryrun   info       pause      set       sys        '
+#  'workflow_draft\n'
+#  'clear      echo     init       provider   shell     term     \n'
+#  'commands   flavor   inventory  py         sleep     test     \n'
+#  'config     group    ip         q          source    var      \n'
+#  'container  gui      key        quit       ssh       vbox')
+# ----------------------------------------------------------------------
+[0m
+PASSED
+tests/cloud/test_00_sys.py::Test_Sys::test_benchmark 
++---------------------+------------------------------------------------------------------+
+| Attribute           | Value                                                            |
+|---------------------+------------------------------------------------------------------|
+| BUG_REPORT_URL      | "https://bugs.launchpad.net/ubuntu/"                             |
+| DISTRIB_CODENAME    | bionic                                                           |
+| DISTRIB_DESCRIPTION | "Ubuntu 18.04.4 LTS"                                             |
+| DISTRIB_ID          | Ubuntu                                                           |
+| DISTRIB_RELEASE     | 18.04                                                            |
+| HOME_URL            | "https://www.ubuntu.com/"                                        |
+| ID                  | ubuntu                                                           |
+| ID_LIKE             | debian                                                           |
+| NAME                | "Ubuntu"                                                         |
+| PRETTY_NAME         | "Ubuntu 18.04.4 LTS"                                             |
+| PRIVACY_POLICY_URL  | "https://www.ubuntu.com/legal/terms-and-policies/privacy-policy" |
+| SUPPORT_URL         | "https://help.ubuntu.com/"                                       |
+| UBUNTU_CODENAME     | bionic                                                           |
+| VERSION             | "18.04.4 LTS (Bionic Beaver)"                                    |
+| VERSION_CODENAME    | bionic                                                           |
+| VERSION_ID          | "18.04"                                                          |
+| cpu_count           | 4                                                                |
+| mem.active          | 3.1 GiB                                                          |
+| mem.available       | 4.7 GiB                                                          |
+| mem.free            | 2.5 GiB                                                          |
+| mem.inactive        | 1.4 GiB                                                          |
+| mem.percent         | 39.1 %                                                           |
+| mem.total           | 7.7 GiB                                                          |
+| mem.used            | 2.1 GiB                                                          |
+| platform.version    | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020              |
+| python              | 3.8.2 (default, Feb 26 2020, 02:56:10)                           |
+|                     | [GCC 7.4.0]                                                      |
+| python.pip          | 20.1                                                             |
+| python.version      | 3.8.2                                                            |
+| sys.platform        | linux                                                            |
+| uname.machine       | x86_64                                                           |
+| uname.node          | josh-XPS-13-9343                                                 |
+| uname.processor     | x86_64                                                           |
+| uname.release       | 5.3.0-46-generic                                                 |
+| uname.system        | Linux                                                            |
+| uname.version       | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020              |
+| user                | josh                                                             |
++---------------------+------------------------------------------------------------------+
+
++---------------------------+----------+--------+---------------------+-------+------------------+--------+-------+-----------------------------------------------------+
+| Name                      | Status   |   Time | Start               | tag   | Node             | User   | OS    | Version                                             |
+|---------------------------+----------+--------+---------------------+-------+------------------+--------+-------+-----------------------------------------------------|
+| test_00_sys/test_cms_help | ok       |  2.127 | 2020-05-07 21:42:30 | aws   | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
++---------------------------+----------+--------+---------------------+-------+------------------+--------+-------+-----------------------------------------------------+
+
+# csv,timer,status,time,start,tag,uname.node,user,uname.system,platform.version
+# csv,test_00_sys/test_cms_help,ok,2.127,2020-05-07 21:42:30,aws,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+
+PASSED
+tests/cloud/test_01_clean_local_remote.py::Test_Clean_Local_Remote::test_cms_init init
+MongoDB stop
+server should be down...
+deleting: /home/josh/.cloudmesh/mongodb
+MongoDB folder deleted
+MongoDB create
+admin mongo create
+
+# ----------------------------------------------------------------------
+# arguments
+# ----------------------------------------------------------------------
+# 122:do_admin /home/josh/dev/cloud/cloudmesh-admin/cloudmesh/admin/command/admin.py
+# ----------------------------------------------------------------------
+# {'--brew': False,
+#  '--docker': False,
+#  '--download': None,
+#  '--dryrun': False,
+#  '--force': False,
+#  '--nosudo': False,
+#  '--output': None,
+#  'FILENAME': None,
+#  'MODE': None,
+#  'PASSWORD': None,
+#  'backup': False,
+#  'create': True,
+#  'docker': False,
+#  'dryrun': False,
+#  'force': False,
+#  'info': False,
+#  'install': False,
+#  'list': False,
+#  'load': False,
+#  'mode': False,
+#  'mongo': True,
+#  'nosudo': False,
+#  'output': 'table',
+#  'password': False,
+#  'security': False,
+#  'ssh': False,
+#  'start': False,
+#  'stats': False,
+#  'status': False,
+#  'stop': False,
+#  'system': False,
+#  'version': False}
+# ----------------------------------------------------------------------
+
+MongoDB create
+INFO: Starting mongo without authentication ... 
+about to fork child process, waiting until server is ready for connections.
+forked process: 24241
+child process started successfully, parent exiting
+
+None
+INFO: Creating admin user ... 
+Administrative user created.
+INFO: Stopping the service ... 
+server should be down...
+admin mongo start
+
+# ----------------------------------------------------------------------
+# arguments
+# ----------------------------------------------------------------------
+# 122:do_admin /home/josh/dev/cloud/cloudmesh-admin/cloudmesh/admin/command/admin.py
+# ----------------------------------------------------------------------
+# {'--brew': False,
+#  '--docker': False,
+#  '--download': None,
+#  '--dryrun': False,
+#  '--force': False,
+#  '--nosudo': False,
+#  '--output': None,
+#  'FILENAME': None,
+#  'MODE': None,
+#  'PASSWORD': None,
+#  'backup': False,
+#  'create': False,
+#  'docker': False,
+#  'dryrun': False,
+#  'force': False,
+#  'info': False,
+#  'install': False,
+#  'list': False,
+#  'load': False,
+#  'mode': False,
+#  'mongo': True,
+#  'nosudo': False,
+#  'output': 'table',
+#  'password': False,
+#  'security': False,
+#  'ssh': False,
+#  'start': True,
+#  'stats': False,
+#  'status': False,
+#  'stop': False,
+#  'system': False,
+#  'version': False}
+# ----------------------------------------------------------------------
+
+MongoDB start
+about to fork child process, waiting until server is ready for connections.
+forked process: 24289
+child process started successfully, parent exiting
+
+None
+Set key
+Config Security Initialization
+key add
+sec load
+
++---------+-------+----------+-----------+-----------+
+| Group   | Rule  | Protocol | Ports     | IP Range  |
++---------+-------+----------+-----------+-----------+
+| default | ssh   | tcp      | 22:22     | 0.0.0.0/0 |
+| default | icmp  | icmp     |           | 0.0.0.0/0 |
+| default | http  | tcp      | 80:80     | 0.0.0.0/0 |
+| default | https | tcp      | 443:443   | 0.0.0.0/0 |
+| flask   | ssh   | tcp      | 22:22     | 0.0.0.0/0 |
+| flask   | icmp  | icmp     |           | 0.0.0.0/0 |
+| flask   | http  | tcp      | 80:80     | 0.0.0.0/0 |
+| flask   | https | tcp      | 443:443   | 0.0.0.0/0 |
+| flask   | flask | tcp      | 8000:8000 | 0.0.0.0/0 |
++---------+-------+----------+-----------+-----------+
+
+Variables
+
+    timer=False
+    cloud=aws
+    vm=test-josh-vm
+    trace=True
+    debug=True
+    verbose=10
+    storage=google
+    key=josh
+    refresh=False
+    group=cloudmesh
+
+[35m
+# ######################################################################
+# test_cms_init /tests/cloud/test_01_clean_local_remote.py 35
+# ######################################################################
+[0m
+PASSED
+tests/cloud/test_01_clean_local_remote.py::Test_Clean_Local_Remote::test_delete_all_keys_from_cloud 
+[35m
+# ######################################################################
+# test_delete_all_keys_from_cloud /tests/cloud/test_01_clean_local_remote.py 41
+# ######################################################################
+[0m
+deleting the key: josh -> aws
+None
+PASSED
+tests/cloud/test_01_clean_local_remote.py::Test_Clean_Local_Remote::test_delete_all_secgroups_from_cloud 
+[35m
+# ######################################################################
+# test_delete_all_secgroups_from_cloud /tests/cloud/test_01_clean_local_remote.py 59
+# ######################################################################
+[0m
+PASSED
+tests/cloud/test_01_clean_local_remote.py::Test_Clean_Local_Remote::test_benchmark 
+
++-----------------------------------------------------------------+----------+--------+---------------------+-------+------------------+--------+-------+-----------------------------------------------------+
+| Name                                                            | Status   |   Time | Start               | tag   | Node             | User   | OS    | Version                                             |
+|-----------------------------------------------------------------+----------+--------+---------------------+-------+------------------+--------+-------+-----------------------------------------------------|
+| test_00_sys/test_cms_help                                       | ok       |  2.127 | 2020-05-07 21:42:30 | aws   | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_01_clean_local_remote/test_cms_init                        | ok       |  8.586 | 2020-05-07 21:42:32 | aws   | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_01_clean_local_remote/test_delete_all_keys_from_cloud      | ok       |  0.14  | 2020-05-07 21:42:41 | aws   | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_01_clean_local_remote/test_delete_all_secgroups_from_cloud | ok       |  0.002 | 2020-05-07 21:42:42 | aws   | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
++-----------------------------------------------------------------+----------+--------+---------------------+-------+------------------+--------+-------+-----------------------------------------------------+
+
+PASSED
+tests/cloud/test_02_key.py::Test_Key::test_clear_local_database 
+[35m
+# ######################################################################
+# test_clear_local_database /tests/cloud/test_02_key.py 39
+# ######################################################################
+[0m
+PASSED
+tests/cloud/test_02_key.py::Test_Key::test_clear_cloud_database 
+[35m
+# ######################################################################
+# test_clear_cloud_database /tests/cloud/test_02_key.py 46
+# ######################################################################
+[0m
+PASSED
+tests/cloud/test_02_key.py::Test_Key::test_upload_key_to_database 
+[35m
+# ######################################################################
+# test_upload_key_to_database /tests/cloud/test_02_key.py 53
+# ######################################################################
+[0m
+<cloudmesh.key.Key.Key object at 0x7fcd0db844f0>
+PASSED
+tests/cloud/test_02_key.py::Test_Key::test_upload_key_to_cloud 
+[35m
+# ######################################################################
+# test_upload_key_to_cloud /tests/cloud/test_02_key.py 66
+# ######################################################################
+[0m
+[34m
+# ----------------------------------------------------------------------
+# key
+# ----------------------------------------------------------------------
+# 80:test_upload_key_to_cloud ./tests/cloud/test_02_key.py
+# ----------------------------------------------------------------------
+# {'_id': ObjectId('5eb480d2b4f2824f59fb069f'),
+#  'cm': {'cloud': 'local',
+#         'collection': 'local-key',
+#         'created': '2020-05-07 21:42:42.421913',
+#         'kind': 'key',
+#         'modified': '2020-05-07 21:42:42.421913',
+#         'name': 'test-key'},
+#  'comment': 'baker203@iu.edu',
+#  'fingerprint': '44:8c:65:30:6e:a8:31:40:13:9f:c8:f2:c6:67:c7:c9',
+#  'group': ['ssh', None, 'local'],
+#  'key': 'AAAAB3NzaC1yc2EAAAADAQABAAACAQCZyFlYiArHL+v9i5sLp2HNv41J5PtLsFaJ4qDNiKgy0rBxmHtFg2giQDYPkWySZB1M+uOTSHkCR98ZsV64vCXfs09Z+xhT42B0jjqHNkILWgY1aShEvXzyII6B4Ny816fCMJI+kxllIeAIVgmwPwCjwsM6erUURBPmHlkPk7OG8Kt8ljiLuQ3TXtBfQ+zWRmvpCv0oN8ptWMCXulONpmTtuvLgNtTHSjeydqe9jSs2y+QwEp2P60A8ZgL8SK0WV5xtZEz6+YkBhl3eitub/D4ek+A37nY//SE8Fxau3TTH9VlMPFefvKUXoMsCCLm1Vs9UfnHKxzfeB9/XfBk4npMn7/Licdg2czGgkvK0FDv7EIDZfwh/KTa5KINPSRGkW5N2j73qi0I02QAkzd5NKfJca4vXklqcZwyIMYv0X0bxmbQ9o5TRO8ISeocDZAMLsYMlyO+wpoqd6MX3fe6d0eA0UBKozjQ7lw/UCnBlAKQGrFjXl4DEAm8xfW2d5vy5wyw2ygGtpKe5Rk30eVUNMfi/zvZYr4TwRZ0ieh2Y80UkQr/YGuM3C1C3GjQuxrMMQc8ooUs6f56+61/sJbsvRjtKiYwMvR8HJT4oGR5Ds4a9I2Wc2FKGzE/AZIGg/zeLCCqDLK+bZYWGwGu4G/XvOoJJfo4fqGf7NvKmcfVXU+zSXw==',
+#  'location': {'private': '/home/josh/.ssh/id_rsa',
+#               'public': '/home/josh/.ssh/id_rsa.pub'},
+#  'name': 'test-key',
+#  'path': '/home/josh/.ssh/id_rsa.pub',
+#  'profile': {'email': 'baker203@iu.edu',
+#              'firstname': 'Josh',
+#              'github': 'joshua-m-baker',
+#              'lastname': 'Baker',
+#              'publickey': '~/.ssh/id_rsa.pub',
+#              'user': 'josh'},
+#  'public_key': 'ssh-rsa '
+#                'AAAAB3NzaC1yc2EAAAADAQABAAACAQCZyFlYiArHL+v9i5sLp2HNv41J5PtLsFaJ4qDNiKgy0rBxmHtFg2giQDYPkWySZB1M+uOTSHkCR98ZsV64vCXfs09Z+xhT42B0jjqHNkILWgY1aShEvXzyII6B4Ny816fCMJI+kxllIeAIVgmwPwCjwsM6erUURBPmHlkPk7OG8Kt8ljiLuQ3TXtBfQ+zWRmvpCv0oN8ptWMCXulONpmTtuvLgNtTHSjeydqe9jSs2y+QwEp2P60A8ZgL8SK0WV5xtZEz6+YkBhl3eitub/D4ek+A37nY//SE8Fxau3TTH9VlMPFefvKUXoMsCCLm1Vs9UfnHKxzfeB9/XfBk4npMn7/Licdg2czGgkvK0FDv7EIDZfwh/KTa5KINPSRGkW5N2j73qi0I02QAkzd5NKfJca4vXklqcZwyIMYv0X0bxmbQ9o5TRO8ISeocDZAMLsYMlyO+wpoqd6MX3fe6d0eA0UBKozjQ7lw/UCnBlAKQGrFjXl4DEAm8xfW2d5vy5wyw2ygGtpKe5Rk30eVUNMfi/zvZYr4TwRZ0ieh2Y80UkQr/YGuM3C1C3GjQuxrMMQc8ooUs6f56+61/sJbsvRjtKiYwMvR8HJT4oGR5Ds4a9I2Wc2FKGzE/AZIGg/zeLCCqDLK+bZYWGwGu4G/XvOoJJfo4fqGf7NvKmcfVXU+zSXw== '
+#                'baker203@iu.edu',
+#  'source': 'ssh',
+#  'type': 'ssh-rsa',
+#  'uri': 'file:///home/josh/.ssh/id_rsa.pub'}
+# ----------------------------------------------------------------------
+[0m
+uploading the key: test-key -> aws
+PASSED
+tests/cloud/test_02_key.py::Test_Key::test_list_key_from_cloud 
+[35m
+# ######################################################################
+# test_list_key_from_cloud /tests/cloud/test_02_key.py 86
+# ######################################################################
+[0m
+PASSED
+tests/cloud/test_02_key.py::Test_Key::test_delete_key_from_cloud 
+[35m
+# ######################################################################
+# test_delete_key_from_cloud /tests/cloud/test_02_key.py 103
+# ######################################################################
+[0m
+deleting the key: test-key -> aws
+None
+PASSED
+tests/cloud/test_02_key.py::Test_Key::test_get_key_from_cloud 
+[35m
+# ######################################################################
+# test_get_key_from_cloud /tests/cloud/test_02_key.py 113
+# ######################################################################
+[0m
+PASSED
+tests/cloud/test_02_key.py::Test_Key::test_key_delete 
+[35m
+# ######################################################################
+# test_key_delete /tests/cloud/test_02_key.py 117
+# ######################################################################
+[0m
+
+[35m
+# ######################################################################
+# test_clear_cloud_database /tests/cloud/test_02_key.py 46
+# ######################################################################
+[0m
+PASSED
+tests/cloud/test_02_key.py::Test_Key::test_cms_local key add
+
+[35m
+# ######################################################################
+# test_cms_local /tests/cloud/test_02_key.py 123
+# ######################################################################
+[0m
+PASSED
+tests/cloud/test_02_key.py::Test_Key::test_cms_cloud key upload --cloud=aws
+cloud aws
+uploading the key: josh -> aws
+upload key 'josh successful'. 
+
+[35m
+# ######################################################################
+# test_cms_cloud /tests/cloud/test_02_key.py 130
+# ######################################################################
+[0m
+
+[35m
+# ######################################################################
+# test_clear_cloud_database /tests/cloud/test_02_key.py 46
+# ######################################################################
+[0m
+PASSED
+tests/cloud/test_02_key.py::Test_Key::test_benchmark 
+
++-----------------------------------------------------------------+----------+--------+---------------------+-------+------------------+--------+-------+-----------------------------------------------------+
+| Name                                                            | Status   |   Time | Start               | tag   | Node             | User   | OS    | Version                                             |
+|-----------------------------------------------------------------+----------+--------+---------------------+-------+------------------+--------+-------+-----------------------------------------------------|
+| test_00_sys/test_cms_help                                       | ok       |  2.127 | 2020-05-07 21:42:30 | aws   | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_01_clean_local_remote/test_cms_init                        | ok       |  8.586 | 2020-05-07 21:42:32 | aws   | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_01_clean_local_remote/test_delete_all_keys_from_cloud      | ok       |  0.14  | 2020-05-07 21:42:41 | aws   | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_01_clean_local_remote/test_delete_all_secgroups_from_cloud | ok       |  0.002 | 2020-05-07 21:42:42 | aws   | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_clear_local_database                           | ok       |  0.157 | 2020-05-07 21:42:42 | aws   | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_clear_cloud_database                           | ok       |  0.019 | 2020-05-07 21:42:46 | aws   | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_upload_key_to_database                         | ok       |  0.04  | 2020-05-07 21:42:42 | aws   | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_upload_key_to_cloud                            | ok       |  0.332 | 2020-05-07 21:42:42 | aws   | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_list_key_from_cloud                            | ok       |  0.126 | 2020-05-07 21:42:43 | aws   | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_delete_key_from_cloud                          | ok       |  0.128 | 2020-05-07 21:42:43 | aws   | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_key_delete                                     | ok       |  0.35  | 2020-05-07 21:42:43 | aws   | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_cms_local                                      | ok       |  2.646 | 2020-05-07 21:42:43 | aws   | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_cms_cloud                                      | ok       |  4.002 | 2020-05-07 21:42:46 | aws   | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
++-----------------------------------------------------------------+----------+--------+---------------------+-------+------------------+--------+-------+-----------------------------------------------------+
+
+# csv,timer,status,time,start,tag,uname.node,user,uname.system,platform.version
+# csv,test_00_sys/test_cms_help,ok,2.127,2020-05-07 21:42:30,aws,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_01_clean_local_remote/test_cms_init,ok,8.586,2020-05-07 21:42:32,aws,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_01_clean_local_remote/test_delete_all_keys_from_cloud,ok,0.14,2020-05-07 21:42:41,aws,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_01_clean_local_remote/test_delete_all_secgroups_from_cloud,ok,0.002,2020-05-07 21:42:42,aws,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_clear_local_database,ok,0.157,2020-05-07 21:42:42,aws,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_clear_cloud_database,ok,0.019,2020-05-07 21:42:46,aws,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_upload_key_to_database,ok,0.04,2020-05-07 21:42:42,aws,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_upload_key_to_cloud,ok,0.332,2020-05-07 21:42:42,aws,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_list_key_from_cloud,ok,0.126,2020-05-07 21:42:43,aws,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_delete_key_from_cloud,ok,0.128,2020-05-07 21:42:43,aws,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_key_delete,ok,0.35,2020-05-07 21:42:43,aws,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_cms_local,ok,2.646,2020-05-07 21:42:43,aws,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_cms_cloud,ok,4.002,2020-05-07 21:42:46,aws,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+
+PASSED
+tests/cloud/test_04_flavor.py::Test_Flavor::test_empty_database 
+[35m
+# ######################################################################
+# test_empty_database /tests/cloud/test_04_flavor.py 38
+# ######################################################################
+[0m
+PASSED
+tests/cloud/test_04_flavor.py::Test_Flavor::test_provider_flavor 
+[35m
+# ######################################################################
+# test_provider_flavor /tests/cloud/test_04_flavor.py 44
+# ######################################################################
+[0m
+fetch: https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/index.json
+fetch: https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonEC2/current/region_index.json
+fetch: https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonEC2/20200507173124/us-east-1/index.json
+PASSED
+tests/cloud/test_04_flavor.py::Test_Flavor::test_provider_flavor_update 
+[35m
+# ######################################################################
+# test_provider_flavor_update /tests/cloud/test_04_flavor.py 50
+# ######################################################################
+[0m
+fetch: https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/index.json
+fetch: https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonEC2/current/region_index.json
+fetch: https://pricing.us-east-1.amazonaws.com/offers/v1.0/aws/AmazonEC2/20200507173124/us-east-1/index.json
+PASSED
+tests/cloud/test_04_flavor.py::Test_Flavor::test_cms_flavor_refresh 
+[35m
+# ######################################################################
+# test_cms_flavor_refresh /tests/cloud/test_04_flavor.py 58
+# ######################################################################
+[0m
+PASSED
+tests/cloud/test_04_flavor.py::Test_Flavor::test_cms_flavor 
+[35m
+# ######################################################################
+# test_cms_flavor /tests/cloud/test_04_flavor.py 65
+# ######################################################################
+[0m
+PASSED
+tests/cloud/test_04_flavor.py::Test_Flavor::test_benchmark 
+
++-----------------------------------------------------------------+----------+---------+---------------------+-------+------------------+--------+-------+-----------------------------------------------------+
+| Name                                                            | Status   |    Time | Start               | tag   | Node             | User   | OS    | Version                                             |
+|-----------------------------------------------------------------+----------+---------+---------------------+-------+------------------+--------+-------+-----------------------------------------------------|
+| test_00_sys/test_cms_help                                       | ok       |   2.127 | 2020-05-07 21:42:30 | aws   | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_01_clean_local_remote/test_cms_init                        | ok       |   8.586 | 2020-05-07 21:42:32 | aws   | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_01_clean_local_remote/test_delete_all_keys_from_cloud      | ok       |   0.14  | 2020-05-07 21:42:41 | aws   | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_01_clean_local_remote/test_delete_all_secgroups_from_cloud | ok       |   0.002 | 2020-05-07 21:42:42 | aws   | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_clear_local_database                           | ok       |   0.157 | 2020-05-07 21:42:42 | aws   | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_clear_cloud_database                           | ok       |   0.019 | 2020-05-07 21:42:46 | aws   | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_upload_key_to_database                         | ok       |   0.04  | 2020-05-07 21:42:42 | aws   | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_upload_key_to_cloud                            | ok       |   0.332 | 2020-05-07 21:42:42 | aws   | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_list_key_from_cloud                            | ok       |   0.126 | 2020-05-07 21:42:43 | aws   | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_delete_key_from_cloud                          | ok       |   0.128 | 2020-05-07 21:42:43 | aws   | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_key_delete                                     | ok       |   0.35  | 2020-05-07 21:42:43 | aws   | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_cms_local                                      | ok       |   2.646 | 2020-05-07 21:42:43 | aws   | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_cms_cloud                                      | ok       |   4.002 | 2020-05-07 21:42:46 | aws   | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_04_flavor/test_empty_database                              | ok       |   0.019 | 2020-05-07 21:42:50 | aws   | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_04_flavor/test_provider_flavor                             | ok       | 258.951 | 2020-05-07 21:42:50 | aws   | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_04_flavor/test_provider_flavor_update                      | ok       | 481.06  | 2020-05-07 21:47:09 | aws   | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_04_flavor/test_cms_flavor_refresh                          | ok       | 267.999 | 2020-05-07 21:55:10 | aws   | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_04_flavor/test_cms_flavor                                  | ok       |   8.415 | 2020-05-07 21:59:38 | aws   | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
++-----------------------------------------------------------------+----------+---------+---------------------+-------+------------------+--------+-------+-----------------------------------------------------+
+
+# csv,timer,status,time,start,tag,uname.node,user,uname.system,platform.version
+# csv,test_00_sys/test_cms_help,ok,2.127,2020-05-07 21:42:30,aws,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_01_clean_local_remote/test_cms_init,ok,8.586,2020-05-07 21:42:32,aws,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_01_clean_local_remote/test_delete_all_keys_from_cloud,ok,0.14,2020-05-07 21:42:41,aws,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_01_clean_local_remote/test_delete_all_secgroups_from_cloud,ok,0.002,2020-05-07 21:42:42,aws,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_clear_local_database,ok,0.157,2020-05-07 21:42:42,aws,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_clear_cloud_database,ok,0.019,2020-05-07 21:42:46,aws,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_upload_key_to_database,ok,0.04,2020-05-07 21:42:42,aws,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_upload_key_to_cloud,ok,0.332,2020-05-07 21:42:42,aws,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_list_key_from_cloud,ok,0.126,2020-05-07 21:42:43,aws,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_delete_key_from_cloud,ok,0.128,2020-05-07 21:42:43,aws,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_key_delete,ok,0.35,2020-05-07 21:42:43,aws,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_cms_local,ok,2.646,2020-05-07 21:42:43,aws,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_cms_cloud,ok,4.002,2020-05-07 21:42:46,aws,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_04_flavor/test_empty_database,ok,0.019,2020-05-07 21:42:50,aws,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_04_flavor/test_provider_flavor,ok,258.951,2020-05-07 21:42:50,aws,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_04_flavor/test_provider_flavor_update,ok,481.06,2020-05-07 21:47:09,aws,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_04_flavor/test_cms_flavor_refresh,ok,267.999,2020-05-07 21:55:10,aws,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_04_flavor/test_cms_flavor,ok,8.415,2020-05-07 21:59:38,aws,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+
+PASSED
+tests/cloud/test_05_image.py::Test_Image::test_empty_database 
+[35m
+# ######################################################################
+# test_empty_database /tests/cloud/test_05_image.py 38
+# ######################################################################
+[0m
+PASSED
+tests/cloud/test_05_image.py::Test_Image::test_provider_image 
+[35m
+# ######################################################################
+# test_provider_image /tests/cloud/test_05_image.py 44
+# ######################################################################
+[0m
+Getting the list of images for aws cloud, this might take a few minutes ...
+[32mImages list for aws cloud retrieved successfully[0m
+Saving the data to file 
+Importing the saved data to database
+2020-05-07T18:00:48.614-0400	connected to: mongodb://localhost/
+2020-05-07T18:00:48.614-0400	dropping: cloudmesh.aws-image
+2020-05-07T18:00:51.614-0400	[##############..........] cloudmesh.aws-image	42.4MB/68.7MB (61.7%)
+2020-05-07T18:00:53.523-0400	[########################] cloudmesh.aws-image	68.7MB/68.7MB (100.0%)
+2020-05-07T18:00:53.523-0400	60059 document(s) imported successfully. 0 document(s) failed to import.
+
+PASSED
+tests/cloud/test_05_image.py::Test_Image::test_provider_image_update 
+[35m
+# ######################################################################
+# test_provider_image_update /tests/cloud/test_05_image.py 50
+# ######################################################################
+[0m
+Getting the list of images for aws cloud, this might take a few minutes ...
+[32mImages list for aws cloud retrieved successfully[0m
+Collection aws-image dropped to be rewritten
+Saving the data to file 
+Importing the saved data to database
+2020-05-07T18:01:55.819-0400	connected to: mongodb://localhost/
+2020-05-07T18:01:55.819-0400	dropping: cloudmesh.aws-image
+2020-05-07T18:01:58.819-0400	[##############..........] cloudmesh.aws-image	42.5MB/68.7MB (61.9%)
+2020-05-07T18:02:00.701-0400	[########################] cloudmesh.aws-image	68.7MB/68.7MB (100.0%)
+2020-05-07T18:02:00.701-0400	60059 document(s) imported successfully. 0 document(s) failed to import.
+
+PASSED
+tests/cloud/test_05_image.py::Test_Image::test_cms_image_refresh 
+[35m
+# ######################################################################
+# test_cms_image_refresh /tests/cloud/test_05_image.py 58
+# ######################################################################
+[0m
+PASSED
+tests/cloud/test_05_image.py::Test_Image::test_cms_image 
+[35m
+# ######################################################################
+# test_cms_image /tests/cloud/test_05_image.py 65
+# ######################################################################
+[0m
+PASSED
+tests/cloud/test_05_image.py::Test_Image::test_benchmark 
+
++-----------------------------------------------------------------+----------+---------+---------------------+-------+------------------+--------+-------+-----------------------------------------------------+
+| Name                                                            | Status   |    Time | Start               | tag   | Node             | User   | OS    | Version                                             |
+|-----------------------------------------------------------------+----------+---------+---------------------+-------+------------------+--------+-------+-----------------------------------------------------|
+| test_00_sys/test_cms_help                                       | ok       |   2.127 | 2020-05-07 21:42:30 | aws   | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_01_clean_local_remote/test_cms_init                        | ok       |   8.586 | 2020-05-07 21:42:32 | aws   | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_01_clean_local_remote/test_delete_all_keys_from_cloud      | ok       |   0.14  | 2020-05-07 21:42:41 | aws   | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_01_clean_local_remote/test_delete_all_secgroups_from_cloud | ok       |   0.002 | 2020-05-07 21:42:42 | aws   | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_clear_local_database                           | ok       |   0.157 | 2020-05-07 21:42:42 | aws   | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_clear_cloud_database                           | ok       |   0.019 | 2020-05-07 21:42:46 | aws   | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_upload_key_to_database                         | ok       |   0.04  | 2020-05-07 21:42:42 | aws   | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_upload_key_to_cloud                            | ok       |   0.332 | 2020-05-07 21:42:42 | aws   | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_list_key_from_cloud                            | ok       |   0.126 | 2020-05-07 21:42:43 | aws   | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_delete_key_from_cloud                          | ok       |   0.128 | 2020-05-07 21:42:43 | aws   | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_key_delete                                     | ok       |   0.35  | 2020-05-07 21:42:43 | aws   | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_cms_local                                      | ok       |   2.646 | 2020-05-07 21:42:43 | aws   | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_cms_cloud                                      | ok       |   4.002 | 2020-05-07 21:42:46 | aws   | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_04_flavor/test_empty_database                              | ok       |   0.019 | 2020-05-07 21:42:50 | aws   | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_04_flavor/test_provider_flavor                             | ok       | 258.951 | 2020-05-07 21:42:50 | aws   | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_04_flavor/test_provider_flavor_update                      | ok       | 481.06  | 2020-05-07 21:47:09 | aws   | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_04_flavor/test_cms_flavor_refresh                          | ok       | 267.999 | 2020-05-07 21:55:10 | aws   | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_04_flavor/test_cms_flavor                                  | ok       |   8.415 | 2020-05-07 21:59:38 | aws   | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_05_image/test_empty_database                               | ok       |   0.019 | 2020-05-07 21:59:47 | aws   | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_05_image/test_provider_image                               | ok       |  66.594 | 2020-05-07 21:59:47 | aws   | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_05_image/test_provider_image_update                        | ok       |  67.172 | 2020-05-07 22:00:53 | aws   | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_05_image/test_cms_image_refresh                            | ok       |  69.532 | 2020-05-07 22:02:01 | aws   | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_05_image/test_cms_image                                    | ok       |  23.788 | 2020-05-07 22:03:10 | aws   | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
++-----------------------------------------------------------------+----------+---------+---------------------+-------+------------------+--------+-------+-----------------------------------------------------+
+
+# csv,timer,status,time,start,tag,uname.node,user,uname.system,platform.version
+# csv,test_00_sys/test_cms_help,ok,2.127,2020-05-07 21:42:30,aws,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_01_clean_local_remote/test_cms_init,ok,8.586,2020-05-07 21:42:32,aws,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_01_clean_local_remote/test_delete_all_keys_from_cloud,ok,0.14,2020-05-07 21:42:41,aws,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_01_clean_local_remote/test_delete_all_secgroups_from_cloud,ok,0.002,2020-05-07 21:42:42,aws,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_clear_local_database,ok,0.157,2020-05-07 21:42:42,aws,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_clear_cloud_database,ok,0.019,2020-05-07 21:42:46,aws,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_upload_key_to_database,ok,0.04,2020-05-07 21:42:42,aws,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_upload_key_to_cloud,ok,0.332,2020-05-07 21:42:42,aws,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_list_key_from_cloud,ok,0.126,2020-05-07 21:42:43,aws,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_delete_key_from_cloud,ok,0.128,2020-05-07 21:42:43,aws,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_key_delete,ok,0.35,2020-05-07 21:42:43,aws,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_cms_local,ok,2.646,2020-05-07 21:42:43,aws,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_cms_cloud,ok,4.002,2020-05-07 21:42:46,aws,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_04_flavor/test_empty_database,ok,0.019,2020-05-07 21:42:50,aws,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_04_flavor/test_provider_flavor,ok,258.951,2020-05-07 21:42:50,aws,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_04_flavor/test_provider_flavor_update,ok,481.06,2020-05-07 21:47:09,aws,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_04_flavor/test_cms_flavor_refresh,ok,267.999,2020-05-07 21:55:10,aws,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_04_flavor/test_cms_flavor,ok,8.415,2020-05-07 21:59:38,aws,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_05_image/test_empty_database,ok,0.019,2020-05-07 21:59:47,aws,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_05_image/test_provider_image,ok,66.594,2020-05-07 21:59:47,aws,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_05_image/test_provider_image_update,ok,67.172,2020-05-07 22:00:53,aws,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_05_image/test_cms_image_refresh,ok,69.532,2020-05-07 22:02:01,aws,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_05_image/test_cms_image,ok,23.788,2020-05-07 22:03:10,aws,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+
+PASSED
+tests/cloud/test_07_secgroup_provider.py::Test_secgroup_provider::test_load 
+[35m
+# ######################################################################
+# test_load /tests/cloud/test_07_secgroup_provider.py 55
+# ######################################################################
+[0m
+
+PASSED
+tests/cloud/test_07_secgroup_provider.py::Test_secgroup_provider::test_list_variables 
+[35m
+# ######################################################################
+# test_list_variables /tests/cloud/test_07_secgroup_provider.py 71
+# ######################################################################
+[0m
+josh
+aws
+PASSED
+tests/cloud/test_07_secgroup_provider.py::Test_secgroup_provider::test_list_secgroups 
+[35m
+# ######################################################################
+# test_list_secgroups /tests/cloud/test_07_secgroup_provider.py 79
+# ######################################################################
+[0m
+[
+    {
+        "Description": "default VPC security group",
+        "GroupName": "default",
+        "IpPermissions": [
+            {
+                "IpProtocol": "-1",
+                "IpRanges": [],
+                "Ipv6Ranges": [],
+                "PrefixListIds": [],
+                "UserIdGroupPairs": [
+                    {
+                        "GroupId": "sg-45ac063d",
+                        "UserId": "060374645798"
+                    }
+                ]
+            }
+        ],
+        "OwnerId": "060374645798",
+        "GroupId": "sg-45ac063d",
+        "IpPermissionsEgress": [
+            {
+                "IpProtocol": "-1",
+                "IpRanges": [
+                    {
+                        "CidrIp": "0.0.0.0/0"
+                    }
+                ],
+                "Ipv6Ranges": [],
+                "PrefixListIds": [],
+                "UserIdGroupPairs": []
+            }
+        ],
+        "VpcId": "vpc-0a15c661"
+    }
+]
+PASSED
+tests/cloud/test_07_secgroup_provider.py::Test_secgroup_provider::test_list_secgroups_rules 
+[35m
+# ######################################################################
+# test_list_secgroups_rules /tests/cloud/test_07_secgroup_provider.py 86
+# ######################################################################
+[0m
+[
+    {
+        "IpProtocol": "-1",
+        "IpRanges": [
+            {
+                "CidrIp": "0.0.0.0/0"
+            }
+        ],
+        "Ipv6Ranges": [],
+        "PrefixListIds": [],
+        "UserIdGroupPairs": []
+    }
+]
+PASSED
+tests/cloud/test_07_secgroup_provider.py::Test_secgroup_provider::test_secgroups_add 
+[35m
+# ######################################################################
+# test_secgroups_add /tests/cloud/test_07_secgroup_provider.py 93
+# ######################################################################
+[0m
+[32mSecurity Group Created {security_group_id} in vpc{vpc_id}[0m
+[
+    {
+        "Description": "security group crated at {str(datetime.utcnow())} by {self.user}",
+        "GroupName": "test-sec-group",
+        "IpPermissions": [],
+        "OwnerId": "060374645798",
+        "GroupId": "sg-058ead6d3decb2bbc",
+        "IpPermissionsEgress": [
+            {
+                "IpProtocol": "-1",
+                "IpRanges": [
+                    {
+                        "CidrIp": "0.0.0.0/0"
+                    }
+                ],
+                "Ipv6Ranges": [],
+                "PrefixListIds": [],
+                "UserIdGroupPairs": []
+            }
+        ],
+        "VpcId": "vpc-0a15c661"
+    },
+    {
+        "Description": "default VPC security group",
+        "GroupName": "default",
+        "IpPermissions": [
+            {
+                "IpProtocol": "-1",
+                "IpRanges": [],
+                "Ipv6Ranges": [],
+                "PrefixListIds": [],
+                "UserIdGroupPairs": [
+                    {
+                        "GroupId": "sg-45ac063d",
+                        "UserId": "060374645798"
+                    }
+                ]
+            }
+        ],
+        "OwnerId": "060374645798",
+        "GroupId": "sg-45ac063d",
+        "IpPermissionsEgress": [
+            {
+                "IpProtocol": "-1",
+                "IpRanges": [
+                    {
+                        "CidrIp": "0.0.0.0/0"
+                    }
+                ],
+                "Ipv6Ranges": [],
+                "PrefixListIds": [],
+                "UserIdGroupPairs": []
+            }
+        ],
+        "VpcId": "vpc-0a15c661"
+    }
+]
+PASSED
+tests/cloud/test_07_secgroup_provider.py::Test_secgroup_provider::test_upload_secgroup 
+[35m
+# ######################################################################
+# test_upload_secgroup /tests/cloud/test_07_secgroup_provider.py 107
+# ######################################################################
+[0m
+Warning group already exists
+[34m
+# ----------------------------------------------------------------------
+# rules
+# ----------------------------------------------------------------------
+# 333:upload_secgroup /home/josh/dev/cloud/cloudmesh-aws/cloudmesh/aws/compute/Provider.py
+# ----------------------------------------------------------------------
+# [{'cm': {'cloud': 'local',
+#          'collection': 'local-secrule',
+#          'created': '2020-05-07 22:03:34.606852',
+#          'kind': 'secrule',
+#          'modified': '2020-05-07 22:03:34.606852',
+#          'name': 'ssh'},
+#   'ip_range': '0.0.0.0/0',
+#   'name': 'ssh',
+#   'ports': '22:22',
+#   'protocol': 'tcp'},
+#  {'cm': {'cloud': 'local',
+#          'collection': 'local-secrule',
+#          'created': '2020-05-07 22:03:34.608230',
+#          'kind': 'secrule',
+#          'modified': '2020-05-07 22:03:34.608230',
+#          'name': 'icmp'},
+#   'ip_range': '0.0.0.0/0',
+#   'name': 'icmp',
+#   'ports': '',
+#   'protocol': 'icmp'},
+#  {'cm': {'cloud': 'local',
+#          'collection': 'local-secrule',
+#          'created': '2020-05-07 22:03:34.609536',
+#          'kind': 'secrule',
+#          'modified': '2020-05-07 22:03:34.609536',
+#          'name': 'flask'},
+#   'ip_range': '0.0.0.0/0',
+#   'name': 'flask',
+#   'ports': '8000:8000',
+#   'protocol': 'tcp'},
+#  {'cm': {'cloud': 'local',
+#          'collection': 'local-secrule',
+#          'created': '2020-05-07 22:03:34.611047',
+#          'kind': 'secrule',
+#          'modified': '2020-05-07 22:03:34.611047',
+#          'name': 'http'},
+#   'ip_range': '0.0.0.0/0',
+#   'name': 'http',
+#   'ports': '80:80',
+#   'protocol': 'tcp'},
+#  {'cm': {'cloud': 'local',
+#          'collection': 'local-secrule',
+#          'created': '2020-05-07 22:03:34.612825',
+#          'kind': 'secrule',
+#          'modified': '2020-05-07 22:03:34.612825',
+#          'name': 'https'},
+#   'ip_range': '0.0.0.0/0',
+#   'name': 'https',
+#   'ports': '443:443',
+#   'protocol': 'tcp'}]
+# ----------------------------------------------------------------------
+[0m
+[34m
+# ----------------------------------------------------------------------
+# groups
+# ----------------------------------------------------------------------
+# 338:upload_secgroup /home/josh/dev/cloud/cloudmesh-aws/cloudmesh/aws/compute/Provider.py
+# ----------------------------------------------------------------------
+# [{'cm': {'cloud': 'local',
+#          'collection': 'local-secgroup',
+#          'created': '2020-05-07 22:03:34.603909',
+#          'kind': 'secgroup',
+#          'modified': '2020-05-07 22:03:34.603909',
+#          'name': 'default'},
+#   'description': 'Default security group',
+#   'name': 'default',
+#   'rules': ['ssh', 'icmp', 'http', 'https']},
+#  {'cm': {'cloud': 'local',
+#          'collection': 'local-secgroup',
+#          'created': '2020-05-07 22:03:34.605507',
+#          'kind': 'secgroup',
+#          'modified': '2020-05-07 22:03:34.605507',
+#          'name': 'flask'},
+#   'description': 'Flask security group',
+#   'name': 'flask',
+#   'rules': ['ssh', 'icmp', 'http', 'https', 'flask']}]
+# ----------------------------------------------------------------------
+[0m
+upload group: test-sec-group
+     rule: ssh
+[32mIngress Successfully Set as {'ResponseMetadata': {'RequestId': 'eae77c85-76dc-4e07-8595-a81ae171bb1c', 'HTTPStatusCode': 200, 'HTTPHeaders': {'x-amzn-requestid': 'eae77c85-76dc-4e07-8595-a81ae171bb1c', 'content-type': 'text/xml;charset=UTF-8', 'content-length': '259', 'date': 'Thu, 07 May 2020 22:03:36 GMT', 'server': 'AmazonEC2'}, 'RetryAttempts': 0}}[0m
+     rule: icmp
+[32mIngress Successfully Set as {'ResponseMetadata': {'RequestId': '146de2df-e2a1-4161-af0d-9137d3a99713', 'HTTPStatusCode': 200, 'HTTPHeaders': {'x-amzn-requestid': '146de2df-e2a1-4161-af0d-9137d3a99713', 'content-type': 'text/xml;charset=UTF-8', 'content-length': '259', 'date': 'Thu, 07 May 2020 22:03:36 GMT', 'server': 'AmazonEC2'}, 'RetryAttempts': 0}}[0m
+     rule: http
+[32mIngress Successfully Set as {'ResponseMetadata': {'RequestId': '50563d43-10ab-46ef-adbe-2be64f733a7c', 'HTTPStatusCode': 200, 'HTTPHeaders': {'x-amzn-requestid': '50563d43-10ab-46ef-adbe-2be64f733a7c', 'content-type': 'text/xml;charset=UTF-8', 'content-length': '259', 'date': 'Thu, 07 May 2020 22:03:36 GMT', 'server': 'AmazonEC2'}, 'RetryAttempts': 0}}[0m
+     rule: https
+[32mIngress Successfully Set as {'ResponseMetadata': {'RequestId': 'a7cceca4-6eeb-464e-ba8a-797ce41f23f5', 'HTTPStatusCode': 200, 'HTTPHeaders': {'x-amzn-requestid': 'a7cceca4-6eeb-464e-ba8a-797ce41f23f5', 'content-type': 'text/xml;charset=UTF-8', 'content-length': '259', 'date': 'Thu, 07 May 2020 22:03:36 GMT', 'server': 'AmazonEC2'}, 'RetryAttempts': 0}}[0m
+     rule: flask
+[32mIngress Successfully Set as {'ResponseMetadata': {'RequestId': 'b5ab93a2-b24f-4d21-b2e0-09ae7f0e0533', 'HTTPStatusCode': 200, 'HTTPHeaders': {'x-amzn-requestid': 'b5ab93a2-b24f-4d21-b2e0-09ae7f0e0533', 'content-type': 'text/xml;charset=UTF-8', 'content-length': '259', 'date': 'Thu, 07 May 2020 22:03:37 GMT', 'server': 'AmazonEC2'}, 'RetryAttempts': 0}}[0m
+[
+    {
+        "Description": "security group crated at {str(datetime.utcnow())} by {self.user}",
+        "GroupName": "test-sec-group",
+        "IpPermissions": [
+            {
+                "FromPort": 80,
+                "IpProtocol": "tcp",
+                "IpRanges": [
+                    {
+                        "CidrIp": "0.0.0.0/0"
+                    }
+                ],
+                "Ipv6Ranges": [],
+                "PrefixListIds": [],
+                "ToPort": 80,
+                "UserIdGroupPairs": []
+            },
+            {
+                "FromPort": 8000,
+                "IpProtocol": "tcp",
+                "IpRanges": [
+                    {
+                        "CidrIp": "0.0.0.0/0"
+                    }
+                ],
+                "Ipv6Ranges": [],
+                "PrefixListIds": [],
+                "ToPort": 8000,
+                "UserIdGroupPairs": []
+            },
+            {
+                "FromPort": 22,
+                "IpProtocol": "tcp",
+                "IpRanges": [
+                    {
+                        "CidrIp": "0.0.0.0/0"
+                    }
+                ],
+                "Ipv6Ranges": [],
+                "PrefixListIds": [],
+                "ToPort": 22,
+                "UserIdGroupPairs": []
+            },
+            {
+                "FromPort": 443,
+                "IpProtocol": "tcp",
+                "IpRanges": [
+                    {
+                        "CidrIp": "0.0.0.0/0"
+                    }
+                ],
+                "Ipv6Ranges": [],
+                "PrefixListIds": [],
+                "ToPort": 443,
+                "UserIdGroupPairs": []
+            },
+            {
+                "FromPort": -1,
+                "IpProtocol": "icmp",
+                "IpRanges": [
+                    {
+                        "CidrIp": "0.0.0.0/0"
+                    }
+                ],
+                "Ipv6Ranges": [],
+                "PrefixListIds": [],
+                "ToPort": -1,
+                "UserIdGroupPairs": []
+            }
+        ],
+        "OwnerId": "060374645798",
+        "GroupId": "sg-058ead6d3decb2bbc",
+        "IpPermissionsEgress": [
+            {
+                "IpProtocol": "-1",
+                "IpRanges": [
+                    {
+                        "CidrIp": "0.0.0.0/0"
+                    }
+                ],
+                "Ipv6Ranges": [],
+                "PrefixListIds": [],
+                "UserIdGroupPairs": []
+            }
+        ],
+        "VpcId": "vpc-0a15c661"
+    },
+    {
+        "Description": "default VPC security group",
+        "GroupName": "default",
+        "IpPermissions": [
+            {
+                "IpProtocol": "-1",
+                "IpRanges": [],
+                "Ipv6Ranges": [],
+                "PrefixListIds": [],
+                "UserIdGroupPairs": [
+                    {
+                        "GroupId": "sg-45ac063d",
+                        "UserId": "060374645798"
+                    }
+                ]
+            }
+        ],
+        "OwnerId": "060374645798",
+        "GroupId": "sg-45ac063d",
+        "IpPermissionsEgress": [
+            {
+                "IpProtocol": "-1",
+                "IpRanges": [
+                    {
+                        "CidrIp": "0.0.0.0/0"
+                    }
+                ],
+                "Ipv6Ranges": [],
+                "PrefixListIds": [],
+                "UserIdGroupPairs": []
+            }
+        ],
+        "VpcId": "vpc-0a15c661"
+    }
+]
+PASSED
+tests/cloud/test_07_secgroup_provider.py::Test_secgroup_provider::test_secgroups_delete 
+[35m
+# ######################################################################
+# test_secgroups_delete /tests/cloud/test_07_secgroup_provider.py 116
+# ######################################################################
+[0m
+[34m
+# ----------------------------------------------------------------------
+# response
+# ----------------------------------------------------------------------
+# 312:remove_secgroup /home/josh/dev/cloud/cloudmesh-aws/cloudmesh/aws/compute/Provider.py
+# ----------------------------------------------------------------------
+# {'ResponseMetadata': {'HTTPHeaders': {'content-length': '239',
+#                                       'content-type': 'text/xml;charset=UTF-8',
+#                                       'date': 'Thu, 07 May 2020 22:03:37 GMT',
+#                                       'server': 'AmazonEC2',
+#                                       'x-amzn-requestid': 'f2fb0aa4-2757-45c3-bf3c-cdaee0056c74'},
+#                       'HTTPStatusCode': 200,
+#                       'RequestId': 'f2fb0aa4-2757-45c3-bf3c-cdaee0056c74',
+#                       'RetryAttempts': 0}}
+# ----------------------------------------------------------------------
+[0m
+default
+[
+    {
+        "Description": "default VPC security group",
+        "GroupName": "default",
+        "IpPermissions": [
+            {
+                "IpProtocol": "-1",
+                "IpRanges": [],
+                "Ipv6Ranges": [],
+                "PrefixListIds": [],
+                "UserIdGroupPairs": [
+                    {
+                        "GroupId": "sg-45ac063d",
+                        "UserId": "060374645798"
+                    }
+                ]
+            }
+        ],
+        "OwnerId": "060374645798",
+        "GroupId": "sg-45ac063d",
+        "IpPermissionsEgress": [
+            {
+                "IpProtocol": "-1",
+                "IpRanges": [
+                    {
+                        "CidrIp": "0.0.0.0/0"
+                    }
+                ],
+                "Ipv6Ranges": [],
+                "PrefixListIds": [],
+                "UserIdGroupPairs": []
+            }
+        ],
+        "VpcId": "vpc-0a15c661"
+    }
+]
+PASSED
+tests/cloud/test_07_secgroup_provider.py::Test_secgroup_provider::test_secgroups_delete_again 
+[35m
+# ######################################################################
+# test_secgroups_delete_again /tests/cloud/test_07_secgroup_provider.py 135
+# ######################################################################
+[0m
+[34mINFO: Security group couldn't be removed as it doesn't exist[0m
+default
+[
+    {
+        "Description": "default VPC security group",
+        "GroupName": "default",
+        "IpPermissions": [
+            {
+                "IpProtocol": "-1",
+                "IpRanges": [],
+                "Ipv6Ranges": [],
+                "PrefixListIds": [],
+                "UserIdGroupPairs": [
+                    {
+                        "GroupId": "sg-45ac063d",
+                        "UserId": "060374645798"
+                    }
+                ]
+            }
+        ],
+        "OwnerId": "060374645798",
+        "GroupId": "sg-45ac063d",
+        "IpPermissionsEgress": [
+            {
+                "IpProtocol": "-1",
+                "IpRanges": [
+                    {
+                        "CidrIp": "0.0.0.0/0"
+                    }
+                ],
+                "Ipv6Ranges": [],
+                "PrefixListIds": [],
+                "UserIdGroupPairs": []
+            }
+        ],
+        "VpcId": "vpc-0a15c661"
+    }
+]
+PASSED
+tests/cloud/test_07_secgroup_provider.py::Test_secgroup_provider::test_benchmark 
+
++-----------------------------------------------------------------+----------+---------+---------------------+-------+------------------+--------+-------+-----------------------------------------------------+
+| Name                                                            | Status   |    Time | Start               | tag   | Node             | User   | OS    | Version                                             |
+|-----------------------------------------------------------------+----------+---------+---------------------+-------+------------------+--------+-------+-----------------------------------------------------|
+| test_00_sys/test_cms_help                                       | ok       |   2.127 | 2020-05-07 21:42:30 | aws   | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_01_clean_local_remote/test_cms_init                        | ok       |   8.586 | 2020-05-07 21:42:32 | aws   | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_01_clean_local_remote/test_delete_all_keys_from_cloud      | ok       |   0.14  | 2020-05-07 21:42:41 | aws   | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_01_clean_local_remote/test_delete_all_secgroups_from_cloud | ok       |   0.002 | 2020-05-07 21:42:42 | aws   | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_clear_local_database                           | ok       |   0.157 | 2020-05-07 21:42:42 | aws   | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_clear_cloud_database                           | ok       |   0.019 | 2020-05-07 21:42:46 | aws   | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_upload_key_to_database                         | ok       |   0.04  | 2020-05-07 21:42:42 | aws   | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_upload_key_to_cloud                            | ok       |   0.332 | 2020-05-07 21:42:42 | aws   | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_list_key_from_cloud                            | ok       |   0.126 | 2020-05-07 21:42:43 | aws   | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_delete_key_from_cloud                          | ok       |   0.128 | 2020-05-07 21:42:43 | aws   | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_key_delete                                     | ok       |   0.35  | 2020-05-07 21:42:43 | aws   | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_cms_local                                      | ok       |   2.646 | 2020-05-07 21:42:43 | aws   | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_cms_cloud                                      | ok       |   4.002 | 2020-05-07 21:42:46 | aws   | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_04_flavor/test_empty_database                              | ok       |   0.019 | 2020-05-07 21:42:50 | aws   | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_04_flavor/test_provider_flavor                             | ok       | 258.951 | 2020-05-07 21:42:50 | aws   | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_04_flavor/test_provider_flavor_update                      | ok       | 481.06  | 2020-05-07 21:47:09 | aws   | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_04_flavor/test_cms_flavor_refresh                          | ok       | 267.999 | 2020-05-07 21:55:10 | aws   | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_04_flavor/test_cms_flavor                                  | ok       |   8.415 | 2020-05-07 21:59:38 | aws   | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_05_image/test_empty_database                               | ok       |   0.019 | 2020-05-07 21:59:47 | aws   | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_05_image/test_provider_image                               | ok       |  66.594 | 2020-05-07 21:59:47 | aws   | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_05_image/test_provider_image_update                        | ok       |  67.172 | 2020-05-07 22:00:53 | aws   | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_05_image/test_cms_image_refresh                            | ok       |  69.532 | 2020-05-07 22:02:01 | aws   | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_05_image/test_cms_image                                    | ok       |  23.788 | 2020-05-07 22:03:10 | aws   | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_07_secgroup_provider/test_load                             | ok       |   0.058 | 2020-05-07 22:03:34 | aws   | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_07_secgroup_provider/test_list_variables                   | ok       |   0.001 | 2020-05-07 22:03:35 | aws   | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_07_secgroup_provider/test_list_secgroups                   | ok       |   0.33  | 2020-05-07 22:03:35 | aws   | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_07_secgroup_provider/test_list_secgroups_rules             | ok       |   0.101 | 2020-05-07 22:03:35 | aws   | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_07_secgroup_provider/test_secgroups_add                    | ok       |   0.215 | 2020-05-07 22:03:35 | aws   | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_07_secgroup_provider/test_upload_secgroup                  | ok       |   1.374 | 2020-05-07 22:03:35 | aws   | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_07_secgroup_provider/test_secgroups_delete                 | ok       |   0.17  | 2020-05-07 22:03:37 | aws   | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_07_secgroup_provider/test_secgroups_delete_again           | ok       |   0.084 | 2020-05-07 22:03:37 | aws   | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
++-----------------------------------------------------------------+----------+---------+---------------------+-------+------------------+--------+-------+-----------------------------------------------------+
+
+# csv,timer,status,time,start,tag,uname.node,user,uname.system,platform.version
+# csv,test_00_sys/test_cms_help,ok,2.127,2020-05-07 21:42:30,aws,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_01_clean_local_remote/test_cms_init,ok,8.586,2020-05-07 21:42:32,aws,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_01_clean_local_remote/test_delete_all_keys_from_cloud,ok,0.14,2020-05-07 21:42:41,aws,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_01_clean_local_remote/test_delete_all_secgroups_from_cloud,ok,0.002,2020-05-07 21:42:42,aws,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_clear_local_database,ok,0.157,2020-05-07 21:42:42,aws,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_clear_cloud_database,ok,0.019,2020-05-07 21:42:46,aws,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_upload_key_to_database,ok,0.04,2020-05-07 21:42:42,aws,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_upload_key_to_cloud,ok,0.332,2020-05-07 21:42:42,aws,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_list_key_from_cloud,ok,0.126,2020-05-07 21:42:43,aws,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_delete_key_from_cloud,ok,0.128,2020-05-07 21:42:43,aws,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_key_delete,ok,0.35,2020-05-07 21:42:43,aws,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_cms_local,ok,2.646,2020-05-07 21:42:43,aws,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_cms_cloud,ok,4.002,2020-05-07 21:42:46,aws,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_04_flavor/test_empty_database,ok,0.019,2020-05-07 21:42:50,aws,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_04_flavor/test_provider_flavor,ok,258.951,2020-05-07 21:42:50,aws,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_04_flavor/test_provider_flavor_update,ok,481.06,2020-05-07 21:47:09,aws,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_04_flavor/test_cms_flavor_refresh,ok,267.999,2020-05-07 21:55:10,aws,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_04_flavor/test_cms_flavor,ok,8.415,2020-05-07 21:59:38,aws,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_05_image/test_empty_database,ok,0.019,2020-05-07 21:59:47,aws,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_05_image/test_provider_image,ok,66.594,2020-05-07 21:59:47,aws,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_05_image/test_provider_image_update,ok,67.172,2020-05-07 22:00:53,aws,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_05_image/test_cms_image_refresh,ok,69.532,2020-05-07 22:02:01,aws,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_05_image/test_cms_image,ok,23.788,2020-05-07 22:03:10,aws,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_07_secgroup_provider/test_load,ok,0.058,2020-05-07 22:03:34,aws,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_07_secgroup_provider/test_list_variables,ok,0.001,2020-05-07 22:03:35,aws,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_07_secgroup_provider/test_list_secgroups,ok,0.33,2020-05-07 22:03:35,aws,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_07_secgroup_provider/test_list_secgroups_rules,ok,0.101,2020-05-07 22:03:35,aws,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_07_secgroup_provider/test_secgroups_add,ok,0.215,2020-05-07 22:03:35,aws,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_07_secgroup_provider/test_upload_secgroup,ok,1.374,2020-05-07 22:03:35,aws,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_07_secgroup_provider/test_secgroups_delete,ok,0.17,2020-05-07 22:03:37,aws,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_07_secgroup_provider/test_secgroups_delete_again,ok,0.084,2020-05-07 22:03:37,aws,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+
+PASSED
+tests/cloud/test_08_vm_provider.py::Test_provider_vm::test_key_upload key add
+key list
+ERROR: executing command 'key list'
+======================================================================
+sequence item 1: expected str instance, NoneType found
+sequence item 1: expected str instance, NoneType found
+Traceback (most recent call last):
+  File "/home/josh/dev/cloud/cloudmesh-cmd5/cloudmesh/shell/shell.py", line 1096, in main
+    stop = cmd.onecmd(command)
+  File "/home/josh/dev/cloud/cloudmesh-cmd5/cloudmesh/shell/shell.py", line 419, in onecmd
+    return func(arg)
+  File "/home/josh/dev/cloud/cloudmesh-cmd5/cloudmesh/shell/command.py", line 115, in new
+    func(instance, args, arguments)
+  File "/home/josh/dev/cloud/cloudmesh-cloud/cloudmesh/key/command/key.py", line 317, in do_key
+    print_keys(keys)
+  File "/home/josh/dev/cloud/cloudmesh-cloud/cloudmesh/key/command/key.py", line 222, in print_keys
+    entry["group"] = ', '.join(entry['group'])
+TypeError: sequence item 1: expected str instance, NoneType found
+
+======================================================================
+key delete josh --cloud=aws
+deleting the key: josh -> aws
+key upload josh --cloud=aws
+cloud aws
+uploading the key: josh -> aws
+upload key 'josh successful'. 
+key list --cloud=aws
+cloud aws
++--------+--------+----------+-------------------------------------------------+-----------+
+| Name   | Type   | Format   | Fingerprint                                     | Comment   |
+|--------+--------+----------+-------------------------------------------------+-----------|
+| josh   | N/A    | N/A      | 6f:2b:06:f8:c6:01:38:9d:a3:8b:f9:ed:6e:ff:86:ef | N/A       |
++--------+--------+----------+-------------------------------------------------+-----------+
+PASSED
+tests/cloud/test_08_vm_provider.py::Test_provider_vm::test_find_largest_id test-josh-vm
+VM is [{'kind': 'aws', 'KeyName': 'josh', 'status': 'stopped', 'created': '05/05/2020, 03:17:00', 'updated': '05/05/2020, 03:17:00', 'name': 'test-josh-vm-3', 'instance_id': 'i-075a2dd1ee1df2b3b', 'instance_tag': 'test-josh-vm-3', 'image': 'ami-0c929bde1796e1484', 'public_ips': None, 'private_ips': '172.31.1.228', 'cm': {'kind': 'vm', 'driver': 'aws', 'cloud': 'aws', 'name': 'test-josh-vm-3', 'updated': '2020-05-07 22:03:47.123173', 'created': '2020-05-07 22:03:47.141823', 'collection': 'aws-vm', 'modified': '2020-05-07 22:03:47.141823'}, '_id': ObjectId('5eb485c3b4f2824f59fb420f')}, {'kind': 'aws', 'KeyName': 'josh', 'status': 'stopped', 'created': '05/07/2020, 21:40:34', 'updated': '05/07/2020, 21:40:34', 'name': 'test-josh-vm', 'instance_id': 'i-097b1084fa3e7ce24', 'instance_tag': 'test-josh-vm', 'image': 'ami-0c929bde1796e1484', 'public_ips': None, 'private_ips': '172.31.4.32', 'cm': {'kind': 'vm', 'driver': 'aws', 'cloud': 'aws', 'name': 'test-josh-vm', 'updated': '2020-05-07 22:03:47.123185', 'created': '2020-05-07 22:03:47.159499', 'collection': 'aws-vm', 'modified': '2020-05-07 22:03:47.159499'}, '_id': ObjectId('5eb485c3b4f2824f59fb4210')}]
+PASSED
+tests/cloud/test_08_vm_provider.py::Test_provider_vm::test_provider_vm_create vm list --cloud=aws
+List aws
++----------------+---------+---------------------+----------+-----------------------+--------------+---------------+-----------------+----------------------+--------+
+| Name           | Cloud   | Instance ID         | Status   | Image                 | Public IPs   | Private IPs   | Creation Time   | Started at           | Kind   |
+|----------------+---------+---------------------+----------+-----------------------+--------------+---------------+-----------------+----------------------+--------|
+| test-josh-vm-3 | aws     | i-075a2dd1ee1df2b3b | stopped  | ami-0c929bde1796e1484 | None         | 172.31.1.228  |                 | 05/05/2020, 03:17:00 | vm     |
+| test-josh-vm   | aws     | i-097b1084fa3e7ce24 | stopped  | ami-0c929bde1796e1484 | None         | 172.31.4.32   |                 | 05/07/2020, 21:40:34 | vm     |
++----------------+---------+---------------------+----------+-----------------------+--------------+---------------+-----------------+----------------------+--------+
+
+[35m
+# ######################################################################
+# test_provider_vm_create /tests/cloud/test_08_vm_provider.py 90
+# ######################################################################
+[0m
+[34m
+# ----------------------------------------------------------------------
+# Create Server
+# ----------------------------------------------------------------------
+[0m
+    Name:     test-josh-vm-2
+    User:     None
+    IP:       None
+    Image:    ami-0c929bde1796e1484
+    Size:     t2.medium
+    Public:   None
+    Key:      josh
+    Location: None
+    Timeout:  360
+    Secgroup: None
+    Group:    cloudmesh
+
+
+[32mInstance created...[0m
+
+Waiting for the Public IP address assignment ...
+    Public IP:   18.191.150.239
+    Private IP:  172.31.2.36
+[31mERROR: aws reported the following error[0m
+[31mERROR: -------------------------------------------------------------------------------[0m
+set_server_metadata() got an unexpected keyword argument 'cm'
+[31mERROR: -------------------------------------------------------------------------------[0m
+[34m
+# ----------------------------------------------------------------------
+# created
+# ----------------------------------------------------------------------
+# 220:create ./cloudmesh/compute/vm/Provider.py
+# ----------------------------------------------------------------------
+# [{'AmiLaunchIndex': 0,
+#   'Architecture': 'x86_64',
+#   'BlockDeviceMappings': [],
+#   'CapacityReservationSpecification': {'CapacityReservationPreference': 'open'},
+#   'ClientToken': '',
+#   'CpuOptions': {'CoreCount': 2, 'ThreadsPerCore': 1},
+#   'EbsOptimized': False,
+#   'EnaSupport': True,
+#   'HibernationOptions': {'Configured': False},
+#   'Hypervisor': 'xen',
+#   'ImageId': 'ami-0c929bde1796e1484',
+#   'InstanceId': 'i-09c7088f0626430d8',
+#   'InstanceType': 't2.medium',
+#   'KeyName': 'josh',
+#   'LaunchTime': datetime.datetime(2020, 5, 7, 22, 3, 50, tzinfo=tzutc()),
+#   'MetadataOptions': {'HttpEndpoint': 'enabled',
+#                       'HttpPutResponseHopLimit': 1,
+#                       'HttpTokens': 'optional',
+#                       'State': 'pending'},
+#   'Monitoring': {'State': 'disabled'},
+#   'NetworkInterfaces': [{'Attachment': {'AttachTime': datetime.datetime(2020, 5, 7, 22, 3, 50, tzinfo=tzutc()),
+#                                         'AttachmentId': 'eni-attach-058484022ba684b4f',
+#                                         'DeleteOnTermination': True,
+#                                         'DeviceIndex': 0,
+#                                         'Status': 'attaching'},
+#                          'Description': '',
+#                          'Groups': [{'GroupId': 'sg-45ac063d',
+#                                      'GroupName': 'default'}],
+#                          'InterfaceType': 'interface',
+#                          'Ipv6Addresses': [],
+#                          'MacAddress': '02:77:89:ec:a9:8e',
+#                          'NetworkInterfaceId': 'eni-00df9be9b1eb223b8',
+#                          'OwnerId': '060374645798',
+#                          'PrivateDnsName': 'ip-172-31-2-36.us-east-2.compute.internal',
+#                          'PrivateIpAddress': '172.31.2.36',
+#                          'PrivateIpAddresses': [{'Primary': True,
+#                                                  'PrivateDnsName': 'ip-172-31-2-36.us-east-2.compute.internal',
+#                                                  'PrivateIpAddress': '172.31.2.36'}],
+#                          'SourceDestCheck': True,
+#                          'Status': 'in-use',
+#                          'SubnetId': 'subnet-f77c879c',
+#                          'VpcId': 'vpc-0a15c661'}],
+#   'Placement': {'AvailabilityZone': 'us-east-2a',
+#                 'GroupName': '',
+#                 'Tenancy': 'default'},
+#   'PrivateDnsName': 'ip-172-31-2-36.us-east-2.compute.internal',
+#   'PrivateIpAddress': '172.31.2.36',
+#   'ProductCodes': [],
+#   'PublicDnsName': '',
+#   'RootDeviceName': '/dev/sda1',
+#   'RootDeviceType': 'ebs',
+#   'SecurityGroups': [{'GroupId': 'sg-45ac063d', 'GroupName': 'default'}],
+#   'SourceDestCheck': True,
+#   'State': {'Code': 0, 'Name': 'pending'},
+#   'StateTransitionReason': '',
+#   'SubnetId': 'subnet-f77c879c',
+#   'Tags': [{'Key': 'Name', 'Value': 'test-josh-vm-2'},
+#            {'Key': 'cm.user', 'Value': 'josh'},
+#            {'Key': 'cm.name', 'Value': 'test-josh-vm-2'},
+#            {'Key': 'cm.status', 'Value': 'BOOTING'},
+#            {'Key': 'cm.kind', 'Value': 'vm'},
+#            {'Key': 'cm.flavor', 'Value': 't2.medium'},
+#            {'Key': 'cm.image', 'Value': 'ami-0c929bde1796e1484'}],
+#   'VirtualizationType': 'hvm',
+#   'VpcId': 'vpc-0a15c661',
+#   '_id': ObjectId('5eb485c5b4f2824f59fb4213'),
+#   'cm': {'cloud': 'aws',
+#          'collection': 'aws-vm',
+#          'created': '2020-05-07 22:03:49.080811',
+#          'creation': '26.00',
+#          'group': 'cloudmesh',
+#          'kind': 'vm',
+#          'label': 'test-josh-vm-2',
+#          'modified': '2020-05-07 22:04:15.231731',
+#          'name': 'test-josh-vm-2',
+#          'status': 'available'},
+#   'created': ('05/07/2020, 22:03:50',),
+#   'image': ('ami-0c929bde1796e1484',),
+#   'instance_id': ('i-09c7088f0626430d8',),
+#   'key_name': ('josh',),
+#   'kind': 'aws',
+#   'metadata': '{\'cm\': "{\'kind\': \'vm\', \'name\': \'test-josh-vm-2\', '
+#               "'label': 'test-josh-vm-2', 'group': 'cloudmesh', 'cloud': "
+#               "'aws', 'status': 'available', 'collection': 'aws-vm', "
+#               "'created': '2020-05-07 22:03:49.080811', 'modified': "
+#               '\'2020-05-07 22:03:49.080811\', \'creation\': \'26.00\'}", '
+#               "'image': 'ami-0c929bde1796e1484', 'size': 't2.medium'}",
+#   'name': ('test-josh-vm-2',),
+#   'private_ips': '172.31.2.36',
+#   'public_ips': '18.191.150.239',
+#   'status': ('pending',),
+#   'updated': ('05/07/2020, 22:03:50',)}]
+# ----------------------------------------------------------------------
+[0m
+[34m
+# ----------------------------------------------------------------------
+# data
+# ----------------------------------------------------------------------
+# 98:test_provider_vm_create ./tests/cloud/test_08_vm_provider.py
+# ----------------------------------------------------------------------
+# [{'AmiLaunchIndex': 0,
+#   'Architecture': 'x86_64',
+#   'BlockDeviceMappings': [],
+#   'CapacityReservationSpecification': {'CapacityReservationPreference': 'open'},
+#   'ClientToken': '',
+#   'CpuOptions': {'CoreCount': 2, 'ThreadsPerCore': 1},
+#   'EbsOptimized': False,
+#   'EnaSupport': True,
+#   'HibernationOptions': {'Configured': False},
+#   'Hypervisor': 'xen',
+#   'ImageId': 'ami-0c929bde1796e1484',
+#   'InstanceId': 'i-09c7088f0626430d8',
+#   'InstanceType': 't2.medium',
+#   'KeyName': 'josh',
+#   'LaunchTime': datetime.datetime(2020, 5, 7, 22, 3, 50, tzinfo=tzutc()),
+#   'MetadataOptions': {'HttpEndpoint': 'enabled',
+#                       'HttpPutResponseHopLimit': 1,
+#                       'HttpTokens': 'optional',
+#                       'State': 'pending'},
+#   'Monitoring': {'State': 'disabled'},
+#   'NetworkInterfaces': [{'Attachment': {'AttachTime': datetime.datetime(2020, 5, 7, 22, 3, 50, tzinfo=tzutc()),
+#                                         'AttachmentId': 'eni-attach-058484022ba684b4f',
+#                                         'DeleteOnTermination': True,
+#                                         'DeviceIndex': 0,
+#                                         'Status': 'attaching'},
+#                          'Description': '',
+#                          'Groups': [{'GroupId': 'sg-45ac063d',
+#                                      'GroupName': 'default'}],
+#                          'InterfaceType': 'interface',
+#                          'Ipv6Addresses': [],
+#                          'MacAddress': '02:77:89:ec:a9:8e',
+#                          'NetworkInterfaceId': 'eni-00df9be9b1eb223b8',
+#                          'OwnerId': '060374645798',
+#                          'PrivateDnsName': 'ip-172-31-2-36.us-east-2.compute.internal',
+#                          'PrivateIpAddress': '172.31.2.36',
+#                          'PrivateIpAddresses': [{'Primary': True,
+#                                                  'PrivateDnsName': 'ip-172-31-2-36.us-east-2.compute.internal',
+#                                                  'PrivateIpAddress': '172.31.2.36'}],
+#                          'SourceDestCheck': True,
+#                          'Status': 'in-use',
+#                          'SubnetId': 'subnet-f77c879c',
+#                          'VpcId': 'vpc-0a15c661'}],
+#   'Placement': {'AvailabilityZone': 'us-east-2a',
+#                 'GroupName': '',
+#                 'Tenancy': 'default'},
+#   'PrivateDnsName': 'ip-172-31-2-36.us-east-2.compute.internal',
+#   'PrivateIpAddress': '172.31.2.36',
+#   'ProductCodes': [],
+#   'PublicDnsName': '',
+#   'RootDeviceName': '/dev/sda1',
+#   'RootDeviceType': 'ebs',
+#   'SecurityGroups': [{'GroupId': 'sg-45ac063d', 'GroupName': 'default'}],
+#   'SourceDestCheck': True,
+#   'State': {'Code': 0, 'Name': 'pending'},
+#   'StateTransitionReason': '',
+#   'SubnetId': 'subnet-f77c879c',
+#   'Tags': [{'Key': 'Name', 'Value': 'test-josh-vm-2'},
+#            {'Key': 'cm.user', 'Value': 'josh'},
+#            {'Key': 'cm.name', 'Value': 'test-josh-vm-2'},
+#            {'Key': 'cm.status', 'Value': 'BOOTING'},
+#            {'Key': 'cm.kind', 'Value': 'vm'},
+#            {'Key': 'cm.flavor', 'Value': 't2.medium'},
+#            {'Key': 'cm.image', 'Value': 'ami-0c929bde1796e1484'}],
+#   'VirtualizationType': 'hvm',
+#   'VpcId': 'vpc-0a15c661',
+#   '_id': ObjectId('5eb485c5b4f2824f59fb4213'),
+#   'cm': {'cloud': 'aws',
+#          'collection': 'aws-vm',
+#          'created': '2020-05-07 22:03:49.080811',
+#          'creation': '26.00',
+#          'driver': 'aws',
+#          'group': 'cloudmesh',
+#          'kind': 'vm',
+#          'label': 'test-josh-vm-2',
+#          'modified': '2020-05-07 22:04:16.219709',
+#          'name': 'test-josh-vm-2',
+#          'status': 'available',
+#          'updated': '2020-05-07 22:04:15.429410'},
+#   'created': ('05/07/2020, 22:03:50',),
+#   'image': ('ami-0c929bde1796e1484',),
+#   'instance_id': ('i-09c7088f0626430d8',),
+#   'key_name': ('josh',),
+#   'kind': 'aws',
+#   'metadata': '{\'cm\': "{\'kind\': \'vm\', \'name\': \'test-josh-vm-2\', '
+#               "'label': 'test-josh-vm-2', 'group': 'cloudmesh', 'cloud': "
+#               "'aws', 'status': 'available', 'collection': 'aws-vm', "
+#               "'created': '2020-05-07 22:03:49.080811', 'modified': "
+#               '\'2020-05-07 22:03:49.080811\', \'creation\': \'26.00\'}", '
+#               "'image': 'ami-0c929bde1796e1484', 'size': 't2.medium'}",
+#   'name': ('test-josh-vm-2',),
+#   'private_ips': '172.31.2.36',
+#   'public_ips': '18.191.150.239',
+#   'status': ('pending',),
+#   'updated': ('05/07/2020, 22:03:50',)}]
+# ----------------------------------------------------------------------
+[0m
+status: {'name': 'test-josh-vm-2', 'status:': 'running', 'cm.status': 'BOOTING'}
+PASSED
+tests/cloud/test_08_vm_provider.py::Test_provider_vm::test_provider_vmprovider_vm_list 
+[35m
+# ######################################################################
+# test_provider_vmprovider_vm_list /tests/cloud/test_08_vm_provider.py 111
+# ######################################################################
+[0m
++----------------+---------+---------------------+----------+-----------------------+----------------+---------------+-----------------+----------------------+--------+
+| Name           | Cloud   | Instance ID         | Status   | Image                 | Public IPs     | Private IPs   | Creation Time   | Started at           | Kind   |
+|----------------+---------+---------------------+----------+-----------------------+----------------+---------------+-----------------+----------------------+--------|
+| test-josh-vm-2 | aws     | i-09c7088f0626430d8 | running  | ami-0c929bde1796e1484 | 18.191.150.239 | 172.31.2.36   |                 | 05/07/2020, 22:03:50 | vm     |
+| test-josh-vm-3 | aws     | i-075a2dd1ee1df2b3b | stopped  | ami-0c929bde1796e1484 | None           | 172.31.1.228  |                 | 05/05/2020, 03:17:00 | vm     |
+| test-josh-vm   | aws     | i-097b1084fa3e7ce24 | stopped  | ami-0c929bde1796e1484 | None           | 172.31.4.32   |                 | 05/07/2020, 21:40:34 | vm     |
++----------------+---------+---------------------+----------+-----------------------+----------------+---------------+-----------------+----------------------+--------+
+None
+PASSED
+tests/cloud/test_08_vm_provider.py::Test_provider_vm::test_provider_vm_wait 
+[35m
+# ######################################################################
+# test_provider_vm_wait /tests/cloud/test_08_vm_provider.py 119
+# ######################################################################
+[0m
+[34mINFO: waiting for instance to be reachable: Interval: {interval}, Timeout: {timeout}[0m
+ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i /home/josh/.ssh/id_rsa ubuntu@18.191.150.239 echo IAmReady
+ERROR: [b'ssh: connect to host 18.191.150.239 port 22: Connection timed out\r\n']
+ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i /home/josh/.ssh/id_rsa ubuntu@18.191.150.239 echo IAmReady
+ERROR: [b'ssh: connect to host 18.191.150.239 port 22: Connection timed out\r\n']
+ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i /home/josh/.ssh/id_rsa ubuntu@18.191.150.239 echo IAmReady
+ERROR: [b'ssh: connect to host 18.191.150.239 port 22: Connection timed out\r\n']
+ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i /home/josh/.ssh/id_rsa ubuntu@18.191.150.239 echo IAmReady
+ERROR: [b'ssh: connect to host 18.191.150.239 port 22: Connection timed out\r\n']
+ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i /home/josh/.ssh/id_rsa ubuntu@18.191.150.239 echo IAmReady
+ERROR: [b'ssh: connect to host 18.191.150.239 port 22: Connection timed out\r\n']
+ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i /home/josh/.ssh/id_rsa ubuntu@18.191.150.239 echo IAmReady
+ERROR: [b'ssh: connect to host 18.191.150.239 port 22: Connection timed out\r\n']
+ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i /home/josh/.ssh/id_rsa ubuntu@18.191.150.239 echo IAmReady
+ERROR: [b'ssh: connect to host 18.191.150.239 port 22: Connection timed out\r\n']
+ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i /home/josh/.ssh/id_rsa ubuntu@18.191.150.239 echo IAmReady
+ERROR: [b'ssh: connect to host 18.191.150.239 port 22: Connection timed out\r\n']
+ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i /home/josh/.ssh/id_rsa ubuntu@18.191.150.239 echo IAmReady
+ERROR: [b'ssh: connect to host 18.191.150.239 port 22: Connection timed out\r\n']
+ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i /home/josh/.ssh/id_rsa ubuntu@18.191.150.239 echo IAmReady
+ERROR: [b'ssh: connect to host 18.191.150.239 port 22: Connection timed out\r\n']
+ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i /home/josh/.ssh/id_rsa ubuntu@18.191.150.239 echo IAmReady
+ERROR: [b'ssh: connect to host 18.191.150.239 port 22: Connection timed out\r\n']
+ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i /home/josh/.ssh/id_rsa ubuntu@18.191.150.239 echo IAmReady
+ERROR: [b'ssh: connect to host 18.191.150.239 port 22: Connection timed out\r\n']
+ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i /home/josh/.ssh/id_rsa ubuntu@18.191.150.239 echo IAmReady
+ERROR: [b'ssh: connect to host 18.191.150.239 port 22: Connection timed out\r\n']
+ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i /home/josh/.ssh/id_rsa ubuntu@18.191.150.239 echo IAmReady
+ERROR: [b'ssh: connect to host 18.191.150.239 port 22: Connection timed out\r\n']
+ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i /home/josh/.ssh/id_rsa ubuntu@18.191.150.239 echo IAmReady
+ERROR: [b'ssh: connect to host 18.191.150.239 port 22: Connection timed out\r\n']
+ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i /home/josh/.ssh/id_rsa ubuntu@18.191.150.239 echo IAmReady
+ERROR: [b'ssh: connect to host 18.191.150.239 port 22: Connection timed out\r\n']
+ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i /home/josh/.ssh/id_rsa ubuntu@18.191.150.239 echo IAmReady
+ERROR: [b'ssh: connect to host 18.191.150.239 port 22: Connection timed out\r\n']
+ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i /home/josh/.ssh/id_rsa ubuntu@18.191.150.239 echo IAmReady
+ERROR: [b'ssh: connect to host 18.191.150.239 port 22: Connection timed out\r\n']
+ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i /home/josh/.ssh/id_rsa ubuntu@18.191.150.239 echo IAmReady
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! KeyboardInterrupt !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+/home/josh/dev/cloud/cloudmesh-aws/cloudmesh/aws/compute/Provider.py:635: KeyboardInterrupt
+(to show a full traceback on KeyboardInterrupt use --full-trace)
+======================= 42 passed in 3829.00s (1:03:48) ========================

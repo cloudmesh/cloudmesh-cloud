@@ -1,0 +1,1985 @@
+============================= test session starts ==============================
+platform linux -- Python 3.8.2, pytest-5.4.1, py-1.8.1, pluggy-0.13.1 -- /home/josh/ENV3/bin/python3
+cachedir: .pytest_cache
+rootdir: /home/josh/dev/cloud/cloudmesh-cloud, inifile: pytest.ini
+plugins: cov-2.8.1
+collecting ... Test run for oracle
+Test run for oracle
+Test run for oracle on key test-key
+Test run for oracle
+Test run for oracle
+[34m
+# ----------------------------------------------------------------------
+# variables.dict()
+# ----------------------------------------------------------------------
+# 27:<module> ./tests/cloud/test_07_secgroup_provider.py
+# ----------------------------------------------------------------------
+# {'cloud': 'oracle',
+#  'debug': 'True',
+#  'group': 'cloudmesh',
+#  'key': 'josh',
+#  'refresh': 'False',
+#  'storage': 'google',
+#  'timer': 'False',
+#  'trace': 'True',
+#  'verbose': '10',
+#  'vm': 'test-josh-vm'}
+# ----------------------------------------------------------------------
+[0m
+Test run for oracle
+[34m
+# ----------------------------------------------------------------------
+# variables.dict()
+# ----------------------------------------------------------------------
+# 27:<module> ./tests/cloud/test_08_vm_provider.py
+# ----------------------------------------------------------------------
+# {'cloud': 'oracle',
+#  'debug': 'True',
+#  'group': 'cloudmesh',
+#  'key': 'josh',
+#  'refresh': 'False',
+#  'storage': 'google',
+#  'timer': 'False',
+#  'trace': 'True',
+#  'verbose': '10',
+#  'vm': 'test-josh-vm'}
+# ----------------------------------------------------------------------
+[0m
+Test run for oracle
+collected 63 items
+
+tests/cloud/test_00_sys.py::Test_Sys::test_cms_help 
+[35m
+# ######################################################################
+# test_cms_help /tests/cloud/test_00_sys.py 28
+# ######################################################################
+[0m
+[34m
+# ----------------------------------------------------------------------
+# result
+# ----------------------------------------------------------------------
+# 34:test_cms_help ./tests/cloud/test_00_sys.py
+# ----------------------------------------------------------------------
+# ('help\n'
+#  '\n'
+#  'Documented commands (type help <topic>):\n'
+#  '========================================\n'
+#  'EOF        data     help       man        quit      ssh        '
+#  'var           \n'
+#  'admin      debug    host       open       register  start      '
+#  'vbox          \n'
+#  'banner     default  image      openstack  sec       stop       '
+#  'vcluster      \n'
+#  'check      dryrun   info       oracle     service   stopwatch  '
+#  'vdir          \n'
+#  'clear      echo     init       pause      set       storage    '
+#  'version       \n'
+#  'commands   flavor   inventory  provider   shell     sys        '
+#  'vm            \n'
+#  'config     group    ip         py         sleep     term       '
+#  'workflow_draft\n'
+#  'container  gui      key        q          source    test')
+# ----------------------------------------------------------------------
+[0m
+PASSED
+tests/cloud/test_00_sys.py::Test_Sys::test_benchmark 
++---------------------+------------------------------------------------------------------+
+| Attribute           | Value                                                            |
+|---------------------+------------------------------------------------------------------|
+| BUG_REPORT_URL      | "https://bugs.launchpad.net/ubuntu/"                             |
+| DISTRIB_CODENAME    | bionic                                                           |
+| DISTRIB_DESCRIPTION | "Ubuntu 18.04.4 LTS"                                             |
+| DISTRIB_ID          | Ubuntu                                                           |
+| DISTRIB_RELEASE     | 18.04                                                            |
+| HOME_URL            | "https://www.ubuntu.com/"                                        |
+| ID                  | ubuntu                                                           |
+| ID_LIKE             | debian                                                           |
+| NAME                | "Ubuntu"                                                         |
+| PRETTY_NAME         | "Ubuntu 18.04.4 LTS"                                             |
+| PRIVACY_POLICY_URL  | "https://www.ubuntu.com/legal/terms-and-policies/privacy-policy" |
+| SUPPORT_URL         | "https://help.ubuntu.com/"                                       |
+| UBUNTU_CODENAME     | bionic                                                           |
+| VERSION             | "18.04.4 LTS (Bionic Beaver)"                                    |
+| VERSION_CODENAME    | bionic                                                           |
+| VERSION_ID          | "18.04"                                                          |
+| cpu_count           | 4                                                                |
+| mem.active          | 4.1 GiB                                                          |
+| mem.available       | 3.0 GiB                                                          |
+| mem.free            | 387.8 MiB                                                        |
+| mem.inactive        | 2.5 GiB                                                          |
+| mem.percent         | 60.6 %                                                           |
+| mem.total           | 7.7 GiB                                                          |
+| mem.used            | 3.4 GiB                                                          |
+| platform.version    | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020              |
+| python              | 3.8.2 (default, Feb 26 2020, 02:56:10)                           |
+|                     | [GCC 7.4.0]                                                      |
+| python.pip          | 20.1                                                             |
+| python.version      | 3.8.2                                                            |
+| sys.platform        | linux                                                            |
+| uname.machine       | x86_64                                                           |
+| uname.node          | josh-XPS-13-9343                                                 |
+| uname.processor     | x86_64                                                           |
+| uname.release       | 5.3.0-46-generic                                                 |
+| uname.system        | Linux                                                            |
+| uname.version       | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020              |
+| user                | josh                                                             |
++---------------------+------------------------------------------------------------------+
+
++---------------------------+----------+--------+---------------------+--------+------------------+--------+-------+-----------------------------------------------------+
+| Name                      | Status   |   Time | Start               | tag    | Node             | User   | OS    | Version                                             |
+|---------------------------+----------+--------+---------------------+--------+------------------+--------+-------+-----------------------------------------------------|
+| test_00_sys/test_cms_help | ok       |  2.236 | 2020-05-07 22:57:15 | oracle | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
++---------------------------+----------+--------+---------------------+--------+------------------+--------+-------+-----------------------------------------------------+
+
+# csv,timer,status,time,start,tag,uname.node,user,uname.system,platform.version
+# csv,test_00_sys/test_cms_help,ok,2.236,2020-05-07 22:57:15,oracle,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+
+PASSED
+tests/cloud/test_01_clean_local_remote.py::Test_Clean_Local_Remote::test_cms_init init
+MongoDB stop
+server should be down...
+deleting: /home/josh/.cloudmesh/mongodb
+MongoDB folder deleted
+MongoDB create
+admin mongo create
+
+# ----------------------------------------------------------------------
+# arguments
+# ----------------------------------------------------------------------
+# 122:do_admin /home/josh/dev/cloud/cloudmesh-admin/cloudmesh/admin/command/admin.py
+# ----------------------------------------------------------------------
+# {'--brew': False,
+#  '--docker': False,
+#  '--download': None,
+#  '--dryrun': False,
+#  '--force': False,
+#  '--nosudo': False,
+#  '--output': None,
+#  'FILENAME': None,
+#  'MODE': None,
+#  'PASSWORD': None,
+#  'backup': False,
+#  'create': True,
+#  'docker': False,
+#  'dryrun': False,
+#  'force': False,
+#  'info': False,
+#  'install': False,
+#  'list': False,
+#  'load': False,
+#  'mode': False,
+#  'mongo': True,
+#  'nosudo': False,
+#  'output': 'table',
+#  'password': False,
+#  'security': False,
+#  'ssh': False,
+#  'start': False,
+#  'stats': False,
+#  'status': False,
+#  'stop': False,
+#  'system': False,
+#  'version': False}
+# ----------------------------------------------------------------------
+
+MongoDB create
+INFO: Starting mongo without authentication ... 
+about to fork child process, waiting until server is ready for connections.
+forked process: 27845
+child process started successfully, parent exiting
+
+None
+INFO: Creating admin user ... 
+Administrative user created.
+INFO: Stopping the service ... 
+server should be down...
+admin mongo start
+
+# ----------------------------------------------------------------------
+# arguments
+# ----------------------------------------------------------------------
+# 122:do_admin /home/josh/dev/cloud/cloudmesh-admin/cloudmesh/admin/command/admin.py
+# ----------------------------------------------------------------------
+# {'--brew': False,
+#  '--docker': False,
+#  '--download': None,
+#  '--dryrun': False,
+#  '--force': False,
+#  '--nosudo': False,
+#  '--output': None,
+#  'FILENAME': None,
+#  'MODE': None,
+#  'PASSWORD': None,
+#  'backup': False,
+#  'create': False,
+#  'docker': False,
+#  'dryrun': False,
+#  'force': False,
+#  'info': False,
+#  'install': False,
+#  'list': False,
+#  'load': False,
+#  'mode': False,
+#  'mongo': True,
+#  'nosudo': False,
+#  'output': 'table',
+#  'password': False,
+#  'security': False,
+#  'ssh': False,
+#  'start': True,
+#  'stats': False,
+#  'status': False,
+#  'stop': False,
+#  'system': False,
+#  'version': False}
+# ----------------------------------------------------------------------
+
+MongoDB start
+about to fork child process, waiting until server is ready for connections.
+forked process: 27894
+child process started successfully, parent exiting
+
+None
+Set key
+Config Security Initialization
+key add
+sec load
+
++---------+-------+----------+-----------+-----------+
+| Group   | Rule  | Protocol | Ports     | IP Range  |
++---------+-------+----------+-----------+-----------+
+| default | ssh   | tcp      | 22:22     | 0.0.0.0/0 |
+| default | icmp  | icmp     |           | 0.0.0.0/0 |
+| default | http  | tcp      | 80:80     | 0.0.0.0/0 |
+| default | https | tcp      | 443:443   | 0.0.0.0/0 |
+| flask   | ssh   | tcp      | 22:22     | 0.0.0.0/0 |
+| flask   | icmp  | icmp     |           | 0.0.0.0/0 |
+| flask   | http  | tcp      | 80:80     | 0.0.0.0/0 |
+| flask   | https | tcp      | 443:443   | 0.0.0.0/0 |
+| flask   | flask | tcp      | 8000:8000 | 0.0.0.0/0 |
++---------+-------+----------+-----------+-----------+
+
+Variables
+
+    timer=False
+    cloud=oracle
+    vm=test-josh-vm
+    trace=True
+    debug=True
+    verbose=10
+    storage=google
+    key=josh
+    refresh=False
+    group=cloudmesh
+
+[35m
+# ######################################################################
+# test_cms_init /tests/cloud/test_01_clean_local_remote.py 35
+# ######################################################################
+[0m
+PASSED
+tests/cloud/test_01_clean_local_remote.py::Test_Clean_Local_Remote::test_delete_all_keys_from_cloud 
+[35m
+# ######################################################################
+# test_delete_all_keys_from_cloud /tests/cloud/test_01_clean_local_remote.py 41
+# ######################################################################
+[0m
+Not supported in oracle cloud
+PASSED
+tests/cloud/test_01_clean_local_remote.py::Test_Clean_Local_Remote::test_delete_all_secgroups_from_cloud 
+[35m
+# ######################################################################
+# test_delete_all_secgroups_from_cloud /tests/cloud/test_01_clean_local_remote.py 59
+# ######################################################################
+[0m
+PASSED
+tests/cloud/test_01_clean_local_remote.py::Test_Clean_Local_Remote::test_benchmark 
+
++-----------------------------------------------------------------+----------+--------+---------------------+--------+------------------+--------+-------+-----------------------------------------------------+
+| Name                                                            | Status   |   Time | Start               | tag    | Node             | User   | OS    | Version                                             |
+|-----------------------------------------------------------------+----------+--------+---------------------+--------+------------------+--------+-------+-----------------------------------------------------|
+| test_00_sys/test_cms_help                                       | ok       |  2.236 | 2020-05-07 22:57:15 | oracle | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_01_clean_local_remote/test_cms_init                        | ok       |  8.852 | 2020-05-07 22:57:17 | oracle | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_01_clean_local_remote/test_delete_all_keys_from_cloud      | ok       |  0.001 | 2020-05-07 22:57:26 | oracle | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_01_clean_local_remote/test_delete_all_secgroups_from_cloud | ok       |  0.002 | 2020-05-07 22:57:27 | oracle | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
++-----------------------------------------------------------------+----------+--------+---------------------+--------+------------------+--------+-------+-----------------------------------------------------+
+
+PASSED
+tests/cloud/test_02_key.py::Test_Key::test_clear_local_database 
+[35m
+# ######################################################################
+# test_clear_local_database /tests/cloud/test_02_key.py 39
+# ######################################################################
+[0m
+PASSED
+tests/cloud/test_02_key.py::Test_Key::test_clear_cloud_database 
+[35m
+# ######################################################################
+# test_clear_cloud_database /tests/cloud/test_02_key.py 46
+# ######################################################################
+[0m
+PASSED
+tests/cloud/test_02_key.py::Test_Key::test_upload_key_to_database 
+[35m
+# ######################################################################
+# test_upload_key_to_database /tests/cloud/test_02_key.py 53
+# ######################################################################
+[0m
+<cloudmesh.key.Key.Key object at 0x7f2307cb2d30>
+PASSED
+tests/cloud/test_02_key.py::Test_Key::test_upload_key_to_cloud 
+[35m
+# ######################################################################
+# test_upload_key_to_cloud /tests/cloud/test_02_key.py 66
+# ######################################################################
+[0m
+[34m
+# ----------------------------------------------------------------------
+# key
+# ----------------------------------------------------------------------
+# 80:test_upload_key_to_cloud ./tests/cloud/test_02_key.py
+# ----------------------------------------------------------------------
+# {'_id': ObjectId('5eb492575cff11e1c3062be1'),
+#  'cm': {'cloud': 'local',
+#         'collection': 'local-key',
+#         'created': '2020-05-07 22:57:27.121794',
+#         'kind': 'key',
+#         'modified': '2020-05-07 22:57:27.121794',
+#         'name': 'test-key'},
+#  'comment': 'baker203@iu.edu',
+#  'fingerprint': '44:8c:65:30:6e:a8:31:40:13:9f:c8:f2:c6:67:c7:c9',
+#  'group': ['ssh', 'local', None],
+#  'key': 'AAAAB3NzaC1yc2EAAAADAQABAAACAQCZyFlYiArHL+v9i5sLp2HNv41J5PtLsFaJ4qDNiKgy0rBxmHtFg2giQDYPkWySZB1M+uOTSHkCR98ZsV64vCXfs09Z+xhT42B0jjqHNkILWgY1aShEvXzyII6B4Ny816fCMJI+kxllIeAIVgmwPwCjwsM6erUURBPmHlkPk7OG8Kt8ljiLuQ3TXtBfQ+zWRmvpCv0oN8ptWMCXulONpmTtuvLgNtTHSjeydqe9jSs2y+QwEp2P60A8ZgL8SK0WV5xtZEz6+YkBhl3eitub/D4ek+A37nY//SE8Fxau3TTH9VlMPFefvKUXoMsCCLm1Vs9UfnHKxzfeB9/XfBk4npMn7/Licdg2czGgkvK0FDv7EIDZfwh/KTa5KINPSRGkW5N2j73qi0I02QAkzd5NKfJca4vXklqcZwyIMYv0X0bxmbQ9o5TRO8ISeocDZAMLsYMlyO+wpoqd6MX3fe6d0eA0UBKozjQ7lw/UCnBlAKQGrFjXl4DEAm8xfW2d5vy5wyw2ygGtpKe5Rk30eVUNMfi/zvZYr4TwRZ0ieh2Y80UkQr/YGuM3C1C3GjQuxrMMQc8ooUs6f56+61/sJbsvRjtKiYwMvR8HJT4oGR5Ds4a9I2Wc2FKGzE/AZIGg/zeLCCqDLK+bZYWGwGu4G/XvOoJJfo4fqGf7NvKmcfVXU+zSXw==',
+#  'location': {'private': '/home/josh/.ssh/id_rsa',
+#               'public': '/home/josh/.ssh/id_rsa.pub'},
+#  'name': 'test-key',
+#  'path': '/home/josh/.ssh/id_rsa.pub',
+#  'profile': {'email': 'baker203@iu.edu',
+#              'firstname': 'Josh',
+#              'github': 'joshua-m-baker',
+#              'lastname': 'Baker',
+#              'publickey': '~/.ssh/id_rsa.pub',
+#              'user': 'josh'},
+#  'public_key': 'ssh-rsa '
+#                'AAAAB3NzaC1yc2EAAAADAQABAAACAQCZyFlYiArHL+v9i5sLp2HNv41J5PtLsFaJ4qDNiKgy0rBxmHtFg2giQDYPkWySZB1M+uOTSHkCR98ZsV64vCXfs09Z+xhT42B0jjqHNkILWgY1aShEvXzyII6B4Ny816fCMJI+kxllIeAIVgmwPwCjwsM6erUURBPmHlkPk7OG8Kt8ljiLuQ3TXtBfQ+zWRmvpCv0oN8ptWMCXulONpmTtuvLgNtTHSjeydqe9jSs2y+QwEp2P60A8ZgL8SK0WV5xtZEz6+YkBhl3eitub/D4ek+A37nY//SE8Fxau3TTH9VlMPFefvKUXoMsCCLm1Vs9UfnHKxzfeB9/XfBk4npMn7/Licdg2czGgkvK0FDv7EIDZfwh/KTa5KINPSRGkW5N2j73qi0I02QAkzd5NKfJca4vXklqcZwyIMYv0X0bxmbQ9o5TRO8ISeocDZAMLsYMlyO+wpoqd6MX3fe6d0eA0UBKozjQ7lw/UCnBlAKQGrFjXl4DEAm8xfW2d5vy5wyw2ygGtpKe5Rk30eVUNMfi/zvZYr4TwRZ0ieh2Y80UkQr/YGuM3C1C3GjQuxrMMQc8ooUs6f56+61/sJbsvRjtKiYwMvR8HJT4oGR5Ds4a9I2Wc2FKGzE/AZIGg/zeLCCqDLK+bZYWGwGu4G/XvOoJJfo4fqGf7NvKmcfVXU+zSXw== '
+#                'baker203@iu.edu',
+#  'source': 'ssh',
+#  'type': 'ssh-rsa',
+#  'uri': 'file:///home/josh/.ssh/id_rsa.pub'}
+# ----------------------------------------------------------------------
+[0m
+Not supported in oracle cloud
+PASSED
+tests/cloud/test_02_key.py::Test_Key::test_list_key_from_cloud 
+[35m
+# ######################################################################
+# test_list_key_from_cloud /tests/cloud/test_02_key.py 86
+# ######################################################################
+[0m
+Not supported in oracle cloud
+[34m
+# ----------------------------------------------------------------------
+# f"{cloud} does not support key list!"
+# ----------------------------------------------------------------------
+# 93:test_list_key_from_cloud ./tests/cloud/test_02_key.py
+# ----------------------------------------------------------------------
+# 'oracle does not support key list!'
+# ----------------------------------------------------------------------
+[0m
+PASSED
+tests/cloud/test_02_key.py::Test_Key::test_delete_key_from_cloud 
+[35m
+# ######################################################################
+# test_delete_key_from_cloud /tests/cloud/test_02_key.py 103
+# ######################################################################
+[0m
+Not supported in oracle cloud
+None
+PASSED
+tests/cloud/test_02_key.py::Test_Key::test_get_key_from_cloud 
+[35m
+# ######################################################################
+# test_get_key_from_cloud /tests/cloud/test_02_key.py 113
+# ######################################################################
+[0m
+PASSED
+tests/cloud/test_02_key.py::Test_Key::test_key_delete 
+[35m
+# ######################################################################
+# test_key_delete /tests/cloud/test_02_key.py 117
+# ######################################################################
+[0m
+
+[35m
+# ######################################################################
+# test_clear_cloud_database /tests/cloud/test_02_key.py 46
+# ######################################################################
+[0m
+PASSED
+tests/cloud/test_02_key.py::Test_Key::test_cms_local key add
+
+[35m
+# ######################################################################
+# test_cms_local /tests/cloud/test_02_key.py 123
+# ######################################################################
+[0m
+PASSED
+tests/cloud/test_02_key.py::Test_Key::test_cms_cloud key upload --cloud=oracle
+cloud oracle
+Not supported in oracle cloud
+upload key 'josh successful'. 
+
+[35m
+# ######################################################################
+# test_cms_cloud /tests/cloud/test_02_key.py 130
+# ######################################################################
+[0m
+
+[35m
+# ######################################################################
+# test_clear_cloud_database /tests/cloud/test_02_key.py 46
+# ######################################################################
+[0m
+PASSED
+tests/cloud/test_02_key.py::Test_Key::test_benchmark 
+
++-----------------------------------------------------------------+----------+--------+---------------------+--------+------------------+--------+-------+-----------------------------------------------------+
+| Name                                                            | Status   |   Time | Start               | tag    | Node             | User   | OS    | Version                                             |
+|-----------------------------------------------------------------+----------+--------+---------------------+--------+------------------+--------+-------+-----------------------------------------------------|
+| test_00_sys/test_cms_help                                       | ok       |  2.236 | 2020-05-07 22:57:15 | oracle | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_01_clean_local_remote/test_cms_init                        | ok       |  8.852 | 2020-05-07 22:57:17 | oracle | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_01_clean_local_remote/test_delete_all_keys_from_cloud      | ok       |  0.001 | 2020-05-07 22:57:26 | oracle | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_01_clean_local_remote/test_delete_all_secgroups_from_cloud | ok       |  0.002 | 2020-05-07 22:57:27 | oracle | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_clear_local_database                           | ok       |  0.039 | 2020-05-07 22:57:27 | oracle | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_clear_cloud_database                           | ok       |  0.018 | 2020-05-07 22:57:30 | oracle | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_upload_key_to_database                         | ok       |  0.038 | 2020-05-07 22:57:27 | oracle | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_upload_key_to_cloud                            | ok       |  0.002 | 2020-05-07 22:57:27 | oracle | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_list_key_from_cloud                            | ok       |  0.001 | 2020-05-07 22:57:27 | oracle | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_delete_key_from_cloud                          | ok       |  0.001 | 2020-05-07 22:57:27 | oracle | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_key_delete                                     | ok       |  0.022 | 2020-05-07 22:57:27 | oracle | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_cms_local                                      | ok       |  2.762 | 2020-05-07 22:57:27 | oracle | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_cms_cloud                                      | ok       |  4.071 | 2020-05-07 22:57:30 | oracle | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
++-----------------------------------------------------------------+----------+--------+---------------------+--------+------------------+--------+-------+-----------------------------------------------------+
+
+# csv,timer,status,time,start,tag,uname.node,user,uname.system,platform.version
+# csv,test_00_sys/test_cms_help,ok,2.236,2020-05-07 22:57:15,oracle,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_01_clean_local_remote/test_cms_init,ok,8.852,2020-05-07 22:57:17,oracle,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_01_clean_local_remote/test_delete_all_keys_from_cloud,ok,0.001,2020-05-07 22:57:26,oracle,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_01_clean_local_remote/test_delete_all_secgroups_from_cloud,ok,0.002,2020-05-07 22:57:27,oracle,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_clear_local_database,ok,0.039,2020-05-07 22:57:27,oracle,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_clear_cloud_database,ok,0.018,2020-05-07 22:57:30,oracle,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_upload_key_to_database,ok,0.038,2020-05-07 22:57:27,oracle,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_upload_key_to_cloud,ok,0.002,2020-05-07 22:57:27,oracle,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_list_key_from_cloud,ok,0.001,2020-05-07 22:57:27,oracle,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_delete_key_from_cloud,ok,0.001,2020-05-07 22:57:27,oracle,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_key_delete,ok,0.022,2020-05-07 22:57:27,oracle,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_cms_local,ok,2.762,2020-05-07 22:57:27,oracle,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_cms_cloud,ok,4.071,2020-05-07 22:57:30,oracle,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+
+PASSED
+tests/cloud/test_04_flavor.py::Test_Flavor::test_empty_database 
+[35m
+# ######################################################################
+# test_empty_database /tests/cloud/test_04_flavor.py 38
+# ######################################################################
+[0m
+PASSED
+tests/cloud/test_04_flavor.py::Test_Flavor::test_provider_flavor 
+[35m
+# ######################################################################
+# test_provider_flavor /tests/cloud/test_04_flavor.py 44
+# ######################################################################
+[0m
+[{
+  "gpu_description": null,
+  "gpus": 0,
+  "local_disk_description": null,
+  "local_disks": 0,
+  "local_disks_total_size_in_gbs": null,
+  "max_vnic_attachment_options": null,
+  "max_vnic_attachments": 2,
+  "memory_in_gbs": 15.0,
+  "memory_options": null,
+  "networking_bandwidth_in_gbps": 1.0,
+  "networking_bandwidth_options": null,
+  "ocpu_options": null,
+  "ocpus": 1.0,
+  "processor_description": "2.0 GHz Intel\u00ae Xeon\u00ae Platinum 8167M (Skylake)",
+  "shape": "VM.Standard2.1"
+}, {
+  "gpu_description": null,
+  "gpus": 0,
+  "local_disk_description": null,
+  "local_disks": 0,
+  "local_disks_total_size_in_gbs": null,
+  "max_vnic_attachment_options": null,
+  "max_vnic_attachments": 2,
+  "memory_in_gbs": 8.0,
+  "memory_options": null,
+  "networking_bandwidth_in_gbps": 0.7,
+  "networking_bandwidth_options": null,
+  "ocpu_options": null,
+  "ocpus": 1.0,
+  "processor_description": "2.0 GHz AMD EPYC\u2122 7551 (Naples)",
+  "shape": "VM.Standard.E2.1"
+}, {
+  "gpu_description": null,
+  "gpus": 0,
+  "local_disk_description": null,
+  "local_disks": 0,
+  "local_disks_total_size_in_gbs": null,
+  "max_vnic_attachment_options": null,
+  "max_vnic_attachments": 2,
+  "memory_in_gbs": 16.0,
+  "memory_options": null,
+  "networking_bandwidth_in_gbps": 1.4,
+  "networking_bandwidth_options": null,
+  "ocpu_options": null,
+  "ocpus": 2.0,
+  "processor_description": "2.0 GHz AMD EPYC\u2122 7551 (Naples)",
+  "shape": "VM.Standard.E2.2"
+}, {
+  "gpu_description": null,
+  "gpus": 0,
+  "local_disk_description": null,
+  "local_disks": 0,
+  "local_disks_total_size_in_gbs": null,
+  "max_vnic_attachment_options": null,
+  "max_vnic_attachments": 2,
+  "memory_in_gbs": 15.0,
+  "memory_options": null,
+  "networking_bandwidth_in_gbps": 1.0,
+  "networking_bandwidth_options": null,
+  "ocpu_options": null,
+  "ocpus": 1.0,
+  "processor_description": "2.0 GHz Intel\u00ae Xeon\u00ae Platinum 8167M (Skylake)",
+  "shape": "VM.Standard2.1"
+}, {
+  "gpu_description": null,
+  "gpus": 0,
+  "local_disk_description": null,
+  "local_disks": 0,
+  "local_disks_total_size_in_gbs": null,
+  "max_vnic_attachment_options": null,
+  "max_vnic_attachments": 2,
+  "memory_in_gbs": 8.0,
+  "memory_options": null,
+  "networking_bandwidth_in_gbps": 0.7,
+  "networking_bandwidth_options": null,
+  "ocpu_options": null,
+  "ocpus": 1.0,
+  "processor_description": "2.0 GHz AMD EPYC\u2122 7551 (Naples)",
+  "shape": "VM.Standard.E2.1"
+}, {
+  "gpu_description": null,
+  "gpus": 0,
+  "local_disk_description": null,
+  "local_disks": 0,
+  "local_disks_total_size_in_gbs": null,
+  "max_vnic_attachment_options": null,
+  "max_vnic_attachments": 2,
+  "memory_in_gbs": 16.0,
+  "memory_options": null,
+  "networking_bandwidth_in_gbps": 1.4,
+  "networking_bandwidth_options": null,
+  "ocpu_options": null,
+  "ocpus": 2.0,
+  "processor_description": "2.0 GHz AMD EPYC\u2122 7551 (Naples)",
+  "shape": "VM.Standard.E2.2"
+}, {
+  "gpu_description": null,
+  "gpus": 0,
+  "local_disk_description": null,
+  "local_disks": 0,
+  "local_disks_total_size_in_gbs": null,
+  "max_vnic_attachment_options": null,
+  "max_vnic_attachments": 1,
+  "memory_in_gbs": 1.0,
+  "memory_options": null,
+  "networking_bandwidth_in_gbps": 0.48,
+  "networking_bandwidth_options": null,
+  "ocpu_options": null,
+  "ocpus": 1.0,
+  "processor_description": "2.0 GHz AMD EPYC\u2122 7551 (Naples)",
+  "shape": "VM.Standard.E2.1.Micro"
+}, {
+  "gpu_description": null,
+  "gpus": 0,
+  "local_disk_description": null,
+  "local_disks": 0,
+  "local_disks_total_size_in_gbs": null,
+  "max_vnic_attachment_options": null,
+  "max_vnic_attachments": 2,
+  "memory_in_gbs": 15.0,
+  "memory_options": null,
+  "networking_bandwidth_in_gbps": 1.0,
+  "networking_bandwidth_options": null,
+  "ocpu_options": null,
+  "ocpus": 1.0,
+  "processor_description": "2.0 GHz Intel\u00ae Xeon\u00ae Platinum 8167M (Skylake)",
+  "shape": "VM.Standard2.1"
+}, {
+  "gpu_description": null,
+  "gpus": 0,
+  "local_disk_description": null,
+  "local_disks": 0,
+  "local_disks_total_size_in_gbs": null,
+  "max_vnic_attachment_options": null,
+  "max_vnic_attachments": 2,
+  "memory_in_gbs": 8.0,
+  "memory_options": null,
+  "networking_bandwidth_in_gbps": 0.7,
+  "networking_bandwidth_options": null,
+  "ocpu_options": null,
+  "ocpus": 1.0,
+  "processor_description": "2.0 GHz AMD EPYC\u2122 7551 (Naples)",
+  "shape": "VM.Standard.E2.1"
+}, {
+  "gpu_description": null,
+  "gpus": 0,
+  "local_disk_description": null,
+  "local_disks": 0,
+  "local_disks_total_size_in_gbs": null,
+  "max_vnic_attachment_options": null,
+  "max_vnic_attachments": 2,
+  "memory_in_gbs": 16.0,
+  "memory_options": null,
+  "networking_bandwidth_in_gbps": 1.4,
+  "networking_bandwidth_options": null,
+  "ocpu_options": null,
+  "ocpus": 2.0,
+  "processor_description": "2.0 GHz AMD EPYC\u2122 7551 (Naples)",
+  "shape": "VM.Standard.E2.2"
+}]
+PASSED
+tests/cloud/test_04_flavor.py::Test_Flavor::test_provider_flavor_update 
+[35m
+# ######################################################################
+# test_provider_flavor_update /tests/cloud/test_04_flavor.py 50
+# ######################################################################
+[0m
+[{
+  "gpu_description": null,
+  "gpus": 0,
+  "local_disk_description": null,
+  "local_disks": 0,
+  "local_disks_total_size_in_gbs": null,
+  "max_vnic_attachment_options": null,
+  "max_vnic_attachments": 2,
+  "memory_in_gbs": 15.0,
+  "memory_options": null,
+  "networking_bandwidth_in_gbps": 1.0,
+  "networking_bandwidth_options": null,
+  "ocpu_options": null,
+  "ocpus": 1.0,
+  "processor_description": "2.0 GHz Intel\u00ae Xeon\u00ae Platinum 8167M (Skylake)",
+  "shape": "VM.Standard2.1"
+}, {
+  "gpu_description": null,
+  "gpus": 0,
+  "local_disk_description": null,
+  "local_disks": 0,
+  "local_disks_total_size_in_gbs": null,
+  "max_vnic_attachment_options": null,
+  "max_vnic_attachments": 2,
+  "memory_in_gbs": 8.0,
+  "memory_options": null,
+  "networking_bandwidth_in_gbps": 0.7,
+  "networking_bandwidth_options": null,
+  "ocpu_options": null,
+  "ocpus": 1.0,
+  "processor_description": "2.0 GHz AMD EPYC\u2122 7551 (Naples)",
+  "shape": "VM.Standard.E2.1"
+}, {
+  "gpu_description": null,
+  "gpus": 0,
+  "local_disk_description": null,
+  "local_disks": 0,
+  "local_disks_total_size_in_gbs": null,
+  "max_vnic_attachment_options": null,
+  "max_vnic_attachments": 2,
+  "memory_in_gbs": 16.0,
+  "memory_options": null,
+  "networking_bandwidth_in_gbps": 1.4,
+  "networking_bandwidth_options": null,
+  "ocpu_options": null,
+  "ocpus": 2.0,
+  "processor_description": "2.0 GHz AMD EPYC\u2122 7551 (Naples)",
+  "shape": "VM.Standard.E2.2"
+}, {
+  "gpu_description": null,
+  "gpus": 0,
+  "local_disk_description": null,
+  "local_disks": 0,
+  "local_disks_total_size_in_gbs": null,
+  "max_vnic_attachment_options": null,
+  "max_vnic_attachments": 2,
+  "memory_in_gbs": 15.0,
+  "memory_options": null,
+  "networking_bandwidth_in_gbps": 1.0,
+  "networking_bandwidth_options": null,
+  "ocpu_options": null,
+  "ocpus": 1.0,
+  "processor_description": "2.0 GHz Intel\u00ae Xeon\u00ae Platinum 8167M (Skylake)",
+  "shape": "VM.Standard2.1"
+}, {
+  "gpu_description": null,
+  "gpus": 0,
+  "local_disk_description": null,
+  "local_disks": 0,
+  "local_disks_total_size_in_gbs": null,
+  "max_vnic_attachment_options": null,
+  "max_vnic_attachments": 2,
+  "memory_in_gbs": 8.0,
+  "memory_options": null,
+  "networking_bandwidth_in_gbps": 0.7,
+  "networking_bandwidth_options": null,
+  "ocpu_options": null,
+  "ocpus": 1.0,
+  "processor_description": "2.0 GHz AMD EPYC\u2122 7551 (Naples)",
+  "shape": "VM.Standard.E2.1"
+}, {
+  "gpu_description": null,
+  "gpus": 0,
+  "local_disk_description": null,
+  "local_disks": 0,
+  "local_disks_total_size_in_gbs": null,
+  "max_vnic_attachment_options": null,
+  "max_vnic_attachments": 2,
+  "memory_in_gbs": 16.0,
+  "memory_options": null,
+  "networking_bandwidth_in_gbps": 1.4,
+  "networking_bandwidth_options": null,
+  "ocpu_options": null,
+  "ocpus": 2.0,
+  "processor_description": "2.0 GHz AMD EPYC\u2122 7551 (Naples)",
+  "shape": "VM.Standard.E2.2"
+}, {
+  "gpu_description": null,
+  "gpus": 0,
+  "local_disk_description": null,
+  "local_disks": 0,
+  "local_disks_total_size_in_gbs": null,
+  "max_vnic_attachment_options": null,
+  "max_vnic_attachments": 1,
+  "memory_in_gbs": 1.0,
+  "memory_options": null,
+  "networking_bandwidth_in_gbps": 0.48,
+  "networking_bandwidth_options": null,
+  "ocpu_options": null,
+  "ocpus": 1.0,
+  "processor_description": "2.0 GHz AMD EPYC\u2122 7551 (Naples)",
+  "shape": "VM.Standard.E2.1.Micro"
+}, {
+  "gpu_description": null,
+  "gpus": 0,
+  "local_disk_description": null,
+  "local_disks": 0,
+  "local_disks_total_size_in_gbs": null,
+  "max_vnic_attachment_options": null,
+  "max_vnic_attachments": 2,
+  "memory_in_gbs": 15.0,
+  "memory_options": null,
+  "networking_bandwidth_in_gbps": 1.0,
+  "networking_bandwidth_options": null,
+  "ocpu_options": null,
+  "ocpus": 1.0,
+  "processor_description": "2.0 GHz Intel\u00ae Xeon\u00ae Platinum 8167M (Skylake)",
+  "shape": "VM.Standard2.1"
+}, {
+  "gpu_description": null,
+  "gpus": 0,
+  "local_disk_description": null,
+  "local_disks": 0,
+  "local_disks_total_size_in_gbs": null,
+  "max_vnic_attachment_options": null,
+  "max_vnic_attachments": 2,
+  "memory_in_gbs": 8.0,
+  "memory_options": null,
+  "networking_bandwidth_in_gbps": 0.7,
+  "networking_bandwidth_options": null,
+  "ocpu_options": null,
+  "ocpus": 1.0,
+  "processor_description": "2.0 GHz AMD EPYC\u2122 7551 (Naples)",
+  "shape": "VM.Standard.E2.1"
+}, {
+  "gpu_description": null,
+  "gpus": 0,
+  "local_disk_description": null,
+  "local_disks": 0,
+  "local_disks_total_size_in_gbs": null,
+  "max_vnic_attachment_options": null,
+  "max_vnic_attachments": 2,
+  "memory_in_gbs": 16.0,
+  "memory_options": null,
+  "networking_bandwidth_in_gbps": 1.4,
+  "networking_bandwidth_options": null,
+  "ocpu_options": null,
+  "ocpus": 2.0,
+  "processor_description": "2.0 GHz AMD EPYC\u2122 7551 (Naples)",
+  "shape": "VM.Standard.E2.2"
+}]
+PASSED
+tests/cloud/test_04_flavor.py::Test_Flavor::test_cms_flavor_refresh 
+[35m
+# ######################################################################
+# test_cms_flavor_refresh /tests/cloud/test_04_flavor.py 58
+# ######################################################################
+[0m
+PASSED
+tests/cloud/test_04_flavor.py::Test_Flavor::test_cms_flavor 
+[35m
+# ######################################################################
+# test_cms_flavor /tests/cloud/test_04_flavor.py 65
+# ######################################################################
+[0m
+PASSED
+tests/cloud/test_04_flavor.py::Test_Flavor::test_benchmark 
+
++-----------------------------------------------------------------+----------+--------+---------------------+--------+------------------+--------+-------+-----------------------------------------------------+
+| Name                                                            | Status   |   Time | Start               | tag    | Node             | User   | OS    | Version                                             |
+|-----------------------------------------------------------------+----------+--------+---------------------+--------+------------------+--------+-------+-----------------------------------------------------|
+| test_00_sys/test_cms_help                                       | ok       |  2.236 | 2020-05-07 22:57:15 | oracle | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_01_clean_local_remote/test_cms_init                        | ok       |  8.852 | 2020-05-07 22:57:17 | oracle | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_01_clean_local_remote/test_delete_all_keys_from_cloud      | ok       |  0.001 | 2020-05-07 22:57:26 | oracle | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_01_clean_local_remote/test_delete_all_secgroups_from_cloud | ok       |  0.002 | 2020-05-07 22:57:27 | oracle | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_clear_local_database                           | ok       |  0.039 | 2020-05-07 22:57:27 | oracle | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_clear_cloud_database                           | ok       |  0.018 | 2020-05-07 22:57:30 | oracle | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_upload_key_to_database                         | ok       |  0.038 | 2020-05-07 22:57:27 | oracle | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_upload_key_to_cloud                            | ok       |  0.002 | 2020-05-07 22:57:27 | oracle | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_list_key_from_cloud                            | ok       |  0.001 | 2020-05-07 22:57:27 | oracle | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_delete_key_from_cloud                          | ok       |  0.001 | 2020-05-07 22:57:27 | oracle | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_key_delete                                     | ok       |  0.022 | 2020-05-07 22:57:27 | oracle | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_cms_local                                      | ok       |  2.762 | 2020-05-07 22:57:27 | oracle | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_cms_cloud                                      | ok       |  4.071 | 2020-05-07 22:57:30 | oracle | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_04_flavor/test_empty_database                              | ok       |  0.017 | 2020-05-07 22:57:34 | oracle | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_04_flavor/test_provider_flavor                             | ok       |  2.092 | 2020-05-07 22:57:34 | oracle | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_04_flavor/test_provider_flavor_update                      | ok       |  1.81  | 2020-05-07 22:57:36 | oracle | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_04_flavor/test_cms_flavor_refresh                          | ok       |  4.029 | 2020-05-07 22:57:38 | oracle | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_04_flavor/test_cms_flavor                                  | ok       |  2.009 | 2020-05-07 22:57:42 | oracle | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
++-----------------------------------------------------------------+----------+--------+---------------------+--------+------------------+--------+-------+-----------------------------------------------------+
+
+# csv,timer,status,time,start,tag,uname.node,user,uname.system,platform.version
+# csv,test_00_sys/test_cms_help,ok,2.236,2020-05-07 22:57:15,oracle,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_01_clean_local_remote/test_cms_init,ok,8.852,2020-05-07 22:57:17,oracle,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_01_clean_local_remote/test_delete_all_keys_from_cloud,ok,0.001,2020-05-07 22:57:26,oracle,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_01_clean_local_remote/test_delete_all_secgroups_from_cloud,ok,0.002,2020-05-07 22:57:27,oracle,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_clear_local_database,ok,0.039,2020-05-07 22:57:27,oracle,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_clear_cloud_database,ok,0.018,2020-05-07 22:57:30,oracle,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_upload_key_to_database,ok,0.038,2020-05-07 22:57:27,oracle,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_upload_key_to_cloud,ok,0.002,2020-05-07 22:57:27,oracle,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_list_key_from_cloud,ok,0.001,2020-05-07 22:57:27,oracle,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_delete_key_from_cloud,ok,0.001,2020-05-07 22:57:27,oracle,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_key_delete,ok,0.022,2020-05-07 22:57:27,oracle,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_cms_local,ok,2.762,2020-05-07 22:57:27,oracle,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_cms_cloud,ok,4.071,2020-05-07 22:57:30,oracle,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_04_flavor/test_empty_database,ok,0.017,2020-05-07 22:57:34,oracle,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_04_flavor/test_provider_flavor,ok,2.092,2020-05-07 22:57:34,oracle,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_04_flavor/test_provider_flavor_update,ok,1.81,2020-05-07 22:57:36,oracle,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_04_flavor/test_cms_flavor_refresh,ok,4.029,2020-05-07 22:57:38,oracle,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_04_flavor/test_cms_flavor,ok,2.009,2020-05-07 22:57:42,oracle,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+
+PASSED
+tests/cloud/test_05_image.py::Test_Image::test_empty_database 
+[35m
+# ######################################################################
+# test_empty_database /tests/cloud/test_05_image.py 38
+# ######################################################################
+[0m
+PASSED
+tests/cloud/test_05_image.py::Test_Image::test_provider_image 
+[35m
+# ######################################################################
+# test_provider_image /tests/cloud/test_05_image.py 44
+# ######################################################################
+[0m
+PASSED
+tests/cloud/test_05_image.py::Test_Image::test_provider_image_update 
+[35m
+# ######################################################################
+# test_provider_image_update /tests/cloud/test_05_image.py 50
+# ######################################################################
+[0m
+PASSED
+tests/cloud/test_05_image.py::Test_Image::test_cms_image_refresh 
+[35m
+# ######################################################################
+# test_cms_image_refresh /tests/cloud/test_05_image.py 58
+# ######################################################################
+[0m
+PASSED
+tests/cloud/test_05_image.py::Test_Image::test_cms_image 
+[35m
+# ######################################################################
+# test_cms_image /tests/cloud/test_05_image.py 65
+# ######################################################################
+[0m
+PASSED
+tests/cloud/test_05_image.py::Test_Image::test_benchmark 
+
++-----------------------------------------------------------------+----------+--------+---------------------+--------+------------------+--------+-------+-----------------------------------------------------+
+| Name                                                            | Status   |   Time | Start               | tag    | Node             | User   | OS    | Version                                             |
+|-----------------------------------------------------------------+----------+--------+---------------------+--------+------------------+--------+-------+-----------------------------------------------------|
+| test_00_sys/test_cms_help                                       | ok       |  2.236 | 2020-05-07 22:57:15 | oracle | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_01_clean_local_remote/test_cms_init                        | ok       |  8.852 | 2020-05-07 22:57:17 | oracle | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_01_clean_local_remote/test_delete_all_keys_from_cloud      | ok       |  0.001 | 2020-05-07 22:57:26 | oracle | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_01_clean_local_remote/test_delete_all_secgroups_from_cloud | ok       |  0.002 | 2020-05-07 22:57:27 | oracle | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_clear_local_database                           | ok       |  0.039 | 2020-05-07 22:57:27 | oracle | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_clear_cloud_database                           | ok       |  0.018 | 2020-05-07 22:57:30 | oracle | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_upload_key_to_database                         | ok       |  0.038 | 2020-05-07 22:57:27 | oracle | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_upload_key_to_cloud                            | ok       |  0.002 | 2020-05-07 22:57:27 | oracle | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_list_key_from_cloud                            | ok       |  0.001 | 2020-05-07 22:57:27 | oracle | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_delete_key_from_cloud                          | ok       |  0.001 | 2020-05-07 22:57:27 | oracle | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_key_delete                                     | ok       |  0.022 | 2020-05-07 22:57:27 | oracle | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_cms_local                                      | ok       |  2.762 | 2020-05-07 22:57:27 | oracle | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_cms_cloud                                      | ok       |  4.071 | 2020-05-07 22:57:30 | oracle | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_04_flavor/test_empty_database                              | ok       |  0.017 | 2020-05-07 22:57:34 | oracle | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_04_flavor/test_provider_flavor                             | ok       |  2.092 | 2020-05-07 22:57:34 | oracle | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_04_flavor/test_provider_flavor_update                      | ok       |  1.81  | 2020-05-07 22:57:36 | oracle | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_04_flavor/test_cms_flavor_refresh                          | ok       |  4.029 | 2020-05-07 22:57:38 | oracle | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_04_flavor/test_cms_flavor                                  | ok       |  2.009 | 2020-05-07 22:57:42 | oracle | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_05_image/test_empty_database                               | ok       |  0.019 | 2020-05-07 22:57:45 | oracle | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_05_image/test_provider_image                               | ok       |  0.6   | 2020-05-07 22:57:45 | oracle | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_05_image/test_provider_image_update                        | ok       |  0.536 | 2020-05-07 22:57:45 | oracle | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_05_image/test_cms_image_refresh                            | ok       |  2.526 | 2020-05-07 22:57:46 | oracle | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_05_image/test_cms_image                                    | ok       |  2.026 | 2020-05-07 22:57:49 | oracle | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
++-----------------------------------------------------------------+----------+--------+---------------------+--------+------------------+--------+-------+-----------------------------------------------------+
+
+# csv,timer,status,time,start,tag,uname.node,user,uname.system,platform.version
+# csv,test_00_sys/test_cms_help,ok,2.236,2020-05-07 22:57:15,oracle,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_01_clean_local_remote/test_cms_init,ok,8.852,2020-05-07 22:57:17,oracle,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_01_clean_local_remote/test_delete_all_keys_from_cloud,ok,0.001,2020-05-07 22:57:26,oracle,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_01_clean_local_remote/test_delete_all_secgroups_from_cloud,ok,0.002,2020-05-07 22:57:27,oracle,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_clear_local_database,ok,0.039,2020-05-07 22:57:27,oracle,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_clear_cloud_database,ok,0.018,2020-05-07 22:57:30,oracle,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_upload_key_to_database,ok,0.038,2020-05-07 22:57:27,oracle,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_upload_key_to_cloud,ok,0.002,2020-05-07 22:57:27,oracle,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_list_key_from_cloud,ok,0.001,2020-05-07 22:57:27,oracle,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_delete_key_from_cloud,ok,0.001,2020-05-07 22:57:27,oracle,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_key_delete,ok,0.022,2020-05-07 22:57:27,oracle,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_cms_local,ok,2.762,2020-05-07 22:57:27,oracle,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_cms_cloud,ok,4.071,2020-05-07 22:57:30,oracle,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_04_flavor/test_empty_database,ok,0.017,2020-05-07 22:57:34,oracle,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_04_flavor/test_provider_flavor,ok,2.092,2020-05-07 22:57:34,oracle,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_04_flavor/test_provider_flavor_update,ok,1.81,2020-05-07 22:57:36,oracle,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_04_flavor/test_cms_flavor_refresh,ok,4.029,2020-05-07 22:57:38,oracle,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_04_flavor/test_cms_flavor,ok,2.009,2020-05-07 22:57:42,oracle,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_05_image/test_empty_database,ok,0.019,2020-05-07 22:57:45,oracle,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_05_image/test_provider_image,ok,0.6,2020-05-07 22:57:45,oracle,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_05_image/test_provider_image_update,ok,0.536,2020-05-07 22:57:45,oracle,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_05_image/test_cms_image_refresh,ok,2.526,2020-05-07 22:57:46,oracle,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_05_image/test_cms_image,ok,2.026,2020-05-07 22:57:49,oracle,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+
+PASSED
+tests/cloud/test_07_secgroup_provider.py::Test_secgroup_provider::test_load 
+[35m
+# ######################################################################
+# test_load /tests/cloud/test_07_secgroup_provider.py 55
+# ######################################################################
+[0m
+
+PASSED
+tests/cloud/test_07_secgroup_provider.py::Test_secgroup_provider::test_list_variables 
+[35m
+# ######################################################################
+# test_list_variables /tests/cloud/test_07_secgroup_provider.py 71
+# ######################################################################
+[0m
+josh
+oracle
+PASSED
+tests/cloud/test_07_secgroup_provider.py::Test_secgroup_provider::test_list_secgroups 
+[35m
+# ######################################################################
+# test_list_secgroups /tests/cloud/test_07_secgroup_provider.py 79
+# ######################################################################
+[0m
+FAILED
+tests/cloud/test_07_secgroup_provider.py::Test_secgroup_provider::test_list_secgroups_rules 
+[35m
+# ######################################################################
+# test_list_secgroups_rules /tests/cloud/test_07_secgroup_provider.py 86
+# ######################################################################
+[0m
+FAILED
+tests/cloud/test_07_secgroup_provider.py::Test_secgroup_provider::test_secgroups_add 
+[35m
+# ######################################################################
+# test_secgroups_add /tests/cloud/test_07_secgroup_provider.py 93
+# ######################################################################
+[0m
+[35mWARNING: secgroup test-sec-group already exists in cloud. skipping.[0m
+FAILED
+tests/cloud/test_07_secgroup_provider.py::Test_secgroup_provider::test_upload_secgroup 
+[35m
+# ######################################################################
+# test_upload_secgroup /tests/cloud/test_07_secgroup_provider.py 107
+# ######################################################################
+[0m
+upload group: test-sec-group
+[35mWARNING: secgroup test-sec-group already exists in cloud. skipping.[0m
+     rule: ssh
+Security group not found
+     rule: icmp
+Security group not found
+     rule: http
+Security group not found
+     rule: https
+Security group not found
+     rule: flask
+Security group not found
+FAILED
+tests/cloud/test_07_secgroup_provider.py::Test_secgroup_provider::test_secgroups_delete 
+[35m
+# ######################################################################
+# test_secgroups_delete /tests/cloud/test_07_secgroup_provider.py 116
+# ######################################################################
+[0m
+Security group with this name not found
+default
+default
+default
+default
+default
+FAILED
+tests/cloud/test_07_secgroup_provider.py::Test_secgroup_provider::test_secgroups_delete_again 
+[35m
+# ######################################################################
+# test_secgroups_delete_again /tests/cloud/test_07_secgroup_provider.py 135
+# ######################################################################
+[0m
+Security group with this name not found
+default
+default
+default
+default
+default
+FAILED
+tests/cloud/test_07_secgroup_provider.py::Test_secgroup_provider::test_benchmark 
+
++-----------------------------------------------------------------+----------+--------+---------------------+--------+------------------+--------+-------+-----------------------------------------------------+
+| Name                                                            | Status   |   Time | Start               | tag    | Node             | User   | OS    | Version                                             |
+|-----------------------------------------------------------------+----------+--------+---------------------+--------+------------------+--------+-------+-----------------------------------------------------|
+| test_00_sys/test_cms_help                                       | ok       |  2.236 | 2020-05-07 22:57:15 | oracle | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_01_clean_local_remote/test_cms_init                        | ok       |  8.852 | 2020-05-07 22:57:17 | oracle | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_01_clean_local_remote/test_delete_all_keys_from_cloud      | ok       |  0.001 | 2020-05-07 22:57:26 | oracle | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_01_clean_local_remote/test_delete_all_secgroups_from_cloud | ok       |  0.002 | 2020-05-07 22:57:27 | oracle | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_clear_local_database                           | ok       |  0.039 | 2020-05-07 22:57:27 | oracle | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_clear_cloud_database                           | ok       |  0.018 | 2020-05-07 22:57:30 | oracle | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_upload_key_to_database                         | ok       |  0.038 | 2020-05-07 22:57:27 | oracle | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_upload_key_to_cloud                            | ok       |  0.002 | 2020-05-07 22:57:27 | oracle | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_list_key_from_cloud                            | ok       |  0.001 | 2020-05-07 22:57:27 | oracle | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_delete_key_from_cloud                          | ok       |  0.001 | 2020-05-07 22:57:27 | oracle | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_key_delete                                     | ok       |  0.022 | 2020-05-07 22:57:27 | oracle | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_cms_local                                      | ok       |  2.762 | 2020-05-07 22:57:27 | oracle | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_cms_cloud                                      | ok       |  4.071 | 2020-05-07 22:57:30 | oracle | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_04_flavor/test_empty_database                              | ok       |  0.017 | 2020-05-07 22:57:34 | oracle | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_04_flavor/test_provider_flavor                             | ok       |  2.092 | 2020-05-07 22:57:34 | oracle | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_04_flavor/test_provider_flavor_update                      | ok       |  1.81  | 2020-05-07 22:57:36 | oracle | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_04_flavor/test_cms_flavor_refresh                          | ok       |  4.029 | 2020-05-07 22:57:38 | oracle | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_04_flavor/test_cms_flavor                                  | ok       |  2.009 | 2020-05-07 22:57:42 | oracle | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_05_image/test_empty_database                               | ok       |  0.019 | 2020-05-07 22:57:45 | oracle | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_05_image/test_provider_image                               | ok       |  0.6   | 2020-05-07 22:57:45 | oracle | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_05_image/test_provider_image_update                        | ok       |  0.536 | 2020-05-07 22:57:45 | oracle | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_05_image/test_cms_image_refresh                            | ok       |  2.526 | 2020-05-07 22:57:46 | oracle | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_05_image/test_cms_image                                    | ok       |  2.026 | 2020-05-07 22:57:49 | oracle | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_07_secgroup_provider/test_load                             | ok       |  0.058 | 2020-05-07 22:57:51 | oracle | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_07_secgroup_provider/test_list_variables                   | ok       |  0.001 | 2020-05-07 22:57:51 | oracle | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_07_secgroup_provider/test_list_secgroups                   | ok       |  0.286 | 2020-05-07 22:57:51 | oracle | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_07_secgroup_provider/test_list_secgroups_rules             | ok       |  0.125 | 2020-05-07 22:57:51 | oracle | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_07_secgroup_provider/test_secgroups_add                    | ok       |  0.066 | 2020-05-07 22:57:52 | oracle | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_07_secgroup_provider/test_upload_secgroup                  | ok       |  0.658 | 2020-05-07 22:57:52 | oracle | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_07_secgroup_provider/test_secgroups_delete                 | ok       |  0.07  | 2020-05-07 22:57:53 | oracle | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_07_secgroup_provider/test_secgroups_delete_again           | ok       |  0.077 | 2020-05-07 22:57:53 | oracle | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
++-----------------------------------------------------------------+----------+--------+---------------------+--------+------------------+--------+-------+-----------------------------------------------------+
+
+# csv,timer,status,time,start,tag,uname.node,user,uname.system,platform.version
+# csv,test_00_sys/test_cms_help,ok,2.236,2020-05-07 22:57:15,oracle,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_01_clean_local_remote/test_cms_init,ok,8.852,2020-05-07 22:57:17,oracle,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_01_clean_local_remote/test_delete_all_keys_from_cloud,ok,0.001,2020-05-07 22:57:26,oracle,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_01_clean_local_remote/test_delete_all_secgroups_from_cloud,ok,0.002,2020-05-07 22:57:27,oracle,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_clear_local_database,ok,0.039,2020-05-07 22:57:27,oracle,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_clear_cloud_database,ok,0.018,2020-05-07 22:57:30,oracle,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_upload_key_to_database,ok,0.038,2020-05-07 22:57:27,oracle,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_upload_key_to_cloud,ok,0.002,2020-05-07 22:57:27,oracle,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_list_key_from_cloud,ok,0.001,2020-05-07 22:57:27,oracle,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_delete_key_from_cloud,ok,0.001,2020-05-07 22:57:27,oracle,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_key_delete,ok,0.022,2020-05-07 22:57:27,oracle,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_cms_local,ok,2.762,2020-05-07 22:57:27,oracle,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_cms_cloud,ok,4.071,2020-05-07 22:57:30,oracle,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_04_flavor/test_empty_database,ok,0.017,2020-05-07 22:57:34,oracle,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_04_flavor/test_provider_flavor,ok,2.092,2020-05-07 22:57:34,oracle,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_04_flavor/test_provider_flavor_update,ok,1.81,2020-05-07 22:57:36,oracle,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_04_flavor/test_cms_flavor_refresh,ok,4.029,2020-05-07 22:57:38,oracle,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_04_flavor/test_cms_flavor,ok,2.009,2020-05-07 22:57:42,oracle,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_05_image/test_empty_database,ok,0.019,2020-05-07 22:57:45,oracle,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_05_image/test_provider_image,ok,0.6,2020-05-07 22:57:45,oracle,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_05_image/test_provider_image_update,ok,0.536,2020-05-07 22:57:45,oracle,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_05_image/test_cms_image_refresh,ok,2.526,2020-05-07 22:57:46,oracle,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_05_image/test_cms_image,ok,2.026,2020-05-07 22:57:49,oracle,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_07_secgroup_provider/test_load,ok,0.058,2020-05-07 22:57:51,oracle,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_07_secgroup_provider/test_list_variables,ok,0.001,2020-05-07 22:57:51,oracle,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_07_secgroup_provider/test_list_secgroups,ok,0.286,2020-05-07 22:57:51,oracle,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_07_secgroup_provider/test_list_secgroups_rules,ok,0.125,2020-05-07 22:57:51,oracle,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_07_secgroup_provider/test_secgroups_add,ok,0.066,2020-05-07 22:57:52,oracle,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_07_secgroup_provider/test_upload_secgroup,ok,0.658,2020-05-07 22:57:52,oracle,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_07_secgroup_provider/test_secgroups_delete,ok,0.07,2020-05-07 22:57:53,oracle,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_07_secgroup_provider/test_secgroups_delete_again,ok,0.077,2020-05-07 22:57:53,oracle,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+
+PASSED
+tests/cloud/test_08_vm_provider.py::Test_provider_vm::test_key_upload key add
+key list
+ERROR: executing command 'key list'
+======================================================================
+sequence item 2: expected str instance, NoneType found
+sequence item 2: expected str instance, NoneType found
+Traceback (most recent call last):
+  File "/home/josh/dev/cloud/cloudmesh-cmd5/cloudmesh/shell/shell.py", line 1096, in main
+    stop = cmd.onecmd(command)
+  File "/home/josh/dev/cloud/cloudmesh-cmd5/cloudmesh/shell/shell.py", line 419, in onecmd
+    return func(arg)
+  File "/home/josh/dev/cloud/cloudmesh-cmd5/cloudmesh/shell/command.py", line 115, in new
+    func(instance, args, arguments)
+  File "/home/josh/dev/cloud/cloudmesh-cloud/cloudmesh/key/command/key.py", line 317, in do_key
+    print_keys(keys)
+  File "/home/josh/dev/cloud/cloudmesh-cloud/cloudmesh/key/command/key.py", line 222, in print_keys
+    entry["group"] = ', '.join(entry['group'])
+TypeError: sequence item 2: expected str instance, NoneType found
+
+======================================================================
+key delete josh --cloud=oracle
+Not supported in oracle cloud
+key upload josh --cloud=oracle
+cloud oracle
+Not supported in oracle cloud
+upload key 'josh successful'. 
+key list --cloud=oracle
+cloud oracle
+Not supported in oracle cloud
++--------+--------+----------+---------------+-----------+
+| Name   | Type   | Format   | Fingerprint   | Comment   |
+|--------+--------+----------+---------------+-----------|
++--------+--------+----------+---------------+-----------+
+PASSED
+tests/cloud/test_08_vm_provider.py::Test_provider_vm::test_find_largest_id test-josh-vm
+VM is []
+PASSED
+tests/cloud/test_08_vm_provider.py::Test_provider_vm::test_provider_vm_create vm list --cloud=oracle
+List oracle
++--------+---------+---------+----------+--------+---------+----------+--------------+---------------+--------------+--------------+--------+
+| Name   | Cloud   | State   | Status   | Task   | Image   | Flavor   | Public IPs   | Private IPs   | Project ID   | Started at   | Kind   |
+|--------+---------+---------+----------+--------+---------+----------+--------------+---------------+--------------+--------------+--------|
++--------+---------+---------+----------+--------+---------+----------+--------------+---------------+--------------+--------------+--------+
+
+[35m
+# ######################################################################
+# test_provider_vm_create /tests/cloud/test_08_vm_provider.py 90
+# ######################################################################
+[0m
+[34m
+# ----------------------------------------------------------------------
+# Create Server
+# ----------------------------------------------------------------------
+[0m
+    Name:     test-josh-vm-2
+    User:     opc
+    IP:       None
+    Image:    Oracle-Linux-7.7-2019.11.12-0
+    Size:     VM.Standard.E2.1
+    Public:   True
+    Key:      josh
+    location: None
+    timeout:  360
+    secgroup: None
+    group:    cloudmesh
+    groups:   ['cloudmesh']
+
+Created VCN
+Created subnet
+Created gateway
+[31mERROR: Problem starting vm[0m
+
+Trace:
+Traceback (most recent call last):
+      File "/home/josh/dev/cloud/cloudmesh-oracle/cloudmesh/oracle/compute/Provider.py", line 1067, in create
+        create_instance_details.image_id = self.image(image).id
+      File "/home/josh/dev/cloud/cloudmesh-oracle/cloudmesh/oracle/compute/Provider.py", line 649, in image
+        return img.data[0]
+    IndexError: list index out of range
+
+list index out of range
+FAILED
+tests/cloud/test_08_vm_provider.py::Test_provider_vm::test_provider_vmprovider_vm_list 
+[35m
+# ######################################################################
+# test_provider_vmprovider_vm_list /tests/cloud/test_08_vm_provider.py 111
+# ######################################################################
+[0m
+FAILED
+tests/cloud/test_08_vm_provider.py::Test_provider_vm::test_provider_vm_wait 
+[35m
+# ######################################################################
+# test_provider_vm_wait /tests/cloud/test_08_vm_provider.py 119
+# ######################################################################
+[0m
+[34mINFO: waiting for instance test-josh-vm-2 to be reachable: Interval: {interval}, Timeout: {timeout}[0m
+
+
+=================================== FAILURES ===================================
+__________________ Test_secgroup_provider.test_list_secgroups __________________
+
+self = <test_07_secgroup_provider.Test_secgroup_provider object at 0x7f23073aa820>
+
+    def test_list_secgroups(self):
+        HEADING()
+        Benchmark.Start()
+        groups = provider.list_secgroups()
+        Benchmark.Stop()
+>       provider.Print(groups, output='json', kind="secgroup")
+
+tests/cloud/test_07_secgroup_provider.py:84: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+cloudmesh/compute/vm/Provider.py:451: in Print
+    content = self.Prints(data, output=output, kind=kind)
+cloudmesh/compute/vm/Provider.py:445: in Prints
+    _output = Printer.write(data, output=output)
+../cloudmesh-common/cloudmesh/common/Tabulate.py:125: in write
+    return json.dumps(_results,
+/usr/lib/python3.8/json/__init__.py:234: in dumps
+    return cls(
+/usr/lib/python3.8/json/encoder.py:201: in encode
+    chunks = list(chunks)
+/usr/lib/python3.8/json/encoder.py:429: in _iterencode
+    yield from _iterencode_list(o, _current_indent_level)
+/usr/lib/python3.8/json/encoder.py:325: in _iterencode_list
+    yield from chunks
+/usr/lib/python3.8/json/encoder.py:405: in _iterencode_dict
+    yield from chunks
+/usr/lib/python3.8/json/encoder.py:438: in _iterencode
+    o = _default(o)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <json.encoder.JSONEncoder object at 0x7f2307e66940>
+o = datetime.datetime(2020, 5, 6, 19, 4, 21, 287000, tzinfo=tzutc())
+
+    def default(self, o):
+        """Implement this method in a subclass such that it returns
+        a serializable object for ``o``, or calls the base implementation
+        (to raise a ``TypeError``).
+    
+        For example, to support arbitrary iterators, you could
+        implement default like this::
+    
+            def default(self, o):
+                try:
+                    iterable = iter(o)
+                except TypeError:
+                    pass
+                else:
+                    return list(iterable)
+                # Let the base class default method raise the TypeError
+                return JSONEncoder.default(self, o)
+    
+        """
+>       raise TypeError(f'Object of type {o.__class__.__name__} '
+                        f'is not JSON serializable')
+E       TypeError: Object of type datetime is not JSON serializable
+
+/usr/lib/python3.8/json/encoder.py:179: TypeError
+_______________ Test_secgroup_provider.test_list_secgroups_rules _______________
+
+self = <test_07_secgroup_provider.Test_secgroup_provider object at 0x7f23061f7670>
+
+    def test_list_secgroups_rules(self):
+        HEADING()
+        Benchmark.Start()
+        rule_groups = provider.list_secgroup_rules()
+        Benchmark.Stop()
+>       provider.Print(output='json', kind="secgroup", data=rule_groups)
+
+tests/cloud/test_07_secgroup_provider.py:91: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+cloudmesh/compute/vm/Provider.py:451: in Print
+    content = self.Prints(data, output=output, kind=kind)
+cloudmesh/compute/vm/Provider.py:445: in Prints
+    _output = Printer.write(data, output=output)
+../cloudmesh-common/cloudmesh/common/Tabulate.py:125: in write
+    return json.dumps(_results,
+/usr/lib/python3.8/json/__init__.py:234: in dumps
+    return cls(
+/usr/lib/python3.8/json/encoder.py:201: in encode
+    chunks = list(chunks)
+/usr/lib/python3.8/json/encoder.py:429: in _iterencode
+    yield from _iterencode_list(o, _current_indent_level)
+/usr/lib/python3.8/json/encoder.py:325: in _iterencode_list
+    yield from chunks
+/usr/lib/python3.8/json/encoder.py:405: in _iterencode_dict
+    yield from chunks
+/usr/lib/python3.8/json/encoder.py:438: in _iterencode
+    o = _default(o)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <json.encoder.JSONEncoder object at 0x7f23061f7a60>
+o = datetime.datetime(2020, 5, 6, 19, 4, 21, 287000, tzinfo=tzutc())
+
+    def default(self, o):
+        """Implement this method in a subclass such that it returns
+        a serializable object for ``o``, or calls the base implementation
+        (to raise a ``TypeError``).
+    
+        For example, to support arbitrary iterators, you could
+        implement default like this::
+    
+            def default(self, o):
+                try:
+                    iterable = iter(o)
+                except TypeError:
+                    pass
+                else:
+                    return list(iterable)
+                # Let the base class default method raise the TypeError
+                return JSONEncoder.default(self, o)
+    
+        """
+>       raise TypeError(f'Object of type {o.__class__.__name__} '
+                        f'is not JSON serializable')
+E       TypeError: Object of type datetime is not JSON serializable
+
+/usr/lib/python3.8/json/encoder.py:179: TypeError
+__________________ Test_secgroup_provider.test_secgroups_add ___________________
+
+self = <test_07_secgroup_provider.Test_secgroup_provider object at 0x7f2307e1df40>
+
+    def test_secgroups_add(self):
+        HEADING()
+        name = "test-sec-group"
+        Benchmark.Start()
+        if cloud == 'google':
+            # Add is not implement for google cloud, so manually adding for uplaod.
+            groups.add(name, ["ssh", "icmp", "https"], "Test security group")
+        else:
+            provider.add_secgroup(name=name)
+        Benchmark.Stop()
+    
+        sec_groups = provider.list_secgroups()
+>       provider.Print(output='json', kind="secgroup", data=sec_groups)
+
+tests/cloud/test_07_secgroup_provider.py:105: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+cloudmesh/compute/vm/Provider.py:451: in Print
+    content = self.Prints(data, output=output, kind=kind)
+cloudmesh/compute/vm/Provider.py:445: in Prints
+    _output = Printer.write(data, output=output)
+../cloudmesh-common/cloudmesh/common/Tabulate.py:125: in write
+    return json.dumps(_results,
+/usr/lib/python3.8/json/__init__.py:234: in dumps
+    return cls(
+/usr/lib/python3.8/json/encoder.py:201: in encode
+    chunks = list(chunks)
+/usr/lib/python3.8/json/encoder.py:429: in _iterencode
+    yield from _iterencode_list(o, _current_indent_level)
+/usr/lib/python3.8/json/encoder.py:325: in _iterencode_list
+    yield from chunks
+/usr/lib/python3.8/json/encoder.py:405: in _iterencode_dict
+    yield from chunks
+/usr/lib/python3.8/json/encoder.py:438: in _iterencode
+    o = _default(o)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <json.encoder.JSONEncoder object at 0x7f2307e66190>
+o = datetime.datetime(2020, 5, 6, 19, 4, 21, 287000, tzinfo=tzutc())
+
+    def default(self, o):
+        """Implement this method in a subclass such that it returns
+        a serializable object for ``o``, or calls the base implementation
+        (to raise a ``TypeError``).
+    
+        For example, to support arbitrary iterators, you could
+        implement default like this::
+    
+            def default(self, o):
+                try:
+                    iterable = iter(o)
+                except TypeError:
+                    pass
+                else:
+                    return list(iterable)
+                # Let the base class default method raise the TypeError
+                return JSONEncoder.default(self, o)
+    
+        """
+>       raise TypeError(f'Object of type {o.__class__.__name__} '
+                        f'is not JSON serializable')
+E       TypeError: Object of type datetime is not JSON serializable
+
+/usr/lib/python3.8/json/encoder.py:179: TypeError
+_________________ Test_secgroup_provider.test_upload_secgroup __________________
+
+self = <test_07_secgroup_provider.Test_secgroup_provider object at 0x7f2306295400>
+
+    def test_upload_secgroup(self):
+        HEADING()
+        name = "test-sec-group"
+        Benchmark.Start()
+        provider.upload_secgroup(name=name)
+        Benchmark.Stop()
+        sec_groups = provider.list_secgroups()
+>       provider.Print(output='json', kind="secgroup", data=sec_groups)
+
+tests/cloud/test_07_secgroup_provider.py:114: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+cloudmesh/compute/vm/Provider.py:451: in Print
+    content = self.Prints(data, output=output, kind=kind)
+cloudmesh/compute/vm/Provider.py:445: in Prints
+    _output = Printer.write(data, output=output)
+../cloudmesh-common/cloudmesh/common/Tabulate.py:125: in write
+    return json.dumps(_results,
+/usr/lib/python3.8/json/__init__.py:234: in dumps
+    return cls(
+/usr/lib/python3.8/json/encoder.py:201: in encode
+    chunks = list(chunks)
+/usr/lib/python3.8/json/encoder.py:429: in _iterencode
+    yield from _iterencode_list(o, _current_indent_level)
+/usr/lib/python3.8/json/encoder.py:325: in _iterencode_list
+    yield from chunks
+/usr/lib/python3.8/json/encoder.py:405: in _iterencode_dict
+    yield from chunks
+/usr/lib/python3.8/json/encoder.py:438: in _iterencode
+    o = _default(o)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <json.encoder.JSONEncoder object at 0x7f2306295880>
+o = datetime.datetime(2020, 5, 6, 19, 4, 21, 287000, tzinfo=tzutc())
+
+    def default(self, o):
+        """Implement this method in a subclass such that it returns
+        a serializable object for ``o``, or calls the base implementation
+        (to raise a ``TypeError``).
+    
+        For example, to support arbitrary iterators, you could
+        implement default like this::
+    
+            def default(self, o):
+                try:
+                    iterable = iter(o)
+                except TypeError:
+                    pass
+                else:
+                    return list(iterable)
+                # Let the base class default method raise the TypeError
+                return JSONEncoder.default(self, o)
+    
+        """
+>       raise TypeError(f'Object of type {o.__class__.__name__} '
+                        f'is not JSON serializable')
+E       TypeError: Object of type datetime is not JSON serializable
+
+/usr/lib/python3.8/json/encoder.py:179: TypeError
+_________________ Test_secgroup_provider.test_secgroups_delete _________________
+
+self = <test_07_secgroup_provider.Test_secgroup_provider object at 0x7f23061d80d0>
+
+    def test_secgroups_delete(self):
+        HEADING()
+        name = "test-sec-group"
+        Benchmark.Start()
+        provider.remove_secgroup(name=name)
+        Benchmark.Stop()
+        sec_groups = provider.list_secgroups()
+        if cloud == 'aws':
+            group_indicator = 'GroupName'
+        elif cloud == 'google':
+            group_indicator = 'name'
+            groups.remove(name)
+        else:
+            group_indicator = 'name'
+    
+        for e in sec_groups:
+            print(e[group_indicator])
+>       provider.Print(output='json', kind="secgroup", data=sec_groups)
+
+tests/cloud/test_07_secgroup_provider.py:133: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+cloudmesh/compute/vm/Provider.py:451: in Print
+    content = self.Prints(data, output=output, kind=kind)
+cloudmesh/compute/vm/Provider.py:445: in Prints
+    _output = Printer.write(data, output=output)
+../cloudmesh-common/cloudmesh/common/Tabulate.py:125: in write
+    return json.dumps(_results,
+/usr/lib/python3.8/json/__init__.py:234: in dumps
+    return cls(
+/usr/lib/python3.8/json/encoder.py:201: in encode
+    chunks = list(chunks)
+/usr/lib/python3.8/json/encoder.py:429: in _iterencode
+    yield from _iterencode_list(o, _current_indent_level)
+/usr/lib/python3.8/json/encoder.py:325: in _iterencode_list
+    yield from chunks
+/usr/lib/python3.8/json/encoder.py:405: in _iterencode_dict
+    yield from chunks
+/usr/lib/python3.8/json/encoder.py:438: in _iterencode
+    o = _default(o)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <json.encoder.JSONEncoder object at 0x7f23061d8460>
+o = datetime.datetime(2020, 5, 6, 19, 4, 21, 287000, tzinfo=tzutc())
+
+    def default(self, o):
+        """Implement this method in a subclass such that it returns
+        a serializable object for ``o``, or calls the base implementation
+        (to raise a ``TypeError``).
+    
+        For example, to support arbitrary iterators, you could
+        implement default like this::
+    
+            def default(self, o):
+                try:
+                    iterable = iter(o)
+                except TypeError:
+                    pass
+                else:
+                    return list(iterable)
+                # Let the base class default method raise the TypeError
+                return JSONEncoder.default(self, o)
+    
+        """
+>       raise TypeError(f'Object of type {o.__class__.__name__} '
+                        f'is not JSON serializable')
+E       TypeError: Object of type datetime is not JSON serializable
+
+/usr/lib/python3.8/json/encoder.py:179: TypeError
+______________ Test_secgroup_provider.test_secgroups_delete_again ______________
+
+self = <test_07_secgroup_provider.Test_secgroup_provider object at 0x7f2306261bb0>
+
+    def test_secgroups_delete_again(self):
+        HEADING()
+        name = "test-sec-group"
+        Benchmark.Start()
+        provider.remove_secgroup(name=name)
+        Benchmark.Stop()
+        g = provider.list_secgroups()
+        if cloud == 'aws':
+            group_indicator = 'GroupName'
+        # elif cloud == 'chameleon':
+        elif cloud == 'oracle':
+            group_indicator = '_display_name'
+        else:
+            group_indicator = 'name'
+    
+        for e in g:
+            print(e[group_indicator])
+>       provider.Print(output='json', kind="secgroup", data=g)
+
+tests/cloud/test_07_secgroup_provider.py:152: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+cloudmesh/compute/vm/Provider.py:451: in Print
+    content = self.Prints(data, output=output, kind=kind)
+cloudmesh/compute/vm/Provider.py:445: in Prints
+    _output = Printer.write(data, output=output)
+../cloudmesh-common/cloudmesh/common/Tabulate.py:125: in write
+    return json.dumps(_results,
+/usr/lib/python3.8/json/__init__.py:234: in dumps
+    return cls(
+/usr/lib/python3.8/json/encoder.py:201: in encode
+    chunks = list(chunks)
+/usr/lib/python3.8/json/encoder.py:429: in _iterencode
+    yield from _iterencode_list(o, _current_indent_level)
+/usr/lib/python3.8/json/encoder.py:325: in _iterencode_list
+    yield from chunks
+/usr/lib/python3.8/json/encoder.py:405: in _iterencode_dict
+    yield from chunks
+/usr/lib/python3.8/json/encoder.py:438: in _iterencode
+    o = _default(o)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <json.encoder.JSONEncoder object at 0x7f2306261760>
+o = datetime.datetime(2020, 5, 6, 19, 4, 21, 287000, tzinfo=tzutc())
+
+    def default(self, o):
+        """Implement this method in a subclass such that it returns
+        a serializable object for ``o``, or calls the base implementation
+        (to raise a ``TypeError``).
+    
+        For example, to support arbitrary iterators, you could
+        implement default like this::
+    
+            def default(self, o):
+                try:
+                    iterable = iter(o)
+                except TypeError:
+                    pass
+                else:
+                    return list(iterable)
+                # Let the base class default method raise the TypeError
+                return JSONEncoder.default(self, o)
+    
+        """
+>       raise TypeError(f'Object of type {o.__class__.__name__} '
+                        f'is not JSON serializable')
+E       TypeError: Object of type datetime is not JSON serializable
+
+/usr/lib/python3.8/json/encoder.py:179: TypeError
+___________________ Test_provider_vm.test_provider_vm_create ___________________
+
+self = <cloudmesh.oracle.compute.Provider.Provider object at 0x7f2307e2af10>
+name = 'test-josh-vm-2', image = 'Oracle-Linux-7.7-2019.11.12-0'
+size = 'VM.Standard.E2.1', location = None, timeout = 360, key = 'josh'
+secgroup = None, ip = None, user = 'opc', public = True, group = 'cloudmesh'
+metadata = None, cloud = 'oracle', kwargs = {}, groups = ['cloudmesh']
+create_instance_details = {
+  "agent_config": null,
+  "availability_domain": "jQAh:US-ASHBURN-AD-1",
+  "compartment_id": "ocid1.tenancy.oc1..aaa...ns": null,
+  "metadata": null,
+  "shape": null,
+  "shape_config": null,
+  "source_details": null,
+  "subnet_id": null
+}
+availability_domain = {
+  "compartment_id": "ocid1.tenancy.oc1..aaaaaaaazbrfxenrq457pgzorpny5nwxmpfk3a2o5qmzmnaqx3j6zcv7kosq",
+  "id": "ocid...ailabilitydomain.oc1..aaaaaaaauvt2n7pijol7uqgdnnsoojcukrijtmcltvfwxazmitk235wyohta",
+  "name": "jQAh:US-ASHBURN-AD-1"
+}
+vcn_and_subnet = {'subnet': {
+  "availability_domain": "jQAh:US-ASHBURN-AD-1",
+  "cidr_block": "11.0.0.0/25",
+  "compartment_id": "ocid...l,
+  "lifecycle_state": "AVAILABLE",
+  "time_created": "2020-05-07T22:58:05.965000+00:00",
+  "vcn_domain_name": null
+}}
+nsgs = None
+
+    def create(self,
+               name=None,
+               image=None,
+               size=None,
+               location=None,
+               timeout=360,
+               key=None,
+               secgroup=None,
+               ip=None,
+               user=None,
+               public=True,
+               group=None,
+               metadata=None,
+               cloud=None,
+               **kwargs):
+        """
+        creates a named node
+    
+    
+        :param group: the list of groups the vm belongs to
+        :param name: the name of the node
+        :param image: the image used
+        :param size: the size of the image
+        :param timeout: a timeout in seconds that is invoked in case the image
+                        does not boot. The default is set to 3 minutes.
+        :param kwargs: additional arguments HEADING(c=".")ed along at time of
+                       boot
+        :return:
+        """
+    
+        # user is 'opc' for oracle linux and windows based systems and
+        # otherwise ubuntu
+        if user is None:
+            user = Image.guess_username(image)
+    
+        '''
+        # get IP - no way to assign while creating instance in oracle
+        if ip is not None:
+            entry = self.list_public_ips(ip=ip, available=True)
+            if len(entry) == 0:
+                print("ip not available")
+                raise ValueError(f"The ip can not be assigned {ip}")
+        '''
+    
+        if type(group) == str:
+            groups = Parameter.expand(group)
+        else:
+            groups = None
+    
+        banner("Create Server")
+        print("    Name:    ", name)
+        print("    User:    ", user)
+        print("    IP:      ", ip)
+        print("    Image:   ", image)
+        print("    Size:    ", size)
+        print("    Public:  ", public)
+        print("    Key:     ", key)
+        print("    location:", location)
+        print("    timeout: ", timeout)
+        print("    secgroup:", secgroup)
+        print("    group:   ", group)
+        print("    groups:  ", groups)
+        print()
+    
+        try:
+            create_instance_details = oci.core.models.LaunchInstanceDetails()
+            create_instance_details.compartment_id = self.compartment_id
+            availability_domain = self.get_availability_domain()
+    
+            vcn_and_subnet = self.create_vcn_and_subnet(
+                name,
+                                                        availability_domain.name)
+    
+            if secgroup is not None:
+                # s = self.list_secgroups(secgroup)
+                # if (len(s) == 0):
+                s = self.add_secgroup(secgroup, secgroup,
+                                      vcn_and_subnet['vcn'].id)
+                s_id = s.id
+            # else:
+            # s_id = s[0]['_id']
+    
+            create_instance_details.availability_domain = availability_domain.name
+            create_instance_details.display_name = name
+    
+            if secgroup is not None:
+                nsgs = [s_id]
+            else:
+                nsgs = None
+    
+            subnet = vcn_and_subnet['subnet']
+            create_instance_details.create_vnic_details = \
+                oci.core.models.CreateVnicDetails(
+                nsg_ids=nsgs,
+                subnet_id=subnet.id,
+                assign_public_ip=public
+            )
+    
+>           create_instance_details.image_id = self.image(image).id
+
+../cloudmesh-oracle/cloudmesh/oracle/compute/Provider.py:1067: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <cloudmesh.oracle.compute.Provider.Provider object at 0x7f2307e2af10>
+name = 'Oracle-Linux-7.7-2019.11.12-0'
+
+    def image(self, name=None):
+        """
+        Gets the image with a given name
+        :param name: The name of the image
+        :return: the dict of the image
+        """
+    
+        img = self.compute.list_images(self.compartment_id, display_name=name)
+>       return img.data[0]
+E       IndexError: list index out of range
+
+../cloudmesh-oracle/cloudmesh/oracle/compute/Provider.py:649: IndexError
+
+During handling of the above exception, another exception occurred:
+
+self = <test_08_vm_provider.Test_provider_vm object at 0x7f230620b280>
+
+    def test_provider_vm_create(self):
+        HEADING()
+        os.system(f"cms vm list --cloud={cloud}")
+        name_generator.incr()
+        Benchmark.Start()
+>       data = provider.create(key=key)
+
+tests/cloud/test_08_vm_provider.py:95: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../cloudmesh-admin/cloudmesh/mongo/DataBaseDecorator.py:87: in wrapper
+    current = f(*args, **kwargs)
+cloudmesh/compute/vm/Provider.py:218: in create
+    created = self.loop(self._create, **arguments)
+cloudmesh/compute/vm/Provider.py:112: in loop
+    vm = func(**parameters)
+cloudmesh/compute/vm/Provider.py:270: in _create
+    data = self.p.create(**arguments)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <cloudmesh.oracle.compute.Provider.Provider object at 0x7f2307e2af10>
+name = 'test-josh-vm-2', image = 'Oracle-Linux-7.7-2019.11.12-0'
+size = 'VM.Standard.E2.1', location = None, timeout = 360, key = 'josh'
+secgroup = None, ip = None, user = 'opc', public = True, group = 'cloudmesh'
+metadata = None, cloud = 'oracle', kwargs = {}, groups = ['cloudmesh']
+create_instance_details = {
+  "agent_config": null,
+  "availability_domain": "jQAh:US-ASHBURN-AD-1",
+  "compartment_id": "ocid1.tenancy.oc1..aaa...ns": null,
+  "metadata": null,
+  "shape": null,
+  "shape_config": null,
+  "source_details": null,
+  "subnet_id": null
+}
+availability_domain = {
+  "compartment_id": "ocid1.tenancy.oc1..aaaaaaaazbrfxenrq457pgzorpny5nwxmpfk3a2o5qmzmnaqx3j6zcv7kosq",
+  "id": "ocid...ailabilitydomain.oc1..aaaaaaaauvt2n7pijol7uqgdnnsoojcukrijtmcltvfwxazmitk235wyohta",
+  "name": "jQAh:US-ASHBURN-AD-1"
+}
+vcn_and_subnet = {'subnet': {
+  "availability_domain": "jQAh:US-ASHBURN-AD-1",
+  "cidr_block": "11.0.0.0/25",
+  "compartment_id": "ocid...l,
+  "lifecycle_state": "AVAILABLE",
+  "time_created": "2020-05-07T22:58:05.965000+00:00",
+  "vcn_domain_name": null
+}}
+nsgs = None
+
+    def create(self,
+               name=None,
+               image=None,
+               size=None,
+               location=None,
+               timeout=360,
+               key=None,
+               secgroup=None,
+               ip=None,
+               user=None,
+               public=True,
+               group=None,
+               metadata=None,
+               cloud=None,
+               **kwargs):
+        """
+        creates a named node
+    
+    
+        :param group: the list of groups the vm belongs to
+        :param name: the name of the node
+        :param image: the image used
+        :param size: the size of the image
+        :param timeout: a timeout in seconds that is invoked in case the image
+                        does not boot. The default is set to 3 minutes.
+        :param kwargs: additional arguments HEADING(c=".")ed along at time of
+                       boot
+        :return:
+        """
+    
+        # user is 'opc' for oracle linux and windows based systems and
+        # otherwise ubuntu
+        if user is None:
+            user = Image.guess_username(image)
+    
+        '''
+        # get IP - no way to assign while creating instance in oracle
+        if ip is not None:
+            entry = self.list_public_ips(ip=ip, available=True)
+            if len(entry) == 0:
+                print("ip not available")
+                raise ValueError(f"The ip can not be assigned {ip}")
+        '''
+    
+        if type(group) == str:
+            groups = Parameter.expand(group)
+        else:
+            groups = None
+    
+        banner("Create Server")
+        print("    Name:    ", name)
+        print("    User:    ", user)
+        print("    IP:      ", ip)
+        print("    Image:   ", image)
+        print("    Size:    ", size)
+        print("    Public:  ", public)
+        print("    Key:     ", key)
+        print("    location:", location)
+        print("    timeout: ", timeout)
+        print("    secgroup:", secgroup)
+        print("    group:   ", group)
+        print("    groups:  ", groups)
+        print()
+    
+        try:
+            create_instance_details = oci.core.models.LaunchInstanceDetails()
+            create_instance_details.compartment_id = self.compartment_id
+            availability_domain = self.get_availability_domain()
+    
+            vcn_and_subnet = self.create_vcn_and_subnet(
+                name,
+                                                        availability_domain.name)
+    
+            if secgroup is not None:
+                # s = self.list_secgroups(secgroup)
+                # if (len(s) == 0):
+                s = self.add_secgroup(secgroup, secgroup,
+                                      vcn_and_subnet['vcn'].id)
+                s_id = s.id
+            # else:
+            # s_id = s[0]['_id']
+    
+            create_instance_details.availability_domain = availability_domain.name
+            create_instance_details.display_name = name
+    
+            if secgroup is not None:
+                nsgs = [s_id]
+            else:
+                nsgs = None
+    
+            subnet = vcn_and_subnet['subnet']
+            create_instance_details.create_vnic_details = \
+                oci.core.models.CreateVnicDetails(
+                nsg_ids=nsgs,
+                subnet_id=subnet.id,
+                assign_public_ip=public
+            )
+    
+            create_instance_details.image_id = self.image(image).id
+            create_instance_details.shape = size
+    
+            if os.path.isfile(key):
+                key_file = open(key, "r")
+                create_instance_details.metadata = {
+                    "ssh_authorized_keys": key_file.read()}
+            else:
+                create_instance_details.metadata = {
+                    "ssh_authorized_keys":
+                        self.key_val}
+    
+            result = self.compute.launch_instance(create_instance_details)
+            instance_ocid = result.data.id
+    
+            get_instance_response = oci.wait_until(
+                self.compute,
+                self.compute.get_instance(instance_ocid),
+                'lifecycle_state',
+                'RUNNING',
+                max_wait_seconds=600
+            )
+            print('Launched instance')
+    
+            variables = Variables()
+            variables['vm'] = name
+    
+        except Exception as e:
+            Console.error("Problem starting vm", traceflag=True)
+            print(e)
+>           raise RuntimeError
+E           RuntimeError
+
+../cloudmesh-oracle/cloudmesh/oracle/compute/Provider.py:1097: RuntimeError
+______________ Test_provider_vm.test_provider_vmprovider_vm_list _______________
+
+self = <test_08_vm_provider.Test_provider_vm object at 0x7f2306340550>
+
+    def test_provider_vmprovider_vm_list(self):
+        # list should be after create() since it would return empty and
+        # len(data) would be 0
+        HEADING()
+        Benchmark.Start()
+        data = provider.list()
+>       assert len(data) > 0
+E       assert 0 > 0
+E        +  where 0 = len([])
+
+tests/cloud/test_08_vm_provider.py:115: AssertionError
+=========================== short test summary info ============================
+FAILED tests/cloud/test_07_secgroup_provider.py::Test_secgroup_provider::test_list_secgroups
+FAILED tests/cloud/test_07_secgroup_provider.py::Test_secgroup_provider::test_list_secgroups_rules
+FAILED tests/cloud/test_07_secgroup_provider.py::Test_secgroup_provider::test_secgroups_add
+FAILED tests/cloud/test_07_secgroup_provider.py::Test_secgroup_provider::test_upload_secgroup
+FAILED tests/cloud/test_07_secgroup_provider.py::Test_secgroup_provider::test_secgroups_delete
+FAILED tests/cloud/test_07_secgroup_provider.py::Test_secgroup_provider::test_secgroups_delete_again
+FAILED tests/cloud/test_08_vm_provider.py::Test_provider_vm::test_provider_vm_create
+FAILED tests/cloud/test_08_vm_provider.py::Test_provider_vm::test_provider_vmprovider_vm_list
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! KeyboardInterrupt !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+/home/josh/dev/cloud/cloudmesh-oracle/cloudmesh/oracle/compute/Provider.py:1347: KeyboardInterrupt
+(to show a full traceback on KeyboardInterrupt use --full-trace)
+=================== 8 failed, 34 passed in 401.26s (0:06:41) ===================

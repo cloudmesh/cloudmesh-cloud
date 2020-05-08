@@ -342,7 +342,6 @@ tests/cloud/test_02_key.py::Test_Key::test_upload_key_to_cloud
 #  'comment': 'baker203@iu.edu',
 #  'fingerprint': '44:8c:65:30:6e:a8:31:40:13:9f:c8:f2:c6:67:c7:c9',
 #  'group': ['local', 'ssh', None],
-#  'key': 'AAAAB3NzaC1yc2EAAAADAQABAAACAQCZyFlYiArHL+v9i5sLp2HNv41J5PtLsFaJ4qDNiKgy0rBxmHtFg2giQDYPkWySZB1M+uOTSHkCR98ZsV64vCXfs09Z+xhT42B0jjqHNkILWgY1aShEvXzyII6B4Ny816fCMJI+kxllIeAIVgmwPwCjwsM6erUURBPmHlkPk7OG8Kt8ljiLuQ3TXtBfQ+zWRmvpCv0oN8ptWMCXulONpmTtuvLgNtTHSjeydqe9jSs2y+QwEp2P60A8ZgL8SK0WV5xtZEz6+YkBhl3eitub/D4ek+A37nY//SE8Fxau3TTH9VlMPFefvKUXoMsCCLm1Vs9UfnHKxzfeB9/XfBk4npMn7/Licdg2czGgkvK0FDv7EIDZfwh/KTa5KINPSRGkW5N2j73qi0I02QAkzd5NKfJca4vXklqcZwyIMYv0X0bxmbQ9o5TRO8ISeocDZAMLsYMlyO+wpoqd6MX3fe6d0eA0UBKozjQ7lw/UCnBlAKQGrFjXl4DEAm8xfW2d5vy5wyw2ygGtpKe5Rk30eVUNMfi/zvZYr4TwRZ0ieh2Y80UkQr/YGuM3C1C3GjQuxrMMQc8ooUs6f56+61/sJbsvRjtKiYwMvR8HJT4oGR5Ds4a9I2Wc2FKGzE/AZIGg/zeLCCqDLK+bZYWGwGu4G/XvOoJJfo4fqGf7NvKmcfVXU+zSXw==',
 #  'location': {'private': '/home/josh/.ssh/id_rsa',
 #               'public': '/home/josh/.ssh/id_rsa.pub'},
 #  'name': 'test-key',
@@ -354,7 +353,6 @@ tests/cloud/test_02_key.py::Test_Key::test_upload_key_to_cloud
 #              'publickey': '~/.ssh/id_rsa.pub',
 #              'user': 'josh'},
 #  'public_key': 'ssh-rsa '
-#                'AAAAB3NzaC1yc2EAAAADAQABAAACAQCZyFlYiArHL+v9i5sLp2HNv41J5PtLsFaJ4qDNiKgy0rBxmHtFg2giQDYPkWySZB1M+uOTSHkCR98ZsV64vCXfs09Z+xhT42B0jjqHNkILWgY1aShEvXzyII6B4Ny816fCMJI+kxllIeAIVgmwPwCjwsM6erUURBPmHlkPk7OG8Kt8ljiLuQ3TXtBfQ+zWRmvpCv0oN8ptWMCXulONpmTtuvLgNtTHSjeydqe9jSs2y+QwEp2P60A8ZgL8SK0WV5xtZEz6+YkBhl3eitub/D4ek+A37nY//SE8Fxau3TTH9VlMPFefvKUXoMsCCLm1Vs9UfnHKxzfeB9/XfBk4npMn7/Licdg2czGgkvK0FDv7EIDZfwh/KTa5KINPSRGkW5N2j73qi0I02QAkzd5NKfJca4vXklqcZwyIMYv0X0bxmbQ9o5TRO8ISeocDZAMLsYMlyO+wpoqd6MX3fe6d0eA0UBKozjQ7lw/UCnBlAKQGrFjXl4DEAm8xfW2d5vy5wyw2ygGtpKe5Rk30eVUNMfi/zvZYr4TwRZ0ieh2Y80UkQr/YGuM3C1C3GjQuxrMMQc8ooUs6f56+61/sJbsvRjtKiYwMvR8HJT4oGR5Ds4a9I2Wc2FKGzE/AZIGg/zeLCCqDLK+bZYWGwGu4G/XvOoJJfo4fqGf7NvKmcfVXU+zSXw== '
 #                'baker203@iu.edu',
 #  'source': 'ssh',
 #  'type': 'ssh-rsa',

@@ -293,12 +293,6 @@ class Provider(ComputeNodeABC):
         entry.update({"metadata": str(metadata)})
 
         try:
-            #
-            # due to metadata limitation in openstack do not add the creation time
-            #
-            if 'chameleon' == cloud and 'created' in cm:
-                del cm['created']
-
             self.p.set_server_metadata(arguments.name, **metadata)
 
         except Exception as e:

@@ -1,0 +1,2427 @@
+============================= test session starts ==============================
+platform linux -- Python 3.8.2, pytest-5.4.1, py-1.8.1, pluggy-0.13.1 -- /home/josh/ENV3/bin/python3
+cachedir: .pytest_cache
+rootdir: /home/josh/dev/cloud/cloudmesh-cloud, inifile: pytest.ini
+plugins: cov-2.8.1
+collecting ... Test run for google
+Test run for google
+Test run for google on key test-key
+Test run for google
+Test run for google
+[34m
+# ----------------------------------------------------------------------
+# variables.dict()
+# ----------------------------------------------------------------------
+# 27:<module> ./tests/cloud/test_07_secgroup_provider.py
+# ----------------------------------------------------------------------
+# {'cloud': 'google',
+#  'debug': 'True',
+#  'group': 'cloudmesh',
+#  'key': 'josh',
+#  'refresh': 'False',
+#  'storage': 'google',
+#  'timer': 'False',
+#  'trace': 'True',
+#  'verbose': '10',
+#  'vm': 'test-josh-vm'}
+# ----------------------------------------------------------------------
+[0m
+Test run for google
+[34m
+# ----------------------------------------------------------------------
+# variables.dict()
+# ----------------------------------------------------------------------
+# 27:<module> ./tests/cloud/test_08_vm_provider.py
+# ----------------------------------------------------------------------
+# {'cloud': 'google',
+#  'debug': 'True',
+#  'group': 'cloudmesh',
+#  'key': 'josh',
+#  'refresh': 'False',
+#  'storage': 'google',
+#  'timer': 'False',
+#  'trace': 'True',
+#  'verbose': '10',
+#  'vm': 'test-josh-vm'}
+# ----------------------------------------------------------------------
+[0m
+Test run for google
+collected 63 items
+
+tests/cloud/test_00_sys.py::Test_Sys::test_cms_help 
+[35m
+# ######################################################################
+# test_cms_help /tests/cloud/test_00_sys.py 28
+# ######################################################################
+[0m
+[34m
+# ----------------------------------------------------------------------
+# result
+# ----------------------------------------------------------------------
+# 34:test_cms_help ./tests/cloud/test_00_sys.py
+# ----------------------------------------------------------------------
+# ('help\n'
+#  '\n'
+#  'Documented commands (type help <topic>):\n'
+#  '========================================\n'
+#  'EOF        default         image      pause     sleep      var           \n'
+#  'admin      dryrun          info       provider  source     vbox          \n'
+#  'banner     echo            init       py        ssh        vcluster      \n'
+#  'check      flavor          inventory  q         start      vdir          \n'
+#  'clear      google          ip         quit      stop       version       \n'
+#  'commands   googlebigquery  key        register  stopwatch  vm            \n'
+#  'config     group           man        sec       storage    workflow_draft\n'
+#  'container  gui             open       service   sys      \n'
+#  'data       help            openstack  set       term     \n'
+#  'debug      host            oracle     shell     test')
+# ----------------------------------------------------------------------
+[0m
+PASSED
+tests/cloud/test_00_sys.py::Test_Sys::test_benchmark 
++---------------------+------------------------------------------------------------------+
+| Attribute           | Value                                                            |
+|---------------------+------------------------------------------------------------------|
+| BUG_REPORT_URL      | "https://bugs.launchpad.net/ubuntu/"                             |
+| DISTRIB_CODENAME    | bionic                                                           |
+| DISTRIB_DESCRIPTION | "Ubuntu 18.04.4 LTS"                                             |
+| DISTRIB_ID          | Ubuntu                                                           |
+| DISTRIB_RELEASE     | 18.04                                                            |
+| HOME_URL            | "https://www.ubuntu.com/"                                        |
+| ID                  | ubuntu                                                           |
+| ID_LIKE             | debian                                                           |
+| NAME                | "Ubuntu"                                                         |
+| PRETTY_NAME         | "Ubuntu 18.04.4 LTS"                                             |
+| PRIVACY_POLICY_URL  | "https://www.ubuntu.com/legal/terms-and-policies/privacy-policy" |
+| SUPPORT_URL         | "https://help.ubuntu.com/"                                       |
+| UBUNTU_CODENAME     | bionic                                                           |
+| VERSION             | "18.04.4 LTS (Bionic Beaver)"                                    |
+| VERSION_CODENAME    | bionic                                                           |
+| VERSION_ID          | "18.04"                                                          |
+| cpu_count           | 4                                                                |
+| mem.active          | 3.1 GiB                                                          |
+| mem.available       | 4.8 GiB                                                          |
+| mem.free            | 2.2 GiB                                                          |
+| mem.inactive        | 1.8 GiB                                                          |
+| mem.percent         | 37.2 %                                                           |
+| mem.total           | 7.7 GiB                                                          |
+| mem.used            | 2.0 GiB                                                          |
+| platform.version    | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020              |
+| python              | 3.8.2 (default, Feb 26 2020, 02:56:10)                           |
+|                     | [GCC 7.4.0]                                                      |
+| python.pip          | 20.1                                                             |
+| python.version      | 3.8.2                                                            |
+| sys.platform        | linux                                                            |
+| uname.machine       | x86_64                                                           |
+| uname.node          | josh-XPS-13-9343                                                 |
+| uname.processor     | x86_64                                                           |
+| uname.release       | 5.3.0-46-generic                                                 |
+| uname.system        | Linux                                                            |
+| uname.version       | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020              |
+| user                | josh                                                             |
++---------------------+------------------------------------------------------------------+
+
++---------------------------+----------+--------+---------------------+--------+------------------+--------+-------+-----------------------------------------------------+
+| Name                      | Status   |   Time | Start               | tag    | Node             | User   | OS    | Version                                             |
+|---------------------------+----------+--------+---------------------+--------+------------------+--------+-------+-----------------------------------------------------|
+| test_00_sys/test_cms_help | ok       |  2.386 | 2020-05-07 23:07:39 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
++---------------------------+----------+--------+---------------------+--------+------------------+--------+-------+-----------------------------------------------------+
+
+# csv,timer,status,time,start,tag,uname.node,user,uname.system,platform.version
+# csv,test_00_sys/test_cms_help,ok,2.386,2020-05-07 23:07:39,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+
+PASSED
+tests/cloud/test_01_clean_local_remote.py::Test_Clean_Local_Remote::test_cms_init init
+MongoDB stop
+server should be down...
+deleting: /home/josh/.cloudmesh/mongodb
+MongoDB folder deleted
+MongoDB create
+admin mongo create
+
+# ----------------------------------------------------------------------
+# arguments
+# ----------------------------------------------------------------------
+# 122:do_admin /home/josh/dev/cloud/cloudmesh-admin/cloudmesh/admin/command/admin.py
+# ----------------------------------------------------------------------
+# {'--brew': False,
+#  '--docker': False,
+#  '--download': None,
+#  '--dryrun': False,
+#  '--force': False,
+#  '--nosudo': False,
+#  '--output': None,
+#  'FILENAME': None,
+#  'MODE': None,
+#  'PASSWORD': None,
+#  'backup': False,
+#  'create': True,
+#  'docker': False,
+#  'dryrun': False,
+#  'force': False,
+#  'info': False,
+#  'install': False,
+#  'list': False,
+#  'load': False,
+#  'mode': False,
+#  'mongo': True,
+#  'nosudo': False,
+#  'output': 'table',
+#  'password': False,
+#  'security': False,
+#  'ssh': False,
+#  'start': False,
+#  'stats': False,
+#  'status': False,
+#  'stop': False,
+#  'system': False,
+#  'version': False}
+# ----------------------------------------------------------------------
+
+MongoDB create
+INFO: Starting mongo without authentication ... 
+about to fork child process, waiting until server is ready for connections.
+forked process: 29876
+child process started successfully, parent exiting
+
+None
+INFO: Creating admin user ... 
+Administrative user created.
+INFO: Stopping the service ... 
+server should be down...
+admin mongo start
+
+# ----------------------------------------------------------------------
+# arguments
+# ----------------------------------------------------------------------
+# 122:do_admin /home/josh/dev/cloud/cloudmesh-admin/cloudmesh/admin/command/admin.py
+# ----------------------------------------------------------------------
+# {'--brew': False,
+#  '--docker': False,
+#  '--download': None,
+#  '--dryrun': False,
+#  '--force': False,
+#  '--nosudo': False,
+#  '--output': None,
+#  'FILENAME': None,
+#  'MODE': None,
+#  'PASSWORD': None,
+#  'backup': False,
+#  'create': False,
+#  'docker': False,
+#  'dryrun': False,
+#  'force': False,
+#  'info': False,
+#  'install': False,
+#  'list': False,
+#  'load': False,
+#  'mode': False,
+#  'mongo': True,
+#  'nosudo': False,
+#  'output': 'table',
+#  'password': False,
+#  'security': False,
+#  'ssh': False,
+#  'start': True,
+#  'stats': False,
+#  'status': False,
+#  'stop': False,
+#  'system': False,
+#  'version': False}
+# ----------------------------------------------------------------------
+
+MongoDB start
+about to fork child process, waiting until server is ready for connections.
+forked process: 29924
+child process started successfully, parent exiting
+
+None
+Set key
+Config Security Initialization
+key add
+sec load
+
++---------+-------+----------+-----------+-----------+
+| Group   | Rule  | Protocol | Ports     | IP Range  |
++---------+-------+----------+-----------+-----------+
+| default | ssh   | tcp      | 22:22     | 0.0.0.0/0 |
+| default | icmp  | icmp     |           | 0.0.0.0/0 |
+| default | http  | tcp      | 80:80     | 0.0.0.0/0 |
+| default | https | tcp      | 443:443   | 0.0.0.0/0 |
+| flask   | ssh   | tcp      | 22:22     | 0.0.0.0/0 |
+| flask   | icmp  | icmp     |           | 0.0.0.0/0 |
+| flask   | http  | tcp      | 80:80     | 0.0.0.0/0 |
+| flask   | https | tcp      | 443:443   | 0.0.0.0/0 |
+| flask   | flask | tcp      | 8000:8000 | 0.0.0.0/0 |
++---------+-------+----------+-----------+-----------+
+
+Variables
+
+    timer=False
+    cloud=google
+    vm=test-josh-vm
+    trace=True
+    debug=True
+    verbose=10
+    storage=google
+    key=josh
+    refresh=False
+    group=cloudmesh
+
+[35m
+# ######################################################################
+# test_cms_init /tests/cloud/test_01_clean_local_remote.py 35
+# ######################################################################
+[0m
+PASSED
+tests/cloud/test_01_clean_local_remote.py::Test_Clean_Local_Remote::test_delete_all_keys_from_cloud 
+[35m
+# ######################################################################
+# test_delete_all_keys_from_cloud /tests/cloud/test_01_clean_local_remote.py 41
+# ######################################################################
+[0m
+list index out of range
+FAILED
+tests/cloud/test_01_clean_local_remote.py::Test_Clean_Local_Remote::test_delete_all_secgroups_from_cloud 
+[35m
+# ######################################################################
+# test_delete_all_secgroups_from_cloud /tests/cloud/test_01_clean_local_remote.py 59
+# ######################################################################
+[0m
+PASSED
+tests/cloud/test_01_clean_local_remote.py::Test_Clean_Local_Remote::test_benchmark 
+
++------------------------------------------+----------+--------+---------------------+--------+------------------+--------+-------+-----------------------------------------------------+
+| Name                                     | Status   |   Time | Start               | tag    | Node             | User   | OS    | Version                                             |
+|------------------------------------------+----------+--------+---------------------+--------+------------------+--------+-------+-----------------------------------------------------|
+| test_00_sys/test_cms_help                | ok       |  2.386 | 2020-05-07 23:07:39 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_01_clean_local_remote/test_cms_init | ok       |  8.795 | 2020-05-07 23:07:42 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
++------------------------------------------+----------+--------+---------------------+--------+------------------+--------+-------+-----------------------------------------------------+
+
+PASSED
+tests/cloud/test_02_key.py::Test_Key::test_clear_local_database 
+[35m
+# ######################################################################
+# test_clear_local_database /tests/cloud/test_02_key.py 39
+# ######################################################################
+[0m
+PASSED
+tests/cloud/test_02_key.py::Test_Key::test_clear_cloud_database 
+[35m
+# ######################################################################
+# test_clear_cloud_database /tests/cloud/test_02_key.py 46
+# ######################################################################
+[0m
+PASSED
+tests/cloud/test_02_key.py::Test_Key::test_upload_key_to_database 
+[35m
+# ######################################################################
+# test_upload_key_to_database /tests/cloud/test_02_key.py 53
+# ######################################################################
+[0m
+<cloudmesh.key.Key.Key object at 0x7f03982599a0>
+PASSED
+tests/cloud/test_02_key.py::Test_Key::test_upload_key_to_cloud 
+[35m
+# ######################################################################
+# test_upload_key_to_cloud /tests/cloud/test_02_key.py 66
+# ######################################################################
+[0m
+[34m
+# ----------------------------------------------------------------------
+# key
+# ----------------------------------------------------------------------
+# 80:test_upload_key_to_cloud ./tests/cloud/test_02_key.py
+# ----------------------------------------------------------------------
+# {'_id': ObjectId('5eb494c8cf07dd4e63172fbb'),
+#  'cm': {'cloud': 'local',
+#         'collection': 'local-key',
+#         'created': '2020-05-07 23:07:52.515421',
+#         'kind': 'key',
+#         'modified': '2020-05-07 23:07:52.515421',
+#         'name': 'test-key'},
+#  'comment': 'baker203@iu.edu',
+#  'fingerprint': '44:8c:65:30:6e:a8:31:40:13:9f:c8:f2:c6:67:c7:c9',
+#  'group': ['local', 'ssh', None],
+#  'key': 'AAAAB3NzaC1yc2EAAAADAQABAAACAQCZyFlYiArHL+v9i5sLp2HNv41J5PtLsFaJ4qDNiKgy0rBxmHtFg2giQDYPkWySZB1M+uOTSHkCR98ZsV64vCXfs09Z+xhT42B0jjqHNkILWgY1aShEvXzyII6B4Ny816fCMJI+kxllIeAIVgmwPwCjwsM6erUURBPmHlkPk7OG8Kt8ljiLuQ3TXtBfQ+zWRmvpCv0oN8ptWMCXulONpmTtuvLgNtTHSjeydqe9jSs2y+QwEp2P60A8ZgL8SK0WV5xtZEz6+YkBhl3eitub/D4ek+A37nY//SE8Fxau3TTH9VlMPFefvKUXoMsCCLm1Vs9UfnHKxzfeB9/XfBk4npMn7/Licdg2czGgkvK0FDv7EIDZfwh/KTa5KINPSRGkW5N2j73qi0I02QAkzd5NKfJca4vXklqcZwyIMYv0X0bxmbQ9o5TRO8ISeocDZAMLsYMlyO+wpoqd6MX3fe6d0eA0UBKozjQ7lw/UCnBlAKQGrFjXl4DEAm8xfW2d5vy5wyw2ygGtpKe5Rk30eVUNMfi/zvZYr4TwRZ0ieh2Y80UkQr/YGuM3C1C3GjQuxrMMQc8ooUs6f56+61/sJbsvRjtKiYwMvR8HJT4oGR5Ds4a9I2Wc2FKGzE/AZIGg/zeLCCqDLK+bZYWGwGu4G/XvOoJJfo4fqGf7NvKmcfVXU+zSXw==',
+#  'location': {'private': '/home/josh/.ssh/id_rsa',
+#               'public': '/home/josh/.ssh/id_rsa.pub'},
+#  'name': 'test-key',
+#  'path': '/home/josh/.ssh/id_rsa.pub',
+#  'profile': {'email': 'baker203@iu.edu',
+#              'firstname': 'Josh',
+#              'github': 'joshua-m-baker',
+#              'lastname': 'Baker',
+#              'publickey': '~/.ssh/id_rsa.pub',
+#              'user': 'josh'},
+#  'public_key': 'ssh-rsa '
+#                'AAAAB3NzaC1yc2EAAAADAQABAAACAQCZyFlYiArHL+v9i5sLp2HNv41J5PtLsFaJ4qDNiKgy0rBxmHtFg2giQDYPkWySZB1M+uOTSHkCR98ZsV64vCXfs09Z+xhT42B0jjqHNkILWgY1aShEvXzyII6B4Ny816fCMJI+kxllIeAIVgmwPwCjwsM6erUURBPmHlkPk7OG8Kt8ljiLuQ3TXtBfQ+zWRmvpCv0oN8ptWMCXulONpmTtuvLgNtTHSjeydqe9jSs2y+QwEp2P60A8ZgL8SK0WV5xtZEz6+YkBhl3eitub/D4ek+A37nY//SE8Fxau3TTH9VlMPFefvKUXoMsCCLm1Vs9UfnHKxzfeB9/XfBk4npMn7/Licdg2czGgkvK0FDv7EIDZfwh/KTa5KINPSRGkW5N2j73qi0I02QAkzd5NKfJca4vXklqcZwyIMYv0X0bxmbQ9o5TRO8ISeocDZAMLsYMlyO+wpoqd6MX3fe6d0eA0UBKozjQ7lw/UCnBlAKQGrFjXl4DEAm8xfW2d5vy5wyw2ygGtpKe5Rk30eVUNMfi/zvZYr4TwRZ0ieh2Y80UkQr/YGuM3C1C3GjQuxrMMQc8ooUs6f56+61/sJbsvRjtKiYwMvR8HJT4oGR5Ds4a9I2Wc2FKGzE/AZIGg/zeLCCqDLK+bZYWGwGu4G/XvOoJJfo4fqGf7NvKmcfVXU+zSXw== '
+#                'baker203@iu.edu',
+#  'source': 'ssh',
+#  'type': 'ssh-rsa',
+#  'uri': 'file:///home/josh/.ssh/id_rsa.pub'}
+# ----------------------------------------------------------------------
+[0m
+test-key:ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCZyFlYiArHL+v9i5sLp2HNv41J5PtLsFaJ4qDNiKgy0rBxmHtFg2giQDYPkWySZB1M+uOTSHkCR98ZsV64vCXfs09Z+xhT42B0jjqHNkILWgY1aShEvXzyII6B4Ny816fCMJI+kxllIeAIVgmwPwCjwsM6erUURBPmHlkPk7OG8Kt8ljiLuQ3TXtBfQ+zWRmvpCv0oN8ptWMCXulONpmTtuvLgNtTHSjeydqe9jSs2y+QwEp2P60A8ZgL8SK0WV5xtZEz6+YkBhl3eitub/D4ek+A37nY//SE8Fxau3TTH9VlMPFefvKUXoMsCCLm1Vs9UfnHKxzfeB9/XfBk4npMn7/Licdg2czGgkvK0FDv7EIDZfwh/KTa5KINPSRGkW5N2j73qi0I02QAkzd5NKfJca4vXklqcZwyIMYv0X0bxmbQ9o5TRO8ISeocDZAMLsYMlyO+wpoqd6MX3fe6d0eA0UBKozjQ7lw/UCnBlAKQGrFjXl4DEAm8xfW2d5vy5wyw2ygGtpKe5Rk30eVUNMfi/zvZYr4TwRZ0ieh2Y80UkQr/YGuM3C1C3GjQuxrMMQc8ooUs6f56+61/sJbsvRjtKiYwMvR8HJT4oGR5Ds4a9I2Wc2FKGzE/AZIGg/zeLCCqDLK+bZYWGwGu4G/XvOoJJfo4fqGf7NvKmcfVXU+zSXw== baker203@iu.edu
+[34mINFO: Waiting for compute.projects.setCommonInstanceMetadata operation to finish : test-key[0m
+[32mcompute.projects.setCommonInstanceMetadata on test-key is complete.[0m
+PASSED
+tests/cloud/test_02_key.py::Test_Key::test_list_key_from_cloud 
+[35m
+# ######################################################################
+# test_list_key_from_cloud /tests/cloud/test_02_key.py 86
+# ######################################################################
+[0m
+FAILED
+tests/cloud/test_02_key.py::Test_Key::test_delete_key_from_cloud 
+[35m
+# ######################################################################
+# test_delete_key_from_cloud /tests/cloud/test_02_key.py 103
+# ######################################################################
+[0m
+list index out of range
+PASSED
+tests/cloud/test_02_key.py::Test_Key::test_get_key_from_cloud 
+[35m
+# ######################################################################
+# test_get_key_from_cloud /tests/cloud/test_02_key.py 113
+# ######################################################################
+[0m
+PASSED
+tests/cloud/test_02_key.py::Test_Key::test_key_delete 
+[35m
+# ######################################################################
+# test_key_delete /tests/cloud/test_02_key.py 117
+# ######################################################################
+[0m
+
+[35m
+# ######################################################################
+# test_clear_cloud_database /tests/cloud/test_02_key.py 46
+# ######################################################################
+[0m
+PASSED
+tests/cloud/test_02_key.py::Test_Key::test_cms_local key add
+
+[35m
+# ######################################################################
+# test_cms_local /tests/cloud/test_02_key.py 123
+# ######################################################################
+[0m
+PASSED
+tests/cloud/test_02_key.py::Test_Key::test_cms_cloud key upload --cloud=google
+cloud google
+josh:ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCZyFlYiArHL+v9i5sLp2HNv41J5PtLsFaJ4qDNiKgy0rBxmHtFg2giQDYPkWySZB1M+uOTSHkCR98ZsV64vCXfs09Z+xhT42B0jjqHNkILWgY1aShEvXzyII6B4Ny816fCMJI+kxllIeAIVgmwPwCjwsM6erUURBPmHlkPk7OG8Kt8ljiLuQ3TXtBfQ+zWRmvpCv0oN8ptWMCXulONpmTtuvLgNtTHSjeydqe9jSs2y+QwEp2P60A8ZgL8SK0WV5xtZEz6+YkBhl3eitub/D4ek+A37nY//SE8Fxau3TTH9VlMPFefvKUXoMsCCLm1Vs9UfnHKxzfeB9/XfBk4npMn7/Licdg2czGgkvK0FDv7EIDZfwh/KTa5KINPSRGkW5N2j73qi0I02QAkzd5NKfJca4vXklqcZwyIMYv0X0bxmbQ9o5TRO8ISeocDZAMLsYMlyO+wpoqd6MX3fe6d0eA0UBKozjQ7lw/UCnBlAKQGrFjXl4DEAm8xfW2d5vy5wyw2ygGtpKe5Rk30eVUNMfi/zvZYr4TwRZ0ieh2Y80UkQr/YGuM3C1C3GjQuxrMMQc8ooUs6f56+61/sJbsvRjtKiYwMvR8HJT4oGR5Ds4a9I2Wc2FKGzE/AZIGg/zeLCCqDLK+bZYWGwGu4G/XvOoJJfo4fqGf7NvKmcfVXU+zSXw== baker203@iu.edu
+INFO: Waiting for compute.projects.setCommonInstanceMetadata operation to finish : josh
+compute.projects.setCommonInstanceMetadata on josh is complete.
+upload key 'josh successful'. 
+
+[35m
+# ######################################################################
+# test_cms_cloud /tests/cloud/test_02_key.py 130
+# ######################################################################
+[0m
+
+[35m
+# ######################################################################
+# test_clear_cloud_database /tests/cloud/test_02_key.py 46
+# ######################################################################
+[0m
+PASSED
+tests/cloud/test_02_key.py::Test_Key::test_benchmark 
+
++------------------------------------------+----------+--------+---------------------+--------+------------------+--------+-------+-----------------------------------------------------+
+| Name                                     | Status   |   Time | Start               | tag    | Node             | User   | OS    | Version                                             |
+|------------------------------------------+----------+--------+---------------------+--------+------------------+--------+-------+-----------------------------------------------------|
+| test_00_sys/test_cms_help                | ok       |  2.386 | 2020-05-07 23:07:39 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_01_clean_local_remote/test_cms_init | ok       |  8.795 | 2020-05-07 23:07:42 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_clear_local_database    | ok       |  0.034 | 2020-05-07 23:07:52 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_clear_cloud_database    | ok       |  0.016 | 2020-05-07 23:08:08 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_upload_key_to_database  | ok       |  0.039 | 2020-05-07 23:07:52 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_upload_key_to_cloud     | ok       | 10.362 | 2020-05-07 23:07:52 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_list_key_from_cloud     | failed   |        | 2020-05-07 23:08:03 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_delete_key_from_cloud   | failed   |        | 2020-05-07 23:08:04 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_key_delete              | ok       |  0.022 | 2020-05-07 23:08:05 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_cms_local               | ok       |  2.752 | 2020-05-07 23:08:05 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_cms_cloud               | ok       | 15.804 | 2020-05-07 23:08:08 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
++------------------------------------------+----------+--------+---------------------+--------+------------------+--------+-------+-----------------------------------------------------+
+
+# csv,timer,status,time,start,tag,uname.node,user,uname.system,platform.version
+# csv,test_00_sys/test_cms_help,ok,2.386,2020-05-07 23:07:39,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_01_clean_local_remote/test_cms_init,ok,8.795,2020-05-07 23:07:42,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_clear_local_database,ok,0.034,2020-05-07 23:07:52,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_clear_cloud_database,ok,0.016,2020-05-07 23:08:08,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_upload_key_to_database,ok,0.039,2020-05-07 23:07:52,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_upload_key_to_cloud,ok,10.362,2020-05-07 23:07:52,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_list_key_from_cloud,failed,None,2020-05-07 23:08:03,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_delete_key_from_cloud,failed,None,2020-05-07 23:08:04,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_key_delete,ok,0.022,2020-05-07 23:08:05,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_cms_local,ok,2.752,2020-05-07 23:08:05,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_cms_cloud,ok,15.804,2020-05-07 23:08:08,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+
+PASSED
+tests/cloud/test_04_flavor.py::Test_Flavor::test_empty_database 
+[35m
+# ######################################################################
+# test_empty_database /tests/cloud/test_04_flavor.py 38
+# ######################################################################
+[0m
+PASSED
+tests/cloud/test_04_flavor.py::Test_Flavor::test_provider_flavor 
+[35m
+# ######################################################################
+# test_provider_flavor /tests/cloud/test_04_flavor.py 44
+# ######################################################################
+[0m
+PASSED
+tests/cloud/test_04_flavor.py::Test_Flavor::test_provider_flavor_update 
+[35m
+# ######################################################################
+# test_provider_flavor_update /tests/cloud/test_04_flavor.py 50
+# ######################################################################
+[0m
+PASSED
+tests/cloud/test_04_flavor.py::Test_Flavor::test_cms_flavor_refresh 
+[35m
+# ######################################################################
+# test_cms_flavor_refresh /tests/cloud/test_04_flavor.py 58
+# ######################################################################
+[0m
+PASSED
+tests/cloud/test_04_flavor.py::Test_Flavor::test_cms_flavor 
+[35m
+# ######################################################################
+# test_cms_flavor /tests/cloud/test_04_flavor.py 65
+# ######################################################################
+[0m
+PASSED
+tests/cloud/test_04_flavor.py::Test_Flavor::test_benchmark 
+
++--------------------------------------------+----------+--------+---------------------+--------+------------------+--------+-------+-----------------------------------------------------+
+| Name                                       | Status   |   Time | Start               | tag    | Node             | User   | OS    | Version                                             |
+|--------------------------------------------+----------+--------+---------------------+--------+------------------+--------+-------+-----------------------------------------------------|
+| test_00_sys/test_cms_help                  | ok       |  2.386 | 2020-05-07 23:07:39 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_01_clean_local_remote/test_cms_init   | ok       |  8.795 | 2020-05-07 23:07:42 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_clear_local_database      | ok       |  0.034 | 2020-05-07 23:07:52 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_clear_cloud_database      | ok       |  0.016 | 2020-05-07 23:08:08 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_upload_key_to_database    | ok       |  0.039 | 2020-05-07 23:07:52 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_upload_key_to_cloud       | ok       | 10.362 | 2020-05-07 23:07:52 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_list_key_from_cloud       | failed   |        | 2020-05-07 23:08:03 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_delete_key_from_cloud     | failed   |        | 2020-05-07 23:08:04 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_key_delete                | ok       |  0.022 | 2020-05-07 23:08:05 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_cms_local                 | ok       |  2.752 | 2020-05-07 23:08:05 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_cms_cloud                 | ok       | 15.804 | 2020-05-07 23:08:08 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_04_flavor/test_empty_database         | ok       |  0.017 | 2020-05-07 23:08:24 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_04_flavor/test_provider_flavor        | ok       |  2.483 | 2020-05-07 23:08:24 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_04_flavor/test_provider_flavor_update | ok       |  1.595 | 2020-05-07 23:08:26 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_04_flavor/test_cms_flavor_refresh     | ok       |  3.844 | 2020-05-07 23:08:28 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_04_flavor/test_cms_flavor             | ok       |  1.509 | 2020-05-07 23:08:32 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
++--------------------------------------------+----------+--------+---------------------+--------+------------------+--------+-------+-----------------------------------------------------+
+
+# csv,timer,status,time,start,tag,uname.node,user,uname.system,platform.version
+# csv,test_00_sys/test_cms_help,ok,2.386,2020-05-07 23:07:39,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_01_clean_local_remote/test_cms_init,ok,8.795,2020-05-07 23:07:42,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_clear_local_database,ok,0.034,2020-05-07 23:07:52,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_clear_cloud_database,ok,0.016,2020-05-07 23:08:08,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_upload_key_to_database,ok,0.039,2020-05-07 23:07:52,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_upload_key_to_cloud,ok,10.362,2020-05-07 23:07:52,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_list_key_from_cloud,failed,None,2020-05-07 23:08:03,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_delete_key_from_cloud,failed,None,2020-05-07 23:08:04,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_key_delete,ok,0.022,2020-05-07 23:08:05,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_cms_local,ok,2.752,2020-05-07 23:08:05,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_cms_cloud,ok,15.804,2020-05-07 23:08:08,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_04_flavor/test_empty_database,ok,0.017,2020-05-07 23:08:24,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_04_flavor/test_provider_flavor,ok,2.483,2020-05-07 23:08:24,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_04_flavor/test_provider_flavor_update,ok,1.595,2020-05-07 23:08:26,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_04_flavor/test_cms_flavor_refresh,ok,3.844,2020-05-07 23:08:28,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_04_flavor/test_cms_flavor,ok,1.509,2020-05-07 23:08:32,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+
+PASSED
+tests/cloud/test_05_image.py::Test_Image::test_empty_database 
+[35m
+# ######################################################################
+# test_empty_database /tests/cloud/test_05_image.py 38
+# ######################################################################
+[0m
+PASSED
+tests/cloud/test_05_image.py::Test_Image::test_provider_image 
+[35m
+# ######################################################################
+# test_provider_image /tests/cloud/test_05_image.py 44
+# ######################################################################
+[0m
+PASSED
+tests/cloud/test_05_image.py::Test_Image::test_provider_image_update 
+[35m
+# ######################################################################
+# test_provider_image_update /tests/cloud/test_05_image.py 50
+# ######################################################################
+[0m
+PASSED
+tests/cloud/test_05_image.py::Test_Image::test_cms_image_refresh 
+[35m
+# ######################################################################
+# test_cms_image_refresh /tests/cloud/test_05_image.py 58
+# ######################################################################
+[0m
+PASSED
+tests/cloud/test_05_image.py::Test_Image::test_cms_image 
+[35m
+# ######################################################################
+# test_cms_image /tests/cloud/test_05_image.py 65
+# ######################################################################
+[0m
+PASSED
+tests/cloud/test_05_image.py::Test_Image::test_benchmark 
+
++--------------------------------------------+----------+--------+---------------------+--------+------------------+--------+-------+-----------------------------------------------------+
+| Name                                       | Status   |   Time | Start               | tag    | Node             | User   | OS    | Version                                             |
+|--------------------------------------------+----------+--------+---------------------+--------+------------------+--------+-------+-----------------------------------------------------|
+| test_00_sys/test_cms_help                  | ok       |  2.386 | 2020-05-07 23:07:39 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_01_clean_local_remote/test_cms_init   | ok       |  8.795 | 2020-05-07 23:07:42 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_clear_local_database      | ok       |  0.034 | 2020-05-07 23:07:52 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_clear_cloud_database      | ok       |  0.016 | 2020-05-07 23:08:08 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_upload_key_to_database    | ok       |  0.039 | 2020-05-07 23:07:52 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_upload_key_to_cloud       | ok       | 10.362 | 2020-05-07 23:07:52 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_list_key_from_cloud       | failed   |        | 2020-05-07 23:08:03 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_delete_key_from_cloud     | failed   |        | 2020-05-07 23:08:04 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_key_delete                | ok       |  0.022 | 2020-05-07 23:08:05 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_cms_local                 | ok       |  2.752 | 2020-05-07 23:08:05 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_cms_cloud                 | ok       | 15.804 | 2020-05-07 23:08:08 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_04_flavor/test_empty_database         | ok       |  0.017 | 2020-05-07 23:08:24 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_04_flavor/test_provider_flavor        | ok       |  2.483 | 2020-05-07 23:08:24 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_04_flavor/test_provider_flavor_update | ok       |  1.595 | 2020-05-07 23:08:26 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_04_flavor/test_cms_flavor_refresh     | ok       |  3.844 | 2020-05-07 23:08:28 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_04_flavor/test_cms_flavor             | ok       |  1.509 | 2020-05-07 23:08:32 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_05_image/test_empty_database          | ok       |  0.018 | 2020-05-07 23:08:34 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_05_image/test_provider_image          | ok       |  4.891 | 2020-05-07 23:08:34 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_05_image/test_provider_image_update   | ok       |  5.251 | 2020-05-07 23:08:39 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_05_image/test_cms_image_refresh       | ok       |  6.476 | 2020-05-07 23:08:44 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_05_image/test_cms_image               | ok       |  1.496 | 2020-05-07 23:08:51 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
++--------------------------------------------+----------+--------+---------------------+--------+------------------+--------+-------+-----------------------------------------------------+
+
+# csv,timer,status,time,start,tag,uname.node,user,uname.system,platform.version
+# csv,test_00_sys/test_cms_help,ok,2.386,2020-05-07 23:07:39,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_01_clean_local_remote/test_cms_init,ok,8.795,2020-05-07 23:07:42,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_clear_local_database,ok,0.034,2020-05-07 23:07:52,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_clear_cloud_database,ok,0.016,2020-05-07 23:08:08,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_upload_key_to_database,ok,0.039,2020-05-07 23:07:52,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_upload_key_to_cloud,ok,10.362,2020-05-07 23:07:52,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_list_key_from_cloud,failed,None,2020-05-07 23:08:03,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_delete_key_from_cloud,failed,None,2020-05-07 23:08:04,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_key_delete,ok,0.022,2020-05-07 23:08:05,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_cms_local,ok,2.752,2020-05-07 23:08:05,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_cms_cloud,ok,15.804,2020-05-07 23:08:08,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_04_flavor/test_empty_database,ok,0.017,2020-05-07 23:08:24,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_04_flavor/test_provider_flavor,ok,2.483,2020-05-07 23:08:24,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_04_flavor/test_provider_flavor_update,ok,1.595,2020-05-07 23:08:26,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_04_flavor/test_cms_flavor_refresh,ok,3.844,2020-05-07 23:08:28,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_04_flavor/test_cms_flavor,ok,1.509,2020-05-07 23:08:32,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_05_image/test_empty_database,ok,0.018,2020-05-07 23:08:34,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_05_image/test_provider_image,ok,4.891,2020-05-07 23:08:34,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_05_image/test_provider_image_update,ok,5.251,2020-05-07 23:08:39,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_05_image/test_cms_image_refresh,ok,6.476,2020-05-07 23:08:44,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_05_image/test_cms_image,ok,1.496,2020-05-07 23:08:51,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+
+PASSED
+tests/cloud/test_07_secgroup_provider.py::Test_secgroup_provider::test_load 
+[35m
+# ######################################################################
+# test_load /tests/cloud/test_07_secgroup_provider.py 55
+# ######################################################################
+[0m
+
+PASSED
+tests/cloud/test_07_secgroup_provider.py::Test_secgroup_provider::test_list_variables 
+[35m
+# ######################################################################
+# test_list_variables /tests/cloud/test_07_secgroup_provider.py 71
+# ######################################################################
+[0m
+josh
+google
+PASSED
+tests/cloud/test_07_secgroup_provider.py::Test_secgroup_provider::test_list_secgroups 
+[35m
+# ######################################################################
+# test_list_secgroups /tests/cloud/test_07_secgroup_provider.py 79
+# ######################################################################
+[0m
+FAILED
+tests/cloud/test_07_secgroup_provider.py::Test_secgroup_provider::test_list_secgroups_rules 
+[35m
+# ######################################################################
+# test_list_secgroups_rules /tests/cloud/test_07_secgroup_provider.py 86
+# ######################################################################
+[0m
+FAILED
+tests/cloud/test_07_secgroup_provider.py::Test_secgroup_provider::test_secgroups_add 
+[35m
+# ######################################################################
+# test_secgroups_add /tests/cloud/test_07_secgroup_provider.py 93
+# ######################################################################
+[0m
+FAILED
+tests/cloud/test_07_secgroup_provider.py::Test_secgroup_provider::test_upload_secgroup 
+[35m
+# ######################################################################
+# test_upload_secgroup /tests/cloud/test_07_secgroup_provider.py 107
+# ######################################################################
+[0m
+FAILED
+tests/cloud/test_07_secgroup_provider.py::Test_secgroup_provider::test_secgroups_delete 
+[35m
+# ######################################################################
+# test_secgroups_delete /tests/cloud/test_07_secgroup_provider.py 116
+# ######################################################################
+[0m
+FAILED
+tests/cloud/test_07_secgroup_provider.py::Test_secgroup_provider::test_secgroups_delete_again 
+[35m
+# ######################################################################
+# test_secgroups_delete_again /tests/cloud/test_07_secgroup_provider.py 135
+# ######################################################################
+[0m
+FAILED
+tests/cloud/test_07_secgroup_provider.py::Test_secgroup_provider::test_benchmark 
+
++-------------------------------------------------------+----------+--------+---------------------+--------+------------------+--------+-------+-----------------------------------------------------+
+| Name                                                  | Status   |   Time | Start               | tag    | Node             | User   | OS    | Version                                             |
+|-------------------------------------------------------+----------+--------+---------------------+--------+------------------+--------+-------+-----------------------------------------------------|
+| test_00_sys/test_cms_help                             | ok       |  2.386 | 2020-05-07 23:07:39 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_01_clean_local_remote/test_cms_init              | ok       |  8.795 | 2020-05-07 23:07:42 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_clear_local_database                 | ok       |  0.034 | 2020-05-07 23:07:52 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_clear_cloud_database                 | ok       |  0.016 | 2020-05-07 23:08:08 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_upload_key_to_database               | ok       |  0.039 | 2020-05-07 23:07:52 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_upload_key_to_cloud                  | ok       | 10.362 | 2020-05-07 23:07:52 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_list_key_from_cloud                  | failed   |        | 2020-05-07 23:08:03 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_delete_key_from_cloud                | failed   |        | 2020-05-07 23:08:04 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_key_delete                           | ok       |  0.022 | 2020-05-07 23:08:05 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_cms_local                            | ok       |  2.752 | 2020-05-07 23:08:05 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_cms_cloud                            | ok       | 15.804 | 2020-05-07 23:08:08 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_04_flavor/test_empty_database                    | ok       |  0.017 | 2020-05-07 23:08:24 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_04_flavor/test_provider_flavor                   | ok       |  2.483 | 2020-05-07 23:08:24 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_04_flavor/test_provider_flavor_update            | ok       |  1.595 | 2020-05-07 23:08:26 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_04_flavor/test_cms_flavor_refresh                | ok       |  3.844 | 2020-05-07 23:08:28 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_04_flavor/test_cms_flavor                        | ok       |  1.509 | 2020-05-07 23:08:32 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_05_image/test_empty_database                     | ok       |  0.018 | 2020-05-07 23:08:34 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_05_image/test_provider_image                     | ok       |  4.891 | 2020-05-07 23:08:34 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_05_image/test_provider_image_update              | ok       |  5.251 | 2020-05-07 23:08:39 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_05_image/test_cms_image_refresh                  | ok       |  6.476 | 2020-05-07 23:08:44 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_05_image/test_cms_image                          | ok       |  1.496 | 2020-05-07 23:08:51 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_07_secgroup_provider/test_load                   | ok       |  0.048 | 2020-05-07 23:08:52 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_07_secgroup_provider/test_list_variables         | ok       |  0.002 | 2020-05-07 23:08:53 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_07_secgroup_provider/test_list_secgroups         | failed   |        | 2020-05-07 23:08:53 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_07_secgroup_provider/test_list_secgroups_rules   | failed   |        | 2020-05-07 23:08:53 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_07_secgroup_provider/test_secgroups_add          | ok       |  0.04  | 2020-05-07 23:08:53 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_07_secgroup_provider/test_upload_secgroup        | failed   |        | 2020-05-07 23:08:53 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_07_secgroup_provider/test_secgroups_delete       | failed   |        | 2020-05-07 23:08:53 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_07_secgroup_provider/test_secgroups_delete_again | failed   |        | 2020-05-07 23:08:53 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
++-------------------------------------------------------+----------+--------+---------------------+--------+------------------+--------+-------+-----------------------------------------------------+
+
+# csv,timer,status,time,start,tag,uname.node,user,uname.system,platform.version
+# csv,test_00_sys/test_cms_help,ok,2.386,2020-05-07 23:07:39,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_01_clean_local_remote/test_cms_init,ok,8.795,2020-05-07 23:07:42,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_clear_local_database,ok,0.034,2020-05-07 23:07:52,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_clear_cloud_database,ok,0.016,2020-05-07 23:08:08,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_upload_key_to_database,ok,0.039,2020-05-07 23:07:52,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_upload_key_to_cloud,ok,10.362,2020-05-07 23:07:52,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_list_key_from_cloud,failed,None,2020-05-07 23:08:03,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_delete_key_from_cloud,failed,None,2020-05-07 23:08:04,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_key_delete,ok,0.022,2020-05-07 23:08:05,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_cms_local,ok,2.752,2020-05-07 23:08:05,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_cms_cloud,ok,15.804,2020-05-07 23:08:08,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_04_flavor/test_empty_database,ok,0.017,2020-05-07 23:08:24,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_04_flavor/test_provider_flavor,ok,2.483,2020-05-07 23:08:24,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_04_flavor/test_provider_flavor_update,ok,1.595,2020-05-07 23:08:26,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_04_flavor/test_cms_flavor_refresh,ok,3.844,2020-05-07 23:08:28,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_04_flavor/test_cms_flavor,ok,1.509,2020-05-07 23:08:32,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_05_image/test_empty_database,ok,0.018,2020-05-07 23:08:34,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_05_image/test_provider_image,ok,4.891,2020-05-07 23:08:34,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_05_image/test_provider_image_update,ok,5.251,2020-05-07 23:08:39,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_05_image/test_cms_image_refresh,ok,6.476,2020-05-07 23:08:44,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_05_image/test_cms_image,ok,1.496,2020-05-07 23:08:51,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_07_secgroup_provider/test_load,ok,0.048,2020-05-07 23:08:52,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_07_secgroup_provider/test_list_variables,ok,0.002,2020-05-07 23:08:53,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_07_secgroup_provider/test_list_secgroups,failed,None,2020-05-07 23:08:53,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_07_secgroup_provider/test_list_secgroups_rules,failed,None,2020-05-07 23:08:53,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_07_secgroup_provider/test_secgroups_add,ok,0.04,2020-05-07 23:08:53,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_07_secgroup_provider/test_upload_secgroup,failed,None,2020-05-07 23:08:53,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_07_secgroup_provider/test_secgroups_delete,failed,None,2020-05-07 23:08:53,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_07_secgroup_provider/test_secgroups_delete_again,failed,None,2020-05-07 23:08:53,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+
+PASSED
+tests/cloud/test_08_vm_provider.py::Test_provider_vm::test_key_upload key add
+key list
+ERROR: executing command 'key list'
+======================================================================
+sequence item 2: expected str instance, NoneType found
+sequence item 2: expected str instance, NoneType found
+Traceback (most recent call last):
+  File "/home/josh/dev/cloud/cloudmesh-cmd5/cloudmesh/shell/shell.py", line 1096, in main
+    stop = cmd.onecmd(command)
+  File "/home/josh/dev/cloud/cloudmesh-cmd5/cloudmesh/shell/shell.py", line 419, in onecmd
+    return func(arg)
+  File "/home/josh/dev/cloud/cloudmesh-cmd5/cloudmesh/shell/command.py", line 115, in new
+    func(instance, args, arguments)
+  File "/home/josh/dev/cloud/cloudmesh-cloud/cloudmesh/key/command/key.py", line 317, in do_key
+    print_keys(keys)
+  File "/home/josh/dev/cloud/cloudmesh-cloud/cloudmesh/key/command/key.py", line 222, in print_keys
+    entry["group"] = ', '.join(entry['group'])
+TypeError: sequence item 2: expected str instance, NoneType found
+
+======================================================================
+key delete josh --cloud=google
+ERROR: executing command 'key delete josh --cloud=google'
+======================================================================
+list index out of range
+list index out of range
+Traceback (most recent call last):
+  File "/home/josh/dev/cloud/cloudmesh-cmd5/cloudmesh/shell/shell.py", line 1096, in main
+    stop = cmd.onecmd(command)
+  File "/home/josh/dev/cloud/cloudmesh-cmd5/cloudmesh/shell/shell.py", line 419, in onecmd
+    return func(arg)
+  File "/home/josh/dev/cloud/cloudmesh-cmd5/cloudmesh/shell/command.py", line 115, in new
+    func(instance, args, arguments)
+  File "/home/josh/dev/cloud/cloudmesh-cloud/cloudmesh/key/command/key.py", line 503, in do_key
+    images = provider.key_delete(name)
+  File "/home/josh/dev/cloud/cloudmesh-cloud/cloudmesh/compute/vm/Provider.py", line 401, in key_delete
+    self.p.key_delete(key)
+  File "/home/josh/dev/cloud/cloudmesh-google/cloudmesh/google/compute/Provider.py", line 1361, in key_delete
+    key = self._get_keys(self.cloud)
+  File "/home/josh/dev/cloud/cloudmesh-google/cloudmesh/google/compute/Provider.py", line 1238, in _get_keys
+    db_keys = self.keys()
+  File "/home/josh/dev/cloud/cloudmesh-google/cloudmesh/google/compute/Provider.py", line 1275, in keys
+    keys = self._key_dict(proj_metadata)
+  File "/home/josh/dev/cloud/cloudmesh-google/cloudmesh/google/compute/Provider.py", line 299, in _key_dict
+    name_items = key_items[0].split(":")
+IndexError: list index out of range
+
+======================================================================
+key upload josh --cloud=google
+cloud google
+josh:ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQCZyFlYiArHL+v9i5sLp2HNv41J5PtLsFaJ4qDNiKgy0rBxmHtFg2giQDYPkWySZB1M+uOTSHkCR98ZsV64vCXfs09Z+xhT42B0jjqHNkILWgY1aShEvXzyII6B4Ny816fCMJI+kxllIeAIVgmwPwCjwsM6erUURBPmHlkPk7OG8Kt8ljiLuQ3TXtBfQ+zWRmvpCv0oN8ptWMCXulONpmTtuvLgNtTHSjeydqe9jSs2y+QwEp2P60A8ZgL8SK0WV5xtZEz6+YkBhl3eitub/D4ek+A37nY//SE8Fxau3TTH9VlMPFefvKUXoMsCCLm1Vs9UfnHKxzfeB9/XfBk4npMn7/Licdg2czGgkvK0FDv7EIDZfwh/KTa5KINPSRGkW5N2j73qi0I02QAkzd5NKfJca4vXklqcZwyIMYv0X0bxmbQ9o5TRO8ISeocDZAMLsYMlyO+wpoqd6MX3fe6d0eA0UBKozjQ7lw/UCnBlAKQGrFjXl4DEAm8xfW2d5vy5wyw2ygGtpKe5Rk30eVUNMfi/zvZYr4TwRZ0ieh2Y80UkQr/YGuM3C1C3GjQuxrMMQc8ooUs6f56+61/sJbsvRjtKiYwMvR8HJT4oGR5Ds4a9I2Wc2FKGzE/AZIGg/zeLCCqDLK+bZYWGwGu4G/XvOoJJfo4fqGf7NvKmcfVXU+zSXw== baker203@iu.edu
+INFO: Waiting for compute.projects.setCommonInstanceMetadata operation to finish : josh
+compute.projects.setCommonInstanceMetadata on josh is complete.
+upload key 'josh successful'. 
+key list --cloud=google
+cloud google
+ERROR: executing command 'key list --cloud=google'
+======================================================================
+list index out of range
+list index out of range
+Traceback (most recent call last):
+  File "/home/josh/dev/cloud/cloudmesh-cmd5/cloudmesh/shell/shell.py", line 1096, in main
+    stop = cmd.onecmd(command)
+  File "/home/josh/dev/cloud/cloudmesh-cmd5/cloudmesh/shell/shell.py", line 419, in onecmd
+    return func(arg)
+  File "/home/josh/dev/cloud/cloudmesh-cmd5/cloudmesh/shell/command.py", line 115, in new
+    func(instance, args, arguments)
+  File "/home/josh/dev/cloud/cloudmesh-cloud/cloudmesh/key/command/key.py", line 282, in do_key
+    keys = provider.keys()
+  File "/home/josh/dev/cloud/cloudmesh-admin/cloudmesh/mongo/DataBaseDecorator.py", line 87, in wrapper
+    current = f(*args, **kwargs)
+  File "/home/josh/dev/cloud/cloudmesh-cloud/cloudmesh/compute/vm/Provider.py", line 125, in keys
+    return self.p.keys()
+  File "/home/josh/dev/cloud/cloudmesh-google/cloudmesh/google/compute/Provider.py", line 1275, in keys
+    keys = self._key_dict(proj_metadata)
+  File "/home/josh/dev/cloud/cloudmesh-google/cloudmesh/google/compute/Provider.py", line 299, in _key_dict
+    name_items = key_items[0].split(":")
+IndexError: list index out of range
+
+======================================================================
+PASSED
+tests/cloud/test_08_vm_provider.py::Test_provider_vm::test_find_largest_id test-josh-vm
+VM is []
+PASSED
+tests/cloud/test_08_vm_provider.py::Test_provider_vm::test_provider_vm_create vm list --cloud=google
+List google
++--------+---------+--------+------+--------+--------+----------+---------------+-------------+----------------+-----------+-------------+----------------------+-----------+
+| Name   | Cloud   | Kind   | Id   | Type   | Zone   | Status   | External IP   | Disk Name   | OS Disk Size   | OS Name   | Disk Type   | Provisioning State   | Created   |
+|--------+---------+--------+------+--------+--------+----------+---------------+-------------+----------------+-----------+-------------+----------------------+-----------|
++--------+---------+--------+------+--------+--------+----------+---------------+-------------+----------------+-----------+-------------+----------------------+-----------+
+
+[35m
+# ######################################################################
+# test_provider_vm_create /tests/cloud/test_08_vm_provider.py 90
+# ######################################################################
+[0m
+[34m
+# ----------------------------------------------------------------------
+# result
+# ----------------------------------------------------------------------
+# 1517:image /home/josh/dev/cloud/cloudmesh-google/cloudmesh/google/compute/Provider.py
+# ----------------------------------------------------------------------
+# {'archiveSizeBytes': '13759726080',
+#  'cm': {'cloud': 'google',
+#         'collection': 'google-image',
+#         'created': '2020-05-07 23:08:50.088146',
+#         'driver': 'google',
+#         'kind': 'image',
+#         'modified': '2020-05-07 23:08:50.088146',
+#         'name': 'ubuntu-1910-eoan-v20200429'},
+#  'creationTimestamp': '2020-04-29T04:00:21.614-07:00',
+#  'description': 'Canonical, Ubuntu, 19.10, amd64 eoan image built on '
+#                 '2020-04-29, supports Shielded VM features',
+#  'diskSizeGb': '10',
+#  'family': 'ubuntu-1910',
+#  'guestOsFeatures': [{'type': 'VIRTIO_SCSI_MULTIQUEUE'},
+#                      {'type': 'UEFI_COMPATIBLE'}],
+#  'id': '3114068200481153194',
+#  'kind': 'compute#image',
+#  'labelFingerprint': '42WmSpB8rSM=',
+#  'licenseCodes': ['1171116710542819062'],
+#  'licenses': ['https://www.googleapis.com/compute/v1/projects/ubuntu-os-cloud/global/licenses/ubuntu-1910'],
+#  'name': 'ubuntu-1910-eoan-v20200429',
+#  'rawDisk': {'containerType': 'TAR', 'source': ''},
+#  'selfLink': 'https://www.googleapis.com/compute/v1/projects/ubuntu-os-cloud/global/images/ubuntu-1910-eoan-v20200429',
+#  'sourceType': 'RAW',
+#  'status': 'READY',
+#  'storageLocations': ['us',
+#                       'asia',
+#                       'us',
+#                       'eu',
+#                       'eu',
+#                       'eu',
+#                       'us',
+#                       'asia',
+#                       'asia',
+#                       'us',
+#                       'eu',
+#                       'us',
+#                       'us',
+#                       'asia',
+#                       'eu',
+#                       'asia',
+#                       'us',
+#                       'asia',
+#                       'us',
+#                       'eu',
+#                       'asia',
+#                       'asia',
+#                       'us'],
+#  'updated': '2020-05-07 23:08:48.997369'}
+# ----------------------------------------------------------------------
+[0m
+[34mINFO: Waiting for insert operation to finish : test-josh-vm-2[0m
+[32minsert on test-josh-vm-2 is complete.[0m
+[32mInstance test-josh-vm-2 created successfully.[0m
+[34m
+# ----------------------------------------------------------------------
+# result
+# ----------------------------------------------------------------------
+# 687:_info /home/josh/dev/cloud/cloudmesh-google/cloudmesh/google/compute/Provider.py
+# ----------------------------------------------------------------------
+# [{'cloud': 'google',
+#   'cm': {'cloud': 'google',
+#          'created': '2020-05-07T16:09:21.706-07:00 UTC',
+#          'driver': 'google',
+#          'kind': 'vm',
+#          'name': 'test-josh-vm-2',
+#          'status': 'RUNNING',
+#          'updated': '2020-05-07 23:09:28.997791'},
+#   'created': '2020-05-07T16:09:21.706-07:00',
+#   'deviceName': 'test-josh-vm-2-disk',
+#   'diskSizeGb': '10',
+#   'diskType': 'PERSISTENT',
+#   'fingerprint': '4sXvCrk4nGo=',
+#   'id': '2403896814082796494',
+#   'ip_public': '35.212.200.251',
+#   'kind': 'compute#instance',
+#   'machineType': 'g1-small',
+#   'metadata': [{'key': 'startup-script', 'value': ''},
+#                {'key': 'bucket', 'value': 'cloudmesh-bucket'}],
+#   'mode': 'READ_WRITE',
+#   'modified': '2020-05-07 23:09:28.997719',
+#   'name': 'test-josh-vm-2',
+#   'networkIP': '10.138.0.19',
+#   'network_fingerprint': 'zfKQ1JMFaEE=',
+#   'sourceImage': 'ubuntu-1910',
+#   'status': 'RUNNING',
+#   'type': 'Intel Broadwell',
+#   'zone': 'us-west1-a'}]
+# ----------------------------------------------------------------------
+[0m
+[34mINFO: Waiting for setMetadata operation to finish : test-josh-vm-2[0m
+[32msetMetadata on test-josh-vm-2 is complete.[0m
+[32mMetadata keys added to instance test-josh-vm-2[0m
+[34m
+# ----------------------------------------------------------------------
+# created
+# ----------------------------------------------------------------------
+# 220:create ./cloudmesh/compute/vm/Provider.py
+# ----------------------------------------------------------------------
+# [{'_id': ObjectId('5eb4951fcf07dd4e6317324a'),
+#   'cloud': 'google',
+#   'cm': {'cloud': 'google',
+#          'collection': 'google-vm',
+#          'created': '2020-05-07 23:09:19.531821',
+#          'creation': '10.00',
+#          'group': 'cloudmesh',
+#          'kind': 'vm',
+#          'label': 'test-josh-vm-2',
+#          'modified': '2020-05-07 23:09:35.550421',
+#          'name': 'test-josh-vm-2',
+#          'status': 'available'},
+#   'created': '2020-05-07T16:09:21.706-07:00',
+#   'deviceName': 'test-josh-vm-2-disk',
+#   'diskSizeGb': '10',
+#   'diskType': 'PERSISTENT',
+#   'fingerprint': '4sXvCrk4nGo=',
+#   'id': '2403896814082796494',
+#   'ip_public': '35.212.200.251',
+#   'kind': 'compute#instance',
+#   'machineType': 'g1-small',
+#   'metadata': '{\'cm\': "{\'kind\': \'vm\', \'name\': \'test-josh-vm-2\', '
+#               "'label': 'test-josh-vm-2', 'group': 'cloudmesh', 'cloud': "
+#               "'google', 'status': 'available', 'collection': 'google-vm', "
+#               "'created': '2020-05-07 23:09:19.531821', 'modified': "
+#               '\'2020-05-07 23:09:19.531821\', \'creation\': \'10.00\'}", '
+#               "'image': 'ubuntu-1910', 'size': 10}",
+#   'mode': 'READ_WRITE',
+#   'modified': '2020-05-07 23:09:28.997719',
+#   'name': 'test-josh-vm-2',
+#   'networkIP': '10.138.0.19',
+#   'network_fingerprint': 'zfKQ1JMFaEE=',
+#   'sourceImage': 'ubuntu-1910',
+#   'status': 'RUNNING',
+#   'type': 'Intel Broadwell',
+#   'zone': 'us-west1-a'}]
+# ----------------------------------------------------------------------
+[0m
+[34m
+# ----------------------------------------------------------------------
+# data
+# ----------------------------------------------------------------------
+# 98:test_provider_vm_create ./tests/cloud/test_08_vm_provider.py
+# ----------------------------------------------------------------------
+# [{'_id': ObjectId('5eb4951fcf07dd4e6317324a'),
+#   'cloud': 'google',
+#   'cm': {'cloud': 'google',
+#          'collection': 'google-vm',
+#          'created': '2020-05-07 23:09:19.531821',
+#          'creation': '10.00',
+#          'driver': 'google',
+#          'group': 'cloudmesh',
+#          'kind': 'vm',
+#          'label': 'test-josh-vm-2',
+#          'modified': '2020-05-07 23:09:37.331785',
+#          'name': 'test-josh-vm-2',
+#          'status': 'available',
+#          'updated': '2020-05-07 23:09:36.792477'},
+#   'created': '2020-05-07T16:09:21.706-07:00',
+#   'deviceName': 'test-josh-vm-2-disk',
+#   'diskSizeGb': '10',
+#   'diskType': 'PERSISTENT',
+#   'fingerprint': '4sXvCrk4nGo=',
+#   'id': '2403896814082796494',
+#   'ip_public': '35.212.200.251',
+#   'kind': 'compute#instance',
+#   'machineType': 'g1-small',
+#   'metadata': '{\'cm\': "{\'kind\': \'vm\', \'name\': \'test-josh-vm-2\', '
+#               "'label': 'test-josh-vm-2', 'group': 'cloudmesh', 'cloud': "
+#               "'google', 'status': 'available', 'collection': 'google-vm', "
+#               "'created': '2020-05-07 23:09:19.531821', 'modified': "
+#               '\'2020-05-07 23:09:19.531821\', \'creation\': \'10.00\'}", '
+#               "'image': 'ubuntu-1910', 'size': 10}",
+#   'mode': 'READ_WRITE',
+#   'modified': '2020-05-07 23:09:28.997719',
+#   'name': 'test-josh-vm-2',
+#   'networkIP': '10.138.0.19',
+#   'network_fingerprint': 'zfKQ1JMFaEE=',
+#   'sourceImage': 'ubuntu-1910',
+#   'status': 'RUNNING',
+#   'type': 'Intel Broadwell',
+#   'zone': 'us-west1-a'}]
+# ----------------------------------------------------------------------
+[0m
+[34m
+# ----------------------------------------------------------------------
+# result
+# ----------------------------------------------------------------------
+# 687:_info /home/josh/dev/cloud/cloudmesh-google/cloudmesh/google/compute/Provider.py
+# ----------------------------------------------------------------------
+# [{'cloud': 'google',
+#   'cm': {'cloud': 'google',
+#          'created': '2020-05-07T16:09:21.706-07:00 UTC',
+#          'driver': 'google',
+#          'kind': 'vm',
+#          'name': 'test-josh-vm-2',
+#          'status': 'RUNNING',
+#          'updated': '2020-05-07 23:09:38.991315'},
+#   'created': '2020-05-07T16:09:21.706-07:00',
+#   'deviceName': 'test-josh-vm-2-disk',
+#   'diskSizeGb': '10',
+#   'diskType': 'PERSISTENT',
+#   'fingerprint': 'G78DBxxtqDQ=',
+#   'id': '2403896814082796494',
+#   'ip_public': '35.212.200.251',
+#   'kind': 'compute#instance',
+#   'machineType': 'g1-small',
+#   'metadata': [{'key': 'startup-script', 'value': ''},
+#                {'key': 'bucket', 'value': 'cloudmesh-bucket'},
+#                {'key': 'cm',
+#                 'value': "{'kind': 'vm', 'name': 'test-josh-vm-2', 'label': "
+#                          "'test-josh-vm-2', 'group': 'cloudmesh', 'cloud': "
+#                          "'google', 'status': 'available', 'collection': "
+#                          "'google-vm', 'created': '2020-05-07 "
+#                          "23:09:19.531821', 'modified': '2020-05-07 "
+#                          "23:09:19.531821', 'creation': '10.00'}"},
+#                {'key': 'image', 'value': 'ubuntu-1910'},
+#                {'key': 'size', 'value': '10'}],
+#   'mode': 'READ_WRITE',
+#   'modified': '2020-05-07 23:09:38.991260',
+#   'name': 'test-josh-vm-2',
+#   'networkIP': '10.138.0.19',
+#   'network_fingerprint': 'zfKQ1JMFaEE=',
+#   'sourceImage': 'ubuntu-1910',
+#   'status': 'RUNNING',
+#   'type': 'Intel Broadwell',
+#   'zone': 'us-west1-a'}]
+# ----------------------------------------------------------------------
+[0m
+status: {'name': 'test-josh-vm-2', 'status:': 'RUNNING', 'cm.status': 'RUNNING'}
+PASSED
+tests/cloud/test_08_vm_provider.py::Test_provider_vm::test_provider_vmprovider_vm_list 
+[35m
+# ######################################################################
+# test_provider_vmprovider_vm_list /tests/cloud/test_08_vm_provider.py 111
+# ######################################################################
+[0m
++----------------+---------+--------+---------------------+-----------------+------------+----------+----------------+---------------------+----------------+-------------+-------------+----------------------+-------------------------------+
+| Name           | Cloud   | Kind   |                  Id | Type            | Zone       | Status   | External IP    | Disk Name           |   OS Disk Size | OS Name     | Disk Type   | Provisioning State   | Created                       |
+|----------------+---------+--------+---------------------+-----------------+------------+----------+----------------+---------------------+----------------+-------------+-------------+----------------------+-------------------------------|
+| test-josh-vm-2 | google  | vm     | 2403896814082796494 | Intel Broadwell | us-west1-a | RUNNING  | 35.212.200.251 | test-josh-vm-2-disk |             10 | ubuntu-1910 | PERSISTENT  | READ_WRITE           | 2020-05-07T16:09:21.706-07:00 |
++----------------+---------+--------+---------------------+-----------------+------------+----------+----------------+---------------------+----------------+-------------+-------------+----------------------+-------------------------------+
+None
+PASSED
+tests/cloud/test_08_vm_provider.py::Test_provider_vm::test_provider_vm_wait 
+[35m
+# ######################################################################
+# test_provider_vm_wait /tests/cloud/test_08_vm_provider.py 119
+# ######################################################################
+[0m
+FAILED
+tests/cloud/test_08_vm_provider.py::Test_provider_vm::test_provider_vm_ssh 
+[35m
+# ######################################################################
+# test_provider_vm_ssh /tests/cloud/test_08_vm_provider.py 129
+# ######################################################################
+[0m
+[31mb'ssh: connect to host 35.212.200.251 port 22: Connection refused\r\n'[0m
+
+FAILED
+tests/cloud/test_08_vm_provider.py::Test_provider_vm::test_provider_vm_info 
+[35m
+# ######################################################################
+# test_provider_vm_info /tests/cloud/test_08_vm_provider.py 143
+# ######################################################################
+[0m
+[34m
+# ----------------------------------------------------------------------
+# result
+# ----------------------------------------------------------------------
+# 687:_info /home/josh/dev/cloud/cloudmesh-google/cloudmesh/google/compute/Provider.py
+# ----------------------------------------------------------------------
+# [{'cloud': 'google',
+#   'cm': {'cloud': 'google',
+#          'created': '2020-05-07T16:09:21.706-07:00 UTC',
+#          'driver': 'google',
+#          'kind': 'vm',
+#          'name': 'test-josh-vm-2',
+#          'status': 'RUNNING',
+#          'updated': '2020-05-07 23:09:43.498016'},
+#   'created': '2020-05-07T16:09:21.706-07:00',
+#   'deviceName': 'test-josh-vm-2-disk',
+#   'diskSizeGb': '10',
+#   'diskType': 'PERSISTENT',
+#   'fingerprint': 'G78DBxxtqDQ=',
+#   'id': '2403896814082796494',
+#   'ip_public': '35.212.200.251',
+#   'kind': 'compute#instance',
+#   'machineType': 'g1-small',
+#   'metadata': [{'key': 'startup-script', 'value': ''},
+#                {'key': 'bucket', 'value': 'cloudmesh-bucket'},
+#                {'key': 'cm',
+#                 'value': "{'kind': 'vm', 'name': 'test-josh-vm-2', 'label': "
+#                          "'test-josh-vm-2', 'group': 'cloudmesh', 'cloud': "
+#                          "'google', 'status': 'available', 'collection': "
+#                          "'google-vm', 'created': '2020-05-07 "
+#                          "23:09:19.531821', 'modified': '2020-05-07 "
+#                          "23:09:19.531821', 'creation': '10.00'}"},
+#                {'key': 'image', 'value': 'ubuntu-1910'},
+#                {'key': 'size', 'value': '10'}],
+#   'mode': 'READ_WRITE',
+#   'modified': '2020-05-07 23:09:43.497961',
+#   'name': 'test-josh-vm-2',
+#   'networkIP': '10.138.0.19',
+#   'network_fingerprint': 'zfKQ1JMFaEE=',
+#   'sourceImage': 'ubuntu-1910',
+#   'status': 'RUNNING',
+#   'type': 'Intel Broadwell',
+#   'zone': 'us-west1-a'}]
+# ----------------------------------------------------------------------
+[0m
+dry run info():
+[{'cloud': 'google',
+  'cm': {'cloud': 'google',
+         'created': '2020-05-07T16:09:21.706-07:00 UTC',
+         'driver': 'google',
+         'kind': 'vm',
+         'name': 'test-josh-vm-2',
+         'status': 'RUNNING',
+         'updated': '2020-05-07 23:09:43.498016'},
+  'created': '2020-05-07T16:09:21.706-07:00',
+  'deviceName': 'test-josh-vm-2-disk',
+  'diskSizeGb': '10',
+  'diskType': 'PERSISTENT',
+  'fingerprint': 'G78DBxxtqDQ=',
+  'id': '2403896814082796494',
+  'ip_public': '35.212.200.251',
+  'kind': 'compute#instance',
+  'machineType': 'g1-small',
+  'metadata': [{'key': 'startup-script', 'value': ''},
+               {'key': 'bucket', 'value': 'cloudmesh-bucket'},
+               {'key': 'cm',
+                'value': "{'kind': 'vm', 'name': 'test-josh-vm-2', 'label': "
+                         "'test-josh-vm-2', 'group': 'cloudmesh', 'cloud': "
+                         "'google', 'status': 'available', 'collection': "
+                         "'google-vm', 'created': '2020-05-07 "
+                         "23:09:19.531821', 'modified': '2020-05-07 "
+                         "23:09:19.531821', 'creation': '10.00'}"},
+               {'key': 'image', 'value': 'ubuntu-1910'},
+               {'key': 'size', 'value': '10'}],
+  'mode': 'READ_WRITE',
+  'modified': '2020-05-07 23:09:43.497961',
+  'name': 'test-josh-vm-2',
+  'networkIP': '10.138.0.19',
+  'network_fingerprint': 'zfKQ1JMFaEE=',
+  'sourceImage': 'ubuntu-1910',
+  'status': 'RUNNING',
+  'type': 'Intel Broadwell',
+  'zone': 'us-west1-a'}]
+PASSED
+tests/cloud/test_08_vm_provider.py::Test_provider_vm::test_vm_status 
+[35m
+# ######################################################################
+# test_vm_status /tests/cloud/test_08_vm_provider.py 152
+# ######################################################################
+[0m
+[34m
+# ----------------------------------------------------------------------
+# result
+# ----------------------------------------------------------------------
+# 687:_info /home/josh/dev/cloud/cloudmesh-google/cloudmesh/google/compute/Provider.py
+# ----------------------------------------------------------------------
+# [{'cloud': 'google',
+#   'cm': {'cloud': 'google',
+#          'created': '2020-05-07T16:09:21.706-07:00 UTC',
+#          'driver': 'google',
+#          'kind': 'vm',
+#          'name': 'test-josh-vm-2',
+#          'status': 'RUNNING',
+#          'updated': '2020-05-07 23:09:45.043861'},
+#   'created': '2020-05-07T16:09:21.706-07:00',
+#   'deviceName': 'test-josh-vm-2-disk',
+#   'diskSizeGb': '10',
+#   'diskType': 'PERSISTENT',
+#   'fingerprint': 'G78DBxxtqDQ=',
+#   'id': '2403896814082796494',
+#   'ip_public': '35.212.200.251',
+#   'kind': 'compute#instance',
+#   'machineType': 'g1-small',
+#   'metadata': [{'key': 'startup-script', 'value': ''},
+#                {'key': 'bucket', 'value': 'cloudmesh-bucket'},
+#                {'key': 'cm',
+#                 'value': "{'kind': 'vm', 'name': 'test-josh-vm-2', 'label': "
+#                          "'test-josh-vm-2', 'group': 'cloudmesh', 'cloud': "
+#                          "'google', 'status': 'available', 'collection': "
+#                          "'google-vm', 'created': '2020-05-07 "
+#                          "23:09:19.531821', 'modified': '2020-05-07 "
+#                          "23:09:19.531821', 'creation': '10.00'}"},
+#                {'key': 'image', 'value': 'ubuntu-1910'},
+#                {'key': 'size', 'value': '10'}],
+#   'mode': 'READ_WRITE',
+#   'modified': '2020-05-07 23:09:45.043812',
+#   'name': 'test-josh-vm-2',
+#   'networkIP': '10.138.0.19',
+#   'network_fingerprint': 'zfKQ1JMFaEE=',
+#   'sourceImage': 'ubuntu-1910',
+#   'status': 'RUNNING',
+#   'type': 'Intel Broadwell',
+#   'zone': 'us-west1-a'}]
+# ----------------------------------------------------------------------
+[0m
+{'name': 'test-josh-vm-2', 'status:': 'RUNNING', 'cm.status': 'RUNNING'}
+PASSED
+tests/cloud/test_08_vm_provider.py::Test_provider_vm::test_provider_vm_stop 
+[35m
+# ######################################################################
+# test_provider_vm_stop /tests/cloud/test_08_vm_provider.py 168
+# ######################################################################
+[0m
+[34mINFO: Waiting for stop operation to finish : test-josh-vm-2[0m
+[32mstop on test-josh-vm-2 is complete.[0m
+[34m
+# ----------------------------------------------------------------------
+# result
+# ----------------------------------------------------------------------
+# 687:_info /home/josh/dev/cloud/cloudmesh-google/cloudmesh/google/compute/Provider.py
+# ----------------------------------------------------------------------
+# [{'cloud': 'google',
+#   'cm': {'cloud': 'google',
+#          'created': '2020-05-07T16:09:21.706-07:00 UTC',
+#          'driver': 'google',
+#          'kind': 'vm',
+#          'name': 'test-josh-vm-2',
+#          'status': 'TERMINATED',
+#          'updated': '2020-05-07 23:10:43.608002'},
+#   'created': '2020-05-07T16:09:21.706-07:00',
+#   'deviceName': 'test-josh-vm-2-disk',
+#   'diskSizeGb': '10',
+#   'diskType': 'PERSISTENT',
+#   'fingerprint': 'LB7gqfeFAQo=',
+#   'id': '2403896814082796494',
+#   'ip_public': 'Not Defined',
+#   'kind': 'compute#instance',
+#   'machineType': 'g1-small',
+#   'metadata': [{'key': 'startup-script', 'value': ''},
+#                {'key': 'bucket', 'value': 'cloudmesh-bucket'},
+#                {'key': 'cm',
+#                 'value': "{'kind': 'vm', 'name': 'test-josh-vm-2', 'label': "
+#                          "'test-josh-vm-2', 'group': 'cloudmesh', 'cloud': "
+#                          "'google', 'status': 'available', 'collection': "
+#                          "'google-vm', 'created': '2020-05-07 "
+#                          "23:09:19.531821', 'modified': '2020-05-07 "
+#                          "23:09:19.531821', 'creation': '10.00'}"},
+#                {'key': 'image', 'value': 'ubuntu-1910'},
+#                {'key': 'size', 'value': '10'}],
+#   'mode': 'READ_WRITE',
+#   'modified': '2020-05-07 23:10:43.607951',
+#   'name': 'test-josh-vm-2',
+#   'networkIP': '10.138.0.19',
+#   'network_fingerprint': '_OQdwvP2-4g=',
+#   'sourceImage': 'ubuntu-1910',
+#   'status': 'TERMINATED',
+#   'type': 'Unknown CPU Platform',
+#   'zone': 'us-west1-a'}]
+# ----------------------------------------------------------------------
+[0m
+[34m
+# ----------------------------------------------------------------------
+# result
+# ----------------------------------------------------------------------
+# 687:_info /home/josh/dev/cloud/cloudmesh-google/cloudmesh/google/compute/Provider.py
+# ----------------------------------------------------------------------
+# [{'cloud': 'google',
+#   'cm': {'cloud': 'google',
+#          'created': '2020-05-07T16:09:21.706-07:00 UTC',
+#          'driver': 'google',
+#          'kind': 'vm',
+#          'name': 'test-josh-vm-2',
+#          'status': 'TERMINATED',
+#          'updated': '2020-05-07 23:10:50.055838'},
+#   'created': '2020-05-07T16:09:21.706-07:00',
+#   'deviceName': 'test-josh-vm-2-disk',
+#   'diskSizeGb': '10',
+#   'diskType': 'PERSISTENT',
+#   'fingerprint': 'LB7gqfeFAQo=',
+#   'id': '2403896814082796494',
+#   'ip_public': 'Not Defined',
+#   'kind': 'compute#instance',
+#   'machineType': 'g1-small',
+#   'metadata': [{'key': 'startup-script', 'value': ''},
+#                {'key': 'bucket', 'value': 'cloudmesh-bucket'},
+#                {'key': 'cm',
+#                 'value': "{'kind': 'vm', 'name': 'test-josh-vm-2', 'label': "
+#                          "'test-josh-vm-2', 'group': 'cloudmesh', 'cloud': "
+#                          "'google', 'status': 'available', 'collection': "
+#                          "'google-vm', 'created': '2020-05-07 "
+#                          "23:09:19.531821', 'modified': '2020-05-07 "
+#                          "23:09:19.531821', 'creation': '10.00'}"},
+#                {'key': 'image', 'value': 'ubuntu-1910'},
+#                {'key': 'size', 'value': '10'}],
+#   'mode': 'READ_WRITE',
+#   'modified': '2020-05-07 23:10:50.055780',
+#   'name': 'test-josh-vm-2',
+#   'networkIP': '10.138.0.19',
+#   'network_fingerprint': '_OQdwvP2-4g=',
+#   'sourceImage': 'ubuntu-1910',
+#   'status': 'TERMINATED',
+#   'type': 'Unknown CPU Platform',
+#   'zone': 'us-west1-a'}]
+# ----------------------------------------------------------------------
+[0m
+[34m
+# ----------------------------------------------------------------------
+# data
+# ----------------------------------------------------------------------
+# 184:test_provider_vm_stop ./tests/cloud/test_08_vm_provider.py
+# ----------------------------------------------------------------------
+# [{'cloud': 'google',
+#   'cm': {'cloud': 'google',
+#          'collection': 'google-vm',
+#          'created': '2020-05-07T16:09:21.706-07:00 UTC',
+#          'creation': '10.00',
+#          'driver': 'google',
+#          'group': 'cloudmesh',
+#          'kind': 'vm',
+#          'label': 'test-josh-vm-2',
+#          'modified': '2020-05-07 23:10:43.641330',
+#          'name': 'test-josh-vm-2',
+#          'status': 'TERMINATED',
+#          'updated': '2020-05-07 23:10:43.608002'},
+#   'created': '2020-05-07T16:09:21.706-07:00',
+#   'deviceName': 'test-josh-vm-2-disk',
+#   'diskSizeGb': '10',
+#   'diskType': 'PERSISTENT',
+#   'fingerprint': 'LB7gqfeFAQo=',
+#   'id': '2403896814082796494',
+#   'ip_public': 'Not Defined',
+#   'kind': 'compute#instance',
+#   'machineType': 'g1-small',
+#   'metadata': [{'key': 'startup-script', 'value': ''},
+#                {'key': 'bucket', 'value': 'cloudmesh-bucket'},
+#                {'key': 'cm',
+#                 'value': "{'kind': 'vm', 'name': 'test-josh-vm-2', 'label': "
+#                          "'test-josh-vm-2', 'group': 'cloudmesh', 'cloud': "
+#                          "'google', 'status': 'available', 'collection': "
+#                          "'google-vm', 'created': '2020-05-07 "
+#                          "23:09:19.531821', 'modified': '2020-05-07 "
+#                          "23:09:19.531821', 'creation': '10.00'}"},
+#                {'key': 'image', 'value': 'ubuntu-1910'},
+#                {'key': 'size', 'value': '10'}],
+#   'mode': 'READ_WRITE',
+#   'modified': '2020-05-07 23:10:43.607951',
+#   'name': 'test-josh-vm-2',
+#   'networkIP': '10.138.0.19',
+#   'network_fingerprint': '_OQdwvP2-4g=',
+#   'sourceImage': 'ubuntu-1910',
+#   'status': 'TERMINATED',
+#   'type': 'Unknown CPU Platform',
+#   'zone': 'us-west1-a'}]
+# ----------------------------------------------------------------------
+[0m
+{'name': 'test-josh-vm-2', 'status:': 'TERMINATED', 'cm.status': 'TERMINATED'}
+PASSED
+tests/cloud/test_08_vm_provider.py::Test_provider_vm::test_provider_vm_start 
+[35m
+# ######################################################################
+# test_provider_vm_start /tests/cloud/test_08_vm_provider.py 188
+# ######################################################################
+[0m
+[34mINFO: Waiting for start operation to finish : test-josh-vm-2[0m
+[32mstart on test-josh-vm-2 is complete.[0m
+[34m
+# ----------------------------------------------------------------------
+# result
+# ----------------------------------------------------------------------
+# 687:_info /home/josh/dev/cloud/cloudmesh-google/cloudmesh/google/compute/Provider.py
+# ----------------------------------------------------------------------
+# [{'cloud': 'google',
+#   'cm': {'cloud': 'google',
+#          'created': '2020-05-07T16:09:21.706-07:00 UTC',
+#          'driver': 'google',
+#          'kind': 'vm',
+#          'name': 'test-josh-vm-2',
+#          'status': 'RUNNING',
+#          'updated': '2020-05-07 23:11:21.519382'},
+#   'created': '2020-05-07T16:09:21.706-07:00',
+#   'deviceName': 'test-josh-vm-2-disk',
+#   'diskSizeGb': '10',
+#   'diskType': 'PERSISTENT',
+#   'fingerprint': 'BDwr-mLotW0=',
+#   'id': '2403896814082796494',
+#   'ip_public': '35.212.172.27',
+#   'kind': 'compute#instance',
+#   'machineType': 'g1-small',
+#   'metadata': [{'key': 'startup-script', 'value': ''},
+#                {'key': 'bucket', 'value': 'cloudmesh-bucket'},
+#                {'key': 'cm',
+#                 'value': "{'kind': 'vm', 'name': 'test-josh-vm-2', 'label': "
+#                          "'test-josh-vm-2', 'group': 'cloudmesh', 'cloud': "
+#                          "'google', 'status': 'available', 'collection': "
+#                          "'google-vm', 'created': '2020-05-07 "
+#                          "23:09:19.531821', 'modified': '2020-05-07 "
+#                          "23:09:19.531821', 'creation': '10.00'}"},
+#                {'key': 'image', 'value': 'ubuntu-1910'},
+#                {'key': 'size', 'value': '10'}],
+#   'mode': 'READ_WRITE',
+#   'modified': '2020-05-07 23:11:21.519332',
+#   'name': 'test-josh-vm-2',
+#   'networkIP': '10.138.0.19',
+#   'network_fingerprint': 'rh02oZwt9eo=',
+#   'sourceImage': 'ubuntu-1910',
+#   'status': 'RUNNING',
+#   'type': 'Intel Broadwell',
+#   'zone': 'us-west1-a'}]
+# ----------------------------------------------------------------------
+[0m
+[34m
+# ----------------------------------------------------------------------
+# result
+# ----------------------------------------------------------------------
+# 687:_info /home/josh/dev/cloud/cloudmesh-google/cloudmesh/google/compute/Provider.py
+# ----------------------------------------------------------------------
+# [{'cloud': 'google',
+#   'cm': {'cloud': 'google',
+#          'created': '2020-05-07T16:09:21.706-07:00 UTC',
+#          'driver': 'google',
+#          'kind': 'vm',
+#          'name': 'test-josh-vm-2',
+#          'status': 'RUNNING',
+#          'updated': '2020-05-07 23:11:28.043964'},
+#   'created': '2020-05-07T16:09:21.706-07:00',
+#   'deviceName': 'test-josh-vm-2-disk',
+#   'diskSizeGb': '10',
+#   'diskType': 'PERSISTENT',
+#   'fingerprint': 'BDwr-mLotW0=',
+#   'id': '2403896814082796494',
+#   'ip_public': '35.212.172.27',
+#   'kind': 'compute#instance',
+#   'machineType': 'g1-small',
+#   'metadata': [{'key': 'startup-script', 'value': ''},
+#                {'key': 'bucket', 'value': 'cloudmesh-bucket'},
+#                {'key': 'cm',
+#                 'value': "{'kind': 'vm', 'name': 'test-josh-vm-2', 'label': "
+#                          "'test-josh-vm-2', 'group': 'cloudmesh', 'cloud': "
+#                          "'google', 'status': 'available', 'collection': "
+#                          "'google-vm', 'created': '2020-05-07 "
+#                          "23:09:19.531821', 'modified': '2020-05-07 "
+#                          "23:09:19.531821', 'creation': '10.00'}"},
+#                {'key': 'image', 'value': 'ubuntu-1910'},
+#                {'key': 'size', 'value': '10'}],
+#   'mode': 'READ_WRITE',
+#   'modified': '2020-05-07 23:11:28.043922',
+#   'name': 'test-josh-vm-2',
+#   'networkIP': '10.138.0.19',
+#   'network_fingerprint': 'rh02oZwt9eo=',
+#   'sourceImage': 'ubuntu-1910',
+#   'status': 'RUNNING',
+#   'type': 'Intel Broadwell',
+#   'zone': 'us-west1-a'}]
+# ----------------------------------------------------------------------
+[0m
+[34m
+# ----------------------------------------------------------------------
+# data
+# ----------------------------------------------------------------------
+# 203:test_provider_vm_start ./tests/cloud/test_08_vm_provider.py
+# ----------------------------------------------------------------------
+# [{'cloud': 'google',
+#   'cm': {'cloud': 'google',
+#          'collection': 'google-vm',
+#          'created': '2020-05-07T16:09:21.706-07:00 UTC',
+#          'creation': '10.00',
+#          'driver': 'google',
+#          'group': 'cloudmesh',
+#          'kind': 'vm',
+#          'label': 'test-josh-vm-2',
+#          'modified': '2020-05-07 23:11:21.554428',
+#          'name': 'test-josh-vm-2',
+#          'status': 'RUNNING',
+#          'updated': '2020-05-07 23:11:21.519382'},
+#   'created': '2020-05-07T16:09:21.706-07:00',
+#   'deviceName': 'test-josh-vm-2-disk',
+#   'diskSizeGb': '10',
+#   'diskType': 'PERSISTENT',
+#   'fingerprint': 'BDwr-mLotW0=',
+#   'id': '2403896814082796494',
+#   'ip_public': '35.212.172.27',
+#   'kind': 'compute#instance',
+#   'machineType': 'g1-small',
+#   'metadata': [{'key': 'startup-script', 'value': ''},
+#                {'key': 'bucket', 'value': 'cloudmesh-bucket'},
+#                {'key': 'cm',
+#                 'value': "{'kind': 'vm', 'name': 'test-josh-vm-2', 'label': "
+#                          "'test-josh-vm-2', 'group': 'cloudmesh', 'cloud': "
+#                          "'google', 'status': 'available', 'collection': "
+#                          "'google-vm', 'created': '2020-05-07 "
+#                          "23:09:19.531821', 'modified': '2020-05-07 "
+#                          "23:09:19.531821', 'creation': '10.00'}"},
+#                {'key': 'image', 'value': 'ubuntu-1910'},
+#                {'key': 'size', 'value': '10'}],
+#   'mode': 'READ_WRITE',
+#   'modified': '2020-05-07 23:11:21.519332',
+#   'name': 'test-josh-vm-2',
+#   'networkIP': '10.138.0.19',
+#   'network_fingerprint': 'rh02oZwt9eo=',
+#   'sourceImage': 'ubuntu-1910',
+#   'status': 'RUNNING',
+#   'type': 'Intel Broadwell',
+#   'zone': 'us-west1-a'}]
+# ----------------------------------------------------------------------
+[0m
+{'name': 'test-josh-vm-2', 'status:': 'RUNNING', 'cm.status': 'RUNNING'}
+PASSED
+tests/cloud/test_08_vm_provider.py::Test_provider_vm::test_provider_vm_terminate 
+[35m
+# ######################################################################
+# test_provider_vm_terminate /tests/cloud/test_08_vm_provider.py 210
+# ######################################################################
+[0m
+[34m
+# ----------------------------------------------------------------------
+# result
+# ----------------------------------------------------------------------
+# 687:_info /home/josh/dev/cloud/cloudmesh-google/cloudmesh/google/compute/Provider.py
+# ----------------------------------------------------------------------
+# [{'cloud': 'google',
+#   'cm': {'cloud': 'google',
+#          'created': '2020-05-07T16:09:21.706-07:00 UTC',
+#          'driver': 'google',
+#          'kind': 'vm',
+#          'name': 'test-josh-vm-2',
+#          'status': 'RUNNING',
+#          'updated': '2020-05-07 23:11:30.707004'},
+#   'created': '2020-05-07T16:09:21.706-07:00',
+#   'deviceName': 'test-josh-vm-2-disk',
+#   'diskSizeGb': '10',
+#   'diskType': 'PERSISTENT',
+#   'fingerprint': 'BDwr-mLotW0=',
+#   'id': '2403896814082796494',
+#   'ip_public': '35.212.172.27',
+#   'kind': 'compute#instance',
+#   'machineType': 'g1-small',
+#   'metadata': [{'key': 'startup-script', 'value': ''},
+#                {'key': 'bucket', 'value': 'cloudmesh-bucket'},
+#                {'key': 'cm',
+#                 'value': "{'kind': 'vm', 'name': 'test-josh-vm-2', 'label': "
+#                          "'test-josh-vm-2', 'group': 'cloudmesh', 'cloud': "
+#                          "'google', 'status': 'available', 'collection': "
+#                          "'google-vm', 'created': '2020-05-07 "
+#                          "23:09:19.531821', 'modified': '2020-05-07 "
+#                          "23:09:19.531821', 'creation': '10.00'}"},
+#                {'key': 'image', 'value': 'ubuntu-1910'},
+#                {'key': 'size', 'value': '10'}],
+#   'mode': 'READ_WRITE',
+#   'modified': '2020-05-07 23:11:30.706954',
+#   'name': 'test-josh-vm-2',
+#   'networkIP': '10.138.0.19',
+#   'network_fingerprint': 'rh02oZwt9eo=',
+#   'sourceImage': 'ubuntu-1910',
+#   'status': 'RUNNING',
+#   'type': 'Intel Broadwell',
+#   'zone': 'us-west1-a'}]
+# ----------------------------------------------------------------------
+[0m
+[34mINFO: Waiting for delete operation to finish : test-josh-vm-2[0m
+[32mdelete on test-josh-vm-2 is complete.[0m
+[32mtest-josh-vm-2 deleted successfully.[0m
+[{'cloud': 'google',
+  'cm': {'cloud': 'google',
+         'collection': 'google-vm',
+         'created': '2020-05-07T16:09:21.706-07:00 UTC',
+         'creation': '10.00',
+         'driver': 'google',
+         'group': 'cloudmesh',
+         'kind': 'vm',
+         'label': 'test-josh-vm-2',
+         'modified': '2020-05-07 23:14:14.569535',
+         'name': 'test-josh-vm-2',
+         'status': 'RUNNING',
+         'updated': '2020-05-07 23:11:30.707004'},
+  'created': '2020-05-07T16:09:21.706-07:00',
+  'deviceName': 'test-josh-vm-2-disk',
+  'diskSizeGb': '10',
+  'diskType': 'PERSISTENT',
+  'fingerprint': 'BDwr-mLotW0=',
+  'id': '2403896814082796494',
+  'ip_public': '35.212.172.27',
+  'kind': 'compute#instance',
+  'machineType': 'g1-small',
+  'metadata': [{'key': 'startup-script', 'value': ''},
+               {'key': 'bucket', 'value': 'cloudmesh-bucket'},
+               {'key': 'cm',
+                'value': "{'kind': 'vm', 'name': 'test-josh-vm-2', 'label': "
+                         "'test-josh-vm-2', 'group': 'cloudmesh', 'cloud': "
+                         "'google', 'status': 'available', 'collection': "
+                         "'google-vm', 'created': '2020-05-07 "
+                         "23:09:19.531821', 'modified': '2020-05-07 "
+                         "23:09:19.531821', 'creation': '10.00'}"},
+               {'key': 'image', 'value': 'ubuntu-1910'},
+               {'key': 'size', 'value': '10'}],
+  'mode': 'READ_WRITE',
+  'modified': '2020-05-07 23:11:30.706954',
+  'name': 'test-josh-vm-2',
+  'networkIP': '10.138.0.19',
+  'network_fingerprint': 'rh02oZwt9eo=',
+  'sourceImage': 'ubuntu-1910',
+  'status': 'DELETED',
+  'type': 'Intel Broadwell',
+  'zone': 'us-west1-a'}]
+PASSED
+tests/cloud/test_08_vm_provider.py::Test_provider_vm::test_benchmark 
+
++-------------------------------------------------------+----------+---------+---------------------+--------+------------------+--------+-------+-----------------------------------------------------+
+| Name                                                  | Status   |    Time | Start               | tag    | Node             | User   | OS    | Version                                             |
+|-------------------------------------------------------+----------+---------+---------------------+--------+------------------+--------+-------+-----------------------------------------------------|
+| test_00_sys/test_cms_help                             | ok       |   2.386 | 2020-05-07 23:07:39 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_01_clean_local_remote/test_cms_init              | ok       |   8.795 | 2020-05-07 23:07:42 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_clear_local_database                 | ok       |   0.034 | 2020-05-07 23:07:52 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_clear_cloud_database                 | ok       |   0.016 | 2020-05-07 23:08:08 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_upload_key_to_database               | ok       |   0.039 | 2020-05-07 23:07:52 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_upload_key_to_cloud                  | ok       |  10.362 | 2020-05-07 23:07:52 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_list_key_from_cloud                  | failed   |         | 2020-05-07 23:08:03 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_delete_key_from_cloud                | failed   |         | 2020-05-07 23:08:04 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_key_delete                           | ok       |   0.022 | 2020-05-07 23:08:05 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_cms_local                            | ok       |   2.752 | 2020-05-07 23:08:05 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_cms_cloud                            | ok       |  15.804 | 2020-05-07 23:08:08 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_04_flavor/test_empty_database                    | ok       |   0.017 | 2020-05-07 23:08:24 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_04_flavor/test_provider_flavor                   | ok       |   2.483 | 2020-05-07 23:08:24 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_04_flavor/test_provider_flavor_update            | ok       |   1.595 | 2020-05-07 23:08:26 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_04_flavor/test_cms_flavor_refresh                | ok       |   3.844 | 2020-05-07 23:08:28 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_04_flavor/test_cms_flavor                        | ok       |   1.509 | 2020-05-07 23:08:32 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_05_image/test_empty_database                     | ok       |   0.018 | 2020-05-07 23:08:34 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_05_image/test_provider_image                     | ok       |   4.891 | 2020-05-07 23:08:34 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_05_image/test_provider_image_update              | ok       |   5.251 | 2020-05-07 23:08:39 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_05_image/test_cms_image_refresh                  | ok       |   6.476 | 2020-05-07 23:08:44 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_05_image/test_cms_image                          | ok       |   1.496 | 2020-05-07 23:08:51 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_07_secgroup_provider/test_load                   | ok       |   0.048 | 2020-05-07 23:08:52 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_07_secgroup_provider/test_list_variables         | ok       |   0.002 | 2020-05-07 23:08:53 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_07_secgroup_provider/test_list_secgroups         | failed   |         | 2020-05-07 23:08:53 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_07_secgroup_provider/test_list_secgroups_rules   | failed   |         | 2020-05-07 23:08:53 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_07_secgroup_provider/test_secgroups_add          | ok       |   0.04  | 2020-05-07 23:08:53 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_07_secgroup_provider/test_upload_secgroup        | failed   |         | 2020-05-07 23:08:53 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_07_secgroup_provider/test_secgroups_delete       | failed   |         | 2020-05-07 23:08:53 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_07_secgroup_provider/test_secgroups_delete_again | failed   |         | 2020-05-07 23:08:53 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_08_vm_provider/test_provider_vm_create           | ok       |  17.872 | 2020-05-07 23:09:19 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| create vm test-josh-vm-2                              | failed   |   9.515 | 2020-05-07 23:09:19 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_08_vm_provider/test_provider_vmprovider_vm_list  | ok       |   1.393 | 2020-05-07 23:09:39 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_08_vm_provider/test_provider_vm_wait             | failed   |         | 2020-05-07 23:09:40 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_08_vm_provider/test_provider_vm_ssh              | failed   |         | 2020-05-07 23:09:40 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_08_vm_provider/test_provider_vm_info             | ok       |   1.399 | 2020-05-07 23:09:42 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_08_vm_provider/test_vm_status                    | ok       |   1.537 | 2020-05-07 23:09:43 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_08_vm_provider/test_provider_vm_stop             | ok       |  58.573 | 2020-05-07 23:09:45 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_08_vm_provider/test_provider_vm_start            | ok       |  31.46  | 2020-05-07 23:10:50 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_08_vm_provider/test_provider_vm_terminate        | ok       | 166.49  | 2020-05-07 23:11:28 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
++-------------------------------------------------------+----------+---------+---------------------+--------+------------------+--------+-------+-----------------------------------------------------+
+
+# csv,timer,status,time,start,tag,uname.node,user,uname.system,platform.version
+# csv,test_00_sys/test_cms_help,ok,2.386,2020-05-07 23:07:39,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_01_clean_local_remote/test_cms_init,ok,8.795,2020-05-07 23:07:42,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_clear_local_database,ok,0.034,2020-05-07 23:07:52,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_clear_cloud_database,ok,0.016,2020-05-07 23:08:08,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_upload_key_to_database,ok,0.039,2020-05-07 23:07:52,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_upload_key_to_cloud,ok,10.362,2020-05-07 23:07:52,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_list_key_from_cloud,failed,None,2020-05-07 23:08:03,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_delete_key_from_cloud,failed,None,2020-05-07 23:08:04,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_key_delete,ok,0.022,2020-05-07 23:08:05,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_cms_local,ok,2.752,2020-05-07 23:08:05,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_cms_cloud,ok,15.804,2020-05-07 23:08:08,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_04_flavor/test_empty_database,ok,0.017,2020-05-07 23:08:24,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_04_flavor/test_provider_flavor,ok,2.483,2020-05-07 23:08:24,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_04_flavor/test_provider_flavor_update,ok,1.595,2020-05-07 23:08:26,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_04_flavor/test_cms_flavor_refresh,ok,3.844,2020-05-07 23:08:28,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_04_flavor/test_cms_flavor,ok,1.509,2020-05-07 23:08:32,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_05_image/test_empty_database,ok,0.018,2020-05-07 23:08:34,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_05_image/test_provider_image,ok,4.891,2020-05-07 23:08:34,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_05_image/test_provider_image_update,ok,5.251,2020-05-07 23:08:39,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_05_image/test_cms_image_refresh,ok,6.476,2020-05-07 23:08:44,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_05_image/test_cms_image,ok,1.496,2020-05-07 23:08:51,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_07_secgroup_provider/test_load,ok,0.048,2020-05-07 23:08:52,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_07_secgroup_provider/test_list_variables,ok,0.002,2020-05-07 23:08:53,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_07_secgroup_provider/test_list_secgroups,failed,None,2020-05-07 23:08:53,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_07_secgroup_provider/test_list_secgroups_rules,failed,None,2020-05-07 23:08:53,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_07_secgroup_provider/test_secgroups_add,ok,0.04,2020-05-07 23:08:53,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_07_secgroup_provider/test_upload_secgroup,failed,None,2020-05-07 23:08:53,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_07_secgroup_provider/test_secgroups_delete,failed,None,2020-05-07 23:08:53,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_07_secgroup_provider/test_secgroups_delete_again,failed,None,2020-05-07 23:08:53,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_08_vm_provider/test_provider_vm_create,ok,17.872,2020-05-07 23:09:19,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,create vm test-josh-vm-2,failed,9.515,2020-05-07 23:09:19,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_08_vm_provider/test_provider_vmprovider_vm_list,ok,1.393,2020-05-07 23:09:39,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_08_vm_provider/test_provider_vm_wait,failed,None,2020-05-07 23:09:40,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_08_vm_provider/test_provider_vm_ssh,failed,None,2020-05-07 23:09:40,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_08_vm_provider/test_provider_vm_info,ok,1.399,2020-05-07 23:09:42,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_08_vm_provider/test_vm_status,ok,1.537,2020-05-07 23:09:43,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_08_vm_provider/test_provider_vm_stop,ok,58.573,2020-05-07 23:09:45,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_08_vm_provider/test_provider_vm_start,ok,31.46,2020-05-07 23:10:50,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_08_vm_provider/test_provider_vm_terminate,ok,166.49,2020-05-07 23:11:28,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+
+PASSED
+tests/cloud/test_09_cm_names_find.py::Test_cm_find::test_cm_find_collection 
+[35m
+# ######################################################################
+# test_cm_find_collection /tests/cloud/test_09_cm_names_find.py 37
+# ######################################################################
+[0m
+Number of entries [vm] 1
+PASSED
+tests/cloud/test_09_cm_names_find.py::Test_cm_find::test_cm_find_loop 
+[35m
+# ######################################################################
+# test_cm_find_loop /tests/cloud/test_09_cm_names_find.py 48
+# ######################################################################
+[0m
+Number of entries [flavor 71
+PASSED
+tests/cloud/test_09_cm_names_find.py::Test_cm_find::test_cm_loop 
+[35m
+# ######################################################################
+# test_cm_loop /tests/cloud/test_09_cm_names_find.py 64
+# ######################################################################
+[0m
+Number of entries [flavor] 71
+PASSED
+tests/cloud/test_09_cm_names_find.py::Test_cm_find::test_cm_image_name_cloud 
+[35m
+# ######################################################################
+# test_cm_image_name_cloud /tests/cloud/test_09_cm_names_find.py 77
+# ######################################################################
+[0m
+Number of entries [image 570
+PASSED
+tests/cloud/test_09_cm_names_find.py::Test_cm_find::test_cm_image_name_collection 
+[35m
+# ######################################################################
+# test_cm_image_name_collection /tests/cloud/test_09_cm_names_find.py 89
+# ######################################################################
+[0m
+Number of entries [image 570
+PASSED
+tests/cloud/test_09_cm_names_find.py::Test_cm_find::test_names_regexp 
+[35m
+# ######################################################################
+# test_names_regexp /tests/cloud/test_09_cm_names_find.py 100
+# ######################################################################
+[0m
+Number of entries [image 570
+PASSED
+tests/cloud/test_09_cm_names_find.py::Test_cm_find::test_cm_find_vms 
+[35m
+# ######################################################################
+# test_cm_find_vms /tests/cloud/test_09_cm_names_find.py 129
+# ######################################################################
+[0m
+Number of entries [vm 1
+PASSED
+tests/cloud/test_09_cm_names_find.py::Test_cm_find::test_cm_find_ubuntu_in_images 
+[35m
+# ######################################################################
+# test_cm_find_ubuntu_in_images /tests/cloud/test_09_cm_names_find.py 140
+# ######################################################################
+[0m
+
+{'name': {'$regex': '.*ubuntu.*'}}
+Number of entries [image 570
+PASSED
+tests/cloud/test_09_cm_names_find.py::Test_cm_find::test_cm_find_cloud_name_attributes 
+[35m
+# ######################################################################
+# test_cm_find_cloud_name_attributes /tests/cloud/test_09_cm_names_find.py 187
+# ######################################################################
+[0m
+
+Number of entries [vm 1
+PASSED
+tests/cloud/test_09_cm_names_find.py::Test_cm_find::test_cm_find_vm_collections 
+[35m
+# ######################################################################
+# test_cm_find_vm_collections /tests/cloud/test_09_cm_names_find.py 203
+# ######################################################################
+[0m
+Number of entries [collections] 6
+PASSED
+tests/cloud/test_09_cm_names_find.py::Test_cm_find::test_cm_find_vm_collections_vm 
+[35m
+# ######################################################################
+# test_cm_find_vm_collections_vm /tests/cloud/test_09_cm_names_find.py 216
+# ######################################################################
+[0m
+Number of entries [collections] 1
+PASSED
+tests/cloud/test_09_cm_names_find.py::Test_cm_find::test_cm_find_vm_collection_form_parameter 
+[35m
+# ######################################################################
+# test_cm_find_vm_collection_form_parameter /tests/cloud/test_09_cm_names_find.py 228
+# ######################################################################
+[0m
+Number of entries [collections] 2
+PASSED
+tests/cloud/test_09_cm_names_find.py::Test_cm_find::test_benchmark 
+[35m
+# ######################################################################
+# test_benchmark /tests/cloud/test_09_cm_names_find.py 243
+# ######################################################################
+[0m
+
+
++-----------------------------------------------------------------+----------+---------+---------------------+--------+------------------+--------+-------+-----------------------------------------------------+
+| Name                                                            | Status   |    Time | Start               | tag    | Node             | User   | OS    | Version                                             |
+|-----------------------------------------------------------------+----------+---------+---------------------+--------+------------------+--------+-------+-----------------------------------------------------|
+| test_00_sys/test_cms_help                                       | ok       |   2.386 | 2020-05-07 23:07:39 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_01_clean_local_remote/test_cms_init                        | ok       |   8.795 | 2020-05-07 23:07:42 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_clear_local_database                           | ok       |   0.034 | 2020-05-07 23:07:52 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_clear_cloud_database                           | ok       |   0.016 | 2020-05-07 23:08:08 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_upload_key_to_database                         | ok       |   0.039 | 2020-05-07 23:07:52 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_upload_key_to_cloud                            | ok       |  10.362 | 2020-05-07 23:07:52 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_list_key_from_cloud                            | failed   |         | 2020-05-07 23:08:03 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_delete_key_from_cloud                          | failed   |         | 2020-05-07 23:08:04 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_key_delete                                     | ok       |   0.022 | 2020-05-07 23:08:05 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_cms_local                                      | ok       |   2.752 | 2020-05-07 23:08:05 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_cms_cloud                                      | ok       |  15.804 | 2020-05-07 23:08:08 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_04_flavor/test_empty_database                              | ok       |   0.017 | 2020-05-07 23:08:24 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_04_flavor/test_provider_flavor                             | ok       |   2.483 | 2020-05-07 23:08:24 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_04_flavor/test_provider_flavor_update                      | ok       |   1.595 | 2020-05-07 23:08:26 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_04_flavor/test_cms_flavor_refresh                          | ok       |   3.844 | 2020-05-07 23:08:28 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_04_flavor/test_cms_flavor                                  | ok       |   1.509 | 2020-05-07 23:08:32 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_05_image/test_empty_database                               | ok       |   0.018 | 2020-05-07 23:08:34 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_05_image/test_provider_image                               | ok       |   4.891 | 2020-05-07 23:08:34 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_05_image/test_provider_image_update                        | ok       |   5.251 | 2020-05-07 23:08:39 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_05_image/test_cms_image_refresh                            | ok       |   6.476 | 2020-05-07 23:08:44 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_05_image/test_cms_image                                    | ok       |   1.496 | 2020-05-07 23:08:51 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_07_secgroup_provider/test_load                             | ok       |   0.048 | 2020-05-07 23:08:52 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_07_secgroup_provider/test_list_variables                   | ok       |   0.002 | 2020-05-07 23:08:53 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_07_secgroup_provider/test_list_secgroups                   | failed   |         | 2020-05-07 23:08:53 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_07_secgroup_provider/test_list_secgroups_rules             | failed   |         | 2020-05-07 23:08:53 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_07_secgroup_provider/test_secgroups_add                    | ok       |   0.04  | 2020-05-07 23:08:53 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_07_secgroup_provider/test_upload_secgroup                  | failed   |         | 2020-05-07 23:08:53 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_07_secgroup_provider/test_secgroups_delete                 | failed   |         | 2020-05-07 23:08:53 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_07_secgroup_provider/test_secgroups_delete_again           | failed   |         | 2020-05-07 23:08:53 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_08_vm_provider/test_provider_vm_create                     | ok       |  17.872 | 2020-05-07 23:09:19 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| create vm test-josh-vm-2                                        | failed   |   9.515 | 2020-05-07 23:09:19 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_08_vm_provider/test_provider_vmprovider_vm_list            | ok       |   1.393 | 2020-05-07 23:09:39 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_08_vm_provider/test_provider_vm_wait                       | failed   |         | 2020-05-07 23:09:40 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_08_vm_provider/test_provider_vm_ssh                        | failed   |         | 2020-05-07 23:09:40 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_08_vm_provider/test_provider_vm_info                       | ok       |   1.399 | 2020-05-07 23:09:42 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_08_vm_provider/test_vm_status                              | ok       |   1.537 | 2020-05-07 23:09:43 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_08_vm_provider/test_provider_vm_stop                       | ok       |  58.573 | 2020-05-07 23:09:45 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_08_vm_provider/test_provider_vm_start                      | ok       |  31.46  | 2020-05-07 23:10:50 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_08_vm_provider/test_provider_vm_terminate                  | ok       | 166.49  | 2020-05-07 23:11:28 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_09_cm_names_find/test_cm_find_collection                   | ok       |   0.019 | 2020-05-07 23:14:19 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_09_cm_names_find/test_cm_find_loop                         | ok       |   0.066 | 2020-05-07 23:14:19 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_09_cm_names_find/test_cm_image_name_cloud                  | ok       |   0.02  | 2020-05-07 23:14:19 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_09_cm_names_find/test_cm_image_name_collection             | ok       |   0.02  | 2020-05-07 23:14:19 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_09_cm_names_find/test_names_regexp                         | ok       |   0.043 | 2020-05-07 23:14:19 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_09_cm_names_find/test_cm_find_vms                          | ok       |   0.02  | 2020-05-07 23:14:19 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_09_cm_names_find/test_cm_find_ubuntu_in_images             | ok       |   0.033 | 2020-05-07 23:14:19 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_09_cm_names_find/test_cm_find_cloud_name_attributes        | ok       |   0.017 | 2020-05-07 23:14:20 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_09_cm_names_find/test_cm_find_vm_collections               | ok       |   0.017 | 2020-05-07 23:14:20 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_09_cm_names_find/test_cm_find_vm_collections_vm            | ok       |   0.019 | 2020-05-07 23:14:20 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_09_cm_names_find/test_cm_find_vm_collection_form_parameter | ok       |   0.017 | 2020-05-07 23:14:20 | google | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
++-----------------------------------------------------------------+----------+---------+---------------------+--------+------------------+--------+-------+-----------------------------------------------------+
+
+# csv,timer,status,time,start,tag,uname.node,user,uname.system,platform.version
+# csv,test_00_sys/test_cms_help,ok,2.386,2020-05-07 23:07:39,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_01_clean_local_remote/test_cms_init,ok,8.795,2020-05-07 23:07:42,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_clear_local_database,ok,0.034,2020-05-07 23:07:52,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_clear_cloud_database,ok,0.016,2020-05-07 23:08:08,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_upload_key_to_database,ok,0.039,2020-05-07 23:07:52,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_upload_key_to_cloud,ok,10.362,2020-05-07 23:07:52,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_list_key_from_cloud,failed,None,2020-05-07 23:08:03,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_delete_key_from_cloud,failed,None,2020-05-07 23:08:04,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_key_delete,ok,0.022,2020-05-07 23:08:05,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_cms_local,ok,2.752,2020-05-07 23:08:05,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_cms_cloud,ok,15.804,2020-05-07 23:08:08,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_04_flavor/test_empty_database,ok,0.017,2020-05-07 23:08:24,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_04_flavor/test_provider_flavor,ok,2.483,2020-05-07 23:08:24,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_04_flavor/test_provider_flavor_update,ok,1.595,2020-05-07 23:08:26,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_04_flavor/test_cms_flavor_refresh,ok,3.844,2020-05-07 23:08:28,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_04_flavor/test_cms_flavor,ok,1.509,2020-05-07 23:08:32,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_05_image/test_empty_database,ok,0.018,2020-05-07 23:08:34,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_05_image/test_provider_image,ok,4.891,2020-05-07 23:08:34,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_05_image/test_provider_image_update,ok,5.251,2020-05-07 23:08:39,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_05_image/test_cms_image_refresh,ok,6.476,2020-05-07 23:08:44,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_05_image/test_cms_image,ok,1.496,2020-05-07 23:08:51,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_07_secgroup_provider/test_load,ok,0.048,2020-05-07 23:08:52,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_07_secgroup_provider/test_list_variables,ok,0.002,2020-05-07 23:08:53,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_07_secgroup_provider/test_list_secgroups,failed,None,2020-05-07 23:08:53,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_07_secgroup_provider/test_list_secgroups_rules,failed,None,2020-05-07 23:08:53,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_07_secgroup_provider/test_secgroups_add,ok,0.04,2020-05-07 23:08:53,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_07_secgroup_provider/test_upload_secgroup,failed,None,2020-05-07 23:08:53,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_07_secgroup_provider/test_secgroups_delete,failed,None,2020-05-07 23:08:53,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_07_secgroup_provider/test_secgroups_delete_again,failed,None,2020-05-07 23:08:53,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_08_vm_provider/test_provider_vm_create,ok,17.872,2020-05-07 23:09:19,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,create vm test-josh-vm-2,failed,9.515,2020-05-07 23:09:19,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_08_vm_provider/test_provider_vmprovider_vm_list,ok,1.393,2020-05-07 23:09:39,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_08_vm_provider/test_provider_vm_wait,failed,None,2020-05-07 23:09:40,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_08_vm_provider/test_provider_vm_ssh,failed,None,2020-05-07 23:09:40,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_08_vm_provider/test_provider_vm_info,ok,1.399,2020-05-07 23:09:42,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_08_vm_provider/test_vm_status,ok,1.537,2020-05-07 23:09:43,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_08_vm_provider/test_provider_vm_stop,ok,58.573,2020-05-07 23:09:45,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_08_vm_provider/test_provider_vm_start,ok,31.46,2020-05-07 23:10:50,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_08_vm_provider/test_provider_vm_terminate,ok,166.49,2020-05-07 23:11:28,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_09_cm_names_find/test_cm_find_collection,ok,0.019,2020-05-07 23:14:19,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_09_cm_names_find/test_cm_find_loop,ok,0.066,2020-05-07 23:14:19,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_09_cm_names_find/test_cm_image_name_cloud,ok,0.02,2020-05-07 23:14:19,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_09_cm_names_find/test_cm_image_name_collection,ok,0.02,2020-05-07 23:14:19,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_09_cm_names_find/test_names_regexp,ok,0.043,2020-05-07 23:14:19,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_09_cm_names_find/test_cm_find_vms,ok,0.02,2020-05-07 23:14:19,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_09_cm_names_find/test_cm_find_ubuntu_in_images,ok,0.033,2020-05-07 23:14:19,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_09_cm_names_find/test_cm_find_cloud_name_attributes,ok,0.017,2020-05-07 23:14:20,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_09_cm_names_find/test_cm_find_vm_collections,ok,0.017,2020-05-07 23:14:20,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_09_cm_names_find/test_cm_find_vm_collections_vm,ok,0.019,2020-05-07 23:14:20,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_09_cm_names_find/test_cm_find_vm_collection_form_parameter,ok,0.017,2020-05-07 23:14:20,google,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+
+PASSED
+
+=================================== FAILURES ===================================
+___________ Test_Clean_Local_Remote.test_delete_all_keys_from_cloud ____________
+
+self = <test_01_clean_local_remote.Test_Clean_Local_Remote object at 0x7f0398227a00>
+
+    def test_delete_all_keys_from_cloud(self):
+        HEADING()
+        try:
+>           keys = provider.keys()
+
+tests/cloud/test_01_clean_local_remote.py:44: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+args = (<cloudmesh.compute.vm.Provider.Provider object at 0x7f03a0951070>,)
+kwargs = {}
+
+    def wrapper(*args, **kwargs):
+>       current = f(*args, **kwargs)
+
+../cloudmesh-admin/cloudmesh/mongo/DataBaseDecorator.py:87: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <cloudmesh.compute.vm.Provider.Provider object at 0x7f03a0951070>
+
+    @DatabaseUpdate()
+    def keys(self):
+>       return self.p.keys()
+
+cloudmesh/compute/vm/Provider.py:125: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <cloudmesh.google.compute.Provider.Provider object at 0x7f03a0951520>
+
+    def keys(self):
+        """
+        Lists the keys on the cloud
+    
+        :return: dict
+        """
+    
+        # Get the project id from auth config.
+        project_id = self.auth_config['project_id']
+    
+        proj_metadata = self._get_project_metadata(project_id)
+    
+        # Generate a simple dict from response.
+>       keys = self._key_dict(proj_metadata)
+
+../cloudmesh-google/cloudmesh/google/compute/Provider.py:1275: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <cloudmesh.google.compute.Provider.Provider object at 0x7f03a0951520>
+response = {'commonInstanceMetadata': {'fingerprint': 'HHH8B4z7pSM=', 'items': [{'key': 'ssh-keys', 'value': 'joshuabaker97:ssh-r...', 'defaultNetworkTier': 'PREMIUM', 'defaultServiceAccount': '716375400709-compute@developer.gserviceaccount.com', ...}
+
+    def _key_dict(self, response):
+        project_id = response["name"]
+        commonInstanceMetadata = response["commonInstanceMetadata"]
+        items = commonInstanceMetadata.get('items', [])
+        id = response["id"]
+        selfLink = response["selfLink"]
+    
+        keys = []
+    
+        for item in items:
+            key = item['key']
+            if (key == 'ssh-keys'):
+                value = item['value']
+                for line in value.splitlines():
+                    key_dict = {}
+    
+                    if line is None or line == '':
+                        # if line is empty, then dont process.
+                        continue
+    
+                    key_items = line.split()
+>                   name_items = key_items[0].split(":")
+E                   IndexError: list index out of range
+
+../cloudmesh-google/cloudmesh/google/compute/Provider.py:299: IndexError
+
+During handling of the above exception, another exception occurred:
+
+self = <test_01_clean_local_remote.Test_Clean_Local_Remote object at 0x7f0398227a00>
+
+    def test_delete_all_keys_from_cloud(self):
+        HEADING()
+        try:
+            keys = provider.keys()
+            Benchmark.Start()
+            for key in keys:
+                if cloud == 'aws':
+                    key_name = key['KeyName']
+                else:
+                    key_name = key['name']
+    
+                r = provider.key_delete(key_name)
+                print(r)
+            Benchmark.Stop()
+        except Exception as e:
+            print(e)
+>           assert False
+E           assert False
+
+tests/cloud/test_01_clean_local_remote.py:57: AssertionError
+------------------------------ Captured log call -------------------------------
+WARNING  googleapiclient.discovery_cache:__init__.py:46 file_cache is unavailable when using oauth2client >= 4.0.0 or google-auth
+Traceback (most recent call last):
+  File "/home/josh/ENV3/lib/python3.8/site-packages/googleapiclient/discovery_cache/__init__.py", line 36, in autodetect
+    from google.appengine.api import memcache
+ModuleNotFoundError: No module named 'google.appengine'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/josh/ENV3/lib/python3.8/site-packages/googleapiclient/discovery_cache/file_cache.py", line 33, in <module>
+    from oauth2client.contrib.locked_file import LockedFile
+ModuleNotFoundError: No module named 'oauth2client.contrib.locked_file'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/josh/ENV3/lib/python3.8/site-packages/googleapiclient/discovery_cache/file_cache.py", line 37, in <module>
+    from oauth2client.locked_file import LockedFile
+ModuleNotFoundError: No module named 'oauth2client.locked_file'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/josh/ENV3/lib/python3.8/site-packages/googleapiclient/discovery_cache/__init__.py", line 42, in autodetect
+    from . import file_cache
+  File "/home/josh/ENV3/lib/python3.8/site-packages/googleapiclient/discovery_cache/file_cache.py", line 40, in <module>
+    raise ImportError(
+ImportError: file_cache is unavailable when using oauth2client >= 4.0.0 or google-auth
+______________________ Test_Key.test_list_key_from_cloud _______________________
+
+self = <test_02_key.Test_Key object at 0x7f039823aa90>
+
+    def test_list_key_from_cloud(self):
+        HEADING()
+        Benchmark.Start()
+>       keys = provider.keys()
+
+tests/cloud/test_02_key.py:89: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+../cloudmesh-admin/cloudmesh/mongo/DataBaseDecorator.py:87: in wrapper
+    current = f(*args, **kwargs)
+cloudmesh/compute/vm/Provider.py:125: in keys
+    return self.p.keys()
+../cloudmesh-google/cloudmesh/google/compute/Provider.py:1275: in keys
+    keys = self._key_dict(proj_metadata)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <cloudmesh.google.compute.Provider.Provider object at 0x7f03a0951e80>
+response = {'commonInstanceMetadata': {'fingerprint': '_73Kb0q2Cs0=', 'items': [{'key': 'ssh-keys', 'value': 'joshuabaker97:ssh-r...', 'defaultNetworkTier': 'PREMIUM', 'defaultServiceAccount': '716375400709-compute@developer.gserviceaccount.com', ...}
+
+    def _key_dict(self, response):
+        project_id = response["name"]
+        commonInstanceMetadata = response["commonInstanceMetadata"]
+        items = commonInstanceMetadata.get('items', [])
+        id = response["id"]
+        selfLink = response["selfLink"]
+    
+        keys = []
+    
+        for item in items:
+            key = item['key']
+            if (key == 'ssh-keys'):
+                value = item['value']
+                for line in value.splitlines():
+                    key_dict = {}
+    
+                    if line is None or line == '':
+                        # if line is empty, then dont process.
+                        continue
+    
+                    key_items = line.split()
+>                   name_items = key_items[0].split(":")
+E                   IndexError: list index out of range
+
+../cloudmesh-google/cloudmesh/google/compute/Provider.py:299: IndexError
+------------------------------ Captured log call -------------------------------
+WARNING  googleapiclient.discovery_cache:__init__.py:46 file_cache is unavailable when using oauth2client >= 4.0.0 or google-auth
+Traceback (most recent call last):
+  File "/home/josh/ENV3/lib/python3.8/site-packages/googleapiclient/discovery_cache/__init__.py", line 36, in autodetect
+    from google.appengine.api import memcache
+ModuleNotFoundError: No module named 'google.appengine'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/josh/ENV3/lib/python3.8/site-packages/googleapiclient/discovery_cache/file_cache.py", line 33, in <module>
+    from oauth2client.contrib.locked_file import LockedFile
+ModuleNotFoundError: No module named 'oauth2client.contrib.locked_file'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/josh/ENV3/lib/python3.8/site-packages/googleapiclient/discovery_cache/file_cache.py", line 37, in <module>
+    from oauth2client.locked_file import LockedFile
+ModuleNotFoundError: No module named 'oauth2client.locked_file'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/josh/ENV3/lib/python3.8/site-packages/googleapiclient/discovery_cache/__init__.py", line 42, in autodetect
+    from . import file_cache
+  File "/home/josh/ENV3/lib/python3.8/site-packages/googleapiclient/discovery_cache/file_cache.py", line 40, in <module>
+    raise ImportError(
+ImportError: file_cache is unavailable when using oauth2client >= 4.0.0 or google-auth
+__________________ Test_secgroup_provider.test_list_secgroups __________________
+
+self = <test_07_secgroup_provider.Test_secgroup_provider object at 0x7f039b368e20>
+
+    def test_list_secgroups(self):
+        HEADING()
+        Benchmark.Start()
+>       groups = provider.list_secgroups()
+
+tests/cloud/test_07_secgroup_provider.py:82: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+cloudmesh/compute/vm/Provider.py:460: in list_secgroups
+    return self.p.list_secgroups()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <cloudmesh.google.compute.Provider.Provider object at 0x7f039823e1f0>
+name = None
+
+    def list_secgroups(self, name=None):
+        """
+        List the named security group
+    
+        :param name: The name of the group, if None all will be returned
+        :return:
+        """
+>       raise NotImplementedError
+E       NotImplementedError
+
+../cloudmesh-google/cloudmesh/google/compute/Provider.py:1673: NotImplementedError
+_______________ Test_secgroup_provider.test_list_secgroups_rules _______________
+
+self = <test_07_secgroup_provider.Test_secgroup_provider object at 0x7f039b598280>
+
+    def test_list_secgroups_rules(self):
+        HEADING()
+        Benchmark.Start()
+>       rule_groups = provider.list_secgroup_rules()
+
+tests/cloud/test_07_secgroup_provider.py:89: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+cloudmesh/compute/vm/Provider.py:463: in list_secgroup_rules
+    return self.p.list_secgroup_rules()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <cloudmesh.google.compute.Provider.Provider object at 0x7f039823e1f0>
+name = 'default'
+
+    def list_secgroup_rules(self, name='default'):
+        """
+        List the named security group
+    
+        :param name: The name of the group, if None all will be returned
+        :return:
+        """
+>       raise NotImplementedError
+E       NotImplementedError
+
+../cloudmesh-google/cloudmesh/google/compute/Provider.py:1682: NotImplementedError
+__________________ Test_secgroup_provider.test_secgroups_add ___________________
+
+self = <test_07_secgroup_provider.Test_secgroup_provider object at 0x7f039a4da430>
+
+    def test_secgroups_add(self):
+        HEADING()
+        name = "test-sec-group"
+        Benchmark.Start()
+        if cloud == 'google':
+            # Add is not implement for google cloud, so manually adding for uplaod.
+            groups.add(name, ["ssh", "icmp", "https"], "Test security group")
+        else:
+            provider.add_secgroup(name=name)
+        Benchmark.Stop()
+    
+>       sec_groups = provider.list_secgroups()
+
+tests/cloud/test_07_secgroup_provider.py:104: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+cloudmesh/compute/vm/Provider.py:460: in list_secgroups
+    return self.p.list_secgroups()
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <cloudmesh.google.compute.Provider.Provider object at 0x7f039823e1f0>
+name = None
+
+    def list_secgroups(self, name=None):
+        """
+        List the named security group
+    
+        :param name: The name of the group, if None all will be returned
+        :return:
+        """
+>       raise NotImplementedError
+E       NotImplementedError
+
+../cloudmesh-google/cloudmesh/google/compute/Provider.py:1673: NotImplementedError
+_________________ Test_secgroup_provider.test_upload_secgroup __________________
+
+self = <test_07_secgroup_provider.Test_secgroup_provider object at 0x7f039b41cb20>
+
+    def test_upload_secgroup(self):
+        HEADING()
+        name = "test-sec-group"
+        Benchmark.Start()
+>       provider.upload_secgroup(name=name)
+
+tests/cloud/test_07_secgroup_provider.py:111: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+cloudmesh/compute/vm/Provider.py:472: in upload_secgroup
+    return self.p.upload_secgroup(name=name)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <cloudmesh.google.compute.Provider.Provider object at 0x7f039823e1f0>
+name = 'test-sec-group'
+
+    def upload_secgroup(self, name=None):
+>       raise NotImplementedError
+E       NotImplementedError
+
+../cloudmesh-google/cloudmesh/google/compute/Provider.py:1685: NotImplementedError
+_________________ Test_secgroup_provider.test_secgroups_delete _________________
+
+self = <test_07_secgroup_provider.Test_secgroup_provider object at 0x7f039b438130>
+
+    def test_secgroups_delete(self):
+        HEADING()
+        name = "test-sec-group"
+        Benchmark.Start()
+>       provider.remove_secgroup(name=name)
+
+tests/cloud/test_07_secgroup_provider.py:120: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+cloudmesh/compute/vm/Provider.py:466: in remove_secgroup
+    return self.p.remove_secgroup(name=name)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <cloudmesh.google.compute.Provider.Provider object at 0x7f039823e1f0>
+name = 'test-sec-group'
+
+    def remove_secgroup(self, name=None):
+>       raise NotImplementedError
+E       NotImplementedError
+
+../cloudmesh-google/cloudmesh/google/compute/Provider.py:1698: NotImplementedError
+______________ Test_secgroup_provider.test_secgroups_delete_again ______________
+
+self = <test_07_secgroup_provider.Test_secgroup_provider object at 0x7f039b2e0370>
+
+    def test_secgroups_delete_again(self):
+        HEADING()
+        name = "test-sec-group"
+        Benchmark.Start()
+>       provider.remove_secgroup(name=name)
+
+tests/cloud/test_07_secgroup_provider.py:139: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+cloudmesh/compute/vm/Provider.py:466: in remove_secgroup
+    return self.p.remove_secgroup(name=name)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <cloudmesh.google.compute.Provider.Provider object at 0x7f039823e1f0>
+name = 'test-sec-group'
+
+    def remove_secgroup(self, name=None):
+>       raise NotImplementedError
+E       NotImplementedError
+
+../cloudmesh-google/cloudmesh/google/compute/Provider.py:1698: NotImplementedError
+____________________ Test_provider_vm.test_provider_vm_wait ____________________
+
+self = <test_08_vm_provider.Test_provider_vm object at 0x7f039b41ccd0>
+
+    def test_provider_vm_wait(self):
+        HEADING()
+        name = str(Name())
+        Benchmark.Start()
+        cm = CmDatabase()
+        vm = cm.find_name(name, kind="vm")[0]
+>       assert provider.wait(vm=vm), "cms wait timed out ..."
+
+tests/cloud/test_08_vm_provider.py:125: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+cloudmesh/compute/vm/Provider.py:504: in wait
+    return self.p.wait(vm=vm, interval=interval, timeout=timeout)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <cloudmesh.google.compute.Provider.Provider object at 0x7f0398128d30>
+vm = {'_id': ObjectId('5eb4951fcf07dd4e6317324a'), 'cloud': 'google', 'cm': {'cloud': 'google', 'collection': 'google-vm', ...ated': '2020-05-07T16:09:21.706-07:00 UTC', 'creation': '10.00', ...}, 'created': '2020-05-07T16:09:21.706-07:00', ...}
+interval = None, timeout = None
+
+    def wait(self,
+             vm=None,
+             interval=None,
+             timeout=None):
+        """
+        wait till the given VM can be logged into
+    
+        :param vm: name of the vm
+        :param interval: interval for checking
+        :param timeout: timeout
+        :return:
+        """
+>       raise NotImplementedError
+E       NotImplementedError
+
+../cloudmesh-google/cloudmesh/google/compute/Provider.py:1718: NotImplementedError
+____________________ Test_provider_vm.test_provider_vm_ssh _____________________
+
+self = <test_08_vm_provider.Test_provider_vm object at 0x7f0398250eb0>
+
+    def test_provider_vm_ssh(self):
+        HEADING()
+        name = str(Name())
+        Benchmark.Start()
+        cm = CmDatabase()
+        vm = cm.find_name(name, kind="vm")[0]
+        data = provider.ssh(vm=vm, command='\"echo IAmAlive\"')
+        print(data)
+>       assert 'IAmAlive' in data
+E       AssertionError: assert 'IAmAlive' in ''
+
+tests/cloud/test_08_vm_provider.py:137: AssertionError
+------------------------------ Captured log call -------------------------------
+WARNING  googleapiclient.discovery_cache:__init__.py:46 file_cache is unavailable when using oauth2client >= 4.0.0 or google-auth
+Traceback (most recent call last):
+  File "/home/josh/ENV3/lib/python3.8/site-packages/googleapiclient/discovery_cache/__init__.py", line 36, in autodetect
+    from google.appengine.api import memcache
+ModuleNotFoundError: No module named 'google.appengine'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/josh/ENV3/lib/python3.8/site-packages/googleapiclient/discovery_cache/file_cache.py", line 33, in <module>
+    from oauth2client.contrib.locked_file import LockedFile
+ModuleNotFoundError: No module named 'oauth2client.contrib.locked_file'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/josh/ENV3/lib/python3.8/site-packages/googleapiclient/discovery_cache/file_cache.py", line 37, in <module>
+    from oauth2client.locked_file import LockedFile
+ModuleNotFoundError: No module named 'oauth2client.locked_file'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/josh/ENV3/lib/python3.8/site-packages/googleapiclient/discovery_cache/__init__.py", line 42, in autodetect
+    from . import file_cache
+  File "/home/josh/ENV3/lib/python3.8/site-packages/googleapiclient/discovery_cache/file_cache.py", line 40, in <module>
+    raise ImportError(
+ImportError: file_cache is unavailable when using oauth2client >= 4.0.0 or google-auth
+=========================== short test summary info ============================
+FAILED tests/cloud/test_01_clean_local_remote.py::Test_Clean_Local_Remote::test_delete_all_keys_from_cloud
+FAILED tests/cloud/test_02_key.py::Test_Key::test_list_key_from_cloud - Index...
+FAILED tests/cloud/test_07_secgroup_provider.py::Test_secgroup_provider::test_list_secgroups
+FAILED tests/cloud/test_07_secgroup_provider.py::Test_secgroup_provider::test_list_secgroups_rules
+FAILED tests/cloud/test_07_secgroup_provider.py::Test_secgroup_provider::test_secgroups_add
+FAILED tests/cloud/test_07_secgroup_provider.py::Test_secgroup_provider::test_upload_secgroup
+FAILED tests/cloud/test_07_secgroup_provider.py::Test_secgroup_provider::test_secgroups_delete
+FAILED tests/cloud/test_07_secgroup_provider.py::Test_secgroup_provider::test_secgroups_delete_again
+FAILED tests/cloud/test_08_vm_provider.py::Test_provider_vm::test_provider_vm_wait
+FAILED tests/cloud/test_08_vm_provider.py::Test_provider_vm::test_provider_vm_ssh
+================== 10 failed, 53 passed in 401.50s (0:06:41) ===================

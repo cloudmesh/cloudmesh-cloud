@@ -1,0 +1,2158 @@
+============================= test session starts ==============================
+platform linux -- Python 3.8.2, pytest-5.4.1, py-1.8.1, pluggy-0.13.1 -- /home/josh/ENV3/bin/python3
+cachedir: .pytest_cache
+rootdir: /home/josh/dev/cloud/cloudmesh-cloud, inifile: pytest.ini
+plugins: cov-2.8.1
+collecting ... Test run for azure
+Test run for azure
+[34m
+# ----------------------------------------------------------------------
+# cre
+# ----------------------------------------------------------------------
+# 220:__init__ /home/josh/dev/cloud/cloudmesh-azure/cloudmesh/azure/compute/Provider.py
+# ----------------------------------------------------------------------
+# {'AZURE_APPLICATION_ID': '********',
+#  'AZURE_REGION': 'eastus',
+#  'AZURE_SECRET_KEY': '******************************',
+#  'AZURE_SUBSCRIPTION_ID': '********',
+#  'AZURE_TENANT_ID': '********'}
+# ----------------------------------------------------------------------
+[0m
+[34mINFO: Creating Azure Resource Group[0m
+[34mINFO: Azure Resource Group created: cloudmesh[0m
+Test run for azure on key test-key
+[34m
+# ----------------------------------------------------------------------
+# cre
+# ----------------------------------------------------------------------
+# 220:__init__ /home/josh/dev/cloud/cloudmesh-azure/cloudmesh/azure/compute/Provider.py
+# ----------------------------------------------------------------------
+# {'AZURE_APPLICATION_ID': '********',
+#  'AZURE_REGION': 'eastus',
+#  'AZURE_SECRET_KEY': '******************************',
+#  'AZURE_SUBSCRIPTION_ID': '********',
+#  'AZURE_TENANT_ID': '********'}
+# ----------------------------------------------------------------------
+[0m
+Test run for azure
+[34m
+# ----------------------------------------------------------------------
+# cre
+# ----------------------------------------------------------------------
+# 220:__init__ /home/josh/dev/cloud/cloudmesh-azure/cloudmesh/azure/compute/Provider.py
+# ----------------------------------------------------------------------
+# {'AZURE_APPLICATION_ID': '********',
+#  'AZURE_REGION': 'eastus',
+#  'AZURE_SECRET_KEY': '******************************',
+#  'AZURE_SUBSCRIPTION_ID': '********',
+#  'AZURE_TENANT_ID': '********'}
+# ----------------------------------------------------------------------
+[0m
+Test run for azure
+[34m
+# ----------------------------------------------------------------------
+# cre
+# ----------------------------------------------------------------------
+# 220:__init__ /home/josh/dev/cloud/cloudmesh-azure/cloudmesh/azure/compute/Provider.py
+# ----------------------------------------------------------------------
+# {'AZURE_APPLICATION_ID': '********',
+#  'AZURE_REGION': 'eastus',
+#  'AZURE_SECRET_KEY': '******************************',
+#  'AZURE_SUBSCRIPTION_ID': '********',
+#  'AZURE_TENANT_ID': '********'}
+# ----------------------------------------------------------------------
+[0m
+[34m
+# ----------------------------------------------------------------------
+# variables.dict()
+# ----------------------------------------------------------------------
+# 27:<module> ./tests/cloud/test_07_secgroup_provider.py
+# ----------------------------------------------------------------------
+# {'cloud': 'azure',
+#  'debug': 'True',
+#  'group': 'cloudmesh',
+#  'key': 'josh',
+#  'refresh': 'False',
+#  'storage': 'google',
+#  'timer': 'False',
+#  'trace': 'True',
+#  'verbose': '10',
+#  'vm': 'test-josh-vm-12'}
+# ----------------------------------------------------------------------
+[0m
+Test run for azure
+[34m
+# ----------------------------------------------------------------------
+# cre
+# ----------------------------------------------------------------------
+# 220:__init__ /home/josh/dev/cloud/cloudmesh-azure/cloudmesh/azure/compute/Provider.py
+# ----------------------------------------------------------------------
+# {'AZURE_APPLICATION_ID': '********',
+#  'AZURE_REGION': 'eastus',
+#  'AZURE_SECRET_KEY': '******************************',
+#  'AZURE_SUBSCRIPTION_ID': '********',
+#  'AZURE_TENANT_ID': '********'}
+# ----------------------------------------------------------------------
+[0m
+[34m
+# ----------------------------------------------------------------------
+# variables.dict()
+# ----------------------------------------------------------------------
+# 27:<module> ./tests/cloud/test_08_vm_provider.py
+# ----------------------------------------------------------------------
+# {'cloud': 'azure',
+#  'debug': 'True',
+#  'group': 'cloudmesh',
+#  'key': 'josh',
+#  'refresh': 'False',
+#  'storage': 'google',
+#  'timer': 'False',
+#  'trace': 'True',
+#  'verbose': '10',
+#  'vm': 'test-josh-vm-12'}
+# ----------------------------------------------------------------------
+[0m
+Test run for azure
+[34m
+# ----------------------------------------------------------------------
+# cre
+# ----------------------------------------------------------------------
+# 220:__init__ /home/josh/dev/cloud/cloudmesh-azure/cloudmesh/azure/compute/Provider.py
+# ----------------------------------------------------------------------
+# {'AZURE_APPLICATION_ID': '********',
+#  'AZURE_REGION': 'eastus',
+#  'AZURE_SECRET_KEY': '******************************',
+#  'AZURE_SUBSCRIPTION_ID': '********',
+#  'AZURE_TENANT_ID': '********'}
+# ----------------------------------------------------------------------
+[0m
+collected 63 items
+
+tests/cloud/test_00_sys.py::Test_Sys::test_cms_help 
+[35m
+# ######################################################################
+# test_cms_help /tests/cloud/test_00_sys.py 28
+# ######################################################################
+[0m
+[34m
+# ----------------------------------------------------------------------
+# result
+# ----------------------------------------------------------------------
+# 34:test_cms_help ./tests/cloud/test_00_sys.py
+# ----------------------------------------------------------------------
+# ('help\n'
+#  '\n'
+#  'Documented commands (type help <topic>):\n'
+#  '========================================\n'
+#  'EOF        data     help       man        register  start      '
+#  'vcluster      \n'
+#  'admin      debug    host       open       sec       stop       '
+#  'version       \n'
+#  'banner     default  image      openstack  service   stopwatch  '
+#  'vm            \n'
+#  'check      dryrun   info       pause      set       sys        '
+#  'workflow_draft\n'
+#  'clear      echo     init       provider   shell     term     \n'
+#  'commands   flavor   inventory  py         sleep     test     \n'
+#  'config     group    ip         q          source    var      \n'
+#  'container  gui      key        quit       ssh       vbox')
+# ----------------------------------------------------------------------
+[0m
+PASSED
+tests/cloud/test_00_sys.py::Test_Sys::test_benchmark 
++---------------------+------------------------------------------------------------------+
+| Attribute           | Value                                                            |
+|---------------------+------------------------------------------------------------------|
+| BUG_REPORT_URL      | "https://bugs.launchpad.net/ubuntu/"                             |
+| DISTRIB_CODENAME    | bionic                                                           |
+| DISTRIB_DESCRIPTION | "Ubuntu 18.04.4 LTS"                                             |
+| DISTRIB_ID          | Ubuntu                                                           |
+| DISTRIB_RELEASE     | 18.04                                                            |
+| HOME_URL            | "https://www.ubuntu.com/"                                        |
+| ID                  | ubuntu                                                           |
+| ID_LIKE             | debian                                                           |
+| NAME                | "Ubuntu"                                                         |
+| PRETTY_NAME         | "Ubuntu 18.04.4 LTS"                                             |
+| PRIVACY_POLICY_URL  | "https://www.ubuntu.com/legal/terms-and-policies/privacy-policy" |
+| SUPPORT_URL         | "https://help.ubuntu.com/"                                       |
+| UBUNTU_CODENAME     | bionic                                                           |
+| VERSION             | "18.04.4 LTS (Bionic Beaver)"                                    |
+| VERSION_CODENAME    | bionic                                                           |
+| VERSION_ID          | "18.04"                                                          |
+| cpu_count           | 4                                                                |
+| mem.active          | 2.4 GiB                                                          |
+| mem.available       | 4.9 GiB                                                          |
+| mem.free            | 3.5 GiB                                                          |
+| mem.inactive        | 1.1 GiB                                                          |
+| mem.percent         | 36.0 %                                                           |
+| mem.total           | 7.7 GiB                                                          |
+| mem.used            | 1.8 GiB                                                          |
+| platform.version    | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020              |
+| python              | 3.8.2 (default, Feb 26 2020, 02:56:10)                           |
+|                     | [GCC 7.4.0]                                                      |
+| python.pip          | 20.1                                                             |
+| python.version      | 3.8.2                                                            |
+| sys.platform        | linux                                                            |
+| uname.machine       | x86_64                                                           |
+| uname.node          | josh-XPS-13-9343                                                 |
+| uname.processor     | x86_64                                                           |
+| uname.release       | 5.3.0-46-generic                                                 |
+| uname.system        | Linux                                                            |
+| uname.version       | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020              |
+| user                | josh                                                             |
++---------------------+------------------------------------------------------------------+
+
++---------------------------+----------+--------+---------------------+-------+------------------+--------+-------+-----------------------------------------------------+
+| Name                      | Status   |   Time | Start               | tag   | Node             | User   | OS    | Version                                             |
+|---------------------------+----------+--------+---------------------+-------+------------------+--------+-------+-----------------------------------------------------|
+| test_00_sys/test_cms_help | ok       |  2.424 | 2020-05-07 17:39:09 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
++---------------------------+----------+--------+---------------------+-------+------------------+--------+-------+-----------------------------------------------------+
+
+# csv,timer,status,time,start,tag,uname.node,user,uname.system,platform.version
+# csv,test_00_sys/test_cms_help,ok,2.424,2020-05-07 17:39:09,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+
+PASSED
+tests/cloud/test_01_clean_local_remote.py::Test_Clean_Local_Remote::test_cms_init init
+MongoDB stop
+server should be down...
+deleting: /home/josh/.cloudmesh/mongodb
+MongoDB folder deleted
+MongoDB create
+admin mongo create
+
+# ----------------------------------------------------------------------
+# arguments
+# ----------------------------------------------------------------------
+# 122:do_admin /home/josh/dev/cloud/cloudmesh-admin/cloudmesh/admin/command/admin.py
+# ----------------------------------------------------------------------
+# {'--brew': False,
+#  '--docker': False,
+#  '--download': None,
+#  '--dryrun': False,
+#  '--force': False,
+#  '--nosudo': False,
+#  '--output': None,
+#  'FILENAME': None,
+#  'MODE': None,
+#  'PASSWORD': None,
+#  'backup': False,
+#  'create': True,
+#  'docker': False,
+#  'dryrun': False,
+#  'force': False,
+#  'info': False,
+#  'install': False,
+#  'list': False,
+#  'load': False,
+#  'mode': False,
+#  'mongo': True,
+#  'nosudo': False,
+#  'output': 'table',
+#  'password': False,
+#  'security': False,
+#  'ssh': False,
+#  'start': False,
+#  'stats': False,
+#  'status': False,
+#  'stop': False,
+#  'system': False,
+#  'version': False}
+# ----------------------------------------------------------------------
+
+MongoDB create
+INFO: Starting mongo without authentication ... 
+about to fork child process, waiting until server is ready for connections.
+forked process: 12638
+child process started successfully, parent exiting
+
+None
+INFO: Creating admin user ... 
+Administrative user created.
+INFO: Stopping the service ... 
+server should be down...
+admin mongo start
+
+# ----------------------------------------------------------------------
+# arguments
+# ----------------------------------------------------------------------
+# 122:do_admin /home/josh/dev/cloud/cloudmesh-admin/cloudmesh/admin/command/admin.py
+# ----------------------------------------------------------------------
+# {'--brew': False,
+#  '--docker': False,
+#  '--download': None,
+#  '--dryrun': False,
+#  '--force': False,
+#  '--nosudo': False,
+#  '--output': None,
+#  'FILENAME': None,
+#  'MODE': None,
+#  'PASSWORD': None,
+#  'backup': False,
+#  'create': False,
+#  'docker': False,
+#  'dryrun': False,
+#  'force': False,
+#  'info': False,
+#  'install': False,
+#  'list': False,
+#  'load': False,
+#  'mode': False,
+#  'mongo': True,
+#  'nosudo': False,
+#  'output': 'table',
+#  'password': False,
+#  'security': False,
+#  'ssh': False,
+#  'start': True,
+#  'stats': False,
+#  'status': False,
+#  'stop': False,
+#  'system': False,
+#  'version': False}
+# ----------------------------------------------------------------------
+
+MongoDB start
+about to fork child process, waiting until server is ready for connections.
+forked process: 12686
+child process started successfully, parent exiting
+
+None
+Set key
+Config Security Initialization
+key add
+sec load
+
++---------+-------+----------+-----------+-----------+
+| Group   | Rule  | Protocol | Ports     | IP Range  |
++---------+-------+----------+-----------+-----------+
+| default | ssh   | tcp      | 22:22     | 0.0.0.0/0 |
+| default | icmp  | icmp     |           | 0.0.0.0/0 |
+| default | http  | tcp      | 80:80     | 0.0.0.0/0 |
+| default | https | tcp      | 443:443   | 0.0.0.0/0 |
+| flask   | ssh   | tcp      | 22:22     | 0.0.0.0/0 |
+| flask   | icmp  | icmp     |           | 0.0.0.0/0 |
+| flask   | http  | tcp      | 80:80     | 0.0.0.0/0 |
+| flask   | https | tcp      | 443:443   | 0.0.0.0/0 |
+| flask   | flask | tcp      | 8000:8000 | 0.0.0.0/0 |
++---------+-------+----------+-----------+-----------+
+
+Variables
+
+    timer=False
+    cloud=azure
+    vm=test-josh-vm-12
+    trace=True
+    debug=True
+    verbose=10
+    storage=google
+    key=josh
+    refresh=False
+    group=cloudmesh
+
+[35m
+# ######################################################################
+# test_cms_init /tests/cloud/test_01_clean_local_remote.py 35
+# ######################################################################
+[0m
+PASSED
+tests/cloud/test_01_clean_local_remote.py::Test_Clean_Local_Remote::test_delete_all_keys_from_cloud 
+[35m
+# ######################################################################
+# test_delete_all_keys_from_cloud /tests/cloud/test_01_clean_local_remote.py 41
+# ######################################################################
+[0m
+[31mERROR: Key list is not supported in Azure![0m
+Please use 
+
+    cms key list 
+
+PASSED
+tests/cloud/test_01_clean_local_remote.py::Test_Clean_Local_Remote::test_delete_all_secgroups_from_cloud 
+[35m
+# ######################################################################
+# test_delete_all_secgroups_from_cloud /tests/cloud/test_01_clean_local_remote.py 59
+# ######################################################################
+[0m
+[34mINFO: Local security groups: [0m
+[34mINFO: {'description': 'Default security group', 'rules': ['ssh', 'icmp', 'http', 'https'], 'name': 'default', 'cm': {'kind': 'secgroup', 'name': 'default', 'cloud': 'local', 'collection': 'local-secgroup', 'created': '2020-05-07 17:39:19.515526', 'modified': '2020-05-07 17:39:19.515526'}}[0m
+[34mINFO: {'description': 'Flask security group', 'rules': ['ssh', 'icmp', 'http', 'https', 'flask'], 'name': 'flask', 'cm': {'kind': 'secgroup', 'name': 'flask', 'cloud': 'local', 'collection': 'local-secgroup', 'created': '2020-05-07 17:39:19.535327', 'modified': '2020-05-07 17:39:19.535327'}}[0m
+[34mINFO: Az security groups: [0m
+[34mINFO: Security group flask deleted from Az![0m
+{'description': 'Flask security group', 'rules': ['ssh', 'icmp', 'http', 'https', 'flask'], 'name': 'flask', 'cm': {'kind': 'secgroup', 'name': 'flask', 'cloud': 'local', 'collection': 'local-secgroup', 'created': '2020-05-07 17:39:19.535327', 'modified': '2020-05-07 17:39:19.535327'}}
+PASSED
+tests/cloud/test_01_clean_local_remote.py::Test_Clean_Local_Remote::test_benchmark 
+
++-----------------------------------------------------------------+----------+--------+---------------------+-------+------------------+--------+-------+-----------------------------------------------------+
+| Name                                                            | Status   |   Time | Start               | tag   | Node             | User   | OS    | Version                                             |
+|-----------------------------------------------------------------+----------+--------+---------------------+-------+------------------+--------+-------+-----------------------------------------------------|
+| test_00_sys/test_cms_help                                       | ok       |  2.424 | 2020-05-07 17:39:09 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_01_clean_local_remote/test_cms_init                        | ok       |  8.979 | 2020-05-07 17:39:11 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_01_clean_local_remote/test_delete_all_keys_from_cloud      | ok       |  0.002 | 2020-05-07 17:39:20 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_01_clean_local_remote/test_delete_all_secgroups_from_cloud | ok       |  0.129 | 2020-05-07 17:39:21 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
++-----------------------------------------------------------------+----------+--------+---------------------+-------+------------------+--------+-------+-----------------------------------------------------+
+
+PASSED
+tests/cloud/test_02_key.py::Test_Key::test_clear_local_database 
+[35m
+# ######################################################################
+# test_clear_local_database /tests/cloud/test_02_key.py 39
+# ######################################################################
+[0m
+PASSED
+tests/cloud/test_02_key.py::Test_Key::test_clear_cloud_database 
+[35m
+# ######################################################################
+# test_clear_cloud_database /tests/cloud/test_02_key.py 46
+# ######################################################################
+[0m
+PASSED
+tests/cloud/test_02_key.py::Test_Key::test_upload_key_to_database 
+[35m
+# ######################################################################
+# test_upload_key_to_database /tests/cloud/test_02_key.py 53
+# ######################################################################
+[0m
+<cloudmesh.key.Key.Key object at 0x7f48c8b89fd0>
+PASSED
+tests/cloud/test_02_key.py::Test_Key::test_upload_key_to_cloud 
+[35m
+# ######################################################################
+# test_upload_key_to_cloud /tests/cloud/test_02_key.py 66
+# ######################################################################
+[0m
+PASSED
+tests/cloud/test_02_key.py::Test_Key::test_list_key_from_cloud 
+[35m
+# ######################################################################
+# test_list_key_from_cloud /tests/cloud/test_02_key.py 86
+# ######################################################################
+[0m
+[31mERROR: Key list is not supported in Azure![0m
+Please use 
+
+    cms key list 
+
+[34m
+# ----------------------------------------------------------------------
+# f"{cloud} does not support key list!"
+# ----------------------------------------------------------------------
+# 93:test_list_key_from_cloud ./tests/cloud/test_02_key.py
+# ----------------------------------------------------------------------
+# 'azure does not support key list!'
+# ----------------------------------------------------------------------
+[0m
+PASSED
+tests/cloud/test_02_key.py::Test_Key::test_delete_key_from_cloud 
+[35m
+# ######################################################################
+# test_delete_key_from_cloud /tests/cloud/test_02_key.py 103
+# ######################################################################
+[0m
+[31mERROR: Azure does not allow explicit key delete! Please use 'cms key' operations to delete keys from the local db![0m
+None
+PASSED
+tests/cloud/test_02_key.py::Test_Key::test_get_key_from_cloud 
+[35m
+# ######################################################################
+# test_get_key_from_cloud /tests/cloud/test_02_key.py 113
+# ######################################################################
+[0m
+PASSED
+tests/cloud/test_02_key.py::Test_Key::test_key_delete 
+[35m
+# ######################################################################
+# test_key_delete /tests/cloud/test_02_key.py 117
+# ######################################################################
+[0m
+
+[35m
+# ######################################################################
+# test_clear_cloud_database /tests/cloud/test_02_key.py 46
+# ######################################################################
+[0m
+PASSED
+tests/cloud/test_02_key.py::Test_Key::test_cms_local key add
+
+[35m
+# ######################################################################
+# test_cms_local /tests/cloud/test_02_key.py 123
+# ######################################################################
+[0m
+PASSED
+tests/cloud/test_02_key.py::Test_Key::test_cms_cloud key upload --cloud=azure
+cloud azure
+
+# ----------------------------------------------------------------------
+# cre
+# ----------------------------------------------------------------------
+# 220:__init__ /home/josh/dev/cloud/cloudmesh-azure/cloudmesh/azure/compute/Provider.py
+# ----------------------------------------------------------------------
+# {'AZURE_APPLICATION_ID': '********',
+#  'AZURE_REGION': 'eastus',
+#  'AZURE_SECRET_KEY': '******************************',
+#  'AZURE_SUBSCRIPTION_ID': '********',
+#  'AZURE_TENANT_ID': '********'}
+# ----------------------------------------------------------------------
+
+ERROR: Azure does not allow explicit key upload! Please use 'cms key' operations to add keys to the local db and reference them at the VM creation!
+upload key 'josh successful'. 
+
+[35m
+# ######################################################################
+# test_cms_cloud /tests/cloud/test_02_key.py 130
+# ######################################################################
+[0m
+
+[35m
+# ######################################################################
+# test_clear_cloud_database /tests/cloud/test_02_key.py 46
+# ######################################################################
+[0m
+PASSED
+tests/cloud/test_02_key.py::Test_Key::test_benchmark 
+
++-----------------------------------------------------------------+----------+--------+---------------------+-------+------------------+--------+-------+-----------------------------------------------------+
+| Name                                                            | Status   |   Time | Start               | tag   | Node             | User   | OS    | Version                                             |
+|-----------------------------------------------------------------+----------+--------+---------------------+-------+------------------+--------+-------+-----------------------------------------------------|
+| test_00_sys/test_cms_help                                       | ok       |  2.424 | 2020-05-07 17:39:09 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_01_clean_local_remote/test_cms_init                        | ok       |  8.979 | 2020-05-07 17:39:11 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_01_clean_local_remote/test_delete_all_keys_from_cloud      | ok       |  0.002 | 2020-05-07 17:39:20 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_01_clean_local_remote/test_delete_all_secgroups_from_cloud | ok       |  0.129 | 2020-05-07 17:39:21 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_clear_local_database                           | ok       |  0.02  | 2020-05-07 17:39:21 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_clear_cloud_database                           | ok       |  0.02  | 2020-05-07 17:39:24 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_upload_key_to_database                         | ok       |  0.038 | 2020-05-07 17:39:21 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_list_key_from_cloud                            | ok       |  0.002 | 2020-05-07 17:39:22 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_delete_key_from_cloud                          | ok       |  0.001 | 2020-05-07 17:39:22 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_key_delete                                     | ok       |  0.022 | 2020-05-07 17:39:22 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_cms_local                                      | ok       |  2.641 | 2020-05-07 17:39:22 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_cms_cloud                                      | ok       |  4.439 | 2020-05-07 17:39:24 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
++-----------------------------------------------------------------+----------+--------+---------------------+-------+------------------+--------+-------+-----------------------------------------------------+
+
+# csv,timer,status,time,start,tag,uname.node,user,uname.system,platform.version
+# csv,test_00_sys/test_cms_help,ok,2.424,2020-05-07 17:39:09,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_01_clean_local_remote/test_cms_init,ok,8.979,2020-05-07 17:39:11,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_01_clean_local_remote/test_delete_all_keys_from_cloud,ok,0.002,2020-05-07 17:39:20,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_01_clean_local_remote/test_delete_all_secgroups_from_cloud,ok,0.129,2020-05-07 17:39:21,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_clear_local_database,ok,0.02,2020-05-07 17:39:21,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_clear_cloud_database,ok,0.02,2020-05-07 17:39:24,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_upload_key_to_database,ok,0.038,2020-05-07 17:39:21,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_list_key_from_cloud,ok,0.002,2020-05-07 17:39:22,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_delete_key_from_cloud,ok,0.001,2020-05-07 17:39:22,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_key_delete,ok,0.022,2020-05-07 17:39:22,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_cms_local,ok,2.641,2020-05-07 17:39:22,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_cms_cloud,ok,4.439,2020-05-07 17:39:24,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+
+PASSED
+tests/cloud/test_04_flavor.py::Test_Flavor::test_empty_database 
+[35m
+# ######################################################################
+# test_empty_database /tests/cloud/test_04_flavor.py 38
+# ######################################################################
+[0m
+PASSED
+tests/cloud/test_04_flavor.py::Test_Flavor::test_provider_flavor 
+[35m
+# ######################################################################
+# test_provider_flavor /tests/cloud/test_04_flavor.py 44
+# ######################################################################
+[0m
+PASSED
+tests/cloud/test_04_flavor.py::Test_Flavor::test_provider_flavor_update 
+[35m
+# ######################################################################
+# test_provider_flavor_update /tests/cloud/test_04_flavor.py 50
+# ######################################################################
+[0m
+PASSED
+tests/cloud/test_04_flavor.py::Test_Flavor::test_cms_flavor_refresh 
+[35m
+# ######################################################################
+# test_cms_flavor_refresh /tests/cloud/test_04_flavor.py 58
+# ######################################################################
+[0m
+PASSED
+tests/cloud/test_04_flavor.py::Test_Flavor::test_cms_flavor 
+[35m
+# ######################################################################
+# test_cms_flavor /tests/cloud/test_04_flavor.py 65
+# ######################################################################
+[0m
+PASSED
+tests/cloud/test_04_flavor.py::Test_Flavor::test_benchmark 
+
++-----------------------------------------------------------------+----------+--------+---------------------+-------+------------------+--------+-------+-----------------------------------------------------+
+| Name                                                            | Status   |   Time | Start               | tag   | Node             | User   | OS    | Version                                             |
+|-----------------------------------------------------------------+----------+--------+---------------------+-------+------------------+--------+-------+-----------------------------------------------------|
+| test_00_sys/test_cms_help                                       | ok       |  2.424 | 2020-05-07 17:39:09 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_01_clean_local_remote/test_cms_init                        | ok       |  8.979 | 2020-05-07 17:39:11 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_01_clean_local_remote/test_delete_all_keys_from_cloud      | ok       |  0.002 | 2020-05-07 17:39:20 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_01_clean_local_remote/test_delete_all_secgroups_from_cloud | ok       |  0.129 | 2020-05-07 17:39:21 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_clear_local_database                           | ok       |  0.02  | 2020-05-07 17:39:21 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_clear_cloud_database                           | ok       |  0.02  | 2020-05-07 17:39:24 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_upload_key_to_database                         | ok       |  0.038 | 2020-05-07 17:39:21 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_list_key_from_cloud                            | ok       |  0.002 | 2020-05-07 17:39:22 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_delete_key_from_cloud                          | ok       |  0.001 | 2020-05-07 17:39:22 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_key_delete                                     | ok       |  0.022 | 2020-05-07 17:39:22 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_cms_local                                      | ok       |  2.641 | 2020-05-07 17:39:22 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_cms_cloud                                      | ok       |  4.439 | 2020-05-07 17:39:24 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_04_flavor/test_empty_database                              | ok       |  0.016 | 2020-05-07 17:39:29 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_04_flavor/test_provider_flavor                             | ok       |  0.888 | 2020-05-07 17:39:29 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_04_flavor/test_provider_flavor_update                      | ok       |  1.113 | 2020-05-07 17:39:30 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_04_flavor/test_cms_flavor_refresh                          | ok       |  2.812 | 2020-05-07 17:39:31 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_04_flavor/test_cms_flavor                                  | ok       |  2.11  | 2020-05-07 17:39:34 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
++-----------------------------------------------------------------+----------+--------+---------------------+-------+------------------+--------+-------+-----------------------------------------------------+
+
+# csv,timer,status,time,start,tag,uname.node,user,uname.system,platform.version
+# csv,test_00_sys/test_cms_help,ok,2.424,2020-05-07 17:39:09,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_01_clean_local_remote/test_cms_init,ok,8.979,2020-05-07 17:39:11,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_01_clean_local_remote/test_delete_all_keys_from_cloud,ok,0.002,2020-05-07 17:39:20,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_01_clean_local_remote/test_delete_all_secgroups_from_cloud,ok,0.129,2020-05-07 17:39:21,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_clear_local_database,ok,0.02,2020-05-07 17:39:21,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_clear_cloud_database,ok,0.02,2020-05-07 17:39:24,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_upload_key_to_database,ok,0.038,2020-05-07 17:39:21,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_list_key_from_cloud,ok,0.002,2020-05-07 17:39:22,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_delete_key_from_cloud,ok,0.001,2020-05-07 17:39:22,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_key_delete,ok,0.022,2020-05-07 17:39:22,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_cms_local,ok,2.641,2020-05-07 17:39:22,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_cms_cloud,ok,4.439,2020-05-07 17:39:24,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_04_flavor/test_empty_database,ok,0.016,2020-05-07 17:39:29,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_04_flavor/test_provider_flavor,ok,0.888,2020-05-07 17:39:29,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_04_flavor/test_provider_flavor_update,ok,1.113,2020-05-07 17:39:30,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_04_flavor/test_cms_flavor_refresh,ok,2.812,2020-05-07 17:39:31,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_04_flavor/test_cms_flavor,ok,2.11,2020-05-07 17:39:34,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+
+PASSED
+tests/cloud/test_05_image.py::Test_Image::test_empty_database 
+[35m
+# ######################################################################
+# test_empty_database /tests/cloud/test_05_image.py 38
+# ######################################################################
+[0m
+PASSED
+tests/cloud/test_05_image.py::Test_Image::test_provider_image 
+[35m
+# ######################################################################
+# test_provider_image /tests/cloud/test_05_image.py 44
+# ######################################################################
+[0m
+[31mDEBUG: PUBLISHER: 128technology, OFFER: 128technology_conductor_hourly, SKU: 128technology_conductor_hourly_427, VERSION: 1.0.0[0m
+[31mDEBUG: PUBLISHER: 128technology, OFFER: 128technology_conductor_hourly, SKU: 128technology_conductor_private_427, VERSION: 1.0.0[0m
+[31mDEBUG: PUBLISHER: 128technology, OFFER: 128technology_router_100_hourly, SKU: 128technology_router_100_hourly_427, VERSION: 1.0.0[0m
+[31mDEBUG: PUBLISHER: 128technology, OFFER: 128technology_router_100_hourly, SKU: 128technology_router_100_private_427, VERSION: 1.0.0[0m
+[31mDEBUG: PUBLISHER: 128technology, OFFER: 128t_networking_platform, SKU: 128t_networking_platform, VERSION: 1.0.0[0m
+[31mDEBUG: PUBLISHER: 128technology, OFFER: 128t_networking_platform, SKU: 128t_networking_platform, VERSION: 1.1.0[0m
+[31mDEBUG: PUBLISHER: 128technology, OFFER: 128t_networking_platform, SKU: 128t_networking_platform, VERSION: 1.1.2[0m
+[31mDEBUG: PUBLISHER: 128technology, OFFER: 128t_networking_platform, SKU: 128t_networking_platform, VERSION: 1.1.4[0m
+[31mDEBUG: PUBLISHER: 128technology, OFFER: 128t_networking_platform, SKU: 128t_networking_platform, VERSION: 1.1.7[0m
+[31mDEBUG: PUBLISHER: 1e, OFFER: tachyonv30-0-100, SKU: tachyonv4-1, VERSION: 5.0.0[0m
+[31mDEBUG: PUBLISHER: 2021ai, OFFER: grace-churn-vm, SKU: grace_vm, VERSION: 0.0.2[0m
+[31mDEBUG: PUBLISHER: 3cx-pbx, OFFER: 3cx-pbx, SKU: 16, VERSION: 16.0.13[0m
+[31mDEBUG: PUBLISHER: 4psa, OFFER: voipnow, SKU: vpn525-single, VERSION: 5.2.5[0m
+PASSED
+tests/cloud/test_05_image.py::Test_Image::test_provider_image_update 
+[35m
+# ######################################################################
+# test_provider_image_update /tests/cloud/test_05_image.py 50
+# ######################################################################
+[0m
+[31mDEBUG: PUBLISHER: 128technology, OFFER: 128technology_conductor_hourly, SKU: 128technology_conductor_hourly_427, VERSION: 1.0.0[0m
+[31mDEBUG: PUBLISHER: 128technology, OFFER: 128technology_conductor_hourly, SKU: 128technology_conductor_private_427, VERSION: 1.0.0[0m
+[31mDEBUG: PUBLISHER: 128technology, OFFER: 128technology_router_100_hourly, SKU: 128technology_router_100_hourly_427, VERSION: 1.0.0[0m
+[31mDEBUG: PUBLISHER: 128technology, OFFER: 128technology_router_100_hourly, SKU: 128technology_router_100_private_427, VERSION: 1.0.0[0m
+[31mDEBUG: PUBLISHER: 128technology, OFFER: 128t_networking_platform, SKU: 128t_networking_platform, VERSION: 1.0.0[0m
+[31mDEBUG: PUBLISHER: 128technology, OFFER: 128t_networking_platform, SKU: 128t_networking_platform, VERSION: 1.1.0[0m
+[31mDEBUG: PUBLISHER: 128technology, OFFER: 128t_networking_platform, SKU: 128t_networking_platform, VERSION: 1.1.2[0m
+[31mDEBUG: PUBLISHER: 128technology, OFFER: 128t_networking_platform, SKU: 128t_networking_platform, VERSION: 1.1.4[0m
+[31mDEBUG: PUBLISHER: 128technology, OFFER: 128t_networking_platform, SKU: 128t_networking_platform, VERSION: 1.1.7[0m
+[31mDEBUG: PUBLISHER: 1e, OFFER: tachyonv30-0-100, SKU: tachyonv4-1, VERSION: 5.0.0[0m
+[31mDEBUG: PUBLISHER: 2021ai, OFFER: grace-churn-vm, SKU: grace_vm, VERSION: 0.0.2[0m
+[31mDEBUG: PUBLISHER: 3cx-pbx, OFFER: 3cx-pbx, SKU: 16, VERSION: 16.0.13[0m
+[31mDEBUG: PUBLISHER: 4psa, OFFER: voipnow, SKU: vpn525-single, VERSION: 5.2.5[0m
+PASSED
+tests/cloud/test_05_image.py::Test_Image::test_cms_image_refresh 
+[35m
+# ######################################################################
+# test_cms_image_refresh /tests/cloud/test_05_image.py 58
+# ######################################################################
+[0m
+PASSED
+tests/cloud/test_05_image.py::Test_Image::test_cms_image 
+[35m
+# ######################################################################
+# test_cms_image /tests/cloud/test_05_image.py 65
+# ######################################################################
+[0m
+PASSED
+tests/cloud/test_05_image.py::Test_Image::test_benchmark 
+
++-----------------------------------------------------------------+----------+--------+---------------------+-------+------------------+--------+-------+-----------------------------------------------------+
+| Name                                                            | Status   |   Time | Start               | tag   | Node             | User   | OS    | Version                                             |
+|-----------------------------------------------------------------+----------+--------+---------------------+-------+------------------+--------+-------+-----------------------------------------------------|
+| test_00_sys/test_cms_help                                       | ok       |  2.424 | 2020-05-07 17:39:09 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_01_clean_local_remote/test_cms_init                        | ok       |  8.979 | 2020-05-07 17:39:11 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_01_clean_local_remote/test_delete_all_keys_from_cloud      | ok       |  0.002 | 2020-05-07 17:39:20 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_01_clean_local_remote/test_delete_all_secgroups_from_cloud | ok       |  0.129 | 2020-05-07 17:39:21 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_clear_local_database                           | ok       |  0.02  | 2020-05-07 17:39:21 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_clear_cloud_database                           | ok       |  0.02  | 2020-05-07 17:39:24 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_upload_key_to_database                         | ok       |  0.038 | 2020-05-07 17:39:21 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_list_key_from_cloud                            | ok       |  0.002 | 2020-05-07 17:39:22 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_delete_key_from_cloud                          | ok       |  0.001 | 2020-05-07 17:39:22 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_key_delete                                     | ok       |  0.022 | 2020-05-07 17:39:22 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_cms_local                                      | ok       |  2.641 | 2020-05-07 17:39:22 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_cms_cloud                                      | ok       |  4.439 | 2020-05-07 17:39:24 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_04_flavor/test_empty_database                              | ok       |  0.016 | 2020-05-07 17:39:29 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_04_flavor/test_provider_flavor                             | ok       |  0.888 | 2020-05-07 17:39:29 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_04_flavor/test_provider_flavor_update                      | ok       |  1.113 | 2020-05-07 17:39:30 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_04_flavor/test_cms_flavor_refresh                          | ok       |  2.812 | 2020-05-07 17:39:31 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_04_flavor/test_cms_flavor                                  | ok       |  2.11  | 2020-05-07 17:39:34 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_05_image/test_empty_database                               | ok       |  0.018 | 2020-05-07 17:39:36 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_05_image/test_provider_image                               | ok       |  3.986 | 2020-05-07 17:39:36 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_05_image/test_provider_image_update                        | ok       |  2.983 | 2020-05-07 17:39:40 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_05_image/test_cms_image_refresh                            | ok       |  8.176 | 2020-05-07 17:39:44 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_05_image/test_cms_image                                    | ok       |  2.145 | 2020-05-07 17:39:52 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
++-----------------------------------------------------------------+----------+--------+---------------------+-------+------------------+--------+-------+-----------------------------------------------------+
+
+# csv,timer,status,time,start,tag,uname.node,user,uname.system,platform.version
+# csv,test_00_sys/test_cms_help,ok,2.424,2020-05-07 17:39:09,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_01_clean_local_remote/test_cms_init,ok,8.979,2020-05-07 17:39:11,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_01_clean_local_remote/test_delete_all_keys_from_cloud,ok,0.002,2020-05-07 17:39:20,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_01_clean_local_remote/test_delete_all_secgroups_from_cloud,ok,0.129,2020-05-07 17:39:21,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_clear_local_database,ok,0.02,2020-05-07 17:39:21,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_clear_cloud_database,ok,0.02,2020-05-07 17:39:24,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_upload_key_to_database,ok,0.038,2020-05-07 17:39:21,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_list_key_from_cloud,ok,0.002,2020-05-07 17:39:22,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_delete_key_from_cloud,ok,0.001,2020-05-07 17:39:22,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_key_delete,ok,0.022,2020-05-07 17:39:22,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_cms_local,ok,2.641,2020-05-07 17:39:22,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_cms_cloud,ok,4.439,2020-05-07 17:39:24,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_04_flavor/test_empty_database,ok,0.016,2020-05-07 17:39:29,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_04_flavor/test_provider_flavor,ok,0.888,2020-05-07 17:39:29,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_04_flavor/test_provider_flavor_update,ok,1.113,2020-05-07 17:39:30,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_04_flavor/test_cms_flavor_refresh,ok,2.812,2020-05-07 17:39:31,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_04_flavor/test_cms_flavor,ok,2.11,2020-05-07 17:39:34,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_05_image/test_empty_database,ok,0.018,2020-05-07 17:39:36,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_05_image/test_provider_image,ok,3.986,2020-05-07 17:39:36,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_05_image/test_provider_image_update,ok,2.983,2020-05-07 17:39:40,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_05_image/test_cms_image_refresh,ok,8.176,2020-05-07 17:39:44,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_05_image/test_cms_image,ok,2.145,2020-05-07 17:39:52,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+
+PASSED
+tests/cloud/test_07_secgroup_provider.py::Test_secgroup_provider::test_load 
+[35m
+# ######################################################################
+# test_load /tests/cloud/test_07_secgroup_provider.py 55
+# ######################################################################
+[0m
+
+PASSED
+tests/cloud/test_07_secgroup_provider.py::Test_secgroup_provider::test_list_variables 
+[35m
+# ######################################################################
+# test_list_variables /tests/cloud/test_07_secgroup_provider.py 71
+# ######################################################################
+[0m
+josh
+azure
+PASSED
+tests/cloud/test_07_secgroup_provider.py::Test_secgroup_provider::test_list_secgroups 
+[35m
+# ######################################################################
+# test_list_secgroups /tests/cloud/test_07_secgroup_provider.py 79
+# ######################################################################
+[0m
+[34mINFO: Local security groups: [0m
+[34mINFO: {'description': 'Default security group', 'rules': ['ssh', 'icmp', 'http', 'https'], 'name': 'default', 'cm': {'kind': 'secgroup', 'name': 'default', 'cloud': 'local', 'collection': 'local-secgroup', 'created': '2020-05-07 17:39:54.589222', 'modified': '2020-05-07 17:39:54.589222'}}[0m
+[34mINFO: {'description': 'Flask security group', 'rules': ['ssh', 'icmp', 'http', 'https', 'flask'], 'name': 'flask', 'cm': {'kind': 'secgroup', 'name': 'flask', 'cloud': 'local', 'collection': 'local-secgroup', 'created': '2020-05-07 17:39:54.590758', 'modified': '2020-05-07 17:39:54.590758'}}[0m
+[34mINFO: Az security groups: [0m
+[
+    {
+        "description": "Default security group",
+        "rules": [
+            "ssh",
+            "icmp",
+            "http",
+            "https"
+        ],
+        "name": "default",
+        "cm": {
+            "kind": "secgroup",
+            "name": "default",
+            "cloud": "local",
+            "collection": "local-secgroup",
+            "created": "2020-05-07 17:39:54.589222",
+            "modified": "2020-05-07 17:39:54.589222"
+        }
+    },
+    {
+        "description": "Flask security group",
+        "rules": [
+            "ssh",
+            "icmp",
+            "http",
+            "https",
+            "flask"
+        ],
+        "name": "flask",
+        "cm": {
+            "kind": "secgroup",
+            "name": "flask",
+            "cloud": "local",
+            "collection": "local-secgroup",
+            "created": "2020-05-07 17:39:54.590758",
+            "modified": "2020-05-07 17:39:54.590758"
+        }
+    }
+]
+PASSED
+tests/cloud/test_07_secgroup_provider.py::Test_secgroup_provider::test_list_secgroups_rules 
+[35m
+# ######################################################################
+# test_list_secgroups_rules /tests/cloud/test_07_secgroup_provider.py 86
+# ######################################################################
+[0m
+[34mINFO: local security rules for 'default': [{'protocol': 'tcp', 'ip_range': '0.0.0.0/0', 'ports': '22:22', 'name': 'ssh', 'cm': {'kind': 'secrule', 'name': 'ssh', 'cloud': 'local', 'collection': 'local-secrule', 'created': '2020-05-07 17:39:54.592105', 'modified': '2020-05-07 17:39:54.592105'}}, {'protocol': 'icmp', 'ip_range': '0.0.0.0/0', 'ports': '', 'name': 'icmp', 'cm': {'kind': 'secrule', 'name': 'icmp', 'cloud': 'local', 'collection': 'local-secrule', 'created': '2020-05-07 17:39:54.593433', 'modified': '2020-05-07 17:39:54.593433'}}, {'protocol': 'tcp', 'ip_range': '0.0.0.0/0', 'ports': '80:80', 'name': 'http', 'cm': {'kind': 'secrule', 'name': 'http', 'cloud': 'local', 'collection': 'local-secrule', 'created': '2020-05-07 17:39:54.596315', 'modified': '2020-05-07 17:39:54.596315'}}, {'protocol': 'tcp', 'ip_range': '0.0.0.0/0', 'ports': '443:443', 'name': 'https', 'cm': {'kind': 'secrule', 'name': 'https', 'cloud': 'local', 'collection': 'local-secrule', 'created': '2020-05-07 17:39:54.598310', 'modified': '2020-05-07 17:39:54.598310'}}][0m
+[34mINFO: az security rules for 'default': [0m
+[35mWARNING: Error in pulling sec rules: Azure Error: ResourceNotFound
+Message: The Resource 'Microsoft.Network/networkSecurityGroups/default' under resource group 'cloudmesh' was not found.[0m
+FAILED
+tests/cloud/test_07_secgroup_provider.py::Test_secgroup_provider::test_secgroups_add 
+[35m
+# ######################################################################
+# test_secgroups_add /tests/cloud/test_07_secgroup_provider.py 93
+# ######################################################################
+[0m
+[35mWARNING: test-sec-group sec group is not found! Created new group: {'description': None, 'rules': [], 'name': 'test-sec-group', 'cm': {'kind': 'secgroup', 'name': 'test-sec-group', 'cloud': 'local', 'collection': 'local-secgroup', 'created': '2020-05-07 13:39:55.525681', 'modified': '2020-05-07 13:39:55.525697'}, '_id': ObjectId('5eb447eb2b727cce0230b6f9')}[0m
+[34mINFO: sec group created successfully![0m
+[34mINFO: Local security groups: [0m
+[34mINFO: {'description': 'Default security group', 'rules': ['ssh', 'icmp', 'http', 'https'], 'name': 'default', 'cm': {'kind': 'secgroup', 'name': 'default', 'cloud': 'local', 'collection': 'local-secgroup', 'created': '2020-05-07 17:39:54.589222', 'modified': '2020-05-07 17:39:54.589222'}}[0m
+[34mINFO: {'description': 'Flask security group', 'rules': ['ssh', 'icmp', 'http', 'https', 'flask'], 'name': 'flask', 'cm': {'kind': 'secgroup', 'name': 'flask', 'cloud': 'local', 'collection': 'local-secgroup', 'created': '2020-05-07 17:39:54.590758', 'modified': '2020-05-07 17:39:54.590758'}}[0m
+[34mINFO: {'description': None, 'rules': [], 'name': 'test-sec-group', 'cm': {'kind': 'secgroup', 'name': 'test-sec-group', 'cloud': 'local', 'collection': 'local-secgroup', 'created': '2020-05-07 13:39:55.525681', 'modified': '2020-05-07 13:39:55.525697'}}[0m
+[34mINFO: Az security groups: [0m
+[
+    {
+        "description": "Default security group",
+        "rules": [
+            "ssh",
+            "icmp",
+            "http",
+            "https"
+        ],
+        "name": "default",
+        "cm": {
+            "kind": "secgroup",
+            "name": "default",
+            "cloud": "local",
+            "collection": "local-secgroup",
+            "created": "2020-05-07 17:39:54.589222",
+            "modified": "2020-05-07 17:39:54.589222"
+        }
+    },
+    {
+        "description": "Flask security group",
+        "rules": [
+            "ssh",
+            "icmp",
+            "http",
+            "https",
+            "flask"
+        ],
+        "name": "flask",
+        "cm": {
+            "kind": "secgroup",
+            "name": "flask",
+            "cloud": "local",
+            "collection": "local-secgroup",
+            "created": "2020-05-07 17:39:54.590758",
+            "modified": "2020-05-07 17:39:54.590758"
+        }
+    },
+    {
+        "description": null,
+        "rules": [],
+        "name": "test-sec-group",
+        "cm": {
+            "kind": "secgroup",
+            "name": "test-sec-group",
+            "cloud": "local",
+            "collection": "local-secgroup",
+            "created": "2020-05-07 13:39:55.525681",
+            "modified": "2020-05-07 13:39:55.525697"
+        }
+    }
+]
+PASSED
+tests/cloud/test_07_secgroup_provider.py::Test_secgroup_provider::test_upload_secgroup 
+[35m
+# ######################################################################
+# test_upload_secgroup /tests/cloud/test_07_secgroup_provider.py 107
+# ######################################################################
+[0m
+[34mINFO: Local security groups: [0m
+[34mINFO: {'description': 'Default security group', 'rules': ['ssh', 'icmp', 'http', 'https'], 'name': 'default', 'cm': {'kind': 'secgroup', 'name': 'default', 'cloud': 'local', 'collection': 'local-secgroup', 'created': '2020-05-07 17:39:54.589222', 'modified': '2020-05-07 17:39:54.589222'}}[0m
+[34mINFO: {'description': 'Flask security group', 'rules': ['ssh', 'icmp', 'http', 'https', 'flask'], 'name': 'flask', 'cm': {'kind': 'secgroup', 'name': 'flask', 'cloud': 'local', 'collection': 'local-secgroup', 'created': '2020-05-07 17:39:54.590758', 'modified': '2020-05-07 17:39:54.590758'}}[0m
+[34mINFO: {'description': None, 'rules': [], 'name': 'test-sec-group', 'cm': {'kind': 'secgroup', 'name': 'test-sec-group', 'cloud': 'local', 'collection': 'local-secgroup', 'created': '2020-05-07 13:39:55.525681', 'modified': '2020-05-07 13:39:55.525697'}}[0m
+[34mINFO: Az security groups: [0m
+[34mINFO: {'additional_properties': {}, 'id': '/subscriptions/bd83424e-705b-4b1a-95ea-8f33fe6bcbc3/resourceGroups/cloudmesh/providers/Microsoft.Network/networkSecurityGroups/test-sec-group', 'name': 'test-sec-group', 'type': 'Microsoft.Network/networkSecurityGroups', 'location': 'eastus', 'tags': None, 'security_rules': [], 'default_security_rules': [<azure.mgmt.network.v2020_03_01.models._models_py3.SecurityRule object at 0x7f48c8a9ce80>, <azure.mgmt.network.v2020_03_01.models._models_py3.SecurityRule object at 0x7f48c8a9c6d0>, <azure.mgmt.network.v2020_03_01.models._models_py3.SecurityRule object at 0x7f48c8a9c130>, <azure.mgmt.network.v2020_03_01.models._models_py3.SecurityRule object at 0x7f48c8a9c700>, <azure.mgmt.network.v2020_03_01.models._models_py3.SecurityRule object at 0x7f48c8a9cd00>, <azure.mgmt.network.v2020_03_01.models._models_py3.SecurityRule object at 0x7f48c8a9c610>], 'network_interfaces': None, 'subnets': None, 'flow_logs': None, 'resource_guid': '5138952e-2975-4e74-a745-d335239a3a36', 'provisioning_state': 'Succeeded', 'etag': 'W/"602467e8-cfba-4713-8660-a89f4ec2cb2f"'}[0m
+[
+    {
+        "description": "Default security group",
+        "rules": [
+            "ssh",
+            "icmp",
+            "http",
+            "https"
+        ],
+        "name": "default",
+        "cm": {
+            "kind": "secgroup",
+            "name": "default",
+            "cloud": "local",
+            "collection": "local-secgroup",
+            "created": "2020-05-07 17:39:54.589222",
+            "modified": "2020-05-07 17:39:54.589222"
+        }
+    },
+    {
+        "description": "Flask security group",
+        "rules": [
+            "ssh",
+            "icmp",
+            "http",
+            "https",
+            "flask"
+        ],
+        "name": "flask",
+        "cm": {
+            "kind": "secgroup",
+            "name": "flask",
+            "cloud": "local",
+            "collection": "local-secgroup",
+            "created": "2020-05-07 17:39:54.590758",
+            "modified": "2020-05-07 17:39:54.590758"
+        }
+    },
+    {
+        "description": null,
+        "rules": [],
+        "name": "test-sec-group",
+        "cm": {
+            "kind": "secgroup",
+            "name": "test-sec-group",
+            "cloud": "local",
+            "collection": "local-secgroup",
+            "created": "2020-05-07 13:39:55.525681",
+            "modified": "2020-05-07 13:39:55.525697"
+        }
+    }
+]
+PASSED
+tests/cloud/test_07_secgroup_provider.py::Test_secgroup_provider::test_secgroups_delete 
+[35m
+# ######################################################################
+# test_secgroups_delete /tests/cloud/test_07_secgroup_provider.py 116
+# ######################################################################
+[0m
+[34mINFO: Security group test-sec-group deleted from Az![0m
+[34mINFO: Local security groups: [0m
+[34mINFO: {'description': 'Default security group', 'rules': ['ssh', 'icmp', 'http', 'https'], 'name': 'default', 'cm': {'kind': 'secgroup', 'name': 'default', 'cloud': 'local', 'collection': 'local-secgroup', 'created': '2020-05-07 17:39:54.589222', 'modified': '2020-05-07 17:39:54.589222'}}[0m
+[34mINFO: {'description': 'Flask security group', 'rules': ['ssh', 'icmp', 'http', 'https', 'flask'], 'name': 'flask', 'cm': {'kind': 'secgroup', 'name': 'flask', 'cloud': 'local', 'collection': 'local-secgroup', 'created': '2020-05-07 17:39:54.590758', 'modified': '2020-05-07 17:39:54.590758'}}[0m
+[34mINFO: {'description': None, 'rules': [], 'name': 'test-sec-group', 'cm': {'kind': 'secgroup', 'name': 'test-sec-group', 'cloud': 'local', 'collection': 'local-secgroup', 'created': '2020-05-07 13:39:55.525681', 'modified': '2020-05-07 13:39:55.525697'}}[0m
+[34mINFO: Az security groups: [0m
+default
+flask
+test-sec-group
+[
+    {
+        "description": "Default security group",
+        "rules": [
+            "ssh",
+            "icmp",
+            "http",
+            "https"
+        ],
+        "name": "default",
+        "cm": {
+            "kind": "secgroup",
+            "name": "default",
+            "cloud": "local",
+            "collection": "local-secgroup",
+            "created": "2020-05-07 17:39:54.589222",
+            "modified": "2020-05-07 17:39:54.589222"
+        }
+    },
+    {
+        "description": "Flask security group",
+        "rules": [
+            "ssh",
+            "icmp",
+            "http",
+            "https",
+            "flask"
+        ],
+        "name": "flask",
+        "cm": {
+            "kind": "secgroup",
+            "name": "flask",
+            "cloud": "local",
+            "collection": "local-secgroup",
+            "created": "2020-05-07 17:39:54.590758",
+            "modified": "2020-05-07 17:39:54.590758"
+        }
+    },
+    {
+        "description": null,
+        "rules": [],
+        "name": "test-sec-group",
+        "cm": {
+            "kind": "secgroup",
+            "name": "test-sec-group",
+            "cloud": "local",
+            "collection": "local-secgroup",
+            "created": "2020-05-07 13:39:55.525681",
+            "modified": "2020-05-07 13:39:55.525697"
+        }
+    }
+]
+PASSED
+tests/cloud/test_07_secgroup_provider.py::Test_secgroup_provider::test_secgroups_delete_again 
+[35m
+# ######################################################################
+# test_secgroups_delete_again /tests/cloud/test_07_secgroup_provider.py 135
+# ######################################################################
+[0m
+[34mINFO: Security group test-sec-group deleted from Az![0m
+[34mINFO: Local security groups: [0m
+[34mINFO: {'description': 'Default security group', 'rules': ['ssh', 'icmp', 'http', 'https'], 'name': 'default', 'cm': {'kind': 'secgroup', 'name': 'default', 'cloud': 'local', 'collection': 'local-secgroup', 'created': '2020-05-07 17:39:54.589222', 'modified': '2020-05-07 17:39:54.589222'}}[0m
+[34mINFO: {'description': 'Flask security group', 'rules': ['ssh', 'icmp', 'http', 'https', 'flask'], 'name': 'flask', 'cm': {'kind': 'secgroup', 'name': 'flask', 'cloud': 'local', 'collection': 'local-secgroup', 'created': '2020-05-07 17:39:54.590758', 'modified': '2020-05-07 17:39:54.590758'}}[0m
+[34mINFO: {'description': None, 'rules': [], 'name': 'test-sec-group', 'cm': {'kind': 'secgroup', 'name': 'test-sec-group', 'cloud': 'local', 'collection': 'local-secgroup', 'created': '2020-05-07 13:39:55.525681', 'modified': '2020-05-07 13:39:55.525697'}}[0m
+[34mINFO: Az security groups: [0m
+default
+flask
+test-sec-group
+[
+    {
+        "description": "Default security group",
+        "rules": [
+            "ssh",
+            "icmp",
+            "http",
+            "https"
+        ],
+        "name": "default",
+        "cm": {
+            "kind": "secgroup",
+            "name": "default",
+            "cloud": "local",
+            "collection": "local-secgroup",
+            "created": "2020-05-07 17:39:54.589222",
+            "modified": "2020-05-07 17:39:54.589222"
+        }
+    },
+    {
+        "description": "Flask security group",
+        "rules": [
+            "ssh",
+            "icmp",
+            "http",
+            "https",
+            "flask"
+        ],
+        "name": "flask",
+        "cm": {
+            "kind": "secgroup",
+            "name": "flask",
+            "cloud": "local",
+            "collection": "local-secgroup",
+            "created": "2020-05-07 17:39:54.590758",
+            "modified": "2020-05-07 17:39:54.590758"
+        }
+    },
+    {
+        "description": null,
+        "rules": [],
+        "name": "test-sec-group",
+        "cm": {
+            "kind": "secgroup",
+            "name": "test-sec-group",
+            "cloud": "local",
+            "collection": "local-secgroup",
+            "created": "2020-05-07 13:39:55.525681",
+            "modified": "2020-05-07 13:39:55.525697"
+        }
+    }
+]
+PASSED
+tests/cloud/test_07_secgroup_provider.py::Test_secgroup_provider::test_benchmark 
+
++-----------------------------------------------------------------+----------+--------+---------------------+-------+------------------+--------+-------+-----------------------------------------------------+
+| Name                                                            | Status   |   Time | Start               | tag   | Node             | User   | OS    | Version                                             |
+|-----------------------------------------------------------------+----------+--------+---------------------+-------+------------------+--------+-------+-----------------------------------------------------|
+| test_00_sys/test_cms_help                                       | ok       |  2.424 | 2020-05-07 17:39:09 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_01_clean_local_remote/test_cms_init                        | ok       |  8.979 | 2020-05-07 17:39:11 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_01_clean_local_remote/test_delete_all_keys_from_cloud      | ok       |  0.002 | 2020-05-07 17:39:20 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_01_clean_local_remote/test_delete_all_secgroups_from_cloud | ok       |  0.129 | 2020-05-07 17:39:21 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_clear_local_database                           | ok       |  0.02  | 2020-05-07 17:39:21 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_clear_cloud_database                           | ok       |  0.02  | 2020-05-07 17:39:24 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_upload_key_to_database                         | ok       |  0.038 | 2020-05-07 17:39:21 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_list_key_from_cloud                            | ok       |  0.002 | 2020-05-07 17:39:22 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_delete_key_from_cloud                          | ok       |  0.001 | 2020-05-07 17:39:22 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_key_delete                                     | ok       |  0.022 | 2020-05-07 17:39:22 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_cms_local                                      | ok       |  2.641 | 2020-05-07 17:39:22 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_cms_cloud                                      | ok       |  4.439 | 2020-05-07 17:39:24 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_04_flavor/test_empty_database                              | ok       |  0.016 | 2020-05-07 17:39:29 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_04_flavor/test_provider_flavor                             | ok       |  0.888 | 2020-05-07 17:39:29 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_04_flavor/test_provider_flavor_update                      | ok       |  1.113 | 2020-05-07 17:39:30 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_04_flavor/test_cms_flavor_refresh                          | ok       |  2.812 | 2020-05-07 17:39:31 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_04_flavor/test_cms_flavor                                  | ok       |  2.11  | 2020-05-07 17:39:34 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_05_image/test_empty_database                               | ok       |  0.018 | 2020-05-07 17:39:36 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_05_image/test_provider_image                               | ok       |  3.986 | 2020-05-07 17:39:36 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_05_image/test_provider_image_update                        | ok       |  2.983 | 2020-05-07 17:39:40 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_05_image/test_cms_image_refresh                            | ok       |  8.176 | 2020-05-07 17:39:44 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_05_image/test_cms_image                                    | ok       |  2.145 | 2020-05-07 17:39:52 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_07_secgroup_provider/test_load                             | ok       |  0.052 | 2020-05-07 17:39:54 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_07_secgroup_provider/test_list_variables                   | ok       |  0.001 | 2020-05-07 17:39:55 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_07_secgroup_provider/test_list_secgroups                   | ok       |  0.226 | 2020-05-07 17:39:55 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_07_secgroup_provider/test_list_secgroups_rules             | ok       |  0.146 | 2020-05-07 17:39:55 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_07_secgroup_provider/test_secgroups_add                    | ok       |  0.032 | 2020-05-07 17:39:55 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_07_secgroup_provider/test_upload_secgroup                  | ok       |  5.381 | 2020-05-07 17:39:55 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_07_secgroup_provider/test_secgroups_delete                 | ok       | 10.62  | 2020-05-07 17:40:01 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_07_secgroup_provider/test_secgroups_delete_again           | ok       |  0.094 | 2020-05-07 17:40:11 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
++-----------------------------------------------------------------+----------+--------+---------------------+-------+------------------+--------+-------+-----------------------------------------------------+
+
+# csv,timer,status,time,start,tag,uname.node,user,uname.system,platform.version
+# csv,test_00_sys/test_cms_help,ok,2.424,2020-05-07 17:39:09,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_01_clean_local_remote/test_cms_init,ok,8.979,2020-05-07 17:39:11,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_01_clean_local_remote/test_delete_all_keys_from_cloud,ok,0.002,2020-05-07 17:39:20,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_01_clean_local_remote/test_delete_all_secgroups_from_cloud,ok,0.129,2020-05-07 17:39:21,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_clear_local_database,ok,0.02,2020-05-07 17:39:21,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_clear_cloud_database,ok,0.02,2020-05-07 17:39:24,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_upload_key_to_database,ok,0.038,2020-05-07 17:39:21,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_list_key_from_cloud,ok,0.002,2020-05-07 17:39:22,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_delete_key_from_cloud,ok,0.001,2020-05-07 17:39:22,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_key_delete,ok,0.022,2020-05-07 17:39:22,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_cms_local,ok,2.641,2020-05-07 17:39:22,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_cms_cloud,ok,4.439,2020-05-07 17:39:24,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_04_flavor/test_empty_database,ok,0.016,2020-05-07 17:39:29,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_04_flavor/test_provider_flavor,ok,0.888,2020-05-07 17:39:29,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_04_flavor/test_provider_flavor_update,ok,1.113,2020-05-07 17:39:30,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_04_flavor/test_cms_flavor_refresh,ok,2.812,2020-05-07 17:39:31,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_04_flavor/test_cms_flavor,ok,2.11,2020-05-07 17:39:34,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_05_image/test_empty_database,ok,0.018,2020-05-07 17:39:36,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_05_image/test_provider_image,ok,3.986,2020-05-07 17:39:36,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_05_image/test_provider_image_update,ok,2.983,2020-05-07 17:39:40,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_05_image/test_cms_image_refresh,ok,8.176,2020-05-07 17:39:44,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_05_image/test_cms_image,ok,2.145,2020-05-07 17:39:52,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_07_secgroup_provider/test_load,ok,0.052,2020-05-07 17:39:54,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_07_secgroup_provider/test_list_variables,ok,0.001,2020-05-07 17:39:55,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_07_secgroup_provider/test_list_secgroups,ok,0.226,2020-05-07 17:39:55,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_07_secgroup_provider/test_list_secgroups_rules,ok,0.146,2020-05-07 17:39:55,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_07_secgroup_provider/test_secgroups_add,ok,0.032,2020-05-07 17:39:55,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_07_secgroup_provider/test_upload_secgroup,ok,5.381,2020-05-07 17:39:55,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_07_secgroup_provider/test_secgroups_delete,ok,10.62,2020-05-07 17:40:01,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_07_secgroup_provider/test_secgroups_delete_again,ok,0.094,2020-05-07 17:40:11,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+
+PASSED
+tests/cloud/test_08_vm_provider.py::Test_provider_vm::test_key_upload key add
+key list
+ERROR: executing command 'key list'
+======================================================================
+sequence item 2: expected str instance, NoneType found
+sequence item 2: expected str instance, NoneType found
+Traceback (most recent call last):
+  File "/home/josh/dev/cloud/cloudmesh-cmd5/cloudmesh/shell/shell.py", line 1096, in main
+    stop = cmd.onecmd(command)
+  File "/home/josh/dev/cloud/cloudmesh-cmd5/cloudmesh/shell/shell.py", line 419, in onecmd
+    return func(arg)
+  File "/home/josh/dev/cloud/cloudmesh-cmd5/cloudmesh/shell/command.py", line 115, in new
+    func(instance, args, arguments)
+  File "/home/josh/dev/cloud/cloudmesh-cloud/cloudmesh/key/command/key.py", line 317, in do_key
+    print_keys(keys)
+  File "/home/josh/dev/cloud/cloudmesh-cloud/cloudmesh/key/command/key.py", line 222, in print_keys
+    entry["group"] = ', '.join(entry['group'])
+TypeError: sequence item 2: expected str instance, NoneType found
+
+======================================================================
+key delete josh --cloud=azure
+
+# ----------------------------------------------------------------------
+# cre
+# ----------------------------------------------------------------------
+# 220:__init__ /home/josh/dev/cloud/cloudmesh-azure/cloudmesh/azure/compute/Provider.py
+# ----------------------------------------------------------------------
+# {'AZURE_APPLICATION_ID': '********',
+#  'AZURE_REGION': 'eastus',
+#  'AZURE_SECRET_KEY': '******************************',
+#  'AZURE_SUBSCRIPTION_ID': '********',
+#  'AZURE_TENANT_ID': '********'}
+# ----------------------------------------------------------------------
+
+ERROR: Azure does not allow explicit key delete! Please use 'cms key' operations to delete keys from the local db!
+key upload josh --cloud=azure
+cloud azure
+
+# ----------------------------------------------------------------------
+# cre
+# ----------------------------------------------------------------------
+# 220:__init__ /home/josh/dev/cloud/cloudmesh-azure/cloudmesh/azure/compute/Provider.py
+# ----------------------------------------------------------------------
+# {'AZURE_APPLICATION_ID': '********',
+#  'AZURE_REGION': 'eastus',
+#  'AZURE_SECRET_KEY': '******************************',
+#  'AZURE_SUBSCRIPTION_ID': '********',
+#  'AZURE_TENANT_ID': '********'}
+# ----------------------------------------------------------------------
+
+ERROR: Azure does not allow explicit key upload! Please use 'cms key' operations to add keys to the local db and reference them at the VM creation!
+upload key 'josh successful'. 
+key list --cloud=azure
+cloud azure
+
+# ----------------------------------------------------------------------
+# cre
+# ----------------------------------------------------------------------
+# 220:__init__ /home/josh/dev/cloud/cloudmesh-azure/cloudmesh/azure/compute/Provider.py
+# ----------------------------------------------------------------------
+# {'AZURE_APPLICATION_ID': '********',
+#  'AZURE_REGION': 'eastus',
+#  'AZURE_SECRET_KEY': '******************************',
+#  'AZURE_SUBSCRIPTION_ID': '********',
+#  'AZURE_TENANT_ID': '********'}
+# ----------------------------------------------------------------------
+
+ERROR: Key list is not supported in Azure!
+Please use 
+
+    cms key list 
+
+ERROR: executing command 'key list --cloud=azure'
+======================================================================
+'order'
+'order'
+Traceback (most recent call last):
+  File "/home/josh/dev/cloud/cloudmesh-cmd5/cloudmesh/shell/shell.py", line 1096, in main
+    stop = cmd.onecmd(command)
+  File "/home/josh/dev/cloud/cloudmesh-cmd5/cloudmesh/shell/shell.py", line 419, in onecmd
+    return func(arg)
+  File "/home/josh/dev/cloud/cloudmesh-cmd5/cloudmesh/shell/command.py", line 115, in new
+    func(instance, args, arguments)
+  File "/home/josh/dev/cloud/cloudmesh-cloud/cloudmesh/key/command/key.py", line 284, in do_key
+    provider.Print(keys, output=arguments.output, kind="key")
+  File "/home/josh/dev/cloud/cloudmesh-cloud/cloudmesh/compute/vm/Provider.py", line 456, in Print
+    content = self.Prints(data, output=output, kind=kind)
+  File "/home/josh/dev/cloud/cloudmesh-cloud/cloudmesh/compute/vm/Provider.py", line 434, in Prints
+    order = self.p.output[kind]['order']  # not pretty
+KeyError: 'order'
+
+======================================================================
+PASSED
+tests/cloud/test_08_vm_provider.py::Test_provider_vm::test_find_largest_id test-josh-vm
+VM is []
+PASSED
+tests/cloud/test_08_vm_provider.py::Test_provider_vm::test_provider_vm_create vm list --cloud=azure
+List azure
+
+# ----------------------------------------------------------------------
+# cre
+# ----------------------------------------------------------------------
+# 220:__init__ /home/josh/dev/cloud/cloudmesh-azure/cloudmesh/azure/compute/Provider.py
+# ----------------------------------------------------------------------
+# {'AZURE_APPLICATION_ID': '********',
+#  'AZURE_REGION': 'eastus',
+#  'AZURE_SECRET_KEY': '******************************',
+#  'AZURE_SUBSCRIPTION_ID': '********',
+#  'AZURE_TENANT_ID': '********'}
+# ----------------------------------------------------------------------
+
++--------+---------+------+--------+------------+-----------+-----------+--------------+----------------+----------------------+---------+--------+
+| Name   | Cloud   | Id   | Type   | Location   | VM Size   | OS Name   | OS Version   | OS Disk Size   | Provisioning State   | VM ID   | Kind   |
+|--------+---------+------+--------+------------+-----------+-----------+--------------+----------------+----------------------+---------+--------|
++--------+---------+------+--------+------------+-----------+-----------+--------------+----------------+----------------------+---------+--------+
+
+[35m
+# ######################################################################
+# test_provider_vm_create /tests/cloud/test_08_vm_provider.py 90
+# ######################################################################
+[0m
+Variables
+{'timer': 'False', 'cloud': 'azure', 'vm': 'test-josh-vm-12', 'trace': 'True', 'debug': 'True', 'verbose': '10', 'storage': 'google', 'key': 'josh', 'refresh': 'False', 'group': 'cloudmesh'}
+Defaults
+{'image': 'Canonical:UbuntuServer:16.04.0-LTS:latest', 'size': 'Standard_F2s_v2', 'resource_group': 'cloudmesh', 'group': 'cloudmesh', 'storage_account': 'cmdrive', 'network': 'cmnetwork', 'subnet': 'cmsubnet', 'blob_container': 'vhds', 'AZURE_VM_IP_CONFIG': 'cloudmesh-ip-config', 'AZURE_VM_NIC': 'cloudmesh-nic', 'AZURE_VM_DISK_NAME': 'cloudmesh-os-disk', 'AZURE_VM_USER': 'TBD', 'AZURE_VM_PASSWORD': 'TBD', 'AZURE_VM_NAME': 'cloudmeshVM'}
+[34mINFO: Creating new public IP[0m
+[34mINFO: Public IP created: cloudmeshVM-pub-ip_0[0m
+[34mINFO: Creating Vnet[0m
+[34mINFO: VNET created: cmnetwork[0m
+[34mINFO: Creating Subnet[0m
+[34mINFO: Subnet created: cmsubnet[0m
+[34mINFO: Creating NIC[0m
+[34mINFO: NIC created: cloudmesh-nic_0[0m
+[34m
+# ----------------------------------------------------------------------
+# Creating Server
+# ----------------------------------------------------------------------
+[0m
+    Name:     test-josh-vm-2
+    User:     None
+    IP:       cloudmeshVM-pub-ip_0
+    Image:    Canonical:UbuntuServer:16.04.0-LTS:latest
+    Size:     Standard_F2s_v2
+    Public:   ?
+    Key:      josh
+    Location: None
+    Timeout:  360
+    Secgroup: default
+    Group:    cloudmesh
+
+[34mINFO: VM created: test-josh-vm-2[0m
+[34m
+# ----------------------------------------------------------------------
+# created
+# ----------------------------------------------------------------------
+# 225:create ./cloudmesh/compute/vm/Provider.py
+# ----------------------------------------------------------------------
+# [{'_id': ObjectId('5eb448072b727cce0230b6fc'),
+#   'cm': {'cloud': 'azure',
+#          'collection': 'azure-vm',
+#          'created': '2020-05-07 17:40:23.911805',
+#          'creation': '169.00',
+#          'group': 'cloudmesh',
+#          'kind': 'vm',
+#          'label': 'test-josh-vm-2',
+#          'modified': '2020-05-07 17:43:43.935707',
+#          'name': 'test-josh-vm-2',
+#          'status': 'available'},
+#   'hardware_profile': {'vm_size': 'Standard_B1s'},
+#   'id': '/subscriptions/bd83424e-705b-4b1a-95ea-8f33fe6bcbc3/resourceGroups/cloudmesh/providers/Microsoft.Compute/virtualMachines/test-josh-vm-2',
+#   'key': 'josh',
+#   'location': 'eastus',
+#   'metadata': '{\'cm\': "{\'kind\': \'vm\', \'name\': \'test-josh-vm-2\', '
+#               "'label': 'test-josh-vm-2', 'group': 'cloudmesh', 'cloud': "
+#               "'azure', 'status': 'available', 'collection': 'azure-vm', "
+#               "'created': '2020-05-07 17:40:23.911805', 'modified': "
+#               '\'2020-05-07 17:40:23.911805\', \'creation\': \'169.00\'}", '
+#               "'image': 'Canonical:UbuntuServer:16.04.0-LTS:latest', 'size': "
+#               "'Standard_F2s_v2'}",
+#   'name': 'test-josh-vm-2',
+#   'network_profile': {'network_interfaces': [{'id': '/subscriptions/bd83424e-705b-4b1a-95ea-8f33fe6bcbc3/resourceGroups/cloudmesh/providers/Microsoft.Network/networkInterfaces/cloudmesh-nic_0'}]},
+#   'os_profile': {'admin_username': 'TBD',
+#                  'allow_extension_operations': True,
+#                  'computer_name': 'test-josh-vm-2',
+#                  'linux_configuration': {'disable_password_authentication': True,
+#                                          'provision_vm_agent': True,
+#                                          'ssh': {'public_keys': [{'key_data': 'ssh-rsa '
+#                                                                               'AAAAB3NzaC1yc2EAAAADAQABAAACAQCZyFlYiArHL+v9i5sLp2HNv41J5PtLsFaJ4qDNiKgy0rBxmHtFg2giQDYPkWySZB1M+uOTSHkCR98ZsV64vCXfs09Z+xhT42B0jjqHNkILWgY1aShEvXzyII6B4Ny816fCMJI+kxllIeAIVgmwPwCjwsM6erUURBPmHlkPk7OG8Kt8ljiLuQ3TXtBfQ+zWRmvpCv0oN8ptWMCXulONpmTtuvLgNtTHSjeydqe9jSs2y+QwEp2P60A8ZgL8SK0WV5xtZEz6+YkBhl3eitub/D4ek+A37nY//SE8Fxau3TTH9VlMPFefvKUXoMsCCLm1Vs9UfnHKxzfeB9/XfBk4npMn7/Licdg2czGgkvK0FDv7EIDZfwh/KTa5KINPSRGkW5N2j73qi0I02QAkzd5NKfJca4vXklqcZwyIMYv0X0bxmbQ9o5TRO8ISeocDZAMLsYMlyO+wpoqd6MX3fe6d0eA0UBKozjQ7lw/UCnBlAKQGrFjXl4DEAm8xfW2d5vy5wyw2ygGtpKe5Rk30eVUNMfi/zvZYr4TwRZ0ieh2Y80UkQr/YGuM3C1C3GjQuxrMMQc8ooUs6f56+61/sJbsvRjtKiYwMvR8HJT4oGR5Ds4a9I2Wc2FKGzE/AZIGg/zeLCCqDLK+bZYWGwGu4G/XvOoJJfo4fqGf7NvKmcfVXU+zSXw== '
+#                                                                               'baker203@iu.edu',
+#                                                                   'path': '/home/TBD/.ssh/authorized_keys'}]}},
+#                  'require_guest_provision_signal': True,
+#                  'secrets': []},
+#   'provisioning_state': 'Succeeded',
+#   'public_ip': '52.170.57.30',
+#   'secgroup': 'default',
+#   'secrule': ['ssh', 'icmp', 'http', 'https'],
+#   'ssh_key_name': 'josh',
+#   'status': 'ACTIVE',
+#   'storage_profile': {'data_disks': [],
+#                       'image_reference': {'exact_version': '16.04.202004290',
+#                                           'offer': 'UbuntuServer',
+#                                           'publisher': 'Canonical',
+#                                           'sku': '16.04.0-LTS',
+#                                           'version': 'latest'},
+#                       'os_disk': {'caching': 'ReadWrite',
+#                                   'create_option': 'FromImage',
+#                                   'disk_size_gb': 64,
+#                                   'managed_disk': {'id': '/subscriptions/bd83424e-705b-4b1a-95ea-8f33fe6bcbc3/resourceGroups/CLOUDMESH/providers/Microsoft.Compute/disks/cloudmesh-os-disk_test-josh-vm-2',
+#                                                    'storage_account_type': 'Premium_LRS'},
+#                                   'name': 'cloudmesh-os-disk_test-josh-vm-2',
+#                                   'os_type': 'Linux'}},
+#   'type': 'Microsoft.Compute/virtualMachines',
+#   'vm_id': '906160ac-b693-4ca5-8464-c4dd18729307'}]
+# ----------------------------------------------------------------------
+[0m
+[34m
+# ----------------------------------------------------------------------
+# data
+# ----------------------------------------------------------------------
+# 98:test_provider_vm_create ./tests/cloud/test_08_vm_provider.py
+# ----------------------------------------------------------------------
+# [{'_id': ObjectId('5eb448072b727cce0230b6fc'),
+#   'cm': {'cloud': 'azure',
+#          'collection': 'azure-vm',
+#          'created': '2020-05-07 17:40:23.911805',
+#          'creation': '169.00',
+#          'driver': 'azure',
+#          'group': 'cloudmesh',
+#          'kind': 'vm',
+#          'label': 'test-josh-vm-2',
+#          'location': 'eastus',
+#          'modified': '2020-05-07 17:43:44.924180',
+#          'name': 'test-josh-vm-2',
+#          'ssh_key_name': 'josh',
+#          'status': 'available',
+#          'type': 'Microsoft.Compute/virtualMachines',
+#          'updated': '2020-05-07 17:43:44.422963'},
+#   'hardware_profile': {'vm_size': 'Standard_B1s'},
+#   'id': '/subscriptions/bd83424e-705b-4b1a-95ea-8f33fe6bcbc3/resourceGroups/cloudmesh/providers/Microsoft.Compute/virtualMachines/test-josh-vm-2',
+#   'key': 'josh',
+#   'location': 'eastus',
+#   'metadata': '{\'cm\': "{\'kind\': \'vm\', \'name\': \'test-josh-vm-2\', '
+#               "'label': 'test-josh-vm-2', 'group': 'cloudmesh', 'cloud': "
+#               "'azure', 'status': 'available', 'collection': 'azure-vm', "
+#               "'created': '2020-05-07 17:40:23.911805', 'modified': "
+#               '\'2020-05-07 17:40:23.911805\', \'creation\': \'169.00\'}", '
+#               "'image': 'Canonical:UbuntuServer:16.04.0-LTS:latest', 'size': "
+#               "'Standard_F2s_v2'}",
+#   'name': 'test-josh-vm-2',
+#   'network_profile': {'network_interfaces': [{'id': '/subscriptions/bd83424e-705b-4b1a-95ea-8f33fe6bcbc3/resourceGroups/cloudmesh/providers/Microsoft.Network/networkInterfaces/cloudmesh-nic_0'}]},
+#   'os_profile': {'admin_username': 'TBD',
+#                  'allow_extension_operations': True,
+#                  'computer_name': 'test-josh-vm-2',
+#                  'linux_configuration': {'disable_password_authentication': True,
+#                                          'provision_vm_agent': True,
+#                                          'ssh': {'public_keys': [{'key_data': 'ssh-rsa '
+#                                                                               'AAAAB3NzaC1yc2EAAAADAQABAAACAQCZyFlYiArHL+v9i5sLp2HNv41J5PtLsFaJ4qDNiKgy0rBxmHtFg2giQDYPkWySZB1M+uOTSHkCR98ZsV64vCXfs09Z+xhT42B0jjqHNkILWgY1aShEvXzyII6B4Ny816fCMJI+kxllIeAIVgmwPwCjwsM6erUURBPmHlkPk7OG8Kt8ljiLuQ3TXtBfQ+zWRmvpCv0oN8ptWMCXulONpmTtuvLgNtTHSjeydqe9jSs2y+QwEp2P60A8ZgL8SK0WV5xtZEz6+YkBhl3eitub/D4ek+A37nY//SE8Fxau3TTH9VlMPFefvKUXoMsCCLm1Vs9UfnHKxzfeB9/XfBk4npMn7/Licdg2czGgkvK0FDv7EIDZfwh/KTa5KINPSRGkW5N2j73qi0I02QAkzd5NKfJca4vXklqcZwyIMYv0X0bxmbQ9o5TRO8ISeocDZAMLsYMlyO+wpoqd6MX3fe6d0eA0UBKozjQ7lw/UCnBlAKQGrFjXl4DEAm8xfW2d5vy5wyw2ygGtpKe5Rk30eVUNMfi/zvZYr4TwRZ0ieh2Y80UkQr/YGuM3C1C3GjQuxrMMQc8ooUs6f56+61/sJbsvRjtKiYwMvR8HJT4oGR5Ds4a9I2Wc2FKGzE/AZIGg/zeLCCqDLK+bZYWGwGu4G/XvOoJJfo4fqGf7NvKmcfVXU+zSXw== '
+#                                                                               'baker203@iu.edu',
+#                                                                   'path': '/home/TBD/.ssh/authorized_keys'}]}},
+#                  'require_guest_provision_signal': True,
+#                  'secrets': []},
+#   'provisioning_state': 'Succeeded',
+#   'public_ip': '52.170.57.30',
+#   'secgroup': 'default',
+#   'secrule': ['ssh', 'icmp', 'http', 'https'],
+#   'ssh_key_name': 'josh',
+#   'status': 'ACTIVE',
+#   'storage_profile': {'data_disks': [],
+#                       'image_reference': {'exact_version': '16.04.202004290',
+#                                           'offer': 'UbuntuServer',
+#                                           'publisher': 'Canonical',
+#                                           'sku': '16.04.0-LTS',
+#                                           'version': 'latest'},
+#                       'os_disk': {'caching': 'ReadWrite',
+#                                   'create_option': 'FromImage',
+#                                   'disk_size_gb': 64,
+#                                   'managed_disk': {'id': '/subscriptions/bd83424e-705b-4b1a-95ea-8f33fe6bcbc3/resourceGroups/CLOUDMESH/providers/Microsoft.Compute/disks/cloudmesh-os-disk_test-josh-vm-2',
+#                                                    'storage_account_type': 'Premium_LRS'},
+#                                   'name': 'cloudmesh-os-disk_test-josh-vm-2',
+#                                   'os_type': 'Linux'}},
+#   'type': 'Microsoft.Compute/virtualMachines',
+#   'vm_id': '906160ac-b693-4ca5-8464-c4dd18729307'}]
+# ----------------------------------------------------------------------
+[0m
+status: {'name': 'test-josh-vm-2', 'status:': 'ACTIVE', 'cm.status': 'ACTIVE'}
+PASSED
+tests/cloud/test_08_vm_provider.py::Test_provider_vm::test_provider_vmprovider_vm_list 
+[35m
+# ######################################################################
+# test_provider_vmprovider_vm_list /tests/cloud/test_08_vm_provider.py 111
+# ######################################################################
+[0m
++----------------+---------+--------------------------------------------------+-----------------------------------+------------+--------------+--------------+--------------+----------------+----------------------+--------------------------------------+--------+
+| Name           | Cloud   | Id                                               | Type                              | Location   | VM Size      | OS Name      | OS Version   |   OS Disk Size | Provisioning State   | VM ID                                | Kind   |
+|----------------+---------+--------------------------------------------------+-----------------------------------+------------+--------------+--------------+--------------+----------------+----------------------+--------------------------------------+--------|
+| test-josh-vm-2 | azure   | /subscriptions/bd83424e-705b-4b1a-95ea-8f33fe6bc | Microsoft.Compute/virtualMachines | eastus     | Standard_B1s | UbuntuServer | 16.04.0-LTS  |             64 | Succeeded            | 906160ac-b693-4ca5-8464-c4dd18729307 | vm     |
+|                |         | bc3/resourceGroups/cloudmesh/providers/Microsoft |                                   |            |              |              |              |                |                      |                                      |        |
+|                |         | .Compute/virtualMachines/test-josh-vm-2          |                                   |            |              |              |              |                |                      |                                      |        |
++----------------+---------+--------------------------------------------------+-----------------------------------+------------+--------------+--------------+--------------+----------------+----------------------+--------------------------------------+--------+
+None
+PASSED
+tests/cloud/test_08_vm_provider.py::Test_provider_vm::test_provider_vm_wait 
+[35m
+# ######################################################################
+# test_provider_vm_wait /tests/cloud/test_08_vm_provider.py 119
+# ######################################################################
+[0m
+PASSED
+tests/cloud/test_08_vm_provider.py::Test_provider_vm::test_provider_vm_ssh 
+[35m
+# ######################################################################
+# test_provider_vm_ssh /tests/cloud/test_08_vm_provider.py 129
+# ######################################################################
+[0m
+[34mINFO: cmd: ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i /home/josh/.ssh/id_rsa TBD@52.170.57.30 "echo IAmAlive"[0m
+[34mINFO: cmd result: IAmAlive
+[0m
+IAmAlive
+
+[34m
+# ----------------------------------------------------------------------
+# data
+# ----------------------------------------------------------------------
+# 139:test_provider_vm_ssh ./tests/cloud/test_08_vm_provider.py
+# ----------------------------------------------------------------------
+# 'IAmAlive\n'
+# ----------------------------------------------------------------------
+[0m
+PASSED
+tests/cloud/test_08_vm_provider.py::Test_provider_vm::test_provider_vm_info 
+[35m
+# ######################################################################
+# test_provider_vm_info /tests/cloud/test_08_vm_provider.py 143
+# ######################################################################
+[0m
+dry run info():
+[{'cm': {'cloud': 'azure',
+         'created': '2020-05-07 17:43:47.670794',
+         'driver': 'azure',
+         'kind': 'vm',
+         'location': 'eastus',
+         'name': 'test-josh-vm-2',
+         'status': 'ACTIVE',
+         'type': 'Microsoft.Compute/virtualMachines',
+         'updated': '2020-05-07 17:43:47.670811'},
+  'hardware_profile': {'vm_size': 'Standard_B1s'},
+  'id': '/subscriptions/bd83424e-705b-4b1a-95ea-8f33fe6bcbc3/resourceGroups/cloudmesh/providers/Microsoft.Compute/virtualMachines/test-josh-vm-2',
+  'instance_view': {'computer_name': 'test-josh-vm-2',
+                    'disks': [{'name': 'cloudmesh-os-disk_test-josh-vm-2',
+                               'statuses': [{'code': 'ProvisioningState/succeeded',
+                                             'display_status': 'Provisioning '
+                                                               'succeeded',
+                                             'level': 'Info',
+                                             'time': '2020-05-07T17:41:58.423688Z'}]}],
+                    'hyper_vgeneration': 'V1',
+                    'os_name': 'ubuntu',
+                    'os_version': '16.04',
+                    'statuses': [{'code': 'ProvisioningState/succeeded',
+                                  'display_status': 'Provisioning succeeded',
+                                  'level': 'Info',
+                                  'time': '2020-05-07T17:43:13.471079Z'},
+                                 {'code': 'PowerState/running',
+                                  'display_status': 'VM running',
+                                  'level': 'Info'}],
+                    'vm_agent': {'extension_handlers': [],
+                                 'statuses': [{'code': 'ProvisioningState/succeeded',
+                                               'display_status': 'Ready',
+                                               'level': 'Info',
+                                               'message': 'Guest Agent is '
+                                                          'running',
+                                               'time': '2020-05-07T17:43:45.000Z'}],
+                                 'vm_agent_version': '2.2.46'}},
+  'location': 'eastus',
+  'name': 'test-josh-vm-2',
+  'network_profile': {'network_interfaces': [{'id': '/subscriptions/bd83424e-705b-4b1a-95ea-8f33fe6bcbc3/resourceGroups/cloudmesh/providers/Microsoft.Network/networkInterfaces/cloudmesh-nic_0'}]},
+  'os_profile': {'admin_username': 'TBD',
+                 'allow_extension_operations': True,
+                 'computer_name': 'test-josh-vm-2',
+                 'linux_configuration': {'disable_password_authentication': True,
+                                         'provision_vm_agent': True,
+                                         'ssh': {'public_keys': [{'key_data': 'ssh-rsa '
+                                                                              'AAAAB3NzaC1yc2EAAAADAQABAAACAQCZyFlYiArHL+v9i5sLp2HNv41J5PtLsFaJ4qDNiKgy0rBxmHtFg2giQDYPkWySZB1M+uOTSHkCR98ZsV64vCXfs09Z+xhT42B0jjqHNkILWgY1aShEvXzyII6B4Ny816fCMJI+kxllIeAIVgmwPwCjwsM6erUURBPmHlkPk7OG8Kt8ljiLuQ3TXtBfQ+zWRmvpCv0oN8ptWMCXulONpmTtuvLgNtTHSjeydqe9jSs2y+QwEp2P60A8ZgL8SK0WV5xtZEz6+YkBhl3eitub/D4ek+A37nY//SE8Fxau3TTH9VlMPFefvKUXoMsCCLm1Vs9UfnHKxzfeB9/XfBk4npMn7/Licdg2czGgkvK0FDv7EIDZfwh/KTa5KINPSRGkW5N2j73qi0I02QAkzd5NKfJca4vXklqcZwyIMYv0X0bxmbQ9o5TRO8ISeocDZAMLsYMlyO+wpoqd6MX3fe6d0eA0UBKozjQ7lw/UCnBlAKQGrFjXl4DEAm8xfW2d5vy5wyw2ygGtpKe5Rk30eVUNMfi/zvZYr4TwRZ0ieh2Y80UkQr/YGuM3C1C3GjQuxrMMQc8ooUs6f56+61/sJbsvRjtKiYwMvR8HJT4oGR5Ds4a9I2Wc2FKGzE/AZIGg/zeLCCqDLK+bZYWGwGu4G/XvOoJJfo4fqGf7NvKmcfVXU+zSXw== '
+                                                                              'baker203@iu.edu',
+                                                                  'path': '/home/TBD/.ssh/authorized_keys'}]}},
+                 'require_guest_provision_signal': True,
+                 'secrets': []},
+  'provisioning_state': 'Succeeded',
+  'status': 'ACTIVE',
+  'storage_profile': {'data_disks': [],
+                      'image_reference': {'exact_version': '16.04.202004290',
+                                          'offer': 'UbuntuServer',
+                                          'publisher': 'Canonical',
+                                          'sku': '16.04.0-LTS',
+                                          'version': 'latest'},
+                      'os_disk': {'caching': 'ReadWrite',
+                                  'create_option': 'FromImage',
+                                  'disk_size_gb': 64,
+                                  'managed_disk': {'id': '/subscriptions/bd83424e-705b-4b1a-95ea-8f33fe6bcbc3/resourceGroups/CLOUDMESH/providers/Microsoft.Compute/disks/cloudmesh-os-disk_test-josh-vm-2',
+                                                   'storage_account_type': 'Premium_LRS'},
+                                  'name': 'cloudmesh-os-disk_test-josh-vm-2',
+                                  'os_type': 'Linux'}},
+  'tags': {'cm': "{'kind': 'vm', 'name': 'test-josh-vm-2', 'label': "
+                 "'test-josh-vm-2', 'group': 'cloudmesh', 'cloud': 'azure', "
+                 "'status': 'available', 'collection': 'azure-vm', 'modified': "
+                 "'2020-05-07 17:40:23.911805', 'creation': '169.00'}"},
+  'type': 'Microsoft.Compute/virtualMachines',
+  'vm_id': '906160ac-b693-4ca5-8464-c4dd18729307'}]
+PASSED
+tests/cloud/test_08_vm_provider.py::Test_provider_vm::test_vm_status 
+[35m
+# ######################################################################
+# test_vm_status /tests/cloud/test_08_vm_provider.py 152
+# ######################################################################
+[0m
+{'name': 'test-josh-vm-2', 'status:': 'ACTIVE', 'cm.status': 'ACTIVE'}
+PASSED
+tests/cloud/test_08_vm_provider.py::Test_provider_vm::test_provider_vm_stop 
+[35m
+# ######################################################################
+# test_provider_vm_stop /tests/cloud/test_08_vm_provider.py 168
+# ######################################################################
+[0m
+[34mINFO: Stopping Azure VM[0m
+[34m
+# ----------------------------------------------------------------------
+# data
+# ----------------------------------------------------------------------
+# 184:test_provider_vm_stop ./tests/cloud/test_08_vm_provider.py
+# ----------------------------------------------------------------------
+# [{'cm': {'cloud': 'azure',
+#          'collection': 'azure-vm',
+#          'created': '2020-05-07 17:44:18.606660',
+#          'creation': '169.00',
+#          'driver': 'azure',
+#          'group': 'cloudmesh',
+#          'kind': 'vm',
+#          'label': 'test-josh-vm-2',
+#          'location': 'eastus',
+#          'modified': '2020-05-07 17:44:18.624118',
+#          'name': 'test-josh-vm-2',
+#          'ssh_key_name': 'josh',
+#          'status': 'STOPPED',
+#          'type': 'Microsoft.Compute/virtualMachines',
+#          'updated': '2020-05-07 17:44:18.606685'},
+#   'hardware_profile': {'vm_size': 'Standard_B1s'},
+#   'id': '/subscriptions/bd83424e-705b-4b1a-95ea-8f33fe6bcbc3/resourceGroups/cloudmesh/providers/Microsoft.Compute/virtualMachines/test-josh-vm-2',
+#   'instance_view': {'computer_name': 'test-josh-vm-2',
+#                     'disks': [{'name': 'cloudmesh-os-disk_test-josh-vm-2',
+#                                'statuses': [{'code': 'ProvisioningState/succeeded',
+#                                              'display_status': 'Provisioning '
+#                                                                'succeeded',
+#                                              'level': 'Info',
+#                                              'time': '2020-05-07T17:41:58.423688Z'}]}],
+#                     'hyper_vgeneration': 'V1',
+#                     'os_name': 'ubuntu',
+#                     'os_version': '16.04',
+#                     'statuses': [{'code': 'ProvisioningState/succeeded',
+#                                   'display_status': 'Provisioning succeeded',
+#                                   'level': 'Info',
+#                                   'time': '2020-05-07T17:44:02.518249Z'},
+#                                  {'code': 'PowerState/stopped',
+#                                   'display_status': 'VM stopped',
+#                                   'level': 'Info'}],
+#                     'vm_agent': {'extension_handlers': [],
+#                                  'statuses': [{'code': 'ProvisioningState/succeeded',
+#                                                'display_status': 'Ready',
+#                                                'level': 'Info',
+#                                                'message': 'Guest Agent is '
+#                                                           'running',
+#                                                'time': '2020-05-07T17:43:48.000Z'}],
+#                                  'vm_agent_version': '2.2.46'}},
+#   'location': 'eastus',
+#   'name': 'test-josh-vm-2',
+#   'network_profile': {'network_interfaces': [{'id': '/subscriptions/bd83424e-705b-4b1a-95ea-8f33fe6bcbc3/resourceGroups/cloudmesh/providers/Microsoft.Network/networkInterfaces/cloudmesh-nic_0'}]},
+#   'os_profile': {'admin_username': 'TBD',
+#                  'allow_extension_operations': True,
+#                  'computer_name': 'test-josh-vm-2',
+#                  'linux_configuration': {'disable_password_authentication': True,
+#                                          'provision_vm_agent': True,
+#                                          'ssh': {'public_keys': [{'key_data': 'ssh-rsa '
+#                                                                               'AAAAB3NzaC1yc2EAAAADAQABAAACAQCZyFlYiArHL+v9i5sLp2HNv41J5PtLsFaJ4qDNiKgy0rBxmHtFg2giQDYPkWySZB1M+uOTSHkCR98ZsV64vCXfs09Z+xhT42B0jjqHNkILWgY1aShEvXzyII6B4Ny816fCMJI+kxllIeAIVgmwPwCjwsM6erUURBPmHlkPk7OG8Kt8ljiLuQ3TXtBfQ+zWRmvpCv0oN8ptWMCXulONpmTtuvLgNtTHSjeydqe9jSs2y+QwEp2P60A8ZgL8SK0WV5xtZEz6+YkBhl3eitub/D4ek+A37nY//SE8Fxau3TTH9VlMPFefvKUXoMsCCLm1Vs9UfnHKxzfeB9/XfBk4npMn7/Licdg2czGgkvK0FDv7EIDZfwh/KTa5KINPSRGkW5N2j73qi0I02QAkzd5NKfJca4vXklqcZwyIMYv0X0bxmbQ9o5TRO8ISeocDZAMLsYMlyO+wpoqd6MX3fe6d0eA0UBKozjQ7lw/UCnBlAKQGrFjXl4DEAm8xfW2d5vy5wyw2ygGtpKe5Rk30eVUNMfi/zvZYr4TwRZ0ieh2Y80UkQr/YGuM3C1C3GjQuxrMMQc8ooUs6f56+61/sJbsvRjtKiYwMvR8HJT4oGR5Ds4a9I2Wc2FKGzE/AZIGg/zeLCCqDLK+bZYWGwGu4G/XvOoJJfo4fqGf7NvKmcfVXU+zSXw== '
+#                                                                               'baker203@iu.edu',
+#                                                                   'path': '/home/TBD/.ssh/authorized_keys'}]}},
+#                  'require_guest_provision_signal': True,
+#                  'secrets': []},
+#   'provisioning_state': 'Succeeded',
+#   'status': 'STOPPED',
+#   'storage_profile': {'data_disks': [],
+#                       'image_reference': {'exact_version': '16.04.202004290',
+#                                           'offer': 'UbuntuServer',
+#                                           'publisher': 'Canonical',
+#                                           'sku': '16.04.0-LTS',
+#                                           'version': 'latest'},
+#                       'os_disk': {'caching': 'ReadWrite',
+#                                   'create_option': 'FromImage',
+#                                   'disk_size_gb': 64,
+#                                   'managed_disk': {'id': '/subscriptions/bd83424e-705b-4b1a-95ea-8f33fe6bcbc3/resourceGroups/CLOUDMESH/providers/Microsoft.Compute/disks/cloudmesh-os-disk_test-josh-vm-2',
+#                                                    'storage_account_type': 'Premium_LRS'},
+#                                   'name': 'cloudmesh-os-disk_test-josh-vm-2',
+#                                   'os_type': 'Linux'}},
+#   'tags': {'cm': "{'kind': 'vm', 'name': 'test-josh-vm-2', 'label': "
+#                  "'test-josh-vm-2', 'group': 'cloudmesh', 'cloud': 'azure', "
+#                  "'status': 'available', 'collection': 'azure-vm', 'modified': "
+#                  "'2020-05-07 17:40:23.911805', 'creation': '169.00'}"},
+#   'type': 'Microsoft.Compute/virtualMachines',
+#   'vm_id': '906160ac-b693-4ca5-8464-c4dd18729307'}]
+# ----------------------------------------------------------------------
+[0m
+{'name': 'test-josh-vm-2', 'status:': 'STOPPED', 'cm.status': 'STOPPED'}
+PASSED
+tests/cloud/test_08_vm_provider.py::Test_provider_vm::test_provider_vm_start 
+[35m
+# ######################################################################
+# test_provider_vm_start /tests/cloud/test_08_vm_provider.py 188
+# ######################################################################
+[0m
+[34mINFO: Starting Azure VM[0m
+[34m
+# ----------------------------------------------------------------------
+# data
+# ----------------------------------------------------------------------
+# 203:test_provider_vm_start ./tests/cloud/test_08_vm_provider.py
+# ----------------------------------------------------------------------
+# [{'cm': {'cloud': 'azure',
+#          'collection': 'azure-vm',
+#          'created': '2020-05-07 17:44:34.474913',
+#          'creation': '169.00',
+#          'driver': 'azure',
+#          'group': 'cloudmesh',
+#          'kind': 'vm',
+#          'label': 'test-josh-vm-2',
+#          'location': 'eastus',
+#          'modified': '2020-05-07 17:44:34.493347',
+#          'name': 'test-josh-vm-2',
+#          'ssh_key_name': 'josh',
+#          'status': 'ACTIVE',
+#          'type': 'Microsoft.Compute/virtualMachines',
+#          'updated': '2020-05-07 17:44:34.474922'},
+#   'hardware_profile': {'vm_size': 'Standard_B1s'},
+#   'id': '/subscriptions/bd83424e-705b-4b1a-95ea-8f33fe6bcbc3/resourceGroups/cloudmesh/providers/Microsoft.Compute/virtualMachines/test-josh-vm-2',
+#   'instance_view': {'computer_name': 'test-josh-vm-2',
+#                     'disks': [{'name': 'cloudmesh-os-disk_test-josh-vm-2',
+#                                'statuses': [{'code': 'ProvisioningState/succeeded',
+#                                              'display_status': 'Provisioning '
+#                                                                'succeeded',
+#                                              'level': 'Info',
+#                                              'time': '2020-05-07T17:41:58.423688Z'}]}],
+#                     'hyper_vgeneration': 'V1',
+#                     'os_name': 'ubuntu',
+#                     'os_version': '16.04',
+#                     'statuses': [{'code': 'ProvisioningState/succeeded',
+#                                   'display_status': 'Provisioning succeeded',
+#                                   'level': 'Info',
+#                                   'time': '2020-05-07T17:44:28.987167Z'},
+#                                  {'code': 'PowerState/running',
+#                                   'display_status': 'VM running',
+#                                   'level': 'Info'}],
+#                     'vm_agent': {'extension_handlers': [],
+#                                  'statuses': [{'code': 'ProvisioningState/succeeded',
+#                                                'display_status': 'Ready',
+#                                                'level': 'Info',
+#                                                'message': 'Guest Agent is '
+#                                                           'running',
+#                                                'time': '2020-05-07T17:43:48.000Z'}],
+#                                  'vm_agent_version': '2.2.46'}},
+#   'location': 'eastus',
+#   'name': 'test-josh-vm-2',
+#   'network_profile': {'network_interfaces': [{'id': '/subscriptions/bd83424e-705b-4b1a-95ea-8f33fe6bcbc3/resourceGroups/cloudmesh/providers/Microsoft.Network/networkInterfaces/cloudmesh-nic_0'}]},
+#   'os_profile': {'admin_username': 'TBD',
+#                  'allow_extension_operations': True,
+#                  'computer_name': 'test-josh-vm-2',
+#                  'linux_configuration': {'disable_password_authentication': True,
+#                                          'provision_vm_agent': True,
+#                                          'ssh': {'public_keys': [{'key_data': 'ssh-rsa '
+#                                                                               'AAAAB3NzaC1yc2EAAAADAQABAAACAQCZyFlYiArHL+v9i5sLp2HNv41J5PtLsFaJ4qDNiKgy0rBxmHtFg2giQDYPkWySZB1M+uOTSHkCR98ZsV64vCXfs09Z+xhT42B0jjqHNkILWgY1aShEvXzyII6B4Ny816fCMJI+kxllIeAIVgmwPwCjwsM6erUURBPmHlkPk7OG8Kt8ljiLuQ3TXtBfQ+zWRmvpCv0oN8ptWMCXulONpmTtuvLgNtTHSjeydqe9jSs2y+QwEp2P60A8ZgL8SK0WV5xtZEz6+YkBhl3eitub/D4ek+A37nY//SE8Fxau3TTH9VlMPFefvKUXoMsCCLm1Vs9UfnHKxzfeB9/XfBk4npMn7/Licdg2czGgkvK0FDv7EIDZfwh/KTa5KINPSRGkW5N2j73qi0I02QAkzd5NKfJca4vXklqcZwyIMYv0X0bxmbQ9o5TRO8ISeocDZAMLsYMlyO+wpoqd6MX3fe6d0eA0UBKozjQ7lw/UCnBlAKQGrFjXl4DEAm8xfW2d5vy5wyw2ygGtpKe5Rk30eVUNMfi/zvZYr4TwRZ0ieh2Y80UkQr/YGuM3C1C3GjQuxrMMQc8ooUs6f56+61/sJbsvRjtKiYwMvR8HJT4oGR5Ds4a9I2Wc2FKGzE/AZIGg/zeLCCqDLK+bZYWGwGu4G/XvOoJJfo4fqGf7NvKmcfVXU+zSXw== '
+#                                                                               'baker203@iu.edu',
+#                                                                   'path': '/home/TBD/.ssh/authorized_keys'}]}},
+#                  'require_guest_provision_signal': True,
+#                  'secrets': []},
+#   'provisioning_state': 'Succeeded',
+#   'status': 'ACTIVE',
+#   'storage_profile': {'data_disks': [],
+#                       'image_reference': {'exact_version': '16.04.202004290',
+#                                           'offer': 'UbuntuServer',
+#                                           'publisher': 'Canonical',
+#                                           'sku': '16.04.0-LTS',
+#                                           'version': 'latest'},
+#                       'os_disk': {'caching': 'ReadWrite',
+#                                   'create_option': 'FromImage',
+#                                   'disk_size_gb': 64,
+#                                   'managed_disk': {'id': '/subscriptions/bd83424e-705b-4b1a-95ea-8f33fe6bcbc3/resourceGroups/CLOUDMESH/providers/Microsoft.Compute/disks/cloudmesh-os-disk_test-josh-vm-2',
+#                                                    'storage_account_type': 'Premium_LRS'},
+#                                   'name': 'cloudmesh-os-disk_test-josh-vm-2',
+#                                   'os_type': 'Linux'}},
+#   'tags': {'cm': "{'kind': 'vm', 'name': 'test-josh-vm-2', 'label': "
+#                  "'test-josh-vm-2', 'group': 'cloudmesh', 'cloud': 'azure', "
+#                  "'status': 'available', 'collection': 'azure-vm', 'modified': "
+#                  "'2020-05-07 17:40:23.911805', 'creation': '169.00'}"},
+#   'type': 'Microsoft.Compute/virtualMachines',
+#   'vm_id': '906160ac-b693-4ca5-8464-c4dd18729307'}]
+# ----------------------------------------------------------------------
+[0m
+{'name': 'test-josh-vm-2', 'status:': 'ACTIVE', 'cm.status': 'ACTIVE'}
+PASSED
+tests/cloud/test_08_vm_provider.py::Test_provider_vm::test_provider_vm_terminate 
+[35m
+# ######################################################################
+# test_provider_vm_terminate /tests/cloud/test_08_vm_provider.py 210
+# ######################################################################
+[0m
+[34mINFO: Deleting Azure Virtual Machine[0m
+[34mINFO: Deleting Azure Resource Group[0m
+[{'cm': {'cloud': 'azure',
+         'collection': 'azure-vm',
+         'created': '2020-05-07 17:45:50.993805',
+         'creation': '169.00',
+         'driver': 'azure',
+         'group': 'cloudmesh',
+         'kind': 'vm',
+         'label': 'test-josh-vm-2',
+         'location': 'eastus',
+         'modified': '2020-05-07 17:49:24.680182',
+         'name': 'test-josh-vm-2',
+         'ssh_key_name': 'josh',
+         'status': 'TERMINATED',
+         'type': 'Microsoft.Compute/virtualMachines',
+         'updated': '2020-05-07 17:45:50.993834'},
+  'location': 'eastus',
+  'name': 'test-josh-vm-2',
+  'status': 'TERMINATED',
+  'type': 'Microsoft.Compute/virtualMachines'}]
+PASSED
+tests/cloud/test_08_vm_provider.py::Test_provider_vm::test_benchmark 
+
++-----------------------------------------------------------------+----------+---------+---------------------+-------+------------------+--------+-------+-----------------------------------------------------+
+| Name                                                            | Status   |    Time | Start               | tag   | Node             | User   | OS    | Version                                             |
+|-----------------------------------------------------------------+----------+---------+---------------------+-------+------------------+--------+-------+-----------------------------------------------------|
+| test_00_sys/test_cms_help                                       | ok       |   2.424 | 2020-05-07 17:39:09 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_01_clean_local_remote/test_cms_init                        | ok       |   8.979 | 2020-05-07 17:39:11 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_01_clean_local_remote/test_delete_all_keys_from_cloud      | ok       |   0.002 | 2020-05-07 17:39:20 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_01_clean_local_remote/test_delete_all_secgroups_from_cloud | ok       |   0.129 | 2020-05-07 17:39:21 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_clear_local_database                           | ok       |   0.02  | 2020-05-07 17:39:21 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_clear_cloud_database                           | ok       |   0.02  | 2020-05-07 17:39:24 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_upload_key_to_database                         | ok       |   0.038 | 2020-05-07 17:39:21 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_list_key_from_cloud                            | ok       |   0.002 | 2020-05-07 17:39:22 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_delete_key_from_cloud                          | ok       |   0.001 | 2020-05-07 17:39:22 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_key_delete                                     | ok       |   0.022 | 2020-05-07 17:39:22 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_cms_local                                      | ok       |   2.641 | 2020-05-07 17:39:22 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_cms_cloud                                      | ok       |   4.439 | 2020-05-07 17:39:24 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_04_flavor/test_empty_database                              | ok       |   0.016 | 2020-05-07 17:39:29 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_04_flavor/test_provider_flavor                             | ok       |   0.888 | 2020-05-07 17:39:29 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_04_flavor/test_provider_flavor_update                      | ok       |   1.113 | 2020-05-07 17:39:30 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_04_flavor/test_cms_flavor_refresh                          | ok       |   2.812 | 2020-05-07 17:39:31 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_04_flavor/test_cms_flavor                                  | ok       |   2.11  | 2020-05-07 17:39:34 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_05_image/test_empty_database                               | ok       |   0.018 | 2020-05-07 17:39:36 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_05_image/test_provider_image                               | ok       |   3.986 | 2020-05-07 17:39:36 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_05_image/test_provider_image_update                        | ok       |   2.983 | 2020-05-07 17:39:40 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_05_image/test_cms_image_refresh                            | ok       |   8.176 | 2020-05-07 17:39:44 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_05_image/test_cms_image                                    | ok       |   2.145 | 2020-05-07 17:39:52 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_07_secgroup_provider/test_load                             | ok       |   0.052 | 2020-05-07 17:39:54 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_07_secgroup_provider/test_list_variables                   | ok       |   0.001 | 2020-05-07 17:39:55 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_07_secgroup_provider/test_list_secgroups                   | ok       |   0.226 | 2020-05-07 17:39:55 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_07_secgroup_provider/test_list_secgroups_rules             | ok       |   0.146 | 2020-05-07 17:39:55 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_07_secgroup_provider/test_secgroups_add                    | ok       |   0.032 | 2020-05-07 17:39:55 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_07_secgroup_provider/test_upload_secgroup                  | ok       |   5.381 | 2020-05-07 17:39:55 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_07_secgroup_provider/test_secgroups_delete                 | ok       |  10.62  | 2020-05-07 17:40:01 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_07_secgroup_provider/test_secgroups_delete_again           | ok       |   0.094 | 2020-05-07 17:40:11 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_08_vm_provider/test_provider_vm_create                     | ok       | 201.089 | 2020-05-07 17:40:23 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| create vm test-josh-vm-2                                        | failed   | 168.992 | 2020-05-07 17:40:23 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_08_vm_provider/test_provider_vmprovider_vm_list            | ok       |   0.355 | 2020-05-07 17:43:45 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_08_vm_provider/test_provider_vm_wait                       | ok       |   0.193 | 2020-05-07 17:43:45 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_08_vm_provider/test_provider_vm_ssh                        | ok       |   1.897 | 2020-05-07 17:43:45 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_08_vm_provider/test_provider_vm_info                       | ok       |   0.101 | 2020-05-07 17:43:47 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_08_vm_provider/test_vm_status                              | ok       |   0.085 | 2020-05-07 17:43:47 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_08_vm_provider/test_provider_vm_stop                       | ok       |  30.848 | 2020-05-07 17:43:47 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_08_vm_provider/test_provider_vm_start                      | ok       |  10.737 | 2020-05-07 17:44:23 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_08_vm_provider/test_provider_vm_terminate                  | ok       | 285.061 | 2020-05-07 17:44:39 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
++-----------------------------------------------------------------+----------+---------+---------------------+-------+------------------+--------+-------+-----------------------------------------------------+
+
+# csv,timer,status,time,start,tag,uname.node,user,uname.system,platform.version
+# csv,test_00_sys/test_cms_help,ok,2.424,2020-05-07 17:39:09,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_01_clean_local_remote/test_cms_init,ok,8.979,2020-05-07 17:39:11,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_01_clean_local_remote/test_delete_all_keys_from_cloud,ok,0.002,2020-05-07 17:39:20,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_01_clean_local_remote/test_delete_all_secgroups_from_cloud,ok,0.129,2020-05-07 17:39:21,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_clear_local_database,ok,0.02,2020-05-07 17:39:21,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_clear_cloud_database,ok,0.02,2020-05-07 17:39:24,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_upload_key_to_database,ok,0.038,2020-05-07 17:39:21,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_list_key_from_cloud,ok,0.002,2020-05-07 17:39:22,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_delete_key_from_cloud,ok,0.001,2020-05-07 17:39:22,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_key_delete,ok,0.022,2020-05-07 17:39:22,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_cms_local,ok,2.641,2020-05-07 17:39:22,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_cms_cloud,ok,4.439,2020-05-07 17:39:24,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_04_flavor/test_empty_database,ok,0.016,2020-05-07 17:39:29,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_04_flavor/test_provider_flavor,ok,0.888,2020-05-07 17:39:29,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_04_flavor/test_provider_flavor_update,ok,1.113,2020-05-07 17:39:30,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_04_flavor/test_cms_flavor_refresh,ok,2.812,2020-05-07 17:39:31,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_04_flavor/test_cms_flavor,ok,2.11,2020-05-07 17:39:34,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_05_image/test_empty_database,ok,0.018,2020-05-07 17:39:36,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_05_image/test_provider_image,ok,3.986,2020-05-07 17:39:36,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_05_image/test_provider_image_update,ok,2.983,2020-05-07 17:39:40,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_05_image/test_cms_image_refresh,ok,8.176,2020-05-07 17:39:44,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_05_image/test_cms_image,ok,2.145,2020-05-07 17:39:52,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_07_secgroup_provider/test_load,ok,0.052,2020-05-07 17:39:54,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_07_secgroup_provider/test_list_variables,ok,0.001,2020-05-07 17:39:55,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_07_secgroup_provider/test_list_secgroups,ok,0.226,2020-05-07 17:39:55,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_07_secgroup_provider/test_list_secgroups_rules,ok,0.146,2020-05-07 17:39:55,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_07_secgroup_provider/test_secgroups_add,ok,0.032,2020-05-07 17:39:55,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_07_secgroup_provider/test_upload_secgroup,ok,5.381,2020-05-07 17:39:55,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_07_secgroup_provider/test_secgroups_delete,ok,10.62,2020-05-07 17:40:01,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_07_secgroup_provider/test_secgroups_delete_again,ok,0.094,2020-05-07 17:40:11,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_08_vm_provider/test_provider_vm_create,ok,201.089,2020-05-07 17:40:23,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,create vm test-josh-vm-2,failed,168.992,2020-05-07 17:40:23,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_08_vm_provider/test_provider_vmprovider_vm_list,ok,0.355,2020-05-07 17:43:45,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_08_vm_provider/test_provider_vm_wait,ok,0.193,2020-05-07 17:43:45,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_08_vm_provider/test_provider_vm_ssh,ok,1.897,2020-05-07 17:43:45,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_08_vm_provider/test_provider_vm_info,ok,0.101,2020-05-07 17:43:47,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_08_vm_provider/test_vm_status,ok,0.085,2020-05-07 17:43:47,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_08_vm_provider/test_provider_vm_stop,ok,30.848,2020-05-07 17:43:47,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_08_vm_provider/test_provider_vm_start,ok,10.737,2020-05-07 17:44:23,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_08_vm_provider/test_provider_vm_terminate,ok,285.061,2020-05-07 17:44:39,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+
+PASSED
+tests/cloud/test_09_cm_names_find.py::Test_cm_find::test_cm_find_collection 
+[35m
+# ######################################################################
+# test_cm_find_collection /tests/cloud/test_09_cm_names_find.py 37
+# ######################################################################
+[0m
+Number of entries [vm] 1
+PASSED
+tests/cloud/test_09_cm_names_find.py::Test_cm_find::test_cm_find_loop 
+[35m
+# ######################################################################
+# test_cm_find_loop /tests/cloud/test_09_cm_names_find.py 48
+# ######################################################################
+[0m
+Number of entries [flavor 282
+PASSED
+tests/cloud/test_09_cm_names_find.py::Test_cm_find::test_cm_loop 
+[35m
+# ######################################################################
+# test_cm_loop /tests/cloud/test_09_cm_names_find.py 64
+# ######################################################################
+[0m
+Number of entries [flavor] 282
+PASSED
+tests/cloud/test_09_cm_names_find.py::Test_cm_find::test_cm_image_name_cloud 
+[35m
+# ######################################################################
+# test_cm_image_name_cloud /tests/cloud/test_09_cm_names_find.py 77
+# ######################################################################
+[0m
+Number of entries [image 9
+PASSED
+tests/cloud/test_09_cm_names_find.py::Test_cm_find::test_cm_image_name_collection 
+[35m
+# ######################################################################
+# test_cm_image_name_collection /tests/cloud/test_09_cm_names_find.py 89
+# ######################################################################
+[0m
+Number of entries [image 9
+PASSED
+tests/cloud/test_09_cm_names_find.py::Test_cm_find::test_names_regexp 
+[35m
+# ######################################################################
+# test_names_regexp /tests/cloud/test_09_cm_names_find.py 100
+# ######################################################################
+[0m
+Number of entries [image 0
+PASSED
+tests/cloud/test_09_cm_names_find.py::Test_cm_find::test_cm_find_vms 
+[35m
+# ######################################################################
+# test_cm_find_vms /tests/cloud/test_09_cm_names_find.py 129
+# ######################################################################
+[0m
+Number of entries [vm 1
+PASSED
+tests/cloud/test_09_cm_names_find.py::Test_cm_find::test_cm_find_ubuntu_in_images 
+[35m
+# ######################################################################
+# test_cm_find_ubuntu_in_images /tests/cloud/test_09_cm_names_find.py 140
+# ######################################################################
+[0m
+
+{'name': {'$regex': '.*..*'}}
+Number of entries [image 9
+PASSED
+tests/cloud/test_09_cm_names_find.py::Test_cm_find::test_cm_find_cloud_name_attributes 
+[35m
+# ######################################################################
+# test_cm_find_cloud_name_attributes /tests/cloud/test_09_cm_names_find.py 187
+# ######################################################################
+[0m
+
+Number of entries [vm 1
+PASSED
+tests/cloud/test_09_cm_names_find.py::Test_cm_find::test_cm_find_vm_collections 
+[35m
+# ######################################################################
+# test_cm_find_vm_collections /tests/cloud/test_09_cm_names_find.py 203
+# ######################################################################
+[0m
+Number of entries [collections] 6
+PASSED
+tests/cloud/test_09_cm_names_find.py::Test_cm_find::test_cm_find_vm_collections_vm 
+[35m
+# ######################################################################
+# test_cm_find_vm_collections_vm /tests/cloud/test_09_cm_names_find.py 216
+# ######################################################################
+[0m
+Number of entries [collections] 1
+PASSED
+tests/cloud/test_09_cm_names_find.py::Test_cm_find::test_cm_find_vm_collection_form_parameter 
+[35m
+# ######################################################################
+# test_cm_find_vm_collection_form_parameter /tests/cloud/test_09_cm_names_find.py 228
+# ######################################################################
+[0m
+Number of entries [collections] 2
+PASSED
+tests/cloud/test_09_cm_names_find.py::Test_cm_find::test_benchmark 
+[35m
+# ######################################################################
+# test_benchmark /tests/cloud/test_09_cm_names_find.py 243
+# ######################################################################
+[0m
+
+
++-----------------------------------------------------------------+----------+---------+---------------------+-------+------------------+--------+-------+-----------------------------------------------------+
+| Name                                                            | Status   |    Time | Start               | tag   | Node             | User   | OS    | Version                                             |
+|-----------------------------------------------------------------+----------+---------+---------------------+-------+------------------+--------+-------+-----------------------------------------------------|
+| test_00_sys/test_cms_help                                       | ok       |   2.424 | 2020-05-07 17:39:09 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_01_clean_local_remote/test_cms_init                        | ok       |   8.979 | 2020-05-07 17:39:11 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_01_clean_local_remote/test_delete_all_keys_from_cloud      | ok       |   0.002 | 2020-05-07 17:39:20 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_01_clean_local_remote/test_delete_all_secgroups_from_cloud | ok       |   0.129 | 2020-05-07 17:39:21 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_clear_local_database                           | ok       |   0.02  | 2020-05-07 17:39:21 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_clear_cloud_database                           | ok       |   0.02  | 2020-05-07 17:39:24 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_upload_key_to_database                         | ok       |   0.038 | 2020-05-07 17:39:21 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_list_key_from_cloud                            | ok       |   0.002 | 2020-05-07 17:39:22 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_delete_key_from_cloud                          | ok       |   0.001 | 2020-05-07 17:39:22 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_key_delete                                     | ok       |   0.022 | 2020-05-07 17:39:22 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_cms_local                                      | ok       |   2.641 | 2020-05-07 17:39:22 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_02_key/test_cms_cloud                                      | ok       |   4.439 | 2020-05-07 17:39:24 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_04_flavor/test_empty_database                              | ok       |   0.016 | 2020-05-07 17:39:29 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_04_flavor/test_provider_flavor                             | ok       |   0.888 | 2020-05-07 17:39:29 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_04_flavor/test_provider_flavor_update                      | ok       |   1.113 | 2020-05-07 17:39:30 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_04_flavor/test_cms_flavor_refresh                          | ok       |   2.812 | 2020-05-07 17:39:31 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_04_flavor/test_cms_flavor                                  | ok       |   2.11  | 2020-05-07 17:39:34 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_05_image/test_empty_database                               | ok       |   0.018 | 2020-05-07 17:39:36 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_05_image/test_provider_image                               | ok       |   3.986 | 2020-05-07 17:39:36 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_05_image/test_provider_image_update                        | ok       |   2.983 | 2020-05-07 17:39:40 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_05_image/test_cms_image_refresh                            | ok       |   8.176 | 2020-05-07 17:39:44 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_05_image/test_cms_image                                    | ok       |   2.145 | 2020-05-07 17:39:52 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_07_secgroup_provider/test_load                             | ok       |   0.052 | 2020-05-07 17:39:54 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_07_secgroup_provider/test_list_variables                   | ok       |   0.001 | 2020-05-07 17:39:55 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_07_secgroup_provider/test_list_secgroups                   | ok       |   0.226 | 2020-05-07 17:39:55 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_07_secgroup_provider/test_list_secgroups_rules             | ok       |   0.146 | 2020-05-07 17:39:55 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_07_secgroup_provider/test_secgroups_add                    | ok       |   0.032 | 2020-05-07 17:39:55 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_07_secgroup_provider/test_upload_secgroup                  | ok       |   5.381 | 2020-05-07 17:39:55 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_07_secgroup_provider/test_secgroups_delete                 | ok       |  10.62  | 2020-05-07 17:40:01 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_07_secgroup_provider/test_secgroups_delete_again           | ok       |   0.094 | 2020-05-07 17:40:11 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_08_vm_provider/test_provider_vm_create                     | ok       | 201.089 | 2020-05-07 17:40:23 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| create vm test-josh-vm-2                                        | failed   | 168.992 | 2020-05-07 17:40:23 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_08_vm_provider/test_provider_vmprovider_vm_list            | ok       |   0.355 | 2020-05-07 17:43:45 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_08_vm_provider/test_provider_vm_wait                       | ok       |   0.193 | 2020-05-07 17:43:45 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_08_vm_provider/test_provider_vm_ssh                        | ok       |   1.897 | 2020-05-07 17:43:45 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_08_vm_provider/test_provider_vm_info                       | ok       |   0.101 | 2020-05-07 17:43:47 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_08_vm_provider/test_vm_status                              | ok       |   0.085 | 2020-05-07 17:43:47 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_08_vm_provider/test_provider_vm_stop                       | ok       |  30.848 | 2020-05-07 17:43:47 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_08_vm_provider/test_provider_vm_start                      | ok       |  10.737 | 2020-05-07 17:44:23 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_08_vm_provider/test_provider_vm_terminate                  | ok       | 285.061 | 2020-05-07 17:44:39 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_09_cm_names_find/test_cm_find_collection                   | ok       |   0.02  | 2020-05-07 17:49:30 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_09_cm_names_find/test_cm_find_loop                         | ok       |   0.058 | 2020-05-07 17:49:30 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_09_cm_names_find/test_cm_image_name_cloud                  | ok       |   0.018 | 2020-05-07 17:49:30 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_09_cm_names_find/test_cm_image_name_collection             | ok       |   0.019 | 2020-05-07 17:49:30 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_09_cm_names_find/test_names_regexp                         | ok       |   0.032 | 2020-05-07 17:49:30 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_09_cm_names_find/test_cm_find_vms                          | ok       |   0.017 | 2020-05-07 17:49:30 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_09_cm_names_find/test_cm_find_ubuntu_in_images             | ok       |   0.018 | 2020-05-07 17:49:30 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_09_cm_names_find/test_cm_find_cloud_name_attributes        | ok       |   0.017 | 2020-05-07 17:49:30 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_09_cm_names_find/test_cm_find_vm_collections               | ok       |   0.017 | 2020-05-07 17:49:30 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_09_cm_names_find/test_cm_find_vm_collections_vm            | ok       |   0.018 | 2020-05-07 17:49:30 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
+| test_09_cm_names_find/test_cm_find_vm_collection_form_parameter | ok       |   0.016 | 2020-05-07 17:49:30 | azure | josh-XPS-13-9343 | josh   | Linux | #38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020 |
++-----------------------------------------------------------------+----------+---------+---------------------+-------+------------------+--------+-------+-----------------------------------------------------+
+
+# csv,timer,status,time,start,tag,uname.node,user,uname.system,platform.version
+# csv,test_00_sys/test_cms_help,ok,2.424,2020-05-07 17:39:09,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_01_clean_local_remote/test_cms_init,ok,8.979,2020-05-07 17:39:11,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_01_clean_local_remote/test_delete_all_keys_from_cloud,ok,0.002,2020-05-07 17:39:20,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_01_clean_local_remote/test_delete_all_secgroups_from_cloud,ok,0.129,2020-05-07 17:39:21,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_clear_local_database,ok,0.02,2020-05-07 17:39:21,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_clear_cloud_database,ok,0.02,2020-05-07 17:39:24,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_upload_key_to_database,ok,0.038,2020-05-07 17:39:21,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_list_key_from_cloud,ok,0.002,2020-05-07 17:39:22,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_delete_key_from_cloud,ok,0.001,2020-05-07 17:39:22,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_key_delete,ok,0.022,2020-05-07 17:39:22,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_cms_local,ok,2.641,2020-05-07 17:39:22,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_02_key/test_cms_cloud,ok,4.439,2020-05-07 17:39:24,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_04_flavor/test_empty_database,ok,0.016,2020-05-07 17:39:29,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_04_flavor/test_provider_flavor,ok,0.888,2020-05-07 17:39:29,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_04_flavor/test_provider_flavor_update,ok,1.113,2020-05-07 17:39:30,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_04_flavor/test_cms_flavor_refresh,ok,2.812,2020-05-07 17:39:31,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_04_flavor/test_cms_flavor,ok,2.11,2020-05-07 17:39:34,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_05_image/test_empty_database,ok,0.018,2020-05-07 17:39:36,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_05_image/test_provider_image,ok,3.986,2020-05-07 17:39:36,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_05_image/test_provider_image_update,ok,2.983,2020-05-07 17:39:40,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_05_image/test_cms_image_refresh,ok,8.176,2020-05-07 17:39:44,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_05_image/test_cms_image,ok,2.145,2020-05-07 17:39:52,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_07_secgroup_provider/test_load,ok,0.052,2020-05-07 17:39:54,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_07_secgroup_provider/test_list_variables,ok,0.001,2020-05-07 17:39:55,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_07_secgroup_provider/test_list_secgroups,ok,0.226,2020-05-07 17:39:55,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_07_secgroup_provider/test_list_secgroups_rules,ok,0.146,2020-05-07 17:39:55,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_07_secgroup_provider/test_secgroups_add,ok,0.032,2020-05-07 17:39:55,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_07_secgroup_provider/test_upload_secgroup,ok,5.381,2020-05-07 17:39:55,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_07_secgroup_provider/test_secgroups_delete,ok,10.62,2020-05-07 17:40:01,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_07_secgroup_provider/test_secgroups_delete_again,ok,0.094,2020-05-07 17:40:11,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_08_vm_provider/test_provider_vm_create,ok,201.089,2020-05-07 17:40:23,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,create vm test-josh-vm-2,failed,168.992,2020-05-07 17:40:23,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_08_vm_provider/test_provider_vmprovider_vm_list,ok,0.355,2020-05-07 17:43:45,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_08_vm_provider/test_provider_vm_wait,ok,0.193,2020-05-07 17:43:45,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_08_vm_provider/test_provider_vm_ssh,ok,1.897,2020-05-07 17:43:45,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_08_vm_provider/test_provider_vm_info,ok,0.101,2020-05-07 17:43:47,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_08_vm_provider/test_vm_status,ok,0.085,2020-05-07 17:43:47,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_08_vm_provider/test_provider_vm_stop,ok,30.848,2020-05-07 17:43:47,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_08_vm_provider/test_provider_vm_start,ok,10.737,2020-05-07 17:44:23,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_08_vm_provider/test_provider_vm_terminate,ok,285.061,2020-05-07 17:44:39,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_09_cm_names_find/test_cm_find_collection,ok,0.02,2020-05-07 17:49:30,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_09_cm_names_find/test_cm_find_loop,ok,0.058,2020-05-07 17:49:30,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_09_cm_names_find/test_cm_image_name_cloud,ok,0.018,2020-05-07 17:49:30,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_09_cm_names_find/test_cm_image_name_collection,ok,0.019,2020-05-07 17:49:30,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_09_cm_names_find/test_names_regexp,ok,0.032,2020-05-07 17:49:30,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_09_cm_names_find/test_cm_find_vms,ok,0.017,2020-05-07 17:49:30,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_09_cm_names_find/test_cm_find_ubuntu_in_images,ok,0.018,2020-05-07 17:49:30,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_09_cm_names_find/test_cm_find_cloud_name_attributes,ok,0.017,2020-05-07 17:49:30,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_09_cm_names_find/test_cm_find_vm_collections,ok,0.017,2020-05-07 17:49:30,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_09_cm_names_find/test_cm_find_vm_collections_vm,ok,0.018,2020-05-07 17:49:30,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+# csv,test_09_cm_names_find/test_cm_find_vm_collection_form_parameter,ok,0.016,2020-05-07 17:49:30,azure,josh-XPS-13-9343,josh,Linux,#38~18.04.1-Ubuntu SMP Tue Mar 31 04:17:56 UTC 2020
+
+PASSED
+
+=================================== FAILURES ===================================
+_______________ Test_secgroup_provider.test_list_secgroups_rules _______________
+
+self = <test_07_secgroup_provider.Test_secgroup_provider object at 0x7f48c8b0db50>
+
+    def test_list_secgroups_rules(self):
+        HEADING()
+        Benchmark.Start()
+        rule_groups = provider.list_secgroup_rules()
+        Benchmark.Stop()
+>       provider.Print(output='json', kind="secgroup", data=rule_groups)
+
+tests/cloud/test_07_secgroup_provider.py:91: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+cloudmesh/compute/vm/Provider.py:456: in Print
+    content = self.Prints(data, output=output, kind=kind)
+cloudmesh/compute/vm/Provider.py:450: in Prints
+    _output = Printer.write(data, output=output)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+results = None, order = None, header = None, output = 'json', width = None
+humanize = False, max_width = None, sep = '.'
+
+    @staticmethod
+    def write(results,
+              order=None,
+              header=None,
+              output='table',
+              width=None,
+              humanize=False,
+              max_width=None,
+              sep='.'):
+    
+        width = width or max_width  # maxwidth is deprecated
+    
+        if header:
+            header = list(header)
+        elif order:
+            header = list(order)
+    
+        if output == 'table':
+            output = Printer.default()
+    
+        #
+        # Make sure that we have a list of dicts
+        #
+        if type(results) == dict:
+            _results = Printer._to_tabulate(results)
+        else:
+>           _results = list(results)
+E           TypeError: 'NoneType' object is not iterable
+
+../cloudmesh-common/cloudmesh/common/Tabulate.py:122: TypeError
+=============================== warnings summary ===============================
+tests/cloud/test_01_clean_local_remote.py: 1 test with warning
+tests/cloud/test_07_secgroup_provider.py: 8 tests with warnings
+tests/cloud/test_08_vm_provider.py: 2 tests with warnings
+  /home/josh/dev/cloud/cloudmesh-azure/cloudmesh/azure/compute/Provider.py:780: DeprecationWarning: count is deprecated. Use Collection.count_documents instead.
+    if local_sec_group.count() == 0:
+
+-- Docs: https://docs.pytest.org/en/latest/warnings.html
+=========================== short test summary info ============================
+FAILED tests/cloud/test_07_secgroup_provider.py::Test_secgroup_provider::test_list_secgroups_rules
+============ 1 failed, 62 passed, 11 warnings in 628.39s (0:10:28) =============

@@ -108,9 +108,10 @@ Aws
 ~~~
 
 - Due to the nature of AWS vm creation, the test can get hung up on the wait command depending 
-  on your configuration.
+  on your configuration. If this happens, the test will need to be manually cancelled, and your
+  configuration updated. 
 
 Oracle
 ~~~~~~
 
-- Hangs on input at the end of testing
+- Hangs on input at the end of testing TODO diagnose issue. 

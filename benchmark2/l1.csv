@@ -1,0 +1,12 @@
+# csv,timer,status,time,start,tag,uname.node,user,uname.system,platform.version
+# csv,test_08_vm_provider/test_find_largest_id,ok,6.044,2020-05-09 01:20:14,chameleon,i9,user,Linux,#33-Ubuntu SMP Wed Apr 29 14:32:27 UTC 2020
+# csv,test_08_vm_provider/test_provider_vm_create,ok,48.337,2020-05-09 01:20:21,chameleon,i9,user,Linux,#33-Ubuntu SMP Wed Apr 29 14:32:27 UTC 2020
+# csv,create vm test-gregor-vm-47,ok,41.483,2020-05-09 01:20:21,chameleon,i9,user,Linux,#33-Ubuntu SMP Wed Apr 29 14:32:27 UTC 2020
+# csv,test_08_vm_provider/test_provider_vmprovider_vm_list,ok,4.227,2020-05-09 01:21:10,chameleon,i9,user,Linux,#33-Ubuntu SMP Wed Apr 29 14:32:27 UTC 2020
+# csv,test_08_vm_provider/test_provider_vm_wait,ok,16.266,2020-05-09 01:21:15,chameleon,i9,user,Linux,#33-Ubuntu SMP Wed Apr 29 14:32:27 UTC 2020
+# csv,test_08_vm_provider/test_provider_vm_ssh,ok,6.047,2020-05-09 01:21:31,chameleon,i9,user,Linux,#33-Ubuntu SMP Wed Apr 29 14:32:27 UTC 2020
+# csv,test_08_vm_provider/test_provider_vm_info,ok,0.45,2020-05-09 01:21:37,chameleon,i9,user,Linux,#33-Ubuntu SMP Wed Apr 29 14:32:27 UTC 2020
+# csv,test_08_vm_provider/test_vm_status,ok,0.519,2020-05-09 01:21:37,chameleon,i9,user,Linux,#33-Ubuntu SMP Wed Apr 29 14:32:27 UTC 2020
+# csv,test_08_vm_provider/test_provider_vm_stop,ok,2.394,2020-05-09 01:21:38,chameleon,i9,user,Linux,#33-Ubuntu SMP Wed Apr 29 14:32:27 UTC 2020
+# csv,test_08_vm_provider/test_provider_vm_start,ok,2.603,2020-05-09 01:21:46,chameleon,i9,user,Linux,#33-Ubuntu SMP Wed Apr 29 14:32:27 UTC 2020
+# csv,test_08_vm_provider/test_provider_vm_terminate,ok,3.422,2020-05-09 01:21:59,chameleon,i9,user,Linux,#33-Ubuntu SMP Wed Apr 29 14:32:27 UTC 2020

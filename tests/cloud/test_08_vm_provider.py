@@ -92,7 +92,10 @@ class Test_provider_vm:
         os.system(f"cms vm list --cloud={cloud}")
         name_generator.incr()
         Benchmark.Start()
-        data = provider.create(key=key)
+        if cloud == "chameleon":
+            data = provider.create(key=key,secgroup="default")
+        else:
+            data = provider.create(key=key)
         Benchmark.Stop()
         # print(data)
         VERBOSE(data)

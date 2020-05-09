@@ -64,7 +64,7 @@ class Test_provider_vm:
         name = str(Name())
         print(name)
         vms = provider.list()
-        print(f'VM is {vms}')
+        #print(f'VM is {vms}')
 
         numbers = []
         if not vms:
@@ -83,9 +83,12 @@ class Test_provider_vm:
         return counter
 
     def test_find_largest_id(self):
+        HEADING()
+        Benchmark.Start()
         name = Name()
         counter = {"counter": self.find_counter()}
         name.assign(counter)
+        Benchmark.Stop()
 
     def test_provider_vm_create(self):
         HEADING()
@@ -184,7 +187,7 @@ class Test_provider_vm:
                 break
             if status["cm.status"] in ['STOPPED', 'SHUTOFF', 'TERMINATED']:
                 break
-        VERBOSE(data)
+        print(data)
         print(status)
         assert status["cm.status"] in ['STOPPED', 'SHUTOFF', 'TERMINATED']
 

@@ -278,6 +278,7 @@ class Provider(ComputeNodeABC):
         cm['status'] = 'available'
 
         StopWatch.stop(f"create vm {arguments.name}")
+
         t = format(StopWatch.get(f"create vm {arguments.name}"), '.2f')
         cm['creation'] = t
 
@@ -294,6 +295,7 @@ class Provider(ComputeNodeABC):
 
         try:
             self.p.set_server_metadata(arguments.name, **metadata)
+            StopWatch.status(f"create vm {arguments.name}", True)
 
         except Exception as e:
             Console.error(f"{cloud} reported the following error")

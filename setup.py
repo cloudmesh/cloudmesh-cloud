@@ -66,7 +66,6 @@ recommonmark
 requests
 selenium
 tabulate
-uuid
 """.splitlines()
 
 

@@ -122,21 +122,17 @@ dist:
 	python setup.py sdist bdist_wheel
 	twine check dist/*
 
-patch: clean requirements
-	$(call banner, "bbuild")
-	bump2version --no-tag --allow-dirty patch
+patch: clean twine
+	$(call banner, "patch")
+	bump2version --allow-dirty patch
 	python setup.py sdist bdist_wheel
-	git push
-	# git push origin master --tags
+	git push origin master --tags
 	twine check dist/*
 	twine upload --repository testpypi  dist/*
 	# $(call banner, "install")
+	# pip search "cloudmesh" | fgrep cloudmesh-$(package)
 	# sleep 10
 	# pip install --index-url https://test.pypi.org/simple/ cloudmesh-$(package) -U
-
-	#make
-	#git commit -m "update documentation" docs
-	#git push
 
 minor: clean
 	$(call banner, "minor")
@@ -154,8 +150,8 @@ release: clean
 	$(call banner, "install")
 	@cat VERSION
 	@echo
-	#sleep 10
-	#pip install -U cloudmesh-common
+	# sleep 10
+	# pip install -U cloudmesh-common
 
 
 dev:
@@ -182,4 +178,14 @@ log:
 	git commit -m "chg: dev: Update ChangeLog" ChangeLog
 	git push
 
+# bump:
+#	git checkout master
+#	git pull
+#	tox
+#	python setup.py sdist bdist_wheel upload
+#	bumpversion --no-tag patch
+#	git push origin master --tags
 
+
+# API_JSON=$(printf '{"tag_name": "v%s","target_commitish": "master","name": "v%s","body": "Release of version %s","draft": false,"prerelease": false}' $VERSION $VERSION $VERSION)
+# curl --data "$API_JSON" https://api.github.com/repos/:owner/:repository/releases?access_token=:access_token

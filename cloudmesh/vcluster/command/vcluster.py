@@ -3,7 +3,7 @@ from datetime import datetime
 from cloudmesh.common.parameter import Parameter
 from cloudmesh.shell.command import PluginCommand
 from cloudmesh.shell.command import command
-from cloudmesh.vcluster.api.VirtualCluster import VirtualCluster
+from cloudmesh.vcluster.VirtualCluster import VirtualCluster
 
 
 class VclusterCommand(PluginCommand):

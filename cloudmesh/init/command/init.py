@@ -67,7 +67,7 @@ class InitCommand(PluginCommand):
             Console.info(
                 "cms init is a convenient program to set up cloudmesh"
                 " with defaukt values. Please make sure you use in your"
-                " ~/.cloudmesh/yaml file a valid value for\n\n"
+                " ~/.cloudmesh/cloudmesh.yaml file a valid value for\n\n"
                 "        cloudmesh.profile.user\n\n"
                 "      This name is aslo used as keyname in the cloud providers\n\n"
                 "      Additionally we recommend that you use. \n\n"

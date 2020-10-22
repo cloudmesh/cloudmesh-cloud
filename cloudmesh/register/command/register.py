@@ -8,7 +8,9 @@ from cloudmesh.common.util import path_expand
 from cloudmesh.register.Register import Register
 from cloudmesh.shell.command import PluginCommand
 from cloudmesh.shell.command import command, map_parameters
-
+import oyaml as yaml
+from cloudmesh.common.Shell import Shell
+from cloudmesh.chameleon.Chameleon import Chameleon
 
 # noinspection
 class RegisterCommand(PluginCommand):
@@ -29,6 +31,8 @@ class RegisterCommand(PluginCommand):
                                             [--keep]
                                             [ATTRIBUTES...]
                                             [--dryrun]
+                register chameleon --filename=FILENAME
+
 
                 This command adds the registration information in the cloudmesh
                 yaml file. A FILENAME can be passed along that contains
@@ -94,6 +98,34 @@ class RegisterCommand(PluginCommand):
                     values from google compute sample. We assume you have
                     downloaded the service account credentials form google cloud.
 
+                Chameleon cloud:
+
+                  We have two methods to register chameleon cloud. Both require that you download the RC file into
+                  your download folder.
+
+                  Method A
+
+                      Then use the command
+
+                        cms chameleon credential find
+
+                      This command will print the location of your downloaded RC file. Next generate a yaml version of teh
+                      RC file with
+
+                        cms chameleon credential create --file=~/Downloads/CH-819337-openrc.sh
+
+                      To complete the registration, please use:
+
+                        cms register update --kind=openstack --service=cloud --filename=~/.cloudmesh/chameleon-tmp.yaml
+                        rm ~/.cloudmesh/chameleon-tmp.yaml
+
+                  METHOD B
+
+                    Execute the command
+
+                        cms register chameleon --filename=~/Downloads/CH-819337-openrc.sh
+
+                    This will execute the conversion from the RC file automatically.
         """
 
         map_parameters(arguments,
@@ -141,6 +173,20 @@ class RegisterCommand(PluginCommand):
         if entry_name and "_" in entry_name:
             Console.error("Name cannot have have '_'.")
             return ""
+
+        # check if chameleon
+
+        if arguments.chameleon:
+
+            filename = path_expand(arguments.filename)
+
+            Chameleon.create_yaml_file(arguments.filename)
+
+            # cms register update --kind=openstack --service=cloud --filename=~/.cloudmesh/chameleon-tmp.yaml
+            arguments.update = True
+            arguments.register = True
+            arguments.kind="openstack"
+            arguments.service="cloud"
 
         # Analyze command.
         if arguments.list:
@@ -220,13 +266,25 @@ class RegisterCommand(PluginCommand):
             attributes = {}
 
             if arguments.filename:
-                # Load JSON File.
                 path = path_expand(arguments.filename)
-                with open(path, "r") as file:
-                    attributes = json.load(file)
 
-                # Add the filename to attributes
-                attributes["filename"] = arguments.filename
+                if arguments.filename.endswith(".json"):
+                    # Load JSON File.
+                    with open(path, "r") as file:
+                        attributes = json.load(file)
+
+                    # Add the filename to attributes
+                    attributes["filename"] = arguments.filename
+                elif arguments.filename.endswith(".yml") or arguments.filename.endswith(".yaml") :
+                    # read the yaml file
+                    with open(path, "r") as file:
+                        attributes = yaml.load(file, Loader=yaml.FullLoader)
+
+                    # Add the filename to attributes
+                    attributes["filename"] = arguments.filename
+                else:
+                    Console.error(f"The file type of {path} is not supported")
+                    return ""
 
             # Attributes will override values from file.
             if arguments.ATTRIBUTES:

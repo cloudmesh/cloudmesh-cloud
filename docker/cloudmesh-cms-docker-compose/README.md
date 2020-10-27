@@ -1,5 +1,5 @@
 
-1. Download the source code: https://github.com/cloudmesh/cloudmesh-cloud/tree/master/docker/cloudmesh-cms-docker-compose
+1. Download the source code: https://github.com/cloudmesh/cloudmesh-cloud/tree/main/docker/cloudmesh-cms-docker-compose
 
     It contains three files:
     * Dockerfile

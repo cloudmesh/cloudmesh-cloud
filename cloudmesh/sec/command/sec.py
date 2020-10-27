@@ -11,7 +11,7 @@ from cloudmesh.shell.command import map_parameters
 
 class SecCommand(PluginCommand):
 
-    # see https://github.com/cloudmesh/client/blob/master/cloudmesh_client/shell/plugins/SecgroupCommand.py
+    # see https://github.com/cloudmesh/client/blob/main/cloudmesh_client/shell/plugins/SecgroupCommand.py
     # noinspection PyUnusedLocal
     @command
     def do_sec(self, args, arguments):

@@ -2,7 +2,7 @@
 Main module of the server file
 """
 
-# see the example in https://github.com/cloudmesh-community/nist/tree/master/examples/flask-connexion-swagger
+# see the example in https://github.com/cloudmesh-community/nist/tree/main/examples/flask-connexion-swagger
 
 import connexion
 from flask import jsonify

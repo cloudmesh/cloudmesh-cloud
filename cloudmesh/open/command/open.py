@@ -10,7 +10,7 @@ from cloudmesh.shell.command import command
 
 class OpenCommand(PluginCommand):
 
-    # see https://github.com/cloudmesh/client/blob/master/cloudmesh_client/shell/plugins/OpenCommand.py
+    # see https://github.com/cloudmesh/client/blob/main/cloudmesh_client/shell/plugins/OpenCommand.py
 
     # noinspection PyUnusedLocal,PyBroadException
     @command

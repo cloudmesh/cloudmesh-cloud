@@ -1,11 +1,11 @@
 # Cloudmesh Cloud Interfaces
 
 [![Version](https://img.shields.io/pypi/v/cloudmesh-cloud.svg)](https://pypi.python.org/pypi/cloudmesh--cloud)
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/cloudmesh/cloudmesh--cloud/blob/master/LICENSE)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/cloudmesh/cloudmesh--cloud/blob/main/LICENSE)
 [![Python](https://img.shields.io/pypi/pyversions/cloudmesh-cloud.svg)](https://pypi.python.org/pypi/cloudmesh--cloud)
 [![Format](https://img.shields.io/pypi/format/cloudmesh-cloud.svg)](https://pypi.python.org/pypi/cloudmesh--cloud)
 [![Status](https://img.shields.io/pypi/status/cloudmesh-cloud.svg)](https://pypi.python.org/pypi/cloudmesh--cloud)
-[![Travis](https://travis-ci.com/cloudmesh/cloudmesh-cloud.svg?branch=master)](https://travis-ci.com/cloudmesh/cloudmesh-cloud)
+[![Travis](https://travis-ci.com/cloudmesh/cloudmesh-cloud.svg?branch=main)](https://travis-ci.com/cloudmesh/cloudmesh-cloud)
 
 * <https://github.com/cloudmesh/cloudmesh-cloud>
 
@@ -23,7 +23,7 @@ in the installation documentation.
 An dynamically extensible CMD based command shell. For en extensive
 documentation please see
 
-* <https://github.com/cloudmesh-community/book/blob/master/vonLaszewski-cloud.epub?raw=true>
+* <https://github.com/cloudmesh-community/book/blob/main/vonLaszewski-cloud.epub?raw=true>
 
 where we also document how to use pyenv virtualenv.
 

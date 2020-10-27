@@ -10,7 +10,7 @@ from cloudmesh.shell.command import command, map_parameters
 
 class ImageCommand(PluginCommand):
 
-    # see https://github.com/cloudmesh/client/blob/master/cloudmesh_client/shell/plugins/ImageCommand.py
+    # see https://github.com/cloudmesh/client/blob/main/cloudmesh_client/shell/plugins/ImageCommand.py
 
     # noinspection PyUnusedLocal
     @command

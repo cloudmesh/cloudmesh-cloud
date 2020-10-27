@@ -126,7 +126,7 @@ patch: clean twine
 	$(call banner, "patch")
 	bump2version --allow-dirty patch
 	python setup.py sdist bdist_wheel
-	git push origin master --tags
+	git push origin main --tags
 	twine check dist/*
 	twine upload --repository testpypi  dist/*
 	# $(call banner, "install")
@@ -143,7 +143,7 @@ minor: clean
 release: clean
 	$(call banner, "release")
 	git tag "v$(VERSION)"
-	git push origin master --tags
+	git push origin main --tags
 	python setup.py sdist bdist_wheel
 	twine check dist/*
 	twine upload --repository pypi dist/*
@@ -179,13 +179,13 @@ log:
 	git push
 
 # bump:
-#	git checkout master
+#	git checkout main
 #	git pull
 #	tox
 #	python setup.py sdist bdist_wheel upload
 #	bumpversion --no-tag patch
-#	git push origin master --tags
+#	git push origin main --tags
 
 
-# API_JSON=$(printf '{"tag_name": "v%s","target_commitish": "master","name": "v%s","body": "Release of version %s","draft": false,"prerelease": false}' $VERSION $VERSION $VERSION)
+# API_JSON=$(printf '{"tag_name": "v%s","target_commitish": "main","name": "v%s","body": "Release of version %s","draft": false,"prerelease": false}' $VERSION $VERSION $VERSION)
 # curl --data "$API_JSON" https://api.github.com/repos/:owner/:repository/releases?access_token=:access_token

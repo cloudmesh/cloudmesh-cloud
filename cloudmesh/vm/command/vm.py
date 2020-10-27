@@ -21,7 +21,7 @@ from cloudmesh.shell.command import command, map_parameters
 
 class VmCommand(PluginCommand):
 
-    # see also https://github.com/cloudmesh/client/edit/master/cloudmesh_client/shell/plugins/VmCommand.py
+    # see also https://github.com/cloudmesh/client/edit/main/cloudmesh_client/shell/plugins/VmCommand.py
 
     # noinspection PyUnusedLocal
     @command

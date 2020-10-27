@@ -12,7 +12,7 @@ from cloudmesh.shell.command import PluginCommand, map_parameters
 from cloudmesh.shell.command import command
 
 
-# see https://github.com/cloudmesh/client/blob/master/cloudmesh_client/shell/plugins/SecureShellCommand.py
+# see https://github.com/cloudmesh/client/blob/main/cloudmesh_client/shell/plugins/SecureShellCommand.py
 
 
 class SshCommand(PluginCommand):

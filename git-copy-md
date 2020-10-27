@@ -18,5 +18,5 @@ git commit
 cd ../../projects/destination
 
 git remote add modified-source ../../backup/source
-git pull modified-source master --allow-unrelated-histories
+git pull modified-source main --allow-unrelated-histories
 git remote rm modified-source

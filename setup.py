@@ -47,6 +47,7 @@ cloudmesh-sys
 cloudmesh-inventory
 cloudmesh-abstract
 cloudmesh-admin
+cloudmesh-chameleon
 apache-libcloud
 beautifulsoup4
 dateparser

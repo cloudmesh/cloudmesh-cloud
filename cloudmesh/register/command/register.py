@@ -150,15 +150,22 @@ class RegisterCommand(PluginCommand):
                 if sample and len(sample) >= 1:
 
                     if sample == "txt":
-                        Console.info(
-                            f"Sample for service={service} kind={arguments.kind}")
 
                         print(dedent(sample))
                     else:
                         headline = f"Configuration for Cloud={arguments.kind} Service={service}"
+                        generate = dedent(f"""
+                           .. note:: This Documentation was generated automatically with::
+                                      
+                                         cms register list sample --service=compute --kind=openstack
+                                   
+                                      please do not change the manual page, change the code if things to not look ok.
+                        """)
                         print()
                         print (headline)
                         print (arguments.underline * len(headline))
+                        print()
+                        print (generate)
                         print()
                         print("::")
 

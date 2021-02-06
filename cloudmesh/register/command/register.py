@@ -110,9 +110,9 @@ class RegisterCommand(PluginCommand):
         # VERBOSE(arguments)
 
         """
-        TODO: This is a special register allowing to use the web interface 
+        TODO: This is a special register allowing to use the web interface
         to get the aws json file.
-        
+
         if arguments.aws and arguments.yaml:
 
             AWSReg = importlib.import_module(
@@ -154,18 +154,18 @@ class RegisterCommand(PluginCommand):
                         print(dedent(sample))
                     else:
                         headline = f"Configuration for Cloud={arguments.kind} Service={service}"
-                        generate = dedent(f"""
+                        generate = dedent("""
                            .. note:: This Documentation was generated automatically with::
-                                      
+
                                          cms register list sample --service=compute --kind=openstack
-                                   
+
                                       please do not change the manual page, change the code if things to not look ok.
                         """)
                         print()
-                        print (headline)
-                        print (arguments.underline * len(headline))
+                        print(headline)
+                        print(arguments.underline * len(headline))
                         print()
-                        print (generate)
+                        print(generate)
                         print()
                         print("::")
 

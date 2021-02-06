@@ -330,10 +330,12 @@ class Provider(ComputeNodeABC):
 
         vms = self.to_dict(self.vagrant_nodes())
 
-        arg = "ssh {} -c {}".format(name, command)
-        result = Shell.execute("vagrant", ["ssh", name, "-c", command],
-                               cwd=arg.directory,
-                               shell=True)
+        arg = f"ssh {name} -c {command}"
+        result = Shell.execute(
+            "vagrant",
+            ["ssh", name, "-c", command],
+            cwd=arg.directory,
+            shell=True)
         return result
 
     def to_dict(self, lst, id="name"):
@@ -704,7 +706,7 @@ class Provider(ComputeNodeABC):
     def list(self, raw=True):
         """
         list all nodes id
-    
+
         :return: an array of dicts representing the nodes
         """
         result = None
@@ -717,7 +719,7 @@ class Provider(ComputeNodeABC):
     def rename(self, name=None, destination=None):
         """
         rename a node
-    
+
         :param destination:
         :param name: the current name
         :return: the dict with the new name

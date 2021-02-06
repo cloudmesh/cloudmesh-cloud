@@ -127,7 +127,6 @@ class GroupCommand(PluginCommand):
                                         output=arguments["--format"]))
 
         """
-    
 
         elif arguments["delete"]:
             groups = Parameter.expand(arguments["GROUPS"])
@@ -171,5 +170,5 @@ class GroupCommand(PluginCommand):
 
             Group.merge(_groupA, _groupB, _mergedGroup)
             return ""
-        
+
         """

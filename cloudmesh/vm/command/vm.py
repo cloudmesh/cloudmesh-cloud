@@ -304,7 +304,7 @@ class VmCommand(PluginCommand):
                 for pair in pairs:
                     key, value = pair.split("=", 1)
 
-                    ##cm cannot be updated using vm meta set
+                    # cm cannot be updated using vm meta set
                     if key == 'cm':
                         Console.warning("Update of cm metadata is not allowed.")
                     else:
@@ -325,7 +325,7 @@ class VmCommand(PluginCommand):
                 keys = arguments['KEY']
 
                 for key in keys:
-                    ##cm cannot be delete using vm meta set
+                    # cm cannot be delete using vm meta set
                     if key == 'cm':
                         Console.warning("Deleting of cm metadata is not allowed.")
                     else:
@@ -376,8 +376,7 @@ class VmCommand(PluginCommand):
                     p = Provider(cloud)
                     kind = p.kind
 
-                    collection = "{cloud}-vm".format(cloud=cloud,
-                                                     kind=p.kind)
+                    collection = f"{cloud}-vm"
                     db = CmDatabase()
                     vms = db.find(collection=collection)
 
@@ -447,9 +446,9 @@ class VmCommand(PluginCommand):
             vm check [NAMES] [--cloud=CLOUDS] [--username=USERNAME]
             """
             """
-            
+
             THIS IS ALL WRONG AS PROVIDER DEPENDENT !!!
-            
+
             if arguments.NAMES:
                 variables['vm'] = arguments.NAMES
             if arguments['--cloud']:
@@ -501,7 +500,6 @@ class VmCommand(PluginCommand):
 
                 provider.Print(status, output=arguments.output, kind="status")
                 return ""
-
 
         elif arguments.start:
             # TODO: not tested
@@ -555,7 +553,6 @@ class VmCommand(PluginCommand):
 
                     provider.Print(vms, output=arguments.output, kind="vm")
 
-
         elif arguments.terminate:
             # TODO: not tested
 
@@ -580,7 +577,6 @@ class VmCommand(PluginCommand):
                         vms = provider.destroy(name)
 
                     provider.Print(vms, output=arguments.output, kind="vm")
-
 
         elif arguments.delete:
 
@@ -611,14 +607,12 @@ class VmCommand(PluginCommand):
                     if name in names:
                         r = provider.destroy(name=name)
 
-
-
         # TODO: username, secgroup
         elif arguments.boot:
             # not everything works
 
             """
-                vm boot 
+                vm boot
                         [--n=COUNT]
                         [--name=NAMES]
                         [--label=LABEL]
@@ -771,7 +765,7 @@ class VmCommand(PluginCommand):
             cloud_kind = cloud[0]
 
             for name in names:
-                #Get Cloud Provider.
+                # Get Cloud Provider.
                 provider = Provider(cloud_kind)
                 if arguments['--dryrun']:
                     print(f"info node {name}")
@@ -895,7 +889,7 @@ class VmCommand(PluginCommand):
         elif arguments.ssh:
 
             """
-            vm ssh [NAMES] 
+            vm ssh [NAMES]
                  [--username=USER]
                  [--quiet]
                  [--ip=IP]

@@ -157,7 +157,7 @@ class SecCommand(PluginCommand):
 
         if (arguments.load and not arguments.group) or \
             (arguments.load and arguments.group and not arguments.GROUP) \
-            and no_cloud:
+                and no_cloud:
 
             examples = SecgroupExamples()
             examples.load()
@@ -193,12 +193,10 @@ class SecCommand(PluginCommand):
                     print(f"cloud {cloud}")
                     provider = Provider(name=cloud)
                     r = provider.remove_secgroup(name=arguments.GROUP)
-
             else:
                 groups.remove(arguments.GROUP)
 
-        elif (arguments.group or arguments.rule) and arguments.list and \
-            arguments.cloud:
+        elif (arguments.group or arguments.rule) and arguments.list and arguments.cloud:
 
             clouds = Parameter.expand(arguments.cloud)
             if len(clouds) == 0:
@@ -213,7 +211,7 @@ class SecCommand(PluginCommand):
 
                 if cloud == 'google':
                     """
-                        Google does not support sec groups. So the firewall 
+                        Google does not support sec groups. So the firewall
                         rules use name cm-{sec-group-name}-{rule-name} format.
                     """
                     if arguments.rule:
@@ -249,12 +247,12 @@ class SecCommand(PluginCommand):
                 else:
                     secrule_output = provider.p.output["secgroup"]
 
-                #Print here.
+                # Print here.
                 print(Printer.flatwrite(cloud_groups,
-                                  sort_keys=secrule_output["sort_keys"],
-                                  order=secrule_output["order"],
-                                  header=secrule_output["header"],
-                                  output=arguments.output))
+                                        sort_keys=secrule_output["sort_keys"],
+                                        order=secrule_output["order"],
+                                        header=secrule_output["header"],
+                                        output=arguments.output))
 
             return ""
 

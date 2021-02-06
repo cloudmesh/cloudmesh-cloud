@@ -227,7 +227,7 @@ class KeyGroup(KeyGroupDatabase):
 
     def add_broken(self, groups=None, names=None, name=None, filename=None, cloud=None):
 
-         #key group add --group=abc [NAMES]
+        # key group add --group=abc [NAMES]
 
         names = Parameter.expand(names)
 

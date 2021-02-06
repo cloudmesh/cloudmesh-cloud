@@ -51,18 +51,15 @@ class VirtualCluster(object):
             if 'sshconfigpath' not in virt_cluster[node]['credentials'].keys():
                 raise ValueError(
                     "%s: 'sshconfigpath' keyword is missing" % node)
-            if not os.path.isfile(os.path.expanduser(
-                virt_cluster[node]['credentials']['sshconfigpath'])):
+            if not os.path.isfile(os.path.expanduser(virt_cluster[node]['credentials']['sshconfigpath'])):
                 raise ValueError(
                     "%s: The ssh config file %s does not exists" % (
-                        node, virt_cluster[node] \
-                            ['credentials']['sshconfigpath']))
+                        node, virt_cluster[node]['credentials']['sshconfigpath']))
         if not os.path.isfile(os.path.expanduser(job_metadata['script_path'])):
             raise ValueError("The script file %s does not exists" % (
                 job_metadata['script_path']))
         if runtime_config['input-type'] == 'params+file':
-            if not os.path.isfile(
-                os.path.expanduser(job_metadata['argfile_path'])):
+            if not os.path.isfile(os.path.expanduser(job_metadata['argfile_path'])):
                 raise ValueError("The arg file %s does not exists" % (
                     job_metadata['arg_file_path']))
 
@@ -75,15 +72,14 @@ class VirtualCluster(object):
         :return:
         """
         target_node_info = self.virt_cluster[target_node]
-        ssh_caller = lambda *x: self._ssh(target_node_info['name'],
-                                          os.path.expanduser(
-                                              target_node_info['credentials'] \
-                                                  ['sshconfigpath']), *x)
-        ssh_caller('rm -rf {}'.format(remote_path))
-        if len(ssh_caller('ls {}'.format(remote_path))) == 0:
-            print("Node {} cleaned successfully.".format(target_node))
+        ssh_caller = lambda *x: self._ssh(
+            target_node_info['name'],
+            os.path.expanduser(target_node_info['credentials']['sshconfigpath']), *x)
+        ssh_caller(f'rm -rf {remote_path}')
+        if len(ssh_caller(f'ls {remote_path}')) == 0:
+            print(f"Node {target_node} cleaned successfully.")
         else:
-            print("Error: Node {} could not be cleaned.".format(target_node))
+            print(f"Error: Node {target_node} could not be cleaned.")
 
     def _connection_test_in_parallel(self, target_node):
         """
@@ -93,14 +89,13 @@ class VirtualCluster(object):
         :return:
         """
         target_node_info = self.virt_cluster[target_node]
-        ssh_caller = lambda *x: self._ssh(target_node_info['name'],
-                                          os.path.expanduser(
-                                              target_node_info['credentials'] \
-                                                  ['sshconfigpath']), *x)
+        ssh_caller = lambda *x: self._ssh(
+            target_node_info['name'],
+            os.path.expanduser(target_node_info['credentials']['sshconfigpath']), *x)
         if len(ssh_caller('uname -a')) > 0:
-            print("Node {} is accessible.".format(target_node))
+            print(f"Node {target_node} is accessible.")
         else:
-            print("Error: Node {} cannot be accessed.".format(target_node))
+            print(f"Error: Node {target_node} cannot be accessed.")
 
     def _create_config(self,
                        config_name,
@@ -179,41 +174,34 @@ class VirtualCluster(object):
         dest_pid = node_pid_tuple[1]
         node_idx = node_pid_tuple[2]
         dest_node_info = self.virt_cluster[dest_node]
-        ssh_caller = lambda *x: self._ssh(dest_node_info['name'],
-                                          os.path.expanduser(
-                                              dest_node_info['credentials'] \
-                                                  ['sshconfigpath']), *x)
-        scp_caller = lambda *x: self._scp(dest_node_info['name'],
-                                          os.path.expanduser(
-                                              dest_node_info['credentials'] \
-                                                  ['sshconfigpath']), *x)
-        ps_output = ssh_caller('ps', '-ef', '|', 'grep', dest_pid.strip('\n'),
-                               '|', 'grep -v grep')
+        ssh_caller = lambda *x: self._ssh(
+            dest_node_info['name'],
+            os.path.expanduser(dest_node_info['credentials']['sshconfigpath']), *x)
+        scp_caller = lambda *x: self._scp(
+            dest_node_info['name'],
+            os.path.expanduser(dest_node_info['credentials']['sshconfigpath']), *x)
+        ps_output = ssh_caller(
+            'ps', '-ef', '|', 'grep', dest_pid.strip('\n'), '|', 'grep -v grep')
         if len(ps_output) == 0 and node_pid_tuple in [pid for pid in all_pids]:
             if not os.path.exists(job_metadata['local_path']):
                 os.makedirs(job_metadata['local_path'])
             if self.runtime_config['output-type'] == 'stdout':
-                scp_caller('%s:%s' % (dest_node_info['name'],
-                                      os.path.join(job_metadata['remote_path'],
-                                                   self.add_suffix_to_path(
-                                                       'outputfile_%d' % node_idx,
-                                                       job_metadata[
-                                                           'suffix']))),
-                           os.path.join(job_metadata['local_path'], ''))
+                scp_caller(
+                    '%s:%s' % (dest_node_info['name'],
+                               os.path.join(job_metadata['remote_path'],
+                                            self.add_suffix_to_path('outputfile_%d' % node_idx,
+                                                                    job_metadata['suffix']))),
+                    os.path.join(job_metadata['local_path'], ''))
             elif self.runtime_config['output-type'] in ['file', 'stdout+file']:
                 nested_remote_path = os.path.join(job_metadata['remote_path'],
                                                   'run{}'.format(node_idx))
-                scp_caller('-r', '%s:%s' % (
-                    dest_node_info['name'], nested_remote_path),
-                           os.path.join(job_metadata \
-                                            [
-                                            'local_path'],
-                                        ''))
+                scp_caller(
+                    '-r', '%s:%s' % (dest_node_info['name'], nested_remote_path),
+                    os.path.join(job_metadata['local_path'], ''))
             all_pids.remove((dest_node, dest_pid, node_idx))
             print("Results collected from %s." % dest_node)
 
-    def _run_remote_job_in_parallel(self, job_metadata, param_idx, params,
-                                    all_pids):
+    def _run_remote_job_in_parallel(self, job_metadata, param_idx, params, all_pids):
         """
         This method is used to spawn remote processes in parallel
 
@@ -228,21 +216,18 @@ class VirtualCluster(object):
         target_node_key = list(self.virt_cluster.keys())[target_node_idx]
         target_node = self.virt_cluster[target_node_key]
         remote_pid = []
-        ssh_caller = lambda *x: self._ssh(target_node['name'],
-                                          os.path.expanduser(
-                                              target_node['credentials'] \
-                                                  ['sshconfigpath']), *x)
-        scp_caller = lambda *x: self._scp(target_node['name'],
-                                          os.path.expanduser(
-                                              target_node['credentials'] \
-                                                  ['sshconfigpath']), *x)
+        ssh_caller = lambda *x: self._ssh(
+            target_node['name'],
+            os.path.expanduser(target_node['credentials']['sshconfigpath']), *x)
+        scp_caller = lambda *x: self._scp(
+            target_node['name'],
+            os.path.expanduser(target_node['credentials']['sshconfigpath']), *x)
 
         # directory_check = ssh_caller('if test -d %s; then echo "exist"; fi' % job_metadata['remote_path'])
         # if len(directory_check) == 0:
         ssh_caller('cd %s && mkdir job%s' % (
             job_metadata['raw_remote_path'], job_metadata['suffix']), True)
-        if self.runtime_config['output-type'].lower() in ['file',
-                                                          'stdout+file']:
+        if self.runtime_config['output-type'].lower() in ['file', 'stdout+file']:
             ssh_caller(
                 "cd {} && mkdir run{}".format(job_metadata['remote_path'],
                                               param_idx))

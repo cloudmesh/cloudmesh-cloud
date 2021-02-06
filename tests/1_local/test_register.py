@@ -97,7 +97,7 @@ class Test_register:
         result = Shell.execute(list_sample_cmd, shell=True)
         Benchmark.Stop()
         assert 'Error' not in result and 'suitable' not in result \
-               and result != None, f"Error listing sample for {kind}-{service}."
+               and result is not None, f"Error listing sample for {kind}-{service}."
 
         # If success, print the result.
         self.rprint(result)

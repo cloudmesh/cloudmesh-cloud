@@ -15,19 +15,40 @@ class VclusterCommand(PluginCommand):
         ::
 
           Usage:
-          
-            vcluster create cluster CLUSTER_NAME --clusters=CLUSTERS_LIST [--computers=COMPUTERS_LIST] [--debug]
+
+            vcluster create cluster CLUSTER_NAME --clusters=CLUSTERS_LIST
+                     [--computers=COMPUTERS_LIST]
+                     [--debug]
             vcluster destroy cluster CLUSTER_NAME
-            vcluster create runtime-config CONFIG_NAME PROCESS_NUM in:params out:stdout [--fetch-proc-num=FETCH_PROCESS_NUM [default=1]] [--download-later [default=True]]  [--debug]
-            vcluster create runtime-config CONFIG_NAME PROCESS_NUM in:params out:file [--fetch-proc-num=FETCH_PROCESS_NUM [default=1]] [--download-later [default=True]]  [--debug]
-            vcluster create runtime-config CONFIG_NAME PROCESS_NUM in:params+file out:stdout [--fetch-proc-num=FETCH_PROCESS_NUM [default=1]]  [--download-later [default=True]]  [--debug]
-            vcluster create runtime-config CONFIG_NAME PROCESS_NUM in:params+file out:file [--fetch-proc-num=FETCH_PROCESS_NUM [default=1]] [--download-later [default=True]]  [--debug]
-            vcluster create runtime-config CONFIG_NAME PROCESS_NUM in:params+file out:stdout+file [--fetch-proc-num=FETCH_PROCESS_NUM [default=1]] [--download-later [default=True]]  [--debug]
+            vcluster create runtime-config CONFIG_NAME PROCESS_NUM in:params out:stdout
+                     [--fetch-proc-num=FETCH_PROCESS_NUM [default=1]]
+                     [--download-later [default=True]]
+                     [--debug]
+            vcluster create runtime-config CONFIG_NAME PROCESS_NUM in:params out:file
+                     [--fetch-proc-num=FETCH_PROCESS_NUM [default=1]]
+                     [--download-later [default=True]]
+                     [--debug]
+            vcluster create runtime-config CONFIG_NAME PROCESS_NUM in:params+file out:stdout
+                     [--fetch-proc-num=FETCH_PROCESS_NUM [default=1]]
+                     [--download-later [default=True]]
+                     [--debug]
+            vcluster create runtime-config CONFIG_NAME PROCESS_NUM in:params+file out:file
+                     [--fetch-proc-num=FETCH_PROCESS_NUM [default=1]]
+                     [--download-later [default=True]]
+                     [--debug]
+            vcluster create runtime-config CONFIG_NAME PROCESS_NUM in:params+file out:stdout+file
+                     [--fetch-proc-num=FETCH_PROCESS_NUM [default=1]]
+                     [--download-later [default=True]]
+                     [--debug]
             vcluster set-param runtime-config CONFIG_NAME PARAMETER VALUE
             vcluster destroy runtime-config CONFIG_NAME
             vcluster list clusters [DEPTH [default:1]]
             vcluster list runtime-configs [DEPTH [default:1]]
-            vcluster run-script --script-path=SCRIPT_PATH --job-name=JOB_NAME --vcluster-name=CLUSTER_NAME --config-name=CONFIG_NAME --arguments=SET_OF_PARAMS --remote-path=REMOTE_PATH --local-path=LOCAL_PATH [--argfile-path=ARGUMENT_FILE_PATH] [--outfile-name=OUTPUT_FILE_NAME] [--suffix=SUFFIX] [--overwrite]
+            vcluster run-script --script-path=SCRIPT_PATH --job-name=JOB_NAME --vcluster-name=CLUSTER_NAME --config-name=CONFIG_NAME --arguments=SET_OF_PARAMS --remote-path=REMOTE_PATH --local-path=LOCAL_PATH
+                     [--argfile-path=ARGUMENT_FILE_PATH]
+                     [--outfile-name=OUTPUT_FILE_NAME]
+                     [--suffix=SUFFIX]
+                     [--overwrite]
             vcluster fetch JOB_NAME
             vcluster clean-remote JOB_NAME PROCESS_NUM
             vcluster test-connection CLUSTER_NAME PROCESS_NUM
@@ -57,41 +78,36 @@ class VclusterCommand(PluginCommand):
                     vcluster_manager.create(arguments.get("CLUSTER_NAME"),
                                             cluster_list=clusters,
                                             computer_list=computers)
-                elif arguments.get("runtime-config") and arguments.get(
-                    "CONFIG_NAME") and arguments.get("PROCESS_NUM"):
+                elif arguments.get("runtime-config") and arguments.get("CONFIG_NAME") and arguments.get("PROCESS_NUM"):
                     config_name = arguments.get("CONFIG_NAME")
                     proc_num = int(arguments.get("PROCESS_NUM"))
-                    download_proc_num = 1 if arguments.get(
-                        "--fetch-proc-num") is None else \
-                        int(arguments.get("--fetch-proc-num"))
-                    download_later = True if arguments.get(
-                        "--download-later") is True else False
+                    download_proc_num = 1 if arguments.get("--fetch-proc-num") is None else int(
+                        arguments.get("--fetch-proc-num"))
+                    download_later = True if arguments.get("--download-later") is True else False
                     input_type = ""
                     output_type = ""
-                    if arguments.get("in:params") and arguments.get(
-                        "out:stdout"):
+                    if arguments.get("in:params") and arguments.get("out:stdout"):
                         input_type = "params"
                         output_type = "stdout"
-                    elif arguments.get("in:params") and arguments.get(
-                        "out:file"):
+                    elif arguments.get("in:params") and arguments.get("out:file"):
                         input_type = "params"
                         output_type = "file"
-                    elif arguments.get("in:params+file") and arguments.get(
-                        "out:stdout"):
+                    elif arguments.get("in:params+file") and arguments.get("out:stdout"):
                         input_type = "params+file"
                         output_type = "stdout"
-                    elif arguments.get("in:params+file") and arguments.get(
-                        "out:file"):
+                    elif arguments.get("in:params+file") and arguments.get("out:file"):
                         input_type = "params+file"
                         output_type = "file"
-                    elif arguments.get("in:params+file") and arguments.get(
-                        "out:stdout+file"):
+                    elif arguments.get("in:params+file") and arguments.get("out:stdout+file"):
                         input_type = "params+file"
                         output_type = "stdout+file"
-                    vcluster_manager.create(config_name, proc_num,
-                                            download_proc_num, download_later,
-                                            input_type,
-                                            output_type)
+                    vcluster_manager.create(
+                        config_name,
+                        proc_num,
+                        download_proc_num,
+                        download_later,
+                        input_type,
+                        output_type)
 
             elif arguments.get("destroy"):
                 if arguments.get("cluster"):
@@ -132,25 +148,14 @@ class VclusterCommand(PluginCommand):
                 script_path = arguments.get("--script-path")
                 remote_path = arguments.get("--remote-path")
                 local_path = arguments.get("--local-path")
-                random_suffix = '_' + str(datetime.now()).replace('-',
-                                                                  '').replace(
-                    ' ', '_').replace(':', '')[
-                                      0:str(datetime.now()).replace('-',
-                                                                    '').replace(
-                                          ' ', '_').replace(':', '').index(
+                random_suffix = '_' + str(datetime.now()).replace('-', '').replace(' ', '_').replace(':', '')[
+                                      0:str(datetime.now()).replace('-', '').replace(' ', '_').replace(':', '').index(
                                           '.') + 3].replace('.', '')
-                suffix = random_suffix if arguments.get(
-                    "suffix") is None else arguments.get("suffix")
+                suffix = random_suffix if arguments.get("suffix") is None else arguments.get("suffix")
                 params_list = arguments.get("--arguments").split(',')
-                overwrite = False if type(
-                    arguments.get("--overwrite")) is None else arguments.get(
-                    "--overwrite")
-                argfile_path = '' if arguments.get(
-                    "--argfile-path") is None else arguments.get(
-                    "--argfile-path")
-                outfile_name = '' if arguments.get(
-                    "--outfile-name") is None else arguments.get(
-                    "--outfile-name")
+                overwrite = False if type(arguments.get("--overwrite")) is None else arguments.get("--overwrite")
+                argfile_path = '' if arguments.get("--argfile-path") is None else arguments.get("--argfile-path")
+                outfile_name = '' if arguments.get("--outfile-name") is None else arguments.get("--outfile-name")
                 vcluster_manager.run(job_name, cluster_name, config_name,
                                      script_path, argfile_path, outfile_name,
                                      remote_path, local_path, params_list,

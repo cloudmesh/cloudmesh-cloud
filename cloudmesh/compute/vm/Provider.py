@@ -233,7 +233,6 @@ class Provider(ComputeNodeABC):
         cm = cm.replace(": ", ":").replace(", ", ":")
         return cm
 
-
     def _create(self, **arguments):
 
         arguments = dotdict(arguments)

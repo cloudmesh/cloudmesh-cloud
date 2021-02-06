@@ -143,7 +143,7 @@ class SecgroupDatabase:
                 try:
                     entry = self.find(name=name)[0]
                     found.append(entry)
-                except Exception as e:
+                except Exception as e:  # noqa: F841
                     pass
 
         return found
@@ -245,7 +245,7 @@ class Secgroup(SecgroupDatabase):
         # noinspection PyUnusedLocal
         try:
             entry = self.find(name=name)[0]
-        except Exception as e:
+        except Exception as e:  # noqa: F841
             entry = {
                 'description': None,
                 'rules': [],

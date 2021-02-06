@@ -349,26 +349,26 @@ class Provider(ComputeNodeABC):
             # cloudmesh dockerfile
             #
             FROM {os}:{version}
-            
+
             # update the OS
             RUN apt-get update
-            
+
             #Define the ENV variable
             #ENV TMP /tmp
- 
+
             # COPY
             #COPY default backup
- 
+
             #RUN mkdir ~/.cloudmesh
- 
+
             # Volume configuration
             #VOLUME ["sample"]
- 
+
             # Configure Services and Port
             #CMD ["cms"]
-            
+
             EXPOSE 80 443
-            
+
            """.format(**arg))}
 
         return script
@@ -457,7 +457,7 @@ class Provider(ComputeNodeABC):
     def rename(self, source=None, destination=None):
         """
         rename a node
-    
+
         :param destination:
         :param source: the current name
         :return: the dict with the new name

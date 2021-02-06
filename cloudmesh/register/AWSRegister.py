@@ -63,7 +63,7 @@ class AWSRegister(object):
             Console.info("{filename} moved to ~/.cloudmesh folder".format(
                 filename=credentials_file_name))
 
-            #creds = pandas.read_csv(
+            # creds = pandas.read_csv(
             #    "{cm}/{filename}".format(cm=cloudmesh_folder,
             #                             filename=credentials_file_name))
 
@@ -119,8 +119,7 @@ class AWSRegister(object):
                 "AWS 'Access Key ID' and 'Secret Access Key' in the cloudmesh.yaml updated")
 
         elif platform == "win32":
-            chrome = Path(
-                "C:\Program Files (x86)\Google\Chrome\Application\Chrome.exe")
+            chrome = Path("C:\Program Files (x86)\Google\Chrome\Application\Chrome.exe")
             if not chrome.is_file():
                 Console.error("Google chrome is not installed")
                 return
@@ -144,17 +143,13 @@ class AWSRegister(object):
             os.rename(credentials_csv_path, cloudmesh_folder.joinpath(
                 credentials_file_name).resolve())
 
-            Console.info(
-                f"{credentials_file_name} moved to ~/.cloudmesh folder")
+            Console.info(f"{credentials_file_name} moved to ~/.cloudmesh folder")
 
-            creds = pandas.read_csv(
-                "{cm}/{filename}".format(cm=cloudmesh_folder,
-                                         filename=credentials_file_name))
+            creds = pandas.read_csv(f"{cloudmesh_folder}/{credentials_file_name}")
 
             self.set_credentials(creds)
 
-            Console.info(
-                "AWS 'Access Key ID' and 'Secret Access Key' in the cloudmesh.yaml updated")
+            Console.info("AWS 'Access Key ID' and 'Secret Access Key' in the cloudmesh.yaml updated")
 
     def slow_typer(self, element, text):
         for character in text:
@@ -254,10 +249,9 @@ class AWSRegister(object):
         self.driver.find_element_by_link_text("Security credentials").click()
         sleep(1.5)
 
-        while len(self.driver.find_elements_by_xpath(
-            '//span[text()="Make inactive"]')) == 2:
-            input(
-                "Two access keys already exist for the user, remove one manually before creating another one and press Enter")
+        while len(self.driver.find_elements_by_xpath('//span[text()="Make inactive"]')) == 2:
+            input("Two access keys already exist for the user, remove one "
+                  "manually before creating another one and press Enter")
 
         self.driver.find_element_by_xpath(
             '//button[.//span[text()="Create access key"]]').click()

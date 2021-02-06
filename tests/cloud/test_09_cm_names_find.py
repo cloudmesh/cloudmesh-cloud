@@ -144,7 +144,9 @@ class Test_cm_find:
         if cloud == 'google':
             image_name = "ubuntu"
         elif cloud == 'azure':
-            image_name = "." #Azure names images differently, no ubuntu shows up which causes test to fail
+            image_name = "."
+            # Azure names images differently, no ubuntu
+            # shows up which causes test to fail
         else:
             image_name = "Ubuntu"
 

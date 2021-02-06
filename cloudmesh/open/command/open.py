@@ -77,7 +77,7 @@ class OpenCommand(PluginCommand):
             name = arguments.NAME or "users"
 
             if name == "users":
-                filename = f"https://console.aws.amazon.com/iam/home#/users"
+                filename = "https://console.aws.amazon.com/iam/home#/users"
             else:
                 filename = "https://console.aws.amazon.com/iam/home#/users" \
                            f"/{name}?section=security_credentials"
@@ -112,7 +112,7 @@ class OpenCommand(PluginCommand):
 
         try:
             webbrowser.open("%s" % filename)
-        except Exception as e:
+        except Exception as e:  # noqa: F841
             Console.error(
                 "can not open browser with file {0}".format(filename))
         return ""

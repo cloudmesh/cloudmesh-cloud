@@ -14,7 +14,7 @@ from cloudmesh.mongo import MongoDBController
 """
 is vagrant up to date
 
-==> vagrant: A new version of Vagrant is available: 2.2.4 (installed version: 2.2.2)! 
+==> vagrant: A new version of Vagrant is available: 2.2.4 (installed version: 2.2.2)!
 ==> vagrant: To upgrade visit: https://www.vagrantup.com/downloads.html
 """
 

@@ -81,9 +81,8 @@ class InitCommand(PluginCommand):
             path = Path(location)
             if path.is_file():
                 print()
-                if yn_choice(
-                    "The file ~/.cloudmesh/cloudmesh.yaml exists, do you wnat to overwrite it",
-                    default='n'):
+                if yn_choice("The file ~/.cloudmesh/cloudmesh.yaml exists, "
+                             "do you wnat to overwrite it", default='n'):
                     config.fetch()
                     print()
                     Console.ok("File cloudmesh.yaml downloaded from Github")
@@ -102,8 +101,8 @@ class InitCommand(PluginCommand):
                 except:
                     Console.ok("MongoDB is not running. ok")
                 machine = platform.lower()
-                location = path_expand(config[
-                                           f'cloudmesh.data.mongo.MONGO_DOWNLOAD.{machine}.MONGO_PATH'])
+                location = \
+                    path_expand(config[f'cloudmesh.data.mongo.MONGO_DOWNLOAD.{machine}.MONGO_PATH'])
                 try:
                     print("deleting:", location)
                     shutil.rmtree(location)
@@ -112,7 +111,7 @@ class InitCommand(PluginCommand):
                     Console.error(f"Could not delete {location}")
                     if platform == 'win32':
                         print(e)
-                        Console.error(f"Please try to run cms init again ... ")
+                        Console.error("Please try to run cms init again ... ")
                         return ""
 
                 print("MongoDB create")
@@ -148,9 +147,9 @@ class InitCommand(PluginCommand):
 
                 variables['cloud'] = cloud
                 os.system(f"cms key upload {user} --cloud={cloud}")
-                os.system(f"cms flavor list --refresh")
-                os.system(f"cms image list --refresh")
-                os.system(f"cms vm list --refresh")
+                os.system("cms flavor list --refresh")
+                os.system("cms image list --refresh")
+                os.system("cms vm list --refresh")
                 os.system(f"cms sec group load {secgroup} --cloud={cloud}")
                 os.system(f"cms set secgroup={secgroup}")
 

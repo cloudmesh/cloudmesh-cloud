@@ -63,7 +63,7 @@ class IpCommand(PluginCommand):
                 try:
                     ip = provider.find_available_public_ip()
                     return ip
-                except Exception as e:
+                except Exception as e:  # noqa: F841
                     Console.error("No free floating ip found")
                     return ""
 
@@ -99,7 +99,6 @@ class IpCommand(PluginCommand):
 
             provider.Print(ips, output=arguments.output, kind="ip")
 
-
         elif arguments.delete:
 
             cloud = Parameter.find("cloud", arguments, variables)
@@ -132,7 +131,6 @@ class IpCommand(PluginCommand):
             except Exception as e:
                 print(e)
                 Console.error("Could not assign public ip.")
-
 
         elif arguments.detach:
             name = Parameter.find("vm", arguments, variables)

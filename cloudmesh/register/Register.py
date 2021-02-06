@@ -29,7 +29,6 @@ class Register(object):
 
         return service_list
 
-
     @staticmethod
     def get_provider_sample(service=None, kind=None):
         if not kind or not service:
@@ -138,8 +137,8 @@ class Register(object):
         try:
             # Extract the sample from Provider.
             sample = provider.sample
-        except Exception as e:
-            Console.error(f"Can not find the sample in the Provider")
+        except Exception as e:  # noqa: F841
+            Console.error("Can not find the sample in the Provider")
             return ""
 
         try:

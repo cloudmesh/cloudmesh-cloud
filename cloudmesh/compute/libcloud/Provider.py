@@ -30,8 +30,8 @@ class Provider(ComputeNodeABC):
     """
     this may be buggy as the fields could be differentbased on the provider
     TODO: fix output base on provider
-    so we may need to do 
-    
+    so we may need to do
+
     output = {"aws": {"vm": ....,,
                       "image": ....,,
                       "flavor": ....,,
@@ -377,9 +377,8 @@ class Provider(ComputeNodeABC):
                             if (ruleobj.ip_protocol == rule["ip_protocol"] and
                                 ruleobj.from_port == rule["from_port"] and
                                 ruleobj.to_port == rule["to_port"] and
-                                ruleobj.ip_range == rule["ip_range"]):
-                                self.cloudman.ex_delete_security_group_rule(
-                                    ruleobj)
+                                ruleobj.ip_range == rule["ip_range"]):  # noqa: E129
+                                self.cloudman.ex_delete_security_group_rule(ruleobj)
 
     def images(self, raw=False, **kwargs):
         """
@@ -396,14 +395,11 @@ class Provider(ComputeNodeABC):
                 else:
                     return self.update_dict(entries, kind="image")
             elif self.cloudtype == "azure_arm":
-                if "publisher" in kwargs and \
-                    "offer" in kwargs and \
-                    "sku" in kwargs:
+                if "publisher" in kwargs and "offer" in kwargs and "sku" in kwargs:
                     entries = self.cloudman.list_images(
                         ex_publisher=kwargs["publisher"],
                         ex_offer=kwargs["offer"],
-                        ex_sku=kwargs["sku"]
-                    )
+                        ex_sku=kwargs["sku"])
                     if raw:
                         return entries
                     else:
@@ -530,7 +526,7 @@ class Provider(ComputeNodeABC):
         # should return the updated names dict, e.g. status and so on
         # the above specification is for one name
         #
-        
+
         return None
         """
 
@@ -780,12 +776,12 @@ class Provider(ComputeNodeABC):
                 print(line.strip("\n"))
 
     """
-    THIS CODE IS BUUGY AS IT OVERWRITES ALL PROVIDERS, THE CODE ABOVE SEEMS TO 
+    THIS CODE IS BUUGY AS IT OVERWRITES ALL PROVIDERS, THE CODE ABOVE SEEMS TO
     WORK
-    def ssh(self, name, ips, username=None, key=None, quiet=None, command=None, 
+    def ssh(self, name, ips, username=None, key=None, quiet=None, command=None,
             script=None, modify_knownhosts=None):
         if key == None:
-            key = self.spec['credentials']['EC2_PRIVATE_KEY_FILE_PATH'] + 
+            key = self.spec['credentials']['EC2_PRIVATE_KEY_FILE_PATH'] +
              self.spec['credentials']['EC2_PRIVATE_KEY_FILE_NAME']
         for ip in ips:
             location = username + '@' + ip
@@ -794,7 +790,7 @@ class Provider(ComputeNodeABC):
                 subprocess.run(ssh_command)
             elif script != None:
                 BUG, doesn't work#
-                ssh_command = ['ssh', '-i', key, location, 
+                ssh_command = ['ssh', '-i', key, location,
                                'bash', '-s', '<', script]
                 subprocess.call(ssh_command, shell=True)
     """

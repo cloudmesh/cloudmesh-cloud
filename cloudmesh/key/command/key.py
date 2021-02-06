@@ -83,16 +83,16 @@ class KeyCommand(PluginCommand):
             example github. If you do not already have a public-private key pair
             they can be generated using cloudmesh
 
-               key gen ssh 
+               key gen ssh
                    This will create the public-private keypair of ~/.ssh/id_rsa
                    and ~/.ssh/id_rsa.pub in OpenSSH format
 
-               key gen pem 
+               key gen pem
                    This will create the public-private keypair of ~/.ssh/id_rsa
                    and ~/.ssh/id_rsa.pub in PEM format
 
                key gen (ssh | pem) --filename=~/.cloudmesh/foobar
-                   This will generate the public-private key pair of 
+                   This will generate the public-private key pair of
                    ~/.cloudmesh/foobar and ~/.cloudmesh/foobar.pub
 
                key gen (ssh | pem) --filename=~/.cloudmesh/foobar --set_path
@@ -308,7 +308,6 @@ class KeyCommand(PluginCommand):
 
             return ""
 
-
         elif arguments.list:
 
             key = Key()
@@ -377,7 +376,7 @@ class KeyCommand(PluginCommand):
         elif arguments.init:
 
             """
-            key init 
+            key init
             """
 
             config = Config()
@@ -388,8 +387,8 @@ class KeyCommand(PluginCommand):
                     "Please set cloudmesh.profile.user in ~/.cloudmesh.yaml")
                 u = os.environ["USER"].lower().replace(" ", "")
                 Console.msg(
-                    f"To change it you can use the command. "
-                    "Define a NAME such as '{u}' e.g.")
+                    "To change it you can use the command. "
+                    f"Define a NAME such as '{u}' e.g.")
                 Console.msg("")
                 Console.msg(f"  cms config set cloudmesh.profile.user={u}")
                 Console.msg("")
@@ -472,7 +471,7 @@ class KeyCommand(PluginCommand):
                         try:
                             r = provider.key_upload(key)
                             Console.ok(f"upload key '{name} successful'. ")
-                        except ValueError as e:
+                        except ValueError as e:  # noqa: F841
                             Console.error(
                                 f"key '{name} already exists in {cloud}.")
 
@@ -480,13 +479,12 @@ class KeyCommand(PluginCommand):
 
             """
              key group add NAMES --groups=GROUPS
-             key group add --groups=GROUPS --file=FILENAME 
+             key group add --groups=GROUPS --file=FILENAME
              key group delete [NAMES] [--group=GROUPS]  [--dryrun]
              key group list [--group=GROUPS] [--output=OUTPUT]
              key group export [--group=GROUPS] [--file=FILENAME]
              key group upload [--group=GROUPS] [--vm=VM][--cloud=CLOUDS] [--dryrun]
             """
-
 
         elif arguments.delete and arguments.cloud and arguments.NAMES:
 
@@ -503,7 +501,6 @@ class KeyCommand(PluginCommand):
                         images = provider.key_delete(name)
 
             return ""
-
 
         elif arguments.delete and arguments.NAMES:
             # key delete NAMES [--dryrun]

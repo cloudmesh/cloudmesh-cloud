@@ -12,9 +12,6 @@ from cloudmesh.shell.command import PluginCommand, map_parameters
 from cloudmesh.shell.command import command
 
 
-# see https://github.com/cloudmesh/client/blob/master/cloudmesh_client/shell/plugins/SecureShellCommand.py
-
-
 class SshCommand(PluginCommand):
 
     # noinspection PyUnusedLocal
@@ -72,7 +69,6 @@ class SshCommand(PluginCommand):
 
             Examples:
 
-
                  ssh config add blue 192.168.1.245 blue
 
                      Adds the following to the !/.ssh/config file
@@ -80,9 +76,7 @@ class SshCommand(PluginCommand):
                      Host blue
                           HostName 192.168.1.245
                           User blue
-                          IdentityFile ~/.ssh/id_rsa.pub
-
-
+                          IdentityFile ~/.ssh/id_rsa
 
         """
 
